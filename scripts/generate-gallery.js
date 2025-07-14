@@ -1,5 +1,5 @@
-import fs from "node:fs";
-import path from "path:fs";
+import fs from 'fs';
+import path from 'path';
 
 // Папка с изображениями, имеющими конфликты.
 const differenceDir = ".loki/difference";

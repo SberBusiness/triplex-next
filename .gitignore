@@ -1,0 +1,43 @@
+# 📦 Папки сборки
+dist/
+storybook-static/
+/src/generated/
+
+# 📚 Кэш Storybook
+.cache/
+.storybook/out/
+
+# 📂 Зависимости
+node_modules/
+
+# 🧪 Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ⚙️ IDE и редакторы
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# 💻 macOS / Windows
+.DS_Store
+Thumbs.db
+
+# 🧪 Тестовые снапшоты (если появятся)
+__snapshots__/
+
+# 🔧 TypeScript build info (если включено)
+tsconfig.tsbuildinfo
+
+# Папка отчета покрытия
+coverage/
+
+.npmrc
+/test-results/
+/helm/
+/jenkins/

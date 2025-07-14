@@ -1,0 +1,9 @@
+.input {
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    background: var(--triplex-next-Input-Background_Default);
+    caret-color: var(--triplex-next-Input-Caret_Color);
+    color: var(--triplex-next-Input-Color_Default);
+    border: 1px solid var(--triplex-next-Input-BorderColor_Default);
+}

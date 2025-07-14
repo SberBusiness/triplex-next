@@ -1,0 +1,20 @@
+.button {
+    background: var(--triplex-next-Button-General_Background_Default);
+    color: var(--triplex-next-Button-General_Color_Default);
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background: var(--triplex-next-Button-General_Background_Hover);
+    color: var(--triplex-next-Button-General_Color_Hover-0-1-0);
+}
+
+.button:disabled {
+    background: var(--triplex-next-Button-General_Background_Disabled);
+    color: var(--triplex-next-Button-General_Color_Disabled);
+}

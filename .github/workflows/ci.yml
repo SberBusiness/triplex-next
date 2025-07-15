@@ -5,6 +5,19 @@ on:
     branches: [ '**' ]
 
 jobs:
+  build:
+    name: Build library
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm ci
+      - name: Build library
+        run: npm run build
+  
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
@@ -38,3 +51,26 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run E2E tests
         run: npm run test-e2e
+
+  visual:
+    name: Visual regression tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm ci
+      - name: Run visual regression tests
+        run: npm run test-visual
+      - name: Generate gallery
+        if: always()
+        run: npm run test-visual:gallery
+      - name: Upload loki report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loki-report
+          path: .loki/
+          include-hidden-files: true

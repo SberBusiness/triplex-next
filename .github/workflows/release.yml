@@ -38,8 +38,8 @@ jobs:
 
       - name: Deploy Storybook to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@your-server "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}"
-          rsync -avz --delete storybook-static/ user@your-server:$STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}/
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}"
+          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}/
 
       - name: Output Storybook URL
         run: echo "Storybook deployed ${{ env.STORYBOOK_URL_BASE }}/releases/${{ github.event.release.tag_name }}"		

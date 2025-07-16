@@ -25,11 +25,11 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
       - name: Deploy Storybook to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@your-server "mkdir -p $STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}"
-          rsync -avz --delete storybook-static/ user@your-server:$STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}/
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "mkdir -p $STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}"
+          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}/
       - name: Comment PR with Storybook URL
         uses: actions/github-script@v7
         env:
@@ -51,6 +51,6 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
       - name: Remove Storybook preview from server
-        run: ssh -o StrictHostKeyChecking=no user@your-server "rm -rf $STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}"
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "rm -rf $STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}"

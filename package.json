@@ -17,6 +17,7 @@
     "scripts": {
         "prebuild": "npm run generateTokensTypes && npm run generateThemeCssVariables && tsc --noEmit",
         "build": "vite build",
+		"postbuild": "node scripts/generate-package-json.js",
         "lint": "npx eslint .",
         "lint:fix": "npx eslint . --fix",
         "storybook": "storybook dev -p 6006",

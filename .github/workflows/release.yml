@@ -20,6 +20,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
       - run: npm ci
       - run: npm run build
+      - run: node scripts/generate-package-json.js
 
       # ---- Публикация в npm ----
       - name: Publish to npm

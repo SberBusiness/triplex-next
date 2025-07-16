@@ -19,7 +19,6 @@
         "build": "vite build",
         "lint": "npx eslint .",
         "lint:fix": "npx eslint . --fix",
-        "prepublishOnly": "npm run build && node scripts/generate-package-json.js",
         "storybook": "storybook dev -p 6006",
         "storybook:build": "npm run generateTokensTypes && npm run generateThemeCssVariables && storybook build",
         "storybook:serve": "npx http-server storybook-static -p 6007",

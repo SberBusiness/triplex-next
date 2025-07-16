@@ -1,0 +1,45 @@
+name: Release, publish npm package & deploy Storybook
+
+on:
+  release:
+    types: [published]
+
+env:
+  STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
+  STORYBOOK_URL_BASE: "https://storybook.triplex-dev.ru"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+      - run: npm ci
+      - run: npm run build
+
+      # ---- Публикация в npm ----
+      - name: Publish to npm
+        run: npm publish --dry-run --access public ./dist
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ---- Сборка и деплой Storybook ----
+      - name: Build Storybook
+        run: npm run storybook:build
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
+
+      - name: Deploy Storybook to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}"
+          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}/
+
+      - name: Output Storybook URL
+        run: echo "Storybook deployed ${{ env.STORYBOOK_URL_BASE }}/releases/${{ github.event.release.tag_name }}"		

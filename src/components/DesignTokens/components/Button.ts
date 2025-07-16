@@ -6,13 +6,9 @@ export const designTokensComponentsButtonKeys = [
     "General_Background_Default",
     "General_Background_Disabled",
     "General_Background_Hover",
-    "General_Caret_Color_Default",
-    "General_Caret_Color_Disabled",
-    "General_Color_Active",
     "General_Color_Default",
     "General_Color_Disabled",
     "General_Color_Hover",
-    "General_Shadow_Focus",
 ] as const;
 
 // Тип, содержащий названия токенов компонента Button.
@@ -26,15 +22,11 @@ export type TDesignTokensComponentsButton = { Button: TDesignTokensComponentsBut
 
 // Токены компонента Button в светлой и темной темах.
 export const Button_Tokens: TDesignTokensComponentsButtonValues = {
-    General_Background_Active: [{ ref: "Primary.900" }, { ref: "Primary.300" }], // var(--triplex-next-Button-General_Background_Active)
-    General_Background_Default: [{ ref: "Primary.700" }, { ref: "Primary.500" }], // var(--triplex-next-Button-General_Background_Default)
-    General_Background_Disabled: [{ ref: "Primary.300" }, { ref: "Basic.300" }], // var(--triplex-next-Button-General_Background_Disabled)
-    General_Background_Hover: [{ ref: "Primary.500" }, { ref: "Primary.700" }], // var(--triplex-next-Button-General_Background_Hover)
-    General_Caret_Color_Default: [{ ref: "Basic.100" }, { ref: "Basic.100" }], // var(--triplex-next-Button-General_Caret_Color_Default)
-    General_Caret_Color_Disabled: [{ ref: "Basic.100" }, { ref: "Neutral.900" }], // var(--triplex-next-Button-General_Caret_Color_Disabled)
-    General_Color_Active: [{ ref: "Basic.100" }, { ref: "Neutral.100" }], // var(--triplex-next-Button-General_Color_Active)
-    General_Color_Default: [{ ref: "Basic.100" }, { ref: "Neutral.100" }], // var(--triplex-next-Button-General_Color_Default)
-    General_Color_Disabled: [{ ref: "Basic.100" }, { ref: "Neutral.900" }], // var(--triplex-next-Button-General_Color_Disabled)
-    General_Color_Hover: [{ ref: "Basic.100" }, { ref: "Neutral.100" }], // var(--triplex-next-Button-General_Color_Hover)
-    General_Shadow_Focus: [{ value: "0 0 0 1px #FFDD64 inset" }, { value: "0 0 0 1px #FFDD64 inset" }], // var(--triplex-next-Button-General_Shadow_Focus)
+    General_Background_Active: [{ ref: "Brand.10" }, { ref: "Brand.90" }], // var(--triplex-next-Button-General_Background_Active)
+    General_Background_Default: [{ ref: "Brand.30" }, { ref: "Brand.50" }], // var(--triplex-next-Button-General_Background_Default)
+    General_Background_Disabled: [{ ref: "Brand.90" }, { ref: "Neutral.0" }], // var(--triplex-next-Button-General_Background_Disabled)
+    General_Background_Hover: [{ ref: "Brand.50" }, { ref: "Brand.30" }], // var(--triplex-next-Button-General_Background_Hover)
+    General_Color_Default: [{ ref: "Neutral.100" }, { ref: "Neutral.90" }], // var(--triplex-next-Button-General_Color_Default)
+    General_Color_Disabled: [{ ref: "Neutral.100" }, { ref: "Neutral.90" }], // var(--triplex-next-Button-General_Color_Disabled)
+    General_Color_Hover: [{ ref: "Neutral.100" }, { ref: "Neutral.90" }], // var(--triplex-next-Button-General_Color_Hover)
 };

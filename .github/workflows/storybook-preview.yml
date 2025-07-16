@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  STORYBOOK_PREVIEW_BASE: "/var/www/www-root/data/www/storybook.triplex-dev.ru"
+  STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
   STORYBOOK_URL_BASE: "https://storybook.triplex-dev.ru"
 
 jobs:

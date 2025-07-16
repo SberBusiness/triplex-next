@@ -1,8 +1,14 @@
 /** Скрипт для генерации package.json внутри dist на основе src/components/*. */
-import path from "node:path";
-import fs from "node:fs";
-import { name, version, peerDependencies } from "../package.json";
+import path from "path";
+import fs from "fs";
+import { readFile } from 'fs/promises';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkgStr = await readFile(resolve(__dirname, '../package.json'), 'utf8');
+const pkg = JSON.parse(pkgStr);
+const { name, scripts, ...rest } = pkg;
 const componentsDir = path.resolve(__dirname, "../src/components");
 const distDir = path.resolve(__dirname, "../dist");
 
@@ -27,12 +33,8 @@ components.forEach((name) => {
 
 const distPackageJson = {
     name: name,
-    version: version,
-    main: "./index.js",
-    module: "./index.js",
-    types: "./index.d.ts",
+    ...rest,
     exports: exportsField,
-    peerDependencies: peerDependencies || {},
 };
 
 fs.writeFileSync(path.join(distDir, "package.json"), JSON.stringify(distPackageJson, null, 2));

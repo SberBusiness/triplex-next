@@ -6,7 +6,7 @@
         "module": "ESNext",
         "moduleResolution": "bundler",
         "paths": { "triplex-next": ["./src/index.ts"] },
-        "types": ["vitest/globals", "@testing-library/dom"],
+        "types": ["vitest/globals", "@testing-library/dom", "@testing-library/jest-dom"],
         // Emit
         "outDir": "dist",
         // Language and Environment

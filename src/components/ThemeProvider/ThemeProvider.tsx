@@ -35,7 +35,7 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({
 
     useEffect(() => {
         if (canUseDom()) {
-            const style = `.${scopeCssClassName} {${DesignTokenUtils.getStyle(theme, tokens || {})}`;
+            const style = `.${scopeCssClassName} {${DesignTokenUtils.getStyle(theme, tokens || {})}}`;
             // Обновление мета тега со стилями темы. Обновляется тег с ключом triplex-next-dynamic-theme.
             updateCSS(style, `triplex-next-dynamic-tokens-${scopeCssClassName}`);
         } else {

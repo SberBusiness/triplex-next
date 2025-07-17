@@ -11,8 +11,8 @@ export interface IThemeProviderProps {
     children: React.ReactNode;
     /** Classname, который добавлен к элементу из scopeRef для создания области видимости css-переменных. */
     scopeClassName?: string;
-    /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. По-умолчанию - html. */
-    scopeRef?: React.RefObject<HTMLElement>;
+    /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. */
+    scopeRef: React.RefObject<HTMLElement>;
     /** Дизайн-тема Triplex Next. */
     theme?: ETriplexNextTheme;
     /** Переопределяемые токены. */

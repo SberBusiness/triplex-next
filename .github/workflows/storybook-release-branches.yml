@@ -48,4 +48,4 @@ jobs:
           rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/${{ steps.vars.outputs.preview_dir }}/
 
       - name: Output Storybook URL
-        run: echo "Storybook deployed: ${{ env.STORYBOOK_URL_BASE }}/${{ steps.vars.outputs.preview_dir }}"
+        run: echo "Storybook deployed ${{ env.STORYBOOK_URL_BASE }}/${{ steps.vars.outputs.preview_dir }}"

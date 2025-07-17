@@ -4,7 +4,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { ThemeProvider } from "../ThemeProvider";
 import { ETriplexNextTheme } from "../ETriplexNextTheme";
 import { ThemeProviderContext } from "../ThemeProviderContext";
-	
+
 vi.mock("rc-util/es/Dom/canUseDom", () => ({
 	default: vi.fn(() => true),
 }));
@@ -62,8 +62,8 @@ describe("ThemeProvider", () => {
 				</ThemeProvider>
 			);
 
-			expect(screen.getByTestId("test-child")).toBeInTheDocument();
-			expect(screen.getByText("Test Content")).toBeInTheDocument();
+			expect(screen.getByTestId("test-child")).toBeDefined();
+			expect(screen.getByText("Test Content")).toBeDefined();
 		});
 
 		it("should use light theme by default", () => {
@@ -73,7 +73,7 @@ describe("ThemeProvider", () => {
 				</ThemeProvider>
 			);
 
-			expect(screen.getByTestId("theme")).toHaveTextContent(ETriplexNextTheme.LIGHT);
+			expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.LIGHT);
 		});
 
 		it("should apply dark theme when specified", () => {
@@ -83,7 +83,7 @@ describe("ThemeProvider", () => {
 				</ThemeProvider>
 			);
 
-			expect(screen.getByTestId("theme")).toHaveTextContent(ETriplexNextTheme.DARK);
+			expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.DARK);
 		});
 	});
 
@@ -96,7 +96,7 @@ describe("ThemeProvider", () => {
 			);
 
 			expect(uniqueId).toHaveBeenCalledWith("triplex-next-theme-");
-			expect(screen.getByTestId("scope-classname")).toHaveTextContent("triplex-next-theme-test-id");
+			expect(screen.getByTestId("scope-classname").textContent).toBe("triplex-next-theme-test-id");
 		});
 
 		it("should use provided scope classname", () => {
@@ -108,7 +108,7 @@ describe("ThemeProvider", () => {
 				</ThemeProvider>
 			);
 
-			expect(screen.getByTestId("scope-classname")).toHaveTextContent(customClassName);
+			expect(screen.getByTestId("scope-classname").textContent).toBe(customClassName);
 		});
 
 		it("should update scope classname when prop changes", async () => {
@@ -118,7 +118,7 @@ describe("ThemeProvider", () => {
 				</ThemeProvider>
 			);
 
-			expect(screen.getByTestId("scope-classname")).toHaveTextContent("initial-class");
+			expect(screen.getByTestId("scope-classname").textContent).toBe("initial-class");
 
 			rerender(
 				<ThemeProvider scopeRef={mockScopeRef} scopeClassName="updated-class">
@@ -127,7 +127,7 @@ describe("ThemeProvider", () => {
 			);
 
 			await waitFor(() => {
-				expect(screen.getByTestId("scope-classname")).toHaveTextContent("updated-class");
+				expect(screen.getByTestId("scope-classname").textContent).toBe("updated-class");
 			});
 		});
 	});
@@ -190,7 +190,7 @@ describe("ThemeProvider", () => {
 				</ThemeProvider>
 			);
 
-			expect(screen.getByTestId("theme")).toHaveTextContent(ETriplexNextTheme.LIGHT);
+			expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.LIGHT);
 
 			rerender(
 				<ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.DARK}>
@@ -199,7 +199,7 @@ describe("ThemeProvider", () => {
 			);
 
 			await waitFor(() => {
-				expect(screen.getByTestId("theme")).toHaveTextContent(ETriplexNextTheme.DARK);
+				expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.DARK);
 			});
 		});
 	});

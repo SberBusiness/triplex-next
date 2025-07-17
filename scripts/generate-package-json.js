@@ -14,8 +14,7 @@ const distDir = path.resolve(__dirname, "../dist");
 
 // Соберём все компоненты, у которых есть index.ts
 const components = fs
-    .readdirSync(componentsDir)
-    .filter((name) => fs.existsSync(path.join(componentsDir, name, "index.ts")));
+    .readdirSync(componentsDir).filter((name) => fs.existsSync(path.join(componentsDir, name, "index.ts")));
 
 const exportsField = {
     ".": {

@@ -1,0 +1,51 @@
+# Workflow для деплоя Storybook релизных веток, после влития в них PR.
+# Релизные ветки, это main и ветки, начинающиеся с release-
+name: Deploy Storybook for main & release branches
+
+on:
+  push:
+    branches:
+      - main
+      - 'release-*'
+  workflow_dispatch:
+
+env:
+  STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
+  STORYBOOK_URL_BASE: "https://storybook.triplex-dev.ru"
+
+jobs:
+  deploy-storybook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - run: npm run storybook:build
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
+
+      - name: Get deploy dir
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
+            echo "preview_dir=main" >> $GITHUB_OUTPUT
+          else
+            echo "preview_dir=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy Storybook to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "mkdir -p $STORYBOOK_PREVIEW_BASE/${{ steps.vars.outputs.preview_dir }}"
+          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/${{ steps.vars.outputs.preview_dir }}/
+
+      - name: Output Storybook URL
+        run: echo "Storybook deployed: ${{ env.STORYBOOK_URL_BASE }}/${{ steps.vars.outputs.preview_dir }}"

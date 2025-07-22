@@ -4,25 +4,25 @@ import { TDesignTokensCore } from "./types/DesignTokensTypes";
 export const DesignTokensCore: TDesignTokensCore = {
     BasicAlpha: {
         0: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-0)
+            value: "rgba(255, 255, 255, 1)", //     var(--triplex-next-BasicAlpha-0)
         },
         40: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-40)
+            value: "rgba(255, 255, 255, .75)", //     var(--triplex-next-BasicAlpha-40)
         },
         60: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-60)
+            value: "rgba(255, 255, 255, .55)", //     var(--triplex-next-BasicAlpha-60)
         },
         70: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-70)
+            value: "rgba(255, 255, 255, .45)", //     var(--triplex-next-BasicAlpha-70)
         },
         80: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-80)
+            value: "rgba(255, 255, 255, .35)", //     var(--triplex-next-BasicAlpha-80)
         },
         90: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-90)
+            value: "rgba(255, 255, 255, .25)", //     var(--triplex-next-BasicAlpha-90)
         },
         100: {
-            value: "#FFFFFF", //     var(--triplex-next-BasicAlpha-100)
+            value: "rgba(255, 255, 255, .15)", //     var(--triplex-next-BasicAlpha-100)
         },
     },
     Brand: {
@@ -45,7 +45,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#21A19A", //     var(--triplex-next-Brand-50)
         },
         60: {
-            value: "#33C6BA", //     var(--triplex-next-Brand-60)
+            value: "#19BDB0", //     var(--triplex-next-Brand-60)
         },
         70: {
             value: "#4BD9CF", //     var(--triplex-next-Brand-70)
@@ -62,25 +62,25 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     DarkBasicAlpha: {
         0: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-0)
+            value: "rgba(0, 0, 0, .85)", //     var(--triplex-next-DarkBasicAlpha-0)
         },
         40: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-40)
+            value: "rgba(0, 0, 0, .7)", //     var(--triplex-next-DarkBasicAlpha-40)
         },
         60: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-60)
+            value: "rgba(0, 0, 0, .55)", //     var(--triplex-next-DarkBasicAlpha-60)
         },
         70: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-70)
+            value: "rgba(0, 0, 0, .45)", //     var(--triplex-next-DarkBasicAlpha-70)
         },
         80: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-80)
+            value: "rgba(0, 0, 0, .35)", //     var(--triplex-next-DarkBasicAlpha-80)
         },
         90: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-90)
+            value: "rgba(0, 0, 0, .25)", //     var(--triplex-next-DarkBasicAlpha-90)
         },
         100: {
-            value: "#000000", //     var(--triplex-next-DarkBasicAlpha-100)
+            value: "rgba(0, 0, 0, .15)", //     var(--triplex-next-DarkBasicAlpha-100)
         },
     },
     DarkNeutralAlpha: {
@@ -146,7 +146,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#E60037", //     var(--triplex-next-Error-50)
         },
         60: {
-            value: "#F70C44", //     var(--triplex-next-Error-60)
+            value: "#F80C45", //     var(--triplex-next-Error-60)
         },
         70: {
             value: "#FF5571", //     var(--triplex-next-Error-70)
@@ -181,7 +181,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#1371E4", //     var(--triplex-next-Info-50)
         },
         60: {
-            value: "#198CFE", //     var(--triplex-next-Info-60)
+            value: "#1297FE", //     var(--triplex-next-Info-60)
         },
         70: {
             value: "#66C7FF", //     var(--triplex-next-Info-70)
@@ -271,7 +271,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#00C075", //     var(--triplex-next-Success-50)
         },
         60: {
-            value: "#00E485", //     var(--triplex-next-Success-60)
+            value: "#00D67D", //     var(--triplex-next-Success-60)
         },
         70: {
             value: "#3AF299", //     var(--triplex-next-Success-70)
@@ -306,7 +306,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FF6D00", //     var(--triplex-next-Warning-50)
         },
         60: {
-            value: "#FF9900", //     var(--triplex-next-Warning-60)
+            value: "#FF7A17", //     var(--triplex-next-Warning-60)
         },
         70: {
             value: "#FFB13B", //     var(--triplex-next-Warning-70)

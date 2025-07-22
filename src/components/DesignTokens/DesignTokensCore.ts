@@ -2,7 +2,7 @@
 import { TDesignTokensCore } from "./types/DesignTokensTypes";
 
 export const DesignTokensCore: TDesignTokensCore = {
-    BasicAlpha: {
+    ColorBasicAlpha: {
         0: {
             value: "rgba(255, 255, 255, 1)", //     var(--triplex-next-BasicAlpha-0)
         },
@@ -25,7 +25,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "rgba(255, 255, 255, .15)", //     var(--triplex-next-BasicAlpha-100)
         },
     },
-    Brand: {
+    ColorBrand: {
         0: {
             value: "#1F3336", //     var(--triplex-next-Brand-0)
         },
@@ -60,7 +60,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#E3FFFA", //     var(--triplex-next-Brand-100)
         },
     },
-    DarkBasicAlpha: {
+    ColorDarkBasicAlpha: {
         0: {
             value: "rgba(0, 0, 0, .85)", //     var(--triplex-next-DarkBasicAlpha-0)
         },
@@ -83,7 +83,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "rgba(0, 0, 0, .15)", //     var(--triplex-next-DarkBasicAlpha-100)
         },
     },
-    DarkNeutralAlpha: {
+    ColorDarkNeutralAlpha: {
         50: {
             value: "#2D2D30", //     var(--triplex-next-DarkNeutralAlpha-50)
         },
@@ -91,7 +91,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#3B3B3E", //     var(--triplex-next-DarkNeutralAlpha-70)
         },
     },
-    DarkNeutral: {
+    ColorDarkNeutral: {
         0: {
             value: "#0D0D09", //     var(--triplex-next-DarkNeutral-0)
         },
@@ -126,7 +126,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#4F4F52", //     var(--triplex-next-DarkNeutral-100)
         },
     },
-    Error: {
+    ColorError: {
         0: {
             value: "#37292F", //     var(--triplex-next-Error-0)
         },
@@ -161,7 +161,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFF0F3", //     var(--triplex-next-Error-100)
         },
     },
-    Info: {
+    ColorInfo: {
         0: {
             value: "#282D3C", //     var(--triplex-next-Info-0)
         },
@@ -196,7 +196,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#E3FAFF", //     var(--triplex-next-Info-100)
         },
     },
-    NeutralAlpha: {
+    ColorNeutralAlpha: {
         0: {
             value: "#8890A0", //     var(--triplex-next-NeutralAlpha-0)
         },
@@ -216,7 +216,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFFFFF", //     var(--triplex-next-NeutralAlpha-100)
         },
     },
-    Neutral: {
+    ColorNeutral: {
         0: {
             value: "#8890A0", //     var(--triplex-next-Neutral-0)
         },
@@ -251,7 +251,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFFFFF", //     var(--triplex-next-Neutral-100)
         },
     },
-    Success: {
+    ColorSuccess: {
         0: {
             value: "#283230", //     var(--triplex-next-Success-0)
         },
@@ -286,7 +286,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#E1FFEB", //     var(--triplex-next-Success-100)
         },
     },
-    Warning: {
+    ColorWarning: {
         0: {
             value: "#392E2D", //     var(--triplex-next-Warning-0)
         },

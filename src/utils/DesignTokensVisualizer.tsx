@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { DesignTokensCore } from "./DesignTokensCore";
+import { DesignTokensCore } from "../components/DesignTokens/DesignTokensCore";
 import styles from "./DesignTokensVisualizer.module.css";
-import { TDesignTokensCore } from "./types/DesignTokensTypes";
+import { TDesignTokensCore } from "../components/DesignTokens/types/DesignTokensTypes";
 
 type DesignTokensGroupName = keyof TDesignTokensCore;
 type TokenGroup = Record<string, { value: string }>;

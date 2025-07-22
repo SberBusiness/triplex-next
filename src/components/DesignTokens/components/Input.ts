@@ -20,10 +20,10 @@ export type TDesignTokensComponentsInput = { Input: TDesignTokensComponentsInput
 
 // Токены компонента Input в светлой и темной темах.
 export const Input_Tokens: TDesignTokensComponentsInputValues = {
-    Background_Default: [{ ref: "Neutral.100" }, { value: "none" }],
+    Background_Default: [{ ref: "ColorNeutral.100" }, { value: "none" }],
 
-    BorderColor_Default: [{ ref: "Neutral.40" }, { ref: "Neutral.70" }],
+    BorderColor_Default: [{ ref: "ColorNeutral.40" }, { ref: "ColorNeutral.70" }],
 
-    Caret_Color: [{ ref: "DarkNeutral.30" }, { ref: "NeutralAlpha.90" }],
-    Color_Default: [{ ref: "DarkNeutral.30" }, { ref: "NeutralAlpha.90" }],
+    Caret_Color: [{ ref: "ColorDarkNeutral.30" }, { ref: "ColorNeutralAlpha.90" }],
+    Color_Default: [{ ref: "ColorDarkNeutral.30" }, { ref: "ColorNeutralAlpha.90" }],
 };

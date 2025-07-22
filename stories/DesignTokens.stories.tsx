@@ -3,7 +3,7 @@ import type { StoryObj } from "@storybook/react";
 import { DesignTokensVisualizer } from "../src/components/DesignTokens/DesignTokensVisualizer";
 
 export default {
-    title: "Design Tokens",
+    title: "Design Tokens/Colors",
     component: DesignTokensVisualizer,
 };
 

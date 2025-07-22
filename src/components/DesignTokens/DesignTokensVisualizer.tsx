@@ -35,8 +35,6 @@ export const DesignTokensVisualizer: React.FC = () => {
                 {activeTab && (
                     <div className={styles.tokenList}>
                         {Object.entries(DesignTokensCore[activeTab] as TokenGroup).map(([tokenName, token]) => {
-                            const cssVar = `var(--triplex-next-${activeTab}-${tokenName})`;
-
                             return (
                                 <div key={tokenName} className={styles.token}>
                                     <div
@@ -51,7 +49,7 @@ export const DesignTokensVisualizer: React.FC = () => {
                                     </div>
 
                                     <button className={styles.variable}>
-                                        <span>{cssVar}</span>
+                                        <span>{`${activeTab}.${tokenName}`}</span>
                                     </button>
                                 </div>
                             );

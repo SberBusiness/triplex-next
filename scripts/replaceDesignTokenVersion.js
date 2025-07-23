@@ -1,4 +1,4 @@
-import { uniq } from "lodash";
+import { uniq } from "lodash-es";
 import { version } from "../package.json";
 
 // Текущая версия npm пакета. Точки заменены на '-'. Например 10-0-5.

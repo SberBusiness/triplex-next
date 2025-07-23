@@ -21,11 +21,12 @@ const preview: Preview = {
 			const scopeRef = React.useRef<HTMLDivElement>(null);
 
             return (
-				<div ref={scopeRef}>
+				// По этому селектору будет искаться элемент для скриншота, поэтому inline-block, чтобы был скриншот по ширине дочернего элемента.
+				<span ref={scopeRef} style={{ display: "inline-block" }}>
 					<ThemeProvider theme={useDarkMode() ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT} scopeRef={scopeRef}>
 						<Story />
 					</ThemeProvider>
-				</div>
+				</span>
             );
         },
     ],

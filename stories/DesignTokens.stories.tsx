@@ -1,12 +1,12 @@
 import React from "react";
 import type { StoryObj } from "@storybook/react";
-import { DesignTokensVisualizer } from "../src/utils/DesignTokensVisualizer";
+import { DesignTokensVisualizer } from "./utils/DesignTokensVisualizer";
 
 export default {
-    title: "Design Tokens/Colors",
+    title: "Design Tokens",
     component: DesignTokensVisualizer,
 };
 
-export const Colors: StoryObj<typeof DesignTokensVisualizer> = {
+export const Core: StoryObj<typeof DesignTokensVisualizer> = {
     render: () => <DesignTokensVisualizer />,
 };

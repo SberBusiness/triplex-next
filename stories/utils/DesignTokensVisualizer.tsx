@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { DesignTokensCore } from "../components/DesignTokens/DesignTokensCore";
+import { DesignTokensCore } from "../../src/components/DesignTokens/DesignTokensCore";
+import { TDesignTokensCore } from "../../src/components/DesignTokens/types/DesignTokensTypes";
 import styles from "./DesignTokensVisualizer.module.css";
-import { TDesignTokensCore } from "../components/DesignTokens/types/DesignTokensTypes";
 
 type DesignTokensGroupName = keyof TDesignTokensCore;
 type TokenGroup = Record<string, { value: string }>;
@@ -48,9 +48,9 @@ export const DesignTokensVisualizer: React.FC = () => {
                                         <span>{token.value}</span>
                                     </div>
 
-                                    <button className={styles.variable}>
+                                    <div className={styles.variable}>
                                         <span>{`${activeTab}.${tokenName}`}</span>
-                                    </button>
+                                    </div>
                                 </div>
                             );
                         })}

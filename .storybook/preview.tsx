@@ -22,7 +22,8 @@ const preview: Preview = {
 
             return (
 				// По этому селектору будет искаться элемент для скриншота, поэтому inline-block, чтобы был скриншот по ширине дочернего элемента.
-				<span ref={scopeRef} style={{ display: "inline-block" }}>
+				// color считается в js, так как css переменные не отрабатывают при смене темы. Значения цветов взяты из цветов storybook.
+				<span ref={scopeRef} style={{ color: useDarkMode() ? 'rgb(201, 205, 207)' : 'rgb(46, 52, 56)', display: "inline-block" }}>
 					<ThemeProvider theme={useDarkMode() ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT} scopeRef={scopeRef}>
 						<Story />
 					</ThemeProvider>

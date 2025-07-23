@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "triplex-next";
 import { StoryObj } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import { action } from "storybook/actions";
 
 export default {
     title: "Components/Button",

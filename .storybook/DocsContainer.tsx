@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DocsContainer as BaseContainer, DocsContainerProps } from "@storybook/addon-docs/blocks";
-import { themes } from "@storybook/theming";
-import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode";
-import { addons } from "@storybook/preview-api";
-
-const channel = addons.getChannel();
+import { themes } from "storybook/theming";
 
 const DocsContainer = (props: DocsContainerProps) => {
-    const [darkMode, setDarkMode] = useState(false);
+    const isDark = props.context.store.userGlobals.globals.theme === "dark";
+    const selectedTheme = isDark ? themes.dark : themes.light;
 
-    useEffect(() => {
-        channel.on(DARK_MODE_EVENT_NAME, setDarkMode);
-    }, []);
-
-    return <BaseContainer {...props} theme={darkMode ? themes.dark : themes.light} />;
+    return <BaseContainer {...props} theme={selectedTheme} />;
 };
 
 export default DocsContainer;

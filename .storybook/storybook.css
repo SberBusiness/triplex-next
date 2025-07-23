@@ -1,0 +1,8 @@
+.theme-dark > body {
+    color: rgb(201, 205, 207);
+    background-color: rgb(24, 24, 25);
+}
+.theme-light > body {
+    color: rgb(24, 24, 25);
+    background-color: rgb(255, 255, 255);
+}

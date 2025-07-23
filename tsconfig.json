@@ -1,23 +1,31 @@
 {
-    "compilerOptions": {
-        // Type Checking
-        "strict": true,
-        // Modules
-        "module": "ESNext",
-        "moduleResolution": "bundler",
-        "paths": { "triplex-next": ["./src/index.ts"] },
-        "types": ["vitest/globals", "@testing-library/dom"],
-        // Emit
-        "outDir": "dist",
-        // Language and Environment
-        "jsx": "react-jsx",
-        "target": "ESNext",
-        // Interop Constraints
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
-        // Completeness
-        "skipLibCheck": false
-    },
-    "include": ["src"]
+	"compilerOptions": {
+		// Type Checking
+		"strict": true,
+		// Modules
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"paths": {
+			"triplex-next": [
+				"./src/index.ts"
+			]
+		},
+		"types": [
+			"vitest/globals"
+		],
+		// Emit
+		"outDir": "dist",
+		// Language and Environment
+		"jsx": "react-jsx",
+		"target": "ESNext",
+		// Interop Constraints
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"esModuleInterop": true,
+		// Completeness
+		"skipLibCheck": false
+	},
+	"include": [
+		"src"
+	]
 }

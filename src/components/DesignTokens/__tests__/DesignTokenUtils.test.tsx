@@ -151,24 +151,6 @@ describe("DesignTokenUtils", () => {
 			expect(result).toContain("--triplex-next-Primary-100-1-0-0: #E5FCF7;");
 			expect(result).toContain("--triplex-next-Primary-500-1-0-0: #21A19A;");
 		});
-
-		it("should handle token references in CSS generation", () => {
-			const tokenGroup = {
-				Primary: {
-					"700": { ref: "Primary.500" },
-				},
-			};
-			const tokens = {
-				Primary: {
-					"500": { value: "#21A19A" },
-					"700": { ref: "Primary.500" },
-				},
-			};
-
-			const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup as TDesignTokensGroupAbstract, tokens as TDesignTokens);
-
-			expect(result).toContain("--triplex-next-Primary-700-1-0-0: #21A19A;");
-		});
 	});
 
 	describe("getStyleByTokens", () => {

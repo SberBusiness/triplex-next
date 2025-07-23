@@ -146,9 +146,6 @@ export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
 					<Button onClick={handleThemeToggle}>
 						Переключить на {currentTheme === ETriplexNextTheme.LIGHT ? "темную" : "светлую"} тему
 					</Button>
-					<div style={{ marginTop: "20px" }}>
-						<Button>Button name</Button>
-					</div>
 				</div>
 			</ThemeProvider>
 		);
@@ -171,6 +168,7 @@ export const ScopedTheme: StoryObj<typeof ThemeProvider> = {
 			<div>
 				<h2>Область вне ThemeProvider</h2>
 				<p>Этот контент использует стандартные стили браузера.</p>
+				<Button>Button name</Button>
 
 				<ThemeProvider theme={ETriplexNextTheme.DARK} scopeRef={scopeRef}>
 					<div ref={scopeRef}>

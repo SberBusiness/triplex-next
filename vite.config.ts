@@ -31,7 +31,7 @@ export default defineConfig({
                 assetFileNames: "assets/[name][extname]",
                 entryFileNames: "[name].js",
             },
-            external: ["clsx", "lodash", "react", "react/jsx-runtime", "react-dom", "rc-util"],
+            external: ["clsx", "lodash-es", "react", "react/jsx-runtime", "react-dom", "rc-util"],
             plugins: [writeCommonCssBundlesPlugin()],
         },
     },

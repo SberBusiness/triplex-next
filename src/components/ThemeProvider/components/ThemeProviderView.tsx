@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { defaultsDeep } from "lodash";
+import { defaultsDeep } from "lodash-es";
 import { TDesignTokens, TDesignTokensPartial } from "../../DesignTokens/types/DesignTokensTypes";
 // Импорт не должен быть относительным.
 import { ThemeProviderContext } from "../ThemeProviderContext";

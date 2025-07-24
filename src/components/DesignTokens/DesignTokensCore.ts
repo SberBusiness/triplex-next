@@ -2,114 +2,323 @@
 import { TDesignTokensCore } from "./types/DesignTokensTypes";
 
 export const DesignTokensCore: TDesignTokensCore = {
-    Accent: {
-        500: {
-            value: "#FFDD64", // @color-sunny-01     var(--triplex-next-Accent-500)
-        },
-    },
-    Basic: {
+    ColorBasicAlpha: {
         0: {
-            value: "transparent", //     var(--triplex-next-Basic-0)
+            value: "rgba(255, 255, 255, 1)", //     var(--triplex-next-ColorBasicAlpha-0)
+        },
+        40: {
+            value: "rgba(255, 255, 255, .75)", //     var(--triplex-next-ColorBasicAlpha-40)
+        },
+        60: {
+            value: "rgba(255, 255, 255, .55)", //     var(--triplex-next-ColorBasicAlpha-60)
+        },
+        70: {
+            value: "rgba(255, 255, 255, .45)", //     var(--triplex-next-ColorBasicAlpha-70)
+        },
+        80: {
+            value: "rgba(255, 255, 255, .35)", //     var(--triplex-next-ColorBasicAlpha-80)
+        },
+        90: {
+            value: "rgba(255, 255, 255, .25)", //     var(--triplex-next-ColorBasicAlpha-90)
         },
         100: {
-            value: "#FFFFFF", // @color-snowy     var(--triplex-next-Basic-100)
-        },
-        300: {
-            value: "#565B62", // @color-graphite-02     var(--triplex-next-Basic-300)
-        },
-        500: {
-            value: "#2D2D30", // @color-total-black-02     var(--triplex-next-Basic-500)
-        },
-        700: {
-            value: "#1F1F22", // @color-graphite-01     var(--triplex-next-Basic-700)
-        },
-        900: {
-            value: "#181819", // @color-total-black-01     var(--triplex-next-Basic-900)
+            value: "rgba(255, 255, 255, .15)", //     var(--triplex-next-ColorBasicAlpha-100)
         },
     },
-    Error: {
+    ColorBrand: {
+        0: {    
+            value: "#1F3336", //     var(--triplex-next-ColorBrand-0)
+        },
+        10: {
+            value: "#004A4E", //     var(--triplex-next-ColorBrand-10)
+        },
+        20: {
+            value: "#006063", //     var(--triplex-next-ColorBrand-20)
+        },
+        30: {
+            value: "#007777", //     var(--triplex-next-ColorBrand-30)
+        },
+        40: {
+            value: "#008985", //     var(--triplex-next-ColorBrand-40)
+        },
+        50: {
+            value: "#21A19A", //     var(--triplex-next-ColorBrand-50)
+        },
+        60: {
+            value: "#19BDB0", //     var(--triplex-next-ColorBrand-60)
+        },
+        70: {
+            value: "#4BD9CF", //     var(--triplex-next-ColorBrand-70)
+        },
+        80: {
+            value: "#71ECDC", //     var(--triplex-next-ColorBrand-80)
+        },
+        90: {
+            value: "#A8F5E9", //     var(--triplex-next-ColorBrand-90)
+        },
         100: {
-            value: "#FFE5E8", // @color-ruby-05     var(--triplex-next-Error-100)
-        },
-        300: {
-            value: "#FFBDC5", // @color-ruby-04     var(--triplex-next-Error-300)
-        },
-        500: {
-            value: "#DB1237", // @color-ruby-03     var(--triplex-next-Error-500)
-        },
-        700: {
-            value: "#C11030", // @color-ruby-02     var(--triplex-next-Error-700)
-        },
-        900: {
-            value: "#A80E2A", // @color-ruby-01     var(--triplex-next-Error-900)
+            value: "#E3FFFA", //     var(--triplex-next-ColorBrand-100)
         },
     },
-    Info: {
+    ColorDarkBasicAlpha: {
+        0: {
+            value: "rgba(0, 0, 0, .85)", //     var(--triplex-next-ColorDarkBasicAlpha-0)
+        },
+        40: {
+            value: "rgba(0, 0, 0, .7)", //     var(--triplex-next-ColorDarkBasicAlpha-40)
+        },
+        60: {
+            value: "rgba(0, 0, 0, .55)", //     var(--triplex-next-ColorDarkBasicAlpha-60)
+        },
+        70: {
+            value: "rgba(0, 0, 0, .45)", //     var(--triplex-next-ColorDarkBasicAlpha-70)
+        },
+        80: {
+            value: "rgba(0, 0, 0, .35)", //     var(--triplex-next-ColorDarkBasicAlpha-80)
+        },
+        90: {
+            value: "rgba(0, 0, 0, .25)", //     var(--triplex-next-ColorDarkBasicAlpha-90)
+        },
         100: {
-            value: "#F2F8FF", // @color-sky-05     var(--triplex-next-Info-100)
-        },
-        300: {
-            value: "#93B7ED", // @color-sky-04     var(--triplex-next-Info-300)
-        },
-        500: {
-            value: "#198CFE", // @color-sky-03     var(--triplex-next-Info-500)
-        },
-        700: {
-            value: "#1358BF", // @color-sky-02     var(--triplex-next-Info-700)
-        },
-        900: {
-            value: "#0F5498", // @color-sky-01     var(--triplex-next-Info-900)
+            value: "rgba(0, 0, 0, .15)", //     var(--triplex-next-ColorDarkBasicAlpha-100)
         },
     },
-    Neutral: {
-        100: {
-            value: "#F2F4F7", // @color-asphalt-05     var(--triplex-next-Neutral-100)
+    ColorDarkNeutralAlpha: {
+        50: {
+            value: "#2D2D30", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
         },
-        300: {
-            value: "#E4E8EB", // @color-asphalt-04     var(--triplex-next-Neutral-300)
-        },
-        500: {
-            value: "#D0D7DD", // @color-asphalt-03     var(--triplex-next-Neutral-500)
-        },
-        700: {
-            value: "#B2B8BF", // @color-asphalt-02     var(--triplex-next-Neutral-700)
-        },
-        900: {
-            value: "#7D838A", // @color-asphalt-01     var(--triplex-next-Neutral-900)
+        70: {
+            value: "#3B3B3E", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
         },
     },
-    Primary: {
+    ColorDarkNeutral: {
+        0: {
+            value: "#0D0D09", //     var(--triplex-next-ColorDarkNeutral-0)
+        },
+        10: {
+            value: "#171719", //     var(--triplex-next-ColorDarkNeutral-10)
+        },
+        20: {
+            value: "#1B1B1D", //     var(--triplex-next-ColorDarkNeutral-20)
+        },
+        30: {
+            value: "#1F1F22", //     var(--triplex-next-ColorDarkNeutral-30)
+        },
+        40: {
+            value: "#262629", //     var(--triplex-next-ColorDarkNeutral-40)
+        },
+        50: {
+            value: "#2D2D30", //     var(--triplex-next-ColorDarkNeutral-50)
+        },
+        60: {
+            value: "#343437", //     var(--triplex-next-ColorDarkNeutral-60)
+        },
+        70: {
+            value: "#3B3B3E", //     var(--triplex-next-ColorDarkNeutral-70)
+        },
+        80: {
+            value: "#424245", //     var(--triplex-next-ColorDarkNeutral-80)
+        },
+        90: {
+            value: "#49494C", //     var(--triplex-next-ColorDarkNeutral-90)
+        },
         100: {
-            value: "#E5FCF7", // @color-malachite-05     var(--triplex-next-Primary-100)
-        },
-        300: {
-            value: "#90D0CC", // @color-malachite-04     var(--triplex-next-Primary-300)
-        },
-        500: {
-            value: "#21A19A", // @color-malachite-03     var(--triplex-next-Primary-500)
-        },
-        700: {
-            value: "#107F8C", // @color-malachite-02     var(--triplex-next-Primary-700)
-        },
-        900: {
-            value: "#005E7F", // @color-malachite-01     var(--triplex-next-Primary-900)
+            value: "#4F4F52", //     var(--triplex-next-ColorDarkNeutral-100)
         },
     },
-    Warning: {
+    ColorError: {
+        0: {
+            value: "#37292F", //     var(--triplex-next-ColorError-0)
+        },
+        10: {
+            value: "#7C001A", //     var(--triplex-next-ColorError-10)
+        },
+        20: {
+            value: "#A90024", //     var(--triplex-next-ColorError-20)
+        },
+        30: {
+            value: "#BD002C", //     var(--triplex-next-ColorError-30)
+        },
+        40: {
+            value: "#D10032", //     var(--triplex-next-ColorError-40)
+        },
+        50: {
+            value: "#E60037", //     var(--triplex-next-ColorError-50)
+        },
+        60: {
+            value: "#F80C45", //     var(--triplex-next-ColorError-60)
+        },
+        70: {
+            value: "#FF5571", //     var(--triplex-next-ColorError-70)
+        },
+        80: {
+            value: "#FFB1C1", //     var(--triplex-next-ColorError-80)
+        },
+        90: {
+            value: "#FFD6DF", //     var(--triplex-next-ColorError-90)
+        },
         100: {
-            value: "#FFF5E6", // @color-pumpkin-05     var(--triplex-next-Warning-100)
+            value: "#FFF0F3", //     var(--triplex-next-ColorError-100)
         },
-        300: {
-            value: "#FFD9A0", // @color-pumpkin-04     var(--triplex-next-Warning-300)
+    },
+    ColorInfo: {
+        0: {
+            value: "#282D3C", //     var(--triplex-next-ColorInfo-0)
         },
-        500: {
-            value: "#FFB13B", // @color-pumpkin-03     var(--triplex-next-Warning-500)
+        10: {
+            value: "#022A7A", //     var(--triplex-next-ColorInfo-10)
         },
-        700: {
-            value: "#FF9900", // @color-pumpkin-02     var(--triplex-next-Warning-700)
+        20: {
+            value: "#0A43B0", //     var(--triplex-next-ColorInfo-20)
         },
-        900: {
-            value: "#E58A00", // @color-pumpkin-01     var(--triplex-next-Warning-900)
+        30: {
+            value: "#124FC2", //     var(--triplex-next-ColorInfo-30)
+        },
+        40: {
+            value: "#0E57CC", //     var(--triplex-next-ColorInfo-40)
+        },
+        50: {
+            value: "#1371E4", //     var(--triplex-next-ColorInfo-50)
+        },
+        60: {
+            value: "#1297FE", //     var(--triplex-next-ColorInfo-60)
+        },
+        70: {
+            value: "#66C7FF", //     var(--triplex-next-ColorInfo-70)
+        },
+        80: {
+            value: "#8DDDFF", //     var(--triplex-next-ColorInfo-80)
+        },
+        90: {
+            value: "#B8EFFF", //     var(--triplex-next-ColorInfo-90)
+        },
+        100: {
+            value: "#E3FAFF", //     var(--triplex-next-ColorInfo-100)
+        },
+    },
+    ColorNeutralAlpha: {
+        0: {
+            value: "#8890A0", //     var(--triplex-next-ColorNeutralAlpha-0)
+        },
+        20: {
+            value: "#C0C5CF", //     var(--triplex-next-ColorNeutralAlpha-20)
+        },
+        30: {
+            value: "#DCDFE4", //     var(--triplex-next-ColorNeutralAlpha-30)
+        },
+        40: {
+            value: "#DFE2E7", //     var(--triplex-next-ColorNeutralAlpha-40)
+        },
+        90: {
+            value: "#F2F4F7", //     var(--triplex-next-ColorNeutralAlpha-90)
+        },
+        100: {
+            value: "#FFFFFF", //     var(--triplex-next-ColorNeutralAlpha-100)
+        },
+    },
+    ColorNeutral: {
+        0: {
+            value: "#8890A0", //     var(--triplex-next-ColorNeutral-0)
+        },
+        10: {
+            value: "#A6ACBA", //     var(--triplex-next-ColorNeutral-10)
+        },
+        20: {
+            value: "#C0C5CF", //     var(--triplex-next-ColorNeutral-20)
+        },
+        30: {
+            value: "#DCDFE4", //     var(--triplex-next-ColorNeutral-30)
+        },
+        40: {
+            value: "#DFE2E7", //     var(--triplex-next-ColorNeutral-40)
+        },
+        50: {
+            value: "#E3E6EA", //     var(--triplex-next-ColorNeutral-50)
+        },
+        60: {
+            value: "#E7E9EE", //     var(--triplex-next-ColorNeutral-60)
+        },
+        70: {
+            value: "#EAEDF1", //     var(--triplex-next-ColorNeutral-70)
+        },
+        80: {
+            value: "#EEF0F4", //     var(--triplex-next-ColorNeutral-80)
+        },
+        90: {
+            value: "#F2F4F7", //     var(--triplex-next-ColorNeutral-90)
+        },
+        100: {
+            value: "#FFFFFF", //     var(--triplex-next-ColorNeutral-100)
+        },
+    },
+    ColorSuccess: {
+        0: {
+            value: "#283230", //     var(--triplex-next-ColorSuccess-0)
+        },
+        10: {
+            value: "#004F42", //     var(--triplex-next-ColorSuccess-10)
+        },
+        20: {
+            value: "#00624C", //     var(--triplex-next-ColorSuccess-20)
+        },
+        30: {
+            value: "#007353", //     var(--triplex-next-ColorSuccess-30)
+        },
+        40: {
+            value: "#008B5C", //     var(--triplex-next-ColorSuccess-40)
+        },
+        50: {
+            value: "#00C075", //     var(--triplex-next-ColorSuccess-50)
+        },
+        60: {
+            value: "#00D67D", //     var(--triplex-next-ColorSuccess-60)
+        },
+        70: {
+            value: "#3AF299", //     var(--triplex-next-ColorSuccess-70)
+        },
+        80: {
+            value: "#8AFFB8", //     var(--triplex-next-ColorSuccess-80)
+        },
+        90: {
+            value: "#B8FFD4", //     var(--triplex-next-ColorSuccess-90)
+        },
+        100: {
+            value: "#E1FFEB", //     var(--triplex-next-ColorSuccess-100)
+        },
+    },
+    ColorWarning: {
+        0: {
+            value: "#392E2D", //     var(--triplex-next-ColorWarning-0)
+        },
+        10: {
+            value: "#DE3300", //     var(--triplex-next-ColorWarning-10)
+        },
+        20: {
+            value: "#EA3E00", //     var(--triplex-next-ColorWarning-20)
+        },
+        30: {
+            value: "#F64A00", //     var(--triplex-next-ColorWarning-30)
+        },
+        40: {
+            value: "#FF4A00", //     var(--triplex-next-ColorWarning-40)
+        },
+        50: {
+            value: "#FF6D00", //     var(--triplex-next-ColorWarning-50)
+        },
+        60: {
+            value: "#FF7A17", //     var(--triplex-next-ColorWarning-60)
+        },
+        70: {
+            value: "#FFB13B", //     var(--triplex-next-ColorWarning-70)
+        },
+        80: {
+            value: "#FFBD76", //     var(--triplex-next-ColorWarning-80)
+        },
+        90: {
+            value: "#FFE7B1", //     var(--triplex-next-ColorWarning-90)
+        },
+        100: {
+            value: "#FFF4DB", //     var(--triplex-next-ColorWarning-100)
         },
     },
 };

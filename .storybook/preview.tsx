@@ -11,6 +11,9 @@ const preview: Preview = {
         docs: {
             container: DocsContainer,
         },
+        options: {
+            storySort: (a, b) => a.title.localeCompare(b.title),
+        },
     },
     decorators: [
         (Story, context) => {

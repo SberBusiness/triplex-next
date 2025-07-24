@@ -12,7 +12,7 @@ export default {
 export const Default: StoryObj<typeof Button> = {
     name: "Button Default",
     args: {
-        label: "Click me",
+        children: "Click me",
         onClick: action("On Click"),
     },
     parameters: {
@@ -22,8 +22,6 @@ export const Default: StoryObj<typeof Button> = {
             },
         },
     },
-    render: (args) => {
-        return <Button {...args}>{args.label}</Button>;
-    },
+    render: (args) => <Button {...args} />,
 };
 export const Disabled = () => <Button disabled>Click me</Button>;

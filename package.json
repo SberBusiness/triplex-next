@@ -31,7 +31,7 @@
     "generateTokensTypes": "tsx scripts/generateRefTokensTypes.ts",
     "generateThemeCssVariables": "tsx scripts/generateCssFromDesignTokens.ts",
     "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
-    "chromatic": "dotenv -e .env.local -- npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=storybook:build"
+    "chromatic": "dotenv -e .env.local -- sh -c 'npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=storybook:build'"
   },
   "dependencies": {
     "clsx": "2.1.1",
@@ -53,6 +53,7 @@
     "@vitest/coverage-v8": "3.2.4",
     "autoprefixer": "10.4.21",
     "chromatic": "13.1.2",
+    "dotenv-cli": "9.0.0",
     "eslint": "9.31.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.5.1",

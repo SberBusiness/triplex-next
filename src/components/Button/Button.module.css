@@ -11,7 +11,7 @@
 
 .button:hover {
     background: var(--triplex-next-Button-General_Background_Hover);
-    color: var(--triplex-next-Button-General_Color_Hover-0-1-0);
+    color: var(--triplex-next-Button-General_Color_Hover);
 }
 
 .button:disabled {

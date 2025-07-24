@@ -3,18 +3,11 @@ import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes
 // Название токенов компонента Input.
 export const designTokensComponentsInputKeys = [
     "Background_Default",
-    "Background_Disabled",
 
     "BorderColor_Default",
-    "BorderColor_Disabled",
-    "BorderColor_Error",
-    "BorderColor_Focus",
 
     "Caret_Color",
     "Color_Default",
-    "Color_Disabled",
-
-    "Placeholder_Color",
 ] as const;
 // Тип, содержащий названия токенов компонента Input.
 export type TDesignTokensComponentsInputKeys = (typeof designTokensComponentsInputKeys)[number];
@@ -27,17 +20,10 @@ export type TDesignTokensComponentsInput = { Input: TDesignTokensComponentsInput
 
 // Токены компонента Input в светлой и темной темах.
 export const Input_Tokens: TDesignTokensComponentsInputValues = {
-    Background_Default: [{ ref: "Basic.100" }, { value: "none" }],
-    Background_Disabled: [{ ref: "Neutral.100" }, { ref: "Basic.700" }],
+    Background_Default: [{ ref: "ColorNeutral.100" }, { value: "none" }],
 
-    BorderColor_Default: [{ ref: "Neutral.500" }, { ref: "Neutral.900" }],
-    BorderColor_Disabled: [{ ref: "Neutral.500" }, { ref: "Basic.300" }],
-    BorderColor_Error: [{ ref: "Error.700" }, { ref: "Error.500" }],
-    BorderColor_Focus: [{ ref: "Basic.700" }, { ref: "Neutral.700" }],
+    BorderColor_Default: [{ ref: "ColorNeutral.40" }, { ref: "ColorNeutral.70" }],
 
-    Caret_Color: [{ ref: "Basic.700" }, { ref: "Neutral.100" }],
-    Color_Default: [{ ref: "Basic.700" }, { ref: "Neutral.100" }],
-    Color_Disabled: [{ ref: "Neutral.900" }, { ref: "Basic.300" }],
-
-    Placeholder_Color: [{ ref: "Neutral.900" }, { ref: "Neutral.900" }],
+    Caret_Color: [{ ref: "ColorDarkNeutral.30" }, { ref: "ColorNeutralAlpha.90" }],
+    Color_Default: [{ ref: "ColorDarkNeutral.30" }, { ref: "ColorNeutralAlpha.90" }],
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "../src";
 import { StoryObj } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import { action } from "storybook/actions";
 
 export default {
     title: "Components/Input",

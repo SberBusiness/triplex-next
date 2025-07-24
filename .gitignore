@@ -41,5 +41,5 @@ coverage/
 /test-results/
 /helm/
 /jenkins/
-.env.local
 build-storybook.log
+.env.local

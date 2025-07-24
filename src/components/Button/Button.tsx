@@ -6,7 +6,7 @@ export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 
 
 export const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(({ className, ...restProps }, ref) => {
-    return <button className={clsx(styles.button, className)} ref={ref} {...restProps} />;
+    return <button className={clsx(styles.button, className)} {...restProps} ref={ref} />;
 });
 
 Button.displayName = "Button";

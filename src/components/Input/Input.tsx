@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import styles from "./Input.module.css";
+import styles from "./styles/Input.module.less";
 
 export interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 

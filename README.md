@@ -46,7 +46,7 @@ src/components/Alert/
 
 ```
 Alert.tsx
-Alert.module.css
+styles/Alert.module.less
 index.ts         ← обязательный!
 ```
 

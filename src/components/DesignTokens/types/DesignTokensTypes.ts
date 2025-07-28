@@ -1,5 +1,5 @@
 import { TDesignTokenValue } from "./DesignTokenTypes";
-import { TDesignTokensComponentsButton, TDesignTokensComponentsInput } from "../components";
+import { TDesignTokensComponentsButton, TDesignTokensComponentsInput, TDesignTokensComponentsTypography } from "../components";
 
 // Название токенов группы ColorBasicAlpha.
 export const designTokensCoreGroupColorBasicAlphaKeys = ["100", "90", "80", "70", "60", "40", "0"] as const;
@@ -199,7 +199,7 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBasicAlpha &
     TDesignTokensCoreGroupColorWarning;
 
 // Тип локальных токенов(токенов компонентов).
-export type TDesignTokensComponents = TDesignTokensComponentsButton & TDesignTokensComponentsInput;
+export type TDesignTokensComponents = TDesignTokensComponentsButton & TDesignTokensComponentsInput & TDesignTokensComponentsTypography;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

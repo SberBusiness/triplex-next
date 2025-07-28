@@ -5,7 +5,7 @@ import { version } from "../package.json";
 const currentPackageVersion = version.replace(/\./g, "-");
 
 function replaceDesignTokenVersion(content, id) {
-    if (!id.includes(".css")) {
+    if (!id.includes(".less")) {
         return {
             code: content,
             map: null, // provide source map if available

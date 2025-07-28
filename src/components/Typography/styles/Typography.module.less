@@ -1,0 +1,166 @@
+.underline {
+    text-decoration: underline;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.underlineStrikethrough {
+    text-decoration: underline line-through;
+}
+
+.typography {
+    &.primary {
+        color: var(--triplex-next-Typography-Primary_Color)
+    }
+
+    &.complementary {
+        color: var(--triplex-Typography-Complementary_Color);
+    }
+
+    &.secondary {
+        color: var(--triplex-next-Typography-Secondary_Color);
+    }
+
+    &.tertiary {
+        color: var(--triplex-next-Typography-Tertiary_Color);
+    }
+
+    &.disabled {
+        color: var(--triplex-next-Typography-Disabled_Color);
+    }
+
+    &.brand {
+        color: var(--triplex-next-Typography-Brand_Color);
+        user-select: none;
+    }
+
+    &.info {
+        color: var(--triplex-next-Typography-Info_Color);
+    }
+
+    &.success {
+        color: var(--triplex-next-Typography-Success_Color);
+    }
+
+    &.error {
+        color: var(--triplex-next-Typography-Error_Color);
+    }
+
+    &.warning {
+        color: var(--triplex-next-Typography-Warning_Color);
+    }
+}
+
+// Title
+.title {
+    .regular {
+        font-family: 'SBSansDisplay';
+    }
+    
+    .semibold {
+        font-family: 'SBSansDisplaySemibold';
+    }
+    .medium {
+        font-family: 'SBSansDisplayMedium';
+    }
+
+    .bold {
+        font-family: 'SBSansDisplayBold';
+    }
+}
+.h1,
+.h2,
+.h3 {
+    margin: 0;
+}
+
+.h1 {
+    font-size: 28px;
+    line-height: 36px;
+}
+
+.h2 {
+    font-size: 24px;
+    line-height: 32px;
+}
+
+.h3 {
+    font-size: 20px;
+    line-height: 28px;
+}
+
+
+// Text
+.text {
+    .regular {  
+        font-family: 'SBSansText';
+    }
+    
+    .semibold {
+        font-family: 'SBSansTextSemibold';
+    }
+}
+.b1 {
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.b2 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.b3 {
+    font-size: 14px;
+    line-height: 20px;
+
+    &.compact {
+        line-height: 16px;
+    }
+}
+
+.b4 {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.compact {
+    line-height: 1.142; // Line height 16px при font-size 14px
+}
+
+// Caption
+.caption {
+    .regular {
+        font-family: 'SBSansText';
+    }
+    
+    .semibold {
+        font-family: 'SBSansTextSemibold';
+    }
+
+    .c1 {
+        font-size: 10px;
+        line-height: 12px;
+    }
+    
+    .c2 {
+        font-size: 8px;
+        line-height: 10px;
+    }
+    
+    .d1 {
+        font-size: 32px;
+        line-height: 40px;
+        
+        .regular {
+            font-family: 'SBSansDisplay';
+        }
+        
+        .semibold {
+            font-family: 'SBSansDisplaySemibold';
+        }
+    }
+}
+

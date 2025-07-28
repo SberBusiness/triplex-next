@@ -3,10 +3,7 @@ import { version } from "../package.json";
 
 const config: StorybookConfig = {
     stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
-    addons: [
-        "@storybook/addon-themes",
-        "@storybook/addon-docs",
-    ],
+    addons: ["@storybook/addon-themes", "@storybook/addon-docs"],
     framework: {
         name: "@storybook/react-vite",
         options: {},

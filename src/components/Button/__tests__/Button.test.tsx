@@ -1,12 +1,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Button } from "../index";
+import { Button } from "triplex-next";
 
 describe("Button", () => {
     it("applying a class", () => {
         const className = "test";
-
         render(<Button className={className} />);
-        expect(screen.getByRole("button").classList).toContain(className);
+
+        const element = screen.getByRole("button");
+        expect(element).toHaveClass(className);
     });
 });

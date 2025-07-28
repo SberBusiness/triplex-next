@@ -10,7 +10,7 @@ export default {
 };
 
 export const Default: StoryObj<typeof Button> = {
-    name: "Button Default",
+    name: "Default",
     args: {
         children: "Click me",
         onClick: action("On Click"),

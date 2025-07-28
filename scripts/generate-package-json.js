@@ -1,14 +1,14 @@
 /** Скрипт для генерации package.json внутри dist на основе src/components/*. */
 import path from "path";
 import fs from "fs";
-import { readFile } from 'fs/promises';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { readFile } from "fs/promises";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const pkgStr = await readFile(resolve(__dirname, '../package.json'), 'utf8');
+const pkgStr = await readFile(resolve(__dirname, "../package.json"), "utf8");
 const pkg = JSON.parse(pkgStr);
-const { name, scripts, ...rest } = pkg;
+const { name, ...rest } = pkg;
 const componentsDir = path.resolve(__dirname, "../src/components");
 const distDir = path.resolve(__dirname, "../dist");
 

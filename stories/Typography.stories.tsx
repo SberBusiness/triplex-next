@@ -10,7 +10,74 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: "Компоненты типографики для отображения текста с различными размерами, весами и стилями."
+                component: `
+Компоненты типографики для отображения текста с различными размерами, весами и стилями.
+
+## Шрифты
+
+Компоненты Typography используют шрифты SBSansDisplay и SBSansText. Эти шрифты включены в npm-пакет и должны быть подключены в вашем проекте.
+
+### Подключение шрифтов
+
+Подключите шрифты в вашем CSS:
+
+\`\`\`css
+@font-face {
+    font-family: 'SBSansDisplay';
+    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplayMedium';
+    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplaySemibold';
+    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplayBold';
+    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansText';
+    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansText-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansTextSemibold';
+    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+\`\`\`
+
+### Доступные шрифты
+
+- **SBSansDisplay** - для заголовков (Title компонент)
+  - Regular 
+  - Medium 
+  - Semibold 
+  - Bold
+
+- **SBSansText** - для основного текста и подписей (Text и Caption компоненты)
+  - Regular
+  - Semibold
+
+                `
             }
         }
     },
@@ -20,9 +87,9 @@ export default {
 export const TitleStory: StoryObj<typeof Title> = {
     render: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <Title size={ETitleSize.H1}>Заголовок H1 - Основной заголовок страницы</Title>
-            <Title size={ETitleSize.H2}>Заголовок H2 - Подзаголовок раздела</Title>
-            <Title size={ETitleSize.H3}>Заголовок H3 - Заголовок подраздела</Title>
+            <Title size={ETitleSize.H1}>Заголовок H1</Title>
+            <Title size={ETitleSize.H2}>Заголовок H2</Title>
+            <Title size={ETitleSize.H3}>Заголовок H3</Title>
         </div>
     ),
     parameters: {
@@ -55,15 +122,15 @@ export const TitleWeights: StoryObj<typeof Title> = {
 export const TitleTypes: StoryObj<typeof Title> = {
     render: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>Primary - Основной цвет</Title>
-            <Title size={ETitleSize.H2} type={EFontType.SECONDARY}>Secondary - Вторичный цвет</Title>
-            <Title size={ETitleSize.H2} type={EFontType.TERTIARY}>Tertiary - Третичный цвет</Title>
-            <Title size={ETitleSize.H2} type={EFontType.BRAND}>Brand - Брендовый цвет</Title>
-            <Title size={ETitleSize.H2} type={EFontType.INFO}>Info - Информационный цвет</Title>
-            <Title size={ETitleSize.H2} type={EFontType.SUCCESS}>Success - Цвет успеха</Title>
-            <Title size={ETitleSize.H2} type={EFontType.WARNING}>Warning - Цвет предупреждения</Title>
-            <Title size={ETitleSize.H2} type={EFontType.ERROR}>Error - Цвет ошибки</Title>
-            <Title size={ETitleSize.H2} type={EFontType.DISABLED}>Disabled - Отключенный цвет</Title>
+            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>Primary</Title>
+            <Title size={ETitleSize.H2} type={EFontType.SECONDARY}>Secondary</Title>
+            <Title size={ETitleSize.H2} type={EFontType.TERTIARY}>Tertiary</Title>
+            <Title size={ETitleSize.H2} type={EFontType.BRAND}>Brand</Title>
+            <Title size={ETitleSize.H2} type={EFontType.INFO}>Info</Title>
+            <Title size={ETitleSize.H2} type={EFontType.SUCCESS}>Success</Title>
+            <Title size={ETitleSize.H2} type={EFontType.WARNING}>Warning</Title>
+            <Title size={ETitleSize.H2} type={EFontType.ERROR}>Error</Title>
+            <Title size={ETitleSize.H2} type={EFontType.DISABLED}>Disabled</Title>
         </div>
     ),
     parameters: {
@@ -132,15 +199,15 @@ export const TextLineTypes: StoryObj<typeof Text> = {
 export const TextTypes: StoryObj<typeof Text> = {
     render: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <Text size={ETextSize.B2} type={EFontType.PRIMARY}>Primary - Основной цвет текста</Text>
-            <Text size={ETextSize.B2} type={EFontType.SECONDARY}>Secondary - Вторичный цвет текста</Text>
-            <Text size={ETextSize.B2} type={EFontType.TERTIARY}>Tertiary - Третичный цвет текста</Text>
-            <Text size={ETextSize.B2} type={EFontType.BRAND}>Brand - Брендовый цвет текста</Text>
-            <Text size={ETextSize.B2} type={EFontType.INFO}>Info - Информационный цвет текста</Text>
-            <Text size={ETextSize.B2} type={EFontType.SUCCESS}>Success - Цвет успеха</Text>
-            <Text size={ETextSize.B2} type={EFontType.WARNING}>Warning - Цвет предупреждения</Text>
-            <Text size={ETextSize.B2} type={EFontType.ERROR}>Error - Цвет ошибки</Text>
-            <Text size={ETextSize.B2} type={EFontType.DISABLED}>Disabled - Отключенный цвет</Text>
+            <Text size={ETextSize.B2} type={EFontType.PRIMARY}>Primary</Text>
+            <Text size={ETextSize.B2} type={EFontType.SECONDARY}>Secondary</Text>
+            <Text size={ETextSize.B2} type={EFontType.TERTIARY}>Tertiary</Text>
+            <Text size={ETextSize.B2} type={EFontType.BRAND}>Brand</Text>
+            <Text size={ETextSize.B2} type={EFontType.INFO}>Info</Text>
+            <Text size={ETextSize.B2} type={EFontType.SUCCESS}>Success</Text>
+            <Text size={ETextSize.B2} type={EFontType.WARNING}>Warning</Text>
+            <Text size={ETextSize.B2} type={EFontType.ERROR}>Error</Text>
+            <Text size={ETextSize.B2} type={EFontType.DISABLED}>Disabled</Text>
         </div>
     ),
     parameters: {
@@ -188,15 +255,15 @@ export const CaptionWeights: StoryObj<typeof Caption> = {
 export const CaptionTypes: StoryObj<typeof Caption> = {
     render: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <Caption size={ECaptionSize.C1} type={EFontType.PRIMARY}>Primary - Основной цвет подписи</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.SECONDARY}>Secondary - Вторичный цвет подписи</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.TERTIARY}>Tertiary - Третичный цвет подписи</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.BRAND}>Brand - Брендовый цвет подписи</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.INFO}>Info - Информационный цвет подписи</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.SUCCESS}>Success - Цвет успеха</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.WARNING}>Warning - Цвет предупреждения</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.ERROR}>Error - Цвет ошибки</Caption>
-            <Caption size={ECaptionSize.C1} type={EFontType.DISABLED}>Disabled - Отключенный цвет</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.PRIMARY}>Primary</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.SECONDARY}>Secondary</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.TERTIARY}>Tertiary</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.BRAND}>Brand</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.INFO}>Info</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.SUCCESS}>Success</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.WARNING}>Warning</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.ERROR}>Error</Caption>
+            <Caption size={ECaptionSize.C1} type={EFontType.DISABLED}>Disabled</Caption>
         </div>
     ),
     parameters: {

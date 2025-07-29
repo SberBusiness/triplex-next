@@ -6,22 +6,22 @@ import { ETriplexNextTheme } from "../ETriplexNextTheme";
 import { ThemeProviderContext } from "../ThemeProviderContext";
 
 vi.mock("rc-util/es/Dom/canUseDom", () => ({
-	default: vi.fn(() => true),
+    default: vi.fn(() => true),
 }));
 
 vi.mock("rc-util/es/Dom/dynamicCSS", () => ({
-	updateCSS: vi.fn(),
-	removeCSS: vi.fn(),
+    updateCSS: vi.fn(),
+    removeCSS: vi.fn(),
 }));
 
 vi.mock("../../../../scripts/uniqueId", () => ({
-	uniqueId: vi.fn((prefix: string) => `${prefix}test-id`),
+    uniqueId: vi.fn((prefix: string) => `${prefix}test-id`),
 }));
 
 vi.mock("../../DesignTokens/DesignTokenUtils", () => ({
-	DesignTokenUtils: {
-		getStyle: vi.fn(() => "--test-token: #ffffff;"),
-	},
+    DesignTokenUtils: {
+        getStyle: vi.fn(() => "--test-token: #ffffff;"),
+    },
 }));
 
 // Import mocked functions
@@ -32,175 +32,175 @@ import { DesignTokenUtils } from "../../DesignTokens/DesignTokenUtils";
 
 // Test component to consume context
 const TestConsumer: React.FC = () => {
-	const context = React.useContext(ThemeProviderContext);
-	return (
-		<div data-testid="context-consumer">
-			<span data-testid="scope-classname">{context.scopeClassName}</span>
-			<span data-testid="theme">{context.theme}</span>
-			<span data-testid="tokens-keys">{Object.keys(context.tokens).length}</span>
-		</div>
-	);
+    const context = React.useContext(ThemeProviderContext);
+    return (
+        <div data-testid="context-consumer">
+            <span data-testid="scope-classname">{context.scopeClassName}</span>
+            <span data-testid="theme">{context.theme}</span>
+            <span data-testid="tokens-keys">{Object.keys(context.tokens).length}</span>
+        </div>
+    );
 };
 
 describe("ThemeProvider", () => {
-	let mockScopeRef: React.RefObject<HTMLDivElement>;
+    let mockScopeRef: React.RefObject<HTMLDivElement>;
 
-	beforeEach(() => {
-		mockScopeRef = { current: document.createElement("div") };
-		vi.clearAllMocks();
-	});
+    beforeEach(() => {
+        mockScopeRef = { current: document.createElement("div") };
+        vi.clearAllMocks();
+    });
 
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
+    afterEach(() => {
+        vi.clearAllMocks();
+    });
 
-	describe("Basic Rendering", () => {
-		it("should render children correctly", () => {
-			render(
-				<ThemeProvider scopeRef={mockScopeRef}>
-					<div data-testid="test-child">Test Content</div>
-				</ThemeProvider>
-			);
+    describe("Basic Rendering", () => {
+        it("should render children correctly", () => {
+            render(
+                <ThemeProvider scopeRef={mockScopeRef}>
+                    <div data-testid="test-child">Test Content</div>
+                </ThemeProvider>,
+            );
 
-			expect(screen.getByTestId("test-child")).toBeDefined();
-			expect(screen.getByText("Test Content")).toBeDefined();
-		});
+            expect(screen.getByTestId("test-child")).toBeDefined();
+            expect(screen.getByText("Test Content")).toBeDefined();
+        });
 
-		it("should use light theme by default", () => {
-			render(
-				<ThemeProvider scopeRef={mockScopeRef}>
-					<TestConsumer />
-				</ThemeProvider>
-			);
+        it("should use light theme by default", () => {
+            render(
+                <ThemeProvider scopeRef={mockScopeRef}>
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.LIGHT);
-		});
+            expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.LIGHT);
+        });
 
-		it("should apply dark theme when specified", () => {
-			render(
-				<ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.DARK}>
-					<TestConsumer />
-				</ThemeProvider>
-			);
+        it("should apply dark theme when specified", () => {
+            render(
+                <ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.DARK}>
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.DARK);
-		});
-	});
+            expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.DARK);
+        });
+    });
 
-	describe("Scope ClassName Management", () => {
-		it("should generate unique scope classname when not provided", () => {
-			render(
-				<ThemeProvider scopeRef={mockScopeRef}>
-					<TestConsumer />
-				</ThemeProvider>
-			);
+    describe("Scope ClassName Management", () => {
+        it("should generate unique scope classname when not provided", () => {
+            render(
+                <ThemeProvider scopeRef={mockScopeRef}>
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			expect(uniqueId).toHaveBeenCalledWith("triplex-next-theme-");
-			expect(screen.getByTestId("scope-classname").textContent).toBe("triplex-next-theme-test-id");
-		});
+            expect(uniqueId).toHaveBeenCalledWith("triplex-next-theme-");
+            expect(screen.getByTestId("scope-classname").textContent).toBe("triplex-next-theme-test-id");
+        });
 
-		it("should use provided scope classname", () => {
-			const customClassName = "custom-theme-scope";
+        it("should use provided scope classname", () => {
+            const customClassName = "custom-theme-scope";
 
-			render(
-				<ThemeProvider scopeRef={mockScopeRef} scopeClassName={customClassName}>
-					<TestConsumer />
-				</ThemeProvider>
-			);
+            render(
+                <ThemeProvider scopeRef={mockScopeRef} scopeClassName={customClassName}>
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			expect(screen.getByTestId("scope-classname").textContent).toBe(customClassName);
-		});
+            expect(screen.getByTestId("scope-classname").textContent).toBe(customClassName);
+        });
 
-		it("should update scope classname when prop changes", async () => {
-			const { rerender } = render(
-				<ThemeProvider scopeRef={mockScopeRef} scopeClassName="initial-class">
-					<TestConsumer />
-				</ThemeProvider>
-			);
+        it("should update scope classname when prop changes", async () => {
+            const { rerender } = render(
+                <ThemeProvider scopeRef={mockScopeRef} scopeClassName="initial-class">
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			expect(screen.getByTestId("scope-classname").textContent).toBe("initial-class");
+            expect(screen.getByTestId("scope-classname").textContent).toBe("initial-class");
 
-			rerender(
-				<ThemeProvider scopeRef={mockScopeRef} scopeClassName="updated-class">
-					<TestConsumer />
-				</ThemeProvider>
-			);
+            rerender(
+                <ThemeProvider scopeRef={mockScopeRef} scopeClassName="updated-class">
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			await waitFor(() => {
-				expect(screen.getByTestId("scope-classname").textContent).toBe("updated-class");
-			});
-		});
-	});
+            await waitFor(() => {
+                expect(screen.getByTestId("scope-classname").textContent).toBe("updated-class");
+            });
+        });
+    });
 
-	describe("CSS Injection", () => {
-		it("should inject CSS styles when DOM is available", () => {
-			(canUseDom as any).mockReturnValue(true);
+    describe("CSS Injection", () => {
+        it("should inject CSS styles when DOM is available", () => {
+            (canUseDom as any).mockReturnValue(true);
 
-			render(
-				<ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.LIGHT}>
-					<div>Test</div>
-				</ThemeProvider>
-			);
+            render(
+                <ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.LIGHT}>
+                    <div>Test</div>
+                </ThemeProvider>,
+            );
 
-			expect(DesignTokenUtils.getStyle).toHaveBeenCalledWith(ETriplexNextTheme.LIGHT, {});
-			expect(updateCSS).toHaveBeenCalledWith(
-				".triplex-next-theme-test-id {--test-token: #ffffff;}",
-				"triplex-next-dynamic-tokens-triplex-next-theme-test-id"
-			);
-		});
-	});
+            expect(DesignTokenUtils.getStyle).toHaveBeenCalledWith(ETriplexNextTheme.LIGHT, {});
+            expect(updateCSS).toHaveBeenCalledWith(
+                ".triplex-next-theme-test-id {--test-token: #ffffff;}",
+                "triplex-next-dynamic-tokens-triplex-next-theme-test-id",
+            );
+        });
+    });
 
-	describe("CSS Cleanup", () => {
-		it("should remove CSS on unmount", () => {
-			const { unmount } = render(
-				<ThemeProvider scopeRef={mockScopeRef}>
-					<div>Test</div>
-				</ThemeProvider>
-			);
+    describe("CSS Cleanup", () => {
+        it("should remove CSS on unmount", () => {
+            const { unmount } = render(
+                <ThemeProvider scopeRef={mockScopeRef}>
+                    <div>Test</div>
+                </ThemeProvider>,
+            );
 
-			unmount();
+            unmount();
 
-			expect(removeCSS).toHaveBeenCalledWith("triplex-next-dynamic-tokens-triplex-next-theme-test-id");
-		});
+            expect(removeCSS).toHaveBeenCalledWith("triplex-next-dynamic-tokens-triplex-next-theme-test-id");
+        });
 
-		it("should remove correct CSS when scope classname changes", async () => {
-			const { rerender } = render(
-				<ThemeProvider scopeRef={mockScopeRef} scopeClassName="initial-class">
-					<div>Test</div>
-				</ThemeProvider>
-			);
+        it("should remove correct CSS when scope classname changes", async () => {
+            const { rerender } = render(
+                <ThemeProvider scopeRef={mockScopeRef} scopeClassName="initial-class">
+                    <div>Test</div>
+                </ThemeProvider>,
+            );
 
-			rerender(
-				<ThemeProvider scopeRef={mockScopeRef} scopeClassName="updated-class">
-					<div>Test</div>
-				</ThemeProvider>
-			);
+            rerender(
+                <ThemeProvider scopeRef={mockScopeRef} scopeClassName="updated-class">
+                    <div>Test</div>
+                </ThemeProvider>,
+            );
 
-			await waitFor(() => {
-				expect(removeCSS).toHaveBeenCalledWith("triplex-next-dynamic-tokens-initial-class");
-			});
-		});
-	});
+            await waitFor(() => {
+                expect(removeCSS).toHaveBeenCalledWith("triplex-next-dynamic-tokens-initial-class");
+            });
+        });
+    });
 
-	describe("Theme Switching", () => {
-		it("should update context when theme changes", async () => {
-			const { rerender } = render(
-				<ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.LIGHT}>
-					<TestConsumer />
-				</ThemeProvider>
-			);
+    describe("Theme Switching", () => {
+        it("should update context when theme changes", async () => {
+            const { rerender } = render(
+                <ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.LIGHT}>
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.LIGHT);
+            expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.LIGHT);
 
-			rerender(
-				<ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.DARK}>
-					<TestConsumer />
-				</ThemeProvider>
-			);
+            rerender(
+                <ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.DARK}>
+                    <TestConsumer />
+                </ThemeProvider>,
+            );
 
-			await waitFor(() => {
-				expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.DARK);
-			});
-		});
-	});
-}); 
+            await waitFor(() => {
+                expect(screen.getByTestId("theme").textContent).toBe(ETriplexNextTheme.DARK);
+            });
+        });
+    });
+});

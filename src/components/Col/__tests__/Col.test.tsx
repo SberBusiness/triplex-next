@@ -72,8 +72,8 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            expect(col.className).toMatch(/col\w*6/);
-            expect(col.className).toMatch(/offset\w*2/);
+            expect(col.className).toMatch(/col-6/);
+            expect(col.className).toMatch(/offset-2/);
         });
 
         it("should apply responsive size and offset classes", () => {
@@ -93,11 +93,18 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            ["colSm4", "colMd5", "colLg6", "colXl7", "offsetSm1", "offsetMd2", "offsetLg3", "offsetXl4"].forEach(
-                (cls) => {
-                    expect(col.className).toMatch(new RegExp(cls));
-                },
-            );
+            [
+                "col-sm-4",
+                "col-md-5",
+                "col-lg-6",
+                "col-xl-7",
+                "offset-sm-1",
+                "offset-md-2",
+                "offset-lg-3",
+                "offset-xl-4",
+            ].forEach((cls) => {
+                expect(col.className).toMatch(new RegExp(cls));
+            });
         });
 
         it("should apply hidden and block classes", () => {
@@ -120,16 +127,16 @@ describe("Col Component", () => {
             );
             const col = getColDiv();
             [
-                "dNone",
-                "dNoneSm",
-                "dNoneMd",
-                "dNoneLg",
-                "dNoneXl",
-                "dBlock",
-                "dBlockSm",
-                "dBlockMd",
-                "dBlockLg",
-                "dBlockXl",
+                "d-none",
+                "d-none-sm",
+                "d-none-md",
+                "d-none-lg",
+                "d-none-xl",
+                "d-block",
+                "d-block-sm",
+                "d-block-md",
+                "d-block-lg",
+                "d-block-xl",
             ].forEach((cls) => {
                 expect(col.className).toMatch(new RegExp(cls));
             });

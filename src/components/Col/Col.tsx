@@ -44,12 +44,24 @@ function getClassNames({
     size?: TColumnSize;
 }) {
     const classes: string[] = [];
-    const prefixCap = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
+    const prefixAsPart = prefix ? `${prefix}-` : "";
+    const prefixVisibility = prefix ? `-${prefix}` : "";
 
-    if (block) classes.push(`d-block${prefixCap}`);
-    if (hidden) classes.push(`d-none${prefixCap}`);
-    if (offset !== undefined) classes.push(`offset-${prefixCap}${offset}`);
-    if (size !== undefined) classes.push(`col-${prefixCap}${size}`);
+    if (block !== undefined) {
+        classes.push(`d-block${prefixVisibility}`);
+    }
+
+    if (hidden !== undefined) {
+        classes.push(`d-none${prefixVisibility}`);
+    }
+
+    if (offset !== undefined) {
+        classes.push(`offset-${prefixAsPart}${offset}`);
+    }
+
+    if (size) {
+        classes.push(`col-${prefixAsPart}${size}`);
+    }
 
     return classes;
 }

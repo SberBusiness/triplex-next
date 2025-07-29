@@ -309,9 +309,8 @@ describe("Row Component", () => {
         });
 
         it("should have correct defaultProps", () => {
-            expect(Row.defaultProps).toEqual({
-                paddingBottom: true,
-            });
+            // Row component uses default parameter values instead of defaultProps
+            expect(Row.defaultProps).toBeUndefined();
         });
     });
 });

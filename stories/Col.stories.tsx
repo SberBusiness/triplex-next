@@ -28,7 +28,7 @@ const meta: Meta<typeof Col> = {
 export default meta;
 type Story = StoryObj<typeof Col>;
 
-export const Default: Story = {
+export const Examples: Story = {
     render: () => (
         <>
             <div>Size не задан.</div>
@@ -43,7 +43,7 @@ export const Default: Story = {
             </Row>
 
             <div>Несколько строк в одном Row.</div>
-            <Row>
+            <Row style={{ rowGap: "4px" }}>
                 <Col>{renderFilledDiv("100% ширины")}</Col>
                 <Col>{renderFilledDiv("100% ширины")}</Col>
                 <Col>{renderFilledDiv("100% ширины")}</Col>

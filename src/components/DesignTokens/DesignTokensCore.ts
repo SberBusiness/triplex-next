@@ -26,7 +26,7 @@ export const DesignTokensCore: TDesignTokensCore = {
         },
     },
     ColorBrand: {
-        0: {    
+        0: {
             value: "#1F3336", //     var(--triplex-next-ColorBrand-0)
         },
         10: {

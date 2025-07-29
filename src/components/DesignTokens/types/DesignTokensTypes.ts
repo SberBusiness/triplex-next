@@ -113,9 +113,11 @@ export type TDesignTokensCoreGroupColorBasicAlphaKeys = (typeof designTokensCore
 // Тип, содержащий названия токенов группы ColorBrand.
 export type TDesignTokensCoreGroupColorBrandKeys = (typeof designTokensCoreGroupColorBrandKeys)[number];
 // Тип, содержащий названия токенов группы ColorDarkBasicAlpha.
-export type TDesignTokensCoreGroupColorDarkBasicAlphaKeys = (typeof designTokensCoreGroupColorDarkBasicAlphaKeys)[number];
+export type TDesignTokensCoreGroupColorDarkBasicAlphaKeys =
+    (typeof designTokensCoreGroupColorDarkBasicAlphaKeys)[number];
 // Тип, содержащий названия токенов группы ColorDarkNeutralAlpha.
-export type TDesignTokensCoreGroupColorDarkNeutralAlphaKeys = (typeof designTokensCoreGroupColorDarkNeutralAlphaKeys)[number];
+export type TDesignTokensCoreGroupColorDarkNeutralAlphaKeys =
+    (typeof designTokensCoreGroupColorDarkNeutralAlphaKeys)[number];
 // Тип, содержащий названия токенов группы DarkNeutral.
 export type TDesignTokensCoreGroupColorDarkNeutralKeys = (typeof designTokensCoreGroupColorDarkNeutralKeys)[number];
 // Тип, содержащий названия токенов группы ColorError.
@@ -132,7 +134,10 @@ export type TDesignTokensCoreGroupColorSuccessKeys = (typeof designTokensCoreGro
 export type TDesignTokensCoreGroupColorWarningKeys = (typeof designTokensCoreGroupColorWarningKeys)[number];
 
 // Тип, содержащий названия токенов группы ColorBasicAlpha и их значения.
-export type TDesignTokensCoreGroupColorBasicAlphaValue = Record<TDesignTokensCoreGroupColorBasicAlphaKeys, TDesignTokenValue>;
+export type TDesignTokensCoreGroupColorBasicAlphaValue = Record<
+    TDesignTokensCoreGroupColorBasicAlphaKeys,
+    TDesignTokenValue
+>;
 // Тип, содержащий названия токенов группы ColorBrand и их значения.
 export type TDesignTokensCoreGroupColorBrandValue = Record<TDesignTokensCoreGroupColorBrandKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов группы ColorDarkBasicAlpha и их значения.
@@ -146,13 +151,19 @@ export type TDesignTokensCoreGroupColorDarkNeutralAlphaValue = Record<
     TDesignTokenValue
 >;
 // Тип, содержащий названия токенов группы ColorDarkNeutral и их значения.
-export type TDesignTokensCoreGroupColorDarkNeutralValue = Record<TDesignTokensCoreGroupColorDarkNeutralKeys, TDesignTokenValue>;
+export type TDesignTokensCoreGroupColorDarkNeutralValue = Record<
+    TDesignTokensCoreGroupColorDarkNeutralKeys,
+    TDesignTokenValue
+>;
 // Тип, содержащий названия токенов группы ColorError и их значения.
 export type TDesignTokensCoreGroupColorErrorValue = Record<TDesignTokensCoreGroupColorErrorKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов группы ColorInfo и их значения.
 export type TDesignTokensCoreGroupColorInfoValue = Record<TDesignTokensCoreGroupColorInfoKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов группы ColorNeutralAlpha и их значения.
-export type TDesignTokensCoreGroupColorNeutralAlphaValue = Record<TDesignTokensCoreGroupColorNeutralAlphaKeys, TDesignTokenValue>;
+export type TDesignTokensCoreGroupColorNeutralAlphaValue = Record<
+    TDesignTokensCoreGroupColorNeutralAlphaKeys,
+    TDesignTokenValue
+>;
 // Тип, содержащий названия токенов группы ColorNeutral и их значения.
 export type TDesignTokensCoreGroupColorNeutralValue = Record<TDesignTokensCoreGroupColorNeutralKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов группы ColorSuccess и их значения.
@@ -165,7 +176,9 @@ export type TDesignTokensCoreGroupColorBasicAlpha = { ColorBasicAlpha: TDesignTo
 // Тип токенов группы Brand.
 export type TDesignTokensCoreGroupColorBrand = { ColorBrand: TDesignTokensCoreGroupColorBrandValue };
 // Тип токенов группы DarkBasicAlpha.
-export type TDesignTokensCoreGroupColorDarkBasicAlpha = { ColorDarkBasicAlpha: TDesignTokensCoreGroupColorDarkBasicAlphaValue };
+export type TDesignTokensCoreGroupColorDarkBasicAlpha = {
+    ColorDarkBasicAlpha: TDesignTokensCoreGroupColorDarkBasicAlphaValue;
+};
 // Тип токенов группы DarkNeutralAlpha.
 export type TDesignTokensCoreGroupColorDarkNeutralAlpha = {
     ColorDarkNeutralAlpha: TDesignTokensCoreGroupColorDarkNeutralAlphaValue;
@@ -177,7 +190,9 @@ export type TDesignTokensCoreGroupColorError = { ColorError: TDesignTokensCoreGr
 // Тип токенов группы Info.
 export type TDesignTokensCoreGroupColorInfo = { ColorInfo: TDesignTokensCoreGroupColorInfoValue };
 // Тип токенов группы NeutralAlpha.
-export type TDesignTokensCoreGroupColorNeutralAlpha = { ColorNeutralAlpha: TDesignTokensCoreGroupColorNeutralAlphaValue };
+export type TDesignTokensCoreGroupColorNeutralAlpha = {
+    ColorNeutralAlpha: TDesignTokensCoreGroupColorNeutralAlphaValue;
+};
 // Тип токенов группы Neutral.
 export type TDesignTokensCoreGroupColorNeutral = { ColorNeutral: TDesignTokensCoreGroupColorNeutralValue };
 // Тип токенов группы Success.

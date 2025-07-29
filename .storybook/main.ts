@@ -5,10 +5,7 @@ import generateScopedName from "../scripts/generate-scoped-name";
 
 const config: StorybookConfig = {
     stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
-    addons: [
-        "@storybook/addon-themes",
-        "@storybook/addon-docs",
-    ],
+    addons: ["@storybook/addon-themes", "@storybook/addon-docs"],
     framework: {
         name: "@storybook/react-vite",
         options: {},

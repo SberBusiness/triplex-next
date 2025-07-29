@@ -42,7 +42,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            "triplex-next": resolve(__dirname, "src/index.ts"),
+            "triplex-next": resolve(__dirname, "src"),
         },
     },
     plugins: [react(), dts({ entryRoot: "src", exclude: "**/*.test.{ts,tsx}" }), replaceDesignTokenVersionPlugin()],

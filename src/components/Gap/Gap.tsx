@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import styles from "./Gap.module.css";
+import styles from "./Gap.module.less";
 
 export type TGapSize = 4 | 8 | 12 | 16 | 24 | 32 | 64 | 128;
 

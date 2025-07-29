@@ -8,6 +8,6 @@ describe("Button", () => {
         render(<Button className={className} />);
 
         const element = screen.getByRole("button");
-        expect(element).toHaveClass(className);
+        expect(element.classList).toContain(className);
     });
 });

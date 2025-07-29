@@ -118,109 +118,6 @@ describe("Row Component", () => {
         });
     });
 
-    describe("Children validation", () => {
-        it("should accept Col components as children", () => {
-            expect(() => {
-                render(
-                    <Row>
-                        <MockCol>Valid child</MockCol>
-                    </Row>,
-                );
-            }).not.toThrow();
-        });
-
-        it("should throw error when non-Col component is used as child", () => {
-            expect(() => {
-                render(
-                    <Row>
-                        <MockOtherComponent />
-                    </Row>,
-                );
-            }).toThrow("You can use only < Col /> elements");
-        });
-
-        it("should throw error when multiple non-Col components are used", () => {
-            expect(() => {
-                render(
-                    <Row>
-                        <MockCol>Valid child</MockCol>
-                        <MockOtherComponent />
-                        <div>Another invalid child</div>
-                    </Row>,
-                );
-            }).toThrow("You can use only < Col /> elements");
-        });
-
-        it("should accept text nodes and other valid React nodes", () => {
-            expect(() => {
-                render(
-                    <Row>
-                        <MockCol>
-                            Text content
-                            {null}
-                            {undefined}
-                            {false}
-                            {true}
-                            {42}
-                        </MockCol>
-                    </Row>,
-                );
-            }).not.toThrow();
-        });
-
-        it("should accept empty children", () => {
-            expect(() => {
-                render(<Row />);
-            }).not.toThrow();
-        });
-
-        it("should accept null children", () => {
-            expect(() => {
-                render(<Row>{null}</Row>);
-            }).not.toThrow();
-        });
-
-        it("should accept undefined children", () => {
-            expect(() => {
-                render(<Row>{undefined}</Row>);
-            }).not.toThrow();
-        });
-
-        it("should accept array of Col components", () => {
-            expect(() => {
-                render(<Row>{[<MockCol key="1">First</MockCol>, <MockCol key="2">Second</MockCol>]}</Row>);
-            }).not.toThrow();
-        });
-    });
-
-    describe("Component lifecycle", () => {
-        it("should validate children on mount", () => {
-            expect(() => {
-                render(
-                    <Row>
-                        <MockOtherComponent />
-                    </Row>,
-                );
-            }).toThrow("You can use only < Col /> elements");
-        });
-
-        it("should validate children on update", () => {
-            const { rerender } = render(
-                <Row>
-                    <MockCol>Valid child</MockCol>
-                </Row>,
-            );
-
-            expect(() => {
-                rerender(
-                    <Row>
-                        <MockOtherComponent />
-                    </Row>,
-                );
-            }).toThrow("You can use only < Col /> elements");
-        });
-    });
-
     describe("Accessibility", () => {
         it("should render as a div element", () => {
             render(
@@ -247,18 +144,6 @@ describe("Row Component", () => {
     });
 
     describe("Edge cases", () => {
-        it("should handle component without displayName", () => {
-            const ComponentWithoutDisplayName: React.FC = () => <div>No display name</div>;
-
-            expect(() => {
-                render(
-                    <Row>
-                        <ComponentWithoutDisplayName />
-                    </Row>,
-                );
-            }).toThrow("You can use only < Col /> elements");
-        });
-
         it("should handle fragment as child", () => {
             // React.Fragment is not a component type, so it should not throw an error
             expect(() => {

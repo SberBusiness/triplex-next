@@ -1,9 +1,25 @@
 import React from 'react';
-import {clsx} from 'clsx';
-import {EFontType, EFontWeightTitle, ETitleSize} from './enums';
-import {ITypographyProps} from './types';
-import {mapTitleSizeToCssClass, mapFontTypeToCssClass, mapFontWeightTitleToCssClass} from './utils';
-import styles from './styles/Typography.module.less';
+import { clsx } from 'clsx';
+import { EFontType, EFontWeightTitle, ETitleSize } from './enums';
+import { ITypographyProps } from './types';
+import { mapFontTypeToCssClass } from './utils';
+import styles from './styles/Title.module.less';
+import typographyStyles from './styles/Typography.module.less';
+
+/** Соответствие размера заголовка стилевому классу. */
+export const mapTitleSizeToCssClass = {
+    [ETitleSize.H1]: styles.h1,
+    [ETitleSize.H2]: styles.h2,
+    [ETitleSize.H3]: styles.h3,
+};
+
+/** Соответствие цвета шрифта стилевому классу. */
+export const mapFontWeightTitleToCssClass = {
+    [EFontWeightTitle.MEDIUM]: styles.medium,
+    [EFontWeightTitle.REGULAR]: styles.regular,
+    [EFontWeightTitle.SEMIBOLD]: styles.semibold,
+    [EFontWeightTitle.BOLD]: styles.bold,
+};
 
 /** Свойства компонента Title. */
 type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
@@ -27,22 +43,22 @@ export function Title<T extends keyof JSX.IntrinsicElements = `h1`>({
     ...props
 }: TTitleProps<T>): JSX.Element {
     const classes = clsx(
-        styles.typography,
+        typographyStyles.typography,
         styles.title,
         mapTitleSizeToCssClass[size],
         mapFontTypeToCssClass[type],
         mapFontWeightTitleToCssClass[weight],
         {
-            [styles.strikethrough]: !!strikethrough && !underline,
-            [styles.underline]: !!underline && !strikethrough,
-            [styles.underlineStrikethrough]: !!strikethrough && !!underline,
+            [typographyStyles.strikethrough]: !!strikethrough && !underline,
+            [typographyStyles.underline]: !!underline && !strikethrough,
+            [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
         },
         className
     );
 
     const Tag = tag;
 
-    return (    
+    return (
         <Tag className={classes} {...props}>
             {children}
         </Tag>

@@ -1,9 +1,24 @@
 import React from 'react';
-import {clsx} from 'clsx';
-import {EFontType, EFontWeightText, ECaptionSize} from './enums';
-import {ITypographyProps} from './types';
-import {mapFontTypeToCssClass, mapFontWeightTextToCssClass, mapCaptionSizeToCssClass} from './utils';
-import styles from './styles/Typography.module.less';
+import { clsx } from 'clsx';
+import { EFontType, EFontWeightText, ECaptionSize } from './enums';
+import { ITypographyProps } from './types';
+import {mapFontTypeToCssClass} from './utils';
+
+import styles from './styles/Caption.module.less';
+import typographyStyles from './styles/Typography.module.less';
+
+/** Соответствие цвета шрифта стилевому классу. */
+export const mapFontWeightTextToCssClass = {
+    [EFontWeightText.REGULAR]: styles.regular,
+    [EFontWeightText.SEMIBOLD]: styles.semibold,
+};
+
+/** Соответствие размера подписи стилевому классу. */
+export const mapCaptionSizeToCssClass = {
+    [ECaptionSize.C1]: styles.c1,
+    [ECaptionSize.C2]: styles.c2,
+    [ECaptionSize.D1]: styles.d1,
+};
 
 /** Свойства компонента Text. */
 type TTextProps<T extends keyof JSX.IntrinsicElements> = {
@@ -27,15 +42,15 @@ export function Caption<T extends keyof JSX.IntrinsicElements = 'span'>({
     ...props
 }: TTextProps<T>): JSX.Element {
     const classes = clsx(
-        styles.typography,
+        typographyStyles.typography,
         styles.caption,
         mapCaptionSizeToCssClass[size],
         mapFontTypeToCssClass[type],
         mapFontWeightTextToCssClass[weight],
         {
-            [styles.strikethrough]: !!strikethrough && !underline,
-            [styles.underline]: !!underline && !strikethrough,
-            [styles.underlineStrikethrough]: !!strikethrough && !!underline,
+            [typographyStyles.strikethrough]: !!strikethrough && !underline,
+            [typographyStyles.underline]: !!underline && !strikethrough,
+            [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
         },
         className
     );

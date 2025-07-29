@@ -2,8 +2,32 @@ import React from 'react';
 import {clsx} from 'clsx';
 import {EFontType, EFontWeightText, ELineType, ETextSize} from './enums';
 import {ITypographyProps} from './types';
-import {mapTextSizeToCssClass, mapFontTypeToCssClass, mapFontWeightTextToCssClass, mapTextLineTypeToCssClass} from './utils';
-import styles from './styles/Typography.module.less';
+import {mapFontTypeToCssClass} from './utils';
+import styles from './styles/Text.module.less';
+import typographyStyles from './styles/Typography.module.less';
+
+/** Соответствие размера текста стилевому классу. */
+export const mapTextSizeToCssClass = {
+    [ETextSize.B1]: styles.b1,
+    [ETextSize.B2]: styles.b2,
+    [ETextSize.B3]: styles.b3,
+    [ETextSize.B4]: styles.b4,
+};
+
+
+/** Соответствие цвета шрифта стилевому классу. */
+export const mapFontWeightTextToCssClass = {
+    [EFontWeightText.REGULAR]: styles.regular,
+    [EFontWeightText.SEMIBOLD]: styles.semibold,
+};
+
+
+/** Соответствие типа высоты блока строки стилевому классу. */
+export const mapTextLineTypeToCssClass = {
+    [ELineType.NORMAL]: '',
+    [ELineType.COMPACT]: typographyStyles.compact,
+};
+
 
 /** Свойства компонента Text. */
 type TTextProps<T extends keyof JSX.IntrinsicElements> = {
@@ -30,16 +54,16 @@ export function Text<T extends keyof JSX.IntrinsicElements = 'span'>({
     ...props
 }: TTextProps<T>): JSX.Element {
     const classes = clsx(
-        styles.typography,
+        typographyStyles.typography,
         styles.text,
         mapTextSizeToCssClass[size],
         mapFontTypeToCssClass[type],
         mapFontWeightTextToCssClass[weight],
         mapTextLineTypeToCssClass[line],
         {   
-            [styles.strikethrough]: !!strikethrough && !underline,
-            [styles.underline]: !!underline && !strikethrough,
-            [styles.underlineStrikethrough]: !!strikethrough && !!underline,
+            [typographyStyles.strikethrough]: !!strikethrough && !underline,
+            [typographyStyles.underline]: !!underline && !strikethrough,
+            [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
         },
         className
     );

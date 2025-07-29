@@ -4,7 +4,7 @@ import { version } from "../package.json";
 const componentFileNameRE = /[/\\]src[/\\]components[/\\](\w+)[/\\]/;
 
 function generateClassNameHash(input: string) {
-    const hash = createHash("sha256").update(input).digest("base64");
+    const hash = createHash("sha256").update(input).digest("hex");
 
     return hash.slice(0, 8);
 }

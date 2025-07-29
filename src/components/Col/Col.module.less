@@ -1,0 +1,86 @@
+@import 'src/styles/style';
+
+@base-col: (100% / 12);
+
+.createCol(@resolutionType) {
+    each(range(12), { // @value = [1 .. 12]
+        .col-@{resolutionType}@{value} {
+        position: relative;
+        width: 100%;
+        padding-right: @ufs-theme-grid-horizontal-gap;
+        padding-left: @ufs-theme-grid-horizontal-gap;
+        flex: 0 0 (@base-col * @value);
+        max-width: (@base-col * @value);
+        box-sizing: border-box;
+    }});
+
+    each(range(0,11,1), { // @value = [0 .. 11]
+        .offset-@{resolutionType}@{value} {
+        margin-left: (@base-col * @value);
+    }});
+}
+
+// https://getbootstrap.com/docs/4.1/layout/grid/#grid-options
+
+// Extra small (на всех разрешениях)
+.createCol(~'');
+
+.d-none {
+    display: none !important;
+}
+
+.d-block {
+    display: block !important;
+}
+
+// Small
+@media (min-width: @screen-sm) {
+    .createCol(sm-);
+
+    .d-none-sm {
+        display: none !important;
+    }
+
+    .d-block-sm {
+        display: block !important;
+    }
+}
+
+// Medium
+@media (min-width: @screen-md) {
+    .createCol(md-);
+
+    .d-none-md {
+        display: none !important;
+    }
+
+    .d-block-md {
+        display: block !important;
+    }
+}
+
+// Large
+@media (min-width: @screen-lg) {
+    .createCol(lg-);
+
+    .d-none-lg {
+        display: none !important;
+    }
+
+    .d-block-lg {
+        display: block !important;
+    }
+}
+
+// Extra large
+@media (min-width: @screen-xl) {
+    .createCol(xl-);
+
+    .d-none-xl {
+        display: none !important;
+    }
+
+    .d-block-xl {
+        display: block !important;
+    }
+}

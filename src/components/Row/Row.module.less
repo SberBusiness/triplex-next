@@ -1,0 +1,14 @@
+@import 'src/styles/style';
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -@ufs-theme-grid-horizontal-gap;
+    margin-right: -@ufs-theme-grid-horizontal-gap;
+    padding-bottom: @ufs-theme-row-bottom-padding;
+
+    &.noPaddingBottom,
+    &:last-child {
+        padding-bottom: 0;
+    }
+}

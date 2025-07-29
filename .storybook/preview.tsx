@@ -4,6 +4,7 @@ import React from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import "./storybook.css";
 import DocsContainer from "./DocsContainer";
+import "../src/styles/style.less";
 
 const preview: Preview = {
     parameters: {

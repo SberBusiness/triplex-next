@@ -104,7 +104,7 @@ describe("DesignTokenUtils", () => {
         });
 
         it("should return empty string for invalid reference", () => {
-            const tokenValue: TDesignTokenValue = { ref: "Invalid.Token" as any };
+            const tokenValue: TDesignTokenValue = { ref: "Invalid.Token" } as unknown as TDesignTokenValue;
             const tokens = {
                 ColorBasicAlpha: {
                     "40": { value: "#21A19A" },
@@ -117,7 +117,7 @@ describe("DesignTokenUtils", () => {
         });
 
         it("should return empty string for token without value or ref", () => {
-            const tokenValue: TDesignTokenValue = {} as any;
+            const tokenValue: TDesignTokenValue = {} as unknown as TDesignTokenValue;
             const tokens = {
                 ColorBasicAlpha: {
                     "40": { value: "#21A19A" },

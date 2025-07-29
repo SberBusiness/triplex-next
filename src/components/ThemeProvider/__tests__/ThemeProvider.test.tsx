@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, Mock } from "vitest";
 import { ThemeProvider } from "../ThemeProvider";
 import { ETriplexNextTheme } from "../ETriplexNextTheme";
 import { ThemeProviderContext } from "../ThemeProviderContext";
@@ -134,7 +134,7 @@ describe("ThemeProvider", () => {
 
     describe("CSS Injection", () => {
         it("should inject CSS styles when DOM is available", () => {
-            (canUseDom as any).mockReturnValue(true);
+            (canUseDom as Mock).mockReturnValue(true);
 
             render(
                 <ThemeProvider scopeRef={mockScopeRef} theme={ETriplexNextTheme.LIGHT}>

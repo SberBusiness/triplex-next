@@ -10,7 +10,7 @@ export default {
 };
 
 export const Default: StoryObj<typeof Input> = {
-    name: "Input  Default",
+    name: "Default",
     args: {
         placeholder: "Введите текст",
         onFocus: action("On Focus"),

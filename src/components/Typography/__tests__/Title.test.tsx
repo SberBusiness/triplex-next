@@ -8,6 +8,7 @@ describe("Title", () => {
         render(<Title size={ETitleSize.H1}>Test Title</Title>);
 
         const title = screen.getByRole("heading", { level: 1 });
+        console.log(title);
         expect(title).toBeDefined();
         expect(title.textContent).toBe("Test Title");
     });

@@ -28,9 +28,9 @@ describe("Typography Enums", () => {
 
     describe("ETitleSize", () => {
         it("has correct values", () => {
-            expect(ETitleSize.H1).toBe(0);
-            expect(ETitleSize.H2).toBe(1);
-            expect(ETitleSize.H3).toBe(2);
+            expect(ETitleSize.H1).toBe(1);
+            expect(ETitleSize.H2).toBe(2);
+            expect(ETitleSize.H3).toBe(3);
         });
     });
 

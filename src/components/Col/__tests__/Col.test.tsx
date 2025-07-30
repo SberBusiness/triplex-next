@@ -25,7 +25,7 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            expect(col).toBeTruthy();
+            expect(col).toBeInTheDocument();
             expect(col.className).toBeTruthy();
             expect(col.className.length).toBeGreaterThan(0);
         });
@@ -37,8 +37,8 @@ describe("Col Component", () => {
                     <span>Second</span>
                 </Col>,
             );
-            expect(screen.getByText("First")).toBeTruthy();
-            expect(screen.getByText("Second")).toBeTruthy();
+            expect(screen.getByText("First")).toBeInTheDocument();
+            expect(screen.getByText("Second")).toBeInTheDocument();
         });
 
         it("should apply custom className", () => {
@@ -48,7 +48,7 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            expect(col.className).toContain("custom-class");
+            expect(col).toHaveClass("custom-class");
             expect(col.className.split(" ").length).toBeGreaterThan(1);
         });
 
@@ -59,8 +59,8 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            expect(col.getAttribute("id")).toBe("test-col");
-            expect(col.getAttribute("aria-label")).toBe("Test col");
+            expect(col).toHaveAttribute("id", "test-col");
+            expect(col).toHaveAttribute("aria-label", "Test col");
         });
     });
 
@@ -93,7 +93,7 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            [
+            const expectedClasses = [
                 "col-sm-4",
                 "col-md-5",
                 "col-lg-6",
@@ -102,7 +102,8 @@ describe("Col Component", () => {
                 "offset-md-2",
                 "offset-lg-3",
                 "offset-xl-4",
-            ].forEach((cls) => {
+            ];
+            expectedClasses.forEach((cls) => {
                 expect(col.className).toMatch(new RegExp(cls));
             });
         });
@@ -126,7 +127,7 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            [
+            const expectedClasses = [
                 "d-none",
                 "d-none-sm",
                 "d-none-md",
@@ -137,7 +138,8 @@ describe("Col Component", () => {
                 "d-block-md",
                 "d-block-lg",
                 "d-block-xl",
-            ].forEach((cls) => {
+            ];
+            expectedClasses.forEach((cls) => {
                 expect(col.className).toMatch(new RegExp(cls));
             });
         });
@@ -203,8 +205,8 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            expect(col.getAttribute("role")).toBe("group");
-            expect(col.getAttribute("aria-label")).toBe("Col container");
+            expect(col).toHaveAttribute("role", "group");
+            expect(col).toHaveAttribute("aria-label", "Col container");
         });
     });
 

@@ -32,7 +32,7 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("mock-col").parentElement;
-            expect(rowElement).toBeTruthy();
+            expect(rowElement).toBeInTheDocument();
             // Check that the element has a class (CSS modules generate unique class names)
             expect(rowElement?.className).toBeTruthy();
             expect(rowElement?.className.length).toBeGreaterThan(0);
@@ -46,8 +46,8 @@ describe("Row Component", () => {
                 </Row>,
             );
 
-            expect(screen.getByText("First column")).toBeTruthy();
-            expect(screen.getByText("Second column")).toBeTruthy();
+            expect(screen.getByText("First column")).toBeInTheDocument();
+            expect(screen.getByText("Second column")).toBeInTheDocument();
             expect(screen.getAllByTestId("mock-col")).toHaveLength(2);
         });
 
@@ -59,7 +59,7 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("mock-col").parentElement;
-            expect(rowElement?.className).toContain("custom-class");
+            expect(rowElement).toHaveClass("custom-class");
             // Check that it has both custom class and CSS module class
             expect(rowElement?.className.split(" ").length).toBeGreaterThan(1);
         });
@@ -72,8 +72,8 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("row-element");
-            expect(rowElement.getAttribute("id")).toBe("test-row");
-            expect(rowElement.getAttribute("aria-label")).toBe("Test row");
+            expect(rowElement).toHaveAttribute("id", "test-row");
+            expect(rowElement).toHaveAttribute("aria-label", "Test row");
         });
     });
 
@@ -86,9 +86,9 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("mock-col").parentElement;
-            expect(rowElement?.className).toBeTruthy();
+            expect(rowElement).toBeInTheDocument();
             // By default, paddingBottom is true, so noPaddingBottom class should not be present
-            expect(rowElement?.className).not.toContain("noPaddingBottom");
+            expect(rowElement?.className).not.toMatch(/noPaddingBottom/);
         });
 
         it("should remove padding bottom when paddingBottom is false", () => {
@@ -99,9 +99,9 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("mock-col").parentElement;
-            expect(rowElement?.className).toBeTruthy();
+            expect(rowElement).toBeInTheDocument();
             // When paddingBottom is false, noPaddingBottom class should be present
-            expect(rowElement?.className).toContain("noPaddingBottom");
+            expect(rowElement?.className).toMatch(/noPaddingBottom/);
         });
 
         it("should have padding bottom when paddingBottom is true", () => {
@@ -112,9 +112,9 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("mock-col").parentElement;
-            expect(rowElement?.className).toBeTruthy();
+            expect(rowElement).toBeInTheDocument();
             // When paddingBottom is true, noPaddingBottom class should not be present
-            expect(rowElement?.className).not.toContain("noPaddingBottom");
+            expect(rowElement?.className).not.toMatch(/noPaddingBottom/);
         });
     });
 
@@ -138,8 +138,8 @@ describe("Row Component", () => {
             );
 
             const rowElement = screen.getByTestId("mock-col").parentElement;
-            expect(rowElement?.getAttribute("role")).toBe("group");
-            expect(rowElement?.getAttribute("aria-label")).toBe("Row container");
+            expect(rowElement).toHaveAttribute("role", "group");
+            expect(rowElement).toHaveAttribute("aria-label", "Row container");
         });
     });
 

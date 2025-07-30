@@ -8,14 +8,14 @@ describe("Gap", () => {
         render(<Gap size={4} className={className} />);
 
         const element = screen.getByRole("presentation");
-        expect(element.classList).toContain(className);
+        expect(element).toHaveClass(className);
     });
 
     it("applies custom size correctly", () => {
         render(<Gap size={8} />);
 
         const element = screen.getByRole("presentation");
-        expect(element.getAttribute("style")).toBe("height: 8px;");
+        expect(element).toHaveStyle("height: 8px");
     });
 
     it("merges custom styles correctly", () => {
@@ -23,14 +23,14 @@ describe("Gap", () => {
         render(<Gap size={4} style={style} />);
 
         const element = screen.getByRole("presentation");
-        expect(element.getAttribute("style")).toBe("height: 4px; display: block; background: rgb(0, 0, 0);");
+        expect(element).toHaveStyle({ ...style, height: "4px" });
     });
 
     it("passes additional HTML attributes", () => {
         render(<Gap size={4} aria-hidden="true" data-analytics="test" />);
 
         const element = screen.getByRole("presentation", { hidden: true });
-        expect(element.getAttribute("aria-hidden")).toBe("true");
-        expect(element.getAttribute("data-analytics")).toBe("test");
+        expect(element).toHaveAttribute("aria-hidden", "true");
+        expect(element).toHaveAttribute("data-analytics", "test");
     });
 });

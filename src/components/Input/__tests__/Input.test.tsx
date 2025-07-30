@@ -8,6 +8,6 @@ describe("Input", () => {
         render(<Input className={className} />);
 
         const element = screen.getByRole("textbox");
-        expect(element.classList).toContain(className);
+        expect(element).toHaveClass(className);
     });
 });

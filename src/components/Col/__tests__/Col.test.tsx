@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { Col } from "../Col";
 
 // Mock child for testing
@@ -10,13 +10,6 @@ const MockChild: React.FC = () => <span data-testid="mock-child">Child</span>;
 const getColDiv = () => screen.getByTestId("col-div");
 
 describe("Col Component", () => {
-    beforeEach(() => {
-        vi.spyOn(console, "error").mockImplementation(() => {});
-    });
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
     describe("Rendering", () => {
         it("should render with default props", () => {
             render(
@@ -26,8 +19,7 @@ describe("Col Component", () => {
             );
             const col = getColDiv();
             expect(col).toBeInTheDocument();
-            expect(col.className).toBeTruthy();
-            expect(col.className.length).toBeGreaterThan(0);
+            expect(col).toHaveClass("col-12");
         });
 
         it("should render children correctly", () => {
@@ -49,7 +41,6 @@ describe("Col Component", () => {
             );
             const col = getColDiv();
             expect(col).toHaveClass("custom-class");
-            expect(col.className.split(" ").length).toBeGreaterThan(1);
         });
 
         it("should pass through HTML attributes", () => {
@@ -72,8 +63,8 @@ describe("Col Component", () => {
                 </Col>,
             );
             const col = getColDiv();
-            expect(col.className).toMatch(/col-6/);
-            expect(col.className).toMatch(/offset-2/);
+            expect(col).toHaveClass("col-6");
+            expect(col).toHaveClass("offset-2");
         });
 
         it("should apply responsive size and offset classes", () => {
@@ -104,43 +95,33 @@ describe("Col Component", () => {
                 "offset-xl-4",
             ];
             expectedClasses.forEach((cls) => {
-                expect(col.className).toMatch(new RegExp(cls));
+                expect(col).toHaveClass(cls);
             });
         });
 
-        it("should apply hidden and block classes", () => {
+        it("should apply hidden classes", () => {
             render(
-                <Col
-                    data-testid="col-div"
-                    hidden
-                    hiddenSm
-                    hiddenMd
-                    hiddenLg
-                    hiddenXl
-                    block
-                    blockSm
-                    blockMd
-                    blockLg
-                    blockXl
-                >
+                <Col data-testid="col-div" hidden hiddenSm hiddenMd hiddenLg hiddenXl>
                     <MockChild />
                 </Col>,
             );
             const col = getColDiv();
-            const expectedClasses = [
-                "d-none",
-                "d-none-sm",
-                "d-none-md",
-                "d-none-lg",
-                "d-none-xl",
-                "d-block",
-                "d-block-sm",
-                "d-block-md",
-                "d-block-lg",
-                "d-block-xl",
-            ];
+            const expectedClasses = ["d-none", "d-none-sm", "d-none-md", "d-none-lg", "d-none-xl"];
             expectedClasses.forEach((cls) => {
-                expect(col.className).toMatch(new RegExp(cls));
+                expect(col).toHaveClass(cls);
+            });
+        });
+
+        it("should apply block classes", () => {
+            render(
+                <Col data-testid="col-div" block blockSm blockMd blockLg blockXl>
+                    <MockChild />
+                </Col>,
+            );
+            const col = getColDiv();
+            const expectedClasses = ["d-block", "d-block-sm", "d-block-md", "d-block-lg", "d-block-xl"];
+            expectedClasses.forEach((cls) => {
+                expect(col).toHaveClass(cls);
             });
         });
     });
@@ -159,12 +140,6 @@ describe("Col Component", () => {
                         <span>Element</span>
                     </Col>,
                 );
-            }).not.toThrow();
-        });
-
-        it("should accept empty children", () => {
-            expect(() => {
-                render(<Col data-testid="col-div" />);
             }).not.toThrow();
         });
 
@@ -212,15 +187,16 @@ describe("Col Component", () => {
 
     describe("Edge cases", () => {
         it("should handle fragment as child", () => {
-            expect(() => {
-                render(
-                    <Col data-testid="col-div">
-                        <React.Fragment>
-                            <span>Fragment child</span>
-                        </React.Fragment>
-                    </Col>,
-                );
-            }).not.toThrow();
+            render(
+                <Col data-testid="col-div">
+                    <React.Fragment>
+                        <span>Fragment child</span>
+                    </React.Fragment>
+                </Col>,
+            );
+            const col = screen.getByTestId("col-div");
+            expect(col).toBeInTheDocument();
+            expect(screen.getByText("Fragment child")).toBeInTheDocument();
         });
     });
 

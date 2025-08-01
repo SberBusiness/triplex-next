@@ -1,5 +1,5 @@
 import React from "react";
-import { Gap } from "../src";
+import { Gap } from "../src/components/Gap";
 import { StoryObj } from "@storybook/react";
 
 export default {
@@ -12,6 +12,27 @@ export default {
             options: [4, 8, 12, 16, 24, 32, 64, 128],
         },
     },
+    parameters: {
+        docs: {
+            description: {
+                component: `
+Компонент - разделитель. Добавляет пустое вертикальное пространство между компонентами.
+
+## Особенности
+
+- Размеры - 4, 8, 12, 16, 24, 32, 64, 128
+
+## Использование
+
+\`\`\`tsx
+import { Gap } from '@sberbusiness/triplex-next';   
+
+<Gap size={4} />
+\`\`\`
+                `,
+            },
+        },
+    },
 };
 
 export const Default: StoryObj<typeof Gap> = {
@@ -21,11 +42,25 @@ export const Default: StoryObj<typeof Gap> = {
     },
     render: (args) => (
         <div>
-            <div style={{ backgroundColor: "#e0e0e0" }}>
+            <div
+                style={{
+                    padding: "16px",
+                    textAlign: "center",
+                    backgroundColor: "rgb(255, 217, 160)",
+                }}
+            >
                 Sample Text Above
             </div>
+
             <Gap size={args.size} />
-            <div style={{ backgroundColor: "#e0e0e0" }}>
+
+            <div
+                style={{
+                    padding: "16px",
+                    textAlign: "center",
+                    backgroundColor: "rgb(255, 217, 160)",
+                }}
+            >
                 Sample Text Below
             </div>
         </div>

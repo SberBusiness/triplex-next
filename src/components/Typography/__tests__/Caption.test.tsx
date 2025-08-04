@@ -78,6 +78,33 @@ describe("Caption", () => {
         expect(screen.getByText("Content")).toBeDefined();
     });
 
+    it("forwards ref correctly for span element", () => {
+        const ref = React.createRef<HTMLElement>();
+        render(<Caption size={ECaptionSize.C1} ref={ref}>Ref Test Caption</Caption>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Ref Test Caption");
+        expect(ref.current?.tagName).toBe("SPAN");
+    });
+
+    it("forwards ref correctly for div element", () => {
+        const ref = React.createRef<HTMLElement>();
+        render(<Caption size={ECaptionSize.C1} tag="div" ref={ref}>Div Ref Test Caption</Caption>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Div Ref Test Caption");
+        expect(ref.current?.tagName).toBe("DIV");
+    });
+
+    it("forwards ref correctly for p element", () => {
+        const ref = React.createRef<HTMLElement>();
+        render(<Caption size={ECaptionSize.C1} tag="p" ref={ref}>P Ref Test Caption</Caption>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("P Ref Test Caption");
+        expect(ref.current?.tagName).toBe("P");
+    });
+
     it("applies correct CSS classes for different combinations", () => {
         render(
             <Caption

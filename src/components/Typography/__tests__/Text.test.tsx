@@ -78,6 +78,33 @@ describe("Text", () => {
         expect(screen.getByText("Content")).toBeDefined();
     });
 
+    it("forwards ref correctly for span element", () => {
+        const ref = React.createRef<HTMLElement>();
+        render(<Text size={ETextSize.B2} ref={ref}>Ref Test Text</Text>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Ref Test Text");
+        expect(ref.current?.tagName).toBe("SPAN");
+    });
+
+    it("forwards ref correctly for div element", () => {
+        const ref = React.createRef<HTMLElement>();
+        render(<Text size={ETextSize.B2} tag="div" ref={ref}>Div Ref Test Text</Text>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Div Ref Test Text");
+        expect(ref.current?.tagName).toBe("DIV");
+    });
+
+    it("forwards ref correctly for p element", () => {
+        const ref = React.createRef<HTMLElement>();
+        render(<Text size={ETextSize.B2} tag="p" ref={ref}>P Ref Test Text</Text>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("P Ref Test Text");
+        expect(ref.current?.tagName).toBe("P");
+    });
+
     it("applies correct CSS classes for different combinations", () => {
         render(
             <Text

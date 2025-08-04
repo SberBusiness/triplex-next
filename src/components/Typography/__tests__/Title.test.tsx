@@ -8,7 +8,6 @@ describe("Title", () => {
         render(<Title size={ETitleSize.H1}>Test Title</Title>);
 
         const title = screen.getByRole("heading", { level: 1 });
-        console.log(title);
         expect(title).toBeDefined();
         expect(title.textContent).toBe("Test Title");
     });
@@ -77,5 +76,32 @@ describe("Title", () => {
 
         expect(screen.getByText("Nested")).toBeDefined();
         expect(screen.getByText("Content")).toBeDefined();
+    });
+
+    it("forwards ref correctly for heading element", () => {
+        const ref = React.createRef<HTMLHeadingElement>();
+        render(<Title size={ETitleSize.H2} ref={ref}>Ref Test Title</Title>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Ref Test Title");
+        expect(ref.current?.tagName).toBe("H2");
+    });
+
+    it("forwards ref correctly for div element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(<Title size={ETitleSize.H2} tag="div" ref={ref}>Div Ref Test Title</Title>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Div Ref Test Title");
+        expect(ref.current?.tagName).toBe("DIV");
+    });
+
+    it("forwards ref correctly for span element", () => {
+        const ref = React.createRef<HTMLSpanElement>();
+        render(<Title size={ETitleSize.H2} tag="span" ref={ref}>Span Ref Test Title</Title>);
+
+        expect(ref.current).toBeDefined();
+        expect(ref.current?.textContent).toBe("Span Ref Test Title");
+        expect(ref.current?.tagName).toBe("SPAN");
     });
 }); 

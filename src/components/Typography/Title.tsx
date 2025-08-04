@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { clsx } from 'clsx';
 import { EFontType, EFontWeightTitle, ETitleSize } from './enums';
 import { ITypographyProps } from './types';
@@ -31,38 +31,40 @@ type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
     JSX.IntrinsicElements[T];
 
 /** Заголовок (типографика). */
-export function Title<T extends keyof JSX.IntrinsicElements = `h1`>({
-    children,
-    className,
-    size,
-    tag = `h${size}`,
-    type = EFontType.PRIMARY,
-    weight = EFontWeightTitle.SEMIBOLD,
-    underline,
-    strikethrough,
-    ...props
-}: TTitleProps<T>): JSX.Element {
-    const classes = clsx(
-        typographyStyles.typography,
-        styles.title,
-        mapTitleSizeToCssClass[size],
-        mapFontTypeToCssClass[type],
-        mapFontWeightTitleToCssClass[weight],
-        {
-            [typographyStyles.strikethrough]: !!strikethrough && !underline,
-            [typographyStyles.underline]: !!underline && !strikethrough,
-            [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-        },
-        className
-    );
+export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElements>>(
+    <T extends keyof JSX.IntrinsicElements = 'h1'>({
+        children,
+        className,
+        size,
+        tag = `h${size}` as T,
+        type = EFontType.PRIMARY,
+        weight = EFontWeightTitle.SEMIBOLD,
+        underline,
+        strikethrough,
+        ...props
+    }: TTitleProps<T>, ref: React.ForwardedRef<HTMLElement>): JSX.Element => {
+        const classes = clsx(
+            typographyStyles.typography,
+            styles.title,
+            mapTitleSizeToCssClass[size],
+            mapFontTypeToCssClass[type],
+            mapFontWeightTitleToCssClass[weight],
+            {
+                [typographyStyles.strikethrough]: !!strikethrough && !underline,
+                [typographyStyles.underline]: !!underline && !strikethrough,
+                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
+            },
+            className
+        );
 
-    const Tag = tag;
+        const Tag = tag;
 
-    return (
-        <Tag className={classes} {...props}>
-            {children}
-        </Tag>
-    );
-}
+        return (
+            <Tag ref={ref} className={classes} {...props}>
+                {children}
+            </Tag>
+        );
+    }
+);
 
 Title.displayName = 'Title';

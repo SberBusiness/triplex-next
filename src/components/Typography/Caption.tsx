@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { clsx } from 'clsx';
 import { EFontType, EFontWeightText, ECaptionSize } from './enums';
 import { ITypographyProps } from './types';
-import {mapFontTypeToCssClass} from './utils';
+import { mapFontTypeToCssClass } from './utils';
 
 import styles from './styles/Caption.module.less';
 import typographyStyles from './styles/Typography.module.less';
@@ -20,8 +20,8 @@ export const mapCaptionSizeToCssClass = {
     [ECaptionSize.D1]: styles.d1,
 };
 
-/** Свойства компонента Text. */
-type TTextProps<T extends keyof JSX.IntrinsicElements> = {
+/** Свойства компонента Caption. */
+type TCaptionProps<T extends keyof JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ECaptionSize;
     /** Толщина шрифта. */
@@ -29,39 +29,41 @@ type TTextProps<T extends keyof JSX.IntrinsicElements> = {
 } & ITypographyProps &
     JSX.IntrinsicElements[T];
 
-/** Текст (типографика). */
-export function Caption<T extends keyof JSX.IntrinsicElements = 'span'>({
-    children,
-    className,
-    size,
-    tag = 'span',
-    type = EFontType.PRIMARY,
-    weight = EFontWeightText.REGULAR,
-    underline,
-    strikethrough,
-    ...props
-}: TTextProps<T>): JSX.Element {
-    const classes = clsx(
-        typographyStyles.typography,
-        styles.caption,
-        mapCaptionSizeToCssClass[size],
-        mapFontTypeToCssClass[type],
-        mapFontWeightTextToCssClass[weight],
-        {
-            [typographyStyles.strikethrough]: !!strikethrough && !underline,
-            [typographyStyles.underline]: !!underline && !strikethrough,
-            [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-        },
-        className
-    );
+/** Подпись (типографика). */
+export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.IntrinsicElements>>(
+    <T extends keyof JSX.IntrinsicElements = 'span'>({
+        children,
+        className,
+        size,
+        tag = 'span' as T,
+        type = EFontType.PRIMARY,
+        weight = EFontWeightText.REGULAR,
+        underline,
+        strikethrough,
+        ...props
+    }: TCaptionProps<T>, ref: React.ForwardedRef<HTMLElement>): JSX.Element => {
+        const classes = clsx(
+            typographyStyles.typography,
+            styles.caption,
+            mapCaptionSizeToCssClass[size],
+            mapFontTypeToCssClass[type],
+            mapFontWeightTextToCssClass[weight],
+            {
+                [typographyStyles.strikethrough]: !!strikethrough && !underline,
+                [typographyStyles.underline]: !!underline && !strikethrough,
+                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
+            },
+            className
+        );
 
-    const Tag = tag;
+        const Tag = tag;
 
-    return (
-        <Tag className={classes} {...props}>
-            {children}
-        </Tag>
-    );
-}
+        return (
+            <Tag ref={ref} className={classes} {...props}>
+                {children}
+            </Tag>
+        );
+    }
+);
 
 Caption.displayName = 'Caption';

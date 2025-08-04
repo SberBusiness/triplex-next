@@ -1,23 +1,13 @@
 import React from "react";
-import clsx from "clsx";
-import styles from "./styles/Gap.module.less";
 
 export type TGapSize = 4 | 8 | 12 | 16 | 24 | 32 | 64 | 128;
 
-export interface IGapProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IGapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
     size: TGapSize;
 }
 
-export const Gap = React.forwardRef<HTMLDivElement, IGapProps>(({ className, style, size, ...restProps }, ref) => {
-    return (
-        <div
-            className={clsx(styles.gap, className)}
-            style={{ height: `${size}px`, ...style }}
-            role="presentation"
-            {...restProps}
-            ref={ref}
-        />
-    );
-});
+export const Gap = React.forwardRef<HTMLDivElement, IGapProps>(({ style, size, ...restProps }, ref) => (
+    <div style={{ height: `${size}px`, ...style }} role="presentation" {...restProps} ref={ref} />
+));
 
 Gap.displayName = "Gap";

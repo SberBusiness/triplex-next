@@ -12,7 +12,7 @@ function replaceDesignTokenVersion(content, id) {
         };
     }
 
-    // Содержимое css-файла с добавленной версией npm пакета.
+    // Содержимое less-файла с добавленной версией npm пакета.
     let contentNext = content;
     // Регулярное выражение, для поиска css-переменных.
     const cssVariableRegexp = /(--)[^,:)]+/g;

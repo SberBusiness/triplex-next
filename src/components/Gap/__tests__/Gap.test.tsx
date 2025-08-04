@@ -11,7 +11,7 @@ describe("Gap", () => {
         expect(element).toHaveClass(className);
     });
 
-    it("applies custom size correctly", () => {
+    it("applies size property correctly", () => {
         render(<Gap size={8} />);
 
         const element = screen.getByRole("presentation");

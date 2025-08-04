@@ -84,6 +84,91 @@ export default {
     tags: ["autodocs"],
 };
 
+export const TitleWithControls: StoryObj<typeof Title> = {
+    render: (args) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Title {...args}>Интерактивный заголовок с controls</Title>
+        </div>
+    ),
+    argTypes: {
+        size: {
+            control: { type: 'select' },
+            options: [ETitleSize.H1, ETitleSize.H2, ETitleSize.H3],
+            description: 'Размер заголовка',
+            table: {
+                type: { summary: 'ETitleSize' },
+                defaultValue: { summary: 'ETitleSize.H1' }
+            }
+        },
+        weight: {
+            control: { type: 'select' },
+            options: [EFontWeightTitle.REGULAR, EFontWeightTitle.MEDIUM, EFontWeightTitle.SEMIBOLD, EFontWeightTitle.BOLD],
+            description: 'Толщина шрифта',
+            table: {
+                type: { summary: 'EFontWeightTitle' },
+                defaultValue: { summary: 'EFontWeightTitle.SEMIBOLD' }
+            }
+        },
+        type: {
+            control: { type: 'select' },
+            options: [EFontType.PRIMARY, EFontType.SECONDARY, EFontType.TERTIARY, EFontType.BRAND, EFontType.INFO, EFontType.SUCCESS, EFontType.WARNING, EFontType.ERROR, EFontType.DISABLED],
+            description: 'Тип (цвет) текста',
+            table: {
+                type: { summary: 'EFontType' },
+                defaultValue: { summary: 'EFontType.PRIMARY' }
+            }
+        },
+        tag: {
+            control: { type: 'select' },
+            options: ['h1', 'h2', 'h3', 'div', 'span', 'p'],
+            description: 'HTML тег для рендера',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'h1' }
+            }
+        },
+        underline: {
+            control: { type: 'boolean' },
+            description: 'Подчеркивание текста',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        strikethrough: {
+            control: { type: 'boolean' },
+            description: 'Зачеркивание текста',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        className: {
+            control: { type: 'text' },
+            description: 'Дополнительные CSS классы',
+            table: {
+                type: { summary: 'string' }
+            }
+        }
+    },
+    args: {
+        size: ETitleSize.H1,
+        weight: EFontWeightTitle.SEMIBOLD,
+        type: EFontType.PRIMARY,
+        tag: 'h1',
+        underline: false,
+        strikethrough: false,
+        className: ''
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Интерактивная демонстрация компонента Title с возможностью изменения всех пропсов через controls панель."
+            }
+        }
+    }
+};
+
 export const TitleStory: StoryObj<typeof Title> = {
     render: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -137,6 +222,101 @@ export const TitleTypes: StoryObj<typeof Title> = {
         docs: {
             description: {
                 story: "Различные типы цветов для заголовков: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled"
+            }
+        }
+    }
+};
+
+export const TextWithControls: StoryObj<typeof Text> = {
+    render: (args) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Text {...args}>Интерактивный текст с controls</Text>
+        </div>
+    ),
+    argTypes: {
+        size: {
+            control: { type: 'select' },
+            options: [ETextSize.B1, ETextSize.B2, ETextSize.B3, ETextSize.B4],
+            description: 'Размер текста',
+            table: {
+                type: { summary: 'ETextSize' },
+                defaultValue: { summary: 'ETextSize.B2' }
+            }
+        },
+        weight: {
+            control: { type: 'select' },
+            options: [EFontWeightText.REGULAR, EFontWeightText.SEMIBOLD],
+            description: 'Толщина шрифта',
+            table: {
+                type: { summary: 'EFontWeightText' },
+                defaultValue: { summary: 'EFontWeightText.REGULAR' }
+            }
+        },
+        line: {
+            control: { type: 'select' },
+            options: [ELineType.NORMAL, ELineType.COMPACT],
+            description: 'Высота блока строки (Normal = обычная, Compact = компактная)',
+            table: {
+                type: { summary: 'ELineType' },
+                defaultValue: { summary: 'ELineType.NORMAL' }
+            }
+        },
+        type: {
+            control: { type: 'select' },
+            options: [EFontType.PRIMARY, EFontType.SECONDARY, EFontType.TERTIARY, EFontType.BRAND, EFontType.INFO, EFontType.SUCCESS, EFontType.WARNING, EFontType.ERROR, EFontType.DISABLED],
+            description: 'Тип (цвет) текста',
+            table: {
+                type: { summary: 'EFontType' },
+                defaultValue: { summary: 'EFontType.PRIMARY' }
+            }
+        },
+        tag: {
+            control: { type: 'select' },
+            options: ['span', 'div', 'p', 'h1', 'h2', 'h3'],
+            description: 'HTML тег для рендера',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'span' }
+            }
+        },
+        underline: {
+            control: { type: 'boolean' },
+            description: 'Подчеркивание текста',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        strikethrough: {
+            control: { type: 'boolean' },
+            description: 'Зачеркивание текста',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        className: {
+            control: { type: 'text' },
+            description: 'Дополнительные CSS классы',
+            table: {
+                type: { summary: 'string' }
+            }
+        }
+    },
+    args: {
+        size: ETextSize.B2,
+        weight: EFontWeightText.REGULAR,
+        line: ELineType.NORMAL,
+        type: EFontType.PRIMARY,
+        tag: 'span',
+        underline: false,
+        strikethrough: false,
+        className: ''
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Интерактивная демонстрация компонента Text с возможностью изменения всех пропсов через controls панель. Включает control для выбора высоты строки (Normal/Compact)."
             }
         }
     }
@@ -214,6 +394,91 @@ export const TextTypes: StoryObj<typeof Text> = {
         docs: {
             description: {
                 story: "Различные типы цветов для текста: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled"
+            }
+        }
+    }
+};
+
+export const CaptionWithControls: StoryObj<typeof Caption> = {
+    render: (args) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Caption {...args}>Интерактивная подпись с controls</Caption>
+        </div>
+    ),
+    argTypes: {
+        size: {
+            control: { type: 'select' },
+            options: [ECaptionSize.C1, ECaptionSize.C2, ECaptionSize.D1],
+            description: 'Размер подписи',
+            table: {
+                type: { summary: 'ECaptionSize' },
+                defaultValue: { summary: 'ECaptionSize.C1' }
+            }
+        },
+        weight: {
+            control: { type: 'select' },
+            options: [EFontWeightText.REGULAR, EFontWeightText.SEMIBOLD],
+            description: 'Толщина шрифта',
+            table: {
+                type: { summary: 'EFontWeightText' },
+                defaultValue: { summary: 'EFontWeightText.REGULAR' }
+            }
+        },
+        type: {
+            control: { type: 'select' },
+            options: [EFontType.PRIMARY, EFontType.SECONDARY, EFontType.TERTIARY, EFontType.BRAND, EFontType.INFO, EFontType.SUCCESS, EFontType.WARNING, EFontType.ERROR, EFontType.DISABLED],
+            description: 'Тип (цвет) текста',
+            table: {
+                type: { summary: 'EFontType' },
+                defaultValue: { summary: 'EFontType.PRIMARY' }
+            }
+        },
+        tag: {
+            control: { type: 'select' },
+            options: ['span', 'div', 'p', 'h1', 'h2', 'h3'],
+            description: 'HTML тег для рендера',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'span' }
+            }
+        },
+        underline: {
+            control: { type: 'boolean' },
+            description: 'Подчеркивание текста',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        strikethrough: {
+            control: { type: 'boolean' },
+            description: 'Зачеркивание текста',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        className: {
+            control: { type: 'text' },
+            description: 'Дополнительные CSS классы',
+            table: {
+                type: { summary: 'string' }
+            }
+        }
+    },
+    args: {
+        size: ECaptionSize.C1,
+        weight: EFontWeightText.REGULAR,
+        type: EFontType.PRIMARY,
+        tag: 'span',
+        underline: false,
+        strikethrough: false,
+        className: ''
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Интерактивная демонстрация компонента Caption с возможностью изменения всех пропсов через controls панель."
             }
         }
     }

@@ -150,6 +150,10 @@ export const MobileVersion: StoryObj<typeof MediaWidth> = {
             },
         },
     },
+    argTypes: {
+        minWidth: { table: { disable: true } },
+        maxWidth: { table: { disable: true } },
+    },
     render: () => (
         <MobileView fallback={<div>Десктоп контент</div>}>
             <div>Мобильный контент</div>

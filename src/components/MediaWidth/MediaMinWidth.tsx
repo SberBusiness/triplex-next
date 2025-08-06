@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { EScreenWidth } from "../../enums/EScreenWidth";
+import { EScreenWidth } from "../../helpers/breakpoints";
 
 /**
  * Свойства MediaMinWidth.

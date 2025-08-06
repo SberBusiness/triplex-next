@@ -1,6 +1,6 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { EScreenWidth } from "../src/enums/EScreenWidth";
+import { EScreenWidth } from "../src/helpers/breakpoints";
 import { MediaWidth } from "../src/components/MediaWidth";
 import { MobileView } from "../src/components/MobileView";
 

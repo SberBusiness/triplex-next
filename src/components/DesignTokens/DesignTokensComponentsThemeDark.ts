@@ -5,11 +5,14 @@ import { GetTokensValueByTheme } from "./GetTokensValueByTheme";
 import {
     Button_Tokens,
     Input_Tokens,
+    Typography_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsInputValue,
+    TDesignTokensComponentsTypographyValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.DARK, Button_Tokens),
     Input: GetTokensValueByTheme<TDesignTokensComponentsInputValue>(ETriplexNextTheme.DARK, Input_Tokens),
+    Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(ETriplexNextTheme.DARK, Typography_Tokens),
 };

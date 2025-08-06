@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import styles from "./Row.module.less";
+import styles from "./styles/Row.module.less";
 
 /** Свойства компонента Row. */
 export interface IRowProps extends React.HTMLAttributes<HTMLDivElement> {

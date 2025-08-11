@@ -9,6 +9,7 @@ import linkStyles from "./styles/ButtonLink.module.less";
 
 import clsx from "clsx";
 import { ButtonBase } from "../protected/ButtonBase/ButtonBase";
+import { LoadingDots } from "../LoadingDots";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -115,6 +116,13 @@ const getDefaultBorderRadius = (size: EButtonSize): number => {
     }
 };
 
+/** Отрисовка анимации загрузки. */
+const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
+    const color = theme === EButtonTheme.SECONDARY ? "#21A19A" : "#FFFFFF";
+    const dotsSize = size === EButtonSize.SM ? "sm" : size === EButtonSize.LG ? "lg" : "md";
+    return <LoadingDots color={color} size={dotsSize} />;
+};
+
 /** Кнопка. */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const {
@@ -158,7 +166,11 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
             style={style}
             {...rest}
         >
-            <span className={styles.content}>{icon ? icon : children}</span>
+            {loading ? (
+                renderLoadingIcon(theme, size)
+            ) : (
+                <span className={styles.content}>{icon ? icon : children}</span>
+            )}
         </ButtonBase>
     );
 });

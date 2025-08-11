@@ -234,13 +234,13 @@ export const Loading: StoryObj<typeof Button> = {
     name: "Loading",
     render: () => (
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Button loading theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+            <Button loading theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
                 Button text
             </Button>
             <Button loading theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
                 Button text
             </Button>
-            <Button loading theme={EButtonTheme.DANGER} size={EButtonSize.MD}>
+            <Button loading theme={EButtonTheme.DANGER} size={EButtonSize.LG}>
                 Button text
             </Button>
         </div>

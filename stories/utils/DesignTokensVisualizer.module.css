@@ -1,22 +1,22 @@
 .container {
     padding: 20px;
     font-family:
-        system-ui,
+        "Nunito Sans",
         -apple-system,
+        ".SFNSText-Regular",
+        "San Francisco",
         BlinkMacSystemFont,
         "Segoe UI",
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        "Open Sans",
         "Helvetica Neue",
+        Helvetica,
+        Arial,
         sans-serif;
 }
 
 .tabs {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .tab {
@@ -24,6 +24,8 @@
     cursor: pointer;
     border: none;
     background-color: transparent;
+    font-size: 14px;
+    color: inherit;
 }
 
 .tokenList {
@@ -35,6 +37,7 @@
 .token {
     display: flex;
     padding-bottom: 10px;
+    font-size: 14px;
 }
 
 .tokenName {
@@ -49,7 +52,6 @@
     height: 80px;
     border-radius: 10px;
     border: 1px solid #e0e0e0;
-    box-shadow: 0rem 0.2rem 0.6rem 0rem hsla(0, 0%, 0%, 0.3);
 }
 
 .tokenValue {
@@ -58,7 +60,6 @@
     justify-content: center;
     width: 25%;
     margin-left: 20px;
-    font-weight: 500;
 }
 
 .variable {

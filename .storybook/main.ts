@@ -36,7 +36,7 @@ const config: StorybookConfig = {
 
         return viteConfig;
     },
-    staticDirs: ['../public'],
+    staticDirs: ["../public"],
 };
 
 export default config;

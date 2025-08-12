@@ -36,7 +36,7 @@ import { MediaWidth } from '@sberbusiness/triplex-next';
         minWidth: {
             control: { type: "select" },
             options: Object.values(EScreenWidth),
-            description: "Минимальная ширина экран, при которой будут отрендерены children.",
+            description: "Минимальная ширина экрана, при которой будут отрендерены children.",
         },
         maxWidth: {
             control: { type: "select" },
@@ -60,8 +60,9 @@ export const MinWidth: StoryObj<typeof MediaWidth> = {
     name: "Min Width",
     args: {
         minWidth: EScreenWidth.MD_MIN,
-        children: <div>Контент виден только на экранах шириной {EScreenWidth.MD_MIN} и более</div>,
-        fallback: <div>Fallback на экранах шириной менее {EScreenWidth.MD_MIN}</div>,
+    },
+    argTypes: {
+        maxWidth: { table: { disable: true } },
     },
     parameters: {
         docs: {
@@ -70,15 +71,27 @@ export const MinWidth: StoryObj<typeof MediaWidth> = {
             },
         },
     },
-    render: (args) => <MediaWidth {...args} />,
+    render: (args) => {
+        const { minWidth, children, fallback } = args;
+
+        return (
+            <MediaWidth
+                minWidth={minWidth}
+                fallback={fallback || <div>Fallback на экранах шириной менее {minWidth}</div>}
+            >
+                {children || <div>Контент виден только на экранах шириной {minWidth} и более</div>}
+            </MediaWidth>
+        );
+    },
 };
 
 export const MaxWidth: StoryObj<typeof MediaWidth> = {
     name: "Max Width",
     args: {
         maxWidth: EScreenWidth.LG_MAX,
-        children: <div>Контент виден только на экранах шириной до {EScreenWidth.LG_MAX} включительно</div>,
-        fallback: <div>Fallback на экранах шириной более {EScreenWidth.LG_MAX}</div>,
+    },
+    argTypes: {
+        minWidth: { table: { disable: true } },
     },
     parameters: {
         docs: {
@@ -87,7 +100,18 @@ export const MaxWidth: StoryObj<typeof MediaWidth> = {
             },
         },
     },
-    render: (args) => <MediaWidth {...args} />,
+    render: (args) => {
+        const { maxWidth, children, fallback } = args;
+
+        return (
+            <MediaWidth
+                maxWidth={maxWidth}
+                fallback={fallback || <div>Fallback на экранах шириной более {maxWidth}</div>}
+            >
+                {children || <div>Контент виден только на экранах шириной до {maxWidth} включительно</div>}
+            </MediaWidth>
+        );
+    },
 };
 
 export const BetweenWidth: StoryObj<typeof MediaWidth> = {
@@ -95,17 +119,6 @@ export const BetweenWidth: StoryObj<typeof MediaWidth> = {
     args: {
         minWidth: EScreenWidth.MD_MIN,
         maxWidth: EScreenWidth.LG_MAX,
-        children: (
-            <div>
-                Контент виден только на экранах шириной от {EScreenWidth.MD_MIN} до {EScreenWidth.LG_MAX} включительно
-            </div>
-        ),
-        fallback: (
-            <div>
-                Fallback на экранах, чья ширина за пределами диапазона от {EScreenWidth.MD_MIN} до {EScreenWidth.LG_MAX}{" "}
-                включительно
-            </div>
-        ),
     },
     parameters: {
         docs: {
@@ -114,7 +127,30 @@ export const BetweenWidth: StoryObj<typeof MediaWidth> = {
             },
         },
     },
-    render: (args) => <MediaWidth {...args} />,
+    render: (args) => {
+        const { minWidth, maxWidth, children, fallback } = args;
+
+        return (
+            <MediaWidth
+                minWidth={minWidth}
+                maxWidth={maxWidth}
+                fallback={
+                    fallback || (
+                        <div>
+                            Fallback на экранах, чья ширина за пределами диапазона от {minWidth} до {maxWidth}{" "}
+                            включительно
+                        </div>
+                    )
+                }
+            >
+                {children || (
+                    <div>
+                        Контент виден только на экранах шириной от {minWidth} до {maxWidth} включительно
+                    </div>
+                )}
+            </MediaWidth>
+        );
+    },
 };
 
 export const Fallback: StoryObj<typeof MediaWidth> = {

@@ -85,15 +85,15 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorDarkNeutralAlpha: {
         50: {
-            value: "#2D2D30", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
+            value: "rgba(45, 45, 48, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
         },
         70: {
-            value: "#3B3B3E", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
+            value: "rgba(59, 59, 62, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
         },
     },
     ColorDarkNeutral: {
         0: {
-            value: "#0D0D09", //     var(--triplex-next-ColorDarkNeutral-0)
+            value: "#0D0D0E", //     var(--triplex-next-ColorDarkNeutral-0)
         },
         10: {
             value: "#171719", //     var(--triplex-next-ColorDarkNeutral-10)
@@ -187,7 +187,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#66C7FF", //     var(--triplex-next-ColorInfo-70)
         },
         80: {
-            value: "#8DDDFF", //     var(--triplex-next-ColorInfo-80)
+            value: "#82DAFF", //     var(--triplex-next-ColorInfo-80)
         },
         90: {
             value: "#B8EFFF", //     var(--triplex-next-ColorInfo-90)
@@ -198,27 +198,27 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorNeutralAlpha: {
         0: {
-            value: "#8890A0", //     var(--triplex-next-ColorNeutralAlpha-0)
+            value: "rgba(136, 144, 160, .25)", //     var(--triplex-next-ColorNeutralAlpha-0)
         },
         20: {
-            value: "#C0C5CF", //     var(--triplex-next-ColorNeutralAlpha-20)
+            value: "rgba(192, 197, 207, .3)", //     var(--triplex-next-ColorNeutralAlpha-20)
         },
         30: {
-            value: "#DCDFE4", //     var(--triplex-next-ColorNeutralAlpha-30)
+            value: "rgba(220, 223, 228, .75)", //     var(--triplex-next-ColorNeutralAlpha-30)
         },
         40: {
-            value: "#DFE2E7", //     var(--triplex-next-ColorNeutralAlpha-40)
+            value: "rgba(223, 226, 231, .75)", //     var(--triplex-next-ColorNeutralAlpha-40)
         },
         90: {
-            value: "#F2F4F7", //     var(--triplex-next-ColorNeutralAlpha-90)
+            value: "rgba(242, 244, 247, .75)", //     var(--triplex-next-ColorNeutralAlpha-90)
         },
         100: {
-            value: "#FFFFFF", //     var(--triplex-next-ColorNeutralAlpha-100)
+            value: "rgba(255, 255, 255, .75)", //     var(--triplex-next-ColorNeutralAlpha-100)
         },
     },
     ColorNeutral: {
         0: {
-            value: "#8890A0", //     var(--triplex-next-ColorNeutral-0)
+            value: "#8890A1", //     var(--triplex-next-ColorNeutral-0)
         },
         10: {
             value: "#A6ACBA", //     var(--triplex-next-ColorNeutral-10)
@@ -312,7 +312,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFB13B", //     var(--triplex-next-ColorWarning-70)
         },
         80: {
-            value: "#FFBD76", //     var(--triplex-next-ColorWarning-80)
+            value: "#FFD169", //     var(--triplex-next-ColorWarning-80)
         },
         90: {
             value: "#FFE7B1", //     var(--triplex-next-ColorWarning-90)

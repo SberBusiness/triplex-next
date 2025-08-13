@@ -6,7 +6,7 @@
         "module": "ESNext",
         "moduleResolution": "bundler",
         "paths": {
-            "triplex-next": ["./src"]
+            "@sberbusiness/triplex-next/*": ["./src/*"]
         },
         "types": ["@testing-library/jest-dom/vitest", "vitest/globals"],
         // Emit

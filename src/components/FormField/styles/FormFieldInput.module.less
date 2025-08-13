@@ -1,0 +1,49 @@
+.formFieldInput {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border: none;
+    background: none;
+    -webkit-appearance: none; // iOS fix
+    color: var(--triplex-next-FormField-Input_Color_Default);
+
+    &:disabled {
+        color: var(--triplex-next-FormField-Input_Color_Disabled);
+    }
+
+    &::placeholder {
+        color: var(--triplex-next-FormField-Placeholder_Color);
+        opacity: 0;
+        transition: opacity .3s ease-out;
+    }
+
+    &:focus {
+        &::placeholder {
+            opacity: 1;
+        }
+        outline: none;
+    }
+
+    // Создаём хук для отслеживания применения автозаполнения.
+    &:-webkit-autofill {
+        animation-name: autofill-applied-hook;
+        animation-duration: 1ms;
+    }
+
+    // Создаём хук для отслеживания отмены автозаполнения.
+    &:not(:-webkit-autofill) {
+        animation-name: autofill-cancelled-hook;
+        animation-duration: 1ms;
+    }
+}
+
+@keyframes autofill-applied-hook {
+    0% {
+        transform: none;
+    }
+}
+
+@keyframes autofill-cancelled-hook {
+    0% {
+        transform: none;
+    }
+}

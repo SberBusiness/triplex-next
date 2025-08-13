@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Gap } from "triplex-next";
+import { Gap } from "@sberbusiness/triplex-next/components";
 
 describe("Gap", () => {
     it("applying a class correctly", () => {

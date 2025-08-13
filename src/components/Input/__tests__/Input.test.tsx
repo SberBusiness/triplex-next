@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Input } from "triplex-next";
+import { Input } from "@sberbusiness/triplex-next/components";
 
 describe("Input", () => {
     it("applying a class", () => {

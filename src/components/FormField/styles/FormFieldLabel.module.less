@@ -1,0 +1,35 @@
+.formFieldLabel {
+    position: absolute;
+    top: 16px;
+    overflow: hidden;
+    // line-height задает дочерний элемент.
+    line-height: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: top .3s ease-out;
+    // Иначе не кликается вся область Select.
+    pointer-events: none;
+
+    &.floating {
+        top: 10px;
+    }
+}
+
+.formFieldLabelText {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    display: inline-block;
+    color: var(--triplex-next-FormField-Label_Color_Default);
+    transition-property: font-size;
+    transition-duration: .3s;
+    transition-timing-function: ease-out;
+
+    .floating & {
+        font-size: 12px;
+    }
+
+    .disabled & {
+        color: var(--triplex-next-FormField-Label_Color_Disabled);
+    }
+}

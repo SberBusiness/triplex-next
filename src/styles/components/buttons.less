@@ -1,32 +1,32 @@
 @import 'src/styles/style';
 
-@ufs-theme-button-height-lg: 56px;
-@ufs-theme-button-height-md: 40px;
-@ufs-theme-button-height-sm: 28px;
+@button-height-lg: 56px;
+@button-height-md: 40px;
+@button-height-sm: 28px;
 
-@ufs-theme-button-min-width-lg: 96px;
-@ufs-theme-button-min-width-md: 96px;
-@ufs-theme-button-min-width-sm: 80px;
-@ufs-theme-button-min-width-link-lg: 0;
-@ufs-theme-button-min-width-link-md: 0;
-@ufs-theme-button-min-width-link-sm: 0;
+@button-min-width-lg: 96px;
+@button-min-width-md: 96px;
+@button-min-width-sm: 80px;
+@button-min-width-link-lg: 0;
+@button-min-width-link-md: 0;
+@button-min-width-link-sm: 0;
 
-@ufs-theme-button-padding-horizontal-lg: 24px;
-@ufs-theme-button-padding-horizontal-md: 20px;
-@ufs-theme-button-padding-horizontal-sm: 16px;
-@ufs-theme-button-padding-horizontal-link-lg: 2px;
-@ufs-theme-button-padding-horizontal-link-md: 2px;
-@ufs-theme-button-padding-horizontal-link-sm: 2px;
+@button-padding-horizontal-lg: 24px;
+@button-padding-horizontal-md: 20px;
+@button-padding-horizontal-sm: 16px;
+@button-padding-horizontal-link-lg: 2px;
+@button-padding-horizontal-link-md: 2px;
+@button-padding-horizontal-link-sm: 2px;
 
-@ufs-theme-button-padding-vertical-link-lg: 14px;
-@ufs-theme-button-padding-vertical-link-md: 6px;
-@ufs-theme-button-padding-vertical-link-sm: 4px;
+@button-padding-vertical-link-lg: 14px;
+@button-padding-vertical-link-md: 6px;
+@button-padding-vertical-link-sm: 4px;
 
-@ufs-theme-button-padding-vertical-lg: 10px;
-@ufs-theme-button-padding-vertical-md: 10px;
-@ufs-theme-button-padding-vertical-sm: 6px;
+@button-padding-vertical-lg: 10px;
+@button-padding-vertical-md: 10px;
+@button-padding-vertical-sm: 6px;
 
-@ufs-theme-button-siblings-margin-left: 16px;
+@button-siblings-margin-left: 16px;
 
 .button-padding(@height, @padding-horizontal) {
     padding: (@height - @line-height) * 0.5 @padding-horizontal;
@@ -38,20 +38,20 @@
     min-width: @min-width;
 }
 
-.size-SM(@min-width: @ufs-theme-button-min-width-sm,
-@padding-horizontal: @ufs-theme-button-padding-horizontal-sm) {
-    .button-size(@ufs-theme-button-height-sm, @min-width);
-    .button-padding(@ufs-theme-button-height-sm, @padding-horizontal);
+.size-SM(@min-width: @button-min-width-sm,
+@padding-horizontal: @button-padding-horizontal-sm) {
+    .button-size(@button-height-sm, @min-width);
+    .button-padding(@button-height-sm, @padding-horizontal);
 }
 
-.size-MD(@min-width: @ufs-theme-button-min-width-md,
-@padding-horizontal: @ufs-theme-button-padding-horizontal-md) {
-    .button-size(@ufs-theme-button-height-md, @min-width);
-    .button-padding(@ufs-theme-button-height-md, @padding-horizontal);
+.size-MD(@min-width: @button-min-width-md,
+@padding-horizontal: @button-padding-horizontal-md) {
+    .button-size(@button-height-md, @min-width);
+    .button-padding(@button-height-md, @padding-horizontal);
 }
 
-.size-LG(@min-width: @ufs-theme-button-min-width-lg,
-@padding-horizontal: @ufs-theme-button-padding-horizontal-lg) {
-    .button-size(@ufs-theme-button-height-lg, @min-width);
-    .button-padding(@ufs-theme-button-height-lg, @padding-horizontal);
+.size-LG(@min-width: @button-min-width-lg,
+@padding-horizontal: @button-padding-horizontal-lg) {
+    .button-size(@button-height-lg, @min-width);
+    .button-padding(@button-height-lg, @padding-horizontal);
 }

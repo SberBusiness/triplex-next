@@ -1,15 +1,12 @@
 import React from "react";
 import { EButtonSize, EButtonTheme } from "./enums";
-
 import styles from "./styles/Button.module.less";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
-
 import clsx from "clsx";
-import { ButtonBase } from "../protected/ButtonBase/ButtonBase";
-import { LoadingDots } from "../LoadingDots";
+import { LoadingDots, ELoadingDotsSize, ELoadingDotsTheme } from "../LoadingDots";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -104,39 +101,21 @@ const getButtonSizeCssClass = (size?: EButtonSize) => {
     }
 };
 
-/** Возвращает радиус скругления по умолчанию в зависимости от размера кнопки. */
-const getDefaultBorderRadius = (size: EButtonSize): number => {
-    switch (size) {
-        case EButtonSize.LG:
-            return 10;
-        case EButtonSize.MD:
-            return 8;
-        case EButtonSize.SM:
-            return 6;
-    }
-};
-
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
-    const color = theme === EButtonTheme.SECONDARY ? "#21A19A" : "#FFFFFF";
-    const dotsSize = size === EButtonSize.SM ? "sm" : size === EButtonSize.LG ? "lg" : "md";
-    return <LoadingDots color={color} size={dotsSize} />;
+    const dotsTheme = theme === EButtonTheme.SECONDARY ? ELoadingDotsTheme.SECONDARY : ELoadingDotsTheme.GENERAL;
+    const dotsSize =
+        size === EButtonSize.SM
+            ? ELoadingDotsSize.SM
+            : size === EButtonSize.LG
+              ? ELoadingDotsSize.LG
+              : ELoadingDotsSize.MD;
+    return <LoadingDots theme={dotsTheme} size={dotsSize} />;
 };
 
 /** Кнопка. */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
-    const {
-        children,
-        className,
-        disabled,
-        theme,
-        size = EButtonSize.MD,
-        block,
-        loading,
-        icon,
-        borderRadius,
-        ...rest
-    } = props;
+    const { children, className, disabled, theme, size = EButtonSize.MD, block, loading, icon, ...rest } = props;
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,
@@ -154,24 +133,18 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
         className,
     );
 
-    const finalBorderRadius = borderRadius ?? getDefaultBorderRadius(size);
-    const style = { borderRadius: `${finalBorderRadius}px` };
-
     return (
-        <ButtonBase
+        <button
+            type="button"
             className={classNames}
             tabIndex={loading ? -1 : undefined}
             ref={ref}
             disabled={disabled}
-            style={style}
             {...rest}
         >
-            {loading ? (
-                renderLoadingIcon(theme, size)
-            ) : (
-                <span className={styles.content}>{icon ? icon : children}</span>
-            )}
-        </ButtonBase>
+            <span className={styles.content}>{icon ? icon : children}</span>
+            <div className={clsx(styles.loadingDots, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
+        </button>
     );
 });
 

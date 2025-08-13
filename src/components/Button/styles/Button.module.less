@@ -16,6 +16,18 @@
         padding: 0;
     }
 
+    &.md {
+        border-radius: 8px;
+    }
+
+    &.sm {
+        border-radius: 6px;
+    }
+
+    &.lg {
+        border-radius: 10px;
+    }
+
     &.md:not(.icon) {
         .size-MD();
         line-height: 20px;
@@ -64,7 +76,7 @@
 
     & + .button {
         &:not(.block) {
-            margin-left: @ufs-theme-button-siblings-margin-left;
+            margin-left: @button-siblings-margin-left;
         }
     }
 
@@ -89,14 +101,17 @@
         }
     }
 
-    .spinner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .loadingDots {
         position: absolute;
-        left: 0;
         top: 0;
+        left: 0;
         right: 0;
         bottom: 0;
+        display: flex;
+        justify-content: center;
+
+        &.hidden {
+            visibility: hidden;
+        }
     }
 }

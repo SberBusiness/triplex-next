@@ -7,7 +7,7 @@ import { EButtonTheme, EButtonSize } from "../enums";
 const getButton = () => screen.getByTestId("button");
 
 describe("Button", () => {
-    it("Should render with default border radius", () => {
+    it("Should render with default props", () => {
         render(
             <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} data-testid="button">
                 Click me
@@ -18,10 +18,9 @@ describe("Button", () => {
         expect(button).toHaveClass("button");
         expect(button).toHaveClass("general");
         expect(button).toHaveClass("md");
-        expect(button).toHaveStyle("border-radius: 8px");
     });
 
-    it("Should apply size classes and default border radius per size", () => {
+    it("Should apply size classes", () => {
         const { rerender } = render(
             <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM} data-testid="button">
                 Small
@@ -29,7 +28,6 @@ describe("Button", () => {
         );
         const button = getButton();
         expect(button).toHaveClass("sm");
-        expect(button).toHaveStyle("border-radius: 6px");
 
         rerender(
             <Button theme={EButtonTheme.GENERAL} size={EButtonSize.LG} data-testid="button">
@@ -37,7 +35,6 @@ describe("Button", () => {
             </Button>,
         );
         expect(button).toHaveClass("lg");
-        expect(button).toHaveStyle("border-radius: 10px");
     });
 
     it("Should apply theme classes", () => {
@@ -91,6 +88,7 @@ describe("Button", () => {
         expect(button).toHaveClass("block");
         expect(button).toHaveClass("loading");
         expect(button).toHaveAttribute("tabindex", "-1");
+        expect(button.querySelector("span[class*='loadingDots']")).toBeInTheDocument();
     });
 
     it("Should apply disabled attribute and class", () => {
@@ -131,13 +129,26 @@ describe("Button", () => {
         expect(button).toHaveClass("active");
     });
 
-    it("Should use custom borderRadius when provided", () => {
+    it("Should render loading dots with correct theme and size", () => {
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} borderRadius={20} data-testid="button">
-                Custom radius
+            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.LG} loading data-testid="button">
+                Loading
             </Button>,
         );
         const button = getButton();
-        expect(button).toHaveStyle("border-radius: 20px");
+        const loadingDots = button.querySelector("span[class*='loadingDots']");
+        expect(loadingDots).toBeInTheDocument();
+        expect(loadingDots).toHaveClass("lg");
+        expect(loadingDots).toHaveClass("secondary");
+    });
+
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLButtonElement>();
+        render(
+            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} ref={ref} data-testid="button">
+                Ref test
+            </Button>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLButtonElement);
     });
 });

@@ -1,20 +1,28 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./styles/LoadingDots.module.less";
-
-export type TLoadingDotsSize = "sm" | "md" | "lg";
+import { ELoadingDotsSize, ELoadingDotsTheme } from "./enum";
 
 export interface ILoadingDotsProps {
-    color: string;
-    size: TLoadingDotsSize;
+    theme: ELoadingDotsTheme;
+    size: ELoadingDotsSize;
 }
 
-export const LoadingDots: React.FC<ILoadingDotsProps> = ({ color, size }) => {
+const getLoadingDotsThemeCssClass = (theme: ELoadingDotsTheme) => {
+    switch (theme) {
+        case ELoadingDotsTheme.GENERAL:
+            return styles.general;
+        case ELoadingDotsTheme.SECONDARY:
+            return styles.secondary;
+    }
+};
+
+export const LoadingDots: React.FC<ILoadingDotsProps> = ({ theme, size }) => {
     return (
-        <span className={clsx(styles.loadingDots, styles[size])}>
-            <span className={clsx(styles.dot, styles.dot1)} style={{ backgroundColor: color }} />
-            <span className={clsx(styles.dot, styles.dot2)} style={{ backgroundColor: color }} />
-            <span className={clsx(styles.dot, styles.dot3)} style={{ backgroundColor: color }} />
+        <span className={clsx(styles.loadingDots, styles[size], getLoadingDotsThemeCssClass(theme))}>
+            <span className={clsx(getLoadingDotsThemeCssClass(theme), styles.dot, styles.dot1)} />
+            <span className={clsx(getLoadingDotsThemeCssClass(theme), styles.dot, styles.dot2)} />
+            <span className={clsx(getLoadingDotsThemeCssClass(theme), styles.dot, styles.dot3)} />
         </span>
     );
 };

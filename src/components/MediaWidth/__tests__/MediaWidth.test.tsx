@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MediaWidth } from "triplex-next";
-import { EScreenWidth } from "../../../enums/EScreenWidth";
+import { EScreenWidth } from "../../../helpers/breakpoints";
 
 describe("MediaWidth", () => {
     const mockMatchMedia = vi.fn();

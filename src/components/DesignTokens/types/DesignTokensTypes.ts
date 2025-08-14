@@ -4,6 +4,7 @@ import {
     TDesignTokensComponentsInput,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLoadingDots,
+    TDesignTokensComponentsFormField,
 } from "../components";
 
 // Название токенов группы ColorBasicAlpha.
@@ -222,6 +223,7 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBasicAlpha &
 export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsInput
+    | TDesignTokensComponentsFormField
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLoadingDots;
 

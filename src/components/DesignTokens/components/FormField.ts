@@ -1,4 +1,4 @@
-import { TDesignTokenValues } from "../types/DesignTokenTypes";
+import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes";
 
 // Название токенов компонента FormField.
 export const designTokensComponentsFormFieldKeys = [
@@ -22,7 +22,7 @@ export const designTokensComponentsFormFieldKeys = [
 // Тип, содержащий названия токенов компонента FormField.
 export type TDesignTokensComponentsFormFieldKeys = (typeof designTokensComponentsFormFieldKeys)[number];
 // Тип, содержащий названия токенов компонента FormField и их значения.
-export type TDesignTokensComponentsFormFieldValue = Record<TDesignTokensComponentsFormFieldKeys, TDesignTokenValues>;
+export type TDesignTokensComponentsFormFieldValue = Record<TDesignTokensComponentsFormFieldKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов компонента FormField и их значения в светлой и темной теме.
 export type TDesignTokensComponentsFormFieldValues = Record<TDesignTokensComponentsFormFieldKeys, TDesignTokenValues>;
 // Тип локальных токенов компонента FormField.

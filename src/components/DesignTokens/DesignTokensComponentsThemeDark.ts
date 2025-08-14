@@ -7,11 +7,11 @@ import {
     Input_Tokens,
     FormField_Tokens,
     Typography_Tokens,
+    LoadingDots_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsInputValue,
     TDesignTokensComponentsFormFieldValue,
     TDesignTokensComponentsTypographyValue,
-    LoadingDots_Tokens,
     TDesignTokensComponentsLoadingDotsValue,
 } from "./components";
 

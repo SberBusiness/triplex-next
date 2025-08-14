@@ -7,11 +7,11 @@ import {
     Input_Tokens,
     FormField_Tokens,
     Typography_Tokens,
+    LoadingDots_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsInputValue,
     TDesignTokensComponentsFormFieldValue,
     TDesignTokensComponentsTypographyValue,
-    LoadingDots_Tokens,
     TDesignTokensComponentsLoadingDotsValue,
 } from "./components";
 
@@ -19,10 +19,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.LIGHT, Button_Tokens),
     FormField: GetTokensValueByTheme<TDesignTokensComponentsFormFieldValue>(ETriplexNextTheme.LIGHT, FormField_Tokens),
     Input: GetTokensValueByTheme<TDesignTokensComponentsInputValue>(ETriplexNextTheme.LIGHT, Input_Tokens),
-    LoadingDots: GetTokensValueByTheme<TDesignTokensComponentsLoadingDotsValue>(
-        ETriplexNextTheme.LIGHT,
-        LoadingDots_Tokens,
-    ),
+    LoadingDots: GetTokensValueByTheme<TDesignTokensComponentsLoadingDotsValue>(ETriplexNextTheme.LIGHT, LoadingDots_Tokens),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
         ETriplexNextTheme.LIGHT,
         Typography_Tokens,

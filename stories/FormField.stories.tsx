@@ -75,12 +75,10 @@ export const FormFieldWithPrefixAndPostfix: StoryObj<typeof FormField> = {
 
         return (
             <FormField>
-                <FormFieldPrefix>prefix</FormFieldPrefix>
-                <FormFieldLabel>Сумма</FormFieldLabel>
+                <FormFieldPrefix>⚠️</FormFieldPrefix>
+                <FormFieldLabel>Название поля</FormFieldLabel>
                 <FormFieldInput value={value} onChange={handleChange} />
-                <FormFieldPostfix>
-                    postfix
-                </FormFieldPostfix>
+                <FormFieldPostfix>⚠️</FormFieldPostfix>
             </FormField>
         )
     },

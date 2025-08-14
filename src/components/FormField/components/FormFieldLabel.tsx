@@ -29,9 +29,9 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
 
         const stylesLabel = {
             // Левая позиция элемента. Когда label по-середине инпута, позиция учитывает иконки по краям, когда сверху, позиция на все ширину поля ввода.
-            left: floating ? TARGET_PADDING_X_DEFAULT : prefixWidth,
+            left: prefixWidth || TARGET_PADDING_X_DEFAULT,
             // Правая позиция элемента. Когда label по-середине инпута, позиция учитывает иконки по краям, когда сверху, позиция на все ширину поля ввода.
-            right: floating ? TARGET_PADDING_X_DEFAULT : postfixWidth,
+            right: postfixWidth || TARGET_PADDING_X_DEFAULT,
             ...style,
         };
 

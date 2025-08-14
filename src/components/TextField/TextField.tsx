@@ -4,25 +4,22 @@ import {
     FormFieldDescription,
     FormFieldLabel,
     FormFieldInput,
-    // FormFieldSidebar,
     FormFieldPostfix,
-    FormFieldClear,
+    FormFieldPrefix,
     IFormFieldInputProps,
-    IFormFieldClearProps,
     IFormFieldProps,
     FormGroup,
     FormGroupLine,
 } from '../../components';
-// import {HelpBox, IHelpBoxProps} from '@sberbusiness/triplex-next/components/HelpBox/HelpBox';
 
 /** Свойства TextField. */
-export interface ITextFieldProps extends IFormFieldProps {
+export interface ITextFieldProps extends Omit<IFormFieldProps, 'prefix' | 'postfix'> {
     /** Описание поля ввода. */
-    description: React.ReactNode;
-    /** Свойства кнопки очищения значения. Если свойства не переданы, кнопка не отображается т.к. нет обработчика действия. */
-    clearButtonProps?: IFormFieldClearProps;
-    /** Свойства HelpBox. */
-    // helpBoxProps?: IHelpBoxProps;
+    description?: React.ReactNode;
+    /** Префикс поля ввода. */
+    prefix?: React.ReactNode;
+    /** Постфикс поля ввода. */
+    postfix?: React.ReactNode;
     /** Свойства поля ввода. */
     inputProps: IFormFieldInputProps & {ref?: React.RefObject<HTMLInputElement>};
     /** Лейбл поля ввода. */
@@ -32,23 +29,19 @@ export interface ITextFieldProps extends IFormFieldProps {
 /** Компонент текстового ввода.
  *  Является более компактным вариантом отображения инпутов, чем FormGroup.
  * */
-export const TextField: React.FC<ITextFieldProps> = ({clearButtonProps, description, inputProps, /* helpBoxProps, */ label, ...formFieldProps}) => {
-    // const showSidebar = helpBoxProps;
-
+export const TextField: React.FC<ITextFieldProps> = ({description, inputProps, label, prefix, postfix, ...formFieldProps}) => {
     return (
         <FormGroup>
-            <FormGroupLine flex>
+            <FormGroupLine>
                 <FormField {...formFieldProps}>
+                    {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
+
                     <FormFieldInput {...inputProps} />
 
                     {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
 
-                    <FormFieldPostfix>
-                        {clearButtonProps ? <FormFieldClear {...clearButtonProps} /> : null}
-                    </FormFieldPostfix>
+                    {postfix ? <FormFieldPostfix>{postfix}</FormFieldPostfix> : null}
                 </FormField>
-
-                {/* {showSidebar ? <FormFieldSidebar>{helpBoxProps ? <HelpBox {...helpBoxProps} /> : null}</FormFieldSidebar> : null} */}
             </FormGroupLine>
 
             {description ? (

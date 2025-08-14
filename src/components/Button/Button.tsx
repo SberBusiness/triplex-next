@@ -20,8 +20,6 @@ export interface IButtonGeneralProps extends React.ButtonHTMLAttributes<HTMLButt
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
-    /** Радиус скругления кнопки. */
-    borderRadius?: number;
 }
 
 /** Свойства кнопки типа Secondary. */
@@ -36,10 +34,7 @@ export interface IButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLBu
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
-    /** Радиус скругления кнопки. */
-    borderRadius?: number;
 }
-
 /** Свойства кнопки типа Danger. */
 export interface IButtonDangerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Тема кнопки. */
@@ -52,8 +47,6 @@ export interface IButtonDangerProps extends React.ButtonHTMLAttributes<HTMLButto
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
-    /** Радиус скругления кнопки. */
-    borderRadius?: number;
 }
 
 /** Свойства кнопки типа Link. */
@@ -68,8 +61,6 @@ export interface IButtonLinkProps extends React.ButtonHTMLAttributes<HTMLButtonE
     loading?: never;
     /** Иконка. */
     icon?: never;
-    /** Радиус скругления кнопки. */
-    borderRadius?: never;
 }
 
 /** Свойства Button. */

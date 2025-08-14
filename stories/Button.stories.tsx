@@ -76,14 +76,6 @@ export const Default: StoryObj<typeof Button> = {
                 defaultValue: { summary: EButtonSize.MD },
             },
         },
-        borderRadius: {
-            control: { type: "number" },
-            description: "Радиус скругления кнопки",
-            table: {
-                type: { summary: "number" },
-                defaultValue: { summary: "lg=10 md=8 sm=6" },
-            },
-        },
         block: {
             control: { type: "boolean" },
             description: "Блочный режим",
@@ -112,7 +104,11 @@ export const Default: StoryObj<typeof Button> = {
         },
     },
 
-    render: (args) => <Button {...args} />,
+    render: (args) => (
+        <div style={{ width: "250px" }}>
+            <Button {...args} />
+        </div>
+    ),
 };
 
 export const DifferentThemes: StoryObj<typeof Button> = {

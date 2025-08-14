@@ -1,5 +1,5 @@
 import React from "react";
-import { EScreenWidth } from "../../enums/EScreenWidth";
+import { EScreenWidth } from "../../helpers/breakpoints";
 import { MediaWidth } from "../MediaWidth";
 
 /**

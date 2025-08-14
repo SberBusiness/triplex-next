@@ -19,7 +19,7 @@
         "prepare": "husky",
         "prebuild": "npm run generateTokensTypes && npm run generateThemeCssVariables && tsc --noEmit",
         "build": "vite build",
-        "postbuild": "node scripts/generate-package-json.js",
+        "postbuild": "node scripts/generate-package-json.js && npm run copyLessHelpers",
         "storybook": "storybook dev -p 6006",
         "storybook:build": "npm run generateTokensTypes && npm run generateThemeCssVariables && storybook build",
         "storybook:serve": "npx http-server storybook-static -p 6007",
@@ -30,6 +30,7 @@
         "generateTokensTypes": "tsx scripts/generateRefTokensTypes.ts",
         "generateThemeCssVariables": "tsx scripts/generateCssFromDesignTokens.ts",
         "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
+        "copyLessHelpers": "tsx scripts/copyLessHelpers.ts",
         "chromatic": "dotenv -e .env.local -- sh -c 'npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=storybook:build'"
     },
     "dependencies": {

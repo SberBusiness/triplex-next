@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { MediaMaxWidth } from "../MediaMaxWidth";
-import { EScreenWidth } from "../../../enums/EScreenWidth";
+import { EScreenWidth } from "../../../helpers/breakpoints";
 
 describe("MediaMaxWidth", () => {
     const mockMatchMedia = vi.fn();

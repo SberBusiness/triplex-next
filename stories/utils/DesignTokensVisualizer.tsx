@@ -26,7 +26,7 @@ export const DesignTokensVisualizer: React.FC = () => {
                         role="tab"
                         tabIndex={activeTab === groupName ? 0 : -1}
                     >
-                        {groupName}
+                        {groupName.slice(5)}
                     </button>
                 ))}
             </div>

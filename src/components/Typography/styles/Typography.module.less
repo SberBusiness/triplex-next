@@ -1,0 +1,59 @@
+.underline {
+    text-decoration: underline;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.underlineStrikethrough {
+    text-decoration: underline line-through;
+}
+
+.typography {
+    &.primary {
+        color: var(--triplex-next-Typography-Primary_Color)
+    }
+
+    &.complementary {
+        color: var(--triplex-Typography-Complementary_Color);
+    }
+
+    &.secondary {
+        color: var(--triplex-next-Typography-Secondary_Color);
+    }
+
+    &.tertiary {
+        color: var(--triplex-next-Typography-Tertiary_Color);
+    }
+
+    &.disabled {
+        color: var(--triplex-next-Typography-Disabled_Color);
+    }
+
+    &.brand {
+        color: var(--triplex-next-Typography-Brand_Color);
+        user-select: none;
+    }
+
+    &.info {
+        color: var(--triplex-next-Typography-Info_Color);
+    }
+
+    &.success {
+        color: var(--triplex-next-Typography-Success_Color);
+    }
+
+    &.error {
+        color: var(--triplex-next-Typography-Error_Color);
+    }
+
+    &.warning {
+        color: var(--triplex-next-Typography-Warning_Color);
+    }
+
+    &.compact {
+        line-height: calc(16 / 14); // Line height 16px при font-size 14px
+    }
+}
+

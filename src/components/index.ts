@@ -4,4 +4,7 @@ export * from "./FormGroup";
 export * from "./Gap";
 export * from "./Input";
 export * from "./TextField";
+export * from "./MediaWidth";
+export * from "./MobileView";
 export * from "./ThemeProvider";
+export * from "./Typography";

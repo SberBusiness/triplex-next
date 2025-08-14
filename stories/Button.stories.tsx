@@ -134,7 +134,7 @@ export const DifferentThemes: StoryObj<typeof Button> = {
     parameters: {
         docs: {
             description: {
-                story: "Тема кнопки",
+                story: "Доступные темы кнопок",
             },
         },
     },
@@ -201,6 +201,13 @@ export const Icon: StoryObj<typeof Button> = {
             />
         </div>
     ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Кнопка с иконкой, переданной свойством icon",
+            },
+        },
+    },
 };
 
 export const DifferentSizes: StoryObj<typeof Button> = {
@@ -221,7 +228,7 @@ export const DifferentSizes: StoryObj<typeof Button> = {
     parameters: {
         docs: {
             description: {
-                story: "Размер кнопки",
+                story: "Доступные размеры кнопок",
             },
         },
     },
@@ -268,6 +275,13 @@ export const BlockMode: StoryObj<typeof Button> = {
             />
         </div>
     ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Кнопка в блочном режиме",
+            },
+        },
+    },
 };
 
 export const Disabled: StoryObj<typeof Button> = {

@@ -1,4 +1,3 @@
-/** Ширина экрана (для соответствия с медиа-запросами в metrics.less). */
 export enum EScreenWidth {
     XS_MAX = "575px",
     SM_MIN = "576px",

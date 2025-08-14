@@ -1,0 +1,28 @@
+@import 'src/styles/style';
+
+.button.danger {
+    text-transform: none;
+    background: var(--triplex-next-Button-Danger_Background_Default);
+    color: var(--triplex-next-Button-Danger_Color_Default);
+
+    &:hover {
+        background: var(--triplex-next-Button-Danger_Background_Hover);
+        color: var(--triplex-next-Button-Danger_Color_Hover);
+    }
+
+    &.expanded,
+    &:active {
+        background: var(--triplex-next-Button-Danger_Background_Active);
+        color: var(--triplex-next-Button-Danger_Color_Active);
+    }
+
+    &:focus-visible {
+        box-shadow: var(--triplex-next-Button-Danger_Shadow_Focus);
+    }
+
+    &:disabled {
+        background: var(--triplex-next-Button-Danger_Background_Disabled);
+        color: var(--triplex-next-Button-Danger_Color_Disabled);
+
+    }
+}

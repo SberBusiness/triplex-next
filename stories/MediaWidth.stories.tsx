@@ -1,6 +1,6 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { EScreenWidth } from "../src/enums/EScreenWidth";
+import { EScreenWidth } from "../src/helpers/breakpoints";
 import { MediaWidth } from "../src/components/MediaWidth";
 import { MobileView } from "../src/components/MobileView";
 
@@ -45,14 +45,59 @@ import { MediaWidth } from '@sberbusiness/triplex-next';
         },
         children: {
             control: { type: "text" },
+            table: {
+                type: { summary: "React.ReactElement" },
+            },
             description:
                 "Элементы, которые рендерятся, когда ширина окна браузера попадает в диапазон minWidth и/или maxWidth.",
         },
         fallback: {
             control: { type: "text" },
+            table: {
+                type: { summary: "React.ReactElement" },
+            },
             description:
                 "Элементы, которые рендерятся, когда ширина окна браузера не попадает в диапазон minWidth и/или maxWidth.",
         },
+    },
+};
+
+export const BetweenWidth: StoryObj<typeof MediaWidth> = {
+    name: "Between Width",
+    args: {
+        minWidth: EScreenWidth.MD_MIN,
+        maxWidth: EScreenWidth.LG_MAX,
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Заданы максимальная и минимальная допустимая ширина - minWidth и maxWidth. Контент отображается на экранах, чья ширина находится в диапазоне от 768px до 1199px включительно.",
+            },
+        },
+    },
+    render: (args) => {
+        const { minWidth, maxWidth, children, fallback } = args;
+
+        return (
+            <MediaWidth
+                minWidth={minWidth}
+                maxWidth={maxWidth}
+                fallback={
+                    fallback || (
+                        <div>
+                            Fallback на экранах, чья ширина за пределами диапазона от {minWidth} до {maxWidth}{" "}
+                            включительно
+                        </div>
+                    )
+                }
+            >
+                {children || (
+                    <div>
+                        Контент виден только на экранах шириной от {minWidth} до {maxWidth} включительно
+                    </div>
+                )}
+            </MediaWidth>
+        );
     },
 };
 
@@ -109,45 +154,6 @@ export const MaxWidth: StoryObj<typeof MediaWidth> = {
                 fallback={fallback || <div>Fallback на экранах шириной более {maxWidth}</div>}
             >
                 {children || <div>Контент виден только на экранах шириной до {maxWidth} включительно</div>}
-            </MediaWidth>
-        );
-    },
-};
-
-export const BetweenWidth: StoryObj<typeof MediaWidth> = {
-    name: "Between Width",
-    args: {
-        minWidth: EScreenWidth.MD_MIN,
-        maxWidth: EScreenWidth.LG_MAX,
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Заданы максимальная и минимальная допустимая ширина - minWidth и maxWidth. Контент отображается на экранах, чья ширина находится в диапазоне от 768px до 1199px включительно.",
-            },
-        },
-    },
-    render: (args) => {
-        const { minWidth, maxWidth, children, fallback } = args;
-
-        return (
-            <MediaWidth
-                minWidth={minWidth}
-                maxWidth={maxWidth}
-                fallback={
-                    fallback || (
-                        <div>
-                            Fallback на экранах, чья ширина за пределами диапазона от {minWidth} до {maxWidth}{" "}
-                            включительно
-                        </div>
-                    )
-                }
-            >
-                {children || (
-                    <div>
-                        Контент виден только на экранах шириной от {minWidth} до {maxWidth} включительно
-                    </div>
-                )}
             </MediaWidth>
         );
     },

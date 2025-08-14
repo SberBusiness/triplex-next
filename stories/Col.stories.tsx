@@ -6,80 +6,7 @@ import { StoryObj } from "@storybook/react";
 
 export default {
     title: "Components/Col",
-    component: Col,
     tags: ["autodocs"],
-    argTypes: {
-        size: {
-            control: { type: "select" },
-            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        },
-        sizeSm: {
-            control: { type: "select" },
-            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        },
-        sizeMd: {
-            control: { type: "select" },
-            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        },
-        sizeLg: {
-            control: { type: "select" },
-            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        },
-        sizeXl: {
-            control: { type: "select" },
-            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        },
-        offset: {
-            control: { type: "select" },
-            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        },
-        offsetSm: {
-            control: { type: "select" },
-            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        },
-        offsetMd: {
-            control: { type: "select" },
-            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        },
-        offsetLg: {
-            control: { type: "select" },
-            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        },
-        offsetXl: {
-            control: { type: "select" },
-            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        },
-        hidden: {
-            control: { type: "boolean" },
-        },
-        hiddenSm: {
-            control: { type: "boolean" },
-        },
-        hiddenMd: {
-            control: { type: "boolean" },
-        },
-        hiddenLg: {
-            control: { type: "boolean" },
-        },
-        hiddenXl: {
-            control: { type: "boolean" },
-        },
-        block: {
-            control: { type: "boolean" },
-        },
-        blockSm: {
-            control: { type: "boolean" },
-        },
-        blockMd: {
-            control: { type: "boolean" },
-        },
-        blockLg: {
-            control: { type: "boolean" },
-        },
-        blockXl: {
-            control: { type: "boolean" },
-        },
-    },
     parameters: {
         docs: {
             description: {
@@ -118,34 +45,58 @@ import { Row, Col } from '@sberbusiness/triplex-next';
     },
 };
 
-export const Default: StoryObj<typeof Col> = {
-    name: "Default",
+export const WithControls: StoryObj<typeof Col> = {
+    name: "With Controls",
     args: {
         size: 12,
-        sizeSm: 12,
-        sizeMd: 12,
-        sizeLg: 12,
-        sizeXl: 12,
         offset: 0,
-        offsetSm: 0,
-        offsetMd: 0,
-        offsetLg: 0,
-        offsetXl: 0,
-        hidden: false,
-        hiddenSm: false,
-        hiddenMd: false,
-        hiddenLg: false,
-        hiddenXl: false,
-        block: false,
-        blockSm: false,
-        blockMd: false,
-        blockLg: false,
-        blockXl: false,
+        children: "Col Content",
+    },
+    argTypes: {
+        children: {
+            control: { type: "text" },
+            description: "Контент колонки",
+            table: {
+                type: { summary: "React.ReactNode" },
+            },
+        },
+        size: {
+            control: { type: "select" },
+            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            description: "Ширина колонки",
+            table: {
+                type: { summary: "TColumnSize" },
+                defaultValue: { summary: "12" },
+            },
+        },
+        offset: {
+            control: { type: "select" },
+            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            description: "Отступ слева для колонки",
+            table: {
+                type: { summary: "TOffsetSize" },
+                defaultValue: { summary: "0" },
+            },
+        },
+        hidden: {
+            control: { type: "boolean" },
+            description: "Колонка скрыта на всех экранах",
+            table: {
+                type: { summary: "boolean" },
+            },
+        },
+        block: {
+            control: { type: "boolean" },
+            description: "Колонка отображается на всех экранах",
+            table: {
+                type: { summary: "boolean" },
+            },
+        },
     },
     render: (args) => (
         <div>
             <Row style={{ width: "600px" }}>
-                <Col size={args.size} offset={args.offset}>
+                <Col {...args}>
                     <div
                         style={{
                             padding: "16px",
@@ -153,7 +104,7 @@ export const Default: StoryObj<typeof Col> = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        size-{args.size}
+                        {args.children}
                     </div>
                 </Col>
             </Row>
@@ -246,7 +197,7 @@ export const ResponsiveSizes: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        <div>sm=6 md=5 lg=4 xl=3</div>
+                        <div>sizeSm=6 sizeMd=5 sizeLg=4 sizeXl=3</div>
                     </div>
                     <Gap size={16} />
                 </Col>
@@ -259,7 +210,7 @@ export const ResponsiveSizes: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        <div>sm=7 md=8 lg=9 xl=10</div>
+                        <div>sizeSm=7 sizeMd=8 sizeLg=9 sizeXl=10</div>
                     </div>
                 </Col>
             </Row>
@@ -287,7 +238,7 @@ export const WithOffsets: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        col-8
+                        size-8
                     </div>
                 </Col>
 
@@ -299,7 +250,7 @@ export const WithOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        col-8 offset-3
+                        size-8 offset-3
                     </div>
                 </Col>
             </Row>
@@ -313,7 +264,7 @@ export const WithOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        col-6 offset-6
+                        size-6 offset-6
                     </div>
                 </Col>
 
@@ -325,7 +276,7 @@ export const WithOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        col-6 offset-2
+                        size-6 offset-2
                     </div>
                 </Col>
             </Row>
@@ -339,7 +290,7 @@ export const WithOffsets: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        col-12 offset-6
+                        size-12 offset-6
                     </div>
                 </Col>
             </Row>

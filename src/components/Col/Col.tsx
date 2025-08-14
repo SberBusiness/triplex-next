@@ -47,11 +47,11 @@ function getClassNames({
     const prefixAsPart = prefix ? `${prefix}-` : "";
     const prefixVisibility = prefix ? `-${prefix}` : "";
 
-    if (block !== undefined) {
+    if (block === true) {
         classes.push(`d-block${prefixVisibility}`);
     }
 
-    if (hidden !== undefined) {
+    if (hidden === true) {
         classes.push(`d-none${prefixVisibility}`);
     }
 

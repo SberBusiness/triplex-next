@@ -8,3 +8,4 @@ export * from "./MediaWidth";
 export * from "./MobileView";
 export * from "./ThemeProvider";
 export * from "./Typography";
+export * from "./LoadingDots";

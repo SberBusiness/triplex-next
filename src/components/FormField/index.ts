@@ -5,5 +5,4 @@ export * from './components/FormFieldClear';
 export * from './components/FormFieldInput';
 export * from './components/FormFieldPostfix';
 export * from './components/FormFieldPrefix';
-export * from './components/FormFieldSidebar';
 export * from './components/FormFieldTextarea';

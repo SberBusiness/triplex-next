@@ -20,10 +20,6 @@ export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearP
 
             onClick?.(event);
         };
-        console.log('ddd', valueExist && !disabled && (focused || hovered));
-        console.log('valueExist', valueExist);
-        console.log('disabled', !disabled);
-        console.log('(focused || hovered)', (focused || hovered));
 
         const classNames = clsx(
             styles.formFieldClear,

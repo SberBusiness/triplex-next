@@ -8,10 +8,11 @@ import {
     FormFieldPrefix,
     FormFieldPostfix,
     FormFieldDescription,
-    FormFieldTextarea,
-    FormFieldSidebar
+    FormFieldTextarea
 } from "../src/components/FormField";
-import { EFormFieldSize } from "../src/components/FormField/FormField";
+import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
+import { Gap } from "../src/components/Gap";
+import { Text, ETextSize, EFontType } from "../src/components/Typography";
 
 export default {
     title: "Components/FormField",
@@ -29,7 +30,6 @@ export default {
 - **FormFieldClear** - кнопка очистки
 - **FormFieldPrefix/Postfix** - элементы слева/справа от поля
 - **FormFieldDescription** - описание под полем
-- **FormFieldSidebar** - боковая панель
 
 ## Размеры
 
@@ -52,7 +52,7 @@ export const FormFieldBasic: StoryObj<typeof FormField> = {
         return (
             <FormField>
                 <FormFieldLabel>Имя пользователя</FormFieldLabel>
-                <FormFieldInput value={value} onChange={handleChange} />
+                <FormFieldInput value={value} onChange={handleChange} placeholder="Введите имя..." />
             </FormField>
         );
     },
@@ -75,11 +75,11 @@ export const FormFieldWithPrefixAndPostfix: StoryObj<typeof FormField> = {
 
         return (
             <FormField>
-                <FormFieldPrefix>₽</FormFieldPrefix>
+                <FormFieldPrefix>prefix</FormFieldPrefix>
                 <FormFieldLabel>Сумма</FormFieldLabel>
                 <FormFieldInput value={value} onChange={handleChange} />
                 <FormFieldPostfix>
-                    <FormFieldClear onClick={() => setValue('')} />
+                    postfix
                 </FormFieldPostfix>
             </FormField>
         )
@@ -94,36 +94,54 @@ export const FormFieldWithPrefixAndPostfix: StoryObj<typeof FormField> = {
 };
 
 export const FormFieldStates: StoryObj<typeof FormField> = {
-    render: () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
-            <FormField>
-                <FormFieldLabel>Обычное состояние</FormFieldLabel>
-                <FormFieldInput />
-            </FormField>
+    render: () => {
+        const [value, setValue] = useState('');
+        const [valueError, setValueError] = useState('');
 
-            <FormField error>
-                <FormFieldLabel>С ошибкой</FormFieldLabel>
-                <FormFieldInput defaultValue="Неверное значение" />
-                <FormFieldDescription style={{ color: '#d32f2f', fontSize: '12px', marginTop: '4px' }}>
-                    Это поле обязательно для заполнения
-                </FormFieldDescription>
-            </FormField>
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
 
-            <FormField disabled>
-                <FormFieldLabel>Отключено</FormFieldLabel>
-                <FormFieldInput defaultValue="Недоступно" />
-            </FormField>
+        const handleChangeError = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueError(e.target.value);
+        };
 
-            <FormField>
-                <FormFieldLabel>С значением</FormFieldLabel>
-                <FormFieldInput defaultValue="Заполненное поле" />
-            </FormField>
-        </div>
-    ),
+        return (
+            <div>
+                <FormField>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput value={value} onChange={handleChange} />
+                </FormField>
+
+                <Gap size={24} />
+
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField error>
+                            <FormFieldLabel>Название поля</FormFieldLabel>
+                            <FormFieldInput value={valueError} onChange={handleChangeError} />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.ERROR}>Error text</Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
+
+                <Gap size={24} />
+
+                <FormField disabled>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput value="Value disabled" />
+                </FormField>
+            </div>
+        )
+    },
     parameters: {
         docs: {
             description: {
-                story: "Различные состояния FormField: обычное, с ошибкой, отключенное, с заполненным значением."
+                story: "Различные состояния FormField: обычное, с ошибкой, отключенное."
             }
         }
     }
@@ -131,26 +149,33 @@ export const FormFieldStates: StoryObj<typeof FormField> = {
 
 export const FormFieldTextareaStory: StoryObj<typeof FormFieldTextarea> = {
     render: () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
+        <div>
             <FormField>
-                <FormFieldLabel>Описание</FormFieldLabel>
+                <FormFieldLabel>Название поля</FormFieldLabel>
                 <FormFieldTextarea placeholder="Введите описание..." />
             </FormField>
 
-            <FormField>
-                <FormFieldLabel>Комментарий</FormFieldLabel>
-                <FormFieldTextarea
-                    defaultValue="Это многострочное поле ввода с предзаполненным значением."
-                    rows={4}
-                />
-            </FormField>
+            <Gap size={24} />
 
-            <FormField error>
-                <FormFieldLabel>Описание с ошибкой</FormFieldLabel>
-                <FormFieldTextarea placeholder="Обязательное поле..." />
-                <FormFieldDescription style={{ color: '#d32f2f', fontSize: '12px', marginTop: '4px' }}>
-                    Минимум 10 символов
-                </FormFieldDescription>
+            <FormGroup>
+                <FormGroupLine>
+                    <FormField error>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldTextarea placeholder="Обязательное поле..." />
+                    </FormField>
+                </FormGroupLine>
+                <FormGroupLine>
+                    <FormFieldDescription>
+                        <Text size={ETextSize.B4} type={EFontType.ERROR}>Error text</Text>
+                    </FormFieldDescription>
+                </FormGroupLine>
+            </FormGroup>
+
+            <Gap size={24} />
+
+            <FormField disabled>
+                <FormFieldLabel>Название поля</FormFieldLabel>
+                <FormFieldTextarea />
             </FormField>
         </div>
     ),
@@ -163,121 +188,64 @@ export const FormFieldTextareaStory: StoryObj<typeof FormFieldTextarea> = {
     }
 };
 
-export const FormFieldWithSidebar: StoryObj<typeof FormField> = {
-    render: () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '600px' }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
-                <FormField>
-                    <FormFieldLabel>Email</FormFieldLabel>
-                    <FormFieldInput type="email" placeholder="example@email.com" />
-                </FormField>
-                <FormFieldSidebar>
-                    <div style={{
-                        background: '#f5f5f5',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        color: '#666'
-                    }}>
-                        Подсказка
-                    </div>
-                </FormFieldSidebar>
-            </div>
+interface IFormFieldWithControlsProps extends React.ComponentProps<typeof FormField> {
+    labelText?: string;
+    placeholder?: string;
+    showClear?: boolean;
+    showDescription?: boolean;
+    descriptionText?: string;
+}
 
-            <div style={{ display: 'flex', gap: '8px' }}>
-                <FormField>
-                    <FormFieldLabel>Пароль</FormFieldLabel>
-                    <FormFieldInput type="password" />
-                </FormField>
-                <FormFieldSidebar>
-                    <div style={{
-                        background: '#e3f2fd',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        color: '#1976d2'
-                    }}>
-                        💡 Сложный пароль
-                    </div>
-                </FormFieldSidebar>
-            </div>
-        </div>
-    ),
-    parameters: {
-        docs: {
-            description: {
-                story: "FormField с боковой панелью (sidebar). Полезно для отображения подсказок, справки или дополнительной информации."
-            }
-        }
-    }
-};
-
-export const FormFieldInteractive: StoryObj<typeof FormField> = {
-    render: () => {
+export const FormFieldWithControls: StoryObj<IFormFieldWithControlsProps> = {
+    render: (args) => {
         const [value, setValue] = useState('');
-        const [error, setError] = useState(false);
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const newValue = e.target.value;
-            setValue(newValue);
-            setError(newValue.length > 0 && newValue.length < 3);
+            setValue(e.target.value);
         };
 
         const handleClear = () => {
             setValue('');
-            setError(false);
         };
 
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
-                <FormField error={error}>
-                    <FormFieldLabel>Интерактивное поле</FormFieldLabel>
-                    <FormFieldInput
-                        value={value}
-                        onChange={handleChange}
-                        placeholder="Введите минимум 3 символа"
-                    />
-                    {value && (
-                        <FormFieldPostfix>
-                            <FormFieldClear onClick={handleClear} />
-                        </FormFieldPostfix>
-                    )}
-                    {error && (
-                        <FormFieldDescription style={{ color: '#d32f2f', fontSize: '12px', marginTop: '4px' }}>
-                            Минимум 3 символа
-                        </FormFieldDescription>
-                    )}
-                </FormField>
+        const {
+            labelText,
+            placeholder,
+            showClear,
+            showDescription,
+            descriptionText,
+            ...formFieldProps
+        } = args;
 
-                <div style={{ fontSize: '14px', color: '#666' }}>
-                    <p>Текущее значение: "{value}"</p>
-                    <p>Длина: {value.length} символов</p>
-                    <p>Ошибка: {error ? 'Да' : 'Нет'}</p>
-                </div>
-            </div>
+        return (
+            <FormGroup>
+                <FormGroupLine>
+                    <FormField {...formFieldProps}>
+                        <FormFieldLabel>{labelText || 'Название поля'}</FormFieldLabel>
+                        <FormFieldInput
+                            value={value}
+                            onChange={handleChange}
+                            placeholder={placeholder || "Введите текст..."}
+                        />
+                        {showClear && value && (
+                            <FormFieldPostfix>
+                                <FormFieldClear onClick={handleClear} />
+                            </FormFieldPostfix>
+                        )}
+                    </FormField>
+                </FormGroupLine>
+
+                {showDescription && (
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>{descriptionText || 'Описание поля'}</Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                )}
+            </FormGroup>
+
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "Интерактивный пример FormField с валидацией и кнопкой очистки. Демонстрирует динамическое изменение состояний."
-            }
-        }
-    }
-};
-
-export const FormFieldWithControls: StoryObj<typeof FormField> = {
-    render: (args) => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
-            <FormField {...args}>
-                <FormFieldLabel>Поле с controls</FormFieldLabel>
-                <FormFieldInput placeholder="Введите текст..." />
-                <FormFieldPostfix>
-                    <FormFieldClear />
-                </FormFieldPostfix>
-            </FormField>
-        </div>
-    ),
     argTypes: {
         error: {
             control: { type: 'boolean' },
@@ -295,6 +263,46 @@ export const FormFieldWithControls: StoryObj<typeof FormField> = {
                 defaultValue: { summary: 'false' }
             }
         },
+        labelText: {
+            control: { type: 'text' },
+            description: 'Текст лейбла',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'Поле с controls' }
+            }
+        },
+        placeholder: {
+            control: { type: 'text' },
+            description: 'Плейсхолдер поля ввода',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'Введите текст...' }
+            }
+        },
+        showClear: {
+            control: { type: 'boolean' },
+            description: 'Показать кнопку очистки',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        showDescription: {
+            control: { type: 'boolean' },
+            description: 'Показать описание поля',
+            table: {
+                type: { summary: 'boolean' },
+                defaultValue: { summary: 'false' }
+            }
+        },
+        descriptionText: {
+            control: { type: 'text' },
+            description: 'Текст описания',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'Описание поля' }
+            }
+        },
         className: {
             control: { type: 'text' },
             description: 'Дополнительные CSS классы',
@@ -306,12 +314,17 @@ export const FormFieldWithControls: StoryObj<typeof FormField> = {
     args: {
         error: false,
         disabled: false,
+        labelText: 'Поле с controls',
+        placeholder: 'Введите текст...',
+        showClear: false,
+        showDescription: false,
+        descriptionText: 'Описание поля',
         className: ''
     },
     parameters: {
         docs: {
             description: {
-                story: "Интерактивная демонстрация FormField с возможностью изменения состояний через controls панель."
+                story: "Интерактивная демонстрация FormField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, отображение кнопки очистки и описания. Также включает отладочную информацию для демонстрации состояния компонента."
             }
         }
     }

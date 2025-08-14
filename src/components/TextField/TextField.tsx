@@ -10,8 +10,9 @@ import {
     IFormFieldInputProps,
     IFormFieldClearProps,
     IFormFieldProps,
-} from '@sberbusiness/triplex-next/components/FormField/';
-import {FormGroup, FormGroupLine} from '@sberbusiness/triplex-next/components/FormGroup/';
+    FormGroup,
+    FormGroupLine,
+} from '../../components';
 // import {HelpBox, IHelpBoxProps} from '@sberbusiness/triplex-next/components/HelpBox/HelpBox';
 
 /** Свойства TextField. */

@@ -13,8 +13,6 @@ export interface IFormFieldContext {
     postfixWidth: number;
     // Ширина элемента FormFieldPrefix.
     prefixWidth: number;
-    // Установка значения disabled.
-    // setDisabled: (disabled: boolean) => void;
     // Установка значения focused.
     setFocused: (focused: boolean) => void;
     // Установка значения id.
@@ -36,7 +34,6 @@ export const initialFormFieldContextContext: IFormFieldContext = {
     id: '',
     postfixWidth: 0,
     prefixWidth: 0,
-    // setDisabled: () => {},
     setFocused: () => {},
     setId: () => {},
     setPostfixWidth: () => {},

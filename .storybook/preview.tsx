@@ -6,6 +6,44 @@ import "./storybook.css";
 import DocsContainer from "./DocsContainer";
 import "../src/styles/style.less";
 
+const customViewports = {
+    XS: {
+        name: "XS",
+        styles: {
+            width: "575px",
+            height: "1024px",
+        },
+    },
+    SM: {
+        name: "SM",
+        styles: {
+            width: "576px",
+            height: "1024px",
+        },
+    },
+    MD: {
+        name: "MD",
+        styles: {
+            width: "768px",
+            height: "1024px",
+        },
+    },
+    LG: {
+        name: "LG",
+        styles: {
+            width: "992px",
+            height: "1024px",
+        },
+    },
+    XL: {
+        name: "XL",
+        styles: {
+            width: "1200px",
+            height: "1024px",
+        },
+    },
+};
+
 const preview: Preview = {
     parameters: {
         backgrounds: { disabled: true },
@@ -14,6 +52,11 @@ const preview: Preview = {
         },
         options: {
             storySort: (a, b) => a.title.localeCompare(b.title),
+        },
+        viewport: {
+            options: {
+                ...customViewports,
+            },
         },
     },
     decorators: [

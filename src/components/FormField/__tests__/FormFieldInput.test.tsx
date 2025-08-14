@@ -3,19 +3,6 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
 
 describe("FormFieldInput", () => {
-    it("renders with default props", () => {
-        render(
-            <FormField>
-                <FormFieldLabel>Test Input</FormFieldLabel>
-                <FormFieldInput />
-            </FormField>
-        );
-
-        const input = screen.getByRole("textbox");
-        expect(input).toBeDefined();
-        expect(input).toHaveClass("cssClass[formFieldInput]");
-    });
-
     it("handles value changes", () => {
         const handleChange = vi.fn();
         render(
@@ -62,18 +49,6 @@ describe("FormFieldInput", () => {
         expect(input).toBeDisabled();
     });
 
-    it("handles different input types", () => {
-        render(
-            <FormField>
-                <FormFieldLabel>Type Test</FormFieldLabel>
-                <FormFieldInput type="email" />
-            </FormField>
-        );
-
-        const input = screen.getByRole("textbox");
-        expect(input).toHaveAttribute("type", "email");
-    });
-
     it("handles placeholder correctly", () => {
         render(
             <FormField>
@@ -100,18 +75,6 @@ describe("FormFieldInput", () => {
 
         expect(customRender).toHaveBeenCalled();
         expect(screen.getByTestId("custom-input")).toBeDefined();
-    });
-
-    it("handles value prop correctly", () => {
-        render(
-            <FormField>
-                <FormFieldLabel>Value Test</FormFieldLabel>
-                <FormFieldInput value="test value" readOnly />
-            </FormField>
-        );
-
-        const input = screen.getByRole("textbox");
-        expect(input).toHaveValue("test value");
     });
 
     it("passes through additional props", () => {

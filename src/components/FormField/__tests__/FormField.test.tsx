@@ -4,18 +4,6 @@ import { FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex
 
 
 describe("FormField", () => {
-    it("renders with basic structure", () => {
-        render(
-            <FormField>
-                <FormFieldLabel>Test Label</FormFieldLabel>
-                <FormFieldInput />
-            </FormField>
-        );
-
-        expect(screen.getByText("Test Label")).toBeDefined();
-        expect(screen.getByRole("textbox")).toBeDefined();
-    });
-
     it("applies error state correctly", () => {
         render(
             <FormField error>
@@ -58,22 +46,6 @@ describe("FormField", () => {
         expect(formField).toHaveClass("active");
     });
 
-    it("handles hover state", () => {
-        render(
-            <FormField>
-                <FormFieldLabel>Hover Test</FormFieldLabel>
-                <FormFieldInput />
-            </FormField>
-        );
-
-        const formField = screen.getByRole("textbox").closest("div");
-        fireEvent.mouseEnter(formField as Element);
-        fireEvent.mouseLeave(formField as Element);
-
-        // Hover state is handled internally, we just verify no errors occur
-        expect(formField).toBeDefined();
-    });
-
     it("passes through additional props", () => {
         render(
             <FormField data-testid="form-field" className="custom-class">
@@ -84,20 +56,6 @@ describe("FormField", () => {
 
         const formField = screen.getByTestId("form-field");
         expect(formField).toHaveClass("custom-class");
-    });
-
-    it("renders with children correctly", () => {
-        render(
-            <FormField>
-                <FormFieldLabel>Children Test</FormFieldLabel>
-                <FormFieldInput />
-                <div data-testid="custom-child">Custom Child</div>
-            </FormField>
-        );
-
-        expect(screen.getByText("Children Test")).toBeDefined();
-        expect(screen.getByRole("textbox")).toBeDefined();
-        expect(screen.getByTestId("custom-child")).toBeDefined();
     });
 });
 

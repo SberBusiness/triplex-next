@@ -6,7 +6,8 @@ import { Gap } from "../src/components/Gap";
 import { EButtonTheme, EButtonSize } from "../src/components/Button/enums";
 
 export default {
-    title: "Components/Button",
+    title: "Components/Buttons/Button",
+    component: Button,
     tags: ["autodocs"],
     parameters: {
         docs: {

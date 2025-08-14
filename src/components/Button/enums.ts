@@ -12,3 +12,8 @@ export enum EButtonSize {
     MD = "md",
     SM = "sm",
 }
+/** Форма границы кнопки. */
+export enum EButtonIconShape {
+    SQUARE = "square",
+    CIRCLE = "circle",
+}

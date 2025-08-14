@@ -1,0 +1,27 @@
+@import 'src/styles/style';
+
+.button.general {
+    text-transform: none;
+    background: var(--triplex-next-Button-General_Background_Default);
+    color: var(--triplex-next-Button-General_Color_Default);
+
+    &:hover {
+        background: var(--triplex-next-Button-General_Background_Hover);
+        color: var(--triplex-next-Button-General_Color_Hover);
+    }
+
+    &.expanded,
+    &:active {
+        background: var(--triplex-next-Button-General_Background_Active);
+        color: var(--triplex-next-Button-General_Color_Active);
+    }
+
+    &:focus-visible {
+        box-shadow: var(--triplex-next-Button-General_Shadow_Focus);
+    }
+
+    &:disabled {
+        background: var(--triplex-next-Button-General_Background_Disabled);
+        color: var(--triplex-next-Button-General_Color_Disabled);
+    }
+}

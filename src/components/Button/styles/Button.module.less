@@ -1,20 +1,117 @@
+@import 'src/styles/style';
+
 .button {
-    background: var(--triplex-next-Button-General_Background_Default);
-    color: var(--triplex-next-Button-General_Color_Default);
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
+    position: relative;
+    margin: 0; // Фиксим отступ в Safari.
+    vertical-align: top;
+    outline: none;
+    font-family: inherit;
+    background-clip: padding-box;
     cursor: pointer;
-    transition: background-color 0.2s;
-}
+    border: none;
+    font-weight: 600;
 
-.button:hover {
-    background: var(--triplex-next-Button-General_Background_Hover);
-    color: var(--triplex-next-Button-General_Color_Hover);
-}
+    &::-moz-focus-inner {
+        border: none;
+        padding: 0;
+    }
 
-.button:disabled {
-    background: var(--triplex-next-Button-General_Background_Disabled);
-    color: var(--triplex-next-Button-General_Color_Disabled);
+    &.md {
+        border-radius: 8px;
+    }
+
+    &.sm {
+        border-radius: 6px;
+    }
+
+    &.lg {
+        border-radius: 10px;
+    }
+
+    &.md:not(.icon) {
+        .size-MD();
+        line-height: 20px;
+        font-size: 14px;
+    }
+
+    &.sm:not(.icon) {
+        .size-SM();
+        line-height: 16px;
+        font-size: 12px;
+    }
+
+    &.lg:not(.icon) {
+        .size-LG();
+        line-height: 20px;
+        font-size: 16px;
+    }
+
+    &.icon {
+        &.md {
+            min-height: 40px;
+            min-width: 40px;
+            padding: 10px;
+        }
+
+        &.sm {
+            min-height: 28px;
+            min-width: 28px;
+            padding: 4px;
+        }
+
+        &.lg {
+            min-height: 56px;
+            min-width: 56px;
+            padding: 12px;
+        }
+    }
+
+    &:disabled {
+        cursor: default;
+
+        * {
+            pointer-events: none;
+        }
+    }
+
+    & + .button {
+        &:not(.block) {
+            margin-left: @button-siblings-margin-left;
+        }
+    }
+
+    .content {
+        display: flex; // button pointer-events ie fix
+        position: relative; // button active offset ie fix
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    &.block {
+        display: block;
+        width: 100%;
+    }
+
+    &.loading {
+        pointer-events: none;
+
+        .content {
+            visibility: hidden;
+        }
+    }
+
+    .loadingDots {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+
+        &.hidden {
+            visibility: hidden;
+        }
+    }
 }

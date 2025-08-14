@@ -9,10 +9,19 @@ import {
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsInputValue,
     TDesignTokensComponentsTypographyValue,
+    LoadingDots_Tokens,
+    TDesignTokensComponentsLoadingDotsValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.DARK, Button_Tokens),
     Input: GetTokensValueByTheme<TDesignTokensComponentsInputValue>(ETriplexNextTheme.DARK, Input_Tokens),
-    Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(ETriplexNextTheme.DARK, Typography_Tokens),
+    LoadingDots: GetTokensValueByTheme<TDesignTokensComponentsLoadingDotsValue>(
+        ETriplexNextTheme.DARK,
+        LoadingDots_Tokens,
+    ),
+    Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
+        ETriplexNextTheme.DARK,
+        Typography_Tokens,
+    ),
 };

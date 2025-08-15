@@ -5,8 +5,8 @@ import styles from "./styles/ButtonIcon.module.less";
 
 const getButtonIconShapeClassName = (shape?: EButtonIconShape) => {
     switch (shape) {
-        case EButtonIconShape.SQUARE:
-            return styles.square;
+        case EButtonIconShape.SQUIRCLE:
+            return styles.squircle;
         case EButtonIconShape.CIRCLE:
             return styles.circle;
     }
@@ -22,7 +22,7 @@ export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonE
 
 /** Кнопка-иконка. */
 export const ButtonIcon = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
-    ({ className, disabled, shape = EButtonIconShape.SQUARE, active, ...rest }, ref) => {
+    ({ className, disabled, shape = EButtonIconShape.SQUIRCLE, active, ...rest }, ref) => {
         const classNames = clsx(styles.buttonIcon, getButtonIconShapeClassName(shape), "hoverable", className, {
             active: !!active,
             disabled: !!disabled,

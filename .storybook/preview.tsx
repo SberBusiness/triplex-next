@@ -5,6 +5,7 @@ import { withThemeByClassName } from "@storybook/addon-themes";
 import "./storybook.css";
 import DocsContainer from "./DocsContainer";
 import "../src/styles/style.less";
+import "@sberbusiness/icons-next/styles/icons.css";
 
 const customViewports = {
     XS: {
@@ -66,19 +67,14 @@ const preview: Preview = {
             const isDark = context.globals.theme === "dark";
 
             return (
-                <span
-                    ref={scopeRef}
-                    style={{
-                        display: "inline-block",
-                    }}
-                >
+                <div ref={scopeRef}>
                     <ThemeProvider
                         theme={isDark ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT}
                         scopeRef={scopeRef}
                     >
                         <Story />
                     </ThemeProvider>
-                </span>
+                </div>
             );
         },
         withThemeByClassName({

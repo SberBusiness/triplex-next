@@ -1,14 +1,16 @@
 import React, {useContext} from 'react';
-// import {ClosenotificationSrvxIcon16} from '@sberbusiness/icons/ClosenotificationSrvxIcon16';
+import {CloseSrvxIcon16} from '@sberbusiness/icons-next/CloseSrvxIcon16';
 import {FormFieldContext} from '../FormFieldContext';
 import clsx from 'clsx';
 import styles from '../styles/FormFieldClear.module.less';
 
-export interface IFormFieldClearProps extends React.HTMLAttributes<HTMLSpanElement> {}
+export interface IFormFieldClearProps extends React.HTMLAttributes<HTMLSpanElement> {
+    children: never;
+}
 
 /** Кнопка очищения введенного значения. */
 export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearProps>(
-    ({children, className, onClick, ...htmlLabelAttributes}, ref) => {
+    ({className, onClick, ...htmlLabelAttributes}, ref) => {
         const {disabled, focused, hovered, id, valueExist} = useContext(FormFieldContext);
 
         const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -32,8 +34,7 @@ export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearP
 
         return (
             <span className={classNames} ref={ref} onClick={handleClick} {...htmlLabelAttributes}>
-                {/* <ClosenotificationSrvxIcon16 /> */}
-                X
+                <CloseSrvxIcon16 />
             </span>
         );
     }

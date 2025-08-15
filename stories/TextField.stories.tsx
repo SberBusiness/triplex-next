@@ -4,6 +4,7 @@ import { TextField } from "../src/components/TextField";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
 import { Gap } from "../src/components/Gap";
 import { FormFieldClear } from "../src/components";
+import { DefaulticonPrdIcon20 } from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
 
 export default {
     title: "Components/TextField",
@@ -28,15 +29,17 @@ export const TextFieldBasic: StoryObj<typeof TextField> = {
         };
 
         return (
-            <TextField
-                description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
-                inputProps={{
-                    value: value,
-                    onChange: handleChange,
-                    placeholder: "Введите текст..."
-                }}
-                label="Название поля"
-            />
+            <div style={{ width: '304px' }}>
+                <TextField
+                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                        placeholder: "Введите текст..."
+                    }}
+                    label="Название поля"
+                />
+            </div>
         );
     },
     parameters: {
@@ -57,22 +60,24 @@ export const TextFieldWithPrefixAndPostfix: StoryObj<typeof TextField> = {
         };
 
         return (
-            <TextField
-                description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
-                prefix="⚠️"
-                postfix="⚠️"
-                inputProps={{
-                    value: value,
-                    onChange: handleChange,
-                }}
-                label="Название поля"
-            />
+            <div style={{ width: '304px' }}>
+                <TextField
+                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    prefix={<DefaulticonPrdIcon20 />}
+                    postfix={<DefaulticonPrdIcon20 />}
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                    }}
+                    label="Название поля"
+                />
+            </div>
         );
     },
     parameters: {
         docs: {
             description: {
-                story: "TextField с префиксом (⚠️) и постфиксом (⚠️)."
+                story: `TextField с префиксом и постфиксом.`
             }
         }
     }
@@ -87,15 +92,17 @@ export const TextFieldWithClearButton: StoryObj<typeof TextField> = {
         };
 
         return (
-            <TextField
-                description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
-                postfix={<FormFieldClear onClick={() => setValue('')} />}
-                inputProps={{
-                    value: value,
-                    onChange: handleChange,
-                }}
-                label="Название поля"
-            />
+            <div style={{ width: '304px' }}>
+                <TextField
+                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    postfix={<FormFieldClear onClick={() => setValue('')} />}
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                    }}
+                    label="Название поля"
+                />
+            </div>
         );
     },
     parameters: {
@@ -121,7 +128,7 @@ export const TextFieldStates: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div>
+            <div style={{ width: '304px' }}>
                 <TextField
                     description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
                     inputProps={{
@@ -194,24 +201,26 @@ export const TextFieldWithControls: StoryObj<ITextFieldWithControlsProps> = {
         } = args;
 
         return (
-            <TextField
-                {...textFieldProps}
-                description={
-                    descriptionText ? (
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            {descriptionText}
-                        </Text>
-                    ) : null
-                }
-                prefix={prefixText || ""}
-                postfix={postfixText || ""}
-                inputProps={{
-                    value: value,
-                    onChange: handleChange,
-                    placeholder: placeholder || "Введите текст...",
-                }}
-                label={showLabel ? (labelText || "Название поля") : undefined}
-            />
+            <div style={{ width: '304px' }}>
+                <TextField
+                    {...textFieldProps}
+                    description={
+                        descriptionText ? (
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {descriptionText}
+                            </Text>
+                        ) : null
+                    }
+                    prefix={prefixText || ""}
+                    postfix={postfixText || ""}
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                        placeholder: placeholder || "Введите текст...",
+                    }}
+                    label={showLabel ? (labelText || "Название поля") : undefined}
+                />
+            </div>
         );
     },
     argTypes: {

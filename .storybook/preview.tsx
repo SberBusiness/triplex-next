@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { ThemeProvider, ETriplexNextTheme } from "../src/components/ThemeProvider";
+import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next/ThemeProvider";
 import React from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import "./storybook.css";
@@ -72,7 +73,10 @@ const preview: Preview = {
                         theme={isDark ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT}
                         scopeRef={scopeRef}
                     >
-                        <Story />
+                        {/* @ts-ignore */}
+                        <ThemeProviderIcons theme={isDark ? EIconsTheme.DARK : EIconsTheme.LIGHT}>
+                            <Story />
+                        </ThemeProviderIcons>
                     </ThemeProvider>
                 </div>
             );

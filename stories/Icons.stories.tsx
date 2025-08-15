@@ -73,26 +73,10 @@ const IconDisplay: React.FC<{
     name: string;
     size?: string;
 }> = ({ icon: Icon, name, size }) => (
-    <div className="hoverable" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '16px',
-        border: '1px solid #e0e0e0',
-        borderRadius: '8px',
-        minWidth: '120px',
-        backgroundColor: '#fafafa'
-    }}>
+    <div className="hoverable icons-item-example">
         <Icon />
-        <div style={{
-            fontSize: '12px',
-            textAlign: 'center',
-            color: '#666',
-            wordBreak: 'break-word'
-        }}>
+        <div>
             {name}
-            {size && <div style={{ fontSize: '10px', color: '#999' }}>{size}</div>}
         </div>
     </div>
 );
@@ -102,7 +86,7 @@ export const AllIcons: StoryObj = {
         <div style={{ padding: '24px' }}>
             {/* Status Icons (Sts) */}
             <section style={{ marginBottom: '32px' }}>
-                <h3 style={{ marginBottom: '16px', color: '#555' }}>Status Icons (Статусные иконки) - Sts</h3>
+                <h3 style={{ marginBottom: '16px', color: '#555' }}>Status Icons</h3>
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
@@ -179,7 +163,7 @@ export const AllIcons: StoryObj = {
 export const StatusIcons: StoryObj = {
     render: () => (
         <div>
-            <h3 style={{ marginBottom: '16px' }}>Status Icons (Статусные иконки) - Sts</h3>
+            <h3 style={{ marginBottom: '16px' }}>Status Icons</h3>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
@@ -204,7 +188,7 @@ export const StatusIcons: StoryObj = {
     parameters: {
         docs: {
             description: {
-                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки, рубль (статус валюты)."
+                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки."
             }
         }
     }
@@ -213,7 +197,7 @@ export const StatusIcons: StoryObj = {
 export const ServiceIcons: StoryObj = {
     render: () => (
         <div>
-            <h3 style={{ marginBottom: '16px' }}>Service Icons (Сервисные иконки) - Srv</h3>
+            <h3 style={{ marginBottom: '16px' }}>Service Icons</h3>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
@@ -253,7 +237,7 @@ export const ServiceIcons: StoryObj = {
 export const ProductIcons: StoryObj = {
     render: () => (
         <div>
-            <h3 style={{ marginBottom: '16px' }}>Product Icons (Продуктовые иконки) - Prd</h3>
+            <h3 style={{ marginBottom: '16px' }}>Product Icons</h3>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',

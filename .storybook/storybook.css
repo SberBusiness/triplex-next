@@ -2,11 +2,13 @@ body {
 	font-family: 'SBSansText';
 }
 
-.theme-dark > body {
+.theme-dark > body, 
+.theme-dark .icons-item-example {
     color: rgb(201, 205, 207);
     background-color: rgb(24, 24, 25);
 }
-.theme-light > body {
+.theme-light > body,
+.theme-light .icons-item-example {
     color: rgb(24, 24, 25);
     background-color: rgb(255, 255, 255);
 }
@@ -47,4 +49,18 @@ body {
 	src: url('/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
+}
+
+.icons-item-example {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	padding: 16px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	min-width: 120px;
+	text-align: center;
+	font-size: 12px;
+	word-break: break-word;
 }

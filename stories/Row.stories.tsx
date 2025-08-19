@@ -169,7 +169,7 @@ export const WithoutPaddingBottom: StoryObj<typeof Row> = {
     parameters: {
         docs: {
             description: {
-                story: "Строка без нижнего отступа с тремя колонками",
+                story: "Строка без нижнего отступа с двумя колонками",
             },
         },
     },

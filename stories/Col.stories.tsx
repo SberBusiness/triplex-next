@@ -45,10 +45,10 @@ import { Row, Col } from '@sberbusiness/triplex-next';
     },
 };
 
-export const WithControls: StoryObj<typeof Col> = {
-    name: "With Controls",
+export const Playground: StoryObj = {
+    name: "Playground",
     args: {
-        size: 12,
+        size: 6,
         offset: 0,
         children: "Col Content",
     },
@@ -80,40 +80,57 @@ export const WithControls: StoryObj<typeof Col> = {
         },
         hidden: {
             control: { type: "boolean" },
-            description: "Колонка скрыта на всех экранах",
+            description: "Колонка скрыта",
             table: {
                 type: { summary: "boolean" },
             },
         },
         block: {
             control: { type: "boolean" },
-            description: "Колонка отображается на всех экранах",
+            description: "Колонка отображается независимо от свойства hidden",
             table: {
                 type: { summary: "boolean" },
             },
         },
     },
     render: (args) => (
-        <div>
-            <Row style={{ width: "600px" }}>
-                <Col {...args}>
-                    <div
-                        style={{
-                            padding: "16px",
-                            textAlign: "center",
-                            backgroundColor: "rgb(255, 217, 160)",
-                        }}
-                    >
-                        {args.children}
-                    </div>
-                </Col>
-            </Row>
-        </div>
+        <Row style={{ width: "600px" }}>
+            <Col {...args}>
+                <div
+                    style={{
+                        padding: "16px",
+                        textAlign: "center",
+                        backgroundColor: "rgb(255, 217, 160)",
+                    }}
+                >
+                    {args.children}
+                </div>
+            </Col>
+        </Row>
+    ),
+};
+
+export const Default: StoryObj = {
+    name: "Default",
+    render: () => (
+        <Row style={{ width: "600px" }}>
+            <Col>
+                <div
+                    style={{
+                        padding: "16px",
+                        textAlign: "center",
+                        backgroundColor: "rgb(255, 217, 160)",
+                    }}
+                >
+                    default size (size-12)
+                </div>{" "}
+            </Col>
+        </Row>
     ),
     parameters: {
         docs: {
             description: {
-                story: "Демонстрация различных размеров колонок, включая размер по-умолчанию",
+                story: "Размер колонки по-умолчанию",
             },
         },
     },
@@ -122,7 +139,7 @@ export const WithControls: StoryObj<typeof Col> = {
 export const DifferentSizes: StoryObj = {
     name: "Different Sizes",
     render: () => (
-        <div>
+        <>
             <Row style={{ width: "600px" }}>
                 <Col>
                     <div
@@ -173,7 +190,7 @@ export const DifferentSizes: StoryObj = {
                     </div>
                 </Col>
             </Row>
-        </div>
+        </>
     ),
     parameters: {
         docs: {
@@ -188,7 +205,7 @@ export const ResponsiveSizes: StoryObj = {
     name: "Responsive Sizes",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <Row>
+            <Row style={{ width: "600px" }}>
                 <Col sizeSm={6} sizeMd={5} sizeLg={4} sizeXl={3}>
                     <div
                         style={{
@@ -197,7 +214,7 @@ export const ResponsiveSizes: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        <div>sizeSm=6 sizeMd=5 sizeLg=4 sizeXl=3</div>
+                        <div>Размеры колонки на разных экранах: sm - 6, md - 5, lg - 4, xl - 3</div>
                     </div>
                     <Gap size={16} />
                 </Col>
@@ -210,7 +227,7 @@ export const ResponsiveSizes: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        <div>sizeSm=7 sizeMd=8 sizeLg=9 sizeXl=10</div>
+                        <div>Размеры колонки на разных экранах: sm - 7, md - 8, lg - 9, xl - 10</div>
                     </div>
                 </Col>
             </Row>
@@ -290,7 +307,7 @@ export const WithOffsets: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        size-12 offset-6
+                        size-12 offset-5
                     </div>
                 </Col>
             </Row>
@@ -309,7 +326,7 @@ export const ResponsiveOffsets: StoryObj = {
     name: "Responsive Offsets",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Row>
+            <Row style={{ width: "600px" }}>
                 <Col sizeMd={12} offsetMd={3}>
                     <div
                         style={{
@@ -362,7 +379,7 @@ export const HiddenColumns: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        hidden: false
+                        Свойство hidden не установлено
                     </div>
                 </Col>
             </Row>
@@ -376,7 +393,7 @@ export const HiddenColumns: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        hiddenSm
+                        Свойство hidden установлено для экрана sm
                     </div>
                     <Gap size={16} />
                 </Col>
@@ -389,7 +406,7 @@ export const HiddenColumns: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        hiddenMd
+                        Свойство hidden установлено для экрана md
                     </div>
                     <Gap size={16} />
                 </Col>
@@ -402,7 +419,7 @@ export const HiddenColumns: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        hiddenXl
+                        Свойство hidden установлено для экрана xl
                     </div>
                 </Col>
             </Row>

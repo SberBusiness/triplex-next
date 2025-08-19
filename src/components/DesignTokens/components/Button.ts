@@ -64,8 +64,8 @@ export const Button_Tokens: TDesignTokensComponentsButtonValues = {
 
     Secondary_Background_Active: [{ ref: "ColorNeutral.60" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Button-Secondary_Background_Active)
     Secondary_Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Secondary_Background_Default)
-    Secondary_Background_Disabled: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.40" }], // var(--triplex-next-Button-Secondary_Background_Disabled)
-    Secondary_Background_Hover: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Secondary_Background_Hover)
+    Secondary_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Secondary_Background_Disabled)
+    Secondary_Background_Hover: [{ ref: "ColorNeutral.80" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-Secondary_Background_Hover)
     Secondary_Color_Active: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.40" }], // var(--triplex-next-Button-Secondary_Color_Active)
     Secondary_Color_Default: [{ ref: "ColorBrand.40" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Button-Secondary_Color_Default)
     Secondary_Color_Disabled: [{ ref: "ColorDarkBasicAlpha.90" }, { ref: "ColorBasicAlpha.90" }], // var(--triplex-next-Button-Secondary_Color_Disabled)

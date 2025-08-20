@@ -4,28 +4,24 @@
     text-transform: none;
     background: var(--triplex-next-Button-Secondary_Background_Default);
     color: var(--triplex-next-Button-Secondary_Color_Default);
-    box-shadow: var(--triplex-next-Button-Secondary_Shadow_Default);
 
     &:hover {
         background: var(--triplex-next-Button-Secondary_Background_Hover);
-        box-shadow: var(--triplex-next-Button-Secondary_Shadow_Hover);
         color: var(--triplex-next-Button-Secondary_Color_Hover);
     }
 
     &.expanded,
     &:active {
         background: var(--triplex-next-Button-Secondary_Background_Active);
-        box-shadow: var(--triplex-next-Button-Secondary_Shadow_Active);
         color: var(--triplex-next-Button-Secondary_Color_Active);
     }
 
     &:focus-visible {
-        box-shadow: var(--triplex-next-Button-Secondary_Shadow_Focus);
+        box-shadow: 0 0 0 1px var(--triplex-next-Button-Secondary_Shadow_Focus) inset;
     }
 
     &:disabled {
         background: var(--triplex-next-Button-Secondary_Background_Disabled);
-        box-shadow: var(--triplex-next-Button-Secondary_Shadow_Disabled);
         color: var(--triplex-next-Button-Secondary_Color_Disabled);
     }
 }

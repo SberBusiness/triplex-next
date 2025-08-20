@@ -2,18 +2,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-}
 
-.loadingDots.general {
-    .dot {
-        background-color: var(--triplex-next-LoadingDots-General_Background_Default);
+    &.sm {
+        width: 16px;
+        height: 16px;
+        gap: 2px;
     }
-}
 
-.loadingDots.secondary {
-    .dot {
-        background-color: var(--triplex-next-LoadingDots-Secondary_Background_Default);
+    &.md {
+        width: 24px;
+        height: 24px;
+        gap: 3px;
+    }
+    
+    &.lg {
+        width: 32px;
+        height: 32px;
+        gap: 4px;
+    }
+
+    &.general {
+        .dot {
+            background-color: var(--triplex-next-LoadingDots-General_Background_Default);
+        }
+    }
+
+    &.secondary {
+        .dot {
+            background-color: var(--triplex-next-LoadingDots-Secondary_Background_Default);
+        }
     }
 }
 

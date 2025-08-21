@@ -16,22 +16,6 @@
         padding: 0;
     }
 
-    &.md {
-        border-radius: 8px;
-        line-height: 20px;
-        font-size: 14px;
-
-        &:not(.icon) {
-            .size-MD();
-        }
-
-        &.icon {
-            min-height: 40px;
-            min-width: 40px;
-            padding: 10px;
-        }
-    }
-
     &.sm {
         border-radius: 6px;
         line-height: 16px;
@@ -42,9 +26,25 @@
         }
 
         &.icon {
-            min-height: 28px;
+            min-height: @button-height-sm;
             min-width: 28px;
             padding: 4px;
+        }
+    }
+
+    &.md {
+        border-radius: 8px;
+        line-height: 20px;
+        font-size: 14px;
+
+        &:not(.icon) {
+            .size-MD();
+        }
+
+        &.icon {
+            min-height: @button-height-md;
+            min-width: 40px;
+            padding: 10px;
         }
     }
 
@@ -58,7 +58,7 @@
         }
         
         &.icon {
-            min-height: 56px;
+            min-height: @button-height-lg;
             min-width: 56px;
             padding: 12px;
         }

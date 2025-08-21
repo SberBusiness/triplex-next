@@ -113,7 +113,7 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
         getButtonThemeCssClass(theme, !!expanded),
         getButtonSizeCssClass(size),
         { [styles.block]: !!block, [styles.loading]: !!loading },
-        { [styles.icon]: !!icon },
+        { [styles.icon]: !!icon && !children },
         // Классы для иконок, начало.
         "hoverable",
         {

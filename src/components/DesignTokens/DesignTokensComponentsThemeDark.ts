@@ -11,6 +11,8 @@ import {
     TDesignTokensComponentsTypographyValue,
     LoadingDots_Tokens,
     TDesignTokensComponentsLoadingDotsValue,
+    AlertContext_Tokens,
+    TDesignTokensComponentsAlertContextValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -23,5 +25,9 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
         ETriplexNextTheme.DARK,
         Typography_Tokens,
+    ),
+    AlertContext: GetTokensValueByTheme<TDesignTokensComponentsAlertContextValue>(
+        ETriplexNextTheme.DARK,
+        AlertContext_Tokens,
     ),
 };

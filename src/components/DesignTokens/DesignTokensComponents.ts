@@ -3,6 +3,7 @@ import { TDesignTokensComponents } from "./types/DesignTokensTypes";
 import { ETriplexNextTheme } from "../ThemeProvider/ETriplexNextTheme";
 import { GetTokensValueByTheme } from "./GetTokensValueByTheme";
 import {
+    AlertContext_Tokens,
     Button_Tokens,
     Input_Tokens,
     Typography_Tokens,
@@ -11,6 +12,7 @@ import {
     TDesignTokensComponentsTypographyValue,
     LoadingDots_Tokens,
     TDesignTokensComponentsLoadingDotsValue,
+    TDesignTokensComponentsAlertContextValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -23,5 +25,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
         ETriplexNextTheme.LIGHT,
         Typography_Tokens,
+    ),
+    AlertContext: GetTokensValueByTheme<TDesignTokensComponentsAlertContextValue>(
+        ETriplexNextTheme.LIGHT,
+        AlertContext_Tokens,
     ),
 };

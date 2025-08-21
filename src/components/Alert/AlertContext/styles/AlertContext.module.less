@@ -1,0 +1,27 @@
+.alertContext {
+    display: flex;
+    font-size: 12px;
+    line-height: 16px;
+
+    > svg {
+        flex-shrink: 0;
+    }
+
+    .alertContextText {
+        margin-left: 8px;
+    }
+
+    &.alertTypeError .alertContextText {
+        color: var(--triplex-next-AlertContext-Error_Color);
+    }
+
+    &.alertTypeInfo .alertContextText {
+        color: var(--triplex-next-AlertContext-Info_Color);
+    }
+    &.alertTypeWarning .alertContextText {
+        color: var(--triplex-next-AlertContext-Warning_Color);
+    }
+    &.alertTypeSystem .alertContextText {
+        color: var(--triplex-next-AlertContext-System_Color);
+    }
+}

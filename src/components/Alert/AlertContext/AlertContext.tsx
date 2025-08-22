@@ -9,13 +9,13 @@ import { EFontType, ETextSize } from "../../Typography/enums";
 /** Свойства компонента AlertContext. */
 export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement> {
     /** Тип предупреждения (info/warning/error/system). */
-    type: EAlertType;
+    type: Exclude<EAlertType, EAlertType.FEATURE>;
     /** Отображаемая иконка. */
     renderIcon?: React.ReactNode;
 }
 
 /** Маппинг типов предупреждений к типам шрифтов. */
-const alertTypeToFontTypeMap: Record<EAlertType, EFontType> = {
+const alertTypeToFontTypeMap: Record<Exclude<EAlertType, EAlertType.FEATURE>, EFontType> = {
     [EAlertType.INFO]: EFontType.INFO,
     [EAlertType.WARNING]: EFontType.WARNING,
     [EAlertType.ERROR]: EFontType.ERROR,
@@ -28,7 +28,7 @@ export const AlertContext = React.forwardRef<HTMLSpanElement, IAlertContextProps
         return (
             <span
                 role="alert"
-                className={clsx(styles.alertContext, alertTypeToClassNameMap[type](styles), className)}
+                className={clsx(styles.alertContext, alertTypeToClassNameMap[type], className)}
                 {...rest}
                 data-tx={process.env.npm_package_version}
                 ref={ref}

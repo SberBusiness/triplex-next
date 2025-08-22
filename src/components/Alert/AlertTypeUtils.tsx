@@ -1,10 +1,11 @@
 import React from "react";
 import { EAlertType } from "./EAlertType";
 import {
-    InfoStrokeStsIcon16,
-    WarningStrokeStsIcon16,
-    ErrorStrokeStsIcon16,
-    SystemStrokeStsIcon16,
+    InfoStsIcon16,
+    WarningStsIcon16,
+    ErrorStsIcon16,
+    SystemStsIcon16,
+    DefaulticonPrdIcon20,
 } from "@sberbusiness/icons-next";
 
 /** Получить иконку по типу предупреждения. */
@@ -17,7 +18,9 @@ export function renderDefaultIcon(type: EAlertType): JSX.Element {
         case EAlertType.ERROR:
             return <ErrorStrokeStsIcon16 paletteIndex={1} />;
         case EAlertType.SYSTEM:
-            return <SystemStrokeStsIcon16 paletteIndex={4} />;
+            return <SystemStsIcon16 />;
+        case EAlertType.FEATURE:
+            return <DefaulticonPrdIcon20 />;
     }
 }
 
@@ -27,4 +30,5 @@ export const alertTypeToClassNameMap = {
     [EAlertType.WARNING]: (styles: Record<string, string>) => styles.alertTypeWarning,
     [EAlertType.ERROR]: (styles: Record<string, string>) => styles.alertTypeError,
     [EAlertType.SYSTEM]: (styles: Record<string, string>) => styles.alertTypeSystem,
+    [EAlertType.FEATURE]: (styles: Record<string, string>) => styles.alertTypeFeature,
 };

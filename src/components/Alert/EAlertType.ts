@@ -4,4 +4,5 @@ export enum EAlertType {
     WARNING = "warning",
     ERROR = "error",
     SYSTEM = "system",
+    FEATURE = "feature",
 }

@@ -54,6 +54,7 @@ const preview: Preview = {
         },
         options: {
             storySort: (a, b) => a.title.localeCompare(b.title),
+            showPanel: true,
         },
         viewport: {
             options: {

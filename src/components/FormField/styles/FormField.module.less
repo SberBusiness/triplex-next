@@ -3,7 +3,18 @@
     flex-grow: 1;
     background: var(--triplex-next-FormField-Background_Default);
     box-shadow: var(--triplex-next-FormField-Shadow_Default);
-    border-radius: 10px;
+
+    &.sm {
+        border-radius: 6px;
+    }
+
+    &.md {
+        border-radius: 8px;
+    }
+
+    &.lg {
+        border-radius: 10px;
+    }
 
     &.active {
         background: var(--triplex-next-FormField-Background_Active);
@@ -24,6 +35,10 @@
 
     &.error {
         background: var(--triplex-next-FormField-Background_Error);
+
+        &.active {
+            box-shadow: var(--triplex-next-FormField-Shadow_Error_Active);
+        }
     }
 }
 

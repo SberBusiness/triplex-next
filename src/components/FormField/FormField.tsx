@@ -3,21 +3,17 @@ import {FormFieldContext} from './FormFieldContext';
 import {TARGET_PADDING_X_DEFAULT} from './consts';
 import clsx from 'clsx';
 import styles from './styles/FormField.module.less';
-
-export enum EFormFieldSize {
-    LG = 'lg',
-    // MD = 'md',
-    // SM = 'sm',
-}
+import {EFormFieldSize} from './enums';
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
     error?: boolean;
     disabled?: boolean;
+    size?: EFormFieldSize;
 }
 
 /** Элемент, отображающий input/select/textarea + label. */
-export const FormField: React.FC<IFormFieldProps> = ({children, className, disabled, error, onMouseEnter, onMouseLeave, style, ...htmlDivAttributes}) => {
+export const FormField: React.FC<IFormFieldProps> = ({children, className, disabled, error, onMouseEnter, onMouseLeave, style, size = EFormFieldSize.LG, ...htmlDivAttributes}) => {
     const [focused, setFocused] = useState(false);
     const [hovered, setHovered] = useState(false);
     const [id, setId] = useState('');
@@ -44,6 +40,7 @@ export const FormField: React.FC<IFormFieldProps> = ({children, className, disab
                 id,
                 postfixWidth,
                 prefixWidth,
+                size,
                 setFocused,
                 setId,
                 setPostfixWidth,
@@ -54,9 +51,10 @@ export const FormField: React.FC<IFormFieldProps> = ({children, className, disab
         >
             <div
                 className={clsx(styles.formField, {
-                    [styles.error]: Boolean(error),
-                    [styles.disabled]: Boolean(disabled),
                     [styles.active]: focused,
+                    [styles.disabled]: Boolean(disabled),
+                    [styles.error]: Boolean(error),
+                    [styles[size]]: size,
                 }, className)}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}

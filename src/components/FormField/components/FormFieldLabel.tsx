@@ -3,6 +3,7 @@ import {FormFieldContext} from '../FormFieldContext';
 import {TARGET_PADDING_X_DEFAULT} from '../consts';
 import clsx from 'clsx';
 import styles from '../styles/FormFieldLabel.module.less';
+import { EFormFieldSize } from '../enums';
 
 /** Свойства компонента FormFieldLabel. */
 interface IFormFieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {}
@@ -10,7 +11,7 @@ interface IFormFieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElemen
 /** Лейбл поля ввода/селекта. Отображается по-середине поля ввода, когда инпут/селект имеет значение или фокус, перемещается в верхний левый угол. */
 export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabelProps>(
     ({children, className, style, ...htmlLabelAttributes}, ref) => {
-        const {disabled, focused, id, prefixWidth, postfixWidth, valueExist} = useContext(FormFieldContext);
+        const {disabled, focused, id, prefixWidth, postfixWidth, size, valueExist} = useContext(FormFieldContext);
         // Label отображается в уменьшенном виде над полем ввода/селектом.
         const [floating, setFloating] = useState(false);
 
@@ -34,6 +35,11 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
             right: postfixWidth || TARGET_PADDING_X_DEFAULT,
             ...style,
         };
+
+        // Label не отображается для маленького и среднего размера.
+        if ([EFormFieldSize.SM, EFormFieldSize.MD].includes(size)) {
+            return null;
+        }
 
         return (
             <label className={classNames} ref={ref} htmlFor={id} {...htmlLabelAttributes} style={stylesLabel}>

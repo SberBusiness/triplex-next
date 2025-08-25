@@ -16,6 +16,7 @@ export const designTokensComponentsFormFieldKeys = [
 
     'Shadow_Active',
     'Shadow_Default',
+    'Shadow_Error_Active',
 
     'Placeholder_Color',
 ] as const;
@@ -44,6 +45,6 @@ export const FormField_Tokens: TDesignTokensComponentsFormFieldValues = {
 
     Shadow_Active: [{value: '0 0 0 1px #21A19A inset'}, {value: '0 0 0 1px #21A19A inset'}], // var(--triplex-next-FormField-Shadow_Active)
     Shadow_Default: [{value: 'none'}, {value: 'none'}], // var(--triplex-next-FormField-Shadow_Default)
-
+    Shadow_Error_Active: [{value: '0 0 0 1px #E60037 inset'}, {value: '0 0 0 1px #E60037 inset'}], // var(--triplex-next-FormField-Shadow_Error_Active)
     Placeholder_Color: [{ref: 'ColorDarkBasicAlpha.60'}, {ref: 'ColorBasicAlpha.60'}], // var(--triplex-next-FormField-Placeholder_Color)
 };

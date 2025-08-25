@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, {useEffect, useContext, useRef} from 'react';
 import {FormFieldContext} from '../FormFieldContext';
 import clsx from 'clsx';
 import { uniqueId } from 'lodash-es';
@@ -17,10 +17,10 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
 
 /** Компонент, отображающий input. */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
-    const {className, id, onAnimationStart, onBlur, onFocus, placeholder, value} = props;
+    const {className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps} = props;
     const {render, ...renderProvideProps} = props;
-    const {focused, disabled, prefixWidth, postfixWidth, setFocused, setId, setValueExist} = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldInput, className);
+    const {focused, disabled, setFocused, setId, size, setValueExist} = useContext(FormFieldContext);
+    const classNames = clsx(styles.formFieldInput, {[styles[size]]: size}, className);
 
     const instanceId = useRef(id || uniqueId('input_'));
 
@@ -87,13 +87,15 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
         // Рендер текстового инпута по-умолчанию.
         return (
             <input
+                {...restProps}
                 className={classNames}
-                {...props}
                 disabled={disabled}
                 id={instanceId.current}
                 onAnimationStart={handleAnimationStart}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
+                value={value}
+                placeholder={placeholder}
                 ref={ref}
             />
         );

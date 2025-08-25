@@ -10,6 +10,7 @@ import {
     FormFieldDescription,
     FormFieldTextarea
 } from "../src/components/FormField";
+import { EFormFieldSize } from "../src/components/FormField/enums";
 import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
@@ -35,7 +36,9 @@ export default {
 
 ## Размеры
 
-- **LG** - большой размер (48px высота)
+- **LG** - большой размер (56px высота)
+- **MD** - средний размер (40px высота)  
+- **SM** - маленький размер (28px высота)
                 `
             }
         }
@@ -43,7 +46,7 @@ export default {
     tags: ["autodocs"],
 };
 
-export const FormFieldBasic: StoryObj<typeof FormField> = {
+export const Basic: StoryObj<typeof FormField> = {
     render: () => {
         const [value, setValue] = useState('');
 
@@ -69,7 +72,7 @@ export const FormFieldBasic: StoryObj<typeof FormField> = {
     }
 };
 
-export const FormFieldWithPrefixAndPostfix: StoryObj<typeof FormField> = {
+export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
     render: () => {
         const [value, setValue] = useState('');
 
@@ -100,7 +103,7 @@ export const FormFieldWithPrefixAndPostfix: StoryObj<typeof FormField> = {
     }
 };
 
-export const FormFieldStates: StoryObj<typeof FormField> = {
+export const States: StoryObj<typeof FormField> = {
     render: () => {
         const [value, setValue] = useState('');
         const [valueError, setValueError] = useState('');
@@ -154,7 +157,7 @@ export const FormFieldStates: StoryObj<typeof FormField> = {
     }
 };
 
-export const FormFieldTextareaStory: StoryObj<typeof FormFieldTextarea> = {
+export const Textarea: StoryObj<typeof FormFieldTextarea> = {
     render: () => {
         const [value, setValue] = useState('');
         const [valueError, setValueError] = useState('');
@@ -208,6 +211,68 @@ export const FormFieldTextareaStory: StoryObj<typeof FormFieldTextarea> = {
     }
 };
 
+export const Sizes: StoryObj<typeof FormField> = {
+    render: () => {
+        const [lgValue, setLgValue] = useState('');
+        const [mdValue, setMdValue] = useState('');
+        const [smValue, setSmValue] = useState('');
+
+        const handleLgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setLgValue(e.target.value);
+        };
+
+        const handleMdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setMdValue(e.target.value);
+        };
+
+        const handleSmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setSmValue(e.target.value);
+        };
+
+        return (
+            <div style={{ width: '304px' }}>
+                <FormField size={EFormFieldSize.LG}>
+                    <FormFieldLabel>Большой размер (LG)</FormFieldLabel>
+                    <FormFieldInput
+                        value={lgValue}
+                        onChange={handleLgChange}
+                        placeholder="Введите текст..."
+                    />
+                </FormField>
+
+                <Gap size={24} />
+
+                <FormField size={EFormFieldSize.MD}>
+                    <FormFieldLabel>Средний размер (MD)</FormFieldLabel>
+                    <FormFieldInput
+                        value={mdValue}
+                        onChange={handleMdChange}
+                        placeholder="Введите текст..."
+                    />
+                </FormField>
+
+                <Gap size={24} />
+
+                <FormField size={EFormFieldSize.SM}>
+                    <FormFieldLabel>Маленький размер (SM)</FormFieldLabel>
+                    <FormFieldInput
+                        value={smValue}
+                        onChange={handleSmChange}
+                        placeholder="Введите текст..."
+                    />
+                </FormField>
+            </div>
+        )
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Демонстрация различных размеров FormField. Доступны три размера: LG, MD и SM."
+            }
+        }
+    }
+};
+
 interface IFormFieldWithControlsProps extends React.ComponentProps<typeof FormField> {
     labelText?: string;
     placeholder?: string;
@@ -216,7 +281,7 @@ interface IFormFieldWithControlsProps extends React.ComponentProps<typeof FormFi
     descriptionText?: string;
 }
 
-export const FormFieldWithControls: StoryObj<IFormFieldWithControlsProps> = {
+export const Playground: StoryObj<IFormFieldWithControlsProps> = {
     render: (args) => {
         const [value, setValue] = useState('');
 
@@ -316,6 +381,15 @@ export const FormFieldWithControls: StoryObj<IFormFieldWithControlsProps> = {
                 defaultValue: { summary: 'false' }
             }
         },
+        size: {
+            control: { type: 'select' },
+            description: 'Размер поля',
+            table: {
+                type: { summary: 'string' },
+                defaultValue: { summary: 'LG' }
+            },
+            options: [EFormFieldSize.LG, EFormFieldSize.MD, EFormFieldSize.SM],
+        },
         descriptionText: {
             control: { type: 'text' },
             description: 'Текст описания',
@@ -340,7 +414,8 @@ export const FormFieldWithControls: StoryObj<IFormFieldWithControlsProps> = {
         showClear: false,
         showDescription: false,
         descriptionText: 'Описание поля',
-        className: ''
+        className: '',
+        size: EFormFieldSize.LG,
     },
     parameters: {
         docs: {

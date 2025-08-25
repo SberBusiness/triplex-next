@@ -93,7 +93,7 @@ export const Playground: StoryObj<typeof AlertProcess> = {
         ),
         type: EAlertType.INFO,
         closable: false,
-        initialExpanded: false,
+        expandableContentOpen: false,
         onClose: action("onClose"),
     },
     argTypes: {
@@ -121,7 +121,7 @@ export const Playground: StoryObj<typeof AlertProcess> = {
                 defaultValue: { summary: "null" },
             },
         },
-        initialExpanded: {
+        expandableContentOpen: {
             control: { type: "boolean" },
             if: { arg: "expandableContent" },
             description: "Начальное состояние спойлера",
@@ -159,6 +159,38 @@ export const Playground: StoryObj<typeof AlertProcess> = {
 
 export const Default: StoryObj<typeof AlertProcess> = {
     name: "Default",
+    argTypes: {
+        type: {
+            table: {
+                disable: true,
+            },
+        },
+        closable: {
+            table: {
+                disable: true,
+            },
+        },
+        expandableContent: {
+            table: {
+                disable: true,
+            },
+        },
+        expandableContentOpen: {
+            table: {
+                disable: true,
+            },
+        },
+        renderIcon: {
+            table: {
+                disable: true,
+            },
+        },
+        onClose: {
+            table: {
+                disable: true,
+            },
+        },
+    },
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
             <AlertProcess type={EAlertType.INFO}>
@@ -188,6 +220,10 @@ export const Default: StoryObj<typeof AlertProcess> = {
             </AlertProcess>
         </div>
     ),
+};
+
+export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
+    name: "With Custom Icon",
     argTypes: {
         type: {
             table: {
@@ -204,7 +240,7 @@ export const Default: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        initialExpanded: {
+        expandableContentOpen: {
             table: {
                 disable: true,
             },
@@ -220,10 +256,6 @@ export const Default: StoryObj<typeof AlertProcess> = {
             },
         },
     },
-};
-
-export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
-    name: "With Custom Icon",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
             <AlertProcess type={EAlertType.INFO} renderIcon={<HintSrvIcon16 />}>
@@ -233,38 +265,6 @@ export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
             </AlertProcess>
         </div>
     ),
-    argTypes: {
-        type: {
-            table: {
-                disable: true,
-            },
-        },
-        closable: {
-            table: {
-                disable: true,
-            },
-        },
-        expandableContent: {
-            table: {
-                disable: true,
-            },
-        },
-        initialExpanded: {
-            table: {
-                disable: true,
-            },
-        },
-        renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        onClose: {
-            table: {
-                disable: true,
-            },
-        },
-    },
 };
 
 export const Closable: StoryObj<typeof AlertProcess> = {
@@ -299,7 +299,7 @@ export const Closable: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        initialExpanded: {
+        expandableContentOpen: {
             table: {
                 disable: true,
             },
@@ -317,11 +317,11 @@ export const Closable: StoryObj<typeof AlertProcess> = {
     },
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
-            <AlertProcess type={EAlertType.INFO} {...args} />
-            <AlertProcess type={EAlertType.WARNING} {...args} />
-            <AlertProcess type={EAlertType.ERROR} {...args} />
-            <AlertProcess type={EAlertType.SYSTEM} {...args} />
-            <AlertProcess type={EAlertType.FEATURE} {...args} />
+            <AlertProcess {...args} type={EAlertType.INFO} />
+            <AlertProcess {...args} type={EAlertType.WARNING} />
+            <AlertProcess {...args} type={EAlertType.ERROR} />
+            <AlertProcess {...args} type={EAlertType.SYSTEM} />
+            <AlertProcess {...args} type={EAlertType.FEATURE} />
         </div>
     ),
 };
@@ -364,7 +364,7 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        initialExpanded: {
+        expandableContentOpen: {
             table: {
                 disable: true,
             },
@@ -382,11 +382,11 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
     },
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
-            <AlertProcess type={EAlertType.INFO} {...args} />
-            <AlertProcess type={EAlertType.WARNING} {...args} />
-            <AlertProcess type={EAlertType.ERROR} {...args} />
-            <AlertProcess type={EAlertType.SYSTEM} {...args} />
-            <AlertProcess type={EAlertType.FEATURE} {...args} />
+            <AlertProcess {...args} type={EAlertType.INFO} />
+            <AlertProcess {...args} type={EAlertType.WARNING} />
+            <AlertProcess {...args} type={EAlertType.ERROR} />
+            <AlertProcess {...args} type={EAlertType.SYSTEM} />
+            <AlertProcess {...args} type={EAlertType.FEATURE} />
         </div>
     ),
 };
@@ -427,7 +427,7 @@ export const Spoiler: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        initialExpanded: {
+        expandableContentOpen: {
             table: {
                 disable: true,
             },

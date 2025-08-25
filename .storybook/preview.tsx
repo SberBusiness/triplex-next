@@ -3,10 +3,10 @@ import { ThemeProvider, ETriplexNextTheme } from "../src/components/ThemeProvide
 import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next";
 import React from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
-import "./storybook.css";
 import DocsContainer from "./DocsContainer";
 import "../src/styles/style.less";
 import "@sberbusiness/icons-next/styles/icons.css";
+import "./storybook.css";
 
 const customViewports = {
     XS: {

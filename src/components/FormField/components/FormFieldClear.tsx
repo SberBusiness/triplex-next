@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styles from '../styles/FormFieldClear.module.less';
 
 export interface IFormFieldClearProps extends React.HTMLAttributes<HTMLSpanElement> {
-    children: never;
+    children?: never;
 }
 
 /** Кнопка очищения введенного значения. */

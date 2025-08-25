@@ -20,7 +20,7 @@ export default {
     tags: ["autodocs"],
 };
 
-export const TextFieldBasic: StoryObj<typeof TextField> = {
+export const Basic: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState('');
 
@@ -51,7 +51,7 @@ export const TextFieldBasic: StoryObj<typeof TextField> = {
     }
 };
 
-export const TextFieldWithPrefixAndPostfix: StoryObj<typeof TextField> = {
+export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState('');
 
@@ -83,7 +83,7 @@ export const TextFieldWithPrefixAndPostfix: StoryObj<typeof TextField> = {
     }
 };
 
-export const TextFieldWithClearButton: StoryObj<typeof TextField> = {
+export const WithClearButton: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState('');
 
@@ -114,7 +114,7 @@ export const TextFieldWithClearButton: StoryObj<typeof TextField> = {
     }
 };
 
-export const TextFieldStates: StoryObj<typeof TextField> = {
+export const States: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState('');
         const [valueError, setValueError] = useState('');
@@ -182,7 +182,7 @@ interface ITextFieldWithControlsProps extends React.ComponentProps<typeof TextFi
     showLabel?: boolean;
 }
 
-export const TextFieldWithControls: StoryObj<ITextFieldWithControlsProps> = {
+export const Playground: StoryObj<ITextFieldWithControlsProps> = {
     render: (args) => {
         const [value, setValue] = useState('');
 

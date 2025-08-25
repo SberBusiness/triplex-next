@@ -6,7 +6,8 @@ import { Gap } from "../src/components/Gap";
 import { EButtonTheme, EButtonSize } from "../src/components/Button/enums";
 
 export default {
-    title: "Components/Button",
+    title: "Components/Button/Button",
+    component: Button,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -75,14 +76,6 @@ export const Default: StoryObj<typeof Button> = {
                 defaultValue: { summary: EButtonSize.MD },
             },
         },
-        borderRadius: {
-            control: { type: "number" },
-            description: "Радиус скругления кнопки",
-            table: {
-                type: { summary: "number" },
-                defaultValue: { summary: "lg=10 md=8 sm=6" },
-            },
-        },
         block: {
             control: { type: "boolean" },
             description: "Блочный режим",
@@ -111,7 +104,11 @@ export const Default: StoryObj<typeof Button> = {
         },
     },
 
-    render: (args) => <Button {...args} />,
+    render: (args) => (
+        <div style={{ width: "250px" }}>
+            <Button {...args} />
+        </div>
+    ),
 };
 
 export const DifferentThemes: StoryObj<typeof Button> = {
@@ -137,7 +134,7 @@ export const DifferentThemes: StoryObj<typeof Button> = {
     parameters: {
         docs: {
             description: {
-                story: "Тема кнопки",
+                story: "Доступные темы кнопок",
             },
         },
     },
@@ -204,6 +201,13 @@ export const Icon: StoryObj<typeof Button> = {
             />
         </div>
     ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Кнопка с иконкой, переданной свойством icon",
+            },
+        },
+    },
 };
 
 export const DifferentSizes: StoryObj<typeof Button> = {
@@ -224,7 +228,7 @@ export const DifferentSizes: StoryObj<typeof Button> = {
     parameters: {
         docs: {
             description: {
-                story: "Размер кнопки",
+                story: "Доступные размеры кнопок",
             },
         },
     },
@@ -271,6 +275,13 @@ export const BlockMode: StoryObj<typeof Button> = {
             />
         </div>
     ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Кнопка в блочном режиме",
+            },
+        },
+    },
 };
 
 export const Disabled: StoryObj<typeof Button> = {

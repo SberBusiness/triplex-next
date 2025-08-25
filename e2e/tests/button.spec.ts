@@ -6,7 +6,7 @@ test.describe("Button", () => {
     });
 
     test("should be disabled when prop is set", async ({ page }) => {
-        await page.goto("http://localhost:6006/iframe.html?id=components-button--disabled");
+        await page.goto("http://localhost:6006/iframe.html?id=components-button-button--disabled");
         const button = page.getByRole("button").first();
         await expect(button).toBeDisabled();
     });

@@ -1,0 +1,26 @@
+.buttonIcon {
+    position: relative;
+    padding: 0;
+    line-height: 0;
+    font-size: 0;
+    vertical-align: top;
+    background: transparent;
+    border: none;
+    outline: none;
+
+    &:enabled {
+        cursor: pointer;
+    }
+
+    &.circle {
+        border-radius: 50%;
+    }
+
+    &.squircle {
+        border-radius: 4px;
+    }
+
+    &:focus-visible {
+        box-shadow: var(--triplex-next-Button-Icon_Shadow_Focus);
+    }
+}

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { EAlertType } from "../EAlertType";
 import { alertTypeToClassNameMap, renderDefaultIcon } from "../AlertTypeUtils";
 import { CloseSrvxIcon16 } from "@sberbusiness/icons-next/CloseSrvxIcon16";
-import { CaretupSrvxIcon16 } from "@sberbusiness/icons-next/CaretupSrvxIcon16";
 import { CaretdownSrvxIcon16 } from "@sberbusiness/icons-next/CaretdownSrvxIcon16";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import styles from "./styles/AlertProcess.module.less";
@@ -43,6 +42,10 @@ export const AlertProcess = Object.assign(
         const [closed, setClosed] = useState(false);
         const [expanded, setExpanded] = useState(initialExpanded);
 
+        useEffect(() => {
+            setExpanded(initialExpanded);
+        }, [initialExpanded]);
+
         if (closed) {
             return null;
         }
@@ -66,14 +69,13 @@ export const AlertProcess = Object.assign(
                 <div className={styles.themeIcon}>{renderIcon ? renderIcon : renderDefaultIcon(type)}</div>
 
                 <div className={styles.alertProcessContentBlock}>
-                    <div className={styles.alertProcessContent}>
-                        {children}
-                        {expandableContent && (
-                            <div className={clsx(styles.expandableContent, { [styles.expanded]: expanded })}>
-                                {expandableContent}
-                            </div>
-                        )}
-                    </div>
+                    {expandableContent ? (
+                        <div className={clsx(styles.expandableContent, { [styles.expanded]: expanded })}>
+                            {expandableContent}
+                        </div>
+                    ) : (
+                        children
+                    )}
                 </div>
 
                 <div className={styles.alertControls}>
@@ -86,9 +88,9 @@ export const AlertProcess = Object.assign(
                     )}
 
                     {expandableContent && (
-                        <div className={styles.expandButton}>
+                        <div className={clsx(styles.expandButton, { [styles.active]: expanded })}>
                             <ButtonIcon onClick={handleExpand}>
-                                {expanded ? <CaretupSrvxIcon16 /> : <CaretdownSrvxIcon16 />}
+                                <CaretdownSrvxIcon16 />
                             </ButtonIcon>
                         </div>
                     )}

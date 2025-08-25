@@ -23,9 +23,10 @@ export default {
 ## Особенности
 
 - **Типы**: Info, Warning, Error, System, Feature
-- Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
-- Управлять скрытием и раскрытием контента возможно через свойство **expandableContent**
+- Передавать контент для спойлера возможно через свойство **expandableContent**
+- Изначальное состояние спойлера задается через свойство **initialExpanded**
 - Обработчик нажатия на иконку закрытия передается снаружи через свойство **onClose**
+- Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
 
 ## Использование
 
@@ -48,17 +49,22 @@ import { Text, ETextSize, EFontType } from '@sberbusiness/triplex-next';
 </AlertProcess>
 
 // С раскрываемым контентом
-<AlertProcess type={EAlertType.ERROR} expandableContent>
+<AlertProcess type={EAlertType.ERROR} expandableContent={
+    <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
+        Контент, который можно скрыть или показать по клику на иконку
+    </Text>
+}>
     <Text size={ETextSize.B1} type={EFontType.ERROR}>
         Основной контент
-    </Text>
-    <Text size={ETextSize.B2} type={EFontType.SECONDARY}>
-        Дополнительная информация, которая может быть скрыта
     </Text>
 </AlertProcess>
 
 // С изначально раскрытым контентом
-<AlertProcess type={EAlertType.SYSTEM} expandableContent initialExpanded>
+<AlertProcess type={EAlertType.SYSTEM} initialExpanded expandableContent={
+    <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
+        Контент, который можно скрыть или показать по клику на иконку
+    </Text>
+}>
     <Text size={ETextSize.B1} type={EFontType.PRIMARY}>
         Контент изначально развернут
     </Text>
@@ -87,7 +93,6 @@ export const Playground: StoryObj<typeof AlertProcess> = {
         ),
         type: EAlertType.INFO,
         closable: false,
-        expandableContent: false,
         initialExpanded: false,
         onClose: action("onClose"),
     },
@@ -109,16 +114,17 @@ export const Playground: StoryObj<typeof AlertProcess> = {
             },
         },
         expandableContent: {
-            control: { type: "boolean" },
-            description: "Возможность скрытия/раскрытия контента",
+            control: { type: "text" },
+            description: "Контент спойлера",
             table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
+                type: { summary: "React.ReactNode" },
+                defaultValue: { summary: "null" },
             },
         },
         initialExpanded: {
             control: { type: "boolean" },
-            description: "Начальное состояние развернутого контента",
+            if: { arg: "expandableContent" },
+            description: "Начальное состояние спойлера",
             table: {
                 type: { summary: "boolean" },
                 defaultValue: { summary: "false" },
@@ -142,11 +148,13 @@ export const Playground: StoryObj<typeof AlertProcess> = {
             },
         },
     },
-    render: (args) => (
-        <div style={{ width: "750px" }}>
-            <AlertProcess {...args} />
-        </div>
-    ),
+    render: (args) => {
+        return (
+            <div style={{ width: "750px" }}>
+                <AlertProcess {...args} />
+            </div>
+        );
+    },
 };
 
 export const Default: StoryObj<typeof AlertProcess> = {

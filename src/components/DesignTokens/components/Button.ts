@@ -70,7 +70,7 @@ export const Button_Tokens: TDesignTokensComponentsButtonValues = {
     Secondary_Color_Default: [{ ref: "ColorBrand.40" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Button-Secondary_Color_Default)
     Secondary_Color_Disabled: [{ ref: "ColorDarkBasicAlpha.90" }, { ref: "ColorBasicAlpha.90" }], // var(--triplex-next-Button-Secondary_Color_Disabled)
     Secondary_Color_Hover: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.70" }], // var(--triplex-next-Button-Secondary_Color_Hover)
-    Secondary_Shadow_Focus: [{ value: "0 0 0 1px #FFDD64" }, { value: "0 0 0 1px #FFDD64" }], // var(--triplex-next-Button-Secondary_Shadow_Focus)
+    Secondary_Shadow_Focus: [{ value: "0 0 0 1px #FFDD64 inset" }, { value: "0 0 0 1px #FFDD64 inset" }], // var(--triplex-next-Button-Secondary_Shadow_Focus)
 
     Danger_Background_Active: [{ ref: "ColorError.30" }, { ref: "ColorWarning.80" }], // var(--triplex-next-Button-Danger_Background_Active)
     Danger_Background_Default: [{ ref: "ColorError.50" }, { ref: "ColorError.50" }], // var(--triplex-next-Button-Danger_Background_Default)

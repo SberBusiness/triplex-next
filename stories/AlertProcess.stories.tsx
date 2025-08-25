@@ -24,7 +24,7 @@ export default {
 
 - **Типы**: Info, Warning, Error, System, Feature
 - Передавать контент для спойлера возможно через свойство **expandableContent**
-- Изначальное состояние спойлера задается через свойство **initialExpanded**
+- Состояние спойлера задается через свойство **expandableContentOpen**
 - Обработчик нажатия на иконку закрытия передается снаружи через свойство **onClose**
 - Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
 
@@ -60,7 +60,7 @@ import { Text, ETextSize, EFontType } from '@sberbusiness/triplex-next';
 </AlertProcess>
 
 // С изначально раскрытым контентом
-<AlertProcess type={EAlertType.SYSTEM} initialExpanded expandableContent={
+<AlertProcess type={EAlertType.SYSTEM} expandableContentOpen expandableContent={
     <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
         Контент, который можно скрыть или показать по клику на иконку
     </Text>
@@ -118,7 +118,6 @@ export const Playground: StoryObj<typeof AlertProcess> = {
             description: "Контент спойлера",
             table: {
                 type: { summary: "React.ReactNode" },
-                defaultValue: { summary: "null" },
             },
         },
         expandableContentOpen: {

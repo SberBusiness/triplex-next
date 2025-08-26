@@ -67,16 +67,16 @@ export interface IButtonLinkProps extends React.ButtonHTMLAttributes<HTMLButtonE
 export type TButtonProps = IButtonGeneralProps | IButtonSecondaryProps | IButtonDangerProps | IButtonLinkProps;
 
 /** Возвращает CSS класс темы кнопки. */
-const getButtonThemeCssClass = (theme: EButtonTheme) => {
+const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
     switch (theme) {
         case EButtonTheme.GENERAL:
-            return generalStyles.general;
+            return { [generalStyles.general]: true, [generalStyles.expanded]: expanded };
         case EButtonTheme.SECONDARY:
-            return secondaryStyles.secondary;
+            return { [secondaryStyles.secondary]: true, [secondaryStyles.expanded]: expanded };
         case EButtonTheme.DANGER:
-            return dangerStyles.danger;
+            return { [dangerStyles.danger]: true, [dangerStyles.expanded]: expanded };
         case EButtonTheme.LINK:
-            return linkStyles.link;
+            return { [linkStyles.link]: true, [linkStyles.expanded]: expanded };
     }
 };
 
@@ -110,10 +110,10 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,
-        getButtonThemeCssClass(theme),
+        getButtonThemeCssClass(theme, !!expanded),
         getButtonSizeCssClass(size),
-        { [styles.block]: !!block, [styles.loading]: !!loading, [styles.expanded]: !!expanded },
-        { [styles.icon]: !!icon },
+        { [styles.block]: !!block, [styles.loading]: !!loading },
+        { [styles.icon]: !!icon && !children },
         // Классы для иконок, начало.
         "hoverable",
         {
@@ -133,7 +133,10 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
             disabled={disabled}
             {...rest}
         >
-            <span className={styles.content}>{icon ? icon : children}</span>
+            <span className={styles.content}>
+                {icon}
+                {children}
+            </span>
             <div className={clsx(styles.loadingDots, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
         </button>
     );

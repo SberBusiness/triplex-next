@@ -17,9 +17,22 @@ const getLoadingDotsThemeCssClass = (theme: ELoadingDotsTheme) => {
     }
 };
 
+const getLoadingDotsSizeCssClass = (size: ELoadingDotsSize) => {
+    switch (size) {
+        case ELoadingDotsSize.SM:
+            return styles.sm;
+        case ELoadingDotsSize.MD:
+            return styles.md;
+        case ELoadingDotsSize.LG:
+            return styles.lg;
+    }
+};
+
 export const LoadingDots: React.FC<ILoadingDotsProps> = ({ theme, size }) => {
     return (
-        <span className={clsx(styles.loadingDots, styles[size], getLoadingDotsThemeCssClass(theme))}>
+        <span
+            className={clsx(styles.loadingDots, getLoadingDotsSizeCssClass(size), getLoadingDotsThemeCssClass(theme))}
+        >
             <span className={clsx(getLoadingDotsThemeCssClass(theme), styles.dot, styles.dot1)} />
             <span className={clsx(getLoadingDotsThemeCssClass(theme), styles.dot, styles.dot2)} />
             <span className={clsx(getLoadingDotsThemeCssClass(theme), styles.dot, styles.dot3)} />

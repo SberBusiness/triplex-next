@@ -102,20 +102,32 @@ describe("Button", () => {
         expect(button).toHaveClass("disabled");
     });
 
-    it("Should render icon instead of children and apply icon class", () => {
-        render(
+    it("Should render icon alongside children and apply icon class when only icon is provided", () => {
+        const { rerender } = render(
             <Button
                 theme={EButtonTheme.GENERAL}
                 size={EButtonSize.MD}
-                icon={<span data-testid="icon" />}
+                icon={<span data-testid="icon-only" />}
+                data-testid="button"
+            />,
+        );
+        const button = getButton();
+        expect(button).toHaveClass("icon");
+        expect(screen.getByTestId("icon-only")).toBeInTheDocument();
+
+        rerender(
+            <Button
+                theme={EButtonTheme.GENERAL}
+                size={EButtonSize.MD}
+                icon={<span data-testid="icon-with-text" />}
                 data-testid="button"
             >
                 Button text
             </Button>,
         );
-        const button = getButton();
-        expect(button).toHaveClass("icon");
-        expect(screen.getByTestId("icon")).toBeInTheDocument();
+        expect(button).not.toHaveClass("icon");
+        expect(screen.getByTestId("icon-with-text")).toBeInTheDocument();
+        expect(button).toHaveTextContent("Button text");
     });
 
     it("Should add expanded and active classes when aria-expanded is true", () => {

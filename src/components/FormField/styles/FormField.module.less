@@ -1,0 +1,32 @@
+.formField {
+    position: relative;
+    flex-grow: 1;
+    background: var(--triplex-next-FormField-Background_Default);
+    box-shadow: var(--triplex-next-FormField-Shadow_Default);
+    border-radius: 10px;
+
+    &.active {
+        background: var(--triplex-next-FormField-Background_Active);
+        box-shadow: var(--triplex-next-FormField-Shadow_Active);
+
+        &::placeholder {
+            opacity: 1;
+        }
+    }
+
+    &:hover {
+        background: var(--triplex-next-FormField-Background_Hover);
+    }
+
+    &.disabled {
+        background: var(--triplex-next-FormField-Background_Disabled);
+    }
+
+    &.error {
+        background: var(--triplex-next-FormField-Background_Error);
+
+        &.active {
+            box-shadow: var(--triplex-next-FormField-Shadow_Error_Active);
+        }
+    }
+}

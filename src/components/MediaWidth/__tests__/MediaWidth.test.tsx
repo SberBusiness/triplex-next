@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MediaWidth } from "triplex-next";
+import { MediaWidth } from "@sberbusiness/triplex-next/components";
 import { EScreenWidth } from "../../../helpers/breakpoints";
 
 describe("MediaWidth", () => {

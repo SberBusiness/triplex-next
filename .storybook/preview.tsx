@@ -1,10 +1,12 @@
 import type { Preview } from "@storybook/react";
 import { ThemeProvider, ETriplexNextTheme } from "../src/components/ThemeProvider";
+import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next/ThemeProvider";
 import React from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import "./storybook.css";
 import DocsContainer from "./DocsContainer";
 import "../src/styles/style.less";
+import "@sberbusiness/icons-next/styles/icons.css";
 
 const customViewports = {
     XS: {
@@ -66,19 +68,17 @@ const preview: Preview = {
             const isDark = context.globals.theme === "dark";
 
             return (
-                <span
-                    ref={scopeRef}
-                    style={{
-                        display: "inline-block",
-                    }}
-                >
+                <div ref={scopeRef}>
                     <ThemeProvider
                         theme={isDark ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT}
                         scopeRef={scopeRef}
                     >
-                        <Story />
+                        {/* @ts-ignore */}
+                        <ThemeProviderIcons theme={isDark ? EIconsTheme.DARK : EIconsTheme.LIGHT}>
+                            <Story />
+                        </ThemeProviderIcons>
                     </ThemeProvider>
-                </span>
+                </div>
             );
         },
         withThemeByClassName({

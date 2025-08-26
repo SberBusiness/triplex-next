@@ -26,7 +26,7 @@ const config: StorybookConfig = {
             ...viteConfig.resolve,
             alias: {
                 ...viteConfig.resolve?.alias,
-                "triplex-next": resolve(__dirname, "../src/index.ts"),
+                "@sberbusiness/triplex-next": resolve(__dirname, "../src/index.ts"),
             },
         };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Button } from "triplex-next";
+import { Button } from "@sberbusiness/triplex-next/components/";
 import { EButtonTheme, EButtonSize } from "../enums";
 
 const getButton = () => screen.getByTestId("button");

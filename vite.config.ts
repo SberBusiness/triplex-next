@@ -42,7 +42,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            "triplex-next": resolve(__dirname, "src"),
+            "@sberbusiness/triplex-next": resolve(__dirname, "src"),
         },
     },
     plugins: [react(), dts({ entryRoot: "src", exclude: "**/*.test.{ts,tsx}" }), replaceDesignTokenVersionPlugin()],

@@ -4,6 +4,7 @@ import {
     TDesignTokensComponentsInput,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLoadingDots,
+    TDesignTokensComponentsFormField,
     TDesignTokensComponentsAlertContext,
 } from "../components";
 
@@ -223,6 +224,7 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBasicAlpha &
 export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsInput
+    | TDesignTokensComponentsFormField
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLoadingDots
     | TDesignTokensComponentsAlertContext;

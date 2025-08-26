@@ -1,0 +1,25 @@
+.formFieldTextarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 20px;
+    height: 96px;
+    padding-top: 26px;
+    padding-bottom: 10px;
+    border: none;
+    background: none;
+    color: var(--triplex-next-FormField-Input_Color_Default);
+    resize: vertical;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:disabled {
+        color: var(--triplex-next-FormField-Input_Color_Disabled);
+    }
+
+    &::placeholder {
+        color: var(--triplex-next-FormField-Placeholder_Color);
+    }
+}

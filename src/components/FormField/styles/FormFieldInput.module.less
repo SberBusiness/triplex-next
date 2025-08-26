@@ -1,4 +1,8 @@
 .formFieldInput {
+    padding-top: 26px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    height: 56px;
     line-height: 20px;
     width: 100%;
     box-sizing: border-box;
@@ -6,35 +10,6 @@
     background: none;
     -webkit-appearance: none; // iOS fix
     color: var(--triplex-next-FormField-Input_Color_Default);
-
-    &.sm {
-        padding-top: 4px;
-        padding-bottom: 4px;
-        font-size: 12px;
-        height: 28px;
-
-        &::placeholder {
-            opacity: 1;
-        }
-    }
-
-    &.md {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-size: 14px;
-        height: 40px;
-
-        &::placeholder {
-            opacity: 1;
-        }
-    }
-
-    &.lg {
-        padding-top: 26px;
-        padding-bottom: 10px;
-        font-size: 16px;
-        height: 56px;
-    }
 
     &:disabled {
         color: var(--triplex-next-FormField-Input_Color_Disabled);

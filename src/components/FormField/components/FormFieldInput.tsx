@@ -19,8 +19,8 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
     const {className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps} = props;
     const {render, ...renderProvideProps} = props;
-    const {focused, disabled, setFocused, setId, size, setValueExist} = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldInput, {[styles[size]]: size}, className);
+    const {focused, disabled, setFocused, setId, setValueExist} = useContext(FormFieldContext);
+    const classNames = clsx(styles.formFieldInput, className);
 
     const instanceId = useRef(id || uniqueId('input_'));
 

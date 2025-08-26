@@ -1,5 +1,4 @@
 import React from 'react';
-import {EFormFieldSize} from './enums';
 
 export interface IFormFieldContext {
     // Поле в состоянии disabled.
@@ -14,8 +13,6 @@ export interface IFormFieldContext {
     postfixWidth: number;
     // Ширина элемента FormFieldPrefix.
     prefixWidth: number;
-    // Размер инпута.
-    size: EFormFieldSize;
     // Установка значения focused.
     setFocused: (focused: boolean) => void;
     // Установка значения id.
@@ -37,7 +34,6 @@ export const initialFormFieldContextContext: IFormFieldContext = {
     id: '',
     postfixWidth: 0,
     prefixWidth: 0,
-    size: EFormFieldSize.LG,
     setFocused: () => {},
     setId: () => {},
     setPostfixWidth: () => {},

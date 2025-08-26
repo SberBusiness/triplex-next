@@ -10,7 +10,6 @@ import {
     FormFieldDescription,
     FormFieldTextarea
 } from "../src/components/FormField";
-import { EFormFieldSize } from "../src/components/FormField/enums";
 import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
@@ -33,12 +32,6 @@ export default {
 - **FormFieldClear** - кнопка очистки
 - **FormFieldPrefix/Postfix** - элементы слева/справа от поля
 - **FormFieldDescription** - описание под полем
-
-## Размеры
-
-- **LG** - большой размер (56px высота)
-- **MD** - средний размер (40px высота)  
-- **SM** - маленький размер (28px высота)
                 `
             }
         }
@@ -103,6 +96,37 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
     }
 };
 
+export const WithClearButton: StoryObj<typeof FormField> = {
+    render: () => {
+        const [value, setValue] = useState('');
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
+
+        const handleClear = () => {
+            setValue('');
+        };
+
+        return (
+            <div style={{ width: '304px' }}>
+                <FormField>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput value={value} onChange={handleChange} />
+                    <FormFieldPostfix><FormFieldClear onClick={handleClear} /></FormFieldPostfix>
+                </FormField>
+            </div>
+        )
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "FormField с префиксами и постфиксами. Префиксы отображаются слева от поля, постфиксы - справа."
+            }
+        }
+    }
+};
+
 export const States: StoryObj<typeof FormField> = {
     render: () => {
         const [value, setValue] = useState('');
@@ -118,10 +142,19 @@ export const States: StoryObj<typeof FormField> = {
 
         return (
             <div style={{ width: '304px' }}>
-                <FormField>
-                    <FormFieldLabel>Название поля</FormFieldLabel>
-                    <FormFieldInput value={value} onChange={handleChange} />
-                </FormField>
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField>
+                            <FormFieldLabel>Название поля</FormFieldLabel>
+                            <FormFieldInput value={value} onChange={handleChange} />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
 
                 <Gap size={24} />
 
@@ -134,17 +167,26 @@ export const States: StoryObj<typeof FormField> = {
                     </FormGroupLine>
                     <FormGroupLine>
                         <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.ERROR}>Error text</Text>
+                            <Text size={ETextSize.B4} type={EFontType.ERROR}>Текст ошибки</Text>
                         </FormFieldDescription>
                     </FormGroupLine>
                 </FormGroup>
 
                 <Gap size={24} />
 
-                <FormField disabled>
-                    <FormFieldLabel>Название поля</FormFieldLabel>
-                    <FormFieldInput value="Value disabled" />
-                </FormField>
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField disabled>
+                            <FormFieldLabel>Название поля</FormFieldLabel>
+                            <FormFieldInput value="Value disabled" />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
             </div>
         )
     },
@@ -172,10 +214,19 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
 
         return (
             <div style={{ width: '304px' }}>
-                <FormField>
-                    <FormFieldLabel>Название поля</FormFieldLabel>
-                    <FormFieldTextarea value={value} onChange={handleChange} />
-                </FormField>
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField>
+                            <FormFieldLabel>Название поля</FormFieldLabel>
+                            <FormFieldTextarea value={value} onChange={handleChange} />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
 
                 <Gap size={24} />
 
@@ -188,17 +239,26 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
                     </FormGroupLine>
                     <FormGroupLine>
                         <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.ERROR}>Error text</Text>
+                            <Text size={ETextSize.B4} type={EFontType.ERROR}>Текст ошибки</Text>
                         </FormFieldDescription>
                     </FormGroupLine>
                 </FormGroup>
 
                 <Gap size={24} />
 
-                <FormField disabled>
-                    <FormFieldLabel>Название поля</FormFieldLabel>
-                    <FormFieldTextarea />
-                </FormField>
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField disabled>
+                            <FormFieldLabel>Название поля</FormFieldLabel>
+                            <FormFieldTextarea />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
             </div>
         )
     },
@@ -206,68 +266,6 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
         docs: {
             description: {
                 story: "FormField с многострочным полем ввода (textarea). Поддерживает все те же состояния, что и обычное поле."
-            }
-        }
-    }
-};
-
-export const Sizes: StoryObj<typeof FormField> = {
-    render: () => {
-        const [lgValue, setLgValue] = useState('');
-        const [mdValue, setMdValue] = useState('');
-        const [smValue, setSmValue] = useState('');
-
-        const handleLgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setLgValue(e.target.value);
-        };
-
-        const handleMdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setMdValue(e.target.value);
-        };
-
-        const handleSmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setSmValue(e.target.value);
-        };
-
-        return (
-            <div style={{ width: '304px' }}>
-                <FormField size={EFormFieldSize.LG}>
-                    <FormFieldLabel>Большой размер (LG)</FormFieldLabel>
-                    <FormFieldInput
-                        value={lgValue}
-                        onChange={handleLgChange}
-                        placeholder="Введите текст..."
-                    />
-                </FormField>
-
-                <Gap size={24} />
-
-                <FormField size={EFormFieldSize.MD}>
-                    <FormFieldLabel>Средний размер (MD)</FormFieldLabel>
-                    <FormFieldInput
-                        value={mdValue}
-                        onChange={handleMdChange}
-                        placeholder="Введите текст..."
-                    />
-                </FormField>
-
-                <Gap size={24} />
-
-                <FormField size={EFormFieldSize.SM}>
-                    <FormFieldLabel>Маленький размер (SM)</FormFieldLabel>
-                    <FormFieldInput
-                        value={smValue}
-                        onChange={handleSmChange}
-                        placeholder="Введите текст..."
-                    />
-                </FormField>
-            </div>
-        )
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация различных размеров FormField. Доступны три размера: LG, MD и SM."
             }
         }
     }
@@ -354,7 +352,7 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
             description: 'Текст лейбла',
             table: {
                 type: { summary: 'string' },
-                defaultValue: { summary: 'Поле с controls' }
+                defaultValue: { summary: 'Название поля' }
             }
         },
         placeholder: {
@@ -381,15 +379,6 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
                 defaultValue: { summary: 'false' }
             }
         },
-        size: {
-            control: { type: 'select' },
-            description: 'Размер поля',
-            table: {
-                type: { summary: 'string' },
-                defaultValue: { summary: 'LG' }
-            },
-            options: [EFormFieldSize.LG, EFormFieldSize.MD, EFormFieldSize.SM],
-        },
         descriptionText: {
             control: { type: 'text' },
             description: 'Текст описания',
@@ -409,13 +398,12 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
     args: {
         error: false,
         disabled: false,
-        labelText: 'Поле с controls',
+        labelText: 'Название поля',
         placeholder: 'Введите текст...',
         showClear: false,
         showDescription: false,
         descriptionText: 'Описание поля',
         className: '',
-        size: EFormFieldSize.LG,
     },
     parameters: {
         docs: {

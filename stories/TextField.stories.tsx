@@ -143,7 +143,7 @@ export const States: StoryObj<typeof TextField> = {
 
                 <TextField
                     error
-                    description={<Text size={ETextSize.B4} type={EFontType.ERROR}>Error text</Text>}
+                    description={<Text size={ETextSize.B4} type={EFontType.ERROR}>Текст ошибки</Text>}
                     inputProps={{
                         value: valueError,
                         onChange: handleChangeError,
@@ -159,6 +159,7 @@ export const States: StoryObj<typeof TextField> = {
                         value: "Value disabled",
                         disabled: true
                     }}
+                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
                     label="Название поля"
                 />
             </div>

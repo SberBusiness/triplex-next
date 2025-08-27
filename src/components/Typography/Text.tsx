@@ -1,10 +1,10 @@
-import React, { forwardRef } from 'react';
-import { clsx } from 'clsx';
-import { EFontType, EFontWeightText, ELineType, ETextSize } from './enums';
-import { ITypographyProps } from './types';
-import { mapFontTypeToCssClass } from './utils';
-import styles from './styles/Text.module.less';
-import typographyStyles from './styles/Typography.module.less';
+import React, { forwardRef } from "react";
+import { clsx } from "clsx";
+import { EFontType, EFontWeightText, ELineType, ETextSize } from "./enums";
+import { ITypographyProps } from "./types";
+import { mapFontTypeToCssClass } from "./utils";
+import styles from "./styles/Text.module.less";
+import typographyStyles from "./styles/Typography.module.less";
 
 /** Соответствие размера текста стилевому классу. */
 export const mapTextSizeToCssClass = {
@@ -14,20 +14,17 @@ export const mapTextSizeToCssClass = {
     [ETextSize.B4]: styles.b4,
 };
 
-
 /** Соответствие цвета шрифта стилевому классу. */
 export const mapFontWeightTextToCssClass = {
     [EFontWeightText.REGULAR]: styles.regular,
     [EFontWeightText.SEMIBOLD]: styles.semibold,
 };
 
-
 /** Соответствие типа высоты блока строки стилевому классу. */
 export const mapTextLineTypeToCssClass = {
-    [ELineType.NORMAL]: '',
+    [ELineType.NORMAL]: "",
     [ELineType.COMPACT]: typographyStyles.compact,
 };
-
 
 /** Свойства компонента Text. */
 type TTextProps<T extends keyof JSX.IntrinsicElements> = {
@@ -42,18 +39,21 @@ type TTextProps<T extends keyof JSX.IntrinsicElements> = {
 
 /** Текст (типографика). */
 export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = 'span'>({
-        children,
-        className,
-        size,
-        tag = 'span' as T,
-        type = EFontType.PRIMARY,
-        weight = EFontWeightText.REGULAR,
-        line = ELineType.NORMAL,
-        underline,
-        strikethrough,
-        ...props
-    }: TTextProps<T>, ref: React.ForwardedRef<HTMLElement>): JSX.Element => {
+    <T extends keyof JSX.IntrinsicElements = "span">(
+        {
+            children,
+            className,
+            size,
+            tag = "span" as T,
+            type = EFontType.PRIMARY,
+            weight = EFontWeightText.REGULAR,
+            line = ELineType.NORMAL,
+            underline,
+            strikethrough,
+            ...props
+        }: TTextProps<T>,
+        ref: React.ForwardedRef<HTMLElement>,
+    ): JSX.Element => {
         const classes = clsx(
             typographyStyles.typography,
             styles.text,
@@ -66,7 +66,7 @@ export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElemen
                 [typographyStyles.underline]: !!underline && !strikethrough,
                 [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
             },
-            className
+            className,
         );
 
         const Tag = tag;
@@ -76,7 +76,7 @@ export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElemen
                 {children}
             </Tag>
         );
-    }
+    },
 );
 
-Text.displayName = 'Text';
+Text.displayName = "Text";

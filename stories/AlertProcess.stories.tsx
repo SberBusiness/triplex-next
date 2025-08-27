@@ -440,26 +440,6 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
     ),
 };
 
-const SpoilerComponent = ({ expandableContent }: { expandableContent: React.ReactNode }) => {
-    const [expanded, setExpanded] = useState(false);
-
-    const renderSpoiler = () => (
-        <AlertProcess.Spoiler expandableContentOpen={expanded}>{expandableContent}</AlertProcess.Spoiler>
-    );
-
-    return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
-            <AlertProcess
-                type={EAlertType.INFO}
-                onExpandableContentOpen={setExpanded}
-                expandableContentOpen={expanded}
-                expandableContent={expandableContent}
-                renderSpoiler={renderSpoiler}
-            />
-        </div>
-    );
-};
-
 export const Spoiler: StoryObj<typeof AlertProcess> = {
     name: "Spoiler",
     args: {
@@ -518,5 +498,23 @@ export const Spoiler: StoryObj<typeof AlertProcess> = {
             },
         },
     },
-    render: (args) => <SpoilerComponent expandableContent={args.expandableContent} />,
+    render: function Render(args) {
+        const [expanded, setExpanded] = useState(false);
+
+        const renderSpoiler = () => (
+            <AlertProcess.Spoiler expandableContentOpen={expanded}>{args.expandableContent}</AlertProcess.Spoiler>
+        );
+
+        return (
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
+                <AlertProcess
+                    type={EAlertType.INFO}
+                    onExpandableContentOpen={setExpanded}
+                    expandableContentOpen={expanded}
+                    expandableContent={args.expandableContent}
+                    renderSpoiler={renderSpoiler}
+                />
+            </div>
+        );
+    },
 };

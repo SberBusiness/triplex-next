@@ -39,37 +39,37 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorDarkNeutralAlpha: {
         0: {
-            value: "rgba(25, 25, 27, 1)", //     var(--triplex-next-ColorDarkNeutralAlpha-0)
+            value: "rgba(31, 31, 34, 1)", //     var(--triplex-next-ColorDarkNeutralAlpha-0)
         },
         10: {
-            value: "rgba(25, 25, 27, .95)", //     var(--triplex-next-ColorDarkNeutralAlpha-10)
+            value: "rgba(31, 31, 34, .95)", //     var(--triplex-next-ColorDarkNeutralAlpha-10)
         },
         20: {
-            value: "rgba(25, 25, 27, .85)", //     var(--triplex-next-ColorDarkNeutralAlpha-20)
+            value: "rgba(31, 31, 34, .85)", //     var(--triplex-next-ColorDarkNeutralAlpha-20)
         },
         30: {
-            value: "rgba(25, 25, 27, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-30)
+            value: "rgba(31, 31, 34, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-30)
         },
         40: {
-            value: "rgba(25, 25, 27, .65)", //     var(--triplex-next-ColorDarkNeutralAlpha-40)
+            value: "rgba(31, 31, 34, .65)", //     var(--triplex-next-ColorDarkNeutralAlpha-40)
         },
         50: {
-            value: "rgba(25, 25, 27, .55)", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
+            value: "rgba(31, 31, 34, .55)", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
         },
         60: {
-            value: "rgba(25, 25, 27, .45)", //     var(--triplex-next-ColorDarkNeutralAlpha-60)
+            value: "rgba(31, 31, 34, .45)", //     var(--triplex-next-ColorDarkNeutralAlpha-60)
         },
         70: {
-            value: "rgba(25, 25, 27, .35)", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
+            value: "rgba(31, 31, 34, .35)", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
         },
         80: {
-            value: "rgba(25, 25, 27, .25)", //     var(--triplex-next-ColorDarkNeutralAlpha-80)
+            value: "rgba(31, 31, 34, .25)", //     var(--triplex-next-ColorDarkNeutralAlpha-80)
         },
         90: {
-            value: "rgba(25, 25, 27, .15)", //     var(--triplex-next-ColorDarkNeutralAlpha-90)
+            value: "rgba(31, 31, 34, .15)", //     var(--triplex-next-ColorDarkNeutralAlpha-90)
         },
         100: {
-            value: "rgba(25, 25, 27, .05)", //     var(--triplex-next-ColorDarkNeutralAlpha-100)
+            value: "rgba(31, 31, 34, .05)", //     var(--triplex-next-ColorDarkNeutralAlpha-100)
         },
     },
     ColorDarkNeutral: {

@@ -94,42 +94,73 @@ describe("AlertProcess", () => {
         expect(onClose).toHaveBeenCalledTimes(1);
     });
 
-    it("Should render expandable content when provided", () => {
-        const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
-        render(<AlertProcess type={EAlertType.INFO} expandableContent={expandableContent} data-testid="alert" />);
+    describe("Expandable Content", () => {
+        it("Should render expand button when expandableContent is provided", () => {
+            const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
+            render(<AlertProcess type={EAlertType.INFO} expandableContent={expandableContent} data-testid="alert" />);
 
-        expect(screen.getByTestId("expandable-content")).toBeInTheDocument();
-        expect(screen.getByTestId("caret-icon")).toBeInTheDocument();
-    });
+            expect(screen.getByTestId("caret-icon")).toBeInTheDocument();
+        });
 
-    it("Should toggle expandable content when expand button is clicked", () => {
-        const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
-        render(<AlertProcess type={EAlertType.INFO} expandableContent={expandableContent} data-testid="alert" />);
+        it("Should call onExpandableContentOpen when expand button is clicked", () => {
+            const onExpandableContentOpen = vi.fn();
+            const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
 
-        const expandButton = screen.getByTestId("caret-icon").closest("button");
-        const expandableContentElement = screen.getByTestId("expandable-content").parentElement;
+            render(
+                <AlertProcess
+                    type={EAlertType.INFO}
+                    expandableContent={expandableContent}
+                    onExpandableContentOpen={onExpandableContentOpen}
+                    data-testid="alert"
+                />,
+            );
 
-        expect(expandableContentElement).not.toHaveClass("expanded");
+            const expandButton = screen.getByTestId("caret-icon").closest("button");
+            fireEvent.click(expandButton!);
 
-        fireEvent.click(expandButton!);
-        expect(expandableContentElement).toHaveClass("expanded");
+            expect(onExpandableContentOpen).toHaveBeenCalledWith(true);
+        });
 
-        fireEvent.click(expandButton!);
-        expect(expandableContentElement).not.toHaveClass("expanded");
-    });
+        it("Should render expandable content using renderSpoiler prop", () => {
+            const expandableContent = (
+                <div data-testid="expandable-content">
+                    <h3>Detailed Information</h3>
+                    <p>This is some detailed content that can be expanded.</p>
+                    <ul>
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                        <li>Item 3</li>
+                    </ul>
+                </div>
+            );
 
-    it("Should start expanded when expandableContentOpen is true", () => {
-        const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
-        render(
-            <AlertProcess
-                type={EAlertType.INFO}
-                expandableContent={expandableContent}
-                expandableContentOpen={true}
-                data-testid="alert"
-            />,
-        );
+            const renderSpoiler = () => (
+                <AlertProcess.Spoiler expandableContentOpen={true}>{expandableContent}</AlertProcess.Spoiler>
+            );
 
-        const expandableContentElement = screen.getByTestId("expandable-content").parentElement;
-        expect(expandableContentElement).toHaveClass("expanded");
+            render(<AlertProcess type={EAlertType.INFO} renderSpoiler={renderSpoiler} data-testid="alert" />);
+
+            expect(screen.getByTestId("expandable-content")).toBeInTheDocument();
+            expect(screen.getByText("Detailed Information")).toBeInTheDocument();
+            expect(screen.getByText("This is some detailed content that can be expanded.")).toBeInTheDocument();
+            expect(screen.getByText("Item 1")).toBeInTheDocument();
+            expect(screen.getByText("Item 2")).toBeInTheDocument();
+            expect(screen.getByText("Item 3")).toBeInTheDocument();
+        });
+
+        it("Should render AlertProcessSpoiler component with correct props", () => {
+            const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
+            const renderSpoiler = () => (
+                <AlertProcess.Spoiler expandableContentOpen={true} data-testid="spoiler">
+                    {expandableContent}
+                </AlertProcess.Spoiler>
+            );
+
+            render(<AlertProcess type={EAlertType.INFO} renderSpoiler={renderSpoiler} data-testid="alert" />);
+
+            const spoiler = screen.getByTestId("spoiler");
+            expect(spoiler).toBeInTheDocument();
+            expect(spoiler).toHaveClass("expanded");
+        });
     });
 });

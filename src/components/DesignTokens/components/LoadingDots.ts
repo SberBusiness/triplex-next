@@ -19,6 +19,6 @@ export type TDesignTokensComponentsLoadingDots = { LoadingDots: TDesignTokensCom
 
 // Токены компонента LoadingDots в светлой и темной темах.
 export const LoadingDots_Tokens: TDesignTokensComponentsLoadingDotsValues = {
-    General_Background_Default: [{ ref: "ColorBasicAlpha.0" }, { ref: "ColorBasicAlpha.0" }], // var(--triplex-next-LoadingDots-General_Background_Default)
+    General_Background_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-LoadingDots-General_Background_Default)
     Secondary_Background_Default: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-next-LoadingDots-Secondary_Background_Default)
 };

@@ -22,35 +22,35 @@ export enum ETitleSize {
 
 /** Возможные типы компонентов типографики. */
 export enum EFontType {
-    PRIMARY = 'primary',
-    COMPLEMENTARY = 'complementary',
-    SECONDARY = 'secondary',
-    TERTIARY = 'tertiary',
-    DISABLED = 'disabled',
-    BRAND = 'brand',
-    INFO = 'info',
-    SUCCESS = 'success',
-    WARNING = 'warning',
-    ERROR = 'error',
+    PRIMARY = "primary",
+    COMPLEMENTARY = "complementary",
+    SECONDARY = "secondary",
+    TERTIARY = "tertiary",
+    DISABLED = "disabled",
+    BRAND = "brand",
+    INFO = "info",
+    SUCCESS = "success",
+    WARNING = "warning",
+    ERROR = "error",
+    SYSTEM = "system",
 }
 
 /** Возможные начертания шрифта. */
 export enum EFontWeightText {
-    REGULAR = 'regular',
-    SEMIBOLD = 'semibold',
+    REGULAR = "regular",
+    SEMIBOLD = "semibold",
 }
-
 
 /** Возможные начертания шрифта. */
 export enum EFontWeightTitle {
-    MEDIUM = 'medium',
-    REGULAR = 'regular',
-    SEMIBOLD = 'semibold',
-    BOLD = 'bold',
+    MEDIUM = "medium",
+    REGULAR = "regular",
+    SEMIBOLD = "semibold",
+    BOLD = "bold",
 }
 
 /** Возможные типы интерлиньяжа. */
 export enum ELineType {
-    NORMAL = 'normal',
-    COMPACT = 'compact',
+    NORMAL = "normal",
+    COMPACT = "compact",
 }

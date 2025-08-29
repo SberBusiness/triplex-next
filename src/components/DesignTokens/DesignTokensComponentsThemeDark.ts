@@ -4,12 +4,10 @@ import { ETriplexNextTheme } from "../ThemeProvider/ETriplexNextTheme";
 import { GetTokensValueByTheme } from "./GetTokensValueByTheme";
 import {
     Button_Tokens,
-    Input_Tokens,
     FormField_Tokens,
     Typography_Tokens,
     LoadingDots_Tokens,
     TDesignTokensComponentsButtonValue,
-    TDesignTokensComponentsInputValue,
     TDesignTokensComponentsFormFieldValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsLoadingDotsValue,
@@ -20,7 +18,6 @@ import {
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.DARK, Button_Tokens),
     FormField: GetTokensValueByTheme<TDesignTokensComponentsFormFieldValue>(ETriplexNextTheme.DARK, FormField_Tokens),
-    Input: GetTokensValueByTheme<TDesignTokensComponentsInputValue>(ETriplexNextTheme.DARK, Input_Tokens),
     LoadingDots: GetTokensValueByTheme<TDesignTokensComponentsLoadingDotsValue>(
         ETriplexNextTheme.DARK,
         LoadingDots_Tokens,

@@ -10,27 +10,38 @@ beforeEach(() => {
 
 vi.mock("../DesignTokensCore", () => ({
     DesignTokensCore: {
-        ColorBasicAlpha: {
-            "0": { value: "#E5FCF7" },
-            "40": { value: "#21A19A" },
-            "60": { ref: "ColorBrand.40" },
-        },
         ColorBrand: {
-            "0": { value: "#F2F4F7" },
-            "40": { value: "#D0D7DD" },
+            "0": { value: "#1F3336" },
+            "40": { value: "#008985" },
+            "50": { value: "#21A19A" },
+            "60": { value: "#19BDB0" },
+        },
+        ColorNeutral: {
+            "0": { value: "#FFFFFF" },
+            "90": { value: "#F2F4F7" },
+        },
+        ColorDarkNeutral: {
+            "0": { value: "#19191B" },
+            "50": { value: "#2A2A2C" },
         },
     },
 }));
 
 vi.mock("../DesignTokensCoreThemeDark", () => ({
     DesignTokensCoreThemeDark: {
-        ColorBasicAlpha: {
-            "0": { value: "#0A2A2A" },
-            "40": { value: "#1A8A8A" },
-        },
         ColorBrand: {
-            "0": { value: "#1A1A1A" },
-            "40": { value: "#4A4A4A" },
+            "0": { value: "#1F3336" },
+            "40": { value: "#008985" },
+            "50": { value: "#21A19A" },
+            "60": { value: "#19BDB0" },
+        },
+        ColorNeutral: {
+            "0": { value: "#FFFFFF" },
+            "90": { value: "#F2F4F7" },
+        },
+        ColorDarkNeutral: {
+            "0": { value: "#19191B" },
+            "50": { value: "#2A2A2C" },
         },
     },
 }));
@@ -38,10 +49,10 @@ vi.mock("../DesignTokensCoreThemeDark", () => ({
 vi.mock("../DesignTokensComponents", () => ({
     DesignTokensComponents: {
         Button: {
-            background: { value: "#21A19A" },
-            text: { value: "#FFFFFF" },
+            General_Background_Default: { value: "#21A19A" },
+            General_Color_Default: { value: "#FFFFFF" },
         },
-        Input: {
+        FormField: {
             border: { value: "#D0D7DD" },
             background: { value: "#FFFFFF" },
         },
@@ -51,12 +62,12 @@ vi.mock("../DesignTokensComponents", () => ({
 vi.mock("../DesignTokensComponentsThemeDark", () => ({
     DesignTokensComponentsThemeDark: {
         Button: {
-            background: { value: "#1A8A8A" },
-            text: { value: "#000000" },
+            General_Background_Default: { value: "#21A19A" },
+            General_Color_Default: { value: "#FFFFFF" },
         },
-        Input: {
+        FormField: {
             border: { value: "#4A4A4A" },
-            background: { value: "#1A1A1A" },
+            background: { value: "#19191B" },
         },
     },
 }));
@@ -66,8 +77,8 @@ describe("DesignTokenUtils", () => {
         it("should return direct value when token has value property", () => {
             const tokenValue: TDesignTokenValue = { value: "#21A19A" };
             const tokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
 
@@ -77,10 +88,10 @@ describe("DesignTokenUtils", () => {
         });
 
         it("should resolve reference when token has ref property", () => {
-            const tokenValue: TDesignTokenValue = { ref: "ColorBasicAlpha.40" };
+            const tokenValue: TDesignTokenValue = { ref: "ColorBrand.50" };
             const tokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
 
@@ -90,24 +101,24 @@ describe("DesignTokenUtils", () => {
         });
 
         it("should resolve nested references", () => {
-            const tokenValue: TDesignTokenValue = { ref: "ColorBasicAlpha.60" };
+            const tokenValue: TDesignTokenValue = { ref: "ColorBrand.60" };
             const tokens = {
-                ColorBasicAlpha: {
-                    "60": { value: "#21A19A" },
-                    "80": { ref: "ColorBasicAlpha.40" },
+                ColorBrand: {
+                    "60": { value: "#19BDB0" },
+                    "80": { ref: "ColorBrand.50" },
                 },
             };
 
             const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
 
-            expect(result).toBe("#21A19A");
+            expect(result).toBe("#19BDB0");
         });
 
         it("should return empty string for invalid reference", () => {
             const tokenValue: TDesignTokenValue = { ref: "Invalid.Token" } as unknown as TDesignTokenValue;
             const tokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
 
@@ -119,8 +130,8 @@ describe("DesignTokenUtils", () => {
         it("should return empty string for token without value or ref", () => {
             const tokenValue: TDesignTokenValue = {} as unknown as TDesignTokenValue;
             const tokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
 
@@ -133,52 +144,52 @@ describe("DesignTokenUtils", () => {
     describe("getCSSVariableByTokenGroup", () => {
         it("should generate CSS variables for token group", () => {
             const tokenGroup = {
-                ColorBasicAlpha: {
-                    "0": { value: "#E5FCF7" },
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "0": { value: "#1F3336" },
+                    "50": { value: "#21A19A" },
                 },
             };
             const tokens = {
-                ColorBasicAlpha: {
-                    "0": { value: "#E5FCF7" },
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "0": { value: "#1F3336" },
+                    "50": { value: "#21A19A" },
                 },
             };
 
             const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-0-1-0-0: #E5FCF7;");
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #21A19A;");
+            expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
         });
     });
 
     describe("getStyleByTokens", () => {
         it("should generate CSS for all token groups", () => {
             const tokens = {
-                ColorBasicAlpha: {
-                    "0": { value: "#E5FCF7" },
-                    "40": { value: "#21A19A" },
-                },
                 ColorBrand: {
-                    "0": { value: "#F2F4F7" },
-                    "40": { value: "#D0D7DD" },
+                    "0": { value: "#1F3336" },
+                    "50": { value: "#21A19A" },
+                },
+                ColorNeutral: {
+                    "0": { value: "#FFFFFF" },
+                    "90": { value: "#F2F4F7" },
                 },
             };
 
             const result = DesignTokenUtils.getStyleByTokens(tokens as TDesignTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-0-1-0-0: #E5FCF7;");
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #21A19A;");
-            expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #F2F4F7;");
-            expect(result).toContain("--triplex-next-ColorBrand-40-1-0-0: #D0D7DD;");
+            expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
+            expect(result).toContain("--triplex-next-ColorNeutral-0-1-0-0: #FFFFFF;");
+            expect(result).toContain("--triplex-next-ColorNeutral-90-1-0-0: #F2F4F7;");
         });
     });
 
     describe("getStyle", () => {
         it("should generate light theme styles by default", () => {
             const customTokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#custom-color" },
+                ColorBrand: {
+                    "50": { value: "#custom-color" },
                 },
             };
 
@@ -186,64 +197,64 @@ describe("DesignTokenUtils", () => {
 
             console.log(result);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #custom-color;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
         });
 
         it("should generate light theme styles", () => {
             const customTokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#custom-color" },
+                ColorBrand: {
+                    "50": { value: "#custom-color" },
                 },
             };
 
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, customTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #custom-color;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
         });
 
         it("should generate dark theme styles", () => {
             const customTokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#custom-dark-color" },
+                ColorBrand: {
+                    "50": { value: "#custom-dark-color" },
                 },
             };
 
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.DARK, customTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #custom-dark-color;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-dark-color;");
         });
 
         it("should merge custom tokens with theme tokens", () => {
             const customTokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#custom-color" },
+                ColorBrand: {
+                    "50": { value: "#custom-color" },
                 },
             };
 
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, customTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #custom-color;");
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-0-1-0-0: #E5FCF7;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
+            expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
         });
     });
 
     describe("Integration Tests", () => {
         it("should handle complex token resolution chain", () => {
             const tokens = {
-                ColorBasicAlpha: {
-                    "0": { value: "#E5FCF7" },
-                    "40": { value: "#21A19A" },
-                    "60": { ref: "ColorBasicAlpha.40" },
-                    "80": { ref: "ColorBasicAlpha.60" },
+                ColorBrand: {
+                    "0": { value: "#1F3336" },
+                    "50": { value: "#21A19A" },
+                    "60": { ref: "ColorBrand.50" },
+                    "80": { ref: "ColorBrand.60" },
                 },
             };
 
             const result = DesignTokenUtils.getStyleByTokens(tokens as TDesignTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-0-1-0-0: #E5FCF7;");
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-1-0-0: #21A19A;");
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-60-1-0-0: #21A19A;");
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-80-1-0-0: #21A19A;");
+            expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
+            expect(result).toContain("--triplex-next-ColorBrand-60-1-0-0: #21A19A;");
+            expect(result).toContain("--triplex-next-ColorBrand-80-1-0-0: #21A19A;");
         });
     });
 
@@ -252,32 +263,32 @@ describe("DesignTokenUtils", () => {
             process.env.npm_package_version = "2.1.3";
 
             const tokenGroup = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
             const tokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
 
             const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
 
-            expect(result).toContain("--triplex-next-ColorBasicAlpha-40-2-1-3:");
+            expect(result).toContain("--triplex-next-ColorBrand-50-2-1-3:");
         });
 
         it("should handle missing package version", () => {
             delete process.env.npm_package_version;
 
             const tokenGroup = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
             const tokens = {
-                ColorBasicAlpha: {
-                    "40": { value: "#21A19A" },
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
                 },
             };
 

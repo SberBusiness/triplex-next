@@ -1,4 +1,4 @@
-import {EFontType} from './enums';
+import { EFontType } from "./enums";
 
 /** Свойства компонента типографики. */
 export interface ITypographyProps {

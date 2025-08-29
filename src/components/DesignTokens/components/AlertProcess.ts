@@ -31,7 +31,7 @@ export const AlertProcess_Tokens: TDesignTokensComponentsAlertProcessValues = {
 
     Error_Background: [{ ref: "ColorError.100" }, { ref: "ColorError.0" }], // var(--triplex-next-AlertProcess-Error_Background)
 
-    System_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-AlertProcess-System_Background)
+    System_Background: [{ ref: "ColorSystem.100" }, { ref: "ColorSystem.0" }], // var(--triplex-next-AlertProcess-System_Background)
 
     Feature_Background: [{ ref: "ColorBrand.100" }, { ref: "ColorBrand.0" }], // var(--triplex-next-AlertProcess-Feature_Background)
 };

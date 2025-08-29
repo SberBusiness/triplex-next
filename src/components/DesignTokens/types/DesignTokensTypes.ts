@@ -1,6 +1,7 @@
 import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
     TDesignTokensComponentsButton,
+    TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLoadingDots,
     TDesignTokensComponentsFormField,
@@ -240,6 +241,7 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBrand &
 // Тип локальных токенов(токенов компонентов).
 export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
+    | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLoadingDots

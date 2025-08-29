@@ -5,10 +5,12 @@ import { GetTokensValueByTheme } from "./GetTokensValueByTheme";
 import {
     AlertContext_Tokens,
     Button_Tokens,
+    Checkbox_Tokens,
     FormField_Tokens,
     Typography_Tokens,
     LoadingDots_Tokens,
     TDesignTokensComponentsButtonValue,
+    TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsFormFieldValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsLoadingDotsValue,
@@ -17,6 +19,7 @@ import {
 
 export const DesignTokensComponents: TDesignTokensComponents = {
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.LIGHT, Button_Tokens),
+    Checkbox: GetTokensValueByTheme<TDesignTokensComponentsCheckboxValue>(ETriplexNextTheme.LIGHT, Checkbox_Tokens),
     FormField: GetTokensValueByTheme<TDesignTokensComponentsFormFieldValue>(ETriplexNextTheme.LIGHT, FormField_Tokens),
     LoadingDots: GetTokensValueByTheme<TDesignTokensComponentsLoadingDotsValue>(
         ETriplexNextTheme.LIGHT,

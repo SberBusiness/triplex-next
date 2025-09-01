@@ -48,6 +48,13 @@ export default tseslint.config(
             globals: globals.browser,
         },
     },
+    // Stories-specific overrides
+    {
+        files: ["stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+        rules: {
+            "react-hooks/rules-of-hooks": "off", // Disable hooks rules for stories
+        },
+    },
     {
         files: ["scripts/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
         languageOptions: {

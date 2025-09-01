@@ -3,8 +3,9 @@ import clsx from 'clsx';
 import MaskedInputTextMask, {conformToMask, MaskedInputProps, PipeConfig} from 'react-text-mask';
 import {presets, TFormFieldMaskedInputPresets} from './formFieldMaskedInputPresets';
 import { FormFieldInput } from './FormFieldInput';
-import styles from '../styles/FormFieldMaskedInput.module.less';
 import { FormFieldContext } from '../FormFieldContext';
+import stylesFormFieldInputStyles from '../styles/FormFieldInput.module.less';
+import styles from '../styles/FormFieldMaskedInput.module.less';
 
 /** Маска. Каждый элемент массива должен быть либо строкой, либо регулярным выражением. Каждая строка — это фиксированный символ в маске, а каждое регулярное выражение — это заполнитель, который принимает пользовательский ввод.
  * Подробнее можно ознакомиться https://github.com/text-mask/text-mask/blob/master/componentDocumentation.md#mask.
@@ -44,7 +45,6 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     placeholderChar = '0',
     placeholderMask,
     value,
-    style,
     ...inputProps
 }) => {
     // Значение инпута, отображающего часть введенного значения и оставшуюся маску.
@@ -189,18 +189,17 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     return (
         <div className={styles.formFieldMaskedInputWrapper}>
             {/* Input, отображающий маску. */}
-            <FormFieldInput
+            <input
                 className={clsx(
+                    stylesFormFieldInputStyles.formFieldInput,
                     styles.formFieldMaskedInputPlaceholder,
                     className
                 )}
                 disabled={disabled}
-                onChange={() => {}}
                 placeholder={getPlaceholderValue()}
                 readOnly
                 aria-hidden="true"
                 tabIndex={-1}
-                style={style}
                 type="text"
             />
 
@@ -226,7 +225,6 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
                 // value={value} не используется т.к. возникает баг при передаче снаружи изначально пустого value, а затем не пустого.
                 value={getValue()}
                 pipe={pipe}
-                style={style}
                 type="text"
                 {...inputProps}
             />

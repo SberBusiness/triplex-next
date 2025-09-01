@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { TextField } from "../src/components/TextField";
-import { Text, ETextSize, EFontType } from "../src/components/Typography";
-import { Gap } from "../src/components/Gap";
-import { FormFieldClear } from "../src/components";
+import { TextField } from "../../src/components/TextField";
+import { Text, ETextSize, EFontType } from "../../src/components/Typography";
+import { Gap } from "../../src/components/Gap";
+import { FormFieldClear } from "../../src/components";
 import { DefaulticonPrdIcon20 } from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
 
 export default {
-    title: "Components/TextField",
+    title: "Components/TextFields/TextField",
     parameters: {
         docs: {
             description: {
                 component: `
 Компонент TextField представляет собой упрощенный вариант поля ввода, построенный на основе FormField и FormGroup.
+
+## Основные возможности
+
+- **TextField** - текстовое поле ввода с лейблом и описанием
                 `
             }
         }
@@ -46,6 +50,45 @@ export const Basic: StoryObj<typeof TextField> = {
         docs: {
             description: {
                 story: "Базовый пример использования TextField с лейблом и описанием."
+            }
+        }
+    }
+};
+
+export const PassRefToInput: StoryObj<typeof TextField> = {
+    render: () => {
+        const [value, setValue] = useState('');
+        const ref = useRef<HTMLInputElement>(null);
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
+        
+        useEffect(() => {
+            if (ref.current) {
+                console.log('input ref', ref.current);
+            }
+        }, []);
+
+        return (
+            <div style={{ width: '304px' }}>
+                <TextField
+                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    inputProps={{
+                        ref: ref,
+                        value: value,
+                        onChange: handleChange,
+                        placeholder: "Введите текст..."
+                    }}
+                    label="Название поля"
+                />
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Пример использования TextField с передачей ref на input."
             }
         }
     }

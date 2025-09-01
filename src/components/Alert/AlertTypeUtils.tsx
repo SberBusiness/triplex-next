@@ -1,9 +1,9 @@
 import React from "react";
 import { EAlertType } from "./EAlertType";
-import { InfoStsIcon16 } from "@sberbusiness/icons-next/InfoStsIcon16";
-import { WarningStsIcon16 } from "@sberbusiness/icons-next/WarningStsIcon16";
-import { ErrorStsIcon16 } from "@sberbusiness/icons-next/ErrorStsIcon16";
-import { SystemStsIcon16 } from "@sberbusiness/icons-next/SystemStsIcon16";
+import InfoStsIcon16 from "@sberbusiness/icons-next/InfoStsIcon16";
+import WarningStsIcon16 from "@sberbusiness/icons-next/WarningStsIcon16";
+import ErrorStsIcon16 from "@sberbusiness/icons-next/ErrorStsIcon16";
+import SystemStsIcon16 from "@sberbusiness/icons-next/SystemStsIcon16";
 
 /** Получить иконку по типу предупреждения. */
 export function renderDefaultIcon(type: EAlertType): JSX.Element {

@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {FormFieldContext} from './FormFieldContext';
-import {TARGET_PADDING_X_DEFAULT} from './consts';
-import clsx from 'clsx';
-import styles from './styles/FormField.module.less';
+import React, { useState } from "react";
+import { FormFieldContext } from "./FormFieldContext";
+import { TARGET_PADDING_X_DEFAULT } from "./consts";
+import clsx from "clsx";
+import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,10 +11,19 @@ export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** Элемент, отображающий input/select/textarea + label. */
-export const FormField: React.FC<IFormFieldProps> = ({children, className, disabled, error, onMouseEnter, onMouseLeave, style, ...htmlDivAttributes}) => {
+export const FormField: React.FC<IFormFieldProps> = ({
+    children,
+    className,
+    disabled,
+    error,
+    onMouseEnter,
+    onMouseLeave,
+    style,
+    ...htmlDivAttributes
+}) => {
     const [focused, setFocused] = useState(false);
     const [hovered, setHovered] = useState(false);
-    const [id, setId] = useState('');
+    const [id, setId] = useState("");
     const [postfixWidth, setPostfixWidth] = useState(TARGET_PADDING_X_DEFAULT);
     const [prefixWidth, setPrefixWidth] = useState(TARGET_PADDING_X_DEFAULT);
     const [valueExist, setValueExist] = useState(false);
@@ -47,15 +56,19 @@ export const FormField: React.FC<IFormFieldProps> = ({children, className, disab
             }}
         >
             <div
-                className={clsx(styles.formField, {
-                    [styles.active]: focused,
-                    [styles.disabled]: Boolean(disabled),
-                    [styles.error]: Boolean(error),
-                }, className)}
+                className={clsx(
+                    styles.formField,
+                    {
+                        [styles.active]: focused,
+                        [styles.disabled]: Boolean(disabled),
+                        [styles.error]: Boolean(error),
+                    },
+                    className,
+                )}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 data-tx={process.env.npm_package_version}
-                style={{paddingLeft: prefixWidth, paddingRight: postfixWidth, ...style}}
+                style={{ paddingLeft: prefixWidth, paddingRight: postfixWidth, ...style }}
                 {...htmlDivAttributes}
             >
                 {children}

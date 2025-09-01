@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface IFormFieldContext {
     // Поле в состоянии disabled.
@@ -31,7 +31,7 @@ export const initialFormFieldContextContext: IFormFieldContext = {
     disabled: false,
     focused: false,
     hovered: false,
-    id: '',
+    id: "",
     postfixWidth: 0,
     prefixWidth: 0,
     setFocused: () => {},

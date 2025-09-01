@@ -205,7 +205,7 @@ export const ResponsiveSizes: StoryObj = {
     name: "Responsive Sizes",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <Row style={{ width: "600px" }}>
+            <Row>
                 <Col sizeSm={6} sizeMd={5} sizeLg={4} sizeXl={3}>
                     <div
                         style={{
@@ -326,7 +326,7 @@ export const ResponsiveOffsets: StoryObj = {
     name: "Responsive Offsets",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Row style={{ width: "600px" }}>
+            <Row>
                 <Col sizeMd={12} offsetMd={3}>
                     <div
                         style={{

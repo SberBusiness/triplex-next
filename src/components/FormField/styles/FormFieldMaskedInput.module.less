@@ -1,0 +1,20 @@
+.formFieldMaskedInputWrapper {
+    position: relative;
+
+    .formFieldMaskedInputPlaceholder {
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        &::placeholder {
+            // Переопределяет opacity: 0 в FormFieldInput.less.
+            opacity: 1;
+        }
+    }
+}
+
+.formFieldMaskedInput {
+    display: block;
+    position: relative;
+    background: none !important;
+}

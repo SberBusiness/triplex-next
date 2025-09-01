@@ -3,16 +3,26 @@
 .label {
     display: inline-block;
     position: relative;
-    min-width: 16px;
-    min-height: 16px;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
     color: var(--triplex-next-Checkbox-Color_Default);
     cursor: pointer;
 
+    &.md {
+        min-width: 24px;
+        min-height: 24px;
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    &.lg {
+        min-width: 28px;
+        min-height: 28px;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
     &.nonempty {
-        padding-left: 24px;
+        padding-left: 40px;
     }
 
     &.disabled {
@@ -34,6 +44,10 @@
     box-sizing: border-box;
     background-color: var(--triplex-next-Checkbox-Background_Default);
     border-radius: 4px;
+
+    &:focus-visible {
+        box-shadow: var(--triplex-next-Checkbox-BorderColor_Focus);
+    }
 }
 
 .checkmarkIcon {
@@ -53,12 +67,16 @@
 .checkboxIcon,
 .checkmarkIcon {
     position: absolute;
-    width: 16px;
-    height: 16px;
     left: 0;
 
-    .nonempty & {
-        top: 2px;
+    .md & {
+        width: 24px;
+        height: 24px;
+    }
+
+    .lg & {
+        width: 28px;
+        height: 28px;
     }
 }
 

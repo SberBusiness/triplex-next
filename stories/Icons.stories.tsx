@@ -1,41 +1,41 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
 
-import { WarningStsIcon16 } from "@sberbusiness/icons-next/WarningStsIcon16";
-import { WarningStsIcon20 } from "@sberbusiness/icons-next/WarningStsIcon20";
-import { SystemStsIcon16 } from "@sberbusiness/icons-next/SystemStsIcon16";
-import { SystemStsIcon20 } from "@sberbusiness/icons-next/SystemStsIcon20";
-import { WaitStsIcon16 } from "@sberbusiness/icons-next/WaitStsIcon16";
-import { WaitStsIcon20 } from "@sberbusiness/icons-next/WaitStsIcon20";
-import { SuccessStsIcon16 } from "@sberbusiness/icons-next/SuccessStsIcon16";
-import { SuccessStsIcon20 } from "@sberbusiness/icons-next/SuccessStsIcon20";
-import { InfoStsIcon16 } from "@sberbusiness/icons-next/InfoStsIcon16";
-import { InfoStsIcon20 } from "@sberbusiness/icons-next/InfoStsIcon20";
-import { ErrorStsIcon16 } from "@sberbusiness/icons-next/ErrorStsIcon16";
-import { ErrorStsIcon20 } from "@sberbusiness/icons-next/ErrorStsIcon20";
-import { RubStsIcon20 } from "@sberbusiness/icons-next/RubStsIcon20";
+import WarningStsIcon16 from "@sberbusiness/icons-next/WarningStsIcon16";
+import WarningStsIcon20 from "@sberbusiness/icons-next/WarningStsIcon20";
+import SystemStsIcon16 from "@sberbusiness/icons-next/SystemStsIcon16";
+import SystemStsIcon20 from "@sberbusiness/icons-next/SystemStsIcon20";
+import WaitStsIcon16 from "@sberbusiness/icons-next/WaitStsIcon16";
+import WaitStsIcon20 from "@sberbusiness/icons-next/WaitStsIcon20";
+import SuccessStsIcon16 from "@sberbusiness/icons-next/SuccessStsIcon16";
+import SuccessStsIcon20 from "@sberbusiness/icons-next/SuccessStsIcon20";
+import InfoStsIcon16 from "@sberbusiness/icons-next/InfoStsIcon16";
+import InfoStsIcon20 from "@sberbusiness/icons-next/InfoStsIcon20";
+import ErrorStsIcon16 from "@sberbusiness/icons-next/ErrorStsIcon16";
+import ErrorStsIcon20 from "@sberbusiness/icons-next/ErrorStsIcon20";
+import RubStsIcon20 from "@sberbusiness/icons-next/RubStsIcon20";
 
-import { HintSrvIcon16 } from "@sberbusiness/icons-next/HintSrvIcon16";
-import { CloseSrvxIcon16 } from "@sberbusiness/icons-next/CloseSrvxIcon16";
-import { CloseSrvxIcon24 } from "@sberbusiness/icons-next/CloseSrvxIcon24";
-import { ClosewhiteSrvxIcon16 } from "@sberbusiness/icons-next/ClosewhiteSrvxIcon16";
-import { ClosewhiteSrvxIcon24 } from "@sberbusiness/icons-next/ClosewhiteSrvxIcon24";
-import { CloseinversionSrvxIcon16 } from "@sberbusiness/icons-next/CloseinversionSrvxIcon16";
-import { CloseinversionSrvxIcon24 } from "@sberbusiness/icons-next/CloseinversionSrvxIcon24";
-import { CaretupSrvxIcon16 } from "@sberbusiness/icons-next/CaretupSrvxIcon16";
-import { CaretupSrvxIcon24 } from "@sberbusiness/icons-next/CaretupSrvxIcon24";
-import { CaretupwhiteSrvxIcon16 } from "@sberbusiness/icons-next/CaretupwhiteSrvxIcon16";
-import { CaretupwhiteSrvxIcon20 } from "@sberbusiness/icons-next/CaretupwhiteSrvxIcon20";
-import { CaretupwhiteSrvxIcon24 } from "@sberbusiness/icons-next/CaretupwhiteSrvxIcon24";
-import { CaretdownSrvxIcon16 } from "@sberbusiness/icons-next/CaretdownSrvxIcon16";
-import { CaretdownSrvxIcon24 } from "@sberbusiness/icons-next/CaretdownSrvxIcon24";
-import { CaretdownwhiteSrvxIcon16 } from "@sberbusiness/icons-next/CaretdownwhiteSrvxIcon16";
-import { CaretdownwhiteSrvxIcon20 } from "@sberbusiness/icons-next/CaretdownwhiteSrvxIcon20";
-import { CaretdownwhiteSrvxIcon24 } from "@sberbusiness/icons-next/CaretdownwhiteSrvxIcon24";
+import HintSrvIcon16 from "@sberbusiness/icons-next/HintSrvIcon16";
+import CloseSrvxIcon16 from "@sberbusiness/icons-next/CloseSrvxIcon16";
+import CloseSrvxIcon24 from "@sberbusiness/icons-next/CloseSrvxIcon24";
+import ClosewhiteSrvxIcon16 from "@sberbusiness/icons-next/ClosewhiteSrvxIcon16";
+import ClosewhiteSrvxIcon24 from "@sberbusiness/icons-next/ClosewhiteSrvxIcon24";
+import CloseinversionSrvxIcon16 from "@sberbusiness/icons-next/CloseinversionSrvxIcon16";
+import CloseinversionSrvxIcon24 from "@sberbusiness/icons-next/CloseinversionSrvxIcon24";
+import CaretupSrvxIcon16 from "@sberbusiness/icons-next/CaretupSrvxIcon16";
+import CaretupSrvxIcon24 from "@sberbusiness/icons-next/CaretupSrvxIcon24";
+import CaretupwhiteSrvxIcon16 from "@sberbusiness/icons-next/CaretupwhiteSrvxIcon16";
+import CaretupwhiteSrvxIcon20 from "@sberbusiness/icons-next/CaretupwhiteSrvxIcon20";
+import CaretupwhiteSrvxIcon24 from "@sberbusiness/icons-next/CaretupwhiteSrvxIcon24";
+import CaretdownSrvxIcon16 from "@sberbusiness/icons-next/CaretdownSrvxIcon16";
+import CaretdownSrvxIcon24 from "@sberbusiness/icons-next/CaretdownSrvxIcon24";
+import CaretdownwhiteSrvxIcon16 from "@sberbusiness/icons-next/CaretdownwhiteSrvxIcon16";
+import CaretdownwhiteSrvxIcon20 from "@sberbusiness/icons-next/CaretdownwhiteSrvxIcon20";
+import CaretdownwhiteSrvxIcon24 from "@sberbusiness/icons-next/CaretdownwhiteSrvxIcon24";
 
-import { DefaulticonPrdIcon20 } from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
-import { DefaulticonPrdIcon24 } from "@sberbusiness/icons-next/DefaulticonPrdIcon24";
-import { DefaulticonPrdIcon32 } from "@sberbusiness/icons-next/DefaulticonPrdIcon32";
+import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
+import DefaulticonPrdIcon24 from "@sberbusiness/icons-next/DefaulticonPrdIcon24";
+import DefaulticonPrdIcon32 from "@sberbusiness/icons-next/DefaulticonPrdIcon32";
 
 export default {
     title: "Components/Icons",
@@ -54,35 +54,35 @@ function MyComponent() {
     return <WarningStsIcon16 />;
 }
 \`\`\`
-                `
-            }
-        }
+                `,
+            },
+        },
     },
     tags: ["autodocs"],
 };
 
 const IconDisplay: React.FC<{
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<unknown>;
     name: string;
     size?: string;
-}> = ({ icon: Icon, name, size }) => (
+}> = ({ icon: Icon, name }) => (
     <div className="hoverable icons-item-example">
         <Icon />
-        <div>
-            {name}
-        </div>
+        <div>{name}</div>
     </div>
 );
 
 export const StatusIcons: StoryObj = {
     render: () => (
         <div>
-            <h3 style={{ marginBottom: '16px' }}>Status Icons</h3>
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                gap: '16px'
-            }}>
+            <h3 style={{ marginBottom: "16px" }}>Status Icons</h3>
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                    gap: "16px",
+                }}
+            >
                 <IconDisplay icon={WarningStsIcon16} name="WarningStsIcon16" size="16px" />
                 <IconDisplay icon={WarningStsIcon20} name="WarningStsIcon20" size="20px" />
                 <IconDisplay icon={WaitStsIcon16} name="WaitStsIcon16" size="16px" />
@@ -102,21 +102,23 @@ export const StatusIcons: StoryObj = {
     parameters: {
         docs: {
             description: {
-                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки."
-            }
-        }
-    }
+                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки.",
+            },
+        },
+    },
 };
 
 export const ServiceIcons: StoryObj = {
     render: () => (
         <div>
-            <h3 style={{ marginBottom: '16px' }}>Service Icons</h3>
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                gap: '16px'
-            }}>
+            <h3 style={{ marginBottom: "16px" }}>Service Icons</h3>
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                    gap: "16px",
+                }}
+            >
                 <IconDisplay icon={HintSrvIcon16} name="HintSrvIcon16" size="16px" />
                 <IconDisplay icon={CloseSrvxIcon16} name="CloseSrvxIcon16" size="16px" />
                 <IconDisplay icon={CloseSrvxIcon24} name="CloseSrvxIcon24" size="24px" />
@@ -140,21 +142,23 @@ export const ServiceIcons: StoryObj = {
     parameters: {
         docs: {
             description: {
-                story: "Иконки для интерфейсных элементов и навигации: подсказки, закрытие (различные варианты), стрелки вверх и вниз."
-            }
-        }
-    }
+                story: "Иконки для интерфейсных элементов и навигации: подсказки, закрытие (различные варианты), стрелки вверх и вниз.",
+            },
+        },
+    },
 };
 
 export const ProductIcons: StoryObj = {
     render: () => (
         <div>
-            <h3 style={{ marginBottom: '16px' }}>Product Icons</h3>
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                gap: '16px'
-            }}>
+            <h3 style={{ marginBottom: "16px" }}>Product Icons</h3>
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                    gap: "16px",
+                }}
+            >
                 <IconDisplay icon={DefaulticonPrdIcon20} name="DefaulticonPrdIcon20" size="20px" />
                 <IconDisplay icon={DefaulticonPrdIcon24} name="DefaulticonPrdIcon24" size="24px" />
                 <IconDisplay icon={DefaulticonPrdIcon32} name="DefaulticonPrdIcon32" size="32px" />
@@ -164,8 +168,8 @@ export const ProductIcons: StoryObj = {
     parameters: {
         docs: {
             description: {
-                story: "Иконки для продуктов: стандартная иконка продукта в различных размерах."
-            }
-        }
-    }
+                story: "Иконки для продуктов: стандартная иконка продукта в различных размерах.",
+            },
+        },
+    },
 };

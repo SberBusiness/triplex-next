@@ -4,7 +4,7 @@ import { TextField } from "../src/components/TextField";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
 import { Gap } from "../src/components/Gap";
 import { FormFieldClear } from "../src/components";
-import { DefaulticonPrdIcon20 } from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
+import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
 
 export default {
     title: "Components/TextField",
@@ -13,29 +13,33 @@ export default {
             description: {
                 component: `
 Компонент TextField представляет собой упрощенный вариант поля ввода, построенный на основе FormField и FormGroup.
-                `
-            }
-        }
+                `,
+            },
+        },
     },
     tags: ["autodocs"],
 };
 
 export const Basic: StoryObj<typeof TextField> = {
-    render: () => {
-        const [value, setValue] = useState('');
+    render: function Render() {
+        const [value, setValue] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
         };
 
         return (
-            <div style={{ width: '304px' }}>
+            <div style={{ width: "304px" }}>
                 <TextField
-                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    description={
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
-                        placeholder: "Введите текст..."
+                        placeholder: "Введите текст...",
                     }}
                     label="Название поля"
                 />
@@ -45,24 +49,28 @@ export const Basic: StoryObj<typeof TextField> = {
     parameters: {
         docs: {
             description: {
-                story: "Базовый пример использования TextField с лейблом и описанием."
-            }
-        }
-    }
+                story: "Базовый пример использования TextField с лейблом и описанием.",
+            },
+        },
+    },
 };
 
 export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
-    render: () => {
-        const [value, setValue] = useState('');
+    render: function Render() {
+        const [value, setValue] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
         };
 
         return (
-            <div style={{ width: '304px' }}>
+            <div style={{ width: "304px" }}>
                 <TextField
-                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    description={
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    }
                     prefix={<DefaulticonPrdIcon20 />}
                     postfix={<DefaulticonPrdIcon20 />}
                     inputProps={{
@@ -77,25 +85,29 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
     parameters: {
         docs: {
             description: {
-                story: `TextField с префиксом и постфиксом.`
-            }
-        }
-    }
+                story: `TextField с префиксом и постфиксом.`,
+            },
+        },
+    },
 };
 
 export const WithClearButton: StoryObj<typeof TextField> = {
-    render: () => {
-        const [value, setValue] = useState('');
+    render: function Render() {
+        const [value, setValue] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
         };
 
         return (
-            <div style={{ width: '304px' }}>
+            <div style={{ width: "304px" }}>
                 <TextField
-                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
-                    postfix={<FormFieldClear onClick={() => setValue('')} />}
+                    description={
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    }
+                    postfix={<FormFieldClear onClick={() => setValue("")} />}
                     inputProps={{
                         value: value,
                         onChange: handleChange,
@@ -108,16 +120,16 @@ export const WithClearButton: StoryObj<typeof TextField> = {
     parameters: {
         docs: {
             description: {
-                story: "TextField с кнопкой очистки значения."
-            }
-        }
-    }
+                story: "TextField с кнопкой очистки значения.",
+            },
+        },
+    },
 };
 
 export const States: StoryObj<typeof TextField> = {
-    render: () => {
-        const [value, setValue] = useState('');
-        const [valueError, setValueError] = useState('');
+    render: function Render() {
+        const [value, setValue] = useState("");
+        const [valueError, setValueError] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
@@ -128,13 +140,17 @@ export const States: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ width: '304px' }}>
+            <div style={{ width: "304px" }}>
                 <TextField
-                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    description={
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
-                        placeholder: "Введите текст..."
+                        placeholder: "Введите текст...",
                     }}
                     label="Название поля"
                 />
@@ -143,7 +159,11 @@ export const States: StoryObj<typeof TextField> = {
 
                 <TextField
                     error
-                    description={<Text size={ETextSize.B4} type={EFontType.ERROR}>Текст ошибки</Text>}
+                    description={
+                        <Text size={ETextSize.B4} type={EFontType.ERROR}>
+                            Текст ошибки
+                        </Text>
+                    }
                     inputProps={{
                         value: valueError,
                         onChange: handleChangeError,
@@ -157,9 +177,13 @@ export const States: StoryObj<typeof TextField> = {
                     disabled
                     inputProps={{
                         value: "Value disabled",
-                        disabled: true
+                        disabled: true,
                     }}
-                    description={<Text size={ETextSize.B4} type={EFontType.SECONDARY}>Описание поля</Text>}
+                    description={
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    }
                     label="Название поля"
                 />
             </div>
@@ -168,10 +192,10 @@ export const States: StoryObj<typeof TextField> = {
     parameters: {
         docs: {
             description: {
-                story: "Различные состояния TextField: обычное, с ошибкой, отключенное."
-            }
-        }
-    }
+                story: "Различные состояния TextField: обычное, с ошибкой, отключенное.",
+            },
+        },
+    },
 };
 
 interface ITextFieldWithControlsProps extends React.ComponentProps<typeof TextField> {
@@ -184,25 +208,17 @@ interface ITextFieldWithControlsProps extends React.ComponentProps<typeof TextFi
 }
 
 export const Playground: StoryObj<ITextFieldWithControlsProps> = {
-    render: (args) => {
-        const [value, setValue] = useState('');
+    render: function Render(args) {
+        const [value, setValue] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
         };
 
-        const {
-            labelText,
-            placeholder,
-            prefixText,
-            postfixText,
-            descriptionText,
-            showLabel,
-            ...textFieldProps
-        } = args;
+        const { labelText, placeholder, prefixText, postfixText, descriptionText, showLabel, ...textFieldProps } = args;
 
         return (
-            <div style={{ width: '304px' }}>
+            <div style={{ width: "304px" }}>
                 <TextField
                     {...textFieldProps}
                     description={
@@ -219,100 +235,100 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                         onChange: handleChange,
                         placeholder: placeholder || "Введите текст...",
                     }}
-                    label={showLabel ? (labelText || "Название поля") : undefined}
+                    label={showLabel ? labelText || "Название поля" : undefined}
                 />
             </div>
         );
     },
     argTypes: {
         error: {
-            control: { type: 'boolean' },
-            description: 'Состояние ошибки',
+            control: { type: "boolean" },
+            description: "Состояние ошибки",
             table: {
-                type: { summary: 'boolean' },
-                defaultValue: { summary: 'false' }
-            }
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
         },
         disabled: {
-            control: { type: 'boolean' },
-            description: 'Отключенное состояние',
+            control: { type: "boolean" },
+            description: "Отключенное состояние",
             table: {
-                type: { summary: 'boolean' },
-                defaultValue: { summary: 'false' }
-            }
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
         },
         labelText: {
-            control: { type: 'text' },
-            description: 'Текст лейбла',
+            control: { type: "text" },
+            description: "Текст лейбла",
             table: {
-                type: { summary: 'string' },
-                defaultValue: { summary: 'Название поля' }
-            }
+                type: { summary: "string" },
+                defaultValue: { summary: "Название поля" },
+            },
         },
         showLabel: {
-            control: { type: 'boolean' },
-            description: 'Показать лейбл',
+            control: { type: "boolean" },
+            description: "Показать лейбл",
             table: {
-                type: { summary: 'boolean' },
-                defaultValue: { summary: 'true' }
-            }
+                type: { summary: "boolean" },
+                defaultValue: { summary: "true" },
+            },
         },
         placeholder: {
-            control: { type: 'text' },
-            description: 'Плейсхолдер поля ввода',
+            control: { type: "text" },
+            description: "Плейсхолдер поля ввода",
             table: {
-                type: { summary: 'string' },
-                defaultValue: { summary: 'Введите текст...' }
-            }
+                type: { summary: "string" },
+                defaultValue: { summary: "Введите текст..." },
+            },
         },
         prefixText: {
-            control: { type: 'text' },
-            description: 'Текст префикса',
+            control: { type: "text" },
+            description: "Текст префикса",
             table: {
-                type: { summary: 'string' },
-                defaultValue: { summary: '' }
-            }
+                type: { summary: "string" },
+                defaultValue: { summary: "" },
+            },
         },
         postfixText: {
-            control: { type: 'text' },
-            description: 'Текст постфикса',
+            control: { type: "text" },
+            description: "Текст постфикса",
             table: {
-                type: { summary: 'string' },
-                defaultValue: { summary: '' }
-            }
+                type: { summary: "string" },
+                defaultValue: { summary: "" },
+            },
         },
         descriptionText: {
-            control: { type: 'text' },
-            description: 'Текст описания',
+            control: { type: "text" },
+            description: "Текст описания",
             table: {
-                type: { summary: 'string' },
-                defaultValue: { summary: 'Описание поля' }
-            }
+                type: { summary: "string" },
+                defaultValue: { summary: "Описание поля" },
+            },
         },
         className: {
-            control: { type: 'text' },
-            description: 'Дополнительные CSS классы',
+            control: { type: "text" },
+            description: "Дополнительные CSS классы",
             table: {
-                type: { summary: 'string' }
-            }
-        }
+                type: { summary: "string" },
+            },
+        },
     },
     args: {
         error: false,
         disabled: false,
-        labelText: 'Название поля',
+        labelText: "Название поля",
         showLabel: true,
-        placeholder: 'Введите текст...',
-        prefixText: '',
-        postfixText: '',
-        descriptionText: 'Описание поля',
-        className: ''
+        placeholder: "Введите текст...",
+        prefixText: "",
+        postfixText: "",
+        descriptionText: "Описание поля",
+        className: "",
     },
     parameters: {
         docs: {
             description: {
-                story: "Интерактивная демонстрация TextField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, префикс, постфикс и описание."
-            }
-        }
-    }
+                story: "Интерактивная демонстрация TextField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, префикс, постфикс и описание.",
+            },
+        },
+    },
 };

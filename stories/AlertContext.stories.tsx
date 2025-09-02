@@ -2,7 +2,7 @@ import React from "react";
 import { AlertContext } from "../src/components/Alert/AlertContext/AlertContext";
 import { StoryObj } from "@storybook/react";
 import { EAlertType } from "../src/components/Alert/EAlertType";
-import { WaitStsIcon16 } from "@sberbusiness/icons-next/WaitStsIcon16";
+import WaitStsIcon16 from "@sberbusiness/icons-next/WaitStsIcon16";
 
 export default {
     title: "Components/AlertContext",

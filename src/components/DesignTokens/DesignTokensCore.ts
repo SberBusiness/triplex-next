@@ -2,35 +2,12 @@
 import { TDesignTokensCore } from "./types/DesignTokensTypes";
 
 export const DesignTokensCore: TDesignTokensCore = {
-    ColorBasicAlpha: {
-        0: {
-            value: "rgba(255, 255, 255, 1)", //     var(--triplex-next-ColorBasicAlpha-0)
-        },
-        40: {
-            value: "rgba(255, 255, 255, .75)", //     var(--triplex-next-ColorBasicAlpha-40)
-        },
-        60: {
-            value: "rgba(255, 255, 255, .55)", //     var(--triplex-next-ColorBasicAlpha-60)
-        },
-        70: {
-            value: "rgba(255, 255, 255, .45)", //     var(--triplex-next-ColorBasicAlpha-70)
-        },
-        80: {
-            value: "rgba(255, 255, 255, .35)", //     var(--triplex-next-ColorBasicAlpha-80)
-        },
-        90: {
-            value: "rgba(255, 255, 255, .25)", //     var(--triplex-next-ColorBasicAlpha-90)
-        },
-        100: {
-            value: "rgba(255, 255, 255, .15)", //     var(--triplex-next-ColorBasicAlpha-100)
-        },
-    },
     ColorBrand: {
         0: {
             value: "#1F3336", //     var(--triplex-next-ColorBrand-0)
         },
         10: {
-            value: "#004A4E", //     var(--triplex-next-ColorBrand-10)
+            value: "#0B3A3C", //     var(--triplex-next-ColorBrand-10)
         },
         20: {
             value: "#006063", //     var(--triplex-next-ColorBrand-20)
@@ -60,40 +37,44 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#E3FFFA", //     var(--triplex-next-ColorBrand-100)
         },
     },
-    ColorDarkBasicAlpha: {
+    ColorDarkNeutralAlpha: {
         0: {
-            value: "rgba(0, 0, 0, .85)", //     var(--triplex-next-ColorDarkBasicAlpha-0)
+            value: "rgba(31, 31, 34, 1)", //     var(--triplex-next-ColorDarkNeutralAlpha-0)
+        },
+        10: {
+            value: "rgba(31, 31, 34, .95)", //     var(--triplex-next-ColorDarkNeutralAlpha-10)
+        },
+        20: {
+            value: "rgba(31, 31, 34, .85)", //     var(--triplex-next-ColorDarkNeutralAlpha-20)
+        },
+        30: {
+            value: "rgba(31, 31, 34, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-30)
         },
         40: {
-            value: "rgba(0, 0, 0, .7)", //     var(--triplex-next-ColorDarkBasicAlpha-40)
+            value: "rgba(31, 31, 34, .65)", //     var(--triplex-next-ColorDarkNeutralAlpha-40)
+        },
+        50: {
+            value: "rgba(31, 31, 34, .55)", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
         },
         60: {
-            value: "rgba(0, 0, 0, .55)", //     var(--triplex-next-ColorDarkBasicAlpha-60)
+            value: "rgba(31, 31, 34, .45)", //     var(--triplex-next-ColorDarkNeutralAlpha-60)
         },
         70: {
-            value: "rgba(0, 0, 0, .45)", //     var(--triplex-next-ColorDarkBasicAlpha-70)
+            value: "rgba(31, 31, 34, .35)", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
         },
         80: {
-            value: "rgba(0, 0, 0, .35)", //     var(--triplex-next-ColorDarkBasicAlpha-80)
+            value: "rgba(31, 31, 34, .25)", //     var(--triplex-next-ColorDarkNeutralAlpha-80)
         },
         90: {
-            value: "rgba(0, 0, 0, .25)", //     var(--triplex-next-ColorDarkBasicAlpha-90)
+            value: "rgba(31, 31, 34, .15)", //     var(--triplex-next-ColorDarkNeutralAlpha-90)
         },
         100: {
-            value: "rgba(0, 0, 0, .15)", //     var(--triplex-next-ColorDarkBasicAlpha-100)
-        },
-    },
-    ColorDarkNeutralAlpha: {
-        50: {
-            value: "rgba(45, 45, 48, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-50)
-        },
-        70: {
-            value: "rgba(59, 59, 62, .75)", //     var(--triplex-next-ColorDarkNeutralAlpha-70)
+            value: "rgba(31, 31, 34, .05)", //     var(--triplex-next-ColorDarkNeutralAlpha-100)
         },
     },
     ColorDarkNeutral: {
         0: {
-            value: "#0D0D0E", //     var(--triplex-next-ColorDarkNeutral-0)
+            value: "#19191B", //     var(--triplex-next-ColorDarkNeutral-0)
         },
         10: {
             value: "#171719", //     var(--triplex-next-ColorDarkNeutral-10)
@@ -131,7 +112,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#37292F", //     var(--triplex-next-ColorError-0)
         },
         10: {
-            value: "#7C001A", //     var(--triplex-next-ColorError-10)
+            value: "#4A323B", //     var(--triplex-next-ColorError-10)
         },
         20: {
             value: "#A90024", //     var(--triplex-next-ColorError-20)
@@ -155,7 +136,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFB1C1", //     var(--triplex-next-ColorError-80)
         },
         90: {
-            value: "#FFD6DF", //     var(--triplex-next-ColorError-90)
+            value: "#FCE0E6", //     var(--triplex-next-ColorError-90)
         },
         100: {
             value: "#FFF0F3", //     var(--triplex-next-ColorError-100)
@@ -166,7 +147,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#282D3C", //     var(--triplex-next-ColorInfo-0)
         },
         10: {
-            value: "#022A7A", //     var(--triplex-next-ColorInfo-10)
+            value: "#2A354B", //     var(--triplex-next-ColorInfo-10)
         },
         20: {
             value: "#0A43B0", //     var(--triplex-next-ColorInfo-20)
@@ -184,47 +165,62 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#1297FE", //     var(--triplex-next-ColorInfo-60)
         },
         70: {
-            value: "#66C7FF", //     var(--triplex-next-ColorInfo-70)
+            value: "#66BEFF", //     var(--triplex-next-ColorInfo-70)
         },
         80: {
-            value: "#82DAFF", //     var(--triplex-next-ColorInfo-80)
+            value: "#8DD2FF", //     var(--triplex-next-ColorInfo-80)
         },
         90: {
-            value: "#B8EFFF", //     var(--triplex-next-ColorInfo-90)
+            value: "#B8E6FF", //     var(--triplex-next-ColorInfo-90)
         },
         100: {
-            value: "#E3FAFF", //     var(--triplex-next-ColorInfo-100)
+            value: "#E3F6FF", //     var(--triplex-next-ColorInfo-100)
         },
     },
     ColorNeutralAlpha: {
         0: {
-            value: "rgba(136, 144, 160, .25)", //     var(--triplex-next-ColorNeutralAlpha-0)
+            value: "rgba(255, 255, 255, 1)", //     var(--triplex-next-ColorNeutralAlpha-0)
+        },
+        10: {
+            value: "rgba(255, 255, 255, .95)", //     var(--triplex-next-ColorNeutralAlpha-10)
         },
         20: {
-            value: "rgba(192, 197, 207, .3)", //     var(--triplex-next-ColorNeutralAlpha-20)
+            value: "rgba(255, 255, 255, .85)", //     var(--triplex-next-ColorNeutralAlpha-20)
         },
         30: {
-            value: "rgba(220, 223, 228, .75)", //     var(--triplex-next-ColorNeutralAlpha-30)
+            value: "rgba(255, 255, 255, .75)", //     var(--triplex-next-ColorNeutralAlpha-30)
         },
         40: {
-            value: "rgba(223, 226, 231, .75)", //     var(--triplex-next-ColorNeutralAlpha-40)
+            value: "rgba(255, 255, 255, .65)", //     var(--triplex-next-ColorNeutralAlpha-40)
+        },
+        50: {
+            value: "rgba(255, 255, 255, .55)", //     var(--triplex-next-ColorNeutralAlpha-50)
+        },
+        60: {
+            value: "rgba(255, 255, 255, .45)", //     var(--triplex-next-ColorNeutralAlpha-60)
+        },
+        70: {
+            value: "rgba(220, 223, 228, .35)", //     var(--triplex-next-ColorNeutralAlpha-70)
+        },
+        80: {
+            value: "rgba(223, 226, 231, .25)", //     var(--triplex-next-ColorNeutralAlpha-80)
         },
         90: {
-            value: "rgba(242, 244, 247, .75)", //     var(--triplex-next-ColorNeutralAlpha-90)
+            value: "rgba(242, 244, 247, .15)", //     var(--triplex-next-ColorNeutralAlpha-90)
         },
         100: {
-            value: "rgba(255, 255, 255, .75)", //     var(--triplex-next-ColorNeutralAlpha-100)
+            value: "rgba(255, 255, 255, .05)", //     var(--triplex-next-ColorNeutralAlpha-100)
         },
     },
     ColorNeutral: {
         0: {
-            value: "#8890A1", //     var(--triplex-next-ColorNeutral-0)
+            value: "#CBCFD7", //     var(--triplex-next-ColorNeutral-0)
         },
         10: {
-            value: "#A6ACBA", //     var(--triplex-next-ColorNeutral-10)
+            value: "#D1D4DC", //     var(--triplex-next-ColorNeutral-10)
         },
         20: {
-            value: "#C0C5CF", //     var(--triplex-next-ColorNeutral-20)
+            value: "#D6D9E0", //     var(--triplex-next-ColorNeutral-20)
         },
         30: {
             value: "#DCDFE4", //     var(--triplex-next-ColorNeutral-30)
@@ -256,7 +252,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#283230", //     var(--triplex-next-ColorSuccess-0)
         },
         10: {
-            value: "#004F42", //     var(--triplex-next-ColorSuccess-10)
+            value: "#19413B", //     var(--triplex-next-ColorSuccess-10)
         },
         20: {
             value: "#00624C", //     var(--triplex-next-ColorSuccess-20)
@@ -286,24 +282,59 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#E1FFEB", //     var(--triplex-next-ColorSuccess-100)
         },
     },
+    ColorSystem: {
+        0: {
+            value: "#2F333E", //     var(--triplex-next-ColorSystem-0)
+        },
+        10: {
+            value: "#38425B", //     var(--triplex-next-ColorSystem-10)
+        },
+        20: {
+            value: "#47526D", //     var(--triplex-next-ColorSystem-20)
+        },
+        30: {
+            value: "#57637F", //     var(--triplex-next-ColorSystem-30)
+        },
+        40: {
+            value: "#697591", //     var(--triplex-next-ColorSystem-40)
+        },
+        50: {
+            value: "#8291B3", //     var(--triplex-next-ColorSystem-50)
+        },
+        60: {
+            value: "#95A3C1", //     var(--triplex-next-ColorSystem-60)
+        },
+        70: {
+            value: "#A9B6D0", //     var(--triplex-next-ColorSystem-70)
+        },
+        80: {
+            value: "#BFCADF", //     var(--triplex-next-ColorSystem-80)
+        },
+        90: {
+            value: "#D6DEED", //     var(--triplex-next-ColorSystem-90)
+        },
+        100: {
+            value: "#EEF3FC", //     var(--triplex-next-ColorSystem-100)
+        },
+    },
     ColorWarning: {
         0: {
             value: "#392E2D", //     var(--triplex-next-ColorWarning-0)
         },
         10: {
-            value: "#DE3300", //     var(--triplex-next-ColorWarning-10)
+            value: "#493626", //     var(--triplex-next-ColorWarning-10)
         },
         20: {
-            value: "#EA3E00", //     var(--triplex-next-ColorWarning-20)
+            value: "#E03400", //     var(--triplex-next-ColorWarning-20)
         },
         30: {
-            value: "#F64A00", //     var(--triplex-next-ColorWarning-30)
+            value: "#E63D00", //     var(--triplex-next-ColorWarning-30)
         },
         40: {
-            value: "#FF4A00", //     var(--triplex-next-ColorWarning-40)
+            value: "#EF4C01", //     var(--triplex-next-ColorWarning-40)
         },
         50: {
-            value: "#FF6D00", //     var(--triplex-next-ColorWarning-50)
+            value: "#FD6508", //     var(--triplex-next-ColorWarning-50)
         },
         60: {
             value: "#FF7A17", //     var(--triplex-next-ColorWarning-60)

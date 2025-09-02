@@ -1,11 +1,11 @@
-import React, { forwardRef } from 'react';
-import { clsx } from 'clsx';
-import { EFontType, EFontWeightText, ECaptionSize } from './enums';
-import { ITypographyProps } from './types';
-import { mapFontTypeToCssClass } from './utils';
+import React, { forwardRef } from "react";
+import { clsx } from "clsx";
+import { EFontType, EFontWeightText, ECaptionSize } from "./enums";
+import { ITypographyProps } from "./types";
+import { mapFontTypeToCssClass } from "./utils";
 
-import styles from './styles/Caption.module.less';
-import typographyStyles from './styles/Typography.module.less';
+import styles from "./styles/Caption.module.less";
+import typographyStyles from "./styles/Typography.module.less";
 
 /** Соответствие цвета шрифта стилевому классу. */
 export const mapFontWeightTextToCssClass = {
@@ -31,17 +31,20 @@ type TCaptionProps<T extends keyof JSX.IntrinsicElements> = {
 
 /** Подпись (типографика). */
 export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = 'span'>({
-        children,
-        className,
-        size,
-        tag = 'span' as T,
-        type = EFontType.PRIMARY,
-        weight = EFontWeightText.REGULAR,
-        underline,
-        strikethrough,
-        ...props
-    }: TCaptionProps<T>, ref: React.ForwardedRef<HTMLElement>): JSX.Element => {
+    <T extends keyof JSX.IntrinsicElements = "span">(
+        {
+            children,
+            className,
+            size,
+            tag = "span" as T,
+            type = EFontType.PRIMARY,
+            weight = EFontWeightText.REGULAR,
+            underline,
+            strikethrough,
+            ...props
+        }: TCaptionProps<T>,
+        ref: React.ForwardedRef<HTMLElement>,
+    ): JSX.Element => {
         const classes = clsx(
             typographyStyles.typography,
             styles.caption,
@@ -53,7 +56,7 @@ export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.Intrinsic
                 [typographyStyles.underline]: !!underline && !strikethrough,
                 [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
             },
-            className
+            className,
         );
 
         const Tag = tag;
@@ -63,7 +66,7 @@ export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.Intrinsic
                 {children}
             </Tag>
         );
-    }
+    },
 );
 
-Caption.displayName = 'Caption';
+Caption.displayName = "Caption";

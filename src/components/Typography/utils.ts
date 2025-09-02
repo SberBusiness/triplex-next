@@ -1,5 +1,5 @@
-import {EFontType} from './enums';
-import styles from './styles/Typography.module.less';
+import { EFontType } from "./enums";
+import styles from "./styles/Typography.module.less";
 
 /** Соответствие цвета шрифта стилевому классу. */
 export const mapFontTypeToCssClass = {
@@ -13,4 +13,5 @@ export const mapFontTypeToCssClass = {
     [EFontType.SUCCESS]: styles.success,
     [EFontType.ERROR]: styles.error,
     [EFontType.WARNING]: styles.warning,
+    [EFontType.SYSTEM]: styles.system,
 };

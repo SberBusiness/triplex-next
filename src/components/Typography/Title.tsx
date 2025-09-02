@@ -1,10 +1,10 @@
-import React, { forwardRef } from 'react';
-import { clsx } from 'clsx';
-import { EFontType, EFontWeightTitle, ETitleSize } from './enums';
-import { ITypographyProps } from './types';
-import { mapFontTypeToCssClass } from './utils';
-import styles from './styles/Title.module.less';
-import typographyStyles from './styles/Typography.module.less';
+import React, { forwardRef } from "react";
+import { clsx } from "clsx";
+import { EFontType, EFontWeightTitle, ETitleSize } from "./enums";
+import { ITypographyProps } from "./types";
+import { mapFontTypeToCssClass } from "./utils";
+import styles from "./styles/Title.module.less";
+import typographyStyles from "./styles/Typography.module.less";
 
 /** Соответствие размера заголовка стилевому классу. */
 export const mapTitleSizeToCssClass = {
@@ -32,17 +32,20 @@ type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
 
 /** Заголовок (типографика). */
 export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = 'h1'>({
-        children,
-        className,
-        size,
-        tag = `h${size}` as T,
-        type = EFontType.PRIMARY,
-        weight = EFontWeightTitle.SEMIBOLD,
-        underline,
-        strikethrough,
-        ...props
-    }: TTitleProps<T>, ref: React.ForwardedRef<HTMLElement>): JSX.Element => {
+    <T extends keyof JSX.IntrinsicElements = "h1">(
+        {
+            children,
+            className,
+            size,
+            tag = `h${size}` as T,
+            type = EFontType.PRIMARY,
+            weight = EFontWeightTitle.SEMIBOLD,
+            underline,
+            strikethrough,
+            ...props
+        }: TTitleProps<T>,
+        ref: React.ForwardedRef<HTMLElement>,
+    ): JSX.Element => {
         const classes = clsx(
             typographyStyles.typography,
             styles.title,
@@ -54,7 +57,7 @@ export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElem
                 [typographyStyles.underline]: !!underline && !strikethrough,
                 [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
             },
-            className
+            className,
         );
 
         const Tag = tag;
@@ -64,7 +67,7 @@ export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElem
                 {children}
             </Tag>
         );
-    }
+    },
 );
 
-Title.displayName = 'Title';
+Title.displayName = "Title";

@@ -1,8 +1,8 @@
-import React, {useContext} from 'react';
-import {CloseSrvxIcon16} from '@sberbusiness/icons-next/CloseSrvxIcon16';
-import {FormFieldContext} from '../FormFieldContext';
-import clsx from 'clsx';
-import styles from '../styles/FormFieldClear.module.less';
+import React, { useContext } from "react";
+import CloseSrvxIcon16 from "@sberbusiness/icons-next/CloseSrvxIcon16";
+import { FormFieldContext } from "../FormFieldContext";
+import clsx from "clsx";
+import styles from "../styles/FormFieldClear.module.less";
 
 export interface IFormFieldClearProps extends React.HTMLAttributes<HTMLSpanElement> {
     children?: never;
@@ -10,8 +10,8 @@ export interface IFormFieldClearProps extends React.HTMLAttributes<HTMLSpanEleme
 
 /** Кнопка очищения введенного значения. */
 export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearProps>(
-    ({className, onClick, ...htmlLabelAttributes}, ref) => {
-        const {disabled, focused, hovered, id, valueExist} = useContext(FormFieldContext);
+    ({ className, onClick, ...htmlLabelAttributes }, ref) => {
+        const { disabled, focused, hovered, id, valueExist } = useContext(FormFieldContext);
 
         const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
             // Установка фокуса в поле ввода при очищении значения.
@@ -25,11 +25,11 @@ export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearP
 
         const classNames = clsx(
             styles.formFieldClear,
-            'hoverable',
+            "hoverable",
             {
                 [styles.shown]: valueExist && !disabled && (focused || hovered),
             },
-            className
+            className,
         );
 
         return (
@@ -37,7 +37,7 @@ export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearP
                 <CloseSrvxIcon16 />
             </span>
         );
-    }
+    },
 );
 
-FormFieldClear.displayName = 'FormFieldClear';
+FormFieldClear.displayName = "FormFieldClear";

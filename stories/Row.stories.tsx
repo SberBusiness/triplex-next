@@ -103,7 +103,7 @@ export const Default: StoryObj<typeof Row> = {
     parameters: {
         docs: {
             description: {
-                story: "Стандартная строка с двумя колонками равного размера",
+                story: "Стандартные строки с двумя колонками равного размера",
             },
         },
     },
@@ -169,7 +169,7 @@ export const WithoutPaddingBottom: StoryObj<typeof Row> = {
     parameters: {
         docs: {
             description: {
-                story: "Строка без нижнего отступа с двумя колонками",
+                story: "Строки без нижнего отступа с двумя колонками",
             },
         },
     },

@@ -25,7 +25,7 @@ export type TDesignTokensComponentsAlertContext = { AlertContext: TDesignTokensC
 // Токены компонента AlertContext в светлой и темной темах.
 export const AlertContext_Tokens: TDesignTokensComponentsAlertContextValues = {
     Error_Color: [{ ref: "ColorError.40" }, { ref: "ColorError.60" }], // var(--triplex-next-AlertContext-Error_Color)
-    Info_Color: [{ ref: "ColorDarkBasicAlpha.0" }, { ref: "ColorBasicAlpha.0" }], // var(--triplex-next-AlertContext-Info_Color)
-    System_Color: [{ ref: "ColorDarkBasicAlpha.0" }, { ref: "ColorBasicAlpha.0" }], // var(--triplex-next-AlertContext-System_Color)
-    Warning_Color: [{ ref: "ColorDarkBasicAlpha.0" }, { ref: "ColorBasicAlpha.0" }], // var(--triplex-next-AlertContext-Warning_Color)
+    Info_Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-AlertContext-Info_Color)
+    System_Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-AlertContext-System_Color)
+    Warning_Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-AlertContext-Warning_Color)
 };

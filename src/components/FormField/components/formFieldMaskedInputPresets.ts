@@ -13,6 +13,10 @@ export interface TFormFieldMaskedInputPresets {
         inn: string;
         // Доб. номер 000 (от 3 до 4 символов).
         phoneExtension: string;
+        // SWIFT код AAAAAAAA (от 8 до 11 символов).
+        swiftCode: string;
+        // Время чч:мм.
+        time: string;
         // УИН 00000000000000000000 (от 20 до 25 символов).
         uin: string;
         // Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000.
@@ -63,6 +67,10 @@ export interface TFormFieldMaskedInputPresets {
         phone: TFormFieldMaskedInputMask;
         // Доб. номер 000 (от 3 до 4 символов).
         phoneExtension: TFormFieldMaskedInputMask;
+        // SWIFT код AAAAAAAA (от 8 до 11 символов).
+        swiftCode: TFormFieldMaskedInputMask;
+        // Время чч:мм.
+        time: TFormFieldMaskedInputMask;
         // Индекс 000000.
         postalCode: TFormFieldMaskedInputMask;
         // СНЛС 000-000-000 00.
@@ -87,18 +95,18 @@ export const presets: TFormFieldMaskedInputPresets = {
             /\d/,
             /\d/,
             /\d/,
-            ' ',
+            " ",
             /\d/,
             /\d/,
             /\d/,
-            ' ',
+            " ",
             /\d/,
-            ' ',
-            /\d/,
-            /\d/,
+            " ",
             /\d/,
             /\d/,
-            ' ',
+            /\d/,
+            /\d/,
+            " ",
             /\d/,
             /\d/,
             /\d/,
@@ -117,30 +125,30 @@ export const presets: TFormFieldMaskedInputPresets = {
             /\d/,
             /\d/,
             /\d/,
-            ' ',
+            " ",
             /\d/,
             /\d/,
             /\d/,
             /\d/,
-            ' ',
+            " ",
             /\d/,
             /\d/,
             /\d/,
             /\d/,
-            ' ',
+            " ",
             /\d/,
             /\d/,
             /\d/,
             /\d/,
-            ' ',
+            " ",
             /\d/,
             /\d/,
             /\d/,
             /\d/,
         ],
-        date: [/\d/, /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/],
+        date: [/\d/, /\d/, ".", /\d/, /\d/, ".", /\d/, /\d/, /\d/, /\d/],
         // Водительское удостоверение 00 00 000000.
-        driversLicense: [/\d/, /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+        driversLicense: [/\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
         // ИНН 0000000000 (от 10 до 12 символов).
         inn: Array<RegExp>(12).fill(/\d/),
         // КБК 00000000000000000000.
@@ -148,9 +156,9 @@ export const presets: TFormFieldMaskedInputPresets = {
         // КПП 000000000.
         kpp: Array<RegExp>(9).fill(/\d/),
         // Широта 00.000000.
-        latitude: [/\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+        latitude: [/\d/, /\d/, ".", /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
         // Долгота 00.000000.
-        longitude: [/\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+        longitude: [/\d/, /\d/, ".", /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
         // ОГРН 0000000000000.
         ogrn: Array<RegExp>(13).fill(/\d/),
         // ОКТМО 00000000.
@@ -158,26 +166,42 @@ export const presets: TFormFieldMaskedInputPresets = {
         // Паспорт РФ.
         passport: {
             // Код подразделения 000-000.
-            departmentCode: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
+            departmentCode: [/\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/],
             // Номер 000000.
             number: Array<RegExp>(6).fill(/\d/),
             // Серия 00 00.
-            series: [/\d/, /\d/, ' ', /\d/, /\d/],
+            series: [/\d/, /\d/, " ", /\d/, /\d/],
         },
         // Номер телефона.
-        phone: ['+', '7', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/],
+        phone: ["+", "7", " ", "(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, "-", /\d/, /\d/, "-", /\d/, /\d/],
+        // SWIFT код.
+        swiftCode: [
+            /[a-zA-Z]/,
+            /[a-zA-Z]/,
+            /[a-zA-Z]/,
+            /[a-zA-Z]/,
+            /[a-zA-Z]/,
+            /[a-zA-Z]/,
+            /[a-zA-Z0-9]/,
+            /[a-zA-Z0-9]/,
+            /[a-zA-Z0-9]/,
+            /[a-zA-Z0-9]/,
+            /[a-zA-Z0-9]/,
+        ],
+        // Время чч:мм.
+        time: [/\d/, /\d/, ":", /\d/, /\d/],
         // Доб. номер 000 (от 3 до 4 символов).
         phoneExtension: Array<RegExp>(4).fill(/\d/),
         // Индекс 000000.
         postalCode: Array<RegExp>(6).fill(/\d/),
         // СНИЛС 000-000-000 00.
-        snils: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, ' ', /\d/, /\d/],
+        snils: [/\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, " ", /\d/, /\d/],
         // УИН 00000000000000000000 (от 20 до 25 символов).
         uin: Array<RegExp>(25).fill(/\d/),
         // Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000.
         zhkuAccount: [/\d/, /\d/, /[а-яА-ЯЁё]/, /[а-яА-ЯЁё]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
         // Идентификатор ЖКУ 00АА000000-00.
-        zhkuId: [/\d/, /\d/, /[а-яА-ЯЁё]/, /[а-яА-ЯЁё]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/],
+        zhkuId: [/\d/, /\d/, /[а-яА-ЯЁё]/, /[а-яА-ЯЁё]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/],
         // Идентификатор платёжного документа (ЖКУ) 00АА000000-00-0000.
         zhkuPaymentDocumentId: [
             /\d/,
@@ -190,10 +214,10 @@ export const presets: TFormFieldMaskedInputPresets = {
             /\d/,
             /\d/,
             /\d/,
-            '-',
+            "-",
             /\d/,
             /\d/,
-            '-',
+            "-",
             /\d/,
             /\d/,
             /\d/,
@@ -203,22 +227,26 @@ export const presets: TFormFieldMaskedInputPresets = {
     // Предзаготовленный набор плейсхолдеров масок. Пустые пробелы в конце - под дополнительные не подсвеченные символы.
     placeholderMasks: {
         // Номер автомобиля A000AA00.
-        carNumber: 'A000AA00 ',
+        carNumber: "A000AA00 ",
         // Номер карты 0000 0000 0000 0000 (от 16 до 20 символов).
-        cardNumber: '0000 0000 0000 0000     ',
+        cardNumber: "0000 0000 0000 0000     ",
         // Дата дд.мм.гггг.
-        date: 'дд.мм.гггг',
+        date: "дд.мм.гггг",
         // ИНН 0000000000 (от 10 до 12 символов).
-        inn: '0000000000  ',
+        inn: "0000000000  ",
         // Доб. номер 000 (от 3 до 4 символов).
-        phoneExtension: '000 ',
+        phoneExtension: "000 ",
+        // SWIFT код AAAAAAAA (от 8 до 11 символов).
+        swiftCode: "AAAAAAAA   ",
+        // Время чч:мм.
+        time: "чч:мм",
         // УИН 00000000000000000000 (от 20 до 25 символов).
-        uin: '00000000000000000000     ',
+        uin: "00000000000000000000     ",
         // Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000.
-        zhkuAccount: '00АА000000',
+        zhkuAccount: "00АА000000",
         // Идентификатор ЖКУ 00АА000000-00.
-        zhkuId: '00АА000000-00',
+        zhkuId: "00АА000000-00",
         // Идентификатор платёжного документа (ЖКУ) 00АА000000-00-0000.
-        zhkuPaymentDocumentId: '00АА000000-00-0000',
+        zhkuPaymentDocumentId: "00АА000000-00-0000",
     },
 };

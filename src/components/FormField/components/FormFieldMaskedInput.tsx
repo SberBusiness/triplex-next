@@ -127,6 +127,8 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
             }
 
             return phonePipe(config.rawValue);
+        } else if (mask === FormFieldMaskedInput.presets.masks.swiftCode) {
+            return conformedValue.toUpperCase();
         }
 
         return conformedValue;

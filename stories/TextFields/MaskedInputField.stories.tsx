@@ -195,11 +195,11 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
                         mask: FormFieldMaskedInput.presets.masks.date,
                         placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.date,
                     };
-                // case 'time':
-                //     return {
-                //         mask: FormFieldMaskedInput.presets.masks.time,
-                //         placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.time,
-                //     };
+                case 'time':
+                    return {
+                        mask: FormFieldMaskedInput.presets.masks.time,
+                        placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.time,
+                    };
                 case 'phone':
                     return {
                         mask: FormFieldMaskedInput.presets.masks.phone,
@@ -217,11 +217,11 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
                     return {
                         mask: FormFieldMaskedInput.presets.masks.bic,
                     };
-                // case 'swifCode':
-                //     return {
-                //         mask: FormFieldMaskedInput.presets.masks.swifCode,
-                //         placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.swifCode,
-                //     };
+                case 'swiftCode':
+                    return {
+                        mask: FormFieldMaskedInput.presets.masks.swiftCode,
+                        placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.swiftCode,
+                    };
                 case 'inn':
                     return {
                         mask: FormFieldMaskedInput.presets.masks.inn,
@@ -467,6 +467,16 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
                         mask: FormFieldMaskedInput.presets.masks.phoneExtension,
                         placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.phoneExtension,
                     };
+                case 'swiftCode':
+                    return {
+                        mask: FormFieldMaskedInput.presets.masks.swiftCode,
+                        placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.swiftCode,
+                    };
+                case 'time':
+                    return {
+                        mask: FormFieldMaskedInput.presets.masks.time,
+                        placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.time,
+                    };
                 case 'postalCode':
                     return {
                         mask: FormFieldMaskedInput.presets.masks.postalCode,
@@ -538,6 +548,10 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
                     return 'Почтовый индекс';
                 case 'snils':
                     return 'СНИЛС';
+                case 'swiftCode':
+                    return 'swift';
+                case 'time':
+                    return 'time';
                 case 'uin':
                     return 'УИН';
                 case 'zhkuAccount':

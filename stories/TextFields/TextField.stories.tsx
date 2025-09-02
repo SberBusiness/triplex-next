@@ -4,7 +4,7 @@ import { TextField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType } from "../../src/components/Typography";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldClear } from "../../src/components";
-import { DefaulticonPrdIcon20 } from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
+import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
 
 export default {
     title: "Components/TextFields/TextField",

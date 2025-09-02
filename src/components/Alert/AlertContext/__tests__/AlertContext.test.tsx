@@ -3,20 +3,11 @@ import { render, screen } from "@testing-library/react";
 import { AlertContext } from "../AlertContext";
 import { EAlertType } from "../../EAlertType";
 
-vi.mock("@sberbusiness/icons-next/InfoStsIcon16", () => ({
-    default: () => <div data-testid="info-icon">Info Icon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/WarningStsIcon16", () => ({
-    default: () => <div data-testid="warning-icon">Warning Icon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/ErrorStsIcon16", () => ({
-    default: () => <div data-testid="error-icon">Error Icon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/SystemStsIcon16", () => ({
-    default: () => <div data-testid="system-icon">System Icon</div>,
+vi.mock("@sberbusiness/icons-next", () => ({
+    InfoStsIcon16: () => <div data-testid="info-icon">Info Icon</div>,
+    WarningStsIcon16: () => <div data-testid="warning-icon">Warning Icon</div>,
+    ErrorStsIcon16: () => <div data-testid="error-icon">Error Icon</div>,
+    SystemStsIcon16: () => <div data-testid="system-icon">System Icon</div>,
 }));
 
 describe("AlertContext", () => {

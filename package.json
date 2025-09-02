@@ -34,7 +34,6 @@
         "chromatic": "dotenv -e .env.local -- sh -c 'npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=storybook:build'"
     },
     "dependencies": {
-        "@sberbusiness/icons-next": "1.0.0-alpha.01",
         "clsx": "2.1.1",
         "rc-util": "5.44.4"
     },

@@ -316,7 +316,7 @@ export const Basic: StoryObj<typeof MaskedInputField> = {
     parameters: {
         docs: {
             description: {
-                story: "Базовые примеры использования MaskedInputField с различными типами масок для ввода структурированных данных.",
+                story: "Базовый пример использования MaskedInputField.",
             },
         },
     },

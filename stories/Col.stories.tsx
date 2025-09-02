@@ -205,7 +205,7 @@ export const ResponsiveSizes: StoryObj = {
     name: "Responsive Sizes",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <Row style={{ width: "600px" }}>
+            <Row>
                 <Col sizeSm={6} sizeMd={5} sizeLg={4} sizeXl={3}>
                     <div
                         style={{
@@ -247,7 +247,7 @@ export const WithOffsets: StoryObj = {
     render: () => (
         <div style={{ display: "flex", flexDirection: "column" }}>
             <Row style={{ flexWrap: "nowrap" }}>
-                <Col size={8}>
+                <Col size={4}>
                     <div
                         style={{
                             padding: "16px",
@@ -255,11 +255,11 @@ export const WithOffsets: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        size-8
+                        size-4
                     </div>
                 </Col>
 
-                <Col size={8} offset={3}>
+                <Col size={4} offset={3}>
                     <div
                         style={{
                             padding: "16px",
@@ -267,13 +267,13 @@ export const WithOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        size-8 offset-3
+                        size-4 offset-3
                     </div>
                 </Col>
             </Row>
 
             <Row style={{ flexWrap: "nowrap" }}>
-                <Col size={6} offset={6}>
+                <Col size={3} offset={3}>
                     <div
                         style={{
                             padding: "16px",
@@ -281,11 +281,11 @@ export const WithOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        size-6 offset-6
+                        size-3 offset-3
                     </div>
                 </Col>
 
-                <Col size={6} offset={2}>
+                <Col size={3} offset={1}>
                     <div
                         style={{
                             padding: "16px",
@@ -293,13 +293,13 @@ export const WithOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        size-6 offset-2
+                        size-3 offset-1
                     </div>
                 </Col>
             </Row>
 
             <Row>
-                <Col size={12} offset={5}>
+                <Col size={6} offset={2}>
                     <div
                         style={{
                             padding: "16px",
@@ -307,7 +307,7 @@ export const WithOffsets: StoryObj = {
                             backgroundColor: "rgb(255, 217, 160)",
                         }}
                     >
-                        size-12 offset-5
+                        size-6 offset-2
                     </div>
                 </Col>
             </Row>
@@ -326,8 +326,8 @@ export const ResponsiveOffsets: StoryObj = {
     name: "Responsive Offsets",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Row style={{ width: "600px" }}>
-                <Col sizeMd={12} offsetMd={3}>
+            <Row>
+                <Col sizeMd={6} offsetMd={3}>
                     <div
                         style={{
                             padding: "16px",
@@ -335,14 +335,14 @@ export const ResponsiveOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        <div>sizeMd=12</div>
+                        <div>sizeMd=6</div>
                         <div>offsetMd=3</div>
                     </div>
                 </Col>
             </Row>
 
             <Row>
-                <Col sizeSm={12} offsetSm={4}>
+                <Col sizeSm={6} offsetSm={4}>
                     <div
                         style={{
                             padding: "16px",
@@ -350,7 +350,7 @@ export const ResponsiveOffsets: StoryObj = {
                             textAlign: "center",
                         }}
                     >
-                        <div>sizeSm=12</div>
+                        <div>sizeSm=6</div>
                         <div>offsetSm=4</div>
                     </div>
                 </Col>
@@ -407,6 +407,19 @@ export const HiddenColumns: StoryObj = {
                         }}
                     >
                         Свойство hidden установлено для экрана md
+                    </div>
+                    <Gap size={16} />
+                </Col>
+
+                <Col hiddenLg>
+                    <div
+                        style={{
+                            padding: "16px",
+                            backgroundColor: "rgb(255, 217, 160)",
+                            textAlign: "center",
+                        }}
+                    >
+                        Свойство hidden установлено для экрана lg
                     </div>
                     <Gap size={16} />
                 </Col>

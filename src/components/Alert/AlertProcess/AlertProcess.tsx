@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { EAlertType } from "../EAlertType";
 import { alertTypeToClassNameMap, renderDefaultIcon } from "../AlertTypeUtils";
-import { CloseSrvxIcon16 } from "@sberbusiness/icons-next/CloseSrvxIcon16";
-import { CaretdownSrvxIcon16 } from "@sberbusiness/icons-next/CaretdownSrvxIcon16";
+import { CloseSrvxIcon16, CaretdownSrvxIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { AlertProcessSpoiler } from "./components/AlertProcessSpoiler";
 import styles from "./styles/AlertProcess.module.less";

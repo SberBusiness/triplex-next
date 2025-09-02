@@ -4,31 +4,13 @@ import { describe, it, expect, vi } from "vitest";
 import { AlertProcess } from "../AlertProcess";
 import { EAlertType } from "../../EAlertType";
 
-vi.mock("@sberbusiness/icons-next/CloseSrvxIcon16", () => ({
+vi.mock("@sberbusiness/icons-next", () => ({
     CloseSrvxIcon16: () => <div data-testid="close-icon">CloseIcon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/CaretdownSrvxIcon16", () => ({
     CaretdownSrvxIcon16: () => <div data-testid="caret-icon">CaretIcon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/InfoStsIcon16", () => ({
     InfoStsIcon16: () => <div data-testid="info-icon">InfoIcon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/WarningStsIcon16", () => ({
     WarningStsIcon16: () => <div data-testid="warning-icon">WarningIcon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/ErrorStsIcon16", () => ({
     ErrorStsIcon16: () => <div data-testid="error-icon">ErrorIcon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/SystemStsIcon16", () => ({
     SystemStsIcon16: () => <div data-testid="system-icon">SystemIcon</div>,
-}));
-
-vi.mock("@sberbusiness/icons-next/DefaulticonPrdIcon20", () => ({
     DefaulticonPrdIcon20: () => <div data-testid="feature-icon">FeatureIcon</div>,
 }));
 

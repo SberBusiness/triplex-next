@@ -8,7 +8,7 @@ import { EFontType, ETextSize } from "../src/components/Typography/enums";
 import { Button } from "../src/components/Button";
 import { EButtonSize, EButtonTheme } from "../src/components/Button";
 import { Gap } from "../src/components/Gap";
-import { HintSrvIcon16 } from "@sberbusiness/icons-next/HintSrvIcon16";
+import HintSrvIcon16 from "@sberbusiness/icons-next/HintSrvIcon16";
 
 export default {
     title: "Components/AlertProcess",

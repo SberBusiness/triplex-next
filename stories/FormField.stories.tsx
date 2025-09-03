@@ -9,6 +9,7 @@ import {
     FormFieldPostfix,
     FormFieldDescription,
     FormFieldTextarea,
+    FormFieldMaskedInput,
 } from "../src/components/FormField";
 import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
@@ -28,6 +29,7 @@ export default {
 
 - **FormFieldInput** - текстовое поле ввода
 - **FormFieldTextarea** - многострочное поле ввода
+- **FormFieldMaskedInput** - поле ввода с маской (телефоны, карты, даты и др.)
 - **FormFieldLabel** - плавающий лейбл
 - **FormFieldClear** - кнопка очистки
 - **FormFieldPrefix/Postfix** - элементы слева/справа от поля
@@ -282,6 +284,76 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
         docs: {
             description: {
                 story: "FormField с многострочным полем ввода (textarea). Поддерживает все те же состояния, что и обычное поле.",
+            },
+        },
+    },
+};
+
+export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
+    render: () => {
+        const [phoneValue, setPhoneValue] = useState("");
+        const [cardValue, setCardValue] = useState("");
+
+        const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setPhoneValue(e.target.value);
+        };
+
+        const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setCardValue(e.target.value);
+        };
+
+        return (
+            <div style={{ width: "304px" }}>
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField>
+                            <FormFieldLabel>Номер телефона</FormFieldLabel>
+                            <FormFieldMaskedInput
+                                value={phoneValue}
+                                onChange={handlePhoneChange}
+                                mask={FormFieldMaskedInput.presets.masks.phone}
+                            />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                Описание поля
+                            </Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
+
+                <Gap size={24} />
+
+                <FormGroup>
+                    <FormGroupLine>
+                        <FormField>
+                            <FormFieldLabel>Номер карты</FormFieldLabel>
+                            <FormFieldMaskedInput
+                                value={cardValue}
+                                onChange={handleCardChange}
+                                mask={FormFieldMaskedInput.presets.masks.cardNumber}
+                                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
+                                placeholder="Введите номер карты"
+                            />
+                        </FormField>
+                    </FormGroupLine>
+                    <FormGroupLine>
+                        <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                Описание поля
+                            </Text>
+                        </FormFieldDescription>
+                    </FormGroupLine>
+                </FormGroup>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "FormField с маскированным вводом. Поддерживает различные предустановленные маски для телефонных номеров, номеров карт, дат и других форматов данных.",
             },
         },
     },

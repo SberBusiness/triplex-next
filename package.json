@@ -35,7 +35,8 @@
     },
     "dependencies": {
         "clsx": "2.1.1",
-        "rc-util": "5.44.4"
+        "rc-util": "5.44.4",
+        "react-text-mask": "5.5.0"
     },
     "devDependencies": {
         "@eslint/js": "9.31.0",
@@ -50,6 +51,7 @@
         "@types/node": "18.19.99",
         "@types/react": "18.3.1",
         "@types/react-dom": "18.3.1",
+        "@types/react-text-mask": "5.4.14",
         "@vitejs/plugin-react": "4.6.0",
         "@vitest/coverage-v8": "3.2.4",
         "autoprefixer": "10.4.21",

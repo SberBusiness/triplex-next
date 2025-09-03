@@ -26,6 +26,9 @@ export default tseslint.config(
     {
         files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
         ...react.configs.flat.recommended,
+        rules: {
+            "react/prop-types": "off",
+        },
     },
     // React-specific adds/overrides
     {
@@ -46,6 +49,13 @@ export default tseslint.config(
         files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
         languageOptions: {
             globals: globals.browser,
+        },
+    },
+    // Stories-specific overrides
+    {
+        files: ["stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+        rules: {
+            "react-hooks/rules-of-hooks": "off", // Disable hooks rules for stories
         },
     },
     {

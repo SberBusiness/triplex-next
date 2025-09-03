@@ -1,56 +1,24 @@
 import React from 'react';
 import {
-    FormField,
-    FormFieldDescription,
-    FormFieldLabel,
     FormFieldInput,
-    FormFieldPostfix,
-    FormFieldPrefix,
     IFormFieldInputProps,
-    IFormFieldProps,
-    FormGroup,
-    FormGroupLine,
 } from '../../components';
+import { ITextFieldBaseProps, TextFieldBase } from './TextFieldBase';
 
 /** Свойства TextField. */
-export interface ITextFieldProps extends Omit<IFormFieldProps, 'prefix' | 'postfix'> {
-    /** Описание поля ввода. */
-    description?: React.ReactNode;
-    /** Префикс поля ввода. */
-    prefix?: React.ReactNode;
-    /** Постфикс поля ввода. */
-    postfix?: React.ReactNode;
+export interface ITextFieldProps extends Omit<ITextFieldBaseProps, 'children'> {
     /** Свойства поля ввода. */
-    inputProps: IFormFieldInputProps & {ref?: React.RefObject<HTMLInputElement>};
-    /** Лейбл поля ввода. */
-    label?: React.ReactNode;
+    inputProps: IFormFieldInputProps & { ref?: React.RefObject<HTMLInputElement> };
 }
 
 /** Компонент текстового ввода.
  *  Является более компактным вариантом отображения инпутов, чем FormGroup.
  * */
-export const TextField: React.FC<ITextFieldProps> = ({description, inputProps, label, prefix, postfix, ...formFieldProps}) => {
-    return (
-        <FormGroup>
-            <FormGroupLine>
-                <FormField {...formFieldProps}>
-                    {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
+export const TextField: React.FC<ITextFieldProps> = ({ inputProps, ...textFieldBaseProps }) => (
+    <TextFieldBase {...textFieldBaseProps}>
+        <FormFieldInput {...inputProps} />
+    </TextFieldBase>
+);
 
-                    <FormFieldInput {...inputProps} />
-
-                    {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
-
-                    {postfix ? <FormFieldPostfix>{postfix}</FormFieldPostfix> : null}
-                </FormField>
-            </FormGroupLine>
-
-            {description ? (
-                <FormGroupLine>
-                    <FormFieldDescription>{description}</FormFieldDescription>
-                </FormGroupLine>
-            ) : null}
-        </FormGroup>
-    );
-};
 
 TextField.displayName = 'TextField';

@@ -7,10 +7,10 @@ import { EAlertType } from "../../EAlertType";
 vi.mock("@sberbusiness/icons-next", () => ({
     CloseSrvxIcon16: () => <div data-testid="close-icon">CloseIcon</div>,
     CaretdownSrvxIcon16: () => <div data-testid="caret-icon">CaretIcon</div>,
-    InfoStsIcon16: () => <div data-testid="info-icon">InfoIcon</div>,
-    WarningStsIcon16: () => <div data-testid="warning-icon">WarningIcon</div>,
-    ErrorStsIcon16: () => <div data-testid="error-icon">ErrorIcon</div>,
-    SystemStsIcon16: () => <div data-testid="system-icon">SystemIcon</div>,
+    InfoStsIcon20: () => <div data-testid="info-icon">InfoIcon</div>,
+    WarningStsIcon20: () => <div data-testid="warning-icon">WarningIcon</div>,
+    ErrorStsIcon20: () => <div data-testid="error-icon">ErrorIcon</div>,
+    SystemStsIcon20: () => <div data-testid="system-icon">SystemIcon</div>,
     DefaulticonPrdIcon20: () => <div data-testid="feature-icon">FeatureIcon</div>,
 }));
 
@@ -63,86 +63,76 @@ describe("AlertProcess", () => {
 
     it("Should render close button when closable is true", () => {
         render(<AlertProcess type={EAlertType.INFO} closable data-testid="alert" />);
-        expect(screen.getByTestId("close-icon")).toBeInTheDocument();
+        const closeButton = screen.getByRole("button");
+        expect(closeButton).toBeInTheDocument();
     });
 
     it("Should call onClose when close button is clicked", () => {
         const onClose = vi.fn();
         render(<AlertProcess type={EAlertType.INFO} closable onClose={onClose} data-testid="alert" />);
 
-        const closeButton = screen.getByTestId("close-icon").closest("button");
-        fireEvent.click(closeButton!);
+        const closeButton = screen.getByRole("button");
+        fireEvent.click(closeButton);
 
         expect(onClose).toHaveBeenCalledTimes(1);
     });
 
-    describe("Expandable Content", () => {
-        it("Should render expand button when expandableContent is provided", () => {
-            const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
-            render(<AlertProcess type={EAlertType.INFO} expandableContent={expandableContent} data-testid="alert" />);
+    it("Should hide alert when closed", () => {
+        const onClose = vi.fn();
+        const { rerender } = render(
+            <AlertProcess type={EAlertType.INFO} closable onClose={onClose} data-testid="alert" />,
+        );
 
-            expect(screen.getByTestId("caret-icon")).toBeInTheDocument();
-        });
+        expect(screen.getByTestId("alert")).toBeInTheDocument();
 
-        it("Should call onExpandableContentOpen when expand button is clicked", () => {
-            const onExpandableContentOpen = vi.fn();
-            const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
+        const closeButton = screen.getByRole("button");
+        fireEvent.click(closeButton);
 
-            render(
-                <AlertProcess
-                    type={EAlertType.INFO}
-                    expandableContent={expandableContent}
-                    onExpandableContentOpen={onExpandableContentOpen}
-                    data-testid="alert"
-                />,
-            );
+        rerender(<AlertProcess type={EAlertType.INFO} closable onClose={onClose} data-testid="alert" />);
+        expect(screen.queryByTestId("alert")).not.toBeInTheDocument();
+    });
 
-            const expandButton = screen.getByTestId("caret-icon").closest("button");
-            fireEvent.click(expandButton!);
+    it("Should render children content", () => {
+        const testContent = "Test alert content";
+        render(
+            <AlertProcess type={EAlertType.INFO} data-testid="alert">
+                {testContent}
+            </AlertProcess>,
+        );
 
-            expect(onExpandableContentOpen).toHaveBeenCalledWith(true);
-        });
+        expect(screen.getByText(testContent)).toBeInTheDocument();
+    });
 
-        it("Should render expandable content using renderSpoiler prop", () => {
-            const expandableContent = (
-                <div data-testid="expandable-content">
-                    <h3>Detailed Information</h3>
-                    <p>This is some detailed content that can be expanded.</p>
-                    <ul>
-                        <li>Item 1</li>
-                        <li>Item 2</li>
-                        <li>Item 3</li>
-                    </ul>
-                </div>
-            );
+    it("Should render with custom data-tx attribute", () => {
+        render(<AlertProcess type={EAlertType.INFO} data-testid="alert" />);
+        const alert = getAlert();
+        expect(alert).toHaveAttribute("data-tx");
+    });
+});
 
-            const renderSpoiler = () => (
-                <AlertProcess.Spoiler expandableContentOpen={true}>{expandableContent}</AlertProcess.Spoiler>
-            );
+describe("AlertProcess.Spoiler", () => {
+    it("Should render spoiler component", () => {
+        render(
+            <AlertProcess.Spoiler data-testid="spoiler">
+                <div>Spoiler content</div>
+            </AlertProcess.Spoiler>,
+        );
 
-            render(<AlertProcess type={EAlertType.INFO} renderSpoiler={renderSpoiler} data-testid="alert" />);
+        expect(screen.getByTestId("spoiler")).toBeInTheDocument();
+        expect(screen.getByText("Spoiler content")).toBeInTheDocument();
+    });
 
-            expect(screen.getByTestId("expandable-content")).toBeInTheDocument();
-            expect(screen.getByText("Detailed Information")).toBeInTheDocument();
-            expect(screen.getByText("This is some detailed content that can be expanded.")).toBeInTheDocument();
-            expect(screen.getByText("Item 1")).toBeInTheDocument();
-            expect(screen.getByText("Item 2")).toBeInTheDocument();
-            expect(screen.getByText("Item 3")).toBeInTheDocument();
-        });
+    it("Should call onOpen when expand button is clicked", () => {
+        const onOpen = vi.fn();
+        render(
+            <AlertProcess.Spoiler onOpen={onOpen} data-testid="spoiler">
+                <div>Spoiler content</div>
+            </AlertProcess.Spoiler>,
+        );
 
-        it("Should render AlertProcessSpoiler component with correct props", () => {
-            const expandableContent = <div data-testid="expandable-content">Expandable content</div>;
-            const renderSpoiler = () => (
-                <AlertProcess.Spoiler expandableContentOpen={true} data-testid="spoiler">
-                    {expandableContent}
-                </AlertProcess.Spoiler>
-            );
+        const expandButton = screen.getByTestId("caret-icon").closest("button");
+        fireEvent.click(expandButton!);
 
-            render(<AlertProcess type={EAlertType.INFO} renderSpoiler={renderSpoiler} data-testid="alert" />);
-
-            const spoiler = screen.getByTestId("spoiler");
-            expect(spoiler).toBeInTheDocument();
-            expect(spoiler).toHaveClass("expanded");
-        });
+        expect(onOpen).toHaveBeenCalledWith(true);
     });
 });

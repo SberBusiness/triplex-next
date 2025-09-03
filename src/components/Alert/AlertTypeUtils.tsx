@@ -1,10 +1,10 @@
 import React from "react";
 import { EAlertType } from "./EAlertType";
 import {
-    InfoStsIcon16,
-    WarningStsIcon16,
-    ErrorStsIcon16,
-    SystemStsIcon16,
+    InfoStsIcon20,
+    WarningStsIcon20,
+    ErrorStsIcon20,
+    SystemStsIcon20,
     DefaulticonPrdIcon20,
 } from "@sberbusiness/icons-next";
 
@@ -18,7 +18,7 @@ export function renderDefaultIcon(type: EAlertType): JSX.Element {
         case EAlertType.ERROR:
             return <ErrorStrokeStsIcon16 paletteIndex={1} />;
         case EAlertType.SYSTEM:
-            return <SystemStsIcon16 />;
+            return <SystemStsIcon20 />;
         case EAlertType.FEATURE:
             return <DefaulticonPrdIcon20 />;
     }

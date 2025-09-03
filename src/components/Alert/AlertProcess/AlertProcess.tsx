@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { EAlertType } from "../EAlertType";
 import { alertTypeToClassNameMap, renderDefaultIcon } from "../AlertTypeUtils";
-import { CloseSrvxIcon16, CaretdownSrvxIcon16 } from "@sberbusiness/icons-next";
+import CloseSrvxIcon16 from "@sberbusiness/icons-next/CloseSrvxIcon16";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { AlertProcessSpoiler } from "./components/AlertProcessSpoiler";
 import styles from "./styles/AlertProcess.module.less";
@@ -13,36 +13,16 @@ export interface IAlertProcessProps extends React.HTMLAttributes<HTMLDivElement>
     type: EAlertType;
     /** Модификатор возможности закрытия предупреждения. */
     closable?: boolean;
-    /** Контент спойлера. */
-    expandableContent?: React.ReactNode;
-    /** Флаг открытия или закрытия спойлера. */
-    expandableContentOpen?: boolean;
-    /** Функция обработки открытия или закрытия спойлера. */
-    onExpandableContentOpen?: (expanded: boolean) => void;
     /** Функция обработки закрытия. */
     onClose?: () => void;
     /** Отображаемая иконка. */
     renderIcon?: React.ReactNode;
-    /** Рендер-функция спойлера. */
-    renderSpoiler?: () => React.ReactNode;
 }
 
 /** Компонент процессного предупреждения. */
 export const AlertProcess = Object.assign(
     React.forwardRef<HTMLDivElement, IAlertProcessProps>(function AlertProcess(
-        {
-            children,
-            className,
-            type,
-            renderIcon,
-            expandableContent,
-            expandableContentOpen = false,
-            closable = false,
-            onClose,
-            onExpandableContentOpen,
-            renderSpoiler,
-            ...rest
-        },
+        { children, className, type, renderIcon, closable = false, onClose, ...rest },
         ref,
     ) {
         const [closed, setClosed] = useState(false);
@@ -56,10 +36,6 @@ export const AlertProcess = Object.assign(
             onClose?.();
         };
 
-        const handleExpand = () => {
-            onExpandableContentOpen?.(!expandableContentOpen);
-        };
-
         return (
             <div
                 className={clsx(styles.alertProcess, alertTypeToClassNameMap[type](styles), className)}
@@ -69,29 +45,15 @@ export const AlertProcess = Object.assign(
             >
                 <div className={styles.themeIcon}>{renderIcon ? renderIcon : renderDefaultIcon(type)}</div>
 
-                <div className={styles.alertProcessContentBlock}>
-                    {children}
+                <div className={styles.alertProcessContentBlock}>{children}</div>
 
-                    {renderSpoiler?.()}
-                </div>
-
-                <div className={styles.alertControls}>
-                    {closable && (
-                        <div className={styles.closeButton}>
-                            <ButtonIcon onClick={handleClose}>
-                                <CloseSrvxIcon16 />
-                            </ButtonIcon>
-                        </div>
-                    )}
-
-                    {expandableContent && (
-                        <div className={clsx(styles.expandButton, { [styles.active]: expandableContentOpen })}>
-                            <ButtonIcon onClick={handleExpand}>
-                                <CaretdownSrvxIcon16 />
-                            </ButtonIcon>
-                        </div>
-                    )}
-                </div>
+                {closable && (
+                    <div className={styles.closeButton}>
+                        <ButtonIcon onClick={handleClose}>
+                            <CloseSrvxIcon16 />
+                        </ButtonIcon>
+                    </div>
+                )}
             </div>
         );
     }),

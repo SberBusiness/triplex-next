@@ -8,7 +8,7 @@ import { EFontType, ETextSize } from "../src/components/Typography/enums";
 import { Button } from "../src/components/Button";
 import { EButtonSize, EButtonTheme } from "../src/components/Button";
 import { Gap } from "../src/components/Gap";
-import HintSrvIcon16 from "@sberbusiness/icons-next/HintSrvIcon16";
+import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
 
 export default {
     title: "Components/AlertProcess",
@@ -93,7 +93,6 @@ export const Playground: StoryObj<typeof AlertProcess> = {
         ),
         type: EAlertType.INFO,
         closable: false,
-        expandableContentOpen: false,
         onClose: action("onClose"),
     },
     argTypes: {
@@ -113,27 +112,6 @@ export const Playground: StoryObj<typeof AlertProcess> = {
                 defaultValue: { summary: "false" },
             },
         },
-        expandableContent: {
-            control: { type: "text" },
-            description: "Контент спойлера",
-            table: {
-                type: { summary: "React.ReactNode" },
-            },
-        },
-        expandableContentOpen: {
-            control: { type: "boolean" },
-            if: { arg: "expandableContent" },
-            description: "Начальное состояние спойлера",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        onExpandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
         children: {
             control: { type: "text" },
             description: "Содержимое предупреждения (используйте Typography компоненты)",
@@ -142,11 +120,6 @@ export const Playground: StoryObj<typeof AlertProcess> = {
             },
         },
         renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        renderSpoiler: {
             table: {
                 disable: true,
             },
@@ -179,27 +152,7 @@ export const Default: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        expandableContent: {
-            table: {
-                disable: true,
-            },
-        },
-        expandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
-        onExpandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
         renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        renderSpoiler: {
             table: {
                 disable: true,
             },
@@ -254,27 +207,7 @@ export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        expandableContent: {
-            table: {
-                disable: true,
-            },
-        },
-        expandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
-        onExpandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
         renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        renderSpoiler: {
             table: {
                 disable: true,
             },
@@ -287,7 +220,7 @@ export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
     },
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
-            <AlertProcess type={EAlertType.INFO} renderIcon={<HintSrvIcon16 />}>
+            <AlertProcess type={EAlertType.INFO} renderIcon={<DefaulticonPrdIcon20 />}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                     This message provides context or highlights important information to note.
                 </Text>
@@ -323,27 +256,7 @@ export const Closable: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        expandableContent: {
-            table: {
-                disable: true,
-            },
-        },
-        expandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
-        onExpandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
         renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        renderSpoiler: {
             table: {
                 disable: true,
             },
@@ -398,27 +311,7 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        expandableContent: {
-            table: {
-                disable: true,
-            },
-        },
-        expandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
-        onExpandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
         renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        renderSpoiler: {
             table: {
                 disable: true,
             },
@@ -442,15 +335,6 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
 
 export const Spoiler: StoryObj<typeof AlertProcess> = {
     name: "Spoiler",
-    args: {
-        expandableContent: (
-            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать заявления, а также
-                заверять документы, имеет право генеральный директор на основании устава, владалец ИП на основании
-                доверенности.
-            </Text>
-        ),
-    },
     argTypes: {
         type: {
             table: {
@@ -467,27 +351,7 @@ export const Spoiler: StoryObj<typeof AlertProcess> = {
                 disable: true,
             },
         },
-        expandableContent: {
-            table: {
-                disable: true,
-            },
-        },
-        expandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
-        onExpandableContentOpen: {
-            table: {
-                disable: true,
-            },
-        },
         renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        renderSpoiler: {
             table: {
                 disable: true,
             },
@@ -498,22 +362,25 @@ export const Spoiler: StoryObj<typeof AlertProcess> = {
             },
         },
     },
-    render: function Render(args) {
+    render: function Render() {
         const [expanded, setExpanded] = useState(false);
 
-        const renderSpoiler = () => (
-            <AlertProcess.Spoiler expandableContentOpen={expanded}>{args.expandableContent}</AlertProcess.Spoiler>
-        );
-
         return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
-                <AlertProcess
-                    type={EAlertType.INFO}
-                    onExpandableContentOpen={setExpanded}
-                    expandableContentOpen={expanded}
-                    expandableContent={args.expandableContent}
-                    renderSpoiler={renderSpoiler}
-                />
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <AlertProcess type={EAlertType.INFO} closable>
+                    <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                        Контент до спойлера
+                    </Text>
+                    <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
+                        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                            У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать
+                            заявления, а также заверять документы, имеет право генеральный директор на основании устава,
+                            владалец ИП на основании доверенности. У вас нет прав на подписание и отправку заявления в
+                            страховую компанию. Подписывать заявления, а также заверять документы, имеет право
+                            генеральный директор на основании устава, владалец ИП на основании доверенности.
+                        </Text>
+                    </AlertProcess.Spoiler>
+                </AlertProcess>
             </div>
         );
     },

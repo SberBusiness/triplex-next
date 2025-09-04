@@ -366,22 +366,19 @@ export const Spoiler: StoryObj<typeof AlertProcess> = {
         const [expanded, setExpanded] = useState(false);
 
         return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                <AlertProcess type={EAlertType.INFO} closable>
+            <AlertProcess type={EAlertType.INFO}>
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                    Контент до спойлера
+                </Text>
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}></Text>
+                <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
                     <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                        Контент до спойлера
+                        У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать заявления, а
+                        также заверять документы, имеет право генеральный директор на основании устава, владалец ИП на
+                        основании доверенности.
                     </Text>
-                    <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
-                        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                            У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать
-                            заявления, а также заверять документы, имеет право генеральный директор на основании устава,
-                            владалец ИП на основании доверенности. У вас нет прав на подписание и отправку заявления в
-                            страховую компанию. Подписывать заявления, а также заверять документы, имеет право
-                            генеральный директор на основании устава, владалец ИП на основании доверенности.
-                        </Text>
-                    </AlertProcess.Spoiler>
-                </AlertProcess>
-            </div>
+                </AlertProcess.Spoiler>
+            </AlertProcess>
         );
     },
 };

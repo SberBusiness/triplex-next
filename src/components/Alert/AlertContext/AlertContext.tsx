@@ -1,10 +1,11 @@
 import React from "react";
 import { EAlertType } from "../EAlertType";
-import { alertTypeToClassNameMap, renderDefaultIcon } from "../AlertTypeUtils";
-import clsx from "clsx";
-import styles from "./styles/AlertContext.module.less";
+import { alertTypeToClassNameMap } from "../AlertTypeUtils";
 import { Text } from "../../Typography/Text";
 import { EFontType, ETextSize } from "../../Typography/enums";
+import { InfoStsIcon16, WarningStsIcon16, ErrorStsIcon16, SystemStsIcon16 } from "@sberbusiness/icons-next";
+import clsx from "clsx";
+import styles from "./styles/AlertContext.module.less";
 
 /** Свойства компонента AlertContext. */
 export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -13,6 +14,19 @@ export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement
     /** Отображаемая иконка. */
     renderIcon?: React.ReactNode;
 }
+
+const renderDefaultIcon = (type: Exclude<EAlertType, EAlertType.FEATURE>): JSX.Element => {
+    switch (type) {
+        case EAlertType.INFO:
+            return <InfoStsIcon16 />;
+        case EAlertType.WARNING:
+            return <WarningStsIcon16 />;
+        case EAlertType.ERROR:
+            return <ErrorStsIcon16 />;
+        case EAlertType.SYSTEM:
+            return <SystemStsIcon16 />;
+    }
+};
 
 /** Маппинг типов предупреждений к типам шрифтов. */
 const alertTypeToFontTypeMap: Record<Exclude<EAlertType, EAlertType.FEATURE>, EFontType> = {
@@ -28,7 +42,7 @@ export const AlertContext = React.forwardRef<HTMLSpanElement, IAlertContextProps
         return (
             <span
                 role="alert"
-                className={clsx(styles.alertContext, alertTypeToClassNameMap[type], className)}
+                className={clsx(styles.alertContext, alertTypeToClassNameMap[type](styles), className)}
                 {...rest}
                 data-tx={process.env.npm_package_version}
                 ref={ref}

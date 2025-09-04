@@ -6,6 +6,10 @@
     border-radius: 8px;
     position: relative;
 
+    &.withSpoiler {
+        min-height: 40px;
+    }
+
     .themeIcon {
         padding-top: 2px;
         box-sizing: border-box;
@@ -42,12 +46,14 @@
         margin-left: 8px;
 
         .expandableContent {
-            &:not(.expanded) {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                word-break: break-word;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+
+            &.expanded {
+                max-height: 1000px;
+                opacity: 1;
             }
         }
     }
@@ -59,17 +65,16 @@
     .expandButton {
         position: absolute;
         right: 16px;
-        top: 40px;
+        bottom: 16px;
         height: 16px;
         width: 16px;
         transition: transform 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        &.active {
+        &.expanded {
             transform: rotate(180deg);
         }
-    }
-
-    .spoiler {
-        display: flex;
     }
 }

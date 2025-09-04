@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { CaretdownSrvxIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../../../Button/ButtonIcon";
+import { AlertProcessContext } from "../AlertProcessContext";
+
 import styles from "../styles/AlertProcess.module.less";
 import clsx from "clsx";
 
@@ -14,6 +16,16 @@ export interface IAlertProcessSpoilerProps extends React.HTMLAttributes<HTMLDivE
 
 /** Спойлер компонента AlertProcess. */
 export const AlertProcessSpoiler: React.FC<IAlertProcessSpoilerProps> = ({ children, open, onOpen, ...rest }) => {
+    const { setHasSpoiler } = useContext(AlertProcessContext);
+
+    useEffect(() => {
+        setHasSpoiler(true);
+
+        return () => {
+            setHasSpoiler(false);
+        };
+    }, [setHasSpoiler]);
+
     const handleToggle = () => {
         onOpen?.(!open);
     };
@@ -24,7 +36,7 @@ export const AlertProcessSpoiler: React.FC<IAlertProcessSpoilerProps> = ({ child
                 {children}
             </div>
 
-            <div className={clsx(styles.expandButton, { [styles.active]: open })}>
+            <div className={clsx(styles.expandButton, { [styles.expanded]: open })}>
                 <ButtonIcon onClick={handleToggle}>
                     <CaretdownSrvxIcon16 />
                 </ButtonIcon>

@@ -15,7 +15,7 @@ export default {
 ## Особенности
 
 - **Размеры**: medium (MD), large (LG)
-- **Группировка**: поддержка группировки по осям X (CheckboxXGroup) и Y (CheckboxYGroup)
+- **Группировка**: по осям X (компонент CheckboxXGroup) и Y (компонент CheckboxYGroup)
 
 ## Использование
 
@@ -36,6 +36,24 @@ import { Checkbox } from '../src/components/Checkbox/Checkbox';
 <Checkbox disabled>
     Недоступная опция
 </Checkbox>
+
+// Группа чекбоксов с направлением по оси X
+<CheckboxXGroup>
+    {[1, 2, 3].map((value, index) => (
+        <Checkbox key={index} value={value}>
+            Вариант - {index + 1}
+        </Checkbox>
+    ))}
+</CheckboxXGroup>
+
+// Группа чекбоксов с направлением по оси Y
+<CheckboxYGroup>
+    {[1, 2, 3, 4].map((value, index) => (
+        <Checkbox key={index} value={value}>
+            Вариант - {index + 1}
+        </Checkbox>
+    ))}
+</CheckboxYGroup>
 \`\`\`
                 `,
             },
@@ -54,7 +72,7 @@ export const Playground: StoryObj<typeof Checkbox> = {
     argTypes: {
         children: {
             control: { type: "text" },
-            description: "Текст метки чекбокса",
+            description: "Контент лейбла чекбокса",
             table: {
                 type: { summary: "React.ReactNode" },
             },

@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useRef, useState, useCallback } from "react";
 import clsx from "clsx";
 import MaskedInputTextMask, { conformToMask, MaskedInputProps, PipeConfig } from "react-text-mask";
-import { presets, TFormFieldMaskedInputPresets } from "./formFieldMaskedInputPresets";
-import { FormFieldInput } from "./FormFieldInput";
+import { presets, TFormFieldMaskedInputPresets } from "./FormFieldMaskedInputPresets";
+import { FormFieldInput } from "@sberbusiness/triplex-next";
 import { FormFieldContext } from "../FormFieldContext";
 import stylesFormFieldInput from "../styles/FormFieldInput.module.less";
 import styles from "../styles/FormFieldMaskedInput.module.less";

@@ -1,44 +1,12 @@
 import React from "react";
+import clsx from "clsx";
 import { StoryObj } from "@storybook/react";
+import * as icons from "@sberbusiness/icons-next";
 
-import {
-    WarningStsIcon16,
-    WarningStsIcon20,
-    SystemStsIcon16,
-    SystemStsIcon20,
-    WaitStsIcon16,
-    WaitStsIcon20,
-    SuccessStsIcon16,
-    SuccessStsIcon20,
-    InfoStsIcon16,
-    InfoStsIcon20,
-    ErrorStsIcon16,
-    ErrorStsIcon20,
-    RubStsIcon20,
-    HintSrvIcon16,
-    CloseSrvxIcon16,
-    CloseSrvxIcon24,
-    ClosewhiteSrvxIcon16,
-    ClosewhiteSrvxIcon24,
-    CloseinversionSrvxIcon16,
-    CloseinversionSrvxIcon24,
-    CaretupSrvxIcon16,
-    CaretupSrvxIcon24,
-    CaretupwhiteSrvxIcon16,
-    CaretupwhiteSrvxIcon20,
-    CaretupwhiteSrvxIcon24,
-    CaretdownSrvxIcon16,
-    CaretdownSrvxIcon24,
-    CaretdownwhiteSrvxIcon16,
-    CaretdownwhiteSrvxIcon20,
-    CaretdownwhiteSrvxIcon24,
-    DefaulticonPrdIcon20,
-    DefaulticonPrdIcon24,
-    DefaulticonPrdIcon32,
-} from "@sberbusiness/icons-next";
+const paletteIndexes = Array.from(Array(8).keys());
 
 export default {
-    title: "Components/Icons",
+    title: "Icons/Icons",
     parameters: {
         docs: {
             description: {
@@ -48,95 +16,210 @@ export default {
 ## Использование
 
 \`\`\`tsx
-import { WarningStsIcon16 } from '@sberbusiness/icons-next/WarningStsIcon16';
+import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
 
-function MyComponent() {
-    return <WarningStsIcon16 />;
-}
+<DefaulticonStrokePrdIcon32 paletteIndex={0} />;
 \`\`\`
                 `,
             },
         },
     },
     tags: ["autodocs"],
+    argTypes: {
+        paletteIndex: {
+            control: { type: "select" },
+            options: paletteIndexes,
+            description: "Индекс цветовой палитры для изменения заливки иконки.",
+        },
+    },
 };
 
-const IconDisplay: React.FC<{
-    icon: React.ComponentType<unknown>;
+interface IIconItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    inverted: boolean;
+    hoverable: boolean;
+}
+
+const IconItem: React.FC<React.PropsWithChildren<IIconItemProps>> = ({
+    className,
+    inverted,
+    hoverable,
+    ...restProps
+}) => <button className={clsx("icon-item", className, { inverted, hoverable })} {...restProps} />;
+
+interface IIconDisplayProps extends IIconItemProps {
     name: string;
-    size?: string;
-}> = ({ icon: Icon, name }) => (
-    <div className="hoverable icons-item-example">
-        <Icon />
-        <div>{name}</div>
+}
+
+const IconDisplay: React.FC<React.PropsWithChildren<IIconDisplayProps>> = ({ children, name, ...restProps }) => (
+    <div className="icon-display">
+        <IconItem className="icon-display-target" {...restProps}>
+            {children}
+        </IconItem>
+        <div className="icon-display-name">{name}</div>
     </div>
 );
 
-export const StatusIcons: StoryObj = {
-    render: () => (
-        <div>
-            <h3 style={{ marginBottom: "16px" }}>Status Icons</h3>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-                    gap: "16px",
-                }}
-            >
-                <IconDisplay icon={WarningStsIcon16} name="WarningStsIcon16" size="16px" />
-                <IconDisplay icon={WarningStsIcon20} name="WarningStsIcon20" size="20px" />
-                <IconDisplay icon={WaitStsIcon16} name="WaitStsIcon16" size="16px" />
-                <IconDisplay icon={WaitStsIcon20} name="WaitStsIcon20" size="20px" />
-                <IconDisplay icon={SystemStsIcon16} name="SystemStsIcon16" size="16px" />
-                <IconDisplay icon={SystemStsIcon20} name="SystemStsIcon20" size="20px" />
-                <IconDisplay icon={SuccessStsIcon16} name="SuccessStsIcon16" size="16px" />
-                <IconDisplay icon={SuccessStsIcon20} name="SuccessStsIcon20" size="20px" />
-                <IconDisplay icon={InfoStsIcon16} name="InfoStsIcon16" size="16px" />
-                <IconDisplay icon={InfoStsIcon20} name="InfoStsIcon20" size="20px" />
-                <IconDisplay icon={ErrorStsIcon16} name="ErrorStsIcon16" size="16px" />
-                <IconDisplay icon={ErrorStsIcon20} name="ErrorStsIcon20" size="20px" />
-                <IconDisplay icon={RubStsIcon20} name="RubStsIcon20" size="20px" />
-            </div>
-        </div>
-    ),
+interface IIconStoryArgs extends Pick<icons.ISingleColorIconProps, "paletteIndex"> {
+    hoverable: boolean;
+    disabled: boolean;
+}
+
+export const Default: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+    },
+    render: ({ paletteIndex }) => {
+        const { DefaulticonStrokePrdIcon32 } = icons;
+        const inverted = paletteIndex === 6;
+
+        return (
+            <IconItem inverted={inverted} hoverable={true}>
+                <DefaulticonStrokePrdIcon32 paletteIndex={paletteIndex} />
+            </IconItem>
+        );
+    },
     parameters: {
         docs: {
-            description: {
-                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки.",
+            canvas: {
+                sourceState: "none",
             },
         },
     },
 };
 
-export const ServiceIcons: StoryObj = {
-    render: () => (
-        <div>
-            <h3 style={{ marginBottom: "16px" }}>Service Icons</h3>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-                    gap: "16px",
-                }}
-            >
-                <IconDisplay icon={HintSrvIcon16} name="HintSrvIcon16" size="16px" />
-                <IconDisplay icon={CloseSrvxIcon16} name="CloseSrvxIcon16" size="16px" />
-                <IconDisplay icon={CloseSrvxIcon24} name="CloseSrvxIcon24" size="24px" />
-                <IconDisplay icon={ClosewhiteSrvxIcon16} name="ClosewhiteSrvxIcon16" size="16px" />
-                <IconDisplay icon={ClosewhiteSrvxIcon24} name="ClosewhiteSrvxIcon24" size="24px" />
-                <IconDisplay icon={CloseinversionSrvxIcon16} name="CloseinversionSrvxIcon16" size="16px" />
-                <IconDisplay icon={CloseinversionSrvxIcon24} name="CloseinversionSrvxIcon24" size="24px" />
-                <IconDisplay icon={CaretupSrvxIcon16} name="CaretupSrvxIcon16" size="16px" />
-                <IconDisplay icon={CaretupSrvxIcon24} name="CaretupSrvxIcon24" size="24px" />
-                <IconDisplay icon={CaretupwhiteSrvxIcon16} name="CaretupwhiteSrvxIcon16" size="16px" />
-                <IconDisplay icon={CaretupwhiteSrvxIcon20} name="CaretupwhiteSrvxIcon20" size="20px" />
-                <IconDisplay icon={CaretupwhiteSrvxIcon24} name="CaretupwhiteSrvxIcon24" size="24px" />
-                <IconDisplay icon={CaretdownSrvxIcon16} name="CaretdownSrvxIcon16" size="16px" />
-                <IconDisplay icon={CaretdownSrvxIcon24} name="CaretdownSrvxIcon24" size="24px" />
-                <IconDisplay icon={CaretdownwhiteSrvxIcon16} name="CaretdownwhiteSrvxIcon16" size="16px" />
-                <IconDisplay icon={CaretdownwhiteSrvxIcon20} name="CaretdownwhiteSrvxIcon20" size="20px" />
-                <IconDisplay icon={CaretdownwhiteSrvxIcon24} name="CaretdownwhiteSrvxIcon24" size="24px" />
+export const Palettes: StoryObj<IIconStoryArgs> = {
+    args: {
+        hoverable: true,
+        disabled: false,
+    },
+    argTypes: {
+        paletteIndex: {
+            control: false,
+        },
+    },
+    render: (args) => {
+        const { DefaulticonStrokePrdIcon32 } = icons;
+
+        return (
+            <div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>0</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={0} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>1</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={1} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>2</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={2} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>3</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={3} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>4</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={4} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>5</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={5} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>6</div>
+                    <IconItem inverted={true} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={6} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>7</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={7} />
+                    </IconItem>
+                </div>
             </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Возможные индексы цветовой палитры для изменения заливки иконки.",
+            },
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
+export const StatusIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {Object.keys(icons).map((key) => {
+                if (key.match(/StsIcon/)) {
+                    const Icon = icons[key];
+                    const inverted = paletteIndex === 6;
+
+                    return (
+                        <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                            <Icon paletteIndex={paletteIndex} />
+                        </IconDisplay>
+                    );
+                }
+            })}
+        </div>
+    ),
+
+    parameters: {
+        docs: {
+            description: {
+                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки.",
+            },
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
+export const ServiceIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {Object.keys(icons).map((key) => {
+                if (key.match(/SrvIcon/)) {
+                    const Icon = icons[key];
+                    const inverted = paletteIndex === 6;
+
+                    return (
+                        <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                            <Icon paletteIndex={paletteIndex} />
+                        </IconDisplay>
+                    );
+                }
+            })}
         </div>
     ),
     parameters: {
@@ -144,31 +227,42 @@ export const ServiceIcons: StoryObj = {
             description: {
                 story: "Иконки для интерфейсных элементов и навигации: подсказки, закрытие (различные варианты), стрелки вверх и вниз.",
             },
+            canvas: {
+                sourceState: "none",
+            },
         },
     },
 };
 
-export const ProductIcons: StoryObj = {
-    render: () => (
-        <div>
-            <h3 style={{ marginBottom: "16px" }}>Product Icons</h3>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-                    gap: "16px",
-                }}
-            >
-                <IconDisplay icon={DefaulticonPrdIcon20} name="DefaulticonPrdIcon20" size="20px" />
-                <IconDisplay icon={DefaulticonPrdIcon24} name="DefaulticonPrdIcon24" size="24px" />
-                <IconDisplay icon={DefaulticonPrdIcon32} name="DefaulticonPrdIcon32" size="32px" />
-            </div>
+export const ProductIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {Object.keys(icons).map((key) => {
+                if (key.match(/PrdIcon/)) {
+                    const Icon = icons[key];
+                    const inverted = paletteIndex === 6;
+
+                    return (
+                        <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                            <Icon paletteIndex={paletteIndex} />
+                        </IconDisplay>
+                    );
+                }
+            })}
         </div>
     ),
     parameters: {
         docs: {
             description: {
                 story: "Иконки для продуктов: стандартная иконка продукта в различных размерах.",
+            },
+            canvas: {
+                sourceState: "none",
             },
         },
     },

@@ -4,10 +4,10 @@ import { AlertContext } from "../AlertContext";
 import { EAlertType } from "../../EAlertType";
 
 vi.mock("@sberbusiness/icons-next", () => ({
-    InfoStsIcon16: () => <div data-testid="info-icon">Info Icon</div>,
-    WarningStsIcon16: () => <div data-testid="warning-icon">Warning Icon</div>,
-    ErrorStsIcon16: () => <div data-testid="error-icon">Error Icon</div>,
-    SystemStsIcon16: () => <div data-testid="system-icon">System Icon</div>,
+    InfoStrokeStsIcon16: () => <div data-testid="info-icon">Info Icon</div>,
+    WarningStrokeStsIcon16: () => <div data-testid="warning-icon">Warning Icon</div>,
+    ErrorStrokeStsIcon16: () => <div data-testid="error-icon">Error Icon</div>,
+    SystemStrokeStsIcon16: () => <div data-testid="system-icon">System Icon</div>,
 }));
 
 describe("AlertContext", () => {

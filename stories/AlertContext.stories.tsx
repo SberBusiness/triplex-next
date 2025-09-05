@@ -2,7 +2,7 @@ import React from "react";
 import { AlertContext } from "../src/components/Alert/AlertContext/AlertContext";
 import { StoryObj } from "@storybook/react";
 import { EAlertType } from "../src/components/Alert/EAlertType";
-import WaitStsIcon16 from "@sberbusiness/icons-next/WaitStsIcon16";
+import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
 
 export default {
     title: "Components/AlertContext",
@@ -174,7 +174,7 @@ export const WithCustomIcon: StoryObj<typeof AlertContext> = {
     },
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <AlertContext type={EAlertType.INFO} renderIcon={<WaitStsIcon16 />}>
+            <AlertContext type={EAlertType.INFO} renderIcon={<WaitStrokeStsIcon16 paletteIndex={4} />}>
                 This message provides context or highlights important information to note.
             </AlertContext>
         </div>

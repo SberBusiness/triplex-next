@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import CloseSrvxIcon16 from "@sberbusiness/icons-next/CloseSrvxIcon16";
+import { CrossStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { FormFieldContext } from "../FormFieldContext";
 import clsx from "clsx";
 import styles from "../styles/FormFieldClear.module.less";
@@ -34,7 +34,7 @@ export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearP
 
         return (
             <span className={classNames} ref={ref} onClick={handleClick} {...htmlLabelAttributes}>
-                <CloseSrvxIcon16 />
+                <CrossStrokeSrvIcon16 paletteIndex={5} />
             </span>
         );
     },

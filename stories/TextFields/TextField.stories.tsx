@@ -4,7 +4,7 @@ import { TextField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType } from "../../src/components/Typography";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldClear } from "../../src/components";
-import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 export default {
     title: "Components/TextFields/TextField",
@@ -253,8 +253,8 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
                             Описание поля
                         </Text>
                     }
-                    prefix={<DefaulticonPrdIcon20 />}
-                    postfix={<DefaulticonPrdIcon20 />}
+                    prefix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                    postfix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
                     inputProps={{
                         value: value,
                         onChange: handleChange,

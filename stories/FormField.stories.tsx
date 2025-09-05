@@ -14,8 +14,8 @@ import {
 import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
-import HintSrvIcon16 from "@sberbusiness/icons-next/HintSrvIcon16";
-import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
+import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 export default {
     title: "Components/FormField",
@@ -79,13 +79,13 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
             <div style={{ width: "304px" }}>
                 <FormField>
                     <FormFieldPrefix>
-                        <DefaulticonPrdIcon20 />
+                        <DefaulticonStrokePrdIcon20 paletteIndex={5} />
                     </FormFieldPrefix>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} />
                     <FormFieldPostfix>
-                        <HintSrvIcon16 />
-                        <DefaulticonPrdIcon20 />
+                        <HintFilledSrvIcon16 paletteIndex={5} />
+                        <DefaulticonStrokePrdIcon20 paletteIndex={5} />
                     </FormFieldPostfix>
                 </FormField>
             </div>
@@ -271,6 +271,9 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
                     </FormGroupLine>
                     <FormGroupLine>
                         <FormFieldDescription>
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                Описание поля
+                            </Text>
                             <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
                                 Описание поля
                             </Text>

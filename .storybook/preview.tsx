@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { ThemeProvider, ETriplexNextTheme } from "../src/components/ThemeProvider";
-import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next/ThemeProvider";
+import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next";
 import React from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import "./storybook.css";

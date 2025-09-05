@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
     FormField,
     FormFieldDescription,
@@ -7,15 +7,17 @@ import {
     FormFieldPrefix,
     IFormFieldProps,
     FormGroup,
-    FormGroupLine,
-} from '../../components';
+    FormFieldCounter,
+} from "../../components";
 
 /** Свойства TextFieldBase. */
-export interface ITextFieldBaseProps extends Omit<IFormFieldProps, 'prefix' | 'postfix'> {
+export interface ITextFieldBaseProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
     /** Дочерние элементы. */
     children: React.ReactNode;
     /** Описание поля ввода. */
     description?: React.ReactNode;
+    /** Счетчик символов. */
+    counter?: React.ReactNode;
     /** Префикс поля ввода. */
     prefix?: React.ReactNode;
     /** Постфикс поля ввода. */
@@ -25,28 +27,33 @@ export interface ITextFieldBaseProps extends Omit<IFormFieldProps, 'prefix' | 'p
 }
 
 /** Компонент текстового ввода, на основе которого реализуются TextField и MaskedInputField. */
-export const TextFieldBase: React.FC<ITextFieldBaseProps> = ({children, description, label, prefix, postfix, ...formFieldProps}) => {
-    return (
-        <FormGroup>
-            <FormGroupLine>
-                <FormField {...formFieldProps}>
-                    {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
+export const TextFieldBase: React.FC<ITextFieldBaseProps> = ({
+    children,
+    description,
+    label,
+    prefix,
+    postfix,
+    counter,
+    ...formFieldProps
+}) => (
+    <FormGroup>
+        <FormField {...formFieldProps}>
+            {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
 
-                    {children}
+            {children}
 
-                    {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
+            {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
 
-                    {postfix ? <FormFieldPostfix>{postfix}</FormFieldPostfix> : null}
-                </FormField>
-            </FormGroupLine>
+            {postfix ? <FormFieldPostfix>{postfix}</FormFieldPostfix> : null}
+        </FormField>
 
-            {description ? (
-                <FormGroupLine>
-                    <FormFieldDescription>{description}</FormFieldDescription>
-                </FormGroupLine>
-            ) : null}
-        </FormGroup>
-    );
-};
+        {description || counter ? (
+            <FormFieldDescription>
+                {description}
+                {counter ? <FormFieldCounter>{counter}</FormFieldCounter> : null}
+            </FormFieldDescription>
+        ) : null}
+    </FormGroup>
+);
 
-TextFieldBase.displayName = 'TextFieldBase';
+TextFieldBase.displayName = "TextFieldBase";

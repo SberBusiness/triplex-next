@@ -41,7 +41,16 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
             setValue(e.target.value);
         };
 
-        const { labelText, placeholder, prefixText, postfixText, descriptionText, showLabel, ...textFieldProps } = args;
+        const {
+            labelText,
+            placeholder,
+            prefixText,
+            postfixText,
+            descriptionText,
+            showLabel,
+            counter,
+            ...textFieldProps
+        } = args;
 
         return (
             <div style={{ width: "304px" }}>
@@ -49,13 +58,20 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                     {...textFieldProps}
                     description={
                         descriptionText ? (
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                                 {descriptionText}
                             </Text>
-                        ) : null
+                        ) : undefined
                     }
                     prefix={prefixText || ""}
                     postfix={postfixText || ""}
+                    counter={
+                        counter ? (
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {counter}
+                            </Text>
+                        ) : undefined
+                    }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
@@ -131,6 +147,13 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                 defaultValue: { summary: "Описание поля" },
             },
         },
+        counter: {
+            control: { type: "text" },
+            description: "Текст счетчика символов",
+            table: {
+                type: { summary: "string" },
+            },
+        },
         className: {
             control: { type: "text" },
             description: "Дополнительные CSS классы",
@@ -149,6 +172,7 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
         postfixText: "",
         descriptionText: "Описание поля",
         className: "",
+        counter: "0/201",
     },
     parameters: {
         docs: {
@@ -171,7 +195,7 @@ export const Basic: StoryObj<typeof TextField> = {
             <div style={{ width: "304px" }}>
                 <TextField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -213,7 +237,7 @@ export const PassRefToInput: StoryObj<typeof TextField> = {
             <div style={{ width: "304px" }}>
                 <TextField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -249,7 +273,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
             <div style={{ width: "304px" }}>
                 <TextField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -285,7 +309,7 @@ export const WithClearButton: StoryObj<typeof TextField> = {
             <div style={{ width: "304px" }}>
                 <TextField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -308,6 +332,44 @@ export const WithClearButton: StoryObj<typeof TextField> = {
     },
 };
 
+export const WithCounter: StoryObj<typeof TextField> = {
+    render: () => {
+        const [value, setValue] = useState("");
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
+        return (
+            <div style={{ width: "304px" }}>
+                <TextField
+                    description={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    }
+                    counter={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            0/201
+                        </Text>
+                    }
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                    }}
+                    label="Название поля"
+                />
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "TextField с счетчиком символов.",
+            },
+        },
+    },
+};
+
 export const States: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState("");
@@ -325,7 +387,7 @@ export const States: StoryObj<typeof TextField> = {
             <div style={{ width: "304px" }}>
                 <TextField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -342,7 +404,7 @@ export const States: StoryObj<typeof TextField> = {
                 <TextField
                     error
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.ERROR}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
                             Текст ошибки
                         </Text>
                     }
@@ -362,7 +424,7 @@ export const States: StoryObj<typeof TextField> = {
                         disabled: true,
                     }}
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }

@@ -10,8 +10,9 @@ import {
     FormFieldDescription,
     FormFieldTextarea,
     FormFieldMaskedInput,
+    FormFieldCounter,
 } from "../src/components/FormField";
-import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
+import { FormGroup } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
 import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
@@ -133,6 +134,36 @@ export const WithClearButton: StoryObj<typeof FormField> = {
     },
 };
 
+export const WithCounter: StoryObj<typeof FormField> = {
+    render: function Render() {
+        return (
+            <div style={{ width: "304px" }}>
+                <FormField>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput />
+                </FormField>
+                <FormFieldDescription>
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Описание поля
+                    </Text>
+                    <FormFieldCounter>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            0/201
+                        </Text>
+                    </FormFieldCounter>
+                </FormFieldDescription>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "FormField со счетчиком символов.",
+            },
+        },
+    },
+};
+
 export const States: StoryObj<typeof FormField> = {
     render: function Render() {
         const [value, setValue] = useState("");
@@ -149,55 +180,43 @@ export const States: StoryObj<typeof FormField> = {
         return (
             <div style={{ width: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldInput value={value} onChange={handleChange} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value={value} onChange={handleChange} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField error>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldInput value={valueError} onChange={handleChangeError} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField error>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value={valueError} onChange={handleChangeError} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                            Текст ошибки
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField disabled>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldInput value="Value disabled" />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField disabled>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value="Value disabled" />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
             </div>
         );
@@ -227,58 +246,46 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
         return (
             <div style={{ width: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldTextarea value={value} onChange={handleChange} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldTextarea value={value} onChange={handleChange} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField error>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldTextarea value={valueError} onChange={handleChangeError} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField error>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldTextarea value={valueError} onChange={handleChangeError} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                            Текст ошибки
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField disabled>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldTextarea />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField disabled>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldTextarea />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
             </div>
         );
@@ -308,47 +315,39 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
         return (
             <div style={{ width: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Номер телефона</FormFieldLabel>
-                            <FormFieldMaskedInput
-                                value={phoneValue}
-                                onChange={handlePhoneChange}
-                                mask={FormFieldMaskedInput.presets.masks.phone}
-                            />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Номер телефона</FormFieldLabel>
+                        <FormFieldMaskedInput
+                            value={phoneValue}
+                            onChange={handlePhoneChange}
+                            mask={FormFieldMaskedInput.presets.masks.phone}
+                        />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Номер карты</FormFieldLabel>
-                            <FormFieldMaskedInput
-                                value={cardValue}
-                                onChange={handleCardChange}
-                                mask={FormFieldMaskedInput.presets.masks.cardNumber}
-                                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
-                                placeholder="Введите номер карты"
-                            />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Номер карты</FormFieldLabel>
+                        <FormFieldMaskedInput
+                            value={cardValue}
+                            onChange={handleCardChange}
+                            mask={FormFieldMaskedInput.presets.masks.cardNumber}
+                            placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
+                            placeholder="Введите номер карты"
+                        />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
             </div>
         );
@@ -366,8 +365,8 @@ interface IFormFieldWithControlsProps extends React.ComponentProps<typeof FormFi
     labelText?: string;
     placeholder?: string;
     showClear?: boolean;
-    showDescription?: boolean;
     descriptionText?: string;
+    counter?: string;
 }
 
 export const Playground: StoryObj<IFormFieldWithControlsProps> = {
@@ -382,35 +381,38 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
             setValue("");
         };
 
-        const { labelText, placeholder, showClear, showDescription, descriptionText, ...formFieldProps } = args;
+        const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
 
         return (
             <div style={{ width: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField {...formFieldProps}>
-                            <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
-                            <FormFieldInput
-                                value={value}
-                                onChange={handleChange}
-                                placeholder={placeholder || "Введите текст..."}
-                            />
-                            {showClear && value && (
-                                <FormFieldPostfix>
-                                    <FormFieldClear onClick={handleClear} />
-                                </FormFieldPostfix>
-                            )}
-                        </FormField>
-                    </FormGroupLine>
+                    <FormField {...formFieldProps}>
+                        <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
+                        <FormFieldInput
+                            value={value}
+                            onChange={handleChange}
+                            placeholder={placeholder || "Введите текст..."}
+                        />
+                        {showClear && value && (
+                            <FormFieldPostfix>
+                                <FormFieldClear onClick={handleClear} />
+                            </FormFieldPostfix>
+                        )}
+                    </FormField>
 
-                    {showDescription && (
-                        <FormGroupLine>
-                            <FormFieldDescription>
-                                <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    {descriptionText || "Описание поля"}
-                                </Text>
-                            </FormFieldDescription>
-                        </FormGroupLine>
+                    {(descriptionText || counter) && (
+                        <FormFieldDescription>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {descriptionText || "Описание поля"}
+                            </Text>
+                            {counter && (
+                                <FormFieldCounter>
+                                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                        {counter}
+                                    </Text>
+                                </FormFieldCounter>
+                            )}
+                        </FormFieldDescription>
                     )}
                 </FormGroup>
             </div>
@@ -457,20 +459,19 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
                 defaultValue: { summary: "false" },
             },
         },
-        showDescription: {
-            control: { type: "boolean" },
-            description: "Показать описание поля",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
         descriptionText: {
             control: { type: "text" },
             description: "Текст описания",
             table: {
                 type: { summary: "string" },
                 defaultValue: { summary: "Описание поля" },
+            },
+        },
+        counter: {
+            control: { type: "text" },
+            description: "Текст счетчика символов",
+            table: {
+                type: { summary: "string" },
             },
         },
         className: {
@@ -487,8 +488,8 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
         labelText: "Название поля",
         placeholder: "Введите текст...",
         showClear: false,
-        showDescription: false,
         descriptionText: "Описание поля",
+        counter: "0/201",
         className: "",
     },
     parameters: {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import CheckboxbulkNavIcon24 from "@sberbusiness/icons-next/CheckboxbulkNavIcon24";
-import CheckboxtickNavIcon24 from "@sberbusiness/icons-next/CheckboxtickNavIcon24";
+import CheckboxbulkStrokeSrvIcon24 from "@sberbusiness/icons-next/CheckboxbulkStrokeSrvIcon24";
+import CheckboxtickStrokeSrvIcon24 from "@sberbusiness/icons-next/CheckboxtickStrokeSrvIcon24";
 import { ECheckboxSize } from "./enum";
 import { EFocusSource } from "../../enums/EFocusSource";
 import clsx from "clsx";
@@ -102,7 +102,11 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
     const renderCheckmarkIcon = () => {
         const className = styles.checkmarkIcon;
 
-        return bulk ? <CheckboxbulkNavIcon24 className={className} /> : <CheckboxtickNavIcon24 className={className} />;
+        return bulk ? (
+            <CheckboxbulkStrokeSrvIcon24 className={className} />
+        ) : (
+            <CheckboxtickStrokeSrvIcon24 className={className} />
+        );
     };
 
     return (

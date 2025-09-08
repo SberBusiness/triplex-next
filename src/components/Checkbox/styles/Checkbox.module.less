@@ -1,0 +1,114 @@
+@import 'src/styles/style';
+
+.label {
+    display: inline-block;
+    position: relative;
+    font-weight: 400;
+    color: var(--triplex-next-Checkbox-Color_Default);
+    cursor: pointer;
+
+    &.md {
+        min-width: 24px;
+        min-height: 24px;
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    &.lg {
+        min-width: 28px;
+        min-height: 28px;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    &.nonempty {
+        padding-left: 40px;
+    }
+
+    &.disabled {
+        color: var(--triplex-next-Checkbox-Color_Disabled);
+        cursor: default;
+    }
+
+    &[hidden] {
+        display: none; // Screenshot tests
+    }
+}
+
+.checkbox {
+    margin: 0;
+    opacity: 0;
+}
+
+.checkbox[data-focus-visible]:focus + .checkboxIcon {
+    box-shadow: var(--triplex-next-Checkbox-BorderColor_Focus);
+}
+
+.checkboxIcon {
+    box-sizing: border-box;
+    background-color: var(--triplex-next-Checkbox-Background_Default);
+    border-radius: 4px;
+}
+
+.checkmarkIcon {
+    transform: scale(0);
+
+    path {
+        fill: var(--triplex-next-Checkbox-Checkmark_Fill_Default);
+    }
+}
+
+.checkboxIcon,
+.checkmarkIcon {
+    pointer-events: none;
+}
+
+.checkbox,
+.checkboxIcon,
+.checkmarkIcon {
+    position: absolute;
+    left: 0;
+
+    .md & {
+        width: 24px;
+        height: 24px;
+    }
+
+    .lg & {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.checkbox:enabled {
+    cursor: pointer;
+}
+
+.checkbox:checked {
+    + .checkboxIcon {
+        background-color: var(--triplex-next-Checkbox-Background_Checked_Default);
+    }
+
+    ~ .checkmarkIcon {
+        transform: scale(1);
+        transition: transform 200ms ease-out;
+    }
+}
+
+.checkbox:disabled {
+    + .checkboxIcon {
+        background-color: var(--triplex-next-Checkbox-Background_Disabled);
+    }
+
+    ~ .checkmarkIcon path {
+        fill: var(--triplex-next-Checkbox-Checkmark_Fill_Disabled);
+    }
+}
+
+.checkbox[data-focus-visible]:focus + .checkboxIcon {
+    border-color: var(--triplex-next-Checkbox-BorderColor_Focus);
+}
+
+.checkbox:checked:enabled:hover + .checkboxIcon {
+    background-color: var(--triplex-next-Checkbox-Background_Checked_Hover);
+}

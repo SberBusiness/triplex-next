@@ -1,6 +1,7 @@
 export * from "./Alert";
 export * from "./Button";
 export * from "./Col";
+export * from "./Checkbox";
 export * from "./FormField";
 export * from "./FormGroup";
 export * from "./Gap";

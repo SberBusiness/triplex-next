@@ -51,7 +51,7 @@ export const Basic: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormField>
                     <FormFieldLabel>Имя пользователя</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} placeholder="Введите имя..." />
@@ -77,7 +77,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormField>
                     <FormFieldPrefix>
                         <DefaulticonStrokePrdIcon20 paletteIndex={5} />
@@ -136,11 +136,23 @@ export const WithClearButton: StoryObj<typeof FormField> = {
 
 export const WithCounter: StoryObj<typeof FormField> = {
     render: function Render() {
+        const [value, setValue] = useState("");
+        const maxLength = 201;
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const newValue = e.target.value;
+            if (newValue.length <= maxLength) {
+                setValue(newValue);
+            }
+        };
+
+        const currentLength = value.length;
+
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
-                    <FormFieldInput />
+                    <FormFieldInput value={value} onChange={handleChange} />
                 </FormField>
                 <FormFieldDescription>
                     <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -148,7 +160,7 @@ export const WithCounter: StoryObj<typeof FormField> = {
                     </Text>
                     <FormFieldCounter>
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            0/201
+                            {currentLength}/{maxLength}
                         </Text>
                     </FormFieldCounter>
                 </FormFieldDescription>
@@ -158,7 +170,7 @@ export const WithCounter: StoryObj<typeof FormField> = {
     parameters: {
         docs: {
             description: {
-                story: "FormField со счетчиком символов.",
+                story: "FormField со счетчиком символов. Счетчик показывает текущее количество символов и максимально допустимое.",
             },
         },
     },
@@ -178,7 +190,7 @@ export const States: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Название поля</FormFieldLabel>
@@ -233,18 +245,18 @@ export const States: StoryObj<typeof FormField> = {
 export const Textarea: StoryObj<typeof FormFieldTextarea> = {
     render: function Render() {
         const [value, setValue] = useState("");
-        const [valueError, setValueError] = useState("");
+        const maxLength = 201;
+
+        const currentLength = value.length;
 
         const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setValue(e.target.value);
-        };
-
-        const handleChangeError = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setValueError(e.target.value);
+            if (e.target.value.length <= maxLength) {
+                setValue(e.target.value);
+            }
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Название поля</FormFieldLabel>
@@ -254,37 +266,11 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
-                    </FormFieldDescription>
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <FormField error>
-                        <FormFieldLabel>Название поля</FormFieldLabel>
-                        <FormFieldTextarea value={valueError} onChange={handleChangeError} />
-                    </FormField>
-                    <FormFieldDescription>
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                            Текст ошибки
-                        </Text>
-                    </FormFieldDescription>
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <FormField disabled>
-                        <FormFieldLabel>Название поля</FormFieldLabel>
-                        <FormFieldTextarea />
-                    </FormField>
-                    <FormFieldDescription>
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
-                        </Text>
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
-                        </Text>
+                        <FormFieldCounter>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {currentLength}/{maxLength}
+                            </Text>
+                        </FormFieldCounter>
                     </FormFieldDescription>
                 </FormGroup>
             </div>
@@ -293,7 +279,7 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
     parameters: {
         docs: {
             description: {
-                story: "FormField с многострочным полем ввода (textarea). Поддерживает все те же состояния, что и обычное поле.",
+                story: "FormField с многострочным полем ввода (textarea). Счетчик показывает текущее количество символов и максимально допустимое.",
             },
         },
     },
@@ -313,7 +299,7 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Номер телефона</FormFieldLabel>
@@ -384,7 +370,7 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
         const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
                     <FormField {...formFieldProps}>
                         <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>

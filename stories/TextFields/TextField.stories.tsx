@@ -53,7 +53,7 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
         } = args;
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     {...textFieldProps}
                     description={
@@ -192,7 +192,7 @@ export const Basic: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -234,7 +234,7 @@ export const PassRefToInput: StoryObj<typeof TextField> = {
         }, []);
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -270,7 +270,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -306,7 +306,7 @@ export const WithClearButton: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -335,12 +335,19 @@ export const WithClearButton: StoryObj<typeof TextField> = {
 export const WithCounter: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState("");
+        const maxLength = 201;
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(e.target.value);
+            const newValue = e.target.value;
+            if (newValue.length <= maxLength) {
+                setValue(newValue);
+            }
         };
+
+        const currentLength = value.length;
+
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -349,12 +356,13 @@ export const WithCounter: StoryObj<typeof TextField> = {
                     }
                     counter={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            0/201
+                            {currentLength}/{maxLength}
                         </Text>
                     }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
+                        maxLength: maxLength,
                     }}
                     label="Название поля"
                 />
@@ -364,7 +372,7 @@ export const WithCounter: StoryObj<typeof TextField> = {
     parameters: {
         docs: {
             description: {
-                story: "TextField с счетчиком символов.",
+                story: "TextField с динамическим счетчиком символов. Счетчик показывает текущее количество символов и максимально допустимое.",
             },
         },
     },
@@ -384,7 +392,7 @@ export const States: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>

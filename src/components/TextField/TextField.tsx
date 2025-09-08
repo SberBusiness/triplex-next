@@ -2,7 +2,7 @@ import React from 'react';
 import {
     FormFieldInput,
     IFormFieldInputProps,
-} from '../../components';
+} from '@sberbusiness/triplex-next';
 import { ITextFieldBaseProps, TextFieldBase } from './TextFieldBase';
 
 /** Свойства TextField. */

@@ -2,7 +2,7 @@ import React from 'react';
 import {
     IFormFieldMaskedInputProps,
     FormFieldMaskedInput,
-} from '../../components';
+} from '@sberbusiness/triplex-next';
 import { ITextFieldBaseProps, TextFieldBase } from './TextFieldBase';
 
 

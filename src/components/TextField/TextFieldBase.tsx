@@ -8,7 +8,7 @@ import {
     IFormFieldProps,
     FormGroup,
     FormGroupLine,
-} from '../../components';
+} from '@sberbusiness/triplex-next';
 
 /** Свойства TextFieldBase. */
 export interface ITextFieldBaseProps extends Omit<IFormFieldProps, 'prefix' | 'postfix'> {

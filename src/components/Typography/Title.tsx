@@ -37,7 +37,7 @@ export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElem
             children,
             className,
             size,
-            tag = `h${size}` as T,
+            tag = `${size}` as T,
             type = EFontType.PRIMARY,
             weight = EFontWeightTitle.SEMIBOLD,
             underline,

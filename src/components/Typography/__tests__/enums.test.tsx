@@ -1,36 +1,28 @@
-import {
-    ETextSize,
-    ECaptionSize,
-    ETitleSize,
-    EFontType,
-    EFontWeightText,
-    EFontWeightTitle,
-    ELineType
-} from "../enums";
+import { ETextSize, ECaptionSize, ETitleSize, EFontType, EFontWeightText, EFontWeightTitle, ELineType } from "../enums";
 
 describe("Typography Enums", () => {
     describe("ETextSize", () => {
         it("has correct values", () => {
-            expect(ETextSize.B1).toBe(0);
-            expect(ETextSize.B2).toBe(1);
-            expect(ETextSize.B3).toBe(2);
-            expect(ETextSize.B4).toBe(3);
+            expect(ETextSize.B1).toBe("B1");
+            expect(ETextSize.B2).toBe("B2");
+            expect(ETextSize.B3).toBe("B3");
+            expect(ETextSize.B4).toBe("B4");
         });
     });
 
     describe("ECaptionSize", () => {
         it("has correct values", () => {
-            expect(ECaptionSize.C1).toBe(0);
-            expect(ECaptionSize.C2).toBe(1);
-            expect(ECaptionSize.D1).toBe(2);
+            expect(ECaptionSize.C1).toBe("C1");
+            expect(ECaptionSize.C2).toBe("C2");
+            expect(ECaptionSize.D1).toBe("D1");
         });
     });
 
     describe("ETitleSize", () => {
         it("has correct values", () => {
-            expect(ETitleSize.H1).toBe(1);
-            expect(ETitleSize.H2).toBe(2);
-            expect(ETitleSize.H3).toBe(3);
+            expect(ETitleSize.H1).toBe("H1");
+            expect(ETitleSize.H2).toBe("H2");
+            expect(ETitleSize.H3).toBe("H3");
         });
     });
 
@@ -71,4 +63,4 @@ describe("Typography Enums", () => {
             expect(ELineType.COMPACT).toBe("compact");
         });
     });
-}); 
+});

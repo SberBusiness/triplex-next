@@ -1,0 +1,103 @@
+.label {
+    display: inline-block;
+    position: relative;
+    min-width: 28px;
+    min-height: 28px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+    color: var(--triplex-next-Radio-Color_Default);
+    cursor: pointer;
+
+    &.nonempty {
+        padding-left: 40px;
+    }
+
+    &.disabled {
+        color: var(--triplex-next-Radio-Color_Disabled);
+        cursor: default;
+    }
+}
+
+.radio {
+    margin: 0;
+    opacity: 0;
+}
+
+.radioIcon {
+    box-sizing: border-box;
+    background: var(--triplex-next-Radio-Background_Default);
+    border-radius: 50%;
+}
+
+.radioIcon::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 7px;
+    left: 7px;
+    background: var(--triplex-next-Radio-Dot_Default);
+    border-radius: 50%;
+    transform: scale(0);
+}
+
+.radioIcon,
+.radioIcon::after {
+    pointer-events: none;
+}
+
+.radio,
+.radioIcon {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    left: 0;
+
+    .nonempty & {
+        top: 2px;
+    }
+}
+
+.radio:enabled {
+    cursor: pointer;
+}
+
+.radio:checked {
+    + .radioIcon {
+        background: var(--triplex-next-Radio-Background_Checked_Default);
+    }
+
+    + .radioIcon::after {
+        transform: scale(1);
+        transition: transform 200ms ease-out;
+    }
+}
+
+.radio:hover + .radioIcon {
+    background-color: var(--triplex-next-Radio-Background_Hover);
+}
+
+.radio:disabled {
+    + .radioIcon {
+        background: var(--triplex-next-Radio-Background_Disabled);
+    }
+
+    &:checked {
+        + .radioIcon {
+            background: var(--triplex-next-Radio-Background_Checked_Disabled);
+        }
+    }
+
+    + .radioIcon::after {
+        background: var(--triplex-next-Radio-Dot_Disabled);
+    }
+}
+
+.radio[data-focus-visible]:focus + .radioIcon {
+    box-shadow: var(--triplex-next-Radio-BorderColor_Focused);
+}
+
+.radio:checked:enabled:hover + .radioIcon {
+    background-color: var(--triplex-next-Radio-Background_Checked_Hover);
+}

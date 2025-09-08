@@ -1,12 +1,9 @@
-import React from 'react';
-import {
-    FormFieldInput,
-    IFormFieldInputProps,
-} from '../../components';
-import { ITextFieldBaseProps, TextFieldBase } from './TextFieldBase';
+import React from "react";
+import { FormFieldInput, IFormFieldInputProps } from "@sberbusiness/triplex-next";
+import { ITextFieldBaseProps, TextFieldBase } from "./TextFieldBase";
 
 /** Свойства TextField. */
-export interface ITextFieldProps extends Omit<ITextFieldBaseProps, 'children'> {
+export interface ITextFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
     inputProps: IFormFieldInputProps & { ref?: React.RefObject<HTMLInputElement> };
 }
@@ -20,5 +17,4 @@ export const TextField: React.FC<ITextFieldProps> = ({ inputProps, ...textFieldB
     </TextFieldBase>
 );
 
-
-TextField.displayName = 'TextField';
+TextField.displayName = "TextField";

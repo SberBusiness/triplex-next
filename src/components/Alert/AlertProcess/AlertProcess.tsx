@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { EAlertType } from "../EAlertType";
 import { alertTypeToClassNameMap } from "../AlertTypeUtils";
-import CloseSrvxIcon16 from "@sberbusiness/icons-next/CloseSrvxIcon16";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { AlertProcessSpoiler } from "./components/AlertProcessSpoiler";
 import { AlertProcessContext } from "./AlertProcessContext";
 import styles from "./styles/AlertProcess.module.less";
 import {
-    InfoStsIcon20,
-    WarningStsIcon20,
-    ErrorStsIcon20,
-    SystemStsIcon20,
-    DefaulticonPrdIcon20,
+    InfoStrokeStsIcon20,
+    WarningStrokeStsIcon20,
+    ErrorStrokeStsIcon20,
+    SystemStrokeStsIcon20,
+    DefaulticonStrokePrdIcon20,
+    CrossStrokeSrvIcon16,
 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 
@@ -30,15 +30,15 @@ export interface IAlertProcessProps extends React.HTMLAttributes<HTMLDivElement>
 const renderDefaultIcon = (type: EAlertType): JSX.Element => {
     switch (type) {
         case EAlertType.INFO:
-            return <InfoStsIcon20 />;
+            return <InfoStrokeStsIcon20 paletteIndex={3} />;
         case EAlertType.WARNING:
-            return <WarningStsIcon20 />;
+            return <WarningStrokeStsIcon20 paletteIndex={2} />;
         case EAlertType.ERROR:
-            return <ErrorStsIcon20 />;
+            return <ErrorStrokeStsIcon20 paletteIndex={1} />;
         case EAlertType.SYSTEM:
-            return <SystemStsIcon20 />;
+            return <SystemStrokeStsIcon20 paletteIndex={4} />;
         case EAlertType.FEATURE:
-            return <DefaulticonPrdIcon20 />;
+            return <DefaulticonStrokePrdIcon20 paletteIndex={0} />;
     }
 };
 
@@ -80,7 +80,7 @@ export const AlertProcess = Object.assign(
                     {closable && (
                         <div className={styles.closeButton}>
                             <ButtonIcon onClick={handleClose}>
-                                <CloseSrvxIcon16 />
+                                <CrossStrokeSrvIcon16 paletteIndex={5} />
                             </ButtonIcon>
                         </div>
                     )}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { CaretdownSrvxIcon16 } from "@sberbusiness/icons-next";
+import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../../../Button/ButtonIcon";
 import { AlertProcessContext } from "../AlertProcessContext";
 
@@ -38,7 +38,7 @@ export const AlertProcessSpoiler: React.FC<IAlertProcessSpoilerProps> = ({ child
 
             <div className={clsx(styles.expandButton, { [styles.expanded]: open })}>
                 <ButtonIcon onClick={handleToggle}>
-                    <CaretdownSrvxIcon16 />
+                    <CaretdownStrokeSrvIcon16 paletteIndex={5} />
                 </ButtonIcon>
             </div>
         </div>

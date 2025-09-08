@@ -3,7 +3,12 @@ import { EAlertType } from "../EAlertType";
 import { alertTypeToClassNameMap } from "../AlertTypeUtils";
 import { Text } from "../../Typography/Text";
 import { EFontType, ETextSize } from "../../Typography/enums";
-import { InfoStsIcon16, WarningStsIcon16, ErrorStsIcon16, SystemStsIcon16 } from "@sberbusiness/icons-next";
+import {
+    InfoStrokeStsIcon16,
+    WarningStrokeStsIcon16,
+    ErrorStrokeStsIcon16,
+    SystemStrokeStsIcon16,
+} from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import styles from "./styles/AlertContext.module.less";
 
@@ -18,13 +23,13 @@ export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement
 const renderDefaultIcon = (type: Exclude<EAlertType, EAlertType.FEATURE>): JSX.Element => {
     switch (type) {
         case EAlertType.INFO:
-            return <InfoStsIcon16 />;
+            return <InfoStrokeStsIcon16 paletteIndex={3} />;
         case EAlertType.WARNING:
-            return <WarningStsIcon16 />;
+            return <WarningStrokeStsIcon16 paletteIndex={2} />;
         case EAlertType.ERROR:
-            return <ErrorStsIcon16 />;
+            return <ErrorStrokeStsIcon16 paletteIndex={1} />;
         case EAlertType.SYSTEM:
-            return <SystemStsIcon16 />;
+            return <SystemStrokeStsIcon16 paletteIndex={4} />;
     }
 };
 

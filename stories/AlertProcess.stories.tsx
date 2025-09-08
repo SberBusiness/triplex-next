@@ -8,7 +8,7 @@ import { EFontType, ETextSize } from "../src/components/Typography/enums";
 import { Button } from "../src/components/Button";
 import { EButtonSize, EButtonTheme } from "../src/components/Button";
 import { Gap } from "../src/components/Gap";
-import DefaulticonPrdIcon20 from "@sberbusiness/icons-next/DefaulticonPrdIcon20";
+import DefaulticonStrokePrdIcon20 from "@sberbusiness/icons-next/DefaulticonStrokePrdIcon20";
 
 export default {
     title: "Components/AlertProcess",
@@ -23,8 +23,7 @@ export default {
 ## Особенности
 
 - **Типы**: Info, Warning, Error, System, Feature
-- Передавать контент для спойлера возможно через свойство **expandableContent**
-- Состояние спойлера задается через свойство **expandableContentOpen**
+- Передавать контент для спойлера возможно через компонент **AlertProcess.Spoiler**. Состояние спойлера задается через свойство **open**, а обработчик изменения состояния - через свойство **onOpen**
 - Обработчик нажатия на иконку закрытия передается снаружи через свойство **onClose**
 - Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
 
@@ -132,7 +131,7 @@ export const Playground: StoryObj<typeof AlertProcess> = {
     },
     render: (args) => {
         return (
-            <div style={{ width: "750px" }}>
+            <div style={{ maxWidth: "750px" }}>
                 <AlertProcess {...args} />
             </div>
         );
@@ -164,7 +163,7 @@ export const Default: StoryObj<typeof AlertProcess> = {
         },
     },
     render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
             <AlertProcess type={EAlertType.INFO}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                     This message provides context or highlights important information to note.
@@ -219,8 +218,8 @@ export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
         },
     },
     render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
-            <AlertProcess type={EAlertType.INFO} renderIcon={<DefaulticonPrdIcon20 />}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
+            <AlertProcess type={EAlertType.INFO} renderIcon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                     This message provides context or highlights important information to note.
                 </Text>
@@ -268,7 +267,7 @@ export const Closable: StoryObj<typeof AlertProcess> = {
         },
     },
     render: (args) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
             <AlertProcess {...args} type={EAlertType.INFO} />
             <AlertProcess {...args} type={EAlertType.WARNING} />
             <AlertProcess {...args} type={EAlertType.ERROR} />
@@ -323,7 +322,7 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
         },
     },
     render: (args) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "750px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
             <AlertProcess {...args} type={EAlertType.INFO} />
             <AlertProcess {...args} type={EAlertType.WARNING} />
             <AlertProcess {...args} type={EAlertType.ERROR} />
@@ -366,19 +365,21 @@ export const Spoiler: StoryObj<typeof AlertProcess> = {
         const [expanded, setExpanded] = useState(false);
 
         return (
-            <AlertProcess type={EAlertType.INFO}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    Контент до спойлера
-                </Text>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}></Text>
-                <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
+            <div style={{ maxWidth: "750px" }}>
+                <AlertProcess type={EAlertType.INFO}>
                     <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                        У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать заявления, а
-                        также заверять документы, имеет право генеральный директор на основании устава, владалец ИП на
-                        основании доверенности.
+                        По вопросам финмониторинга обращайтесь в рабочие дни с 03:00 до 21:00 МСК с мобильного телефона
+                        по номеру 0321, доб. 6. Звонки по России бесплатные.
                     </Text>
-                </AlertProcess.Spoiler>
-            </AlertProcess>
+                    <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
+                        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                            У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать
+                            заявления, а также заверять документы, имеет право генеральный директор на основании устава,
+                            владалец ИП на основании доверенности.
+                        </Text>
+                    </AlertProcess.Spoiler>
+                </AlertProcess>
+            </div>
         );
     },
 };

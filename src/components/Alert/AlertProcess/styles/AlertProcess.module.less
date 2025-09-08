@@ -45,6 +45,10 @@
         flex: 1;
         margin-left: 8px;
 
+        &:not(:has(+ .closeButton)) {
+            padding-right: 26px;
+        }
+
         .expandableContent {
             overflow: hidden;
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;

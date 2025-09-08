@@ -5,13 +5,13 @@ import { AlertProcess } from "../AlertProcess";
 import { EAlertType } from "../../EAlertType";
 
 vi.mock("@sberbusiness/icons-next", () => ({
-    CloseSrvxIcon16: () => <div data-testid="close-icon">CloseIcon</div>,
-    CaretdownSrvxIcon16: () => <div data-testid="caret-icon">CaretIcon</div>,
-    InfoStsIcon20: () => <div data-testid="info-icon">InfoIcon</div>,
-    WarningStsIcon20: () => <div data-testid="warning-icon">WarningIcon</div>,
-    ErrorStsIcon20: () => <div data-testid="error-icon">ErrorIcon</div>,
-    SystemStsIcon20: () => <div data-testid="system-icon">SystemIcon</div>,
-    DefaulticonPrdIcon20: () => <div data-testid="feature-icon">FeatureIcon</div>,
+    CrossStrokeSrvIcon16: () => <div data-testid="close-icon">CloseIcon</div>,
+    CaretdownStrokeSrvIcon16: () => <div data-testid="caret-icon">CaretIcon</div>,
+    InfoStrokeStsIcon20: () => <div data-testid="info-icon">InfoIcon</div>,
+    WarningStrokeStsIcon20: () => <div data-testid="warning-icon">WarningIcon</div>,
+    ErrorStrokeStsIcon20: () => <div data-testid="error-icon">ErrorIcon</div>,
+    SystemStrokeStsIcon20: () => <div data-testid="system-icon">SystemIcon</div>,
+    DefaulticonStrokePrdIcon20: () => <div data-testid="feature-icon">FeatureIcon</div>,
 }));
 
 const getAlert = () => screen.getByTestId("alert");

@@ -2,7 +2,6 @@ import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes
 
 // Название токенов компонента Link.
 export const designTokensComponentsLinkKeys = [
-    "BorderColor_Default",
     "BorderColor_Focus",
 
     "Text_Color_Active",
@@ -20,7 +19,6 @@ export type TDesignTokensComponentsLink = { Link: TDesignTokensComponentsLinkVal
 
 // Токены компонента Link в светлой и темной темах.
 export const Link_Tokens: TDesignTokensComponentsLinkValues = {
-    BorderColor_Default: [{ value: "0 0 0 1px transparent inset" }, { value: "0 0 0 1px transparent inset" }], // var(--triplex-next-Link-BorderColor_Default)
     BorderColor_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Link-BorderColor_Focus)
 
     Text_Color_Active: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.40" }], // var(--triplex-next-Link-Text-Color_Active)

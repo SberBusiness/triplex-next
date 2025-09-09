@@ -1,27 +1,11 @@
 .link {
     cursor: pointer;
-    padding: 0 2px;
     margin: -1px -3px;
-    box-shadow: var(--triplex-next-Link-BorderColor_Default);
 
-    &:focus {
-        outline: none;
-
-        &.focusVisible {
-            box-shadow: var(--triplex-next-Link-BorderColor_Focus);
-        }
+    &:focus-visible {
+        box-shadow: var(--triplex-next-Link-BorderColor_Focus);
     }
-}
 
-.sm {
-    font-size: 12px;
-}
-
-.lg {
-    font-size: 14px;
-}
-
-.text {
     position: relative;
     color: var(--triplex-next-Link-Text_Color_Default);
     text-decoration: none;

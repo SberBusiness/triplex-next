@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
-import { ELinkSize } from "./enums";
 import styles from "./styles/Link.module.less";
 
 /** Общие свойства компонента Link. */
 interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    /** Размер текста. */
-    size: ELinkSize;
     /** Тело гиперссылки. */
     children: React.ReactNode;
     /** Рендер функция последующего контента. */
@@ -15,21 +12,15 @@ interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
 
 /** Гиперссылка. */
 export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
-    ({ children, className, size, onBlur, onMouseDown, contentAfter, ...rest }, ref) => {
-        const [focusedByClick, setFocusedByClick] = useState(false);
-
+    ({ children, className, onBlur, onMouseDown, contentAfter, ...rest }, ref) => {
         /** Обработчик нажатия мыши. */
         const handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
             onMouseDown?.(event);
-            setFocusedByClick(true);
         };
 
         /** Обработчик потери фокуса. */
         const handleBlur = (event: React.FocusEvent<HTMLAnchorElement>) => {
             onBlur?.(event);
-            if (event.target !== document.activeElement) {
-                setFocusedByClick(false);
-            }
         };
 
         /** Рендер функция последующего контента. */
@@ -51,15 +42,13 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
                 );
             }
 
-            const firstWord = words[0];
+            const firstWord = words.slice(0, -1).join(" ");
             const lastWord = words[words.length - 1];
-            const restWords = words.slice(1, -1).join(" ");
-
-            const firstNode = firstWord;
 
             const classNameAfter = clsx(styles.wordWithContent, {
                 [styles.after]: Boolean(contentAfter),
             });
+
             const lastNode = contentAfter ? (
                 <span className={classNameAfter}>
                     {lastWord}
@@ -71,7 +60,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
 
             return (
                 <>
-                    {firstNode} {restWords} {lastNode}
+                    {firstWord} {lastNode}
                 </>
             );
         };
@@ -98,12 +87,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
             <a
                 role="link"
                 {...rest}
-                className={clsx(className, styles.link, "hoverable", {
-                    [styles.focusVisible]: !focusedByClick,
-                    [styles.lg]: size === ELinkSize.LG,
-                    [styles.sm]: size === ELinkSize.SM,
-                    [styles.text]: true,
-                })}
+                className={clsx(className, styles.link, "hoverable")}
                 onBlur={handleBlur}
                 onMouseDown={handleMouseDown}
                 data-tx={process.env.npm_package_version}

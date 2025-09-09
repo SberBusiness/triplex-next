@@ -1,0 +1,84 @@
+@import "src/styles/style";
+
+.alertProcess {
+    display: flex;
+    padding: 16px;
+    border-radius: 8px;
+    position: relative;
+
+    &.withSpoiler {
+        min-height: 40px;
+    }
+
+    .themeIcon {
+        padding-top: 2px;
+        box-sizing: border-box;
+        height: 20px;
+        width: 20px;
+    }
+
+    &.alertTypeError {
+        background: var(--triplex-next-AlertProcess-Error_Background);
+    }
+
+    &.alertTypeInfo {
+        background: var(--triplex-next-AlertProcess-Info_Background);
+    }
+
+    &.alertTypeWarning {
+        background: var(--triplex-next-AlertProcess-Warning_Background);
+    }
+
+    &.alertTypeSystem {
+        background: var(--triplex-next-AlertProcess-System_Background);
+    }
+
+    &.alertTypeFeature {
+        background: var(--triplex-next-AlertProcess-Feature_Background);
+
+        .themeIcon {
+            padding-top: 0;
+        }
+    }
+
+    .alertProcessContentBlock {
+        flex: 1;
+        margin-left: 8px;
+
+        &:not(:has(+ .closeButton)) {
+            padding-right: 26px;
+        }
+
+        .expandableContent {
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+
+            &.expanded {
+                max-height: 1000px;
+                opacity: 1;
+            }
+        }
+    }
+
+    .closeButton {
+        margin-left: 10px;
+    }
+
+    .expandButton {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        height: 16px;
+        width: 16px;
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.expanded {
+            transform: rotate(180deg);
+        }
+    }
+}

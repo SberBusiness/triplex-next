@@ -1,10 +1,12 @@
 import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
     TDesignTokensComponentsButton,
+    TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLoadingDots,
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsAlertContext,
+    TDesignTokensComponentsAlertProcess,
 } from "../components";
 
 // Название токенов группы ColorBrand.
@@ -240,10 +242,12 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBrand &
 // Тип локальных токенов(токенов компонентов).
 export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
+    | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLoadingDots
-    | TDesignTokensComponentsAlertContext;
+    | TDesignTokensComponentsAlertContext
+    | TDesignTokensComponentsAlertProcess;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

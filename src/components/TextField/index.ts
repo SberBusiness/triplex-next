@@ -1,2 +1,2 @@
 export * from "./TextField";
-export * from "./MaskedInputField";
+export * from "./MaskedField";

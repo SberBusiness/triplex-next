@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { MaskedInputField } from "../../src/components/TextField";
+import { MaskedField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
 import { EFormFieldSize } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldMaskedInput } from "../../src/components/FormField";
 
 export default {
-    title: "Components/TextFields/MaskedInputField",
+    title: "Components/TextFields/MaskedField",
     parameters: {
         docs: {
             description: {
                 component: `
-Компонент MaskedInputField представляет собой поле ввода с маской для структурированных данных, построенное на основе TextField.
+Компонент MaskedField представляет собой поле ввода с маской для структурированных данных, построенное на основе TextField.
 Для более гибкой настройки можно использовать маскированный ввод на основе компонента FormField.
 Основан на https://github.com/text-mask/text-mask.
 
@@ -70,7 +70,7 @@ export default {
     tags: ["autodocs"],
 };
 
-export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
+export const Playground: StoryObj<IMaskedFieldWithControlsProps> = {
     render: (args) => {
         const [value, setValue] = useState("");
 
@@ -78,7 +78,7 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
             setValue(e.target.value);
         };
 
-        const { labelText, descriptionText, maskType, ...maskedInputFieldProps } = args;
+        const { labelText, descriptionText, maskType, ...maskedFieldProps } = args;
 
         const getMaskConfig = () => {
             switch (maskType) {
@@ -207,8 +207,8 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
 
         return (
             <div style={{ width: "304px" }}>
-                <MaskedInputField
-                    {...maskedInputFieldProps}
+                <MaskedField
+                    {...maskedFieldProps}
                     description={
                         descriptionText ? (
                             <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -297,13 +297,13 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
     parameters: {
         docs: {
             description: {
-                story: "Интерактивная демонстрация MaskedInputField с расширенными controls. Позволяет настраивать тип маски, текст лейбла, описание и состояния компонента.",
+                story: "Интерактивная демонстрация MaskedField с расширенными controls. Позволяет настраивать тип маски, текст лейбла, описание и состояния компонента.",
             },
         },
     },
 };
 
-export const Basic: StoryObj<typeof MaskedInputField> = {
+export const Basic: StoryObj<typeof MaskedField> = {
     render: () => {
         const [phoneValue, setPhoneValue] = useState("");
 
@@ -313,7 +313,7 @@ export const Basic: StoryObj<typeof MaskedInputField> = {
 
         return (
             <div style={{ width: "304px" }}>
-                <MaskedInputField
+                <MaskedField
                     description={
                         <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
@@ -339,7 +339,7 @@ export const Basic: StoryObj<typeof MaskedInputField> = {
     },
 };
 
-export const States: StoryObj<typeof MaskedInputField> = {
+export const States: StoryObj<typeof MaskedField> = {
     render: () => {
         const [phoneValue, setPhoneValue] = useState("");
         const [phoneValueError, setPhoneValueError] = useState("");
@@ -354,7 +354,7 @@ export const States: StoryObj<typeof MaskedInputField> = {
 
         return (
             <div style={{ width: "304px" }}>
-                <MaskedInputField
+                <MaskedField
                     description={
                         <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
@@ -371,7 +371,7 @@ export const States: StoryObj<typeof MaskedInputField> = {
 
                 <Gap size={24} />
 
-                <MaskedInputField
+                <MaskedField
                     error
                     description={
                         <Text size={ETextSize.B4} type={EFontType.ERROR}>
@@ -389,7 +389,7 @@ export const States: StoryObj<typeof MaskedInputField> = {
 
                 <Gap size={24} />
 
-                <MaskedInputField
+                <MaskedField
                     disabled
                     description={
                         <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -415,7 +415,7 @@ export const States: StoryObj<typeof MaskedInputField> = {
     },
 };
 
-interface IMaskedInputFieldWithControlsProps extends React.ComponentProps<typeof MaskedInputField> {
+interface IMaskedFieldWithControlsProps extends React.ComponentProps<typeof MaskedField> {
     labelText?: string;
     descriptionText?: string;
     maskType?:
@@ -425,7 +425,7 @@ interface IMaskedInputFieldWithControlsProps extends React.ComponentProps<typeof
     | "passportDepartmentCode";
 }
 
-export const Sizes: StoryObj<typeof MaskedInputField> = {
+export const Sizes: StoryObj<typeof MaskedField> = {
     render: () => {
         const [valueSM, setValueSM] = useState("");
         const [valueMD, setValueMD] = useState("");
@@ -449,7 +449,7 @@ export const Sizes: StoryObj<typeof MaskedInputField> = {
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
                         Размер SM (маленький)
                     </Title>
-                    <MaskedInputField
+                    <MaskedField
                         size={EFormFieldSize.SM}
                         maskedInputProps={{
                             value: valueSM,
@@ -465,7 +465,7 @@ export const Sizes: StoryObj<typeof MaskedInputField> = {
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
                         Размер MD (средний)
                     </Title>
-                    <MaskedInputField
+                    <MaskedField
                         size={EFormFieldSize.MD}
                         maskedInputProps={{
                             value: valueMD,
@@ -481,7 +481,7 @@ export const Sizes: StoryObj<typeof MaskedInputField> = {
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
                         Размер LG (большой) - по умолчанию
                     </Title>
-                    <MaskedInputField
+                    <MaskedField
                         size={EFormFieldSize.LG}
                         maskedInputProps={{
                             value: valueLG,
@@ -504,7 +504,7 @@ export const Sizes: StoryObj<typeof MaskedInputField> = {
     },
 };
 
-export const AllMasks: StoryObj<typeof MaskedInputField> = {
+export const AllMasks: StoryObj<typeof MaskedField> = {
     render: () => {
         const [values, setValues] = useState<Record<string, string>>({});
 
@@ -700,7 +700,7 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
                         const value = values[maskType] || "";
 
                         return (
-                            <MaskedInputField
+                            <MaskedField
                                 key={maskType}
                                 maskedInputProps={{
                                     value: value,
@@ -712,7 +712,7 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
                         );
                     })}
 
-                    <MaskedInputField
+                    <MaskedField
                         maskedInputProps={{
                             value: values["passportSeries"] || "",
                             onChange: handleChange("passportSeries"),
@@ -721,7 +721,7 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
                         label="Серия паспорта"
                     />
 
-                    <MaskedInputField
+                    <MaskedField
                         maskedInputProps={{
                             value: values["passportNumber"] || "",
                             onChange: handleChange("passportNumber"),
@@ -730,7 +730,7 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
                         label="Номер паспорта"
                     />
 
-                    <MaskedInputField
+                    <MaskedField
                         maskedInputProps={{
                             value: values["passportDepartmentCode"] || "",
                             onChange: handleChange("passportDepartmentCode"),
@@ -745,7 +745,7 @@ export const AllMasks: StoryObj<typeof MaskedInputField> = {
     parameters: {
         docs: {
             description: {
-                story: "Демонстрация всех доступных масок MaskedInputField. Показывает, как выглядят и работают различные типы масок для ввода структурированных данных.",
+                story: "Демонстрация всех доступных масок MaskedField. Показывает, как выглядят и работают различные типы масок для ввода структурированных данных.",
             },
         },
     },

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { MaskedInputField } from "../../src/components/TextField";
-import { Text, ETextSize, EFontType } from "../../src/components/Typography";
+import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
+import { EFormFieldSize } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldMaskedInput } from "../../src/components/FormField";
 
@@ -14,6 +15,12 @@ export default {
 Компонент MaskedInputField представляет собой поле ввода с маской для структурированных данных, построенное на основе TextField.
 Для более гибкой настройки можно использовать маскированный ввод на основе компонента FormField.
 Основан на https://github.com/text-mask/text-mask.
+
+## Основные возможности
+
+- **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
+- **Маскированный ввод** - автоматическое форматирование данных
+- **Валидация** - проверка корректности введенных данных
 
 ## Доступные маски
 
@@ -261,6 +268,15 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
                 defaultValue: { summary: "phone" },
             },
         },
+        size: {
+            control: { type: "select" },
+            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            description: "Размер поля ввода",
+            table: {
+                type: { summary: "EFormFieldSize" },
+                defaultValue: { summary: "EFormFieldSize.LG" },
+            },
+        },
         className: {
             control: { type: "text" },
             description: "Дополнительные CSS классы",
@@ -272,6 +288,7 @@ export const Playground: StoryObj<IMaskedInputFieldWithControlsProps> = {
     args: {
         error: false,
         disabled: false,
+        size: EFormFieldSize.LG,
         labelText: "Название поля",
         descriptionText: "Описание поля",
         maskType: "phone",
@@ -402,11 +419,90 @@ interface IMaskedInputFieldWithControlsProps extends React.ComponentProps<typeof
     labelText?: string;
     descriptionText?: string;
     maskType?:
-        | keyof typeof FormFieldMaskedInput.presets.masks
-        | "passportSeries"
-        | "passportNumber"
-        | "passportDepartmentCode";
+    | keyof typeof FormFieldMaskedInput.presets.masks
+    | "passportSeries"
+    | "passportNumber"
+    | "passportDepartmentCode";
 }
+
+export const Sizes: StoryObj<typeof MaskedInputField> = {
+    render: () => {
+        const [valueSM, setValueSM] = useState("");
+        const [valueMD, setValueMD] = useState("");
+        const [valueLG, setValueLG] = useState("");
+
+        const handleChangeSM = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueSM(e.target.value);
+        };
+
+        const handleChangeMD = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueMD(e.target.value);
+        };
+
+        const handleChangeLG = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueLG(e.target.value);
+        };
+
+        return (
+            <div style={{ maxWidth: "400px" }}>
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер SM (маленький)
+                    </Title>
+                    <MaskedInputField
+                        size={EFormFieldSize.SM}
+                        maskedInputProps={{
+                            value: valueSM,
+                            onChange: handleChangeSM,
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                            placeholder: "Введите номер телефона",
+                        }}
+                        label="Номер телефона"
+                    />
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер MD (средний)
+                    </Title>
+                    <MaskedInputField
+                        size={EFormFieldSize.MD}
+                        maskedInputProps={{
+                            value: valueMD,
+                            onChange: handleChangeMD,
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                            placeholder: "Введите номер телефона",
+                        }}
+                        label="Номер телефона"
+                    />
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер LG (большой) - по умолчанию
+                    </Title>
+                    <MaskedInputField
+                        size={EFormFieldSize.LG}
+                        maskedInputProps={{
+                            value: valueLG,
+                            onChange: handleChangeLG,
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                            placeholder: "Введите номер телефона",
+                        }}
+                        label="Номер телефона"
+                    />
+                </div>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Демонстрация различных размеров MaskedInputField: SM (маленький), MD (средний), LG (большой - по умолчанию). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
+            },
+        },
+    },
+};
 
 export const AllMasks: StoryObj<typeof MaskedInputField> = {
     render: () => {

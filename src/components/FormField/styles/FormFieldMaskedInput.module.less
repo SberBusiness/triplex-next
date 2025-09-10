@@ -11,10 +11,44 @@
             opacity: 1;
         }
     }
-}
 
-.formFieldMaskedInput {
-    display: block;
-    position: relative;
-    background: none !important;
+
+    &.size-sm {
+        font-size: 12px;
+        line-height: 16px;
+
+        .formFieldMaskedInputPlaceholder {
+            top: 5px;
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+
+    &.size-md {
+        font-size: 14px;
+        line-height: 20px;
+
+        .formFieldMaskedInputPlaceholder {
+            top: 9px;
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+
+    &.size-lg {
+        font-size: 16px;
+        line-height: 20px;
+
+        .formFieldMaskedInputPlaceholder {
+            top: 25px;
+            font-size: 16px;
+            line-height: 20px;
+        }
+    }
+
+    .formFieldMaskedInput {
+        display: block;
+        position: relative;
+        background: none !important;
+    }
 }

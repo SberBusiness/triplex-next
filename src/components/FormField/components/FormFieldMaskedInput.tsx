@@ -50,7 +50,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     // Значение инпута, отображающего часть введенного значения и оставшуюся маску.
     const [placeholderValue, setPlaceholderValue] = useState("");
     const pasted = useRef(false);
-    const { valueExist, focused } = useContext(FormFieldContext);
+    const { valueExist, focused, size } = useContext(FormFieldContext);
 
     useEffect(() => {
         /**
@@ -193,10 +193,14 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     };
 
     return (
-        <div className={styles.formFieldMaskedInputWrapper}>
+        <div className={clsx(styles.formFieldMaskedInputWrapper, styles[`size-${size}`])}>
             {/* Input, отображающий маску. */}
             <input
-                className={clsx(stylesFormFieldInput.formFieldInput, styles.formFieldMaskedInputPlaceholder, className)}
+                className={clsx(
+                    stylesFormFieldInput.formFieldInput,
+                    styles.formFieldMaskedInputPlaceholder,
+                    className,
+                )}
                 disabled={disabled}
                 placeholder={getPlaceholderValue()}
                 readOnly

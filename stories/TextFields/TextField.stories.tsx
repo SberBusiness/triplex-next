@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { TextField } from "../../src/components/TextField";
-import { Text, ETextSize, EFontType } from "../../src/components/Typography";
+import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
+import { EFormFieldSize } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldClear } from "../../src/components";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
@@ -17,6 +18,9 @@ export default {
 ## Основные возможности
 
 - **TextField** - текстовое поле ввода с лейблом и описанием
+- **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
+- **Счетчик символов** - динамический подсчет введенных символов
+- **Префикс/Постфикс** - дополнительные элементы слева и справа от поля
                 `,
             },
         },
@@ -154,6 +158,15 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                 type: { summary: "string" },
             },
         },
+        size: {
+            control: { type: "select" },
+            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            description: "Размер поля ввода",
+            table: {
+                type: { summary: "EFormFieldSize" },
+                defaultValue: { summary: "EFormFieldSize.LG" },
+            },
+        },
         className: {
             control: { type: "text" },
             description: "Дополнительные CSS классы",
@@ -165,6 +178,7 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
     args: {
         error: false,
         disabled: false,
+        size: EFormFieldSize.LG,
         labelText: "Название поля",
         showLabel: true,
         placeholder: "Введите текст...",
@@ -373,6 +387,82 @@ export const WithCounter: StoryObj<typeof TextField> = {
         docs: {
             description: {
                 story: "TextField с динамическим счетчиком символов. Счетчик показывает текущее количество символов и максимально допустимое.",
+            },
+        },
+    },
+};
+
+export const Sizes: StoryObj<typeof TextField> = {
+    render: () => {
+        const [valueSM, setValueSM] = useState("");
+        const [valueMD, setValueMD] = useState("");
+        const [valueLG, setValueLG] = useState("");
+
+        const handleChangeSM = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueSM(e.target.value);
+        };
+
+        const handleChangeMD = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueMD(e.target.value);
+        };
+
+        const handleChangeLG = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueLG(e.target.value);
+        };
+
+        return (
+            <div style={{ maxWidth: "400px" }}>
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер SM (маленький)
+                    </Title>
+                    <TextField
+                        size={EFormFieldSize.SM}
+                        inputProps={{
+                            value: valueSM,
+                            onChange: handleChangeSM,
+                            placeholder: "Введите текст...",
+                        }}
+                        label="Маленькое поле"
+                    />
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер MD (средний)
+                    </Title>
+                    <TextField
+                        size={EFormFieldSize.MD}
+                        inputProps={{
+                            value: valueMD,
+                            onChange: handleChangeMD,
+                            placeholder: "Введите текст...",
+                        }}
+                        label="Среднее поле"
+                    />
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер LG (большой) - по умолчанию
+                    </Title>
+                    <TextField
+                        size={EFormFieldSize.LG}
+                        inputProps={{
+                            value: valueLG,
+                            onChange: handleChangeLG,
+                            placeholder: "Введите текст...",
+                        }}
+                        label="Большое поле"
+                    />
+                </div>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Демонстрация различных размеров TextField: SM (маленький), MD (средний), LG (большой - по умолчанию). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
     },

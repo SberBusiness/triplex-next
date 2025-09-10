@@ -12,9 +12,10 @@ import {
     FormFieldMaskedInput,
     FormFieldCounter,
 } from "../src/components/FormField";
+import { EFormFieldSize } from "../src/components/FormField/enums";
 import { FormGroup } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
-import { Text, ETextSize, EFontType } from "../src/components/Typography";
+import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
 import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
@@ -35,6 +36,7 @@ export default {
 - **FormFieldClear** - кнопка очистки
 - **FormFieldPrefix/Postfix** - элементы слева/справа от поля
 - **FormFieldDescription** - описание под полем
+- **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
                 `,
             },
         },
@@ -285,6 +287,73 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
     },
 };
 
+export const Sizes: StoryObj<typeof FormField> = {
+    render: function Render() {
+        const [valueSM, setValueSM] = useState("");
+        const [valueMD, setValueMD] = useState("");
+        const [valueLG, setValueLG] = useState("");
+
+        const handleChangeSM = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueSM(e.target.value);
+        };
+
+        const handleChangeMD = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueMD(e.target.value);
+        };
+
+        const handleChangeLG = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueLG(e.target.value);
+        };
+
+        return (
+            <div style={{ maxWidth: "400px" }}>
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер SM (маленький)
+                    </Title>
+                    <FormGroup>
+                        <FormField size={EFormFieldSize.SM}>
+                            <FormFieldLabel>Маленькое поле</FormFieldLabel>
+                            <FormFieldInput value={valueSM} onChange={handleChangeSM} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер MD (средний) - по умолчанию
+                    </Title>
+                    <FormGroup>
+                        <FormField size={EFormFieldSize.MD}>
+                            <FormFieldLabel>Среднее поле</FormFieldLabel>
+                            <FormFieldInput value={valueMD} onChange={handleChangeMD} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер LG (большой)
+                    </Title>
+                    <FormGroup>
+                        <FormField size={EFormFieldSize.LG}>
+                            <FormFieldLabel>Большое поле</FormFieldLabel>
+                            <FormFieldInput value={valueLG} onChange={handleChangeLG} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Демонстрация различных размеров FormField: SM (маленький), MD (средний - по умолчанию), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
+            },
+        },
+    },
+};
+
 export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
     render: () => {
         const [phoneValue, setPhoneValue] = useState("");
@@ -460,6 +529,15 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
                 type: { summary: "string" },
             },
         },
+        size: {
+            control: { type: "select" },
+            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            description: "Размер поля ввода",
+            table: {
+                type: { summary: "EFormFieldSize" },
+                defaultValue: { summary: "EFormFieldSize.MD" },
+            },
+        },
         className: {
             control: { type: "text" },
             description: "Дополнительные CSS классы",
@@ -471,6 +549,7 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
     args: {
         error: false,
         disabled: false,
+        size: EFormFieldSize.MD,
         labelText: "Название поля",
         placeholder: "Введите текст...",
         showClear: false,

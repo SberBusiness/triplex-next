@@ -3,9 +3,12 @@ import {FormFieldContext} from '../FormFieldContext';
 import clsx from 'clsx';
 import { uniqueId } from 'lodash-es';
 import styles from '../styles/FormFieldInput.module.less';
+import { EFormFieldSize } from '../enums';
 
 /** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
-export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, 'render'> {}
+export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, 'render' | 'size'> {
+    size: EFormFieldSize;
+}
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -19,8 +22,8 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
     const {className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps} = props;
     const {render, ...renderProvideProps} = props;
-    const {focused, disabled, setFocused, setId, setValueExist} = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldInput, className);
+    const {focused, disabled, setFocused, setId, setValueExist, size} = useContext(FormFieldContext);
+    const classNames = clsx(styles.formFieldInput, className, styles[`size-${size}`]);
 
     const instanceId = useRef(id || uniqueId('input_'));
 
@@ -80,6 +83,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
                 onFocus: handleFocus,
                 /* Когда элемент не в фокусе, вместо placeholder показывается Label. */
                 placeholder: focused ? placeholder : ' ',
+                size,
             },
             ref
         );

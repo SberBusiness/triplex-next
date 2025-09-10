@@ -5,6 +5,14 @@
     box-shadow: var(--triplex-next-FormField-Shadow_Default);
     border-radius: 10px;
 
+    &:hover {
+        background: var(--triplex-next-FormField-Background_Hover);
+    }
+
+    &.disabled {
+        background: var(--triplex-next-FormField-Background_Disabled);
+    }
+
     &.active {
         background: var(--triplex-next-FormField-Background_Active);
         box-shadow: var(--triplex-next-FormField-Shadow_Active);
@@ -12,14 +20,6 @@
         &::placeholder {
             opacity: 1;
         }
-    }
-
-    &:hover {
-        background: var(--triplex-next-FormField-Background_Hover);
-    }
-
-    &.disabled {
-        background: var(--triplex-next-FormField-Background_Disabled);
     }
 
     &.error {

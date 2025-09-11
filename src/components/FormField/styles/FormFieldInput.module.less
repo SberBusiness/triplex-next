@@ -1,9 +1,4 @@
 .formFieldInput {
-    padding-top: 26px;
-    padding-bottom: 10px;
-    font-size: 16px;
-    height: 56px;
-    line-height: 20px;
     width: 100%;
     box-sizing: border-box;
     border: none;
@@ -39,6 +34,30 @@
     &:not(:-webkit-autofill) {
         animation-name: autofill-cancelled-hook;
         animation-duration: 1ms;
+    }
+
+    &.size-sm {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        font-size: 12px;
+        height: 28px;
+        line-height: 16px;
+    }
+
+    &.size-md {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 14px;
+        height: 40px;
+        line-height: 20px;
+    }
+
+    &.size-lg {
+        padding-top: 26px;
+        padding-bottom: 10px;
+        height: 56px;
+        line-height: 20px;
+        font-size: 16px;
     }
 }
 

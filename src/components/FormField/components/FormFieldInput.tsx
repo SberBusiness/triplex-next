@@ -1,11 +1,14 @@
-import React, {useEffect, useContext, useRef} from 'react';
-import {FormFieldContext} from '../FormFieldContext';
-import clsx from 'clsx';
-import { uniqueId } from 'lodash-es';
-import styles from '../styles/FormFieldInput.module.less';
+import React, { useEffect, useContext, useRef } from "react";
+import { FormFieldContext } from "../FormFieldContext";
+import clsx from "clsx";
+import { uniqueId } from "lodash-es";
+import styles from "../styles/FormFieldInput.module.less";
+import { EFormFieldSize } from "../enums";
 
 /** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
-export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, 'render'> {}
+export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
+    size: EFormFieldSize;
+}
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -17,12 +20,12 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
 
 /** Компонент, отображающий input. */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
-    const {className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps} = props;
-    const {render, ...renderProvideProps} = props;
-    const {focused, disabled, setFocused, setId, setValueExist} = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldInput, className);
+    const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
+    const { render, ...renderProvideProps } = props;
+    const { focused, disabled, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
+    const classNames = clsx(styles.formFieldInput, className, styles[`size-${size}`]);
 
-    const instanceId = useRef(id || uniqueId('input_'));
+    const instanceId = useRef(id || uniqueId("input_"));
 
     useEffect(() => {
         setId(instanceId.current);
@@ -34,7 +37,6 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             setId(instanceId.current);
         }
     }, [id, setId]);
-
 
     useEffect(() => {
         setValueExist(Boolean(value));
@@ -59,9 +61,9 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
      * - Браузер устанавливает значение в поле при навигации пользователем по сохранённым опциям заполнения.
      */
     const handleAnimationStart = (event: React.AnimationEvent<HTMLInputElement>) => {
-        if (event.animationName.startsWith('autofill-applied-hook')) {
+        if (event.animationName.startsWith("autofill-applied-hook")) {
             setValueExist(true);
-        } else if (event.animationName.startsWith('autofill-cancelled-hook')) {
+        } else if (event.animationName.startsWith("autofill-cancelled-hook")) {
             // Необходимо проверить, что при отмене автозаполнения, в поле не находится значение.
             !value && setValueExist(false);
         }
@@ -79,9 +81,10 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
                 onBlur: handleBlur,
                 onFocus: handleFocus,
                 /* Когда элемент не в фокусе, вместо placeholder показывается Label. */
-                placeholder: focused ? placeholder : ' ',
+                placeholder: focused ? placeholder : " ",
+                size,
             },
-            ref
+            ref,
         );
     } else {
         // Рендер текстового инпута по-умолчанию.
@@ -102,4 +105,4 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
     }
 });
 
-FormFieldInput.displayName = 'FormFieldInput';
+FormFieldInput.displayName = "FormFieldInput";

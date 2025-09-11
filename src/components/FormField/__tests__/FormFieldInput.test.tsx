@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
+import { IFormFieldInputProvideProps } from "../components/FormFieldInput";
 
 describe("FormFieldInput", () => {
     it("handles value changes", () => {
@@ -9,7 +10,7 @@ describe("FormFieldInput", () => {
             <FormField>
                 <FormFieldLabel>Change Test</FormFieldLabel>
                 <FormFieldInput onChange={handleChange} />
-            </FormField>
+            </FormField>,
         );
 
         const input = screen.getByRole("textbox");
@@ -26,7 +27,7 @@ describe("FormFieldInput", () => {
             <FormField>
                 <FormFieldLabel>Focus Test</FormFieldLabel>
                 <FormFieldInput onFocus={handleFocus} onBlur={handleBlur} />
-            </FormField>
+            </FormField>,
         );
 
         const input = screen.getByRole("textbox");
@@ -42,7 +43,7 @@ describe("FormFieldInput", () => {
             <FormField disabled>
                 <FormFieldLabel>Disabled Input</FormFieldLabel>
                 <FormFieldInput />
-            </FormField>
+            </FormField>,
         );
 
         const input = screen.getByRole("textbox");
@@ -54,7 +55,7 @@ describe("FormFieldInput", () => {
             <FormField>
                 <FormFieldLabel>Placeholder Test</FormFieldLabel>
                 <FormFieldInput placeholder="Enter text..." />
-            </FormField>
+            </FormField>,
         );
 
         const input = screen.getByRole("textbox");
@@ -62,15 +63,16 @@ describe("FormFieldInput", () => {
     });
 
     it("handles custom render function", () => {
-        const customRender = vi.fn((props: React.InputHTMLAttributes<HTMLInputElement>) => (
-            <input {...props} data-testid="custom-input" />
-        ));
+        const customRender = vi.fn((props: IFormFieldInputProvideProps) => {
+            const { size, ...inputProps } = props;
+            return <input {...inputProps} data-testid="custom-input" />;
+        });
 
         render(
             <FormField>
                 <FormFieldLabel>Custom Render</FormFieldLabel>
                 <FormFieldInput render={customRender} />
-            </FormField>
+            </FormField>,
         );
 
         expect(customRender).toHaveBeenCalled();
@@ -81,12 +83,8 @@ describe("FormFieldInput", () => {
         render(
             <FormField>
                 <FormFieldLabel>Props Test</FormFieldLabel>
-                <FormFieldInput
-                    data-testid="input-test"
-                    className="custom-input-class"
-                    maxLength={10}
-                />
-            </FormField>
+                <FormFieldInput data-testid="input-test" className="custom-input-class" maxLength={10} />
+            </FormField>,
         );
 
         const input = screen.getByTestId("input-test");
@@ -94,4 +92,3 @@ describe("FormFieldInput", () => {
         expect(input).toHaveAttribute("maxLength", "10");
     });
 });
-

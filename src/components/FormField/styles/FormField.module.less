@@ -1,9 +1,21 @@
+@import '../../../styles/transitions';
+
 .formField {
     position: relative;
     flex-grow: 1;
     background: var(--triplex-next-FormField-Background_Default);
     box-shadow: var(--triplex-next-FormField-Shadow_Default);
-    border-radius: 10px;
+
+    // Применяем плавные переходы
+    .smooth-transition();
+
+    &:hover {
+        background: var(--triplex-next-FormField-Background_Hover);
+    }
+
+    &.disabled {
+        background: var(--triplex-next-FormField-Background_Disabled);
+    }
 
     &.active {
         background: var(--triplex-next-FormField-Background_Active);
@@ -14,19 +26,29 @@
         }
     }
 
-    &:hover {
-        background: var(--triplex-next-FormField-Background_Hover);
-    }
-
-    &.disabled {
-        background: var(--triplex-next-FormField-Background_Disabled);
-    }
-
     &.error {
         background: var(--triplex-next-FormField-Background_Error);
 
+        &:hover {
+            background: var(--triplex-next-FormField-Background_Error_Hover);
+        }
+
         &.active {
+            background: var(--triplex-next-FormField-Background_Error);
             box-shadow: var(--triplex-next-FormField-Shadow_Error_Active);
         }
+    }
+
+    &.size-sm {
+        border-radius: 6px;
+    }
+
+    &.size-md {
+        border-radius: 8px;
+
+    }
+
+    &.size-lg {
+        border-radius: 10px;
     }
 }

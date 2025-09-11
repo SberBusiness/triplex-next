@@ -92,7 +92,7 @@ export default {
     tags: ["autodocs"],
 };
 
-export const TitleWithControls: StoryObj<typeof Title> = {
+export const TitlePlayground: StoryObj<typeof Title> = {
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Title {...args}>Интерактивный заголовок с controls</Title>
@@ -284,7 +284,7 @@ export const TitleTypes: StoryObj<typeof Title> = {
     },
 };
 
-export const TextWithControls: StoryObj<typeof Text> = {
+export const TextPlayground: StoryObj<typeof Text> = {
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Text {...args}>Интерактивный текст с controls</Text>
@@ -497,7 +497,7 @@ export const TextTypes: StoryObj<typeof Text> = {
     },
 };
 
-export const CaptionWithControls: StoryObj<typeof Caption> = {
+export const CaptionPlayground: StoryObj<typeof Caption> = {
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Caption {...args}>Интерактивная подпись с controls</Caption>

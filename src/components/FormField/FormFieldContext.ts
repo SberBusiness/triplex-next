@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { EFormFieldSize } from "./enums";
 
 export interface IFormFieldContext {
     // Поле в состоянии disabled.
@@ -25,13 +26,15 @@ export interface IFormFieldContext {
     setValueExist: (valueExist: boolean) => void;
     // Поле имеет значение, в этом случае label перемещается вверх над значением.
     valueExist: boolean;
+    // Размер поля.
+    size: EFormFieldSize;
 }
 
-export const initialFormFieldContextContext: IFormFieldContext = {
+export const initialFormFieldContext: IFormFieldContext = {
     disabled: false,
     focused: false,
     hovered: false,
-    id: '',
+    id: "",
     postfixWidth: 0,
     prefixWidth: 0,
     setFocused: () => {},
@@ -40,9 +43,10 @@ export const initialFormFieldContextContext: IFormFieldContext = {
     setPrefixWidth: () => {},
     setValueExist: () => {},
     valueExist: false,
+    size: EFormFieldSize.MD,
 };
 
 /**
  * Контекст поля ввода.
  */
-export const FormFieldContext = React.createContext<IFormFieldContext>(initialFormFieldContextContext);
+export const FormFieldContext = React.createContext<IFormFieldContext>(initialFormFieldContext);

@@ -10,10 +10,12 @@ import {
     FormFieldDescription,
     FormFieldTextarea,
     FormFieldMaskedInput,
+    FormFieldCounter,
 } from "../src/components/FormField";
-import { FormGroup, FormGroupLine } from "../src/components/FormGroup";
+import { EFormFieldSize } from "../src/components/FormField/enums";
+import { FormGroup } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
-import { Text, ETextSize, EFontType } from "../src/components/Typography";
+import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
 import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
@@ -34,6 +36,7 @@ export default {
 - **FormFieldClear** - кнопка очистки
 - **FormFieldPrefix/Postfix** - элементы слева/справа от поля
 - **FormFieldDescription** - описание под полем
+- **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
                 `,
             },
         },
@@ -50,7 +53,7 @@ export const Basic: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormField>
                     <FormFieldLabel>Имя пользователя</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} placeholder="Введите имя..." />
@@ -76,7 +79,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormField>
                     <FormFieldPrefix>
                         <DefaulticonStrokePrdIcon20 paletteIndex={5} />
@@ -133,6 +136,48 @@ export const WithClearButton: StoryObj<typeof FormField> = {
     },
 };
 
+export const WithCounter: StoryObj<typeof FormField> = {
+    render: function Render() {
+        const [value, setValue] = useState("");
+        const maxLength = 201;
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const newValue = e.target.value;
+            if (newValue.length <= maxLength) {
+                setValue(newValue);
+            }
+        };
+
+        const currentLength = value.length;
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <FormField>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput value={value} onChange={handleChange} />
+                </FormField>
+                <FormFieldDescription>
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Описание поля
+                    </Text>
+                    <FormFieldCounter>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            {currentLength}/{maxLength}
+                        </Text>
+                    </FormFieldCounter>
+                </FormFieldDescription>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "FormField со счетчиком символов. Счетчик показывает текущее количество символов и максимально допустимое.",
+            },
+        },
+    },
+};
+
 export const States: StoryObj<typeof FormField> = {
     render: function Render() {
         const [value, setValue] = useState("");
@@ -147,57 +192,45 @@ export const States: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldInput value={value} onChange={handleChange} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value={value} onChange={handleChange} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField error>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldInput value={valueError} onChange={handleChangeError} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField error>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value={valueError} onChange={handleChangeError} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                            Текст ошибки
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField disabled>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldInput value="Value disabled" />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField disabled>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value="Value disabled" />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
             </div>
         );
@@ -214,71 +247,33 @@ export const States: StoryObj<typeof FormField> = {
 export const Textarea: StoryObj<typeof FormFieldTextarea> = {
     render: function Render() {
         const [value, setValue] = useState("");
-        const [valueError, setValueError] = useState("");
+        const maxLength = 201;
+
+        const currentLength = value.length;
 
         const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setValue(e.target.value);
-        };
-
-        const handleChangeError = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setValueError(e.target.value);
+            if (e.target.value.length <= maxLength) {
+                setValue(e.target.value);
+            }
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldTextarea value={value} onChange={handleChange} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
+                    <FormField>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldTextarea value={value} onChange={handleChange} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                        <FormFieldCounter>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {currentLength}/{maxLength}
                             </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <FormGroupLine>
-                        <FormField error>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldTextarea value={valueError} onChange={handleChangeError} />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <FormGroupLine>
-                        <FormField disabled>
-                            <FormFieldLabel>Название поля</FormFieldLabel>
-                            <FormFieldTextarea />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                        </FormFieldCounter>
+                    </FormFieldDescription>
                 </FormGroup>
             </div>
         );
@@ -286,7 +281,74 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
     parameters: {
         docs: {
             description: {
-                story: "FormField с многострочным полем ввода (textarea). Поддерживает все те же состояния, что и обычное поле.",
+                story: "FormField с многострочным полем ввода (textarea). Счетчик показывает текущее количество символов и максимально допустимое.",
+            },
+        },
+    },
+};
+
+export const Sizes: StoryObj<typeof FormField> = {
+    render: function Render() {
+        const [valueSM, setValueSM] = useState("");
+        const [valueMD, setValueMD] = useState("");
+        const [valueLG, setValueLG] = useState("");
+
+        const handleChangeSM = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueSM(e.target.value);
+        };
+
+        const handleChangeMD = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueMD(e.target.value);
+        };
+
+        const handleChangeLG = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueLG(e.target.value);
+        };
+
+        return (
+            <div style={{ maxWidth: "400px" }}>
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер SM (маленький)
+                    </Title>
+                    <FormGroup>
+                        <FormField size={EFormFieldSize.SM}>
+                            <FormFieldLabel>Маленькое поле</FormFieldLabel>
+                            <FormFieldInput value={valueSM} onChange={handleChangeSM} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер MD (средний) - по умолчанию
+                    </Title>
+                    <FormGroup>
+                        <FormField size={EFormFieldSize.MD}>
+                            <FormFieldLabel>Среднее поле</FormFieldLabel>
+                            <FormFieldInput value={valueMD} onChange={handleChangeMD} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+
+                <div style={{ marginBottom: "32px" }}>
+                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Размер LG (большой)
+                    </Title>
+                    <FormGroup>
+                        <FormField size={EFormFieldSize.LG}>
+                            <FormFieldLabel>Большое поле</FormFieldLabel>
+                            <FormFieldInput value={valueLG} onChange={handleChangeLG} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Демонстрация различных размеров FormField: SM (маленький), MD (средний - по умолчанию), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
     },
@@ -306,49 +368,41 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Номер телефона</FormFieldLabel>
-                            <FormFieldMaskedInput
-                                value={phoneValue}
-                                onChange={handlePhoneChange}
-                                mask={FormFieldMaskedInput.presets.masks.phone}
-                            />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Номер телефона</FormFieldLabel>
+                        <FormFieldMaskedInput
+                            value={phoneValue}
+                            onChange={handlePhoneChange}
+                            mask={FormFieldMaskedInput.presets.masks.phone}
+                        />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
 
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField>
-                            <FormFieldLabel>Номер карты</FormFieldLabel>
-                            <FormFieldMaskedInput
-                                value={cardValue}
-                                onChange={handleCardChange}
-                                mask={FormFieldMaskedInput.presets.masks.cardNumber}
-                                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
-                                placeholder="Введите номер карты"
-                            />
-                        </FormField>
-                    </FormGroupLine>
-                    <FormGroupLine>
-                        <FormFieldDescription>
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Описание поля
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroupLine>
+                    <FormField>
+                        <FormFieldLabel>Номер карты</FormFieldLabel>
+                        <FormFieldMaskedInput
+                            value={cardValue}
+                            onChange={handleCardChange}
+                            mask={FormFieldMaskedInput.presets.masks.cardNumber}
+                            placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
+                            placeholder="Введите номер карты"
+                        />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Описание поля
+                        </Text>
+                    </FormFieldDescription>
                 </FormGroup>
             </div>
         );
@@ -366,8 +420,8 @@ interface IFormFieldWithControlsProps extends React.ComponentProps<typeof FormFi
     labelText?: string;
     placeholder?: string;
     showClear?: boolean;
-    showDescription?: boolean;
     descriptionText?: string;
+    counter?: string;
 }
 
 export const Playground: StoryObj<IFormFieldWithControlsProps> = {
@@ -382,35 +436,38 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
             setValue("");
         };
 
-        const { labelText, placeholder, showClear, showDescription, descriptionText, ...formFieldProps } = args;
+        const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
-                    <FormGroupLine>
-                        <FormField {...formFieldProps}>
-                            <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
-                            <FormFieldInput
-                                value={value}
-                                onChange={handleChange}
-                                placeholder={placeholder || "Введите текст..."}
-                            />
-                            {showClear && value && (
-                                <FormFieldPostfix>
-                                    <FormFieldClear onClick={handleClear} />
-                                </FormFieldPostfix>
-                            )}
-                        </FormField>
-                    </FormGroupLine>
+                    <FormField {...formFieldProps}>
+                        <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
+                        <FormFieldInput
+                            value={value}
+                            onChange={handleChange}
+                            placeholder={placeholder || "Введите текст..."}
+                        />
+                        {showClear && value && (
+                            <FormFieldPostfix>
+                                <FormFieldClear onClick={handleClear} />
+                            </FormFieldPostfix>
+                        )}
+                    </FormField>
 
-                    {showDescription && (
-                        <FormGroupLine>
-                            <FormFieldDescription>
-                                <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    {descriptionText || "Описание поля"}
-                                </Text>
-                            </FormFieldDescription>
-                        </FormGroupLine>
+                    {(descriptionText || counter) && (
+                        <FormFieldDescription>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {descriptionText || "Описание поля"}
+                            </Text>
+                            {counter && (
+                                <FormFieldCounter>
+                                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                        {counter}
+                                    </Text>
+                                </FormFieldCounter>
+                            )}
+                        </FormFieldDescription>
                     )}
                 </FormGroup>
             </div>
@@ -457,20 +514,28 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
                 defaultValue: { summary: "false" },
             },
         },
-        showDescription: {
-            control: { type: "boolean" },
-            description: "Показать описание поля",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
         descriptionText: {
             control: { type: "text" },
             description: "Текст описания",
             table: {
                 type: { summary: "string" },
                 defaultValue: { summary: "Описание поля" },
+            },
+        },
+        counter: {
+            control: { type: "text" },
+            description: "Текст счетчика символов",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        size: {
+            control: { type: "select" },
+            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            description: "Размер поля ввода",
+            table: {
+                type: { summary: "EFormFieldSize" },
+                defaultValue: { summary: "EFormFieldSize.MD" },
             },
         },
         className: {
@@ -484,11 +549,12 @@ export const Playground: StoryObj<IFormFieldWithControlsProps> = {
     args: {
         error: false,
         disabled: false,
+        size: EFormFieldSize.MD,
         labelText: "Название поля",
         placeholder: "Введите текст...",
         showClear: false,
-        showDescription: false,
         descriptionText: "Описание поля",
+        counter: "0/201",
         className: "",
     },
     parameters: {

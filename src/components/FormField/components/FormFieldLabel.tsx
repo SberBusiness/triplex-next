@@ -10,7 +10,7 @@ interface IFormFieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElemen
 /** Лейбл поля ввода/селекта. Отображается по-середине поля ввода, когда инпут/селект имеет значение или фокус, перемещается в верхний левый угол. */
 export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabelProps>(
     ({children, className, style, ...htmlLabelAttributes}, ref) => {
-        const {disabled, focused, id, prefixWidth, postfixWidth, valueExist} = useContext(FormFieldContext);
+        const {disabled, focused, id, prefixWidth, postfixWidth, size, valueExist} = useContext(FormFieldContext);
         // Label отображается в уменьшенном виде над полем ввода/селектом.
         const [floating, setFloating] = useState(false);
 
@@ -23,6 +23,7 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
             {
                 [styles.disabled]: disabled,
                 [styles.floating]: floating,
+                [styles[`size-${size}`]]: size,
             },
             className
         );

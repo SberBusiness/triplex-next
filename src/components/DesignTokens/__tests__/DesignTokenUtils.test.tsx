@@ -195,8 +195,6 @@ describe("DesignTokenUtils", () => {
 
             const result = DesignTokenUtils.getStyle(undefined, customTokens);
 
-            console.log(result);
-
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
         });
 

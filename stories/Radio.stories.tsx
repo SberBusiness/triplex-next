@@ -1,5 +1,6 @@
 import React from "react";
-import { Radio, RadioXGroup, RadioYGroup } from "../src/components/Radio";
+import { Radio, RadioXGroup, RadioYGroup, ERadioSize } from "../src/components/Radio";
+import { Gap } from "../src/components/Gap";
 import { StoryObj } from "@storybook/react";
 
 export default {
@@ -13,6 +14,7 @@ export default {
 
 ## Особенности
 
+- **Размеры**: medium (MD), large (LG)
 - **Группировка**: по осям X (компонент RadioXGroup) и Y (компонент RadioYGroup)
 
 ## Использование
@@ -29,6 +31,24 @@ import { Radio } from '@sberbusiness/triplex-next';
 <Radio disabled>
     Disabled option
 </Radio>
+
+// Группа радио-кнопок с направлением по оси X
+<RadioXGroup>
+    {[1, 2, 3].map((value, index) => (
+        <Radio key={index} value={value}>
+            Вариант - {index + 1}
+        </Radio>
+    ))}
+</RadioXGroup>
+
+// Группа радио-кнопок с направлением по оси Y
+<RadioYGroup>
+    {[1, 2, 3, 4].map((value, index) => (
+        <Radio key={index} value={value}>
+            Вариант - {index + 1}
+        </Radio>
+    ))}
+</RadioYGroup>
 \`\`\`
                 `,
             },
@@ -41,6 +61,7 @@ export const Playground: StoryObj<typeof Radio> = {
     args: {
         children: "Radio text",
         disabled: false,
+        size: ERadioSize.MD,
     },
     argTypes: {
         children: {
@@ -62,6 +83,15 @@ export const Playground: StoryObj<typeof Radio> = {
             description: "Состояние disabled",
             table: {
                 type: { summary: "boolean" },
+            },
+        },
+        size: {
+            control: { type: "select" },
+            options: Object.values(ERadioSize),
+            description: "Размер радио-кнопки",
+            table: {
+                type: { summary: "ERadioSize" },
+                defaultValue: { summary: "ERadioSize.MD" },
             },
         },
         onChange: {
@@ -88,8 +118,8 @@ export const Playground: StoryObj<typeof Radio> = {
     render: (args) => <Radio {...args} />,
 };
 
-export const Default: StoryObj<typeof Radio> = {
-    name: "Default",
+export const DifferentSizes: StoryObj<typeof Radio> = {
+    name: "Different Sizes",
     args: {
         children: "Radio text",
     },
@@ -114,6 +144,11 @@ export const Default: StoryObj<typeof Radio> = {
                 disable: true,
             },
         },
+        size: {
+            table: {
+                disable: true,
+            },
+        },
         disabled: {
             table: {
                 disable: true,
@@ -128,6 +163,8 @@ export const Default: StoryObj<typeof Radio> = {
     render: (args) => (
         <div style={{ width: "250px" }}>
             <Radio {...args} />
+            <Gap size={16} />
+            <Radio {...args} size={ERadioSize.LG} />
         </div>
     ),
 };
@@ -163,7 +200,7 @@ export const YGroup: StoryObj<typeof Radio> = {
     },
     render: () => (
         <RadioYGroup>
-            {[1, 2, 3].map((value, index) => (
+            {[1, 2, 3, 4].map((value, index) => (
                 <Radio key={index} name="radio-group" value={value}>
                     Radio text
                 </Radio>

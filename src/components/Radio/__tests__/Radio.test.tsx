@@ -1,14 +1,17 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Radio } from "../Radio";
+import { Radio, ERadioSize } from "@sberbusiness/triplex-next/components/Radio";
+
+const getRadio = () => screen.getByRole("radio");
+const getLabel = () => screen.getByRole("radio").closest("label");
 
 describe("Radio", () => {
     it("Should render with default props", () => {
         render(<Radio>Radio text</Radio>);
 
-        const radio = screen.getByRole("radio");
-        const label = screen.getByText("Radio text");
+        const radio = getRadio();
+        const label = getLabel();
 
         expect(radio).toBeInTheDocument();
         expect(label).toBeInTheDocument();
@@ -17,35 +20,39 @@ describe("Radio", () => {
         expect(radio).not.toBeDisabled();
     });
 
+    it("Should apply size classes", () => {
+        const { rerender } = render(
+            <Radio size={ERadioSize.MD} data-testid="radio">
+                Radio text
+            </Radio>,
+        );
+        const label = getLabel();
+        expect(label).toHaveClass("md");
+
+        rerender(<Radio size={ERadioSize.LG} data-testid="radio" />);
+        expect(label).toHaveClass("lg");
+    });
+
     it("Should render with custom className", () => {
         render(<Radio className="custom-radio">Radio text</Radio>);
 
-        const radio = screen.getByRole("radio");
+        const radio = getRadio();
         expect(radio).toHaveClass("custom-radio");
     });
 
     it("Should handle checked state", () => {
         render(<Radio checked>Checked radio</Radio>);
 
-        const radio = screen.getByRole("radio");
+        const radio = getRadio();
         expect(radio).toBeChecked();
     });
 
     it("Should handle disabled state", () => {
         render(<Radio disabled>Disabled radio</Radio>);
 
-        const radio = screen.getByRole("radio");
+        const radio = getRadio();
 
         expect(radio).toBeDisabled();
-    });
-
-    it("Should show focus visible state on keyboard focus", () => {
-        render(<Radio>Radio text</Radio>);
-
-        const radio = screen.getByRole("radio");
-        fireEvent.focus(radio);
-
-        expect(radio).toHaveAttribute("data-focus-visible", "");
     });
 
     it("Should forward ref correctly", () => {

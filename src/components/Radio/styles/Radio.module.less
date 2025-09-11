@@ -1,13 +1,23 @@
 .label {
     display: inline-block;
     position: relative;
-    min-width: 28px;
-    min-height: 28px;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 28px;
     color: var(--triplex-next-Radio-Color_Default);
     cursor: pointer;
+
+    &.md {
+        font-size: 14px;
+        line-height: 24px;
+        min-height: 24px;
+        min-width: 24px;
+    }
+
+    &.lg {
+        font-size: 16px;
+        line-height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+    }
 
     &.nonempty {
         padding-left: 40px;
@@ -31,15 +41,25 @@
 }
 
 .radioIcon::after {
-    content: '';
+    content: "";
     position: absolute;
-    width: 14px;
-    height: 14px;
-    top: 7px;
-    left: 7px;
     background: var(--triplex-next-Radio-Dot_Default);
     border-radius: 50%;
     transform: scale(0);
+
+    .md & {
+        width: 12px;
+        height: 12px;
+        top: 6px;
+        left: 6px;
+    }
+
+    .lg & {
+        width: 14px;
+        height: 14px;
+        top: 7px;
+        left: 7px;
+    }
 }
 
 .radioIcon,
@@ -50,9 +70,17 @@
 .radio,
 .radioIcon {
     position: absolute;
-    width: 28px;
-    height: 28px;
     left: 0;
+
+    .md & {
+        width: 24px;
+        height: 24px;
+    }
+
+    .lg & {
+        width: 28px;
+        height: 28px;
+    }
 
     .nonempty & {
         top: 2px;
@@ -94,7 +122,7 @@
     }
 }
 
-.radio[data-focus-visible]:focus + .radioIcon {
+.radio:focus-visible + .radioIcon {
     box-shadow: var(--triplex-next-Radio-BorderColor_Focused);
 }
 

@@ -6,6 +6,7 @@ export const designTokensComponentsFormFieldKeys = [
     "Background_Default",
     "Background_Disabled",
     "Background_Error",
+    "Background_Error_Hover",
     "Background_Hover",
 
     "Input_Color_Default",
@@ -35,6 +36,7 @@ export const FormField_Tokens: TDesignTokensComponentsFormFieldValues = {
     Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-FormField-Background_Default)
     Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-FormField-Background_Disabled)
     Background_Error: [{ ref: "ColorError.100" }, { ref: "ColorError.0" }], // var(--triplex-next-FormField-Background_Error)
+    Background_Error_Hover: [{ ref: "ColorError.90" }, { ref: "ColorError.10" }], // var(--triplex-next-FormField-Background_Error_Hover)
     Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-FormField-Background_Hover)
 
     Input_Color_Default: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-FormField-Input_Color_Default)

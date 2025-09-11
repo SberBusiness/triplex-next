@@ -211,7 +211,7 @@ export const Playground: StoryObj<IMaskedFieldWithControlsProps> = {
                     {...maskedFieldProps}
                     description={
                         descriptionText ? (
-                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                                 {descriptionText}
                             </Text>
                         ) : null
@@ -315,7 +315,7 @@ export const Basic: StoryObj<typeof MaskedField> = {
             <div style={{ width: "304px" }}>
                 <MaskedField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -356,7 +356,7 @@ export const States: StoryObj<typeof MaskedField> = {
             <div style={{ width: "304px" }}>
                 <MaskedField
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -374,7 +374,7 @@ export const States: StoryObj<typeof MaskedField> = {
                 <MaskedField
                     error
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.ERROR}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
                             Неверный формат номера
                         </Text>
                     }
@@ -392,7 +392,7 @@ export const States: StoryObj<typeof MaskedField> = {
                 <MaskedField
                     disabled
                     description={
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
                         </Text>
                     }
@@ -419,10 +419,10 @@ interface IMaskedFieldWithControlsProps extends React.ComponentProps<typeof Mask
     labelText?: string;
     descriptionText?: string;
     maskType?:
-    | keyof typeof FormFieldMaskedInput.presets.masks
-    | "passportSeries"
-    | "passportNumber"
-    | "passportDepartmentCode";
+        | keyof typeof FormFieldMaskedInput.presets.masks
+        | "passportSeries"
+        | "passportNumber"
+        | "passportDepartmentCode";
 }
 
 export const Sizes: StoryObj<typeof MaskedField> = {

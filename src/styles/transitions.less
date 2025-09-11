@@ -1,0 +1,11 @@
+/**
+ * Миксин для плавных переходов
+ * Применяет transition для background, border, box-shadow и color
+ */
+.smooth-transition(@duration: 0.2s, @timing-function: ease-in-out) {
+    transition:
+        background-color @duration @timing-function,
+        border-color @duration @timing-function,
+        box-shadow @duration @timing-function,
+        color @duration @timing-function;
+}

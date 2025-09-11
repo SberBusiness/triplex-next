@@ -11,6 +11,8 @@
     border: none;
     font-weight: 600;
 
+    .smooth-transition();
+
     &::-moz-focus-inner {
         border: none;
         padding: 0;
@@ -56,7 +58,7 @@
         &:not(.icon) {
             .size-LG();
         }
-        
+
         &.icon {
             min-height: @button-height-lg;
             min-width: 56px;
@@ -72,7 +74,7 @@
         }
     }
 
-    & + .button {
+    &+.button {
         &:not(.block) {
             margin-left: @button-siblings-margin-left;
         }

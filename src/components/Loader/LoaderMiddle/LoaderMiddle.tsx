@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 export const LoaderMiddle: React.FC = () => {
     return (
-        <div className={styles.loaderMiddle}>
+        <div role="status" aria-label="loading" className={styles.loaderMiddle}>
             <span className={styles.line} />
             <span className={clsx(styles.dot, styles.dot1)} />
             <span className={clsx(styles.dot, styles.dot2)} />

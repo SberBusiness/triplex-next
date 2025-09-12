@@ -33,6 +33,8 @@ const getLoaderSmallSizeCssClass = (size: ELoaderSmallSize) => {
 export const LoaderSmall: React.FC<ILoaderSmallProps> = ({ theme, size }) => {
     return (
         <span
+            role="status"
+            aria-label="loading"
             className={clsx(styles.loaderSmall, getLoaderSmallSizeCssClass(size), getLoaderSmallThemeCssClass(theme))}
         >
             <span className={clsx(getLoaderSmallThemeCssClass(theme), styles.dot, styles.dot1)} />

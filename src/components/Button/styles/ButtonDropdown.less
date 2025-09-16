@@ -1,0 +1,31 @@
+@import 'src/styles/style';
+
+.buttonDropdown {
+    &.block {
+        display: block;
+    }
+
+    & + .button,
+    & + .buttonDropdown {
+        &:not(.block) {
+            margin-left: @ufs-theme-button-siblings-margin-left;
+        }
+    }
+
+    .buttonDropdownTarget {
+        .caretIcon {
+            position: relative;
+            left: @metric-4;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        &.active .caretIcon {
+            transform: rotate(-180deg);
+        }
+    }
+
+    .buttonDropdownMenuItem {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

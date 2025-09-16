@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "../src/components/Link";
 import { StoryObj } from "@storybook/react";
-import { Gap } from "../src/components/Gap";
+import { Text } from "../src/components/Typography";
+import { ETextSize } from "../src/components/Typography/enums";
+import { EFontType } from "../src/components/Typography/enums";
 
 const ExternalLinkStrokePrdIcon16 = () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,6 +31,7 @@ export default {
 ## Особенности
 
 - **Дополнительный контент**: поддержка contentAfter для добавления иконок или другого контента
+- Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
 
 ## Использование
 
@@ -78,9 +81,6 @@ import { ExternalLinkStrokePrdIcon16 } from '@sberbusiness/icons-next';
 
 export const Playground: StoryObj<typeof Link> = {
     name: "Playground",
-    args: {
-        children: "Link text",
-    },
     argTypes: {
         children: {
             control: { type: "text" },
@@ -107,14 +107,17 @@ export const Playground: StoryObj<typeof Link> = {
             },
         },
     },
-    render: (args) => <Link {...args} />,
+    render: (args) => (
+        <Link {...args}>
+            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                Link text
+            </Text>
+        </Link>
+    ),
 };
 
 export const Default: StoryObj<typeof Link> = {
     name: "Default",
-    args: {
-        children: "Link text",
-    },
     argTypes: {
         children: {
             table: {
@@ -122,42 +125,6 @@ export const Default: StoryObj<typeof Link> = {
             },
         },
         contentAfter: {
-            table: {
-                disable: true,
-            },
-        },
-        href: {
-            table: {
-                disable: true,
-            },
-        },
-        target: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => <Link {...args} href="#" />,
-};
-
-export const ExternalLink: StoryObj<typeof Link> = {
-    name: "External Link",
-    args: {
-        children: "Link text",
-        contentAfter: () => <ExternalLinkStrokePrdIcon16 />,
-    },
-    argTypes: {
-        contentAfter: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
             table: {
                 disable: true,
             },
@@ -179,18 +146,56 @@ export const ExternalLink: StoryObj<typeof Link> = {
         },
     },
     render: (args) => (
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Link {...args} href="#">
+        <Link {...args} href="#">
+            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 Link text
-            </Link>
-            <Gap size={16} />
-            <Link {...args} href="#">
-                Link text
-            </Link>
-            <Gap size={16} />
-            <Link {...args} href="#">
-                Link text
-            </Link>
-        </div>
+            </Text>
+        </Link>
     ),
+};
+
+export const ExternalLink: StoryObj<typeof Link> = {
+    name: "External Link",
+    argTypes: {
+        contentAfter: {
+            table: {
+                disable: true,
+            },
+        },
+        children: {
+            table: {
+                disable: true,
+            },
+        },
+        href: {
+            table: {
+                disable: true,
+            },
+        },
+        target: {
+            table: {
+                disable: true,
+            },
+        },
+        onClick: {
+            table: {
+                disable: true,
+            },
+        },
+    },
+    render: (args) => {
+        const renderContentAfter = () => (
+            <div style={{ paddingTop: "4px" }}>
+                <ExternalLinkStrokePrdIcon16 />
+            </div>
+        );
+
+        return (
+            <Link {...args} href="#" contentAfter={renderContentAfter}>
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                    Link text
+                </Text>
+            </Link>
+        );
+    },
 };

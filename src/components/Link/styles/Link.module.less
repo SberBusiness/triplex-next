@@ -1,28 +1,27 @@
 .link {
     cursor: pointer;
     margin: -1px -3px;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+
+    & * {
+        color: var(--triplex-next-Link-Text_Color_Default) !important;
+
+        &:hover {
+            color: var(--triplex-next-Link-Text_Color_Hover) !important;
+        }
+    
+        &:active {
+            color: var(--triplex-next-Link-Text_Color_Active) !important;
+        }
+    }
 
     &:focus-visible {
         box-shadow: var(--triplex-next-Link-BorderColor_Focus);
     }
-
-    position: relative;
-    color: var(--triplex-next-Link-Text_Color_Default);
-    text-decoration: none;
-
-    &:hover {
-        color: var(--triplex-next-Link-Text_Color_Hover);
-    }
-
-    &:active {
-        color: var(--triplex-next-Link-Text_Color_Active);
-    }
-}
-
-.wordWithContent {
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
 }
 
 .after :last-child {

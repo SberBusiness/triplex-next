@@ -23,65 +23,20 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
             onBlur?.(event);
         };
 
-        /** Рендер функция последующего контента. */
-        const renderContentAfter = () => (contentAfter ? contentAfter() : null);
-
-        /** Рендерит как простой текст. */
-        const renderAsSimpleText = (text: string) => {
-            const words = text.split(" ");
-
-            if (words.length < 2 || (words.length < 3 && contentAfter)) {
-                const className = clsx(styles.wordWithContent, {
-                    [styles.after]: Boolean(contentAfter),
-                });
-                return (
-                    <span className={className}>
-                        {text}
-                        {renderContentAfter()}
-                    </span>
-                );
-            }
-
-            const firstWord = words.slice(0, -1).join(" ");
-            const lastWord = words[words.length - 1];
-
-            const classNameAfter = clsx(styles.wordWithContent, {
-                [styles.after]: Boolean(contentAfter),
-            });
-
-            const lastNode = contentAfter ? (
-                <span className={classNameAfter}>
-                    {lastWord}
-                    {renderContentAfter()}
-                </span>
-            ) : (
-                lastWord
-            );
-
-            return (
-                <>
-                    {firstWord} {lastNode}
-                </>
-            );
-        };
-
         /** Рендерит как React Nodes. */
         const renderAsReactNode = (node: React.ReactNode) => {
-            const firstNode = null;
-            const lastNode = contentAfter ? contentAfter() : null;
+            const childNode = node;
+            const contentAfterNode = contentAfter ? <span className={styles.after}>{contentAfter()}</span> : null;
+
             return (
                 <>
-                    {firstNode}
-                    {node}
-                    {lastNode}
+                    {childNode}
+                    {contentAfterNode}
                 </>
             );
         };
 
-        const renderContent = (children: React.ReactNode) =>
-            typeof children === "string" ? renderAsSimpleText(children) : renderAsReactNode(children);
-
-        const content = contentAfter ? renderContent(children) : children;
+        const content = contentAfter ? renderAsReactNode(children) : children;
 
         return (
             <a

@@ -3,24 +3,23 @@ import {
     ButtonDropdownExtended,
     IButtonDropdownExtendedButtonProvideProps,
     IButtonDropdownExtendedDropdownProvideProps,
-} from "@sber-business/triplex/components/Button/ButtonDropdownExtended";
-import { Button } from "@sber-business/triplex/components/Button/Button";
-import { EButtonSize, EButtonTheme } from "@sber-business/triplex/components/Button/enums";
-import { DropdownwhiteSrvxIcon16 } from "@sberbusiness/icons/DropdownwhiteSrvxIcon16";
-import { CaretdownSrvxIcon16 } from "@sberbusiness/icons/CaretdownSrvxIcon16";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { isKey } from "@sber-business/triplex/utils/keyboard";
-import { DropdownList } from "@sber-business/triplex/components/Dropdown/desktop/DropdownList";
-import { IDropdownListItemProps } from "../Dropdown/desktop/DropdownListItem";
-import { DropdownListContext } from "@sber-business/triplex/components/Dropdown/DropdownListContext";
-import { uniqueId } from "@sber-business/triplex/utils/uniqueId";
-import { DropdownMobileHeader } from "@sber-business/triplex/components/Dropdown/mobile/DropdownMobileHeader";
-import { DropdownMobileBody } from "@sber-business/triplex/components/Dropdown/mobile/DropdownMobileBody";
-import { DropdownMobileList } from "@sber-business/triplex/components/Dropdown/mobile/DropdownMobileList";
-import { DropdownMobileListItem } from "@sber-business/triplex/components/Dropdown/mobile/DropdownMobileListItem";
-import { DropdownMobileClose } from "@sber-business/triplex/components/Dropdown/mobile/DropdownMobileClose";
-import { Text } from "@sber-business/triplex/components/Typography/Text";
-import { ETextSize } from "@sber-business/triplex/components/Typography/enums";
+} from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
+import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
+import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import { DropdownList,  IDropdownListItemProps} from "@sberbusiness/triplex-next/components/Dropdown";
+import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
+import { uniqueId } from "lodash-es";
+import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
+import { DropdownMobileBody } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileBody";
+import { DropdownMobileList } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileList";
+import { DropdownMobileListItem } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileListItem";
+import { DropdownMobileClose } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileClose";
+import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
+import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import clsx from "clsx";
+import styles from "./styles/ButtonDropdown.module.less";
 
 /** Свойства опции в выпадающем списке действий. */
 export interface IButtonDropdownOption
@@ -58,29 +57,21 @@ interface IButtonDropdownBaseProps extends IButtonDropdownProps {
     block?: boolean;
 }
 
-/** Свойства контекстной кнопки с выпадающим списком действий. */
-interface IButtonDotsProps extends IButtonDropdownProps {
-    /** Тема кнопки. */
-    theme: EButtonTheme.DOTS;
-    /** Блочное состояние кнопки. */
-    block?: never;
-}
-
 /** Кнопка с выпадающим списком действий. */
-export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps | IButtonDotsProps>(
+export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps>(
     (props, ref) => {
         const { buttonAttributes, children, className, theme, size, options, selected, block, disabled, ...rest } =
             props;
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
-        const classNames = classnames("cssClass[buttonDropdown]", { "cssClass[block]": !!block }, className);
+        const classNames = clsx(styles.buttonDropdown, { [styles.block]: !!block }, className);
         const [activeDescendant, setActiveDescendant] = useState<string>();
         const instanceId = useRef(uniqueId());
 
         const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = classnames("cssClass[buttonDropdownTarget]", "hoverable", {
-                "cssClass[active]": opened,
-                "cssClass[block]": !!block,
+            const classNames = clsx(styles.buttonDropdownTarget, "hoverable", {
+                [styles.active]: opened,
+                [styles.block]: !!block,
             });
 
             return (
@@ -126,14 +117,14 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             switch (theme) {
                 case EButtonTheme.GENERAL:
                 case EButtonTheme.DANGER:
-                    return <DropdownwhiteSrvxIcon16 className="cssClass[caretIcon]" />;
+                    return <CaretdownStrokeSrvIcon24 paletteIndex={7} className={styles.caretIcon} />;
                 case EButtonTheme.SECONDARY:
-                    return <CaretdownSrvxIcon16 className="cssClass[caretIcon]" />;
+                    return <CaretdownStrokeSrvIcon24 paletteIndex={0} className={styles.caretIcon} />;
             }
         };
 
         const renderDropdown = ({ opened, setOpened, className }: IButtonDropdownExtendedDropdownProvideProps) => {
-            const classNames = classnames("cssClass[buttonDropdownMenu]", className);
+            const classNames = clsx(styles.buttonDropdownMenu, className);
 
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
@@ -177,7 +168,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                             {options.map((option) => (
                                 <DropdownList.Item
                                     {...option}
-                                    className="cssClass[buttonDropdownMenuItem]"
+                                    className={styles.buttonDropdownMenuItem}
                                     key={option.id}
                                     selected={option.id === selected?.id}
                                     onSelect={() => {

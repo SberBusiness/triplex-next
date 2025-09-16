@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileList. */
 export interface IDropdownMobileListProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -8,7 +9,7 @@ export interface IDropdownMobileListProps extends React.HTMLAttributes<HTMLDivEl
 export const DropdownMobileList = React.forwardRef<HTMLDivElement, IDropdownMobileListProps>(
     ({ children, className, ...htmlAttributes }, ref) => (
         <div
-            className={classnames("cssClass[dropdownMobileList]", className)}
+            className={clsx(styles.dropdownMobileList, className)}
             ref={ref}
             role="listbox"
             {...htmlAttributes}

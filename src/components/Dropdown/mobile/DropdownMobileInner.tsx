@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { IOverlayChildrenProvideProps } from "@sber-business/triplex/components/Overlay/OverlayBase";
+import clsx from "clsx";
+import { IOverlayChildrenProvideProps } from "@sberbusiness/triplex-next/components/Overlay/OverlayBase";
 import { useToken } from "../../ThemeProvider/useToken";
+import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileInner. */
 export interface IDropdownMobileInnerProps extends IOverlayChildrenProvideProps, React.HTMLAttributes<HTMLDivElement> {}
@@ -35,18 +36,18 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
             setTimeout(() => setOpenedState(openedProps));
         }, [openedProps]);
 
-        const classNamesWrapper = classnames("cssClass[dropdownMobileWrapper]", scopeClassName, className);
+        const classNamesWrapper = clsx(styles.dropdownMobileWrapper, scopeClassName, className);
 
-        const classNamesBackDrop = classnames("cssClass[dropdownMobileBackdrop]", {
-            "cssClass[closing]": closing,
-            "cssClass[opened]": openedState,
-            "cssClass[opening]": openingState,
+        const classNamesBackDrop = clsx(styles.dropdownMobileBackdrop, {
+            [styles.closing]: closing,
+            [styles.opened]: openedState,
+            [styles.opening]: openingState,
         });
 
-        const classNamesContent = classnames("cssClass[dropdownMobile]", {
-            "cssClass[closing]": closing,
-            "cssClass[opened]": openedState,
-            "cssClass[opening]": openingState,
+        const classNamesContent = clsx(styles.dropdownMobile, {
+            [styles.closing]: closing,
+            [styles.opened]: openedState,
+            [styles.opening]: openingState,
         });
 
         const handleTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {

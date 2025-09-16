@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента DropdownList.
 export const designTokensComponentsDropdownListKeys = [
@@ -27,9 +27,9 @@ export type TDesignTokensComponentsDropdownList = { DropdownList: TDesignTokensC
 
 // Токены компонента DropdownList в светлой и темной темах.
 export const DropdownList_Tokens: TDesignTokensComponentsDropdownListValues = {
-    Background_Active: [{ ref: "Neutral.100" }, { ref: "Neutral.900" }], // var(--triplex-DropdownList-Background_Active)
-    Background_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-DropdownList-Background_Default)
-    Background_Selected: [{ ref: "Neutral.500" }, { ref: "Basic.300" }], // var(--triplex-DropdownList-Background_Selected)
+    Background_Active: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-DropdownList-Background_Active)
+    Background_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-DropdownList-Background_Default)
+    Background_Selected: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-DropdownList-Background_Selected)
 
-    Color: [{ ref: "Basic.700" }, { ref: "Neutral.100" }], // var(--triplex-DropdownList-Color)
+    Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-DropdownList-Color)
 };

@@ -12,3 +12,4 @@ export * from "./Row";
 export * from "./TextField";
 export * from "./ThemeProvider";
 export * from "./Typography";
+export * from "./Dropdown";

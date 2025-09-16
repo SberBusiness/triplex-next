@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileInput. */
 export interface IDropdownMobileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -7,7 +8,7 @@ export interface IDropdownMobileInputProps extends React.InputHTMLAttributes<HTM
 /** Поле ввода мобильной версии Dropdown. */
 export const DropdownMobileInput = React.forwardRef<HTMLInputElement, IDropdownMobileInputProps>(
     ({ className, ...rest }, ref) => (
-        <input className={classnames("cssClass[dropdownMobileInput]", className)} {...rest} ref={ref} />
+        <input className={clsx(styles.dropdownMobileInput, className)} {...rest} ref={ref} />
     )
 );
 

@@ -1,7 +1,8 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { Text } from "@sber-business/triplex/components/Typography/Text";
-import { ELineType, ETextSize } from "@sber-business/triplex/components/Typography/enums";
+import clsx from "clsx";
+import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
+import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileListItem. */
 export interface IDropdownMobileListItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -22,10 +23,9 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
             <Text
                 tag="div"
                 size={ETextSize.B1}
-                line={ELineType.EXTRA}
-                className={classnames(
-                    "cssClass[dropdownMobileListItem]",
-                    { "cssClass[selected]": Boolean(selected) },
+                className={clsx(
+                    styles.dropdownMobileListItem,
+                    { [styles.selected]: Boolean(selected) },
                     className
                 )}
                 aria-selected={Boolean(selected)}

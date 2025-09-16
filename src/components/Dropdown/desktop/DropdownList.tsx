@@ -1,8 +1,9 @@
 import React from "react";
 import { DropdownListItem } from "./DropdownListItem";
-import { EVENT_KEY_CODES } from "@sber-business/triplex/utils/keyboard";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { DropdownListContext } from "@sber-business/triplex/components/Dropdown/DropdownListContext";
+import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
+import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
+import clsx from "clsx";
+import stylesDropdownList from "../styles/DropdownList.module.less";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -87,7 +88,7 @@ export class DropdownList extends React.Component<IDropdownListProps, IDropdownL
 
     public render(): JSX.Element {
         const { children, className, dropdownOpened, listRef, ...htmlDivAttributes } = this.props;
-        const classNames = classnames("cssClass[dropdownList]", className);
+        const classNames = clsx(stylesDropdownList.dropdownList, className);
 
         return (
             <div className={classNames} role="listbox" ref={this.containerRef} {...htmlDivAttributes}>

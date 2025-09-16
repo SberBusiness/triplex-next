@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { EDropdownAlignment, EDropdownDirection } from "@sber-business/triplex/components/Dropdown/Dropdown";
-import { isKey } from "@sber-business/triplex/utils/keyboard";
-import { useToken } from "@sber-business/triplex/components/ThemeProvider/useToken";
+import { EDropdownAlignment, EDropdownDirection } from "@sberbusiness/triplex-next/components/Dropdown/Dropdown";
+import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import { useToken } from "@sberbusiness/triplex-next/components/ThemeProvider/useToken";
+import clsx from "clsx";
+import stylesDropdown from "../styles/Dropdown.module.less";
 
 /** Свойства компонента DropdownDesktop. */
 export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,7 +21,7 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
     fixedWidth?: boolean;
 }
 
-const dropdownDesktopBodyOverflowClassName = "cssClass[dropdownOverflowHidden]";
+const dropdownDesktopBodyOverflowClassName = "dropdownOverflowHidden";
 
 /** Выпадающее меню. */
 export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktopProps>((props, ref) => {
@@ -41,7 +42,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     const [styles, setStyles] = useState<React.CSSProperties>({ ...style, opacity: 0 });
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const dropdownRes = useRef<{ width: number; height: number }>({ height: 0, width: 0 });
-    const classNames = classnames("cssClass[dropdown]", scopeClassName, className);
+    const classNames = clsx(stylesDropdown.dropdown, scopeClassName, className);
 
     /** Блокировка скролла вне дропдауна. */
     const wheelHandler = useCallback(

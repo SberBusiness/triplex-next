@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента DropdownMobileList.
 export const designTokensComponentsDropdownMobileListKeys = ["Active_Background", "Selected_Background"] as const;
@@ -25,6 +25,6 @@ export type TDesignTokensComponentsDropdownMobileList = {
 
 // Токены компонента DropdownMobileList в светлой и темной темах.
 export const DropdownMobileList_Tokens: TDesignTokensComponentsDropdownMobileListValues = {
-    Active_Background: [{ ref: "Neutral.100" }, { ref: "Neutral.900" }], // var(--triplex-DropdownMobileList-Active_Background)
-    Selected_Background: [{ ref: "Neutral.500" }, { ref: "Basic.300" }], // var(--triplex-DropdownMobileList-Selected_Background)
+    Active_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-DropdownMobileList-Active_Background)
+    Selected_Background: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-DropdownMobileList-Selected_Background)
 };

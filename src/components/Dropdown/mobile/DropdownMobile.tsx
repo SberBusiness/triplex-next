@@ -3,8 +3,9 @@ import {
     EOverlayDirection,
     IOverlayChildrenProvideProps,
     OverlayBase,
-} from "@sber-business/triplex/components/Overlay/OverlayBase";
-import { DropdownMobileInner } from "@sber-business/triplex/components/Dropdown/mobile/DropdownMobileInner";
+} from "@sberbusiness/triplex-next/components/Overlay/OverlayBase";
+import { DropdownMobileInner } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileInner";
+import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobile. */
 export interface IDropdownMobileProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,7 +15,7 @@ export interface IDropdownMobileProps extends React.HTMLAttributes<HTMLDivElemen
     setOpened: (opened: boolean) => void;
 }
 
-const dropdownMobileBodyOverflowClassName = "cssClass[dropdownMobileBodyOverflow]";
+const dropdownMobileBodyOverflowClassName = styles.dropdownMobileBodyOverflow;
 
 /** Мобильная версия Dropdown. */
 export const DropdownMobile = React.forwardRef<HTMLDivElement, IDropdownMobileProps>(

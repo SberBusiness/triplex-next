@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { EVENT_KEY_CODES } from "@sber-business/triplex/utils/keyboard";
+import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
+import clsx from "clsx";
+import styles from "../styles/DropdownList.module.less";
 
 /** Свойства компонента DropdownListItem. */
 export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -64,9 +65,9 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
         return (
             // eslint-disable-next-line jsx-a11y/interactive-supports-focus
             <div
-                className={classnames(
-                    "cssClass[dropdownListItem]",
-                    { "cssClass[active]": !!active, "cssClass[selected]": !!selected },
+                className={clsx(
+                    styles.dropdownListItem,
+                    { [styles.active]: !!active, [styles.selected]: !!selected },
                     className
                 )}
                 title={typeof children === "string" ? children : undefined}

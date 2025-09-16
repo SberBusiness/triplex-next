@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { Portal } from "@sber-business/triplex/components/Portal/Portal";
+import { Portal } from "@sberbusiness/triplex-next/components/Portal/Portal";
 import {
     DropdownDesktop,
     IDropdownDesktopProps,
-} from "@sber-business/triplex/components/Dropdown/desktop/DropdownDesktop";
+} from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownDesktop";
 import { DropdownMobile, IDropdownMobileProps } from "./mobile/DropdownMobile";
-import { MobileView } from "@sber-business/triplex/components/MobileView/MobileView";
+import { MobileView } from "@sberbusiness/triplex-next/components/MobileView/MobileView";
 
 /** Варианты направления Dropdown. */
 export enum EDropdownDirection {

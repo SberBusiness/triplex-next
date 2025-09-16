@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import '../../../styles/style';
 
 .dropdownMobileWrapper {
     position: fixed;
@@ -10,10 +10,10 @@
 }
 
 .dropdownMobileBackdrop {
-    background: var(--triplex-DropdownMobile-Backdrop);
+    background: var(--triplex-next-DropdownMobile-Backdrop);
+    position: absolute;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
-    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
@@ -64,21 +64,21 @@
     // Если title не задан.
     min-height: 16px;
     padding: 16px 40px 16px 16px;
-    background: var(--triplex-DropdownMobile-Header_Background);
+    background: var(--triplex-next-DropdownMobile-Header_Background);
     position: relative;
     flex-shrink: 1;
 }
 
 .dropdownMobileContent {
-    background: var(--triplex-DropdownMobile-Content_Background);
+    background: var(--triplex-next-DropdownMobile-Content_Background);
     flex-grow: 1;
     overflow: auto;
 }
 
 .dropdownMobileFooter {
     padding: 15px 16px 16px 16px;
-    background: var(--triplex-DropdownMobile-Footer_Background);
-    border-top: 1px solid var(--triplex-DropdownMobile-Border_Color);
+    background: var(--triplex-next-DropdownMobile-Footer_Background);
+    border-top: 1px solid var(--triplex-next-DropdownMobile-Border_Color);
     flex-shrink: 1;
 }
 
@@ -86,11 +86,11 @@
     padding: 12px 16px;
 
     &.selected {
-        background: var(--triplex-DropdownMobileList-Selected_Background);
+        background: var(--triplex-next-DropdownMobileList-Selected_Background);
     }
 
     &:active {
-        background-color: var(--triplex-DropdownMobileList-Active_Background);
+        background-color: var(--triplex-next-DropdownMobileList-Active_Background);
     }
 }
 

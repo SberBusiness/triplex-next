@@ -1,8 +1,9 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { Dropdown } from "@sber-business/triplex/components/Dropdown/Dropdown";
-import { isKey } from "@sber-business/triplex/utils/keyboard";
-import { DropdownList } from "@sber-business/triplex/components/Dropdown/desktop/DropdownList";
+import { Dropdown } from "@sberbusiness/triplex-next/components/Dropdown/Dropdown";
+import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
+import clsx from "clsx";
+import styles from "./styles/ButtonDropdownExtended.module.less";
 
 /** Состояния кнопки с выпадающим блоком. */
 interface IButtonDropdownExtendedState {
@@ -155,13 +156,13 @@ export class ButtonDropdownExtended extends React.Component<
     public render(): JSX.Element {
         const { className, opened, setOpened, renderButton, renderDropdown, dropdownRef, closeOnTab, ...props } =
             this.props;
-        const classNames = classnames("cssClass[globalButtonDropdownExtended]", className);
+        const classNames = clsx(styles.buttonDropdownExtended, className);
 
         return (
             <div className={classNames} ref={this.ref} {...props}>
                 {renderButton({ opened: this.getOpened(), setOpened: this.handleOpen })}
                 {renderDropdown({
-                    className: "cssClass[buttonDropdownExtendedBlock]",
+                    className: styles.buttonDropdownExtendedBlock,
                     opened: this.getOpened(),
                     setOpened: this.handleOpen,
                 })}

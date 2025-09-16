@@ -1,0 +1,32 @@
+
+.dropdownList {
+    max-height: 196px;
+    padding: 4px;
+    overflow: auto;
+}
+
+.dropdownListItem {
+    // .b2-text-controls-normal(@color-graphite-01);
+
+    color: var(--triplex-next-DropdownList-Color);
+    background: var(--triplex-next-DropdownList-Background_Default);
+    position: relative;
+    outline: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+
+    + .dropdownListItem {
+        margin-top: 2px;
+    }
+
+    &.active {
+        background: var(--triplex-next-DropdownList-Background_Active);
+        cursor: pointer;
+    }
+
+    &.selected {
+        background: var(--triplex-next-DropdownList-Background_Selected);
+        cursor: default;
+    }
+}

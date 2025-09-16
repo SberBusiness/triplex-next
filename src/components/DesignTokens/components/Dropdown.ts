@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента Dropdown.
 export const designTokensComponentsDropdownKeys = ["Background", "Shadow"] as const;
@@ -16,6 +16,6 @@ export type TDesignTokensComponentsDropdown = { Dropdown: TDesignTokensComponent
 
 // Токены компонента Dropdown в светлой и темной темах.
 export const Dropdown_Tokens: TDesignTokensComponentsDropdownValues = {
-    Background: [{ ref: "Basic.100" }, { ref: "Basic.500" }], // var(--triplex-Dropdown-Background)
-    Shadow: [{ value: "0px 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "none" }], // var(--triplex-Dropdown-Shadow)
+    Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-Dropdown-Background)
+    Shadow: [{ value: "0px 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "none" }], // var(--triplex-next-Dropdown-Shadow)
 };

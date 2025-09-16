@@ -7,6 +7,11 @@ import {
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
+    TDesignTokensComponentsDropdown,
+    TDesignTokensComponentsDropdownList,
+    TDesignTokensComponentsDropdownMobile,
+    TDesignTokensComponentsDropdownMobileList,
+    TDesignTokensComponentsOverlay,
 } from "../components";
 
 // Название токенов группы ColorBrand.
@@ -247,7 +252,12 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLoadingDots
     | TDesignTokensComponentsAlertContext
-    | TDesignTokensComponentsAlertProcess;
+    | TDesignTokensComponentsAlertProcess
+    | TDesignTokensComponentsDropdown
+    | TDesignTokensComponentsDropdownList
+    | TDesignTokensComponentsDropdownMobile
+    | TDesignTokensComponentsDropdownMobileList
+    | TDesignTokensComponentsOverlay;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

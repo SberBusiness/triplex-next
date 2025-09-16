@@ -1,13 +1,12 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента DropdownMobile.
 export const designTokensComponentsDropdownMobileKeys = [
     "Backdrop",
     "Border_Color",
-    "Opacity",
     "Content_Background",
     "Footer_Background",
     "Header_Background",
@@ -29,10 +28,9 @@ export type TDesignTokensComponentsDropdownMobile = { DropdownMobile: TDesignTok
 
 // Токены компонента DropdownMobile в светлой и темной темах.
 export const DropdownMobile_Tokens: TDesignTokensComponentsDropdownMobileValues = {
-    Backdrop: [{ ref: "Basic.700" }, { ref: "Basic.900" }], // var(--triplex-DropdownMobile-Backdrop)
-    Border_Color: [{ ref: "Neutral.500" }, { ref: "Basic.300" }], // var(--triplex-DropdownMobile-Border_Color)
-    Content_Background: [{ ref: "Basic.100" }, { ref: "Basic.500" }], // var(--triplex-DropdownMobile-Content_Background)
-    Footer_Background: [{ ref: "Basic.100" }, { ref: "Basic.500" }], // var(--triplex-DropdownMobile-Footer_Background)
-    Header_Background: [{ ref: "Neutral.100" }, { ref: "Basic.700" }], // var(--triplex-DropdownMobile-Header_Background)
-    Opacity: [{ value: "0.6" }, { value: "0.8" }], // var(--triplex-DropdownMobile-Opacity)
+    Backdrop: [{ ref: "ColorDarkNeutralAlpha.40" }, { ref: "ColorDarkNeutralAlpha.40" }], // var(--triplex-next-DropdownMobile-Backdrop)
+    Border_Color: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-DropdownMobile-Border_Color)
+    Content_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-DropdownMobile-Content_Background)
+    Footer_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-DropdownMobile-Footer_Background)
+    Header_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-DropdownMobile-Header_Background)
 };

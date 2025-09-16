@@ -1,7 +1,8 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { ButtonIcon, IButtonIconProps } from "@sber-business/triplex/components/Button/ButtonIcon";
-import { ClosenotificationSrvxIcon16 } from "@sberbusiness/icons/ClosenotificationSrvxIcon16";
+import { ButtonIcon, IButtonIconProps } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
+import { CrossStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import clsx from "clsx";
+import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileClose. */
 export interface IDropdownMobileCloseProps extends Omit<IButtonIconProps, "children"> {
@@ -11,8 +12,8 @@ export interface IDropdownMobileCloseProps extends Omit<IButtonIconProps, "child
 /** Кнопка закрытия мобильной версии Dropdown. */
 export const DropdownMobileClose = React.forwardRef<HTMLButtonElement, IDropdownMobileCloseProps>(
     ({ className, ...buttonIconProps }, ref) => (
-        <ButtonIcon className={classnames("cssClass[dropdownMobileClose]", className)} ref={ref} {...buttonIconProps}>
-            <ClosenotificationSrvxIcon16 />
+        <ButtonIcon className={clsx(styles.dropdownMobileClose, className)} ref={ref} {...buttonIconProps}>
+            <CrossStrokeSrvIcon24 paletteIndex={5} />
         </ButtonIcon>
     )
 );

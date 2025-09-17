@@ -8,7 +8,7 @@ import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
 import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { DropdownList,  IDropdownListItemProps} from "@sberbusiness/triplex-next/components/Dropdown";
+import { DropdownList,  EDropdownListSize,  EDropdownSize,  IDropdownListItemProps} from "@sberbusiness/triplex-next/components/Dropdown";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
@@ -20,6 +20,31 @@ import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import clsx from "clsx";
 import styles from "./styles/ButtonDropdown.module.less";
+
+const getDropdownSize = (size: EButtonSize) => {
+    switch (size) {
+        case EButtonSize.SM:
+            return EDropdownSize.SM;
+        case EButtonSize.MD:
+            return EDropdownSize.MD;
+        case EButtonSize.LG:
+            return EDropdownSize.LG;
+        default:
+            return EDropdownSize.MD;
+    }
+}   
+const getDropdownListSize = (size: EButtonSize) => {
+    switch (size) {
+        case EButtonSize.SM:
+            return EDropdownListSize.SM;
+        case EButtonSize.MD:
+            return EDropdownListSize.MD;
+        case EButtonSize.LG:
+            return EDropdownListSize.LG;
+        default:
+            return EDropdownListSize.MD;
+    }
+}
 
 /** Свойства опции в выпадающем списке действий. */
 export interface IButtonDropdownOption
@@ -129,6 +154,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                     <ButtonDropdownExtended.Dropdown
+                        size={getDropdownSize(size)}
                         className={classNames}
                         opened={opened}
                         setOpened={setOpened}
@@ -164,7 +190,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                             ),
                         }}
                     >
-                        <DropdownList dropdownOpened={opened} id={instanceId.current}>
+                        <DropdownList dropdownOpened={opened} id={instanceId.current} size={getDropdownListSize(size)}>
                             {options.map((option) => (
                                 <DropdownList.Item
                                     {...option}

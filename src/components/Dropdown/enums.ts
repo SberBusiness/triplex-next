@@ -11,3 +11,14 @@ export enum EDropdownAlignment {
     LEFT = "left",
     RIGHT = "right",
 }
+
+export enum EDropdownListSize {
+    SM = "sm",
+    MD = "md",
+    LG = "lg",
+}
+export enum EDropdownSize {
+    SM = "sm",
+    MD = "md",
+    LG = "lg",
+}

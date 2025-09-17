@@ -4,6 +4,7 @@ import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import clsx from "clsx";
 import stylesDropdownList from "../styles/DropdownList.module.less";
+import { EDropdownListSize } from "@sberbusiness/triplex-next";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,6 +12,8 @@ export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement>
     dropdownOpened: boolean;
     /** Объект для создания ссылки на html-элемент "список". */
     listRef?: React.RefObject<HTMLDivElement>;
+    /** Размер списка. */
+    size?: EDropdownListSize;
 }
 
 /** Индекс текущего выделенного элемента списка при навигации с клавиатуры. */
@@ -26,8 +29,8 @@ export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
 }
 
 export const DropdownList: IDropdownListComponent = (props) => {
-    const { children, className, dropdownOpened, listRef, ...htmlDivAttributes } = props;
-    const classNames = clsx(stylesDropdownList.dropdownList, className);
+    const { children, className, dropdownOpened, listRef, size = EDropdownListSize.MD, ...htmlDivAttributes } = props;
+    const classNames = clsx(stylesDropdownList.dropdownList, className, stylesDropdownList[`dropdownList-${size}`]);
 
     const { activeDescendant, setActiveDescendant } = useContext(DropdownListContext);
 

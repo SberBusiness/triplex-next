@@ -1,17 +1,9 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Dropdown } from "@sberbusiness/triplex-next/components/Dropdown/Dropdown";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
 import clsx from "clsx";
 import styles from "./styles/ButtonDropdownExtended.module.less";
-
-/** Состояния кнопки с выпадающим блоком. */
-interface IButtonDropdownExtendedState {
-    /** Состояние контролируемости. */
-    isControlled: boolean;
-    /** Состояние открытости. */
-    isOpened?: boolean;
-}
 
 /** Свойства встроенной кнопки. */
 export interface IButtonDropdownExtendedButtonProvideProps {
@@ -50,123 +42,82 @@ export interface IButtonDropdownExtendedProps extends React.HTMLAttributes<HTMLD
 /**
  * Компонент "Кнопка с выпадающим блоком".
  * Позволяет кастомизировать кнопку открытия Dropdown и сам Dropdown.
- * */
-export class ButtonDropdownExtended extends React.Component<
-    IButtonDropdownExtendedProps,
-    IButtonDropdownExtendedState
-> {
-    public static Dropdown = Dropdown;
-    public static DropdownList = DropdownList;
+ */
+export interface IButtonDropdownExtendedComponent extends React.FC<IButtonDropdownExtendedProps> {
+    Dropdown: typeof Dropdown;
+    DropdownList: typeof DropdownList;
+};
 
-    constructor(props: IButtonDropdownExtendedProps) {
-        super(props);
+export const ButtonDropdownExtended: IButtonDropdownExtendedComponent = (props) => {
+    const { className, opened, setOpened, renderButton, renderDropdown, dropdownRef, closeOnTab, ...rest } = props;
 
-        this.state = {
-            isControlled: props.opened !== undefined,
-            isOpened: props.opened === undefined ? false : undefined,
+    const containerRef = useRef<HTMLDivElement>(null);
+    const isControlledRef = useRef<boolean>(props.opened !== undefined);
+    const [uncontrolledOpened, setUncontrolledOpened] = useState<boolean>(props.opened === undefined ? false : false);
+
+    const computedOpened = isControlledRef.current ? !!opened : uncontrolledOpened;
+
+    const handleOpen = useCallback(
+        (nextOpened: boolean) => {
+            if (isControlledRef.current) {
+                setOpened && setOpened(nextOpened);
+                return;
+            }
+            setUncontrolledOpened(nextOpened);
+        },
+        [setOpened]
+    );
+
+    useEffect(() => {
+        if (!computedOpened) {
+            return;
+        }
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const key: string | number = event.code || event.keyCode;
+            if (computedOpened) {
+                if (isKey(key, "ESCAPE") || (closeOnTab && isKey(key, "TAB"))) {
+                    handleOpen(false);
+                }
+            }
         };
-    }
 
-    private ref = React.createRef<HTMLDivElement>();
+        const handleClickOutside = (event: Event) => {
+            const button = containerRef.current;
+            const dropdown = dropdownRef.current;
 
-    private getOpened = (): boolean => {
-        const { opened } = this.props;
-        const { isControlled, isOpened } = this.state;
-
-        return !!(isControlled ? opened : isOpened);
-    };
-
-    private handleOpen = (opened: boolean) => {
-        const { setOpened } = this.props;
-        const { isControlled } = this.state;
-
-        isControlled ? setOpened!(opened) : this.setState({ isOpened: opened });
-    };
-
-    private handleKeyDown = (event: KeyboardEvent) => {
-        const { closeOnTab } = this.props;
-        const key = event.code || event.keyCode;
-
-        if (this.getOpened()) {
-            if (isKey(key, "ESCAPE") || (closeOnTab && isKey(key, "TAB"))) {
-                this.handleOpen(false);
+            if (computedOpened) {
+                const targetNode = event.target as Node | null;
+                if (targetNode && !button?.contains(targetNode) && !dropdown?.contains(targetNode)) {
+                    handleOpen(false);
+                }
             }
-        }
-    };
+        };
 
-    private handleClickOutside = (event: UIEvent) => {
-        const { current: button } = this.ref;
-        const { current: dropdown } = this.props.dropdownRef;
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside);
 
-        if (this.getOpened()) {
-            if (!button?.contains(event.target as Node) && !dropdown?.contains(event.target as Node)) {
-                this.handleOpen(false);
-            }
-        }
-    };
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [computedOpened, closeOnTab, dropdownRef, handleOpen, containerRef]);
 
-    private addListeners(): void {
-        document.addEventListener("keydown", this.handleKeyDown);
-        document.addEventListener("mousedown", this.handleClickOutside);
-        document.addEventListener("touchstart", this.handleClickOutside);
-    }
+    const classNames = clsx(styles.buttonDropdownExtended, className);
 
-    private removeListeners(): void {
-        document.removeEventListener("keydown", this.handleKeyDown);
-        document.removeEventListener("mousedown", this.handleClickOutside);
-        document.removeEventListener("touchstart", this.handleClickOutside);
-    }
+    return (
+        <div className={classNames} ref={containerRef} {...rest}>
+            {renderButton({ opened: computedOpened, setOpened: handleOpen })}
+            {renderDropdown({
+                className: styles.buttonDropdownExtendedBlock,
+                opened: computedOpened,
+                setOpened: handleOpen,
+            })}
+        </div>
+    );
+};
 
-    public componentDidMount(): void {
-        if (this.getOpened()) {
-            this.addListeners();
-        }
-    }
-
-    public componentDidUpdate(
-        prevProps: Readonly<IButtonDropdownExtendedProps>,
-        prevState: Readonly<IButtonDropdownExtendedState>
-    ): void {
-        const { opened } = this.props;
-        const { isOpened, isControlled } = this.state;
-        const { opened: prevOpened } = prevProps;
-        const { isOpened: prevIsOpened } = prevState;
-
-        if (isControlled) {
-            if (opened && !prevOpened) {
-                this.addListeners();
-            } else if (!opened && prevOpened) {
-                this.removeListeners();
-            }
-        } else {
-            if (isOpened && !prevIsOpened) {
-                this.addListeners();
-            } else if (!isOpened && prevIsOpened) {
-                this.removeListeners();
-            }
-        }
-    }
-
-    public componentWillUnmount(): void {
-        if (this.getOpened()) {
-            this.removeListeners();
-        }
-    }
-
-    public render(): JSX.Element {
-        const { className, opened, setOpened, renderButton, renderDropdown, dropdownRef, closeOnTab, ...props } =
-            this.props;
-        const classNames = clsx(styles.buttonDropdownExtended, className);
-
-        return (
-            <div className={classNames} ref={this.ref} {...props}>
-                {renderButton({ opened: this.getOpened(), setOpened: this.handleOpen })}
-                {renderDropdown({
-                    className: styles.buttonDropdownExtendedBlock,
-                    opened: this.getOpened(),
-                    setOpened: this.handleOpen,
-                })}
-            </div>
-        );
-    }
-}
+ButtonDropdownExtended.Dropdown = Dropdown;
+ButtonDropdownExtended.DropdownList = DropdownList;

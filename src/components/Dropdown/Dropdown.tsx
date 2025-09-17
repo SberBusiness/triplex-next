@@ -7,20 +7,6 @@ import {
 import { DropdownMobile, IDropdownMobileProps } from "./mobile/DropdownMobile";
 import { MobileView } from "@sberbusiness/triplex-next/components/MobileView/MobileView";
 
-/** Варианты направления Dropdown. */
-export enum EDropdownDirection {
-    AUTO = "auto",
-    BOTTOM = "bottom",
-    TOP = "top",
-}
-
-/** Варианты выравнивания Dropdown. */
-export enum EDropdownAlignment {
-    AUTO = "auto",
-    LEFT = "left",
-    RIGHT = "right",
-}
-
 /** Свойства компонента Dropdown. */
 export interface IDropdownProps extends IDropdownDesktopProps {
     /** Функция, вызывающаяся при открытии. */

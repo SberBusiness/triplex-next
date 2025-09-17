@@ -65,24 +65,31 @@ const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOpti
     },
 ];
 
-type IButtonDropdownWithControlsProps = React.ComponentProps<typeof ButtonDropdown> & { label?: string };
+type IButtonDropdownWithControlsProps = React.ComponentProps<typeof ButtonDropdown>;
 
 export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
     render: (args) => {
         const options = useMemo(() => createOptions(), []);
-        const { label, children, ...rest } = args;
+        const { children, ...rest } = args;
         return (
             <div style={{ width: 280 }}>
                 <ButtonDropdown {...rest} options={options}>
-                    {children || label || "Действия"}
+                    {children}
                 </ButtonDropdown>
             </div>
         );
     },
     argTypes: {
+        children: {
+            control: { type: "text" },
+            description: "Название кнопки",
+            table: {
+                type: { summary: "React.ReactNode" },
+            },
+        },
         theme: {
             control: { type: "select" },
-            options: [EButtonTheme.GENERAL, EButtonTheme.SECONDARY, EButtonTheme.DANGER],
+            options: Object.values(EButtonTheme),
             description: "Тема кнопки",
         },
         size: {
@@ -105,7 +112,7 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
     args: {
         theme: EButtonTheme.GENERAL,
         size: EButtonSize.MD,
-        label: "Действия",
+        children: "Button text",
     },
     parameters: {
         docs: {
@@ -123,13 +130,13 @@ export const SecondaryTheme: StoryObj<typeof ButtonDropdown> = {
         return (
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.SM} options={options}>
-                    Маленькая
+                    Button text
                 </ButtonDropdown>
                 <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options}>
-                    Средняя
+                    Button text
                 </ButtonDropdown>
                 <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.LG} options={options}>
-                    Большая
+                    Button text
                 </ButtonDropdown>
             </div>
         );
@@ -149,13 +156,13 @@ export const DangerTheme: StoryObj<typeof ButtonDropdown> = {
         return (
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <ButtonDropdown theme={EButtonTheme.DANGER} size={EButtonSize.SM} options={options}>
-                    Маленькая
+                    Button text
                 </ButtonDropdown>
                 <ButtonDropdown theme={EButtonTheme.DANGER} size={EButtonSize.MD} options={options}>
-                    Средняя
+                    Button text
                 </ButtonDropdown>
                 <ButtonDropdown theme={EButtonTheme.DANGER} size={EButtonSize.LG} options={options}>
-                    Большая
+                    Button text
                 </ButtonDropdown>
             </div>
         );
@@ -172,7 +179,7 @@ export const Block: StoryObj<typeof ButtonDropdown> = {
         return (
             <div style={{ maxWidth: 280 }}>
                 <ButtonDropdown block theme={EButtonTheme.GENERAL} size={EButtonSize.MD} options={options}>
-                    Блочная кнопка
+                    Button text
                 </ButtonDropdown>
             </div>
         );
@@ -192,13 +199,13 @@ export const Disabled: StoryObj<typeof ButtonDropdown> = {
         return (
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <ButtonDropdown disabled theme={EButtonTheme.GENERAL} size={EButtonSize.MD} options={options}>
-                    Маленькая
+                    Button text
                 </ButtonDropdown>
                 <ButtonDropdown disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options}>
-                    Средняя
+                    Button text
                 </ButtonDropdown>
                 <ButtonDropdown disabled theme={EButtonTheme.DANGER} size={EButtonSize.MD} options={options}>
-                    Большая
+                    Button text
                 </ButtonDropdown>
             </div>
         );
@@ -221,7 +228,7 @@ export const WithSelected: StoryObj<typeof ButtonDropdown> = {
         return (
             <div style={{ maxWidth: 280 }}>
                 <ButtonDropdown theme={EButtonTheme.GENERAL} size={EButtonSize.MD} options={options} selected={selected}>
-                    С выбранным значением
+                    Button text
                 </ButtonDropdown>
             </div>
         );

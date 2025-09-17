@@ -63,7 +63,6 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
         }, [active]);
 
         return (
-            // eslint-disable-next-line jsx-a11y/interactive-supports-focus
             <div
                 className={clsx(
                     styles.dropdownListItem,

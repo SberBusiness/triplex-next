@@ -7,9 +7,9 @@ interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
     /** Тело гиперссылки. */
     children: string;
     /** Рендер функция предшествующего контента. */
-    contentBefore?: () => JSX.Element;
+    contentBefore?: () => React.ReactElement;
     /** Рендер функция последующего контента. */
-    contentAfter?: () => JSX.Element;
+    contentAfter?: () => React.ReactElement;
 }
 
 /** Гиперссылка. */

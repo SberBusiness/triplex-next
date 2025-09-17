@@ -8,6 +8,7 @@ import {
     Checkbox_Tokens,
     FormField_Tokens,
     Radio_Tokens,
+    Tabs_Tokens,
     Typography_Tokens,
     Link_Tokens,
     Loader_Tokens,
@@ -20,6 +21,7 @@ import {
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsFormFieldValue,
     TDesignTokensComponentsRadioValue,
+    TDesignTokensComponentsTabsValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsLinkValue,
     TDesignTokensComponentsLoaderValue,
@@ -64,6 +66,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         DropdownMobileList_Tokens,
     ),
+    Tabs: GetTokensValueByTheme<TDesignTokensComponentsTabsValue>(ETriplexNextTheme.LIGHT, Tabs_Tokens),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
         ETriplexNextTheme.LIGHT,
         Typography_Tokens,

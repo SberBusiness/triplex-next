@@ -2,6 +2,7 @@ export * from "./Button";
 export * from "./Checkbox";
 export * from "./FormField";
 export * from "./Link";
+export * from "./Tabs";
 export * from "./Loader";
 export * from "./Radio";
 export * from "./Typography";

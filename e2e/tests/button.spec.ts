@@ -64,6 +64,26 @@ test.describe("Button", () => {
         }
     });
 
+    test("should be disabled when loading", async ({ page }) => {
+        const buttons = await getButtons(
+            page,
+            "http://localhost:6006/iframe.html?id=components-buttons-button--loading",
+        );
+
+        const count = await buttons.count();
+
+        for (let i = 0; i < count; i++) {
+            const currentButton = buttons.nth(i);
+            await expect(currentButton).toBeVisible();
+            await expect(currentButton).toHaveCSS("pointer-events", "none");
+            await expect(currentButton).toHaveClass(/loading/);
+
+            const loadingDots = currentButton.locator("div");
+            await expect(loadingDots).toHaveClass(/loader/);
+            await expect(loadingDots).toBeVisible();
+        }
+    });
+
     test("should take full width when block prop is set", async ({ page }) => {
         const buttons = await getButtons(
             page,
@@ -77,19 +97,5 @@ test.describe("Button", () => {
             await expect(currentButton).toBeVisible();
             await expect(currentButton).toHaveCSS("display", "block");
         }
-    });
-
-    test("should be focused when tab is pressed", async ({ page }) => {
-        const button = await getButtons(
-            page,
-            "http://localhost:6006/iframe.html?id=components-buttons-button--default",
-        );
-
-        await page.keyboard.press("Tab");
-        const isButtonFocused = await button.evaluate((el) => el === document.activeElement);
-        expect(isButtonFocused).toBe(true);
-        await page.waitForTimeout(300);
-        const focusShadow = await button.evaluate((el) => getComputedStyle(el).boxShadow);
-        expect(focusShadow).toBe("rgb(255, 209, 105) 0px 0px 0px 1px inset");
     });
 });

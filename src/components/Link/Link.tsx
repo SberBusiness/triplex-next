@@ -5,46 +5,92 @@ import styles from "./styles/Link.module.less";
 /** Общие свойства компонента Link. */
 interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     /** Тело гиперссылки. */
-    children: React.ReactNode;
+    children: string;
+    /** Рендер функция предшествующего контента. */
+    contentBefore?: () => JSX.Element;
     /** Рендер функция последующего контента. */
     contentAfter?: () => JSX.Element;
 }
 
 /** Гиперссылка. */
 export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
-    ({ children, className, onBlur, onMouseDown, contentAfter, ...rest }, ref) => {
-        /** Обработчик нажатия мыши. */
-        const handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-            onMouseDown?.(event);
-        };
+    ({ children, className, onBlur, onMouseDown, contentAfter, contentBefore, ...rest }, ref) => {
+        /** Рендер функция предшествующего контента. */
+        const renderContentBefore = () =>
+            contentBefore ? (
+                <>
+                    {/* Zero-width space необходим для правильного выравнивания контента. */}
+                    {"\u200B"}
+                    {contentBefore()}
+                </>
+            ) : null;
 
-        /** Обработчик потери фокуса. */
-        const handleBlur = (event: React.FocusEvent<HTMLAnchorElement>) => {
-            onBlur?.(event);
-        };
+        /** Рендер функция последующего контента. */
+        const renderContentAfter = () => (contentAfter ? contentAfter() : null);
 
-        /** Рендерит как React Nodes. */
-        const renderAsReactNode = (node: React.ReactNode) => {
-            const childNode = node;
-            const contentAfterNode = contentAfter ? <span className={styles.after}>{contentAfter()}</span> : null;
+        const renderAsSimpleText = (text: string) => {
+            const words = text.split(" ");
+
+            if (words.length < 2 || (words.length < 3 && contentBefore && contentAfter)) {
+                const className = clsx(styles.wordWithContent, {
+                    [styles.after]: Boolean(contentAfter),
+                    [styles.before]: Boolean(contentBefore),
+                });
+                return (
+                    <span className={className}>
+                        {renderContentBefore()}
+                        {text}
+                        {renderContentAfter()}
+                    </span>
+                );
+            }
+
+            const firstWord = words[0];
+            const lastWord = words[words.length - 1];
+            const restWords = words.slice(1, -1).join(" ");
+
+            const classNameBefore = clsx(styles.wordWithContent, {
+                [styles.before]: Boolean(contentBefore),
+            });
+
+            const firstNode = contentBefore ? (
+                <span className={classNameBefore}>
+                    {renderContentBefore()}
+                    {firstWord}
+                </span>
+            ) : (
+                firstWord
+            );
+
+            const classNameAfter = clsx(styles.wordWithContent, {
+                [styles.after]: Boolean(contentAfter),
+            });
+
+            const lastNode = contentAfter ? (
+                <span className={classNameAfter}>
+                    {lastWord}
+                    {renderContentAfter()}
+                </span>
+            ) : (
+                lastWord
+            );
 
             return (
                 <>
-                    {childNode}
-                    {contentAfterNode}
+                    {firstNode} {restWords} {lastNode}
                 </>
             );
         };
 
-        const content = contentAfter ? renderAsReactNode(children) : children;
+        const content = contentAfter || contentBefore ? renderAsSimpleText(children) : children;
 
         return (
             <a
                 role="link"
                 {...rest}
                 className={clsx(className, styles.link, "hoverable")}
-                onBlur={handleBlur}
-                onMouseDown={handleMouseDown}
+                onBlur={onBlur}
+                onMouseDown={onMouseDown}
                 data-tx={process.env.npm_package_version}
                 ref={ref}
             >

@@ -4,6 +4,8 @@ import { StoryObj } from "@storybook/react";
 import { Text } from "../src/components/Typography";
 import { ETextSize } from "../src/components/Typography/enums";
 import { EFontType } from "../src/components/Typography/enums";
+import { Col } from "../src/components/Col";
+import { Gap } from "../src/components/Gap";
 
 const ExternalLinkStrokePrdIcon16 = () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,8 +32,8 @@ export default {
 
 ## Особенности
 
-- **Дополнительный контент**: поддержка contentAfter для добавления иконок или другого контента
-- Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
+- **Дополнительный контент**: поддержка contentAfter и contentBefore для добавления иконок или другого контента до или после ссылки
+- Компонент задает только цвет текста ссылки
 
 ## Использование
 
@@ -44,8 +46,13 @@ import { ExternalLinkStrokePrdIcon16 } from '@sberbusiness/icons-next';
     Перейти
 </Link>
 
-// External link
+// External link c contentAfter
 <Link contentAfter={() => <ExternalLinkStrokePrdIcon16 />} >
+    Перейти
+</Link>
+
+// External link c contentBefore
+<Link contentBefore={() => <ExternalLinkStrokePrdIcon16 />} >
     Перейти
 </Link>
 
@@ -81,12 +88,20 @@ import { ExternalLinkStrokePrdIcon16 } from '@sberbusiness/icons-next';
 
 export const Playground: StoryObj<typeof Link> = {
     name: "Playground",
+    args: {
+        children: "Link text",
+    },
     argTypes: {
         children: {
             control: { type: "text" },
             description: "Текст ссылки",
         },
         contentAfter: {
+            table: {
+                disable: true,
+            },
+        },
+        contentBefore: {
             table: {
                 disable: true,
             },
@@ -108,11 +123,9 @@ export const Playground: StoryObj<typeof Link> = {
         },
     },
     render: (args) => (
-        <Link {...args}>
-            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                Link text
-            </Text>
-        </Link>
+        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+            <Link {...args}>{args.children}</Link>
+        </Text>
     ),
 };
 
@@ -129,6 +142,11 @@ export const Default: StoryObj<typeof Link> = {
                 disable: true,
             },
         },
+        contentBefore: {
+            table: {
+                disable: true,
+            },
+        },
         href: {
             table: {
                 disable: true,
@@ -146,11 +164,11 @@ export const Default: StoryObj<typeof Link> = {
         },
     },
     render: (args) => (
-        <Link {...args} href="#">
-            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+            <Link {...args} href="#">
                 Link text
-            </Text>
-        </Link>
+            </Link>
+        </Text>
     ),
 };
 
@@ -158,6 +176,11 @@ export const ExternalLink: StoryObj<typeof Link> = {
     name: "External Link",
     argTypes: {
         contentAfter: {
+            table: {
+                disable: true,
+            },
+        },
+        contentBefore: {
             table: {
                 disable: true,
             },
@@ -190,12 +213,32 @@ export const ExternalLink: StoryObj<typeof Link> = {
             </div>
         );
 
+        const renderContentBefore = () => (
+            <div style={{ paddingTop: "4px" }}>
+                <ExternalLinkStrokePrdIcon16 />
+            </div>
+        );
+
         return (
-            <Link {...args} href="#" contentAfter={renderContentAfter}>
+            <Col size={6}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    Link text
+                    <Link {...args} href="#" contentAfter={renderContentAfter}>
+                        External link with content after
+                    </Link>
                 </Text>
-            </Link>
+                <Gap size={16} />
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                    <Link {...args} href="#" contentBefore={renderContentBefore}>
+                        External link with content before
+                    </Link>
+                </Text>
+                <Gap size={16} />
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                    <Link {...args} href="#" contentBefore={renderContentBefore} contentAfter={renderContentAfter}>
+                        External link with content before and after
+                    </Link>
+                </Text>
+            </Col>
         );
     },
 };

@@ -41,4 +41,35 @@ describe("Link", () => {
         expect(screen.getByTestId("after-content")).toBeInTheDocument();
         expect(screen.getByTestId("after-content")).toHaveTextContent("Content after");
     });
+
+    it("Should render contentBefore when provided", () => {
+        const contentBefore = () => <span data-testid="before-content">Content before</span>;
+        render(
+            <Link contentBefore={contentBefore} data-testid="link">
+                Link text
+            </Link>,
+        );
+        const link = getLink();
+
+        expect(link).toHaveTextContent("Link text");
+        expect(screen.getByTestId("before-content")).toBeInTheDocument();
+        expect(screen.getByTestId("before-content")).toHaveTextContent("Content before");
+    });
+
+    it("Should render contentBefore and contentAfter when provided", () => {
+        const contentBefore = () => <span data-testid="before-content">Content before</span>;
+        const contentAfter = () => <span data-testid="after-content">Content after</span>;
+        render(
+            <Link contentBefore={contentBefore} contentAfter={contentAfter} data-testid="link">
+                Link text
+            </Link>,
+        );
+        const link = getLink();
+
+        expect(link).toHaveTextContent("Link text");
+        expect(screen.getByTestId("before-content")).toBeInTheDocument();
+        expect(screen.getByTestId("before-content")).toHaveTextContent("Content before");
+        expect(screen.getByTestId("after-content")).toBeInTheDocument();
+        expect(screen.getByTestId("after-content")).toHaveTextContent("Content after");
+    });
 });

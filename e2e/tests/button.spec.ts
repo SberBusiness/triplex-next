@@ -9,7 +9,10 @@ async function getButtons(page: Page, url: string) {
 
 test.describe("Button", () => {
     test("should be clickable when enabled", async ({ page }) => {
-        const button = await getButtons(page, "http://localhost:6006/iframe.html?id=components-button-button--default");
+        const button = await getButtons(
+            page,
+            "http://localhost:6006/iframe.html?id=components-buttons-button--default",
+        );
 
         await expect(button).toBeEnabled();
         await expect(button).toHaveRole("button");
@@ -18,7 +21,10 @@ test.describe("Button", () => {
     });
 
     test("should change background color on hover", async ({ page }) => {
-        const button = await getButtons(page, "http://localhost:6006/iframe.html?id=components-button-button--default");
+        const button = await getButtons(
+            page,
+            "http://localhost:6006/iframe.html?id=components-buttons-button--default",
+        );
 
         const before = await button.evaluate((el) => getComputedStyle(el).backgroundColor);
         await button.hover();
@@ -44,7 +50,7 @@ test.describe("Button", () => {
     test("should change box-shadow on focus", async ({ page }) => {
         const buttons = await getButtons(
             page,
-            "http://localhost:6006/iframe.html?id=components-button-button--different-themes",
+            "http://localhost:6006/iframe.html?id=components-buttons-button--different-themes",
         );
 
         const count = await buttons.count();
@@ -61,7 +67,7 @@ test.describe("Button", () => {
     test("should be disabled when loading", async ({ page }) => {
         const buttons = await getButtons(
             page,
-            "http://localhost:6006/iframe.html?id=components-button-button--loading",
+            "http://localhost:6006/iframe.html?id=components-buttons-button--loading",
         );
 
         const count = await buttons.count();
@@ -81,7 +87,7 @@ test.describe("Button", () => {
     test("should take full width when block prop is set", async ({ page }) => {
         const buttons = await getButtons(
             page,
-            "http://localhost:6006/iframe.html?id=components-button-button--block-mode",
+            "http://localhost:6006/iframe.html?id=components-buttons-button--block-mode",
         );
 
         const count = await buttons.count();
@@ -94,7 +100,10 @@ test.describe("Button", () => {
     });
 
     test("should be focused when tab is pressed", async ({ page }) => {
-        const button = await getButtons(page, "http://localhost:6006/iframe.html?id=components-button-button--default");
+        const button = await getButtons(
+            page,
+            "http://localhost:6006/iframe.html?id=components-buttons-button--default",
+        );
 
         await page.keyboard.press("Tab");
         const isButtonFocused = await button.evaluate((el) => el === document.activeElement);

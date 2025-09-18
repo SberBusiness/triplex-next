@@ -5,7 +5,7 @@ import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 
 export default {
-    title: "Components/Button/ButtonIcon",
+    title: "Components/Buttons/ButtonIcon",
     tags: ["autodocs"],
     parameters: {
         docs: {

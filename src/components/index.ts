@@ -6,7 +6,7 @@ export * from "./FormField";
 export * from "./FormGroup";
 export * from "./Gap";
 export * from "./Link";
-export * from "./LoadingDots";
+export * from "./Loader";
 export * from "./MediaWidth";
 export * from "./MobileView";
 export * from "./Row";

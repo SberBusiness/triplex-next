@@ -31,7 +31,7 @@ test.describe("Button", () => {
     test("should be disabled when prop is set", async ({ page }) => {
         const buttons = await getButtons(
             page,
-            "http://localhost:6006/iframe.html?id=components-button-button--disabled",
+            "http://localhost:6006/iframe.html?id=components-buttons-button--disabled",
         );
         const count = await buttons.count();
 

@@ -7,7 +7,6 @@ import styles from "./styles/Footer.module.less";
 export interface IFooterProps extends React.HTMLAttributes<HTMLDivElement> {
     /**
      * Footer прилипает к нижней границе экрана при скролле.
-     * Свойство работает на экранах высотой более 800px и шириной более 1024px.
      * */
     sticky?: boolean;
 }

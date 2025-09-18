@@ -8,6 +8,4 @@ export * from "./components/HeaderTabs/HeaderTabsContent";
 export * from "./components/HeaderTabs/HeaderTabsControls";
 export * from "./components/HeaderTitle/HeaderTitle";
 export * from "./components/HeaderTitle/HeaderTitleContent";
-export * from "./components/HeaderTitle/HeaderTitleContentSubhead";
-export * from "./components/HeaderTitle/HeaderTitleContentText";
 export * from "./components/HeaderTitle/HeaderTitleControls";

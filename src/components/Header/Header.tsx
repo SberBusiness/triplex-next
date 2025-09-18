@@ -10,7 +10,6 @@ import styles from "./styles/Header.module.less";
 export interface IHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
     /**
      * Header прилипает к верхней границе экрана при скролле.
-     * Свойство работает на экранах высотой более 800px и шириной более 1024px.
      * */
     sticky?: boolean;
 }

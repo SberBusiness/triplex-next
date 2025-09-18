@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../../styles/HeaderTitle.module.less";
 
 /** Свойства компонента HeaderTitleControls. */
 export interface IHeaderTitleControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -7,7 +8,7 @@ export interface IHeaderTitleControlsProps extends React.HTMLAttributes<HTMLDivE
 /** Блок с кнопками действий HeaderTitle. */
 export const HeaderTitleControls = React.forwardRef<HTMLDivElement, IHeaderTitleControlsProps>(
     ({ children, className, ...rest }, ref) => (
-        <div className={classnames("cssClass[globalHeaderTitleControls]", className)} {...rest} ref={ref}>
+        <div className={clsx(styles.headerTitleControls, className)} {...rest} ref={ref}>
             {children}
         </div>
     ),

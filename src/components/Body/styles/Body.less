@@ -1,0 +1,32 @@
+@import 'src/styles/style';
+
+.body {
+    position: relative;
+    padding: @ufs-theme-page-padding-y @ufs-theme-page-padding-x;
+    display: flex;
+
+    .bodyInner {
+        position: relative;
+        flex-grow: 1;
+        width: 100%;
+    }
+
+    &.withWhiteBackground {
+        background: var(--triplex-Body-Background_White);
+    }
+
+    &.withGrayBackground {
+        background: var(--triplex-Body-Background_Gray);
+    }
+
+    &.withDarkGrayBackground {
+        background: var(--triplex-Body-Background_Darkgray);
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .body {
+        padding: @page-padding-sm;
+        overflow-x: auto;
+    }
+}

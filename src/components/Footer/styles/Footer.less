@@ -1,0 +1,96 @@
+@import '../../../styles/style';
+
+.footer {
+    padding: @ufs-theme-page-padding-y @ufs-theme-page-padding-x;
+    background: var(--triplex-Footer-Background);
+
+    &.sticky {
+        z-index: @page-header-sticky-z-index;
+        position: sticky;
+        bottom: 0;
+    }
+}
+
+.footerDescription {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footerDescriptionContent {
+    flex-grow: 1;
+    margin-right: auto;
+    .b1-text-main(@color-graphite-01);
+    color: var(--triplex-Footer-Color);
+}
+
+.footerDescriptionControls {
+    margin-left: auto;
+    white-space: nowrap;
+    padding-left: @ufs-theme-padding-before-controls-column;
+}
+
+// На мобильных устройствах блок с кнопками располагается строкой ниже.
+@media (max-width: @screen-sm-max) {
+    .footerDescription {
+        flex-wrap: wrap;
+        align-items: normal;
+    }
+
+    .footerDescriptionContent {
+        width: 100%;
+    }
+
+    .footerDescriptionControls {
+        padding-left: 0;
+        white-space: normal;
+        // Отступы, компенсирующие отступы у Button.
+        margin-top: -16px;
+        margin-left: -16px;
+
+        > button,
+        > .globalButtonDropdownExtended {
+            margin-left: 16px;
+            margin-top: 16px;
+        }
+    }
+
+    .footerDescriptionContent + .footerDescriptionControls {
+        margin-top: 0;
+    }
+
+    .footer {
+        padding: @page-padding-sm;
+    }
+}
+
+each(@scroll-sizes, {
+    @scroll-width: @value;
+
+    html.scroll-@{scroll-width} {
+        /*
+          Breakpoint для экранов менее 1024px.
+          Футер при этом разрешении в лайтбоксе не фиксируется.
+        */
+        @media (max-width: (@lightBox-media-point-0 + @scroll-width)) {
+            .globalLightBoxContent .footer,
+            .globalLightBoxSideOverlay .footer {
+                &.sticky {
+                    position: relative;
+                }
+            }
+        }
+
+        /**
+            При высоте экрана менее 800px lightBoxControls, header и footer не прилипают к экрану.
+         */
+        @media screen and (max-height: @lightBox-disable-sticky-screen-height) {
+            .globalLightBoxContent .footer,
+            .globalLightBoxSideOverlay .footer {
+                &.sticky {
+                    position: relative;
+                }
+            }
+        }
+    }
+});

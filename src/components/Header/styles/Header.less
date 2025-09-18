@@ -1,0 +1,90 @@
+@import '../../../styles/style';
+
+.header {
+    background: var(--triplex-Header-Background);
+
+    &.sticky {
+        z-index: @page-header-sticky-z-index;
+        position: sticky;
+        top: 0;
+    }
+
+    .globalHeaderTabs:first-child {
+        padding: @ufs-theme-page-padding-y @ufs-theme-page-padding-x 0;
+    }
+
+    .globalHeaderTitle + .globalHeaderTabs {
+        padding: 0 @ufs-theme-page-padding-x @ufs-theme-page-padding-y;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        .globalHeaderTabs:first-child {
+            padding: @page-padding-sm @page-padding-sm 0 @page-padding-sm;
+        }
+
+        .globalHeaderTabs + .globalHeaderTitle {
+            padding-top: @page-elements-padding-y-sm;
+        }
+
+        .globalHeaderTitle + .globalHeaderTabs {
+            margin-top: -4px;
+            padding: 0 @page-padding-sm 24px;
+        }
+    }
+}
+
+each(@scroll-sizes, {
+    @scroll-width: @value;
+
+    html.scroll-@{scroll-width} {
+        /*
+          Breakpoint до которого LightBoxControls находятся наверху лайтбокса.
+          Хедер фиксируется под LightBoxControls.
+        */
+        .LB-less-or-equal-media-point-1-no-hash {
+            .globalLightBoxContent .header {
+                &.sticky {
+                    top: @lightBox-controls-opened-height;
+                }
+            }
+        }
+
+        /*
+          Breakpoint после которого хедер прилипает к верху экрана.
+        */
+        .LB-more-media-point-1-no-hash {
+            .globalLightBoxContent .header {
+                &.sticky {
+                    top: 0;
+                }
+            }
+        }
+
+        /*
+          Breakpoint для ширины LightBox менее 1024px.
+          Хедер при этом разрешении в лайтбоксе не фиксируется.
+        */
+        .LB-less-or-equal-media-point-0-no-hash {
+            .globalLightBoxContent .header,
+            .globalLightBoxSideOverlay .header {
+                &.sticky {
+                    position: relative;
+                    top: 0;
+                }
+            }
+        }
+
+        /**
+            При высоте экрана менее 800px lightBoxControls, header и footer не прилипают к экрану.
+         */
+        @media screen and (max-height: @lightBox-disable-sticky-screen-height) {
+            .globalLightBoxContent .header,
+            .globalLightBoxSideOverlay .header {
+                &.sticky {
+                    position: relative;
+                    top: 0 !important;
+                }
+            }
+        }
+    }
+});

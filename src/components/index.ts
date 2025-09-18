@@ -5,6 +5,7 @@ export * from "./Checkbox";
 export * from "./FormField";
 export * from "./FormGroup";
 export * from "./Gap";
+export * from "./Link";
 export * from "./Loader";
 export * from "./MediaWidth";
 export * from "./MobileView";

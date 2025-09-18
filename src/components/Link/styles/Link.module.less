@@ -1,0 +1,35 @@
+.link {
+    cursor: pointer;
+    margin: -1px -3px;
+    position: relative;
+    text-decoration: none;
+    outline: none;
+
+    color: var(--triplex-next-Link-Text_Color_Default);
+
+    &:hover {
+        color: var(--triplex-next-Link-Text_Color_Hover);
+    }
+
+    &:active {
+        color: var(--triplex-next-Link-Text_Color_Active);
+    }
+
+    &:focus-visible {
+        box-shadow: var(--triplex-next-Link-BorderColor_Focus);
+    }
+}
+
+.wordWithContent {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+}
+
+.before :first-child {
+    margin-right: 4px;
+}
+
+.after :last-child {
+    margin-left: 4px;
+}

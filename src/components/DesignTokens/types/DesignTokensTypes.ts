@@ -3,7 +3,7 @@ import {
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsTypography,
-    TDesignTokensComponentsLoadingDots,
+    TDesignTokensComponentsLoader,
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
@@ -245,7 +245,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsTypography
-    | TDesignTokensComponentsLoadingDots
+    | TDesignTokensComponentsLoader
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess;
 

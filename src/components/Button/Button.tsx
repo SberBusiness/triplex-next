@@ -6,7 +6,7 @@ import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
 import clsx from "clsx";
-import { LoadingDots, ELoadingDotsSize, ELoadingDotsTheme } from "../LoadingDots";
+import { LoaderSmall, ELoaderSmallSize, ELoaderSmallTheme } from "../Loader";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -94,14 +94,14 @@ const getButtonSizeCssClass = (size?: EButtonSize) => {
 
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
-    const dotsTheme = theme === EButtonTheme.SECONDARY ? ELoadingDotsTheme.SECONDARY : ELoadingDotsTheme.GENERAL;
+    const dotsTheme = theme === EButtonTheme.SECONDARY ? ELoaderSmallTheme.BRAND : ELoaderSmallTheme.NEUTRAL;
     const dotsSize =
         size === EButtonSize.SM
-            ? ELoadingDotsSize.SM
+            ? ELoaderSmallSize.SM
             : size === EButtonSize.LG
-              ? ELoadingDotsSize.LG
-              : ELoadingDotsSize.MD;
-    return <LoadingDots theme={dotsTheme} size={dotsSize} />;
+              ? ELoaderSmallSize.LG
+              : ELoaderSmallSize.MD;
+    return <LoaderSmall theme={dotsTheme} size={dotsSize} />;
 };
 
 /** Кнопка. */
@@ -137,7 +137,7 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
                 {icon}
                 {children}
             </span>
-            <div className={clsx(styles.loadingDots, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
+            <div className={clsx(styles.loader, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
         </button>
     );
 });

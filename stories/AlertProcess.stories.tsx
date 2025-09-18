@@ -11,7 +11,7 @@ import { Gap } from "../src/components/Gap";
 import DefaulticonStrokePrdIcon20 from "@sberbusiness/icons-next/DefaulticonStrokePrdIcon20";
 
 export default {
-    title: "Components/AlertProcess",
+    title: "Components/Alerts/AlertProcess",
     component: AlertProcess,
     tags: ["autodocs"],
     parameters: {

@@ -88,7 +88,7 @@ describe("Button", () => {
         expect(button).toHaveClass("block");
         expect(button).toHaveClass("loading");
         expect(button).toHaveAttribute("tabindex", "-1");
-        expect(button.querySelector("span[class*='loadingDots']")).toBeInTheDocument();
+        expect(button.querySelector("span[class*='loaderSmall']")).toBeInTheDocument();
     });
 
     it("Should apply disabled attribute and class", () => {
@@ -148,10 +148,10 @@ describe("Button", () => {
             </Button>,
         );
         const button = getButton();
-        const loadingDots = button.querySelector("span[class*='loadingDots']");
-        expect(loadingDots).toBeInTheDocument();
-        expect(loadingDots).toHaveClass("lg");
-        expect(loadingDots).toHaveClass("secondary");
+        const loader = button.querySelector("span[class*='loaderSmall']");
+        expect(loader).toBeInTheDocument();
+        expect(loader).toHaveClass("lg");
+        expect(loader).toHaveClass("brand");
     });
 
     it("Should forward ref correctly", () => {

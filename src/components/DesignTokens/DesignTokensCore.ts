@@ -74,7 +74,7 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorDarkNeutral: {
         0: {
-            value: "#050505", //     var(--triplex-next-ColorDarkNeutral-0)
+            value: "#000000", //     var(--triplex-next-ColorDarkNeutral-0)
         },
         10: {
             value: "#171719", //     var(--triplex-next-ColorDarkNeutral-10)

@@ -5,7 +5,7 @@ import { EAlertType } from "../src/components/Alert/EAlertType";
 import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
 
 export default {
-    title: "Components/AlertContext",
+    title: "Components/Alerts/AlertContext",
     component: AlertContext,
     tags: ["autodocs"],
     parameters: {

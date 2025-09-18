@@ -1,8 +1,8 @@
 import React from "react";
 import clsx from "clsx";
-import { Body } from "../Body";
-import { Footer } from "../Footer";
-import { Header } from "../Header";
+import { BodyPage } from "./components/BodyPage";
+import { HeaderPage } from "./components/HeaderPage";
+import { FooterPage } from "./components/FooterPage";
 import styles from "./styles/Page.module.less";
 
 /** Свойства компонента Page. */
@@ -18,9 +18,9 @@ export const Page = Object.assign(
         );
     }),
     {
-        Body: Body,
-        Header: Header,
-        Footer: Footer,
+        Body: BodyPage,
+        Header: HeaderPage,
+        Footer: FooterPage,
     },
 );
 

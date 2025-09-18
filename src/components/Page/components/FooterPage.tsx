@@ -1,2 +1,2 @@
-import { Footer } from "@sber-business/triplex/components/Footer/Footer";
+import { Footer } from "@sberbusiness/triplex-next/components/Footer/Footer";
 export { Footer as FooterPage };

@@ -1,2 +1,2 @@
-import { Header } from "@sber-business/triplex/components/Header/Header";
+import { Header } from "@sberbusiness/triplex-next/components/Header/Header";
 export { Header as HeaderPage };

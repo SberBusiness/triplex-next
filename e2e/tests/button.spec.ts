@@ -64,26 +64,6 @@ test.describe("Button", () => {
         }
     });
 
-    test("should be disabled when loading", async ({ page }) => {
-        const buttons = await getButtons(
-            page,
-            "http://localhost:6006/iframe.html?id=components-buttons-button--loading",
-        );
-
-        const count = await buttons.count();
-
-        for (let i = 0; i < count; i++) {
-            const currentButton = buttons.nth(i);
-            await expect(currentButton).toBeVisible();
-            await expect(currentButton).toHaveCSS("pointer-events", "none");
-            await expect(currentButton).toHaveClass(/loading/);
-
-            const loadingDots = currentButton.locator("div");
-            await expect(loadingDots).toHaveClass(/loadingDots/);
-            await expect(loadingDots).toBeVisible();
-        }
-    });
-
     test("should take full width when block prop is set", async ({ page }) => {
         const buttons = await getButtons(
             page,

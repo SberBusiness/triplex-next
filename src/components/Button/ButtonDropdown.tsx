@@ -6,9 +6,14 @@ import {
 } from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
 import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
-import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { CaretdownStrokeSrvIcon24, DotshorizontalStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { DropdownList,  EDropdownListSize,  EDropdownSize,  IDropdownListItemProps} from "@sberbusiness/triplex-next/components/Dropdown";
+import {
+    DropdownList,
+    EDropdownListSize,
+    EDropdownSize,
+    IDropdownListItemProps,
+} from "@sberbusiness/triplex-next/components/Dropdown";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
@@ -21,6 +26,8 @@ import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enum
 import clsx from "clsx";
 import styles from "./styles/ButtonDropdown.module.less";
 
+export const dotsTheme = "dots";
+
 const getDropdownSize = (size: EButtonSize) => {
     switch (size) {
         case EButtonSize.SM:
@@ -32,7 +39,7 @@ const getDropdownSize = (size: EButtonSize) => {
         default:
             return EDropdownSize.MD;
     }
-}   
+};
 const getDropdownListSize = (size: EButtonSize) => {
     switch (size) {
         case EButtonSize.SM:
@@ -44,7 +51,7 @@ const getDropdownListSize = (size: EButtonSize) => {
         default:
             return EDropdownListSize.MD;
     }
-}
+};
 
 /** Свойства опции в выпадающем списке действий. */
 export interface IButtonDropdownOption
@@ -82,8 +89,16 @@ interface IButtonDropdownBaseProps extends IButtonDropdownProps {
     block?: boolean;
 }
 
+/** Свойства контекстной кнопки с выпадающим списком действий. */
+interface IButtonDotsProps extends IButtonDropdownProps {
+    /** Тема кнопки. */
+    theme: typeof dotsTheme;
+    /** Блочное состояние кнопки. */
+    block?: never;
+}
+
 /** Кнопка с выпадающим списком действий. */
-export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps>(
+export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps | IButtonDotsProps>(
     (props, ref) => {
         const { buttonAttributes, children, className, theme, size, options, selected, block, disabled, ...rest } =
             props;
@@ -102,7 +117,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             return (
                 <Button
                     className={classNames}
-                    theme={theme}
+                    theme={theme as EButtonTheme}
                     size={size}
                     onKeyDown={handleKeyDown({ opened, setOpened })}
                     onClick={handleClick({ opened, setOpened })}
@@ -117,6 +132,31 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                     {children}
                     {renderCaret()}
                 </Button>
+            );
+        };
+
+        const renderButtonDots = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
+            const classNames = clsx(styles.buttonDropdownTarget, "hoverable", {
+                [styles.active]: opened,
+                [styles.block]: !!block,
+            });
+
+            return (
+                <Button
+                    className={classNames}
+                    theme={EButtonTheme.SECONDARY}
+                    size={size}
+                    onKeyDown={handleKeyDown({ opened, setOpened })}
+                    onClick={handleClick({ opened, setOpened })}
+                    disabled={disabled}
+                    aria-haspopup="menu"
+                    aria-expanded={opened}
+                    aria-controls={instanceId.current}
+                    aria-activedescendant={activeDescendant}
+                    {...buttonAttributes}
+                    ref={setRef}
+                    icon={<DotshorizontalStrokeSrvIcon24 paletteIndex={0} />}
+                />
             );
         };
 
@@ -142,9 +182,12 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             switch (theme) {
                 case EButtonTheme.GENERAL:
                 case EButtonTheme.DANGER:
+                case dotsTheme:
                     return <CaretdownStrokeSrvIcon24 paletteIndex={7} className={styles.caretIcon} />;
                 case EButtonTheme.SECONDARY:
                     return <CaretdownStrokeSrvIcon24 paletteIndex={0} className={styles.caretIcon} />;
+                default:
+                    return null;
             }
         };
 
@@ -164,7 +207,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                             children: (
                                 <>
                                     <DropdownMobileHeader>
-                                        <Text tag="div" size={ETextSize.B1}>
+                                        <Text tag="div" size={ETextSize.B3}>
                                             {children}
                                         </Text>
                                         <DropdownMobileClose onClick={() => setOpened(false)} />
@@ -224,14 +267,14 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         return (
             <ButtonDropdownExtended
                 className={classNames}
-                renderButton={renderButton}
+                renderButton={theme === dotsTheme ? renderButtonDots : renderButton}
                 renderDropdown={renderDropdown}
                 dropdownRef={dropdownRef}
                 closeOnTab
                 {...rest}
             />
         );
-    }
+    },
 );
 
 ButtonDropdown.displayName = "ButtonDropdown";

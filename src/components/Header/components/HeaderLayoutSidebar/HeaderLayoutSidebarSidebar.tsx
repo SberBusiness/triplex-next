@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../../styles/HeaderLayoutSidebar.module.less";
 
 /** Свойства компонента HeaderLayoutSidebarSidebar. */
 export interface IHeaderLayoutSidebarSidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -7,7 +8,7 @@ export interface IHeaderLayoutSidebarSidebarProps extends React.HTMLAttributes<H
 /** Header sidebar. */
 export const HeaderLayoutSidebarSidebar = React.forwardRef<HTMLDivElement, IHeaderLayoutSidebarSidebarProps>(
     ({ children, className, ...rest }, ref) => (
-        <div className={classnames("cssClass[headerLayoutSidebarSidebar]", className)} {...rest} ref={ref}>
+        <div className={clsx(styles.headerLayoutSidebarSidebar, className)} {...rest} ref={ref}>
             {children}
         </div>
     ),

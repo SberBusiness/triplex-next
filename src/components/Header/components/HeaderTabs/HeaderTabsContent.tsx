@@ -1,24 +1,18 @@
 import React from "react";
-import { Tabs } from "@sber-business/triplex/components/Tabs/Tabs";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../../styles/HeaderTabs.module.less";
 
 /** Свойства компонента HeaderTabsContent. */
 export interface IHeaderTabsContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Контейнер табов. */
-export const HeaderTabsContent = Object.assign(
-    React.forwardRef<HTMLDivElement, IHeaderTabsContentProps>(function HeaderTabsContent(
-        { children, className, ...rest },
-        ref,
-    ) {
+export const HeaderTabsContent = React.forwardRef<HTMLDivElement, IHeaderTabsContentProps>(
+    ({ children, className, ...rest }, ref) => {
         return (
-            <div className={classnames("cssClass[headerTabsContent]", className)} {...rest} ref={ref}>
+            <div className={clsx(styles.headerTabsContent, className)} {...rest} ref={ref}>
                 {children}
             </div>
         );
-    }),
-    {
-        Tabs: Tabs,
     },
 );
 

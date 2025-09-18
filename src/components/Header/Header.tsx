@@ -1,10 +1,10 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { HeaderTabs } from "@sber-business/triplex/components/Header/components/HeaderTabs/HeaderTabs";
-import { HeaderTitle } from "@sber-business/triplex/components/Header/components/HeaderTitle/HeaderTitle";
-import { HeaderSubheader } from "@sber-business/triplex/components/Header/components/HeaderSubheader/HeaderSubheader";
-import { HeaderLink } from "@sber-business/triplex/components/Header/components/HeaderLink/HeaderLink";
+import { clsx } from "clsx";
+import { HeaderTabs } from "./components/HeaderTabs/HeaderTabs";
+import { HeaderTitle } from "./components/HeaderTitle/HeaderTitle";
+import { HeaderSubheader } from "./components/HeaderSubheader/HeaderSubheader";
 import { HeaderLayoutSidebar } from "./components/HeaderLayoutSidebar/HeaderLayoutSidebar";
+import styles from "./styles/Header.module.less";
 
 /** Свойства компонента Header. */
 export interface IHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,7 +20,7 @@ export const Header = Object.assign(
     React.forwardRef<HTMLDivElement, IHeaderProps>(function Header({ className, sticky, ...rest }, ref) {
         return (
             <div
-                className={classnames("cssClass[header]", { "cssClass[sticky]": Boolean(sticky) }, className)}
+                className={clsx(styles.header, { [styles.sticky]: Boolean(sticky) }, className)}
                 {...rest}
                 data-tx={process.env.npm_package_version}
                 ref={ref}
@@ -29,7 +29,6 @@ export const Header = Object.assign(
     }),
     {
         LayoutSidebar: HeaderLayoutSidebar,
-        Link: HeaderLink,
         Subhead: HeaderSubheader,
         Tabs: HeaderTabs,
         Title: HeaderTitle,

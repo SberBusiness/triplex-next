@@ -1,24 +1,23 @@
 @import '../../../styles/style';
 
-.globalHeaderTabs {
+.headerTabs {
     display: flex;
     justify-content: space-between;
 
     .headerTabsContent {
         flex-grow: 1;
-        min-width: 1px; // IE fix.
     }
 
     .headerTabsControls {
         flex-shrink: 0;
         white-space: nowrap;
-        padding-left: @ufs-theme-padding-before-controls-column;
+        padding-left: 24px;
     }
 }
 
 // На мобильных устройствах блок с кнопками располагается строкой ниже.
 @media (max-width: @screen-sm-max) {
-    .globalHeaderTabs {
+    .headerTabs {
         flex-wrap: wrap;
 
         .headerTabsContent {
@@ -32,8 +31,7 @@
             // Отступы, компенсирующие отступы у Button.
             margin-left: -16px;
 
-            > button,
-            > .globalButtonDropdownExtended {
+            > button {
                 margin-left: 16px;
                 margin-top: 16px;
             }

@@ -1,7 +1,8 @@
 import React from "react";
-import { FooterDescriptionContent } from "@sber-business/triplex/components/Footer/components/FooterDescriptionContent";
-import { FooterDescriptionControls } from "@sber-business/triplex/components/Footer/components/FooterDescriptionControls";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { FooterDescriptionContent } from "./FooterDescriptionContent";
+import { FooterDescriptionControls } from "./FooterDescriptionControls";
+import clsx from "clsx";
+import styles from "../styles/Footer.module.less";
 
 /** Свойства компонента FooterDescription. */
 export interface IFooterDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -13,7 +14,7 @@ export const FooterDescription = Object.assign(
         ref,
     ) {
         return (
-            <div className={classnames("cssClass[footerDescription]", className)} {...rest} ref={ref}>
+            <div className={clsx(styles.footerDescription, className)} {...rest} ref={ref}>
                 {children}
             </div>
         );

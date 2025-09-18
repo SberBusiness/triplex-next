@@ -1,25 +1,26 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { BodyPage } from "@sber-business/triplex/components/Page/components/BodyPage";
-import { FooterPage } from "@sber-business/triplex/components/Page/components/FooterPage";
-import { HeaderPage } from "@sber-business/triplex/components/Page/components/HeaderPage";
+import clsx from "clsx";
+import { Body } from "../Body";
+import { Footer } from "../Footer";
+import { Header } from "../Header";
+import styles from "./styles/Page.module.less";
 
 /** Свойства компонента Page. */
 export interface IPageProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-/** Страница. Может содержать только BodyPage, PageHeader и PageFooter. */
+/** Страница. Может содержать только Body, Header и Footer. */
 export const Page = Object.assign(
     React.forwardRef<HTMLDivElement, IPageProps>(function Page({ children, className, ...rest }, ref) {
         return (
-            <div className={classnames("cssClass[page]", className)} {...rest} ref={ref}>
+            <div className={clsx(styles.page, className)} {...rest} ref={ref}>
                 {children}
             </div>
         );
     }),
     {
-        Body: BodyPage,
-        Header: HeaderPage,
-        Footer: FooterPage,
+        Body: Body,
+        Header: Header,
+        Footer: Footer,
     },
 );
 

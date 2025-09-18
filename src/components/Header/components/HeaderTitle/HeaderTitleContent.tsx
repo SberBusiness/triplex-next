@@ -1,26 +1,18 @@
 import React from "react";
-import { HeaderTitleContentText } from "@sber-business/triplex/components/Header/components/HeaderTitle/HeaderTitleContentText";
-import { HeaderTitleContentSubhead } from "@sber-business/triplex/components/Header/components/HeaderTitle/HeaderTitleContentSubhead";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../../styles/HeaderTitle.module.less";
 
 /** Свойства компонента HeaderTitleContent. */
 export interface IHeaderTitleContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Часть HeaderTitle с заголовком и подзаголовком. */
-export const HeaderTitleContent = Object.assign(
-    React.forwardRef<HTMLDivElement, IHeaderTitleContentProps>(function HeaderTitleContent(
-        { children, className, ...rest },
-        ref,
-    ) {
+export const HeaderTitleContent = React.forwardRef<HTMLDivElement, IHeaderTitleContentProps>(
+    ({ children, className, ...rest }, ref) => {
         return (
-            <div className={classnames(className, "cssClass[headerTitleContent]")} {...rest} ref={ref}>
+            <div className={clsx(className, styles.headerTitleContent)} {...rest} ref={ref}>
                 {children}
             </div>
         );
-    }),
-    {
-        Subhead: HeaderTitleContentSubhead,
-        Text: HeaderTitleContentText,
     },
 );
 

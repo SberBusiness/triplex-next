@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/Footer.module.less";
 
 /** Свойства компонента FooterDescriptionControls. */
 export interface IFooterDescriptionControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -7,7 +8,7 @@ export interface IFooterDescriptionControlsProps extends React.HTMLAttributes<HT
 /** Футер, кнопки действий основной части. */
 export const FooterDescriptionControls = React.forwardRef<HTMLDivElement, IFooterDescriptionControlsProps>(
     ({ children, className, ...rest }, ref) => (
-        <div className={classnames("cssClass[footerDescriptionControls]", className)} {...rest} ref={ref}>
+        <div className={clsx(styles.footerDescriptionControls, className)} {...rest} ref={ref}>
             {children}
         </div>
     ),

@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../../styles/HeaderSubheader.module.less";
 
 /** Свойства компонента HeaderSubheader. */
 export interface IHeaderSubheaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,11 +12,7 @@ export interface IHeaderSubheaderProps extends React.HTMLAttributes<HTMLDivEleme
 export const HeaderSubheader = React.forwardRef<HTMLDivElement, IHeaderSubheaderProps>(
     ({ children, className, withoutPaddings, ...rest }, ref) => (
         <div
-            className={classnames(
-                "cssClass[headerSubheader]",
-                { "cssClass[withoutPaddings]": Boolean(withoutPaddings) },
-                className,
-            )}
+            className={clsx(styles.headerSubheader, { [styles.withoutPaddings]: Boolean(withoutPaddings) }, className)}
             {...rest}
             ref={ref}
         >

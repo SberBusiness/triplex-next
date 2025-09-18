@@ -1,0 +1,41 @@
+@import '../../../styles/style';
+
+.headerTitle {
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+
+    .headerTitleContent {}
+
+    .headerTitleControls {
+        white-space: nowrap;
+        padding-left: 24px;
+    }
+}
+
+.headerLink + .headerTitle {
+    padding-top: 0;
+}
+
+@media (max-width: @screen-sm-max) {
+    .headerTitle {
+        flex-wrap: wrap;
+        padding: 20px 16px;
+
+        .headerTitleContent {
+            width: 100%;
+        }
+
+        .headerTitleControls {
+            padding-left: 0;
+            white-space: normal;
+            // Отступы, компенсирующие отступы у Button.
+            margin-left: -16px;
+
+            > button {
+                margin-left: 16px;
+                margin-top: 16px;
+            }
+        }
+    }
+}

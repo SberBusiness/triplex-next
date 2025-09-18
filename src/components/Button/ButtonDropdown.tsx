@@ -207,7 +207,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                             children: (
                                 <>
                                     <DropdownMobileHeader>
-                                        <Text tag="div" size={ETextSize.B1}>
+                                        <Text tag="div" size={ETextSize.B3}>
                                             {children}
                                         </Text>
                                         <DropdownMobileClose onClick={() => setOpened(false)} />

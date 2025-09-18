@@ -1,0 +1,94 @@
+.overlay {
+    position: absolute;
+    // Через display: none не будет анимации появления.
+    left: -10000px;
+    // Чтобы элементы оверлея не получали фокус, когда он скрыт.
+    visibility: hidden;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+
+    &.fixed {
+        position: fixed;
+    }
+
+    &.closing,
+    &.opened {
+        visibility: visible;
+        left: 0;
+        right: 0;
+    }
+}
+
+.overlayPanel {
+    position: absolute;
+    background: var(--triplex-next-Overlay-Panel_Background);
+    overflow: auto;
+    transition: transform 0.3s ease-in-out;
+
+    &.bottom {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: translateY(100%);
+        box-shadow: 0 -13px 17px 0 rgba(0, 0, 0, 0.14);
+    }
+
+    &.left {
+        left: 0;
+        top: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        box-shadow: 13px 0 17px 0 rgba(0, 0, 0, 0.14);
+    }
+
+    &.right {
+        right: 0;
+        top: 0;
+        height: 100%;
+        transform: translateX(100%);
+        box-shadow: -13px 0 17px 0 rgba(0, 0, 0, 0.14);
+    }
+
+    &.top {
+        left: 0;
+        top: 0;
+        right: 0;
+        transform: translateY(-100%);
+        box-shadow: 0 13px 17px 0 rgba(0, 0, 0, 0.14);
+    }
+
+    &.left,
+    &.right {
+        &.opened {
+            transform: translateX(0);
+        }
+    }
+
+    &.top,
+    &.bottom {
+        &.opened {
+            transform: translateY(0);
+        }
+    }
+}
+
+.overlayContent {
+    display: flex;
+    min-height: 100%;
+}
+
+.overlayMask {
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    position: absolute;
+    background: var(--triplex-next-Overlay-Background);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &.overlayOpened {
+        opacity: 1;
+    }
+}

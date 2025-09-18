@@ -10,6 +10,11 @@ import {
     Typography_Tokens,
     Link_Tokens,
     Loader_Tokens,
+    Dropdown_Tokens,
+    DropdownList_Tokens,
+    DropdownMobile_Tokens,
+    DropdownMobileList_Tokens,
+    Overlay_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsFormFieldValue,
@@ -19,6 +24,11 @@ import {
     TDesignTokensComponentsAlertContextValue,
     AlertProcess_Tokens,
     TDesignTokensComponentsAlertProcessValue,
+    TDesignTokensComponentsDropdownValue,
+    TDesignTokensComponentsDropdownListValue,
+    TDesignTokensComponentsDropdownMobileValue,
+    TDesignTokensComponentsDropdownMobileListValue,
+    TDesignTokensComponentsOverlayValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -27,6 +37,19 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     FormField: GetTokensValueByTheme<TDesignTokensComponentsFormFieldValue>(ETriplexNextTheme.LIGHT, FormField_Tokens),
     Link: GetTokensValueByTheme<TDesignTokensComponentsLinkValue>(ETriplexNextTheme.LIGHT, Link_Tokens),
     Loader: GetTokensValueByTheme<TDesignTokensComponentsLoaderValue>(ETriplexNextTheme.LIGHT, Loader_Tokens),
+    Dropdown: GetTokensValueByTheme<TDesignTokensComponentsDropdownValue>(ETriplexNextTheme.LIGHT, Dropdown_Tokens),
+    DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(
+        ETriplexNextTheme.LIGHT,
+        DropdownList_Tokens,
+    ),
+    DropdownMobile: GetTokensValueByTheme<TDesignTokensComponentsDropdownMobileValue>(
+        ETriplexNextTheme.LIGHT,
+        DropdownMobile_Tokens,
+    ),
+    DropdownMobileList: GetTokensValueByTheme<TDesignTokensComponentsDropdownMobileListValue>(
+        ETriplexNextTheme.LIGHT,
+        DropdownMobileList_Tokens,
+    ),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
         ETriplexNextTheme.LIGHT,
         Typography_Tokens,
@@ -39,4 +62,5 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         AlertProcess_Tokens,
     ),
+    Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.LIGHT, Overlay_Tokens),
 };

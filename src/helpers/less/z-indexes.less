@@ -1,0 +1,39 @@
+// Шаг интервалов между z-индексами элементов.
+@z-index-step: 100;
+
+// Большой стартовый z-индекс.
+@z-index-super: 10000;
+
+// DatePicker
+@z-index-popover: 800; // 800
+
+// LightBox
+@z-index-lightbox: 1300; // 1300
+// LightBoxHeader - локальный z-index внутри LightBox
+@z-index-lightbox-header: @z-index-step; // 100
+// LightBoxFooter - локальный z-index внутри LightBox
+@z-index-lightbox-footer: @z-index-step; // 100
+// LightBoxControls - локальный z-index внутри LightBox
+@z-index-lightbox-controls: @z-index-step; // 100
+// LightBoxTopOverlay - локальный z-index внутри LightBox
+@z-index-lightbox-top-overlay: @z-index-lightbox-header + @z-index-step; // 200
+
+// ModalWindow
+@z-index-modal-window: @z-index-lightbox + @z-index-step; // 1400
+
+// Dropdown
+@z-index-dropdown: @z-index-modal-window + @z-index-step; // 1500
+
+// Элементы с самым большим z-index:
+
+// Tooltip
+@z-index-tooltip: @z-index-super; // 10000
+
+// SpinnerWidget
+@z-index-spinner-widget: @z-index-tooltip + @z-index-step; //10100
+
+// UploadZone
+@z-index-upload-zone-fullscreen: @z-index-spinner-widget + @z-index-step; //10200
+
+// Модальное окно с предупреждением об истечении сессии.
+@z-index-modal-window-session-expiration: @z-index-upload-zone-fullscreen + @z-index-step; //10300

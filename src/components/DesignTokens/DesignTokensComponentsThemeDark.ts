@@ -19,6 +19,16 @@ import {
     TDesignTokensComponentsAlertContextValue,
     AlertProcess_Tokens,
     TDesignTokensComponentsAlertProcessValue,
+    Dropdown_Tokens,
+    TDesignTokensComponentsDropdownValue,
+    DropdownList_Tokens,
+    TDesignTokensComponentsDropdownListValue,
+    DropdownMobile_Tokens,
+    TDesignTokensComponentsDropdownMobileValue,
+    DropdownMobileList_Tokens,
+    TDesignTokensComponentsDropdownMobileListValue,
+    Overlay_Tokens,
+    TDesignTokensComponentsOverlayValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -39,4 +49,18 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         AlertProcess_Tokens,
     ),
+    Dropdown: GetTokensValueByTheme<TDesignTokensComponentsDropdownValue>(ETriplexNextTheme.DARK, Dropdown_Tokens),
+    DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(
+        ETriplexNextTheme.DARK,
+        DropdownList_Tokens,
+    ),
+    DropdownMobile: GetTokensValueByTheme<TDesignTokensComponentsDropdownMobileValue>(
+        ETriplexNextTheme.DARK,
+        DropdownMobile_Tokens,
+    ),
+    DropdownMobileList: GetTokensValueByTheme<TDesignTokensComponentsDropdownMobileListValue>(
+        ETriplexNextTheme.DARK,
+        DropdownMobileList_Tokens,
+    ),
+    Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.DARK, Overlay_Tokens),
 };

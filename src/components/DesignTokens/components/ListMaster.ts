@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента ListMaster.
 export const designTokensComponentsListMasterKeys = [
@@ -22,9 +22,9 @@ export type TDesignTokensComponentsListMaster = { ListMaster: TDesignTokensCompo
 
 // Токены компонента ListMaster в светлой и темной темах.
 export const ListMaster_Tokens: TDesignTokensComponentsListMasterValues = {
-    Background: [{ ref: "Basic.100" }, { ref: "Basic.900" }], // var(--triplex-ListMaster-Background)
-    Footer_Background: [{ ref: "Neutral.300" }, { ref: "Basic.700" }], // var(--triplex-ListMaster-Footer_Background)
-    Footer_Color: [{ ref: "Basic.700" }, { ref: "Neutral.100" }], // var(--triplex-ListMaster-Footer_Color)
-    Header_Background: [{ ref: "Neutral.300" }, { ref: "Basic.500" }], // var(--triplex-ListMaster-Header_Background)
-    Header_Color: [{ ref: "Basic.700" }, { ref: "Neutral.100" }], // var(--triplex-ListMaster-Header_Color)
+    Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-ListMaster-Background)
+    Footer_Background: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-ListMaster-Footer_Background)
+    Footer_Color: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-ListMaster-Footer_Color)
+    Header_Background: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-ListMaster-Header_Background)
+    Header_Color: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-ListMaster-Header_Color)
 };

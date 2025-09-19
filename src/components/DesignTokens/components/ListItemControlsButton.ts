@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента ListItemControlsButton.
 export const designTokensComponentsListItemControlsButtonKeys = ["Background", "Color"] as const;
@@ -25,6 +25,6 @@ export type TDesignTokensComponentsListItemControlsButton = {
 
 // Токены компонента ListItemControlsButton в светлой и темной темах.
 export const ListItemControlsButton_Tokens: TDesignTokensComponentsListItemControlsButtonValues = {
-    Background: [{ ref: "Neutral.100" }, { ref: "Basic.500" }], // var(--triplex-ListItemControlsButton-Background)
-    Color: [{ ref: "Basic.700" }, { ref: "Neutral.100" }], // var(--triplex-ListItemControlsButton-Color)
+    Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.10" }], // var(--triplex-next-ListItemControlsButton-Background)
+    Color: [{ ref: "ColorDarkNeutral.10" }, { ref: "ColorNeutral.90" }], // var(--triplex-next-ListItemControlsButton-Color)
 };

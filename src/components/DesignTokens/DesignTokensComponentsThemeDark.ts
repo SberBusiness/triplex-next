@@ -29,6 +29,14 @@ import {
     TDesignTokensComponentsDropdownMobileListValue,
     Overlay_Tokens,
     TDesignTokensComponentsOverlayValue,
+    ListItem_Tokens,
+    TDesignTokensComponentsListItemValue,
+    ListItemControlsButton_Tokens,
+    TDesignTokensComponentsListItemControlsButtonValue,
+    ListMaster_Tokens,
+    TDesignTokensComponentsListMasterValue,
+    Body_Tokens,
+    TDesignTokensComponentsBodyValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -63,4 +71,11 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         DropdownMobileList_Tokens,
     ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.DARK, Overlay_Tokens),
+    ListItem: GetTokensValueByTheme<TDesignTokensComponentsListItemValue>(ETriplexNextTheme.DARK, ListItem_Tokens),
+    ListItemControlsButton: GetTokensValueByTheme<TDesignTokensComponentsListItemControlsButtonValue>(
+        ETriplexNextTheme.DARK,
+        ListItemControlsButton_Tokens,
+    ),
+    ListMaster: GetTokensValueByTheme<TDesignTokensComponentsListMasterValue>(ETriplexNextTheme.DARK, ListMaster_Tokens),
+    Body: GetTokensValueByTheme<TDesignTokensComponentsBodyValue>(ETriplexNextTheme.DARK, Body_Tokens),
 };

@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/ListEmptyState.module.less";
 
 /** Свойства компонента ListItemEmpty. */
 export interface IListItemEmptyProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -10,7 +11,7 @@ export interface IListItemEmptyProps extends React.HTMLAttributes<HTMLDivElement
  * */
 export const ListEmptyState = React.forwardRef<HTMLDivElement, IListItemEmptyProps>(
     ({ children, className, ...rest }, ref) => (
-        <div className={classnames("cssClass[listEmptyState]", className)} {...rest} ref={ref}>
+        <div className={clsx(styles.listEmptyState, className)} {...rest} ref={ref}>
             {children}
         </div>
     )

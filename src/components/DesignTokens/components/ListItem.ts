@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента ListItem.
 export const designTokensComponentsListItemKeys = [
@@ -21,8 +21,8 @@ export type TDesignTokensComponentsListItem = { ListItem: TDesignTokensComponent
 
 // Токены компонента ListItem в светлой и темной темах.
 export const ListItem_Tokens: TDesignTokensComponentsListItemValues = {
-    Background: [{ ref: "Basic.100" }, { ref: "Basic.900" }], // var(--triplex-ListItem-Background)
-    Background_Dragging: [{ ref: "Basic.100" }, { ref: "Basic.300" }], // var(--triplex-ListItem-Background_Dragging)
-    Background_Selected: [{ ref: "Neutral.100" }, { ref: "Basic.500" }], // var(--triplex-ListItem-Background_Selected)
-    Shadow: [{ value: "0 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "none" }], // var(--triplex-ListItem-Background_Shadow)
+    Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-ListItem-Background)
+    Background_Dragging: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-ListItem-Background_Dragging)
+    Background_Selected: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.10" }], // var(--triplex-next-ListItem-Background_Selected)
+    Shadow: [{ value: "0 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "none" }], // var(--triplex-next-ListItem-Background_Shadow)
 };

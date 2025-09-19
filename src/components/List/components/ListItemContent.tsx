@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { ListItemContext } from "@sber-business/triplex/components/List/components/ListItemContext";
+import clsx from "clsx";
+import styles from "../styles/ListItemContent.module.less";
+import { ListItemContext } from "@sberbusiness/triplex-next/components/List/components/ListItemContext";
 
 interface IListItemContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -11,7 +12,7 @@ export const ListItemContent = React.forwardRef<HTMLDivElement, IListItemContent
 
         return (
             <div
-                className={classnames("cssClass[listItemContent]", { "cssClass[selected]": selected }, className)}
+                className={clsx(styles.listItemContent, { [styles.selected]: selected }, className)}
                 {...rest}
                 data-tx={process.env.npm_package_version}
                 ref={ref}

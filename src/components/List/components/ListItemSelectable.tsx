@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { Checkbox } from "@sber-business/triplex/components/Checkbox/Checkbox";
-import { ListItemContext } from "@sber-business/triplex/components/List/components/ListItemContext";
+import clsx from "clsx";
+import { Checkbox } from "@sberbusiness/triplex-next/components/Checkbox/Checkbox";
+import { ListItemContext } from "@sberbusiness/triplex-next/components/List/components/ListItemContext";
+import styles from "../styles/ListItemSelectable.module.less";
 
 export interface IListItemSelectableProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
     onSelect: (selected: boolean) => void;
@@ -23,18 +24,18 @@ export const ListItemSelectable = React.forwardRef<HTMLDivElement, IListItemSele
 
         return (
             <div
-                className={classnames("cssClass[listItemSelectable]", { "cssClass[selected]": selected }, className)}
+                className={clsx(styles.listItemSelectable, { [styles.selected]: selected }, className)}
                 {...rest}
                 ref={ref}
             >
-                <div className="cssClass[childrenWrapper]">{children}</div>
-                <div className="cssClass[checkboxWrapper]">
+                <div className={styles.childrenWrapper}>{children}</div>
+                <div className={styles.checkboxWrapper}>
                     <Checkbox
                         checked={selected}
                         onChange={handleChange}
-                        labelAttributes={{ className: "cssClass[checkboxLabel]" }}
+                        labelAttributes={{ className: styles.checkboxLabel }}
                     >
-                        <span className={"cssClass[checkboxLabelClickArea]"} />
+                        <span className={styles.checkboxLabelClickArea} />
                     </Checkbox>
                 </div>
             </div>

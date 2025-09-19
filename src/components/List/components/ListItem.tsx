@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { ListItemContext } from "@sber-business/triplex/components/List/components/ListItemContext";
+import { ListItemContext } from "@sberbusiness/triplex-next/components/List/components/ListItemContext";
 
 /** Свойства компонента ListItem. */
 export interface IListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {}
@@ -12,7 +11,7 @@ export const ListItem = React.forwardRef<HTMLLIElement, IListItemProps>(({ child
     return (
         <ListItemContext.Provider value={{ selected, setSelected }}>
             <li
-                className={classnames("cssClass[listItem]", className)}
+                className={className}
                 {...rest}
                 data-tx={process.env.npm_package_version}
                 ref={ref}

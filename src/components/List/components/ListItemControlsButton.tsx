@@ -1,7 +1,8 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { ETextSize } from "@sber-business/triplex/components/Typography/enums";
-import { Text } from "@sber-business/triplex/components/Typography/Text";
+import clsx from "clsx";
+import styles from "../styles/ListItemControlsButton.module.less";
+import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 
 export interface IListItemControlsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: React.ReactNode;
@@ -12,22 +13,22 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
     ({ children, className, icon, ...rest }, ref) => (
         <button
             type="button"
-            className={classnames(
-                "cssClass[listItemControlsButton]",
+            className={clsx(
+                styles.listItemControlsButton,
                 "hoverable",
                 {
-                    "cssClass[withIcon]": typeof icon !== "undefined",
-                    "cssClass[withText]": typeof children !== "undefined",
+                    [styles.withIcon]: typeof icon !== "undefined",
+                    [styles.withText]: typeof children !== "undefined",
                 },
                 className
             )}
             {...rest}
             ref={ref}
         >
-            <span className="cssClass[listItemControlsButtonInner]">
-                {icon ? <span className="cssClass[listItemControlsButtonIcon]">{icon}</span> : null}
+            <span className={styles.listItemControlsButtonInner}>
+                {icon ? <span className={styles.listItemControlsButtonIcon}>{icon}</span> : null}
                 {children ? (
-                    <Text className="cssClass[listItemControlsButtonLabel]" size={ETextSize.B2}>
+                    <Text className={styles.listItemControlsButtonLabel} size={ETextSize.B2}>
                         {children}
                     </Text>
                 ) : null}

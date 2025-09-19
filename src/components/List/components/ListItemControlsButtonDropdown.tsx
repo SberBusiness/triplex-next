@@ -1,28 +1,29 @@
 import React, { useRef, useState } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { ETextSize } from "@sber-business/triplex/components/Typography/enums";
-import { Text } from "@sber-business/triplex/components/Typography/Text";
-import { uniqueId } from "@sber-business/triplex/utils/uniqueId";
+import clsx from "clsx";
+import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
+import { uniqueId } from "lodash-es";
 import {
     ButtonDropdownExtended,
     IButtonDropdownExtendedButtonProvideProps,
     IButtonDropdownExtendedDropdownProvideProps,
-} from "@sber-business/triplex/components/Button/ButtonDropdownExtended";
-import { isKey } from "@sber-business/triplex/utils/keyboard";
-import { DropdownListContext } from "@sber-business/triplex/components/Dropdown/DropdownListContext";
+} from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
+import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import {
     DropdownMobileBody,
     DropdownMobileClose,
     DropdownMobileHeader,
     DropdownMobileList,
     DropdownMobileListItem,
-} from "@sber-business/triplex/components/Dropdown/mobile";
-import { DropdownList } from "@sber-business/triplex/components/Dropdown/desktop/DropdownList";
-import { IButtonDropdownProps } from "@sber-business/triplex/components/Button/ButtonDropdown";
+} from "@sberbusiness/triplex-next/components/Dropdown/mobile";
+import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
+import { IButtonDropdownProps } from "@sberbusiness/triplex-next/components/Button/ButtonDropdown";
 import {
     IListItemControlsButtonProps,
     ListItemControlsButton,
-} from "@sber-business/triplex/components/List/components/ListItemControlsButton";
+} from "@sberbusiness/triplex-next/components/List/components/ListItemControlsButton";
+import styles from "../styles/ListItemControlsButton.module.less";
 
 interface IListItemControlsButtonDropdownProps
     extends Omit<IButtonDropdownProps, "size">,
@@ -38,13 +39,9 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
         const instanceId = useRef(uniqueId());
 
         const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = classnames("hoverable", {
-                "cssClass[active]": opened,
-            });
-
             return (
                 <ListItemControlsButton
-                    className={classNames}
+                    className="hoverable"
                     onKeyDown={handleKeyDown({ opened, setOpened })}
                     onClick={handleClick({ opened, setOpened })}
                     disabled={disabled}
@@ -80,12 +77,10 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
             };
 
         const renderDropdown = ({ opened, setOpened, className }: IButtonDropdownExtendedDropdownProvideProps) => {
-            const classNames = classnames("cssClass[buttonDropdownMenu]", className);
-
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                     <ButtonDropdownExtended.Dropdown
-                        className={classNames}
+                        className={className}
                         opened={opened}
                         setOpened={setOpened}
                         targetRef={buttonRef}
@@ -124,7 +119,7 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
                             {options.map((option) => (
                                 <DropdownList.Item
                                     {...option}
-                                    className="cssClass[buttonDropdownMenuItem]"
+                                    className={styles.buttonDropdownMenuItem}
                                     key={option.id}
                                     selected={option.id === selected?.id}
                                     onSelect={() => {
@@ -153,7 +148,7 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
 
         return (
             <ButtonDropdownExtended
-                className={classnames("cssClass[listItemControlsButtonDropdown]", className)}
+                className={clsx(styles.listItemControlsButtonDropdown, className)}
                 renderButton={renderButton}
                 renderDropdown={renderDropdown}
                 dropdownRef={dropdownRef}

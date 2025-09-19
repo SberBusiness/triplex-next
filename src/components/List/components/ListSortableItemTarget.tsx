@@ -1,6 +1,7 @@
 import React from "react";
-import { DragdropSrvIcon20 } from "@sberbusiness/icons/DragdropSrvIcon20";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { DotsverticalStrokeSrvIcon20} from "@sberbusiness/icons-next";
+import clsx from "clsx";
+import styles from "../styles/ListSortableItemTarget.module.less";
 
 /** Свойства компонента ListSortableItemTarget. */
 export interface IListSortableItemTargetProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,17 +15,17 @@ export interface IListSortableItemTargetProps extends React.HTMLAttributes<HTMLD
 export const ListSortableItemTarget = React.forwardRef<HTMLDivElement, IListSortableItemTargetProps>(
     ({ children, className, disabled, dragging, ...rest }, ref) => (
         <div
-            className={classnames(
-                "cssClass[listSortableItemTarget]",
-                { ["cssClass[dragging]"]: dragging },
+            className={clsx(
+                styles.listSortableItemTarget,
+                { [styles.dragging]: dragging },
                 "hoverable",
                 className
             )}
             {...rest}
             ref={ref}
         >
-            <div className="cssClass[listSortableItemTargetContent]">{children}</div>
-            {!disabled && <DragdropSrvIcon20 className="cssClass[listSortableItemTargetIcon]" />}
+            <div className={styles.listSortableItemTargetContent}>{children}</div>
+            {!disabled && <DotsverticalStrokeSrvIcon20 className={styles.listSortableItemTargetIcon} />}
         </div>
     )
 );

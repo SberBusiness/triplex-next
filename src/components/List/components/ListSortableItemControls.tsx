@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/ListSortableItemControls.module.less";
 
 /** Свойства компонента ListSortableItemControls. */
 export interface IListSortableItemControls extends React.HTMLAttributes<HTMLDivElement> {}
@@ -9,7 +10,7 @@ export const ListSortableItemControls = React.forwardRef<HTMLDivElement, IListSo
     ({ className, ...rest }, ref) => {
         return (
             <div
-                className={classnames("cssClass[listSortableItemControls]", className)}
+                className={clsx(styles.listSortableItemControls, className)}
                 data-draggable="false"
                 {...rest}
                 ref={ref}

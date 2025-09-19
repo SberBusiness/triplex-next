@@ -1,5 +1,5 @@
 import React from "react";
-import { ISwipeableAreaRef, SwipeableArea } from "@sber-business/triplex/components/SwipeableArea/SwipeableArea";
+import { ISwipeableAreaRef, SwipeableArea } from "@sberbusiness/triplex-next/components/SwipeableArea/SwipeableArea";
 import {
     IListItemProps,
     ListItem,
@@ -7,8 +7,9 @@ import {
     ListItemControls,
     ListItemSelectable,
     ListItemTailRight,
-} from "@sber-business/triplex/components/List";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+} from "@sberbusiness/triplex-next/components/List";
+import clsx from "clsx";
+import styles from "../styles/ListItemTable.module.less";
 
 interface IListItemTableSelectableProps extends Omit<IListItemTableProps, "selected" | "onSelect"> {
     /** Обработчик изменения флага selected. */
@@ -38,7 +39,7 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
         const renderContent = () => <ListItemContent onClick={onClickItem}>{children}</ListItemContent>;
 
         return (
-            <ListItem className={classnames("cssClass[listItemTable]", className)} {...rest} ref={ref}>
+            <ListItem className={clsx(styles.listItemTable, className)} {...rest} ref={ref}>
                 <SwipeableArea
                     ref={swipeableAreaRef}
                     rightSwipeableArea={

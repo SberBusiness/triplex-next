@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/ListItemTail.module.less";
 
 interface IListItemTailLeftProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: never;
@@ -9,13 +10,13 @@ interface IListItemTailLeftProps extends React.HTMLAttributes<HTMLDivElement> {
 export const ListItemTailLeft = React.forwardRef<HTMLDivElement, IListItemTailLeftProps>(
     ({ className, ...rest }, ref) => (
         <span
-            className={classnames("cssClass[listItemTail]", "cssClass[listItemTailLeft]", className)}
+            className={clsx(styles.listItemTail, styles.listItemTailLeft, className)}
             ref={ref}
             {...rest}
         >
-            <span className="cssClass[listItemTailLine]" />
-            <span className="cssClass[listItemTailTop]" />
-            <span className="cssClass[listItemTailBottom]" />
+            <span className={styles.listItemTailLine} />
+            <span className={styles.listItemTailTop} />
+            <span className={styles.listItemTailBottom} />
         </span>
     )
 );

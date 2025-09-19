@@ -2,8 +2,9 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
-import { ListItem } from "@sber-business/triplex/components/List";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { ListItem } from "@sberbusiness/triplex-next/components/List";
+import clsx from "clsx";
+import styles from "../styles/ListSortableItem.module.less";
 import { ListSortableItemTarget } from "./ListSortableItemTarget";
 
 export interface IListSortableItemChildrenProvideProps {
@@ -14,7 +15,7 @@ export interface IListSortableItemChildrenProvideProps {
 }
 
 /** Свойства компонента ListSortableItem. */
-export interface IListSortableItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
+export interface IListSortableItemProps extends Omit<React.LiHTMLAttributes<HTMLLIElement>, "children"> {
     /** Уникальный идентификатор. */
     id: string;
     /** Неактивное состояние. */
@@ -56,7 +57,7 @@ export const ListSortableItem = Object.assign(
 
         return (
             <ListItem
-                className={classnames("cssClass[listSortableItem]", { "cssClass[dragging]": isDragging }, className)}
+                className={clsx(styles.listSortableItem, { [styles.dragging]: isDragging }, className)}
                 style={{ transform: CSS.Translate.toString(transform), transition, ...style }}
                 {...rest}
                 ref={setRef}

@@ -1,0 +1,20 @@
+@import 'src/styles/style';
+
+.body {
+    position: relative;
+    padding: 24px 0;
+    display: flex;
+
+    .bodyInner {
+        position: relative;
+        flex-grow: 1;
+        width: 100%;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .body {
+        padding: 16px 0;
+        overflow-x: auto;
+    }
+}

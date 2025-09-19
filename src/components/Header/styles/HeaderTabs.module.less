@@ -1,0 +1,40 @@
+@import '../../../styles/style';
+
+.headerTabs {
+    display: flex;
+    justify-content: space-between;
+
+    .headerTabsContent {
+        flex-grow: 1;
+    }
+
+    .headerTabsControls {
+        flex-shrink: 0;
+        white-space: nowrap;
+        padding-left: 24px;
+    }
+}
+
+// На мобильных устройствах блок с кнопками располагается строкой ниже.
+@media (max-width: @screen-sm-max) {
+    .headerTabs {
+        flex-wrap: wrap;
+
+        .headerTabsContent {
+            width: 100%;
+        }
+
+        .headerTabsControls {
+            flex-shrink: initial;
+            padding-left: 0;
+            white-space: normal;
+            // Отступы, компенсирующие отступы у Button.
+            margin-left: -16px;
+
+            > button {
+                margin-left: 16px;
+                margin-top: 16px;
+            }
+        }
+    }
+}

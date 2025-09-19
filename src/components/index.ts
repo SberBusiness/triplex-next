@@ -15,3 +15,7 @@ export * from "./ThemeProvider";
 export * from "./Typography";
 export * from "./Dropdown";
 export * from "./List";
+export * from "./Footer";
+export * from "./Body";
+export * from "./Header";
+export * from "./Page";

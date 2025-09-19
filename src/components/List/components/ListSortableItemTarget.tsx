@@ -25,7 +25,7 @@ export const ListSortableItemTarget = React.forwardRef<HTMLDivElement, IListSort
             ref={ref}
         >
             <div className={styles.listSortableItemTargetContent}>{children}</div>
-            {!disabled && <DotsverticalStrokeSrvIcon20 className={styles.listSortableItemTargetIcon} />}
+            {!disabled && <DotsverticalStrokeSrvIcon20 paletteIndex={0} className={styles.listSortableItemTargetIcon} />}
         </div>
     )
 );

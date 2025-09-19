@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import {
     List,
@@ -9,9 +9,15 @@ import {
     ListEmptyState,
     ListSortable,
     ListSortableItem,
+    ListSortableItemControls,
 } from "../src/components/List";
 import { Button, EButtonSize, EButtonTheme } from "../src/components/Button";
-import { Text } from "../src/components/Typography";
+import { ELineType, ETextSize, Text } from "../src/components/Typography";
+// import { NotfoundSrvIcon64 } from "@sberbusiness/icons-next";
+import { Gap } from "../src/components/Gap";
+import { FixedSizeList } from 'react-window';
+import { Checkbox } from "../src/components/Checkbox";
+
 
 export default {
     title: "Components/List",
@@ -31,18 +37,9 @@ export default {
 export const Basic: StoryObj<typeof List> = {
     render: () => (
         <List>
-            {[1, 2, 3].map((id) => (
-                <ListItem key={id}>
-                    <ListItemContent>
-                        <Text>Item {id}</Text>
-                    </ListItemContent>
-                    <ListItemControls>
-                        <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
-                            Action
-                        </Button>
-                    </ListItemControls>
-                </ListItem>
-            ))}
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
         </List>
     ),
     parameters: {
@@ -53,13 +50,9 @@ export const Basic: StoryObj<typeof List> = {
 export const Loading: StoryObj<typeof List> = {
     render: () => (
         <List loading>
-            {[1, 2, 3].map((id) => (
-                <ListItem key={id}>
-                    <ListItemContent>
-                        <Text>Item {id}</Text>
-                    </ListItemContent>
-                </ListItem>
-            ))}
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
         </List>
     ),
     parameters: {
@@ -67,83 +60,124 @@ export const Loading: StoryObj<typeof List> = {
     },
 };
 
-export const EmptyState: StoryObj<typeof List> = {
+export const NotFoundState: StoryObj<typeof List> = {
     render: () => (
-        <List>
-            <ListEmptyState>
-                <Text>Ничего не найдено</Text>
-            </ListEmptyState>
-        </List>
+        <ListEmptyState>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                Иллюстрация не найдено
+                {/* <NotfoundSrvIcon64 /> */}
+            </div>
+
+            <Text size={ETextSize.B2}>
+                Ничего не найдено.<br />
+                Попробуйте выбрать другие фильтры.
+            </Text>
+
+            <Gap size={24} />
+
+            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>Сбросить фильтры</Button>
+        </ListEmptyState>
     ),
     parameters: {
-        docs: { description: { story: "Пустой список с состоянием EmptyState." } },
+        docs: { description: { story: "Используется при применении фильтров, когда не найден ни один элемент." } },
     },
 };
 
-export const Selectable: StoryObj<typeof List> = {
-    render: () => {
-        const [selectedIds, setSelectedIds] = useState<string[]>([]);
-        const items = [
-            { id: "1", title: "Document 1" },
-            { id: "2", title: "Document 2" },
-            { id: "3", title: "Document 3" },
-        ];
 
-        const handleToggle = (id: string, next: boolean) => {
-            setSelectedIds((prev) => (next ? [...prev, id] : prev.filter((x) => x !== id)));
-        };
+export const EmptyState: StoryObj<typeof List> = {
+    render: () => (
+        <ListEmptyState>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                {/* <EmptytableSrvIcon64 /> */}
+                Иллюстрация пустого списка
+            </div>
+
+            <Text size={ETextSize.B3}>
+                Нет данных, но можно предложить какие-то действия для заполнения таблицы.
+            </Text>
+
+            <Gap size={24} />
+
+            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>Button Name</Button>
+            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>Button Name</Button>
+        </ListEmptyState>
+    ),
+    parameters: {
+        docs: { description: { story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка." } },
+    },
+};
+
+
+export const Virtualized: StoryObj<typeof List> = {
+    render: () => {
+
+        const itemData = useMemo(() => Array.from({ length: 100 }).map((_, index) => `List item ${index}`), []);
 
         return (
-            <List>
-                {items.map((item) => {
-                    const isSelected = selectedIds.includes(item.id);
-                    return (
-                        <ListItem key={item.id}>
-                            <ListItemSelectable selected={isSelected} onSelect={(next) => handleToggle(item.id, next)}>
-                                <ListItemContent>
-                                    <Text>{item.title}</Text>
-                                </ListItemContent>
-                            </ListItemSelectable>
-                        </ListItem>
-                    );
-                })}
-            </List>
-        );
+            <FixedSizeList
+                itemData={itemData}
+                itemCount={100}
+                itemSize={20}
+                width="100%"
+                height={200}
+                innerElementType={List}
+            >
+                {({ data, index, style }) => <ListItem style={style}>{data[index]}</ListItem>}
+            </FixedSizeList>
+        )
     },
     parameters: {
-        docs: { description: { story: "Элементы списка c выбором (checkbox)." } },
+        docs: { description: { story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка." } },
     },
 };
 
-type SortableItem = { id: string; title: string };
 
-export const Sortable: StoryObj = {
+export const Sortable: StoryObj<typeof List> = {
     render: () => {
-        const [items, setItems] = useState<SortableItem[]>([
-            { id: "1", title: "Row 1" },
-            { id: "2", title: "Row 2" },
-            { id: "3", title: "Row 3" },
-        ]);
+        const [items, setItems] = useState(
+            Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-0-${index}`, index }))
+        );
+        return (
+            <ListSortable items={items} onItemsChange={setItems} >
+                {
+                    items.map(({ id, index }) => (
+                        <ListSortableItem key={id} id={id}>
+                            {({ listeners, dragging, setActivatorNodeRef }) => (
+                                <ListSortableItem.Target {...listeners} dragging={dragging} ref={setActivatorNodeRef}>
+                                    List item {index}
+                                </ListSortableItem.Target>
+                            )}
+                        </ListSortableItem>
+                    ))
+                }
+            </ListSortable >
+        )
+    }
+};
+
+export const SortableWithInteractiveElements: StoryObj<typeof List> = {
+    render: () => {
+        const [items, setItems] = useState(
+            Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-1-${index}`, index }))
+        );
 
         return (
             <ListSortable items={items} onItemsChange={setItems}>
-                {items.map((item) => (
-                    <ListSortableItem id={item.id} key={item.id}>
-                        {({ dragging, setActivatorNodeRef, listeners }) => (
-                            <>
-                                <ListSortableItem.Target dragging={dragging} {...listeners} ref={setActivatorNodeRef}>
-                                    <Text>{item.title}</Text>
-                                </ListSortableItem.Target>
-                            </>
+                {items.map(({ id, index }) => (
+                    <ListSortableItem key={id} id={id}>
+                        {({ listeners, dragging, setActivatorNodeRef }) => (
+                            <ListSortableItem.Target {...listeners} dragging={dragging} ref={setActivatorNodeRef}>
+                                <ListSortableItemControls>
+                                    <Checkbox>List item {index}</Checkbox>
+                                </ListSortableItemControls>
+                            </ListSortableItem.Target>
                         )}
                     </ListSortableItem>
                 ))}
             </ListSortable>
-        );
-    },
-    parameters: {
-        docs: { description: { story: "Сортируемый список с drag-and-drop." } },
+        )
     },
 };
+
 
 

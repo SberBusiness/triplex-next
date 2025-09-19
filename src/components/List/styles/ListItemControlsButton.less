@@ -1,0 +1,56 @@
+.listItemControlsButton {
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    background: var(--triplex-ListItemControlsButton-Background);
+    border: none;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 8px;
+    min-height: 56px;
+}
+
+.listItemControlsButton + .listItemControlsButton,
+.listItemControlsButton + .listItemControlsButtonDropdown {
+    margin-left: 4px;
+}
+
+.listItemControlsButtonIcon {
+    // Убирает отступ под svg элементом.
+    line-height: 0;
+}
+
+// Отступ у иконки только если под иконкой есть подпись.
+.listItemControlsButton.withText {
+    .listItemControlsButtonIcon {
+        margin-bottom: 8px;
+    }
+}
+
+
+.listItemControlsButtonLabel {
+    color: var(--triplex-ListItemControlsButton-Color);
+    overflow-wrap: break-word;
+}
+
+div.listItemControlsButtonDropdown {
+    display: flex;
+}
+
+.listItemControlsButtonInner {
+    display: flex;
+    flex-direction: column;
+    padding: 0 4px;
+}
+
+.listItemControlsButton.withIcon.withText {
+    .listItemControlsButtonInner {
+        // Оба свойства, чтобы иконка с подписью в две строки была на том же уровне, что и соседняя иконка с подписью в одну строку.
+        height: 44px;
+        overflow: visible;
+    }
+}
+

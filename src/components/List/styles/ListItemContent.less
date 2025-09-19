@@ -1,0 +1,12 @@
+.listItemContent {
+    background: var(--triplex-ListItem-Background);
+    padding: 12px 16px;
+    // Минимальная высота, из-за блока Action с кнопками при свайпе.
+    min-height: 56px;
+    box-sizing: border-box;
+
+    &.selected {
+        border-radius: 8px 0 0 8px;
+        background: var(--triplex-ListItem-Background_Selected);
+    }
+}

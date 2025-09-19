@@ -1,0 +1,12 @@
+.listMasterHeader {
+  padding: 12px 16px;
+  background: var(--triplex-ListMaster-Header_Background);
+  color: var(--triplex-ListMaster-Header_Color);
+
+  &.sticky {
+    position: sticky;
+    top: 0;
+    // Перекрытие listMasterBody.
+    z-index: 1;
+  }
+}

@@ -22,7 +22,7 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
         return (
             <Text
                 tag="div"
-                size={ETextSize.B1}
+                size={ETextSize.B3}
                 className={clsx(
                     styles.dropdownMobileListItem,
                     { [styles.selected]: Boolean(selected) },

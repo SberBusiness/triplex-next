@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { ButtonDropdown, IButtonDropdownOption } from "../src/components/Button/ButtonDropdown";
+import { ButtonDropdown, dotsTheme, IButtonDropdownOption } from "../src/components/Button/ButtonDropdown";
 import { EButtonSize, EButtonTheme } from "../src/components/Button/enums";
 
 export default {
-    title: "Components/Button/ButtonDropdown",
+    title: "Components/Buttons/ButtonDropdown",
     component: ButtonDropdown,
     tags: ["autodocs"],
     parameters: {
@@ -172,6 +172,29 @@ export const DangerTheme: StoryObj<typeof ButtonDropdown> = {
     },
 };
 
+export const DotsTheme: StoryObj<typeof ButtonDropdown> = {
+    name: "Dots Theme",
+    render: () => {
+        const options = useMemo(() => createOptions(), []);
+        return (
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <ButtonDropdown theme={dotsTheme} size={EButtonSize.SM} options={options}>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown theme={dotsTheme} size={EButtonSize.MD} options={options}>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown theme={dotsTheme} size={EButtonSize.LG} options={options}>
+                    Button text
+                </ButtonDropdown>
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
 export const Block: StoryObj<typeof ButtonDropdown> = {
     name: "Block",
     render: () => {
@@ -227,7 +250,12 @@ export const WithSelected: StoryObj<typeof ButtonDropdown> = {
 
         return (
             <div style={{ maxWidth: 280 }}>
-                <ButtonDropdown theme={EButtonTheme.GENERAL} size={EButtonSize.MD} options={options} selected={selected}>
+                <ButtonDropdown
+                    theme={EButtonTheme.GENERAL}
+                    size={EButtonSize.MD}
+                    options={options}
+                    selected={selected}
+                >
                     Button text
                 </ButtonDropdown>
             </div>
@@ -240,5 +268,3 @@ export const WithSelected: StoryObj<typeof ButtonDropdown> = {
         controls: { disable: true },
     },
 };
-
-

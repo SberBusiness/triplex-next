@@ -51,15 +51,6 @@
     }
 }
 
-.globalMultiselectDropdownMobileWrapper .dropdownMobile {
-    height: 50vh;
-    justify-content: space-between;
-}
-
-.globalDatePickerExtendedDropdownMobileWrapper .dropdownMobile {
-    max-height: 100vh;
-}
-
 .dropdownMobileHeader {
     // Если title не задан.
     min-height: 16px;
@@ -67,6 +58,7 @@
     background: var(--triplex-next-DropdownMobile-Header_Background);
     position: relative;
     flex-shrink: 1;
+    border-radius: 16px 16px 0 0;
 }
 
 .dropdownMobileContent {
@@ -83,7 +75,7 @@
 }
 
 .dropdownMobileListItem {
-    padding: 12px 16px;
+    padding: 16px;
 
     &.selected {
         background: var(--triplex-next-DropdownMobileList-Selected_Background);

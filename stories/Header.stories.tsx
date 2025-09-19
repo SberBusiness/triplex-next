@@ -5,6 +5,7 @@ import { Text, Title } from "../src/components/Typography";
 import { Button, EButtonSize, EButtonTheme } from "../src/components/Button";
 import { EFontType, ETextSize, ETitleSize } from "../src/components/Typography/enums";
 import { Gap } from "../src/components/Gap";
+import { Link } from "../src/components/Link";
 
 export default {
     title: "Components/Header",
@@ -32,6 +33,41 @@ export const Basic: StoryObj<typeof Header> = {
         <Header>
             <Header.Title>
                 <Header.Title.Content>
+                    <Title tag="h1" size={ETitleSize.H1}>
+                        Title text
+                    </Title>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                        Optional description about the page
+                    </Text>
+                </Header.Title.Content>
+                <Header.Title.Controls>
+                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                        Button text
+                    </Button>
+                </Header.Title.Controls>
+            </Header.Title>
+        </Header>
+    ),
+    parameters: {
+        docs: {
+            description: { story: "Базовый Header с заголовком и кнопкой действия." },
+        },
+    },
+};
+
+export const WithLinkInTitle: StoryObj<typeof Header> = {
+    render: () => (
+        <Header>
+            <Header.Title>
+                <Header.Title.Content>
+                    <Text size={ETextSize.B2}>
+                        <Link href="#">Link text</Link>
+                    </Text>
+                    <Gap size={4} />
                     <Title tag="h1" size={ETitleSize.H1}>
                         Title text
                     </Title>

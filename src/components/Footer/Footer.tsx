@@ -1,0 +1,33 @@
+import React from "react";
+import { FooterDescription } from "./components/FooterDescription";
+import clsx from "clsx";
+import styles from "./styles/Footer.module.less";
+
+/** Свойства компонента Footer. */
+export interface IFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * Footer прилипает к нижней границе экрана при скролле.
+     * */
+    sticky?: boolean;
+}
+
+/** Футер. */
+export const Footer = Object.assign(
+    React.forwardRef<HTMLDivElement, IFooterProps>(function Footer({ children, className, sticky, ...rest }, ref) {
+        return (
+            <div
+                className={clsx(styles.footer, { [styles.sticky]: Boolean(sticky) }, className)}
+                {...rest}
+                data-tx={process.env.npm_package_version}
+                ref={ref}
+            >
+                {children}
+            </div>
+        );
+    }),
+    {
+        Description: FooterDescription,
+    },
+);
+
+Footer.displayName = "Footer";

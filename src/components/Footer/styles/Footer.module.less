@@ -1,0 +1,60 @@
+@import '../../../styles/style';
+
+.footer {
+
+    &.sticky {
+        z-index: @page-header-sticky-z-index;
+        position: sticky;
+        bottom: 0;
+    }
+}
+
+.footerDescription {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footerDescriptionContent {
+    flex-grow: 1;
+    margin-right: auto;
+}
+
+.footerDescriptionControls {
+    margin-left: auto;
+    white-space: nowrap;
+    padding-left: 24px;
+}
+
+// На мобильных устройствах блок с кнопками располагается строкой ниже.
+@media (max-width: @screen-sm-max) {
+    .footerDescription {
+        flex-wrap: wrap;
+        align-items: normal;
+    }
+
+    .footerDescriptionContent {
+        width: 100%;
+    }
+
+    .footerDescriptionControls {
+        padding-left: 0;
+        white-space: normal;
+        // Отступы, компенсирующие отступы у Button.
+        margin-top: -16px;
+        margin-left: -16px;
+
+        > button{
+            margin-left: 16px;
+            margin-top: 16px;
+        }
+    }
+
+    .footerDescriptionContent + .footerDescriptionControls {
+        margin-top: 0;
+    }
+
+    .footer {
+        padding: 16px 0;
+    }
+}

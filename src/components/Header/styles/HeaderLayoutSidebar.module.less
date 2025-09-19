@@ -1,0 +1,18 @@
+@import '../../../styles/style';
+
+.headerLayoutSidebar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.headerLayoutSidebarContent {
+    flex-grow: 1;
+    min-width: 1px;
+}
+
+@media (max-width: @screen-sm-max) {
+    // На мобильном устройстве сайдбар скрыт.
+    .headerLayoutSidebarSidebar {
+        display: none;
+    }
+}

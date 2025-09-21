@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/ListMasterFooter.module.less";
 
 /** Свойства компонента ListMasterFooter. */
 export interface IListMasterFooterProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,10 +12,10 @@ export interface IListMasterFooterProps extends React.HTMLAttributes<HTMLDivElem
 export const ListMasterFooter = React.forwardRef<HTMLDivElement, IListMasterFooterProps>(
     ({ children, className, sticky = true, ...rest }, ref) => (
         <div
-            className={classnames(
-                "cssClass[listMasterFooter]",
+            className={clsx(
+                styles.listMasterFooter,
                 {
-                    "cssClass[sticky]": sticky,
+                    [styles.sticky]: sticky,
                 },
                 className
             )}

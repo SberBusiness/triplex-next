@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "../styles/ListMasterHeader.module.less";
 
 /** Свойства компонента ListMasterHeader. */
 export interface IListMasterHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -43,10 +44,10 @@ export const ListMasterHeader = React.forwardRef<HTMLDivElement, IListMasterHead
 
         return (
             <div
-                className={classnames(
-                    "cssClass[listMasterHeader]",
+                className={clsx(
+                    styles.listMasterHeader,
                     {
-                        "cssClass[sticky]": sticky,
+                        [styles.sticky]: sticky,
                     },
                     className
                 )}

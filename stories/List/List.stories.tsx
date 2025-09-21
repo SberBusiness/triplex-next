@@ -3,24 +3,20 @@ import { StoryObj } from "@storybook/react";
 import {
     List,
     ListItem,
-    ListItemContent,
-    ListItemControls,
-    ListItemSelectable,
     ListEmptyState,
     ListSortable,
     ListSortableItem,
     ListSortableItemControls,
-} from "../src/components/List";
-import { Button, EButtonSize, EButtonTheme } from "../src/components/Button";
-import { ELineType, ETextSize, Text } from "../src/components/Typography";
+} from "../../src/components/List";
+import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { ETextSize, Text } from "../../src/components/Typography";
 // import { NotfoundSrvIcon64 } from "@sberbusiness/icons-next";
-import { Gap } from "../src/components/Gap";
-import { FixedSizeList } from 'react-window';
-import { Checkbox } from "../src/components/Checkbox";
-
+import { Gap } from "../../src/components/Gap";
+import { FixedSizeList } from "react-window";
+import { Checkbox } from "../../src/components/Checkbox";
 
 export default {
-    title: "Components/List",
+    title: "Components/List/List",
     component: List,
     tags: ["autodocs"],
     parameters: {
@@ -63,19 +59,22 @@ export const Loading: StoryObj<typeof List> = {
 export const NotFoundState: StoryObj<typeof List> = {
     render: () => (
         <ListEmptyState>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
                 Иллюстрация не найдено
                 {/* <NotfoundSrvIcon64 /> */}
             </div>
 
             <Text size={ETextSize.B2}>
-                Ничего не найдено.<br />
+                Ничего не найдено.
+                <br />
                 Попробуйте выбрать другие фильтры.
             </Text>
 
             <Gap size={24} />
 
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>Сбросить фильтры</Button>
+            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                Сбросить фильтры
+            </Button>
         </ListEmptyState>
     ),
     parameters: {
@@ -83,34 +82,37 @@ export const NotFoundState: StoryObj<typeof List> = {
     },
 };
 
-
 export const EmptyState: StoryObj<typeof List> = {
     render: () => (
         <ListEmptyState>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
                 {/* <EmptytableSrvIcon64 /> */}
                 Иллюстрация пустого списка
             </div>
 
-            <Text size={ETextSize.B3}>
-                Нет данных, но можно предложить какие-то действия для заполнения таблицы.
-            </Text>
+            <Text size={ETextSize.B3}>Нет данных, но можно предложить какие-то действия для заполнения таблицы.</Text>
 
             <Gap size={24} />
 
-            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>Button Name</Button>
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>Button Name</Button>
+            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+                Button Name
+            </Button>
+            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                Button Name
+            </Button>
         </ListEmptyState>
     ),
     parameters: {
-        docs: { description: { story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка." } },
+        docs: {
+            description: {
+                story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка.",
+            },
+        },
     },
 };
 
-
 export const Virtualized: StoryObj<typeof List> = {
     render: () => {
-
         const itemData = useMemo(() => Array.from({ length: 100 }).map((_, index) => `List item ${index}`), []);
 
         return (
@@ -124,41 +126,42 @@ export const Virtualized: StoryObj<typeof List> = {
             >
                 {({ data, index, style }) => <ListItem style={style}>{data[index]}</ListItem>}
             </FixedSizeList>
-        )
+        );
     },
     parameters: {
-        docs: { description: { story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка." } },
+        docs: {
+            description: {
+                story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка.",
+            },
+        },
     },
 };
-
 
 export const Sortable: StoryObj<typeof List> = {
     render: () => {
         const [items, setItems] = useState(
-            Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-0-${index}`, index }))
+            Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-0-${index}`, index })),
         );
         return (
-            <ListSortable items={items} onItemsChange={setItems} >
-                {
-                    items.map(({ id, index }) => (
-                        <ListSortableItem key={id} id={id}>
-                            {({ listeners, dragging, setActivatorNodeRef }) => (
-                                <ListSortableItem.Target {...listeners} dragging={dragging} ref={setActivatorNodeRef}>
-                                    List item {index}
-                                </ListSortableItem.Target>
-                            )}
-                        </ListSortableItem>
-                    ))
-                }
-            </ListSortable >
-        )
-    }
+            <ListSortable items={items} onItemsChange={setItems}>
+                {items.map(({ id, index }) => (
+                    <ListSortableItem key={id} id={id}>
+                        {({ listeners, dragging, setActivatorNodeRef }) => (
+                            <ListSortableItem.Target {...listeners} dragging={dragging} ref={setActivatorNodeRef}>
+                                List item {index}
+                            </ListSortableItem.Target>
+                        )}
+                    </ListSortableItem>
+                ))}
+            </ListSortable>
+        );
+    },
 };
 
 export const SortableWithInteractiveElements: StoryObj<typeof List> = {
     render: () => {
         const [items, setItems] = useState(
-            Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-1-${index}`, index }))
+            Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-1-${index}`, index })),
         );
 
         return (
@@ -175,9 +178,6 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
                     </ListSortableItem>
                 ))}
             </ListSortable>
-        )
+        );
     },
 };
-
-
-

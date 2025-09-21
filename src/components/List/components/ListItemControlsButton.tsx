@@ -20,7 +20,7 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
                     [styles.withIcon]: typeof icon !== "undefined",
                     [styles.withText]: typeof children !== "undefined",
                 },
-                className
+                className,
             )}
             {...rest}
             ref={ref}
@@ -28,13 +28,13 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
             <span className={styles.listItemControlsButtonInner}>
                 {icon ? <span className={styles.listItemControlsButtonIcon}>{icon}</span> : null}
                 {children ? (
-                    <Text className={styles.listItemControlsButtonLabel} size={ETextSize.B2}>
+                    <Text className={styles.listItemControlsButtonLabel} size={ETextSize.B4}>
                         {children}
                     </Text>
                 ) : null}
             </span>
         </button>
-    )
+    ),
 );
 
 ListItemControlsButton.displayName = "ListItemControlsButton";

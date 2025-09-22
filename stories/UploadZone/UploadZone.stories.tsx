@@ -25,19 +25,17 @@ export default {
 export const Default: StoryObj<typeof UploadZone> = {
     name: "Default",
     render: () => {
-
         const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
         const renderContainerContent = () => (
             <div className="uploadZoneContainerContent">
                 <AttachmentStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
-                <Text type={EFontType.PRIMARY} size={ETextSize.B3}>
+                <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">
                     Положите файлы сюда
                 </Text>
             </div>
         );
-
 
         const handleChange = () => {
             alert("Change handler called.");
@@ -51,12 +49,11 @@ export const Default: StoryObj<typeof UploadZone> = {
                 <AttachmentStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
                 <div>
-                    <Text type={EFontType.PRIMARY} size={ETextSize.B3}>
+                    <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">
                         Перетащите файлы или
+                        {"\u00A0"}
+                        <Link onClick={openUploadDialog}>выберите на компьютере</Link>
                     </Text>{" "}
-                    <Link onClick={openUploadDialog}>
-                        выберите на компьютере
-                    </Link>
                     {/* {"\u00A0"}
                     <HelpBox tooltipSize={ETooltipSize.SM}>
                         Допустимые форматы файлов: PDF, TIFF, JPEG, PNG, PCX, DOCX.

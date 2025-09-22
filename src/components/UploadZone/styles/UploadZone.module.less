@@ -8,7 +8,13 @@
 }
 
 .uploadZone {
+    border-radius: 8px;
     position: relative;
+    background: var(--triplex-next-UploadZone-Background_Default);
+
+    &:hover {
+        background: var(--triplex-next-UploadZone-Background_Hover);
+    }
 }
 
 .uploadZoneDragArea {
@@ -16,10 +22,9 @@
 
     border: 1px dashed var(--triplex-next-UploadZone-BorderColor_Default);
     border-radius: 8px;
+    box-sizing: border-box;
 
-    &:hover {
-        border-color: var(--triplex-next-UploadZone-BorderColor_Hover);
-    }
+
 }
 
 .uploadZoneContainerDragArea {
@@ -30,6 +35,7 @@
 
     border: 1px dashed var(--triplex-next-UploadZone-DragArea_BorderColor);
     border-radius: 8px;
+    box-sizing: border-box;
 }
 
 .uploadZoneInput {

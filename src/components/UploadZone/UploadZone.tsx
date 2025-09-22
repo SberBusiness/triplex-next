@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "./styles/UploadZone.module.less";
 // Не менять import на абсолютный.
 import { UploadZoneInput } from "./components/UploadZoneInput";
 
@@ -92,7 +93,7 @@ export class UploadZone extends React.PureComponent<IUploadZoneProps, IUploadZon
         this.removeListeners(this.props.dropZoneContainer);
     }
 
-    render(): JSX.Element {
+    render() {
         const { children, className, onChange, renderContainerContent, dropZoneContainer, ...rest } = this.props;
         const { inputNode } = this.state;
 
@@ -107,9 +108,9 @@ export class UploadZone extends React.PureComponent<IUploadZoneProps, IUploadZon
                     },
                 }}
             >
-                <div className="cssClass[uploadZone]" data-tx={process.env.npm_package_version}>
+                <div className={styles.uploadZone} data-tx={process.env.npm_package_version}>
                     <div
-                        className={classnames("cssClass[uploadZoneDragArea]", className)}
+                        className={clsx(styles.uploadZoneDragArea, className)}
                         onClick={this.handleAreaClick}
                         {...rest}
                         key="uploadZoneDragArea"
@@ -145,7 +146,7 @@ export class UploadZone extends React.PureComponent<IUploadZoneProps, IUploadZon
         const wrapperDiv = document.createElement("div");
         ReactDOM.render(
             <div
-                className={classnames("cssClass[uploadZoneContainerDragArea]", className)}
+                className={clsx(styles.uploadZoneContainerDragArea, className)}
                 onDragOver={this.handlePreventDefault}
                 onDrop={this.fileDrop}
                 {...restHtmlAttributes}

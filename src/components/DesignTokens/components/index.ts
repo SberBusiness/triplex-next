@@ -11,3 +11,4 @@ export * from "./DropdownList";
 export * from "./DropdownMobile";
 export * from "./DropdownMobileList";
 export * from "./Overlay";
+export * from "./UploadZone";

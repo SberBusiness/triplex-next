@@ -1,6 +1,7 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
 import { UploadZoneContext } from "../UploadZone";
+import clsx from "clsx";
+import styles from "../styles/UploadZone.module.less";
 
 export interface IUploadZoneInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {}
 
@@ -31,7 +32,7 @@ export const UploadZoneInput: React.FC<IUploadZoneInputProps> = ({ className, ..
         <input
             {...restHtmlAttributes}
             type="file"
-            className={classnames(className, "cssClass[uploadZoneInput]")}
+            className={clsx(className, styles.uploadZoneInput)}
             onChange={handleChange}
             onClick={handleClick}
             ref={context.setInputNode}

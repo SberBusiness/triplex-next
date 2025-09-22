@@ -29,6 +29,8 @@ import {
     TDesignTokensComponentsDropdownMobileListValue,
     Overlay_Tokens,
     TDesignTokensComponentsOverlayValue,
+    UploadZone_Tokens,
+    TDesignTokensComponentsUploadZoneValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -63,4 +65,5 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         DropdownMobileList_Tokens,
     ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.DARK, Overlay_Tokens),
+    UploadZone: GetTokensValueByTheme<TDesignTokensComponentsUploadZoneValue>(ETriplexNextTheme.DARK, UploadZone_Tokens),
 };

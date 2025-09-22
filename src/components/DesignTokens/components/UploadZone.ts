@@ -1,7 +1,7 @@
 import {
     TDesignTokenValue,
     TDesignTokenValues,
-} from "@sber-business/triplex/components/DesignTokens/types/DesignTokenTypes";
+} from "@sberbusiness/triplex-next/components/DesignTokens/types/DesignTokenTypes";
 
 // Название токенов компонента UploadZone.
 export const designTokensComponentsUploadZoneKeys = [
@@ -21,9 +21,9 @@ export type TDesignTokensComponentsUploadZone = { UploadZone: TDesignTokensCompo
 
 // Токены компонента UploadZone в светлой и темной темах.
 export const UploadZone_Tokens: TDesignTokensComponentsUploadZoneValues = {
-    BorderColor_Default: [{ ref: "Neutral.500" }, { ref: "Basic.300" }], // var(--triplex-UploadZone-BorderColor_Default)
-    BorderColor_Hover: [{ ref: "Basic.700" }, { ref: "Neutral.500" }], // var(--triplex-UploadZone-BorderColor_Hover)
+    BorderColor_Default: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.40" }], // var(--triplex-next-UploadZone-BorderColor_Default)
+    BorderColor_Hover: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-UploadZone-BorderColor_Hover)
 
-    DragArea_Background: [{ ref: "Basic.100" }, { ref: "Basic.900" }], // var(--triplex-UploadZone-DragArea_Background)
-    DragArea_BorderColor: [{ ref: "Basic.700" }, { ref: "Neutral.500" }], // var(--triplex-UploadZone-DragArea_BorderColor)
+    DragArea_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutralAlpha.0" }], // var(--triplex-next-UploadZone-DragArea_Background)
+    DragArea_BorderColor: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-UploadZone-DragArea_BorderColor)
 };

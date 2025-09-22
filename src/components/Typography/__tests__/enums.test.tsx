@@ -20,9 +20,9 @@ describe("Typography Enums", () => {
 
     describe("ETitleSize", () => {
         it("has correct values", () => {
-            expect(ETitleSize.H1).toBe("H1");
-            expect(ETitleSize.H2).toBe("H2");
-            expect(ETitleSize.H3).toBe("H3");
+            expect(ETitleSize.H1).toBe("h1");
+            expect(ETitleSize.H2).toBe("h2");
+            expect(ETitleSize.H3).toBe("h3");
         });
     });
 

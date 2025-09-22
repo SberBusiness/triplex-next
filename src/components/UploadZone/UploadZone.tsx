@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import clsx from "clsx";
 import styles from "./styles/UploadZone.module.less";
 // Не менять import на абсолютный.
@@ -144,7 +144,7 @@ export class UploadZone extends React.PureComponent<IUploadZoneProps, IUploadZon
         const { children, className, onChange, renderContainerContent, dropZoneContainer, ...restHtmlAttributes } =
             this.props;
         const wrapperDiv = document.createElement("div");
-        ReactDOM.render(
+        createRoot(wrapperDiv).render(  
             <div
                 className={clsx(styles.uploadZoneContainerDragArea, className)}
                 onDragOver={this.handlePreventDefault}
@@ -154,8 +154,7 @@ export class UploadZone extends React.PureComponent<IUploadZoneProps, IUploadZon
                 role="none"
             >
                 {renderContainerContent?.()}
-            </div>,
-            wrapperDiv
+            </div>
         );
 
         return wrapperDiv;

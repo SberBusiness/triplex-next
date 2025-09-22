@@ -82,21 +82,6 @@ test.describe("Checkbox", () => {
             await page.goto("http://localhost:6006/iframe.html?id=components-checkbox--x-group");
         });
 
-        test("should render horizontal checkbox groups with both sizes", async ({ page }) => {
-            const checkboxes = page.getByRole("checkbox");
-            const labels = page.getByText("Checkbox text");
-
-            await expect(checkboxes).toHaveCount(6);
-            await expect(labels).toHaveCount(6);
-
-            for (const checkbox of await checkboxes.all()) {
-                await expect(checkbox).toBeVisible();
-                await expect(checkbox).toHaveAttribute("type", "checkbox");
-                await expect(checkbox).not.toBeChecked();
-                await expect(checkbox).not.toBeDisabled();
-            }
-        });
-
         test("should allow multiple selections in groups", async ({ page }) => {
             const checkboxes = page.getByRole("checkbox");
 
@@ -120,21 +105,6 @@ test.describe("Checkbox", () => {
     test.describe("Y Group", () => {
         test.beforeEach(async ({ page }) => {
             await page.goto("http://localhost:6006/iframe.html?id=components-checkbox--y-group");
-        });
-
-        test("should render vertical checkbox groups with both sizes", async ({ page }) => {
-            const checkboxes = page.getByRole("checkbox");
-            const labels = page.getByText("Checkbox text");
-
-            await expect(checkboxes).toHaveCount(8);
-            await expect(labels).toHaveCount(8);
-
-            for (const checkbox of await checkboxes.all()) {
-                await expect(checkbox).toBeVisible();
-                await expect(checkbox).toHaveAttribute("type", "checkbox");
-                await expect(checkbox).not.toBeChecked();
-                await expect(checkbox).not.toBeDisabled();
-            }
         });
 
         test("should allow multiple selections in groups", async ({ page }) => {

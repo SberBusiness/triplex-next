@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import CheckboxbulkStrokeSrvIcon24 from "@sberbusiness/icons-next/CheckboxbulkStrokeSrvIcon24";
 import CheckboxtickStrokeSrvIcon24 from "@sberbusiness/icons-next/CheckboxtickStrokeSrvIcon24";
 import { ECheckboxSize } from "./enum";
@@ -6,46 +6,25 @@ import clsx from "clsx";
 import styles from "./styles/Checkbox.module.less";
 
 /** Свойства компонента Checkbox. */
-export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
     /** Объект label-атрибутов. */
     labelAttributes?: React.LabelHTMLAttributes<HTMLLabelElement>;
     /** Признак частичного типа выбора. */
     bulk?: boolean;
     /** Размер чекбокса. */
-    checkboxSize?: ECheckboxSize;
+    size?: ECheckboxSize;
 }
 
 /** Чекбокс с описанием. */
 export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
-    const {
-        children,
-        className,
-        onFocus,
-        onBlur,
-        disabled,
-        bulk,
-        labelAttributes,
-        checkboxSize = ECheckboxSize.MD,
-        ...inputAttributes
-    } = props;
-    const classNames = clsx(styles.checkbox, className, styles[checkboxSize]);
+    const { children, className, disabled, bulk, labelAttributes, size = ECheckboxSize.MD, ...inputAttributes } = props;
+    const classNames = clsx(styles.checkbox, className, styles[size]);
     const classNamesLabel = clsx(
         styles.label,
-        styles[checkboxSize],
+        styles[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
         labelAttributes?.className,
     );
-    const inputRef = useRef<HTMLInputElement | null>(null);
-
-    /** Функция для хранения ссылки. */
-    const setRef = (instance: HTMLInputElement | null) => {
-        inputRef.current = instance;
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
 
     /** Отрисовка галочки чекбокса. */
     const renderCheckmarkIcon = () => {
@@ -60,15 +39,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
 
     return (
         <label {...labelAttributes} className={classNamesLabel} data-tx={process.env.npm_package_version}>
-            <input
-                type="checkbox"
-                className={classNames}
-                disabled={disabled}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                {...inputAttributes}
-                ref={setRef}
-            />
+            <input type="checkbox" className={classNames} disabled={disabled} {...inputAttributes} ref={ref} />
             <span className={styles.checkboxIcon} />
             {renderCheckmarkIcon()}
             {children}

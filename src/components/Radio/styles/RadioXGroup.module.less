@@ -1,0 +1,19 @@
+@indent: 12, 16, 20, 24, 28, 32;
+
+.radioXGroup {
+    display: inline-flex;
+    flex-flow: row wrap;
+
+    each(@indent, {
+        @n: @value;
+        &.indent-@{n} {
+            margin-left: -(@n / 2px);
+            margin-right: -(@n / 2px);
+
+            .label {
+                margin-left: (@n / 2px);
+                margin-right: (@n / 2px);
+            }
+        }
+    });
+}

@@ -2,6 +2,7 @@ import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCheckbox,
+    TDesignTokensComponentsRadio,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsLoader,
@@ -250,6 +251,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsFormField
+    | TDesignTokensComponentsRadio
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsLoader

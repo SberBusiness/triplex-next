@@ -1,8 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Checkbox } from "@sberbusiness/triplex-next/components";
-import { ECheckboxSize } from "@sberbusiness/triplex-next/components/Checkbox";
+import { Checkbox, ECheckboxSize } from "@sberbusiness/triplex-next/components";
 
 const getCheckbox = () => screen.getByRole("checkbox");
 const getLabel = () => screen.getByRole("checkbox").closest("label");
@@ -19,22 +18,22 @@ describe("Checkbox", () => {
     });
 
     it("Should apply size classes", () => {
-        const { rerender } = render(<Checkbox checkboxSize={ECheckboxSize.MD} data-testid="checkbox" />);
+        const { rerender } = render(<Checkbox size={ECheckboxSize.MD} />);
         const label = getLabel();
         expect(label).toHaveClass("md");
 
-        rerender(<Checkbox checkboxSize={ECheckboxSize.LG} data-testid="checkbox" />);
+        rerender(<Checkbox size={ECheckboxSize.LG} />);
         expect(label).toHaveClass("lg");
     });
 
     it("Should apply checked state", () => {
-        render(<Checkbox checked data-testid="checkbox" />);
+        render(<Checkbox checked />);
         const checkbox = getCheckbox();
         expect(checkbox).toBeChecked();
     });
 
     it("Should apply disabled state and class", () => {
-        render(<Checkbox disabled data-testid="checkbox" />);
+        render(<Checkbox disabled />);
         const checkbox = getCheckbox();
         const label = getLabel();
 
@@ -44,7 +43,7 @@ describe("Checkbox", () => {
 
     it("Should handle click events", () => {
         const handleClick = vi.fn();
-        render(<Checkbox onClick={handleClick} data-testid="checkbox" />);
+        render(<Checkbox onClick={handleClick} />);
         const checkbox = getCheckbox();
 
         fireEvent.click(checkbox);
@@ -53,7 +52,7 @@ describe("Checkbox", () => {
 
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLInputElement>();
-        render(<Checkbox ref={ref} data-testid="checkbox" />);
+        render(<Checkbox ref={ref} />);
         expect(ref.current).toBeInstanceOf(HTMLInputElement);
     });
 });

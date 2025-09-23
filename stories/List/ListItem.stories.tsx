@@ -378,21 +378,21 @@ export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
     },
 };
 
-export const SortableWithInteractiveElements: StoryObj<typeof ListItem> = {
+export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
     render: () => {
         const options = [
             {
-                id: "button-dropdown-card-option-1",
+                id: "button-dropdown-card-with-selectable-option-1",
                 label: "Текст пункта меню 1",
                 onSelect: () => alert("Выбран пункт меню 1."),
             },
             {
-                id: "button-dropdown-card-option-2",
+                id: "button-dropdown-card-with-selectable-option-2",
                 label: "Текст пункта меню 2",
                 onSelect: () => alert("Выбран пункт меню 2."),
             },
             {
-                id: "button-dropdown-card-option-3",
+                id: "button-dropdown-card-with-selectable-option-3",
                 label: "Текст пункта меню 3",
                 onSelect: () => alert("Выбран пункт меню 3."),
             },
@@ -443,7 +443,7 @@ export const SortableWithInteractiveElements: StoryObj<typeof ListItem> = {
     parameters: {
         docs: {
             description: {
-                story: "ЭЭлемент списка для отображения табличных данных на мобильных устройствах с возможностью выбора элемента.",
+                story: "Элемент списка для отображения табличных данных на мобильных устройствах с возможностью выбора элемента.",
             },
         },
     },

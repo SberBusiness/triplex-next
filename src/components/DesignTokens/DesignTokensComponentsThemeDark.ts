@@ -39,6 +39,8 @@ import {
     TDesignTokensComponentsListMasterValue,
     Body_Tokens,
     TDesignTokensComponentsBodyValue,
+    UploadZone_Tokens,
+    TDesignTokensComponentsUploadZoneValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -81,4 +83,5 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     ),
     ListMaster: GetTokensValueByTheme<TDesignTokensComponentsListMasterValue>(ETriplexNextTheme.DARK, ListMaster_Tokens),
     Body: GetTokensValueByTheme<TDesignTokensComponentsBodyValue>(ETriplexNextTheme.DARK, Body_Tokens),
+    UploadZone: GetTokensValueByTheme<TDesignTokensComponentsUploadZoneValue>(ETriplexNextTheme.DARK, UploadZone_Tokens),
 };

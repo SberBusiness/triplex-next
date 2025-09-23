@@ -1,0 +1,82 @@
+.listItemTail {
+    position: absolute;
+    width: 16px;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.listItemTailLine {
+    background: var(--triplex-next-ListMaster-Background);
+    left: 8px;
+    position: absolute;
+    width: 4px;
+    top: 0;
+    bottom: 0;
+}
+
+.listItemTailTop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    &::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        top: 0;
+        left: 12px;
+        border-top-left-radius: 8px;
+        box-shadow: -2px -2px 0 2px var(--triplex-next-ListMaster-Background);
+    }
+
+    &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-top-right-radius: 8px;
+        box-shadow: 2px -2px 0 2px var(--triplex-next-ListMaster-Background);
+    }
+}
+
+.listItemTailBottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    &::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        border-bottom-left-radius: 8px;
+        box-shadow: -2px 2px 0 2px var(--triplex-next-ListMaster-Background);
+    }
+
+    &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-bottom-right-radius: 8px;
+        box-shadow: 2px 2px 0 2px var(--triplex-next-ListItem-Tail_Background);
+    }
+}
+
+.listItemTailRight {
+    right: -8px;
+}
+
+.listItemTailLeft {
+    left: -8px;
+}

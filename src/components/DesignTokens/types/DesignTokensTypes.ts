@@ -2,6 +2,7 @@ import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCheckbox,
+    TDesignTokensComponentsRadio,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsLoader,
@@ -13,6 +14,10 @@ import {
     TDesignTokensComponentsDropdownMobile,
     TDesignTokensComponentsDropdownMobileList,
     TDesignTokensComponentsOverlay,
+    TDesignTokensComponentsListItem,
+    TDesignTokensComponentsListItemControlsButton,
+    TDesignTokensComponentsListMaster,
+    TDesignTokensComponentsBody,
     TDesignTokensComponentsUploadZone,
 } from "../components";
 
@@ -251,6 +256,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsFormField
+    | TDesignTokensComponentsRadio
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsLoader
@@ -260,6 +266,11 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsDropdownList
     | TDesignTokensComponentsDropdownMobile
     | TDesignTokensComponentsDropdownMobileList
+    | TDesignTokensComponentsOverlay
+    | TDesignTokensComponentsListItem
+    | TDesignTokensComponentsListItemControlsButton
+    | TDesignTokensComponentsListMaster
+    | TDesignTokensComponentsBody;
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsUploadZone;
 

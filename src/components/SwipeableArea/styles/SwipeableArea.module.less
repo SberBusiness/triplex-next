@@ -1,0 +1,44 @@
+.swipeableArea {
+  position: relative;
+  overflow: hidden;
+
+  .content {
+    position: relative;
+    // Элемент может вызывать только вертикальный скролл.
+    touch-action: pan-y;
+
+    &.disableScroll {
+      // Предотвращение вертикального скролла.
+      touch-action: none;
+    }
+
+    // Элемент, предотвращающий нажатие на элементы карточки при свайпе.
+    &.disablePointerEvents::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  .swipeAnimationFinish {
+    // Анимация завершения свайпа.
+    transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+  }
+
+  .leftContent,
+  .rightContent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+  }
+
+  .rightContent {
+    left: auto;
+    right: 0;
+  }
+}

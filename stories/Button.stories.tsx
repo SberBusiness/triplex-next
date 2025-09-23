@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@sberbusiness/triplex-next";
+import { Button } from "../src/components/Button";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { Gap } from "../src/components/Gap";

@@ -41,6 +41,8 @@ import {
     TDesignTokensComponentsBodyValue,
     UploadZone_Tokens,
     TDesignTokensComponentsUploadZoneValue,
+    Pagination_Tokens,
+    TDesignTokensComponentsPaginationValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -81,7 +83,17 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         ListItemControlsButton_Tokens,
     ),
-    ListMaster: GetTokensValueByTheme<TDesignTokensComponentsListMasterValue>(ETriplexNextTheme.DARK, ListMaster_Tokens),
+    ListMaster: GetTokensValueByTheme<TDesignTokensComponentsListMasterValue>(
+        ETriplexNextTheme.DARK,
+        ListMaster_Tokens,
+    ),
     Body: GetTokensValueByTheme<TDesignTokensComponentsBodyValue>(ETriplexNextTheme.DARK, Body_Tokens),
-    UploadZone: GetTokensValueByTheme<TDesignTokensComponentsUploadZoneValue>(ETriplexNextTheme.DARK, UploadZone_Tokens),
+    UploadZone: GetTokensValueByTheme<TDesignTokensComponentsUploadZoneValue>(
+        ETriplexNextTheme.DARK,
+        UploadZone_Tokens,
+    ),
+    Pagination: GetTokensValueByTheme<TDesignTokensComponentsPaginationValue>(
+        ETriplexNextTheme.DARK,
+        Pagination_Tokens,
+    ),
 };

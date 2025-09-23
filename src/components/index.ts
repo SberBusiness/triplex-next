@@ -9,6 +9,7 @@ export * from "./Link";
 export * from "./Loader";
 export * from "./MediaWidth";
 export * from "./MobileView";
+export * from "./Radio";
 export * from "./Row";
 export * from "./TextField";
 export * from "./ThemeProvider";

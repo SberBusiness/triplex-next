@@ -3,6 +3,7 @@ export * from "./Checkbox";
 export * from "./FormField";
 export * from "./Link";
 export * from "./Loader";
+export * from "./Radio";
 export * from "./Typography";
 export * from "./AlertContext";
 export * from "./AlertProcess";

@@ -5,7 +5,7 @@ import { EFontType, ETextSize } from "../../src/components/Typography/enums";
 import { Text } from "../../src/components/Typography/Text";
 import { Link } from "../../src/components/Link";
 import { UploadZone } from "../../src/components/UploadZone/UploadZone";
-import { AttachmentStrokeSrvIcon32 } from "@sberbusiness/icons-next";
+import { ClouddraguploadStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import "./UploadZone.less";
 
 export default {
@@ -29,7 +29,7 @@ export const Default: StoryObj<typeof UploadZone> = {
 
         const renderContainerContent = () => (
             <div className="uploadZoneContainerContent">
-                <AttachmentStrokeSrvIcon32 paletteIndex={5} />
+                <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
                 <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">
                     Положите файлы сюда
@@ -45,8 +45,7 @@ export const Default: StoryObj<typeof UploadZone> = {
             <div className="uploadZoneContent">
                 <UploadZone.Input multiple />
                 <Gap size={16} />
-                {/* @TODO: change to new icon */}
-                <AttachmentStrokeSrvIcon32 paletteIndex={5} />
+                <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
                 <div>
                     <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">

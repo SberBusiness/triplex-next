@@ -1,6 +1,5 @@
 import React from "react";
-import CheckboxbulkStrokeSrvIcon24 from "@sberbusiness/icons-next/CheckboxbulkStrokeSrvIcon24";
-import CheckboxtickStrokeSrvIcon24 from "@sberbusiness/icons-next/CheckboxtickStrokeSrvIcon24";
+import { CheckboxbulkStrokeSrvIcon24, CheckboxtickStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ECheckboxSize } from "./enum";
 import clsx from "clsx";
 import styles from "./styles/Checkbox.module.less";
@@ -31,9 +30,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
         const className = styles.checkmarkIcon;
 
         return bulk ? (
-            <CheckboxbulkStrokeSrvIcon24 className={className} />
+            <CheckboxbulkStrokeSrvIcon24 className={className} paletteIndex={7} />
         ) : (
-            <CheckboxtickStrokeSrvIcon24 className={className} />
+            <CheckboxtickStrokeSrvIcon24 className={className} paletteIndex={7} />
         );
     };
 

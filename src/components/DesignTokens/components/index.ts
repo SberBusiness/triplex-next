@@ -18,3 +18,4 @@ export * from "./ListMaster";
 export * from "./Body";
 export * from "./UploadZone";
 export * from "./Pagination";
+export * from "./Card";

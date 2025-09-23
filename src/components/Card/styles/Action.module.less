@@ -1,0 +1,48 @@
+@import 'src/styles/style';
+
+.action {
+    cursor: pointer;
+    transition: background 120ms ease, box-shadow 120ms ease;
+
+    &.general {
+        background: var(--triplex-next-Card-Action_General_Background);
+
+        &:hover {
+            background: var(--triplex-next-Card-Action_General_Background_Hover);
+            box-shadow: var(--triplex-next-Card-Shadow_Hover);
+        }
+
+        &.selected {
+            background: var(--triplex-next-Card-Action_General_Background_Selected);
+
+            &:hover {
+                background: var(--triplex-next-Card-Action_General_Background_Selected_Hover);
+            }
+        }
+    }
+
+    &.secondary {
+        background: var(--triplex-next-Card-Action_Secondary_Background);
+
+        &:hover {
+            background: var(--triplex-next-Card-Action_Secondary_Background_Hover);
+            box-shadow: var(--triplex-next-Card-Shadow_Hover);
+        }
+
+        &.selected {
+            background: var(--triplex-next-Card-Action_Secondary_Background_Selected);
+
+            &:hover {
+                background: var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover);
+            }
+        }
+    }
+
+    &:focus {
+        outline: none;
+
+        &.focusVisible {
+            border: 1px solid var(--triplex-next-Card-BorderColor_Focus);
+        }
+    }
+}

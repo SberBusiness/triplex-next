@@ -1,0 +1,34 @@
+.paginationPageButton {
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--triplex-next-Pagination-PageButton_Color);
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    margin: 0 2px;
+    cursor: pointer;
+
+    &:focus-visible {
+        border-color: var(--triplex-next-Pagination-PageButton_BorderColor_Focus);
+        outline: none;
+    }
+
+    &:hover {
+        background-color: var(--triplex-next-Pagination-PageButton_Background_Hover);
+    }
+
+    &:active {
+        background-color: var(--triplex-next-Pagination-PageButton_Background_Active);
+        cursor: grabbing;
+    }
+
+    &.currentPage {
+        background-color: var(--triplex-next-Pagination-PageButton_Background_Selected);
+        cursor: default;
+    }
+}

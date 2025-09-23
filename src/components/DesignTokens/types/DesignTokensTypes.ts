@@ -270,7 +270,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsListItem
     | TDesignTokensComponentsListItemControlsButton
     | TDesignTokensComponentsListMaster
-    | TDesignTokensComponentsBody;
+    | TDesignTokensComponentsBody
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsUploadZone;
 

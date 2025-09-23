@@ -8,8 +8,10 @@ export const ListMasterChipGroup = React.forwardRef<HTMLDivElement, React.HTMLAt
         // <ChipGroup className={clsx("cssClass[listMasterChipGroup]", className)} oneLine {...rest} ref={ref}>
         //     {children}
         // </ChipGroup>
-        <div className={clsx(styles.listMasterChipGroup, className)} ref={ref}>{children}</div>
-    )
+        <div className={clsx(styles.listMasterChipGroup, className)} ref={ref} {...rest}>
+            {children}
+        </div>
+    ),
 );
 
 ListMasterChipGroup.displayName = "ListMasterChips";

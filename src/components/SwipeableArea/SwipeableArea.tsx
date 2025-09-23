@@ -1,4 +1,4 @@
-import React, {useEffect, useImperativeHandle, useRef, useState} from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles/SwipeableArea.module.less";
 
@@ -20,12 +20,12 @@ const DISABLE_SCROLL_CLASSNAME = styles.disableScroll;
 // Css-класс, предотвращающий нажатие на элементы карточки при свайпе.
 const DISABLE_POINTER_EVENTS_CLASSNAME = styles.disablePointerEvents;
 // Изначальное значение startCoordinates.
-const START_COORDINATES_INITIAL = {clientX: 0, clientY: 0};
+const START_COORDINATES_INITIAL = { clientX: 0, clientY: 0 };
 
 // Направление перемещения пальца.
 enum EDragType {
-    horizontal = 'horizontal',
-    vertical = 'vertical',
+    horizontal = "horizontal",
+    vertical = "vertical",
 }
 
 export interface ISwipeableAreaRef {
@@ -43,7 +43,7 @@ export interface ISwipeableAreaRef {
  * При свайпе вправо открывается leftSwipeableArea.
  */
 export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaProps>(
-    ({children, className, leftSwipeableArea, rightSwipeableArea, ...rest}, ref) => {
+    ({ children, className, leftSwipeableArea, rightSwipeableArea, ...rest }, ref) => {
         // Происходит анимация завершения свайпа.
         const [animating, setAnimating] = useState(false);
         // Направление перемещения пальца, вертикальное - скролл, горизонтальное - свайп.
@@ -74,14 +74,16 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 if (deltaContentTranslateX > 0) {
                     // Если сдвиг слишком короткий - возврат на прежнее положение, или открытие левого контента.
                     setContentTranslateX(
-                        deltaContentTranslateX > SWIPE_MIN_DISTANCE ? -rightSwipeableAreaRef.current!.getBoundingClientRect().width : 0
+                        deltaContentTranslateX > SWIPE_MIN_DISTANCE
+                            ? -rightSwipeableAreaRef.current!.getBoundingClientRect().width
+                            : 0,
                     );
                 } else {
                     // Свайп вправо.
                     setContentTranslateX(
                         Math.abs(deltaContentTranslateX) > SWIPE_MIN_DISTANCE
                             ? leftSwipeableAreaRef.current!.getBoundingClientRect().width
-                            : 0
+                            : 0,
                     );
                 }
             } else if (contentTranslateXOnStartRef.current > 0) {
@@ -89,7 +91,9 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 // Свайп влево.
                 if (deltaContentTranslateX > 0) {
                     setContentTranslateX(
-                        deltaContentTranslateX > SWIPE_MIN_DISTANCE ? 0 : leftSwipeableAreaRef.current!.getBoundingClientRect().width
+                        deltaContentTranslateX > SWIPE_MIN_DISTANCE
+                            ? 0
+                            : leftSwipeableAreaRef.current!.getBoundingClientRect().width,
                     );
                 }
             } else if (contentTranslateXOnStartRef.current < 0) {
@@ -99,7 +103,7 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                     setContentTranslateX(
                         Math.abs(deltaContentTranslateX) > SWIPE_MIN_DISTANCE
                             ? 0
-                            : -rightSwipeableAreaRef.current!.getBoundingClientRect().width
+                            : -rightSwipeableAreaRef.current!.getBoundingClientRect().width,
                     );
                 }
             }
@@ -110,7 +114,7 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
 
             setDragType(undefined);
 
-            document.removeEventListener('touchend', handleDocumentTouchEnd);
+            document.removeEventListener("touchend", handleDocumentTouchEnd);
         };
 
         useEffect(() => {
@@ -119,12 +123,13 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 handleSwipe();
             }
             // Другие зависимости добавлять не нужно.
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [dragType]);
 
         const handleTouchStart = (event: React.TouchEvent) => {
-            startCoordinates.current = {clientX: event.touches[0].clientX, clientY: event.touches[0].clientY};
+            startCoordinates.current = { clientX: event.touches[0].clientX, clientY: event.touches[0].clientY };
             contentTranslateXOnStartRef.current = contentTranslateX;
-            document.addEventListener('touchend', handleDocumentTouchEnd);
+            document.addEventListener("touchend", handleDocumentTouchEnd);
         };
 
         const handleTouchMove = (event: React.TouchEvent) => {
@@ -159,10 +164,14 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
             if (contentTranslateXOnStartRef.current === 0) {
                 // Свайп вправо и есть контент слева.
                 if (deltaX > 0 && leftSwipeableArea) {
-                    setContentTranslateX(Math.min(contentTranslateXNext, leftSwipeableAreaRef.current!.getBoundingClientRect().width));
+                    setContentTranslateX(
+                        Math.min(contentTranslateXNext, leftSwipeableAreaRef.current!.getBoundingClientRect().width),
+                    );
                 } else if (deltaX < 0 && rightSwipeableArea) {
                     // Свайп влево и есть контент справа.
-                    setContentTranslateX(Math.max(contentTranslateXNext, -rightSwipeableAreaRef.current!.getBoundingClientRect().width));
+                    setContentTranslateX(
+                        Math.max(contentTranslateXNext, -rightSwipeableAreaRef.current!.getBoundingClientRect().width),
+                    );
                 }
             } else if (contentTranslateXOnStartRef.current > 0) {
                 // Свайп закрытия левой области.
@@ -210,9 +219,9 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 }
             };
 
-            document.addEventListener('touchstart', handleDocumentTouchStart);
+            document.addEventListener("touchstart", handleDocumentTouchStart);
 
-            return () => document.removeEventListener('touchstart', handleDocumentTouchStart);
+            return () => document.removeEventListener("touchstart", handleDocumentTouchStart);
         }, []);
 
         // Открывает leftSwipeableAreaRef.
@@ -255,7 +264,7 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                     openLeftSwipeableArea();
                 },
             }),
-            [closeSwipeableArea, openRightSwipeableArea, openLeftSwipeableArea]
+            [closeSwipeableArea, openRightSwipeableArea, openLeftSwipeableArea],
         );
 
         return (
@@ -265,27 +274,27 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 data-tx={process.env.npm_package_version}
                 ref={containerRef}
             >
-                {typeof leftSwipeableArea !== 'undefined' ? (
+                {typeof leftSwipeableArea !== "undefined" ? (
                     <div
                         className={clsx(styles.leftContent, {
                             [SWIPE_ANIMATION_CLASSNAME]: animating,
                         })}
                         ref={leftSwipeableAreaRef}
                         /* Плавное появление контента при свайпе. */
-                        style={{opacity: getOpacityLeftContent()}}
+                        style={{ opacity: getOpacityLeftContent() }}
                     >
                         {leftSwipeableArea}
                     </div>
                 ) : null}
 
-                {typeof rightSwipeableArea !== 'undefined' ? (
+                {typeof rightSwipeableArea !== "undefined" ? (
                     <div
                         className={clsx(styles.rightContent, {
                             [SWIPE_ANIMATION_CLASSNAME]: animating,
                         })}
                         ref={rightSwipeableAreaRef}
                         /* Плавное появление контента при свайпе. */
-                        style={{opacity: getOpacityRightContent()}}
+                        style={{ opacity: getOpacityRightContent() }}
                     >
                         {rightSwipeableArea}
                     </div>
@@ -308,7 +317,7 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 </div>
             </div>
         );
-    }
+    },
 );
 
 SwipeableArea.displayName = "SwipeableArea";

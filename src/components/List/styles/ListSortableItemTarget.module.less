@@ -1,0 +1,32 @@
+@import 'src/styles/style';
+
+.listSortableItemTarget {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--triplex-next-ListItem-Background);
+    touch-action: manipulation;
+    cursor: grab;
+
+    &:hover {
+        background: var(--triplex-next-ListItem-Background_Selected);
+    }
+
+    &.dragging {
+        background: var(--triplex-next-ListItem-Background_Dragging);
+        box-shadow: var(--triplex-next-ListItem-Shadow);
+        cursor: grabbing;
+        z-index: 1;
+    }
+}
+
+.listSortableItemTargetContent {
+    flex: 1;
+}
+
+.listSortableItemTargetIcon {
+    display: block;
+    margin-left: 24px;
+}

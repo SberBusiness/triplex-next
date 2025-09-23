@@ -31,6 +31,14 @@ import {
     TDesignTokensComponentsDropdownMobileValue,
     TDesignTokensComponentsDropdownMobileListValue,
     TDesignTokensComponentsOverlayValue,
+    TDesignTokensComponentsListItemValue,
+    TDesignTokensComponentsListItemControlsButtonValue,
+    TDesignTokensComponentsListMasterValue,
+    ListItemControlsButton_Tokens,
+    ListMaster_Tokens,
+    ListItem_Tokens,
+    Body_Tokens,
+    TDesignTokensComponentsBodyValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -65,5 +73,12 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         AlertProcess_Tokens,
     ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.LIGHT, Overlay_Tokens),
+    ListItem: GetTokensValueByTheme<TDesignTokensComponentsListItemValue>(ETriplexNextTheme.LIGHT, ListItem_Tokens),
+    ListItemControlsButton: GetTokensValueByTheme<TDesignTokensComponentsListItemControlsButtonValue>(
+        ETriplexNextTheme.LIGHT,
+        ListItemControlsButton_Tokens,
+    ),
+    ListMaster: GetTokensValueByTheme<TDesignTokensComponentsListMasterValue>(ETriplexNextTheme.LIGHT, ListMaster_Tokens),
+    Body: GetTokensValueByTheme<TDesignTokensComponentsBodyValue>(ETriplexNextTheme.LIGHT, Body_Tokens),
     Radio: GetTokensValueByTheme<TDesignTokensComponentsRadioValue>(ETriplexNextTheme.LIGHT, Radio_Tokens),
 };

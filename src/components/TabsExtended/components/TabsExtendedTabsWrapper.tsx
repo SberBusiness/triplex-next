@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, useLayoutEffect, isValidElement } from "react";
-import ReactResizeDetector from "react-resize-detector";
+import { useResizeDetector } from "react-resize-detector";
 import pickBy from "lodash/pickBy";
 import clsx from "clsx";
 import { TabsExtendedContext } from "../TabsExtendedContext";
@@ -100,19 +100,27 @@ export const TabsExtendedTabsWrapper: React.FC<ITabsExtendedTabsWrapperProps> = 
         });
     };
 
+    const { ref: resizeRef } = useResizeDetector({
+        handleWidth: true,
+        onResize: checkVisibleItems,
+        refreshMode: "throttle",
+        refreshRate: 150,
+    });
+
     return (
         <>
             {/* Скрытый контейнер с дубликатом табов, для вычисления табов, передаваемых в Dropdown. */}
             {/* TabsFake идут в коде обязательно выше, чем tabsReal. */}
-            <div className={styles.tabsFake} ref={tabsFakeRef}>
-                {dropdownRef.current && (
-                    <ReactResizeDetector
-                        handleWidth
-                        onResize={checkVisibleItems}
-                        refreshMode="throttle"
-                        refreshRate={150}
-                    />
-                )}
+            <div
+                className={styles.tabsFake}
+                ref={(node) => {
+                    if (tabsFakeRef.current !== node) {
+                        (tabsFakeRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+                    }
+
+                    resizeRef(node);
+                }}
+            >
                 <TabsExtendedTabContext.Provider value={{ isFakeTab: true }}>
                     {stripDataAttributes(children)}
                 </TabsExtendedTabContext.Provider>

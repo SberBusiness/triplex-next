@@ -109,10 +109,10 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorError: {
         0: {
-            value: "#37292F", //     var(--triplex-next-ColorError-0)
+            value: "#443139", //     var(--triplex-next-ColorError-0)
         },
         10: {
-            value: "#4A323B", //     var(--triplex-next-ColorError-10)
+            value: "#4E3741", //     var(--triplex-next-ColorError-10)
         },
         20: {
             value: "#A90024", //     var(--triplex-next-ColorError-20)
@@ -144,10 +144,10 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorInfo: {
         0: {
-            value: "#282D3C", //     var(--triplex-next-ColorInfo-0)
+            value: "#313749", //     var(--triplex-next-ColorInfo-0)
         },
         10: {
-            value: "#2A354B", //     var(--triplex-next-ColorInfo-10)
+            value: "#2E3A52", //     var(--triplex-next-ColorInfo-10)
         },
         20: {
             value: "#0A43B0", //     var(--triplex-next-ColorInfo-20)
@@ -249,10 +249,10 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorSuccess: {
         0: {
-            value: "#283230", //     var(--triplex-next-ColorSuccess-0)
+            value: "#28433E", //     var(--triplex-next-ColorSuccess-0)
         },
         10: {
-            value: "#19413B", //     var(--triplex-next-ColorSuccess-10)
+            value: "#2A4C45", //     var(--triplex-next-ColorSuccess-10)
         },
         20: {
             value: "#00624C", //     var(--triplex-next-ColorSuccess-20)
@@ -284,10 +284,10 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorSystem: {
         0: {
-            value: "#2F333E", //     var(--triplex-next-ColorSystem-0)
+            value: "#373C49", //     var(--triplex-next-ColorSystem-0)
         },
         10: {
-            value: "#38425B", //     var(--triplex-next-ColorSystem-10)
+            value: "#384156", //     var(--triplex-next-ColorSystem-10)
         },
         20: {
             value: "#47526D", //     var(--triplex-next-ColorSystem-20)
@@ -319,10 +319,10 @@ export const DesignTokensCore: TDesignTokensCore = {
     },
     ColorWarning: {
         0: {
-            value: "#392E2D", //     var(--triplex-next-ColorWarning-0)
+            value: "#463734", //     var(--triplex-next-ColorWarning-0)
         },
         10: {
-            value: "#493626", //     var(--triplex-next-ColorWarning-10)
+            value: "#4F3E3B", //     var(--triplex-next-ColorWarning-10)
         },
         20: {
             value: "#E03400", //     var(--triplex-next-ColorWarning-20)

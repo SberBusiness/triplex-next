@@ -83,7 +83,7 @@ export const Default: StoryObj<typeof TabsExtended> = {
         ];
 
         return (
-            <div style={{ width: "600px" }}>
+            <div style={{ maxWidth: "600px" }}>
                 <TabsExtended className="tabs-extended" selectedId={selectedTabId} onSelectTab={setSelectedTabId}>
                     <TabsExtended.Content className="tabs-extended-content">
                         <TabsExtended.Content.TabsWrapper>
@@ -104,9 +104,7 @@ export const Default: StoryObj<typeof TabsExtended> = {
                                     size={EButtonSize.SM}
                                     options={getDropdownOptions({ dropdownItemsIds, onSelectTab })}
                                     selected={options.filter((option) => option.id == selectedTabId)[0]}
-                                >
-                                    Button text
-                                </ButtonDropdown>
+                                />
                             )}
                         </TabsExtended.Content.DropdownWrapper>
                     </TabsExtended.Content>

@@ -49,6 +49,8 @@ import {
     TDesignTokensComponentsPaginationValue,
     TDesignTokensComponentsCardValue,
     Card_Tokens,
+    Skeleton_Tokens,
+    TDesignTokensComponentsSkeletonValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -108,4 +110,5 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         Pagination_Tokens,
     ),
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.DARK, Card_Tokens),
+    Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.DARK, Skeleton_Tokens),
 };

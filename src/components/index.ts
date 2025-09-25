@@ -24,3 +24,4 @@ export * from "./Header";
 export * from "./Page";
 export * from "./Pagination";
 export * from "./Card";
+export * from "./Skeleton";

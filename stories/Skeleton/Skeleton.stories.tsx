@@ -61,50 +61,34 @@ export const Playground: StoryObj<typeof Skeleton> = {
                         <span>
                             <Skeleton {...args} />
                         </span>
-                        <div>
-                            <Skeleton {...args} />
-                        </div>
+                        <Skeleton {...args} />
                     </li>
                     <li>
                         <span>
                             <Skeleton {...args} />
                         </span>
-                        <div>
-                            <Skeleton {...args} />
-                        </div>
+                        <Skeleton {...args} />
                     </li>
                     <li>
                         <span>
                             <Skeleton {...args} />
                         </span>
-                        <div>
-                            <Skeleton {...args} />
-                        </div>
+                        <Skeleton {...args} />
                     </li>
                     <li>
                         <span>
                             <Skeleton {...args} />
                         </span>
-                        <div>
-                            <Skeleton {...args} />
-                        </div>
+                        <Skeleton {...args} />
                     </li>
                 </ul>
             </div>
             <div className="skeleton-example-right">
                 <div className="skeleton-example-grid">
-                    <div>
-                        <Skeleton {...args} />
-                    </div>
-                    <div>
-                        <Skeleton {...args} />
-                    </div>
-                    <div>
-                        <Skeleton {...args} />
-                    </div>
-                    <div>
-                        <Skeleton {...args} />
-                    </div>
+                    <Skeleton {...args} />
+                    <Skeleton {...args} />
+                    <Skeleton {...args} />
+                    <Skeleton {...args} />
                 </div>
             </div>
         </div>
@@ -123,18 +107,10 @@ export const Default: StoryObj<typeof Skeleton> = {
     render: () => (
         <div className="skeleton-example-default">
             <div className="skeleton-example-grid">
-                <div>
-                    <Skeleton />
-                </div>
-                <div>
-                    <Skeleton />
-                </div>
-                <div>
-                    <Skeleton />
-                </div>
-                <div>
-                    <Skeleton />
-                </div>
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
             </div>
         </div>
     ),
@@ -152,18 +128,10 @@ export const LightBackground: StoryObj<typeof Skeleton> = {
     render: (args) => (
         <div className="skeleton-example-gray">
             <div className="skeleton-example-grid">
-                <div>
-                    <Skeleton {...args} />
-                </div>
-                <div>
-                    <Skeleton {...args} />
-                </div>
-                <div>
-                    <Skeleton {...args} />
-                </div>
-                <div>
-                    <Skeleton {...args} />
-                </div>
+                <Skeleton {...args} />
+                <Skeleton {...args} />
+                <Skeleton {...args} />
+                <Skeleton {...args} />
             </div>
         </div>
     ),

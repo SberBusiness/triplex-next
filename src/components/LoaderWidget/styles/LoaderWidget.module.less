@@ -1,0 +1,26 @@
+@import '../../../styles/style';
+
+.loaderWidget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: @z-index-spinner-widget;
+    background: var(--triplex-next-Overlay-Background);
+
+    & .loaderMiddleBackground {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: var(--triplex-next-LoaderWidget-Middle_Background_Default);
+
+        & div {
+            margin: 12px;
+        }
+    }
+}

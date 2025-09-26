@@ -12,6 +12,7 @@ import {
     Typography_Tokens,
     Link_Tokens,
     Loader_Tokens,
+    LoaderWidget_Tokens,
     Dropdown_Tokens,
     DropdownList_Tokens,
     DropdownMobile_Tokens,
@@ -25,6 +26,7 @@ import {
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsLinkValue,
     TDesignTokensComponentsLoaderValue,
+    TDesignTokensComponentsLoaderWidgetValue,
     TDesignTokensComponentsAlertContextValue,
     AlertProcess_Tokens,
     TDesignTokensComponentsAlertProcessValue,
@@ -53,6 +55,10 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     FormField: GetTokensValueByTheme<TDesignTokensComponentsFormFieldValue>(ETriplexNextTheme.LIGHT, FormField_Tokens),
     Link: GetTokensValueByTheme<TDesignTokensComponentsLinkValue>(ETriplexNextTheme.LIGHT, Link_Tokens),
     Loader: GetTokensValueByTheme<TDesignTokensComponentsLoaderValue>(ETriplexNextTheme.LIGHT, Loader_Tokens),
+    LoaderWidget: GetTokensValueByTheme<TDesignTokensComponentsLoaderWidgetValue>(
+        ETriplexNextTheme.LIGHT,
+        LoaderWidget_Tokens,
+    ),
     Dropdown: GetTokensValueByTheme<TDesignTokensComponentsDropdownValue>(ETriplexNextTheme.LIGHT, Dropdown_Tokens),
     DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(
         ETriplexNextTheme.LIGHT,

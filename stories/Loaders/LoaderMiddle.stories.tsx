@@ -1,5 +1,5 @@
 import React from "react";
-import { LoaderMiddle } from "../src/components/Loader";
+import { LoaderMiddle } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
 
 export default {

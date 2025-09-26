@@ -11,6 +11,8 @@ import {
     Typography_Tokens,
     Link_Tokens,
     Loader_Tokens,
+    LoaderWidget_Tokens,
+    TDesignTokensComponentsLoaderWidgetValue,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsFormFieldValue,
@@ -55,6 +57,10 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Link: GetTokensValueByTheme<TDesignTokensComponentsLinkValue>(ETriplexNextTheme.DARK, Link_Tokens),
     Loader: GetTokensValueByTheme<TDesignTokensComponentsLoaderValue>(ETriplexNextTheme.DARK, Loader_Tokens),
     Tabs: GetTokensValueByTheme<TDesignTokensComponentsTabsValue>(ETriplexNextTheme.DARK, Tabs_Tokens),
+    LoaderWidget: GetTokensValueByTheme<TDesignTokensComponentsLoaderWidgetValue>(
+        ETriplexNextTheme.DARK,
+        LoaderWidget_Tokens,
+    ),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
         ETriplexNextTheme.DARK,
         Typography_Tokens,

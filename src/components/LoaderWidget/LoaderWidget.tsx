@@ -20,16 +20,23 @@ export const LoaderWidget: React.FC<ILoaderWidgetProps> = ({
     type,
     theme = ELoaderSmallTheme.BRAND,
     ...htmlDivAttributes
-}) => (
-    <div className={clsx(className, styles.loaderWidget)} {...htmlDivAttributes}>
-        {type === "small" ? (
-            <LoaderSmall size={size} theme={theme} />
-        ) : (
-            <div className={styles.loaderMiddleBackground}>
-                <LoaderMiddle />
-            </div>
-        )}
-    </div>
-);
+}) => {
+    const classNames = clsx(className, styles.loaderWidget, {
+        [styles.loaderSmallBackdrop]: type === "small",
+        [styles.loaderMiddleBackdrop]: type === "middle",
+    });
+
+    return (
+        <div className={classNames} {...htmlDivAttributes}>
+            {type === "small" ? (
+                <LoaderSmall size={size} theme={theme} />
+            ) : (
+                <div className={styles.loaderMiddleBackground}>
+                    <LoaderMiddle />
+                </div>
+            )}
+        </div>
+    );
+};
 
 LoaderWidget.displayName = "LoaderWidget";

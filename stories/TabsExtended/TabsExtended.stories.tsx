@@ -18,40 +18,6 @@ export default {
 
 - Компонент формируется декларативно
 
-## Использование
-
-\`\`\`tsx
-import { TabsExtended } from '@sberbusiness/triplex-next';
-
-const [selectedId, setSelectedId] = useState('tab1');
-
-<TabsExtended selectedId={selectedId} onSelectTab={setSelectedId}>
-    <TabsExtended.Content>
-        <TabsExtended.Content.TabsWrapper>
-            <TabsExtended.Content.Tab id="tab1">
-                {({ selected }) => (
-                    <TabsExtended.Content.TabButton selected={selected}>
-                        Первый таб
-                    </TabsExtended.Content.TabButton>
-                )}
-            </TabsExtended.Content.Tab>
-            <TabsExtended.Content.Tab id="tab2">
-                {({ selected }) => (
-                    <TabsExtended.Content.TabButton selected={selected}>
-                        Второй таб
-                    </TabsExtended.Content.TabButton>
-                )}
-            </TabsExtended.Content.Tab>
-        </TabsExtended.Content.TabsWrapper>
-        
-        <TabsExtended.Content.DropdownWrapper>
-            {({ dropdownItemsIds, onSelectTab }) => (
-                <CustomDropdown items={dropdownItemsIds} onSelect={onSelectTab} />
-            )}
-        </TabsExtended.Content.DropdownWrapper>
-    </TabsExtended.Content>
-</TabsExtended>
-\`\`\`
                 `,
             },
         },

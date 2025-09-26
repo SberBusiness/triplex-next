@@ -6,6 +6,7 @@ import {
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsLoader,
+    TDesignTokensComponentsTabs,
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
@@ -261,6 +262,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsLoader
+    | TDesignTokensComponentsTabs
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
     | TDesignTokensComponentsDropdown

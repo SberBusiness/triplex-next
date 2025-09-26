@@ -39,6 +39,7 @@
         "@dnd-kit/sortable": "^10.0.0",
         "clsx": "2.1.1",
         "rc-util": "5.44.4",
+        "react-resize-detector": "12.3.0",
         "react-text-mask": "5.5.0",
         "react-window": "1.8.10"
     },

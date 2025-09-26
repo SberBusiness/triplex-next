@@ -1,0 +1,37 @@
+.tabsExtended {
+    position: relative;
+}
+
+.tabsExtendedContent {
+    display: inline-flex;
+    padding: 4px;
+}
+
+.tabsExtendedTab + .tabsExtendedTab,
+.tabsExtendedDropdown {
+    margin-left: 2px;
+}
+
+.tabsReal,
+.tabsFake {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.tabsReal {
+    &.hidden {
+        visibility: hidden;
+    }
+
+    .tabsExtendedTab.hidden {
+        display: none;
+    }
+}
+
+.tabsFake {
+    padding: 0 2px;
+    position: absolute;
+    left: -10000px;
+    visibility: hidden;
+}

@@ -1,0 +1,54 @@
+.tabsExtendedTabButton {
+    font-family: inherit;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid var(--triplex-next-Tabs-Tab_BorderColor_Default);
+    outline: none;
+    background: var(--triplex-next-Tabs-Tab_Background_Default);
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    overflow: visible;
+
+    &.lg {
+        border-radius: 6px;
+        padding: 14px 16px;
+        line-height: 20px;
+        font-size: 16px;
+    }
+
+    &.md {
+        border-radius: 4px;
+        padding: 6px 16px;
+        line-height: 20px;
+        font-size: 14px;
+    }
+
+    &.sm {
+        border-radius: 4px;
+        padding: 2px 16px;
+        line-height: 16px;
+        font-size: 12px;
+    }
+
+    &::-moz-focus-inner {
+        border: none;
+    }
+
+    & + .tabsExtendedTabButton {
+        margin-left: 2px;
+    }
+
+    &:hover {
+        background: var(--triplex-next-Tabs-Tab_Background_Hover);
+    }
+
+    &:focus-visible {
+        border-color: var(--triplex-next-Tabs-Tab_BorderColor_Focus);
+    }
+
+    &.selected {
+        background: var(--triplex-next-Tabs-Tab_Background_Selected);
+        cursor: default;
+    }
+}

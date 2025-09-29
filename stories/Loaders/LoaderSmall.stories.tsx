@@ -1,7 +1,7 @@
 import React from "react";
-import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "../src/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
-import { Col } from "../src/components/Col";
+import { Col } from "../../src/components/Col";
 
 export default {
     title: "Components/Loaders/LoaderSmall",

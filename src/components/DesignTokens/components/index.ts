@@ -4,6 +4,7 @@ export * from "./FormField";
 export * from "./Link";
 export * from "./Tabs";
 export * from "./Loader";
+export * from "./LoaderWidget";
 export * from "./Radio";
 export * from "./Typography";
 export * from "./AlertContext";

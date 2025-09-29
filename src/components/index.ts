@@ -22,3 +22,4 @@ export * from "./Body";
 export * from "./Header";
 export * from "./Page";
 export * from "./Pagination";
+export * from "./Card";

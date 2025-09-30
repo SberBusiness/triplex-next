@@ -20,8 +20,8 @@ export type TDesignTokensComponentsPagination = { Pagination: TDesignTokensCompo
 // Токены компонента Pagination в светлой и темной темах.
 export const Pagination_Tokens: TDesignTokensComponentsPaginationValues = {
     PageButton_Background_Active: [{ ref: "ColorNeutral.50" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Pagination-PageButton_Background_Active)
-    PageButton_Background_Hover: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Pagination-PageButton_Background_Hover)
-    PageButton_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Pagination-PageButton_Background_Selected)
+    PageButton_Background_Hover: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Pagination-PageButton_Background_Hover)
+    PageButton_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Pagination-PageButton_Background_Selected)
     PageButton_BorderColor_Focus: [{ ref: "ColorWarning.80" }, { ref: "ColorWarning.80" }], // var(--triplex-next-Pagination-PageButton_BorderColor_Focus)
     PageButton_Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Pagination-PageButton_Color)
 };

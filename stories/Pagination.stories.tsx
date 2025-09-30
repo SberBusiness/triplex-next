@@ -7,9 +7,7 @@ const meta: Meta<typeof Pagination> = {
     parameters: {
         docs: {
             description: {
-                component: `
-					Компонент Pagination:
-                `,
+                component: "Компонент Pagination:",
             },
         },
     },
@@ -63,8 +61,9 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
                     onCurrentPageChange: setPage,
                 }}
                 paginationSelectProps={{
-                    paginationLabel: args.paginationLabel ?? "Элементов на странице:",
+                    paginationLabel: args.paginationLabel ?? "Показать на странице:",
                     value: pageSize,
+                    hidden: args.showSelect,
                     options: [10, 20, 50, 100],
                     onChange: setPageSize,
                 }}
@@ -77,20 +76,15 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
             description: "Текущая страница",
             table: { type: { summary: "number" }, defaultValue: { summary: "1" } },
         },
-        totalPages: {
-            control: { type: "number", min: 1 },
-            description: "Общее число страниц",
-            table: { type: { summary: "number" }, defaultValue: { summary: "20" } },
-        },
         boundaryCount: {
             control: { type: "number", min: 0 },
             description: "Количество видимых страниц в начале и в конце",
-            table: { type: { summary: "number" }, defaultValue: { summary: "1" } },
+            table: { type: { summary: "number" }, defaultValue: { summary: "0" } },
         },
         siblingCount: {
             control: { type: "number", min: 0 },
             description: "Количество видимых соседей около текущей",
-            table: { type: { summary: "number" }, defaultValue: { summary: "1" } },
+            table: { type: { summary: "number" }, defaultValue: { summary: "0" } },
         },
         showSelect: {
             control: { type: "boolean" },
@@ -100,7 +94,7 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
         paginationLabel: {
             control: { type: "text" },
             description: "Лейбл селекта количества элементов",
-            table: { type: { summary: "string" }, defaultValue: { summary: "Элементов на странице:" } },
+            table: { type: { summary: "string" }, defaultValue: { summary: "Показать на странице:" } },
         },
         className: {
             control: { type: "text" },
@@ -110,11 +104,10 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     },
     args: {
         currentPage: 1,
-        totalPages: 20,
-        boundaryCount: 1,
-        siblingCount: 1,
+        boundaryCount: 0,
+        siblingCount: 0,
         showSelect: true,
-        paginationLabel: "Элементов на странице:",
+        paginationLabel: "Показать на странице:",
         className: "",
     },
     parameters: {
@@ -134,7 +127,7 @@ export const Default: Story = {
             <Pagination
                 paginationNavigationProps={{ currentPage: page, totalPages: 10, onCurrentPageChange: setPage }}
                 paginationSelectProps={{
-                    paginationLabel: "Элементов на странице:",
+                    paginationLabel: "Показать на странице:",
                     value: 10,
                     options: [10, 20, 50, 100],
                     onChange: () => {},
@@ -158,7 +151,7 @@ export const WithBoundariesAndSiblings: Story = {
                     onCurrentPageChange: setPage,
                 }}
                 paginationSelectProps={{
-                    paginationLabel: "Элементов на странице:",
+                    paginationLabel: "Показать на странице:",
                     value: 10,
                     options: [10, 20, 50, 100],
                     onChange: () => {},
@@ -182,7 +175,7 @@ export const ManyPages: Story = {
                     onCurrentPageChange: setPage,
                 }}
                 paginationSelectProps={{
-                    paginationLabel: "Элементов на странице:",
+                    paginationLabel: "Показать на странице:",
                     value: 10,
                     options: [10, 20, 50, 100],
                     onChange: () => {},
@@ -203,7 +196,7 @@ export const WithSelect: Story = {
             <Pagination
                 paginationNavigationProps={{ currentPage: page, totalPages, onCurrentPageChange: setPage }}
                 paginationSelectProps={{
-                    paginationLabel: "Элементов на странице:",
+                    paginationLabel: "Показать на странице:",
                     value: pageSize,
                     options: [10, 20, 50, 100],
                     onChange: setPageSize,
@@ -230,7 +223,7 @@ export const FullExample: Story = {
                     onCurrentPageChange: setPage,
                 }}
                 paginationSelectProps={{
-                    paginationLabel: "Элементов на странице:",
+                    paginationLabel: "Показать на странице:",
                     value: pageSize,
                     options: [10, 20, 50, 100],
                     onChange: setPageSize,
@@ -249,7 +242,7 @@ export const Extended: Story = {
             <PaginationExtended>
                 <PaginationNavigation currentPage={page} totalPages={10} onCurrentPageChange={setPage} />
                 <PaginationSelect
-                    paginationLabel="Элементов на странице:"
+                    paginationLabel="Показать на странице:"
                     value={10}
                     options={[10, 20, 50, 100]}
                     onChange={() => {}}

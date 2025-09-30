@@ -18,6 +18,7 @@ import {
     DropdownMobile_Tokens,
     DropdownMobileList_Tokens,
     Overlay_Tokens,
+    Skeleton_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsFormFieldValue,
@@ -49,6 +50,7 @@ import {
     Pagination_Tokens,
     TDesignTokensComponentsCardValue,
     Card_Tokens,
+    TDesignTokensComponentsSkeletonValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -108,4 +110,5 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         Pagination_Tokens,
     ),
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.LIGHT, Card_Tokens),
+    Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.LIGHT, Skeleton_Tokens),
 };

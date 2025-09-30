@@ -1,0 +1,38 @@
+@import 'src/styles/style';
+
+.skeleton {
+    border-radius: 16px;
+    flex-grow: 1;
+
+    &.light {
+        animation: skeleton-light-pulse 2s ease-in-out infinite;
+    }
+
+    &.dark {
+        animation: skeleton-dark-pulse 2s ease-in-out infinite;
+    }
+}
+
+@keyframes skeleton-light-pulse {
+    0% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Light_Start);
+    }
+    50% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Light_End);
+    }
+    100% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Light_Start);
+    }
+}
+
+@keyframes skeleton-dark-pulse {
+    0% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Dark_Start);
+    }
+    50% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Dark_End);
+    }
+    100% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Dark_Start);
+    }
+}

@@ -20,7 +20,7 @@ export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement
     renderIcon?: React.ReactNode;
 }
 
-const renderDefaultIcon = (type: Exclude<EAlertType, EAlertType.FEATURE>): JSX.Element => {
+const renderDefaultIcon = (type: Exclude<EAlertType, EAlertType.FEATURE>): React.JSX.Element => {
     switch (type) {
         case EAlertType.INFO:
             return <InfoStrokeStsIcon16 paletteIndex={3} />;

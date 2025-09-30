@@ -1,4 +1,5 @@
 export * from "./Alert";
+export * from "./Amount";
 export * from "./Button";
 export * from "./Col";
 export * from "./Checkbox";
@@ -29,3 +30,4 @@ export * from "./SegmentedControl";
 export * from "./KeyDownListener";
 export * from "./SelectExtendedField";
 export * from "./Island";
+export * from "./Table";

@@ -22,7 +22,7 @@ export const mapFontWeightTitleToCssClass = {
 };
 
 /** Свойства компонента Title. */
-type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
+export type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ETitleSize;
     /** Толщина шрифта. */
@@ -45,7 +45,7 @@ export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElem
             ...props
         }: TTitleProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): JSX.Element => {
+    ): React.JSX.Element => {
         const classes = clsx(
             typographyStyles.typography,
             styles.title,

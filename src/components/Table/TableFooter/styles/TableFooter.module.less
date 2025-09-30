@@ -1,0 +1,42 @@
+@import "src/styles/style";
+
+.tableFooterWrapper {
+    position: sticky;
+    height: 76px;
+    margin-top: 16px;
+    bottom: 0;
+
+    .tableFooter {
+        background: var(--triplex-next-TableBasic-TableFooter_Background);
+        padding: 24px 12px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: -64px;
+            left: 0;
+            width: 100%;
+            height: 64px;
+            background: var(--triplex-next-TableBasic-TableFooter_Highlight);
+            pointer-events: none;
+        }
+
+        .tableFooterSummary {
+            display: flex;
+            align-items: center;
+
+            .tableFooterSummarySelectedCount,
+            .tableFooterSummaryAmount,
+            .tableFooterSummarySelectAllButton,
+            .tableFooterSummaryDivider {
+                margin-left: 24px;
+            }
+        }
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .tableFooterWrapper {
+        height: 112px;
+    }
+}

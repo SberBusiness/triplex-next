@@ -1,0 +1,30 @@
+@import 'src/styles/style';
+
+.tableBasic > table {
+    th,
+    td {
+        @media (max-width: @screen-xs-max) {
+            &.hideXS {
+                display: none;
+            }
+        }
+
+        @media (max-width: @screen-sm-max) {
+            &.hideSM {
+                display: none;
+            }
+        }
+
+        @media (max-width: @screen-md-max) {
+            &.hideMD {
+                display: none;
+            }
+        }
+
+        @media (max-width: @screen-lg-max) {
+            &.hideLG {
+                display: none;
+            }
+        }
+    }
+}

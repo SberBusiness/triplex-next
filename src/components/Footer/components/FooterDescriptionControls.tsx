@@ -1,9 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "../styles/Footer.module.less";
-
-/** Свойства компонента FooterDescriptionControls. */
-export interface IFooterDescriptionControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { IFooterDescriptionControlsProps } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
 
 /** Футер, кнопки действий основной части. */
 export const FooterDescriptionControls = React.forwardRef<HTMLDivElement, IFooterDescriptionControlsProps>(

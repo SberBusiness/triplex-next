@@ -1,0 +1,89 @@
+@import 'src/styles/style';
+
+.tooltipDesktop {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+    pointer-events: auto;
+    z-index: @z-index-tooltip;
+
+    .tooltipBody {
+        text-align: left;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--triplex-next-Tooltip-Color);
+    }
+
+    .tooltipXButton {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+    }
+}
+
+.tooltipDesktopContent {
+    position: relative;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background-color: var(--triplex-next-Tooltip-Background);
+    border-radius: 8px;
+
+    .closable & {
+        padding-right: 32px;
+    }
+}
+
+.tooltipDesktopContent {
+    .tooltipSM & {
+        width: 192px;
+        min-height: 52px;
+    }
+
+    .tooltipLG & {
+        width: 384px;
+        min-height: 52px;
+    }
+}
+
+.tooltipOverlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: @z-index-tooltip - 1;
+}
+
+.tooltipDesktopTip {
+    width: 0;
+    height: 0;
+
+    &.down {
+        border-top: solid var(--triplex-next-Tooltip-Background);
+        border-right: solid transparent;
+        border-left: solid transparent;
+    }
+
+    &.up {
+        border-bottom: solid var(--triplex-next-Tooltip-Background);
+        border-right: solid transparent;
+        border-left: solid transparent;
+    }
+
+    &.left {
+        border-right: solid var(--triplex-next-Tooltip-Background);
+        border-top: solid transparent;
+        border-bottom: solid transparent;
+    }
+
+    &.right {
+        border-left: solid var(--triplex-next-Tooltip-Background);
+        border-top: solid transparent;
+        border-bottom: solid transparent;
+    }
+}

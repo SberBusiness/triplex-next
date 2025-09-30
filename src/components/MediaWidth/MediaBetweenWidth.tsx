@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { EScreenWidth } from "../../helpers/breakpoints";
+import React from "react";
+import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
+import { useMatchMedia } from "@sberbusiness/triplex-next/components/MediaWidth/useMatchMedia";
 
 /**
  * Свойства MediaBetweenWidth.
@@ -20,28 +21,10 @@ interface IMediaBetweenWidthProps {
  * В противном случае рендерится fallback.
  */
 export const MediaBetweenWidth: React.FC<IMediaBetweenWidthProps> = ({ children, fallback, minWidth, maxWidth }) => {
-    const [matches, setMatches] = React.useState(
+    const matches = useMatchMedia(
+        `(max-width: ${maxWidth}) and (min-width: ${minWidth})`,
         window.innerWidth >= parseInt(minWidth) && window.innerWidth <= parseInt(maxWidth),
     );
-
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia(`(max-width: ${maxWidth}) and (min-width: ${minWidth})`);
-        const handleChangeMatches = (event: MediaQueryListEvent) => setMatches(event.matches);
-
-        if ("addEventListener" in mediaQueryList) {
-            mediaQueryList.addEventListener("change", handleChangeMatches);
-        } else if ("addListener" in mediaQueryList) {
-            (mediaQueryList as MediaQueryList).addListener(handleChangeMatches);
-        }
-
-        return () => {
-            if ("removeEventListener" in mediaQueryList) {
-                mediaQueryList.removeEventListener("change", handleChangeMatches);
-            } else if ("removeListener" in mediaQueryList) {
-                (mediaQueryList as MediaQueryList).removeListener(handleChangeMatches);
-            }
-        };
-    }, [maxWidth, minWidth]);
 
     return matches ? children : fallback;
 };

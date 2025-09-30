@@ -9,6 +9,7 @@ import {
     Radio_Tokens,
     Tabs_Tokens,
     Typography_Tokens,
+    Tooltip_Tokens,
     Link_Tokens,
     Loader_Tokens,
     LoaderWidget_Tokens,
@@ -35,6 +36,7 @@ import {
     TDesignTokensComponentsDropdownMobileListValue,
     Overlay_Tokens,
     TDesignTokensComponentsOverlayValue,
+    TDesignTokensComponentsTooltipValue,
     ListItem_Tokens,
     TDesignTokensComponentsListItemValue,
     ListItemControlsButton_Tokens,
@@ -67,6 +69,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         Typography_Tokens,
     ),
+    Tooltip: GetTokensValueByTheme<TDesignTokensComponentsTooltipValue>(ETriplexNextTheme.DARK, Tooltip_Tokens),
     AlertContext: GetTokensValueByTheme<TDesignTokensComponentsAlertContextValue>(
         ETriplexNextTheme.DARK,
         AlertContext_Tokens,

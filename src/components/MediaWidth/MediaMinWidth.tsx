@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { EScreenWidth } from "../../helpers/breakpoints";
+import React from "react";
+import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
+import { useMatchMedia } from "@sberbusiness/triplex-next/components/MediaWidth/useMatchMedia";
 
 /**
  * Свойства MediaMinWidth.
@@ -18,26 +19,7 @@ interface IMediaMinWidthProps {
  * В противном случае рендерится fallback.
  */
 export const MediaMinWidth: React.FC<IMediaMinWidthProps> = ({ children, fallback, minWidth }) => {
-    const [matches, setMatches] = React.useState(window.innerWidth >= parseInt(minWidth));
-
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia(`(min-width: ${minWidth})`);
-        const handleChangeMatches = (event: MediaQueryListEvent) => setMatches(event.matches);
-
-        if ("addEventListener" in mediaQueryList) {
-            mediaQueryList.addEventListener("change", handleChangeMatches);
-        } else if ("addListener" in mediaQueryList) {
-            (mediaQueryList as MediaQueryList).addListener(handleChangeMatches);
-        }
-
-        return () => {
-            if ("removeEventListener" in mediaQueryList) {
-                mediaQueryList.removeEventListener("change", handleChangeMatches);
-            } else if ("removeListener" in mediaQueryList) {
-                (mediaQueryList as MediaQueryList).removeListener(handleChangeMatches);
-            }
-        };
-    }, [minWidth]);
+    const matches = useMatchMedia(`(min-width: ${minWidth})`, window.innerWidth >= parseInt(minWidth));
 
     return matches ? children : fallback;
 };

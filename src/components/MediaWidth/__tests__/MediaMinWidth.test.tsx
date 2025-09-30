@@ -8,8 +8,6 @@ describe("MediaMinWidth", () => {
     const mockMatchMedia = vi.fn();
     const mockAddEventListener = vi.fn();
     const mockRemoveEventListener = vi.fn();
-    const mockAddListener = vi.fn();
-    const mockRemoveListener = vi.fn();
 
     const mockChildren = <div data-testid="children">Children content</div>;
     const mockFallback = <div data-testid="fallback">Fallback content</div>;
@@ -40,8 +38,6 @@ describe("MediaMinWidth", () => {
                 matches: true,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             render(
@@ -61,8 +57,6 @@ describe("MediaMinWidth", () => {
                 matches: false,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             render(
@@ -82,8 +76,6 @@ describe("MediaMinWidth", () => {
                 matches: true,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             render(
@@ -103,8 +95,6 @@ describe("MediaMinWidth", () => {
                 matches: true,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             render(
@@ -124,8 +114,6 @@ describe("MediaMinWidth", () => {
                 matches: true,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             render(
@@ -142,8 +130,6 @@ describe("MediaMinWidth", () => {
                 matches: true,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             render(
@@ -240,8 +226,6 @@ describe("MediaMinWidth", () => {
                 matches: true,
                 addEventListener: mockAddEventListener,
                 removeEventListener: mockRemoveEventListener,
-                addListener: mockAddListener,
-                removeListener: mockRemoveListener,
             });
 
             const { unmount } = render(

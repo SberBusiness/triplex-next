@@ -57,6 +57,8 @@ import {
     TDesignTokensComponentsSegmentedControlValue,
     SegmentedControlSegment_Tokens,
     TDesignTokensComponentsSegmentedControlSegmentValue,
+    HeaderPage_Tokens,
+    TDesignTokensComponentsHeaderPageValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -125,5 +127,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     SegmentedControlSegment: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlSegmentValue>(
         ETriplexNextTheme.LIGHT,
         SegmentedControlSegment_Tokens,
+    ),
+    HeaderPage: GetTokensValueByTheme<TDesignTokensComponentsHeaderPageValue>(
+        ETriplexNextTheme.LIGHT,
+        HeaderPage_Tokens,
     ),
 };

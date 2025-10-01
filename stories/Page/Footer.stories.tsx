@@ -1,9 +1,9 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Footer } from "../src/components/Footer";
-import { Button } from "../src/components/Button";
-import { EButtonTheme, EButtonSize } from "../src/components/Button/enums";
-import { Text, ETextSize } from "../src/components/Typography";
+import { Footer } from "../../src/components/Footer";
+import { Button } from "../../src/components/Button";
+import { EButtonTheme, EButtonSize } from "../../src/components/Button/enums";
+import { Text, ETextSize } from "../../src/components/Typography";
 
 export default {
     title: "Components/Footer",

@@ -200,13 +200,13 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "rgba(255, 255, 255, .45)", //     var(--triplex-next-ColorNeutralAlpha-60)
         },
         70: {
-            value: "rgba(220, 223, 228, .35)", //     var(--triplex-next-ColorNeutralAlpha-70)
+            value: "rgba(255, 255, 255, .35)", //     var(--triplex-next-ColorNeutralAlpha-70)
         },
         80: {
-            value: "rgba(223, 226, 231, .25)", //     var(--triplex-next-ColorNeutralAlpha-80)
+            value: "rgba(255, 255, 255, .25)", //     var(--triplex-next-ColorNeutralAlpha-80)
         },
         90: {
-            value: "rgba(242, 244, 247, .15)", //     var(--triplex-next-ColorNeutralAlpha-90)
+            value: "rgba(255, 255, 255, .15)", //     var(--triplex-next-ColorNeutralAlpha-90)
         },
         100: {
             value: "rgba(255, 255, 255, .05)", //     var(--triplex-next-ColorNeutralAlpha-100)

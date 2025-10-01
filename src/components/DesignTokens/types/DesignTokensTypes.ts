@@ -4,6 +4,7 @@ import {
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsTypography,
+    TDesignTokensComponentsTooltip,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsLoader,
     TDesignTokensComponentsTabs,
@@ -263,6 +264,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsTypography
+    | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsLoader
     | TDesignTokensComponentsTabs

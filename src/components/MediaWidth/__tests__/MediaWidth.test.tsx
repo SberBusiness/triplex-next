@@ -6,6 +6,8 @@ import { EScreenWidth } from "../../../helpers/breakpoints";
 
 describe("MediaWidth", () => {
     const mockMatchMedia = vi.fn();
+    const mockAddEventListener = vi.fn();
+    const mockRemoveEventListener = vi.fn();
 
     Object.defineProperty(window, "matchMedia", {
         writable: true,
@@ -25,6 +27,8 @@ describe("MediaWidth", () => {
 
             mockMatchMedia.mockImplementation(() => ({
                 matches: window.innerWidth >= 576 && window.innerWidth <= 991,
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
             }));
 
             render(
@@ -41,6 +45,8 @@ describe("MediaWidth", () => {
 
             mockMatchMedia.mockImplementation(() => ({
                 matches: window.innerWidth >= 576 && window.innerWidth <= 991,
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
             }));
 
             render(
@@ -59,6 +65,8 @@ describe("MediaWidth", () => {
 
             mockMatchMedia.mockImplementation(() => ({
                 matches: window.innerWidth >= 768,
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
             }));
 
             render(
@@ -75,6 +83,8 @@ describe("MediaWidth", () => {
 
             mockMatchMedia.mockImplementation(() => ({
                 matches: window.innerWidth >= 768,
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
             }));
 
             render(
@@ -93,6 +103,8 @@ describe("MediaWidth", () => {
 
             mockMatchMedia.mockImplementation(() => ({
                 matches: window.innerWidth <= 767,
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
             }));
 
             render(
@@ -109,6 +121,8 @@ describe("MediaWidth", () => {
 
             mockMatchMedia.mockImplementation(() => ({
                 matches: window.innerWidth <= 767,
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
             }));
 
             render(

@@ -7,6 +7,7 @@ export * from "./Loader";
 export * from "./LoaderWidget";
 export * from "./Radio";
 export * from "./Typography";
+export * from "./Tooltip";
 export * from "./AlertContext";
 export * from "./AlertProcess";
 export * from "./Dropdown";

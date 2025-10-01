@@ -20,6 +20,12 @@ export default tseslint.config(
                     allowInterfaces: "with-single-extends",
                 },
             ],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    ignoreRestSiblings: true,
+                },
+            ],
         },
     },
     // React recommended configuration

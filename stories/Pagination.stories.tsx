@@ -23,7 +23,7 @@ interface IPaginationPlaygroundProps {
     totalPages?: number;
     boundaryCount?: number;
     siblingCount?: number;
-    showSelect?: boolean;
+    hidden?: boolean;
     paginationLabel?: string;
     className?: string;
 }
@@ -37,25 +37,20 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
             setPage(args.currentPage ?? 1);
         }, [args.currentPage]);
 
-        useEffect(() => {
-            setPageSize(args.totalPages ?? 10);
-        }, [args.totalPages]);
-
-        const totalItems = 200;
-        const computedTotalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+        const totalPages = args.totalPages && args.totalPages <= 200 ? args.totalPages : 200;
 
         useEffect(() => {
-            if (page > computedTotalPages) {
-                setPage(computedTotalPages);
+            if (page > totalPages) {
+                setPage(1);
             }
-        }, [page, pageSize, computedTotalPages]);
+        }, [page, totalPages]);
 
         return (
             <Pagination
                 className={args.className}
                 paginationNavigationProps={{
                     currentPage: page,
-                    totalPages: computedTotalPages,
+                    totalPages,
                     boundaryCount: args.boundaryCount ?? 0,
                     siblingCount: args.siblingCount ?? 0,
                     onCurrentPageChange: setPage,
@@ -63,7 +58,7 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
                 paginationSelectProps={{
                     paginationLabel: args.paginationLabel ?? "Показать на странице:",
                     value: pageSize,
-                    hidden: args.showSelect,
+                    hidden: args.hidden,
                     options: [10, 20, 50, 100],
                     onChange: setPageSize,
                 }}
@@ -76,6 +71,11 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
             description: "Текущая страница",
             table: { type: { summary: "number" }, defaultValue: { summary: "1" } },
         },
+        totalPages: {
+            control: { type: "number", min: 1, max: 200 },
+            description: "Общее количество страниц",
+            table: { type: { summary: "number" }, defaultValue: { summary: "10" } },
+        },
         boundaryCount: {
             control: { type: "number", min: 0 },
             description: "Количество видимых страниц в начале и в конце",
@@ -86,10 +86,10 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
             description: "Количество видимых соседей около текущей",
             table: { type: { summary: "number" }, defaultValue: { summary: "0" } },
         },
-        showSelect: {
+        hidden: {
             control: { type: "boolean" },
-            description: "Показывать селект количества элементов",
-            table: { type: { summary: "boolean" }, defaultValue: { summary: "true" } },
+            description: "Скрывать селект количества элементов",
+            table: { type: { summary: "boolean" }, defaultValue: { summary: "false" } },
         },
         paginationLabel: {
             control: { type: "text" },
@@ -104,9 +104,10 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     },
     args: {
         currentPage: 1,
+        totalPages: 10,
         boundaryCount: 0,
         siblingCount: 0,
-        showSelect: true,
+        hidden: false,
         paginationLabel: "Показать на странице:",
         className: "",
     },
@@ -230,6 +231,35 @@ export const FullExample: Story = {
                 }}
             />
         );
+    },
+};
+
+export const WithoutPaginationSelect: Story = {
+    name: "Without Pagination Select",
+    render: () => {
+        const [page, setPage] = useState(1);
+        const totalPages = 10;
+
+        return (
+            <Pagination
+                paginationNavigationProps={{
+                    currentPage: page,
+                    totalPages,
+                    onCurrentPageChange: setPage,
+                }}
+                paginationSelectProps={{
+                    paginationLabel: "Показать на странице:",
+                    hidden: true,
+                }}
+            />
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Пример использования Pagination без селекта количества элементов. Навигация работает, селект скрыт с помощью props hidden.",
+            },
+        },
     },
 };
 

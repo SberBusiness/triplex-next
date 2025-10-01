@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { uniqueId } from "lodash-es";
 import clsx from "clsx";
 import styles from "../styles/PaginationSelect.module.less";
+import { ETextSize, Text } from "../../Typography";
 
 /* Свойства компонента PaginationSelect. */
 export interface IPaginationSelectProps {
@@ -34,9 +35,9 @@ export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSele
 
         return hidden ? null : (
             <div className={clsx(styles.paginationSelect, className)} ref={ref}>
-                <div className={styles.paginationSelectLabel} id={instanceId.current}>
+                <Text size={ETextSize.B3} id={instanceId.current}>
                     {paginationLabel}
-                </div>
+                </Text>
                 <div className={styles.paginationSelectControl}>
                     <select
                         aria-labelledby={instanceId.current}

@@ -1,6 +1,6 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Page, EHeaderPageType } from "../../src/components/Page";
+import { Page, EHeaderPageType, EFooterPageType } from "../../src/components/Page";
 import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
 import { Text, Title } from "../../src/components/Typography";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
@@ -16,6 +16,10 @@ export default {
                 component: `
 Компонент Page — каркас страницы. Принимает только компоненты \`Page.Header\`, \`Page.Body\` и \`Page.Footer\`.
 
+## Особенности
+
+- **Типы**: headerPage и footerPage могут быть двух типов: \`first\` (без стилей) и \`second\` (с фоном и возможностью фиксирования)
+
 ## Возможности
 
 - **Структура**: фиксированные области Header/Body/Footer
@@ -29,13 +33,17 @@ export default {
 
 interface IWithTypeControlsArgs {
     headerType: EHeaderPageType;
-    sticky: boolean;
+    stickyHeader: boolean;
+    footerType: EFooterPageType;
+    stickyFooter: boolean;
 }
 
 export const Playground: StoryObj<IWithTypeControlsArgs> = {
     args: {
         headerType: EHeaderPageType.FIRST,
-        sticky: false,
+        stickyHeader: false,
+        footerType: EFooterPageType.FIRST,
+        stickyFooter: false,
     },
     argTypes: {
         headerType: {
@@ -47,7 +55,16 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                 defaultValue: { summary: "first" },
             },
         },
-        sticky: {
+        footerType: {
+            control: { type: "select" },
+            options: [EFooterPageType.FIRST, EFooterPageType.SECOND],
+            description: "Тип футера страницы",
+            table: {
+                type: { summary: "EFooterPageType" },
+                defaultValue: { summary: "first" },
+            },
+        },
+        stickyHeader: {
             control: { type: "boolean" },
             description: "Фиксирование заголовка при скролле страницы",
             table: {
@@ -56,13 +73,22 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
             },
             if: { arg: "headerType", eq: EHeaderPageType.SECOND },
         },
+        stickyFooter: {
+            control: { type: "boolean" },
+            description: "Фиксирование футера при скролле страницы",
+            table: {
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+            if: { arg: "footerType", eq: EFooterPageType.SECOND },
+        },
     },
     render: (args: IWithTypeControlsArgs) => (
         <div className="page-example" style={{ height: 400, overflow: "auto", border: "1px solid #eee" }}>
             <Page>
                 <Page.Header
                     type={args.headerType}
-                    {...(args.headerType === EHeaderPageType.SECOND && { sticky: args.sticky })}
+                    {...(args.headerType === EHeaderPageType.SECOND && { sticky: args.stickyHeader })}
                 >
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
@@ -89,7 +115,10 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                     <div style={{ height: 800 }} />
                 </Page.Body>
 
-                <Page.Footer>
+                <Page.Footer
+                    type={args.footerType}
+                    {...(args.footerType === EFooterPageType.SECOND && { sticky: args.stickyFooter })}
+                >
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>
                             <Text size={ETextSize.B3}>Footer page text</Text>
@@ -109,7 +138,7 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
     ),
 };
 
-export const Basic: StoryObj<typeof Page> = {
+export const Default: StoryObj<typeof Page> = {
     render: () => (
         <div className="page-example">
             <Page>
@@ -141,7 +170,7 @@ export const Basic: StoryObj<typeof Page> = {
                     </Text>
                 </Page.Body>
 
-                <Page.Footer>
+                <Page.Footer type={EFooterPageType.FIRST}>
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>
                             <Text size={ETextSize.B3}>Footer page text</Text>
@@ -196,7 +225,7 @@ export const StickyHeaderAndFooter: StoryObj<typeof Page> = {
                     <div style={{ height: 800 }} />
                 </Page.Body>
 
-                <Page.Footer sticky>
+                <Page.Footer type={EFooterPageType.SECOND} sticky>
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>
                             <Text size={ETextSize.B3}>Footer прилипает при скролле контейнера</Text>

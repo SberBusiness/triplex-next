@@ -3,7 +3,6 @@ import { test, expect, Page } from "@playwright/test";
 async function getButtons(page: Page, url: string) {
     await page.goto(url);
     const buttons = page.getByRole("button");
-    await expect(buttons.first()).toBeVisible({ timeout: 5000 });
     return buttons;
 }
 

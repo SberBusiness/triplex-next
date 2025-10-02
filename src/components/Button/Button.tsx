@@ -1,15 +1,15 @@
 import React from "react";
-import { EButtonSize, EButtonTheme } from "./enums";
+import clsx from "clsx";
+import { ButtonBase, IButtonBaseProps, EButtonTheme, EButtonSize } from "@sberbusiness/triplex-next/components/Button";
+import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
 import styles from "./styles/Button.module.less";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
-import clsx from "clsx";
-import { LoaderSmall, ELoaderSmallSize, ELoaderSmallTheme } from "../Loader";
 
 /** Свойства кнопки типа General. */
-export interface IButtonGeneralProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonGeneralProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.GENERAL;
     /** Размер кнопки. */
@@ -23,7 +23,7 @@ export interface IButtonGeneralProps extends React.ButtonHTMLAttributes<HTMLButt
 }
 
 /** Свойства кнопки типа Secondary. */
-export interface IButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonSecondaryProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY;
     /** Размер кнопки. */
@@ -36,7 +36,7 @@ export interface IButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLBu
     icon?: React.ReactElement;
 }
 /** Свойства кнопки типа Danger. */
-export interface IButtonDangerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonDangerProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.DANGER;
     /** Размер кнопки. */
@@ -50,7 +50,7 @@ export interface IButtonDangerProps extends React.ButtonHTMLAttributes<HTMLButto
 }
 
 /** Свойства кнопки типа Link. */
-export interface IButtonLinkProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonLinkProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.LINK;
     /** Размер кнопки. */
@@ -63,7 +63,7 @@ export interface IButtonLinkProps extends React.ButtonHTMLAttributes<HTMLButtonE
     icon?: never;
 }
 
-/** Свойства Button. */
+/** Свойства компонента Button. */
 export type TButtonProps = IButtonGeneralProps | IButtonSecondaryProps | IButtonDangerProps | IButtonLinkProps;
 
 /** Возвращает CSS класс темы кнопки. */
@@ -125,20 +125,13 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     );
 
     return (
-        <button
-            type="button"
-            className={classNames}
-            tabIndex={loading ? -1 : undefined}
-            ref={ref}
-            disabled={disabled}
-            {...rest}
-        >
+        <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
             <span className={styles.content}>
                 {icon}
                 {children}
             </span>
             <div className={clsx(styles.loader, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
-        </button>
+        </ButtonBase>
     );
 });
 

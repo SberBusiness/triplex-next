@@ -53,6 +53,10 @@ import {
     Card_Tokens,
     Skeleton_Tokens,
     TDesignTokensComponentsSkeletonValue,
+    SegmentedControl_Tokens,
+    TDesignTokensComponentsSegmentedControlValue,
+    SegmentedControlSegment_Tokens,
+    TDesignTokensComponentsSegmentedControlSegmentValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -114,4 +118,12 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     ),
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.DARK, Card_Tokens),
     Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.DARK, Skeleton_Tokens),
+    SegmentedControl: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlValue>(
+        ETriplexNextTheme.DARK,
+        SegmentedControl_Tokens,
+    ),
+    SegmentedControlSegment: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlSegmentValue>(
+        ETriplexNextTheme.DARK,
+        SegmentedControlSegment_Tokens,
+    ),
 };

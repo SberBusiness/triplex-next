@@ -59,6 +59,8 @@ import {
     TDesignTokensComponentsSegmentedControlSegmentValue,
     HeaderPage_Tokens,
     TDesignTokensComponentsHeaderPageValue,
+    FooterPage_Tokens,
+    TDesignTokensComponentsFooterPageValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -131,5 +133,9 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     HeaderPage: GetTokensValueByTheme<TDesignTokensComponentsHeaderPageValue>(
         ETriplexNextTheme.DARK,
         HeaderPage_Tokens,
+    ),
+    FooterPage: GetTokensValueByTheme<TDesignTokensComponentsFooterPageValue>(
+        ETriplexNextTheme.DARK,
+        FooterPage_Tokens,
     ),
 };

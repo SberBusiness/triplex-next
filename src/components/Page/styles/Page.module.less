@@ -12,15 +12,32 @@
         border-radius: 24px;
     }
 
+    .footerPageBackground {
+        background: var(--triplex-next-FooterPage-Background);
+        padding: 24px;
+        border-radius: 24px;
+    }
+
     .headerPageSticky {
         z-index: @page-header-sticky-z-index;
         position: sticky;
         top: 0;
     }
 
+    .footerPageSticky {
+        z-index: @page-header-sticky-z-index;
+        position: sticky;
+        bottom: 0;
+    }
+
     .headerPageStuck {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
+    }
+
+    .footerPageStuck {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }
 

@@ -84,7 +84,7 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
         },
     },
     render: (args: IWithTypeControlsArgs) => (
-        <div className="page-example" style={{ height: 400, overflow: "auto", border: "1px solid #eee" }}>
+        <div className="page-example" style={{ maxHeight: "400px", overflow: "auto", border: "1px solid #eee" }}>
             <Page>
                 <Page.Header
                     type={args.headerType}
@@ -197,7 +197,7 @@ export const Default: StoryObj<typeof Page> = {
 
 export const StickyHeaderAndFooter: StoryObj<typeof Page> = {
     render: () => (
-        <div style={{ height: 400, overflow: "auto", border: "1px solid #eee" }}>
+        <div style={{ maxHeight: "400px", overflow: "auto", border: "1px solid #eee" }}>
             <Page>
                 <Page.Header type={EHeaderPageType.SECOND} sticky>
                     <Page.Header.Title>

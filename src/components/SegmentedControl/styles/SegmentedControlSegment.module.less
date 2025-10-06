@@ -1,0 +1,159 @@
+.segmentedControlSegment {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--triplex-next-SegmentedControlSegment-BorderColor_Default);
+    outline: none;
+    cursor: pointer;
+
+    &:disabled {
+        cursor: default;
+    }
+
+    .sm & {
+        min-height: 20px;
+        padding: 2px;
+        font-size: 12px;
+        line-height: 16px;
+        border-radius: 4px;
+    }
+
+    .md & {
+        min-height: 32px;
+        padding: 6px;
+        font-size: 14px;
+        line-height: 20px;
+        border-radius: 6px;
+    }
+
+    .lg & {
+        min-height: 40px;
+        padding: 8px;
+        font-size: 16px;
+        line-height: 20px;
+        border-radius: 8px;
+    }
+
+    .general1 & {
+        color: var(--triplex-next-SegmentedControlSegment-General_1_Color_Default);
+        background: var(--triplex-next-SegmentedControlSegment-General_1_Background_Default);
+
+        &:hover {
+            color: var(--triplex-next-SegmentedControlSegment-General_1_Color_Hover);
+            background: var(--triplex-next-SegmentedControlSegment-General_1_Background_Hover);
+        }
+
+        &:disabled {
+            color: var(--triplex-next-SegmentedControlSegment-General_1_Color_Disabled);
+            background: var(--triplex-next-SegmentedControlSegment-General_1_Background_Disabled);
+        }
+
+        &.selected {
+            color: var(--triplex-next-SegmentedControlSegment-General_1_Color_Selected_Default);
+            background: var(--triplex-next-SegmentedControlSegment-General_1_Background_Selected_Default);
+
+            &:hover {
+                color: var(--triplex-next-SegmentedControlSegment-General_1_Color_Selected_Hover);
+                background: var(--triplex-next-SegmentedControlSegment-General_1_Background_Selected_Hover);
+            }
+
+            &:disabled {
+                color: var(--triplex-next-SegmentedControlSegment-General_1_Color_Selected_Disabled);
+                background: var(--triplex-next-SegmentedControlSegment-General_1_Background_Selected_Disabled);
+            }
+        }
+    }
+
+    .general2 & {
+        color: var(--triplex-next-SegmentedControlSegment-General_2_Color_Default);
+        background: var(--triplex-next-SegmentedControlSegment-General_2_Background_Default);
+
+        &:hover {
+            color: var(--triplex-next-SegmentedControlSegment-General_2_Color_Hover);
+            background: var(--triplex-next-SegmentedControlSegment-General_2_Background_Hover);
+        }
+
+        &:disabled {
+            color: var(--triplex-next-SegmentedControlSegment-General_2_Color_Disabled);
+            background: var(--triplex-next-SegmentedControlSegment-General_2_Background_Disabled);
+        }
+
+        &.selected {
+            color: var(--triplex-next-SegmentedControlSegment-General_2_Color_Selected_Default);
+            background: var(--triplex-next-SegmentedControlSegment-General_2_Background_Selected_Default);
+
+            &:hover {
+                color: var(--triplex-next-SegmentedControlSegment-General_2_Color_Selected_Hover);
+                background: var(--triplex-next-SegmentedControlSegment-General_2_Background_Selected_Hover);
+            }
+
+            &:disabled {
+                color: var(--triplex-next-SegmentedControlSegment-General_2_Color_Selected_Disabled);
+                background: var(--triplex-next-SegmentedControlSegment-General_2_Background_Selected_Disabled);
+            }
+        }
+    }
+
+    .secondary1 & {
+        color: var(--triplex-next-SegmentedControlSegment-Secondary_1_Color_Default);
+        background: var(--triplex-next-SegmentedControlSegment-Secondary_1_Background_Default);
+
+        &:hover {
+            color: var(--triplex-next-SegmentedControlSegment-Secondary_1_Color_Hover);
+            background: var(--triplex-next-SegmentedControlSegment-Secondary_1_Background_Hover);
+        }
+
+        &:disabled {
+            color: var(--triplex-next-SegmentedControlSegment-Secondary_1_Color_Disabled);
+            background: var(--triplex-next-SegmentedControlSegment-Secondary_1_Background_Disabled);
+        }
+
+        &.selected {
+            color: var(--triplex-next-SegmentedControlSegment-Secondary_1_Color_Selected_Default);
+            background: var(--triplex-next-SegmentedControlSegment-Secondary_1_Background_Selected_Default);
+
+            &:disabled {
+                color: var(--triplex-next-SegmentedControlSegment-Secondary_1_Color_Selected_Disabled);
+                background: var(--triplex-next-SegmentedControlSegment-Secondary_1_Background_Selected_Disabled);
+            }
+        }
+    }
+
+    .secondary2 & {
+        color: var(--triplex-next-SegmentedControlSegment-Secondary_2_Color_Default);
+        background: var(--triplex-next-SegmentedControlSegment-Secondary_2_Background_Default);
+
+        &:hover {
+            color: var(--triplex-next-SegmentedControlSegment-Secondary_2_Color_Hover);
+            background: var(--triplex-next-SegmentedControlSegment-Secondary_2_Background_Hover);
+        }
+
+        &:disabled {
+            color: var(--triplex-next-SegmentedControlSegment-Secondary_2_Color_Disabled);
+            background: var(--triplex-next-SegmentedControlSegment-Secondary_2_Background_Disabled);
+        }
+
+        &.selected {
+            color: var(--triplex-next-SegmentedControlSegment-Secondary_2_Color_Selected_Default);
+            background: var(--triplex-next-SegmentedControlSegment-Secondary_2_Background_Selected_Default);
+
+            &:disabled {
+                color: var(--triplex-next-SegmentedControlSegment-Secondary_2_Color_Selected_Disabled);
+                background: var(--triplex-next-SegmentedControlSegment-Secondary_2_Background_Selected_Disabled);
+            }
+        }
+    }
+
+    &:focus-visible {
+        border-color: var(--triplex-next-SegmentedControlSegment-BorderColor_Focus);
+    }
+}
+
+.content {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

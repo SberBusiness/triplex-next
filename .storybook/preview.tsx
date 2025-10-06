@@ -48,7 +48,13 @@ const customViewports = {
 
 const preview: Preview = {
     parameters: {
-        backgrounds: { disabled: true },
+        backgrounds: {
+            options: [
+                { name: "white", value: "#FFFFFF" },
+                { name: "gray", value: "#EEF0F4" },
+                { name: "black", value: "#000000" },
+            ],
+        },
         docs: {
             container: DocsContainer,
         },

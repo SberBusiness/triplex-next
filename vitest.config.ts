@@ -6,9 +6,9 @@ export default defineConfig({
     plugins: [react()],
     test: {
         coverage: {
-            provider: "v8",
-            reportsDirectory: "./coverage",
             reporter: ["text", "html", "lcov"],
+            include: ["src/**/*.{js,ts,jsx,tsx}"],
+            exclude: ["src/components/DesignTokens/*", "src/generated/*"],
         },
         include: ["src/**/*.test.tsx"],
         environment: "jsdom",

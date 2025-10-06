@@ -11,6 +11,7 @@ import {
     ELineType,
     EFontWeightText,
     Link,
+    Gap,
 } from "@sberbusiness/triplex-next";
 
 const CONTAINER_WIDTH = 232;
@@ -106,39 +107,35 @@ export const Default: Story = {
                         <Text tag="div" size={ETextSize.B3} line={ELineType.EXTRA}>
                             This message provides context or highlights important information to note.
                         </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B3} style={{ marginTop: "8px" }}>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             This message provides additional context or highlights important information to note.
                         </Text>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                        </div>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                        </div>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                        </div>
-
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </div>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1234567,00
+                        </Text>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Текст пояснения
+                        </Text>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1234567,00
+                        </Text>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Текст пояснения
+                        </Text>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1234567,00
+                        </Text>
+                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                            Текст пояснения
+                        </Text>
+                        <Gap size={8} />
+                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
+                            <Link onClick={() => {}}>Link text</Link>
+                        </Text>
                     </CardStatic.Content.Body>
                 </CardStatic.Content>
             </CardStatic>
@@ -167,39 +164,35 @@ export const Secondary: Story = {
                         <Text tag="div" size={ETextSize.B3} line={ELineType.EXTRA}>
                             This message provides context or highlights important information to note.
                         </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B3} style={{ marginTop: "8px" }}>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             This message provides additional context or highlights important information to note.
                         </Text>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                        </div>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                        </div>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                        </div>
-
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </div>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1234567,00
+                        </Text>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Текст пояснения
+                        </Text>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1234567,00
+                        </Text>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Текст пояснения
+                        </Text>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1234567,00
+                        </Text>
+                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                            Текст пояснения
+                        </Text>
+                        <Gap size={8} />
+                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
+                            <Link onClick={() => {}}>Link text</Link>
+                        </Text>
                     </CardStatic.Content.Body>
                 </CardStatic.Content>
             </CardStatic>
@@ -223,39 +216,35 @@ export const SmallPaddingSize: Story = {
                     <Text tag="div" size={ETextSize.B3} line={ELineType.EXTRA}>
                         This message provides context or highlights important information to note.
                     </Text>
-                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B3} style={{ marginTop: "8px" }}>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                         This message provides additional context or highlights important information to note.
                     </Text>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1234567,00
-                        </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                            Текст пояснения
-                        </Text>
-                    </div>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1234567,00
-                        </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                            Текст пояснения
-                        </Text>
-                    </div>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1234567,00
-                        </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                            Текст пояснения
-                        </Text>
-                    </div>
-
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                            <Link onClick={() => {}}>Link text</Link>
-                        </Text>
-                    </div>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                        1234567,00
+                    </Text>
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Текст пояснения
+                    </Text>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                        1234567,00
+                    </Text>
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Текст пояснения
+                    </Text>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                        1234567,00
+                    </Text>
+                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                        Текст пояснения
+                    </Text>
+                    <Gap size={8} />
+                    <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
+                        <Link onClick={() => {}}>Link text</Link>
+                    </Text>
                 </CardStatic.Content.Body>
             </CardStatic.Content>
         </CardStatic>
@@ -278,39 +267,35 @@ export const SmallRoundingSize: Story = {
                     <Text tag="div" size={ETextSize.B3} line={ELineType.EXTRA}>
                         This message provides context or highlights important information to note.
                     </Text>
-                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B3} style={{ marginTop: "8px" }}>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                         This message provides additional context or highlights important information to note.
                     </Text>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1234567,00
-                        </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                            Текст пояснения
-                        </Text>
-                    </div>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1234567,00
-                        </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                            Текст пояснения
-                        </Text>
-                    </div>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1234567,00
-                        </Text>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                            Текст пояснения
-                        </Text>
-                    </div>
-
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                            <Link onClick={() => {}}>Link text</Link>
-                        </Text>
-                    </div>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                        1234567,00
+                    </Text>
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Текст пояснения
+                    </Text>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                        1234567,00
+                    </Text>
+                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Текст пояснения
+                    </Text>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                        1234567,00
+                    </Text>
+                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                        Текст пояснения
+                    </Text>
+                    <Gap size={8} />
+                    <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
+                        <Link onClick={() => {}}>Link text</Link>
+                    </Text>
                 </CardStatic.Content.Body>
             </CardStatic.Content>
         </CardStatic>

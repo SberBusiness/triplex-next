@@ -17,6 +17,7 @@ import {
     ETextSize,
     EFontType,
     Link,
+    Gap,
 } from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon20, SuccessStrokeStsIcon16 } from "@sberbusiness/icons-next";
 
@@ -157,14 +158,14 @@ export const Default: Story = {
                                 List item text
                             </Text>
                         </div>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4} style={{ marginTop: "8px" }}>
+                        <Gap size={8} />
+                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
                             This message provides additional context or highlights important information to note.
                         </Text>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </div>
+                        <Gap size={8} />
+                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                            <Link onClick={() => {}}>Link text</Link>
+                        </Text>
                     </CardAction.Content.Body>
                     <CardAction.Content.Footer>
                         {!selected ? (
@@ -227,14 +228,14 @@ export const Secondary: Story = {
                                 List item text
                             </Text>
                         </div>
-                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4} style={{ marginTop: "8px" }}>
+                        <Gap size={8} />
+                        <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
                             This message provides additional context or highlights important information to note.
                         </Text>
-                        <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </div>
+                        <Gap size={8} />
+                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                            <Link onClick={() => {}}>Link text</Link>
+                        </Text>
                     </CardAction.Content.Body>
                     <CardAction.Content.Footer>
                         {!selected ? (
@@ -290,14 +291,15 @@ export const SmallPaddingSize: Story = {
                             List item text
                         </Text>
                     </div>
-                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4} style={{ marginTop: "8px" }}>
+
+                    <Gap size={8} />
+                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
                         This message provides additional context or highlights important information to note.
                     </Text>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                            <Link onClick={() => {}}>Link text</Link>
-                        </Text>
-                    </div>
+                    <Gap size={8} />
+                    <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                        <Link onClick={() => {}}>Link text</Link>
+                    </Text>
                 </CardAction.Content.Body>
                 <CardAction.Content.Footer>
                     <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
@@ -343,14 +345,15 @@ export const SmallRoundingSize: Story = {
                             List item text
                         </Text>
                     </div>
-                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4} style={{ marginTop: "8px" }}>
+
+                    <Gap size={8} />
+                    <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
                         This message provides additional context or highlights important information to note.
                     </Text>
-                    <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                        <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                            <Link onClick={() => {}}>Link text</Link>
-                        </Text>
-                    </div>
+                    <Gap size={8} />
+                    <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                        <Link onClick={() => {}}>Link text</Link>
+                    </Text>
                 </CardAction.Content.Body>
                 <CardAction.Content.Footer>
                     <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
@@ -415,14 +418,15 @@ export const Controlled: Story = {
                                     List item text
                                 </Text>
                             </div>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4} style={{ marginTop: "8px" }}>
+
+                            <Gap size={8} />
+                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
                                 This message provides additional context or highlights important information to note.
                             </Text>
-                            <div style={{ marginTop: "8px", lineHeight: "100%" }}>
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </div>
+                            <Gap size={8} />
+                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                <Link onClick={() => {}}>Link text</Link>
+                            </Text>
                         </CardAction.Content.Body>
                         <CardAction.Content.Footer>
                             <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>

@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write   # нужно для загрузки ассетов в релиз
+
 env:
   STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
   STORYBOOK_URL_BASE: "https://storybook.triplex-dev.ru"
@@ -14,18 +17,33 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org/'
+
       - run: npm ci
       - run: npm run build
 
+      # ---- Упаковать dist в архив для ассетов релиза ----
+      - name: Create dist.zip
+        run: |
+          zip -r "dist-${{ github.event.release.tag_name }}.zip" dist
+
       # ---- Публикация в npm ----
       - name: Publish to npm
-        run: npm publish --dry-run --access public ./dist
+        run: npm publish --access public ./dist
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ---- Загрузка dist.zip (и, при желании, .tgz) в ассеты релиза ----
+      - name: Upload build artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist-${{ github.event.release.tag_name }}.zip
+            # *.tgz
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook
@@ -42,4 +60,4 @@ jobs:
           rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}/
 
       - name: Output Storybook URL
-        run: echo "Storybook deployed ${{ env.STORYBOOK_URL_BASE }}/releases/${{ github.event.release.tag_name }}"		
+        run: echo "Storybook deployed ${{ env.STORYBOOK_URL_BASE }}/releases/${{ github.event.release.tag_name }}"

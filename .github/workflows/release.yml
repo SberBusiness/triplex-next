@@ -14,6 +14,8 @@ env:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -22,31 +24,38 @@ jobs:
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org/'
+          scope: '@sberbusiness'
+          always-auth: true
 
       - run: npm ci
       - run: npm run build
 
-      # ---- Упаковать dist в архив для ассетов релиза ----
-      - name: Create dist.zip
-        run: |
-          zip -r "dist-${{ github.event.release.tag_name }}.zip" dist
-
-      # ---- Публикация в npm ----
-      - name: Publish to npm
-        run: |
-          npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
-          npm publish --access public ./dist
-
+      # Диагностика перед publish (поможет понять, видит ли npm токен и что в dist)
+      - name: Debug NPM auth & dist
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm whoami || true
+          node -e "console.log(require('./dist/package.json'))"
 
-      # ---- Загрузка dist.zip (и, при желании, .tgz) в ассеты релиза ----
+      # Публикация
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          cd dist
+          npm publish --access public
+
+      # Упаковать dist.zip как release asset
+      - name: Create dist.zip
+        run: zip -r "dist-${{ github.event.release.tag_name }}.zip" dist
+
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist-${{ github.event.release.tag_name }}.zip
-            # *.tgz
+          files: dist-${{ github.event.release.tag_name }}.zip
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook

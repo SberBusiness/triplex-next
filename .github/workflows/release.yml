@@ -33,9 +33,12 @@ jobs:
 
       # ---- Публикация в npm ----
       - name: Publish to npm
-        run: npm publish --access public ./dist
+        run: |
+          npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+          npm publish --access public ./dist
+
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # ---- Загрузка dist.zip (и, при желании, .tgz) в ассеты релиза ----
       - name: Upload build artifacts to GitHub Release

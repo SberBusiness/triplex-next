@@ -1,12 +1,12 @@
 {
     "name": "@sberbusiness/triplex-next",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Библиотека компонент дизайн-системы Triplex.",
     "author": "СберБизнес",
     "license": "Sber Public License at-nc-sa v.2",
     "repository": {
         "type": "git",
-        "url": "https://github.com/SberBusiness/triplex-next.git"
+        "url": "git@github.com:SberBusiness/triplex-next.git"
     },
     "type": "module",
     "files": [

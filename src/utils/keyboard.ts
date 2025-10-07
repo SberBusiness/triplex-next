@@ -1,24 +1,24 @@
 /** Коды клавиш. */
 export const EVENT_KEYS = {
-    ARROW_DOWN: ['ArrowDown', 'Down'],
-    ARROW_LEFT: ['ArrowLeft', 'Left'],
-    ARROW_RIGHT: ['ArrowRight', 'Right'],
-    ARROW_UP: ['ArrowUp', 'Up'],
-    BACKSPACE: ['Backspace'],
-    COMMA: ['Comma'],
-    DELETE: ['Delete', 'Del'],
-    END: ['End'],
-    ENTER: ['Enter'],
-    ESCAPE: ['Escape', 'Esc'],
-    HOME: ['Home'],
-    PAGE_DOWN: ['PageDown'],
-    PAGE_UP: ['PageUp'],
-    PERIOD: ['Period'],
-    SPACE: ['Spacebar', 'Space'],
-    TAB: ['Tab'],
-    X: ['KeyX', 'X', 'x'],
-    Y: ['KeyY', 'Y', 'y'],
-    Z: ['KeyZ', 'Z', 'z'],
+    ARROW_DOWN: ["ArrowDown", "Down"],
+    ARROW_LEFT: ["ArrowLeft", "Left"],
+    ARROW_RIGHT: ["ArrowRight", "Right"],
+    ARROW_UP: ["ArrowUp", "Up"],
+    BACKSPACE: ["Backspace"],
+    COMMA: ["Comma"],
+    DELETE: ["Delete", "Del"],
+    END: ["End"],
+    ENTER: ["Enter"],
+    ESCAPE: ["Escape", "Esc"],
+    HOME: ["Home"],
+    PAGE_DOWN: ["PageDown"],
+    PAGE_UP: ["PageUp"],
+    PERIOD: ["Period"],
+    SPACE: ["Spacebar", "Space"],
+    TAB: ["Tab"],
+    X: ["KeyX", "X", "x"],
+    Y: ["KeyY", "Y", "y"],
+    Z: ["KeyZ", "Z", "z"],
 };
 
 // Тип ключи EVENT_KEYS.
@@ -56,7 +56,7 @@ export const EVENT_KEY_CODES = {
  * @param {keyof typeof EVENT_KEY_CODES} target Ожидаемая клавиша.
  */
 export function isKey(key: string | number, target: keyof typeof EVENT_KEY_CODES): boolean {
-    if (typeof key === 'string') {
+    if (typeof key === "string") {
         return EVENT_KEYS[target].includes(key);
     }
     // IE fallback.

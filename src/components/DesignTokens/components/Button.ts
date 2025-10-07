@@ -54,7 +54,7 @@ export type TDesignTokensComponentsButton = { Button: TDesignTokensComponentsBut
 export const Button_Tokens: TDesignTokensComponentsButtonValues = {
     General_Background_Active: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.30" }], // var(--triplex-next-Button-General_Background_Active)
     General_Background_Default: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-next-Button-General_Background_Default)
-    General_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-General_Background_Disabled)
+    General_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-General_Background_Disabled)
     General_Background_Hover: [{ ref: "ColorBrand.60" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Button-General_Background_Hover)
     General_Color_Active: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Button-General_Color_Active)
     General_Color_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Button-General_Color_Default)
@@ -62,10 +62,10 @@ export const Button_Tokens: TDesignTokensComponentsButtonValues = {
     General_Color_Hover: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Button-General_Color_Hover)
     General_Shadow_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Button-General_Shadow_Focus)
 
-    Secondary_Background_Active: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Button-Secondary_Background_Active)
-    Secondary_Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Secondary_Background_Default)
-    Secondary_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Secondary_Background_Disabled)
-    Secondary_Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Button-Secondary_Background_Hover)
+    Secondary_Background_Active: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Button-Secondary_Background_Active)
+    Secondary_Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Button-Secondary_Background_Default)
+    Secondary_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-Secondary_Background_Disabled)
+    Secondary_Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Button-Secondary_Background_Hover)
     Secondary_Color_Active: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.40" }], // var(--triplex-next-Button-Secondary_Color_Active)
     Secondary_Color_Default: [{ ref: "ColorBrand.40" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Button-Secondary_Color_Default)
     Secondary_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-Button-Secondary_Color_Disabled)
@@ -74,7 +74,7 @@ export const Button_Tokens: TDesignTokensComponentsButtonValues = {
 
     Danger_Background_Active: [{ ref: "ColorError.30" }, { ref: "ColorError.30" }], // var(--triplex-next-Button-Danger_Background_Active)
     Danger_Background_Default: [{ ref: "ColorError.50" }, { ref: "ColorError.50" }], // var(--triplex-next-Button-Danger_Background_Default)
-    Danger_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Danger_Background_Disabled)
+    Danger_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-Danger_Background_Disabled)
     Danger_Background_Hover: [{ ref: "ColorError.60" }, { ref: "ColorError.60" }], // var(--triplex-next-Button-Danger_Background_Hover)
     Danger_Color_Active: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Button-Danger_Color_Active)
     Danger_Color_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Button-Danger_Color_Default)

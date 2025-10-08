@@ -30,16 +30,6 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # Диагностика перед publish (поможет понять, видит ли npm токен и что в dist)
-      - name: Debug NPM auth & dist
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: |
-          echo "@sberbusiness:registry=https://registry.npmjs.org/" > .npmrc
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-          npm whoami || true
-          node -e "console.log(require('./dist/package.json'))"
-
       # Публикация
       - name: Publish to npm
         env:

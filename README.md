@@ -3,7 +3,13 @@
 ## 🚀 Установка
 
 ```bash
-npm install triplex-next
+npm install @sberbusiness/triplex-next @sberbusiness/icons-next
+```
+
+## Импортировать стили
+```ts
+import '@sberbusiness/triplex-next/styles/triplex-next.css';
+import '@sberbusiness/icons-next/styles/icons.css';
 ```
 
 ## 🔤 Шрифты
@@ -13,42 +19,42 @@ npm install triplex-next
 ```css
 @font-face {
     font-family: 'SBSansDisplay';
-    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Regular.woff2') format('woff2');
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansDisplayMedium';
-    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansDisplaySemibold';
-    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansDisplayBold';
-    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansText';
-    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansText-Regular.woff2') format('woff2');
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansTextSemibold';
-    src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }

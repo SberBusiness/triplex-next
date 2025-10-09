@@ -3,6 +3,7 @@ export * from "./components/FormFieldDescription";
 export * from "./components/FormFieldCounter";
 export * from "./components/FormFieldLabel";
 export * from "./components/FormFieldClear";
+export * from "./components/FormFieldTarget";
 export * from "./components/FormFieldInput";
 export * from "./components/FormFieldMaskedInput";
 export * from "./components/FormFieldPostfix";

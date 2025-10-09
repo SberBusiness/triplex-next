@@ -1,0 +1,48 @@
+.SelectExtendedFieldTarget {
+    position: relative;
+    box-sizing: border-box;
+    align-items: center;
+    outline: none;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .caretIcon {
+        transition: transform 0.3s ease;
+        transform: rotate(0);
+    }
+
+    &.selectOpened {
+        .caretIcon {
+            transform: rotate(180deg);
+
+            path {
+                fill: var(--triplex-next-SelectField-Color_Caret_Opened);
+                fill-opacity: initial;
+            }
+        }
+    }
+
+    &.loading .target,
+    & .target.placeholder {
+        color: var(--triplex-next-SelectField-Color_Default);
+    }
+
+    & .target.label {
+        color: var(--triplex-next-SelectField-Color_Selected);
+    }
+
+    &.disabled .target {
+        color: var(--triplex-next-SelectField-Color_Disabled);
+    }
+
+    &.loading,
+    &.disabled {
+        user-select: none;
+        pointer-events: none;
+    }
+}
+
+.grouped .selectOpened {
+    z-index: 1;
+}

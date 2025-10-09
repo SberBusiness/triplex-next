@@ -61,6 +61,8 @@ import {
     TDesignTokensComponentsHeaderPageValue,
     FooterPage_Tokens,
     TDesignTokensComponentsFooterPageValue,
+    TDesignTokensComponentsSelectFieldValue,
+    Select_Field_Tokens,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -137,5 +139,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     FooterPage: GetTokensValueByTheme<TDesignTokensComponentsFooterPageValue>(
         ETriplexNextTheme.LIGHT,
         FooterPage_Tokens,
+    ),
+    SelectField: GetTokensValueByTheme<TDesignTokensComponentsSelectFieldValue>(
+        ETriplexNextTheme.LIGHT,
+        Select_Field_Tokens,
     ),
 };

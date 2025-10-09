@@ -44,8 +44,8 @@ import {
     ListItemControlsButton_Tokens,
     ListMaster_Tokens,
     ListItem_Tokens,
-    Body_Tokens,
-    TDesignTokensComponentsBodyValue,
+    Page_Tokens,
+    TDesignTokensComponentsPageValue,
     UploadZone_Tokens,
     TDesignTokensComponentsUploadZoneValue,
     TDesignTokensComponentsPaginationValue,
@@ -57,6 +57,10 @@ import {
     TDesignTokensComponentsSegmentedControlValue,
     SegmentedControlSegment_Tokens,
     TDesignTokensComponentsSegmentedControlSegmentValue,
+    HeaderPage_Tokens,
+    TDesignTokensComponentsHeaderPageValue,
+    FooterPage_Tokens,
+    TDesignTokensComponentsFooterPageValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -106,7 +110,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         ListMaster_Tokens,
     ),
-    Body: GetTokensValueByTheme<TDesignTokensComponentsBodyValue>(ETriplexNextTheme.LIGHT, Body_Tokens),
+    Page: GetTokensValueByTheme<TDesignTokensComponentsPageValue>(ETriplexNextTheme.LIGHT, Page_Tokens),
     Radio: GetTokensValueByTheme<TDesignTokensComponentsRadioValue>(ETriplexNextTheme.LIGHT, Radio_Tokens),
     UploadZone: GetTokensValueByTheme<TDesignTokensComponentsUploadZoneValue>(
         ETriplexNextTheme.LIGHT,
@@ -125,5 +129,13 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     SegmentedControlSegment: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlSegmentValue>(
         ETriplexNextTheme.LIGHT,
         SegmentedControlSegment_Tokens,
+    ),
+    HeaderPage: GetTokensValueByTheme<TDesignTokensComponentsHeaderPageValue>(
+        ETriplexNextTheme.LIGHT,
+        HeaderPage_Tokens,
+    ),
+    FooterPage: GetTokensValueByTheme<TDesignTokensComponentsFooterPageValue>(
+        ETriplexNextTheme.LIGHT,
+        FooterPage_Tokens,
     ),
 };

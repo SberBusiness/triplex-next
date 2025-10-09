@@ -43,8 +43,8 @@ import {
     TDesignTokensComponentsListItemControlsButtonValue,
     ListMaster_Tokens,
     TDesignTokensComponentsListMasterValue,
-    Body_Tokens,
-    TDesignTokensComponentsBodyValue,
+    Page_Tokens,
+    TDesignTokensComponentsPageValue,
     UploadZone_Tokens,
     TDesignTokensComponentsUploadZoneValue,
     Pagination_Tokens,
@@ -57,6 +57,10 @@ import {
     TDesignTokensComponentsSegmentedControlValue,
     SegmentedControlSegment_Tokens,
     TDesignTokensComponentsSegmentedControlSegmentValue,
+    HeaderPage_Tokens,
+    TDesignTokensComponentsHeaderPageValue,
+    FooterPage_Tokens,
+    TDesignTokensComponentsFooterPageValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -107,7 +111,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         ListMaster_Tokens,
     ),
-    Body: GetTokensValueByTheme<TDesignTokensComponentsBodyValue>(ETriplexNextTheme.DARK, Body_Tokens),
+    Page: GetTokensValueByTheme<TDesignTokensComponentsPageValue>(ETriplexNextTheme.DARK, Page_Tokens),
     UploadZone: GetTokensValueByTheme<TDesignTokensComponentsUploadZoneValue>(
         ETriplexNextTheme.DARK,
         UploadZone_Tokens,
@@ -125,5 +129,13 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     SegmentedControlSegment: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlSegmentValue>(
         ETriplexNextTheme.DARK,
         SegmentedControlSegment_Tokens,
+    ),
+    HeaderPage: GetTokensValueByTheme<TDesignTokensComponentsHeaderPageValue>(
+        ETriplexNextTheme.DARK,
+        HeaderPage_Tokens,
+    ),
+    FooterPage: GetTokensValueByTheme<TDesignTokensComponentsFooterPageValue>(
+        ETriplexNextTheme.DARK,
+        FooterPage_Tokens,
     ),
 };

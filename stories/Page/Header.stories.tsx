@@ -1,11 +1,11 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Header } from "../src/components/Header";
-import { Text, Title } from "../src/components/Typography";
-import { Button, EButtonSize, EButtonTheme } from "../src/components/Button";
-import { EFontType, ETextSize, ETitleSize } from "../src/components/Typography/enums";
-import { Gap } from "../src/components/Gap";
-import { Link } from "../src/components/Link";
+import { Header } from "../../src/components/Header";
+import { Text, Title } from "../../src/components/Typography";
+import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
+import { Gap } from "../../src/components/Gap";
+import { Link } from "../../src/components/Link";
 
 export default {
     title: "Components/Header",

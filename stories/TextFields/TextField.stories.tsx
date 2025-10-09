@@ -103,6 +103,14 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                 defaultValue: { summary: "false" },
             },
         },
+        warning: {
+            control: { type: "boolean" },
+            description: "Состояние предупреждения",
+            table: {
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+        },
         labelText: {
             control: { type: "text" },
             description: "Текст лейбла",
@@ -178,6 +186,7 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
     args: {
         error: false,
         disabled: false,
+        warning: false,
         size: EFormFieldSize.LG,
         labelText: "Название поля",
         showLabel: true,
@@ -472,6 +481,7 @@ export const States: StoryObj<typeof TextField> = {
     render: () => {
         const [value, setValue] = useState("");
         const [valueError, setValueError] = useState("");
+        const [valueWarning, setValueWarning] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
@@ -479,6 +489,10 @@ export const States: StoryObj<typeof TextField> = {
 
         const handleChangeError = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValueError(e.target.value);
+        };
+
+        const handleChangeWarning = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueWarning(e.target.value);
         };
 
         return (
@@ -509,6 +523,22 @@ export const States: StoryObj<typeof TextField> = {
                     inputProps={{
                         value: valueError,
                         onChange: handleChangeError,
+                    }}
+                    label="Название поля"
+                />
+
+                <Gap size={24} />
+
+                <TextField
+                    warning
+                    description={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
+                            Текст предупреждения
+                        </Text>
+                    }
+                    inputProps={{
+                        value: valueWarning,
+                        onChange: handleChangeWarning,
                     }}
                     label="Название поля"
                 />

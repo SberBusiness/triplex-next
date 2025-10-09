@@ -9,6 +9,7 @@ import { EFormFieldSize } from "./enums";
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
     error?: boolean;
     disabled?: boolean;
+    warning?: boolean;
     size?: EFormFieldSize;
 }
 
@@ -22,6 +23,7 @@ export const FormField: React.FC<IFormFieldProps> = ({
     onMouseLeave,
     style,
     size = EFormFieldSize.LG,
+    warning,
     ...htmlDivAttributes
 }) => {
     const [focused, setFocused] = useState(false);
@@ -65,6 +67,7 @@ export const FormField: React.FC<IFormFieldProps> = ({
                     {
                         [styles.active]: focused,
                         [styles.disabled]: Boolean(disabled),
+                        [styles.warning]: Boolean(warning),
                         [styles.error]: Boolean(error),
                         [styles[`size-${size}`]]: size,
                     },

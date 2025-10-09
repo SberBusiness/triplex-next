@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from "../src/components/Button";
+import { Button } from "../../src/components/Button";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { Gap } from "../src/components/Gap";
-import { EButtonTheme, EButtonSize } from "../src/components/Button/enums";
+import { Gap } from "../../src/components/Gap";
+import { EButtonTheme, EButtonSize } from "../../src/components/Button/enums";
 import { DefaulticonStrokePrdIcon32, DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 export default {

@@ -1,6 +1,6 @@
 import React from "react";
-import { ButtonIcon } from "../src/components/Button/ButtonIcon";
-import { EButtonIconShape } from "../src/components/Button/enums";
+import { ButtonIcon } from "../../src/components/Button/ButtonIcon";
+import { EButtonIconShape } from "../../src/components/Button/enums";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 

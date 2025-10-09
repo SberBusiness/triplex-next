@@ -85,6 +85,8 @@ export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElemen
 interface IButtonDropdownBaseProps extends IButtonDropdownProps {
     /** Тема кнопки. */
     theme: EButtonTheme.GENERAL | EButtonTheme.SECONDARY | EButtonTheme.DANGER;
+    /** Режим кнопки на темном фоне. */
+    light?: boolean;
     /** Блочное состояние кнопки. */
     block?: boolean;
 }
@@ -102,6 +104,8 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
     (props, ref) => {
         const { buttonAttributes, children, className, theme, size, options, selected, block, disabled, ...rest } =
             props;
+        const light = "light" in props ? props.light : undefined;
+
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
         const classNames = clsx(styles.buttonDropdown, { [styles.block]: !!block }, className);
@@ -119,6 +123,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                     className={classNames}
                     theme={theme as EButtonTheme}
                     size={size}
+                    light={light}
                     onKeyDown={handleKeyDown({ opened, setOpened })}
                     onClick={handleClick({ opened, setOpened })}
                     disabled={disabled}

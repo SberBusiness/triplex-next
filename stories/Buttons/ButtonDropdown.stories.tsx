@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { ButtonDropdown, dotsTheme, IButtonDropdownOption } from "../src/components/Button/ButtonDropdown";
-import { EButtonSize, EButtonTheme } from "../src/components/Button/enums";
+import { ButtonDropdown, dotsTheme, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
+import { EButtonSize, EButtonTheme } from "../../src/components/Button/enums";
+import "./ButtonDropdown.less";
 
 export default {
     title: "Components/Buttons/ButtonDropdown",
@@ -16,22 +17,10 @@ export default {
 
 ## Особенности
 
-- **Темы**: General, Secondary, Danger
+- **Темы**: General, Secondary, Secondary Light, Danger
 - **Размеры**: small (SM), medium (MD), large (LG)
 - **Состояния**: disabled, block
 - **Доступность**: ARIA-атрибуты, поддержка клавиатурной навигации
-
-## Использование
-
-\`\`\`tsx
-<ButtonDropdown
-    theme={EButtonTheme.GENERAL}
-    size={EButtonSize.MD}
-    options=[{ id: '1', label: 'Action' }]
->
-    Действия
-</ButtonDropdown>
-\`\`\`
                 `,
             },
         },
@@ -92,6 +81,14 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
             options: Object.values(EButtonTheme),
             description: "Тема кнопки",
         },
+        light: {
+            control: { type: "boolean" },
+            description: "Режим кнопки на темном фоне",
+            table: {
+                type: { summary: "boolean" },
+            },
+            if: { arg: "theme", eq: EButtonTheme.SECONDARY },
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EButtonSize),
@@ -113,6 +110,7 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
         theme: EButtonTheme.GENERAL,
         size: EButtonSize.MD,
         children: "Button text",
+        light: false,
     },
     parameters: {
         docs: {
@@ -144,6 +142,32 @@ export const SecondaryTheme: StoryObj<typeof ButtonDropdown> = {
     parameters: {
         docs: {
             description: { story: "Кнопка с темой Secondary в трёх размерах" },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const SecondaryLightTheme: StoryObj<typeof ButtonDropdown> = {
+    name: "Secondary Light Theme",
+    render: () => {
+        const options = useMemo(() => createOptions(), []);
+        return (
+            <div className="button-dropdown-example">
+                <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.SM} options={options} light>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options} light>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.LG} options={options} light>
+                    Button text
+                </ButtonDropdown>
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: { story: "Кнопка с темой Secondary Light в трёх размерах" },
         },
         controls: { disable: true },
     },
@@ -225,6 +249,9 @@ export const Disabled: StoryObj<typeof ButtonDropdown> = {
                     Button text
                 </ButtonDropdown>
                 <ButtonDropdown disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options}>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options} light>
                     Button text
                 </ButtonDropdown>
                 <ButtonDropdown disabled theme={EButtonTheme.DANGER} size={EButtonSize.MD} options={options}>

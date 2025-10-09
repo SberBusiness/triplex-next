@@ -87,7 +87,7 @@ function stripDevFields(pkg) {
         types: "./index.d.ts",
         exports: exportsField,
         sideEffects: ["*.css", "*.less"],
-        files: ["**/*.js", "**/*.d.ts", "**/*.css", "**/*.less", "!**/*.map", "README.md"],
+        files: ["**/*.js", "**/*.d.ts", "**/*.css", "**/*.less", "**/*.woff2", "!**/*.map", "README.md"],
         peerDependencies,
         dependencies,
     });

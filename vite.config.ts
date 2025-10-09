@@ -7,8 +7,8 @@ import { globSync } from "glob";
 import generateScopedName from "./scripts/generate-scoped-name";
 import replaceDesignTokenVersionPlugin from "./scripts/replaceDesignTokenVersion";
 import writeCommonCssBundlesPlugin from "./scripts/writeCommonCssBundles";
+import { version } from "./package.json";
 
-// peer = external (НЕ бандлим)
 const PEERS = [/^react(\/.*)?$/, /^react-dom(\/.*)?$/, /^react\/jsx-runtime$/, /^@sberbusiness\/icons-next(\/.*)?$/];
 
 export default defineConfig({
@@ -34,6 +34,12 @@ export default defineConfig({
             // только для времени сборки
             "@sberbusiness/triplex-next": resolve(__dirname, "src"),
         },
+    },
+
+    define: {
+        "process.env.npm_package_version": JSON.stringify(version),
+        // Защита от случайных process.env.* (чтобы не вшивать весь объект окружения)
+        "process.env": {},
     },
 
     build: {

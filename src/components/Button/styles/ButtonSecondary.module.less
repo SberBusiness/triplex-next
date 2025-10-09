@@ -5,6 +5,23 @@
     background: var(--triplex-next-Button-Secondary_Background_Default);
     color: var(--triplex-next-Button-Secondary_Color_Default);
 
+    &.light {
+        background: var(--triplex-next-Button-Secondary_Light_Background_Default);
+
+        &:hover {
+            background: var(--triplex-next-Button-Secondary_Light_Background_Hover);
+        }
+
+        &.expanded,
+        &:active {
+            background: var(--triplex-next-Button-Secondary_Light_Background_Active);
+        }
+
+        &:disabled {
+            background: var(--triplex-next-Button-Secondary_Light_Background_Disabled);
+        }
+    }
+
     &:hover {
         background: var(--triplex-next-Button-Secondary_Background_Hover);
         color: var(--triplex-next-Button-Secondary_Color_Hover);

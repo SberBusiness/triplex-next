@@ -26,6 +26,8 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
 export interface IButtonSecondaryProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY;
+    /** Режим кнопки на темном фоне. */
+    light?: boolean;
     /** Размер кнопки. */
     size: EButtonSize;
     /** Блочный режим. */
@@ -67,12 +69,16 @@ export interface IButtonLinkProps extends IButtonBaseProps {
 export type TButtonProps = IButtonGeneralProps | IButtonSecondaryProps | IButtonDangerProps | IButtonLinkProps;
 
 /** Возвращает CSS класс темы кнопки. */
-const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
+const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean, light?: boolean) => {
     switch (theme) {
         case EButtonTheme.GENERAL:
             return { [generalStyles.general]: true, [generalStyles.expanded]: expanded };
         case EButtonTheme.SECONDARY:
-            return { [secondaryStyles.secondary]: true, [secondaryStyles.expanded]: expanded };
+            return {
+                [secondaryStyles.secondary]: true,
+                [secondaryStyles.expanded]: expanded,
+                [secondaryStyles.light]: light,
+            };
         case EButtonTheme.DANGER:
             return { [dangerStyles.danger]: true, [dangerStyles.expanded]: expanded };
         case EButtonTheme.LINK:
@@ -107,10 +113,12 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
 /** Кнопка. */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EButtonSize.MD, block, loading, icon, ...rest } = props;
+    const light = "light" in props ? props.light : undefined;
+
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,
-        getButtonThemeCssClass(theme, !!expanded),
+        getButtonThemeCssClass(theme, !!expanded, !!light),
         getButtonSizeCssClass(size),
         { [styles.block]: !!block, [styles.loading]: !!loading },
         { [styles.icon]: !!icon && !children },

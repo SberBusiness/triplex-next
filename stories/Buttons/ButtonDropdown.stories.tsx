@@ -219,6 +219,29 @@ export const DotsTheme: StoryObj<typeof ButtonDropdown> = {
     },
 };
 
+export const DotsLightTheme: StoryObj<typeof ButtonDropdown> = {
+    name: "Dots Light Theme",
+    render: () => {
+        const options = useMemo(() => createOptions(), []);
+        return (
+            <div className="button-dropdown-example-dots">
+                <ButtonDropdown theme={dotsTheme} size={EButtonSize.SM} options={options} light>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown theme={dotsTheme} size={EButtonSize.MD} options={options} light>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown theme={dotsTheme} size={EButtonSize.LG} options={options} light>
+                    Button text
+                </ButtonDropdown>
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
 export const Block: StoryObj<typeof ButtonDropdown> = {
     name: "Block",
     render: () => {

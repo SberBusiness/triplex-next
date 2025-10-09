@@ -95,6 +95,8 @@ interface IButtonDropdownBaseProps extends IButtonDropdownProps {
 interface IButtonDotsProps extends IButtonDropdownProps {
     /** Тема кнопки. */
     theme: typeof dotsTheme;
+    /** Режим кнопки на темном фоне. */
+    light?: never;
     /** Блочное состояние кнопки. */
     block?: never;
 }
@@ -102,9 +104,19 @@ interface IButtonDotsProps extends IButtonDropdownProps {
 /** Кнопка с выпадающим списком действий. */
 export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps | IButtonDotsProps>(
     (props, ref) => {
-        const { buttonAttributes, children, className, theme, size, options, selected, block, disabled, ...rest } =
-            props;
-        const light = "light" in props ? props.light : undefined;
+        const {
+            buttonAttributes,
+            children,
+            className,
+            theme,
+            size,
+            options,
+            selected,
+            block,
+            disabled,
+            light,
+            ...rest
+        } = props;
 
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
@@ -151,6 +163,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                     className={classNames}
                     theme={EButtonTheme.SECONDARY}
                     size={size}
+                    light={light}
                     onKeyDown={handleKeyDown({ opened, setOpened })}
                     onClick={handleClick({ opened, setOpened })}
                     disabled={disabled}

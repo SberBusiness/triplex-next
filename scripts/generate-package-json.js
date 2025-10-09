@@ -29,6 +29,7 @@ function getComponentNames() {
 function buildExports(componentNames) {
     const exportsField = {
         ".": { import: "./index.js", types: "./index.d.ts" },
+        "./styles/*": "./styles/*",
     };
     for (const name of componentNames) {
         exportsField[`./components/${name}`] = {

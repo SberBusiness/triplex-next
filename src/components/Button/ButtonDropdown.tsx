@@ -5,7 +5,7 @@ import {
     IButtonDropdownExtendedDropdownProvideProps,
 } from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
-import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EButtonDotsTheme, EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 import { CaretdownStrokeSrvIcon24, DotshorizontalStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import {
@@ -25,8 +25,6 @@ import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import clsx from "clsx";
 import styles from "./styles/ButtonDropdown.module.less";
-
-export const dotsTheme = "dots";
 
 const getDropdownSize = (size: EButtonSize) => {
     switch (size) {
@@ -84,7 +82,7 @@ export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElemen
 /** Свойства основной/вспомогательной кнопки с выпадающим списком действий. */
 interface IButtonDropdownBaseProps extends IButtonDropdownProps {
     /** Тема кнопки. */
-    theme: EButtonTheme.GENERAL | EButtonTheme.SECONDARY | EButtonTheme.DANGER;
+    theme: EButtonTheme.GENERAL | EButtonTheme.SECONDARY | EButtonTheme.SECONDARY_LIGHT | EButtonTheme.DANGER;
     /** Блочное состояние кнопки. */
     block?: boolean;
 }
@@ -92,7 +90,7 @@ interface IButtonDropdownBaseProps extends IButtonDropdownProps {
 /** Свойства контекстной кнопки с выпадающим списком действий. */
 interface IButtonDotsProps extends IButtonDropdownProps {
     /** Тема кнопки. */
-    theme: typeof dotsTheme;
+    theme: EButtonDotsTheme;
     /** Блочное состояние кнопки. */
     block?: never;
 }
@@ -102,6 +100,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
     (props, ref) => {
         const { buttonAttributes, children, className, theme, size, options, selected, block, disabled, ...rest } =
             props;
+
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
         const classNames = clsx(styles.buttonDropdown, { [styles.block]: !!block }, className);
@@ -144,7 +143,11 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             return (
                 <Button
                     className={classNames}
-                    theme={EButtonTheme.SECONDARY}
+                    theme={
+                        theme === EButtonDotsTheme.DOTS_SECONDARY
+                            ? EButtonTheme.SECONDARY
+                            : EButtonTheme.SECONDARY_LIGHT
+                    }
                     size={size}
                     onKeyDown={handleKeyDown({ opened, setOpened })}
                     onClick={handleClick({ opened, setOpened })}
@@ -182,9 +185,11 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             switch (theme) {
                 case EButtonTheme.GENERAL:
                 case EButtonTheme.DANGER:
-                case dotsTheme:
+                case EButtonDotsTheme.DOTS_SECONDARY:
+                case EButtonDotsTheme.DOTS_SECONDARY_LIGHT:
                     return <CaretdownStrokeSrvIcon24 paletteIndex={7} className={styles.caretIcon} />;
                 case EButtonTheme.SECONDARY:
+                case EButtonTheme.SECONDARY_LIGHT:
                     return <CaretdownStrokeSrvIcon24 paletteIndex={0} className={styles.caretIcon} />;
                 default:
                     return null;
@@ -267,7 +272,13 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         return (
             <ButtonDropdownExtended
                 className={classNames}
-                renderButton={theme === dotsTheme ? renderButtonDots : renderButton}
+                renderButton={
+                    [EButtonDotsTheme.DOTS_SECONDARY, EButtonDotsTheme.DOTS_SECONDARY_LIGHT].includes(
+                        theme as EButtonDotsTheme,
+                    )
+                        ? renderButtonDots
+                        : renderButton
+                }
                 renderDropdown={renderDropdown}
                 dropdownRef={dropdownRef}
                 closeOnTab

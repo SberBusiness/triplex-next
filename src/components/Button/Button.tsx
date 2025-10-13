@@ -38,9 +38,9 @@ export interface IButtonSecondaryProps extends IButtonBaseProps {
 }
 
 /** Свойства кнопки типа SecondaryLight. */
-export interface IButtonSecondarLightProps extends IButtonBaseProps {
+export interface IButtonSecondaryLightProps extends IButtonBaseProps {
     /** Тема кнопки. */
-    theme: EButtonTheme.SECONDARY;
+    theme: EButtonTheme.SECONDARY_LIGHT;
     /** Размер кнопки. */
     size: EButtonSize;
     /** Блочный режим. */
@@ -82,7 +82,7 @@ export interface IButtonLinkProps extends IButtonBaseProps {
 export type TButtonProps =
     | IButtonGeneralProps
     | IButtonSecondaryProps
-    | IButtonSecondarLightProps
+    | IButtonSecondaryLightProps
     | IButtonDangerProps
     | IButtonLinkProps;
 

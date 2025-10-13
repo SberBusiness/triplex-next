@@ -1,7 +1,24 @@
 import React from "react";
 import clsx from "clsx";
 import { StoryObj } from "@storybook/react";
-import * as icons from "@sberbusiness/icons-next";
+import * as iconModule from "@sberbusiness/icons-next";
+
+const iconCategoryMap: Record<string, string[]> = Object.keys(iconModule)
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+    .reduce((map, key) => {
+        const results = key.match(/(Acc|Brd|Ill|Mrk|Nav|Prd|Srv|Sts|Sys)Icon/);
+
+        if (results) {
+            const category = results[1];
+
+            if (category in map) {
+                map[category].push(key);
+            } else {
+                map[category] = [key];
+            }
+        }
+        return map;
+    }, {});
 
 const paletteIndexes = Array.from(Array(8).keys());
 
@@ -50,26 +67,24 @@ interface IIconDisplayProps extends IIconItemProps {
     name: string;
 }
 
-const IconDisplay: React.FC<React.PropsWithChildren<IIconDisplayProps>> = ({ children, name, ...restProps }) => (
+const IconDisplay: React.FC<React.PropsWithChildren<IIconDisplayProps>> = ({ name, ...restProps }) => (
     <div className="icon-display">
-        <IconItem className="icon-display-target" {...restProps}>
-            {children}
-        </IconItem>
+        <IconItem className="icon-display-target" {...restProps} />
         <div className="icon-display-name">{name}</div>
     </div>
 );
 
-interface IIconStoryArgs extends Pick<icons.ISingleColorIconProps, "paletteIndex"> {
+interface IIconStoryArgs extends Pick<iconModule.ISingleColorIconProps, "paletteIndex"> {
     hoverable: boolean;
     disabled: boolean;
 }
 
-export const Default: StoryObj<IIconStoryArgs> = {
+export const Playground: StoryObj<IIconStoryArgs> = {
     args: {
         paletteIndex: 0,
     },
     render: ({ paletteIndex }) => {
-        const { DefaulticonStrokePrdIcon32 } = icons;
+        const { DefaulticonStrokePrdIcon32 } = iconModule;
         const inverted = paletteIndex === 6;
 
         return (
@@ -98,7 +113,7 @@ export const Palettes: StoryObj<IIconStoryArgs> = {
         },
     },
     render: (args) => {
-        const { DefaulticonStrokePrdIcon32 } = icons;
+        const { DefaulticonStrokePrdIcon32 } = iconModule;
 
         return (
             <div>
@@ -165,7 +180,7 @@ export const Palettes: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const StatusIcons: StoryObj<IIconStoryArgs> = {
+export const BrandIcon: StoryObj<IIconStoryArgs> = {
     args: {
         paletteIndex: 0,
         hoverable: true,
@@ -173,26 +188,21 @@ export const StatusIcons: StoryObj<IIconStoryArgs> = {
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
-            {Object.keys(icons).map((key) => {
-                if (key.match(/StsIcon/)) {
-                    const Icon = icons[key];
-                    const inverted = paletteIndex === 6;
+            {iconCategoryMap["Brd"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
 
-                    return (
-                        <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
-                            <Icon paletteIndex={paletteIndex} />
-                        </IconDisplay>
-                    );
-                }
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
             })}
         </div>
     ),
 
     parameters: {
         docs: {
-            description: {
-                story: "Иконки для отображения различных статусов и состояний: предупреждения, ожидание, системные, успех, информация, ошибки.",
-            },
             canvas: {
                 sourceState: "none",
             },
@@ -208,25 +218,109 @@ export const ServiceIcons: StoryObj<IIconStoryArgs> = {
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
-            {Object.keys(icons).map((key) => {
-                if (key.match(/SrvIcon/)) {
-                    const Icon = icons[key];
-                    const inverted = paletteIndex === 6;
+            {iconCategoryMap["Srv"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
 
-                    return (
-                        <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
-                            <Icon paletteIndex={paletteIndex} />
-                        </IconDisplay>
-                    );
-                }
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
             })}
         </div>
     ),
     parameters: {
         docs: {
-            description: {
-                story: "Иконки для интерфейсных элементов и навигации: подсказки, закрытие (различные варианты), стрелки вверх и вниз.",
+            canvas: {
+                sourceState: "none",
             },
+        },
+    },
+};
+
+export const StatusIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Sts"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
+export const MarketingIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Mrk"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
+export const NavigationIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Nav"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+    parameters: {
+        docs: {
             canvas: {
                 sourceState: "none",
             },
@@ -242,25 +336,49 @@ export const ProductIcons: StoryObj<IIconStoryArgs> = {
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
-            {Object.keys(icons).map((key) => {
-                if (key.match(/PrdIcon/)) {
-                    const Icon = icons[key];
-                    const inverted = paletteIndex === 6;
+            {iconCategoryMap["Prd"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
 
-                    return (
-                        <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
-                            <Icon paletteIndex={paletteIndex} />
-                        </IconDisplay>
-                    );
-                }
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
             })}
         </div>
     ),
     parameters: {
         docs: {
-            description: {
-                story: "Иконки для продуктов: стандартная иконка продукта в различных размерах.",
+            canvas: {
+                sourceState: "none",
             },
+        },
+    },
+};
+
+export const SystemIcons: StoryObj<IIconStoryArgs> = {
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Sys"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+    parameters: {
+        docs: {
             canvas: {
                 sourceState: "none",
             },

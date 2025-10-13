@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TabsExtended } from "../../src/components/TabsExtended";
-import { ButtonDropdown, dotsTheme } from "../../src/components/Button/ButtonDropdown";
-import { EButtonSize } from "../../src/components/Button/enums";
+import { ButtonDropdown } from "../../src/components/Button/ButtonDropdown";
+import { EButtonDotsTheme, EButtonSize } from "../../src/components/Button/enums";
 import { StoryObj } from "@storybook/react";
 import "./styles.less";
 
@@ -66,7 +66,7 @@ export const Default: StoryObj<typeof TabsExtended> = {
                         <TabsExtended.Content.DropdownWrapper>
                             {({ dropdownItemsIds, onSelectTab }) => (
                                 <ButtonDropdown
-                                    theme={dotsTheme}
+                                    theme={EButtonDotsTheme.DOTS_SECONDARY}
                                     size={EButtonSize.SM}
                                     options={getDropdownOptions({ dropdownItemsIds, onSelectTab })}
                                     selected={options.filter((option) => option.id == selectedTabId)[0]}

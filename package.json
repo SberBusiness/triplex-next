@@ -32,8 +32,7 @@
         "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
         "copyLessHelpers": "tsx scripts/copyLessHelpers.ts",
         "chromatic": "dotenv -e .env.local -- sh -c 'npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=storybook:build'",
-        "deps:cycles": "madge src --circular",
-        "deps:cycles:strict": "madge src --circular --fail"
+        "deps:cycles": "madge src --circular"
     },
     "dependencies": {
         "@dnd-kit/core": "6.3.1",

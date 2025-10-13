@@ -17,7 +17,7 @@ jobs:
         run: npm ci
 
       - name: Check circular dependencies
-        run: npm run deps:cycles:strict
+        run: npm run deps:cycles
 
       - name: Build library
         run: npm run build

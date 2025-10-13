@@ -4,7 +4,7 @@ import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { LoaderSmall, ELoaderSmallSize, ELoaderSmallTheme } from "../../Loader";
 import clsx from "clsx";
 import styles from "../styles/SelectExtendedFieldTarget.module.less";
-import { FormField, FormFieldLabel, FormFieldPostfix, IFormFieldProps } from "../../FormField";
+import { EFormFieldStatus, FormField, FormFieldLabel, FormFieldPostfix, IFormFieldProps } from "../../FormField";
 import { FormFieldTarget } from "../../FormField/components/FormFieldTarget";
 
 /* Свойства SelectExtendedFieldTarget. */
@@ -40,30 +40,29 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             setOpened,
             loading,
             size,
-            error,
-            disabled,
+            status,
             tabIndex,
             fieldLabel,
             ...rest
         } = props;
         const targetRef = useRef<HTMLDivElement | null>(null);
         const classNames = clsx(
-            styles.SelectExtendedFieldTarget,
+            styles.selectExtendedFieldTarget,
             {
                 [styles.selectOpened]: opened,
                 [styles.loading]: loading,
-                [styles.disabled]: disabled,
+                [styles.disabled]: status === EFormFieldStatus.DISABLED,
             },
             className,
         );
 
         const getTabIndex = (): number => {
-            return disabled || loading ? -1 : tabIndex || 0;
+            return status === EFormFieldStatus.DISABLED || loading ? -1 : tabIndex || 0;
         };
 
         /* Обработчик клика. */
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-            if (loading && disabled) {
+            if (loading && status === EFormFieldStatus.DISABLED) {
                 return; // Не реагируем на клики в состоянии загрузки
             }
             setOpened(!opened);
@@ -72,7 +71,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
 
         /* Обработчик нажатия клавиши. */
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-            if (loading && disabled) {
+            if (loading && status === EFormFieldStatus.DISABLED) {
                 return; // Не реагируем на клавиши в состоянии загрузки
             }
 
@@ -110,8 +109,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 onClick={handleClick}
                 tabIndex={getTabIndex()}
                 onKeyDown={handleKeyDown}
-                disabled={disabled}
-                error={error}
+                status={status}
                 size={size}
                 className={classNames}
                 aria-expanded={opened}
@@ -126,8 +124,9 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                         [styles.placeholder]: !!placeholder && !label,
                         [styles.label]: !!label,
                     })}
+                    placeholder={placeholder}
                 >
-                    {label || placeholder || null}
+                    {label}
                 </FormFieldTarget>
                 <FormFieldPostfix>
                     {loading ? (

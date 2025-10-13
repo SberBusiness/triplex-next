@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SelectExtendedField, SelectExtendedFieldTarget, SelectExtendedFieldDropdown } from "../index";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
+import { EFormFieldStatus } from "../../FormField";
 
 // Mock для KeyDownListener
 vi.mock("../../KeyDownListener", () => ({
@@ -406,7 +407,7 @@ describe("SelectExtendedFieldTarget", () => {
                 fieldLabel="Test Field"
                 opened={false}
                 setOpened={mockSetOpened}
-                disabled={true}
+                status={EFormFieldStatus.DISABLED}
                 data-testid="target"
             />,
         );
@@ -441,7 +442,7 @@ describe("SelectExtendedFieldTarget", () => {
                 opened={false}
                 setOpened={mockSetOpened}
                 loading={true}
-                disabled={true}
+                status={EFormFieldStatus.DISABLED}
                 onClick={mockOnClick}
                 data-testid="target"
             />,
@@ -495,7 +496,7 @@ describe("SelectExtendedFieldTarget", () => {
                 opened={false}
                 setOpened={mockSetOpened}
                 loading={true}
-                disabled={true}
+                status={EFormFieldStatus.DISABLED}
                 onKeyDown={mockOnKeyDown}
                 data-testid="target"
             />,

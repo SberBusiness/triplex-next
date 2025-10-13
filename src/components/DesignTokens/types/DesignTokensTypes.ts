@@ -29,7 +29,6 @@ import {
     TDesignTokensComponentsSegmentedControlSegment,
     TDesignTokensComponentsHeaderPage,
     TDesignTokensComponentsFooterPage,
-    TDesignTokensComponentsSelectField,
 } from "../components";
 
 // Название токенов группы ColorBrand.
@@ -290,7 +289,6 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsCard
     | TDesignTokensComponentsSkeleton
-    | TDesignTokensComponentsSelectField
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment

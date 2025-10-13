@@ -1,13 +1,10 @@
 import React from "react";
 import { ISwipeableAreaRef, SwipeableArea } from "@sberbusiness/triplex-next/components/SwipeableArea/SwipeableArea";
-import {
-    IListItemProps,
-    ListItem,
-    ListItemContent,
-    ListItemControls,
-    ListItemSelectable,
-    ListItemTailRight,
-} from "@sberbusiness/triplex-next/components/List";
+import { IListItemProps, ListItem } from "@sberbusiness/triplex-next/components/List/components/ListItem";
+import { ListItemContent } from "@sberbusiness/triplex-next/components/List/components/ListItemContent";
+import { ListItemControls } from "@sberbusiness/triplex-next/components/List/components/ListItemControls";
+import { ListItemSelectable } from "@sberbusiness/triplex-next/components/List/components/ListItemSelectable";
+import { ListItemTailRight } from "@sberbusiness/triplex-next/components/List/components/ListItemTailRight";
 import clsx from "clsx";
 import styles from "../styles/ListItemTable.module.less";
 
@@ -58,7 +55,7 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
                 </SwipeableArea>
             </ListItem>
         );
-    }
+    },
 );
 
 ListItemTable.displayName = "ListItemTable";

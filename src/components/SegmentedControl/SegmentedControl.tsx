@@ -1,23 +1,20 @@
 import React from "react";
 import clsx from "clsx";
+import { SegmentedControlSegment } from "@sberbusiness/triplex-next/components/SegmentedControl/SegmentedControlSegment";
 import {
-    SegmentedControlSegment,
-    ISegmentedControlContextType,
+    ISegmentedControlSingleProps,
+    ISegmentedControlMultipleProps,
+} from "@sberbusiness/triplex-next/components/SegmentedControl/types";
+import {
     ESegmentedControlTheme,
     ESegmentedControlType,
     ESegmentedControlSize,
-    ISegmentedControlSingleProps,
-    ISegmentedControlMultipleProps,
-} from "@sberbusiness/triplex-next/components/SegmentedControl";
+} from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
+import {
+    ISegmentedControlContextType,
+    SegmentedControlContext,
+} from "@sberbusiness/triplex-next/components/SegmentedControl/SegmentedControlContext";
 import styles from "./styles/SegmentedControl.module.less";
-
-/** Контекст компонента SegmentedControl. */
-export const SegmentedControlContext = React.createContext<ISegmentedControlContextType>({
-    type: ESegmentedControlType.SINGLE,
-    value: "",
-    disabled: false,
-    onSegmentSelect: () => {},
-});
 
 /** Соответствие темы имени класса. */
 const themeToClassNameMap = {

@@ -1,5 +1,8 @@
 import React from "react";
-import { IFormFieldMaskedInputProps, FormFieldMaskedInput } from "@sberbusiness/triplex-next";
+import {
+    IFormFieldMaskedInputProps,
+    FormFieldMaskedInput,
+} from "@sberbusiness/triplex-next/components/FormField/components/FormFieldMaskedInput";
 import { ITextFieldBaseProps, TextFieldBase } from "./TextFieldBase";
 
 export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children"> {

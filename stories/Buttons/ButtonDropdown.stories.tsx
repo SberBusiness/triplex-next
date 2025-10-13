@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { ButtonDropdown, dotsTheme, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
-import { EButtonSize, EButtonTheme } from "../../src/components/Button/enums";
+import { ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
+import { EButtonSize, EButtonTheme, EButtonDotsTheme } from "../../src/components/Button/enums";
 import "./ButtonDropdown.less";
 
 export default {
@@ -17,7 +17,7 @@ export default {
 
 ## Особенности
 
-- **Темы**: General, Secondary, Secondary Light, Danger
+- **Темы**: General, Secondary, SecondaryLight, Danger
 - **Размеры**: small (SM), medium (MD), large (LG)
 - **Состояния**: disabled, block
 - **Доступность**: ARIA-атрибуты, поддержка клавиатурной навигации
@@ -78,16 +78,8 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
         },
         theme: {
             control: { type: "select" },
-            options: Object.values(EButtonTheme),
+            options: [...Object.values(EButtonTheme), ...Object.values(EButtonDotsTheme)],
             description: "Тема кнопки",
-        },
-        light: {
-            control: { type: "boolean" },
-            description: "Режим кнопки на темном фоне",
-            table: {
-                type: { summary: "boolean" },
-            },
-            if: { arg: "theme", eq: EButtonTheme.SECONDARY },
         },
         size: {
             control: { type: "select" },
@@ -110,7 +102,6 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
         theme: EButtonTheme.GENERAL,
         size: EButtonSize.MD,
         children: "Button text",
-        light: false,
     },
     parameters: {
         docs: {
@@ -153,13 +144,13 @@ export const SecondaryLightTheme: StoryObj<typeof ButtonDropdown> = {
         const options = useMemo(() => createOptions(), []);
         return (
             <div className="button-dropdown-example">
-                <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.SM} options={options} light>
+                <ButtonDropdown theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.SM} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options} light>
+                <ButtonDropdown theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EButtonSize.LG} options={options} light>
+                <ButtonDropdown theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.LG} options={options}>
                     Button text
                 </ButtonDropdown>
             </div>
@@ -202,13 +193,13 @@ export const DotsTheme: StoryObj<typeof ButtonDropdown> = {
         const options = useMemo(() => createOptions(), []);
         return (
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <ButtonDropdown theme={dotsTheme} size={EButtonSize.SM} options={options}>
+                <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY} size={EButtonSize.SM} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown theme={dotsTheme} size={EButtonSize.MD} options={options}>
+                <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY} size={EButtonSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown theme={dotsTheme} size={EButtonSize.LG} options={options}>
+                <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY} size={EButtonSize.LG} options={options}>
                     Button text
                 </ButtonDropdown>
             </div>
@@ -225,13 +216,13 @@ export const DotsLightTheme: StoryObj<typeof ButtonDropdown> = {
         const options = useMemo(() => createOptions(), []);
         return (
             <div className="button-dropdown-example-dots">
-                <ButtonDropdown theme={dotsTheme} size={EButtonSize.SM} options={options} light>
+                <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT} size={EButtonSize.SM} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown theme={dotsTheme} size={EButtonSize.MD} options={options} light>
+                <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT} size={EButtonSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown theme={dotsTheme} size={EButtonSize.LG} options={options} light>
+                <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT} size={EButtonSize.LG} options={options}>
                     Button text
                 </ButtonDropdown>
             </div>
@@ -274,10 +265,26 @@ export const Disabled: StoryObj<typeof ButtonDropdown> = {
                 <ButtonDropdown disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
-                <ButtonDropdown disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} options={options} light>
+                <ButtonDropdown disabled theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
                 <ButtonDropdown disabled theme={EButtonTheme.DANGER} size={EButtonSize.MD} options={options}>
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown
+                    disabled
+                    theme={EButtonDotsTheme.DOTS_SECONDARY}
+                    size={EButtonSize.MD}
+                    options={options}
+                >
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown
+                    disabled
+                    theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
+                    size={EButtonSize.MD}
+                    options={options}
+                >
                     Button text
                 </ButtonDropdown>
             </div>

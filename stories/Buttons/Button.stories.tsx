@@ -18,7 +18,7 @@ export default {
 
 ## Особенности
 
-- **Темы**: General, Secondary, Secondary Light, Danger, Link
+- **Темы**: General, Secondary, SecondaryLight, Danger, Link
 - **Размеры**: small (SM), medium (MD), large (LG)
 - **Состояния**: disabled, loading, expanded
 - **Режимы**: обычный, блочный (block)
@@ -38,7 +38,6 @@ export const Playground: StoryObj<typeof Button> = {
         size: EButtonSize.MD,
         block: false,
         loading: false,
-        light: false,
     },
     argTypes: {
         theme: {
@@ -67,14 +66,6 @@ export const Playground: StoryObj<typeof Button> = {
             table: {
                 type: { summary: "boolean" },
             },
-        },
-        light: {
-            control: { type: "boolean" },
-            description: "Режим кнопки на темном фоне",
-            table: {
-                type: { summary: "boolean" },
-            },
-            if: { arg: "theme", eq: EButtonTheme.SECONDARY },
         },
         children: {
             control: { type: "text" },
@@ -155,7 +146,7 @@ export const DifferentThemes: StoryObj<typeof Button> = {
                 <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
                     Secondary
                 </Button>
-                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} light>
+                <Button theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD}>
                     Secondary Light
                 </Button>
                 <Button theme={EButtonTheme.DANGER} size={EButtonSize.MD}>
@@ -196,8 +187,7 @@ export const Icon: StoryObj<typeof Button> = {
             <Button
                 icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                 size={EButtonSize.MD}
-                theme={EButtonTheme.SECONDARY}
-                light
+                theme={EButtonTheme.SECONDARY_LIGHT}
             />
             <Button
                 icon={<DefaulticonStrokePrdIcon32 paletteIndex={7} />}
@@ -244,13 +234,13 @@ export const DifferentSizes: StoryObj<typeof Button> = {
             </div>
             <Gap size={16} />
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <Button size={EButtonSize.SM} theme={EButtonTheme.SECONDARY} light>
+                <Button size={EButtonSize.SM} theme={EButtonTheme.SECONDARY_LIGHT}>
                     SM
                 </Button>
-                <Button size={EButtonSize.MD} theme={EButtonTheme.SECONDARY} light>
+                <Button size={EButtonSize.MD} theme={EButtonTheme.SECONDARY_LIGHT}>
                     MD
                 </Button>
-                <Button size={EButtonSize.LG} theme={EButtonTheme.SECONDARY} light>
+                <Button size={EButtonSize.LG} theme={EButtonTheme.SECONDARY_LIGHT}>
                     LG
                 </Button>
             </div>
@@ -301,7 +291,7 @@ export const BlockMode: StoryObj<typeof Button> = {
                 Secondary
             </Button>
             <Gap size={16} />
-            <Button block theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} light>
+            <Button block theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD}>
                 Secondary Light
             </Button>
             <Gap size={16} />
@@ -332,7 +322,7 @@ export const Disabled: StoryObj<typeof Button> = {
             <Button disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
                 Secondary
             </Button>
-            <Button disabled theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} light>
+            <Button disabled theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD}>
                 Secondary Light
             </Button>
             <Button disabled theme={EButtonTheme.DANGER} size={EButtonSize.MD}>
@@ -368,7 +358,7 @@ export const Loading: StoryObj<typeof Button> = {
             <Button loading theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
                 Button text
             </Button>
-            <Button loading theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} light>
+            <Button loading theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD}>
                 Button text
             </Button>
             <Button loading theme={EButtonTheme.DANGER} size={EButtonSize.LG}>
@@ -396,7 +386,7 @@ export const Expanded: StoryObj<typeof Button> = {
                 <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} aria-expanded>
                     Secondary
                 </Button>
-                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} aria-expanded light>
+                <Button theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.MD} aria-expanded>
                     Secondary Light
                 </Button>
                 <Button theme={EButtonTheme.DANGER} size={EButtonSize.MD} aria-expanded>

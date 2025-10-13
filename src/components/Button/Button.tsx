@@ -2,11 +2,12 @@ import React from "react";
 import clsx from "clsx";
 import { ButtonBase, IButtonBaseProps, EButtonTheme, EButtonSize } from "@sberbusiness/triplex-next/components/Button";
 import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
-import styles from "./styles/Button.module.less";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
+import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
+import styles from "./styles/Button.module.less";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {
@@ -26,8 +27,20 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
 export interface IButtonSecondaryProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY;
-    /** Режим кнопки на темном фоне. */
-    light?: boolean;
+    /** Размер кнопки. */
+    size: EButtonSize;
+    /** Блочный режим. */
+    block?: boolean;
+    /** Режим загрузки. */
+    loading?: boolean;
+    /** Иконка. */
+    icon?: React.ReactElement;
+}
+
+/** Свойства кнопки типа SecondaryLight. */
+export interface IButtonSecondarLightProps extends IButtonBaseProps {
+    /** Тема кнопки. */
+    theme: EButtonTheme.SECONDARY;
     /** Размер кнопки. */
     size: EButtonSize;
     /** Блочный режим. */
@@ -66,10 +79,15 @@ export interface IButtonLinkProps extends IButtonBaseProps {
 }
 
 /** Свойства компонента Button. */
-export type TButtonProps = IButtonGeneralProps | IButtonSecondaryProps | IButtonDangerProps | IButtonLinkProps;
+export type TButtonProps =
+    | IButtonGeneralProps
+    | IButtonSecondaryProps
+    | IButtonSecondarLightProps
+    | IButtonDangerProps
+    | IButtonLinkProps;
 
 /** Возвращает CSS класс темы кнопки. */
-const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean, light?: boolean) => {
+const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
     switch (theme) {
         case EButtonTheme.GENERAL:
             return { [generalStyles.general]: true, [generalStyles.expanded]: expanded };
@@ -77,12 +95,22 @@ const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean, light?:
             return {
                 [secondaryStyles.secondary]: true,
                 [secondaryStyles.expanded]: expanded,
-                [secondaryStyles.light]: light,
+            };
+        case EButtonTheme.SECONDARY_LIGHT:
+            return {
+                [secondaryLightStyles.secondaryLight]: true,
+                [secondaryLightStyles.expanded]: expanded,
             };
         case EButtonTheme.DANGER:
-            return { [dangerStyles.danger]: true, [dangerStyles.expanded]: expanded };
+            return {
+                [dangerStyles.danger]: true,
+                [dangerStyles.expanded]: expanded,
+            };
         case EButtonTheme.LINK:
-            return { [linkStyles.link]: true, [linkStyles.expanded]: expanded };
+            return {
+                [linkStyles.link]: true,
+                [linkStyles.expanded]: expanded,
+            };
     }
 };
 
@@ -100,7 +128,9 @@ const getButtonSizeCssClass = (size?: EButtonSize) => {
 
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
-    const dotsTheme = theme === EButtonTheme.SECONDARY ? ELoaderSmallTheme.BRAND : ELoaderSmallTheme.NEUTRAL;
+    const dotsTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
+        ? ELoaderSmallTheme.BRAND
+        : ELoaderSmallTheme.NEUTRAL;
     const dotsSize =
         size === EButtonSize.SM
             ? ELoaderSmallSize.SM
@@ -113,12 +143,11 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
 /** Кнопка. */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EButtonSize.MD, block, loading, icon, ...rest } = props;
-    const light = "light" in props ? props.light : undefined;
 
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,
-        getButtonThemeCssClass(theme, !!expanded, !!light),
+        getButtonThemeCssClass(theme, !!expanded),
         getButtonSizeCssClass(size),
         { [styles.block]: !!block, [styles.loading]: !!loading },
         { [styles.icon]: !!icon && !children },

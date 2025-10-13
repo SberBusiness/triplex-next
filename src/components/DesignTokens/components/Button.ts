@@ -16,15 +16,21 @@ export const designTokensComponentsButtonKeys = [
     "Secondary_Background_Default",
     "Secondary_Background_Disabled",
     "Secondary_Background_Hover",
-    "Secondary_Light_Background_Active",
-    "Secondary_Light_Background_Default",
-    "Secondary_Light_Background_Disabled",
-    "Secondary_Light_Background_Hover",
     "Secondary_Color_Active",
     "Secondary_Color_Default",
     "Secondary_Color_Disabled",
     "Secondary_Color_Hover",
     "Secondary_Shadow_Focus",
+
+    "SecondaryLight_Background_Active",
+    "SecondaryLight_Background_Default",
+    "SecondaryLight_Background_Disabled",
+    "SecondaryLight_Background_Hover",
+    "SecondaryLight_Color_Active",
+    "SecondaryLight_Color_Default",
+    "SecondaryLight_Color_Disabled",
+    "SecondaryLight_Color_Hover",
+    "SecondaryLight_Shadow_Focus",
 
     "Danger_Background_Active",
     "Danger_Background_Default",
@@ -76,10 +82,15 @@ export const Button_Tokens: TDesignTokensComponentsButtonValues = {
     Secondary_Color_Hover: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.70" }], // var(--triplex-next-Button-Secondary_Color_Hover)
     Secondary_Shadow_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Button-Secondary_Shadow_Focus)
 
-    Secondary_Light_Background_Active: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Button-Secondary_Light_Background_Active)
-    Secondary_Light_Background_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-Secondary_Light_Background_Default)
-    Secondary_Light_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-Secondary_Light_Background_Disabled)
-    Secondary_Light_Background_Hover: [{ ref: "ColorNeutral.80" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-Secondary_Light_Background_Hover)
+    SecondaryLight_Background_Active: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Button-SecondaryLight_Background_Active)
+    SecondaryLight_Background_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-SecondaryLight_Background_Default)
+    SecondaryLight_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-SecondaryLight_Background_Disabled)
+    SecondaryLight_Background_Hover: [{ ref: "ColorNeutral.80" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-SecondaryLight_Background_Hover)
+    SecondaryLight_Color_Active: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.40" }], // var(--triplex-next-Button-SecondaryLight_Color_Active)
+    SecondaryLight_Color_Default: [{ ref: "ColorBrand.40" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Button-SecondaryLight_Color_Default)
+    SecondaryLight_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-Button-SecondaryLight_Color_Disabled)
+    SecondaryLight_Color_Hover: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.70" }], // var(--triplex-next-Button-SecondaryLight_Color_Hover)
+    SecondaryLight_Shadow_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Button-SecondaryLight_Shadow_Focus)
 
     Danger_Background_Active: [{ ref: "ColorError.30" }, { ref: "ColorError.30" }], // var(--triplex-next-Button-Danger_Background_Active)
     Danger_Background_Default: [{ ref: "ColorError.50" }, { ref: "ColorError.50" }], // var(--triplex-next-Button-Danger_Background_Default)

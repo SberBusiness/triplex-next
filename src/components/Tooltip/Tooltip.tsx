@@ -8,35 +8,10 @@ import { TooltipLink } from "@sberbusiness/triplex-next/components/Tooltip/compo
 import { TooltipTarget } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipTarget";
 import { TooltipXButton } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipXButton";
 import { TooltipMobileHeader } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileHeader";
-import { ETooltipAlign, ETooltipPreferPlace, ETooltipSize } from "@sberbusiness/triplex-next/components/Tooltip/enums";
-import { ITooltipElements, TTooltipToggleType } from "@sberbusiness/triplex-next/components/Tooltip/types";
+import { ITooltipElements, ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 import { useTooltipTheme } from "@sberbusiness/triplex-next/components/Tooltip/utils/useTooltipTheme";
 import { useMatchMedia } from "@sberbusiness/triplex-next/components/MediaWidth";
 import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
-
-/** Свойства компонента Tooltip. */
-export interface ITooltipProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Размер подсказки. */
-    size: ETooltipSize;
-    /** Подсказка должна появляться по наведению или по клику. */
-    toggleType?: TTooltipToggleType;
-    /** Предпочитаемое место расположения подсказки. Если не помещается, то отобразится там где помещается. */
-    preferPlace?: ETooltipPreferPlace;
-    /** Расположение указателя. */
-    alignTip?: ETooltipAlign;
-    /** Элемент в который будет происходить рендер подсказки. */
-    renderContainer?: Element;
-    /** Отключить режим адаптивности. */
-    disableAdaptiveMode?: boolean;
-    /** Признак открыт ли Tooltip. */
-    isOpen?: boolean;
-    /** Контролирующая функция закрытия/открытия. */
-    toggle?: (open: boolean) => void;
-    /** Callback-функция появления Tooltip. */
-    onShow?: (node: HTMLDivElement) => void;
-    /** Ссылка на target-элемент. */
-    targetRef: React.MutableRefObject<HTMLElement | null>;
-}
 
 /** Внутренние составляющие компонента Tooltip. */
 interface ITooltipComposition {

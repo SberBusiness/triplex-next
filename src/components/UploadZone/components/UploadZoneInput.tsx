@@ -1,5 +1,5 @@
 import React from "react";
-import { UploadZoneContext } from "../UploadZone";
+import { UploadZoneContext } from "../UploadZoneContext";
 import clsx from "clsx";
 import styles from "../styles/UploadZone.module.less";
 

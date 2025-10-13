@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
-import { ButtonBase } from "@sberbusiness/triplex-next/components/Button";
-import {
-    ISegmentedControlSegmentProps,
-    SegmentedControlContext,
-    ESegmentedControlType,
-} from "@sberbusiness/triplex-next/components/SegmentedControl";
+import { ButtonBase } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
+import { ISegmentedControlSegmentProps } from "@sberbusiness/triplex-next/components/SegmentedControl/types";
+import { ESegmentedControlType } from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
 import styles from "./styles/SegmentedControlSegment.module.less";
+import { SegmentedControlContext } from "@sberbusiness/triplex-next/components/SegmentedControl/SegmentedControlContext";
 
 /** Элемент SegmentedControl, представляет собой опцию для выбора. */
 export const SegmentedControlSegment: React.FC<ISegmentedControlSegmentProps> = ({

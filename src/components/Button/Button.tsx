@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-import { ButtonBase, IButtonBaseProps, EButtonTheme, EButtonSize } from "@sberbusiness/triplex-next/components/Button";
 import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
@@ -8,6 +7,8 @@ import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
 import styles from "./styles/Button.module.less";
+import { ButtonBase, IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
+import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {

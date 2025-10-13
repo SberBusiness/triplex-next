@@ -1,4 +1,4 @@
-import { TFormFieldMaskedInputMask } from "./FormFieldMaskedInput";
+import { TFormFieldMaskedInputMask } from "../types";
 
 export interface TFormFieldMaskedInputPresets {
     // Предзаготовленный набор плейсхолдеров масок.

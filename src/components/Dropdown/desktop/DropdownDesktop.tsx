@@ -1,5 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { EDropdownAlignment, EDropdownDirection, EDropdownSize } from "@sberbusiness/triplex-next/components/Dropdown";
+import {
+    EDropdownAlignment,
+    EDropdownDirection,
+    EDropdownSize,
+} from "@sberbusiness/triplex-next/components/Dropdown/enums";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { useToken } from "@sberbusiness/triplex-next/components/ThemeProvider/useToken";
 import clsx from "clsx";

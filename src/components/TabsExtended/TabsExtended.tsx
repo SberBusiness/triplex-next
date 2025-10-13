@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
+import clsx from "clsx";
 import { TabsExtendedContext } from "./TabsExtendedContext";
 import { TabsExtendedContent } from "./components/TabsExtendedContent";
 import styles from "./styles/TabsExtended.module.less";
-import clsx from "clsx";
-
-export type TTabsExtendedOnSelectTab = (id: string) => void;
+import { TTabsExtendedOnSelectTab } from "@sberbusiness/triplex-next/components/TabsExtended/types";
 
 /** Свойства компонента TabsExtended. */
 export interface ITabsExtendedProps extends React.HTMLAttributes<HTMLDivElement> {

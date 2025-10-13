@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
+import { EFormFieldStatus, FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
 import { IFormFieldInputProvideProps } from "../components/FormFieldInput";
 
 describe("FormFieldInput", () => {
@@ -40,7 +40,7 @@ describe("FormFieldInput", () => {
 
     it("applies disabled state", () => {
         render(
-            <FormField disabled>
+            <FormField status={EFormFieldStatus.DISABLED}>
                 <FormFieldLabel>Disabled Input</FormFieldLabel>
                 <FormFieldInput />
             </FormField>,

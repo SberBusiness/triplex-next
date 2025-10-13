@@ -1,0 +1,15 @@
+{
+  "baseDir": ".",
+  "fileExtensions": ["ts", "tsx", "js", "jsx"],
+  "excludeRegExp": [
+    "node_modules",
+    "\\.test\\.(ts|tsx)$",
+    "\\.stories\\.(ts|tsx|mdx)$",
+    "^stories/",
+    "^e2e/"
+  ],
+  "tsConfig": "./tsconfig.json",
+  "detectiveOptions": {
+    "es6": { "mixedImports": true }
+  }
+}

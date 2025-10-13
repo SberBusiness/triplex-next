@@ -39,6 +39,19 @@
         }
     }
 
+    &.warning {
+        background: var(--triplex-next-FormField-Background_Warning);
+
+        &:hover {
+            background: var(--triplex-next-FormField-Background_Warning_Hover);
+        }
+
+        &.active {
+            background: var(--triplex-next-FormField-Background_Warning);
+            box-shadow: var(--triplex-next-FormField-Shadow_Warning_Active);
+        }
+    }
+
     &.size-sm {
         border-radius: 6px;
     }

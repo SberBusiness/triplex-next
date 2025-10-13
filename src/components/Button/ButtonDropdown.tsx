@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import clsx from "clsx";
 import {
     ButtonDropdownExtended,
     IButtonDropdownExtendedButtonProvideProps,
@@ -8,12 +9,6 @@ import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
 import { EButtonDotsTheme, EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 import { CaretdownStrokeSrvIcon24, DotshorizontalStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import {
-    DropdownList,
-    EDropdownListSize,
-    EDropdownSize,
-    IDropdownListItemProps,
-} from "@sberbusiness/triplex-next/components/Dropdown";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
@@ -23,7 +18,9 @@ import { DropdownMobileListItem } from "@sberbusiness/triplex-next/components/Dr
 import { DropdownMobileClose } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileClose";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-import clsx from "clsx";
+import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
+import { IDropdownListItemProps } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownListItem";
+import { EDropdownSize, EDropdownListSize } from "@sberbusiness/triplex-next/components/Dropdown/enums";
 import styles from "./styles/ButtonDropdown.module.less";
 
 const getDropdownSize = (size: EButtonSize) => {

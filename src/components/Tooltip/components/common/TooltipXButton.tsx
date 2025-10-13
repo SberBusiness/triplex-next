@@ -2,13 +2,8 @@ import React, { useContext } from "react";
 import { CrossStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
+import { ITooltipXButtonProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipDesktop.module.less";
-
-/** Свойства компонента TooltipXButton. */
-export interface ITooltipXButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    /** Дочерние элементы. */
-    children?: never;
-}
 
 /** Кнопка закрытия Tooltip. */
 export const TooltipXButton: React.FC<ITooltipXButtonProps> = ({ onClick, ...rest }) => {

@@ -1,12 +1,12 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
+import { EFormFieldStatus, FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
 
 
 describe("FormField", () => {
     it("applies error state correctly", () => {
         render(
-            <FormField error>
+            <FormField status={EFormFieldStatus.ERROR}>
                 <FormFieldLabel>Error Field</FormFieldLabel>
                 <FormFieldInput />
             </FormField>
@@ -18,7 +18,7 @@ describe("FormField", () => {
 
     it("applies disabled state correctly", () => {
         render(
-            <FormField disabled>
+            <FormField status={EFormFieldStatus.DISABLED}>
                 <FormFieldLabel>Disabled Field</FormFieldLabel>
                 <FormFieldInput />
             </FormField>

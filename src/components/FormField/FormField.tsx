@@ -3,12 +3,11 @@ import { FormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
 import clsx from "clsx";
 import styles from "./styles/FormField.module.less";
-import { EFormFieldSize } from "./enums";
+import { EFormFieldSize, EFormFieldStatus } from "./enums";
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
-    error?: boolean;
-    disabled?: boolean;
+    status?: EFormFieldStatus;
     size?: EFormFieldSize;
 }
 
@@ -16,8 +15,7 @@ export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 export const FormField: React.FC<IFormFieldProps> = ({
     children,
     className,
-    disabled,
-    error,
+    status = EFormFieldStatus.DEFAULT,
     onMouseEnter,
     onMouseLeave,
     style,
@@ -44,7 +42,7 @@ export const FormField: React.FC<IFormFieldProps> = ({
     return (
         <FormFieldContext.Provider
             value={{
-                disabled: Boolean(disabled),
+                status,
                 focused,
                 hovered,
                 id,
@@ -64,8 +62,10 @@ export const FormField: React.FC<IFormFieldProps> = ({
                     styles.formField,
                     {
                         [styles.active]: focused,
-                        [styles.disabled]: Boolean(disabled),
-                        [styles.error]: Boolean(error),
+                        [styles.disabled]: status === EFormFieldStatus.DISABLED,
+                        [styles.default]: status === EFormFieldStatus.DEFAULT,
+                        [styles.error]: status === EFormFieldStatus.ERROR,
+                        [styles.warning]: status === EFormFieldStatus.WARNING,
                         [styles[`size-${size}`]]: size,
                     },
                     className,

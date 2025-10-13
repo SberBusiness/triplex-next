@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { MaskedField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
-import { EFormFieldSize } from "../../src/components/FormField/enums";
+import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldMaskedInput } from "../../src/components/FormField";
 
@@ -70,7 +70,17 @@ export default {
     tags: ["autodocs"],
 };
 
-export const Playground: StoryObj<IMaskedFieldWithControlsProps> = {
+interface IMaskedPlaygroundProps extends React.ComponentProps<typeof MaskedField> {
+    labelText?: string;
+    descriptionText?: string;
+    maskType?:
+        | keyof typeof FormFieldMaskedInput.presets.masks
+        | "passportSeries"
+        | "passportNumber"
+        | "passportDepartmentCode";
+}
+
+export const Playground: StoryObj<IMaskedPlaygroundProps> = {
     render: (args) => {
         const [value, setValue] = useState("");
 
@@ -227,20 +237,13 @@ export const Playground: StoryObj<IMaskedFieldWithControlsProps> = {
         );
     },
     argTypes: {
-        error: {
-            control: { type: "boolean" },
-            description: "Состояние ошибки",
+        status: {
+            control: { type: "select" },
+            options: Object.values(EFormFieldStatus),
+            description: "Состояние поля",
             table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Отключенное состояние",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
+                type: { summary: "EFormFieldStatus" },
+                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
             },
         },
         labelText: {
@@ -286,8 +289,7 @@ export const Playground: StoryObj<IMaskedFieldWithControlsProps> = {
         },
     },
     args: {
-        error: false,
-        disabled: false,
+        status: EFormFieldStatus.DEFAULT,
         size: EFormFieldSize.LG,
         labelText: "Название поля",
         descriptionText: "Описание поля",
@@ -343,13 +345,17 @@ export const States: StoryObj<typeof MaskedField> = {
     render: () => {
         const [phoneValue, setPhoneValue] = useState("");
         const [phoneValueError, setPhoneValueError] = useState("");
-
+        const [phoneValueWarning, setPhoneValueWarning] = useState("");
         const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setPhoneValue(e.target.value);
         };
 
         const handlePhoneChangeError = (e: React.ChangeEvent<HTMLInputElement>) => {
             setPhoneValueError(e.target.value);
+        };
+
+        const handlePhoneChangeWarning = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setPhoneValueWarning(e.target.value);
         };
 
         return (
@@ -372,7 +378,7 @@ export const States: StoryObj<typeof MaskedField> = {
                 <Gap size={24} />
 
                 <MaskedField
-                    error
+                    status={EFormFieldStatus.ERROR}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
                             Неверный формат номера
@@ -382,7 +388,6 @@ export const States: StoryObj<typeof MaskedField> = {
                         value: phoneValueError,
                         onChange: handlePhoneChangeError,
                         mask: FormFieldMaskedInput.presets.masks.phone,
-                        error: true,
                     }}
                     label="Номер телефона"
                 />
@@ -390,7 +395,24 @@ export const States: StoryObj<typeof MaskedField> = {
                 <Gap size={24} />
 
                 <MaskedField
-                    disabled
+                    status={EFormFieldStatus.WARNING}
+                    description={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
+                            Неверный формат номера
+                        </Text>
+                    }
+                    maskedInputProps={{
+                        value: phoneValueWarning,
+                        onChange: handlePhoneChangeWarning,
+                        mask: FormFieldMaskedInput.presets.masks.phone,
+                    }}
+                    label="Номер телефона"
+                />
+
+                <Gap size={24} />
+
+                <MaskedField
+                    status={EFormFieldStatus.DISABLED}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             Описание поля
@@ -399,7 +421,6 @@ export const States: StoryObj<typeof MaskedField> = {
                     maskedInputProps={{
                         value: "9999999999",
                         mask: FormFieldMaskedInput.presets.masks.phone,
-                        disabled: true,
                     }}
                     label="Номер телефона"
                 />
@@ -414,16 +435,6 @@ export const States: StoryObj<typeof MaskedField> = {
         },
     },
 };
-
-interface IMaskedFieldWithControlsProps extends React.ComponentProps<typeof MaskedField> {
-    labelText?: string;
-    descriptionText?: string;
-    maskType?:
-        | keyof typeof FormFieldMaskedInput.presets.masks
-        | "passportSeries"
-        | "passportNumber"
-        | "passportDepartmentCode";
-}
 
 export const Sizes: StoryObj<typeof MaskedField> = {
     render: () => {

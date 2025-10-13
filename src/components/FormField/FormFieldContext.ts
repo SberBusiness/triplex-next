@@ -1,9 +1,9 @@
 import React from "react";
-import { EFormFieldSize } from "./enums";
+import { EFormFieldSize, EFormFieldStatus } from "./enums";
 
 export interface IFormFieldContext {
     // Поле в состоянии disabled.
-    disabled: boolean;
+    status: EFormFieldStatus;
     // Поле в фокусе.
     focused: boolean;
     // Поле в состоянии hover.
@@ -31,7 +31,7 @@ export interface IFormFieldContext {
 }
 
 export const initialFormFieldContext: IFormFieldContext = {
-    disabled: false,
+    status: EFormFieldStatus.DEFAULT,
     focused: false,
     hovered: false,
     id: "",

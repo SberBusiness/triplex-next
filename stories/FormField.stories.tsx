@@ -12,7 +12,7 @@ import {
     FormFieldMaskedInput,
     FormFieldCounter,
 } from "../src/components/FormField";
-import { EFormFieldSize } from "../src/components/FormField/enums";
+import { EFormFieldSize, EFormFieldStatus } from "../src/components/FormField/enums";
 import { FormGroup } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
@@ -43,6 +43,150 @@ export default {
     },
     tags: ["autodocs"],
 };
+
+
+interface IFormFieldPlaygroundProps extends React.ComponentProps<typeof FormField> {
+    labelText?: string;
+    placeholder?: string;
+    showClear?: boolean;
+    descriptionText?: string;
+    counter?: string;
+}
+
+export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
+    render: function Render(args) {
+        const [value, setValue] = useState("");
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
+
+        const handleClear = () => {
+            setValue("");
+        };
+
+        const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <FormGroup>
+                    <FormField {...formFieldProps}>
+                        <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
+                        <FormFieldInput
+                            value={value}
+                            onChange={handleChange}
+                            placeholder={placeholder || "Введите текст..."}
+                        />
+                        {showClear && value && (
+                            <FormFieldPostfix>
+                                <FormFieldClear onClick={handleClear} />
+                            </FormFieldPostfix>
+                        )}
+                    </FormField>
+
+                    {(descriptionText || counter) && (
+                        <FormFieldDescription>
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {descriptionText || "Описание поля"}
+                            </Text>
+                            {counter && (
+                                <FormFieldCounter>
+                                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                        {counter}
+                                    </Text>
+                                </FormFieldCounter>
+                            )}
+                        </FormFieldDescription>
+                    )}
+                </FormGroup>
+            </div>
+        );
+    },
+    argTypes: {
+        status: {
+            control: { type: "select" },
+            options: Object.values(EFormFieldStatus),
+            description: "Состояние поля",
+            table: {
+                type: { summary: "EFormFieldStatus" },
+                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
+            },
+        },
+        labelText: {
+            control: { type: "text" },
+            description: "Текст лейбла",
+            table: {
+                type: { summary: "string" },
+                defaultValue: { summary: "Название поля" },
+            },
+        },
+        placeholder: {
+            control: { type: "text" },
+            description: "Плейсхолдер поля ввода",
+            table: {
+                type: { summary: "string" },
+                defaultValue: { summary: "Введите текст..." },
+            },
+        },
+        showClear: {
+            control: { type: "boolean" },
+            description: "Показать кнопку очистки",
+            table: {
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+        },
+        descriptionText: {
+            control: { type: "text" },
+            description: "Текст описания",
+            table: {
+                type: { summary: "string" },
+                defaultValue: { summary: "Описание поля" },
+            },
+        },
+        counter: {
+            control: { type: "text" },
+            description: "Текст счетчика символов",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        size: {
+            control: { type: "select" },
+            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            description: "Размер поля ввода",
+            table: {
+                type: { summary: "EFormFieldSize" },
+                defaultValue: { summary: "EFormFieldSize.MD" },
+            },
+        },
+        className: {
+            control: { type: "text" },
+            description: "Дополнительные CSS классы",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+    },
+    args: {
+        status: EFormFieldStatus.DEFAULT,
+        size: EFormFieldSize.MD,
+        labelText: "Название поля",
+        placeholder: "Введите текст...",
+        showClear: false,
+        descriptionText: "Описание поля",
+        counter: "0/201",
+        className: "",
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Интерактивная демонстрация FormField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, отображение кнопки очистки и описания. Также включает отладочную информацию для демонстрации состояния компонента.",
+            },
+        },
+    },
+};
+
 
 export const Basic: StoryObj<typeof FormField> = {
     render: function Render() {
@@ -182,6 +326,7 @@ export const States: StoryObj<typeof FormField> = {
     render: function Render() {
         const [value, setValue] = useState("");
         const [valueError, setValueError] = useState("");
+        const [valueWarning, setValueWarning] = useState("");
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
@@ -189,6 +334,10 @@ export const States: StoryObj<typeof FormField> = {
 
         const handleChangeError = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValueError(e.target.value);
+        };
+
+        const handleChangeWarning = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValueWarning(e.target.value);
         };
 
         return (
@@ -208,7 +357,7 @@ export const States: StoryObj<typeof FormField> = {
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormField error>
+                    <FormField status={EFormFieldStatus.ERROR}>
                         <FormFieldLabel>Название поля</FormFieldLabel>
                         <FormFieldInput value={valueError} onChange={handleChangeError} />
                     </FormField>
@@ -222,7 +371,21 @@ export const States: StoryObj<typeof FormField> = {
                 <Gap size={24} />
 
                 <FormGroup>
-                    <FormField disabled>
+                    <FormField status={EFormFieldStatus.WARNING}>
+                        <FormFieldLabel>Название поля</FormFieldLabel>
+                        <FormFieldInput value={valueWarning} onChange={handleChangeWarning} />
+                    </FormField>
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
+                            Текст предупреждения
+                        </Text>
+                    </FormFieldDescription>
+                </FormGroup>
+
+                <Gap size={24} />
+
+                <FormGroup>
+                    <FormField status={EFormFieldStatus.DISABLED}>
                         <FormFieldLabel>Название поля</FormFieldLabel>
                         <FormFieldInput value="Value disabled" />
                     </FormField>
@@ -411,156 +574,6 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
         docs: {
             description: {
                 story: "FormField с маскированным вводом. Поддерживает различные предустановленные маски для телефонных номеров, номеров карт, дат и других форматов данных.",
-            },
-        },
-    },
-};
-
-interface IFormFieldWithControlsProps extends React.ComponentProps<typeof FormField> {
-    labelText?: string;
-    placeholder?: string;
-    showClear?: boolean;
-    descriptionText?: string;
-    counter?: string;
-}
-
-export const Playground: StoryObj<IFormFieldWithControlsProps> = {
-    render: function Render(args) {
-        const [value, setValue] = useState("");
-
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(e.target.value);
-        };
-
-        const handleClear = () => {
-            setValue("");
-        };
-
-        const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <FormGroup>
-                    <FormField {...formFieldProps}>
-                        <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
-                        <FormFieldInput
-                            value={value}
-                            onChange={handleChange}
-                            placeholder={placeholder || "Введите текст..."}
-                        />
-                        {showClear && value && (
-                            <FormFieldPostfix>
-                                <FormFieldClear onClick={handleClear} />
-                            </FormFieldPostfix>
-                        )}
-                    </FormField>
-
-                    {(descriptionText || counter) && (
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                {descriptionText || "Описание поля"}
-                            </Text>
-                            {counter && (
-                                <FormFieldCounter>
-                                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                        {counter}
-                                    </Text>
-                                </FormFieldCounter>
-                            )}
-                        </FormFieldDescription>
-                    )}
-                </FormGroup>
-            </div>
-        );
-    },
-    argTypes: {
-        error: {
-            control: { type: "boolean" },
-            description: "Состояние ошибки",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Отключенное состояние",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        labelText: {
-            control: { type: "text" },
-            description: "Текст лейбла",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Название поля" },
-            },
-        },
-        placeholder: {
-            control: { type: "text" },
-            description: "Плейсхолдер поля ввода",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Введите текст..." },
-            },
-        },
-        showClear: {
-            control: { type: "boolean" },
-            description: "Показать кнопку очистки",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        descriptionText: {
-            control: { type: "text" },
-            description: "Текст описания",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Описание поля" },
-            },
-        },
-        counter: {
-            control: { type: "text" },
-            description: "Текст счетчика символов",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-        size: {
-            control: { type: "select" },
-            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
-            description: "Размер поля ввода",
-            table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.MD" },
-            },
-        },
-        className: {
-            control: { type: "text" },
-            description: "Дополнительные CSS классы",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-    },
-    args: {
-        error: false,
-        disabled: false,
-        size: EFormFieldSize.MD,
-        labelText: "Название поля",
-        placeholder: "Введите текст...",
-        showClear: false,
-        descriptionText: "Описание поля",
-        counter: "0/201",
-        className: "",
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Интерактивная демонстрация FormField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, отображение кнопки очистки и описания. Также включает отладочную информацию для демонстрации состояния компонента.",
             },
         },
     },

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import styles from "../styles/TabsExtended.module.less";
 import clsx from "clsx";
-import { TTabsExtendedOnSelectTab } from "../TabsExtended";
 import { TabsExtendedContext } from "../TabsExtendedContext";
+import { TTabsExtendedOnSelectTab } from "@sberbusiness/triplex-next/components/TabsExtended/types";
 
 export interface ITabsExtendedDropdownWrapperProvideProps {
     dropdownItemsIds: string[];

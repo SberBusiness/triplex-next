@@ -2,7 +2,7 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
-import { ListItem } from "@sberbusiness/triplex-next/components/List";
+import { ListItem } from "@sberbusiness/triplex-next/components/List/components/ListItem";
 import clsx from "clsx";
 import styles from "../styles/ListSortableItem.module.less";
 import { ListSortableItemTarget } from "./ListSortableItemTarget";

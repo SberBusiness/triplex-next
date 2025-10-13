@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { FormFieldContext } from "../FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "../consts";
 import clsx from "clsx";
+import { EFormFieldStatus } from "../enums";
 import styles from "../styles/FormFieldLabel.module.less";
 import { isUndefined } from "lodash-es";
 
@@ -14,7 +15,7 @@ interface IFormFieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElemen
 /** Лейбл поля ввода/селекта. Отображается по-середине поля ввода, когда инпут/селект имеет значение или фокус, перемещается в верхний левый угол. */
 export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabelProps>(
     ({ children, className, style, floating: floatingProp, ...htmlLabelAttributes }, ref) => {
-        const { disabled, focused, id, prefixWidth, postfixWidth, size, valueExist } = useContext(FormFieldContext);
+        const { status, focused, id, prefixWidth, postfixWidth, size, valueExist } = useContext(FormFieldContext);
         // Label отображается в уменьшенном виде над полем ввода/селектом.
         const [floating, setFloating] = useState(false);
 
@@ -29,7 +30,7 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
         const classNames = clsx(
             styles.formFieldLabel,
             {
-                [styles.disabled]: disabled,
+                [styles.disabled]: status === EFormFieldStatus.DISABLED,
                 [styles.floating]: floating,
                 [styles[`size-${size}`]]: size,
             },

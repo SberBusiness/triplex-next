@@ -1,12 +1,14 @@
 import React from "react";
 import clsx from "clsx";
-import { ButtonBase, IButtonBaseProps, EButtonTheme, EButtonSize } from "@sberbusiness/triplex-next/components/Button";
 import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
-import styles from "./styles/Button.module.less";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
+import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
+import styles from "./styles/Button.module.less";
+import { ButtonBase, IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
+import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {
@@ -26,6 +28,20 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
 export interface IButtonSecondaryProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY;
+    /** Размер кнопки. */
+    size: EButtonSize;
+    /** Блочный режим. */
+    block?: boolean;
+    /** Режим загрузки. */
+    loading?: boolean;
+    /** Иконка. */
+    icon?: React.ReactElement;
+}
+
+/** Свойства кнопки типа SecondaryLight. */
+export interface IButtonSecondaryLightProps extends IButtonBaseProps {
+    /** Тема кнопки. */
+    theme: EButtonTheme.SECONDARY_LIGHT;
     /** Размер кнопки. */
     size: EButtonSize;
     /** Блочный режим. */
@@ -64,7 +80,12 @@ export interface IButtonLinkProps extends IButtonBaseProps {
 }
 
 /** Свойства компонента Button. */
-export type TButtonProps = IButtonGeneralProps | IButtonSecondaryProps | IButtonDangerProps | IButtonLinkProps;
+export type TButtonProps =
+    | IButtonGeneralProps
+    | IButtonSecondaryProps
+    | IButtonSecondaryLightProps
+    | IButtonDangerProps
+    | IButtonLinkProps;
 
 /** Возвращает CSS класс темы кнопки. */
 const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
@@ -72,11 +93,25 @@ const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
         case EButtonTheme.GENERAL:
             return { [generalStyles.general]: true, [generalStyles.expanded]: expanded };
         case EButtonTheme.SECONDARY:
-            return { [secondaryStyles.secondary]: true, [secondaryStyles.expanded]: expanded };
+            return {
+                [secondaryStyles.secondary]: true,
+                [secondaryStyles.expanded]: expanded,
+            };
+        case EButtonTheme.SECONDARY_LIGHT:
+            return {
+                [secondaryLightStyles.secondaryLight]: true,
+                [secondaryLightStyles.expanded]: expanded,
+            };
         case EButtonTheme.DANGER:
-            return { [dangerStyles.danger]: true, [dangerStyles.expanded]: expanded };
+            return {
+                [dangerStyles.danger]: true,
+                [dangerStyles.expanded]: expanded,
+            };
         case EButtonTheme.LINK:
-            return { [linkStyles.link]: true, [linkStyles.expanded]: expanded };
+            return {
+                [linkStyles.link]: true,
+                [linkStyles.expanded]: expanded,
+            };
     }
 };
 
@@ -94,7 +129,9 @@ const getButtonSizeCssClass = (size?: EButtonSize) => {
 
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
-    const dotsTheme = theme === EButtonTheme.SECONDARY ? ELoaderSmallTheme.BRAND : ELoaderSmallTheme.NEUTRAL;
+    const dotsTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
+        ? ELoaderSmallTheme.BRAND
+        : ELoaderSmallTheme.NEUTRAL;
     const dotsSize =
         size === EButtonSize.SM
             ? ELoaderSmallSize.SM
@@ -107,6 +144,7 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
 /** Кнопка. */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EButtonSize.MD, block, loading, icon, ...rest } = props;
+
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import clsx from "clsx";
 import { DropdownListItem } from "./DropdownListItem";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
-import clsx from "clsx";
+import { EDropdownListSize } from "@sberbusiness/triplex-next/components/Dropdown/enums";
 import stylesDropdownList from "../styles/DropdownList.module.less";
-import { EDropdownListSize } from "@sberbusiness/triplex-next";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {

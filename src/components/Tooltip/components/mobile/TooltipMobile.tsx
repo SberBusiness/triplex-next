@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useRef } from "react";
-import { ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/Tooltip";
 import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import { Portal } from "@sberbusiness/triplex-next/components/Portal/Portal";
 import { DropdownMobile } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobile";
@@ -7,6 +6,7 @@ import { DropdownMobileBody } from "@sberbusiness/triplex-next/components/Dropdo
 import { TooltipMobileCloseButton } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileCloseButton";
 import clsx from "clsx";
 import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipMobile.module.less";
+import { ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
 /** Свойства компонента TooltipMobile. */
 export interface ITooltipMobileProps extends Omit<ITooltipProps, "preferPlace" | "toggle"> {

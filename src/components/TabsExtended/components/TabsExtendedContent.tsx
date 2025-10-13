@@ -1,10 +1,10 @@
 import React from "react";
+import clsx from "clsx";
 import { TabsExtendedTabsWrapper } from "./TabsExtendedTabsWrapper";
 import { TabsExtendedTab } from "./TabsExtendedTab";
 import { TabsExtendedTabButton } from "./TabsExtendedTabButton";
 import { TabsExtendedDropdownWrapper } from "./TabsExtendedDropdownWrapper";
 import styles from "../styles/TabsExtended.module.less";
-import clsx from "clsx";
 
 /** Свойства компонента TabsExtendedContent. */
 export interface ITabsExtendedContentProps extends React.HTMLAttributes<HTMLDivElement> {}

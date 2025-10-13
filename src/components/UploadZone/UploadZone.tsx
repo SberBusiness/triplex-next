@@ -1,32 +1,15 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
 import clsx from "clsx";
-import styles from "./styles/UploadZone.module.less";
-// Не менять import на абсолютный.
 import { UploadZoneInput } from "./components/UploadZoneInput";
-
-export type UploadZoneOnChangeType = (files: FileList | null, e: React.SyntheticEvent) => void;
+import { UploadZoneContext } from "./UploadZoneContext";
+import { UploadZoneOnChangeType } from "@sberbusiness/triplex-next/components/UploadZone/types";
+import styles from "./styles/UploadZone.module.less";
 
 export interface IUploadZoneChildrenProvideProps {
     /** Открытие диалогового окна выбора файла(ов). */
     openUploadDialog: () => void;
 }
-
-export interface IUploadZoneContext {
-    /** Открытие диалогового окна выбора файла(ов). */
-    openUploadDialog: () => void;
-    /** Обработчик изменения значения. */
-    onChange: UploadZoneOnChangeType;
-    /** Установка ссылки на элемент поля. */
-    setInputNode?: (inputNode: HTMLInputElement) => void;
-    /** Ссылка на элемент поля. */
-    inputNode?: HTMLInputElement;
-}
-
-export const UploadZoneContext = React.createContext<IUploadZoneContext>({
-    onChange: () => void 0,
-    openUploadDialog: () => void 0,
-});
 
 /** Свойства компонента UploadZone. */
 interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children"> {

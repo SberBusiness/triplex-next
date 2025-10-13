@@ -17,37 +17,6 @@ export default {
 ## Особенности
 
 - **Типы**: Info, Warning, Error, System
-
-## Использование
-
-\`\`\`tsx
-import { AlertContext, EAlertType } from '@sberbusiness/triplex-next';
-
-// Информационное сообщение
-<AlertContext type={EAlertType.INFO}>
-    Это информационное сообщение
-</AlertContext>
-
-// Предупреждение
-<AlertContext type={EAlertType.WARNING}>
-    Это предупреждение
-</AlertContext>
-
-// Ошибка
-<AlertContext type={EAlertType.ERROR}>
-    Это сообщение об ошибке
-</AlertContext>
-
-// Системное сообщение
-<AlertContext type={EAlertType.SYSTEM}>
-    Это системное сообщение
-</AlertContext>
-
-// С кастомной иконкой
-<AlertContext type={EAlertType.INFO} renderIcon={<CustomIcon />}>
-    Сообщение с кастомной иконкой
-</AlertContext>
-\`\`\`
                 `,
             },
         },

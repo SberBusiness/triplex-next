@@ -1,16 +1,8 @@
 import React from "react";
-import { ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/Tooltip";
 import { TooltipDesktopBase } from "@sberbusiness/triplex-next/components/Tooltip/components/desktop/components/TooltipDesktopBase";
 import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-
-/** Свойства компонента TooltipDesktop. */
-export interface ITooltipDesktopProps extends Omit<ITooltipProps, "toggle"> {
-    /** Признак открыт ли TooltipDesktop. */
-    isOpen: boolean;
-    /** Дочерние элементы. */
-    children?: never;
-}
+import { ITooltipDesktopProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
 /** Десктоп версия компонента Tooltip. */
 export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {

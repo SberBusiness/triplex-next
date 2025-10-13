@@ -1,12 +1,7 @@
 import React, { useContext } from "react";
 import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-
-/** Свойства компонента TooltipTarget. */
-export interface ITooltipTargetProps {
-    /** Дочерние элементы. */
-    children: React.ReactElement;
-}
+import { ITooltipTargetProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
 /** Целевой элемент компонента Tooltip. */
 export const TooltipTarget: React.FC<ITooltipTargetProps> = ({ children }) => {

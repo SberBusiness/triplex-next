@@ -2,7 +2,7 @@ import {
     ESegmentedControlType,
     ESegmentedControlTheme,
     ESegmentedControlSize,
-} from "@sberbusiness/triplex-next/components/SegmentedControl";
+} from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
 import { IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button";
 
 /** Значение SegmentedControl с множественным выбором. */
@@ -44,12 +44,4 @@ export interface ISegmentedControlSingleProps extends ISegmentedControlCommonPro
 /** Свойства компонента SegmentedControlSegment. */
 export interface ISegmentedControlSegmentProps extends IButtonBaseProps {
     value: string;
-}
-
-/** Тип контекста компонента SegmentedControl. */
-export interface ISegmentedControlContextType {
-    type: ESegmentedControlType;
-    value: TSegmentedControlSingleValue | TSegmentedControlMultipleValue;
-    disabled: boolean;
-    onSegmentSelect: (props: { selected: boolean; value: string }) => void;
 }

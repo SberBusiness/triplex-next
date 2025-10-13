@@ -1,12 +1,10 @@
 import React from "react";
+import clsx from "clsx";
 import { MobileView } from "@sberbusiness/triplex-next/components/MobileView/MobileView";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize, ELineType } from "@sberbusiness/triplex-next/components/Typography/enums";
-import clsx from "clsx";
+import { ITooltipBodyProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipDesktop.module.less";
-
-/** Свойства компонента TooltipBody. */
-export interface ITooltipBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Тело компонента Tooltip. */
 export const TooltipBody = React.forwardRef<HTMLDivElement, ITooltipBodyProps>(({ className, ...rest }, ref) => {

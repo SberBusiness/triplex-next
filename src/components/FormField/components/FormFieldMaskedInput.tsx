@@ -2,15 +2,11 @@ import React, { useEffect, useContext, useRef, useState, useCallback } from "rea
 import clsx from "clsx";
 import MaskedInputTextMask, { conformToMask, MaskedInputProps, PipeConfig } from "react-text-mask";
 import { presets, TFormFieldMaskedInputPresets } from "./FormFieldMaskedInputPresets";
-import { FormFieldInput } from "@sberbusiness/triplex-next";
+import { FormFieldInput } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldInput";
 import { FormFieldContext } from "../FormFieldContext";
+import { TFormFieldMaskedInputMask } from "@sberbusiness/triplex-next/components/FormField/types";
 import stylesFormFieldInput from "../styles/FormFieldInput.module.less";
 import styles from "../styles/FormFieldMaskedInput.module.less";
-
-/** Маска. Каждый элемент массива должен быть либо строкой, либо регулярным выражением. Каждая строка — это фиксированный символ в маске, а каждое регулярное выражение — это заполнитель, который принимает пользовательский ввод.
- * Подробнее можно ознакомиться https://github.com/text-mask/text-mask/blob/master/componentDocumentation.md#mask.
- * */
-export type TFormFieldMaskedInputMask = Array<string | RegExp>;
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldMaskedInputProps extends Omit<MaskedInputProps, "guide" | "mask" | "render"> {

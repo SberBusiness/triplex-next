@@ -5,15 +5,11 @@ import {
     ETooltipEndCoordinates,
     ETooltipFlowTypes,
     ETooltipPreferPlace,
+    ETooltipSize,
     ETooltipSizeParameter,
     ETooltipStartCoordinates,
     ETooltipTypeName,
 } from "@sberbusiness/triplex-next/components/Tooltip/enums";
-import { ITooltipTargetProps } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipTarget";
-import { ITooltipBodyProps } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipBody";
-import { ITooltipXButtonProps } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipXButton";
-import { ITooltipMobileHeaderProps } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileHeader";
-import { ITooltipLinkProps } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipLink";
 
 /** Интерфейс координат X. */
 export interface ITooltipXCoordinates {
@@ -103,4 +99,64 @@ export interface ITooltipElements {
     link: React.ReactElement<ITooltipLinkProps> | null;
     closeButton: React.ReactElement<ITooltipXButtonProps> | null;
     mobileHeader: React.ReactElement<ITooltipMobileHeaderProps> | null;
+}
+
+/** Свойства компонента TooltipTarget. */
+export interface ITooltipTargetProps {
+    /** Дочерние элементы. */
+    children: React.ReactElement;
+}
+
+/** Свойства компонента TooltipBody. */
+export interface ITooltipBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+/** Свойства компонента TooltipXButton. */
+export interface ITooltipXButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Дочерние элементы. */
+    children?: never;
+}
+
+/** Свойства компонента TooltipMobileHeader. */
+export interface ITooltipMobileHeaderProps extends Omit<IDropdownMobileHeaderProps, "closeButton"> {}
+
+/** Свойства компонента DropdownMobileHeader. */
+export interface IDropdownMobileHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Кнопка закрытия мобильной версии Dropdown. */
+    closeButton?: () => JSX.Element;
+}
+
+/** Свойства компонента TooltipLink. */
+export interface ITooltipLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
+
+
+/** Свойства компонента Tooltip. */
+export interface ITooltipProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Размер подсказки. */
+    size: ETooltipSize;
+    /** Подсказка должна появляться по наведению или по клику. */
+    toggleType?: TTooltipToggleType;
+    /** Предпочитаемое место расположения подсказки. Если не помещается, то отобразится там где помещается. */
+    preferPlace?: ETooltipPreferPlace;
+    /** Расположение указателя. */
+    alignTip?: ETooltipAlign;
+    /** Элемент в который будет происходить рендер подсказки. */
+    renderContainer?: Element;
+    /** Отключить режим адаптивности. */
+    disableAdaptiveMode?: boolean;
+    /** Признак открыт ли Tooltip. */
+    isOpen?: boolean;
+    /** Контролирующая функция закрытия/открытия. */
+    toggle?: (open: boolean) => void;
+    /** Callback-функция появления Tooltip. */
+    onShow?: (node: HTMLDivElement) => void;
+    /** Ссылка на target-элемент. */
+    targetRef: React.MutableRefObject<HTMLElement | null>;
+}
+
+/** Свойства компонента TooltipDesktop. */
+export interface ITooltipDesktopProps extends Omit<ITooltipProps, "toggle"> {
+    /** Признак открыт ли TooltipDesktop. */
+    isOpen: boolean;
+    /** Дочерние элементы. */
+    children?: never;
 }

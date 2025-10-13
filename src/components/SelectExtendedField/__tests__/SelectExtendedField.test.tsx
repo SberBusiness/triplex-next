@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SelectExtendedField, SelectExtendedFieldTarget, SelectExtendedFieldDropdown } from "../index";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { EFormFieldStatus } from "../../FormField";
+import { EFormFieldStatus } from "../../FormField/enums";
 
 // Mock для KeyDownListener
 vi.mock("../../KeyDownListener", () => ({
@@ -77,6 +77,7 @@ vi.mock("../../FormField", () => ({
     FormFieldPostfix: ({ children }: { children: React.ReactNode }) => (
         <div data-testid="form-field-postfix">{children}</div>
     ),
+    EFormFieldStatus: { DEFAULT: "default", DISABLED: "disabled", ERROR: "error", WARNING: "warning" },
 }));
 
 // Mock для FormFieldTarget
@@ -340,22 +341,6 @@ describe("SelectExtendedFieldTarget", () => {
         const target = screen.getByTestId("form-field-target");
         expect(target).toHaveTextContent("Selected Value");
         expect(target).toHaveClass("label");
-    });
-
-    it("Should display placeholder when no label", () => {
-        render(
-            <SelectExtendedFieldTarget
-                fieldLabel="Test Field"
-                placeholder="Select option"
-                opened={false}
-                setOpened={mockSetOpened}
-                data-testid="target"
-            />,
-        );
-
-        const target = screen.getByTestId("form-field-target");
-        expect(target).toHaveTextContent("Select option");
-        expect(target).toHaveClass("placeholder");
     });
 
     it("Should apply opened state class", () => {

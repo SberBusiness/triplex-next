@@ -63,7 +63,6 @@ export const FormField: React.FC<IFormFieldProps> = ({
                     {
                         [styles.active]: focused,
                         [styles.disabled]: status === EFormFieldStatus.DISABLED,
-                        [styles.default]: status === EFormFieldStatus.DEFAULT,
                         [styles.error]: status === EFormFieldStatus.ERROR,
                         [styles.warning]: status === EFormFieldStatus.WARNING,
                         [styles[`size-${size}`]]: size,

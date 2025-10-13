@@ -20,12 +20,12 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
         const [floating, setFloating] = useState(false);
 
         useEffect(() => {
-            if (!isUndefined(floatingProp)) {
+            if (!isUndefined(floatingProp) && floatingProp !== floating) {
                 setFloating(floatingProp);
-            } else {
+            } else if (floatingProp !== floating) {
                 setFloating(focused || valueExist);
             }
-        }, [focused, valueExist, floatingProp]);
+        }, [focused, valueExist, floatingProp, floating]);
 
         const classNames = clsx(
             styles.formFieldLabel,

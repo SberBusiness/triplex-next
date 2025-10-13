@@ -1,12 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { IDropdownMobileHeaderProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 import styles from "../styles/DropdownMobile.module.less";
-
-/** Свойства компонента DropdownMobileHeader. */
-export interface IDropdownMobileHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Кнопка закрытия мобильной версии Dropdown. */
-    closeButton?: () => JSX.Element;
-}
 
 /** Заголовок мобильной версии Dropdown. */
 export const DropdownMobileHeader = React.forwardRef<HTMLDivElement, IDropdownMobileHeaderProps>(

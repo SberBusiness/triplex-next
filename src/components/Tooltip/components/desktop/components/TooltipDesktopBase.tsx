@@ -1,7 +1,7 @@
 import React from "react";
 import isEqual from "lodash-es/isEqual";
-import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import clsx from "clsx";
+import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import { Portal } from "@sberbusiness/triplex-next/components/Portal/Portal";
 import {
     ETooltipAlign,
@@ -16,8 +16,12 @@ import {
     ETooltipTypeName,
 } from "@sberbusiness/triplex-next/components/Tooltip/enums";
 import { TooltipDesktopTip } from "@sberbusiness/triplex-next/components/Tooltip/components/desktop/components/TooltipDesktopTip";
-import { ITooltipDesktopProps } from "@sberbusiness/triplex-next/components/Tooltip/components/desktop/TooltipDesktop";
-import { ITooltipBounds, ITooltipDomainSize, ITooltipSize } from "@sberbusiness/triplex-next/components/Tooltip/types";
+import {
+    ITooltipBounds,
+    ITooltipDesktopProps,
+    ITooltipDomainSize,
+    ITooltipSize,
+} from "@sberbusiness/triplex-next/components/Tooltip/types";
 import {
     axes,
     calcBounds,

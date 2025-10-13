@@ -1,15 +1,10 @@
 import React, { useContext } from "react";
-import {
-    DropdownMobileHeader,
-    IDropdownMobileHeaderProps,
-} from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
+import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
 import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
 import { TooltipMobileCloseButton } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileCloseButton";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { EFontType, ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-
-/** Свойства компонента TooltipMobileHeader. */
-export interface ITooltipMobileHeaderProps extends Omit<IDropdownMobileHeaderProps, "closeButton"> {}
+import { ITooltipMobileHeaderProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
 /** Заголовок компонента TooltipMobile. */
 export const TooltipMobileHeader: React.FC<ITooltipMobileHeaderProps> = ({ children, ...rest }) => {

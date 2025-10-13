@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { TextField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
-import { EFormFieldSize } from "../../src/components/FormField/enums";
+import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldClear } from "../../src/components";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
@@ -87,28 +87,13 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
         );
     },
     argTypes: {
-        error: {
-            control: { type: "boolean" },
-            description: "Состояние ошибки",
+        status: {
+            control: { type: "select" },
+            options: Object.values(EFormFieldStatus),
+            description: "Состояние поля",
             table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Отключенное состояние",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        warning: {
-            control: { type: "boolean" },
-            description: "Состояние предупреждения",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
+                type: { summary: "EFormFieldStatus" },
+                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
             },
         },
         labelText: {
@@ -184,9 +169,7 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
         },
     },
     args: {
-        error: false,
-        disabled: false,
-        warning: false,
+        status: EFormFieldStatus.DEFAULT,
         size: EFormFieldSize.LG,
         labelText: "Название поля",
         showLabel: true,
@@ -514,7 +497,7 @@ export const States: StoryObj<typeof TextField> = {
                 <Gap size={24} />
 
                 <TextField
-                    error
+                    status={EFormFieldStatus.ERROR}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
                             Текст ошибки
@@ -530,7 +513,7 @@ export const States: StoryObj<typeof TextField> = {
                 <Gap size={24} />
 
                 <TextField
-                    warning
+                    status={EFormFieldStatus.WARNING}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
                             Текст предупреждения
@@ -546,10 +529,9 @@ export const States: StoryObj<typeof TextField> = {
                 <Gap size={24} />
 
                 <TextField
-                    disabled
+                    status={EFormFieldStatus.DISABLED}
                     inputProps={{
-                        value: "Value disabled",
-                        disabled: true,
+                        value: "Value disabled"
                     }}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>

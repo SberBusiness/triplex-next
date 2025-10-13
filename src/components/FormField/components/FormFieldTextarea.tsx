@@ -3,6 +3,7 @@ import {FormFieldContext} from '../FormFieldContext';
 import clsx from 'clsx';
 import { uniqueId } from 'lodash-es';
 import styles from '../styles/FormFieldTextarea.module.less';
+import { EFormFieldStatus } from '../enums';
 
 /** Свойства компонента FormFieldTextarea. */
 export interface IFormFieldTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -10,7 +11,7 @@ export interface IFormFieldTextareaProps extends React.TextareaHTMLAttributes<HT
 /** Компонент, отображающий textarea. */
 export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFieldTextareaProps>(
     ({className, id, onBlur, onFocus, placeholder, value, ...htmlTextareaHTMLAttributes}, ref) => {
-        const {disabled, focused, setFocused, setId, setValueExist} = useContext(FormFieldContext);
+        const {status, focused, setFocused, setId, setValueExist} = useContext(FormFieldContext);
         const instanceId = useRef(id || uniqueId());
         const classNames = clsx(styles.formFieldTextarea, className);
 
@@ -44,7 +45,7 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
                 {...htmlTextareaHTMLAttributes}
                 id={instanceId.current}
                 className={classNames}
-                disabled={disabled}
+                disabled={status === EFormFieldStatus.DISABLED}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 /* Когда элемент не в фокусе, вместо placeholder показывается Label. */

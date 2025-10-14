@@ -51,7 +51,8 @@ const preview: Preview = {
         backgrounds: {
             options: [
                 { name: "white", value: "#FFFFFF" },
-                { name: "gray", value: "#EEF0F4" },
+                // Совпадает с фоном LightBox.
+                { name: "gray", value: "#EAEDF1" },
                 { name: "black", value: "#000000" },
             ],
         },

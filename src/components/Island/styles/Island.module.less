@@ -1,1 +1,42 @@
-.island {}
+.island {
+    &.type1 {
+        background-color: var(--triplex-next-Island-Type1_Background);
+        box-shadow: var(--triplex-next-Island-Type1_Shadow);
+    }
+
+    &.type2 {
+        background-color: var(--triplex-next-Island-Type2_Background);
+        box-shadow: var(--triplex-next-Island-Type2_Shadow);
+    }
+    
+    &.type3 {
+        background-color: var(--triplex-next-Island-Type3_Background);
+        box-shadow: var(--triplex-next-Island-Type3_Shadow);
+    }
+
+    &.borderRadiusMD {
+        border-radius: 16px;
+    }
+
+    &.borderRadiusSM {
+        border-radius: 8px;
+    }
+
+    &.paddingLG {
+        padding: 24px;
+    }
+
+    &.paddingMD {
+        padding: 16px;
+    }
+
+    &.paddingSM {
+        padding: 0;
+    }
+
+    .islandHeader + .islandBody,
+    .islandHeader + .islandFooter,
+    .islandBody + .islandFooter {
+        margin-top: 16px;
+    }
+}

@@ -1,16 +1,40 @@
 import React from "react";
 import clsx from "clsx";
-import { EIslandType } from "@sberbusiness/triplex-next/components/Island/enums";
+import {
+    EIslandBorderRadius,
+    EIslandPaddingSize,
+    EIslandType,
+} from "@sberbusiness/triplex-next/components/Island/enums";
 import styles from "./styles/Island.module.less";
 
 export interface IIslandProps extends React.HTMLProps<HTMLDivElement> {
+    /** Возможные размеры скругления. */
+    borderRadius?: EIslandBorderRadius;
+    /** Тип компонента Island. Отличаются цвет и тень. */
     type?: EIslandType;
+    /** Возможные размеры внутреннего отступа. */
+    paddingSize?: EIslandPaddingSize;
 }
 
-export const Island = React.forwardRef<HTMLDivElement, IIslandProps>(({ type, ...rest }, ref) => {
-    return (
-        <div className={clsx(styles.island)} ref={ref} {...rest}>
-            Island
-        </div>
-    );
-});
+export const Island = React.forwardRef<HTMLDivElement, IIslandProps>(
+    (
+        {
+            type = EIslandType.type1,
+            borderRadius = EIslandBorderRadius.MD,
+            paddingSize = EIslandPaddingSize.MD,
+            children,
+            ...rest
+        },
+        ref,
+    ) => {
+        return (
+            <div
+                className={clsx(styles.island, styles[type], styles[borderRadius], styles[paddingSize])}
+                ref={ref}
+                {...rest}
+            >
+                {children}
+            </div>
+        );
+    },
+);

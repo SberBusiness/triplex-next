@@ -20,6 +20,7 @@ import {
     DropdownMobileList_Tokens,
     Overlay_Tokens,
     Skeleton_Tokens,
+    Island_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsFormFieldValue,
@@ -41,6 +42,7 @@ import {
     TDesignTokensComponentsListItemValue,
     TDesignTokensComponentsListItemControlsButtonValue,
     TDesignTokensComponentsListMasterValue,
+    TDesignTokensComponentsIslandValue,
     ListItemControlsButton_Tokens,
     ListMaster_Tokens,
     ListItem_Tokens,
@@ -138,4 +140,5 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         FooterPage_Tokens,
     ),
+    Island: GetTokensValueByTheme<TDesignTokensComponentsIslandValue>(ETriplexNextTheme.LIGHT, Island_Tokens),
 };

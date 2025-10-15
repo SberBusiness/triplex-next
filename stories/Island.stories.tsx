@@ -9,8 +9,10 @@ const meta = {
     title: "Components/Island",
     component: Island,
     tags: ["autodocs"],
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     parameters: {
-        backgrounds: { default: "gray" },
         docs: {
             description: {
                 component: `

@@ -49,11 +49,12 @@ const customViewports = {
 const preview: Preview = {
     parameters: {
         backgrounds: {
-            options: [
-                { name: "white", value: "#FFFFFF" },
-                { name: "gray", value: "#EEF0F4" },
-                { name: "black", value: "#000000" },
-            ],
+            options: {
+                white: { name: "white", value: "#FFFFFF" },
+                // Совпадает с фоном LightBox.
+                gray: { name: "gray", value: "#EAEDF1" },
+                black: { name: "black", value: "#000000" },
+            },
         },
         docs: {
             container: DocsContainer,
@@ -67,6 +68,9 @@ const preview: Preview = {
                 ...customViewports,
             },
         },
+    },
+    initialGlobals: {
+        backgrounds: { value: "white" },
     },
     decorators: [
         (Story, context) => {

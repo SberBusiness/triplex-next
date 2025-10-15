@@ -61,6 +61,8 @@ import {
     TDesignTokensComponentsHeaderPageValue,
     FooterPage_Tokens,
     TDesignTokensComponentsFooterPageValue,
+    Island_Tokens,
+    TDesignTokensComponentsIslandValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -138,4 +140,5 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         FooterPage_Tokens,
     ),
+    Island: GetTokensValueByTheme<TDesignTokensComponentsIslandValue>(ETriplexNextTheme.DARK, Island_Tokens),
 };

@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import { TCardProps } from "@sberbusiness/triplex-next/components/Card/types";
+import { ICardActionProps } from "@sberbusiness/triplex-next/components/Card/types";
 import { CardContent } from "@sberbusiness/triplex-next/components/Card/components/CardContent/CardContent";
 import { CardMedia } from "@sberbusiness/triplex-next/components/Card/components/CardMedia";
 import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
@@ -14,16 +13,6 @@ import clsx from "clsx";
 import actionStyles from "./styles/Action.module.less";
 import cardStyles from "./styles/Card.module.less";
 
-/** Свойства интерактивной карточки. */
-type TCardActionProps = TCardProps & {
-    /** Обработчик переключения выбора карточки. */
-    onToggle?: (selected: boolean) => void;
-    /** Контролируемое состояние выбрана/не выбрана. */
-    selected?: boolean;
-    /** Контролирующая функция состояние выбрана/не выбрана. */
-    toggle?: (selected: boolean) => void;
-};
-
 /** Состояния интерактивной карточки. */
 interface ICardActionState {
     /** Выбрана или нет. */
@@ -35,7 +24,7 @@ interface ICardActionState {
 }
 
 /** Компонент "Интерактивная карточка". */
-export class CardAction extends React.Component<TCardActionProps, ICardActionState> {
+export class CardAction extends React.Component<ICardActionProps, ICardActionState> {
     public static displayName = "CardAction";
 
     public static Content = CardContent;
@@ -47,7 +36,7 @@ export class CardAction extends React.Component<TCardActionProps, ICardActionSta
         isSelected: !!this.props.selected,
     };
 
-    public componentDidUpdate(prevProps: Readonly<TCardActionProps>): void {
+    public componentDidUpdate(prevProps: Readonly<ICardActionProps>): void {
         const { selected, onToggle } = this.props;
 
         if (selected !== prevProps.selected) {

@@ -28,3 +28,4 @@ export * from "./Skeleton";
 export * from "./SegmentedControl";
 export * from "./KeyDownListener";
 export * from "./SelectExtendedField";
+export * from "./Island";

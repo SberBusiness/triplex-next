@@ -38,7 +38,7 @@ const meta = {
             control: { type: "select" },
             options: Object.values(EIslandType),
             description: "Тип визуального оформления острова",
-            table: { type: { summary: "EIslandType" }, defaultValue: { summary: EIslandType.type1 } },
+            table: { type: { summary: "EIslandType" }, defaultValue: { summary: EIslandType.TYPE_1 } },
         },
         borderRadius: {
             control: { type: "select" },
@@ -75,7 +75,7 @@ interface IPlaygroundProps extends React.ComponentProps<typeof Island> {
 export const Playground: StoryObj<IPlaygroundProps> = {
     name: "Playground",
     args: {
-        type: EIslandType.type1,
+        type: EIslandType.TYPE_1,
         borderRadius: EIslandBorderRadius.MD,
         paddingSize: EIslandPaddingSize.MD,
         headerText: "Island Header",
@@ -130,9 +130,9 @@ export const Playground: StoryObj<IPlaygroundProps> = {
         return (
             <div style={{ maxWidth: 360 }}>
                 <Island {...rest}>
-                    {showHeader ? <IslandHeader>{headerText}</IslandHeader> : null}
-                    {showBody ? <IslandBody>{bodyText}</IslandBody> : null}
-                    {showFooter ? <IslandFooter>{footerText}</IslandFooter> : null}
+                    {showHeader ? <Island.Header>{headerText}</Island.Header> : null}
+                    {showBody ? <Island.Body>{bodyText}</Island.Body> : null}
+                    {showFooter ? <Island.Footer>{footerText}</Island.Footer> : null}
                 </Island>
             </div>
         );
@@ -161,17 +161,17 @@ export const Types: Story = {
                 gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             }}
         >
-            <Island type={EIslandType.type1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
-                <IslandHeader>Type 1</IslandHeader>
-                <IslandBody>Body content</IslandBody>
-                <IslandFooter>Footer content</IslandFooter>
+            <Island type={EIslandType.TYPE_1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
+                <Island.Header>Type 1</Island.Header>
+                <Island.Body>Body content</Island.Body>
+                <Island.Footer>Footer content</Island.Footer>
             </Island>
-            <Island type={EIslandType.type2} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
-                <IslandHeader>Type 2</IslandHeader>
-                <IslandBody>Body content</IslandBody>
-                <IslandFooter>Footer content</IslandFooter>
+            <Island type={EIslandType.TYPE_2} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
+                <Island.Header>Type 2</Island.Header>
+                <Island.Body>Body content</Island.Body>
+                <Island.Footer>Footer content</Island.Footer>
             </Island>
-            <Island type={EIslandType.type3} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
+            <Island type={EIslandType.TYPE_3} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
                 <IslandHeader>Type 3</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
@@ -202,12 +202,12 @@ export const BorderRadius: Story = {
                 gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             }}
         >
-            <Island type={EIslandType.type1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.SM}>
+            <Island type={EIslandType.TYPE_1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.SM}>
                 <IslandHeader>SM</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
             </Island>
-            <Island type={EIslandType.type1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
+            <Island type={EIslandType.TYPE_1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
                 <IslandHeader>MD</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
@@ -238,17 +238,17 @@ export const PaddingSizes: Story = {
                 gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             }}
         >
-            <Island type={EIslandType.type1} paddingSize={EIslandPaddingSize.SM} borderRadius={EIslandBorderRadius.MD}>
+            <Island type={EIslandType.TYPE_1} paddingSize={EIslandPaddingSize.SM} borderRadius={EIslandBorderRadius.MD}>
                 <IslandHeader>Padding SM</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
             </Island>
-            <Island type={EIslandType.type1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
+            <Island type={EIslandType.TYPE_1} paddingSize={EIslandPaddingSize.MD} borderRadius={EIslandBorderRadius.MD}>
                 <IslandHeader>Padding MD</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
             </Island>
-            <Island type={EIslandType.type1} paddingSize={EIslandPaddingSize.LG} borderRadius={EIslandBorderRadius.MD}>
+            <Island type={EIslandType.TYPE_1} paddingSize={EIslandPaddingSize.LG} borderRadius={EIslandBorderRadius.MD}>
                 <IslandHeader>Padding LG</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>

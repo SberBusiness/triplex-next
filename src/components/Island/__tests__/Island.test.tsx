@@ -1,11 +1,7 @@
 import React, { createRef } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Island } from "./Island";
-import {
-    EIslandType,
-    EIslandBorderRadius,
-    EIslandPaddingSize,
-} from "@sberbusiness/triplex-next/components/Island/enums";
+import { Island } from "../Island";
+import { EIslandType, EIslandBorderRadius, EIslandPaddingSize } from "../enums";
 
 describe("Island", () => {
     test("applies default classes for type, borderRadius and paddingSize", () => {
@@ -21,7 +17,7 @@ describe("Island", () => {
     test("applies classes based on props", () => {
         const { container } = render(
             <Island
-                type={EIslandType.type2}
+                type={EIslandType.TYPE_2}
                 borderRadius={EIslandBorderRadius.SM}
                 paddingSize={EIslandPaddingSize.LG}
             />,

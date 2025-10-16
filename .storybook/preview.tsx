@@ -69,9 +69,6 @@ const preview: Preview = {
             },
         },
     },
-    initialGlobals: {
-        backgrounds: { value: "white" },
-    },
     decorators: [
         (Story, context) => {
             const scopeRef = React.useRef<HTMLDivElement>(null);

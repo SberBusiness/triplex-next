@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import CaretdownStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretdownStrokeSrvIcon24";
+import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { LoaderSmall, ELoaderSmallSize, ELoaderSmallTheme } from "../../Loader";
 import clsx from "clsx";

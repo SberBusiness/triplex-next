@@ -2,7 +2,7 @@ import React from "react";
 import { ButtonIcon, IButtonIconProps } from "../../Button/ButtonIcon";
 import { EButtonIconShape } from "../../Button/enums";
 import { EPaginationNavigationIconDirection } from "../enums";
-import CaretleftStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretleftStrokeSrvIcon24";
+import { CaretleftStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import styles from "../styles/PaginationNavigationButton.module.less";
 
 /* Свойства компонента PaginationNavigationButton. */

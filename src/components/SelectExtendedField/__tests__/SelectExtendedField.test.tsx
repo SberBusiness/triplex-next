@@ -103,8 +103,8 @@ vi.mock("../../Loader", () => ({
 }));
 
 // Mock для иконки
-vi.mock("@sberbusiness/icons-next/CaretdownStrokeSrvIcon24", () => ({
-    default: ({ className }: { className?: string }) => (
+vi.mock("@sberbusiness/icons-next", () => ({
+    CaretdownStrokeSrvIcon24: ({ className }: { className?: string }) => (
         <div data-testid="caret-icon" className={className}>
             Caret Icon
         </div>

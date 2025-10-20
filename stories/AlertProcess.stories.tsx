@@ -8,7 +8,7 @@ import { EFontType, ETextSize } from "../src/components/Typography/enums";
 import { Button } from "../src/components/Button";
 import { EButtonSize, EButtonTheme } from "../src/components/Button";
 import { Gap } from "../src/components/Gap";
-import DefaulticonStrokePrdIcon20 from "@sberbusiness/icons-next/DefaulticonStrokePrdIcon20";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 export default {
     title: "Components/Alerts/AlertProcess",

@@ -1,5 +1,5 @@
 import React from "react";
-import { TCardProps } from "@sberbusiness/triplex-next/components/Card/types";
+import { ICardProps } from "@sberbusiness/triplex-next/components/Card/types";
 import { CardContent } from "@sberbusiness/triplex-next/components/Card/components/CardContent/CardContent";
 import { CardMedia } from "@sberbusiness/triplex-next/components/Card/components/CardMedia";
 import {
@@ -19,7 +19,7 @@ interface ICardStaticComposition {
 }
 
 /** Компонент "Статичная карточка". */
-export const CardStatic: React.FC<TCardProps> & ICardStaticComposition = ({
+export const CardStatic: React.FC<ICardProps> & ICardStaticComposition = ({
     children,
     className,
     roundingSize = ECardRoundingSize.MD,

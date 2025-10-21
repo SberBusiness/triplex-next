@@ -21,7 +21,7 @@ export const designTokensComponentsCardKeys = [
     "Action_Secondary_Background_Selected_Hover",
 
     // Common
-    "BorderColor_Focus",
+    "Shadow_Focus",
     "Shadow_Default",
     "Shadow_Hover",
 ] as const;
@@ -52,7 +52,7 @@ export const Card_Tokens: TDesignTokensComponentsCardValues = {
     Action_Secondary_Background_Selected_Hover: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover)
 
     // Common
-    BorderColor_Focus: [{ ref: "ColorWarning.80" }, { ref: "ColorWarning.80" }], // var(--triplex-next-Card-BorderColor_Focus)
+    Shadow_Focus: [{ value: "0 0 0 1px rgba(255, 209, 105)" }, { value: "0 0 0 1px rgba(255, 209, 105)" }], // var(--triplex-next-Card-Shadow_Focus)
     Shadow_Default: [{ value: "0 0 7px 0 rgba(31, 31, 34, 0.25)" }, { value: "0 0 7px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-Card-Shadow_Default)
     Shadow_Hover: [{ value: "0 0 14px 0 rgba(31, 31, 34, 0.25)" }, { value: "0 0 14px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-Card-Shadow_Hover)
 };

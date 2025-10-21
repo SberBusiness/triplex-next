@@ -1,19 +1,18 @@
 import React from "react";
 import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
-
-/** Свойства компонента Card типа Secondary. */
-export interface ICardGeneralProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Возможные размеры скругления карточки. */
     roundingSize?: ECardRoundingSize;
-    theme: ECardTheme.GENERAL;
+    /** Возможные темы оформления карточки. */
+    theme: ECardTheme;
 }
 
-/** Свойства компонента Card типа Secondary. */
-export interface ICardSecondaryProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Возможные размеры скругления карточки. */
-    roundingSize?: ECardRoundingSize;
-    theme: ECardTheme.SECONDARY;
+/** Свойства интерактивной карточки. */
+export interface ICardActionProps extends ICardProps {
+    /** Обработчик переключения выбора карточки. */
+    onToggle?: (selected: boolean) => void;
+    /** Контролируемое состояние выбрана/не выбрана. */
+    selected?: boolean;
+    /** Контролирующая функция состояние выбрана/не выбрана. */
+    toggle?: (selected: boolean) => void;
 }
-
-/** Свойства компонента Card. */
-export type TCardProps = ICardGeneralProps | ICardSecondaryProps;

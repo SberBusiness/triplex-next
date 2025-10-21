@@ -1,0 +1,82 @@
+@import 'src/styles/style';
+
+.lightBoxControls {
+    box-sizing: border-box;
+    top: 0;
+    top: var(--lightBox-screen-top);
+    position: fixed;
+    background-color: var(--triplex-LightBox-Controls_Background);
+    height: @lightBox-controls-opened-height;
+    z-index: @z-index-step + @z-index-step / 2;
+
+    .lightBoxControlsSmall {
+        display: block;
+    }
+
+    .lightBoxControlsBig {
+        display: none;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .lightBoxControlsSmall:hover {
+        cursor: pointer;
+    }
+}
+
+.withKeyboardEvent {
+    display: inline-block;
+}
+
+.withoutKeyboardEvent {
+    display: none;
+}
+
+.lightBox.lightBoxSideOverlayActive,
+.lightBox.lightBoxTopOverlayActive,
+.lightBox.isLoading {
+    .withKeyboardEvent {
+        display: none;
+    }
+
+    .withoutKeyboardEvent {
+        display: inline-block;
+    }
+}
+
+.lightBox.isLoading {
+    .lightBoxPrev,
+    .lightBoxNext {
+        display: none;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .LB-less-or-equal-media-point-0-no-hash {
+        .lightBoxControls {
+            height: @lightBox-controls-opened-height-SM;
+            // Перекрытие стилей из LightBoxAdaptive.less.
+            padding: 16px 16px !important;
+
+            .lightBoxClose {
+                // Перекрытие стилей из LightBoxAdaptive.less.
+                top: 18px !important;
+                right: 16px !important;
+            }
+
+            .lightBoxPrev + .lightBoxNext {
+                margin-left: 16px !important;
+            }
+        }
+    }
+}
+
+// При высоте экрана менее 800px lightBoxControls, header и footer не прилипают к экрану.
+@media screen and (max-height: @lightBox-disable-sticky-screen-height) {
+    .lightBoxControls {
+        position: absolute;
+        top: 0;
+    }
+}

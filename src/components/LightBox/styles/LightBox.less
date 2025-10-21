@@ -1,0 +1,85 @@
+@import 'src/styles/style';
+
+.firstFocus {
+    position: absolute;
+    left: -10000px;
+    width: 0;
+    height: 0;
+}
+
+.lightBox {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: @z-index-lightbox;
+    left: 0;
+    // IE 11
+    top: 0;
+    top: var(--lightBox-screen-top);
+    bottom: 0;
+    // IE 11
+    width: 100%;
+    width: var(--lightBox-screen-width);
+    overflow-y: scroll;
+    min-width: @ufs-theme-screen-min;
+
+    .lightBoxBackdrop {
+        content: '';
+        .backdropDefault();
+    }
+
+    &.lightBoxSideOverlayActive {
+        overflow-y: hidden;
+    }
+
+    &.lightBoxTopOverlayActive {
+        overflow-y: hidden;
+    }
+
+    .lightBoxPrev,
+    .lightBoxNext {
+        user-select: none;
+    }
+
+    .lightBoxContent {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 0;
+        position: relative;
+
+        .lightBoxBody {
+            flex-grow: 1;
+        }
+    }
+
+    .loadingContentOverlay {
+        z-index: @z-index-step * 3;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    .lightBoxContentResizeWrapper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 0;
+    }
+
+    // Скрытый элемент для вызова ререндера при закрытии оверлея, фикс бага в Safari - DCBSWT-2866.
+    .tempElSafariBug {
+        position: absolute;
+        left: -1000px;
+        top: 0;
+        visibility: hidden;
+    }
+}
+
+.bodyOverflowHidden {
+    overflow: hidden;
+}

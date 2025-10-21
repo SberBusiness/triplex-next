@@ -1,0 +1,245 @@
+@import url('src/styles/style');
+
+each(@scroll-sizes, {
+    @scroll-width: @value;
+    @scroll-width-px: ~'@{scroll-width}px';
+    // Ширина экрана без скрола.
+    @screen-width-without-scroll: calc(var(--lightBox-screen-width) - @scroll-width-px);
+
+    html.scroll-@{scroll-width} {
+        .lightBox {
+            left: var(--lightBox-screen-left);
+
+            .lightBoxBackdrop {
+                width: @screen-width-without-scroll;
+            }
+        }
+
+        /*
+          Breakpoint до которого стрелки находятся наверху лайтбокса.
+          Тело лайтбокса фиксированной ширины(@lightBox-content-min-width), после начинает увеличиваться до @lightBox-content-max-width.
+          < 1192px.
+        */
+        .LB-less-or-equal-media-point-1-no-hash {
+            // Ширина тела лайтбокса.
+            @lightBox-content-width: @lightBox-content-min-width;
+            // Левая позиция лайтбокса.
+            @lightBox-content-left: calc((@screen-width-without-scroll - @lightBox-content-width) / 2);
+            // Левая позиция стрелки 'Назад'.
+            @lightBox-arrow-prev-left: 32px;
+            // Левая позиция стрелки 'Вперед'.
+            @lightBox-arrow-next-left: 72px;
+            // Правая позиция кнопки 'Закрыть'.
+            @lightBox-close-right: 32px;
+
+            .lightBoxContent {
+                left: @lightBox-content-left;
+                width: @lightBox-content-width;
+            }
+
+            .lightBox.isLoading .lightBoxControls {
+                // Нужен, чтобы панель была над .loadingContentOverlay.
+                z-index: @z-index-step * 4;
+            }
+
+            .lightBoxControls,
+            .lightBoxContent > .loadingContentOverlay {
+                left: calc(@lightBox-content-left + var(--lightBox-screen-left));
+                width: @lightBox-content-width;
+            }
+
+            .lightBoxControls {
+                padding: 24px 32px;
+            }
+
+            .lightBoxClose {
+                top: 24px;
+                position: absolute;
+            }
+
+            .lightBoxPrev,
+            .lightBoxNext {
+                position: static;
+                display: inline-block;
+            }
+
+            .lightBoxPrev + .lightBoxNext {
+                margin-left: 8px;
+            }
+
+            .lightBoxClose {
+                right: @lightBox-close-right;
+            }
+        }
+
+        /*
+          Breakpoints в которых растет тело лайтбокса до @lightBox-content-max-width.
+          1192px < and < 1314
+         */
+        .LB-more-media-point-1-no-hash.LB-less-or-equal-media-point-2-no-hash {
+            // Ширина тела лайтбокса.
+            @lightBox-content-width: calc(@screen-width-without-scroll - @lightBox-arrow-with-margin-width * 2);
+            // Левая позиция лайтбокса.
+            @lightBox-content-left: calc((@screen-width-without-scroll - @lightBox-content-width) / 2);
+            // Левая позиция стрелки 'Назад'.
+            @lightBox-arrow-prev-left: calc(var(--lightBox-screen-left) + @lightBox-content-left - (@lightBox-arrow-width + 16px));
+            // Левая позиция стрелки 'Вперед'.
+            @lightBox-arrow-next-left: calc(var(--lightBox-screen-left) + @lightBox-content-left + @lightBox-content-width + 16px);
+            // Левая позиция кнопки 'Закрыть'.
+            @lightBox-close-left: @lightBox-arrow-next-left;
+
+            .lightBoxContent {
+                left: @lightBox-content-left;
+                width: @lightBox-content-width;
+            }
+
+            .lightBoxControls,
+            .lightBoxContent > .loadingContentOverlay {
+                left: calc(@lightBox-content-left + var(--lightBox-screen-left));
+                width: @lightBox-content-width;
+            }
+
+            .lightBoxPrev,
+            .lightBoxNext {
+                top: 50%;
+                transform: translateY(-50%);
+                position: fixed;
+            }
+
+            .lightBoxPrev {
+                left: @lightBox-arrow-prev-left;
+            }
+
+            .lightBoxNext {
+                left: @lightBox-arrow-next-left;
+            }
+
+            .lightBoxClose {
+                // IE11.
+                top: 16px;
+                top: calc(16px + var(--lightBox-screen-top));
+                left: @lightBox-close-left;
+                position: fixed;
+            }
+        }
+
+        /*
+          Breakpoint после которого ширина лайтбокса равна @lightBox-content-max-width, центруется относительно экрана.
+          > 1314
+         */
+        .LB-more-media-point-2-no-hash {
+            // Ширина тела лайтбокса.
+            @lightBox-content-width: @lightBox-content-max-width;
+            // Левая позиция лайтбокса. (Ширина экрана до скролла - ширина лайтбокса) / 2.
+            @lightBox-content-left: calc((@screen-width-without-scroll - @lightBox-content-width) / 2);
+            // Левая позиция стрелки 'Назад'.
+            @lightBox-arrow-prev-left: calc(var(--lightBox-screen-left) + @lightBox-content-left - @lightBox-arrow-width - 16px);
+            // Левая позиция стрелки 'Вперед'.
+            @lightBox-arrow-next-left: calc(var(--lightBox-screen-left) + @lightBox-content-left + @lightBox-content-width + 16px);
+            // Левая позиция кнопки 'Закрыть'.
+            @lightBox-close-left: @lightBox-arrow-next-left;
+
+            .lightBoxContent {
+                left: @lightBox-content-left;
+                width: @lightBox-content-width;
+            }
+
+            .lightBoxControls,
+            .lightBoxContent > .loadingContentOverlay {
+                left: calc(@lightBox-content-left + var(--lightBox-screen-left));
+                width: @lightBox-content-width;
+            }
+
+            .lightBoxPrev,
+            .lightBoxNext {
+                top: 50%;
+                transform: translateY(-50%);
+                position: fixed;
+            }
+
+            .lightBoxPrev {
+                left: @lightBox-arrow-prev-left;
+            }
+
+            .lightBoxNext {
+                left: @lightBox-arrow-next-left;
+            }
+
+            .lightBoxClose {
+                // IE11.
+                top: 16px;
+                top: calc(16px + var(--lightBox-screen-top));
+                left: @lightBox-close-left;
+                position: fixed;
+            }
+        }
+
+        /**
+         > 1192
+         */
+        .LB-more-media-point-1-no-hash {
+            .lightBox {
+                &.lightBoxSideOverlayActive,
+                &.lightBoxTopOverlayActive {
+                    .lightBoxClose,
+                    .lightBoxPrev,
+                    .lightBoxNext {
+                        display: none;
+                    }
+                }
+            }
+
+            .lightBoxControls {
+                height: @lightBox-controls-closed-height;
+                position: static;
+                z-index: @z-index-lightbox-controls;
+
+                .lightBoxControlsBig {
+                    display: block;
+                }
+
+                .lightBoxControlsSmall {
+                    display: none;
+                }
+            }
+        }
+
+        /*
+          Breakpoint для экранов менее 1024px.
+          < 1024px
+        */
+        .LB-less-or-equal-media-point-0-no-hash {
+            // Ширина лайтбокса/контролов/хедера/футера.
+            @lightBox-content-width: @screen-width-without-scroll;
+            // Левая позиция лайтбокса.
+            @lightBox-content-left: 0;
+
+            .lightBox {
+                position: fixed;
+                min-width: 0;
+                width: var(--lightBox-screen-width);
+
+                &.lightBoxSideOverlayActive {
+                    overflow: hidden;
+                }
+            }
+
+            .lightBoxControls {
+                position: absolute;
+                left: @lightBox-content-left;
+                width: @lightBox-content-width;
+                top: 0;
+            }
+
+            .lightBoxContent,
+            .lightBoxContent > .loadingContentOverlay {
+                left: @lightBox-content-left;
+                width: @lightBox-content-width;
+            }
+
+            .lightBox .lightBoxContent {
+                box-sizing: border-box;
+            }
+        }
+    }
+})

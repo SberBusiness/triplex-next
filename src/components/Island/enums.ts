@@ -4,16 +4,3 @@ export enum EIslandType {
     TYPE_2 = "type_2",
     TYPE_3 = "type_3",
 }
-
-/** Возможные размеры скругления. */
-export enum EIslandBorderRadius {
-    MD = "md",
-    SM = "sm",
-}
-
-/** Возможные размеры внутреннего отступа. */
-export enum EIslandPaddingSize {
-    LG = "lg",
-    MD = "md",
-    SM = "sm",
-}

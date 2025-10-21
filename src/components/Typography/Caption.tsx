@@ -21,7 +21,7 @@ export const mapCaptionSizeToCssClass = {
 };
 
 /** Свойства компонента Caption. */
-type TCaptionProps<T extends keyof JSX.IntrinsicElements> = {
+export type TCaptionProps<T extends keyof JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ECaptionSize;
     /** Толщина шрифта. */
@@ -44,7 +44,7 @@ export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.Intrinsic
             ...props
         }: TCaptionProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): JSX.Element => {
+    ): React.JSX.Element => {
         const classes = clsx(
             typographyStyles.typography,
             styles.caption,

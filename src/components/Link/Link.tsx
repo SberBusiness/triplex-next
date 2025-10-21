@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "./styles/Link.module.less";
 
 /** Общие свойства компонента Link. */
-interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     /** Тело гиперссылки. */
     children: React.ReactNode;
     /** Рендер функция предшествующего контента. */

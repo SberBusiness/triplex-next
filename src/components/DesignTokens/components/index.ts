@@ -28,3 +28,4 @@ export * from "./SegmentedControlSegment";
 export * from "./HeaderPage";
 export * from "./FooterPage";
 export * from "./Island";
+export * from "./TableBasic";

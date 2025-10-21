@@ -1,0 +1,204 @@
+@import "src/styles/style";
+
+@borderVerticalSpacing: 16px;
+
+.keyframes-fadeIn();
+
+.tableBasic {
+    position: relative;
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 16px;
+        margin-top: -16px;
+        margin-bottom: -16px;
+
+        th,
+        td {
+            &.alignLeft {
+                text-align: left;
+            }
+
+            &.alignRight {
+                text-align: right;
+            }
+
+            &.alignCenter {
+                text-align: center;
+            }
+
+            &.verticalAlignBaseline {
+                vertical-align: baseline;
+            }
+
+            &.verticalAlignSub {
+                vertical-align: sub;
+            }
+
+            &.verticalAlignSuper {
+                vertical-align: super;
+            }
+
+            &.verticalAlignTextTop {
+                vertical-align: text-top;
+            }
+
+            &.verticalAlignTextBottom {
+                vertical-align: text-bottom;
+            }
+
+            &.verticalAlignMiddle {
+                vertical-align: middle;
+            }
+
+            &.verticalAlignTop {
+                vertical-align: top;
+            }
+
+            &.verticalAlignBottom {
+                vertical-align: bottom;
+            }
+        }
+
+        > thead > tr {
+            height: @ufs-theme-size-icon-16 + 16px * 2;
+
+            > th {
+                background-color: var(--triplex-next-TableBasic-Header_Background);
+                padding: 18px 12px;
+                box-sizing: border-box;
+                color: var(--triplex-next-TableBasic-Color);
+
+                // Фикс бага движка IE11. Иначе по бокам от колонки появляется белая линия.
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    box-shadow:
+                        inset -1px 0 0 var(--triplex-next-TableBasic-Header_Background),
+                        inset 1px 0 0 var(--triplex-next-TableBasic-Header_Background);
+                }
+
+                &:first-child {
+                    border-top-left-radius: 8px;
+                }
+
+                &:last-child {
+                    border-top-right-radius: 8px;
+                }
+
+                .thBlock {
+                    display: inline-flex;
+                    vertical-align: top;
+
+                    &.order {
+                        cursor: pointer;
+
+                        .orderButton {
+                            display: flex;
+                            visibility: hidden;
+                            align-items: center;
+
+                            &.alignLeft {
+                                margin-right: 8px;
+                            }
+
+                            &.alignRight {
+                                margin-left: 8px;
+                            }
+
+                            &.sorted {
+                                visibility: visible;
+                            }
+                        }
+
+                        &:hover {
+                            .orderButton {
+                                visibility: visible;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        > tbody {
+            > tr {
+                > td {
+                    vertical-align: top;
+                    box-sizing: border-box;
+                    color: var(--triplex-next-TableBasic-Color);
+
+                    &:first-child {
+                        border-radius: 8px 0 0 8px;
+                    }
+
+                    &:last-child {
+                        border-radius: 0 8px 8px 0;
+                    }
+
+                    &.textType {
+                        padding: 12px;
+                    }
+
+                    &.componentsType {
+                        padding: 8px 12px;
+                    }
+
+                    &.checkboxType {
+                        padding: 12px + 2px 12px 12px;
+                    }
+                }
+
+                &.selected > td {
+                    background-color: var(--triplex-next-TableBasic-Background_Selected);
+
+                    // Фикс бага движка IE11. Иначе по бокам от колонки появляется белая линия.
+                    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                        box-shadow:
+                            inset -1px 0 0 var(--triplex-next-TableBasic-Background_Selected),
+                            inset 1px 0 0 var(--triplex-next-TableBasic-Background_Selected);
+                    }
+                }
+            }
+
+            &.clickable > tr {
+                cursor: pointer;
+            }
+
+            &.hoverable > tr:hover > td {
+                background-color: var(--triplex-next-TableBasic-Background_Hover);
+
+                // Фикс бага движка IE11. Иначе по бокам от колонки появляется белая линия.
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    box-shadow:
+                        inset -1px 0 0 var(--triplex-next-TableBasic-Background_Hover),
+                        inset 1px 0 0 var(--triplex-next-TableBasic-Background_Hover);
+                }
+            }
+        }
+    }
+
+    .footerEmptyData {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 64px 0;
+    }
+
+    .spinnerWrapper {
+        position: absolute;
+        top: 16px;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 16px);
+    }
+
+    .overlayCover {
+        position: absolute;
+        top: 16px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: @ufs-theme-overlay-white-background-color;
+        animation: fadeIn 0.3s;
+    }
+}

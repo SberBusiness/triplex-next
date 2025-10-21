@@ -27,7 +27,7 @@ export const mapTextLineTypeToCssClass = {
 };
 
 /** Свойства компонента Text. */
-type TTextProps<T extends keyof JSX.IntrinsicElements> = {
+export type TTextProps<T extends keyof JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ETextSize;
     /** Высота блока строки. */
@@ -53,7 +53,7 @@ export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElemen
             ...props
         }: TTextProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): JSX.Element => {
+    ): React.JSX.Element => {
         const classes = clsx(
             typographyStyles.typography,
             styles.text,

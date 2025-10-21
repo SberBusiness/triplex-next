@@ -68,11 +68,11 @@ import '@sberbusiness/icons-next/styles/icons.css';
 ```
 src/
   components/
-    MyComponent/
-      MyComponent.tsx
-      MyComponent.module.css
+    ComponentName/
       index.ts
-      __tests__/MyComponent.test.tsx
+      ComponentName.tsx
+      styles/ComponentName.module.less
+      __tests__/ComponentName.test.tsx
 ```
 
 > Каждый компонент должен иметь собственный `index.ts`, чтобы поддерживать генерацию `exports` в `package.json`.
@@ -91,13 +91,13 @@ src/
 
 ## 🧱 Добавление нового компонента
 
-1. Создай папку:
+1. Создать каталог:
 
 ```bash
 src/components/Alert/
 ```
 
-2. Добавь файлы:
+2. Добавить файлы:
 
 ```
 Alert.tsx
@@ -105,7 +105,7 @@ styles/Alert.module.less
 index.ts         ← обязательный!
 ```
 
-3. Зарегистрируй в `src/index.ts`:
+3. Указать экспорт в `src/index.ts`:
 
 ```ts
 export * from './components/Alert';
@@ -114,7 +114,7 @@ export * from './components/Alert';
 ---
 ## 🧪 Тестирование
 
-Проект использует [Vitest](https://vitest.dev/) для юнит-тестирования и [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) для тестирования компонентов.
+Проект использует [Vitest](https://vitest.dev/) для unit-тестирования и [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) для тестирования компонентов.
 
 Chromatic для визуального тестирования Storybook-компонентов.
 

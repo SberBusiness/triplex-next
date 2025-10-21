@@ -10,7 +10,7 @@ export const DropdownMobileHeader = React.forwardRef<HTMLDivElement, IDropdownMo
             {children}
             {closeButton?.()}
         </div>
-    )
+    ),
 );
 
 DropdownMobileHeader.displayName = "DropdownMobileHeader";

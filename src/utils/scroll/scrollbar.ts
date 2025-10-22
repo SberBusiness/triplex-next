@@ -23,8 +23,9 @@ export const getScrollbarWidth = (): number => {
     return scrollWidth;
 };
 
-export const addClassNameWithScrollbarWidth = (): void => {
-    const className = `scroll-${getScrollbarWidth()}`;
+export const addClassNameWithScrollbarWidth = (styles: Record<string, string>): void => {
+    const scrollWidth = getScrollbarWidth();
+    const className = styles[`scroll-${scrollWidth}`];
     if (!document.documentElement.classList.contains(className)) {
         document.documentElement.classList.add(className);
     }

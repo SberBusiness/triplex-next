@@ -12,7 +12,6 @@ import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
 import styles from "./styles/LightBox.module.less";
-// import stylesAdaptive from "./styles/LightBoxAdaptive.module.less";
 
 // Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body.
 export const lightBoxMountNodeIdDefault = "LightBox-mount-node";
@@ -46,7 +45,7 @@ interface ILightBoxFC extends React.FC<ILightBoxProps> {
     Controls: typeof LightBoxControls;
 }
 
-const bodyClassNamesIsLightBoxOpen = ["cssClass[bodyOverflowHidden]"];
+const bodyClassNamesIsLightBoxOpen = [styles.bodyOverflowHidden];
 
 export const LightBox: ILightBoxFC = ({
     children,
@@ -113,7 +112,7 @@ export const LightBox: ILightBoxFC = ({
     };
 
     useEffect(() => {
-        addClassNameWithScrollbarWidth();
+        addClassNameWithScrollbarWidth(styles);
         addClassNamesToDocumentElement();
         // Фикс бага в роутере - при переключении между лайтбоксами иногда сначала происходит componentDidMount 2го и затем componentWillUnmount первого, css классы удаляются.
         setTimeout(addClassNamesToDocumentElement, 100);
@@ -141,7 +140,7 @@ export const LightBox: ILightBoxFC = ({
 
     const classNameLightBox = clsx(
         scopeClassName,
-        styles.lightbox,
+        styles.lightBox,
         {
             [styles.isLoading]: Boolean(isLoading),
             [styles.lightBoxSideOverlayActive]: Boolean(isSideOverlayOpened),

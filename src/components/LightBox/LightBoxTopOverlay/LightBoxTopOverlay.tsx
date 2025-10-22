@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { EOverlayDirection, IOverlayChildrenProvideProps } from "@sber-business/triplex/components/Overlay/OverlayBase";
-import { Overlay, IOverlayProps } from "@sber-business/triplex/components/Overlay/Overlay";
-import FocusTrap from "focus-trap-react";
+import FocusTrap, { FocusTrapProps } from "focus-trap-react";
+import clsx from "clsx";
+import { EOverlayDirection, IOverlayChildrenProvideProps } from "../../Overlay/OverlayBase";
+import { Overlay, IOverlayProps } from "../../Overlay/Overlay";
+import styles from "./styles/LightBoxTopOverlay.module.less";
 
 /** Свойства компонента LightBoxTopOverlay. */
 export interface ILightBoxTopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
     children?: React.ReactNode;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    focusTrapProps?: FocusTrapProps;
 }
 
 export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
@@ -45,7 +46,7 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
                     (overlayWrapperTopPositionPrev) =>
                         parseInt(overlayWrapperTopPositionPrev as string, 10) +
                         Math.abs(position.top) +
-                        parseInt(lightBoxTopPosition, 10)
+                        parseInt(lightBoxTopPosition, 10),
                 );
             } else {
                 setOverlayWrapperTopPosition(
@@ -53,7 +54,7 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
                     (overlayWrapperTopPositionPrev) =>
                         parseInt(overlayWrapperTopPositionPrev as string, 10) -
                         position.top +
-                        parseInt(lightBoxTopPosition, 10)
+                        parseInt(lightBoxTopPosition, 10),
                 );
             }
         }
@@ -88,19 +89,18 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
 
     const renderOverlay = (overlayProps: IOverlayChildrenProvideProps) => (
         <>
-            <Overlay.Mask opened={overlayProps.opened} className="cssClass[lightBoxTopOverlayMask]" />
-            <Overlay.Panel className="cssClass[lightBoxTopOverlayPanel]" {...overlayProps}>
+            <Overlay.Mask opened={overlayProps.opened} className={styles.lightBoxTopOverlayMask} />
+            <Overlay.Panel className={styles.lightBoxTopOverlayPanel} {...overlayProps}>
                 {children}
             </Overlay.Panel>
         </>
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const setOpened = () => {};
 
-    const classNameOverlayWrapper = classnames("cssClass[lightBoxTopOverlayWrapper]", {
-        "cssClass[closing]": closing,
-        "cssClass[opened]": opened,
+    const classNameOverlayWrapper = clsx(styles.lightBoxTopOverlayWrapper, {
+        [styles.closing]: closing,
+        [styles.opened]: opened,
     });
 
     const overlay = (
@@ -111,7 +111,7 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
             opened={opened}
             setOpened={setOpened}
             {...OverlayBaseProps}
-            className="cssClass[lightBoxTopOverlay]"
+            className={styles.lightBoxTopOverlay}
             direction={EOverlayDirection.TOP}
         >
             {renderOverlay}
@@ -138,3 +138,5 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
         </FocusTrap>
     );
 };
+
+LightBoxTopOverlay.displayName = "LightBoxTopOverlay";

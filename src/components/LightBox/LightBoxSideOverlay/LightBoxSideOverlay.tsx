@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
 import {
     EOverlayDirection,
     IOverlayBaseProps,
     OverlayBase,
     IOverlayChildrenProvideProps,
-} from "@sber-business/triplex/components/Overlay/OverlayBase";
+} from "../../Overlay/OverlayBase";
 import { OverlayMask } from "../../Overlay/OverlayMask";
 import { LightBoxSideOverlayClose } from "./LightBoxSideOverlayClose";
 import { LightBoxSideOverlayLoader } from "./LightBoxSideOverlayLoader";
-import FocusTrap from "focus-trap-react";
-import { FocusTrapUtils } from "@sber-business/triplex/utils/focus/FocusTrapUtils";
+import FocusTrap, { FocusTrapProps } from "focus-trap-react";
+import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
+import styles from "./styles/LightBoxSideOverlay.module.less";
 
 export enum ELightBoxSideOverlaySize {
     SM,
@@ -23,7 +24,7 @@ export interface ILightBoxSideOverlayProps
     extends React.HTMLAttributes<HTMLDivElement>,
         Pick<IOverlayBaseProps, "opened" | "onClose" | "onOpen"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    focusTrapProps?: FocusTrapProps;
     isLoading?: boolean;
     /** Текст под спиннером. */
     loadingTitle?: React.ReactNode;
@@ -92,16 +93,14 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
 
     const renderMask = ({ opened, setOpened }: IOverlayChildrenProvideProps) =>
         // Маска рендерится у SideOverlay самого верхнего уровня, чтобы маски не накладывались друг на друга.
-        isTopLevelSideOverlayOpened ? null : (
-            <OverlayMask opened={opened} className="cssClass[lightBoxSideOverlayMask]" />
-        );
+        isTopLevelSideOverlayOpened ? null : <OverlayMask opened={opened} className={styles.lightBoxSideOverlayMask} />;
 
     const renderPanel = () => (
         <div
-            className={classnames("cssClass[lightBoxSideOverlayContent]", {
-                "cssClass[closing]": closing,
-                "cssClass[opening]": opening,
-                "cssClass[opened]": opened,
+            className={clsx(styles.lightBoxSideOverlayContent, {
+                [styles.closing]: closing,
+                [styles.opening]: opening,
+                [styles.opened]: opened,
             })}
             onTransitionEnd={handleTransitionEnd}
             ref={contentRef}
@@ -112,19 +111,18 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         </div>
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const setOpened = () => {};
 
-    const classNameOverlayWrapper = classnames(className, "cssClass[lightBoxSideOverlayWrapper]", {
-        "cssClass[closing]": closing,
-        "cssClass[opened]": opened,
-        "cssClass[openedTopLevelSideOverlay]": Boolean(isTopLevelSideOverlayOpened),
-        "cssClass[overflowXHidden]": Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
-        "cssClass[overflowYHidden]":
+    const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, {
+        [styles.closing]: closing,
+        [styles.opened]: opened,
+        [styles.openedTopLevelSideOverlay]: Boolean(isTopLevelSideOverlayOpened),
+        [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
+        [styles.overflowYHidden]:
             Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
-        "cssClass[sizeSM]": size === ELightBoxSideOverlaySize.SM,
-        "cssClass[sizeMD]": size === ELightBoxSideOverlaySize.MD,
-        "cssClass[sizeLG]": size === ELightBoxSideOverlaySize.LG,
+        [styles.sizeSM]: size === ELightBoxSideOverlaySize.SM,
+        [styles.sizeMD]: size === ELightBoxSideOverlaySize.MD,
+        [styles.sizeLG]: size === ELightBoxSideOverlaySize.LG,
     });
 
     const renderOverlay = (provideProps: IOverlayChildrenProvideProps) => (
@@ -136,9 +134,9 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
 
     const content = (
         <div
-            className={classnames("cssClass[lightBoxSideOverlay]", "cssClass[globalLightBoxSideOverlay]", {
-                "cssClass[closing]": closing,
-                "cssClass[opening]": opening,
+            className={clsx(styles.lightBoxSideOverlay, styles.globalLightBoxSideOverlay, {
+                [styles.closing]: closing,
+                [styles.opening]: opening,
             })}
         >
             <OverlayBase direction={EOverlayDirection.RIGHT} opened={opened} setOpened={setOpened}>

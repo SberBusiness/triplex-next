@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { SpinnerWidget } from "@sber-business/triplex/components/SpinnerWidget/SpinnerWidget";
+import { LoaderWidget } from "../../LoaderWidget/LoaderWidget";
+import styles from "./styles/LightBoxSideOverlayLoader.module.less";
 
 interface ILightBoxSideOverlayLoaderProps {
     /** Текст под спиннером.*/
@@ -25,8 +26,10 @@ export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps
     }, []);
 
     return (
-        <div ref={loaderRef} className="cssClass[spinnerWrapper]" style={{ top: `${topPosition}px` }}>
-            <SpinnerWidget>{loadingTitle}</SpinnerWidget>
+        <div ref={loaderRef} className={styles.lightBoxSideOverlayLoaderWrapper} style={{ top: `${topPosition}px` }}>
+            <LoaderWidget type="middle">{loadingTitle}</LoaderWidget>
         </div>
     );
 };
+
+LightBoxSideOverlayLoader.displayName = "LightBoxSideOverlayLoader";

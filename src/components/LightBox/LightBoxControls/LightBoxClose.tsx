@@ -1,7 +1,7 @@
 import React, { Ref, useRef } from "react";
 import { CrossStrokeSrvIcon20, CrossStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../../Button/ButtonIcon";
-import { TriggerClickOnKeyDownEvent } from "../Triggers/TriggerClickOnKeyDownEvent";
+import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { MobileView } from "../../MobileView/MobileView";
 import clsx from "clsx";

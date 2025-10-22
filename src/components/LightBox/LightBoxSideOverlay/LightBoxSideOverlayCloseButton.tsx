@@ -1,7 +1,8 @@
 import React from "react";
-import { ClosemediumNavIcon20 } from "@sberbusiness/icons/ClosemediumNavIcon20";
-import { ButtonIcon, IButtonIconProps } from "@sber-business/triplex/components/Button/ButtonIcon";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { CrossStrokeSrvIcon32 } from "@sberbusiness/icons-next";
+import { ButtonIcon, IButtonIconProps } from "../../Button/ButtonIcon";
+import clsx from "clsx";
+import styles from "./styles/LightBoxSideOverlayCloseButton.module.less";
 
 export interface ILightBoxSideOverlayCloseButtonProps extends Omit<IButtonIconProps, "children"> {}
 
@@ -11,14 +12,14 @@ export interface ILightBoxSideOverlayCloseButtonProps extends Omit<IButtonIconPr
 export const LightBoxSideOverlayCloseButton = React.forwardRef<HTMLButtonElement, ILightBoxSideOverlayCloseButtonProps>(
     ({ className, title = "Закрыть", ...props }, ref) => (
         <ButtonIcon
-            className={classnames(className, "cssClass[lightBoxSideOverlayCloseButton]")}
+            className={clsx(className, styles.lightBoxSideOverlayCloseButton)}
             title={title}
             {...props}
             ref={ref}
         >
-            <ClosemediumNavIcon20 />
+            <CrossStrokeSrvIcon32 paletteIndex={0} />
         </ButtonIcon>
-    )
+    ),
 );
 
 LightBoxSideOverlayCloseButton.displayName = "LightBoxSideOverlayCloseButton";

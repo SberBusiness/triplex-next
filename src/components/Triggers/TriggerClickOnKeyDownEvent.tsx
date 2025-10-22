@@ -1,7 +1,4 @@
-import {
-    IKeyDownListenerProps,
-    KeyDownListener,
-} from "@sber-business/triplex/components/KeyDownListener/KeyDownListener";
+import { IKeyDownListenerProps, KeyDownListener } from "../KeyDownListener/KeyDownListener";
 import React from "react";
 
 /**

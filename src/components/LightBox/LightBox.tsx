@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import FocusTrap, { FocusTrapProps } from "focus-trap-react";
-import { LightBoxContent } from "./components/LightBoxContent";
+import { LightBoxContent } from "./LightBoxContent";
 import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
 import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";
 import { Portal } from "../Portal/Portal";
@@ -12,6 +12,7 @@ import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
 import styles from "./styles/LightBox.module.less";
+// import stylesAdaptive from "./styles/LightBoxAdaptive.module.less";
 
 // Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body.
 export const lightBoxMountNodeIdDefault = "LightBox-mount-node";

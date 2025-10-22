@@ -1,5 +1,8 @@
 @import 'src/styles/style';
 
+.lightBox {
+    background-color: red;
+}
 .firstFocus {
     position: absolute;
     left: -10000px;
@@ -17,11 +20,16 @@
     bottom: 0;
     width: var(--lightBox-screen-width);
     overflow-y: scroll;
-    min-width: @ufs-theme-screen-min;
+    // min-width: @ufs-theme-screen-min;
 
     .lightBoxBackdrop {
         content: '';
-        .backdropDefault();
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background-color: var(--triplex-Backdrop-background);
+        background-image: blue;
     }
 
     &.lightBoxSideOverlayActive {

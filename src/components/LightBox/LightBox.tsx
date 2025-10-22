@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import FocusTrap from "focus-trap-react";
+import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import { LightBoxContent } from "./components/LightBoxContent";
 import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
 import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";
@@ -8,8 +8,10 @@ import { addClassNameWithScrollbarWidth } from "../../utils/scroll/scrollbar";
 import { LightBoxTopOverlay } from "./LightBoxTopOverlay/LightBoxTopOverlay";
 import { LightBoxViewManager } from "./LightBoxViewManager/LightBoxViewManager";
 import { MobileView } from "../MobileView/MobileView";
-import { FocusTrapUtils } from "../FocusTrap/FocusTrapUtils";
+import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
+import clsx from "clsx";
+import styles from "./styles/LightBox.module.less";
 
 // Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body.
 export const lightBoxMountNodeIdDefault = "LightBox-mount-node";
@@ -21,7 +23,7 @@ export const lightBoxViewManagerNodeIdDefault = "LightBox-view-manager-node";
 export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactElement[];
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    focusTrapProps?: FocusTrapProps;
     /** Ref на контейнер LightBox. */
     forwardRef?: React.MutableRefObject<HTMLElement | null>;
     /** DOM-нода в которую будет рендерится лайтбокс. */
@@ -105,6 +107,10 @@ export const LightBox: ILightBoxFC = ({
      */
     const lightBoxViewManagerNode = useRef<HTMLDivElement | null>(getLightBoxViewManagerMountNode());
 
+    const addClassNamesToDocumentElement = () => {
+        bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.add(className));
+    };
+
     useEffect(() => {
         addClassNameWithScrollbarWidth();
         addClassNamesToDocumentElement();
@@ -123,10 +129,6 @@ export const LightBox: ILightBoxFC = ({
         }
     }, [isSideOverlayOpened]);
 
-    const addClassNamesToDocumentElement = () => {
-        bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.add(className));
-    };
-
     /** Функция для хранения ссылки. */
     const setRef = (instance: HTMLDivElement | null) => {
         containerRef.current = instance;
@@ -136,15 +138,15 @@ export const LightBox: ILightBoxFC = ({
         }
     };
 
-    const classNameLightBox = classnames(
+    const classNameLightBox = clsx(
         scopeClassName,
-        "cssClass[lightBox]",
+        styles.lightbox,
         {
-            "cssClass[isLoading]": Boolean(isLoading),
-            "cssClass[lightBoxSideOverlayActive]": Boolean(isSideOverlayOpened),
-            "cssClass[lightBoxTopOverlayActive]": Boolean(isTopOverlayOpened),
+            [styles.isLoading]: Boolean(isLoading),
+            [styles.lightBoxSideOverlayActive]: Boolean(isSideOverlayOpened),
+            [styles.lightBoxTopOverlayActive]: Boolean(isTopOverlayOpened),
         },
-        className
+        className,
     );
 
     if (!lightBoxMountNode.current) {
@@ -153,9 +155,9 @@ export const LightBox: ILightBoxFC = ({
 
     const renderLightBox = () => (
         <div className={classNameLightBox} ref={setRef} role="dialog" aria-modal="true" {...htmlDivAttributes}>
-            <div className="cssClass[lightBoxBackdrop]" />
+            <div className={styles.lightBoxBackdrop} />
             {children}
-            <span ref={tempButtonRef} className="cssClass[tempElSafariBug]" />
+            <span ref={tempButtonRef} className={styles.tempElSafariBug} />
         </div>
     );
 

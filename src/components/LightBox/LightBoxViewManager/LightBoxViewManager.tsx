@@ -1,6 +1,6 @@
 import React from "react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import ReactResizeDetector from "react-resize-detector";
+import { useResizeDetector } from "react-resize-detector";
 import { Portal } from "../../Portal/Portal";
 import { LightBoxViewManagerConsts } from "./LightBoxViewManagerConsts";
 import isEqual from "lodash-es/isEqual";
@@ -121,11 +121,17 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
         updateRect();
     });
 
+    const { ref: resizeRef } = useResizeDetector({
+        handleWidth: true,
+        onResize: updateRectAndClassNames,
+        refreshMode: "throttle",
+        refreshRate: 150,
+    });
     return (
         <Portal container={lightBoxViewManagerNode}>
             {/* Высота div должна быть равной высоте lightBoxViewManagerNode. */}
             <div ref={viewNodeRef} style={{ height: "100%" }}>
-                <ReactResizeDetector onResize={updateRectAndClassNames} />
+                <div ref={resizeRef} style={{ width: "100%", height: "100%", position: "absolute" }} />
                 {rectViewNode && (
                     <style>
                         {/*

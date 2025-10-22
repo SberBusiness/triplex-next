@@ -1,13 +1,12 @@
-import { LightboxpaginatorleftNavIcon64 } from "@sberbusiness/icons/LightboxpaginatorleftNavIcon64";
-import { PaginatorleftNavIcon32 } from "@sberbusiness/icons/PaginatorleftNavIcon32";
-import { CaretleftSrvxIcon24 } from "@sberbusiness/icons/CaretleftSrvxIcon24";
-import { ButtonIcon } from "@sber-business/triplex/components/Button/ButtonIcon";
-import { EButtonIconShape } from "@sber-business/triplex/components/Button/enums";
-import { TriggerClickOnKeyDownEvent } from "@sber-business/triplex/components/Triggers/TriggerClickOnKeyDownEvent";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { EVENT_KEY_CODES } from "@sber-business/triplex/utils/keyboard";
+import { CaretleftStrokeSrvIcon32, CaretleftStrokeSrvIcon20, CaretleftStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { ButtonIcon } from "../../Button/ButtonIcon";
+import { EButtonIconShape } from "../../Button/enums";
+import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import React, { Ref, useRef } from "react";
-import { MobileView } from "@sber-business/triplex/components/MobileView/MobileView";
+import { MobileView } from "../../MobileView/MobileView";
+import clsx from "clsx";
+import styles from "../styles/LightBoxControls.module.less";
 
 /** Свойства LightBoxPrev. */
 interface ILightBoxPrevProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -50,31 +49,31 @@ export const LightBoxPrev: React.FC<ILightBoxPrevProps> = ({
             ref={params?.buttonRef}
         >
             {/* Большая стрелка слева от LightBox. */}
-            <span className="cssClass[lightBoxControlsBig]">
-                <LightboxpaginatorleftNavIcon64 />
+            <span className={styles.lightBoxControlsBig}>
+                <CaretleftStrokeSrvIcon32 paletteIndex={0} />
             </span>
             {/* Маленькая стрелка сверху LightBox. */}
-            <span className="cssClass[lightBoxControlsSmall]">
-                <MobileView fallback={<PaginatorleftNavIcon32 />}>
-                    <CaretleftSrvxIcon24 />
+            <span className={styles.lightBoxControlsSmall}>
+                <MobileView fallback={<CaretleftStrokeSrvIcon24 paletteIndex={0} />}>
+                    <CaretleftStrokeSrvIcon20 paletteIndex={0} />
                 </MobileView>
             </span>
         </ButtonIcon>
     );
 
     return (
-        <div className={classnames(className, "cssClass[lightBoxPrev]")} {...htmlDivAttributes}>
+        <div className={clsx(className, styles.lightBoxPrev)} {...htmlDivAttributes}>
             {clickByArrowLeft ? (
                 <span>
                     {/* Кнопка с триггером при нажатии стрелки на клавиатуре. */}
-                    <span className="cssClass[withKeyboardEvent]">
+                    <span className={styles.withKeyboardEvent}>
                         <TriggerClickOnKeyDownEvent targetRef={ref} eventKeyCode={EVENT_KEY_CODES.ARROW_LEFT}>
                             {renderButton({ addDataTestId: true, buttonRef: ref })}
                         </TriggerClickOnKeyDownEvent>
                     </span>
                     {/* Кнопка без триггера при нажатии стрелки на клавиатуре. Нельзя нажать, когда открыт
                          SideOverlay. */}
-                    <span className="cssClass[withoutKeyboardEvent]">{renderButton()}</span>
+                    <span className={styles.withoutKeyboardEvent}>{renderButton()}</span>
                 </span>
             ) : (
                 renderButton({ addDataTestId: true })

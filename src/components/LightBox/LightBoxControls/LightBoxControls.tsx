@@ -1,8 +1,9 @@
 import React from "react";
-import { LightBoxClose } from "@sber-business/triplex/components/LightBox/LightBoxControls/LightBoxClose";
-import { LightBoxNext } from "@sber-business/triplex/components/LightBox/LightBoxControls/LightBoxNext";
-import { LightBoxPrev } from "@sber-business/triplex/components/LightBox/LightBoxControls/LightBoxPrev";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { LightBoxClose } from "./LightBoxClose";
+import { LightBoxNext } from "./LightBoxNext";
+import { LightBoxPrev } from "./LightBoxPrev";
+import clsx from "clsx";
+import styles from "../styles/LightBoxControls.module.less";
 
 /** Свойства компонента LightBoxControls. */
 interface ILightBoxControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -15,11 +16,7 @@ export interface ILightBoxControlsFC extends React.FC<ILightBoxControlsProps> {
 
 /** Контейнер кнопок-действий (закрыть/вперед/назад). */
 export const LightBoxControls: ILightBoxControlsFC = ({ children, className, ...htmlDivAttributes }) => (
-    <div
-        className={classnames(className, "cssClass[lightBoxControls]")}
-        {...htmlDivAttributes}
-        data-lightbox-component="controls"
-    >
+    <div className={clsx(className, styles.lightBoxControls)} {...htmlDivAttributes} data-lightbox-component="controls">
         {children}
     </div>
 );

@@ -1,16 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import FocusTrap from "focus-trap-react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { LightBoxContent } from "@sber-business/triplex/components/LightBox/components/LightBoxContent";
-import { LightBoxControls } from "@sber-business/triplex/components/LightBox/LightBoxControls/LightBoxControls";
-import { LightBoxSideOverlay } from "@sber-business/triplex/components/LightBox/LightBoxSideOverlay/LightBoxSideOverlay";
-import { Portal } from "@sber-business/triplex/components/Portal/Portal";
-import { addClassNameWithScrollbarWidth } from "@sber-business/triplex/utils/scroll/scrollbar";
-import { LightBoxTopOverlay } from "@sber-business/triplex/components/LightBox/LightBoxTopOverlay/LightBoxTopOverlay";
-import { LightBoxViewManager } from "@sber-business/triplex/components/LightBox/LightBoxViewManager/LightBoxViewManager";
-import { MobileView } from "@sber-business/triplex/components/MobileView/MobileView";
-import { FocusTrapUtils } from "@sber-business/triplex/utils/focus/FocusTrapUtils";
-import { useToken } from "@sber-business/triplex/components/ThemeProvider/useToken";
+import { LightBoxContent } from "./components/LightBoxContent";
+import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
+import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";
+import { Portal } from "../Portal/Portal";
+import { addClassNameWithScrollbarWidth } from "../../utils/scroll/scrollbar";
+import { LightBoxTopOverlay } from "./LightBoxTopOverlay/LightBoxTopOverlay";
+import { LightBoxViewManager } from "./LightBoxViewManager/LightBoxViewManager";
+import { MobileView } from "../MobileView/MobileView";
+import { FocusTrapUtils } from "../FocusTrap/FocusTrapUtils";
+import { useToken } from "../ThemeProvider/useToken";
 
 // Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body.
 export const lightBoxMountNodeIdDefault = "LightBox-mount-node";

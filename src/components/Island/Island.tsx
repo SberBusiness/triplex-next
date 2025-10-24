@@ -1,39 +1,46 @@
 import React from "react";
 import clsx from "clsx";
-import { EIslandBorderRadius, EIslandPaddingSize, EIslandType } from "./enums";
+import { EIslandType } from "./enums";
 import { IslandBody } from "./components/IslandBody";
 import { IslandHeader } from "./components/IslandHeader";
 import { IslandFooter } from "./components/IslandFooter";
 import styles from "./styles/Island.module.less";
 
+export type TIslandBorderRadiusSize = 16 | 24 | 32;
+export type TIslandPaddingSize = 16 | 24 | 32;
+
 export interface IIslandProps extends React.HTMLProps<HTMLDivElement> {
     /** Возможные размеры скругления. */
-    borderRadius?: EIslandBorderRadius;
+    borderRadius?: TIslandBorderRadiusSize;
     /** Тип компонента Island. Отличаются цвет и тень. */
     type?: EIslandType;
     /** Возможные размеры внутреннего отступа. */
-    paddingSize?: EIslandPaddingSize;
+    paddingSize?: TIslandPaddingSize;
 }
 
-const mapBorderRadiusToClassName = (borderRadius: EIslandBorderRadius) => {
+const mapBorderRadiusToClassName = (borderRadius: TIslandBorderRadiusSize) => {
     switch (borderRadius) {
-        case EIslandBorderRadius.MD:
-            return styles.borderRadiusMD;
-        case EIslandBorderRadius.SM:
-            return styles.borderRadiusSM;
+        case 16:
+            return styles.borderRadius16;
+        case 24:
+            return styles.borderRadius24;
+        case 32:
+            return styles.borderRadius32;
     }
+
+    return "";
 };
 
-const mapPaddingSizeToClassName = (paddingSize: EIslandPaddingSize) => {
+const mapPaddingSizeToClassName = (paddingSize: TIslandPaddingSize) => {
     switch (paddingSize) {
-        case EIslandPaddingSize.MD:
-            return styles.paddingMD;
+        case 16:
+            return styles.padding16;
 
-        case EIslandPaddingSize.SM:
-            return styles.paddingSM;
+        case 24:
+            return styles.padding24;
 
-        case EIslandPaddingSize.LG:
-            return styles.paddingLG;
+        case 32:
+            return styles.padding32;
     }
 };
 
@@ -52,17 +59,7 @@ const mapTypeToClassName = (type: EIslandType) => {
 
 export const Island = Object.assign(
     React.forwardRef<HTMLDivElement, IIslandProps>(
-        (
-            {
-                type = EIslandType.TYPE_1,
-                borderRadius = EIslandBorderRadius.MD,
-                paddingSize = EIslandPaddingSize.MD,
-                className,
-                children,
-                ...rest
-            },
-            ref,
-        ) => {
+        ({ type = EIslandType.TYPE_1, borderRadius = 16, paddingSize = 16, className, children, ...rest }, ref) => {
             return (
                 <div
                     className={clsx(

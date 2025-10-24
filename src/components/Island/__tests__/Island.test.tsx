@@ -1,7 +1,7 @@
 import React, { createRef } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Island } from "../Island";
-import { EIslandType, EIslandBorderRadius, EIslandPaddingSize } from "../enums";
+import { EIslandType } from "../enums";
 
 describe("Island", () => {
     test("applies default classes for type, borderRadius and paddingSize", () => {
@@ -10,22 +10,16 @@ describe("Island", () => {
         expect(root).toBeTruthy();
         expect(root?.classList.contains("island")).toBe(true);
         expect(root?.classList.contains("type1")).toBe(true);
-        expect(root?.classList.contains("borderRadiusMD")).toBe(true);
-        expect(root?.classList.contains("paddingMD")).toBe(true);
+        expect(root?.classList.contains("borderRadius16")).toBe(true);
+        expect(root?.classList.contains("padding16")).toBe(true);
     });
 
     test("applies classes based on props", () => {
-        const { container } = render(
-            <Island
-                type={EIslandType.TYPE_2}
-                borderRadius={EIslandBorderRadius.SM}
-                paddingSize={EIslandPaddingSize.LG}
-            />,
-        );
+        const { container } = render(<Island type={EIslandType.TYPE_2} borderRadius={16} paddingSize={16} />);
         const root = container.firstElementChild as HTMLElement | null;
         expect(root?.classList.contains("type2")).toBe(true);
-        expect(root?.classList.contains("borderRadiusSM")).toBe(true);
-        expect(root?.classList.contains("paddingLG")).toBe(true);
+        expect(root?.classList.contains("borderRadius16")).toBe(true);
+        expect(root?.classList.contains("padding16")).toBe(true);
     });
 
     test("forwards ref to root div", () => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { CrossStrokeSrvIcon16, CrossStrokeSrvIcon20, CrossStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import styles from "./styles/ChipClearButton.module.less";
 import { EChipSize } from "./enums";
+import styles from "./styles/ChipClearButton.module.less";
 
 export interface IChipClearButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: never;

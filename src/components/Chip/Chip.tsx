@@ -59,7 +59,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                         // Для иконок.
                         "hoverable",
                         {
-                            [styles.disabled]: Boolean(disabled),
+                            disabled: Boolean(disabled),
                         },
                     )}
                 >

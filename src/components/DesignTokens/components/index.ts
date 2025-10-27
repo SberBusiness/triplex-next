@@ -29,3 +29,4 @@ export * from "./HeaderPage";
 export * from "./FooterPage";
 export * from "./Island";
 export * from "./TableBasic";
+export * from "./Chip";

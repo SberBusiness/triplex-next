@@ -1,5 +1,6 @@
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import clsx from "clsx";
+import styles from "./styles/ChipGroup.module.less";
 
 export interface IChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Чипсы выводятся в одну строку со скроллом. */
@@ -13,9 +14,9 @@ export interface IChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
 export const ChipGroup = React.forwardRef<HTMLDivElement, IChipGroupProps>(
     ({ children, className, oneLine, ...rest }, ref) => (
         <div
-            className={classnames("cssClass[chipGroup]", className, {
-                "cssClass[multiLine]": !oneLine,
-                "cssClass[oneLine]": Boolean(oneLine),
+            className={clsx(styles.chipGroup, className, {
+                [styles.multiLine]: !oneLine,
+                [styles.oneLine]: Boolean(oneLine),
             })}
             {...rest}
             ref={ref}

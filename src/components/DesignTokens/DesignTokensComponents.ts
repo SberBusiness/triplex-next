@@ -65,6 +65,8 @@ import {
     TDesignTokensComponentsFooterPageValue,
     TableBasic_Tokens,
     TDesignTokensComponentsTableBasicValue,
+    Chip_Tokens,
+    TDesignTokensComponentsChipValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -147,4 +149,5 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         TableBasic_Tokens,
     ),
+    Chip: GetTokensValueByTheme<TDesignTokensComponentsChipValue>(ETriplexNextTheme.LIGHT, Chip_Tokens),
 };

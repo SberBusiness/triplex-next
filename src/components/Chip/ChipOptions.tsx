@@ -1,7 +1,8 @@
 import React from "react";
-import { OptionsoffSrvxIcon24 } from "@sberbusiness/icons/OptionsoffSrvxIcon24";
-import { OptionsonSrvxIcon24 } from "@sberbusiness/icons/OptionsonSrvxIcon24";
-import { Chip, ChipClearButton, IChipProps } from "@sber-business/triplex/components/Chip";
+import { SortStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { Chip, IChipProps } from "./Chip";
+import { ChipClearButton } from "./ChipClearButton";
+import styles from "./styles/ChipOptions.module.less";
 
 export interface IChipOptionsProps extends Omit<IChipProps, "prefix" | "postfix"> {
     /** Функция отмены выбора. */
@@ -22,14 +23,14 @@ export const ChipOptions = React.forwardRef<HTMLSpanElement, IChipOptionsProps>(
 
         return (
             <Chip
-                prefix={selected ? <OptionsonSrvxIcon24 /> : <OptionsoffSrvxIcon24 />}
-                postfix={selected ? <ChipClearButton onClick={handleClickClearButton} /> : ""}
+                prefix={selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
+                postfix={selected ? <ChipClearButton onClick={handleClickClearButton} size={rest.size} /> : <span />}
                 selected={selected}
                 {...rest}
                 ref={ref}
             >
                 {typeof children !== "undefined" ? (
-                    <span className="cssClass[chipOptionsContent]">{children}</span>
+                    <span className={styles.chipOptionsContent}>{children}</span>
                 ) : (
                     children
                 )}

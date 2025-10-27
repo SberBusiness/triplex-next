@@ -1,5 +1,7 @@
+import clsx from "clsx";
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import styles from "./styles/Chip.module.less";
+import { EChipSize } from "./enums";
 
 /** Свойства компонента Chip. */
 export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "prefix"> {
@@ -11,23 +13,37 @@ export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
     prefix?: React.ReactNode;
     /** Контент, следующий за основным контентом, например иконка справа. */
     postfix?: React.ReactNode;
+    /** Размер Chip. */
+    size?: EChipSize;
 }
+
+const getSizeCssClass = (size: EChipSize) => {
+    switch (size) {
+        case EChipSize.LG:
+            return styles["size-lg"];
+        case EChipSize.MD:
+            return styles["size-md"];
+        case EChipSize.SM:
+            return styles["size-sm"];
+    }
+};
 
 /**
  * Предоставляет возможность произвести действие по нажатию, также отображает выбранное состояние.
  * Рекомендуется всегда располагать Chip внутри компонента ChipGroup.
  */
 export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
-    ({ children, className, disabled, postfix, prefix, selected, ...rest }, ref) => (
+    ({ children, className, disabled, postfix, prefix, selected, size = EChipSize.MD, ...rest }, ref) => (
         <span
-            className={classnames(
-                "cssClass[chip]",
-                "cssClass[chipGroupItem]",
+            className={clsx(
+                styles.chip,
+                styles.chipGroupItem,
                 {
-                    "cssClass[disabled]": Boolean(disabled),
-                    "cssClass[selected]": Boolean(selected),
-                    "cssClass[withPostfix]": typeof postfix !== "undefined",
-                    "cssClass[withPrefix]": typeof prefix !== "undefined",
+                    [styles.disabled]: Boolean(disabled),
+                    [styles.selected]: Boolean(selected),
+                    [styles.withPostfix]: typeof postfix !== "undefined",
+                    [styles.withPrefix]: typeof prefix !== "undefined",
+                    [getSizeCssClass(size)]: size,
                 },
                 className,
             )}
@@ -38,13 +54,12 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
         >
             {prefix ? (
                 <span
-                    className={classnames(
-                        "cssClass[prefix]",
+                    className={clsx(
+                        styles.prefix,
                         // Для иконок.
                         "hoverable",
                         {
-                            // Для иконок.
-                            disabled: Boolean(disabled),
+                            [styles.disabled]: Boolean(disabled),
                         },
                     )}
                 >
@@ -52,12 +67,12 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 </span>
             ) : null}
 
-            <span className="cssClass[content]">{children}</span>
+            <span className={styles.content}>{children}</span>
 
             {postfix ? (
                 <span
-                    className={classnames(
-                        "cssClass[postfix]",
+                    className={clsx(
+                        styles.postfix,
                         // Для иконок.
                         "hoverable",
                         {

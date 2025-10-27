@@ -1,0 +1,93 @@
+// .chipGroupItem не всегда является .chip, например в Select или MultiSelect .chip лежит внутри .chipGroupItem.
+.chipGroupItem {
+    display: inline-block;
+}
+
+.chip {
+    background: var(--triplex-Chip-Background_Default);
+    color: var(--triplex-Chip-Color_Default);
+    flex-shrink: 0;
+    padding: 0 12px;
+    max-width: 264px;
+    min-width: 40px;
+    box-sizing: border-box;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    line-height: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    outline: none;
+    // Без этого свойства, чипсы с иконкой прыгают вверх.
+    vertical-align: middle;
+
+    &:hover {
+        background: var(--triplex-Chip-Background_Hover);
+        color: var(--triplex-Chip-Color_Hover);
+    }
+
+    &:focus-visible {
+        box-shadow: var(--triplex-Chip-Shadow_Focus);
+    }
+
+    &:active,
+    &[aria-expanded="true"] {
+        background: var(--triplex-Chip-Background_Active);
+        color: var(--triplex-Chip-Color_Active);
+    }
+
+    &.disabled {
+        background: var(--triplex-Chip-Background_Disabled);
+        color: var(--triplex-Chip-Color_Disabled);
+        cursor: default;
+        pointer-events: none;
+    }
+
+    &.selected {
+        background: var(--triplex-Chip-Background_Selected_Default);
+        color: var(--triplex-Chip-Color_Selected_Default);
+
+        &:hover {
+            background: var(--triplex-Chip-Background_Selected_Hover);
+            color: var(--triplex-Chip-Color_Selected_Hover);
+        }
+
+        &:active,
+        &[aria-expanded="true"] {
+            background: var(--triplex-Chip-Background_Selected_Active);
+            color: var(--triplex-Chip-Color_Selected_Active);
+        }
+
+        &.disabled {
+            background: var(--triplex-Chip-Background_Selected_Disabled);
+            color: var(--triplex-Chip-Color_Selected_Disabled);
+        }
+    }
+
+    &.withPrefix {
+        padding-left: 0;
+    }
+
+    &.withPostfix {
+        padding-right: 0;
+    }
+
+    .content {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .prefix {
+        display: flex;
+        padding-left: 8px;
+    }
+
+    .postfix {
+        display: flex;
+        padding-right: 8px;
+    }
+}

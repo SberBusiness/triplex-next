@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import clsx from "clsx";
-import styles from "../styles/DropdownList.module.less";
+import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownListItem. */
 export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -32,7 +32,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
             selected,
             ...htmlDivAttributes
         },
-        ref
+        ref,
     ) => {
         const handleKeyDown = (event: KeyboardEvent) => {
             const { keyCode } = event;
@@ -65,9 +65,9 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
         return (
             <div
                 className={clsx(
-                    styles.dropdownListItem,
+                    styles.dropdownDesktopListItem,
                     { [styles.active]: !!active, [styles.selected]: !!selected },
-                    className
+                    className,
                 )}
                 title={typeof children === "string" ? children : undefined}
                 role="option"
@@ -79,7 +79,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
                 {children}
             </div>
         );
-    }
+    },
 );
 
 DropdownListItem.displayName = "DropdownListItem";

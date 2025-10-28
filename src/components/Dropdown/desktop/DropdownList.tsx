@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { DropdownListItem } from "./DropdownListItem";
+import {
+    DropdownListItem,
+    IDropdownListItemProps,
+} from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownListItem";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { EDropdownListSize } from "@sberbusiness/triplex-next/components/Dropdown/enums";
-import stylesDropdownList from "../styles/DropdownList.module.less";
+import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
+import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -12,6 +16,8 @@ export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement>
     dropdownOpened: boolean;
     /** Объект для создания ссылки на html-элемент "список". */
     listRef?: React.RefObject<HTMLDivElement>;
+    /** Состояние загрузки. */
+    loading?: boolean;
     /** Размер списка. */
     size?: EDropdownListSize;
 }
@@ -19,38 +25,47 @@ export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement>
 /** Индекс текущего выделенного элемента списка при навигации с клавиатуры. */
 type TActiveListItemIndex = number | undefined;
 
-/**
- * Компонент DropdownList.
- * Используется для обрамления вложенного списка и добавляет спику возможность навигации с клавиатуры.
- * В качестве children принимает только DropdownList.Item.
- */
 export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
     Item: typeof DropdownListItem;
 }
 
+// Соответствие размера DropdownList размеру LoaderSmall.
+const listSizeToLoaderSmallSizeMap = {
+    [EDropdownListSize.SM]: ELoaderSmallSize.SM,
+    [EDropdownListSize.MD]: ELoaderSmallSize.MD,
+    [EDropdownListSize.LG]: ELoaderSmallSize.LG,
+};
+
+/**
+ * Компонент DropdownList.
+ * Используется для обрамления вложенного списка и добавляет спику возможность навигации с клавиатуры.
+ * В качестве children принимает только DropdownDesktopList.Item.
+ */
 export const DropdownList: IDropdownListComponent = (props) => {
-    const { children, className, dropdownOpened, listRef, size = EDropdownListSize.MD, ...htmlDivAttributes } = props;
-    const classNames = clsx(stylesDropdownList.dropdownList, className, stylesDropdownList[`dropdownList-${size}`]);
+    const {
+        children,
+        className,
+        dropdownOpened,
+        listRef,
+        loading,
+        size = EDropdownListSize.MD,
+        ...htmlDivAttributes
+    } = props;
+    const classNames = clsx(styles.dropdownDesktopList, className, styles[`dropdownDesktopList-${size}`]);
 
     const { activeDescendant, setActiveDescendant } = useContext(DropdownListContext);
 
     // Ref контейнера списка.
     const containerRef = listRef || React.createRef<HTMLDivElement>();
-    // Массив рефов на элементы списка.
-    const listItemsRef = useRef<Array<React.RefObject<HTMLDivElement>>>([]);
+    // Массив DOM-элементов списка.
+    const listItemsRef = useRef<Array<HTMLDivElement | null>>([]);
     const [activeListItemIndex, setActiveListItemIndex] = useState<TActiveListItemIndex>(undefined);
 
     const childrenCount = React.Children.count(children);
 
-    const setListItemRef = (index: number): React.RefObject<HTMLDivElement> => {
-        const ref = React.createRef<HTMLDivElement>();
-        listItemsRef.current[index] = ref;
-        return ref;
-    };
-
     const scrollContainerToItem = (itemIndex: number) => {
         const parent = containerRef?.current;
-        const activeItem = listItemsRef.current[itemIndex]?.current;
+        const activeItem = listItemsRef.current[itemIndex];
 
         if (parent && activeItem) {
             const { top: parentTop, bottom: parentBottom } = parent.getBoundingClientRect();
@@ -127,8 +142,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
         }
         let isSelectedItemExist = false;
         React.Children.forEach(children, (child, index) => {
-            // @ts-ignore
-            if (child && child.props && child.props.selected) {
+            if (React.isValidElement<IDropdownListItemProps>(child) && child.props.selected) {
                 isSelectedItemExist = true;
                 scrollContainerToItem(index);
                 setActiveListItemIndex(index);
@@ -143,7 +157,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
     // Синхронизация activeDescendant при изменении activeListItemIndex
     useEffect(() => {
         if (dropdownOpened && activeListItemIndex !== undefined) {
-            setActiveDescendant(listItemsRef.current[activeListItemIndex]?.current?.id);
+            setActiveDescendant(listItemsRef.current[activeListItemIndex]?.id);
             return;
         }
         if (!dropdownOpened && activeDescendant !== undefined) {
@@ -160,23 +174,40 @@ export const DropdownList: IDropdownListComponent = (props) => {
     }, [activeDescendant, setActiveDescendant]);
 
     const renderedChildren = React.Children.map(children, (child, index) => {
-        if (!child) {
-            return;
+        if (!React.isValidElement<IDropdownListItemProps & React.RefAttributes<HTMLDivElement>>(child)) {
+            return child;
         }
 
-        return React.cloneElement(child as React.ReactElement, {
-            active: dropdownOpened && activeListItemIndex === index,
-            onMouseOver: (event: React.MouseEvent) => {
+        return React.cloneElement(child, {
+            active: activeListItemIndex === index,
+            onMouseOver: (event: React.MouseEvent<HTMLDivElement>) => {
                 setActiveListItemIndex(index);
-                (child as React.ReactElement).props.onMouseOver?.(event);
+                child.props.onMouseOver?.(event);
             },
-            ref: setListItemRef(index),
+            onMouseOut: (event: React.MouseEvent<HTMLDivElement>) => {
+                setActiveListItemIndex(undefined);
+                child.props.onMouseOut?.(event);
+            },
+            ref: (node: HTMLDivElement | null) => {
+                listItemsRef.current[index] = node;
+            },
         });
     });
 
+    const renderLoaderItem = () => (
+        <DropdownListItem id="dropdown-desktop-list-loader-item">
+            <LoaderSmall
+                className={styles.dropdownDesktopListLoader}
+                theme={ELoaderSmallTheme.BRAND}
+                size={listSizeToLoaderSmallSizeMap[size]}
+            />
+        </DropdownListItem>
+    );
+
     return (
-        <div className={classNames} role="listbox" ref={containerRef} {...htmlDivAttributes}>
+        <div className={classNames} role="listbox" {...htmlDivAttributes} ref={containerRef}>
             {renderedChildren}
+            {loading && renderLoaderItem()}
         </div>
     );
 };

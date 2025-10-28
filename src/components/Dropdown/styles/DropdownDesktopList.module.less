@@ -1,19 +1,17 @@
-
-.dropdownList {
+.dropdownDesktopList {
     max-height: 196px;
     padding: 4px;
     overflow: auto;
 }
 
-
-.dropdownListItem {
+.dropdownDesktopListItem {
     color: var(--triplex-next-DropdownList-Color);
     background: var(--triplex-next-DropdownList-Background_Default);
     position: relative;
     outline: none;
     white-space: nowrap;
 
-    + .dropdownListItem {
+    + .dropdownDesktopListItem {
         margin-top: 2px;
     }
 
@@ -27,33 +25,46 @@
         cursor: default;
     }
 }
-.dropdownList-sm {
+
+.dropdownDesktopList-sm {
     font-size: 12px;
     line-height: 16px;
-    
 
-    .dropdownListItem {
+
+    .dropdownDesktopListItem {
         padding: 6px 8px;
         border-radius: 6px;
     }
+
+    .dropdownDesktopListLoader {
+        margin: 0px auto;
+    }
 }
 
-.dropdownList-md {
+.dropdownDesktopList-md {
     font-size: 14px;
     line-height: 20px;
-    
-    .dropdownListItem {
+
+    .dropdownDesktopListItem {
         padding: 7px 8px;
         border-radius: 8px;
     }
+
+    .dropdownDesktopListLoader {
+        margin: -2px auto;
+    }
 }
-    
-.dropdownList-lg {
+
+.dropdownDesktopList-lg {
     font-size: 16px;
     line-height: 20px;
 
-    .dropdownListItem {
+    .dropdownDesktopListItem {
         padding: 14px 8px;
         border-radius: 10px;
+    }
+
+    .dropdownDesktopListLoader {
+        margin: -6px auto;
     }
 }

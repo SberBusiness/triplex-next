@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "./styles/LoaderSmall.module.less";
 import { ELoaderSmallSize, ELoaderSmallTheme } from "./enum";
 
-export interface ILoaderSmallProps {
+export interface ILoaderSmallProps extends React.HTMLAttributes<HTMLSpanElement> {
     /** Тема. */
     theme: ELoaderSmallTheme;
     /** Размер. */
@@ -30,12 +30,18 @@ const getLoaderSmallSizeCssClass = (size: ELoaderSmallSize) => {
     }
 };
 
-export const LoaderSmall: React.FC<ILoaderSmallProps> = ({ theme, size }) => {
+export const LoaderSmall: React.FC<ILoaderSmallProps> = ({ className, theme, size, ...restProps }) => {
     return (
         <span
+            className={clsx(
+                styles.loaderSmall,
+                getLoaderSmallSizeCssClass(size),
+                getLoaderSmallThemeCssClass(theme),
+                className,
+            )}
             role="status"
             aria-label="loading"
-            className={clsx(styles.loaderSmall, getLoaderSmallSizeCssClass(size), getLoaderSmallThemeCssClass(theme))}
+            {...restProps}
         >
             <span className={clsx(getLoaderSmallThemeCssClass(theme), styles.dot, styles.dot1)} />
             <span className={clsx(getLoaderSmallThemeCssClass(theme), styles.dot, styles.dot2)} />

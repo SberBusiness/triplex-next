@@ -27,9 +27,9 @@ export type TDesignTokensComponentsDropdownList = { DropdownList: TDesignTokensC
 
 // Токены компонента DropdownList в светлой и темной темах.
 export const DropdownList_Tokens: TDesignTokensComponentsDropdownListValues = {
-    Background_Active: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-DropdownList-Background_Active)
+    Background_Active: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-DropdownList-Background_Active)
     Background_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-DropdownList-Background_Default)
-    Background_Selected: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-DropdownList-Background_Selected)
+    Background_Selected: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-DropdownList-Background_Selected)
 
     Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-DropdownList-Color)
 };

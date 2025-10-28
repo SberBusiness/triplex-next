@@ -13,35 +13,35 @@ const customViewports = {
         name: "XS",
         styles: {
             width: "575px",
-            height: "1024px",
+            height: "100%",
         },
     },
     SM: {
         name: "SM",
         styles: {
             width: "576px",
-            height: "1024px",
+            height: "100%",
         },
     },
     MD: {
         name: "MD",
         styles: {
             width: "768px",
-            height: "1024px",
+            height: "100%",
         },
     },
     LG: {
         name: "LG",
         styles: {
             width: "992px",
-            height: "1024px",
+            height: "100%",
         },
     },
     XL: {
         name: "XL",
         styles: {
             width: "1200px",
-            height: "1024px",
+            height: "100%",
         },
     },
 };

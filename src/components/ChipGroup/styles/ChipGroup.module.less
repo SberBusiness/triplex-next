@@ -1,0 +1,20 @@
+.chipGroup {
+  display: flex;
+  gap: 8px;
+
+  &.oneLine {
+    overflow: auto;
+
+    // Hide scrollbar
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE + Edge
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome
+    }
+  }
+
+  &.multiLine {
+    flex-wrap: wrap;
+  }
+}

@@ -10,12 +10,7 @@ export const ListItem = React.forwardRef<HTMLLIElement, IListItemProps>(({ child
 
     return (
         <ListItemContext.Provider value={{ selected, setSelected }}>
-            <li
-                className={className}
-                {...rest}
-                data-tx={process.env.npm_package_version}
-                ref={ref}
-            >
+            <li className={className} {...rest} data-tx={process.env.npm_package_version} ref={ref}>
                 {children}
             </li>
         </ListItemContext.Provider>

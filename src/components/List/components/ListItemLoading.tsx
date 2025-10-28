@@ -1,8 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "../styles/ListItemLoading.module.less";
-// import { SpinnerWidget } from "@sberbusiness/triplex-next/components/SpinnerWidget/SpinnerWidget";
-// import { ESpinnerSize } from "@sberbusiness/triplex-next/components/Spinner/enum";
+import { LoaderWidget } from "@sberbusiness/triplex-next/components/LoaderWidget/LoaderWidget";
+import { ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader/LoaderSmall/enum";
 
 /** Свойства компонента ListItemLoading. */
 export interface IListItemLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,12 +15,11 @@ export interface IListItemLoadingProps extends React.HTMLAttributes<HTMLDivEleme
  * */
 //@TODO: Добавить лоадер.
 export const ListItemLoading = React.forwardRef<HTMLDivElement, IListItemLoadingProps>(
-    ({className, ...rest }, ref) => (
+    ({ className, ...rest }, ref) => (
         <div className={clsx(styles.listItemLoading, className)} {...rest} ref={ref}>
-            Лоадер
-            {/* <SpinnerWidget size={ESpinnerSize.SM} /> */}
+            <LoaderWidget type="small" size={ELoaderSmallSize.MD} />
         </div>
-    )
+    ),
 );
 
 ListItemLoading.displayName = "ListItemLoading";

@@ -28,9 +28,46 @@ export default {
             },
         },
     },
+    argTypes: {
+        loading: {
+            table: {
+                disable: true,
+            },
+        },
+    },
 } as const;
 
-export const Basic: StoryObj<typeof List> = {
+export const Playground: StoryObj<typeof List> = {
+    args: {
+        loading: false,
+    },
+    argTypes: {
+        loading: {
+            table: { disable: false },
+            control: { type: "boolean" },
+            description: "Состояние загрузки",
+        },
+    },
+    render: (args) => (
+        <List loading={args.loading} style={{ width: "150px" }}>
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
+        </List>
+    ),
+    parameters: {
+        docs: { description: { story: "Базовый список с элементами и контролами." } },
+    },
+};
+
+export const Default: StoryObj<typeof List> = {
+    // argTypes: {
+    //     loading: {
+    //         table: {
+    //             disable: true,
+    //         },
+    //     },
+    // },
     render: () => (
         <List>
             <ListItem>Элемент списка</ListItem>
@@ -45,11 +82,13 @@ export const Basic: StoryObj<typeof List> = {
 
 export const Loading: StoryObj<typeof List> = {
     render: () => (
-        <List loading>
-            <ListItem>Элемент списка</ListItem>
-            <ListItem>Элемент списка</ListItem>
-            <ListItem>Элемент списка</ListItem>
-        </List>
+        <div style={{ width: "150px" }}>
+            <List loading>
+                <ListItem>Элемент списка</ListItem>
+                <ListItem>Элемент списка</ListItem>
+                <ListItem>Элемент списка</ListItem>
+            </List>
+        </div>
     ),
     parameters: {
         docs: { description: { story: "Список в состоянии загрузки." } },

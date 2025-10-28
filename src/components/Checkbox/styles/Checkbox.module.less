@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .label {
     display: inline-block;
@@ -43,7 +43,8 @@
 .checkboxIcon {
     box-sizing: border-box;
     background-color: var(--triplex-next-Checkbox-Background_Default);
-    border-radius: 4px;
+    border-radius: 6px;
+    box-shadow: var(--triplex-next-Checkbox-BorderColor_Default);
 }
 
 .checkmarkIcon {
@@ -83,6 +84,7 @@
 .checkbox:checked {
     + .checkboxIcon {
         background-color: var(--triplex-next-Checkbox-Background_Checked_Default);
+        box-shadow: none;
     }
 
     ~ .checkmarkIcon {
@@ -94,6 +96,7 @@
 .checkbox:disabled {
     + .checkboxIcon {
         background-color: var(--triplex-next-Checkbox-Background_Disabled);
+        box-shadow: var(--triplex-next-Checkbox-BorderColor_Disabled);
     }
 
     ~ .checkmarkIcon path {

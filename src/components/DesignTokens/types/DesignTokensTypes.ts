@@ -27,6 +27,7 @@ import {
     TDesignTokensComponentsSkeleton,
     TDesignTokensComponentsSegmentedControl,
     TDesignTokensComponentsSegmentedControlSegment,
+    TDesignTokensComponentsStepper,
     TDesignTokensComponentsHeaderPage,
     TDesignTokensComponentsFooterPage,
     TDesignTokensComponentsIsland,
@@ -293,6 +294,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsSkeleton
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment
+    | TDesignTokensComponentsStepper
     | TDesignTokensComponentsHeaderPage
     | TDesignTokensComponentsFooterPage
     | TDesignTokensComponentsIsland

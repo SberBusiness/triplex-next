@@ -1,0 +1,15 @@
+@import "src/styles/style";
+
+.carouselExtended {
+    display: flex;
+    overflow-y: hidden;
+    position: relative;
+
+    // Hide scrollbar
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE + Edge
+
+    &::-webkit-scrollbar {
+        display: none; // Chrome
+    }
+}

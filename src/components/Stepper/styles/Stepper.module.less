@@ -1,0 +1,57 @@
+@import "src/styles/style";
+
+.stepper {
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.stepperCarousel {
+    margin-left: -32px;
+    margin-right: -32px;
+    position: relative;
+
+    .buttonPrev,
+    .buttonNext {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+
+        &.sm {
+            height: 28px;
+            width: 28px;
+        }
+
+        &.md {
+            height: 40px;
+            width: 40px;
+        }
+
+        &.lg {
+            height: 56px;
+            width: 56px;
+        }
+    }
+
+    .buttonPrev {
+        left: 0;
+        background: var(--triplex-next-Stepper-ButtonPrev_Background);
+    }
+
+    .buttonNext {
+        right: 0;
+        background: var(--triplex-next-Stepper-ButtonNext_Background);
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .stepper {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .buttonPrev,
+    .buttonNext {
+        display: none;
+    }
+}

@@ -52,6 +52,8 @@ import {
     TDesignTokensComponentsCardValue,
     Card_Tokens,
     Skeleton_Tokens,
+    Stepper_Tokens,
+    TDesignTokensComponentsStepperValue,
     TDesignTokensComponentsSkeletonValue,
     SegmentedControl_Tokens,
     TDesignTokensComponentsSegmentedControlValue,
@@ -134,6 +136,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         SegmentedControlSegment_Tokens,
     ),
+    Stepper: GetTokensValueByTheme<TDesignTokensComponentsStepperValue>(ETriplexNextTheme.DARK, Stepper_Tokens),
     HeaderPage: GetTokensValueByTheme<TDesignTokensComponentsHeaderPageValue>(
         ETriplexNextTheme.DARK,
         HeaderPage_Tokens,

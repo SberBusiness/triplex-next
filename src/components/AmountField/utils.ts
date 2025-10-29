@@ -36,9 +36,9 @@ export function setFallbackCaret(input: HTMLInputElement, coreAmount: AmountBase
 
     if (selectionStart === null || selectionEnd === null || selectionDirection === null) return;
 
-    if (key == AmountConst.DecimalComma || key == AmountConst.DecimalPoint) {
+    if (key === AmountConst.DecimalComma || key === AmountConst.DecimalPoint) {
         // Если каретка находится непосредственно перед десятичным разделителем, сдвигаем каретку вперёд.
-        if (selectionStart == selectionEnd && formattedValue[selectionStart] === AmountConst.DecimalComma)
+        if (selectionStart === selectionEnd && formattedValue[selectionStart] === AmountConst.DecimalComma)
             return input.setSelectionRange(selectionStart + 1, selectionStart + 1);
     } else if (isKey(key, "BACKSPACE")) {
         if (selectionStart === selectionEnd) {
@@ -52,7 +52,7 @@ export function setFallbackCaret(input: HTMLInputElement, coreAmount: AmountBase
             return input.setSelectionRange(selectionStart, selectionStart);
         }
     } else if (isKey(key, "DELETE")) {
-        if (selectionStart == selectionEnd) {
+        if (selectionStart === selectionEnd) {
             // Если каретка стоит непосредственно перед групповым/десятичным разделителем, сдвигаем каретку вперёд.
             if (StringUtils.isDigit(formattedValue[selectionStart]) === false)
                 return input.setSelectionRange(selectionStart + 1, selectionEnd + 1);
@@ -66,7 +66,7 @@ export function setFallbackCaret(input: HTMLInputElement, coreAmount: AmountBase
     // Если каретка находится после десятичного разделителя.
     if (fractionDigits > 0 && formattedValue.length - fractionDigits - 1 < selectionStart) {
         // Если новое значение повторяет старое, ставим каретку в расчётное место.
-        if (coreAmount.formattedValue == formattedValue)
+        if (coreAmount.formattedValue === formattedValue)
             return input.setSelectionRange(coreAmount.caret, coreAmount.caret);
     }
 

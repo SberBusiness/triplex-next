@@ -14,9 +14,9 @@ import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition } from "@sberbusiness/triplex-next/utils/inputUtils";
 import { createPlaceholder, setFallbackCaret } from "./utils";
 
-interface IAmountFieldProps extends IFormFieldProps {
+export interface IAmountFieldProps extends IFormFieldProps {
     /** Свойства поля ввода. */
-    inputProps: Omit<IFormFieldInputProps, "type" | "maxLength" | "onChange"> & {
+    inputProps: Omit<IFormFieldInputProps, "type" | "maxLength" | "onChange" | "inputMode" | "autoComplete"> & {
         /** Значение. */
         value: string;
         /** Обработчик изменения значения. */

@@ -31,3 +31,4 @@ export * from "./KeyDownListener";
 export * from "./SelectExtendedField";
 export * from "./Island";
 export * from "./Table";
+export * from "./AmountField";

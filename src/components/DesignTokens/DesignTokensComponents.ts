@@ -20,6 +20,7 @@ import {
     DropdownMobileList_Tokens,
     Overlay_Tokens,
     Skeleton_Tokens,
+    Stepper_Tokens,
     Island_Tokens,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCheckboxValue,
@@ -67,6 +68,7 @@ import {
     TDesignTokensComponentsTableBasicValue,
     Chip_Tokens,
     TDesignTokensComponentsChipValue,
+    TDesignTokensComponentsStepperValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -132,6 +134,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         SegmentedControl_Tokens,
     ),
+    Stepper: GetTokensValueByTheme<TDesignTokensComponentsStepperValue>(ETriplexNextTheme.LIGHT, Stepper_Tokens),
     SegmentedControlSegment: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlSegmentValue>(
         ETriplexNextTheme.LIGHT,
         SegmentedControlSegment_Tokens,

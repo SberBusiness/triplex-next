@@ -25,6 +25,7 @@ export * from "./Card";
 export * from "./Skeleton";
 export * from "./SegmentedControl";
 export * from "./SegmentedControlSegment";
+export * from "./Stepper";
 export * from "./HeaderPage";
 export * from "./FooterPage";
 export * from "./Island";

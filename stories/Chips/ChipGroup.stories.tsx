@@ -26,23 +26,18 @@ export const Playground: StoryObj<typeof ChipGroup> = {
         return (
             <ChipGroup {...args} style={{ maxWidth: 360 }}>
                 {chips.map((label, index) => (
-                    <Chip
-                        key={label}
-                        size={EChipSize.MD}
-                        selected={selected === index}
-                        onClick={() => setSelected(index)}
-                        style={{ marginRight: 8, marginBottom: 8 }}
-                    >
+                    <Chip key={label} size={args.size} selected={selected === index} onClick={() => setSelected(index)}>
                         {label}
                     </Chip>
                 ))}
             </ChipGroup>
         );
     },
-    args: { oneLine: false },
+    args: { oneLine: false, size: EChipSize.MD },
     argTypes: {
         oneLine: { control: { type: "boolean" } },
         className: { control: { type: "text" } },
+        size: { control: { type: "inline-radio" }, options: Object.values(EChipSize) },
     },
 };
 
@@ -58,7 +53,6 @@ export const OneLineScrollable: StoryObj<typeof ChipGroup> = {
                         size={EChipSize.MD}
                         selected={selected === index}
                         onClick={() => setSelected(index)}
-                        style={{ marginRight: 8 }}
                     >
                         {label}
                     </Chip>

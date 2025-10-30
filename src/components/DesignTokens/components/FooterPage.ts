@@ -1,7 +1,7 @@
 import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes";
 
 // Название токенов компонента FooterPage.
-export const designTokensComponentsFooterPageKeys = ["Background"] as const;
+export const designTokensComponentsFooterPageKeys = ["StickyShadow"] as const;
 // Тип, содержащий названия токенов компонента FooterPage.
 export type TDesignTokensComponentsFooterPageKeys = (typeof designTokensComponentsFooterPageKeys)[number];
 // Тип, содержащий названия токенов компонента FooterPage и их значения.
@@ -13,5 +13,5 @@ export type TDesignTokensComponentsFooterPage = { FooterPage: TDesignTokensCompo
 
 // Токены компонента FooterPage в светлой и темной темах.
 export const FooterPage_Tokens: TDesignTokensComponentsFooterPageValues = {
-    Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.40" }], // var(--triplex-next-FooterPage-Background)
+    StickyShadow: [{ value: "0 -2px 7px 0 rgba(31, 31, 34, 0.08)" }, { value: "0 -2px 7px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-FooterPage-StickyShadow)
 };

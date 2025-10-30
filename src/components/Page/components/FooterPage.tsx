@@ -4,7 +4,7 @@ import { EFooterPageType } from "./enums";
 import styles from "../styles/Page.module.less";
 import clsx from "clsx";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
-import { EIslandType, Island } from "@sberbusiness/triplex-next";
+import { EIslandType, Island } from "../../Island";
 
 export interface IFooterPageProps extends IFooterProps {
     /** Тип компонента FooterPage. */

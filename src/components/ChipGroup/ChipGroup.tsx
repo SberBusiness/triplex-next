@@ -13,11 +13,11 @@ export interface IChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
 const getSizeCssClass = (size: EChipSize) => {
     switch (size) {
         case EChipSize.LG:
-            return styles["size-lg"];
+            return styles["lg"];
         case EChipSize.MD:
-            return styles["size-md"];
+            return styles["md"];
         case EChipSize.SM:
-            return styles["size-sm"];
+            return styles["sm"];
     }
 };
 

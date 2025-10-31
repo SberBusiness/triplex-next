@@ -1,22 +1,22 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./styles/ChipGroup.module.less";
-import { EChipSize } from "../Chip/enums";
+import { EChipGroupSize } from "./enums";
 
 export interface IChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Чипсы выводятся в одну строку со скроллом. */
     oneLine?: boolean;
     /** Размер компонента. */
-    size?: EChipSize;
+    size?: EChipGroupSize;
 }
 
-const getSizeCssClass = (size: EChipSize) => {
+const getSizeCssClass = (size: EChipGroupSize): string => {
     switch (size) {
-        case EChipSize.LG:
+        case EChipGroupSize.LG:
             return styles.lg;
-        case EChipSize.MD:
+        case EChipGroupSize.MD:
             return styles.md;
-        case EChipSize.SM:
+        case EChipGroupSize.SM:
             return styles.sm;
     }
 };
@@ -26,13 +26,17 @@ const getSizeCssClass = (size: EChipSize) => {
  * Контейнер компонентов Chip.
  */
 export const ChipGroup = React.forwardRef<HTMLDivElement, IChipGroupProps>(
-    ({ children, className, oneLine, size = EChipSize.MD, ...rest }, ref) => (
+    ({ children, className, oneLine, size = EChipGroupSize.MD, ...rest }, ref) => (
         <div
-            className={clsx(styles.chipGroup, className, {
-                [styles.multiLine]: !oneLine,
-                [styles.oneLine]: Boolean(oneLine),
-                [getSizeCssClass(size)]: size,
-            })}
+            className={clsx(
+                styles.chipGroup,
+                className,
+                {
+                    [styles.multiLine]: !oneLine,
+                    [styles.oneLine]: Boolean(oneLine),
+                },
+                getSizeCssClass(size),
+            )}
             {...rest}
             ref={ref}
             data-tx={process.env.npm_package_version}

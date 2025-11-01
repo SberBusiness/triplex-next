@@ -4,7 +4,25 @@
 
 .tabsExtendedContent {
     display: inline-flex;
-    padding: 4px;
+
+    &:has(.sm) {
+        border-radius: 6px;
+        padding: 4px;
+    }
+
+    &:has(.md) {
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    &:has(.lg) {
+        border-radius: 10px;
+        padding: 8px;
+    }
+}
+
+.tabsExtendedTab {
+    display: flex;
 }
 
 .tabsExtendedTab + .tabsExtendedTab,
@@ -34,4 +52,16 @@
     position: absolute;
     left: -10000px;
     visibility: hidden;
+}
+
+.type1 {
+    .tabsExtendedContent {
+        background-color: var(--triplex-next-Tabs-Type1_Background);
+    }
+}
+
+.type2 {
+    .tabsExtendedContent {
+        background-color: var(--triplex-next-Tabs-Type2_Background);
+    }
 }

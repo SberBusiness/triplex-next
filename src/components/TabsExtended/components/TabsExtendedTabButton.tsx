@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "../styles/TabsExtendedTabButton.module.less";
 import clsx from "clsx";
-import { Text } from "../../Typography/Text";
 import { ETabsExtendedTabButtonSize } from "../enums";
-import { tabsExtendedSizeToCssClassMap, tabsExtendedSizeToTextSizeMap } from "../TabsExtendedUtils";
+import { tabsExtendedSizeToCssClassMap, mapTypeToClassName } from "../utils";
+import { TabsExtendedContext } from "../TabsExtendedContext";
 
 /** Свойства компонента TabsExtendedTabButton. */
 export interface ITabsExtendedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,16 +19,19 @@ export interface ITabsExtendedButtonProps extends React.ButtonHTMLAttributes<HTM
  */
 export const TabsExtendedTabButton = React.forwardRef<HTMLButtonElement, ITabsExtendedButtonProps>(
     ({ children, className, selected, size = ETabsExtendedTabButtonSize.MD, ...rest }, ref) => {
+        const { type } = useContext(TabsExtendedContext);
+
         const classNames = clsx(
             styles.tabsExtendedTabButton,
             tabsExtendedSizeToCssClassMap[size],
+            mapTypeToClassName(type, styles),
             { [styles.selected]: !!selected },
             className,
         );
 
         return (
             <button className={classNames} role="tab" aria-selected={selected} ref={ref} {...rest}>
-                <Text size={tabsExtendedSizeToTextSizeMap[size]}>{children}</Text>
+                <div className={styles.tabButtonText}>{children}</div>
             </button>
         );
     },

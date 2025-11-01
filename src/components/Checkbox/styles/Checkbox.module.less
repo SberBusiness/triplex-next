@@ -1,5 +1,3 @@
-@import "src/styles/style";
-
 .label {
     display: inline-block;
     position: relative;
@@ -26,7 +24,6 @@
     }
 
     &.disabled {
-        color: var(--triplex-next-Checkbox-Color_Disabled);
         cursor: default;
     }
 
@@ -97,6 +94,13 @@
     + .checkboxIcon {
         background-color: var(--triplex-next-Checkbox-Background_Disabled);
         box-shadow: var(--triplex-next-Checkbox-BorderColor_Disabled);
+    }
+
+    &:checked {
+        + .checkboxIcon {
+            background: var(--triplex-next-Checkbox-Background_Checked_Disabled);
+            box-shadow: none;
+        }
     }
 
     ~ .checkmarkIcon path {

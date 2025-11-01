@@ -9,8 +9,8 @@ import {
     ListSortableItemControls,
 } from "../../src/components/List";
 import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
-import { ETextSize, Text } from "../../src/components/Typography";
-// import { NotfoundSrvIcon64 } from "@sberbusiness/icons-next";
+import { EFontWeightTitle, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
+import { EmptytableSysIcon96 } from "@sberbusiness/icons-next";
 import { Gap } from "../../src/components/Gap";
 import { FixedSizeList } from "react-window";
 import { Checkbox } from "../../src/components/Checkbox";
@@ -61,13 +61,6 @@ export const Playground: StoryObj<typeof List> = {
 };
 
 export const Default: StoryObj<typeof List> = {
-    // argTypes: {
-    //     loading: {
-    //         table: {
-    //             disable: true,
-    //         },
-    //     },
-    // },
     render: () => (
         <List>
             <ListItem>Элемент списка</ListItem>
@@ -95,39 +88,20 @@ export const Loading: StoryObj<typeof List> = {
     },
 };
 
-export const NotFoundState: StoryObj<typeof List> = {
-    render: () => (
-        <ListEmptyState>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-                Иллюстрация не найдено
-                {/* <NotfoundSrvIcon64 /> */}
-            </div>
-
-            <Text size={ETextSize.B2}>
-                Ничего не найдено.
-                <br />
-                Попробуйте выбрать другие фильтры.
-            </Text>
-
-            <Gap size={24} />
-
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
-                Сбросить фильтры
-            </Button>
-        </ListEmptyState>
-    ),
-    parameters: {
-        docs: { description: { story: "Используется при применении фильтров, когда не найден ни один элемент." } },
-    },
-};
-
 export const EmptyState: StoryObj<typeof List> = {
     render: () => (
         <ListEmptyState>
             <div style={{ display: "flex", justifyContent: "center" }}>
-                {/* <EmptytableSrvIcon64 /> */}
-                Иллюстрация пустого списка
+                <EmptytableSysIcon96 />
             </div>
+
+            <Gap size={16} />
+
+            <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                Title text
+            </Title>
+
+            <Gap size={8} />
 
             <Text size={ETextSize.B3}>Нет данных, но можно предложить какие-то действия для заполнения таблицы.</Text>
 

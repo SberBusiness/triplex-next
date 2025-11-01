@@ -13,7 +13,6 @@ export interface IListItemLoadingProps extends React.HTMLAttributes<HTMLDivEleme
  * Спиннер для элемента списка.
  * Используется, как последний элемент при подгрузке новых данных.
  * */
-//@TODO: Добавить лоадер.
 export const ListItemLoading = React.forwardRef<HTMLDivElement, IListItemLoadingProps>(
     ({ className, ...rest }, ref) => (
         <div className={clsx(styles.listItemLoading, className)} {...rest} ref={ref}>

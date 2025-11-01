@@ -24,7 +24,6 @@
     }
 
     &.disabled {
-        color: var(--triplex-next-Radio-Color_Disabled);
         cursor: default;
     }
 }
@@ -38,6 +37,7 @@
     box-sizing: border-box;
     background: var(--triplex-next-Radio-Background_Default);
     border-radius: 50%;
+    box-shadow: var(--triplex-next-Radio-BorderColor_Default);
 }
 
 .radioIcon::after {
@@ -81,10 +81,6 @@
         width: 28px;
         height: 28px;
     }
-
-    .nonempty & {
-        top: 2px;
-    }
 }
 
 .radio:enabled {
@@ -94,6 +90,7 @@
 .radio:checked {
     + .radioIcon {
         background: var(--triplex-next-Radio-Background_Checked_Default);
+        box-shadow: none;
     }
 
     + .radioIcon::after {
@@ -104,16 +101,19 @@
 
 .radio:hover + .radioIcon {
     background-color: var(--triplex-next-Radio-Background_Hover);
+    box-shadow: none;
 }
 
 .radio:disabled {
     + .radioIcon {
         background: var(--triplex-next-Radio-Background_Disabled);
+        box-shadow: var(--triplex-next-Radio-BorderColor_Disabled);
     }
 
     &:checked {
         + .radioIcon {
             background: var(--triplex-next-Radio-Background_Checked_Disabled);
+            box-shadow: none;
         }
     }
 

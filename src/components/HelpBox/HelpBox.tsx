@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
-import FocusTrap from "focus-trap-react";
-import { HintSrvIcon16 } from "@sberbusiness/icons/HintSrvIcon16";
-import { ButtonIcon } from "@sber-business/triplex/components/Button/ButtonIcon";
-import { EButtonIconShape } from "@sber-business/triplex/components/Button/enums";
-import { Tooltip, ITooltipProps } from "@sber-business/triplex/components/Tooltip/Tooltip";
-import { ETooltipSize } from "@sber-business/triplex/components/Tooltip/enums";
-import { TooltipMobileHeader } from "@sber-business/triplex/components/Tooltip/components/mobile/components/TooltipMobileHeader";
-import { MobileView } from "@sber-business/triplex/components/MobileView/MobileView";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { getAriaHTMLAttributes, TAriaHTMLAttributes } from "@sber-business/triplex/utils/HTML/AriaAttributes";
-import { getDataHTMLAttributes, TDataHTMLAttributes } from "@sber-business/triplex/utils/HTML/DataAttributes";
-import { uniqueId } from "@sber-business/triplex/utils/uniqueId";
+import React, { useState, useRef, useId } from "react";
+import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { ButtonIcon } from "../Button/ButtonIcon";
+import { EButtonIconShape } from "../Button/enums";
+import { Tooltip } from "../Tooltip/Tooltip";
+import { ITooltipProps } from "../Tooltip/types";
+import { ETooltipSize } from "../Tooltip/enums";
+import { TooltipMobileHeader } from "../Tooltip/components/mobile/components/TooltipMobileHeader";
+import { MobileView } from "../MobileView/MobileView";
+import { getDataHTMLAttributes, TDataHTMLAttributes } from "../../utils/html/DataAttributes";
+import { getAriaHTMLAttributes, TAriaHTMLAttributes } from "../../utils/html/AriaAttributes";
+import styles from "./styles/HelpBox.module.less";
+import clsx from "clsx";
 
 /** Свойства компонента HelpBox. */
 export interface IHelpBoxProps
     extends React.HTMLAttributes<HTMLButtonElement>,
         Pick<ITooltipProps, "isOpen" | "preferPlace" | "onShow" | "toggle"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    focusTrapProps?: FocusTrapProps;
     /** Aria-атрибуты Tooltip. */
     tooltipAriaAttributes?: TAriaHTMLAttributes;
     /** Data-атрибуты Tooltip. */
@@ -47,21 +48,9 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
 }) => {
     const ref = useRef<HTMLButtonElement>(null);
     const [openState, setOpenState] = useState(Boolean(openProp));
-    // Элементы являющиеся границами для ловушки фокуса.
-    const [containerElements, setContainerElements] = useState<HTMLElement[]>([]);
-    const tooltipId = useRef(uniqueId());
-
-    useEffect(() => {
-        if (openProp !== undefined && openProp !== openState) {
-            setOpenState(openProp);
-        }
-    }, [openProp, openState]);
-
-    useEffect(() => {
-        if (!openState) {
-            setContainerElements([]);
-        }
-    }, [openState]);
+    const [focusTrapNode, setFocusTrapNode] = useState<HTMLDivElement | null>(null);
+    const tooltipId = useId();
+    const open = openProp ?? openState;
 
     /** Обработчик закрытия/открытия Tooltip. */
     const handleTooltipToggle = (open: boolean) => {
@@ -69,30 +58,33 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
             setOpenState(open);
         }
 
+        if (!open) {
+            setFocusTrapNode(null);
+        }
+
         toggle?.(open);
     };
 
     /** Обработчик появления Tooltip. */
     const handleTooltipShow = (node: HTMLDivElement) => {
-        setContainerElements([node]);
-
+        setFocusTrapNode(node);
         onShow?.(node);
     };
 
     /** Рендер ловушки фокуса. */
-    const renderFocusTrap = () => (
+    const renderFocusTrap = (node: HTMLDivElement) => (
         <MobileView
             fallback={
                 <FocusTrap
-                    active={openState}
+                    active={open}
                     {...focusTrapProps}
                     focusTrapOptions={{
                         clickOutsideDeactivates: true,
-                        initialFocus: `[id='${tooltipId.current}']`,
+                        initialFocus: `[id='${tooltipId}']`,
                         preventScroll: true,
                         ...focusTrapProps?.focusTrapOptions,
                     }}
-                    containerElements={containerElements}
+                    containerElements={[node]}
                 />
             }
         >
@@ -103,13 +95,13 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
     return (
         <>
             <Tooltip
-                id={tooltipId.current}
+                id={tooltipId}
                 tabIndex={-1}
                 role="dialog"
                 toggleType="hover"
                 size={tooltipSize}
                 preferPlace={preferPlace}
-                isOpen={openState}
+                isOpen={open}
                 toggle={handleTooltipToggle}
                 onShow={handleTooltipShow}
                 targetRef={ref}
@@ -118,20 +110,20 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
             >
                 <Tooltip.Target>
                     <ButtonIcon
-                        className={classnames("cssClass[helpBoxButton]", className)}
+                        className={clsx(styles.helpBoxButton, className)}
                         aria-label="Подсказка"
                         shape={EButtonIconShape.CIRCLE}
                         ref={ref}
                         {...targetHtmlAttrs}
                     >
-                        <HintSrvIcon16 />
+                        <HintFilledSrvIcon16 paletteIndex={5} />
                     </ButtonIcon>
                 </Tooltip.Target>
                 {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}
-                <Tooltip.Body className="cssClass[helpBoxTooltipBody]">{children}</Tooltip.Body>
+                <Tooltip.Body className={styles.helpBoxTooltipBody}>{children}</Tooltip.Body>
                 <Tooltip.XButton aria-label="Закрыть" />
             </Tooltip>
-            {openState && renderFocusTrap()}
+            {open && focusTrapNode && renderFocusTrap(focusTrapNode)}
         </>
     );
 };

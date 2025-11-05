@@ -8,14 +8,15 @@ import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
 import styles from "./styles/Button.module.less";
 import { ButtonBase, IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
-import { EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.GENERAL;
     /** Размер кнопки. */
-    size: EButtonSize;
+    size: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -29,7 +30,7 @@ export interface IButtonSecondaryProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY;
     /** Размер кнопки. */
-    size: EButtonSize;
+    size: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -43,7 +44,7 @@ export interface IButtonSecondaryLightProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY_LIGHT;
     /** Размер кнопки. */
-    size: EButtonSize;
+    size: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -56,7 +57,7 @@ export interface IButtonDangerProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.DANGER;
     /** Размер кнопки. */
-    size: EButtonSize;
+    size: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -70,7 +71,7 @@ export interface IButtonLinkProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.LINK;
     /** Размер кнопки. */
-    size: EButtonSize;
+    size: EComponentSize;
     /** Блочный режим. */
     block?: never;
     /** Режим загрузки. */
@@ -116,26 +117,26 @@ const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
 };
 
 /** Возвращает CSS класс размера кнопки. */
-const getButtonSizeCssClass = (size?: EButtonSize) => {
+const getButtonSizeCssClass = (size?: EComponentSize) => {
     switch (size) {
-        case EButtonSize.LG:
+        case EComponentSize.LG:
             return styles.lg;
-        case EButtonSize.MD:
+        case EComponentSize.MD:
             return styles.md;
-        case EButtonSize.SM:
+        case EComponentSize.SM:
             return styles.sm;
     }
 };
 
 /** Отрисовка анимации загрузки. */
-const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
+const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
     const dotsTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
         ? ELoaderSmallTheme.BRAND
         : ELoaderSmallTheme.NEUTRAL;
     const dotsSize =
-        size === EButtonSize.SM
+        size === EComponentSize.SM
             ? ELoaderSmallSize.SM
-            : size === EButtonSize.LG
+            : size === EComponentSize.LG
               ? ELoaderSmallSize.LG
               : ELoaderSmallSize.MD;
     return <LoaderSmall theme={dotsTheme} size={dotsSize} />;
@@ -143,7 +144,7 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EButtonSize) => {
 
 /** Кнопка. */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
-    const { children, className, disabled, theme, size = EButtonSize.MD, block, loading, icon, ...rest } = props;
+    const { children, className, disabled, theme, size = EComponentSize.MD, block, loading, icon, ...rest } = props;
 
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(

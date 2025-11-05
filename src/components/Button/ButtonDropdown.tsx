@@ -6,7 +6,7 @@ import {
     IButtonDropdownExtendedDropdownProvideProps,
 } from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
-import { EButtonDotsTheme, EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EButtonDotsTheme, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 import { CaretdownStrokeSrvIcon24, DotshorizontalStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
@@ -20,33 +20,8 @@ import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
 import { IDropdownListItemProps } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownListItem";
-import { EDropdownSize, EDropdownListSize } from "@sberbusiness/triplex-next/components/Dropdown/enums";
 import styles from "./styles/ButtonDropdown.module.less";
-
-const getDropdownSize = (size: EButtonSize) => {
-    switch (size) {
-        case EButtonSize.SM:
-            return EDropdownSize.SM;
-        case EButtonSize.MD:
-            return EDropdownSize.MD;
-        case EButtonSize.LG:
-            return EDropdownSize.LG;
-        default:
-            return EDropdownSize.MD;
-    }
-};
-const getDropdownListSize = (size: EButtonSize) => {
-    switch (size) {
-        case EButtonSize.SM:
-            return EDropdownListSize.SM;
-        case EButtonSize.MD:
-            return EDropdownListSize.MD;
-        case EButtonSize.LG:
-            return EDropdownListSize.LG;
-        default:
-            return EDropdownListSize.MD;
-    }
-};
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства опции в выпадающем списке действий. */
 export interface IButtonDropdownOption
@@ -67,7 +42,7 @@ export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElemen
     /** HTML-атрибуты кнопки. */
     buttonAttributes?: React.ButtonHTMLAttributes<HTMLButtonElement>;
     /** Размер кнопки. */
-    size: EButtonSize;
+    size: EComponentSize;
     /** Список опций. */
     options: IButtonDropdownOption[];
     /** Выбранная опция. */
@@ -199,7 +174,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                     <ButtonDropdownExtended.Dropdown
-                        size={getDropdownSize(size)}
+                        size={size}
                         className={classNames}
                         opened={opened}
                         setOpened={setOpened}
@@ -235,7 +210,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                             ),
                         }}
                     >
-                        <DropdownList dropdownOpened={opened} id={instanceId.current} size={getDropdownListSize(size)}>
+                        <DropdownList dropdownOpened={opened} id={instanceId.current} size={size}>
                             {options.map((option) => (
                                 <DropdownList.Item
                                     {...option}

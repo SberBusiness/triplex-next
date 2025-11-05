@@ -13,8 +13,11 @@ import {
 } from "../../Dropdown/mobile";
 import { Text } from "../../Typography/Text";
 import { ETextSize } from "../../Typography/enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 export interface ISelectExtendedFieldDropdownDefaultProps extends ISelectExtendedFieldDropdownProvideProps {
+    /* Размер поля. */
+    size: EComponentSize;
     /* Фиксированная ширина по управляющему элементу. */
     fixedWidth?: boolean;
     /* ClassName для модификации SelectExtendedField.Dropdown.List.Item. */
@@ -46,6 +49,7 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
     mobileTitle,
     onChange,
     opened,
+    size,
     options,
     setOpened,
     targetRef,
@@ -58,6 +62,7 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
             fixedWidth={typeof fixedWidth === "undefined" ? true : fixedWidth}
             setOpened={setOpened}
             targetRef={targetRef}
+            size={size}
             mobileViewProps={{
                 children: (
                     <>

@@ -33,3 +33,4 @@ export * from "./SelectExtendedField";
 export * from "./Island";
 export * from "./Table";
 export * from "./AmountField";
+export * from "./SelectField";

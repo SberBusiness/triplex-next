@@ -1,5 +1,6 @@
 import React from "react";
-import { EFormFieldSize, EFormFieldStatus } from "./enums";
+import { EFormFieldStatus } from "./enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 export interface IFormFieldContext {
     // Поле в состоянии disabled.
@@ -27,7 +28,7 @@ export interface IFormFieldContext {
     // Поле имеет значение, в этом случае label перемещается вверх над значением.
     valueExist: boolean;
     // Размер поля.
-    size: EFormFieldSize;
+    size: EComponentSize;
 }
 
 export const initialFormFieldContext: IFormFieldContext = {
@@ -43,7 +44,7 @@ export const initialFormFieldContext: IFormFieldContext = {
     setPrefixWidth: () => {},
     setValueExist: () => {},
     valueExist: false,
-    size: EFormFieldSize.MD,
+    size: EComponentSize.MD,
 };
 
 /**

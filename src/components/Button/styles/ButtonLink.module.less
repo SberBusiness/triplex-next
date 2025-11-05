@@ -1,21 +1,21 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .button.link {
     text-transform: none;
     background: transparent;
     color: var(--triplex-next-Button-Link_Color_Default);
-    border-radius: 0;
+    padding: 0;
 
     &.md {
-        .size-MD(@button-min-width-link-md, @button-padding-horizontal-link-md);
+        .size-MD(@button-min-width-link, @button-padding-horizontal-link);
     }
 
     &.sm {
-        .size-SM(@button-min-width-link-sm, @button-padding-horizontal-link-sm);
+        .size-SM(@button-min-width-link, @button-padding-horizontal-link);
     }
 
     &.lg {
-        .size-LG(@button-min-width-link-lg, @button-padding-horizontal-link-lg);
+        .size-LG(@button-min-width-link, @button-padding-horizontal-link);
     }
 
     &:hover {

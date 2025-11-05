@@ -35,27 +35,6 @@ export default {
 - **Дополнительный контент**: поддержка contentAfter и contentBefore для добавления иконок или другого контента до или после ссылки
 - Компонент задает только цвет текста ссылки
 
-## Использование
-
-\`\`\`tsx
-import { Link } from '@sberbusiness/triplex-next';
-import { ExternalLinkStrokePrdIcon16 } from '@sberbusiness/icons-next';
-
-// Простая ссылка
-<Link>
-    Перейти
-</Link>
-
-// External link c contentAfter
-<Link contentAfter={() => <ExternalLinkStrokePrdIcon16 />} >
-    Перейти
-</Link>
-
-// External link c contentBefore
-<Link contentBefore={() => <ExternalLinkStrokePrdIcon16 />} >
-    Перейти
-</Link>
-
 \`\`\`
                 `,
             },
@@ -163,11 +142,9 @@ export const Default: StoryObj<typeof Link> = {
             },
         },
     },
-    render: (args) => (
+    render: () => (
         <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-            <Link {...args} href="#">
-                Link text
-            </Link>
+            <Link href="#">Link text</Link>
         </Text>
     ),
 };

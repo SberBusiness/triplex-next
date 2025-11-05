@@ -12,12 +12,7 @@ export interface IListProps extends React.HTMLAttributes<HTMLUListElement> {
 // @TODO: add SpinnerWidget
 /** Список. */
 export const List = React.forwardRef<HTMLUListElement, IListProps>(({ children, className, loading, ...rest }, ref) => (
-    <ul
-        className={clsx(styles.list, className)}
-        {...rest}
-        data-tx={process.env.npm_package_version}
-        ref={ref}
-    >
+    <ul className={clsx(styles.list, className)} {...rest} data-tx={process.env.npm_package_version} ref={ref}>
         {children}
         {loading ? "Загрузка..." : null}
     </ul>

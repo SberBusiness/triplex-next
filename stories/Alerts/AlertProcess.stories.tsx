@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { AlertProcess } from "../src/components/Alert/AlertProcess/AlertProcess";
+import { AlertProcess } from "../../src/components/Alert/AlertProcess/AlertProcess";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { EAlertType } from "../src/components/Alert/EAlertType";
-import { Text } from "../src/components/Typography/Text";
-import { EFontType, ETextSize } from "../src/components/Typography/enums";
-import { Button } from "../src/components/Button";
-import { EButtonSize, EButtonTheme } from "../src/components/Button";
-import { Gap } from "../src/components/Gap";
+import { EAlertType } from "../../src/components/Alert/EAlertType";
+import { Text } from "../../src/components/Typography/Text";
+import { EFontType, ETextSize } from "../../src/components/Typography/enums";
+import { Button } from "../../src/components/Button";
+import { EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { Gap } from "../../src/components/Gap";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { Link } from "../../src/components/Link";
 
 export default {
     title: "Components/Alerts/AlertProcess",
@@ -241,6 +242,61 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
                 <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
                     Button link text
                 </Button>
+            </>
+        ),
+    },
+    argTypes: {
+        type: {
+            table: {
+                disable: true,
+            },
+        },
+        closable: {
+            table: {
+                disable: true,
+            },
+        },
+        children: {
+            table: {
+                disable: true,
+            },
+        },
+        renderIcon: {
+            table: {
+                disable: true,
+            },
+        },
+        onClose: {
+            table: {
+                disable: true,
+            },
+        },
+    },
+    render: (args) => (
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
+            <AlertProcess {...args} type={EAlertType.INFO} />
+            <AlertProcess {...args} type={EAlertType.WARNING} />
+            <AlertProcess {...args} type={EAlertType.ERROR} />
+            <AlertProcess {...args} type={EAlertType.SYSTEM} />
+            <AlertProcess {...args} type={EAlertType.FEATURE} />
+        </div>
+    ),
+};
+
+export const WithLink: StoryObj<typeof AlertProcess> = {
+    name: "With Link",
+    args: {
+        closable: true,
+        onClose: action("onClose"),
+        children: (
+            <>
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                    This message provides context or highlights important information to note.
+                </Text>
+                <Gap size={8} />
+                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                    <Link href="#">Link text</Link>
+                </Text>
             </>
         ),
     },

@@ -1,0 +1,16 @@
+.unorderedListItem {
+    &::before {
+        content: '';
+        width: 4px;
+        height: 4px;
+        margin: 8px 1px;
+        position: absolute;
+        left: 0;
+        background-color: currentColor;
+        border-radius: 50%;
+    }
+
+    + .unorderedListItem {
+        margin-top: 8px;
+    }
+}

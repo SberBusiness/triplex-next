@@ -14,7 +14,7 @@ describe("TabsLine", () => {
 
     const defaultProps: ITabsLineProps = {
         tabs: mockTabs,
-        selectedTabId: "tab-1",
+        selectedId: "tab-1",
         onChangeTab: vi.fn(),
     };
 

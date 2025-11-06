@@ -28,8 +28,8 @@ export interface ITabsProps extends ITabsExtendedProps {
 /** Компонент Tabs. */
 export const Tabs: React.FC<ITabsProps> = ({
     buttonDropdownAttributes,
-    onSelectTab,
     selectedId,
+    onSelectTab,
     size = EComponentSize.MD,
     tabs,
     ...props

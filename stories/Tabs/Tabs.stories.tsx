@@ -71,7 +71,7 @@ export const Playground: StoryObj<typeof Tabs> = {
             <Tabs
                 {...args}
                 tabs={tabs}
-                selectedTabId={selectedTabId}
+                selectedId={selectedTabId}
                 onSelectTab={(id) => setSelectedTabId(id)}
                 buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
             />
@@ -127,7 +127,7 @@ export const Type1: StoryObj<typeof Tabs> = {
             <div className="tabs-type1-example">
                 <Tabs
                     tabs={tabs_0}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     size={EComponentSize.SM}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
@@ -135,7 +135,7 @@ export const Type1: StoryObj<typeof Tabs> = {
                 <Gap size={16} />
                 <Tabs
                     tabs={tabs_1}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     size={EComponentSize.MD}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
@@ -143,7 +143,7 @@ export const Type1: StoryObj<typeof Tabs> = {
                 <Gap size={16} />
                 <Tabs
                     tabs={tabs_2}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     size={EComponentSize.LG}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
@@ -201,7 +201,7 @@ export const Type2: StoryObj<typeof Tabs> = {
             <div className="tabs-type2-example">
                 <Tabs
                     tabs={tabs_0}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     type={ETabsExtendedType.TYPE_2}
                     size={EComponentSize.SM}
@@ -210,7 +210,7 @@ export const Type2: StoryObj<typeof Tabs> = {
                 <Gap size={16} />
                 <Tabs
                     tabs={tabs_1}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     type={ETabsExtendedType.TYPE_2}
                     size={EComponentSize.MD}
@@ -219,7 +219,7 @@ export const Type2: StoryObj<typeof Tabs> = {
                 <Gap size={16} />
                 <Tabs
                     tabs={tabs_2}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     type={ETabsExtendedType.TYPE_2}
                     size={EComponentSize.LG}

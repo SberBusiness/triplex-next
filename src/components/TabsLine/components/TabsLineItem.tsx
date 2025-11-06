@@ -19,11 +19,11 @@ export interface ITabsLineItemProps extends React.HTMLAttributes<HTMLButtonEleme
     size?: EComponentSize;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Компонент TabsLineItem. */
 export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemProps>(
     ({ id, label, selected, showNotificationIcon, size = EComponentSize.MD, ...htmlButtonAttributes }, ref) => {
-        const sizeToClassNameMap = createSizeToClassNameMap(styles);
-
         return (
             <button
                 {...htmlButtonAttributes}

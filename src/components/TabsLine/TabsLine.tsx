@@ -18,7 +18,7 @@ export const TabsLine: React.FC<ITabsLineProps> = ({
     maxVisible,
     onChangeTab,
     paddingX,
-    selectedTabId,
+    selectedId,
     tabs,
     size,
     ...htmlDivAttributes
@@ -35,14 +35,14 @@ export const TabsLine: React.FC<ITabsLineProps> = ({
                     <TabsLineDesktop
                         tabs={tabs}
                         onChangeTab={onChangeTab}
-                        selectedTabId={selectedTabId}
+                        selectedId={selectedId}
                         dropdownTargetHtmlAttributes={dropdownTargetHtmlAttributes}
                         maxVisible={maxVisible}
                         size={size}
                     />
                 }
             >
-                <TabsLineMobile tabs={tabs} onChangeTab={onChangeTab} selectedTabId={selectedTabId} />
+                <TabsLineMobile tabs={tabs} onChangeTab={onChangeTab} selectedId={selectedId} />
             </MobileView>
         </div>
     );

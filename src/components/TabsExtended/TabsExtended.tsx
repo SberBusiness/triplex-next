@@ -5,7 +5,7 @@ import { TabsExtendedContent } from "./components/TabsExtendedContent";
 import styles from "./styles/TabsExtended.module.less";
 import { TTabsExtendedOnSelectTab } from "@sberbusiness/triplex-next/components/TabsExtended/types";
 import { ETabsExtendedType } from "./enums";
-import { typeToClassNameKeyMap } from "./utils";
+import { typeToClassNameMap } from "./utils";
 
 /** Свойства компонента TabsExtended. */
 export interface ITabsExtendedProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -55,7 +55,7 @@ export const TabsExtended: React.FC<ITabsExtendedProps> & ITabsExtendedCompositi
             }}
         >
             <div
-                className={clsx(styles.tabsExtended, styles[typeToClassNameKeyMap[type]], className)}
+                className={clsx(styles.tabsExtended, typeToClassNameMap[type], className)}
                 role="tablist"
                 {...htmlDivAttributes}
             >

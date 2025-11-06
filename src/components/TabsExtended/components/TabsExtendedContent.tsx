@@ -21,14 +21,14 @@ export interface ITabsExtendedContentComposition {
     DropdownWrapper: typeof TabsExtendedDropdownWrapper;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 export const TabsExtendedContent: React.FC<ITabsExtendedContentProps> & ITabsExtendedContentComposition = ({
     children,
     className,
     size = EComponentSize.MD,
     ...htmlDivAttributes
 }) => {
-    const sizeToClassNameMap = createSizeToClassNameMap(styles);
-
     return (
         <div className={clsx(styles.tabsExtendedContent, sizeToClassNameMap[size], className)} {...htmlDivAttributes}>
             {children}

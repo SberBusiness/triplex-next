@@ -19,6 +19,7 @@ export const designTokensComponentsTabsKeys = [
     "Type1_Tab_Color_Hover",
     "Type2_Tab_Color_Hover",
 
+    "Tab_BorderColor_Default",
     "Tab_BorderColor_Focus",
 ] as const;
 // Тип, содержащий названия токенов компонента Tabs.
@@ -49,5 +50,6 @@ export const Tabs_Tokens: TDesignTokensComponentsTabsValues = {
     Type1_Tab_Color_Hover: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Tabs-Type1_Tab_Color_Hover)
     Type2_Tab_Color_Hover: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Tabs-Type2_Tab_Color_Hover)
 
+    Tab_BorderColor_Default: [{ value: "transparent" }, { value: "transparent" }], // var(--triplex-next-Tabs-Tab_BorderColor_Default)
     Tab_BorderColor_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Tabs-Tab_BorderColor_Focus)
 };

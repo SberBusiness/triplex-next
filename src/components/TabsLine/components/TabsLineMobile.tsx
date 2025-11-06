@@ -7,7 +7,7 @@ import styles from "../styles/TabsLineMobile.module.less";
 interface ITabsLineMobileProps extends ITabsLineBaseProps {}
 
 /** Компонент TabsLineMobile. */
-export const TabsLineMobile: React.FC<ITabsLineMobileProps> = ({ onChangeTab, selectedTabId, tabs }) => {
+export const TabsLineMobile: React.FC<ITabsLineMobileProps> = ({ onChangeTab, selectedId, tabs }) => {
     if (!tabs.length) {
         return null;
     }
@@ -18,7 +18,7 @@ export const TabsLineMobile: React.FC<ITabsLineMobileProps> = ({ onChangeTab, se
             item.onClick?.(event as React.MouseEvent<HTMLButtonElement>);
         };
 
-        return <TabsLineItem key={item.id} selected={selectedTabId === item.id} {...item} onClick={handleClick} />;
+        return <TabsLineItem key={item.id} selected={selectedId === item.id} {...item} onClick={handleClick} />;
     };
 
     return (

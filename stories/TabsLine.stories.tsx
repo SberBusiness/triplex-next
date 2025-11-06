@@ -101,7 +101,7 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
             <TabsLine
                 {...args}
                 tabs={tabs}
-                selectedTabId={selectedTabId}
+                selectedId={selectedTabId}
                 onChangeTab={setSelectedTabId}
                 dropdownTargetHtmlAttributes={{
                     "data-test-id": "TabsLine__DropdownTarget",
@@ -163,7 +163,7 @@ export const Default: StoryObj<ITabsLineStoriesProps> = {
             <TabsLine
                 {...args}
                 tabs={tabs}
-                selectedTabId={selectedTabId}
+                selectedId={selectedTabId}
                 onChangeTab={setSelectedTabId}
                 dropdownTargetHtmlAttributes={{
                     "data-test-id": "TabsLine__DropdownTarget",
@@ -226,7 +226,7 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                 <TabsLine
                     {...args}
                     tabs={tabs}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     size={EComponentSize.SM}
                     onChangeTab={setSelectedTabId}
                     dropdownTargetHtmlAttributes={{
@@ -237,7 +237,7 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                 <TabsLine
                     {...args}
                     tabs={tabs}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     size={EComponentSize.MD}
                     onChangeTab={setSelectedTabId}
                     dropdownTargetHtmlAttributes={{
@@ -248,7 +248,7 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                 <TabsLine
                     {...args}
                     tabs={tabs}
-                    selectedTabId={selectedTabId}
+                    selectedId={selectedTabId}
                     size={EComponentSize.LG}
                     onChangeTab={setSelectedTabId}
                     dropdownTargetHtmlAttributes={{

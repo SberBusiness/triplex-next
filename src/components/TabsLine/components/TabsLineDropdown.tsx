@@ -38,6 +38,8 @@ interface ITabsLineDropdownState {
     opened: boolean;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Компонент TabsLineDropdown. */
 export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps, ITabsLineDropdownState> {
     state = {
@@ -48,7 +50,6 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
     private readonly targetRef: React.RefObject<HTMLDivElement>;
     private readonly dropdownRef: React.RefObject<HTMLDivElement>;
     private instanceId = uniqueId();
-    private sizeToClassNameMap = createSizeToClassNameMap(styles);
 
     constructor(props: ITabsLineDropdownProps) {
         super(props);
@@ -84,7 +85,7 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
         const { isActive, label, targetHtmlAttributes, size = EComponentSize.MD } = this.props;
         const { activeDescendant, opened } = this.state;
 
-        const buttonClassName = clsx(styles.tab, this.sizeToClassNameMap[size], styles.dropdownTarget, {
+        const buttonClassName = clsx(styles.tab, sizeToClassNameMap[size], styles.dropdownTarget, {
             [styles.active]: isActive,
         });
         const caretClassName = clsx(styles.dropdownTargetCaret, { [styles.opened]: opened });

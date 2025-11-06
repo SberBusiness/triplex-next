@@ -24,12 +24,12 @@ const themeToClassNameMap = {
     [ESegmentedControlTheme.SECONDARY_2]: styles.secondary2,
 };
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Набор опций для выбора одного или нескольких вариантов. */
 export const SegmentedControl = Object.assign(
     React.forwardRef<HTMLDivElement, ISegmentedControlSingleProps | ISegmentedControlMultipleProps>(
         ({ children, className, value, theme, type, size, disabled, onSelect, ...rest }, ref) => {
-            const sizeToClassNameMap = createSizeToClassNameMap(styles);
-
             const classNames = clsx(
                 styles.segmentedControl,
                 themeToClassNameMap[theme],

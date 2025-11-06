@@ -18,7 +18,7 @@ export interface ITabsLineDesktopProps extends ITabsLineBaseProps {
 export const TabsLineDesktop: React.FC<ITabsLineDesktopProps> = ({
     tabs,
     dropdownTargetHtmlAttributes,
-    selectedTabId,
+    selectedId,
     onChangeTab,
     maxVisible,
     size,
@@ -97,7 +97,7 @@ export const TabsLineDesktop: React.FC<ITabsLineDesktopProps> = ({
         return (
             <TabsLineItem
                 key={item.id}
-                selected={selectedTabId === item.id}
+                selected={selectedId === item.id}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
                 tabIndex={tabIndex}
@@ -114,7 +114,7 @@ export const TabsLineDesktop: React.FC<ITabsLineDesktopProps> = ({
         const itemsToRender: JSX.Element[] = inlineTabs.map((item, index) => renderInlineTab(item, index));
 
         if (dropdownTabs.length > 0) {
-            const selectedTab = dropdownTabs.find((item) => item.id === selectedTabId);
+            const selectedTab = dropdownTabs.find((item) => item.id === selectedId);
             const dropdownLabel = selectedTab ? selectedTab.label : dropdownTabs[0].label;
 
             itemsToRender.push(

@@ -11,14 +11,14 @@ export interface IChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     size?: EComponentSize;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /**
  * Компонент ChipGroup.
  * Контейнер компонентов Chip.
  */
 export const ChipGroup = React.forwardRef<HTMLDivElement, IChipGroupProps>(
     ({ children, className, oneLine, size = EComponentSize.MD, ...rest }, ref) => {
-        const sizeToClassNameMap = createSizeToClassNameMap(styles);
-
         return (
             <div
                 className={clsx(styles.chipGroup, sizeToClassNameMap[size], className, {

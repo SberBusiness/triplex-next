@@ -8,7 +8,7 @@ export interface ITabsLineBaseProps extends Omit<React.HTMLAttributes<HTMLDivEle
     /** Коллбек смены таба. */
     onChangeTab: (tabId: string) => void;
     /** Идентификатор выбранного таба. */
-    selectedTabId: string;
+    selectedId: string;
     /** Размер компонента. */
     size?: EComponentSize;
 }

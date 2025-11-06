@@ -15,7 +15,7 @@ export const tabsExtendedSizeToTextSizeMap = {
     [EComponentSize.SM]: ETextSize.B4,
 };
 
-export const typeToClassNameKeyMap = {
-    [ETabsExtendedType.TYPE_1]: "type1",
-    [ETabsExtendedType.TYPE_2]: "type2",
-} as const;
+export const typeToClassNameMap = {
+    [ETabsExtendedType.TYPE_1]: styles.type1,
+    [ETabsExtendedType.TYPE_2]: styles.type2,
+};

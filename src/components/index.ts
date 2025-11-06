@@ -9,6 +9,7 @@ export * from "./Gap";
 export * from "./Link";
 export * from "./Loader";
 export * from "./LoaderWidget";
+export * from "./Marker";
 export * from "./MediaWidth";
 export * from "./MobileView";
 export * from "./Radio";

@@ -1,0 +1,45 @@
+.markerStatus {
+    position: relative;
+    line-height: 0;
+
+    .markerContainer {
+        position: absolute;
+    }
+
+    .markerStatusDescription {
+        color: var(--triplex-next-MarkerStatus-Description_Color);
+    }
+
+    &.md {
+        .markerContainer {
+            top: 4px;
+        }
+
+        .markerStatusDescription {
+            line-height: 12px;
+            font-size: 10px;
+            margin-left: 12px;
+        }
+
+        .markerStatusText {
+            margin-left: 12px;
+        }
+    }
+
+    &.lg {
+        .markerContainer {
+            top: 5px;
+        }
+
+        .markerStatusDescription {
+            line-height: 16px;
+            font-size: 12px;
+            margin-left: 16px;
+            margin-top: 4px;
+        }
+
+        .markerStatusText {
+            margin-left: 16px;
+        }
+    }
+}

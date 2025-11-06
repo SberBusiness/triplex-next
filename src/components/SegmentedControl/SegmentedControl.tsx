@@ -8,12 +8,12 @@ import {
 import {
     ESegmentedControlTheme,
     ESegmentedControlType,
-    ESegmentedControlSize,
 } from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
 import {
     ISegmentedControlContextType,
     SegmentedControlContext,
 } from "@sberbusiness/triplex-next/components/SegmentedControl/SegmentedControlContext";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/SegmentedControl.module.less";
 
 /** Соответствие темы имени класса. */
@@ -24,12 +24,7 @@ const themeToClassNameMap = {
     [ESegmentedControlTheme.SECONDARY_2]: styles.secondary2,
 };
 
-/** Соответствие размера имени класса. */
-const sizeToClassNameMap = {
-    [ESegmentedControlSize.SM]: styles.sm,
-    [ESegmentedControlSize.MD]: styles.md,
-    [ESegmentedControlSize.LG]: styles.lg,
-};
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Набор опций для выбора одного или нескольких вариантов. */
 export const SegmentedControl = Object.assign(

@@ -4,3 +4,4 @@ export * from "./desktop/DropdownDesktop";
 export * from "./desktop/DropdownListItem";
 export * from "./mobile";
 export * from "./enums";
+export * from "./DropdownListContext";

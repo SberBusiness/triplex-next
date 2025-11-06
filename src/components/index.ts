@@ -14,6 +14,8 @@ export * from "./MobileView";
 export * from "./Radio";
 export * from "./Row";
 export * from "./TabsExtended";
+export * from "./Tabs";
+export * from "./TabsLine";
 export * from "./TextField";
 export * from "./ThemeProvider";
 export * from "./Typography";

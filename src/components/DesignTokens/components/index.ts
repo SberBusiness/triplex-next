@@ -3,6 +3,7 @@ export * from "./Checkbox";
 export * from "./FormField";
 export * from "./Link";
 export * from "./Tabs";
+export * from "./TabsLine";
 export * from "./Loader";
 export * from "./LoaderWidget";
 export * from "./Radio";

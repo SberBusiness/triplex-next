@@ -11,30 +11,24 @@ export interface IFormFieldClearProps extends React.HTMLAttributes<HTMLSpanEleme
 
 /** Кнопка очищения введенного значения. */
 export const FormFieldClear = React.forwardRef<HTMLSpanElement, IFormFieldClearProps>(
-    ({ className, onClick, ...htmlLabelAttributes }, ref) => {
-        const { status, focused, hovered, id, valueExist } = useContext(FormFieldContext);
-
-        const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
-            // Установка фокуса в поле ввода при очищении значения.
-            const input = document.querySelector<HTMLInputElement>(`#${id}`);
-            if (input) {
-                input.focus();
-            }
-
-            onClick?.(event);
-        };
-
+    ({ className, onMouseDown, ...htmlLabelAttributes }, ref) => {
+        const { status, focused, hovered, valueExist } = useContext(FormFieldContext);
         const classNames = clsx(
             styles.formFieldClear,
             "hoverable",
             {
-                [styles.shown]: valueExist && status !== EFormFieldStatus.DISABLED && (focused || hovered),
+                [styles.hidden]: !valueExist || status === EFormFieldStatus.DISABLED || !(focused || hovered),
             },
             className,
         );
 
+        const handleMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+            event.preventDefault();
+            onMouseDown?.(event);
+        };
+
         return (
-            <span className={classNames} ref={ref} onClick={handleClick} {...htmlLabelAttributes}>
+            <span className={classNames} onMouseDown={handleMouseDown} {...htmlLabelAttributes} ref={ref}>
                 <CrossStrokeSrvIcon16 paletteIndex={5} />
             </span>
         );

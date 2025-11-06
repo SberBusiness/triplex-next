@@ -1,22 +1,26 @@
 .dropdownMobileInput {
-    display: block;
-    width: calc(100% - 12px);
+    flex: 1;
     padding: 0;
     font-family: inherit;
     font-size: 14px;
-    line-height: 16px;
-    color: var(--triplex-next-Input-Color_Default);
+    line-height: 20px;
+    color: var(--triplex-next-FormField-Input-Color_Default);
     background: none;
     border: none;
     border-radius: 0;
     outline: none;
 
     &::placeholder {
-        color: var(--triplex-next-Input-Placeholder_Color);
+        color: var(--triplex-next-FormField-Placeholder_Color);
         opacity: 1; // На Firefox по-дефолту цвет полупрозрачный
     }
 
     &::-ms-clear {
         display: none;
+    }
+
+    & + .dropdownMobileClose,
+    & + .dropdownMobileLoader {
+        margin-left: 12px;
     }
 }

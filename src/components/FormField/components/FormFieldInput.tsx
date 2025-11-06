@@ -24,7 +24,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
     const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
     const { render, ...renderProvideProps } = props;
     const { focused, status, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldInput, className, styles[`size-${size}`]);
+    const classNames = clsx(styles.formFieldInput, styles[`size-${size}`], className);
 
     const instanceId = useRef(id || uniqueId("input_"));
 

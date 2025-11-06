@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import styles from '../styles/FormFieldPostfix.module.less';
 
 /** Свойства компонента FormFieldPostfix. */
-interface IFormFieldPostfixProps extends React.HTMLAttributes<HTMLSpanElement> {}
+export interface IFormFieldPostfixProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
 /** Контейнер элементов, отображающихся в правой части FormField. */
 export const FormFieldPostfix = React.forwardRef<HTMLSpanElement, IFormFieldPostfixProps>(

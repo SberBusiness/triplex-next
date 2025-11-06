@@ -47,7 +47,7 @@
         "react-window": "1.8.10"
     },
     "devDependencies": {
-        "@eslint/js": "9.37.0",
+        "@eslint/js": "9.38.0",
         "@playwright/test": "1.55.1",
         "@sberbusiness/icons-next": "1.1.0",
         "@storybook/addon-docs": "9.1.15",
@@ -68,7 +68,7 @@
         "autoprefixer": "10.4.21",
         "chromatic": "13.1.2",
         "dotenv-cli": "9.0.0",
-        "eslint": "9.37.0",
+        "eslint": "9.38.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-prettier": "5.5.4",
         "eslint-plugin-react": "7.37.5",

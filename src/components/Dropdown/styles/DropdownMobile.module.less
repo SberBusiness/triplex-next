@@ -52,9 +52,9 @@
 }
 
 .dropdownMobileHeader {
-    // Если title не задан.
-    min-height: 16px;
-    padding: 16px 40px 16px 16px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
     background: var(--triplex-next-DropdownMobile-Header_Background);
     position: relative;
     flex-shrink: 1;
@@ -86,14 +86,12 @@
     }
 }
 
-.dropdownMobileListLoader {
-    margin: -2px auto;
+.dropdownMobileLoader + .dropdownMobileClose {
+    margin-left: 8px;
 }
 
-button.dropdownMobileClose {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+.dropdownMobileListLoader {
+    margin: -2px auto;
 }
 
 .dropdownMobileBodyOverflow {

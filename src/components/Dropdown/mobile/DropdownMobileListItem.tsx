@@ -23,11 +23,7 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
             <Text
                 tag="div"
                 size={ETextSize.B3}
-                className={clsx(
-                    styles.dropdownMobileListItem,
-                    { [styles.selected]: Boolean(selected) },
-                    className
-                )}
+                className={clsx(styles.dropdownMobileListItem, { [styles.selected]: Boolean(selected) }, className)}
                 aria-selected={Boolean(selected)}
                 role="option"
                 ref={ref}

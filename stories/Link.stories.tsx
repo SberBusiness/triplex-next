@@ -103,7 +103,9 @@ export const Playground: StoryObj<typeof Link> = {
     },
     render: (args) => (
         <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-            <Link {...args}>{args.children}</Link>
+            <Link {...args} onClick={(event) => event.preventDefault()}>
+                {args.children}
+            </Link>
         </Text>
     ),
 };
@@ -144,7 +146,9 @@ export const Default: StoryObj<typeof Link> = {
     },
     render: () => (
         <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-            <Link href="#">Link text</Link>
+            <Link href="#" onClick={(event) => event.preventDefault()}>
+                Link text
+            </Link>
         </Text>
     ),
 };
@@ -199,19 +203,35 @@ export const ExternalLink: StoryObj<typeof Link> = {
         return (
             <Col size={6}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link {...args} href="#" contentAfter={renderContentAfter}>
+                    <Link
+                        {...args}
+                        href="#"
+                        contentAfter={renderContentAfter}
+                        onClick={(event) => event.preventDefault()}
+                    >
                         External link with content after
                     </Link>
                 </Text>
                 <Gap size={16} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link {...args} href="#" contentBefore={renderContentBefore}>
+                    <Link
+                        {...args}
+                        href="#"
+                        contentBefore={renderContentBefore}
+                        onClick={(event) => event.preventDefault()}
+                    >
                         External link with content before
                     </Link>
                 </Text>
                 <Gap size={16} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link {...args} href="#" contentBefore={renderContentBefore} contentAfter={renderContentAfter}>
+                    <Link
+                        {...args}
+                        href="#"
+                        contentBefore={renderContentBefore}
+                        contentAfter={renderContentAfter}
+                        onClick={(event) => event.preventDefault()}
+                    >
                         External link with content before and after
                     </Link>
                 </Text>

@@ -7,7 +7,13 @@ import {
 } from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
 import { EButtonDotsTheme, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
-import { CaretdownStrokeSrvIcon24, DotshorizontalStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import {
+    CaretdownStrokeSrvIcon24,
+    CaretdownStrokeSrvIcon20,
+    CaretdownStrokeSrvIcon16,
+    DotshorizontalStrokeSrvIcon32,
+    DotshorizontalStrokeSrvIcon20,
+} from "@sberbusiness/icons-next";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
@@ -66,6 +72,18 @@ interface IButtonDotsProps extends IButtonDropdownProps {
     /** Блочное состояние кнопки. */
     block?: never;
 }
+
+const sizeToDotsIconMap = {
+    [EComponentSize.SM]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
+    [EComponentSize.MD]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
+    [EComponentSize.LG]: <DotshorizontalStrokeSrvIcon32 paletteIndex={0} />,
+};
+
+const sizeToCaretIconMap = {
+    [EComponentSize.SM]: <CaretdownStrokeSrvIcon16 paletteIndex={7} className={styles.caretIcon} />,
+    [EComponentSize.MD]: <CaretdownStrokeSrvIcon20 paletteIndex={7} className={styles.caretIcon} />,
+    [EComponentSize.LG]: <CaretdownStrokeSrvIcon24 paletteIndex={7} className={styles.caretIcon} />,
+};
 
 /** Кнопка с выпадающим списком действий. */
 export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps | IButtonDotsProps>(
@@ -130,7 +148,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                     aria-activedescendant={activeDescendant}
                     {...buttonAttributes}
                     ref={setRef}
-                    icon={<DotshorizontalStrokeSrvIcon24 paletteIndex={0} />}
+                    icon={sizeToDotsIconMap[size]}
                 />
             );
         };
@@ -159,10 +177,10 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                 case EButtonTheme.DANGER:
                 case EButtonDotsTheme.DOTS_SECONDARY:
                 case EButtonDotsTheme.DOTS_SECONDARY_LIGHT:
-                    return <CaretdownStrokeSrvIcon24 paletteIndex={7} className={styles.caretIcon} />;
+                    return sizeToCaretIconMap[size];
                 case EButtonTheme.SECONDARY:
                 case EButtonTheme.SECONDARY_LIGHT:
-                    return <CaretdownStrokeSrvIcon24 paletteIndex={0} className={styles.caretIcon} />;
+                    return sizeToCaretIconMap[size];
                 default:
                     return null;
             }

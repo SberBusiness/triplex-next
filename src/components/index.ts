@@ -38,3 +38,4 @@ export * from "./AmountField";
 export * from "./SelectField";
 export * from "./OrderedList";
 export * from "./UnorderedList";
+export * from "./Ellipsis";

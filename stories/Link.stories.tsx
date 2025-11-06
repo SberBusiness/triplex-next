@@ -35,27 +35,6 @@ export default {
 - **Дополнительный контент**: поддержка contentAfter и contentBefore для добавления иконок или другого контента до или после ссылки
 - Компонент задает только цвет текста ссылки
 
-## Использование
-
-\`\`\`tsx
-import { Link } from '@sberbusiness/triplex-next';
-import { ExternalLinkStrokePrdIcon16 } from '@sberbusiness/icons-next';
-
-// Простая ссылка
-<Link>
-    Перейти
-</Link>
-
-// External link c contentAfter
-<Link contentAfter={() => <ExternalLinkStrokePrdIcon16 />} >
-    Перейти
-</Link>
-
-// External link c contentBefore
-<Link contentBefore={() => <ExternalLinkStrokePrdIcon16 />} >
-    Перейти
-</Link>
-
 \`\`\`
                 `,
             },
@@ -124,7 +103,9 @@ export const Playground: StoryObj<typeof Link> = {
     },
     render: (args) => (
         <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-            <Link {...args}>{args.children}</Link>
+            <Link {...args} onClick={(event) => event.preventDefault()}>
+                {args.children}
+            </Link>
         </Text>
     ),
 };
@@ -163,9 +144,9 @@ export const Default: StoryObj<typeof Link> = {
             },
         },
     },
-    render: (args) => (
+    render: () => (
         <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-            <Link {...args} href="#">
+            <Link href="#" onClick={(event) => event.preventDefault()}>
                 Link text
             </Link>
         </Text>
@@ -222,19 +203,35 @@ export const ExternalLink: StoryObj<typeof Link> = {
         return (
             <Col size={6}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link {...args} href="#" contentAfter={renderContentAfter}>
+                    <Link
+                        {...args}
+                        href="#"
+                        contentAfter={renderContentAfter}
+                        onClick={(event) => event.preventDefault()}
+                    >
                         External link with content after
                     </Link>
                 </Text>
                 <Gap size={16} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link {...args} href="#" contentBefore={renderContentBefore}>
+                    <Link
+                        {...args}
+                        href="#"
+                        contentBefore={renderContentBefore}
+                        onClick={(event) => event.preventDefault()}
+                    >
                         External link with content before
                     </Link>
                 </Text>
                 <Gap size={16} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link {...args} href="#" contentBefore={renderContentBefore} contentAfter={renderContentAfter}>
+                    <Link
+                        {...args}
+                        href="#"
+                        contentBefore={renderContentBefore}
+                        contentAfter={renderContentAfter}
+                        onClick={(event) => event.preventDefault()}
+                    >
                         External link with content before and after
                     </Link>
                 </Text>

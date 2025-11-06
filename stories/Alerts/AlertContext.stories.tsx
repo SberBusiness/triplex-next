@@ -1,7 +1,7 @@
 import React from "react";
-import { AlertContext } from "../src/components/Alert/AlertContext/AlertContext";
+import { AlertContext } from "../../src/components/Alert/AlertContext/AlertContext";
 import { StoryObj } from "@storybook/react";
-import { EAlertType } from "../src/components/Alert/EAlertType";
+import { EAlertType } from "../../src/components/Alert/EAlertType";
 import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
 
 export default {

@@ -295,7 +295,9 @@ export const WithLink: StoryObj<typeof AlertProcess> = {
                 </Text>
                 <Gap size={8} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link href="#">Link text</Link>
+                    <Link href="#" onClick={(event) => event.preventDefault()}>
+                        Link text
+                    </Link>
                 </Text>
             </>
         ),

@@ -24,11 +24,13 @@
         font-size: 12px;
 
         &:not(.icon):not(.link) {
-            .size-SM();
+            height: 28px;
+            min-width: 58px;
+            padding: 6px 16px;
         }
 
         &.icon {
-            min-height: @button-height-sm;
+            min-height: 28px;
             min-width: 28px;
             padding: 4px;
         }
@@ -40,11 +42,13 @@
         font-size: 14px;
 
         &:not(.icon):not(.link) {
-            .size-MD();
+            height: 40px;
+            min-width: 72px;
+            padding: 10px 20px;
         }
 
         &.icon {
-            min-height: @button-height-md;
+            min-height: 40px;
             min-width: 40px;
             padding: 10px;
         }
@@ -56,11 +60,13 @@
         font-size: 16px;
 
         &:not(.icon):not(.link) {
-            .size-LG();
+            height: 56px;
+            min-width: 84px;
+            padding: 18px 24px;
         }
 
         &.icon {
-            min-height: @button-height-lg;
+            min-height: 56px;
             min-width: 56px;
             padding: 12px;
         }
@@ -76,7 +82,7 @@
 
     &+.button {
         &:not(.block) {
-            margin-left: @button-siblings-margin-left;
+            margin-left: 16px;
         }
     }
 

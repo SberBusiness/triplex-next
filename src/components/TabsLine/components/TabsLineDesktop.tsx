@@ -121,7 +121,7 @@ export const TabsLineDesktop: React.FC<ITabsLineDesktopProps> = ({
                 <TabsLineDropdown
                     key="TabsLineDropdown"
                     tabs={dropdownTabs}
-                    isActive={selectedTab !== undefined}
+                    active={selectedTab !== undefined}
                     label={dropdownLabel}
                     onClickTab={(item) => onChangeTab(item.id)}
                     selected={selectedTab}

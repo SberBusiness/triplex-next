@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styles from "../styles/TabsExtendedTabButton.module.less";
 import clsx from "clsx";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { typeToClassNameMap, tabsExtendedSizeToTextSizeMap } from "../utils";
+import { tabsExtendedTypeToClassNameMap, tabsExtendedSizeToTextSizeMap } from "../utils";
 import { TabsExtendedContext } from "../TabsExtendedContext";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 
@@ -25,7 +25,7 @@ export const TabsExtendedTabButton = React.forwardRef<HTMLButtonElement, ITabsEx
         const classNames = clsx(
             styles.tabsExtendedTabButton,
             styles[size],
-            typeToClassNameMap[type],
+            tabsExtendedTypeToClassNameMap[type],
             { [styles.selected]: !!selected },
             className,
         );

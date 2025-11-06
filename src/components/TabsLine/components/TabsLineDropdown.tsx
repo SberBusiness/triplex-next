@@ -17,7 +17,7 @@ interface ITabsLineDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Табы дропдауна. */
     tabs: ITabsLineItemProps[];
     /** Выбранный таб находится в дропдауне. */
-    isActive: boolean;
+    active: boolean;
     /** Текст таргет кнопки дропдауна. */
     label: string;
     /** Коллбэк выбора таба. */
@@ -82,11 +82,11 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
 
     /** Рендер кнопки, раскрывающей список. */
     private renderTarget = () => {
-        const { isActive, label, targetHtmlAttributes, size = EComponentSize.MD } = this.props;
+        const { active, label, targetHtmlAttributes, size = EComponentSize.MD } = this.props;
         const { activeDescendant, opened } = this.state;
 
         const buttonClassName = clsx(styles.tab, sizeToClassNameMap[size], styles.dropdownTarget, {
-            [styles.active]: isActive,
+            [styles.active]: active,
         });
         const caretClassName = clsx(styles.dropdownTargetCaret, { [styles.opened]: opened });
 

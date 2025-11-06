@@ -6,7 +6,7 @@ import { TabsLineMobile } from "./components/TabsLineMobile";
 import styles from "./styles/TabsLine.module.less";
 
 /** Состояние компонента TabsLine. */
-export interface ITabsLineProps extends ITabsLineDesktopProps, Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
+export interface ITabsLineProps extends ITabsLineDesktopProps {
     /** Горизонтальный отступ от первого таба слева и последнего таба справа. */
     paddingX?: 0 | 8 | 16 | 24;
 }

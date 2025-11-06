@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { TestProps } from "../../../types/CoreTypes";
 import { TabsLineDropdown } from "./TabsLineDropdown";
 import { ITabsLineItemProps, TabsLineItem } from "./TabsLineItem";
-import { ITabsLineBase } from "../types";
+import { ITabsLineBaseProps } from "../types";
 import { isKey } from "../../../utils/keyboard";
 import { isEqual } from "lodash";
 import styles from "../styles/TabsLine.module.less";
 
 /** Свойства компонента TabsLineDesktop. */
-export interface ITabsLineDesktopProps extends ITabsLineBase {
+export interface ITabsLineDesktopProps extends ITabsLineBaseProps {
     /** Атрибуты кнопки дропдауна. */
     dropdownTargetHtmlAttributes?: React.HTMLAttributes<HTMLButtonElement> & TestProps;
     /** Максимальное число отображаемых табов. */

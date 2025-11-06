@@ -36,9 +36,9 @@ export const Tabs_Tokens: TDesignTokensComponentsTabsValues = {
     Type2_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Tabs-Type2_Background)
 
     Type1_Tab_Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Default)
-    Type2_Tab_Background_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Default)
+    Type2_Tab_Background_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Tabs-Type2_Tab_Background_Default)
     Type1_Tab_Background_Selected: [{ ref: "ColorNeutral.30" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Selected)
-    Type2_Tab_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Selected)
+    Type2_Tab_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Tabs-Type2_Tab_Background_Selected)
     Type1_Tab_Background_Hover: [{ ref: "ColorNeutral.50" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Hover)
     Type2_Tab_Background_Hover: [{ ref: "ColorNeutral.80" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Tabs-Type2_Tab_Background_Hover)
 

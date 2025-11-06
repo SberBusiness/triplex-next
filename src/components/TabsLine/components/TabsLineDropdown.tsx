@@ -9,7 +9,8 @@ import { DropdownListContext } from "../../Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { ITabsLineItemProps } from "./TabsLineItem";
 import styles from "../styles/TabsLine.module.less";
-import { ETabsSize } from "../enum";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 /** Свойства компонента TabsLineDropdown. */
 interface ITabsLineDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -24,7 +25,7 @@ interface ITabsLineDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Выбранный таб. */
     selected?: ITabsLineItemProps;
     /** Размер таба кнопки дропдауна. */
-    size?: ETabsSize;
+    size?: EComponentSize;
     /** Атрибуты кнопки дропдауна. */
     targetHtmlAttributes?: React.HTMLAttributes<HTMLButtonElement> & TestProps;
 }
@@ -37,18 +38,6 @@ interface ITabsLineDropdownState {
     opened: boolean;
 }
 
-/** Возвращает CSS класс размера таба кнопки дропдауна. */
-const getTabSizeCssClass = (size?: ETabsSize) => {
-    switch (size) {
-        case ETabsSize.LG:
-            return styles.lg;
-        case ETabsSize.MD:
-            return styles.md;
-        case ETabsSize.SM:
-            return styles.sm;
-    }
-};
-
 /** Компонент TabsLineDropdown. */
 export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps, ITabsLineDropdownState> {
     state = {
@@ -59,6 +48,7 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
     private readonly targetRef: React.RefObject<HTMLDivElement>;
     private readonly dropdownRef: React.RefObject<HTMLDivElement>;
     private instanceId = uniqueId();
+    private sizeToClassNameMap = createSizeToClassNameMap(styles);
 
     constructor(props: ITabsLineDropdownProps) {
         super(props);
@@ -91,10 +81,10 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
 
     /** Рендер кнопки, раскрывающей список. */
     private renderTarget = () => {
-        const { isActive, label, targetHtmlAttributes, size = ETabsSize.MD } = this.props;
+        const { isActive, label, targetHtmlAttributes, size = EComponentSize.MD } = this.props;
         const { activeDescendant, opened } = this.state;
 
-        const buttonClassName = clsx(styles.tab, getTabSizeCssClass(size), styles.dropdownTarget, {
+        const buttonClassName = clsx(styles.tab, this.sizeToClassNameMap[size], styles.dropdownTarget, {
             [styles.active]: isActive,
         });
         const caretClassName = clsx(styles.dropdownTargetCaret, { [styles.opened]: opened });

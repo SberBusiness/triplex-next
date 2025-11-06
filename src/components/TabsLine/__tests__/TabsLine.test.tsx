@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { TabsLine, ITabsLineProps } from "../TabsLine";
-import { ETabsSize } from "../enum";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { ITabsLineItemProps } from "../components/TabsLineItem";
 
 describe("TabsLine", () => {
@@ -60,7 +60,7 @@ describe("TabsLine", () => {
     });
 
     it("Should render with size SM", () => {
-        render(<TabsLine {...defaultProps} size={ETabsSize.SM} />);
+        render(<TabsLine {...defaultProps} size={EComponentSize.SM} />);
 
         const tabsLineWrapper = getTabsLine();
         const tabsLine = tabsLineWrapper.firstChild;
@@ -71,7 +71,7 @@ describe("TabsLine", () => {
     });
 
     it("Should render with size LG", () => {
-        render(<TabsLine {...defaultProps} size={ETabsSize.LG} />);
+        render(<TabsLine {...defaultProps} size={EComponentSize.LG} />);
 
         const tabsLineWrapper = getTabsLine();
         const tabsLine = tabsLineWrapper.firstChild;

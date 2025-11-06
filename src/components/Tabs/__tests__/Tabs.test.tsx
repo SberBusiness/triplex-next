@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Tabs, ITabsProps } from "../Tabs";
-import { ETabsExtendedTabButtonSize } from "@sberbusiness/triplex-next/components/TabsExtended";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { ETabsExtendedType } from "@sberbusiness/triplex-next/components/TabsExtended";
 
 const getTabs = () => screen.getByTestId("tabs");
@@ -17,7 +17,7 @@ describe("Tabs", () => {
 
     const defaultProps: ITabsProps = {
         tabs: mockTabs,
-        selectedTabId: "tab-1",
+        selectedId: "tab-1",
         onSelectTab: vi.fn(),
     };
 
@@ -33,7 +33,7 @@ describe("Tabs", () => {
     });
 
     it("Should render with size SM", () => {
-        render(<Tabs {...defaultProps} size={ETabsExtendedTabButtonSize.SM} data-testid="tabs" />);
+        render(<Tabs {...defaultProps} size={EComponentSize.SM} data-testid="tabs" />);
 
         const tabs = getTabs();
         const tab1 = getTab();
@@ -44,7 +44,7 @@ describe("Tabs", () => {
     });
 
     it("Should render with size LG", () => {
-        render(<Tabs {...defaultProps} size={ETabsExtendedTabButtonSize.LG} data-testid="tabs" />);
+        render(<Tabs {...defaultProps} size={EComponentSize.LG} data-testid="tabs" />);
 
         const tabs = getTabs();
         const tab1 = getTab();

@@ -1,10 +1,10 @@
 import React from "react";
 import { ITabsLineItemProps, TabsLineItem } from "./TabsLineItem";
-import { ITabsLineBase } from "../types";
+import { ITabsLineBaseProps } from "../types";
 import styles from "../styles/TabsLineMobile.module.less";
 
 /** Свойства компонента ITabsLineMobileProps. */
-interface ITabsLineMobileProps extends ITabsLineBase {}
+interface ITabsLineMobileProps extends ITabsLineBaseProps {}
 
 /** Компонент TabsLineMobile. */
 export const TabsLineMobile: React.FC<ITabsLineMobileProps> = ({ onChangeTab, selectedTabId, tabs }) => {

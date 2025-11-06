@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
-import { ETabsExtendedType, TabsExtended } from "@sberbusiness/triplex-next/components/TabsExtended";
+import { TabsExtended } from "@sberbusiness/triplex-next/components/TabsExtended";
 import { ITabsExtendedDropdownWrapperProvideProps } from "@sberbusiness/triplex-next/components/TabsExtended";
 import { ButtonDropdown } from "@sberbusiness/triplex-next/components/Button";
 import { EButtonDotsTheme } from "@sberbusiness/triplex-next/components/Button";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { ITabsExtendedTabProps } from "@sberbusiness/triplex-next/components/TabsExtended";
+import { ITabsExtendedTabProps, ITabsExtendedProps } from "@sberbusiness/triplex-next/components/TabsExtended";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { ETabsExtendedTabButtonSize } from "@sberbusiness/triplex-next/components/TabsExtended";
 import styles from "./styles/Tabs.module.less";
 import clsx from "clsx";
 
@@ -14,50 +13,29 @@ export interface ITabsItem extends Omit<ITabsExtendedTabProps, "children" | "onS
     label: React.ReactNode;
 }
 
-export interface ITabsProps {
+export interface ITabsProps extends ITabsExtendedProps {
     /** HTML-атрибуты dropdown-кнопки. */
     buttonDropdownAttributes?: React.ButtonHTMLAttributes<HTMLButtonElement>;
     children?: never;
     /** Обработчик выбора таба. */
     onSelectTab: (selectedId: string) => void;
-    /** Идентификатор выбранного таба. */
-    selectedTabId: string;
     /** Размер компонента. */
-    size?: ETabsExtendedTabButtonSize;
+    size?: EComponentSize;
     /** Массив табов. */
     tabs: Array<ITabsItem>;
-    /** Тип компонента. */
-    type?: ETabsExtendedType;
 }
-
-const getTabSizeCssClass = (size?: ETabsExtendedTabButtonSize) => {
-    switch (size) {
-        case ETabsExtendedTabButtonSize.LG:
-            return styles.lg;
-        case ETabsExtendedTabButtonSize.MD:
-            return styles.md;
-        case ETabsExtendedTabButtonSize.SM:
-            return styles.sm;
-    }
-};
-
-export const buttonSizeToTabsExtendedTabButtonSize: Record<ETabsExtendedTabButtonSize, EComponentSize> = {
-    [ETabsExtendedTabButtonSize.SM]: EComponentSize.SM,
-    [ETabsExtendedTabButtonSize.MD]: EComponentSize.MD,
-    [ETabsExtendedTabButtonSize.LG]: EComponentSize.LG,
-};
 
 /** Компонент Tabs. */
 export const Tabs: React.FC<ITabsProps> = ({
     buttonDropdownAttributes,
     onSelectTab,
-    selectedTabId,
-    size = ETabsExtendedTabButtonSize.MD,
+    selectedId,
+    size = EComponentSize.MD,
     tabs,
     ...props
 }) => {
     // Id таба с tabIndex = 0;
-    const [availableToFocusTabId, setAvailableToFocusTabId] = useState(selectedTabId || tabs[0].id);
+    const [availableToFocusTabId, setAvailableToFocusTabId] = useState(selectedId || tabs[0].id);
     // Id таба, предшествующий табу с tabIndex = 0;
     const [prevAvailableToFocusTabId, setPrevAvailableToFocusTabId] = useState("");
     // Id таба, следующего за табом с tabIndex = 0;
@@ -134,20 +112,20 @@ export const Tabs: React.FC<ITabsProps> = ({
     };
 
     return (
-        <TabsExtended {...props} selectedId={selectedTabId} onSelectTab={onSelectTab}>
-            <TabsExtended.Content className={styles.tabsContent}>
+        <TabsExtended {...props} selectedId={selectedId} onSelectTab={onSelectTab}>
+            <TabsExtended.Content className={styles.tabsContent} size={size}>
                 <TabsExtended.Content.TabsWrapper>{tabs.map(renderTab)}</TabsExtended.Content.TabsWrapper>
 
                 <TabsExtended.Content.DropdownWrapper>
                     {({ dropdownItemsIds, onSelectTab }) => (
                         <ButtonDropdown
                             theme={EButtonDotsTheme.DOTS_SECONDARY}
-                            size={buttonSizeToTabsExtendedTabButtonSize[size]}
+                            size={size}
                             options={getDropdownOptions({ dropdownItemsIds, onSelectTab })}
-                            selected={tabs.filter((tab) => tab.id === selectedTabId)[0]}
+                            selected={tabs.filter((tab) => tab.id === selectedId)[0]}
                             buttonAttributes={{
                                 ...buttonDropdownAttributes,
-                                className: clsx(styles.tabButtonDropdown, getTabSizeCssClass(size)),
+                                className: clsx(styles.tabButtonDropdown, styles[size]),
                             }}
                         />
                     )}

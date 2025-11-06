@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Tabs } from "../../src/components/Tabs";
-import { ETabsExtendedTabButtonSize } from "../../src/components/TabsExtended";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
 import { ETabsExtendedType } from "../../src/components/TabsExtended";
 import "./Tabs.less";
@@ -30,16 +30,16 @@ export default {
 export const Playground: StoryObj<typeof Tabs> = {
     name: "Playground",
     args: {
-        size: ETabsExtendedTabButtonSize.MD,
+        size: EComponentSize.MD,
         type: ETabsExtendedType.TYPE_1,
     },
     argTypes: {
         size: {
             control: { type: "select" },
-            options: Object.values(ETabsExtendedTabButtonSize),
+            options: Object.values(EComponentSize),
             description: "Размер компонента",
             table: {
-                defaultValue: { summary: ETabsExtendedTabButtonSize.MD },
+                defaultValue: { summary: EComponentSize.MD },
             },
         },
         type: {
@@ -129,7 +129,7 @@ export const Type1: StoryObj<typeof Tabs> = {
                     tabs={tabs_0}
                     selectedTabId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
-                    size={ETabsExtendedTabButtonSize.SM}
+                    size={EComponentSize.SM}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
                 />
                 <Gap size={16} />
@@ -137,7 +137,7 @@ export const Type1: StoryObj<typeof Tabs> = {
                     tabs={tabs_1}
                     selectedTabId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
-                    size={ETabsExtendedTabButtonSize.MD}
+                    size={EComponentSize.MD}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
                 />
                 <Gap size={16} />
@@ -145,7 +145,7 @@ export const Type1: StoryObj<typeof Tabs> = {
                     tabs={tabs_2}
                     selectedTabId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
-                    size={ETabsExtendedTabButtonSize.LG}
+                    size={EComponentSize.LG}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
                 />
             </div>
@@ -204,7 +204,7 @@ export const Type2: StoryObj<typeof Tabs> = {
                     selectedTabId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     type={ETabsExtendedType.TYPE_2}
-                    size={ETabsExtendedTabButtonSize.SM}
+                    size={EComponentSize.SM}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
                 />
                 <Gap size={16} />
@@ -213,7 +213,7 @@ export const Type2: StoryObj<typeof Tabs> = {
                     selectedTabId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     type={ETabsExtendedType.TYPE_2}
-                    size={ETabsExtendedTabButtonSize.MD}
+                    size={EComponentSize.MD}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
                 />
                 <Gap size={16} />
@@ -222,7 +222,7 @@ export const Type2: StoryObj<typeof Tabs> = {
                     selectedTabId={selectedTabId}
                     onSelectTab={(id) => setSelectedTabId(id)}
                     type={ETabsExtendedType.TYPE_2}
-                    size={ETabsExtendedTabButtonSize.LG}
+                    size={EComponentSize.LG}
                     buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
                 />
             </div>

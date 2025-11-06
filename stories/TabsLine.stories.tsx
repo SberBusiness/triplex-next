@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { ETabsSize, TabsLine } from "../src/components/TabsLine";
+import { TabsLine } from "../src/components/TabsLine";
+import { EComponentSize } from "../src/enums/EComponentSize";
 import { Gap } from "../src/components/Gap";
 
 export default {
@@ -25,7 +26,7 @@ export default {
 
 interface ITabsLineStoriesProps extends React.ComponentProps<typeof TabsLine> {
     maxVisible: number;
-    size?: ETabsSize;
+    size?: EComponentSize;
     showNotificationIcon?: boolean;
 }
 
@@ -34,7 +35,7 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
     args: {
         paddingX: 0,
         maxVisible: 3,
-        size: ETabsSize.MD,
+        size: EComponentSize.MD,
         showNotificationIcon: true,
     },
     argTypes: {
@@ -49,10 +50,10 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
         },
         size: {
             control: { type: "select" },
-            options: Object.values(ETabsSize),
+            options: Object.values(EComponentSize),
             description: "Размер компонента",
             table: {
-                defaultValue: { summary: ETabsSize.MD },
+                defaultValue: { summary: EComponentSize.MD },
             },
         },
         showNotificationIcon: {
@@ -226,7 +227,7 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                     {...args}
                     tabs={tabs}
                     selectedTabId={selectedTabId}
-                    size={ETabsSize.SM}
+                    size={EComponentSize.SM}
                     onChangeTab={setSelectedTabId}
                     dropdownTargetHtmlAttributes={{
                         "data-test-id": "TabsLine__DropdownTarget",
@@ -237,7 +238,7 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                     {...args}
                     tabs={tabs}
                     selectedTabId={selectedTabId}
-                    size={ETabsSize.MD}
+                    size={EComponentSize.MD}
                     onChangeTab={setSelectedTabId}
                     dropdownTargetHtmlAttributes={{
                         "data-test-id": "TabsLine__DropdownTarget",
@@ -248,7 +249,7 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                     {...args}
                     tabs={tabs}
                     selectedTabId={selectedTabId}
-                    size={ETabsSize.LG}
+                    size={EComponentSize.LG}
                     onChangeTab={setSelectedTabId}
                     dropdownTargetHtmlAttributes={{
                         "data-test-id": "TabsLine__DropdownTarget",

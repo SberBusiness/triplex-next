@@ -1,9 +1,8 @@
-import { ETabsSize } from "./enum";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { ITabsLineItemProps } from "./components/TabsLineItem";
 
 /** Общие свойства TabsLineDesktop и TabsLine Mobile. */
-export interface ITabsLineBase {
-    children?: never;
+export interface ITabsLineBaseProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
     /** Коллекция табов. */
     tabs: ITabsLineItemProps[];
     /** Коллбек смены таба. */
@@ -11,5 +10,5 @@ export interface ITabsLineBase {
     /** Идентификатор выбранного таба. */
     selectedTabId: string;
     /** Размер компонента. */
-    size?: ETabsSize;
+    size?: EComponentSize;
 }

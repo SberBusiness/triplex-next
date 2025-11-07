@@ -40,7 +40,7 @@ export const ListItemSelectable = React.forwardRef<HTMLDivElement, IListItemSele
                 </div>
             </div>
         );
-    }
+    },
 );
 
 ListItemSelectable.displayName = "ListItemSelectable";

@@ -11,8 +11,12 @@ import {
     ListItemControlsButton,
     ListItemTable,
 } from "../../src/components/List";
-import { EFontType, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
-import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { EFontType, EFontWeightText, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
+import {
+    AttachmentStrokeSrvIcon20,
+    DotshorizontalStrokeSrvIcon20,
+    DefaulticonStrokePrdIcon20,
+} from "@sberbusiness/icons-next";
 import { SwipeableArea, ISwipeableAreaRef } from "../../src/components/SwipeableArea";
 
 export default {
@@ -23,14 +27,14 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент ListItem — элемент списка.
+Элемент списка.
                 `,
             },
         },
     },
 } as const;
 
-export const Basic: StoryObj<typeof ListItem> = {
+export const Default: StoryObj<typeof ListItem> = {
     render: () => (
         <List>
             <ListItem>
@@ -54,7 +58,7 @@ export const Loading: StoryObj<typeof ListItem> = {
     parameters: {
         docs: {
             description: {
-                story: "Элемент списка, отображающий подгрузку данных. Отображается последним элементом списка, при доскролле до которого загружаются новые элементы.",
+                story: "Элемент списка, отображающий подгрузку данных. Отображается последним, при доскролле до него загружаются новые элементы.",
             },
         },
     },
@@ -81,77 +85,6 @@ export const Selectable: StoryObj<typeof ListItem> = {
 };
 
 export const Swipeable: StoryObj<typeof ListItem> = {
-    render: () => {
-        const options = [
-            {
-                id: "list-item-controls-dropdown-option-1",
-                label: "Текст пункта меню 1",
-                onSelect: () => alert("Выбран пункт меню 1."),
-            },
-            {
-                id: "list-item-controls-dropdown-option-2",
-                label: "Текст пункта меню 2",
-                onSelect: () => alert("Выбран пункт меню 2."),
-            },
-            {
-                id: "list-item-controls-dropdown-option-3",
-                label: "Текст пункта меню 3",
-                onSelect: () => alert("Выбран пункт меню 3."),
-            },
-        ];
-
-        return (
-            <div style={{ maxWidth: "400px" }}>
-                <List>
-                    <ListItem>
-                        <SwipeableArea
-                            rightSwipeableArea={
-                                <ListItemControls>
-                                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
-                                        Скачать
-                                    </ListItemControlsButton>
-                                    <ListItemControlsButtonDropdown
-                                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                        options={options}
-                                    >
-                                        Действия
-                                    </ListItemControlsButtonDropdown>
-                                </ListItemControls>
-                            }
-                        >
-                            <ListItemContent>Свайп влево</ListItemContent>
-                        </SwipeableArea>
-                    </ListItem>
-
-                    <ListItem>
-                        <SwipeableArea
-                            leftSwipeableArea={
-                                <ListItemControls>
-                                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
-                                        Скачать
-                                    </ListItemControlsButton>
-                                    <ListItemControlsButtonDropdown
-                                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                        options={options}
-                                    >
-                                        Действия
-                                    </ListItemControlsButtonDropdown>
-                                </ListItemControls>
-                            }
-                        >
-                            <ListItemContent>Свайп вправо</ListItemContent>
-                        </SwipeableArea>
-                    </ListItem>
-                </List>
-            </div>
-        );
-    },
-    parameters: {
-        docs: { description: { story: "Элемент списка со свайпом и кнопками действий" } },
-    },
-};
-
-export const SwipeEmulation: StoryObj<typeof ListItem> = {
     render: () => {
         const options = [
             {
@@ -201,14 +134,26 @@ export const SwipeEmulation: StoryObj<typeof ListItem> = {
                             ref={ref}
                             rightSwipeableArea={
                                 <ListItemControls>
-                                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
-                                        Скачать
+                                    <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
+                                        <Text
+                                            size={ETextSize.B4}
+                                            type={EFontType.BRAND}
+                                            weight={EFontWeightText.SEMIBOLD}
+                                        >
+                                            Button name
+                                        </Text>
                                     </ListItemControlsButton>
                                     <ListItemControlsButtonDropdown
-                                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                                         options={options}
                                     >
-                                        Действия
+                                        <Text
+                                            size={ETextSize.B4}
+                                            type={EFontType.BRAND}
+                                            weight={EFontWeightText.SEMIBOLD}
+                                        >
+                                            Button name
+                                        </Text>
                                     </ListItemControlsButtonDropdown>
                                 </ListItemControls>
                             }

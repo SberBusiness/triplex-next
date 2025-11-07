@@ -16,7 +16,10 @@ export const designTokensComponentsRadioKeys = [
     "BorderColor_Disabled",
     "BorderColor_Focused",
 
-    "Color_Default",
+    "BorderColor_Checked_Default",
+    "BorderColor_Checked_Disabled",
+
+    "Color",
 
     "Dot_Default",
     "Dot_Disabled",
@@ -46,7 +49,10 @@ export const Radio_Tokens: TDesignTokensComponentsRadioValues = {
     BorderColor_Disabled: [{ value: "0 0 0 1px #E3E6EA inset" }, { value: "0 0 0 1px #4F4F52 inset" }], // var(--triplex-next-Radio-BorderColor_Disabled)
     BorderColor_Focused: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Radio-BorderColor_Focused)
 
-    Color_Default: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Radio-Color_Default)
+    BorderColor_Checked_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Radio-BorderColor_Checked_Default)
+    BorderColor_Checked_Disabled: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Radio-BorderColor_Checked_Disabled)
+
+    Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Radio-Color)
 
     Dot_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Radio-Dot_Default)
     Dot_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Radio-Dot_Disabled)

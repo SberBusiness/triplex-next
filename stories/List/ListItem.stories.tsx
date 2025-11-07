@@ -34,7 +34,7 @@ export default {
     },
 } as const;
 
-export const Basic: StoryObj<typeof ListItem> = {
+export const Default: StoryObj<typeof ListItem> = {
     render: () => (
         <List>
             <ListItem>

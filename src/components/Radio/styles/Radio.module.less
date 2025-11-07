@@ -2,7 +2,7 @@
     display: inline-block;
     position: relative;
     font-weight: 400;
-    color: var(--triplex-next-Radio-Color_Default);
+    color: var(--triplex-next-Radio-Color);
     cursor: pointer;
 
     &.md {
@@ -90,7 +90,7 @@
 .radio:checked {
     + .radioIcon {
         background: var(--triplex-next-Radio-Background_Checked_Default);
-        box-shadow: none;
+        box-shadow: var(--triplex-next-Radio-BorderColor_Checked_Default);
     }
 
     + .radioIcon::after {
@@ -113,7 +113,7 @@
     &:checked {
         + .radioIcon {
             background: var(--triplex-next-Radio-Background_Checked_Disabled);
-            box-shadow: none;
+            box-shadow: var(--triplex-next-Radio-BorderColor_Checked_Disabled);
         }
     }
 

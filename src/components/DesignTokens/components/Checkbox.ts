@@ -12,10 +12,13 @@ export const designTokensComponentsCheckboxKeys = [
     "BorderColor_Disabled",
     "BorderColor_Focus",
 
+    "BorderColor_Checked_Default",
+    "BorderColor_Checked_Disabled",
+
     "Checkmark_Fill_Default",
     "Checkmark_Fill_Disabled",
 
-    "Color_Default",
+    "Color",
 ] as const;
 // Тип, содержащий названия токенов компонента Checkbox.
 export type TDesignTokensComponentsCheckboxKeys = (typeof designTokensComponentsCheckboxKeys)[number];
@@ -41,8 +44,11 @@ export const Checkbox_Tokens: TDesignTokensComponentsCheckboxValues = {
     BorderColor_Disabled: [{ value: "0 0 0 1px #E3E6EA inset" }, { value: "0 0 0 1px #4F4F52 inset" }], // var(--triplex-next-Checkbox-BorderColor_Disabled)
     BorderColor_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Checkbox-BorderColor_Focus)
 
+    BorderColor_Checked_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Checkbox-BorderColor_Checked_Default)
+    BorderColor_Checked_Disabled: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Checkbox-BorderColor_Checked_Disabled)
+
     Checkmark_Fill_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Checkbox-Checkmark_Fill_Default)
     Checkmark_Fill_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Checkbox-Checkmark_Fill_Disabled)
 
-    Color_Default: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Checkbox-Color_Default)
+    Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Checkbox-Color)
 };

@@ -2,7 +2,7 @@
     display: inline-block;
     position: relative;
     font-weight: 400;
-    color: var(--triplex-next-Checkbox-Color_Default);
+    color: var(--triplex-next-Checkbox-Color);
     cursor: pointer;
 
     &.md {
@@ -81,7 +81,7 @@
 .checkbox:checked {
     + .checkboxIcon {
         background-color: var(--triplex-next-Checkbox-Background_Checked_Default);
-        box-shadow: none;
+        box-shadow: var(--triplex-next-Checkbox-BorderColor_Checked_Default);
     }
 
     ~ .checkmarkIcon {
@@ -99,7 +99,7 @@
     &:checked {
         + .checkboxIcon {
             background: var(--triplex-next-Checkbox-Background_Checked_Disabled);
-            box-shadow: none;
+            box-shadow: var(--triplex-next-Checkbox-BorderColor_Checked_Disabled);
         }
     }
 

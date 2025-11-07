@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import {
     SuggestField,
     ISuggestFieldOption,
-    EFormFieldSize,
+    EComponentSize,
     EFormFieldStatus,
     Text,
     ETextSize,
@@ -31,13 +31,13 @@ export default {
     argTypes: {
         size: {
             control: { type: "select" },
-            options: Object.values(EFormFieldSize),
+            options: Object.values(EComponentSize),
             description: "Размер компонента.",
             table: {
                 type: {
-                    summary: Object.values(EFormFieldSize).join(" | "),
+                    summary: Object.values(EComponentSize).join(" | "),
                 },
-                defaultValue: { summary: EFormFieldSize.LG },
+                defaultValue: { summary: EComponentSize.LG },
             },
         },
         status: {
@@ -113,24 +113,25 @@ const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
 }));
 
 // Базовая логика для переиспользования
-const useSuggestFieldLogic = () => {
+const useSuggestFieldLogic = (customInitialOptions?: ISuggestFieldOption[]) => {
     const [value, setValue] = useState<ISuggestFieldOption>();
     const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
     const [tooltipOpen, setTooltipOpen] = useState(false);
+    const initialOptionsRef = useRef<ISuggestFieldOption[]>(customInitialOptions || initialOptions);
 
     const handleTargetInputFocus = () => {
-        setOptions(initialOptions);
+        setOptions(initialOptionsRef.current);
         setTooltipOpen(false);
     };
 
     const handleFilter = (inputValue: string) => {
         if (inputValue.length === 0) {
-            setOptions(initialOptions);
+            setOptions(initialOptionsRef.current);
             setTooltipOpen(false);
             return;
         }
 
-        const filteredOptions = initialOptions.filter(({ label }) =>
+        const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
             label.toLowerCase().includes(inputValue.toLowerCase()),
         );
 
@@ -154,7 +155,7 @@ const useSuggestFieldLogic = () => {
 
 export const Playground: StoryObj = {
     args: {
-        size: EFormFieldSize.LG,
+        size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
         label: "Label",
         placeholder: "Type to proceed",
@@ -181,14 +182,14 @@ export const Playground: StoryObj = {
 };
 
 const sizeToLabelMap = {
-    [EFormFieldSize.SM]: "SM",
-    [EFormFieldSize.MD]: "MD",
-    [EFormFieldSize.LG]: "LG",
+    [EComponentSize.SM]: "SM",
+    [EComponentSize.MD]: "MD",
+    [EComponentSize.LG]: "LG",
 };
 
 export const DifferentSizes = {
     render: () => {
-        const sizes = Object.values(EFormFieldSize);
+        const sizes = Object.values(EComponentSize);
 
         return sizes.map((size) => {
             const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
@@ -233,6 +234,7 @@ export const DifferentStates = {
                     value={value}
                     options={options}
                     label={statusToLabelMap[status]}
+                    placeholder="Type to proceed"
                     tooltipHint="No matches found."
                     tooltipOpen={tooltipOpen}
                     onTargetInputFocus={onTargetInputFocus}
@@ -246,22 +248,31 @@ export const DifferentStates = {
 
 export const WithLoadingStates = {
     render: () => {
-        const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
+        const sizes = Object.values(EComponentSize);
 
-        return (
-            <SuggestField
-                value={value}
-                options={options}
-                label="Label"
-                tooltipHint="No matches found."
-                tooltipOpen={tooltipOpen}
-                loading={true}
-                dropdownListLoading={true}
-                onTargetInputFocus={onTargetInputFocus}
-                onFilter={onFilter}
-                onSelect={onSelect}
-            />
-        );
+        return sizes.map((size) => {
+            const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic(
+                initialOptions.slice(0, 3),
+            );
+
+            return (
+                <SuggestField
+                    key={size}
+                    size={size}
+                    value={value}
+                    options={options}
+                    label="Label"
+                    placeholder="Type to proceed"
+                    tooltipHint="No matches found."
+                    tooltipOpen={tooltipOpen}
+                    loading={true}
+                    dropdownListLoading={true}
+                    onTargetInputFocus={onTargetInputFocus}
+                    onFilter={onFilter}
+                    onSelect={onSelect}
+                />
+            );
+        });
     },
 };
 
@@ -296,12 +307,9 @@ const fruitToTupleMap = {
 
 export const WithCustomOptions = {
     render: () => {
-        const { value, tooltipOpen, onTargetInputFocus, onSelect } = useSuggestFieldLogic();
-        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
-
-        const customOptions: ISuggestFieldOption[] = initialOptions.map((option, index) => ({
+        const customInitialOptions: ISuggestFieldOption[] = initialOptions.map((option) => ({
             ...option,
-            labelReactNode: (
+            content: (
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <span>{fruitToTupleMap[option.label][0]}</span>
                     <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
@@ -314,32 +322,20 @@ export const WithCustomOptions = {
             ),
         }));
 
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(customOptions);
-                return;
-            }
-
-            const filteredOptions = customOptions.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-            setOptions(filteredOptions);
-        };
-
-        const handleTargetInputFocusWithCustom = () => {
-            setOptions(customOptions);
-            onTargetInputFocus();
-        };
+        const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
+            useSuggestFieldLogic(customInitialOptions);
 
         return (
             <SuggestField
+                size={EComponentSize.LG}
                 value={value}
                 options={options}
                 label="Label"
+                placeholder="Type to proceed"
                 tooltipHint="No matches found."
                 tooltipOpen={tooltipOpen}
-                onTargetInputFocus={handleTargetInputFocusWithCustom}
-                onFilter={handleFilter}
+                onTargetInputFocus={onTargetInputFocus}
+                onFilter={onFilter}
                 onSelect={onSelect}
             />
         );

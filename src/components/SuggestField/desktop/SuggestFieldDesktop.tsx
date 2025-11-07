@@ -1,454 +1,265 @@
-import React from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import clsx from "clsx";
-import isFunction from "lodash-es/isFunction";
+import { uniqueId, debounce } from "lodash-es";
 import { ISuggestFieldDesktopProps } from "@sberbusiness/triplex-next/components/SuggestField/desktop/types";
-import {
-    ISuggestFieldOption,
-    ISuggestFieldDropdownProps,
-    ISuggestFieldDropdownItemProps,
-    ISuggestFieldDropdownItemLabelProps,
-    TSetRef,
-} from "@sberbusiness/triplex-next/components/SuggestField/types";
+import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
 import { Tooltip, ETooltipSize } from "@sberbusiness/triplex-next/components/Tooltip";
 import { SuggestFieldTarget } from "@sberbusiness/triplex-next/components/SuggestField/SuggestFieldTarget";
 import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
-import { Dropdown, DropdownList, DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown";
-import { SuggestFieldDesktopDropdownItemLabel } from "@sberbusiness/triplex-next/components/SuggestField/desktop/SuggestFieldDesktopDropdownItemLabel";
-import { uniqueId } from "@sberbusiness/triplex-next/utils/uniqueId";
-import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
-import { TestIds } from "@sberbusiness/triplex-next/dataTestIds/dataTestId";
-import { debounce } from "@sberbusiness/triplex-next/utils/debounce";
+import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown";
+import { DataTestId } from "@sberbusiness/triplex-next/consts/DataTestId";
+import { SuggestFieldDesktopDropdown } from "@sberbusiness/triplex-next/components/SuggestField/desktop/SuggestFieldDesktopDropdown";
 import styles from "../styles/SuggestFieldDesktop.module.less";
-
-/** Состояния компонента SuggestFieldDesktop. */
-interface ISuggestFieldDesktopState {
-    /** Значение Input. */
-    inputValue: string;
-    /** Идентификатор текущего активного элемента списка. */
-    activeDescendant: string | undefined;
-    /** Состояние поля ввода - в фокусе/не в фокусе. */
-    inputFocused: boolean;
-    /** Состояние выпадающего списка – открыт/закрыт. */
-    dropdownOpen: boolean;
-    /** Состояние выпадающего списка – отключен/включен. */
-    dropdownDisabled: boolean;
-}
-
-const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
 /**
  * Выпадающий список с возможностью поиска по введённому значению, позволяет задать кастомные компоненты для отображения всех
  * элементов управления.
+ *
+ * @template T - тип опции, должен расширять ISuggestFieldOption
  */
-export class SuggestFieldDesktop<T extends ISuggestFieldOption = ISuggestFieldOption> extends React.Component<
-    ISuggestFieldDesktopProps<T>,
-    ISuggestFieldDesktopState
-> {
-    public state = {
-        inputValue: this.props.value?.label || "",
-        activeDescendant: undefined,
-        inputFocused: false,
-        dropdownOpen: false,
-        dropdownDisabled: false,
-    };
+export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFieldOption>({
+    className,
+    value,
+    options,
+    size,
+    status,
+    label,
+    placeholder,
+    loading,
+    dropdownListLoading,
+    tooltipHint,
+    tooltipOpen,
+    clearInputOnFocus,
+    onSelect,
+    onFilter,
+    onScrollEnd,
+    onTargetInputFocus,
+    onTargetInputBlur,
+    renderTarget,
+    renderTargetInput,
+    renderTargetLabel,
+    renderTargetPrefix,
+    renderTargetPostfix,
+    renderDropdown,
+    renderDropdownList,
+    renderDropdownListItem,
+    "data-test-id": dataTestId,
+    ...restProps
+}: ISuggestFieldDesktopProps<T>) => {
+    const [inputValue, setInputValue] = useState(value?.label || "");
+    const [activeDescendant, setActiveDescendant] = useState<string>();
+    const [inputFocused, setInputFocused] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [dropdownDisabled, setDropdownDisabled] = useState(false);
 
-    public static defaultProps = {
-        loading: false,
-        clearInputOnFocus: false,
-    };
+    const dropdownListId = useRef(uniqueId());
+    const suggestRef = useRef<HTMLInputElement>(null);
+    const listRef = useRef<HTMLDivElement>(null);
 
-    private dropdownListId = uniqueId();
+    const onScrollEndRef = useRef(onScrollEnd);
+    onScrollEndRef.current = onScrollEnd;
 
-    private static readonly displayName: string = "SuggestFieldDesktop";
-    private suggestRef = React.createRef<HTMLInputElement>();
-    private listRef = React.createRef<HTMLDivElement>();
+    const handleSelect = useCallback(
+        (selectedValue: T | undefined) => {
+            setInputValue(selectedValue?.label || "");
+            setActiveDescendant(undefined);
+            setDropdownOpen(false);
+            setDropdownDisabled(true);
+            onSelect(selectedValue);
+        },
+        [onSelect],
+    );
 
-    public componentDidUpdate(
-        prevProps: Readonly<ISuggestFieldDesktopProps<T>>,
-        prevState: Readonly<ISuggestFieldDesktopState>,
-    ): void {
-        if (this.props.value !== prevProps.value) {
-            this.setState({
-                inputValue: this.props.value?.label || "",
-            });
+    const handleTargetInputFocus = useCallback(
+        (event: React.FocusEvent<HTMLInputElement>) => {
+            setInputFocused(true);
+            setDropdownOpen(true);
+
+            if (clearInputOnFocus && inputValue.length !== 0) {
+                setInputValue("");
+            }
+
+            onTargetInputFocus?.(event);
+        },
+        [clearInputOnFocus, inputValue, onTargetInputFocus],
+    );
+
+    const handleTargetInputBlur = useCallback(
+        (event: React.FocusEvent<HTMLInputElement>) => {
+            setActiveDescendant(undefined);
+            setInputFocused(false);
+            setDropdownOpen(false);
+            setDropdownDisabled(false);
+
+            if (inputValue.length !== 0) {
+                setInputValue(value?.label || "");
+            } else {
+                onSelect(undefined);
+            }
+
+            onTargetInputBlur?.(event);
+        },
+        [value?.label, inputValue, onSelect, onTargetInputBlur],
+    );
+
+    const handleClick = useCallback(() => {
+        if (inputFocused && !dropdownOpen) {
+            setDropdownOpen(true);
+            setDropdownDisabled(false);
         }
+    }, [inputFocused, dropdownOpen]);
 
-        if (this.state.inputFocused === true) {
-            if (this.state.dropdownOpen === true) {
-                if (this.props.options.length === 0) {
-                    this.setState({ dropdownOpen: false });
-                }
-            } else if (this.state.dropdownDisabled === false) {
-                if (this.props.options.length !== 0) {
-                    this.setState({ dropdownOpen: true });
-                }
+    const handleInputChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const newValue = event.target.value;
+            setInputValue(newValue);
+            setDropdownDisabled(false);
+            onFilter(newValue);
+        },
+        [onFilter],
+    );
+
+    const handleClear = useCallback(() => {
+        if (inputFocused) {
+            setInputValue("");
+            onFilter("");
+        } else {
+            onSelect(undefined);
+        }
+    }, [inputFocused, onFilter, onSelect]);
+
+    const handleSetActiveDescendant = useCallback(
+        (id?: string) => {
+            if (activeDescendant !== id) {
+                setActiveDescendant(id);
+            }
+        },
+        [activeDescendant],
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onScrollList = useCallback(
+        debounce((event: Event) => {
+            // Бессмысленно собирать данные об окончании скрола, если не передан обработчик.
+            if (onScrollEndRef.current === undefined) {
+                return;
+            }
+
+            const list = event.target as HTMLDivElement;
+            const listParent = list.parentElement;
+
+            if (listParent === null) {
+                return;
+            }
+
+            const listHeight = list.scrollHeight;
+            const scrolled = list.scrollTop;
+            const parentFullHeight = listParent.scrollHeight;
+            const styles = window.getComputedStyle(listParent);
+            const parentPaddingTop = styles.getPropertyValue("padding-top");
+            const parentPaddingBottom = styles.getPropertyValue("padding-bottom");
+            const parentPaddings = Number.parseInt(parentPaddingBottom) + Number.parseInt(parentPaddingTop);
+
+            if (Math.abs(scrolled + parentFullHeight - parentPaddings - listHeight) <= 1) {
+                onScrollEndRef.current();
+            }
+        }, 100),
+        [],
+    );
+
+    useEffect(() => {
+        setInputValue(value?.label || "");
+    }, [value]);
+
+    useEffect(() => {
+        if (inputFocused) {
+            if (dropdownOpen && options.length === 0) {
+                setDropdownOpen(false);
+            } else if (!dropdownOpen && !dropdownDisabled && options.length !== 0) {
+                setDropdownOpen(true);
             }
         }
+    }, [inputFocused, dropdownOpen, dropdownDisabled, options.length]);
 
-        if (this.state.dropdownOpen === true && prevState.dropdownOpen === false) {
-            // Таймаут тк listRef.current будет доступен только после рендера DropdownList.
-            setTimeout(() => this.listRef?.current?.addEventListener("scroll", this.onScrollList));
+    useEffect(() => {
+        if (dropdownOpen) {
+            const listElement = listRef.current;
+            if (listElement) {
+                listElement.addEventListener("scroll", onScrollList);
+            }
+
+            return () => {
+                if (listElement) {
+                    listElement.removeEventListener("scroll", onScrollList);
+                }
+            };
         }
-    }
+    }, [dropdownOpen, onScrollList]);
 
-    public componentWillUnmount(): void {
-        this.listRef?.current?.removeEventListener("scroll", this.onScrollList);
-    }
-
-    public render(): React.ReactElement {
-        const { status, tooltipHint, tooltipOpen, "data-test-id": dataTestId } = this.props;
-        const { inputFocused } = this.state;
-
-        return (
-            <Tooltip
-                size={ETooltipSize.SM}
-                isOpen={!!(tooltipOpen && inputFocused) && status !== EFormFieldStatus.DISABLED}
-                toggle={() => {}}
-                targetRef={this.suggestRef}
-                disableAdaptiveMode
-            >
-                <Tooltip.Body data-test-id={dataTestId && `${dataTestId}${TestIds.Suggest.tooltip}`}>
-                    {tooltipHint}
-                </Tooltip.Body>
-                <Tooltip.Target>{this.renderSuggestField()}</Tooltip.Target>
-            </Tooltip>
-        );
-    }
-
-    private renderSuggestField(): React.ReactElement {
-        const {
-            className,
-            value,
-            options,
-            label,
-            placeholder,
-            size,
-            status,
-            loading,
-            dropdownListLoading,
-            renderTarget,
-            renderTargetInput,
-            renderTargetLabel,
-            renderTargetPrefix,
-            renderTargetPostfix,
-            renderDropdown,
-            renderDropdownItem,
-            renderDropdownItemLabel,
-            // omit
-            tooltipHint,
-            tooltipOpen,
-            clearInputOnFocus,
-            onSelect,
-            onFilter,
-            onScrollEnd,
-            onTargetInputFocus,
-            onTargetInputBlur,
-            "data-test-id": dataTestId,
-            ...restProps
-        } = this.props;
-        const { inputValue, activeDescendant, dropdownOpen } = this.state;
+    const renderSuggestField = () => {
         const classNames = clsx(styles.suggestFieldDesktop, "hoverable", className);
         const Target = renderTarget === undefined ? SuggestFieldTarget : renderTarget;
+        const Dropdown = renderDropdown === undefined ? SuggestFieldDesktopDropdown : renderDropdown;
 
         return (
-            <div className={classNames} {...restProps} ref={this.setSuggestRef}>
+            <div className={classNames} data-test-id={dataTestId} {...restProps} ref={suggestRef}>
                 <DropdownListContext.Provider
-                    value={{ activeDescendant, setActiveDescendant: this.setActiveDescendant }}
+                    value={{ activeDescendant, setActiveDescendant: handleSetActiveDescendant }}
                 >
                     <Target
-                        className={styles.suggestDesktopTarget}
+                        size={size}
+                        status={status}
                         inputValue={inputValue}
                         label={label}
                         placeholder={placeholder}
-                        aria-controls={this.dropdownListId}
+                        aria-controls={dropdownListId.current}
                         aria-activedescendant={activeDescendant}
-                        size={size!}
-                        status={status}
                         loading={loading}
-                        onClick={this.handleClick}
-                        onClear={this.handleClear}
-                        onInputFocus={this.handleTargetInputFocus}
-                        onInputBlur={this.handleTargetInputBlur}
-                        onInputChange={this.handleInputChange}
+                        onClick={handleClick}
+                        onClear={handleClear}
+                        onInputFocus={handleTargetInputFocus}
+                        onInputBlur={handleTargetInputBlur}
+                        onInputChange={handleInputChange}
                         renderInput={renderTargetInput}
                         renderLabel={renderTargetLabel}
                         renderPrefix={renderTargetPrefix}
                         renderPostfix={renderTargetPostfix}
+                        dataTestId={dataTestId}
                     />
-                    {this.renderDropdown({
-                        dataTestId,
-                        listId: this.dropdownListId,
-                        listRef: this.listRef,
-                        onSelect: this.handleSelect,
-                        opened: dropdownOpen && options.length > 0,
-                        options,
-                        renderCustom: renderDropdown,
-                        renderDropdownItem: this.renderDropdownItem,
-                        renderDropdownItemLabel,
-                        setOpened: this.handleDropdownOpen,
-                        size: size,
-                        listLoading: dropdownListLoading,
-                        suggestDropdownItemClassName: styles.suggestDropdownListItem,
-                        suggestDropdownListClassName: styles.suggestDropdownList,
-                        targetRef: this.suggestRef,
-                        value,
-                    })}
+                    <Dropdown
+                        value={value}
+                        options={options}
+                        size={size}
+                        listId={dropdownListId.current}
+                        opened={dropdownOpen && options.length > 0}
+                        listLoading={dropdownListLoading}
+                        listRef={listRef}
+                        onSelect={handleSelect}
+                        renderList={renderDropdownList}
+                        renderListItem={renderDropdownListItem}
+                        setOpened={setDropdownOpen}
+                        targetRef={suggestRef}
+                        dataTestId={dataTestId}
+                    />
                 </DropdownListContext.Provider>
             </div>
         );
-    }
-
-    private setActiveDescendant = (id?: string) => {
-        const { activeDescendant } = this.state;
-
-        if (activeDescendant !== id) {
-            this.setState({ activeDescendant: id });
-        }
     };
 
-    private renderDropdown = (props: ISuggestFieldDropdownProps<T>) => {
-        if (isFunction(props.renderCustom)) {
-            return props.renderCustom(props);
-        }
+    return (
+        <Tooltip
+            size={ETooltipSize.SM}
+            isOpen={!!(tooltipOpen && inputFocused) && status !== EFormFieldStatus.DISABLED}
+            toggle={() => {}}
+            targetRef={suggestRef}
+            disableAdaptiveMode
+        >
+            <Tooltip.Body data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.tooltip}`}>
+                {tooltipHint}
+            </Tooltip.Body>
+            <Tooltip.Target>{renderSuggestField()}</Tooltip.Target>
+        </Tooltip>
+    );
+};
 
-        const {
-            value,
-            size,
-            opened,
-            listLoading,
-            className,
-            dataTestId,
-            listId,
-            renderDropdownItem,
-            renderDropdownItemLabel,
-            options,
-            onSelect,
-            listRef,
-            targetRef,
-            setOpened,
-            suggestDropdownListClassName,
-            suggestDropdownItemClassName,
-        } = props;
-
-        return (
-            <Dropdown
-                className={className}
-                size={size}
-                opened={opened}
-                fixedWidth={true}
-                targetRef={targetRef}
-                setOpened={setOpened}
-                data-test-id={dataTestId && `${dataTestId}${TestIds.Suggest.dropdown}`}
-            >
-                <DropdownList
-                    id={listId}
-                    className={suggestDropdownListClassName}
-                    size={size}
-                    dropdownOpened={opened}
-                    loading={listLoading}
-                    listRef={listRef}
-                    onMouseDown={(event) => event.preventDefault()}
-                >
-                    {options?.map((option) =>
-                        renderDropdownItem({
-                            className: suggestDropdownItemClassName,
-                            dataTestId,
-                            key: option.id,
-                            onMouseDown: (event) => event.preventDefault(),
-                            onSelect,
-                            option,
-                            renderCustom: this.props.renderDropdownItem,
-                            renderDropdownItemLabel,
-                            selected: option.id === value?.id,
-                        }),
-                    )}
-                </DropdownList>
-            </Dropdown>
-        );
-    };
-
-    private renderDropdownItem = (props: ISuggestFieldDropdownItemProps<T>) => {
-        if (props.renderCustom) {
-            return props.renderCustom(props);
-        }
-
-        const {
-            active,
-            dataTestId,
-            selected,
-            key,
-            option,
-            onSelect,
-            renderCustom,
-            renderDropdownItemLabel,
-            ...restProps
-        } = props;
-
-        return (
-            <DropdownList.Item
-                key={key}
-                active={active}
-                selected={selected}
-                onSelect={() => onSelect(option)}
-                keyCodesForSelection={KEY_CODES_SELECTABLE}
-                id={option.label}
-                title={option.label}
-                data-test-id={dataTestId && `${dataTestId}${TestIds.Suggest.dropdown}${TestIds.Dropdown.listItem}`}
-                {...restProps}
-            >
-                {this.renderDropdownItemLabel({ option, renderCustom: renderDropdownItemLabel })}
-            </DropdownList.Item>
-        );
-    };
-
-    private renderDropdownItemLabel = (props: ISuggestFieldDropdownItemLabelProps<T>) => {
-        if (props.renderCustom) {
-            return props.renderCustom(props);
-        }
-
-        return <SuggestFieldDesktopDropdownItemLabel option={props.option} />;
-    };
-
-    /** Обработчик открытия/закрытия Dropdown. */
-    private handleDropdownOpen = (open: boolean) => {
-        this.setState({ dropdownOpen: open });
-    };
-
-    /** Обработчик выбора элемента из списка. */
-    private handleSelect = (value: T | undefined) => {
-        const { onSelect } = this.props;
-
-        this.setState(
-            {
-                inputValue: value?.label || "",
-                activeDescendant: undefined,
-                dropdownOpen: false,
-                dropdownDisabled: true,
-            },
-            () => {
-                onSelect(value);
-            },
-        );
-    };
-
-    /** Обработчик получения фокуса TargetInput. */
-    private handleTargetInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-        const { clearInputOnFocus, onTargetInputFocus } = this.props;
-        const { inputValue, dropdownOpen } = this.state;
-
-        if (dropdownOpen === false) {
-            this.setState({
-                inputFocused: true,
-                dropdownOpen: true,
-            });
-
-            if (clearInputOnFocus === true && inputValue.length !== 0) {
-                this.setState({
-                    inputValue: "",
-                });
-            }
-        }
-
-        onTargetInputFocus?.(event);
-    };
-
-    /** Обработчик потери фокуса TargetInput. */
-    private handleTargetInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        const { value, clearInputOnFocus, onSelect, onTargetInputBlur } = this.props;
-        const { inputValue } = this.state;
-
-        this.setState({
-            activeDescendant: undefined,
-            inputFocused: false,
-            dropdownOpen: false,
-            dropdownDisabled: false,
-        });
-
-        if (inputValue.length !== 0 || clearInputOnFocus === true) {
-            this.setState({ inputValue: value?.label || "" });
-        } else {
-            onSelect(undefined);
-        }
-
-        onTargetInputBlur?.(event);
-    };
-
-    /** Обработчик клика. */
-    private handleClick = () => {
-        const { inputFocused, dropdownOpen } = this.state;
-
-        if (inputFocused === true && dropdownOpen === false) {
-            this.setState({
-                dropdownOpen: true,
-                dropdownDisabled: false,
-            });
-        }
-    };
-
-    /** Обработчик изменения значения Input. */
-    private handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-
-        this.setState(
-            {
-                inputValue: value,
-                dropdownDisabled: false,
-            },
-            () => {
-                this.props.onFilter(value);
-            },
-        );
-    };
-
-    /** Обработчик сброса значения. */
-    private handleClear = () => {
-        const { inputFocused } = this.state;
-        const { onSelect } = this.props;
-
-        if (inputFocused) {
-            this.setState(
-                {
-                    inputValue: "",
-                },
-                () => {
-                    this.props.onFilter("");
-                },
-            );
-        } else {
-            onSelect(undefined);
-        }
-    };
-
-    /** Установка рефа на инпут. */
-    private setSuggestRef: TSetRef<HTMLInputElement | null> = (instance) => {
-        (this.suggestRef as React.MutableRefObject<HTMLInputElement | null>).current = instance;
-    };
-
-    private scrollHandler = (event: React.UIEvent<HTMLDivElement> & { target: HTMLDivElement & EventTarget }) => {
-        const { onScrollEnd } = this.props;
-
-        // Бессмысленно собирать данные об окончании скрола, если не передан обработчик.
-        if (onScrollEnd === undefined) {
-            return;
-        }
-
-        const {
-            target: list,
-            target: { parentElement: parent },
-        } = event;
-
-        const listHeight = list.scrollHeight;
-        const scrolled = list.scrollTop;
-        const parentFullHeight = parent!.scrollHeight;
-        const styles = window.getComputedStyle(parent!);
-        const parentPaddingTop = styles.getPropertyValue("padding-top");
-        const parentPaddingBottom = styles.getPropertyValue("padding-bottom");
-        const parentPaddings = Number.parseInt(parentPaddingBottom) + Number.parseInt(parentPaddingTop);
-
-        if (Math.abs(scrolled + parentFullHeight - parentPaddings - listHeight) <= 1) {
-            onScrollEnd();
-        }
-    };
-
-    private onScrollList = debounce(this.scrollHandler, 100);
-}
+SuggestFieldDesktop.displayName = "SuggestFieldDesktop";

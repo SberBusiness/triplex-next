@@ -12,15 +12,15 @@ export enum EDropdownAlignment {
     RIGHT = "right",
 }
 
-/** Размеры Dropdown. */
-export enum EDropdownSize {
+/** Размеры DropdownList. */
+export enum EDropdownListSize {
     SM = "sm",
     MD = "md",
     LG = "lg",
 }
 
-/** Размеры DropdownList. */
-export enum EDropdownListSize {
+/** Размеры Dropdown. */
+export enum EDropdownSize {
     SM = "sm",
     MD = "md",
     LG = "lg",

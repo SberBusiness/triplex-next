@@ -116,11 +116,7 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
 
                     {(descriptionText || errorText) && (
                         <FormFieldDescription>
-                            <Text
-                                tag="div"
-                                size={ETextSize.B4}
-                                type={status === EFormFieldStatus.ERROR ? EFontType.ERROR : EFontType.SECONDARY}
-                            >
+                            <Text tag="div" size={ETextSize.B4} type={status === EFormFieldStatus.ERROR ? EFontType.ERROR : EFontType.SECONDARY}>
                                 {status === EFormFieldStatus.ERROR ? errorText || "Текст ошибки" : descriptionText || "Описание поля"}
                             </Text>
                         </FormFieldDescription>

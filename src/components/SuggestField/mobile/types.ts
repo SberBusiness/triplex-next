@@ -7,11 +7,7 @@ import { IDropdownMobileProps } from "@sberbusiness/triplex-next/components/Drop
 
 /** Свойства компонента SuggestFieldMobile. */
 export interface ISuggestFieldMobileProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<
-            ISuggestFieldProps<T>,
-            "size" | "tooltipHint" | "tooltipOpen" | "renderDropdown" | "renderDropdownList" | "renderDropdownListItem"
-        >,
-        Required<Pick<ISuggestFieldProps, "size">> {
+    extends Omit<ISuggestFieldProps<T>, "tooltipHint" | "tooltipOpen"> {
     /** Текст подсказки. Например - "Ничего не найдено" или "Введите более 3 символов". Подсказка отображается на месте списка выбора. */
     dropdownHint: string;
 }

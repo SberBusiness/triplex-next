@@ -15,7 +15,7 @@ import { SuggestFieldMobileDropdownHint } from "@sberbusiness/triplex-next/compo
 import styles from "../styles/SuggestFieldMobile.module.less";
 
 /** Отображает мобильный dropdown с полем ввода и списком для выбора. */
-function SuggestFieldMobileDropdownBase<T extends ISuggestFieldOption = ISuggestFieldOption>(
+const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
     {
         value,
         options,
@@ -31,7 +31,7 @@ function SuggestFieldMobileDropdownBase<T extends ISuggestFieldOption = ISuggest
         onScrollEnd,
     }: ISuggestFieldMobileDropdownProps<T>,
     ref: React.ForwardedRef<HTMLDivElement>,
-) {
+) => {
     const [inputValue, setInputValue] = useState(value?.label || "");
     const listRef = useRef<HTMLDivElement>(null);
     // Не используется в мобильном Dropdown, нужен как обязательное свойство Dropdown.
@@ -115,7 +115,7 @@ function SuggestFieldMobileDropdownBase<T extends ISuggestFieldOption = ISuggest
                                                 setOpened(false);
                                             }}
                                         >
-                                            {option.labelReactNode || option.label}
+                                            {option.content || option.label}
                                         </DropdownMobileListItem>
                                     ))}
                                 </DropdownMobileList>
@@ -126,7 +126,7 @@ function SuggestFieldMobileDropdownBase<T extends ISuggestFieldOption = ISuggest
             }}
         />
     );
-}
+};
 
 export const SuggestFieldMobileDropdown = React.forwardRef(SuggestFieldMobileDropdownBase) as <
     T extends ISuggestFieldOption = ISuggestFieldOption,

@@ -29,10 +29,10 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
 
         const classNames = clsx(
             styles.formFieldLabel,
-            styles[`size-${size}`],
             {
                 [styles.disabled]: status === EFormFieldStatus.DISABLED,
                 [styles.floating]: floating,
+                [styles[`size-${size}`]]: size,
             },
             className,
         );

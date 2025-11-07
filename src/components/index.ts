@@ -3,6 +3,7 @@ export * from "./Amount";
 export * from "./Button";
 export * from "./Col";
 export * from "./Checkbox";
+export * from "./Ellipsis";
 export * from "./FormField";
 export * from "./FormGroup";
 export * from "./Gap";

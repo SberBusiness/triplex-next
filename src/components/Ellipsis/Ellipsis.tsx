@@ -2,24 +2,26 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles/Ellipsis.module.less";
 
-export interface IEllipsisProps extends React.HTMLProps<HTMLDivElement> {
-    /** Текст, который нужно свернуть в многоточие. */
-    children: React.ReactNode;
+export interface IEllipsisProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Количество строк, после которых происходит сворачивание в многоточие. */
-    maxLine: number;
+    maxLines: number;
 }
-export const Ellipsis: React.FC<IEllipsisProps> = ({ children, maxLine, className, ...rest }) => {
-    const classNames = clsx(styles.ellipsisLineClamp, { [styles.oneLine]: maxLine === 1 }, className);
+export const Ellipsis = React.forwardRef<HTMLDivElement, IEllipsisProps>(
+    ({ children, maxLines, className, ...rest }, ref) => {
+        const classNames = clsx(styles.ellipsisLineClamp, { [styles.oneLine]: maxLines === 1 }, className);
 
-    return (
-        <div
-            className={classNames}
-            style={{ "--ellipsis-line-clamp": maxLine } as React.CSSProperties}
-            {...rest}
-            data-tx={process.env.npm_package_version}
-        >
-            {children}
-        </div>
-    );
-};
+        return (
+            <div
+                className={classNames}
+                style={{ "--ellipsis-line-clamp": maxLines } as React.CSSProperties}
+                {...rest}
+                data-tx={process.env.npm_package_version}
+                ref={ref}
+            >
+                {children}
+            </div>
+        );
+    },
+);
+
 Ellipsis.displayName = "Ellipsis";

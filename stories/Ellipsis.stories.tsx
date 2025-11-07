@@ -17,7 +17,7 @@ export default {
 \`\`\`tsx
 import { Ellipsis } from '@sberbusiness/triplex-next';
 
-<Ellipsis maxLine={2}>
+<Ellipsis maxLines={2}>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
     labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
     laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
@@ -34,10 +34,10 @@ import { Ellipsis } from '@sberbusiness/triplex-next';
 export const Playground: StoryObj<typeof Ellipsis> = {
     name: "Playground",
     args: {
-        maxLine: 2,
+        maxLines: 2,
     },
     argTypes: {
-        maxLine: {
+        maxLines: {
             control: { type: "number" },
             description: "Количество строк, после которых происходит сворачивание в многоточие.",
             table: {
@@ -64,7 +64,7 @@ export const Playground: StoryObj<typeof Ellipsis> = {
 export const Default: StoryObj<typeof Ellipsis> = {
     name: "Default",
     args: {
-        maxLine: 2,
+        maxLines: 2,
     },
     render: (args) => (
         <Ellipsis {...args}>

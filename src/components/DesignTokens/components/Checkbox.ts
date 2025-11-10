@@ -18,8 +18,6 @@ export const designTokensComponentsCheckboxKeys = [
 
     "Checkmark_Fill_Default",
     "Checkmark_Fill_Disabled",
-
-    "Color",
 ] as const;
 // Тип, содержащий названия токенов компонента Checkbox.
 export type TDesignTokensComponentsCheckboxKeys = (typeof designTokensComponentsCheckboxKeys)[number];
@@ -51,6 +49,4 @@ export const Checkbox_Tokens: TDesignTokensComponentsCheckboxValues = {
 
     Checkmark_Fill_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Checkbox-Checkmark_Fill_Default)
     Checkmark_Fill_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Checkbox-Checkmark_Fill_Disabled)
-
-    Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Checkbox-Color)
 };

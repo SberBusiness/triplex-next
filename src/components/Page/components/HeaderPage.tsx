@@ -1,64 +1,45 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Header, IHeaderProps } from "@sberbusiness/triplex-next/components/Header/Header";
 import { EHeaderPageType } from "./enums";
-import styles from "../styles/Page.module.less";
 import clsx from "clsx";
+import { Island } from "../../Island/Island";
+import { EIslandType } from "../../Island/enums";
+import { useStickyCornerRadius } from "./useStickyCornerRadius";
+import styles from "../styles/Page.module.less";
 
-/** Свойства компонента HeaderPage Type 1. */
-export interface IHeaderPageFirstProps extends Omit<IHeaderProps, "sticky"> {
+export interface IHeaderPage extends IHeaderProps {
     /** Тип компонента HeaderPage. */
-    type: EHeaderPageType.FIRST;
+    type?: EHeaderPageType;
 }
-
-/** Свойства компонента HeaderPage Type 2. */
-export interface IHeaderPageSecondProps extends IHeaderProps {
-    /** Тип компонента HeaderPage. */
-    type: EHeaderPageType.SECOND;
-}
-
-/** Свойства компонента HeaderPage. */
-export type IHeaderPageProps = IHeaderPageFirstProps | IHeaderPageSecondProps;
 
 export const HeaderPage = Object.assign(
-    React.forwardRef<HTMLDivElement, IHeaderPageProps>(({ className, type, ...rest }, ref) => {
-        const [stuck, setStuck] = useState(false);
-        const targetRef = useRef<HTMLDivElement | null>(null);
+    React.forwardRef<HTMLDivElement, IHeaderPage>(({ className, type = EHeaderPageType.FIRST, ...rest }, ref) => {
+        const islandRef = useRef<HTMLDivElement | null>(null);
+        useStickyCornerRadius(islandRef, "top");
 
-        const sticky = type === EHeaderPageType.SECOND && "sticky" in rest ? rest.sticky : false;
-
-        useEffect(() => {
-            if (!sticky || !targetRef.current) {
-                return;
+        const setIslandRef = (instance: HTMLDivElement | null) => {
+            islandRef.current = instance;
+            if (typeof ref === "function") {
+                ref(instance);
+            } else if (ref) {
+                ref.current = instance;
             }
+        };
 
-            const observer = new IntersectionObserver(([entry]) => setStuck(!entry.isIntersecting), { threshold: [0] });
-
-            observer.observe(targetRef.current);
-
-            return () => {
-                observer.disconnect();
-            };
-        }, [sticky]);
-
-        const headerPageClassNames = clsx(
-            styles.headerPage,
-            {
-                [styles.headerPageBackground]: type === EHeaderPageType.SECOND,
-                [styles.headerPageSticky]: sticky,
-                [styles.headerPageStuck]: stuck && sticky && type === EHeaderPageType.SECOND,
-            },
-            className,
-        );
+        const headerPageSecondClassNames = clsx(className, styles.headerPageTypeSecond);
 
         return type === EHeaderPageType.SECOND ? (
-            <>
-                <div ref={targetRef} aria-hidden="true" className={styles.observerTarget} />
-                <div className={headerPageClassNames} ref={ref}>
-                    {<Header {...rest} />}
-                </div>
-            </>
+            <Island
+                className={headerPageSecondClassNames}
+                type={EIslandType.TYPE_1}
+                borderRadius={16}
+                paddingSize={16}
+                ref={setIslandRef}
+            >
+                <Header {...rest} />
+            </Island>
         ) : (
-            <Header ref={ref} className={headerPageClassNames} {...rest} />
+            <Header ref={ref} className={clsx(styles.headerPageTypeFirst, className)} {...rest} />
         );
     }),
     {

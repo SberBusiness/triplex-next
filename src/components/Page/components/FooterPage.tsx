@@ -1,64 +1,46 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Footer, IFooterProps } from "@sberbusiness/triplex-next/components/Footer/Footer";
 import { EFooterPageType } from "./enums";
 import styles from "../styles/Page.module.less";
 import clsx from "clsx";
+import { useStickyCornerRadius } from "./useStickyCornerRadius";
+import { EIslandType, Island } from "../../Island";
 
-/** Свойства компонента FooterPage Type 1. */
-export interface IFooterPageFirstProps extends Omit<IFooterProps, "sticky"> {
+export interface IFooterPageProps extends IFooterProps {
     /** Тип компонента FooterPage. */
-    type: EFooterPageType.FIRST;
-}
-
-/** Свойства компонента FooterPage Type 2. */
-export interface IFooterPageSecondProps extends IFooterProps {
-    /** Тип компонента FooterPage. */
-    type: EFooterPageType.SECOND;
+    type?: EFooterPageType;
 }
 
 /** Свойства компонента FooterPage. */
-export type IFooterPageProps = IFooterPageFirstProps | IFooterPageSecondProps;
-
 export const FooterPage = Object.assign(
-    React.forwardRef<HTMLDivElement, IFooterPageProps>(({ className, type, ...rest }, ref) => {
-        const [stuck, setStuck] = useState(false);
-        const targetRef = useRef<HTMLDivElement | null>(null);
+    React.forwardRef<HTMLDivElement, IFooterPageProps>(({ className, type = EFooterPageType.FIRST, ...rest }, ref) => {
+        const footerRef = useRef<HTMLDivElement | null>(null);
+        // Плавное обнуление нижних углов и добавление тени при прилипания к низу.
+        useStickyCornerRadius(footerRef, "bottom");
 
-        const sticky = type === EFooterPageType.SECOND && "sticky" in rest ? rest.sticky : false;
-
-        useEffect(() => {
-            if (!sticky || !targetRef.current) {
-                return;
+        const setFooterRef = (instance: HTMLDivElement | null) => {
+            footerRef.current = instance;
+            if (typeof ref === "function") {
+                ref(instance);
+            } else if (ref) {
+                ref.current = instance;
             }
+        };
 
-            const observer = new IntersectionObserver(([entry]) => setStuck(!entry.isIntersecting), { threshold: [0] });
-
-            observer.observe(targetRef.current);
-
-            return () => {
-                observer.disconnect();
-            };
-        }, [sticky]);
-
-        const footerPageClassNames = clsx(
-            styles.footerPage,
-            {
-                [styles.footerPageBackground]: type === EFooterPageType.SECOND,
-                [styles.footerPageSticky]: sticky,
-                [styles.footerPageStuck]: stuck && sticky && type === EFooterPageType.SECOND,
-            },
-            className,
-        );
+        const footerPageTypeSecondClassNames = clsx(className, styles.footerPageTypeSecond);
 
         return type === EFooterPageType.SECOND ? (
-            <>
-                <div className={footerPageClassNames} ref={ref}>
-                    {<Footer {...rest} />}
-                </div>
-                <div ref={targetRef} aria-hidden="true" className={styles.observerTarget} />
-            </>
+            <Island
+                className={footerPageTypeSecondClassNames}
+                type={EIslandType.TYPE_1}
+                borderRadius={16}
+                paddingSize={16}
+                ref={setFooterRef}
+            >
+                <Footer {...rest} />
+            </Island>
         ) : (
-            <Footer ref={ref} className={footerPageClassNames} {...rest} />
+            <Footer ref={ref} className={clsx(styles.footerPageTypeFirst, className)} {...rest} />
         );
     }),
     {

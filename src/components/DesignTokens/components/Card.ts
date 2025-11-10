@@ -20,10 +20,11 @@ export const designTokensComponentsCardKeys = [
     "Action_Secondary_Background_Selected",
     "Action_Secondary_Background_Selected_Hover",
 
-    // Common
-    "Shadow_Focus",
+    // Shadow
     "Shadow_Default",
+    "Shadow_Focus",
     "Shadow_Hover",
+    "Shadow_Selected",
 ] as const;
 // Тип, содержащий названия токенов компонента Card.
 export type TDesignTokensComponentsCardKeys = (typeof designTokensComponentsCardKeys)[number];
@@ -41,18 +42,19 @@ export const Card_Tokens: TDesignTokensComponentsCardValues = {
     Static_Secondary_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Card-Static_Secondary_Background)
 
     // Action (CardAction)
-    Action_General_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Card-Action_General_Background)
-    Action_General_Background_Hover: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_General_Background_Hover)
-    Action_General_Background_Selected: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Card-Action_General_Background_Selected)
-    Action_General_Background_Selected_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Card-Action_General_Background_Selected_Hover)
+    Action_General_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Card-Action_General_Background)
+    Action_General_Background_Hover: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Card-Action_General_Background_Hover)
+    Action_General_Background_Selected: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_General_Background_Selected)
+    Action_General_Background_Selected_Hover: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Card-Action_General_Background_Selected_Hover)
 
-    Action_Secondary_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Card-Action_Secondary_Background)
-    Action_Secondary_Background_Hover: [{ ref: "ColorNeutral.60" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Card-Action_Secondary_Background_Hover)
-    Action_Secondary_Background_Selected: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected)
-    Action_Secondary_Background_Selected_Hover: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover)
+    Action_Secondary_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_Secondary_Background)
+    Action_Secondary_Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Card-Action_Secondary_Background_Hover)
+    Action_Secondary_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected)
+    Action_Secondary_Background_Selected_Hover: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover)
 
-    // Common
-    Shadow_Focus: [{ value: "0 0 0 1px rgba(255, 209, 105)" }, { value: "0 0 0 1px rgba(255, 209, 105)" }], // var(--triplex-next-Card-Shadow_Focus)
-    Shadow_Default: [{ value: "0 0 7px 0 rgba(31, 31, 34, 0.25)" }, { value: "0 0 7px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-Card-Shadow_Default)
-    Shadow_Hover: [{ value: "0 0 14px 0 rgba(31, 31, 34, 0.25)" }, { value: "0 0 14px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-Card-Shadow_Hover)
+    // Shadow
+    Shadow_Default: [{ value: "0 2px 12px 0 rgba(31, 31, 34, 0.12)" }, { value: "none" }], // var(--triplex-next-Card-Shadow_Default)
+    Shadow_Focus: [{ value: "0 0 0 1px rgba(255, 209, 105) inset" }, { value: "0 0 0 1px rgba(255, 209, 105) inset" }], // var(--triplex-next-Card-Shadow_Focus)
+    Shadow_Hover: [{ value: "0 4px 12px 0 rgba(31, 31, 34, 0.16)" }, { value: "none" }], // var(--triplex-next-Card-Shadow_Hover)
+    Shadow_Selected: [{ value: "0 0 0 1px rgb(33, 161, 154) inset" }, { value: "0 0 0 1px rgb(33, 161, 154) inset" }], // var(--triplex-next-Card-Shadow_Selected)
 };

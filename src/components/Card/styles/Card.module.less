@@ -5,13 +5,14 @@
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
+    border-radius: var(--radius);
 
     &.roundingMD {
-        border-radius: 16px;
+        --radius: 16px;
     }
 
     &.roundingSM {
-        border-radius: 8px;
+        --radius: 8px;
     }
 
     &.general {
@@ -29,12 +30,14 @@
     }
 
     .cardContent {
+        padding: var(--padding);
+
         &.paddingMD {
-            padding: 24px;
+            --padding: 24px;
         }
 
         &.paddingSM {
-            padding: 16px;
+            --padding: 16px;
         }
 
         .cardContentHeader {

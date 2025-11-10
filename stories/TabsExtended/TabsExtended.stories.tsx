@@ -66,8 +66,9 @@ export const Default: StoryObj<typeof TabsExtended> = {
                         <TabsExtended.Content.DropdownWrapper>
                             {({ dropdownItemsIds, onSelectTab }) => (
                                 <ButtonDropdown
+                                    className="button-icon-dropdown-tabs-extended"
                                     theme={EButtonDotsTheme.DOTS_SECONDARY}
-                                    size={EButtonSize.SM}
+                                    size={EButtonSize.MD}
                                     options={getDropdownOptions({ dropdownItemsIds, onSelectTab })}
                                     selected={options.filter((option) => option.id == selectedTabId)[0]}
                                 />

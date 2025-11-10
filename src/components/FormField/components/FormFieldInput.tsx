@@ -3,11 +3,12 @@ import { FormFieldContext } from "../FormFieldContext";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import styles from "../styles/FormFieldInput.module.less";
-import { EFormFieldSize, EFormFieldStatus } from "../enums";
+import { EFormFieldStatus } from "../enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
 export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
-    size: EFormFieldSize;
+    size: EComponentSize;
 }
 
 /** Свойства компонента FormFieldInput. */
@@ -29,6 +30,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
 
     useEffect(() => {
         setId(instanceId.current);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -65,6 +67,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             setValueExist(true);
         } else if (event.animationName.startsWith("autofill-cancelled-hook")) {
             // Необходимо проверить, что при отмене автозаполнения, в поле не находится значение.
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             !value && setValueExist(false);
         }
         onAnimationStart?.(event);

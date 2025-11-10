@@ -413,8 +413,8 @@ export const Expanded: StoryObj<typeof Button> = {
 export const TextWithIcon: StoryObj<typeof Button> = {
     name: "Text With Icon",
     args: {
-        icon: <DefaulticonStrokePrdIcon32 paletteIndex={5} />,
-        theme: EButtonTheme.GENERAL,
+        icon: <DefaulticonStrokePrdIcon20 paletteIndex={5} />,
+        theme: EButtonTheme.LINK,
         size: EButtonSize.MD,
     },
     argTypes: {

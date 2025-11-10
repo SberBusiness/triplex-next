@@ -1,0 +1,14 @@
+.orderedListItem {
+    counter-increment: list-item-tx;
+
+    &::before {
+        content: counter(list-item-tx) ".";
+        display: inline-block;
+        position: absolute;
+        left: 0;
+    }
+
+    + .orderedListItem {
+        margin-top: 8px;
+    }
+}

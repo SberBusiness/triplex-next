@@ -6,9 +6,9 @@ import {
 } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownListItem";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
-import { EDropdownListSize } from "@sberbusiness/triplex-next/components/Dropdown/enums";
 import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
 import styles from "../styles/DropdownDesktopList.module.less";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,7 +19,7 @@ export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement>
     /** Состояние загрузки. */
     loading?: boolean;
     /** Размер списка. */
-    size?: EDropdownListSize;
+    size?: EComponentSize;
 }
 
 /** Индекс текущего выделенного элемента списка при навигации с клавиатуры. */
@@ -31,9 +31,9 @@ export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
 
 // Соответствие размера DropdownList размеру LoaderSmall.
 const listSizeToLoaderSmallSizeMap = {
-    [EDropdownListSize.SM]: ELoaderSmallSize.SM,
-    [EDropdownListSize.MD]: ELoaderSmallSize.MD,
-    [EDropdownListSize.LG]: ELoaderSmallSize.LG,
+    [EComponentSize.SM]: ELoaderSmallSize.SM,
+    [EComponentSize.MD]: ELoaderSmallSize.MD,
+    [EComponentSize.LG]: ELoaderSmallSize.LG,
 };
 
 /**
@@ -48,7 +48,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
         dropdownOpened,
         listRef,
         loading,
-        size = EDropdownListSize.MD,
+        size = EComponentSize.MD,
         ...htmlDivAttributes
     } = props;
     const classNames = clsx(styles.dropdownDesktopList, className, styles[`dropdownDesktopList-${size}`]);
@@ -133,6 +133,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dropdownOpened, activeListItemIndex, childrenCount]);
 
     // Установка активного элемента и скролла при открытии.
@@ -152,6 +153,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
             setActiveListItemIndex(0);
             scrollContainerToTop();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dropdownOpened]);
 
     // Синхронизация activeDescendant при изменении activeListItemIndex

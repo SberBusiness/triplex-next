@@ -18,7 +18,7 @@ export default {
     },
 } as const;
 
-export const Basic: StoryObj<typeof ListItemControls> = {
+export const Default: StoryObj<typeof ListItemControls> = {
     render: () => {
         const options = [
             {

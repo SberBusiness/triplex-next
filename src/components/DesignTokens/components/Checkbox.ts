@@ -7,11 +7,12 @@ export const designTokensComponentsCheckboxKeys = [
     "Background_Checked_Disabled",
     "Background_Checked_Hover",
     "Background_Disabled",
+    "Background_Hover",
 
     "BorderColor_Default",
     "BorderColor_Disabled",
     "BorderColor_Focus",
-
+    "BorderColor_Hover",
     "BorderColor_Checked_Default",
     "BorderColor_Checked_Disabled",
 
@@ -36,6 +37,7 @@ export const Checkbox_Tokens: TDesignTokensComponentsCheckboxValues = {
     Background_Checked_Hover: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.30" }], // var(--triplex-next-Checkbox-Background_Checked_Hover)
     Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Checkbox-Background_Default)
     Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Checkbox-Background_Disabled)
+    Background_Hover: [{ ref: "ColorBrand.60" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Checkbox-Background_Hover)
 
     BorderColor_Default: [
         { value: "0 0 0 1px rgba(31, 31, 34, 0.25) inset" },
@@ -43,7 +45,7 @@ export const Checkbox_Tokens: TDesignTokensComponentsCheckboxValues = {
     ], // var(--triplex-next-Checkbox-BorderColor_Default)
     BorderColor_Disabled: [{ value: "0 0 0 1px #E3E6EA inset" }, { value: "0 0 0 1px #4F4F52 inset" }], // var(--triplex-next-Checkbox-BorderColor_Disabled)
     BorderColor_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Checkbox-BorderColor_Focus)
-
+    BorderColor_Hover: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Checkbox-BorderColor_Hover)
     BorderColor_Checked_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Checkbox-BorderColor_Checked_Default)
     BorderColor_Checked_Disabled: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Checkbox-BorderColor_Checked_Disabled)
 

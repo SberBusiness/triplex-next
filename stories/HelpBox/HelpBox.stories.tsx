@@ -51,13 +51,7 @@ export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
                 defaultValue: { summary: "ETooltipPreferPlace.ABOVE" },
             },
         },
-        className: {
-            control: { type: "text" },
-            description: "Доп. CSS класс",
-            table: {
-                type: { summary: "string" },
-            },
-        },
+
         contentText: {
             control: { type: "text" },
             description: "Текст в теле подсказки",

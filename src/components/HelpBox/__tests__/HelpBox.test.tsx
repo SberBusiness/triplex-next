@@ -1,6 +1,5 @@
 import React from "react";
-import { vi } from "vitest";
-import { describe, it, expect, vi as vitestVi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { HelpBox } from "../HelpBox";
 import { ETooltipSize, ETooltipPreferPlace } from "@sberbusiness/triplex-next/components/Tooltip/enums";
@@ -24,7 +23,7 @@ describe("HelpBox", () => {
 
     it("renders tooltip content when open", () => {
         render(
-            <HelpBox tooltipSize={ETooltipSize.LG} isOpen>
+            <HelpBox tooltipSize={ETooltipSize.SM} isOpen>
                 Видимый контент тултипа
             </HelpBox>,
         );
@@ -51,7 +50,7 @@ describe("HelpBox", () => {
     });
 
     it("calls toggle(false) when close button is pressed in controlled mode", () => {
-        const handleToggle = vitestVi.fn();
+        const handleToggle = vi.fn();
         render(
             <HelpBox tooltipSize={ETooltipSize.LG} isOpen toggle={handleToggle}>
                 Контент

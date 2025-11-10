@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
-import { Gap } from "../../src/components/Gap";
 
 export default {
     title: "Components/HelpBox",
@@ -91,7 +90,7 @@ export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
     },
 };
 
-export const Basic: StoryObj<typeof HelpBox> = {
+export const Default: StoryObj<typeof HelpBox> = {
     render: () => (
         <div style={{ padding: 50 }}>
             <HelpBox tooltipSize={ETooltipSize.SM}>Подсказка по элементу интерфейса</HelpBox>

@@ -2,6 +2,8 @@ import React from "react";
 import { Radio, RadioXGroup, RadioYGroup, ERadioSize } from "../src/components/Radio";
 import { Gap } from "../src/components/Gap";
 import { StoryObj } from "@storybook/react";
+import { Row } from "../src/components/Row";
+import { Col } from "../src/components/Col";
 
 export default {
     title: "Components/Radio",
@@ -179,13 +181,23 @@ export const XGroup: StoryObj<typeof Radio> = {
         },
     },
     render: () => (
-        <RadioXGroup aria-labelledby="radio-x-group-label" indent={20}>
-            {[1, 2, 3].map((value, index) => (
-                <Radio key={index} name="radio-x-group" value={value}>
-                    Radio text
-                </Radio>
-            ))}
-        </RadioXGroup>
+        <>
+            <RadioXGroup aria-labelledby="radio-x-group-label" indent={16}>
+                {[1, 2, 3].map((value, index) => (
+                    <Radio key={index} name="radio-x-group" value={value}>
+                        Radio text
+                    </Radio>
+                ))}
+            </RadioXGroup>
+            <Gap size={16} />
+            <RadioXGroup aria-labelledby="radio-x-group-label" indent={20}>
+                {[1, 2, 3].map((value, index) => (
+                    <Radio key={index} name="radio-x-group" value={value} size={ERadioSize.LG}>
+                        Radio text
+                    </Radio>
+                ))}
+            </RadioXGroup>
+        </>
     ),
 };
 
@@ -199,12 +211,25 @@ export const YGroup: StoryObj<typeof Radio> = {
         },
     },
     render: () => (
-        <RadioYGroup>
-            {[1, 2, 3, 4].map((value, index) => (
-                <Radio key={index} name="radio-group" value={value}>
-                    Radio text
-                </Radio>
-            ))}
-        </RadioYGroup>
+        <Row>
+            <Col size={3}>
+                <RadioYGroup>
+                    {[1, 2, 3, 4].map((value, index) => (
+                        <Radio key={index} name="radio-group" value={value}>
+                            Radio text
+                        </Radio>
+                    ))}
+                </RadioYGroup>
+            </Col>
+            <Col size={3}>
+                <RadioYGroup>
+                    {[1, 2, 3, 4].map((value, index) => (
+                        <Radio key={index} name="radio-group" value={value} size={ERadioSize.LG}>
+                            Radio text
+                        </Radio>
+                    ))}
+                </RadioYGroup>
+            </Col>
+        </Row>
     ),
 };

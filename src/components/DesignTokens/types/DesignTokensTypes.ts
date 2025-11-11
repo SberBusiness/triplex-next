@@ -6,6 +6,7 @@ import {
     TDesignTokensComponentsCard,
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsChip,
+    TDesignTokensComponentsDivider,
     TDesignTokensComponentsDropdown,
     TDesignTokensComponentsDropdownList,
     TDesignTokensComponentsDropdownMobile,
@@ -274,6 +275,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsCard
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsChip
+    | TDesignTokensComponentsDivider
     | TDesignTokensComponentsDropdown
     | TDesignTokensComponentsDropdownList
     | TDesignTokensComponentsDropdownMobile

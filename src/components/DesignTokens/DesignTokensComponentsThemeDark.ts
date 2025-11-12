@@ -1,3 +1,4 @@
+import { Divider_Tokens } from "./components/Divider";
 // Токены локальных компонентов Triplex Next.
 import { TDesignTokensComponents } from "./types/DesignTokensTypes";
 import { ETriplexNextTheme } from "../ThemeProvider/ETriplexNextTheme";
@@ -42,6 +43,7 @@ import {
     TDesignTokensComponentsCardValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsChipValue,
+    TDesignTokensComponentsDividerValue,
     TDesignTokensComponentsDropdownListValue,
     TDesignTokensComponentsDropdownMobileListValue,
     TDesignTokensComponentsDropdownMobileValue,
@@ -84,6 +86,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.DARK, Card_Tokens),
     Checkbox: GetTokensValueByTheme<TDesignTokensComponentsCheckboxValue>(ETriplexNextTheme.DARK, Checkbox_Tokens),
     Chip: GetTokensValueByTheme<TDesignTokensComponentsChipValue>(ETriplexNextTheme.DARK, Chip_Tokens),
+    Divider: GetTokensValueByTheme<TDesignTokensComponentsDividerValue>(ETriplexNextTheme.DARK, Divider_Tokens),
     Dropdown: GetTokensValueByTheme<TDesignTokensComponentsDropdownValue>(ETriplexNextTheme.DARK, Dropdown_Tokens),
     DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(
         ETriplexNextTheme.DARK,

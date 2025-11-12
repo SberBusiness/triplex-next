@@ -11,6 +11,7 @@ export * from "./Typography";
 export * from "./Tooltip";
 export * from "./AlertContext";
 export * from "./AlertProcess";
+export * from "./Divider";
 export * from "./Dropdown";
 export * from "./DropdownList";
 export * from "./DropdownMobile";

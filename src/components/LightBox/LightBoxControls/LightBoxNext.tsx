@@ -1,15 +1,12 @@
-import {
-    CaretrightStrokeSrvIcon32,
-    CaretrightStrokeSrvIcon20,
-    CaretrightStrokeSrvIcon24,
-} from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../../Button/ButtonIcon";
-import { EButtonIconShape } from "../../Button/enums";
+import React, { Ref, useRef } from "react";
+import clsx from "clsx";
+import { CaretrightStrokeSrvIcon20, CaretrightStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import React, { Ref, useRef } from "react";
 import { MobileView } from "../../MobileView/MobileView";
-import clsx from "clsx";
+import { Button } from "../../Button/Button";
+import { EButtonTheme } from "../../Button/enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/LightBoxControls.module.less";
 
 /** Свойства LightBoxNext. */
@@ -44,25 +41,31 @@ export const LightBoxNext: React.FC<ILightBoxNextProps> = ({
      * Отображение кнопки.
      */
     const renderButton = (params?: IRenderButtonParams) => (
-        <ButtonIcon
-            data-test-id={params?.addDataTestId ? "lightBox-next" : undefined}
-            data-tutorial-id={dataTutorialId}
-            onClick={onClick}
-            title={title}
-            shape={EButtonIconShape.CIRCLE}
-            ref={params?.buttonRef}
+        <MobileView
+            fallback={
+                <Button
+                    data-test-id={params?.addDataTestId ? "lightBox-next" : undefined}
+                    data-tutorial-id={dataTutorialId}
+                    onClick={onClick}
+                    title={title}
+                    ref={params?.buttonRef}
+                    icon={<CaretrightStrokeSrvIcon32 paletteIndex={0} />}
+                    size={EComponentSize.LG}
+                    theme={EButtonTheme.SECONDARY_LIGHT}
+                />
+            }
         >
-            {/* Большая стрелка справа от LightBox. */}
-            <span className="cssClass[lightBoxControlsBig]">
-                <CaretrightStrokeSrvIcon32 paletteIndex={0} />
-            </span>
-            {/* Маленькая стрелка сверху LightBox. */}
-            <span className="cssClass[lightBoxControlsSmall]">
-                <MobileView fallback={<CaretrightStrokeSrvIcon24 paletteIndex={0} />}>
-                    <CaretrightStrokeSrvIcon20 paletteIndex={0} />
-                </MobileView>
-            </span>
-        </ButtonIcon>
+            <Button
+                data-test-id={params?.addDataTestId ? "lightBox-next" : undefined}
+                data-tutorial-id={dataTutorialId}
+                onClick={onClick}
+                title={title}
+                ref={params?.buttonRef}
+                icon={<CaretrightStrokeSrvIcon20 paletteIndex={0} />}
+                size={EComponentSize.MD}
+                theme={EButtonTheme.SECONDARY_LIGHT}
+            />
+        </MobileView>
     );
 
     return (

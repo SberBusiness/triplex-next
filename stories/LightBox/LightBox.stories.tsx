@@ -8,6 +8,7 @@ import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typograph
 import { Text } from "../../src/components/Typography/Text";
 import { Title } from "../../src/components/Typography/Title";
 import { Gap } from "../../src/components/Gap";
+import { EFooterPageType, EHeaderPageType } from "../../src/components/Page/components/enums";
 import "./styles.less";
 
 export default {
@@ -27,7 +28,7 @@ export default {
 export const Default: StoryObj<typeof LightBox> = {
     name: "Default",
     render: () => {
-        const [open, setOpen] = useState(false);
+        const [open, setOpen] = useState(true);
 
         React.useEffect(() => {
             if (open) {
@@ -46,13 +47,23 @@ export const Default: StoryObj<typeof LightBox> = {
                         data-test-id="lightbox-close"
                         onClick={() => setOpen(false)}
                     />
+                    <LightBox.Controls.Prev
+                        title="Назад"
+                        onClick={() => console.log("Prev arrow clicked!")}
+                        clickByArrowLeft
+                    />
+                    <LightBox.Controls.Next
+                        title="Вперёд"
+                        onClick={() => console.log("Next arrow clicked!")}
+                        clickByArrowRight
+                    />
                 </LightBox.Controls>
             </LightBox>
         );
 
         const renderPage = () => (
             <Page>
-                <Page.Header sticky>
+                <Page.Header type={EHeaderPageType.SECOND} sticky>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
                             <Title tag="h1" size={ETitleSize.H1}>
@@ -193,7 +204,7 @@ export const Default: StoryObj<typeof LightBox> = {
                         <br />
                     </div>
                 </Page.Body>
-                <Page.Footer sticky>
+                <Page.Footer type={EFooterPageType.SECOND} sticky>
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>

@@ -8,22 +8,6 @@
     background-color: blue;
     height: @lightBox-controls-opened-height;
     z-index: 150;
-
-    .lightBoxControlsSmall {
-        display: block;
-    }
-
-    .lightBoxControlsBig {
-        display: none;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    .lightBoxControlsSmall:hover {
-        cursor: pointer;
-    }
 }
 
 .withKeyboardEvent {
@@ -53,30 +37,8 @@
     }
 }
 
-@media (max-width: @screen-sm-max) {
-    .LB-less-or-equal-media-point-0-no-hash {
-        .lightBoxControls {
-            height: @lightBox-controls-opened-height-SM;
-            // Перекрытие стилей из LightBoxAdaptive.less.
-            padding: 16px 16px !important;
-
-            .lightBoxClose {
-                // Перекрытие стилей из LightBoxAdaptive.less.
-                top: 18px !important;
-                right: 16px !important;
-            }
-
-            .lightBoxPrev + .lightBoxNext {
-                margin-left: 16px !important;
-            }
-        }
-    }
-}
-
-// При высоте экрана менее 800px lightBoxControls, header и footer не прилипают к экрану.
-@media screen and (max-height: @lightBox-disable-sticky-screen-height) {
-    .lightBoxControls {
-        position: absolute;
-        top: 0;
-    }
+.lightBoxClose {
+    position: fixed;
+    right: 24px;
+    top: calc(16px + var(--lightBox-screen-top));
 }

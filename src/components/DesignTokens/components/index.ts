@@ -32,3 +32,4 @@ export * from "./FooterPage";
 export * from "./Island";
 export * from "./TableBasic";
 export * from "./Chip";
+export * from "./LightBox";

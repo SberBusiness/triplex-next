@@ -36,6 +36,7 @@ import {
     Typography_Tokens,
     Tooltip_Tokens,
     UploadZone_Tokens,
+    LightBox_Tokens,
     TDesignTokensComponentsAlertContextValue,
     TDesignTokensComponentsAlertProcessValue,
     TDesignTokensComponentsButtonValue,
@@ -69,6 +70,7 @@ import {
     TDesignTokensComponentsTooltipValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsUploadZoneValue,
+    TDesignTokensComponentsLightBoxValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -150,4 +152,5 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         UploadZone_Tokens,
     ),
+    LightBox: GetTokensValueByTheme<TDesignTokensComponentsLightBoxValue>(ETriplexNextTheme.DARK, LightBox_Tokens),
 };

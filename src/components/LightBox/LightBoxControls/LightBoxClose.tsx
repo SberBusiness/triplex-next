@@ -1,10 +1,12 @@
 import React, { Ref, useRef } from "react";
-import { CrossStrokeSrvIcon20, CrossStrokeSrvIcon32 } from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../../Button/ButtonIcon";
+import clsx from "clsx";
+import { CrossStrokeSrvIcon32, CrossStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { MobileView } from "../../MobileView/MobileView";
-import clsx from "clsx";
+import { EButtonTheme } from "../../Button/enums";
+import { Button } from "../../Button/Button";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/LightBoxControls.module.less";
 
 /** Свойства LightBoxClose. */
@@ -23,11 +25,29 @@ export const LightBoxClose: React.FC<ILightBoxCloseProps> = ({
     const ref = useRef<HTMLButtonElement>(null);
 
     const renderButton = (buttonRef?: Ref<HTMLButtonElement>) => (
-        <ButtonIcon onClick={onClick} title={title} data-exclude-modal-focus ref={buttonRef}>
-            <MobileView fallback={<CrossStrokeSrvIcon32 paletteIndex={0} />}>
-                <CrossStrokeSrvIcon20 paletteIndex={0} />
-            </MobileView>
-        </ButtonIcon>
+        <MobileView
+            fallback={
+                <Button
+                    onClick={onClick}
+                    title={title}
+                    data-exclude-modal-focus
+                    ref={buttonRef}
+                    icon={<CrossStrokeSrvIcon32 paletteIndex={0} />}
+                    size={EComponentSize.LG}
+                    theme={EButtonTheme.SECONDARY_LIGHT}
+                />
+            }
+        >
+            <Button
+                onClick={onClick}
+                title={title}
+                data-exclude-modal-focus
+                ref={buttonRef}
+                icon={<CrossStrokeSrvIcon20 paletteIndex={0} />}
+                size={EComponentSize.MD}
+                theme={EButtonTheme.SECONDARY_LIGHT}
+            />
+        </MobileView>
     );
 
     return (

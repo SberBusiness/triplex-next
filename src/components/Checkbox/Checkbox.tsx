@@ -1,6 +1,7 @@
 import React from "react";
 import { CheckboxbulkStrokeSrvIcon24, CheckboxtickStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ECheckboxSize } from "./enum";
+import { ETextSize, Text } from "../Typography";
 import clsx from "clsx";
 import styles from "./styles/Checkbox.module.less";
 
@@ -13,6 +14,11 @@ export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInput
     /** Размер чекбокса. */
     size?: ECheckboxSize;
 }
+
+const mapCheckboxSizeToTextSize = {
+    [ECheckboxSize.LG]: ETextSize.B2,
+    [ECheckboxSize.MD]: ETextSize.B3,
+};
 
 /** Чекбокс с описанием. */
 export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
@@ -41,7 +47,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
             <input type="checkbox" className={classNames} disabled={disabled} {...inputAttributes} ref={ref} />
             <span className={styles.checkboxIcon} />
             {renderCheckmarkIcon()}
-            {children}
+            {children && <Text size={mapCheckboxSizeToTextSize[size]}>{children}</Text>}
         </label>
     );
 });

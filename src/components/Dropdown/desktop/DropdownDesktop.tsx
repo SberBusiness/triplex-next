@@ -1,13 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import {
-    EDropdownAlignment,
-    EDropdownDirection,
-    EDropdownSize,
-} from "@sberbusiness/triplex-next/components/Dropdown/enums";
+import clsx from "clsx";
+import { EDropdownAlignment, EDropdownDirection } from "@sberbusiness/triplex-next/components/Dropdown/enums";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { useToken } from "@sberbusiness/triplex-next/components/ThemeProvider/useToken";
-import clsx from "clsx";
-import stylesDropdown from "../styles/Dropdown.module.less";
+import styles from "../styles/DropdownDesktop.module.less";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства компонента DropdownDesktop. */
 export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -24,10 +21,10 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
     /** Фиксированная ширина по управляющему элементу. */
     fixedWidth?: boolean;
     /** Размер дропдауна. */
-    size?: EDropdownSize;
+    size?: EComponentSize;
 }
 
-const dropdownDesktopBodyOverflowClassName = "dropdownOverflowHidden";
+const overflowHiddenClassName = styles.dropdownDesktopOverflowHidden;
 
 /** Выпадающее меню. */
 export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktopProps>((props, ref) => {
@@ -39,17 +36,17 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         direction = EDropdownDirection.AUTO,
         opened,
         setOpened,
-        style,
+        style: styleProp,
         targetRef,
-        size = EDropdownSize.MD,
+        size = EComponentSize.MD,
         ...rest
     } = props;
     const { scopeClassName } = useToken();
 
-    const [styles, setStyles] = useState<React.CSSProperties>({ ...style, opacity: 0 });
+    const [styleState, setStyleState] = useState<React.CSSProperties>({ opacity: 0 });
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const dropdownRes = useRef<{ width: number; height: number }>({ height: 0, width: 0 });
-    const classNames = clsx(stylesDropdown.dropdown, scopeClassName, className, stylesDropdown[`dropdown-${size}`]);
+    const classNames = clsx(styles.dropdownDesktop, scopeClassName, className, styles[`dropdownDesktop-${size}`]);
 
     /** Блокировка скролла вне дропдауна. */
     const wheelHandler = useCallback(
@@ -58,7 +55,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
                 event.preventDefault();
             }
         },
-        [dropdownRef]
+        [dropdownRef],
     );
 
     const keyDownHandler = useCallback((event: KeyboardEvent) => {
@@ -93,7 +90,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
                 document.removeEventListener("keydown", keyDownHandler);
             }
         },
-        [wheelHandler, keyDownHandler]
+        [wheelHandler, keyDownHandler],
     );
 
     /** Расчёт положения по горизонтали. */
@@ -118,7 +115,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
                 css.left = targetRect.left;
             }
         },
-        [alignment, fixedWidth]
+        [alignment, fixedWidth],
     );
 
     /** Расчёт положения по вертикали. */
@@ -144,7 +141,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
                 css.bottom = document.documentElement.clientHeight - targetRect.top + offset;
             }
         },
-        [direction]
+        [direction],
     );
 
     /** Установка положения меню. */
@@ -167,18 +164,19 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             calculatePositionHorizontal(css, dropdownRect, targetRect);
 
             dropdownRes.current = { height: dropdownRect.height, width: dropdownRect.width };
-            setStyles({ ...style, ...css });
+            setStyleState(css);
         }
-    }, [targetRef, fixedWidth, style, calculatePositionVertical, calculatePositionHorizontal]);
+    }, [targetRef, fixedWidth, calculatePositionVertical, calculatePositionHorizontal]);
 
     useEffect(() => {
         if (opened) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setPosition();
         } else {
             dropdownRes.current = { height: 0, width: 0 };
-            setStyles({ ...style, opacity: 0 });
+            setStyleState({ opacity: 0 });
         }
-    }, [opened, setPosition, style]);
+    }, [opened, setPosition]);
 
     // При любом изменении контента внутри Dropdown.
     useEffect(() => {
@@ -187,6 +185,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
 
             // Если разрешение не изменилось, позицию не пересчитываем.
             if (width != dropdownRes.current.width || height != dropdownRes.current.height) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setPosition();
             }
         }
@@ -202,13 +201,13 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             document.addEventListener("scroll", handleReposition, true);
             window.addEventListener("resize", handleReposition);
             toggleScrollEventListener(true);
-            document.body.classList.add(dropdownDesktopBodyOverflowClassName);
+            document.body.classList.add(overflowHiddenClassName);
 
             return () => {
                 document.removeEventListener("scroll", handleReposition, true);
                 window.removeEventListener("resize", handleReposition);
                 toggleScrollEventListener(false);
-                document.body.classList.remove(dropdownDesktopBodyOverflowClassName);
+                document.body.classList.remove(overflowHiddenClassName);
             };
         }
     }, [opened, handleReposition, toggleScrollEventListener]);
@@ -230,10 +229,10 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     return (
         <div
             className={classNames}
-            style={{ ...styles }}
-            ref={setRef}
+            style={{ ...styleState, ...styleProp }}
             {...rest}
             data-tx={process.env.npm_package_version}
+            ref={setRef}
         >
             {children}
         </div>

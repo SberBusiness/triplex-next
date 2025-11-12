@@ -1,21 +1,25 @@
-@import 'src/styles/style';
-
 .button.link {
     text-transform: none;
     background: transparent;
     color: var(--triplex-next-Button-Link_Color_Default);
-    border-radius: 0;
-
-    &.md {
-        .size-MD(@button-min-width-link-md, @button-padding-horizontal-link-md);
-    }
+    padding: 0;
 
     &.sm {
-        .size-SM(@button-min-width-link-sm, @button-padding-horizontal-link-sm);
+        height: 28px;
+        min-width: 0px;
+        padding: 6px 2px;
+    }
+
+    &.md {
+        height: 40px;
+        min-width: 0px;
+        padding: 10px 2px;
     }
 
     &.lg {
-        .size-LG(@button-min-width-link-lg, @button-padding-horizontal-link-lg);
+        height: 56px;
+        min-width: 0px;
+        padding: 18px 2px;
     }
 
     &:hover {

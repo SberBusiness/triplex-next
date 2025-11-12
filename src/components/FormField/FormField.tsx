@@ -3,12 +3,13 @@ import { FormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
 import clsx from "clsx";
 import styles from "./styles/FormField.module.less";
-import { EFormFieldSize, EFormFieldStatus } from "./enums";
+import { EFormFieldStatus } from "./enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
     status?: EFormFieldStatus;
-    size?: EFormFieldSize;
+    size?: EComponentSize;
 }
 
 /** Элемент, отображающий input/select/textarea + label. */
@@ -19,7 +20,7 @@ export const FormField: React.FC<IFormFieldProps> = ({
     onMouseEnter,
     onMouseLeave,
     style,
-    size = EFormFieldSize.LG,
+    size = EComponentSize.LG,
     ...htmlDivAttributes
 }) => {
     const [focused, setFocused] = useState(false);

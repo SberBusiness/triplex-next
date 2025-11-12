@@ -21,7 +21,7 @@ import {
     Link,
     Gap,
 } from "@sberbusiness/triplex-next";
-import { DefaulticonStrokePrdIcon20, SuccessStrokeStsIcon16 } from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import "./Cards.less";
 
 /** Высота блока Media */
@@ -143,7 +143,8 @@ export const Playground: Story = {
             action("toggle")(selected);
         };
 
-        const buttomTheme = theme === ECardTheme.GENERAL ? EButtonTheme.SECONDARY : EButtonTheme.SECONDARY_LIGHT;
+        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
+        const isGeneralTheme = theme === ECardTheme.GENERAL;
 
         return (
             <div className="card-playground-preview">
@@ -185,20 +186,13 @@ export const Playground: Story = {
                                 <Link onClick={() => {}}>Link text</Link>
                             </Text>
                         </CardAction.Content.Body>
-                        <CardAction.Content.Footer>
-                            {!isSelected ? (
+                        {isGeneralTheme && (
+                            <CardAction.Content.Footer>
                                 <Button theme={buttomTheme} size={EButtonSize.SM}>
                                     Button text
                                 </Button>
-                            ) : (
-                                <div style={{ display: "flex", alignItems: "center", height: "28px" }}>
-                                    <SuccessStrokeStsIcon16 paletteIndex={0} />
-                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px", marginRight: "18px" }}>
-                                        Selected
-                                    </Text>
-                                </div>
-                            )}
-                        </CardAction.Content.Footer>
+                            </CardAction.Content.Footer>
+                        )}
                     </CardAction.Content>
                 </CardAction>
             </div>
@@ -234,6 +228,8 @@ export const General: Story = {
             action("onToggle")(selected);
             action("toggle")(selected);
         };
+
+        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
 
         return (
             <div className="card-playground-preview">
@@ -276,18 +272,9 @@ export const General: Story = {
                             </Text>
                         </CardAction.Content.Body>
                         <CardAction.Content.Footer>
-                            {!isSelected ? (
-                                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
-                                    Button text
-                                </Button>
-                            ) : (
-                                <div style={{ display: "flex", alignItems: "center", height: "28px" }}>
-                                    <SuccessStrokeStsIcon16 paletteIndex={0} />
-                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px", marginRight: "18px" }}>
-                                        Selected
-                                    </Text>
-                                </div>
-                            )}
+                            <Button theme={buttomTheme} size={EButtonSize.SM}>
+                                Button text
+                            </Button>
                         </CardAction.Content.Footer>
                     </CardAction.Content>
                 </CardAction>
@@ -365,20 +352,6 @@ export const Secondary: Story = {
                                 <Link onClick={() => {}}>Link text</Link>
                             </Text>
                         </CardAction.Content.Body>
-                        <CardAction.Content.Footer>
-                            {!isSelected ? (
-                                <Button theme={EButtonTheme.SECONDARY_LIGHT} size={EButtonSize.SM}>
-                                    Button text
-                                </Button>
-                            ) : (
-                                <div style={{ display: "flex", alignItems: "center", height: "28px" }}>
-                                    <SuccessStrokeStsIcon16 paletteIndex={0} />
-                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px", marginRight: "18px" }}>
-                                        Selected
-                                    </Text>
-                                </div>
-                            )}
-                        </CardAction.Content.Footer>
                     </CardAction.Content>
                 </CardAction>
             </div>
@@ -415,7 +388,8 @@ export const SmallPaddingSize: Story = {
             action("toggle")(selected);
         };
 
-        const buttomTheme = theme === ECardTheme.GENERAL ? EButtonTheme.SECONDARY : EButtonTheme.SECONDARY_LIGHT;
+        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
+        const isGeneralTheme = theme === ECardTheme.GENERAL;
 
         return (
             <div className="card-playground-preview">
@@ -457,20 +431,13 @@ export const SmallPaddingSize: Story = {
                                 <Link onClick={() => {}}>Link text</Link>
                             </Text>
                         </CardAction.Content.Body>
-                        <CardAction.Content.Footer>
-                            {!isSelected ? (
+                        {isGeneralTheme && (
+                            <CardAction.Content.Footer>
                                 <Button theme={buttomTheme} size={EButtonSize.SM}>
                                     Button text
                                 </Button>
-                            ) : (
-                                <div style={{ display: "flex", alignItems: "center", height: "28px" }}>
-                                    <SuccessStrokeStsIcon16 paletteIndex={0} />
-                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px", marginRight: "18px" }}>
-                                        Selected
-                                    </Text>
-                                </div>
-                            )}
-                        </CardAction.Content.Footer>
+                            </CardAction.Content.Footer>
+                        )}
                     </CardAction.Content>
                 </CardAction>
             </div>
@@ -507,7 +474,8 @@ export const SmallRoundingSize: Story = {
             action("toggle")(selected);
         };
 
-        const buttomTheme = theme === ECardTheme.GENERAL ? EButtonTheme.SECONDARY : EButtonTheme.SECONDARY_LIGHT;
+        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
+        const isGeneralTheme = theme === ECardTheme.GENERAL;
 
         return (
             <div className="card-playground-preview">
@@ -549,20 +517,13 @@ export const SmallRoundingSize: Story = {
                                 <Link onClick={() => {}}>Link text</Link>
                             </Text>
                         </CardAction.Content.Body>
-                        <CardAction.Content.Footer>
-                            {!isSelected ? (
+                        {isGeneralTheme && (
+                            <CardAction.Content.Footer>
                                 <Button theme={buttomTheme} size={EButtonSize.SM}>
                                     Button text
                                 </Button>
-                            ) : (
-                                <div style={{ display: "flex", alignItems: "center", height: "28px" }}>
-                                    <SuccessStrokeStsIcon16 paletteIndex={0} />
-                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px", marginRight: "18px" }}>
-                                        Selected
-                                    </Text>
-                                </div>
-                            )}
-                        </CardAction.Content.Footer>
+                            </CardAction.Content.Footer>
+                        )}
                     </CardAction.Content>
                 </CardAction>
             </div>
@@ -601,7 +562,8 @@ export const Controlled: Story = {
             action("toggle")(selected);
         };
 
-        const buttomTheme = theme === ECardTheme.GENERAL ? EButtonTheme.SECONDARY : EButtonTheme.SECONDARY_LIGHT;
+        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
+        const isGeneralTheme = theme === ECardTheme.GENERAL;
 
         return (
             <div className="card-playground-preview">
@@ -647,20 +609,13 @@ export const Controlled: Story = {
                                 <Link onClick={() => {}}>Link text</Link>
                             </Text>
                         </CardAction.Content.Body>
-                        <CardAction.Content.Footer>
-                            {!isSelected ? (
+                        {isGeneralTheme && (
+                            <CardAction.Content.Footer>
                                 <Button theme={buttomTheme} size={EButtonSize.SM}>
                                     Button text
                                 </Button>
-                            ) : (
-                                <div style={{ display: "flex", alignItems: "center", height: "28px" }}>
-                                    <SuccessStrokeStsIcon16 paletteIndex={0} />
-                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px", marginRight: "18px" }}>
-                                        Selected
-                                    </Text>
-                                </div>
-                            )}
-                        </CardAction.Content.Footer>
+                            </CardAction.Content.Footer>
+                        )}
                     </CardAction.Content>
                 </CardAction>
             </div>

@@ -49,7 +49,7 @@ export default tseslint.config(
         },
     },
     // React hooks recommended configuration
-    reactHooks.configs["recommended-latest"],
+    reactHooks.configs.flat["recommended-latest"],
     // Enviroment-specific adds/overrides
     {
         files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],

@@ -1,0 +1,27 @@
+.tabsLineMobileWrapper {
+    position: relative;
+
+    .tab {
+        flex-shrink: 0;
+
+        &:first-child {
+            margin-left: 16px;
+        }
+        &:last-child {
+            margin-right: 16px;
+        }
+    }
+}
+
+.tabsLineMobile {
+    display: flex;
+    overflow: auto;
+
+    // Hide scrollbar
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE + Edge
+
+    &::-webkit-scrollbar {
+        display: none; // Chrome
+    }
+}

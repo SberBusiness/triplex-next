@@ -189,8 +189,7 @@ export const Default: StoryObj<typeof Checkbox> = {
 export const XGroup: StoryObj<typeof Checkbox> = {
     name: "X Group",
     args: {
-        children: "Checkbox label",
-        size: ECheckboxSize.MD,
+        disabled: false,
     },
     argTypes: {
         children: {
@@ -204,8 +203,10 @@ export const XGroup: StoryObj<typeof Checkbox> = {
             },
         },
         disabled: {
+            control: { type: "boolean" },
+            description: "Состояние disabled",
             table: {
-                disable: true,
+                type: { summary: "boolean" },
             },
         },
         bulk: {
@@ -241,11 +242,11 @@ export const XGroup: StoryObj<typeof Checkbox> = {
             },
         },
     },
-    render: () => (
+    render: (args) => (
         <>
-            <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={20}>
+            <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={16}>
                 {[1, 2, 3].map((value, index) => (
-                    <Checkbox key={index} name="checkbox-x-group" value={value}>
+                    <Checkbox key={index} name="checkbox-x-group" value={value} disabled={args.disabled}>
                         Checkbox text
                     </Checkbox>
                 ))}
@@ -253,7 +254,13 @@ export const XGroup: StoryObj<typeof Checkbox> = {
             <Gap size={16} />
             <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={20}>
                 {[1, 2, 3].map((value, index) => (
-                    <Checkbox key={index} name="checkbox-x-group" value={value} size={ECheckboxSize.LG}>
+                    <Checkbox
+                        key={index}
+                        name="checkbox-x-group"
+                        value={value}
+                        size={ECheckboxSize.LG}
+                        disabled={args.disabled}
+                    >
                         Checkbox text
                     </Checkbox>
                 ))}
@@ -265,8 +272,7 @@ export const XGroup: StoryObj<typeof Checkbox> = {
 export const YGroup: StoryObj<typeof Checkbox> = {
     name: "Y Group",
     args: {
-        children: "Checkbox label",
-        size: ECheckboxSize.MD,
+        disabled: false,
     },
     argTypes: {
         children: {
@@ -280,8 +286,10 @@ export const YGroup: StoryObj<typeof Checkbox> = {
             },
         },
         disabled: {
+            control: { type: "boolean" },
+            description: "Состояние disabled",
             table: {
-                disable: true,
+                type: { summary: "boolean" },
             },
         },
         bulk: {
@@ -317,12 +325,12 @@ export const YGroup: StoryObj<typeof Checkbox> = {
             },
         },
     },
-    render: () => (
+    render: (args) => (
         <Row>
             <Col size={3}>
                 <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox key={index} name="checkbox-y-group" value={value}>
+                        <Checkbox key={index} name="checkbox-y-group" value={value} disabled={args.disabled}>
                             Checkbox text
                         </Checkbox>
                     ))}
@@ -331,7 +339,13 @@ export const YGroup: StoryObj<typeof Checkbox> = {
             <Col size={3}>
                 <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox key={index} name="checkbox-y-group" value={value} size={ECheckboxSize.LG}>
+                        <Checkbox
+                            key={index}
+                            name="checkbox-y-group"
+                            value={value}
+                            size={ECheckboxSize.LG}
+                            disabled={args.disabled}
+                        >
                             Checkbox text
                         </Checkbox>
                     ))}

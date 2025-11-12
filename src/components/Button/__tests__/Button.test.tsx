@@ -2,14 +2,15 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { Button } from "@sberbusiness/triplex-next/components/";
-import { EButtonTheme, EButtonSize } from "../enums";
+import { EButtonTheme } from "../enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 const getButton = () => screen.getByTestId("button");
 
 describe("Button", () => {
     it("Should render with default props", () => {
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} data-testid="button">
                 Click me
             </Button>,
         );
@@ -22,7 +23,7 @@ describe("Button", () => {
 
     it("Should apply size classes", () => {
         const { rerender } = render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM} data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM} data-testid="button">
                 Small
             </Button>,
         );
@@ -30,7 +31,7 @@ describe("Button", () => {
         expect(button).toHaveClass("sm");
 
         rerender(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.LG} data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.LG} data-testid="button">
                 Large
             </Button>,
         );
@@ -39,7 +40,7 @@ describe("Button", () => {
 
     it("Should apply theme classes", () => {
         const { rerender } = render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} data-testid="button">
                 General
             </Button>,
         );
@@ -47,21 +48,21 @@ describe("Button", () => {
         expect(button).toHaveClass("general");
 
         rerender(
-            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} data-testid="button">
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} data-testid="button">
                 Secondary
             </Button>,
         );
         expect(button).toHaveClass("secondary");
 
         rerender(
-            <Button theme={EButtonTheme.DANGER} size={EButtonSize.MD} data-testid="button">
+            <Button theme={EButtonTheme.DANGER} size={EComponentSize.MD} data-testid="button">
                 Danger
             </Button>,
         );
         expect(button).toHaveClass("danger");
 
         rerender(
-            <Button theme={EButtonTheme.LINK} size={EButtonSize.MD} data-testid="button">
+            <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} data-testid="button">
                 Link
             </Button>,
         );
@@ -70,7 +71,7 @@ describe("Button", () => {
 
     it("Should merge custom className and passes through attributes", () => {
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} className="custom-class" data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} className="custom-class" data-testid="button">
                 Button text
             </Button>,
         );
@@ -80,7 +81,7 @@ describe("Button", () => {
 
     it("Should apply block and loading classes and sets tabIndex when loading", () => {
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} block loading data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} block loading data-testid="button">
                 Loading
             </Button>,
         );
@@ -93,7 +94,7 @@ describe("Button", () => {
 
     it("Should apply disabled attribute and class", () => {
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} disabled data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} disabled data-testid="button">
                 Disabled
             </Button>,
         );
@@ -106,7 +107,7 @@ describe("Button", () => {
         const { rerender } = render(
             <Button
                 theme={EButtonTheme.GENERAL}
-                size={EButtonSize.MD}
+                size={EComponentSize.MD}
                 icon={<span data-testid="icon-only" />}
                 data-testid="button"
             />,
@@ -118,7 +119,7 @@ describe("Button", () => {
         rerender(
             <Button
                 theme={EButtonTheme.GENERAL}
-                size={EButtonSize.MD}
+                size={EComponentSize.MD}
                 icon={<span data-testid="icon-with-text" />}
                 data-testid="button"
             >
@@ -132,7 +133,7 @@ describe("Button", () => {
 
     it("Should add expanded and active classes when aria-expanded is true", () => {
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} aria-expanded data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded data-testid="button">
                 Expandable
             </Button>,
         );
@@ -143,7 +144,7 @@ describe("Button", () => {
 
     it("Should render loading dots with correct theme and size", () => {
         render(
-            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.LG} loading data-testid="button">
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.LG} loading data-testid="button">
                 Loading
             </Button>,
         );
@@ -157,7 +158,7 @@ describe("Button", () => {
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLButtonElement>();
         render(
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} ref={ref} data-testid="button">
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} ref={ref} data-testid="button">
                 Ref test
             </Button>,
         );

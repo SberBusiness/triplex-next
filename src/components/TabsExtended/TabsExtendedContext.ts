@@ -1,4 +1,5 @@
 import React, { RefObject } from "react";
+import { ETabsExtendedType } from "./enums";
 
 export interface ITabsExtendedContext {
     // Массив id табов, передаваемых в Dropdown.
@@ -15,6 +16,7 @@ export interface ITabsExtendedContext {
     setDropdownItemsIds: (dropdownItemsIds: string[]) => void;
     // Определяет id табов, отрендереных inline.
     setInlineItemsIds: (inlineItemsIds: string[]) => void;
+    type: ETabsExtendedType;
 }
 
 const contextInitial: ITabsExtendedContext = {
@@ -25,6 +27,7 @@ const contextInitial: ITabsExtendedContext = {
     selectedId: "",
     setDropdownItemsIds: () => {},
     setInlineItemsIds: () => {},
+    type: ETabsExtendedType.TYPE_1,
 };
 
 export const TabsExtendedContext = React.createContext<ITabsExtendedContext>(contextInitial);

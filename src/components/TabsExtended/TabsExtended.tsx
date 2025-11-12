@@ -4,6 +4,8 @@ import { TabsExtendedContext } from "./TabsExtendedContext";
 import { TabsExtendedContent } from "./components/TabsExtendedContent";
 import styles from "./styles/TabsExtended.module.less";
 import { TTabsExtendedOnSelectTab } from "@sberbusiness/triplex-next/components/TabsExtended/types";
+import { ETabsExtendedType } from "./enums";
+import { tabsExtendedTypeToClassNameMap } from "./utils";
 
 /** Свойства компонента TabsExtended. */
 export interface ITabsExtendedProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,6 +13,8 @@ export interface ITabsExtendedProps extends React.HTMLAttributes<HTMLDivElement>
     selectedId: string;
     /** Обработчик выбора таба. */
     onSelectTab: TTabsExtendedOnSelectTab;
+    /** Тип компонента. */
+    type?: ETabsExtendedType;
 }
 
 /** Внутренние составляющие компонента TabsExtended. */
@@ -24,6 +28,7 @@ export const TabsExtended: React.FC<ITabsExtendedProps> & ITabsExtendedCompositi
     className,
     selectedId,
     onSelectTab,
+    type = ETabsExtendedType.TYPE_1,
     ...htmlDivAttributes
 }) => {
     const [inlineItemsIds, setInlineItemsIds] = useState<string[]>([]);
@@ -46,9 +51,14 @@ export const TabsExtended: React.FC<ITabsExtendedProps> & ITabsExtendedCompositi
                 selectedId,
                 setDropdownItemsIds,
                 setInlineItemsIds,
+                type,
             }}
         >
-            <div className={clsx(styles.tabsExtended, className)} role="tablist" {...htmlDivAttributes}>
+            <div
+                className={clsx(styles.tabsExtended, tabsExtendedTypeToClassNameMap[type], className)}
+                role="tablist"
+                {...htmlDivAttributes}
+            >
                 {children}
             </div>
         </TabsExtendedContext.Provider>

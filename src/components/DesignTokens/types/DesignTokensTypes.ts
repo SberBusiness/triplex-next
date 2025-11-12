@@ -1,36 +1,39 @@
 import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
-    TDesignTokensComponentsButton,
-    TDesignTokensComponentsCheckbox,
-    TDesignTokensComponentsRadio,
-    TDesignTokensComponentsTypography,
-    TDesignTokensComponentsTooltip,
-    TDesignTokensComponentsLink,
-    TDesignTokensComponentsLoader,
-    TDesignTokensComponentsTabs,
-    TDesignTokensComponentsLoaderWidget,
-    TDesignTokensComponentsFormField,
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
+    TDesignTokensComponentsButton,
+    TDesignTokensComponentsCard,
+    TDesignTokensComponentsCheckbox,
+    TDesignTokensComponentsChip,
     TDesignTokensComponentsDropdown,
     TDesignTokensComponentsDropdownList,
     TDesignTokensComponentsDropdownMobile,
     TDesignTokensComponentsDropdownMobileList,
-    TDesignTokensComponentsOverlay,
+    TDesignTokensComponentsFooterPage,
+    TDesignTokensComponentsFormField,
+    TDesignTokensComponentsHeaderPage,
+    TDesignTokensComponentsIsland,
+    TDesignTokensComponentsLink,
     TDesignTokensComponentsListItem,
     TDesignTokensComponentsListItemControlsButton,
     TDesignTokensComponentsListMaster,
+    TDesignTokensComponentsLoader,
+    TDesignTokensComponentsLoaderWidget,
+    TDesignTokensComponentsOverlay,
     TDesignTokensComponentsPage,
-    TDesignTokensComponentsUploadZone,
     TDesignTokensComponentsPagination,
-    TDesignTokensComponentsCard,
-    TDesignTokensComponentsSkeleton,
+    TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
     TDesignTokensComponentsSegmentedControlSegment,
-    TDesignTokensComponentsHeaderPage,
-    TDesignTokensComponentsFooterPage,
-    TDesignTokensComponentsIsland,
+    TDesignTokensComponentsSkeleton,
+    TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
+    TDesignTokensComponentsTabs,
+    TDesignTokensComponentsTabsLine,
+    TDesignTokensComponentsTooltip,
+    TDesignTokensComponentsTypography,
+    TDesignTokensComponentsUploadZone,
 } from "../components";
 
 // Название токенов группы ColorBrand.
@@ -265,37 +268,40 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBrand &
 
 // Тип локальных токенов(токенов компонентов).
 export type TDesignTokensComponents =
-    | TDesignTokensComponentsButton
-    | TDesignTokensComponentsCheckbox
-    | TDesignTokensComponentsFormField
-    | TDesignTokensComponentsRadio
-    | TDesignTokensComponentsTypography
-    | TDesignTokensComponentsTooltip
-    | TDesignTokensComponentsLink
-    | TDesignTokensComponentsLoader
-    | TDesignTokensComponentsTabs
-    | TDesignTokensComponentsLoaderWidget
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
+    | TDesignTokensComponentsButton
+    | TDesignTokensComponentsCard
+    | TDesignTokensComponentsCheckbox
+    | TDesignTokensComponentsChip
     | TDesignTokensComponentsDropdown
     | TDesignTokensComponentsDropdownList
     | TDesignTokensComponentsDropdownMobile
     | TDesignTokensComponentsDropdownMobileList
-    | TDesignTokensComponentsOverlay
+    | TDesignTokensComponentsFooterPage
+    | TDesignTokensComponentsFormField
+    | TDesignTokensComponentsHeaderPage
+    | TDesignTokensComponentsIsland
+    | TDesignTokensComponentsLink
     | TDesignTokensComponentsListItem
     | TDesignTokensComponentsListItemControlsButton
     | TDesignTokensComponentsListMaster
+    | TDesignTokensComponentsLoader
+    | TDesignTokensComponentsLoaderWidget
+    | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsPage
-    | TDesignTokensComponentsUploadZone
     | TDesignTokensComponentsPagination
-    | TDesignTokensComponentsCard
-    | TDesignTokensComponentsSkeleton
+    | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment
-    | TDesignTokensComponentsHeaderPage
-    | TDesignTokensComponentsFooterPage
-    | TDesignTokensComponentsIsland
-    | TDesignTokensComponentsTableBasic;
+    | TDesignTokensComponentsSkeleton
+    | TDesignTokensComponentsStepper
+    | TDesignTokensComponentsTableBasic
+    | TDesignTokensComponentsTabs
+    | TDesignTokensComponentsTabsLine
+    | TDesignTokensComponentsTooltip
+    | TDesignTokensComponentsTypography
+    | TDesignTokensComponentsUploadZone;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

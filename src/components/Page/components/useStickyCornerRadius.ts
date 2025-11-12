@@ -29,13 +29,13 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
 
         const maxRadius = 16;
         const cssVarName = edge === "top" ? "--r-top" : "--r-bottom";
+        const initializationDelay = 16;
 
-        const computed = getComputedStyle(el);
-        const offsetRaw = edge === "top" ? computed.top : computed.bottom;
-        const stickyOffset = parseFloat(offsetRaw || "0") || 0;
-        const scroller = getScrollParent(el);
-
+        let stickyOffset = 0;
         let raf = 0;
+        let timeoutId: number | null = null;
+        let scroller: HTMLElement | Window = window;
+        let target: HTMLElement | Window | null = null;
 
         const update = () => {
             raf = 0;
@@ -59,20 +59,35 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
             }
         };
 
-        const onScrollOrResize = () => {
+        const handleScrollOrResize = () => {
             if (raf) return;
             raf = requestAnimationFrame(update);
         };
 
-        update();
+        const initialize = () => {
+            timeoutId = null;
+            const computed = getComputedStyle(el);
+            const offsetRaw = edge === "top" ? computed.top : computed.bottom;
+            stickyOffset = parseFloat(offsetRaw || "0") || 0;
+            scroller = getScrollParent(el);
+            target = scroller === window ? window : (scroller as HTMLElement);
 
-        const target = scroller === window ? window : (scroller as HTMLElement);
-        target.addEventListener("scroll", onScrollOrResize, { passive: true });
-        window.addEventListener("resize", onScrollOrResize);
+            update();
+
+            target.addEventListener("scroll", handleScrollOrResize, { passive: true });
+            window.addEventListener("resize", handleScrollOrResize);
+        };
+
+        timeoutId = window.setTimeout(initialize, initializationDelay);
 
         return () => {
-            target.removeEventListener("scroll", onScrollOrResize);
-            window.removeEventListener("resize", onScrollOrResize);
+            if (timeoutId !== null) {
+                window.clearTimeout(timeoutId);
+            }
+            if (target) {
+                target.removeEventListener("scroll", handleScrollOrResize);
+            }
+            window.removeEventListener("resize", handleScrollOrResize);
             if (raf) cancelAnimationFrame(raf);
         };
     }, [ref, edge]);

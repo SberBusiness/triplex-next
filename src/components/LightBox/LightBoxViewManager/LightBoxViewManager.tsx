@@ -43,30 +43,22 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
             let classNames: Array<string> | string = [];
 
             if (rect.width <= LightBoxViewManagerConsts.lightBoxMediaPoint0) {
+                console.log("less-or-equal-media-point-0");
                 classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-0"]);
             } else {
+                console.log("more-media-point-0");
                 classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["more-media-point-0"]);
             }
 
-            if (rect.width <= LightBoxViewManagerConsts.lightBoxMediaPoint1) {
-                classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-1"]);
-            } else {
-                classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["more-media-point-1"]);
-            }
-
-            if (rect.width <= LightBoxViewManagerConsts.lightBoxMediaPoint2) {
-                classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-2"]);
-            } else {
-                classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["more-media-point-2"]);
-            }
-
             classNames = classNames.sort().join(" ");
+
+            console.log("classNames", classNames);
 
             if (breakPointsClassNames !== classNames) {
                 setBreakPointsClassNames(classNames);
             }
         },
-        [breakPointsClassNames]
+        [breakPointsClassNames],
     );
 
     const updateRect = () => {
@@ -76,7 +68,7 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
             if (
                 !isEqual(
                     pick(rectViewNode, ["top", "left", "width", "height"]),
-                    pick(nextRect, ["top", "left", "width", "height"])
+                    pick(nextRect, ["top", "left", "width", "height"]),
                 )
             ) {
                 setRectViewNode(nextRect);

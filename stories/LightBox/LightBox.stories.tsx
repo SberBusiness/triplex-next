@@ -62,7 +62,7 @@ export const Default: StoryObj<typeof LightBox> = {
         );
 
         const renderPage = () => (
-            <Page>
+            <Page style={{ width: "800px" }}>
                 <Page.Header type={EHeaderPageType.SECOND} sticky>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>

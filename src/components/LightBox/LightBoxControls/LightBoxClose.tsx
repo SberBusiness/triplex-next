@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { CrossStrokeSrvIcon32, CrossStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { MobileView } from "../../MobileView/MobileView";
 import { EButtonTheme } from "../../Button/enums";
 import { Button } from "../../Button/Button";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
@@ -25,29 +24,29 @@ export const LightBoxClose: React.FC<ILightBoxCloseProps> = ({
     const ref = useRef<HTMLButtonElement>(null);
 
     const renderButton = (buttonRef?: Ref<HTMLButtonElement>) => (
-        <MobileView
-            fallback={
-                <Button
-                    onClick={onClick}
-                    title={title}
-                    data-exclude-modal-focus
-                    ref={buttonRef}
-                    icon={<CrossStrokeSrvIcon32 paletteIndex={0} />}
-                    size={EComponentSize.LG}
-                    theme={EButtonTheme.SECONDARY_LIGHT}
-                />
-            }
-        >
+        <>
+            {/* Кнопка для экранов шире 1024px */}
             <Button
+                className={styles.lightBoxControlsDesktop}
                 onClick={onClick}
                 title={title}
                 data-exclude-modal-focus
                 ref={buttonRef}
+                icon={<CrossStrokeSrvIcon32 paletteIndex={0} />}
+                size={EComponentSize.LG}
+                theme={EButtonTheme.SECONDARY_LIGHT}
+            />
+            {/* Кнопка для экранов менее 1024px */}
+            <Button
+                className={styles.lightBoxControlsMobile}
+                onClick={onClick}
+                title={title}
+                data-exclude-modal-focus
                 icon={<CrossStrokeSrvIcon20 paletteIndex={0} />}
                 size={EComponentSize.MD}
                 theme={EButtonTheme.SECONDARY_LIGHT}
             />
-        </MobileView>
+        </>
     );
 
     return (

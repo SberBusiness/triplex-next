@@ -43,16 +43,12 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
             let classNames: Array<string> | string = [];
 
             if (rect.width <= LightBoxViewManagerConsts.lightBoxMediaPoint0) {
-                console.log("less-or-equal-media-point-0");
                 classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-0"]);
             } else {
-                console.log("more-media-point-0");
                 classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["more-media-point-0"]);
             }
 
             classNames = classNames.sort().join(" ");
-
-            console.log("classNames", classNames);
 
             if (breakPointsClassNames !== classNames) {
                 setBreakPointsClassNames(classNames);

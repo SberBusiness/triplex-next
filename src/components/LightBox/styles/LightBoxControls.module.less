@@ -31,81 +31,85 @@
     }
 }
 
-
-each(@scroll-sizes, {
-    @scroll-width: @value;
-    @scroll-width-px: ~'@{scroll-width}px';
-    // Ширина экрана без скрола.
-    @screen-width-without-scroll: calc(var(--lightBox-screen-width) - @scroll-width-px);
-
-    html.scroll-@{scroll-width} {
-        /*
-          Breakpoint для экранов менее 1024px.
-          < 1024px
-        */
-        .LB-less-or-equal-media-point-0-no-hash {
-            // Ширина лайтбокса/контролов/хедера/футера.
-            @lightBox-content-width: @screen-width-without-scroll;
-            // Левая позиция лайтбокса.
-            @lightBox-content-left: 0;
-
-
-            .lightBoxControls {
-                background-color: yellow;
-                position: absolute;
-                left: @lightBox-content-left;
-                width: @lightBox-content-width;
-                top: 0;
-                padding: 16px;
-            }
-
-            .lightBoxClose {
-                position: absolute;
-                right: 40px;
-                top: 16px;
-            }
-
-            .lightBoxPrev,
-            .lightBoxNext {
-                user-select: none;
-                display: inline-block;
-            }
-            
-            .lightBoxPrev {
-                margin-right: 16px;
-            }
-        }
-
-        /*
-          Breakpoint для экранов шире 1024px.
-          > 1024px
-        */
-        .LB-more-media-point-0-no-hash {
-            .lightBoxControls {
-                position: static;
-            }
-
-            .lightBoxClose {
-                position: fixed;
-                right: 40px;
-                top: calc(40px + var(--lightBox-screen-top));
-            }
-            
-            .lightBoxPrev,
-            .lightBoxNext {
-                user-select: none;
-                position: fixed;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            
-            .lightBoxPrev {
-                left: 40px;
-            }
-            
-            .lightBoxNext {
-                right: 40px;
-            }
-        }
+/*
+    Breakpoint для экранов менее 1024px.
+    < 1024px
+*/
+.LB-less-or-equal-media-point-0-no-hash {
+    .lightBoxControls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        padding: 16px;
     }
-})
+
+    .lightBoxControlsDesktop {
+        display: none;
+    }
+
+    .lightBoxControlsMobile {
+        display: block;
+    }
+
+    .lightBoxClose {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+    }
+
+    .lightBoxPrev,
+    .lightBoxNext {
+        user-select: none;
+        display: inline-block;
+    }
+
+    .lightBoxPrev {
+        margin-right: 12px;
+    }
+
+    .lightBoxPrevButton,
+    .lightBoxNextButton {
+        margin-left: 0;
+    }
+}
+
+/*
+    Breakpoint для экранов шире 1024px.
+    > 1024px
+*/
+.LB-more-media-point-0-no-hash {
+    .lightBoxControls {
+        position: static;
+    }
+
+    .lightBoxControlsDesktop {
+        display: block;
+    }
+
+    .lightBoxControlsMobile {
+        display: none;
+    }
+
+    .lightBoxClose {
+        position: fixed;
+        right: 40px;
+        top: calc(40px + var(--lightBox-screen-top));
+    }
+    
+    .lightBoxPrev,
+    .lightBoxNext {
+        user-select: none;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .lightBoxPrev {
+        left: 40px;
+    }
+    
+    .lightBoxNext {
+        right: 40px;
+    }
+}

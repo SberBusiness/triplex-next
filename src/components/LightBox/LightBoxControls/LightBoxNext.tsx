@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { CaretrightStrokeSrvIcon20, CaretrightStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { MobileView } from "../../MobileView/MobileView";
 import { Button } from "../../Button/Button";
 import { EButtonTheme } from "../../Button/enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
@@ -41,21 +40,22 @@ export const LightBoxNext: React.FC<ILightBoxNextProps> = ({
      * Отображение кнопки.
      */
     const renderButton = (params?: IRenderButtonParams) => (
-        <MobileView
-            fallback={
-                <Button
-                    data-test-id={params?.addDataTestId ? "lightBox-next" : undefined}
-                    data-tutorial-id={dataTutorialId}
-                    onClick={onClick}
-                    title={title}
-                    ref={params?.buttonRef}
-                    icon={<CaretrightStrokeSrvIcon32 paletteIndex={0} />}
-                    size={EComponentSize.LG}
-                    theme={EButtonTheme.SECONDARY_LIGHT}
-                />
-            }
-        >
+        <>
+            {/* Кнопка для экранов шире 1024px */}
             <Button
+                className={clsx(styles.lightBoxControlsDesktop, styles.lightBoxNextButton)}
+                data-test-id={params?.addDataTestId ? "lightBox-next" : undefined}
+                data-tutorial-id={dataTutorialId}
+                onClick={onClick}
+                title={title}
+                ref={params?.buttonRef}
+                icon={<CaretrightStrokeSrvIcon32 paletteIndex={0} />}
+                size={EComponentSize.LG}
+                theme={EButtonTheme.SECONDARY_LIGHT}
+            />
+            {/* Кнопка для экранов менее 1024px */}
+            <Button
+                className={clsx(styles.lightBoxControlsMobile, styles.lightBoxNextButton)}
                 data-test-id={params?.addDataTestId ? "lightBox-next" : undefined}
                 data-tutorial-id={dataTutorialId}
                 onClick={onClick}
@@ -65,7 +65,7 @@ export const LightBoxNext: React.FC<ILightBoxNextProps> = ({
                 size={EComponentSize.MD}
                 theme={EButtonTheme.SECONDARY_LIGHT}
             />
-        </MobileView>
+        </>
     );
 
     return (

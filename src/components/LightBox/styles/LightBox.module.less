@@ -119,15 +119,20 @@ each(@scroll-sizes, {
                 }
             }
 
-            .lightBoxContent,
-            .lightBoxContent > .loadingContentOverlay {
-                left: @lightBox-content-left;
-                width: @lightBox-content-width;
+            .lightBoxContent {
+                margin: 0;
+                border-radius: 0;
             }
 
-            .lightBox .lightBoxContent {
-                box-sizing: border-box;
-            }
+            // .lightBoxContent,
+            // .lightBoxContent > .loadingContentOverlay {
+            //     left: @lightBox-content-left;
+            //     width: @lightBox-content-width;
+            // }
+
+            // .lightBox .lightBoxContent {
+            //     box-sizing: border-box;
+            // }
         }
 
         .LB-more-media-point-0-no-hash {

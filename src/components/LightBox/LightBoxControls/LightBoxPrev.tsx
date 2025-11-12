@@ -4,7 +4,6 @@ import { CaretleftStrokeSrvIcon32, CaretleftStrokeSrvIcon20 } from "@sberbusines
 import { EButtonTheme } from "../../Button/enums";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { MobileView } from "../../MobileView/MobileView";
 import { Button } from "../../Button/Button";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/LightBoxControls.module.less";
@@ -41,21 +40,22 @@ export const LightBoxPrev: React.FC<ILightBoxPrevProps> = ({
      * Отображение кнопки.
      */
     const renderButton = (params?: IRenderButtonParams) => (
-        <MobileView
-            fallback={
-                <Button
-                    data-test-id={params?.addDataTestId ? "lightBox-prev" : undefined}
-                    data-tutorial-id={dataTutorialId}
-                    onClick={onClick}
-                    title={title}
-                    ref={params?.buttonRef}
-                    icon={<CaretleftStrokeSrvIcon32 paletteIndex={0} />}
-                    size={EComponentSize.LG}
-                    theme={EButtonTheme.SECONDARY_LIGHT}
-                />
-            }
-        >
+        <>
+            {/* Кнопка для экранов шире 1024px */}
             <Button
+                className={clsx(styles.lightBoxControlsDesktop, styles.lightBoxPrevButton)}
+                data-test-id={params?.addDataTestId ? "lightBox-prev" : undefined}
+                data-tutorial-id={dataTutorialId}
+                onClick={onClick}
+                title={title}
+                ref={params?.buttonRef}
+                icon={<CaretleftStrokeSrvIcon32 paletteIndex={0} />}
+                size={EComponentSize.LG}
+                theme={EButtonTheme.SECONDARY_LIGHT}
+            />
+            {/* Кнопка для экранов менее 1024px */}
+            <Button
+                className={clsx(styles.lightBoxControlsMobile, styles.lightBoxPrevButton)}
                 data-test-id={params?.addDataTestId ? "lightBox-prev" : undefined}
                 data-tutorial-id={dataTutorialId}
                 onClick={onClick}
@@ -65,7 +65,7 @@ export const LightBoxPrev: React.FC<ILightBoxPrevProps> = ({
                 size={EComponentSize.MD}
                 theme={EButtonTheme.SECONDARY_LIGHT}
             />
-        </MobileView>
+        </>
     );
 
     return (

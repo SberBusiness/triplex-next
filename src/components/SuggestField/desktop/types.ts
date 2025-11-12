@@ -11,12 +11,12 @@ export interface ISuggestFieldDesktopProps<T extends ISuggestFieldOption = ISugg
     /** Рендер-функция компонента Dropdown. */
     renderDropdown?: (props: ISuggestFieldDesktopDropdownProps<T>) => JSX.Element;
     /** Рендер-функция компонента DropdownList. */
-    renderDropdownList?: (props: ISuggestFieldDesktopDropdownListProps<T>) => JSX.Element;
+    renderDropdownList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => JSX.Element;
     /** Рендер-функция компонента DropdownListItem. */
-    renderDropdownListItem?: (props: ISuggestFieldDesktopDropdownListItemProps<T>) => JSX.Element;
+    renderDropdownListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => JSX.Element;
 }
 
-/** Свойство компонента SuggestFieldDesktopDropdown. */
+/** Свойства компонента SuggestFieldDesktopDropdown. */
 export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
     extends Omit<IDropdownProps, "onSelect">,
         Pick<ISuggestFieldDesktopProps<T>, "value" | "options" | "onSelect">,
@@ -28,32 +28,18 @@ export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption
     /** Состояние загрузки DropdownList. */
     listLoading?: boolean;
     /** Рендер-функция компонента DropdownList. */
-    renderList?: (props: ISuggestFieldDesktopDropdownListProps<T>) => JSX.Element;
+    renderList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => JSX.Element;
     /** Рендер-функция компонента DropdownListItem. */
-    renderListItem?: (props: ISuggestFieldDesktopDropdownListItemProps<T>) => JSX.Element;
+    renderListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => JSX.Element;
 }
 
-/** Свойства компонента SuggestFieldDesktopDropdownList. */
-export interface ISuggestFieldDesktopDropdownListProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<IDropdownListProps, "onSelect">,
-        Pick<ISuggestFieldDesktopProps<T>, "value" | "options" | "onSelect"> {
-    /** Идентификатор для тестирования. */
-    dataTestId?: string;
-    /** Рендер-функция компонента DropdownListItem. */
-    renderItem?: (props: ISuggestFieldDesktopDropdownListItemProps<T>) => JSX.Element;
-}
+/** Свойства, передаваемые в рендер-функцию DropdownList. */
+export interface ISuggestFieldDesktopDropdownListProvideProps
+    extends Pick<IDropdownListProps, "children" | "id" | "size" | "dropdownOpened" | "loading" | "onMouseDown"> {}
 
-/** Свойства компонента SuggestFieldDesktopDropdownListItem. */
-export interface ISuggestFieldDesktopDropdownListItemProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<IDropdownListItemProps, "onSelect"> {
-    /** Объект опции. */
-    option: T;
-    /** Флаг состояния элемента (выбран/невыбран). */
-    selected: boolean;
-    /** Флаг состояния активности элемента (активным элемент становится при перемещении на него курсора). */
-    active?: boolean;
-    /** Идентификатор для тестирования. */
-    dataTestId?: string;
-    /** Обработчик выбора элемента. */
-    onSelect: (value: T) => void;
-}
+/** Свойства, передаваемые в рендер-функцию DropdownListItem. */
+export interface ISuggestFieldDesktopDropdownListItemProvideProps
+    extends Pick<
+        IDropdownListItemProps,
+        "children" | "id" | "keyCodesForSelection" | "selected" | "onMouseDown" | "onSelect"
+    > {}

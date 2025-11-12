@@ -25,6 +25,7 @@ export const FormFieldClear = React.forwardRef<HTMLButtonElement, IFormFieldClea
         );
 
         const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
+            // Предотвращаем получение фокуса.
             event.preventDefault();
             onMouseDown?.(event);
         };

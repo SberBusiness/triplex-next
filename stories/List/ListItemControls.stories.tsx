@@ -40,11 +40,11 @@ export const Default: StoryObj<typeof ListItemControls> = {
         return (
             <>
                 <ListItemControls>
-                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
+                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}>
                         Скачать
                     </ListItemControlsButton>
                     <ListItemControlsButtonDropdown
-                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={0} />}
                         options={options}
                     >
                         Еще
@@ -54,11 +54,11 @@ export const Default: StoryObj<typeof ListItemControls> = {
                 <br />
 
                 <ListItemControls style={{ height: "100px" }}>
-                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
+                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}>
                         Скачать
                     </ListItemControlsButton>
                     <ListItemControlsButtonDropdown
-                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={0} />}
                         options={options}
                     >
                         Длинная подпись
@@ -68,9 +68,9 @@ export const Default: StoryObj<typeof ListItemControls> = {
                 <br />
 
                 <ListItemControls>
-                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />} />
+                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />} />
                     <ListItemControlsButtonDropdown
-                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={0} />}
                         options={options}
                     />
                 </ListItemControls>

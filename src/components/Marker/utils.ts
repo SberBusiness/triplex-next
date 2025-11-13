@@ -7,7 +7,7 @@ export const statusToClassNameMap = {
     [EMarkerStatus.WAITING]: (styles: Record<string, string>) => styles.waiting,
 };
 
-export const sizeToClassNameMap = {
+export const markerSizeToClassNameMap = {
     [EMarkerSize.MD]: (styles: Record<string, string>) => styles.md,
     [EMarkerSize.LG]: (styles: Record<string, string>) => styles.lg,
 };

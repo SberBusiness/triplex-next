@@ -3,7 +3,7 @@ import { Marker } from "../Marker";
 import { EMarkerStatus, EMarkerSize } from "../Marker/enums";
 import styles from "./styles/MarkerStatus.module.less";
 import clsx from "clsx";
-import { sizeToClassNameMap, statusToClassNameMap } from "../Marker/utils";
+import { markerSizeToClassNameMap, statusToClassNameMap } from "../Marker/utils";
 import { ETextSize } from "../Typography/enums";
 import { Text } from "../Typography/Text";
 
@@ -29,10 +29,10 @@ export const MarkerStatus: React.FC<IMarkerStatusProps> = ({
     size = EMarkerSize.MD,
 }) => {
     const classNames = clsx(
-        className,
         styles.markerStatus,
-        sizeToClassNameMap[size](styles),
+        markerSizeToClassNameMap[size](styles),
         statusToClassNameMap[status](styles),
+        className,
     );
 
     return (

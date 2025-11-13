@@ -10,6 +10,7 @@ export * from "./Link";
 export * from "./Loader";
 export * from "./LoaderWidget";
 export * from "./Marker";
+export * from "./MarkerStatus";
 export * from "./MediaWidth";
 export * from "./MobileView";
 export * from "./Radio";

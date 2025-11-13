@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { EMarkerStatus, EMarkerSize } from "./enums";
 import React from "react";
 import styles from "./styles/Marker.module.less";
-import { sizeToClassNameMap, statusToClassNameMap } from "./utils";
+import { markerSizeToClassNameMap, statusToClassNameMap } from "./utils";
 
 export interface IMarkerProps extends React.HTMLAttributes<HTMLDivElement> {
     status: EMarkerStatus;
@@ -11,10 +11,10 @@ export interface IMarkerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Marker: React.FC<IMarkerProps> = ({ className, status, size = EMarkerSize.MD, ...htmlDivAttributes }) => {
     const classNames = clsx(
-        className,
         styles.marker,
-        sizeToClassNameMap[size](styles),
+        markerSizeToClassNameMap[size](styles),
         statusToClassNameMap[status](styles),
+        className,
     );
 
     return <div className={classNames} {...htmlDivAttributes} />;

@@ -1,11 +1,13 @@
 import React from "react";
 import { Marker } from "../Marker";
-import { EMarkerStatus, EMarkerSize } from "../Marker/enums";
+import { EMarkerStatus } from "../Marker/enums";
 import styles from "./styles/MarkerStatus.module.less";
 import clsx from "clsx";
-import { markerSizeToClassNameMap, statusToClassNameMap } from "../Marker/utils";
+import { statusToClassNameMap } from "../Marker/utils";
 import { ETextSize } from "../Typography/enums";
 import { Text } from "../Typography/Text";
+import { EComponentSize } from "../../enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 
 export interface IMarkerStatusProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Статус. */
@@ -13,27 +15,24 @@ export interface IMarkerStatusProps extends React.HTMLAttributes<HTMLDivElement>
     /** Дополнительное описание под наименованием статуса. */
     description?: React.ReactNode;
     /** Размер. */
-    size?: EMarkerSize;
+    size?: EComponentSize.MD | EComponentSize.LG;
 }
 
 const markerStatusSizeToTextSizeMap = {
-    [EMarkerSize.MD]: ETextSize.B4,
-    [EMarkerSize.LG]: ETextSize.B3,
+    [EComponentSize.MD]: ETextSize.B4,
+    [EComponentSize.LG]: ETextSize.B3,
 };
+
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 export const MarkerStatus: React.FC<IMarkerStatusProps> = ({
     children,
     className,
     description,
     status,
-    size = EMarkerSize.MD,
+    size = EComponentSize.MD,
 }) => {
-    const classNames = clsx(
-        styles.markerStatus,
-        markerSizeToClassNameMap[size](styles),
-        statusToClassNameMap[status](styles),
-        className,
-    );
+    const classNames = clsx(styles.markerStatus, sizeToClassNameMap[size], statusToClassNameMap[status], className);
 
     return (
         <div className={classNames} data-tx={process.env.npm_package_version}>

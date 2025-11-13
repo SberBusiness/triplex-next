@@ -4,8 +4,3 @@ export enum EMarkerStatus {
     WARNING = "warning",
     WAITING = "waiting",
 }
-
-export enum EMarkerSize {
-    MD = "md",
-    LG = "lg",
-}

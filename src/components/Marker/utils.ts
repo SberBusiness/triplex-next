@@ -1,13 +1,9 @@
-import { EMarkerSize, EMarkerStatus } from "./enums";
+import { EMarkerStatus } from "./enums";
+import styles from "./styles/Marker.module.less";
 
 export const statusToClassNameMap = {
-    [EMarkerStatus.SUCCESS]: (styles: Record<string, string>) => styles.success,
-    [EMarkerStatus.ERROR]: (styles: Record<string, string>) => styles.error,
-    [EMarkerStatus.WARNING]: (styles: Record<string, string>) => styles.warning,
-    [EMarkerStatus.WAITING]: (styles: Record<string, string>) => styles.waiting,
-};
-
-export const markerSizeToClassNameMap = {
-    [EMarkerSize.MD]: (styles: Record<string, string>) => styles.md,
-    [EMarkerSize.LG]: (styles: Record<string, string>) => styles.lg,
+    [EMarkerStatus.SUCCESS]: styles.success,
+    [EMarkerStatus.ERROR]: styles.error,
+    [EMarkerStatus.WARNING]: styles.warning,
+    [EMarkerStatus.WAITING]: styles.waiting,
 };

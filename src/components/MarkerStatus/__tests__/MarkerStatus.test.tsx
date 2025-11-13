@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MarkerStatus } from "@sberbusiness/triplex-next/components/MarkerStatus/MarkerStatus";
-import { EMarkerSize, EMarkerStatus } from "@sberbusiness/triplex-next/components/Marker/enums";
+import { EMarkerStatus } from "@sberbusiness/triplex-next/components/Marker/enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 const getMarkerStatusText = () => screen.getByText("Status text");
 const getMarkerStatusDescription = () => screen.queryByText("Description");
@@ -31,7 +32,7 @@ describe("MarkerStatus", () => {
 
     it("Should apply size classes", () => {
         render(
-            <MarkerStatus status={EMarkerStatus.SUCCESS} size={EMarkerSize.LG}>
+            <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
                 Status text
             </MarkerStatus>,
         );

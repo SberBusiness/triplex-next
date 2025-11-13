@@ -172,7 +172,19 @@ export const DifferentSizes: StoryObj<typeof Radio> = {
 };
 
 export const XGroup: StoryObj<typeof Radio> = {
-    name: "XGroup",
+    name: "X Group",
+    args: {
+        disabled: false,
+    },
+    argTypes: {
+        disabled: {
+            control: { type: "boolean" },
+            description: "Состояние disabled",
+            table: {
+                type: { summary: "boolean" },
+            },
+        },
+    },
     parameters: {
         docs: {
             description: {
@@ -180,11 +192,11 @@ export const XGroup: StoryObj<typeof Radio> = {
             },
         },
     },
-    render: () => (
+    render: (args) => (
         <>
             <RadioXGroup aria-labelledby="radio-x-group-label" indent={16}>
                 {[1, 2, 3].map((value, index) => (
-                    <Radio key={index} name="radio-x-group" value={value}>
+                    <Radio key={index} name="radio-x-group" value={value} disabled={args.disabled}>
                         Radio text
                     </Radio>
                 ))}
@@ -192,7 +204,7 @@ export const XGroup: StoryObj<typeof Radio> = {
             <Gap size={16} />
             <RadioXGroup aria-labelledby="radio-x-group-label" indent={20}>
                 {[1, 2, 3].map((value, index) => (
-                    <Radio key={index} name="radio-x-group" value={value} size={ERadioSize.LG}>
+                    <Radio key={index} name="radio-x-group" value={value} size={ERadioSize.LG} disabled={args.disabled}>
                         Radio text
                     </Radio>
                 ))}
@@ -202,7 +214,19 @@ export const XGroup: StoryObj<typeof Radio> = {
 };
 
 export const YGroup: StoryObj<typeof Radio> = {
-    name: "YGroup",
+    name: "Y Group",
+    args: {
+        disabled: false,
+    },
+    argTypes: {
+        disabled: {
+            control: { type: "boolean" },
+            description: "Состояние disabled",
+            table: {
+                type: { summary: "boolean" },
+            },
+        },
+    },
     parameters: {
         docs: {
             description: {
@@ -210,12 +234,12 @@ export const YGroup: StoryObj<typeof Radio> = {
             },
         },
     },
-    render: () => (
+    render: (args) => (
         <Row>
             <Col size={3}>
                 <RadioYGroup>
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Radio key={index} name="radio-group" value={value}>
+                        <Radio key={index} name="radio-group" value={value} disabled={args.disabled}>
                             Radio text
                         </Radio>
                     ))}
@@ -224,12 +248,48 @@ export const YGroup: StoryObj<typeof Radio> = {
             <Col size={3}>
                 <RadioYGroup>
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Radio key={index} name="radio-group" value={value} size={ERadioSize.LG}>
+                        <Radio
+                            key={index}
+                            name="radio-group"
+                            value={value}
+                            size={ERadioSize.LG}
+                            disabled={args.disabled}
+                        >
                             Radio text
                         </Radio>
                     ))}
                 </RadioYGroup>
             </Col>
         </Row>
+    ),
+};
+
+export const Selected: StoryObj<typeof Radio> = {
+    name: "Selected",
+    parameters: {
+        docs: {
+            description: {
+                story: "Группа радио-кнопок с одной предварительно выбранной",
+            },
+        },
+    },
+    render: () => (
+        <>
+            <RadioYGroup>
+                {[1, 2, 3, 4].map((value, index) => (
+                    <Radio key={index} name="radio-group" value={value} defaultChecked={value === 2}>
+                        Radio text
+                    </Radio>
+                ))}
+            </RadioYGroup>
+            <Gap size={32} />
+            <RadioXGroup aria-labelledby="radio-x-group-label" indent={16}>
+                {[1, 2, 3].map((value, index) => (
+                    <Radio key={index} name="radio-x-group" value={value} defaultChecked={value === 2}>
+                        Radio text
+                    </Radio>
+                ))}
+            </RadioXGroup>
+        </>
     ),
 };

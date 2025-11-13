@@ -64,7 +64,7 @@ export const Default: StoryObj<typeof LightBox> = {
         );
 
         const renderPage = () => (
-            <Page style={{ width: "800px" }} noPadding>
+            <Page style={{ maxWidth: "800px" }}>
                 <Page.Header type={EHeaderPageType.SECOND} sticky>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
@@ -87,7 +87,7 @@ export const Default: StoryObj<typeof LightBox> = {
                         </Page.Header.Title.Controls>
                     </Page.Header.Title>
                 </Page.Header>
-                <Page.Body>
+                <Page.Body verticalMargin={16}>
                     <Island borderRadius={16} paddingSize={16} type="type_1">
                         <IslandBody>
                             Мой дядя самых честных правил,

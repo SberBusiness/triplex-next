@@ -6,19 +6,13 @@ import { FooterPage } from "./components/FooterPage";
 import styles from "./styles/Page.module.less";
 
 /** Свойства компонента Page. */
-export interface IPageProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Флаг, убрающий padding. */
-    noPadding?: boolean;
-}
+export interface IPageProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Страница. Может содержать только Body, Header и Footer. */
 export const Page = Object.assign(
-    React.forwardRef<HTMLDivElement, IPageProps>(function Page(
-        { children, className, noPadding = false, ...rest },
-        ref,
-    ) {
+    React.forwardRef<HTMLDivElement, IPageProps>(function Page({ children, className, ...rest }, ref) {
         return (
-            <div className={clsx(styles.page, className, { [styles.noPadding]: noPadding })} {...rest} ref={ref}>
+            <div className={clsx(styles.page, className)} {...rest} ref={ref}>
                 {children}
             </div>
         );

@@ -20,6 +20,8 @@ export * from "./Overlay";
 export * from "./ListItem";
 export * from "./ListItemControlsButton";
 export * from "./ListMaster";
+export * from "./Marker";
+export * from "./MarkerStatus";
 export * from "./Page";
 export * from "./UploadZone";
 export * from "./Pagination";

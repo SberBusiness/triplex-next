@@ -21,6 +21,8 @@ import {
     TDesignTokensComponentsListMaster,
     TDesignTokensComponentsLoader,
     TDesignTokensComponentsLoaderWidget,
+    TDesignTokensComponentsMarker,
+    TDesignTokensComponentsMarkerStatus,
     TDesignTokensComponentsOverlay,
     TDesignTokensComponentsPage,
     TDesignTokensComponentsPagination,
@@ -290,6 +292,8 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsListMaster
     | TDesignTokensComponentsLoader
     | TDesignTokensComponentsLoaderWidget
+    | TDesignTokensComponentsMarker
+    | TDesignTokensComponentsMarkerStatus
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsPage
     | TDesignTokensComponentsPagination

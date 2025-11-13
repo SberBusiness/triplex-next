@@ -1,7 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import { DropdownMobileListItem } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileListItem";
-import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileList. */
@@ -18,7 +19,7 @@ export const DropdownMobileList = React.forwardRef<HTMLDivElement, IDropdownMobi
                 <LoaderSmall
                     className={styles.dropdownMobileListLoader}
                     theme={ELoaderSmallTheme.BRAND}
-                    size={ELoaderSmallSize.MD}
+                    size={EComponentSize.MD}
                 />
             </DropdownMobileListItem>
         );

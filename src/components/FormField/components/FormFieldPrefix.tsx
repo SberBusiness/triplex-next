@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import styles from '../styles/FormFieldPrefix.module.less';
 
 /** Свойства компонента FormFieldPrefix. */
-interface IFormFieldPrefixProps extends React.HTMLAttributes<HTMLSpanElement> {}
+export interface IFormFieldPrefixProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
 /** Контейнер элементов, отображающихся в левой части FormField. */
 export const FormFieldPrefix = React.forwardRef<HTMLSpanElement, IFormFieldPrefixProps>(

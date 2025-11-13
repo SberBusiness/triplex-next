@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
@@ -133,13 +133,8 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
     const dotsTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
         ? ELoaderSmallTheme.BRAND
         : ELoaderSmallTheme.NEUTRAL;
-    const dotsSize =
-        size === EComponentSize.SM
-            ? ELoaderSmallSize.SM
-            : size === EComponentSize.LG
-              ? ELoaderSmallSize.LG
-              : ELoaderSmallSize.MD;
-    return <LoaderSmall theme={dotsTheme} size={dotsSize} />;
+
+    return <LoaderSmall theme={dotsTheme} size={size} />;
 };
 
 /** Кнопка. */

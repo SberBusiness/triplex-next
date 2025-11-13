@@ -1,6 +1,7 @@
 import React from "react";
-import { LoaderSmall, ELoaderSmallSize, ELoaderSmallTheme, LoaderMiddle } from "../Loader";
+import { LoaderSmall, ELoaderSmallTheme, LoaderMiddle } from "../Loader";
 import clsx from "clsx";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import styles from "./styles/LoaderWidget.module.less";
 
 /** Свойства компонента LoaderWidget. */
@@ -10,13 +11,13 @@ export interface ILoaderWidgetProps extends React.HTMLAttributes<HTMLDivElement>
     /** Тема лоадера для типа small. */
     theme?: ELoaderSmallTheme;
     /** Размер лоадера для типа small. */
-    size?: ELoaderSmallSize;
+    size?: EComponentSize;
 }
 
 /** Лоадер виждет, закрывает контент и отображает лоадер в середине своей области. */
 export const LoaderWidget: React.FC<ILoaderWidgetProps> = ({
     className,
-    size = ELoaderSmallSize.MD,
+    size = EComponentSize.MD,
     type,
     theme = ELoaderSmallTheme.BRAND,
     ...htmlDivAttributes

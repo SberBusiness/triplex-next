@@ -6,7 +6,7 @@ import {
 } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownListItem";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
-import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import styles from "../styles/DropdownDesktopList.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
@@ -28,13 +28,6 @@ type TActiveListItemIndex = number | undefined;
 export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
     Item: typeof DropdownListItem;
 }
-
-// Соответствие размера DropdownList размеру LoaderSmall.
-const listSizeToLoaderSmallSizeMap = {
-    [EComponentSize.SM]: ELoaderSmallSize.SM,
-    [EComponentSize.MD]: ELoaderSmallSize.MD,
-    [EComponentSize.LG]: ELoaderSmallSize.LG,
-};
 
 /**
  * Компонент DropdownList.
@@ -198,11 +191,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
 
     const renderLoaderItem = () => (
         <DropdownListItem id="dropdown-desktop-list-loader-item">
-            <LoaderSmall
-                className={styles.dropdownDesktopListLoader}
-                theme={ELoaderSmallTheme.BRAND}
-                size={listSizeToLoaderSmallSizeMap[size]}
-            />
+            <LoaderSmall className={styles.dropdownDesktopListLoader} theme={ELoaderSmallTheme.BRAND} size={size} />
         </DropdownListItem>
     );
 

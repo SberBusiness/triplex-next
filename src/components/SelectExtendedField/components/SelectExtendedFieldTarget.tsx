@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
 import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { LoaderSmall, ELoaderSmallSize, ELoaderSmallTheme } from "../../Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import clsx from "clsx";
 import styles from "../styles/SelectExtendedFieldTarget.module.less";
 import { EFormFieldStatus, FormField, FormFieldLabel, FormFieldPostfix, IFormFieldProps } from "../../FormField";
 import { FormFieldTarget } from "../../FormField/components/FormFieldTarget";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /* Свойства SelectExtendedFieldTarget. */
 export interface ISelectExtendedFieldTargetProps extends IFormFieldProps {
@@ -130,7 +131,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 </FormFieldTarget>
                 <FormFieldPostfix>
                     {loading ? (
-                        <LoaderSmall size={ELoaderSmallSize.LG} theme={ELoaderSmallTheme.BRAND} />
+                        <LoaderSmall size={EComponentSize.LG} theme={ELoaderSmallTheme.BRAND} />
                     ) : (
                         <CaretdownStrokeSrvIcon24 paletteIndex={5} className={styles.caretIcon} />
                     )}

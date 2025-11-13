@@ -1,51 +1,38 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./styles/LoaderSmall.module.less";
-import { ELoaderSmallSize, ELoaderSmallTheme } from "./enum";
+import { ELoaderSmallTheme } from "./enum";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
+/** Свойства компонента LoaderSmall. */
 export interface ILoaderSmallProps extends React.HTMLAttributes<HTMLSpanElement> {
     /** Тема. */
     theme: ELoaderSmallTheme;
     /** Размер. */
-    size: ELoaderSmallSize;
+    size: EComponentSize;
 }
 
-const getLoaderSmallThemeCssClass = (theme: ELoaderSmallTheme) => {
-    switch (theme) {
-        case ELoaderSmallTheme.BRAND:
-            return styles.brand;
-        case ELoaderSmallTheme.NEUTRAL:
-            return styles.neutral;
-    }
+// Соответствие темы имени класса.
+const themeToClassNameMap = {
+    [ELoaderSmallTheme.BRAND]: styles.brand,
+    [ELoaderSmallTheme.NEUTRAL]: styles.neutral,
 };
 
-const getLoaderSmallSizeCssClass = (size: ELoaderSmallSize) => {
-    switch (size) {
-        case ELoaderSmallSize.SM:
-            return styles.sm;
-        case ELoaderSmallSize.MD:
-            return styles.md;
-        case ELoaderSmallSize.LG:
-            return styles.lg;
-    }
-};
+// Соответствие размера имени класса.
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 export const LoaderSmall: React.FC<ILoaderSmallProps> = ({ className, theme, size, ...restProps }) => {
     return (
         <span
-            className={clsx(
-                styles.loaderSmall,
-                getLoaderSmallSizeCssClass(size),
-                getLoaderSmallThemeCssClass(theme),
-                className,
-            )}
+            className={clsx(styles.loaderSmall, themeToClassNameMap[theme], sizeToClassNameMap[size], className)}
             role="status"
             aria-label="loading"
             {...restProps}
         >
-            <span className={clsx(getLoaderSmallThemeCssClass(theme), styles.dot, styles.dot1)} />
-            <span className={clsx(getLoaderSmallThemeCssClass(theme), styles.dot, styles.dot2)} />
-            <span className={clsx(getLoaderSmallThemeCssClass(theme), styles.dot, styles.dot3)} />
+            <span className={clsx(styles.dot, styles.dot1)} />
+            <span className={clsx(styles.dot, styles.dot2)} />
+            <span className={clsx(styles.dot, styles.dot3)} />
         </span>
     );
 };

@@ -1,5 +1,6 @@
 import React from "react";
-import { Checkbox, ECheckboxSize, CheckboxXGroup, CheckboxYGroup } from "../src/components/Checkbox";
+import { Checkbox, CheckboxXGroup, CheckboxYGroup } from "../src/components/Checkbox";
+import { EComponentSize } from "../src/enums/EComponentSize";
 import { Gap } from "../src/components/Gap";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
@@ -68,7 +69,7 @@ export const Playground: StoryObj<typeof Checkbox> = {
     name: "Playground",
     args: {
         children: "Checkbox label",
-        size: ECheckboxSize.MD,
+        size: EComponentSize.MD,
         bulk: false,
         disabled: false,
     },
@@ -103,11 +104,11 @@ export const Playground: StoryObj<typeof Checkbox> = {
         },
         size: {
             control: { type: "select" },
-            options: Object.values(ECheckboxSize),
+            options: [EComponentSize.MD, EComponentSize.LG],
             description: "Размер чекбокса",
             table: {
                 type: { summary: "ECheckboxSize" },
-                defaultValue: { summary: ECheckboxSize.MD },
+                defaultValue: { summary: EComponentSize.MD },
             },
         },
         labelAttributes: {
@@ -133,7 +134,7 @@ export const Default: StoryObj<typeof Checkbox> = {
     name: "Default",
     args: {
         children: "Checkbox label",
-        size: ECheckboxSize.MD,
+        size: EComponentSize.MD,
     },
     argTypes: {
         children: {
@@ -181,7 +182,7 @@ export const Default: StoryObj<typeof Checkbox> = {
         <>
             <Checkbox {...args} />
             <Gap size={16} />
-            <Checkbox {...args} size={ECheckboxSize.LG} />
+            <Checkbox {...args} size={EComponentSize.LG} />
         </>
     ),
 };
@@ -258,7 +259,7 @@ export const XGroup: StoryObj<typeof Checkbox> = {
                         key={index}
                         name="checkbox-x-group"
                         value={value}
-                        size={ECheckboxSize.LG}
+                        size={EComponentSize.LG}
                         disabled={args.disabled}
                     >
                         Checkbox text
@@ -343,7 +344,7 @@ export const YGroup: StoryObj<typeof Checkbox> = {
                             key={index}
                             name="checkbox-y-group"
                             value={value}
-                            size={ECheckboxSize.LG}
+                            size={EComponentSize.LG}
                             disabled={args.disabled}
                         >
                             Checkbox text

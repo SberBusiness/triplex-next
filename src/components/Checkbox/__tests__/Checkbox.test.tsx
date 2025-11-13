@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Checkbox, ECheckboxSize } from "@sberbusiness/triplex-next/components";
+import { Checkbox } from "@sberbusiness/triplex-next/components";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 const getCheckbox = () => screen.getByRole("checkbox");
 const getLabel = () => screen.getByRole("checkbox").closest("label");
@@ -18,11 +19,11 @@ describe("Checkbox", () => {
     });
 
     it("Should apply size classes", () => {
-        const { rerender } = render(<Checkbox size={ECheckboxSize.MD} />);
+        const { rerender } = render(<Checkbox size={EComponentSize.MD} />);
         const label = getLabel();
         expect(label).toHaveClass("md");
 
-        rerender(<Checkbox size={ECheckboxSize.LG} />);
+        rerender(<Checkbox size={EComponentSize.LG} />);
         expect(label).toHaveClass("lg");
     });
 

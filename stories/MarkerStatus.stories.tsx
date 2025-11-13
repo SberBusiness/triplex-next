@@ -43,7 +43,7 @@ export const Playground: StoryObj<typeof MarkerStatus> = {
         },
         size: {
             control: { type: "select" },
-            options: Object.values(EComponentSize),
+            options: [EComponentSize.MD, EComponentSize.LG],
             description: "Размер компонента",
         },
         description: {

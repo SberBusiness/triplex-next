@@ -11,7 +11,6 @@ import {
     ECardRoundingSize,
     ECardContentPaddingSize,
     Checkbox,
-    ECheckboxSize,
     Title,
     ETitleSize,
     EFontWeightTitle,
@@ -20,7 +19,8 @@ import {
     EFontType,
     Link,
     Gap,
-} from "@sberbusiness/triplex-next";
+} from "../../src/components";
+import { EComponentSize } from "../../src/enums";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import "./Cards.less";
 
@@ -567,7 +567,7 @@ export const Controlled: Story = {
 
         return (
             <div className="card-playground-preview">
-                <Checkbox size={ECheckboxSize.MD} checked={isSelected} onChange={handleChangeSelect}>
+                <Checkbox size={EComponentSize.MD} checked={isSelected} onChange={handleChangeSelect}>
                     Selected
                 </Checkbox>
                 <Gap size={16} />

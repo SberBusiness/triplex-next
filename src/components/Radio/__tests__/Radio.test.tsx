@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Radio, ERadioSize } from "@sberbusiness/triplex-next/components/Radio";
+import { Radio } from "@sberbusiness/triplex-next/components/Radio";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 const getRadio = () => screen.getByRole("radio");
 const getLabel = () => screen.getByRole("radio").closest("label");
@@ -22,14 +23,14 @@ describe("Radio", () => {
 
     it("Should apply size classes", () => {
         const { rerender } = render(
-            <Radio size={ERadioSize.MD} data-testid="radio">
+            <Radio size={EComponentSize.MD} data-testid="radio">
                 Radio text
             </Radio>,
         );
         const label = getLabel();
         expect(label).toHaveClass("md");
 
-        rerender(<Radio size={ERadioSize.LG} data-testid="radio" />);
+        rerender(<Radio size={EComponentSize.LG} data-testid="radio" />);
         expect(label).toHaveClass("lg");
     });
 

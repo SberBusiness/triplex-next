@@ -1,27 +1,29 @@
 .label {
     display: inline-block;
     position: relative;
-    font-weight: 400;
-    color: var(--triplex-next-Radio-Color);
     cursor: pointer;
+    box-sizing: border-box;
 
     &.md {
-        font-size: 14px;
-        line-height: 24px;
         min-height: 24px;
         min-width: 24px;
+
+        &.nonempty {
+            padding-left: 32px;
+            padding-top: 2px;
+        }
     }
 
     &.lg {
-        font-size: 16px;
-        line-height: 28px;
         min-width: 28px;
         min-height: 28px;
+
+        &.nonempty {
+            padding-left: 40px;
+            padding-top: 4px;
+        }
     }
 
-    &.nonempty {
-        padding-left: 40px;
-    }
 
     &.disabled {
         cursor: default;
@@ -71,6 +73,7 @@
 .radioIcon {
     position: absolute;
     left: 0;
+    top: 0;
 
     .md & {
         width: 24px;

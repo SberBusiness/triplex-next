@@ -19,8 +19,6 @@ export const designTokensComponentsRadioKeys = [
     "BorderColor_Checked_Default",
     "BorderColor_Checked_Disabled",
 
-    "Color",
-
     "Dot_Default",
     "Dot_Disabled",
 ] as const;
@@ -36,10 +34,10 @@ export type TDesignTokensComponentsRadio = { Radio: TDesignTokensComponentsRadio
 // Токены компонента Radio в светлой и темной темах.
 export const Radio_Tokens: TDesignTokensComponentsRadioValues = {
     Background_Checked_Default: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-next-Radio-Background_Checked_Default)
-    Background_Checked_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Radio-Background_Checked_Disabled)
+    Background_Checked_Disabled: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Radio-Background_Checked_Disabled)
     Background_Checked_Hover: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.30" }], // var(--triplex-next-Radio-Background_Checked_Hover)
-    Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Radio-Background_Default)
-    Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Radio-Background_Disabled)
+    Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Radio-Background_Default)
+    Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Radio-Background_Disabled)
     Background_Hover: [{ ref: "ColorBrand.60" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Radio-Background_Hover)
 
     BorderColor_Default: [
@@ -51,8 +49,6 @@ export const Radio_Tokens: TDesignTokensComponentsRadioValues = {
 
     BorderColor_Checked_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Radio-BorderColor_Checked_Default)
     BorderColor_Checked_Disabled: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Radio-BorderColor_Checked_Disabled)
-
-    Color: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Radio-Color)
 
     Dot_Default: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Radio-Dot_Default)
     Dot_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Radio-Dot_Disabled)

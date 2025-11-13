@@ -1,7 +1,8 @@
 import React from "react";
 import { CheckboxbulkStrokeSrvIcon24, CheckboxtickStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { ECheckboxSize } from "./enum";
 import { ETextSize, Text } from "../Typography";
+import { EComponentSize } from "../../enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 import clsx from "clsx";
 import styles from "./styles/Checkbox.module.less";
 
@@ -12,21 +13,31 @@ export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInput
     /** Признак частичного типа выбора. */
     bulk?: boolean;
     /** Размер чекбокса. */
-    size?: ECheckboxSize;
+    size?: EComponentSize.MD | EComponentSize.LG;
 }
 
-const mapCheckboxSizeToTextSize = {
-    [ECheckboxSize.LG]: ETextSize.B2,
-    [ECheckboxSize.MD]: ETextSize.B3,
+const sizeToTextSizeMap = {
+    [EComponentSize.LG]: ETextSize.B2,
+    [EComponentSize.MD]: ETextSize.B3,
 };
+
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Чекбокс с описанием. */
 export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
-    const { children, className, disabled, bulk, labelAttributes, size = ECheckboxSize.MD, ...inputAttributes } = props;
-    const classNames = clsx(styles.checkbox, className, styles[size]);
+    const {
+        children,
+        className,
+        disabled,
+        bulk,
+        labelAttributes,
+        size = EComponentSize.MD,
+        ...inputAttributes
+    } = props;
+    const classNames = clsx(styles.checkbox, className, sizeToClassNameMap[size]);
     const classNamesLabel = clsx(
         styles.label,
-        styles[size],
+        sizeToClassNameMap[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
         labelAttributes?.className,
     );
@@ -47,7 +58,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
             <input type="checkbox" className={classNames} disabled={disabled} {...inputAttributes} ref={ref} />
             <span className={styles.checkboxIcon} />
             {renderCheckmarkIcon()}
-            {children && <Text size={mapCheckboxSizeToTextSize[size]}>{children}</Text>}
+            {children && <Text size={sizeToTextSizeMap[size]}>{children}</Text>}
         </label>
     );
 });

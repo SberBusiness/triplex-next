@@ -36,6 +36,7 @@ import {
     Stepper_Tokens,
     TabsLine_Tokens,
     Tabs_Tokens,
+    Tag_Tokens,
     Typography_Tokens,
     Tooltip_Tokens,
     UploadZone_Tokens,
@@ -72,6 +73,7 @@ import {
     TDesignTokensComponentsStepperValue,
     TDesignTokensComponentsTabsLineValue,
     TDesignTokensComponentsTabsValue,
+    TDesignTokensComponentsTagValue,
     TDesignTokensComponentsTooltipValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsUploadZoneValue,
@@ -152,6 +154,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.DARK, Skeleton_Tokens),
     Stepper: GetTokensValueByTheme<TDesignTokensComponentsStepperValue>(ETriplexNextTheme.DARK, Stepper_Tokens),
     Tabs: GetTokensValueByTheme<TDesignTokensComponentsTabsValue>(ETriplexNextTheme.DARK, Tabs_Tokens),
+    Tag: GetTokensValueByTheme<TDesignTokensComponentsTagValue>(ETriplexNextTheme.DARK, Tag_Tokens),
     TabsLine: GetTokensValueByTheme<TDesignTokensComponentsTabsLineValue>(ETriplexNextTheme.DARK, TabsLine_Tokens),
     Tooltip: GetTokensValueByTheme<TDesignTokensComponentsTooltipValue>(ETriplexNextTheme.DARK, Tooltip_Tokens),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(

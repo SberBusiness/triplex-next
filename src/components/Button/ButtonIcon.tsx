@@ -1,19 +1,16 @@
 import React from "react";
-import { EButtonIconShape } from "./enums";
 import clsx from "clsx";
+import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
+import { EButtonIconShape } from "@sberbusiness/triplex-next/components/Button/enums";
 import styles from "./styles/ButtonIcon.module.less";
 
-const getButtonIconShapeClassName = (shape?: EButtonIconShape) => {
-    switch (shape) {
-        case EButtonIconShape.SQUIRCLE:
-            return styles.squircle;
-        case EButtonIconShape.CIRCLE:
-            return styles.circle;
-    }
+const iconShapeToClassNameMap = {
+    [EButtonIconShape.SQUIRCLE]: styles.squircle,
+    [EButtonIconShape.CIRCLE]: styles.circle,
 };
 
-/** Свойства ButtonIcon. */
-export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+/** Свойства компонента ButtonIcon. */
+export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, DataAttributes {
     /** Форма границы кнопки. */
     shape?: EButtonIconShape;
     /** Активное состояние. */
@@ -23,7 +20,7 @@ export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonE
 /** Кнопка-иконка. */
 export const ButtonIcon = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ className, disabled, shape = EButtonIconShape.SQUIRCLE, active, ...rest }, ref) => {
-        const classNames = clsx(styles.buttonIcon, getButtonIconShapeClassName(shape), "hoverable", className, {
+        const classNames = clsx(styles.buttonIcon, iconShapeToClassNameMap[shape], "hoverable", className, {
             active: !!active,
             disabled: !!disabled,
         });

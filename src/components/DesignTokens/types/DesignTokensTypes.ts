@@ -33,6 +33,7 @@ import {
     TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
     TDesignTokensComponentsTabs,
+    TDesignTokensComponentsTag,
     TDesignTokensComponentsTabsLine,
     TDesignTokensComponentsTooltip,
     TDesignTokensComponentsTypography,
@@ -304,6 +305,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsStepper
     | TDesignTokensComponentsTableBasic
     | TDesignTokensComponentsTabs
+    | TDesignTokensComponentsTag
     | TDesignTokensComponentsTabsLine
     | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsTypography

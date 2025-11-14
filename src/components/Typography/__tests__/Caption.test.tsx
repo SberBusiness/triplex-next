@@ -13,7 +13,11 @@ describe("Caption", () => {
     });
 
     it("renders with custom tag", () => {
-        render(<Caption size={ECaptionSize.C1} tag="div">Custom Tag Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} tag="div">
+                Custom Tag Caption
+            </Caption>,
+        );
 
         const caption = screen.getByText("Custom Tag Caption");
         expect(caption.tagName).toBe("DIV");
@@ -21,21 +25,33 @@ describe("Caption", () => {
 
     it("applies custom className", () => {
         const className = "custom-caption-class";
-        render(<Caption size={ECaptionSize.C1} className={className}>Test Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} className={className}>
+                Test Caption
+            </Caption>,
+        );
 
         const caption = screen.getByText("Test Caption");
         expect(caption.className).toContain(className);
     });
 
     it("renders with underline", () => {
-        render(<Caption size={ECaptionSize.C1} underline>Underlined Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} underline>
+                Underlined Caption
+            </Caption>,
+        );
 
         const caption = screen.getByText("Underlined Caption");
         expect(caption.className).toContain("underline");
     });
 
     it("renders with strikethrough", () => {
-        render(<Caption size={ECaptionSize.C1} strikethrough>Strikethrough Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} strikethrough>
+                Strikethrough Caption
+            </Caption>,
+        );
 
         const caption = screen.getByText("Strikethrough Caption");
         expect(caption.className).toContain("strikethrough");
@@ -45,7 +61,7 @@ describe("Caption", () => {
         render(
             <Caption size={ECaptionSize.C1} underline strikethrough>
                 Underlined and Strikethrough Caption
-            </Caption>
+            </Caption>,
         );
 
         const caption = screen.getByText("Underlined and Strikethrough Caption");
@@ -54,13 +70,9 @@ describe("Caption", () => {
 
     it("passes through additional props", () => {
         render(
-            <Caption
-                size={ECaptionSize.C1}
-                data-testid="caption-test"
-                aria-label="Test caption"
-            >
+            <Caption size={ECaptionSize.C1} data-testid="caption-test" aria-label="Test caption">
                 Test Caption
-            </Caption>
+            </Caption>,
         );
 
         const caption = screen.getByTestId("caption-test");
@@ -71,7 +83,7 @@ describe("Caption", () => {
         render(
             <Caption size={ECaptionSize.C1}>
                 <span>Nested</span> <strong>Content</strong>
-            </Caption>
+            </Caption>,
         );
 
         expect(screen.getByText("Nested")).toBeDefined();
@@ -80,7 +92,11 @@ describe("Caption", () => {
 
     it("forwards ref correctly for span element", () => {
         const ref = React.createRef<HTMLElement>();
-        render(<Caption size={ECaptionSize.C1} ref={ref}>Ref Test Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} ref={ref}>
+                Ref Test Caption
+            </Caption>,
+        );
 
         expect(ref.current).toBeDefined();
         expect(ref.current?.textContent).toBe("Ref Test Caption");
@@ -89,7 +105,11 @@ describe("Caption", () => {
 
     it("forwards ref correctly for div element", () => {
         const ref = React.createRef<HTMLElement>();
-        render(<Caption size={ECaptionSize.C1} tag="div" ref={ref}>Div Ref Test Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} tag="div" ref={ref}>
+                Div Ref Test Caption
+            </Caption>,
+        );
 
         expect(ref.current).toBeDefined();
         expect(ref.current?.textContent).toBe("Div Ref Test Caption");
@@ -98,7 +118,11 @@ describe("Caption", () => {
 
     it("forwards ref correctly for p element", () => {
         const ref = React.createRef<HTMLElement>();
-        render(<Caption size={ECaptionSize.C1} tag="p" ref={ref}>P Ref Test Caption</Caption>);
+        render(
+            <Caption size={ECaptionSize.C1} tag="p" ref={ref}>
+                P Ref Test Caption
+            </Caption>,
+        );
 
         expect(ref.current).toBeDefined();
         expect(ref.current?.textContent).toBe("P Ref Test Caption");
@@ -114,7 +138,7 @@ describe("Caption", () => {
                 className="custom-class"
             >
                 Complex Caption
-            </Caption>
+            </Caption>,
         );
 
         const caption = screen.getByText("Complex Caption");
@@ -122,4 +146,4 @@ describe("Caption", () => {
         expect(caption.className).toContain("typography");
         expect(caption.className).toContain("caption");
     });
-}); 
+});

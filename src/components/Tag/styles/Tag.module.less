@@ -1,0 +1,32 @@
+.tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    background: var(--triplex-next-Tag-Background);
+    border-radius: 4px;
+    gap: 2px;
+
+    &.sm {
+        height: 20px;
+        padding: 2px 4px 2px 6px;
+    }
+
+    &.md {
+        height: 28px;
+        padding: 4px 6px 4px 8px;
+    }
+
+    &.lg {
+        height: 32px;
+        padding: 6px 8px 6px 10px;
+    }
+}
+
+.content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}

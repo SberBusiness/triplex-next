@@ -21,14 +21,21 @@ function getScrollParent(el: HTMLElement | null): HTMLElement | Window {
  * Когда элемент "прилипает" (`r === 0`) — добавляется тень.
  * @param ref - Ссылка на элемент, для которого нужно управлять радиусом скругления и тенью.
  * @param edge - Край элемента, к которому нужно прилипать: "top" (верхний) или "bottom" (нижний).
+ * @param isEnabled - Флаг, определяющий, нужно ли управлять радиусом скругления и тенью.
  */
-export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "top" | "bottom") {
+export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "top" | "bottom", isEnabled = true) {
     useEffect(() => {
         const el = ref.current;
         if (!el) return;
 
-        const maxRadius = 16;
         const cssVarName = edge === "top" ? "--r-top" : "--r-bottom";
+        if (!isEnabled) {
+            el.style.removeProperty(cssVarName);
+            delete el.dataset.stuck;
+            return;
+        }
+
+        const maxRadius = 16;
         const initializationDelay = 16;
 
         let stickyOffset = 0;
@@ -90,5 +97,5 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
             window.removeEventListener("resize", handleScrollOrResize);
             if (raf) cancelAnimationFrame(raf);
         };
-    }, [ref, edge]);
+    }, [ref, edge, isEnabled]);
 }

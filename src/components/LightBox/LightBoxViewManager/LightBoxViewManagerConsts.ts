@@ -2,7 +2,6 @@
  * Константы соответствуют less константам в src/styles/components/lightbox.less.
  */
 import { getScrollbarWidth } from "../../../utils/scroll/scrollbar";
-import styles from "../styles/LightBox.module.less";
 
 interface ILightBoxViewManagerConsts {
     /**
@@ -45,10 +44,10 @@ export const LightBoxViewManagerConsts: ILightBoxViewManagerConsts = {
      */
     breakPointsClassNames: {
         // Ширина меньше или равна lightBoxMediaPoint0.
-        "less-or-equal-media-point-0": styles["LB-less-or-equal-media-point-0-no-hash"],
+        "less-or-equal-media-point-0": "global-LB-less-or-equal-media-point-0",
         // Ширина больше lightBoxMediaPoint0.
         // У этого класса нет стилей, поэтому тут произвольный класс.
-        "more-media-point-0": styles["LB-more-media-point-0-no-hash"],
+        "more-media-point-0": "global-LB-more-media-point-0",
     },
     // Расстояние от стрелки до лайтбокса.
     lightBoxArrowMarginToLightBox,

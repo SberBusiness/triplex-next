@@ -33,17 +33,13 @@ export default {
 
 interface IWithTypeControlsArgs {
     headerType: EHeaderPageType;
-    stickyHeader: boolean;
     footerType: EFooterPageType;
-    stickyFooter: boolean;
 }
 
 export const Playground: StoryObj<IWithTypeControlsArgs> = {
     args: {
         headerType: EHeaderPageType.FIRST,
-        stickyHeader: false,
         footerType: EFooterPageType.FIRST,
-        stickyFooter: false,
     },
     argTypes: {
         headerType: {
@@ -64,32 +60,11 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                 defaultValue: { summary: "first" },
             },
         },
-        stickyHeader: {
-            control: { type: "boolean" },
-            description: "Фиксирование заголовка при скролле страницы",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-            if: { arg: "headerType", eq: EHeaderPageType.SECOND },
-        },
-        stickyFooter: {
-            control: { type: "boolean" },
-            description: "Фиксирование футера при скролле страницы",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-            if: { arg: "footerType", eq: EFooterPageType.SECOND },
-        },
     },
     render: (args: IWithTypeControlsArgs) => (
         <div className="page-example" style={{ maxHeight: "400px", overflow: "auto" }}>
             <Page>
-                <Page.Header
-                    type={args.headerType}
-                    {...(args.headerType === EHeaderPageType.SECOND && { sticky: args.stickyHeader })}
-                >
+                <Page.Header type={args.headerType}>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
                             <Title tag="h1" size={ETitleSize.H1}>
@@ -115,10 +90,7 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                     <div style={{ height: 800 }} />
                 </Page.Body>
 
-                <Page.Footer
-                    type={args.footerType}
-                    {...(args.footerType === EFooterPageType.SECOND && { sticky: args.stickyFooter })}
-                >
+                <Page.Footer type={args.footerType}>
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>
                             <Text size={ETextSize.B3}>Footer page text</Text>
@@ -191,61 +163,6 @@ export const Default: StoryObj<typeof Page> = {
     parameters: {
         docs: {
             description: { story: "Базовая страница с заголовком, контентом и футером." },
-        },
-    },
-};
-
-export const StickyHeaderAndFooter: StoryObj<typeof Page> = {
-    render: () => (
-        <div style={{ maxHeight: "400px", overflow: "auto" }}>
-            <Page>
-                <Page.Header type={EHeaderPageType.SECOND} sticky>
-                    <Page.Header.Title>
-                        <Page.Header.Title.Content>
-                            <Title tag="h1" size={ETitleSize.H1}>
-                                Sticky Page header
-                            </Title>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                Header прилипает при скролле контейнера
-                            </Text>
-                        </Page.Header.Title.Content>
-                        <Page.Header.Title.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
-                                Button text
-                            </Button>
-                            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
-                                Button text
-                            </Button>
-                        </Page.Header.Title.Controls>
-                    </Page.Header.Title>
-                </Page.Header>
-
-                <Page.Body>
-                    <div style={{ height: 800 }} />
-                </Page.Body>
-
-                <Page.Footer type={EFooterPageType.SECOND} sticky>
-                    <Page.Footer.Description>
-                        <Page.Footer.Description.Content>
-                            <Text size={ETextSize.B3}>Footer прилипает при скролле контейнера</Text>
-                        </Page.Footer.Description.Content>
-                        <Page.Footer.Description.Controls>
-                            <Button size={EButtonSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
-                                Button text
-                            </Button>
-                            <Button size={EButtonSize.MD} theme={EButtonTheme.GENERAL}>
-                                Button text
-                            </Button>
-                        </Page.Footer.Description.Controls>
-                    </Page.Footer.Description>
-                </Page.Footer>
-            </Page>
-        </div>
-    ),
-    parameters: {
-        docs: {
-            description: { story: "Sticky Header и Footer внутри скролл-контейнера страницы." },
         },
     },
 };

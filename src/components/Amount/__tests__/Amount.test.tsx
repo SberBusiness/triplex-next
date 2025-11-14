@@ -31,6 +31,6 @@ describe("Amount", () => {
         render(<Amount value="12345678901234" adaptive data-testid="amount" />);
 
         const amount = getAmount();
-        expect(amount).toHaveClass("amountAdaptive");
+        expect(amount).toHaveClass("adaptive");
     });
 });

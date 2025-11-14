@@ -2,6 +2,7 @@ import React from "react";
 import { formatAmount } from "@sberbusiness/triplex-next/utils/amountUtils";
 import { clsx } from "clsx";
 import styles from "./styles/Amount.module.less";
+import { Text, ETextSize } from "../Typography";
 
 /** Длина форматированной (с отступами и разделителем) строки amount, начиная с которой будет уменьшен шрифт. */
 const adaptiveAmountLength = 14;
@@ -34,12 +35,6 @@ export const Amount: React.FC<IAmountProps> = ({
     ...restProps
 }) => {
     let formattedAmount = formatAmount(value, fractionLength);
-    const classNames = clsx(
-        {
-            [styles.amountAdaptive]: !!adaptive && formattedAmount.length >= adaptiveAmountLength,
-        },
-        className,
-    );
 
     if (formattedAmount[0] == "-") {
         // (Accessibility) Меняем дефис-минус на знак минуса для его озвучивания скрин-ридерами.
@@ -53,10 +48,23 @@ export const Amount: React.FC<IAmountProps> = ({
         </span>,
     ];
 
+    const classNames = clsx(
+        {
+            [styles.adaptive]: !!adaptive && formattedAmount.length >= adaptiveAmountLength,
+        },
+        className,
+    );
+
     return (
         <span className={classNames} {...restProps} data-tx={process.env.npm_package_version}>
-            <span data-test-id={dataTestId && `${dataTestId}__amount`}>{formattedAmount}</span>
-            {currency && renderCurrencyName()}
+            <Text
+                size={ETextSize.B2}
+                className={styles.amountText}
+                data-test-id={dataTestId && `${dataTestId}__amount`}
+            >
+                {formattedAmount}
+                {currency && renderCurrencyName()}
+            </Text>
         </span>
     );
 };

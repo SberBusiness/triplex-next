@@ -1,8 +1,9 @@
 import React from "react";
-import { Amount } from "../src/components/Amount";
-import { Row } from "../src/components/Row";
-import { Col } from "../src/components/Col";
+import { Amount } from "../../src/components/Amount";
+import { Row } from "../../src/components/Row";
+import { Col } from "../../src/components/Col";
 import { StoryObj } from "@storybook/react";
+import "./Amount.less";
 
 export default {
     title: "Components/Amount",
@@ -84,8 +85,16 @@ export const Default: StoryObj<typeof Amount> = {
                 element: <Amount value="+8967452.31" {...commonProps} />,
             },
             {
+                title: "Положительный (цвет)",
+                element: <Amount value="+8967452.31" className="positiveColor" {...commonProps} />,
+            },
+            {
                 title: "Отрицательный",
                 element: <Amount value="-8967452.31" {...commonProps} />,
+            },
+            {
+                title: "Отрицательный (цвет)",
+                element: <Amount value="-8967452.31" className="negativeColor" {...commonProps} />,
             },
             {
                 title: "Без валюты",
@@ -98,6 +107,10 @@ export const Default: StoryObj<typeof Amount> = {
             {
                 title: "Адаптивная большая сумма (50 миллиардов)",
                 element: <Amount value="50000000000.31" {...commonProps} adaptive />,
+            },
+            {
+                title: "Акцент",
+                element: <Amount value="8967452.31" className="accent" {...commonProps} />,
             },
         ];
 

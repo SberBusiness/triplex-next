@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { ChipIcon } from "../../src/components/Chip/ChipIcon";
-import { EChipSize } from "../../src/components/Chip/enums";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 
 export default {
@@ -20,11 +20,11 @@ export const Playground: StoryObj<typeof ChipIcon> = {
         );
     },
     args: {
-        size: EChipSize.MD,
+        size: EComponentSize.MD,
         disabled: false,
     },
     argTypes: {
-        size: { control: { type: "inline-radio" }, options: Object.values(EChipSize) },
+        size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
         selected: { control: false },
         className: { control: { type: "text" } },

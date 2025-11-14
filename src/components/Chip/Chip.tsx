@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import styles from "./styles/Chip.module.less";
-import { EChipSize } from "./enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 
 /** Свойства компонента Chip. */
 export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "prefix"> {
@@ -14,16 +14,16 @@ export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
     /** Контент, следующий за основным контентом, например иконка справа. */
     postfix?: React.ReactNode;
     /** Размер Chip. */
-    size?: EChipSize;
+    size?: EComponentSize;
 }
 
-const getSizeCssClass = (size: EChipSize) => {
+const getSizeCssClass = (size: EComponentSize) => {
     switch (size) {
-        case EChipSize.LG:
+        case EComponentSize.LG:
             return styles["size-lg"];
-        case EChipSize.MD:
+        case EComponentSize.MD:
             return styles["size-md"];
-        case EChipSize.SM:
+        case EComponentSize.SM:
             return styles["size-sm"];
     }
 };
@@ -33,7 +33,7 @@ const getSizeCssClass = (size: EChipSize) => {
  * Рекомендуется всегда располагать Chip внутри компонента ChipGroup.
  */
 export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
-    ({ children, className, disabled, postfix, prefix, selected, size = EChipSize.MD, ...rest }, ref) => (
+    ({ children, className, disabled, postfix, prefix, selected, size = EComponentSize.MD, ...rest }, ref) => (
         <span
             className={clsx(
                 styles.chip,

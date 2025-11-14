@@ -1,25 +1,25 @@
 import React from "react";
 import { CrossStrokeSrvIcon16, CrossStrokeSrvIcon20, CrossStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { EChipSize } from "./enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import styles from "./styles/ChipClearButton.module.less";
 
 export interface IChipClearButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: never;
-    size?: EChipSize;
+    size?: EComponentSize;
 }
 
 /**
  * Кнопка отмены выбора для Chip.
  */
 export const ChipClearButton = React.forwardRef<HTMLButtonElement, IChipClearButtonProps>(
-    ({ size = EChipSize.MD, ...props }, ref) => {
-        const getSizeIcon = (size: EChipSize) => {
+    ({ size = EComponentSize.MD, ...props }, ref) => {
+        const getSizeIcon = (size: EComponentSize) => {
             switch (size) {
-                case EChipSize.SM:
+                case EComponentSize.SM:
                     return <CrossStrokeSrvIcon16 paletteIndex={6} />;
-                case EChipSize.MD:
+                case EComponentSize.MD:
                     return <CrossStrokeSrvIcon20 paletteIndex={6} />;
-                case EChipSize.LG:
+                case EComponentSize.LG:
                     return <CrossStrokeSrvIcon24 paletteIndex={6} />;
                 default:
                     return null;

@@ -3,4 +3,4 @@ export * from "./ChipClearButton";
 export * from "./ChipDropdownArrow";
 export * from "./ChipIcon";
 export * from "./ChipOptions";
-export * from "./enums";
+export * from "./ChipSelect";

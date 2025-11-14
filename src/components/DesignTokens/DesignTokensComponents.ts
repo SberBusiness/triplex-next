@@ -35,6 +35,7 @@ import {
     TableBasic_Tokens,
     TabsLine_Tokens,
     Tabs_Tokens,
+    Tag_Tokens,
     Typography_Tokens,
     Tooltip_Tokens,
     UploadZone_Tokens,
@@ -70,6 +71,7 @@ import {
     TDesignTokensComponentsTableBasicValue,
     TDesignTokensComponentsTabsLineValue,
     TDesignTokensComponentsTabsValue,
+    TDesignTokensComponentsTagValue,
     TDesignTokensComponentsTooltipValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsUploadZoneValue,
@@ -149,6 +151,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         TableBasic_Tokens,
     ),
     Tabs: GetTokensValueByTheme<TDesignTokensComponentsTabsValue>(ETriplexNextTheme.LIGHT, Tabs_Tokens),
+    Tag: GetTokensValueByTheme<TDesignTokensComponentsTagValue>(ETriplexNextTheme.LIGHT, Tag_Tokens),
     TabsLine: GetTokensValueByTheme<TDesignTokensComponentsTabsLineValue>(ETriplexNextTheme.LIGHT, TabsLine_Tokens),
     Tooltip: GetTokensValueByTheme<TDesignTokensComponentsTooltipValue>(ETriplexNextTheme.LIGHT, Tooltip_Tokens),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(

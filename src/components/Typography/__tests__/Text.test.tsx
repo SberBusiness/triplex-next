@@ -13,7 +13,11 @@ describe("Text", () => {
     });
 
     it("renders with custom tag", () => {
-        render(<Text size={ETextSize.B2} tag="p">Custom Tag Text</Text>);
+        render(
+            <Text size={ETextSize.B2} tag="p">
+                Custom Tag Text
+            </Text>,
+        );
 
         const text = screen.getByText("Custom Tag Text");
         expect(text.tagName).toBe("P");
@@ -21,21 +25,33 @@ describe("Text", () => {
 
     it("applies custom className", () => {
         const className = "custom-text-class";
-        render(<Text size={ETextSize.B2} className={className}>Test Text</Text>);
+        render(
+            <Text size={ETextSize.B2} className={className}>
+                Test Text
+            </Text>,
+        );
 
         const text = screen.getByText("Test Text");
         expect(text.className).toContain(className);
     });
 
     it("renders with underline", () => {
-        render(<Text size={ETextSize.B2} underline>Underlined Text</Text>);
+        render(
+            <Text size={ETextSize.B2} underline>
+                Underlined Text
+            </Text>,
+        );
 
         const text = screen.getByText("Underlined Text");
         expect(text.className).toContain("underline");
     });
 
     it("renders with strikethrough", () => {
-        render(<Text size={ETextSize.B2} strikethrough>Strikethrough Text</Text>);
+        render(
+            <Text size={ETextSize.B2} strikethrough>
+                Strikethrough Text
+            </Text>,
+        );
 
         const text = screen.getByText("Strikethrough Text");
         expect(text.className).toContain("strikethrough");
@@ -45,7 +61,7 @@ describe("Text", () => {
         render(
             <Text size={ETextSize.B2} underline strikethrough>
                 Underlined and Strikethrough Text
-            </Text>
+            </Text>,
         );
 
         const text = screen.getByText("Underlined and Strikethrough Text");
@@ -54,13 +70,9 @@ describe("Text", () => {
 
     it("passes through additional props", () => {
         render(
-            <Text
-                size={ETextSize.B2}
-                data-testid="text-test"
-                aria-label="Test text"
-            >
+            <Text size={ETextSize.B2} data-testid="text-test" aria-label="Test text">
                 Test Text
-            </Text>
+            </Text>,
         );
 
         const text = screen.getByTestId("text-test");
@@ -71,7 +83,7 @@ describe("Text", () => {
         render(
             <Text size={ETextSize.B2}>
                 <span>Nested</span> <strong>Content</strong>
-            </Text>
+            </Text>,
         );
 
         expect(screen.getByText("Nested")).toBeDefined();
@@ -80,7 +92,11 @@ describe("Text", () => {
 
     it("forwards ref correctly for span element", () => {
         const ref = React.createRef<HTMLElement>();
-        render(<Text size={ETextSize.B2} ref={ref}>Ref Test Text</Text>);
+        render(
+            <Text size={ETextSize.B2} ref={ref}>
+                Ref Test Text
+            </Text>,
+        );
 
         expect(ref.current).toBeDefined();
         expect(ref.current?.textContent).toBe("Ref Test Text");
@@ -89,7 +105,11 @@ describe("Text", () => {
 
     it("forwards ref correctly for div element", () => {
         const ref = React.createRef<HTMLElement>();
-        render(<Text size={ETextSize.B2} tag="div" ref={ref}>Div Ref Test Text</Text>);
+        render(
+            <Text size={ETextSize.B2} tag="div" ref={ref}>
+                Div Ref Test Text
+            </Text>,
+        );
 
         expect(ref.current).toBeDefined();
         expect(ref.current?.textContent).toBe("Div Ref Test Text");
@@ -98,7 +118,11 @@ describe("Text", () => {
 
     it("forwards ref correctly for p element", () => {
         const ref = React.createRef<HTMLElement>();
-        render(<Text size={ETextSize.B2} tag="p" ref={ref}>P Ref Test Text</Text>);
+        render(
+            <Text size={ETextSize.B2} tag="p" ref={ref}>
+                P Ref Test Text
+            </Text>,
+        );
 
         expect(ref.current).toBeDefined();
         expect(ref.current?.textContent).toBe("P Ref Test Text");
@@ -115,7 +139,7 @@ describe("Text", () => {
                 className="custom-class"
             >
                 Complex Text
-            </Text>
+            </Text>,
         );
 
         const text = screen.getByText("Complex Text");
@@ -123,4 +147,4 @@ describe("Text", () => {
         expect(text.className).toContain("typography");
         expect(text.className).toContain("text");
     });
-}); 
+});

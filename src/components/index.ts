@@ -17,6 +17,8 @@ export * from "./Row";
 export * from "./TabsExtended";
 export * from "./Tabs";
 export * from "./TabsLine";
+export * from "./Tag";
+export * from "./TagGroup";
 export * from "./TextField";
 export * from "./ThemeProvider";
 export * from "./Typography";

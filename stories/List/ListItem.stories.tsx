@@ -11,13 +11,16 @@ import {
     ListItemControlsButton,
     ListItemTable,
 } from "../../src/components/List";
-import { EFontType, EFontWeightText, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
+import { EFontType, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
 import {
     AttachmentStrokeSrvIcon20,
     DotshorizontalStrokeSrvIcon20,
     DefaulticonStrokePrdIcon20,
 } from "@sberbusiness/icons-next";
 import { SwipeableArea, ISwipeableAreaRef } from "../../src/components/SwipeableArea";
+import { MarkerStatus } from "../../src/components/MarkerStatus";
+import { EMarkerStatus } from "../../src/components/Marker/enums";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 
 export default {
     title: "Components/List/ListItem",
@@ -135,25 +138,13 @@ export const Swipeable: StoryObj<typeof ListItem> = {
                             rightSwipeableArea={
                                 <ListItemControls>
                                     <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
-                                        <Text
-                                            size={ETextSize.B4}
-                                            type={EFontType.BRAND}
-                                            weight={EFontWeightText.SEMIBOLD}
-                                        >
-                                            Button name
-                                        </Text>
+                                        Button name
                                     </ListItemControlsButton>
                                     <ListItemControlsButtonDropdown
                                         icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                                         options={options}
                                     >
-                                        <Text
-                                            size={ETextSize.B4}
-                                            type={EFontType.BRAND}
-                                            weight={EFontWeightText.SEMIBOLD}
-                                        >
-                                            Button name
-                                        </Text>
+                                        Button name
                                     </ListItemControlsButtonDropdown>
                                 </ListItemControls>
                             }
@@ -223,6 +214,9 @@ export const ListItemForTable: StoryObj<typeof ListItem> = {
                         <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
                             40702 810 2 0527 5000000 от 09.04.24
                         </Text>
+                        <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
+                            Status text
+                        </MarkerStatus>
                     </ListItemTable>
                 </List>
             </div>
@@ -309,6 +303,9 @@ export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
                         <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
                             40702 810 2 0527 5000000 от 09.04.24
                         </Text>
+                        <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
+                            Status text
+                        </MarkerStatus>
                     </ListItemTable>
                 </List>
             </div>
@@ -380,6 +377,9 @@ export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
                         <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
                             40702 810 2 0527 5000000 от 09.04.24
                         </Text>
+                        <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
+                            Status text
+                        </MarkerStatus>
                     </ListItemTable>
                 </List>
             </div>

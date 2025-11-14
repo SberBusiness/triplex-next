@@ -197,7 +197,7 @@ export const XGroup: StoryObj<typeof Radio> = {
         <>
             <RadioXGroup aria-labelledby="radio-x-group-label" indent={16}>
                 {[1, 2, 3].map((value, index) => (
-                    <Radio key={index} name="radio-x-group" value={value} disabled={args.disabled}>
+                    <Radio key={index} name="radio-x-group-md" value={value} disabled={args.disabled}>
                         Radio text
                     </Radio>
                 ))}
@@ -207,7 +207,7 @@ export const XGroup: StoryObj<typeof Radio> = {
                 {[1, 2, 3].map((value, index) => (
                     <Radio
                         key={index}
-                        name="radio-x-group"
+                        name="radio-x-group-lg"
                         value={value}
                         size={EComponentSize.LG}
                         disabled={args.disabled}
@@ -246,7 +246,7 @@ export const YGroup: StoryObj<typeof Radio> = {
             <Col size={3}>
                 <RadioYGroup>
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Radio key={index} name="radio-group" value={value} disabled={args.disabled}>
+                        <Radio key={index} name="radio-y-group-md" value={value} disabled={args.disabled}>
                             Radio text
                         </Radio>
                     ))}
@@ -257,7 +257,7 @@ export const YGroup: StoryObj<typeof Radio> = {
                     {[1, 2, 3, 4].map((value, index) => (
                         <Radio
                             key={index}
-                            name="radio-group"
+                            name="radio-y-group-lg"
                             value={value}
                             size={EComponentSize.LG}
                             disabled={args.disabled}

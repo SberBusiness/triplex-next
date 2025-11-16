@@ -18,8 +18,8 @@ export type TDesignTokensComponentsMarker = { Marker: TDesignTokensComponentsMar
 
 // Токены компонента Marker в светлой и темной темах.
 export const Marker_Tokens: TDesignTokensComponentsMarkerValues = {
-    Background_Error: [{ ref: "ColorError.60" }, { ref: "ColorError.60" }], // var(--triplex-next-Marker-Background_Error)
-    Background_Success: [{ ref: "ColorBrand.60" }, { ref: "ColorBrand.70" }], // var(--triplex-next-Marker-Background_Success)
-    Background_Waiting: [{ ref: "ColorSystem.60" }, { ref: "ColorSystem.70" }], // var(--triplex-next-Marker-Background_Waiting)
-    Background_Warning: [{ ref: "ColorWarning.60" }, { ref: "ColorWarning.70" }], // var(--triplex-next-Marker-Background_Warning)
+    Background_Error: [{ ref: "ColorError.50" }, { ref: "ColorError.50" }], // var(--triplex-next-Marker-Background_Error)
+    Background_Success: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-next-Marker-Background_Success)
+    Background_Waiting: [{ ref: "ColorSystem.50" }, { ref: "ColorSystem.50" }], // var(--triplex-next-Marker-Background_Waiting)
+    Background_Warning: [{ ref: "ColorWarning.50" }, { ref: "ColorWarning.50" }], // var(--triplex-next-Marker-Background_Warning)
 };

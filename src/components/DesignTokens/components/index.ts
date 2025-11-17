@@ -36,3 +36,4 @@ export * from "./Island";
 export * from "./TableBasic";
 export * from "./Chip";
 export * from "./Tag";
+export * from "./Notification";

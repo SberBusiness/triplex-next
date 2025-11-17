@@ -13,12 +13,6 @@ export enum EButtonTheme {
     LINK = "link",
 }
 
-/** Размеры кнопки. */
-export enum EButtonSize {
-    LG = "lg",
-    MD = "md",
-    SM = "sm",
-}
 /** Форма границы кнопки. */
 export enum EButtonIconShape {
     SQUIRCLE = "squircle",

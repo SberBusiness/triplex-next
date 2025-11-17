@@ -12,8 +12,8 @@ import { Text } from "../src/components/Typography/Text";
 import { Title } from "../src/components/Typography/Title";
 import { EFontType, EFontWeightTitle, ETextSize, ETitleSize } from "../src/components/Typography/enums";
 import { Button } from "../src/components/Button/Button";
-import { EButtonSize, EButtonTheme } from "../src/components/Button/enums";
-import { Mc_sys_notfound_84 } from "../src/tempIllustrations/Mc_sys_notfound_84";
+import { EButtonTheme } from "../src/components/Button/enums";
+import { EComponentSize } from "../src/enums/EComponentSize";
 import { Checkbox } from "../src/components/Checkbox/Checkbox";
 import { amountComparator, formatAmount } from "../src/utils/amountUtils";
 import { AmountConst } from "../src/consts/AmountConst";
@@ -74,10 +74,10 @@ const renderNoData = () => (
         </Text>
         <Gap size={24} />
         <div>
-            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                 Button text
             </Button>
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                 Button text
             </Button>
         </div>
@@ -94,7 +94,7 @@ const renderNoColumns = (onClick: () => void) => (
             Выберите нужные вам для отображения колонки в настройках таблицы.
         </Text>
         <Gap size={24} />
-        <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD} onClick={onClick}>
+        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={onClick}>
             Сбросить настройки
         </Button>
     </MasterTable.NoColumns>
@@ -292,10 +292,10 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                     <MasterTable.TableFooter.Summary.Amount label="Сумма" sum={getCheckedSum()} currency="RUB" />
                 </MasterTable.TableFooter.Summary>
                 <MasterTable.TableFooter.Controls data-test-id="TestTable__MasterTable.TableFooter.Controls">
-                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button Name
                     </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button Name
                     </Button>
                 </MasterTable.TableFooter.Controls>
@@ -538,10 +538,10 @@ export const TableSettingsColumn: StoryObj = {
                             </MasterTable.TableBasicSettings.Body>
 
                             <MasterTable.TableBasicSettings.Footer>
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.MD} onClick={showAllColumns}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} onClick={showAllColumns}>
                                     Выбрать все
                                 </Button>
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.MD} onClick={resetColumns}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} onClick={resetColumns}>
                                     Сбросить настройки
                                 </Button>
                             </MasterTable.TableBasicSettings.Footer>
@@ -805,10 +805,10 @@ export const TableSettingsColumnExtended: StoryObj = {
                             </MasterTable.TableBasicSettings.Body>
 
                             <MasterTable.TableBasicSettings.Footer>
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.MD} onClick={showAllColumns}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} onClick={showAllColumns}>
                                     Выбрать все
                                 </Button>
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.MD} onClick={resetColumns}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} onClick={resetColumns}>
                                     Сбросить настройки
                                 </Button>
                             </MasterTable.TableBasicSettings.Footer>

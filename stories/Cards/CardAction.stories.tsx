@@ -4,7 +4,6 @@ import { action } from "storybook/actions";
 import {
     Button,
     EButtonTheme,
-    EButtonSize,
     CardAction,
     ICardActionProps,
     ECardTheme,
@@ -20,7 +19,7 @@ import {
     Link,
     Gap,
 } from "../../src/components";
-import { EComponentSize } from "../../src/enums";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import "./Cards.less";
 
@@ -188,7 +187,7 @@ export const Playground: Story = {
                         </CardAction.Content.Body>
                         {isGeneralTheme && (
                             <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EButtonSize.SM}>
+                                <Button theme={buttomTheme} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </CardAction.Content.Footer>
@@ -272,7 +271,7 @@ export const General: Story = {
                             </Text>
                         </CardAction.Content.Body>
                         <CardAction.Content.Footer>
-                            <Button theme={buttomTheme} size={EButtonSize.SM}>
+                            <Button theme={buttomTheme} size={EComponentSize.SM}>
                                 Button text
                             </Button>
                         </CardAction.Content.Footer>
@@ -433,7 +432,7 @@ export const SmallPaddingSize: Story = {
                         </CardAction.Content.Body>
                         {isGeneralTheme && (
                             <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EButtonSize.SM}>
+                                <Button theme={buttomTheme} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </CardAction.Content.Footer>
@@ -519,7 +518,7 @@ export const SmallRoundingSize: Story = {
                         </CardAction.Content.Body>
                         {isGeneralTheme && (
                             <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EButtonSize.SM}>
+                                <Button theme={buttomTheme} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </CardAction.Content.Footer>
@@ -611,7 +610,7 @@ export const Controlled: Story = {
                         </CardAction.Content.Body>
                         {isGeneralTheme && (
                             <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EButtonSize.SM}>
+                                <Button theme={buttomTheme} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </CardAction.Content.Footer>

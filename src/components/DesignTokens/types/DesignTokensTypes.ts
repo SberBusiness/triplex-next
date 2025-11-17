@@ -38,6 +38,7 @@ import {
     TDesignTokensComponentsTooltip,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsUploadZone,
+    TDesignTokensComponentsNotification,
 } from "../components";
 
 // Название токенов группы ColorBrand.
@@ -309,7 +310,8 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTabsLine
     | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsTypography
-    | TDesignTokensComponentsUploadZone;
+    | TDesignTokensComponentsUploadZone
+    | TDesignTokensComponentsNotification;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

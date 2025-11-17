@@ -8,7 +8,8 @@ import {
     ListSortableItem,
     ListSortableItemControls,
 } from "../../src/components/List";
-import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { Button, EButtonTheme } from "../../src/components/Button";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { EFontWeightTitle, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
 import { EmptytableSysIcon96 } from "@sberbusiness/icons-next";
 import { Gap } from "../../src/components/Gap";
@@ -107,10 +108,10 @@ export const EmptyState: StoryObj<typeof List> = {
 
             <Gap size={24} />
 
-            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                 Button Name
             </Button>
-            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                 Button Name
             </Button>
         </ListEmptyState>

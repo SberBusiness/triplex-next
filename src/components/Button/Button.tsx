@@ -23,6 +23,8 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства кнопки типа Secondary. */
@@ -37,6 +39,8 @@ export interface IButtonSecondaryProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства кнопки типа SecondaryLight. */
@@ -51,6 +55,8 @@ export interface IButtonSecondaryLightProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 /** Свойства кнопки типа Danger. */
 export interface IButtonDangerProps extends IButtonBaseProps {
@@ -64,6 +70,8 @@ export interface IButtonDangerProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства кнопки типа Link. */
@@ -78,6 +86,8 @@ export interface IButtonLinkProps extends IButtonBaseProps {
     loading?: never;
     /** Иконка. */
     icon?: never;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства компонента Button. */

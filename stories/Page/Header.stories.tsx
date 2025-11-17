@@ -2,7 +2,8 @@ import React from "react";
 import { StoryObj } from "@storybook/react";
 import { Header } from "../../src/components/Header";
 import { Text, Title } from "../../src/components/Typography";
-import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { Button, EButtonTheme } from "../../src/components/Button";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { Gap } from "../../src/components/Gap";
 import { Link } from "../../src/components/Link";
@@ -42,10 +43,10 @@ export const Basic: StoryObj<typeof Header> = {
                     </Text>
                 </Header.Title.Content>
                 <Header.Title.Controls>
-                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
                 </Header.Title.Controls>
@@ -77,10 +78,10 @@ export const WithLinkInTitle: StoryObj<typeof Header> = {
                     </Text>
                 </Header.Title.Content>
                 <Header.Title.Controls>
-                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
                 </Header.Title.Controls>
@@ -116,10 +117,10 @@ export const WithTabsAndControls: StoryObj<typeof Header> = {
                     </Text>
                 </Header.Tabs.Content>
                 <Header.Tabs.Controls>
-                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
                 </Header.Tabs.Controls>
@@ -147,10 +148,10 @@ export const WithSubheader: StoryObj<typeof Header> = {
                     </Text>
                 </Header.Title.Content>
                 <Header.Title.Controls>
-                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
                 </Header.Title.Controls>

@@ -6,7 +6,8 @@ import { EAlertType } from "../../src/components/Alert/EAlertType";
 import { Text } from "../../src/components/Typography/Text";
 import { EFontType, ETextSize } from "../../src/components/Typography/enums";
 import { Button } from "../../src/components/Button";
-import { EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { EButtonTheme } from "../../src/components/Button";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Link } from "../../src/components/Link";
@@ -239,7 +240,7 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
                     This message provides context or highlights important information to note.
                 </Text>
                 <Gap size={8} />
-                <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
+                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
                     Button link text
                 </Button>
             </>

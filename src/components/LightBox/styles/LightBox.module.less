@@ -44,6 +44,7 @@
         align-items: center;
         position: relative;
         margin: 16px 16px 0 16px;
+        padding: 0;
         border-top-left-radius: 32px;
         border-top-right-radius: 32px;
         background-color: var(--triplex-next-LightBox-Content_Background);
@@ -133,6 +134,11 @@ each(@scroll-sizes, {
 
         .global-LB-more-media-point-0 {
             /* стили для экранов шире 1024px */
+            .lightBoxContent {
+                // Отступы для кнопок вперед/назад.
+                padding-left: 80px;
+                padding-right: 80px;
+            }
         }
     }
 })

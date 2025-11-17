@@ -239,7 +239,7 @@ export const Playground: Story = {
         // showTopOverlay: false,
         stickyHeader: true,
         stickyFooter: true,
-        pageWidth: 800,
+        pageWidth: 1000,
     },
     argTypes: {
         isOpenInitially: {

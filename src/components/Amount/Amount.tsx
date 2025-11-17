@@ -2,7 +2,6 @@ import React from "react";
 import { formatAmount } from "@sberbusiness/triplex-next/utils/amountUtils";
 import { clsx } from "clsx";
 import styles from "./styles/Amount.module.less";
-import { Text, ETextSize } from "../Typography";
 
 /** Длина форматированной (с отступами и разделителем) строки amount, начиная с которой будет уменьшен шрифт. */
 const adaptiveAmountLength = 14;
@@ -57,14 +56,8 @@ export const Amount: React.FC<IAmountProps> = ({
 
     return (
         <span className={classNames} {...restProps} data-tx={process.env.npm_package_version}>
-            <Text
-                size={ETextSize.B2}
-                className={styles.amountText}
-                data-test-id={dataTestId && `${dataTestId}__amount`}
-            >
-                {formattedAmount}
-                {currency && renderCurrencyName()}
-            </Text>
+            <span data-test-id={dataTestId && `${dataTestId}__amount`}>{formattedAmount}</span>
+            {currency && renderCurrencyName()}
         </span>
     );
 };

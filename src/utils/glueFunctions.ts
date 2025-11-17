@@ -6,7 +6,8 @@
  * @param {Function} [h1] Первая функция.
  * @param {Function} [h2] Вторая функция.
  */
-export const glueFunctions = <T extends (...args: unknown[]) => unknown>(h1?: T, h2?: T): T | undefined =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const glueFunctions = <T extends (...args: any[]) => unknown>(h1?: T, h2?: T): T | undefined =>
     h1 && h2
         ? (((...args) => {
               h1(...args);

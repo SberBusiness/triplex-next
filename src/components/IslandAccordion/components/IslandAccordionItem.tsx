@@ -14,6 +14,7 @@ import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { ButtonIcon } from "../../Button";
 import { IIslandProps, EIslandType } from "../../Island";
 import { ETitleSize } from "../../Typography/enums";
+import { Step, EStepStatus, EStepPosition } from "../../Step";
 
 /** Свойства компонента элемента аккордеона. */
 export interface IIslandAccordionItemProps
@@ -23,8 +24,14 @@ export interface IIslandAccordionItemProps
     title: React.ReactNode;
     /** Идентификатор вкладки (если не передать извне, то используется индекс. Также используется как ключ при рендере списка вкладок). */
     id?: string;
+    /** Цифра в кружке. */
+    num?: number;
     /** Раскрыт ли элемент. */
     opened?: boolean;
+    /** Статус шага. */
+    status?: EStepStatus;
+    /** Подсказка к шагу. */
+    stepHint?: string;
     /** Заблокирован ли элемент. */
     disabled?: boolean;
     /** Вызывается при клике по вкладке. */
@@ -69,6 +76,9 @@ export const IslandAccordionItem = Object.assign(
                 onRemove,
                 onToggle,
                 id,
+                num,
+                status,
+                stepHint,
                 transitionProps,
                 size = EComponentSize.MD,
                 type = EIslandType.TYPE_1,
@@ -141,6 +151,13 @@ export const IslandAccordionItem = Object.assign(
                                 disabled={disabled}
                                 data-tx={process.env.npm_package_version}
                             >
+                                {status && (
+                                    <div className={styles.step}>
+                                        <Step step={num!} status={status!} position={EStepPosition.XFirst}>
+                                            {disabled ? undefined : stepHint}
+                                        </Step>
+                                    </div>
+                                )}
                                 {renderTitle()}
                                 <span
                                     className={clsx(styles.caretWrapper, "hoverable", {

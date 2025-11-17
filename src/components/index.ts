@@ -37,6 +37,7 @@ export * from "./Pagination";
 export * from "./Card";
 export * from "./Skeleton";
 export * from "./SegmentedControl";
+export * from "./Step";
 export * from "./Stepper";
 export * from "./KeyDownListener";
 export * from "./SelectExtendedField";

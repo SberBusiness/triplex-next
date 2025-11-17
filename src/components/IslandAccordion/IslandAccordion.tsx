@@ -27,21 +27,13 @@ export const IslandAccordion = Object.assign(
                     return child;
                 }
 
-                // const prevChild = childArray[index - 1] as React.ReactElement<IIslandAccordionItemProps> | undefined;
-                // const nextChild = childArray[index + 1] as React.ReactElement<IIslandAccordionItemProps> | undefined;
-
-                // const prevStatus = prevChild?.props.status ?? undefined;
-                // const nextStatus = nextChild?.props.status ?? undefined;
-
                 const id = child.props.id ?? index.toString();
                 const key = child.props.id ?? index;
-                // const num = child.props.num ?? index + 1;
+                const num = child.props.num ?? index + 1;
 
                 return React.cloneElement(child, {
                     id,
-                    // num,
-                    // prevStatus,
-                    // nextStatus,
+                    num,
                     onToggle: glueFunctions(child.props.onToggle, onToggle),
                     onRemove: glueFunctions(child.props.onRemove, onRemove),
                     key,

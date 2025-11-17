@@ -32,6 +32,7 @@ import {
     TDesignTokensComponentsSegmentedControlSegment,
     TDesignTokensComponentsSkeleton,
     TDesignTokensComponentsSMSInput,
+    TDesignTokensComponentsStep,
     TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
     TDesignTokensComponentsTabs,
@@ -309,6 +310,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsSegmentedControlSegment
     | TDesignTokensComponentsSkeleton
     | TDesignTokensComponentsSMSInput
+    | TDesignTokensComponentsStep
     | TDesignTokensComponentsStepper
     | TDesignTokensComponentsTableBasic
     | TDesignTokensComponentsTabs

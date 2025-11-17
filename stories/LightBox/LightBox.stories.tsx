@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
-import { EButtonTheme, EButtonSize } from "../../src/components/Button/enums";
+import { EButtonTheme } from "../../src/components/Button/enums";
 import { Gap } from "../../src/components/Gap";
 import { Title } from "../../src/components/Typography/Title";
 import { Text } from "../../src/components/Typography/Text";
@@ -12,9 +12,10 @@ import { EHeaderPageType, EFooterPageType } from "../../src/components/Page/comp
 import { Island } from "../../src/components/Island/Island";
 import { IslandBody } from "../../src/components/Island/components/IslandBody";
 import { EIslandType } from "../../src/components/Island/enums";
-import "./styles.less";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import "./styles.less";
 
 type LightBoxStoryArgs = {
     isOpenInitially: boolean;
@@ -102,18 +103,18 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
                     <Button
                         icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                         theme={EButtonTheme.SECONDARY}
-                        size={EButtonSize.MD}
+                        size={EComponentSize.MD}
                     />
                     <Button
                         icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                         theme={EButtonTheme.SECONDARY}
-                        size={EButtonSize.MD}
+                        size={EComponentSize.MD}
                     />
                 </Page.Header.Title.Controls>
             </Page.Header.Title>
         </Page.Header>
 
-        <Page.Body>
+        <Page.Body verticalMargin={16}>
             {[0, 1, 2].map((index) => (
                 <React.Fragment key={index}>
                     <PoemBlock />
@@ -126,10 +127,10 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
             <Page.Footer.Description>
                 <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                 <Page.Footer.Description.Controls>
-                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
                 </Page.Footer.Description.Controls>
@@ -183,7 +184,7 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
     //                 <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
     //                     Боковой оверлей помогает размещать справочную информацию и действия без выхода из LightBox.
     //                 </Text>
-    //                 <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM} onClick={handleClose}>
+    //                 <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={handleClose}>
     //                     Закрыть LightBox
     //                 </Button>
     //             </div>
@@ -208,7 +209,7 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
 
     return (
         <div>
-            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} onClick={handleOpen}>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
                 Открыть LightBox
             </Button>
 

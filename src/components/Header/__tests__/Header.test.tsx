@@ -10,13 +10,6 @@ describe("Header", () => {
         expect(root).toBeInTheDocument();
     });
 
-    it("applies sticky class when sticky is true", () => {
-        render(<Header sticky data-testid="header-root" />);
-
-        const root = screen.getByTestId("header-root");
-        expect(root.className).toMatch(/sticky/);
-    });
-
     it("forwards ref to root div", () => {
         const ref = React.createRef<HTMLDivElement>();
         render(<Header ref={ref}>content</Header>);

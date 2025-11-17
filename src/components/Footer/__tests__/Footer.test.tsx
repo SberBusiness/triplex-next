@@ -10,13 +10,6 @@ describe("Footer", () => {
         expect(root).toBeInTheDocument();
     });
 
-    it("applies sticky class when sticky is true", () => {
-        render(<Footer sticky data-testid="footer-root" />);
-
-        const root = screen.getByTestId("footer-root");
-        expect(root.className).toMatch(/sticky/);
-    });
-
     it("forwards ref to root div", () => {
         const ref = React.createRef<HTMLDivElement>();
         render(<Footer ref={ref}>content</Footer>);

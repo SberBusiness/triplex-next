@@ -61,12 +61,12 @@ export const FormField: React.FC<IFormFieldProps> = ({
             <div
                 className={clsx(
                     styles.formField,
+                    styles[`size-${size}`],
                     {
                         [styles.active]: focused,
                         [styles.disabled]: status === EFormFieldStatus.DISABLED,
                         [styles.error]: status === EFormFieldStatus.ERROR,
                         [styles.warning]: status === EFormFieldStatus.WARNING,
-                        [styles[`size-${size}`]]: size,
                     },
                     className,
                 )}

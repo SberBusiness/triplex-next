@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "@sberbusiness/triplex-next/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
@@ -23,6 +23,8 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства кнопки типа Secondary. */
@@ -37,6 +39,8 @@ export interface IButtonSecondaryProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства кнопки типа SecondaryLight. */
@@ -51,6 +55,8 @@ export interface IButtonSecondaryLightProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 /** Свойства кнопки типа Danger. */
 export interface IButtonDangerProps extends IButtonBaseProps {
@@ -64,6 +70,8 @@ export interface IButtonDangerProps extends IButtonBaseProps {
     loading?: boolean;
     /** Иконка. */
     icon?: React.ReactElement;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства кнопки типа Link. */
@@ -78,6 +86,8 @@ export interface IButtonLinkProps extends IButtonBaseProps {
     loading?: never;
     /** Иконка. */
     icon?: never;
+    /** Содержимое кнопки. */
+    children?: React.ReactNode;
 }
 
 /** Свойства компонента Button. */
@@ -133,13 +143,8 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
     const dotsTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
         ? ELoaderSmallTheme.BRAND
         : ELoaderSmallTheme.NEUTRAL;
-    const dotsSize =
-        size === EComponentSize.SM
-            ? ELoaderSmallSize.SM
-            : size === EComponentSize.LG
-              ? ELoaderSmallSize.LG
-              : ELoaderSmallSize.MD;
-    return <LoaderSmall theme={dotsTheme} size={dotsSize} />;
+
+    return <LoaderSmall theme={dotsTheme} size={size} />;
 };
 
 /** Кнопка. */

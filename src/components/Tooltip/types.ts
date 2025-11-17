@@ -128,7 +128,6 @@ export interface IDropdownMobileHeaderProps extends React.HTMLAttributes<HTMLDiv
 /** Свойства компонента TooltipLink. */
 export interface ITooltipLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
 
-
 /** Свойства компонента Tooltip. */
 export interface ITooltipProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Размер подсказки. */

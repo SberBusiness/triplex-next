@@ -40,11 +40,11 @@ SelectExtendedField - это расширенный компонент выбо�
 
 // Данные для примеров
 const options = [
-    { value: "option1", label: "Первая опция" },
-    { value: "option2", label: "Вторая опция" },
-    { value: "option3", label: "Третья опция" },
-    { value: "option4", label: "Четвертая опция" },
-    { value: "option5", label: "Пятая опция" },
+    { id: "option1", value: "option1", label: "Первая опция" },
+    { id: "option2", value: "option2", label: "Вторая опция" },
+    { id: "option3", value: "option3", label: "Третья опция" },
+    { id: "option4", value: "option4", label: "Четвертая опция" },
+    { id: "option5", value: "option5", label: "Пятая опция" },
 ];
 
 interface ISelectExtendedFieldPlaygroundProps {
@@ -116,8 +116,14 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
 
                     {(descriptionText || errorText) && (
                         <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={status === EFormFieldStatus.ERROR ? EFontType.ERROR : EFontType.SECONDARY}>
-                                {status === EFormFieldStatus.ERROR ? errorText || "Текст ошибки" : descriptionText || "Описание поля"}
+                            <Text
+                                tag="div"
+                                size={ETextSize.B4}
+                                type={status === EFormFieldStatus.ERROR ? EFontType.ERROR : EFontType.SECONDARY}
+                            >
+                                {status === EFormFieldStatus.ERROR
+                                    ? errorText || "Текст ошибки"
+                                    : descriptionText || "Описание поля"}
                             </Text>
                         </FormFieldDescription>
                     )}

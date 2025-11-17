@@ -25,10 +25,10 @@ const generateComponentTokensTemplate = () => {
         return;
     }
 
-    const fileContent = `import {TDesignTokenValue, TDesignTokenValues} from '../types/DesignTokenTypes';
+    const fileContent = `import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes";
 
 // Название токенов компонента ${componentName}.
-export const designTokensComponents${componentName}Keys = ['Background'] as const;
+export const designTokensComponents${componentName}Keys = ["Background"] as const;
 // Тип, содержащий названия токенов компонента ${componentName}.
 export type TDesignTokensComponents${componentName}Keys = (typeof designTokensComponents${componentName}Keys)[number];
 // Тип, содержащий названия токенов компонента ${componentName} и их значения.
@@ -36,11 +36,11 @@ export type TDesignTokensComponents${componentName}Value = Record<TDesignTokensC
 // Тип, содержащий названия токенов компонента ${componentName} и их значения в светлой и темной теме.
 export type TDesignTokensComponents${componentName}Values = Record<TDesignTokensComponents${componentName}Keys, TDesignTokenValues>;
 // Тип локальных токенов компонента ${componentName}.
-export type TDesignTokensComponents${componentName} = {${componentName}: TDesignTokensComponents${componentName}Value};
+export type TDesignTokensComponents${componentName} = { ${componentName}: TDesignTokensComponents${componentName}Value };
 
 // Токены компонента ${componentName} в светлой и темной темах.
 export const ${componentName}_Tokens: TDesignTokensComponents${componentName}Values = {
-    Background: [{ref: 'Neutral.500'}, {value: '#fff'}], // var(--triplex-next-${componentName}-Background)
+    Background: [{ ref: "ColorNeutral.100" }, { value: "#000000" }], // var(--triplex-next-${componentName}-Background)
 };
 `;
 

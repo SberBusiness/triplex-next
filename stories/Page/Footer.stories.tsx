@@ -2,7 +2,8 @@ import React from "react";
 import { StoryObj } from "@storybook/react";
 import { Footer } from "../../src/components/Footer";
 import { Button } from "../../src/components/Button";
-import { EButtonTheme, EButtonSize } from "../../src/components/Button/enums";
+import { EButtonTheme } from "../../src/components/Button/enums";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, ETextSize } from "../../src/components/Typography";
 
 export default {
@@ -35,10 +36,10 @@ export const Basic: StoryObj<typeof Footer> = {
                     <Text size={ETextSize.B3}>Footer page text</Text>
                 </Footer.Description.Content>
                 <Footer.Description.Controls>
-                    <Button size={EButtonSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
+                    <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
                         Button text
                     </Button>
-                    <Button size={EButtonSize.MD} theme={EButtonTheme.GENERAL}>
+                    <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
                         Button text
                     </Button>
                 </Footer.Description.Controls>

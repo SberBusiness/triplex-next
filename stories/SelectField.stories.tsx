@@ -33,11 +33,11 @@ SelectField - это упрощенный компонент выбора, по�
 
 // Данные для примеров
 const options: ISelectFieldOption[] = [
-    { value: "option1", label: "Первая опция" },
-    { value: "option2", label: "Вторая опция" },
-    { value: "option3", label: "Третья опция" },
-    { value: "option4", label: "Четвертая опция" },
-    { value: "option5", label: "Пятая опция" },
+    { id: "option1", value: "option1", label: "Первая опция" },
+    { id: "option2", value: "option2", label: "Вторая опция" },
+    { id: "option3", value: "option3", label: "Третья опция" },
+    { id: "option4", value: "option4", label: "Четвертая опция" },
+    { id: "option5", value: "option5", label: "Пятая опция" },
 ];
 
 interface ISelectFieldPlaygroundProps {

@@ -1,8 +1,8 @@
 .listItemControlsButton {
-    font-family: inherit;
+    font-weight: 600;
     margin: 0;
     padding: 0;
-    background: var(--triplex-next-ListItemControlsButton-Background);
+    background: var(--triplex-next-ListItemControlsButton-Background_Default);
     border: none;
     display: flex;
     align-items: center;
@@ -10,6 +10,23 @@
     flex-direction: column;
     border-radius: 8px;
     min-height: 56px;
+
+    &:hover {
+        background: var(--triplex-next-ListItemControlsButton-Background_Hover);
+
+        .listItemControlsButtonLabel {
+            color: var(--triplex-next-ListItemControlsButton-Color_Hover) !important;
+        }
+    }
+
+    &.expanded,
+    &:active {
+        background: var(--triplex-next-ListItemControlsButton-Background_Active);
+
+        .listItemControlsButtonLabel {
+            color: var(--triplex-next-ListItemControlsButton-Color_Active) !important;
+        }
+    }
 }
 
 .listItemControlsButton + .listItemControlsButton,
@@ -31,7 +48,7 @@
 
 
 .listItemControlsButtonLabel {
-    color: var(--triplex-next-ListItemControlsButton-Color);
+    color: var(--triplex-next-ListItemControlsButton-Color_Default) !important;
     overflow-wrap: break-word;
 }
 

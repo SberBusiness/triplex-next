@@ -1,3 +1,4 @@
+import { Divider_Tokens } from "./components/Divider";
 // Токены локальных компонентов Triplex Next.
 import { TDesignTokensComponents } from "./types/DesignTokensTypes";
 import { ETriplexNextTheme } from "../ThemeProvider/ETriplexNextTheme";
@@ -23,6 +24,8 @@ import {
     ListMaster_Tokens,
     Loader_Tokens,
     LoaderWidget_Tokens,
+    Marker_Tokens,
+    MarkerStatus_Tokens,
     Overlay_Tokens,
     Page_Tokens,
     Pagination_Tokens,
@@ -33,16 +36,19 @@ import {
     Stepper_Tokens,
     TabsLine_Tokens,
     Tabs_Tokens,
+    Tag_Tokens,
     Typography_Tokens,
     Tooltip_Tokens,
     UploadZone_Tokens,
     LightBox_Tokens,
+    Notification_Tokens,
     TDesignTokensComponentsAlertContextValue,
     TDesignTokensComponentsAlertProcessValue,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCardValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsChipValue,
+    TDesignTokensComponentsDividerValue,
     TDesignTokensComponentsDropdownListValue,
     TDesignTokensComponentsDropdownMobileListValue,
     TDesignTokensComponentsDropdownMobileValue,
@@ -57,6 +63,8 @@ import {
     TDesignTokensComponentsListMasterValue,
     TDesignTokensComponentsLoaderValue,
     TDesignTokensComponentsLoaderWidgetValue,
+    TDesignTokensComponentsMarkerValue,
+    TDesignTokensComponentsMarkerStatusValue,
     TDesignTokensComponentsOverlayValue,
     TDesignTokensComponentsPageValue,
     TDesignTokensComponentsPaginationValue,
@@ -67,10 +75,12 @@ import {
     TDesignTokensComponentsStepperValue,
     TDesignTokensComponentsTabsLineValue,
     TDesignTokensComponentsTabsValue,
+    TDesignTokensComponentsTagValue,
     TDesignTokensComponentsTooltipValue,
     TDesignTokensComponentsTypographyValue,
     TDesignTokensComponentsUploadZoneValue,
     TDesignTokensComponentsLightBoxValue,
+    TDesignTokensComponentsNotificationValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -86,6 +96,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.DARK, Card_Tokens),
     Checkbox: GetTokensValueByTheme<TDesignTokensComponentsCheckboxValue>(ETriplexNextTheme.DARK, Checkbox_Tokens),
     Chip: GetTokensValueByTheme<TDesignTokensComponentsChipValue>(ETriplexNextTheme.DARK, Chip_Tokens),
+    Divider: GetTokensValueByTheme<TDesignTokensComponentsDividerValue>(ETriplexNextTheme.DARK, Divider_Tokens),
     Dropdown: GetTokensValueByTheme<TDesignTokensComponentsDropdownValue>(ETriplexNextTheme.DARK, Dropdown_Tokens),
     DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(
         ETriplexNextTheme.DARK,
@@ -124,6 +135,11 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ETriplexNextTheme.DARK,
         LoaderWidget_Tokens,
     ),
+    Marker: GetTokensValueByTheme<TDesignTokensComponentsMarkerValue>(ETriplexNextTheme.DARK, Marker_Tokens),
+    MarkerStatus: GetTokensValueByTheme<TDesignTokensComponentsMarkerStatusValue>(
+        ETriplexNextTheme.DARK,
+        MarkerStatus_Tokens,
+    ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.DARK, Overlay_Tokens),
     Page: GetTokensValueByTheme<TDesignTokensComponentsPageValue>(ETriplexNextTheme.DARK, Page_Tokens),
     Pagination: GetTokensValueByTheme<TDesignTokensComponentsPaginationValue>(
@@ -142,6 +158,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.DARK, Skeleton_Tokens),
     Stepper: GetTokensValueByTheme<TDesignTokensComponentsStepperValue>(ETriplexNextTheme.DARK, Stepper_Tokens),
     Tabs: GetTokensValueByTheme<TDesignTokensComponentsTabsValue>(ETriplexNextTheme.DARK, Tabs_Tokens),
+    Tag: GetTokensValueByTheme<TDesignTokensComponentsTagValue>(ETriplexNextTheme.DARK, Tag_Tokens),
     TabsLine: GetTokensValueByTheme<TDesignTokensComponentsTabsLineValue>(ETriplexNextTheme.DARK, TabsLine_Tokens),
     Tooltip: GetTokensValueByTheme<TDesignTokensComponentsTooltipValue>(ETriplexNextTheme.DARK, Tooltip_Tokens),
     Typography: GetTokensValueByTheme<TDesignTokensComponentsTypographyValue>(
@@ -153,4 +170,8 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         UploadZone_Tokens,
     ),
     LightBox: GetTokensValueByTheme<TDesignTokensComponentsLightBoxValue>(ETriplexNextTheme.DARK, LightBox_Tokens),
+    Notification: GetTokensValueByTheme<TDesignTokensComponentsNotificationValue>(
+        ETriplexNextTheme.DARK,
+        Notification_Tokens,
+    ),
 };

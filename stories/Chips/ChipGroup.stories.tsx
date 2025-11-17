@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Chip } from "../../src/components/Chip/Chip";
 import { ChipGroup } from "../../src/components/ChipGroup/ChipGroup";
-import { EChipSize } from "../../src/components/Chip/enums";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 
 export default {
     title: "Components/Chips/ChipGroup",
@@ -33,11 +33,11 @@ export const Playground: StoryObj<typeof ChipGroup> = {
             </ChipGroup>
         );
     },
-    args: { oneLine: false, size: EChipSize.MD },
+    args: { oneLine: false, size: EComponentSize.MD },
     argTypes: {
         oneLine: { control: { type: "boolean" } },
         className: { control: { type: "text" } },
-        size: { control: { type: "inline-radio" }, options: Object.values(EChipSize) },
+        size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
     },
 };
 
@@ -50,7 +50,7 @@ export const OneLineScrollable: StoryObj<typeof ChipGroup> = {
                 {chips.map((label, index) => (
                     <Chip
                         key={label}
-                        size={EChipSize.MD}
+                        size={EComponentSize.MD}
                         selected={selected === index}
                         onClick={() => setSelected(index)}
                     >

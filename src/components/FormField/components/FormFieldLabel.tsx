@@ -7,7 +7,7 @@ import styles from "../styles/FormFieldLabel.module.less";
 import { isUndefined } from "lodash-es";
 
 /** Свойства компонента FormFieldLabel. */
-interface IFormFieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface IFormFieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
     /** Label отображается в уменьшенном виде над полем ввода/селектом. */
     floating?: boolean;
 }

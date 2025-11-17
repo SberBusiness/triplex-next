@@ -1,3 +1,4 @@
+import { defineConfig } from "eslint/config";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
@@ -5,7 +6,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import prettierRecommended from "eslint-plugin-prettier/recommended";
 
-export default tseslint.config(
+export default defineConfig(
     // ESLint recommended configuration
     eslint.configs.recommended,
     // TypeScript-ESLint recommended configuration
@@ -57,17 +58,17 @@ export default tseslint.config(
             globals: globals.browser,
         },
     },
+    {
+        files: ["scripts/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+        languageOptions: {
+            globals: globals.node,
+        },
+    },
     // Stories-specific overrides
     {
         files: ["stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
         rules: {
             "react-hooks/rules-of-hooks": "off", // Disable hooks rules for stories
-        },
-    },
-    {
-        files: ["scripts/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
-        languageOptions: {
-            globals: globals.node,
         },
     },
     // Global ignores (e.g., build output)

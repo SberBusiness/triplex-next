@@ -11,6 +11,7 @@ const config: StorybookConfig = {
     },
     core: {
         disableTelemetry: true,
+        disableWhatsNewNotifications: true,
     },
     staticDirs: ["../public"],
     viteFinal: async (viteConfig) => {

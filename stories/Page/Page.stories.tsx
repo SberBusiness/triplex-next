@@ -1,7 +1,8 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
 import { Page, EHeaderPageType, EFooterPageType } from "../../src/components/Page";
-import { Button, EButtonSize, EButtonTheme } from "../../src/components/Button";
+import { Button, EButtonTheme } from "../../src/components/Button";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, Title } from "../../src/components/Typography";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { Gap } from "../../src/components/Gap";
@@ -76,10 +77,10 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                             </Text>
                         </Page.Header.Title.Content>
                         <Page.Header.Title.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                                 Button text
                             </Button>
-                            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                 Button text
                             </Button>
                         </Page.Header.Title.Controls>
@@ -96,10 +97,10 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                             <Text size={ETextSize.B3}>Footer page text</Text>
                         </Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
-                            <Button size={EButtonSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
+                            <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
                                 Button text
                             </Button>
-                            <Button size={EButtonSize.MD} theme={EButtonTheme.GENERAL}>
+                            <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
                                 Button text
                             </Button>
                         </Page.Footer.Description.Controls>
@@ -126,10 +127,10 @@ export const Default: StoryObj<typeof Page> = {
                             </Text>
                         </Page.Header.Title.Content>
                         <Page.Header.Title.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                                 Button text
                             </Button>
-                            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                 Button text
                             </Button>
                         </Page.Header.Title.Controls>
@@ -148,10 +149,10 @@ export const Default: StoryObj<typeof Page> = {
                             <Text size={ETextSize.B3}>Footer page text</Text>
                         </Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
-                            <Button size={EButtonSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
+                            <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
                                 Button text
                             </Button>
-                            <Button size={EButtonSize.MD} theme={EButtonTheme.GENERAL}>
+                            <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
                                 Button text
                             </Button>
                         </Page.Footer.Description.Controls>

@@ -6,6 +6,7 @@ import {
     TDesignTokensComponentsCard,
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsChip,
+    TDesignTokensComponentsDivider,
     TDesignTokensComponentsDropdown,
     TDesignTokensComponentsDropdownList,
     TDesignTokensComponentsDropdownMobile,
@@ -20,6 +21,8 @@ import {
     TDesignTokensComponentsListMaster,
     TDesignTokensComponentsLoader,
     TDesignTokensComponentsLoaderWidget,
+    TDesignTokensComponentsMarker,
+    TDesignTokensComponentsMarkerStatus,
     TDesignTokensComponentsOverlay,
     TDesignTokensComponentsPage,
     TDesignTokensComponentsPagination,
@@ -30,11 +33,13 @@ import {
     TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
     TDesignTokensComponentsTabs,
+    TDesignTokensComponentsTag,
     TDesignTokensComponentsTabsLine,
     TDesignTokensComponentsTooltip,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsUploadZone,
     TDesignTokensComponentsLightBox,
+    TDesignTokensComponentsNotification,
 } from "../components";
 
 // Название токенов группы ColorBrand.
@@ -275,6 +280,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsCard
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsChip
+    | TDesignTokensComponentsDivider
     | TDesignTokensComponentsDropdown
     | TDesignTokensComponentsDropdownList
     | TDesignTokensComponentsDropdownMobile
@@ -289,6 +295,8 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsListMaster
     | TDesignTokensComponentsLoader
     | TDesignTokensComponentsLoaderWidget
+    | TDesignTokensComponentsMarker
+    | TDesignTokensComponentsMarkerStatus
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsPage
     | TDesignTokensComponentsPagination
@@ -299,11 +307,14 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsStepper
     | TDesignTokensComponentsTableBasic
     | TDesignTokensComponentsTabs
+    | TDesignTokensComponentsTag
     | TDesignTokensComponentsTabsLine
     | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsUploadZone
-    | TDesignTokensComponentsLightBox;
+    | TDesignTokensComponentsLightBox
+    | TDesignTokensComponentsUploadZone
+    | TDesignTokensComponentsNotification;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

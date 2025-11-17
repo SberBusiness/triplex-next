@@ -1,7 +1,7 @@
-import { useContext } from 'react';
-import { TDesignTokens } from '../DesignTokens/types/DesignTokensTypes';
-import { ThemeProviderContext } from '@sberbusiness/triplex-next/components/ThemeProvider/ThemeProviderContext';
-import { ETriplexNextTheme } from './ETriplexNextTheme';
+import { useContext } from "react";
+import { TDesignTokens } from "../DesignTokens/types/DesignTokensTypes";
+import { ThemeProviderContext } from "@sberbusiness/triplex-next/components/ThemeProvider/ThemeProviderContext";
+import { ETriplexNextTheme } from "./ETriplexNextTheme";
 
 /**
  * Хук, возвращающий текущую тему и токены.

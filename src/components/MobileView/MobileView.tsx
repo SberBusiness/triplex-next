@@ -5,7 +5,7 @@ import { MediaWidth } from "../MediaWidth";
 /**
  * Свойства MobileView.
  */
-interface IMobileViewProps {
+export interface IMobileViewProps {
     /** Элементы, которые рендерятся, когда ширина окна браузера соответствует ширине мобильного устройства (<768px). */
     children: React.ReactElement | null;
     /** Элементы, которые рендерятся, когда ширина окна браузера не соответствует ширине мобильного устройства (<768px). */

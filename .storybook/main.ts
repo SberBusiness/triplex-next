@@ -4,10 +4,20 @@ import generateScopedName from "../scripts/generate-scoped-name";
 
 const config: StorybookConfig = {
     stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
-    addons: ["@storybook/addon-docs", "@storybook/addon-themes"],
+    addons: [
+        "@storybook/addon-docs",
+        "@storybook/addon-themes",
+        // "@storybook/addon-vitest",
+    ],
     framework: {
         name: "@storybook/react-vite",
         options: {},
+    },
+    build: {
+        test: {
+            disableBlocks: true,
+            disableDocgen: true,
+        },
     },
     core: {
         disableTelemetry: true,

@@ -1,5 +1,3 @@
-// noinspection ES6PreferShortImport
-
 import React, { useEffect, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { MasterTable } from "../src/components/Table/MasterTable";
@@ -18,9 +16,7 @@ import { Checkbox } from "../src/components/Checkbox/Checkbox";
 import { amountComparator, formatAmount } from "../src/utils/amountUtils";
 import { AmountConst } from "../src/consts/AmountConst";
 import Big from "big.js";
-import { NotfoundSysIcon84 } from "@sberbusiness/icons-next";
 
-// noinspection JSUnusedGlobalSymbols
 export default {
     title: "Components/TableBasic",
     parameters: {
@@ -54,7 +50,7 @@ const dataSetForTest = Array.from({ length: 5 }).map((_, i) => {
         },
         purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (docNumber * 100 * Math.random()).toFixed(2),
+        sum: "1220000000",
         status: "Исполнено",
     };
 });
@@ -362,7 +358,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     },
 };
 
-// noinspection JSUnusedGlobalSymbols
 export const TableSpan: StoryObj = {
     render: () => {
         const backendData = [
@@ -438,7 +433,6 @@ export const TableSpan: StoryObj = {
     },
 };
 
-// noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumn: StoryObj = {
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
@@ -568,7 +562,6 @@ export const TableSettingsColumn: StoryObj = {
     },
 };
 
-// noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumnExtended: StoryObj = {
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
@@ -672,8 +665,6 @@ export const TableSettingsColumnExtended: StoryObj = {
                                     checked={Boolean(value)}
                                     onChange={(event) => handleChildCheckboxChange(event, key)}
                                 >
-                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                    {/*@ts-expect-error*/}
                                     {mapValueColumnOptionKeyToName[key]}
                                 </Checkbox>
                             </ColumnSettings.StaticList.Item>

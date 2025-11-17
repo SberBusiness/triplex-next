@@ -19,6 +19,11 @@ export default defineConfig({
                 classNameStrategy: "non-scoped",
             },
         },
+        // browser: {
+        //     enabled: true,
+        //     name: "chromium",
+        //     provider: "playwright",
+        // },
     },
     resolve: {
         alias: {

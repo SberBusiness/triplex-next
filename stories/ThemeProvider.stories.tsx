@@ -15,6 +15,11 @@ export default {
                     "ThemeProvider - компонент для управления темами в приложении. Позволяет переключаться между светлой и темной темами, а также переопределять дизайн-токены.",
             },
         },
+        test: {
+            async preRender(page) {
+                await page.waitForFunction(() => document.fonts.ready);
+            },
+        },
     },
     argTypes: {
         theme: {

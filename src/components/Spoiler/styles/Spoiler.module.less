@@ -1,0 +1,47 @@
+.spoiler {
+    display: flex;
+    flex-direction: column;
+
+    &.opened .caretIcon {
+        transform: rotate(-180deg);
+    }
+
+    .head {
+        .caretIcon {
+            flex-shrink: 0;
+            transition: transform 0.3s ease-in-out;
+            margin-left: 8px;
+        }
+
+        button {
+            & > span {
+                white-space: normal;
+                text-align: left;
+            }
+        }
+    }
+
+    .content {
+        &.hidden {
+            display: none;
+        }
+    }
+
+    .lg {
+        .content {
+            margin-top: 8px;
+        }
+    }
+
+    .md {
+        .content {
+            margin-top: 0px;
+        }
+    }
+
+    .sm {
+        .content {
+            margin-top: -4px;
+        }
+    }
+}

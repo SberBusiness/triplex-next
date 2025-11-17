@@ -1,0 +1,140 @@
+.islandAccordion {
+    margin: 0;
+    padding: 0;
+
+    .island {
+        padding: 0;
+    }
+
+    .item {
+        position: relative;
+        list-style-type: none;
+
+        &.disabled {
+            opacity: 0.48;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        & + .item.sm,
+        & + .item.md {
+            margin-top: 16px;
+        }
+
+        & + .item.lg {
+            margin-top: 24px;
+        }
+
+        .header {
+            display: flex;
+            width: 100%;
+            margin: 0; // Safari/Firefox fix
+            outline: none;
+            border: 1px solid transparent;
+            text-align: left;
+            cursor: pointer;
+            background: none;
+
+            &:focus-visible {
+                box-shadow: var(--triplex-next-IslandAccordion-Shadow_Focus);
+            }
+        }
+
+        .body,
+        .footer {
+            // Чтобы focus не попадал во внутренние элементы в закрытом состоянии.
+            visibility: hidden;
+        }
+
+        &.opened .body,
+        &.opened .footer {
+            visibility: visible;
+            // margin-top: 16px;
+        }
+
+        .caretWrapper {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .caretIcon {
+            flex-shrink: 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        &.sm {
+            .header {
+                padding: 16px;
+                border-radius: 16px;
+            }
+
+            .body,
+            .footer {
+                padding: 0 16px 16px 16px;
+            }
+
+            .caretWrapper {
+                right: 20px;
+            }
+
+            .remove {
+                right: -40px;
+                top: 20px;
+            }
+        }
+
+        &.md {
+            .header {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            .body,
+            .footer {
+                padding: 0 24px 24px 24px;
+            }
+
+            .caretWrapper {
+                right: 28px;
+            }
+
+            .remove {
+                right: -40px;
+                top: 28px;
+            }
+        }
+
+        &.lg {
+            .header {
+                padding: 32px;
+                border-radius: 32px;
+            }
+
+            .body,
+            .footer {
+                padding: 0 32px 32px 32px;
+            }
+
+            .caretWrapper {
+                right: 36px;
+            }
+
+            .remove {
+                right: -48px;
+                top: 40px;
+            }
+        }
+
+        &.opened:not(.disabled) .caretWrapper .caretIcon {
+            transform: rotate(-180deg);
+        }
+
+        .remove {
+            position: absolute;
+        }
+    }
+}

@@ -18,6 +18,7 @@ import {
     FormField_Tokens,
     HeaderPage_Tokens,
     Island_Tokens,
+    IslandAccordion_Tokens,
     Link_Tokens,
     ListItemControlsButton_Tokens,
     ListItem_Tokens,
@@ -59,6 +60,7 @@ import {
     TDesignTokensComponentsFormFieldValue,
     TDesignTokensComponentsHeaderPageValue,
     TDesignTokensComponentsIslandValue,
+    TDesignTokensComponentsIslandAccordionValue,
     TDesignTokensComponentsLinkValue,
     TDesignTokensComponentsListItemControlsButtonValue,
     TDesignTokensComponentsListItemValue,
@@ -126,6 +128,10 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         HeaderPage_Tokens,
     ),
     Island: GetTokensValueByTheme<TDesignTokensComponentsIslandValue>(ETriplexNextTheme.DARK, Island_Tokens),
+    IslandAccordion: GetTokensValueByTheme<TDesignTokensComponentsIslandAccordionValue>(
+        ETriplexNextTheme.DARK,
+        IslandAccordion_Tokens,
+    ),
     Link: GetTokensValueByTheme<TDesignTokensComponentsLinkValue>(ETriplexNextTheme.DARK, Link_Tokens),
     ListItem: GetTokensValueByTheme<TDesignTokensComponentsListItemValue>(ETriplexNextTheme.DARK, ListItem_Tokens),
     ListItemControlsButton: GetTokensValueByTheme<TDesignTokensComponentsListItemControlsButtonValue>(

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import FocusTrap, { FocusTrapProps } from "focus-trap-react";
+import { FocusTrap, FocusTrapProps } from "focus-trap-react";
 import { LightBoxContent } from "./LightBoxContent";
 import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
 import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";

@@ -79,9 +79,11 @@ export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
             >
                 {children}
 
-                <div className={clsx(styles.loadingContentOverlay, { [styles.hidden]: !isLoading })}>
-                    {isLoading && <LoaderWidget type="middle">{loadingTitle}</LoaderWidget>}
-                </div>
+                {isLoading && (
+                    <LoaderWidget className={styles.loadingContentOverlay} type="middle">
+                        {loadingTitle}
+                    </LoaderWidget>
+                )}
 
                 <div className={styles.lightBoxContentResizeWrapper} ref={resizeRef} />
             </div>

@@ -1,239 +1,357 @@
-import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
+import React, { useEffect, useState } from "react";
+import { Meta, StoryObj } from "@storybook/react";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
 import { EButtonTheme, EButtonSize } from "../../src/components/Button/enums";
-import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { Text } from "../../src/components/Typography/Text";
-import { Title } from "../../src/components/Typography/Title";
 import { Gap } from "../../src/components/Gap";
-import { EFooterPageType, EHeaderPageType } from "../../src/components/Page/components/enums";
+import { Title } from "../../src/components/Typography/Title";
+import { Text } from "../../src/components/Typography/Text";
+import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
+import { EHeaderPageType, EFooterPageType } from "../../src/components/Page/components/enums";
 import { Island } from "../../src/components/Island/Island";
 import { IslandBody } from "../../src/components/Island/components/IslandBody";
+import { EIslandType } from "../../src/components/Island/enums";
 import "./styles.less";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 
-export default {
+type LightBoxStoryArgs = {
+    isOpenInitially: boolean;
+    isLoading: boolean;
+    showControls: boolean;
+    showSideOverlay: boolean;
+    showTopOverlay: boolean;
+    stickyHeader: boolean;
+    stickyFooter: boolean;
+    pageWidth: number;
+};
+
+const STORY_META_DESCRIPTION = `
+Компонент **LightBox** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
+`;
+
+const meta = {
     title: "Components/LightBox",
     tags: ["autodocs"],
     parameters: {
+        layout: "fullscreen",
         docs: {
             description: {
-                component: `
-Компонент LightBox.
-                `,
+                component: STORY_META_DESCRIPTION,
+            },
+        },
+    },
+} satisfies Meta<LightBoxStoryArgs>;
+
+export default meta;
+
+const POEM_LINES: string[] = [
+    "Мой дядя самых честных правил,",
+    "Когда не в шутку занемог,",
+    "Он уважать себя заставил",
+    "И лучше выдумать не мог.",
+    "Его пример другим наука;",
+    "Но, боже мой, какая скука",
+    "С больным сидеть и день и ночь,",
+    "Не отходя ни шагу прочь!",
+    "Какое низкое коварство",
+    "Полуживого забавлять,",
+    "Ему подушки поправлять,",
+    "Печально подносить лекарство,",
+    "Вздыхать и думать про себя:",
+    "Когда же черт возьмёт тебя…",
+];
+
+const PoemBlock: React.FC = () => (
+    <Island type={EIslandType.TYPE_1} borderRadius={16} paddingSize={16}>
+        <IslandBody>
+            {POEM_LINES.map((line) => (
+                <React.Fragment key={line}>
+                    {line}
+                    <br />
+                </React.Fragment>
+            ))}
+        </IslandBody>
+    </Island>
+);
+
+const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boolean; pageWidth: number }> = ({
+    stickyHeader,
+    stickyFooter,
+    pageWidth,
+}) => (
+    <Page style={{ maxWidth: pageWidth }}>
+        <Page.Header type={EHeaderPageType.SECOND} sticky={stickyHeader}>
+            <Page.Header.Title>
+                <Page.Header.Title.Content>
+                    <Title
+                        tag="h1"
+                        size={ETitleSize.H1}
+                        tabIndex={-1}
+                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                    >
+                        Евгений Онегин
+                    </Title>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                        Русский поэт, драматург и прозаик, заложивший основы русского реалистического направления.
+                    </Text>
+                </Page.Header.Title.Content>
+                <Page.Header.Title.Controls>
+                    <Button
+                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                        theme={EButtonTheme.SECONDARY}
+                        size={EButtonSize.MD}
+                    />
+                    <Button
+                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                        theme={EButtonTheme.SECONDARY}
+                        size={EButtonSize.MD}
+                    />
+                </Page.Header.Title.Controls>
+            </Page.Header.Title>
+        </Page.Header>
+
+        <Page.Body>
+            {[0, 1, 2].map((index) => (
+                <React.Fragment key={index}>
+                    <PoemBlock />
+                    {index < 2 && <Gap size={16} />}
+                </React.Fragment>
+            ))}
+        </Page.Body>
+
+        <Page.Footer type={EFooterPageType.SECOND} sticky={stickyFooter}>
+            <Page.Footer.Description>
+                <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                <Page.Footer.Description.Controls>
+                    <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
+                        Button text
+                    </Button>
+                </Page.Footer.Description.Controls>
+            </Page.Footer.Description>
+        </Page.Footer>
+    </Page>
+);
+
+const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
+    isOpenInitially,
+    isLoading,
+    showControls,
+    showSideOverlay,
+    showTopOverlay,
+    stickyHeader,
+    stickyFooter,
+    pageWidth,
+}) => {
+    const [isOpen, setIsOpen] = useState(isOpenInitially);
+
+    useEffect(() => {
+        setIsOpen(isOpenInitially);
+    }, [isOpenInitially]);
+
+    const handleOpen = () => setIsOpen(true);
+    const handleClose = () => setIsOpen(false);
+
+    const lightBoxChildren: React.ReactElement[] = [
+        <LightBox.Content key="content" isLoading={isLoading}>
+            <LightBoxPageContent stickyHeader={stickyHeader} stickyFooter={stickyFooter} pageWidth={pageWidth} />
+        </LightBox.Content>,
+    ];
+
+    if (showControls) {
+        lightBoxChildren.push(
+            <LightBox.Controls key="controls">
+                <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={handleClose} />
+                <LightBox.Controls.Prev title="Назад" clickByArrowLeft onClick={() => console.log("Prev clicked")} />
+                <LightBox.Controls.Next title="Вперёд" clickByArrowRight onClick={() => console.log("Next clicked")} />
+            </LightBox.Controls>,
+        );
+    }
+
+    // if (showSideOverlay) {
+    //     lightBoxChildren.push(
+    //         <LightBox.SideOverlay key="sideOverlay" opened={showSideOverlay} onClose={() => console.log("Side closed")}>
+    //             <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
+    //                 <Title tag="h3" size={ETitleSize.H3}>
+    //                     Дополнительные материалы
+    //                 </Title>
+    //                 <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+    //                     Боковой оверлей помогает размещать справочную информацию и действия без выхода из LightBox.
+    //                 </Text>
+    //                 <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM} onClick={handleClose}>
+    //                     Закрыть LightBox
+    //                 </Button>
+    //             </div>
+    //         </LightBox.SideOverlay>,
+    //     );
+    // }
+
+    // if (showTopOverlay) {
+    //     lightBoxChildren.push(
+    //         <LightBox.TopOverlay key="topOverlay" opened={showTopOverlay} onClose={() => console.log("Top closed")}>
+    //             <div style={{ padding: "16px 24px", display: "flex", flexDirection: "column", gap: "8px" }}>
+    //                 <Title tag="h3" size={ETitleSize.H3}>
+    //                     Важное уведомление
+    //                 </Title>
+    //                 <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+    //                     Верхний оверлей используется для сервисных сообщений и закреплённых действий.
+    //                 </Text>
+    //             </div>
+    //         </LightBox.TopOverlay>,
+    //     );
+    // }
+
+    return (
+        <div>
+            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} onClick={handleOpen}>
+                Открыть LightBox
+            </Button>
+
+            {isOpen ? (
+                <LightBox
+                    isLoading={isLoading}
+                    isSideOverlayOpened={showSideOverlay}
+                    isTopOverlayOpened={showTopOverlay}
+                >
+                    {lightBoxChildren}
+                </LightBox>
+            ) : null}
+        </div>
+    );
+};
+
+const Template = (args: LightBoxStoryArgs) => <LightBoxPlayground {...args} />;
+
+type Story = StoryObj<LightBoxStoryArgs>;
+
+export const Playground: Story = {
+    render: Template,
+    args: {
+        isOpenInitially: false,
+        isLoading: false,
+        showControls: true,
+        // showSideOverlay: false,
+        // showTopOverlay: false,
+        stickyHeader: true,
+        stickyFooter: true,
+        pageWidth: 800,
+    },
+    argTypes: {
+        isOpenInitially: {
+            control: { type: "boolean" },
+            description: "Открывать LightBox автоматически при загрузке story.",
+            table: {
+                category: "Поведение",
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+        },
+        isLoading: {
+            control: { type: "boolean" },
+            description: "Показать состояние загрузки LightBox.",
+            table: {
+                category: "Состояния",
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+        },
+        showControls: {
+            control: { type: "boolean" },
+            description: "Отображать навигационные кнопки LightBox.Controls.",
+            table: {
+                category: "Содержимое",
+                type: { summary: "boolean" },
+                defaultValue: { summary: "true" },
+            },
+        },
+        // showSideOverlay: {
+        //     control: { type: "boolean" },
+        //     description: "Добавить боковую панель LightBox.SideOverlay.",
+        //     table: {
+        //         category: "Оверлеи",
+        //         type: { summary: "boolean" },
+        //         defaultValue: { summary: "false" },
+        //     },
+        // },
+        // showTopOverlay: {
+        //     control: { type: "boolean" },
+        //     description: "Добавить верхнюю панель LightBox.TopOverlay.",
+        //     table: {
+        //         category: "Оверлеи",
+        //         type: { summary: "boolean" },
+        //         defaultValue: { summary: "false" },
+        //     },
+        // },
+        stickyHeader: {
+            control: { type: "boolean" },
+            description: "Использовать sticky-позиционирование для Page.Header.",
+            table: {
+                category: "Контент",
+                type: { summary: "boolean" },
+                defaultValue: { summary: "true" },
+            },
+        },
+        stickyFooter: {
+            control: { type: "boolean" },
+            description: "Использовать sticky-позиционирование для Page.Footer.",
+            table: {
+                category: "Контент",
+                type: { summary: "boolean" },
+                defaultValue: { summary: "true" },
+            },
+        },
+        pageWidth: {
+            control: { type: "number" },
+            description: "Максимальная ширина области Page в пикселях.",
+            table: {
+                category: "Контент",
+                type: { summary: "number" },
+                defaultValue: { summary: "800" },
+            },
+        },
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Интерактивный пример LightBox. Управляйте состояниями и оверлеями через панель Storybook.",
             },
         },
     },
 };
 
-export const Default: StoryObj<typeof LightBox> = {
-    name: "Default",
-    render: () => {
-        const [open, setOpen] = useState(true);
-
-        React.useEffect(() => {
-            if (open) {
-                document.body.classList.add("dialogOpenExample");
-            } else {
-                document.body.classList.remove("dialogOpenExample");
-            }
-        }, [open]);
-
-        const renderLightBox = () => (
-            <LightBox>
-                <LightBox.Content>{renderPage()}</LightBox.Content>
-                <LightBox.Controls>
-                    <LightBox.Controls.Close
-                        title="Закрыть"
-                        data-test-id="lightbox-close"
-                        onClick={() => setOpen(false)}
-                    />
-                    <LightBox.Controls.Prev
-                        title="Назад"
-                        onClick={() => console.log("Prev arrow clicked!")}
-                        clickByArrowLeft
-                    />
-                    <LightBox.Controls.Next
-                        title="Вперёд"
-                        onClick={() => console.log("Next arrow clicked!")}
-                        clickByArrowRight
-                    />
-                </LightBox.Controls>
-            </LightBox>
-        );
-
-        const renderPage = () => (
-            <Page style={{ maxWidth: "800px" }}>
-                <Page.Header type={EHeaderPageType.SECOND} sticky>
-                    <Page.Header.Title>
-                        <Page.Header.Title.Content>
-                            <Title tag="h1" size={ETitleSize.H1}>
-                                Евгений Онегин
-                            </Title>
-                            <Gap size={8} />
-                            <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">
-                                Русский поэт, драматург и прозаик, заложивший основы русского реалистического
-                                направления.
-                            </Text>
-                        </Page.Header.Title.Content>
-                        <Page.Header.Title.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
-                                Button Name
-                            </Button>
-                            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.MD}>
-                                Button Name
-                            </Button>
-                        </Page.Header.Title.Controls>
-                    </Page.Header.Title>
-                </Page.Header>
-                <Page.Body verticalMargin={16}>
-                    <Island borderRadius={16} paddingSize={16} type="type_1">
-                        <IslandBody>
-                            Мой дядя самых честных правил,
-                            <br />
-                            Когда не в шутку занемог,
-                            <br />
-                            Он уважать себя заставил
-                            <br />
-                            И лучше выдумать не мог.
-                            <br />
-                            Его пример другим наука;
-                            <br />
-                            Но, боже мой, какая скука
-                            <br />С больным сидеть и день и ночь,
-                        </IslandBody>
-                    </Island>
-                    <Gap size={16} />
-                    <Island borderRadius={16} paddingSize={16} type="type_1">
-                        <IslandBody>
-                            Не отходя ни шагу прочь!
-                            <br />
-                            Какое низкое коварство
-                            <br />
-                            Полуживого забавлять,
-                            <br />
-                            Ему подушки поправлять,
-                            <br />
-                            Печально подносить лекарство,
-                            <br />
-                            Вздыхать и думать про себя:
-                            <br />
-                            Когда же черт возьмет тебя
-                            <br />
-                            <br />
-                            Так думал молодой повеса,
-                            <br />
-                            Летя в пыли на почтовых,
-                            <br />
-                            Всевышней волею Зевеса
-                            <br />
-                            Наследник всех своих родных.
-                            <br />
-                            Друзья Людмилы и Руслана!
-                            <br />
-                            С героем моего романа
-                            <br />
-                            Без предисловий, сей же час
-                            <br />
-                            Позвольте познакомить вас:
-                            <br />
-                            Онегин, добрый мой приятель,
-                            <br />
-                            Родился на брегах Невы,
-                            <br />
-                            Где, может быть, родились вы
-                            <br />
-                            Или блистали, мой читатель;
-                            <br />
-                            Там некогда гулял и я:
-                            <br />
-                            Но вреден север для меня.
-                            <br />
-                            <br />
-                            Служив отлично благородно,
-                            <br />
-                            Долгами жил его отец,
-                            <br />
-                            Давал три бала ежегодно
-                            <br />
-                            И промотался наконец.
-                            <br />
-                            Судьба Евгения хранила:
-                            <br />
-                            Сперва Madame за ним ходила,
-                            <br />
-                            Потом Monsieur ее сменил.
-                            <br />
-                            Ребенок был резов, но мил.
-                            <br />
-                            Monsieur l'Abbé, француз убогой,
-                            <br />
-                            Чтоб не измучилось дитя,
-                            <br />
-                            Учил его всему шутя,
-                            <br />
-                            Не докучал моралью строгой,
-                            <br />
-                            Слегка за шалости бранил
-                            <br />
-                            И в Летний сад гулять водил.
-                            <br />
-                            <br />
-                            Когда же юности мятежной
-                            <br />
-                            Пришла Евгению пора,
-                            <br />
-                            Пора надежд и грусти нежной,
-                            <br />
-                            Monsieur прогнали со двора.
-                        </IslandBody>
-                    </Island>
-
-                    <Gap size={16} />
-
-                    <Island borderRadius={16} paddingSize={16} type="type_1">
-                        <IslandBody>
-                            Вот мой Онегин на свободе;
-                            <br />
-                            Острижен по последней моде,
-                            <br />
-                            Как dandy лондонский одет —<br />
-                            И наконец увидел свет.
-                            <br />
-                            Он по-французски совершенно
-                            <br />
-                            Мог изъясняться и писал;
-                            <br />
-                            Легко мазурку танцевал
-                            <br />
-                            И кланялся непринужденно;
-                            <br />
-                            Чего ж вам больше? Свет решил,
-                            <br />
-                            Что он умен и очень мил.
-                        </IslandBody>
-                    </Island>
-                </Page.Body>
-                <Page.Footer type={EFooterPageType.SECOND} sticky>
-                    <Page.Footer.Description>
-                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
-                        <Page.Footer.Description.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD}>
-                                Button Name
-                            </Button>
-                        </Page.Footer.Description.Controls>
-                    </Page.Footer.Description>
-                </Page.Footer>
-            </Page>
-        );
-        return (
-            <>
-                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.MD} onClick={() => setOpen(true)}>
-                    Open LightBox
-                </Button>
-                {open && renderLightBox()}
-            </>
-        );
+const createStory = (partialArgs: Partial<LightBoxStoryArgs>, description: string): Story => ({
+    render: Template,
+    args: { ...Playground.args, ...partialArgs },
+    parameters: {
+        docs: {
+            description: {
+                story: description,
+            },
+        },
     },
-};
+});
+
+export const DefaultView = createStory(
+    { isOpenInitially: true, showControls: true },
+    "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
+);
+
+// export const WithSideOverlay = createStory(
+//     { isOpenInitially: true, showSideOverlay: true },
+//     "LightBox c дополнительной боковой панелью, где можно разместить навигацию или справку.",
+// );
+
+// export const WithTopOverlay = createStory(
+//     { isOpenInitially: true, showTopOverlay: true },
+//     "Вариант с верхним оверлеем, подходящим для уведомлений и сервисных сообщений.",
+// );
+
+export const LoadingState = createStory(
+    { isOpenInitially: true, isLoading: true, showControls: true },
+    "Сценарий загрузки контента: стрелки скрыты, пока LightBox находится в состоянии loading.",
+);

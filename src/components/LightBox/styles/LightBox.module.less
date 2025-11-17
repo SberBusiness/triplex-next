@@ -54,14 +54,9 @@
     }
 
     .loadingContentOverlay {
-        z-index: @z-index-step * 3;
-        position: fixed;
-        top: 0;
-        bottom: 0;
-
-        &.hidden {
-            display: none;
-        }
+        border-top-left-radius: 32px;
+        border-top-right-radius: 32px;
+        opacity: 0.8;
     }
 
     .lightBoxContentResizeWrapper {

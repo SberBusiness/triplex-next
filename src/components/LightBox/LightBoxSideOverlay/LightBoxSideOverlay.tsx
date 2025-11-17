@@ -134,7 +134,7 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
 
     const content = (
         <div
-            className={clsx(styles.lightBoxSideOverlay, styles.globalLightBoxSideOverlay, {
+            className={clsx(styles.lightBoxSideOverlay, {
                 [styles.closing]: closing,
                 [styles.opening]: opening,
             })}

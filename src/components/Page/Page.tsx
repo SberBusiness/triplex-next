@@ -12,7 +12,7 @@ export interface IPageProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const Page = Object.assign(
     React.forwardRef<HTMLDivElement, IPageProps>(function Page({ children, className, ...rest }, ref) {
         return (
-            <div className={clsx(styles.page, className)} {...rest} ref={ref}>
+            <div className={clsx(styles.page, styles["global-page"], className)} {...rest} ref={ref}>
                 {children}
             </div>
         );

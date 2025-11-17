@@ -90,6 +90,7 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
                         tag="h1"
                         size={ETitleSize.H1}
                         tabIndex={-1}
+                        // Устанавливает фокус на первый элемент при открытии LightBox.
                         {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
                     >
                         Евгений Онегин
@@ -174,23 +175,13 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
         );
     }
 
-    // if (showSideOverlay) {
-    //     lightBoxChildren.push(
-    //         <LightBox.SideOverlay key="sideOverlay" opened={showSideOverlay} onClose={() => console.log("Side closed")}>
-    //             <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
-    //                 <Title tag="h3" size={ETitleSize.H3}>
-    //                     Дополнительные материалы
-    //                 </Title>
-    //                 <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-    //                     Боковой оверлей помогает размещать справочную информацию и действия без выхода из LightBox.
-    //                 </Text>
-    //                 <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={handleClose}>
-    //                     Закрыть LightBox
-    //                 </Button>
-    //             </div>
-    //         </LightBox.SideOverlay>,
-    //     );
-    // }
+    if (showSideOverlay) {
+        lightBoxChildren.push(
+            <LightBox.SideOverlay key="sideOverlay" opened={showSideOverlay} onClose={() => console.log("Side closed")}>
+                <LightBoxPageContent stickyHeader={stickyHeader} stickyFooter={stickyFooter} pageWidth={pageWidth} />
+            </LightBox.SideOverlay>,
+        );
+    }
 
     // if (showTopOverlay) {
     //     lightBoxChildren.push(
@@ -236,7 +227,7 @@ export const Playground: Story = {
         isOpenInitially: false,
         isLoading: false,
         showControls: true,
-        // showSideOverlay: false,
+        showSideOverlay: false,
         // showTopOverlay: false,
         stickyHeader: true,
         stickyFooter: true,
@@ -270,15 +261,15 @@ export const Playground: Story = {
                 defaultValue: { summary: "true" },
             },
         },
-        // showSideOverlay: {
-        //     control: { type: "boolean" },
-        //     description: "Добавить боковую панель LightBox.SideOverlay.",
-        //     table: {
-        //         category: "Оверлеи",
-        //         type: { summary: "boolean" },
-        //         defaultValue: { summary: "false" },
-        //     },
-        // },
+        showSideOverlay: {
+            control: { type: "boolean" },
+            description: "Добавить боковую панель LightBox.SideOverlay.",
+            table: {
+                category: "Оверлеи",
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+        },
         // showTopOverlay: {
         //     control: { type: "boolean" },
         //     description: "Добавить верхнюю панель LightBox.TopOverlay.",
@@ -342,14 +333,11 @@ export const DefaultView = createStory(
     "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
 );
 
-// export const WithSideOverlay = createStory(
-//     { isOpenInitially: true, showSideOverlay: true },
-//     "LightBox c дополнительной боковой панелью, где можно разместить навигацию или справку.",
-// );
+export const WithSideOverlay = createStory({ isOpenInitially: true, showSideOverlay: true }, "LightBox c SideOverlay.");
 
 // export const WithTopOverlay = createStory(
 //     { isOpenInitially: true, showTopOverlay: true },
-//     "Вариант с верхним оверлеем, подходящим для уведомлений и сервисных сообщений.",
+//     "Вариант с TopOverlay.",
 // );
 
 export const LoadingState = createStory(

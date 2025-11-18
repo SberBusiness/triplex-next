@@ -7,7 +7,7 @@ import { ExpandAnimation, IExpandAnimationProps } from "../../ExpandAnimation/Ex
 import styles from "../styles/IslandAccordion.module.less";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { TIslandBorderRadiusSize } from "../../Island/types";
-import { IslandAccordionTitle } from "./IslandAccordionTitle";
+import { IIslandAccordionTitleProps, IslandAccordionTitle } from "./IslandAccordionTitle";
 import { IslandAccordionContent } from "./IslandAccordionContent";
 import { IslandAccordionFooter } from "./IslandAccordionFooter";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
@@ -16,7 +16,6 @@ import { IIslandProps, EIslandType } from "../../Island";
 import { ETitleSize } from "../../Typography/enums";
 import { Step, EStepStatus, EStepPosition } from "../../Step";
 
-/** Свойства компонента элемента аккордеона. */
 export interface IIslandAccordionItemProps
     extends Omit<React.HTMLAttributes<HTMLLIElement>, "title">,
         Pick<IIslandProps, "type"> {
@@ -118,35 +117,31 @@ export const IslandAccordionItem = Object.assign(
                 onRemove?.(id!);
             };
 
+            const renderTitle = () => {
+                if (!React.isValidElement<IIslandAccordionTitleProps>(title)) {
+                    return title;
+                }
+
+                return React.cloneElement(title, {
+                    size: sizeToTitleSizeMap[size],
+                });
+            };
+
             const classNames = clsx(className, styles.item, sizeToClassNameMap[size], typeToClassNameMap[type], {
                 [styles.disabled]: !!disabled,
                 [styles.opened]: isOpen,
             });
 
-            const renderTitle = () => {
-                if (React.isValidElement(title) && title.type === IslandAccordionTitle) {
-                    return React.cloneElement(title, {
-                        size: sizeToTitleSizeMap[size],
-                    });
-                }
-                return title;
-            };
-
             return (
                 <li {...rest} className={classNames} id={id} ref={ref}>
-                    <Island
-                        // paddingSize={sizeToPaddingSizeMap[size]}
-                        className={styles.island}
-                        borderRadius={sizeToBorderRadiusMap[size]}
-                        type={type}
-                    >
+                    <Island className={styles.island} borderRadius={sizeToBorderRadiusMap[size]} type={type}>
                         <Island.Header>
                             <button
                                 id={headerInstanceId}
                                 aria-controls={bodyInstanceId}
                                 aria-expanded={isOpen}
                                 type="button"
-                                className={clsx(styles.header, styles.hoverable)}
+                                className={styles.header}
                                 onClick={handleHeaderClick}
                                 disabled={disabled}
                                 data-tx={process.env.npm_package_version}
@@ -158,7 +153,9 @@ export const IslandAccordionItem = Object.assign(
                                         </Step>
                                     </div>
                                 )}
-                                {renderTitle()}
+
+                                <div className={styles.titleWrapper}> {renderTitle()}</div>
+
                                 <span
                                     className={clsx(styles.caretWrapper, "hoverable", {
                                         active: isOpen,

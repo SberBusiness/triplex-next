@@ -1,14 +1,9 @@
-.globalStep {
+.step {
     font-weight: 600;
     font-family: 'SBSansUI', 'Arial', sans-serif;
-    font-style: normal;
     font-size: 18px;
     line-height: 24px;
-
-    text-transform: none;
-
     display: flex;
-    flex-shrink: 0; //ie11-fix
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -16,30 +11,30 @@
     height: 32px;
     user-select: none;
     cursor: default;
-    border: 2px solid;
     border-radius: 50%;
 
     &.success {
         color: var(--triplex-next-Step-Color_Success);
         background-color: var(--triplex-next-Step-Background_Success);
-        border-color: var(--triplex-next-Step-Border_Success);
     }
 
-    // &.warning {
-    //     color: var(--triplex-next-Step-Color_Warning);
-    //     background-color: var(--triplex-next-Step-Background_Warning);
-    //     border-color: var(--triplex-next-Step-Border_Warning);
-    // }
+    &.warning {
+        color: var(--triplex-next-Step-Color_Warning);
+        background-color: var(--triplex-next-Step-Background_Warning);
+    }
 
     &.wait {
         color: var(--triplex-next-Step-Color_Wait);
         background-color: var(--triplex-next-Step-Background_Wait);
-        border-color: var(--triplex-next-Step-Border_Wait);
     }
 
-    // &.error {
-    //     color: var(--triplex-next-Step-Color_Error);
-    //     background-color: var(--triplex-next-Step-Background_Error);
-    //     border-color: var(--triplex-next-Step-Border_Error);
-    // }
+    &.error {
+        color: var(--triplex-next-Step-Color_Error);
+        background-color: var(--triplex-next-Step-Background_Error);
+    }
+
+    &.disabled {
+        color: var(--triplex-next-Step-Color_Disabled);
+        background-color: var(--triplex-next-Step-Background_Disabled);
+    }
 }

@@ -3,7 +3,7 @@ import { IslandAccordion, IslandAccordionItem } from "../../src/components/Islan
 import { StoryObj } from "@storybook/react";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Button } from "../../src/components/Button";
-import { EButtonTheme, EButtonSize } from "../../src/components/Button/enums";
+import { EButtonTheme } from "../../src/components/Button/enums";
 import { EIslandType } from "../../src/components/Island";
 import { EStepStatus } from "../../src/components/Step";
 import "./IslandAccordion.less";
@@ -83,13 +83,13 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
                             <div className="island-accordion-item-footer">
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
                                     Button link text
                                 </Button>
-                                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </div>
@@ -135,13 +135,13 @@ export const Default: StoryObj<IIslandAccordionStoryType> = {
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
                             <div className="island-accordion-item-footer">
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
                                     Button link text
                                 </Button>
-                                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </div>
@@ -186,7 +186,7 @@ export const Disabled: StoryObj<IIslandAccordionStoryType> = {
                     <IslandAccordion.Item title={title} disabled>
                         <IslandAccordion.Item.Content>Контент аккордеона</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
-                            <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                                 Button Name
                             </Button>
                         </IslandAccordion.Item.Footer>
@@ -233,13 +233,13 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
                         <IslandAccordion.Item.Content>Контент аккордеона</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
                             <div className="island-accordion-item-footer">
-                                <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
                                     Button link text
                                 </Button>
-                                <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                                     Button text
                                 </Button>
                             </div>
@@ -255,9 +255,8 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
     name: "With Status",
     argTypes: {
         size: {
-            table: {
-                disable: true,
-            },
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
         },
         type: {
             table: {
@@ -275,7 +274,7 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
             },
         },
     },
-    render: () => {
+    render: (args) => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
 
         const items = [
@@ -287,6 +286,18 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
                 id: "accordion-form-item-2",
                 status: EStepStatus.WAIT,
             },
+            {
+                id: "accordion-form-item-3",
+                status: EStepStatus.ERROR,
+            },
+            {
+                id: "accordion-form-item-4",
+                status: EStepStatus.DISABLED,
+            },
+            {
+                id: "accordion-form-item-5",
+                status: EStepStatus.WARNING,
+            },
         ];
 
         const renderIslandAccordionItem = ({ id, status }) => (
@@ -294,13 +305,13 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
                 <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                 <IslandAccordion.Item.Footer>
                     <div className="island-accordion-item-footer">
-                        <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
+                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
                             Button link text
                         </Button>
-                        <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                             Button text
                         </Button>
-                        <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                             Button text
                         </Button>
                     </div>
@@ -310,7 +321,9 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion>{items.map((item) => renderIslandAccordionItem(item))}</IslandAccordion>
+                <IslandAccordion size={args.size}>
+                    {items.map((item) => renderIslandAccordionItem(item))}
+                </IslandAccordion>
             </div>
         );
     },
@@ -359,13 +372,13 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
                 <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                 <IslandAccordion.Item.Footer>
                     <div className="island-accordion-item-footer">
-                        <Button theme={EButtonTheme.LINK} size={EButtonSize.SM}>
+                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
                             Button link text
                         </Button>
-                        <Button theme={EButtonTheme.SECONDARY} size={EButtonSize.SM}>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                             Button text
                         </Button>
-                        <Button theme={EButtonTheme.GENERAL} size={EButtonSize.SM}>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                             Button text
                         </Button>
                     </div>

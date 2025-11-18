@@ -6,7 +6,7 @@ import clsx from "clsx";
 import styles from "./styles/Step.module.less";
 
 /** Свойства компонента Step. */
-export interface IStepMarkerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IStepProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Номер шага для отображения в кружке. */
     step: number;
     /** Статус текущего шага. */
@@ -17,9 +17,10 @@ export interface IStepMarkerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const statusToClassNameMap = {
     [EStepStatus.WAIT]: styles.wait,
-    // [EStepStatus.WARNING]: styles.warning,
-    // [EStepStatus.ERROR]: styles.error,
+    [EStepStatus.WARNING]: styles.warning,
+    [EStepStatus.ERROR]: styles.error,
     [EStepStatus.SUCCESS]: styles.success,
+    [EStepStatus.DISABLED]: styles.disabled,
 };
 
 const stepPositionToTooltipAlignMap = {
@@ -39,8 +40,7 @@ export const calcPosition = (stepCount: number, i: number): EStepPosition => {
     }
 };
 
-/** Компонент маркера шага (цифра в кружке). */
-export const Step: React.FC<IStepMarkerProps> = ({
+export const Step: React.FC<IStepProps> = ({
     children,
     className,
     step,
@@ -52,7 +52,7 @@ export const Step: React.FC<IStepMarkerProps> = ({
     const tooltipAlign = stepPositionToTooltipAlignMap[position];
 
     const renderContent = () => (
-        <div ref={ref} className={clsx(styles.globalStep, statusToClassNameMap[status], className)} {...rest}>
+        <div ref={ref} className={clsx(styles.step, statusToClassNameMap[status], className)} {...rest}>
             {step}
         </div>
     );

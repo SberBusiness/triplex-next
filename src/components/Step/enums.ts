@@ -2,11 +2,12 @@
 export enum EStepStatus {
     SUCCESS = "success",
     WAIT = "wait",
-    // ERROR = "error",
-    // WARNING = "warning",
+    ERROR = "error",
+    WARNING = "warning",
+    DISABLED = "disabled",
 }
 
-/** Позиция шага, относительно других. */
+/** Позиция шага относительно других. */
 export enum EStepPosition {
     /** Обычная позиция. */
     Default = "Default",

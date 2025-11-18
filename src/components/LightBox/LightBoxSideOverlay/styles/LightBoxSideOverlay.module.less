@@ -120,23 +120,3 @@
         overflow-x: hidden;
     }
 }
-
-// Миксин скролл-зависимых стилей.
-each(@scroll-sizes, {
-    @scroll-width: @value;
-    @scroll-width-px: ~'@{scroll-width}px';
-    // Ширина экрана без скрола.
-    @screen-width-without-scroll: calc(var(--lightBox-screen-width) - @scroll-width-px);
-
-    html.scroll-@{scroll-width} {
-        /*
-          Breakpoint для размера менее 1024px.
-        */
-        // .LB-less-or-equal-media-point-0-no-hash {
-        //     .lightBoxSideOverlay {
-        //         left: 0;
-        //         width: 100%;
-        //     }
-        // }
-    }
-})

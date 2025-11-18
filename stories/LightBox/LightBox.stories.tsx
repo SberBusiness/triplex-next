@@ -329,7 +329,7 @@ const createStory = (partialArgs: Partial<LightBoxStoryArgs>, description: strin
 });
 
 export const DefaultView = createStory(
-    { isOpenInitially: true, showControls: true },
+    { isOpenInitially: false, showControls: true },
     "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
 );
 
@@ -341,6 +341,6 @@ export const WithSideOverlay = createStory({ isOpenInitially: true, showSideOver
 // );
 
 export const LoadingState = createStory(
-    { isOpenInitially: true, isLoading: true, showControls: true },
+    { isOpenInitially: false, isLoading: true, showControls: true },
     "Сценарий загрузки контента: стрелки скрыты, пока LightBox находится в состоянии loading.",
 );

@@ -75,7 +75,7 @@ describe("LightBox", () => {
         );
 
         expect(screen.getAllByText("Dialog content")[0]).toBeInTheDocument();
-        expect(document.getElementById("LightBox-mount-node")).toBeTruthy();
+        expect(document.getElementById("LightBox-next-mount-node")).toBeTruthy();
         expect(document.documentElement.classList.contains(styles.bodyOverflowHidden)).toBe(true);
         expect(addClassNameWithScrollbarWidth).toHaveBeenCalledTimes(1);
 

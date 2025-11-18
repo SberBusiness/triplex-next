@@ -16,8 +16,18 @@ export default {
         docs: {
             description: {
                 component: `
+Интерактивный компонент для организации контента, который позволяет пользователям раскрывать и скрывать разделы логически сгруппированной информации внутри ограниченного пространства.
+                
+## Особенности
 
-                `,
+- Позволяет использовать **статусы** success, wait, error, disabled, warning, с возможностью добавления подсказок при наведении курсора
+
+## Состав
+
+- Title — заголовок контента
+- Content — основной контент
+- Footer — нижняя часть
+`,
             },
         },
     },
@@ -27,6 +37,7 @@ type IIslandAccordionStoryType = React.ComponentProps<typeof IslandAccordion> & 
     type: EIslandType;
     removable: boolean;
     disabled: boolean;
+    size: EComponentSize;
 };
 
 export const Playground: StoryObj<IIslandAccordionStoryType> = {
@@ -41,6 +52,8 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
+            description: "Размер компонента",
+            table: { type: { summary: "EComponentSize" }, defaultValue: { summary: EComponentSize.SM } },
         },
         type: {
             control: { type: "select" },
@@ -54,16 +67,6 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
         disabled: {
             control: { type: "boolean" },
         },
-        onToggle: {
-            table: {
-                disable: true,
-            },
-        },
-        onRemove: {
-            table: {
-                disable: true,
-            },
-        },
     },
     render: (args) => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -72,27 +75,26 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion size={args.size}>
+                <IslandAccordion>
                     <IslandAccordion.Item
                         id="island-accordion-item-removable"
                         title={title}
                         type={args.type}
                         disabled={args.disabled}
                         onRemove={args.removable ? handleRemove : undefined}
+                        size={args.size}
                     >
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
-                            <div className="island-accordion-item-footer">
-                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                                    Button link text
-                                </Button>
-                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                            </div>
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                                Button link text
+                            </Button>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                                Button text
+                            </Button>
                         </IslandAccordion.Item.Footer>
                     </IslandAccordion.Item>
                 </IslandAccordion>
@@ -114,16 +116,6 @@ export const Default: StoryObj<IIslandAccordionStoryType> = {
                 disable: true,
             },
         },
-        onToggle: {
-            table: {
-                disable: true,
-            },
-        },
-        onRemove: {
-            table: {
-                disable: true,
-            },
-        },
     },
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -134,17 +126,15 @@ export const Default: StoryObj<IIslandAccordionStoryType> = {
                     <IslandAccordion.Item title={title}>
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
-                            <div className="island-accordion-item-footer">
-                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                                    Button link text
-                                </Button>
-                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                            </div>
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                                Button link text
+                            </Button>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                                Button text
+                            </Button>
                         </IslandAccordion.Item.Footer>
                     </IslandAccordion.Item>
                 </IslandAccordion>
@@ -162,16 +152,6 @@ export const Disabled: StoryObj<IIslandAccordionStoryType> = {
             },
         },
         type: {
-            table: {
-                disable: true,
-            },
-        },
-        onToggle: {
-            table: {
-                disable: true,
-            },
-        },
-        onRemove: {
             table: {
                 disable: true,
             },
@@ -210,16 +190,6 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
                 disable: true,
             },
         },
-        onToggle: {
-            table: {
-                disable: true,
-            },
-        },
-        onRemove: {
-            table: {
-                disable: true,
-            },
-        },
     },
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -232,17 +202,15 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
                     <IslandAccordion.Item id="island-accordion-item-removable-1" title={title} onRemove={handleRemove}>
                         <IslandAccordion.Item.Content>Контент аккордеона</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
-                            <div className="island-accordion-item-footer">
-                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                                    Button link text
-                                </Button>
-                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                            </div>
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                                Button link text
+                            </Button>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                                Button text
+                            </Button>
                         </IslandAccordion.Item.Footer>
                     </IslandAccordion.Item>
                 </IslandAccordion>
@@ -253,22 +221,15 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
 
 export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
     name: "With Status",
+    args: {
+        size: EComponentSize.SM,
+    },
     argTypes: {
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
         },
         type: {
-            table: {
-                disable: true,
-            },
-        },
-        onToggle: {
-            table: {
-                disable: true,
-            },
-        },
-        onRemove: {
             table: {
                 disable: true,
             },
@@ -301,29 +262,25 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
         ];
 
         const renderIslandAccordionItem = ({ id, status }) => (
-            <IslandAccordion.Item key={id} id={id} status={status} title={title}>
+            <IslandAccordion.Item key={id} id={id} status={status} title={title} size={args.size}>
                 <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                 <IslandAccordion.Item.Footer>
-                    <div className="island-accordion-item-footer">
-                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                            Button link text
-                        </Button>
-                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
-                            Button text
-                        </Button>
-                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
-                            Button text
-                        </Button>
-                    </div>
+                    <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                        Button link text
+                    </Button>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
                 </IslandAccordion.Item.Footer>
             </IslandAccordion.Item>
         );
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion size={args.size}>
-                    {items.map((item) => renderIslandAccordionItem(item))}
-                </IslandAccordion>
+                <IslandAccordion>{items.map((item) => renderIslandAccordionItem(item))}</IslandAccordion>
             </div>
         );
     },
@@ -338,16 +295,6 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
             },
         },
         type: {
-            table: {
-                disable: true,
-            },
-        },
-        onToggle: {
-            table: {
-                disable: true,
-            },
-        },
-        onRemove: {
             table: {
                 disable: true,
             },
@@ -371,17 +318,15 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
             <IslandAccordion.Item key={id} id={id} status={status} title={title} stepHint="Текст подсказки.">
                 <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                 <IslandAccordion.Item.Footer>
-                    <div className="island-accordion-item-footer">
-                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                            Button link text
-                        </Button>
-                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
-                            Button text
-                        </Button>
-                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
-                            Button text
-                        </Button>
-                    </div>
+                    <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                        Button link text
+                    </Button>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
                 </IslandAccordion.Item.Footer>
             </IslandAccordion.Item>
         );

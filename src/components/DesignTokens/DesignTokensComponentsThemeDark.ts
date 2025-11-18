@@ -23,7 +23,7 @@ import {
     ListItem_Tokens,
     ListMaster_Tokens,
     Loader_Tokens,
-    LoaderWidget_Tokens,
+    LoaderScreen_Tokens,
     Marker_Tokens,
     MarkerStatus_Tokens,
     Overlay_Tokens,
@@ -61,7 +61,7 @@ import {
     TDesignTokensComponentsListItemValue,
     TDesignTokensComponentsListMasterValue,
     TDesignTokensComponentsLoaderValue,
-    TDesignTokensComponentsLoaderWidgetValue,
+    TDesignTokensComponentsLoaderScreenValue,
     TDesignTokensComponentsMarkerValue,
     TDesignTokensComponentsMarkerStatusValue,
     TDesignTokensComponentsOverlayValue,
@@ -129,9 +129,9 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         ListMaster_Tokens,
     ),
     Loader: GetTokensValueByTheme<TDesignTokensComponentsLoaderValue>(ETriplexNextTheme.DARK, Loader_Tokens),
-    LoaderWidget: GetTokensValueByTheme<TDesignTokensComponentsLoaderWidgetValue>(
+    LoaderScreen: GetTokensValueByTheme<TDesignTokensComponentsLoaderScreenValue>(
         ETriplexNextTheme.DARK,
-        LoaderWidget_Tokens,
+        LoaderScreen_Tokens,
     ),
     Marker: GetTokensValueByTheme<TDesignTokensComponentsMarkerValue>(ETriplexNextTheme.DARK, Marker_Tokens),
     MarkerStatus: GetTokensValueByTheme<TDesignTokensComponentsMarkerStatusValue>(

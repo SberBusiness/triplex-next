@@ -5,7 +5,7 @@ export * from "./Link";
 export * from "./Tabs";
 export * from "./TabsLine";
 export * from "./Loader";
-export * from "./LoaderWidget";
+export * from "./LoaderScreen";
 export * from "./Radio";
 export * from "./Typography";
 export * from "./Tooltip";

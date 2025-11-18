@@ -20,7 +20,7 @@ import {
     TDesignTokensComponentsListItemControlsButton,
     TDesignTokensComponentsListMaster,
     TDesignTokensComponentsLoader,
-    TDesignTokensComponentsLoaderWidget,
+    TDesignTokensComponentsLoaderScreen,
     TDesignTokensComponentsMarker,
     TDesignTokensComponentsMarkerStatus,
     TDesignTokensComponentsOverlay,
@@ -293,7 +293,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsListItemControlsButton
     | TDesignTokensComponentsListMaster
     | TDesignTokensComponentsLoader
-    | TDesignTokensComponentsLoaderWidget
+    | TDesignTokensComponentsLoaderScreen
     | TDesignTokensComponentsMarker
     | TDesignTokensComponentsMarkerStatus
     | TDesignTokensComponentsOverlay

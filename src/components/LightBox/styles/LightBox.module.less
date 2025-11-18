@@ -17,7 +17,7 @@
         position: fixed;
         top: var(--lightBox-screen-top);
         left: var(--lightBox-screen-left);
-        width: var(--lightBox-screen-width);
+        width: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0));
         height: 100%;
         pointer-events: none;
         background-color: var(--triplex-next-LightBox-Backdrop_Background);

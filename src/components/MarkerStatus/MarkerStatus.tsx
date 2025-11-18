@@ -4,8 +4,7 @@ import { EMarkerStatus } from "../Marker/enums";
 import styles from "./styles/MarkerStatus.module.less";
 import clsx from "clsx";
 import { statusToClassNameMap } from "../Marker/utils";
-import { ETextSize } from "../Typography/enums";
-import { Text } from "../Typography/Text";
+import { ETextSize, ECaptionSize, Caption, Text, EFontType } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 
@@ -31,20 +30,30 @@ export const MarkerStatus: React.FC<IMarkerStatusProps> = ({
     description,
     status,
     size = EComponentSize.MD,
+    ...rest
 }) => {
     const classNames = clsx(styles.markerStatus, sizeToClassNameMap[size], statusToClassNameMap[status], className);
 
     return (
-        <div className={classNames} data-tx={process.env.npm_package_version}>
+        <div className={classNames} data-tx={process.env.npm_package_version} {...rest}>
             <div className={styles.markerContainer}>
                 <Marker status={status} size={size} />
             </div>
 
-            <Text size={markerStatusSizeToTextSizeMap[size]} className={styles.markerStatusText}>
-                {children}
-            </Text>
+            <div className={styles.contentContainer}>
+                <Text size={markerStatusSizeToTextSizeMap[size]}>{children}</Text>
 
-            {description && <div className={styles.markerStatusDescription}>{description}</div>}
+                {description &&
+                    (size === EComponentSize.MD ? (
+                        <Caption size={ECaptionSize.C1} type={EFontType.SECONDARY}>
+                            {description}
+                        </Caption>
+                    ) : (
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            {description}
+                        </Text>
+                    ))}
+            </div>
         </div>
     );
 };

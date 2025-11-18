@@ -12,12 +12,13 @@ import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
 import styles from "./styles/LightBox.module.less";
+import scrollStyles from "./styles/LightBoxScroll.module.less";
 
 // Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body.
-export const lightBoxMountNodeIdDefault = "LightBox-mount-node";
+export const lightBoxMountNodeIdDefault = "LightBox-next-mount-node";
 
 // Идентификатор DOM-элемента, в визуальных границах (левая и правая координата) которого рендерится лайтбокс.
-export const lightBoxViewManagerNodeIdDefault = "LightBox-view-manager-node";
+export const lightBoxViewManagerNodeIdDefault = "LightBox-next-view-manager-node";
 
 /** Свойства компонента LightBox. */
 export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -112,7 +113,7 @@ export const LightBox: ILightBoxFC = ({
     };
 
     useEffect(() => {
-        addClassNameWithScrollbarWidth(styles);
+        addClassNameWithScrollbarWidth(scrollStyles);
         addClassNamesToDocumentElement();
         // Фикс бага в роутере - при переключении между лайтбоксами иногда сначала происходит componentDidMount 2го и затем componentWillUnmount первого, css классы удаляются.
         setTimeout(addClassNamesToDocumentElement, 100);

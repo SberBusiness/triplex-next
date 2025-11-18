@@ -1,45 +1,11 @@
-/**
- * Константы соответствуют js константам в src/components/LightBox/LightBoxViewManager/LightBoxViewManagerConsts.ts.
- */
-
-// Возможные размеры ширины скроллбара браузера.
-@scroll-sizes: 0, 15, 16, 17;
-
-// Ширина стрелки лайтбокса.
-@lightBox-arrow-width: 64px;
-// Расстояние от стрелки до лайтбокса.
-@lightBox-arrow-margin-to-lightBox: 16px;
-// Расстояние от стрелки до края экрана.
-@lightBox-arrow-margin-to-screen: 16px;
-
-/*
-  Ширина стрелки лайтбокса с полями по бокам.
- */
-@lightBox-arrow-with-margin-width: @lightBox-arrow-width + @lightBox-arrow-margin-to-lightBox + @lightBox-arrow-margin-to-screen; // 96
-
-@lightBox-content-min-width: 0;
-
-
 /*
   Breakpoint для экранов менее 1024px, Controls в этом случае отобрахается наверху LightBox.
 */
 @lightBox-media-point-0: 1024px;
 
-// Высота плашки с кнопками вперед/назад/закрыть, при маленьком разрешении.
-// @lightBox-controls-opened-height: 80px;
-// @lightBox-controls-opened-height-SM: 56px;
-
-// Высота плашки с кнопками вперед/назад/закрыть, при большом разрешении. Кнопки перемещаются к краям лайтбокса.
-// @lightBox-controls-closed-height: 0;
-
-// Ширина области левой тени sideOverlay.
-@sideOverlayLeftShadowWidth: 40px;
 // Ширина SideOverlayLG без учета тени.
 @sideOverlayLGWidth: 800px;
 // Ширина SideOverlayMD без учета тени.
 @sideOverlayMDWidth: 600px;
 // Ширина SideOverlaySM без учета тени.
 @sideOverlaySMWidth: 480px;
-
-// Высота экрана, до которой футер и хедер не фиксируются.
-@lightBox-disable-sticky-screen-height: 800px;

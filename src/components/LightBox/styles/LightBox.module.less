@@ -1,28 +1,23 @@
 @import 'src/styles/style';
 
-.firstFocus {
-    position: absolute;
-    left: -10000px;
-    width: 0;
-    height: 0;
-}
-
 .lightBox {
     display: flex;
     flex-direction: column;
     position: fixed;
     z-index: @z-index-lightbox;
-    left: 0;
+    left: var(--lightBox-screen-left);
+    width: var(--lightBox-screen-width);
     top: var(--lightBox-screen-top);
     bottom: 0;
-    width: var(--lightBox-screen-width);
+    min-width: 0;
     overflow-y: scroll;
-    // min-width: @ufs-theme-screen-min;
 
     .lightBoxBackdrop {
         content: '';
         position: fixed;
-        width: 100%;
+        top: var(--lightBox-screen-top);
+        left: var(--lightBox-screen-left);
+        width: var(--lightBox-screen-width);
         height: 100%;
         pointer-events: none;
         background-color: var(--triplex-next-LightBox-Backdrop_Background);
@@ -81,64 +76,28 @@
 }
 
 
-each(@scroll-sizes, {
-    @scroll-width: @value;
-    @scroll-width-px: ~'@{scroll-width}px';
-    // Ширина экрана без скрола.
-    @screen-width-without-scroll: calc(var(--lightBox-screen-width) - @scroll-width-px);
-
-    html.scroll-@{scroll-width} {
-        .lightBox {
-            left: var(--lightBox-screen-left);
-
-            .lightBoxBackdrop {
-                width: @screen-width-without-scroll;
-            }
-        }
-
-        /*
-          Breakpoint для экранов менее 1024px.
-          < 1024px
-        */
-        .global-LB-less-or-equal-media-point-0 {
-            // Ширина лайтбокса/контролов/хедера/футера.
-            @lightBox-content-width: @screen-width-without-scroll;
-            // Левая позиция лайтбокса.
-            @lightBox-content-left: 0;
-
-            .lightBox {
-                position: fixed;
-                min-width: 0;
-                width: var(--lightBox-screen-width);
-
-                &.lightBoxSideOverlayActive {
-                    overflow: hidden;
-                }
-            }
-
-            .lightBoxContent {
-                margin: 0;
-                border-radius: 0;
-            }
-
-            // .lightBoxContent,
-            // .lightBoxContent > .loadingContentOverlay {
-            //     left: @lightBox-content-left;
-            //     width: @lightBox-content-width;
-            // }
-
-            // .lightBox .lightBoxContent {
-            //     box-sizing: border-box;
-            // }
-        }
-
-        .global-LB-more-media-point-0 {
-            /* стили для экранов шире 1024px */
-            .lightBoxContent {
-                // Отступы для кнопок вперед/назад.
-                padding-left: 80px;
-                padding-right: 80px;
-            }
+/*
+    Breakpoint для экранов менее 1024px.
+    < 1024px
+*/
+.global-LB-less-or-equal-media-point-0 {
+    .lightBox {
+        &.lightBoxSideOverlayActive {
+            overflow: hidden;
         }
     }
-})
+
+    .lightBoxContent {
+        margin: 0;
+        border-radius: 0;
+    }
+}
+
+.global-LB-more-media-point-0 {
+    /* стили для экранов шире 1024px */
+    .lightBoxContent {
+        // Отступы для кнопок вперед/назад.
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+}

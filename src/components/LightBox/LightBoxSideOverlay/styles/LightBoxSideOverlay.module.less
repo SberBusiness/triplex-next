@@ -86,6 +86,11 @@
     }
 
     @media (max-width: @screen-sm-max) {
+        .lightBoxSideOverlayContent {
+            margin-top: 28px;
+            max-width: 100%;
+        }
+
         // На мобильных устройствах блок с кнопкой закрыть не должен уезжать на вторую строку.
         .global-HeaderTitleControls {
             position: absolute;
@@ -96,6 +101,11 @@
         .global-HeaderTitleContent {
             // На мобильных устройствах отступ справа, чтобы не наезжать на кнопку закрыть.
             padding-right: 40px !important;
+        }
+
+        .global-page {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
     }
 }

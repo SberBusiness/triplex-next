@@ -10,3 +10,25 @@
     right: 16px;
     margin: 0 !important;
 }
+
+/** Breakpoint для экранов менее 1024px. */
+.global-LB-less-or-equal-media-point-0 {
+    .lightBoxSideOverlayCloseDesktop {
+        display: none;
+    }
+
+    .lightBoxSideOverlayCloseMobile {
+        display: block;
+    }
+}
+
+/** Breakpoint для экранов шире 1024px. */
+.global-LB-more-media-point-0 {
+    .lightBoxSideOverlayCloseDesktop {
+        display: block;
+    }
+    
+    .lightBoxSideOverlayCloseMobile {
+        display: none;
+    }
+}

@@ -3,7 +3,6 @@ import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDown
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import clsx from "clsx";
 import { CrossStrokeSrvIcon32 } from "@sberbusiness/icons-next";
-import { MobileView } from "../../MobileView";
 import { EButtonTheme } from "../../Button/enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { Button } from "../../Button/Button";
@@ -16,7 +15,11 @@ export interface ILightBoxSideOverlayCloseDesktopProps extends React.HTMLAttribu
     clickByEsc: boolean;
 }
 
-const LightBoxSideOverlayCloseDesktopInner: React.FC<ILightBoxSideOverlayCloseDesktopProps> = ({
+/**
+ * Компонент закрытия SideOverlay для десктопа.
+ * Отображается только на десктопе, справа от заголовка SideOverlay.
+ */
+export const LightBoxSideOverlayCloseDesktop: React.FC<ILightBoxSideOverlayCloseDesktopProps> = ({
     className,
     clickByEsc,
     ...htmlButtonAttributes
@@ -45,13 +48,5 @@ const LightBoxSideOverlayCloseDesktopInner: React.FC<ILightBoxSideOverlayCloseDe
     }
     return renderButton();
 };
-
-/**
- * Компонент закрытия SideOverlay для десктопа.
- * Отображается только на десктопе, справа от заголовка SideOverlay.
- */
-export const LightBoxSideOverlayCloseDesktop: React.FC<ILightBoxSideOverlayCloseDesktopProps> = (props) => (
-    <MobileView fallback={<LightBoxSideOverlayCloseDesktopInner {...props} />}>{null}</MobileView>
-);
 
 LightBoxSideOverlayCloseDesktop.displayName = "LightBoxSideOverlayCloseDesktop";

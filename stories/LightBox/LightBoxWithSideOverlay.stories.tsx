@@ -354,9 +354,13 @@ export const LightBoxWithSideOverlay: React.FC = () => {
 export const LightBoxWithSideOverlayLoading: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [openedSideOverlayLG, setOpenedSideOverlayLG] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleOpenSideOverlayLG = () => setOpenedSideOverlayLG(true);
-    const handleCloseSideOverlayLG = () => setOpenedSideOverlayLG(false);
+    const handleCloseSideOverlayLG = () => {
+        setIsLoading(false);
+        setOpenedSideOverlayLG(false);
+    };
 
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
@@ -375,7 +379,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
             opened={openedSideOverlayLG}
             size={ELightBoxSideOverlaySize.LG}
             isTopLevelSideOverlayOpened={false}
-            isLoading
+            isLoading={isLoading}
         >
             <Page>
                 <Page.Header type={EHeaderPageType.SECOND} sticky>
@@ -414,8 +418,12 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
-                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                Button text
+                            <Button
+                                theme={EButtonTheme.GENERAL}
+                                size={EComponentSize.MD}
+                                onClick={() => setIsLoading(true)}
+                            >
+                                Loading on
                             </Button>
                         </Page.Footer.Description.Controls>
                     </Page.Footer.Description>

@@ -18,7 +18,7 @@ describe("List", () => {
         expect(list.tagName).toBe("UL");
     });
 
-    it("Should render LoaderWidget when loading is true", () => {
+    it("Should render LoaderScreen when loading is true", () => {
         render(
             <List loading>
                 <li>Item</li>

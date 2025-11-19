@@ -29,11 +29,11 @@
 // Tooltip
 @z-index-tooltip: @z-index-super; // 10000
 
-// SpinnerWidget
-@z-index-spinner-widget: @z-index-tooltip + @z-index-step; //10100
+// LoaderScreen
+@z-index-loader-screen: @z-index-tooltip + @z-index-step; //10100
 
 // UploadZone
-@z-index-upload-zone-fullscreen: @z-index-spinner-widget + @z-index-step; //10200
+@z-index-upload-zone-fullscreen: @z-index-loader-screen + @z-index-step; //10200
 
 // Модальное окно с предупреждением об истечении сессии.
 @z-index-modal-window-session-expiration: @z-index-upload-zone-fullscreen + @z-index-step; //10300

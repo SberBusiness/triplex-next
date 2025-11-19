@@ -2,10 +2,10 @@ import React from "react";
 import { LoaderSmall, ELoaderSmallTheme, LoaderMiddle } from "../Loader";
 import clsx from "clsx";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
-import styles from "./styles/LoaderWidget.module.less";
+import styles from "./styles/LoaderScreen.module.less";
 
-/** Свойства компонента LoaderWidget. */
-export interface ILoaderWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
+/** Свойства компонента LoaderScreen. */
+export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Тип лоадера. */
     type: "small" | "middle";
     /** Тема лоадера для типа small. */
@@ -14,15 +14,14 @@ export interface ILoaderWidgetProps extends React.HTMLAttributes<HTMLDivElement>
     size?: EComponentSize;
 }
 
-/** Лоадер виждет, закрывает контент и отображает лоадер в середине своей области. */
-export const LoaderWidget: React.FC<ILoaderWidgetProps> = ({
+export const LoaderScreen: React.FC<ILoaderScreenProps> = ({
     className,
     size = EComponentSize.MD,
     type,
     theme = ELoaderSmallTheme.BRAND,
     ...htmlDivAttributes
 }) => {
-    const classNames = clsx(className, styles.loaderWidget, {
+    const classNames = clsx(className, styles.loaderScreen, {
         [styles.loaderSmallBackdrop]: type === "small",
         [styles.loaderMiddleBackdrop]: type === "middle",
     });
@@ -40,4 +39,4 @@ export const LoaderWidget: React.FC<ILoaderWidgetProps> = ({
     );
 };
 
-LoaderWidget.displayName = "LoaderWidget";
+LoaderScreen.displayName = "LoaderScreen";

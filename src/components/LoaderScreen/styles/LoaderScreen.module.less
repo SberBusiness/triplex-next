@@ -1,6 +1,6 @@
 @import '../../../styles/style';
 
-.loaderWidget {
+.loaderScreen {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,20 +10,20 @@
     top: 0;
     right: 0;
     bottom: 0;
-    z-index: @z-index-spinner-widget;
+    z-index: @z-index-loader-screen;
 
     &.loaderSmallBackdrop {
-        background: var(--triplex-next-LoaderWidget-Small_Backdrop_Default);
+        background: var(--triplex-next-LoaderScreen-Small_Backdrop_Default);
     }
 
     &.loaderMiddleBackdrop {
-        background: var(--triplex-next-LoaderWidget-Middle_Backdrop_Default);
+        background: var(--triplex-next-LoaderScreen-Middle_Backdrop_Default);
 
         & .loaderMiddleBackground {
             width: 64px;
             height: 64px;
             border-radius: 16px;
-            background: var(--triplex-next-LoaderWidget-Middle_Background_Default);
+            background: var(--triplex-next-LoaderScreen-Middle_Background_Default);
     
             & div {
                 margin: 12px;

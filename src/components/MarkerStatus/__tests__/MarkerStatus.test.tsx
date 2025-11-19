@@ -1,63 +1,92 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MarkerStatus } from "@sberbusiness/triplex-next/components/MarkerStatus/MarkerStatus";
-import { EMarkerStatus } from "@sberbusiness/triplex-next/components/Marker/enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { describe, it, expect } from "vitest";
+import { MarkerStatus } from "../MarkerStatus";
+import { EMarkerStatus } from "../../Marker/enums";
+import { EComponentSize } from "../../../enums/EComponentSize";
 
-const getMarkerStatusText = () => screen.getByText("Status text");
-const getMarkerStatusDescription = () => screen.queryByText("Description");
-const getMarkerStatus = () => getMarkerStatusText().closest("div");
-const getMarker = () => getMarkerStatus()?.querySelector(".marker");
+const getMarkerStatus = () => screen.getByTestId("marker-status");
+const getDescription = () => screen.getByText("Test description");
 
 describe("MarkerStatus", () => {
-    it("Should render with default props", () => {
+    it("Should render correctly with default props", () => {
         render(
-            <MarkerStatus status={EMarkerStatus.SUCCESS} description="Description">
-                Status text
+            <MarkerStatus status={EMarkerStatus.SUCCESS} data-testid="marker-status">
+                Test Status
             </MarkerStatus>,
         );
 
         const markerStatus = getMarkerStatus();
         expect(markerStatus).toBeInTheDocument();
         expect(markerStatus).toHaveClass("markerStatus");
+        expect(markerStatus).toHaveClass("success");
         expect(markerStatus).toHaveClass("md");
-
-        const marker = getMarker();
-        expect(marker).toBeInTheDocument();
-        expect(marker).toHaveClass("md");
-
-        const description = getMarkerStatusDescription();
-        expect(description).toBeInTheDocument();
     });
 
-    it("Should apply size classes", () => {
+    it("Should render description when provided", () => {
         render(
-            <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
-                Status text
+            <MarkerStatus status={EMarkerStatus.SUCCESS} description="Test description" data-testid="marker-status">
+                Test Status
+            </MarkerStatus>,
+        );
+
+        const description = getDescription();
+
+        expect(description).toBeInTheDocument();
+        expect(description).toHaveClass("caption");
+    });
+
+    it("Should correct apply LG size", () => {
+        render(
+            <MarkerStatus
+                status={EMarkerStatus.SUCCESS}
+                description="Test description"
+                size={EComponentSize.LG}
+                data-testid="marker-status"
+            >
+                Test Status
             </MarkerStatus>,
         );
 
         const markerStatus = getMarkerStatus();
-        expect(markerStatus).toBeInTheDocument();
+        const description = getDescription();
+
         expect(markerStatus).toHaveClass("lg");
-
-        const marker = getMarker();
-        expect(marker).toBeInTheDocument();
-        expect(marker).toHaveClass("lg");
-
-        const description = getMarkerStatusDescription();
-        expect(description).not.toBeInTheDocument();
+        expect(description).toHaveClass("text");
     });
 
-    it("Should apply status classes", () => {
-        render(<MarkerStatus status={EMarkerStatus.WARNING}>Status text</MarkerStatus>);
+    it("Should correct apply status classes", () => {
+        const { rerender } = render(
+            <MarkerStatus status={EMarkerStatus.SUCCESS} data-testid="marker-status">
+                Test Status
+            </MarkerStatus>,
+        );
 
         const markerStatus = getMarkerStatus();
-        expect(markerStatus).toBeInTheDocument();
+        expect(markerStatus).toHaveClass("success");
+
+        rerender(
+            <MarkerStatus status={EMarkerStatus.ERROR} data-testid="marker-status">
+                Test Status
+            </MarkerStatus>,
+        );
+
+        expect(markerStatus).toHaveClass("error");
+
+        rerender(
+            <MarkerStatus status={EMarkerStatus.WARNING} data-testid="marker-status">
+                Test Status
+            </MarkerStatus>,
+        );
+
         expect(markerStatus).toHaveClass("warning");
 
-        const marker = getMarker();
-        expect(marker).toBeInTheDocument();
-        expect(marker).toHaveClass("warning");
+        rerender(
+            <MarkerStatus status={EMarkerStatus.WAITING} data-testid="marker-status">
+                Test Status
+            </MarkerStatus>,
+        );
+
+        expect(markerStatus).toHaveClass("waiting");
     });
 });

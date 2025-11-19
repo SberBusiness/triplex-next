@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { LoaderWidget } from "../../LoaderWidget/LoaderWidget";
+import { LoaderScreen } from "../../LoaderScreen/LoaderScreen";
 import styles from "./styles/LightBoxSideOverlayLoader.module.less";
 
 interface ILightBoxSideOverlayLoaderProps {
@@ -27,7 +27,7 @@ export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps
 
     return (
         <div ref={loaderRef} className={styles.lightBoxSideOverlayLoaderWrapper} style={{ top: `${topPosition}px` }}>
-            <LoaderWidget type="middle">{loadingTitle}</LoaderWidget>
+            <LoaderScreen type="middle">{loadingTitle}</LoaderScreen>
         </div>
     );
 };

@@ -9,7 +9,7 @@ export * from "./FormGroup";
 export * from "./Gap";
 export * from "./Link";
 export * from "./Loader";
-export * from "./LoaderWidget";
+export * from "./LoaderScreen";
 export * from "./Marker";
 export * from "./MarkerStatus";
 export * from "./MediaWidth";

@@ -34,11 +34,11 @@ export const SMSInputSubmit: React.FC<ISMSInputSubmitProps> = ({ className, disa
 
     return (
         <ButtonIcon
+            active={!!code}
             className={submitClassName}
             disabled={submitDisabled}
             onClick={handleClick}
             shape={EButtonIconShape.CIRCLE}
-            active={!!code}
             {...restProps}
         >
             <SubmitIcon size={size} />

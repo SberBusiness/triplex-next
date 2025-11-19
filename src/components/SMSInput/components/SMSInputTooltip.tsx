@@ -35,12 +35,12 @@ export const SMSInputTooltip: React.FC<ISMSInputTooltipProps> = ({
 
     return (
         <Tooltip
-            id={tooltipId}
             alignTip={ETooltipAlign.START}
-            size={ETooltipSize.SM}
-            toggleType="hover"
             disableAdaptiveMode
+            id={tooltipId}
+            size={ETooltipSize.SM}
             targetRef={targetRef}
+            toggleType="hover"
             {...restProps}
         >
             <Tooltip.Body>{message}</Tooltip.Body>

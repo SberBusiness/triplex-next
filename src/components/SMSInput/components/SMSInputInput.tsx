@@ -71,20 +71,15 @@ export const SMSInputInput = React.forwardRef<HTMLInputElement, ISMSInputInputPr
 
         return (
             <FormGroup>
-                <FormField
-                    className={sizeClassName}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    size={size}
-                    status={status}
-                >
+                <FormField className={sizeClassName} onKeyDown={handleKeyDown} size={size} status={status}>
                     <FormFieldInput
                         autoComplete="off"
                         className={inputClassName}
+                        maxLength={maxLength}
+                        onChange={handleChange}
+                        placeholder={placeholder}
                         ref={ref}
                         value={code}
-                        maxLength={maxLength}
-                        placeholder={placeholder}
                         {...restProps}
                     />
                 </FormField>

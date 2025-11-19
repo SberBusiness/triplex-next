@@ -9,7 +9,8 @@ export const designTokensComponentsSMSInputKeys = [
     "Refresh_Fill_Full",
     "Refresh_Disabled",
 
-    "Submit_Background",
+    "Submit_Background_Default",
+    "Submit_Background_Hover",
     "Submit_Background_Active",
 ] as const;
 // Тип, содержащий названия токенов компонента SMSInput.
@@ -27,6 +28,7 @@ export const SMSInput_Tokens: TDesignTokensComponentsSMSInputValues = {
     Refresh_Fill_Full: [{ ref: "ColorBrand.40" }, { ref: "ColorBrand.60" }], // var(--triplex-next-SMSInput-Refresh_Fill_Full)
     Refresh_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-SMSInput-Refresh_Disabled)
 
-    Submit_Background: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-SMSInput-Submit_Background)
+    Submit_Background_Default: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-SMSInput-Submit_Background_Default)
+    Submit_Background_Hover: [{ ref: "ColorBrand.60" }, { ref: "ColorBrand.60" }], // var(--triplex-next-SMSInput-Submit_Background_Hover)
     Submit_Background_Active: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-next-SMSInput-Submit_Background_Active)
 };

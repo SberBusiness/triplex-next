@@ -7,19 +7,10 @@ import { SMSInputRefresh } from "@sberbusiness/triplex-next/components/SMSInput/
 import { SMSInputSubmit } from "@sberbusiness/triplex-next/components/SMSInput/components/SMSInputSubmit";
 import { SMSInputTooltip } from "@sberbusiness/triplex-next/components/SMSInput/components/SMSInputTooltip";
 import styles from "@sberbusiness/triplex-next/components/SMSInput/styles/SMSInput.module.less";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
-/** Возвращает CSS класс в зависимости от размера. */
-const getSizeClassName = (size: EComponentSize) => {
-    switch (size) {
-        case EComponentSize.LG:
-            return styles.LG;
-        case EComponentSize.MD:
-            return styles.MD;
-        case EComponentSize.SM:
-            return styles.SM;
-    }
-};
+// Соответствие размера имени класса.
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Внутренние составляющие SMSInput. */
 interface ISMSInputComposition {
@@ -37,7 +28,6 @@ export const SMSInput: React.FC<ISMSInputProps> & ISMSInputComposition = (props)
     const [disabledSubmit, setDisabledSubmit] = useState(true);
     const [tooltipId, setTooltipId] = useState<string>();
     const classSMSInput = clsx(styles.smsInput, className);
-    const sizeClassName = getSizeClassName(size);
 
     return (
         <SMSInputContext.Provider
@@ -51,7 +41,7 @@ export const SMSInput: React.FC<ISMSInputProps> & ISMSInputComposition = (props)
                 setDisabledSubmit,
                 setTooltipId,
                 size,
-                sizeClassName,
+                sizeClassName: sizeToClassNameMap[size],
                 tooltipId,
             }}
         >

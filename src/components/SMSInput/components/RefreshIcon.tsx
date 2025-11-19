@@ -28,7 +28,7 @@ const deg2rad = (deg: number) => {
     return deg * radInOneDeg; // Ну и под конец нормализованный угол переводим в радианы.
 };
 const startAnge = deg2rad(-8); // Угол, с которого начинается отрисовка сектора - маски (иконка не строго горизонтально начинается, а на 8 градусов выше).
-const endAngle = deg2rad(-22); // Угол, которым заканчивается отрисовка сектора - маски (выше горизонтали на 22 градуса).
+const endAngle = deg2rad(-19); // Угол, которым заканчивается отрисовка сектора - маски (выше горизонтали на 19 градусов).
 const diff = endAngle < startAnge ? radiansInCircle - (startAnge - endAngle) : endAngle - startAnge; // Разница между углами в радианах.
 const ra2X = (r: number, a: number) => Math.round(r * Math.cos(a) * 1000) / 1000; // По радиусу и углу определяем координату X.
 const ra2Y = (r: number, a: number) => Math.round(r * Math.sin(a) * 1000) / 1000; // По радиусу и углу определяем координату Y.
@@ -87,7 +87,7 @@ export const RefreshIcon: React.FC<IProps> = (props: IProps) => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" focusable="false">
             <clipPath id={`clipFront${percent}`}>
-                <path d={calculateSectorPath(10, 10, 12, percent)} />
+                <path d={calculateSectorPath(10, 10, 14, percent)} />
             </clipPath>
 
             <path className={classNames} d={iconPath} />

@@ -50,7 +50,7 @@ describe("SMSInput", () => {
         );
 
         const submitButton = screen.getByRole("button", { name: "Send code" });
-        expect(submitButton).toHaveClass(smsInputStyles.SM);
+        expect(submitButton).toHaveClass(smsInputStyles.sm);
     });
 });
 
@@ -240,7 +240,7 @@ describe("SMSInput.Refresh", () => {
         );
 
         const refreshButton = screen.getByRole("button", { name: "Запросить новый код" });
-        expect(refreshButton).toHaveAttribute("aria-disabled", "true");
+        expect(refreshButton).toBeDisabled();
         expect(refreshButton).toHaveClass(smsInputStyles.disabled);
         fireEvent.click(refreshButton);
         expect(handleRefresh).not.toHaveBeenCalled();

@@ -37,21 +37,18 @@ export const SMSInputRefresh = forwardRef<HTMLButtonElement, ISMSInputRefreshPro
 
         /** Обработчик запроса sms-кода. */
         const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-            // В нативном состоянии disabled, кнопка перестаёт реагировать на события мыши (не показывается Tooltip), поэтому проверяем здесь.
-            if (!refreshDisabled) {
-                onRefresh();
-                onClick?.(event);
-            }
+            onRefresh();
+            onClick?.(event);
         };
 
         return (
             <ButtonIcon
-                className={refreshClassName}
                 aria-describedby={tooltipId}
-                aria-disabled={refreshDisabled}
+                className={refreshClassName}
+                disabled={refreshDisabled}
                 onClick={handleClick}
-                shape={EButtonIconShape.CIRCLE}
                 ref={ref}
+                shape={EButtonIconShape.CIRCLE}
                 {...restProps}
             >
                 <RefreshIcon percent={percent || 0} size={size} disabled={Boolean(allDisabled || disabled)} />

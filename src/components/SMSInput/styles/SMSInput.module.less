@@ -18,16 +18,16 @@
             }
         }
 
-        &.LG {
+        &.lg {
             padding: 18px 40px;
         }
 
-        &.MD {
+        &.md {
             padding-left: 26px;
             padding-right: 26px;
         }
 
-        &.SM {
+        &.sm {
             padding-left: 20px;
             padding-right: 20px;
         }
@@ -38,19 +38,19 @@
         outline: none;
         z-index: 1;
 
-        &.LG {
+        &.lg {
             top: 12px;
             left: 12px;
             height: 32px;
             width: 32px;
         }
 
-        &.MD {
+        &.md {
             top: 10px;
             left: 10px;
         }
 
-        &.SM {
+        &.sm {
             top: 4px;
             left: 4px;
         }
@@ -63,7 +63,7 @@
             fill: var(--triplex-next-SMSInput-Refresh_Fill_Empty);
         }
 
-        &.disabled {
+        &:disabled {
             cursor: default;
             fill: var(--triplex-next-SMSInput-Refresh_Disabled);
         }
@@ -71,25 +71,29 @@
 
     .btnSubmit {
         position: absolute;
-        fill: var(--triplex-next-SMSInput-Submit_Background);
+        fill: var(--triplex-next-SMSInput-Submit_Background_Default);
 
         &.active:not(:disabled) {
             fill: var(--triplex-next-SMSInput-Submit_Background_Active);
+
+            &:hover {
+                fill: var(--triplex-next-SMSInput-Submit_Background_Hover);
+            }
         }
 
-        &.LG {
+        &.lg {
             top: 15px;
             right: 15px;
             height: 26px;
             width: 26px;
         }
 
-        &.MD {
+        &.md {
             top: 10px;
             right: 10px;
         }
 
-        &.SM {
+        &.sm {
             top: 4px;
             right: 4px;
         }

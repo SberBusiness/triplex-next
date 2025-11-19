@@ -14,6 +14,7 @@ export * from "./Marker";
 export * from "./MarkerStatus";
 export * from "./MediaWidth";
 export * from "./MobileView";
+export * from "./NumberField";
 export * from "./Radio";
 export * from "./Row";
 export * from "./TabsExtended";

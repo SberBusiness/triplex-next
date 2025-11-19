@@ -93,9 +93,9 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         }
     };
 
-    const renderMask = ({ opened, setOpened }: IOverlayChildrenProvideProps) =>
-        // Маска рендерится у SideOverlay самого верхнего уровня, чтобы маски не накладывались друг на друга.
-        isTopLevelSideOverlayOpened ? null : <OverlayMask opened={opened} className={styles.lightBoxSideOverlayMask} />;
+    const renderMask = ({ opened }: IOverlayChildrenProvideProps) => (
+        <OverlayMask opened={opened} className={styles.lightBoxSideOverlayMask} />
+    );
 
     const renderPanel = () => (
         <div
@@ -118,7 +118,6 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
     const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, {
         [styles.closing]: closing,
         [styles.opened]: opened,
-        [styles.openedTopLevelSideOverlay]: Boolean(isTopLevelSideOverlayOpened),
         [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
         [styles.overflowYHidden]:
             Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),

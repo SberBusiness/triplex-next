@@ -22,7 +22,6 @@ type LightBoxStoryArgs = {
     showControls: boolean;
     stickyHeader: boolean;
     stickyFooter: boolean;
-    pageWidth: number;
 };
 
 const STORY_META_DESCRIPTION = `
@@ -74,12 +73,11 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boolean; pageWidth: number }> = ({
+const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boolean }> = ({
     stickyHeader,
     stickyFooter,
-    pageWidth,
 }) => (
-    <Page style={{ maxWidth: pageWidth }}>
+    <Page>
         <Page.Header type={EHeaderPageType.SECOND} sticky={stickyHeader}>
             <Page.Header.Title>
                 <Page.Header.Title.Content>
@@ -137,13 +135,7 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
     </Page>
 );
 
-const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
-    isLoading,
-    showControls,
-    stickyHeader,
-    stickyFooter,
-    pageWidth,
-}) => {
+const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ isLoading, showControls, stickyHeader, stickyFooter }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
@@ -151,7 +143,7 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
 
     const lightBoxChildren: React.ReactElement[] = [
         <LightBox.Content key="content" isLoading={isLoading}>
-            <LightBoxPageContent stickyHeader={stickyHeader} stickyFooter={stickyFooter} pageWidth={pageWidth} />
+            <LightBoxPageContent stickyHeader={stickyHeader} stickyFooter={stickyFooter} />
         </LightBox.Content>,
     ];
 
@@ -191,7 +183,6 @@ export const Playground: Story = {
         showControls: true,
         stickyHeader: true,
         stickyFooter: true,
-        pageWidth: 1000,
     },
     argTypes: {
         isLoading: {
@@ -230,15 +221,6 @@ export const Playground: Story = {
                 defaultValue: { summary: "true" },
             },
         },
-        pageWidth: {
-            control: { type: "number" },
-            description: "Максимальная ширина области Page в пикселях.",
-            table: {
-                category: "Контент",
-                type: { summary: "number" },
-                defaultValue: { summary: "800" },
-            },
-        },
     },
     parameters: {
         docs: {
@@ -250,19 +232,44 @@ export const Playground: Story = {
 };
 
 export const DefaultView: Story = {
-    render: () => (
-        <div>
-            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
-                Открыть LightBox
-            </Button>
+    render: () => {
+        const [isOpen, setIsOpen] = useState(false);
 
-            {isOpen ? (
-                <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
-                    <LightBoxPageContent stickyHeader stickyFooter pageWidth={1000} />
-                </LightBox>
-            ) : null}
-        </div>
-    ),
+        const handleOpen = () => setIsOpen(true);
+        const handleClose = () => setIsOpen(false);
+
+        return (
+            <div>
+                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
+                    Открыть LightBox
+                </Button>
+
+                {isOpen ? (
+                    <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
+                        <LightBoxPageContent stickyHeader stickyFooter />
+
+                        <LightBox.Controls>
+                            <LightBox.Controls.Close
+                                title="Закрыть"
+                                data-test-id="lightbox-close"
+                                onClick={handleClose}
+                            />
+                            <LightBox.Controls.Prev
+                                title="Назад"
+                                clickByArrowLeft
+                                onClick={() => console.log("Prev clicked")}
+                            />
+                            <LightBox.Controls.Next
+                                title="Вперёд"
+                                clickByArrowRight
+                                onClick={() => console.log("Next clicked")}
+                            />
+                        </LightBox.Controls>
+                    </LightBox>
+                ) : null}
+            </div>
+        );
+    },
     parameters: {
         docs: {
             description: {

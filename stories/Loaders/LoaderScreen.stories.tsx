@@ -1,11 +1,11 @@
 import React from "react";
-import { LoaderWidget } from "../../src/components/LoaderWidget";
+import { LoaderScreen } from "../../src/components/LoaderScreen";
 import { ELoaderSmallTheme, ELoaderSmallSize } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
 
 export default {
-    title: "Components/Loaders/LoaderWidget",
-    component: LoaderWidget,
+    title: "Components/Loaders/LoaderScreen",
+    component: LoaderScreen,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -20,13 +20,13 @@ export default {
 ## Использование
 
 \`\`\`tsx
-import { LoaderWidget } from '@sberbusiness/triplex-next';
+import { LoaderScreen } from '@sberbusiness/triplex-next';
 
-// LoaderWidget с loaderSmall
-<LoaderWidget type="small" theme={ELoaderSmallTheme.BRAND} size={ELoaderSmallSize.MD} />
+// LoaderScreen с loaderSmall
+<LoaderScreen type="small" theme={ELoaderSmallTheme.BRAND} size={ELoaderSmallSize.MD} />
 
-// LoaderWidget с loaderMiddle
-<LoaderWidget type="middle" />
+// LoaderScreen с loaderMiddle
+<LoaderScreen type="middle" />
 \`\`\`
                 `,
             },
@@ -34,7 +34,7 @@ import { LoaderWidget } from '@sberbusiness/triplex-next';
     },
 };
 
-export const Playground: StoryObj<typeof LoaderWidget> = {
+export const Playground: StoryObj<typeof LoaderScreen> = {
     name: "Playground",
     args: {
         type: "small",
@@ -70,10 +70,10 @@ export const Playground: StoryObj<typeof LoaderWidget> = {
             );
         },
     ],
-    render: (args) => <LoaderWidget {...args} />,
+    render: (args) => <LoaderScreen {...args} />,
 };
 
-export const SmallLoader: StoryObj<typeof LoaderWidget> = {
+export const SmallLoader: StoryObj<typeof LoaderScreen> = {
     name: "Small Loader",
     args: {
         type: "small",
@@ -107,10 +107,10 @@ export const SmallLoader: StoryObj<typeof LoaderWidget> = {
             );
         },
     ],
-    render: (args) => <LoaderWidget {...args} />,
+    render: (args) => <LoaderScreen {...args} />,
 };
 
-export const MiddleLoader: StoryObj<typeof LoaderWidget> = {
+export const MiddleLoader: StoryObj<typeof LoaderScreen> = {
     name: "Middle Loader",
     args: {
         type: "middle",
@@ -142,5 +142,5 @@ export const MiddleLoader: StoryObj<typeof LoaderWidget> = {
             );
         },
     ],
-    render: (args) => <LoaderWidget {...args} />,
+    render: (args) => <LoaderScreen {...args} />,
 };

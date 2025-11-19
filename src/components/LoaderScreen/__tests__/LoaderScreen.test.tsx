@@ -1,17 +1,17 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { LoaderWidget } from "../LoaderWidget";
+import { LoaderScreen } from "../LoaderScreen";
 import { ELoaderSmallTheme } from "../../Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 
-const getLoaderWidget = () => screen.getByRole("status", { name: "loading" });
+const getLoaderScreen = () => screen.getByRole("status", { name: "loading" });
 
-describe("LoaderWidget", () => {
+describe("LoaderScreen", () => {
     it("Should render LoaderSmall with default props", () => {
-        render(<LoaderWidget type="small" />);
+        render(<LoaderScreen type="small" />);
 
-        const loader = getLoaderWidget();
+        const loader = getLoaderScreen();
         expect(loader).toBeInTheDocument();
         expect(loader).toHaveClass("loaderSmall");
         expect(loader).toHaveClass("brand");
@@ -19,9 +19,9 @@ describe("LoaderWidget", () => {
     });
 
     it("Should render LoaderSmall in different themes", () => {
-        render(<LoaderWidget type="small" theme={ELoaderSmallTheme.NEUTRAL} size={EComponentSize.MD} />);
+        render(<LoaderScreen type="small" theme={ELoaderSmallTheme.NEUTRAL} size={EComponentSize.MD} />);
 
-        const loader = getLoaderWidget();
+        const loader = getLoaderScreen();
         expect(loader).toBeInTheDocument();
         expect(loader).toHaveClass("loaderSmall");
         expect(loader).toHaveClass("neutral");
@@ -29,9 +29,9 @@ describe("LoaderWidget", () => {
     });
 
     it("Should render LoaderSmall in different sizes", () => {
-        render(<LoaderWidget type="small" theme={ELoaderSmallTheme.BRAND} size={EComponentSize.SM} />);
+        render(<LoaderScreen type="small" theme={ELoaderSmallTheme.BRAND} size={EComponentSize.SM} />);
 
-        const loader = getLoaderWidget();
+        const loader = getLoaderScreen();
         expect(loader).toBeInTheDocument();
         expect(loader).toHaveClass("loaderSmall");
         expect(loader).toHaveClass("brand");
@@ -39,9 +39,9 @@ describe("LoaderWidget", () => {
     });
 
     it("Should render LoaderMiddle", () => {
-        render(<LoaderWidget type="middle" />);
+        render(<LoaderScreen type="middle" />);
 
-        const loader = getLoaderWidget();
+        const loader = getLoaderScreen();
         expect(loader).toBeInTheDocument();
         expect(loader).toHaveClass("loaderMiddle");
     });

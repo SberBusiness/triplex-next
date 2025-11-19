@@ -7,10 +7,11 @@ import {
     IOverlayChildrenProvideProps,
 } from "../../Overlay/OverlayBase";
 import { OverlayMask } from "../../Overlay/OverlayMask";
-import { LightBoxSideOverlayClose } from "./LightBoxSideOverlayClose";
 import { LightBoxSideOverlayLoader } from "./LightBoxSideOverlayLoader";
 import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
+import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
+import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
 import styles from "./styles/LightBoxSideOverlay.module.less";
 
 export enum ELightBoxSideOverlaySize {
@@ -36,7 +37,8 @@ export interface ILightBoxSideOverlayProps
 }
 
 export interface ILightBoxSideOverlayFC extends React.FC<ILightBoxSideOverlayProps> {
-    Close: typeof LightBoxSideOverlayClose;
+    CloseDesktop: typeof LightBoxSideOverlayCloseDesktop;
+    CloseMobile: typeof LightBoxSideOverlayCloseMobile;
 }
 
 /**
@@ -164,4 +166,5 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
 };
 
 LightBoxSideOverlay.displayName = "LightBoxSideOverlay";
-LightBoxSideOverlay.Close = LightBoxSideOverlayClose;
+LightBoxSideOverlay.CloseDesktop = LightBoxSideOverlayCloseDesktop;
+LightBoxSideOverlay.CloseMobile = LightBoxSideOverlayCloseMobile;

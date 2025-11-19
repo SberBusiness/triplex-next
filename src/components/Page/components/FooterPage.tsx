@@ -7,6 +7,7 @@ import { EIslandType, Island } from "../../Island";
 import styles from "../styles/Page.module.less";
 
 export interface IFooterPageProps extends IFooterProps {
+    children: React.ReactNode;
     /** Тип компонента FooterPage. */
     type?: EFooterPageType;
     /**

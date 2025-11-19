@@ -8,6 +8,7 @@ import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import styles from "../styles/Page.module.less";
 
 export interface IHeaderPage extends IHeaderProps {
+    children: React.ReactNode;
     /** Тип компонента HeaderPage. */
     type?: EHeaderPageType;
     /**

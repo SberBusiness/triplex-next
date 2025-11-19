@@ -9,7 +9,11 @@ export interface IHeaderTitleContentProps extends React.HTMLAttributes<HTMLDivEl
 export const HeaderTitleContent = React.forwardRef<HTMLDivElement, IHeaderTitleContentProps>(
     ({ children, className, ...rest }, ref) => {
         return (
-            <div className={clsx(className, styles.headerTitleContent)} {...rest} ref={ref}>
+            <div
+                className={clsx(className, styles.headerTitleContent, styles["global-HeaderTitleContent"])}
+                {...rest}
+                ref={ref}
+            >
                 {children}
             </div>
         );

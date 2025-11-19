@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
@@ -14,15 +14,12 @@ import { IslandBody } from "../../src/components/Island/components/IslandBody";
 import { EIslandType } from "../../src/components/Island/enums";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import "./styles.less";
 
 type LightBoxStoryArgs = {
-    isOpenInitially: boolean;
     isLoading: boolean;
     showControls: boolean;
-    showSideOverlay: boolean;
-    showTopOverlay: boolean;
     stickyHeader: boolean;
     stickyFooter: boolean;
     pageWidth: number;
@@ -33,7 +30,7 @@ const STORY_META_DESCRIPTION = `
 `;
 
 const meta = {
-    title: "Components/LightBox",
+    title: "Components/LightBox/LightBox",
     tags: ["autodocs"],
     parameters: {
         layout: "fullscreen",
@@ -141,20 +138,13 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
 );
 
 const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
-    isOpenInitially,
     isLoading,
     showControls,
-    showSideOverlay,
-    showTopOverlay,
     stickyHeader,
     stickyFooter,
     pageWidth,
 }) => {
-    const [isOpen, setIsOpen] = useState(isOpenInitially);
-
-    useEffect(() => {
-        setIsOpen(isOpenInitially);
-    }, [isOpenInitially]);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
@@ -175,29 +165,6 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
         );
     }
 
-    if (showSideOverlay) {
-        lightBoxChildren.push(
-            <LightBox.SideOverlay key="sideOverlay" opened={showSideOverlay} onClose={() => console.log("Side closed")}>
-                <LightBoxPageContent stickyHeader={stickyHeader} stickyFooter={stickyFooter} pageWidth={pageWidth} />
-            </LightBox.SideOverlay>,
-        );
-    }
-
-    // if (showTopOverlay) {
-    //     lightBoxChildren.push(
-    //         <LightBox.TopOverlay key="topOverlay" opened={showTopOverlay} onClose={() => console.log("Top closed")}>
-    //             <div style={{ padding: "16px 24px", display: "flex", flexDirection: "column", gap: "8px" }}>
-    //                 <Title tag="h3" size={ETitleSize.H3}>
-    //                     Важное уведомление
-    //                 </Title>
-    //                 <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-    //                     Верхний оверлей используется для сервисных сообщений и закреплённых действий.
-    //                 </Text>
-    //             </div>
-    //         </LightBox.TopOverlay>,
-    //     );
-    // }
-
     return (
         <div>
             <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
@@ -205,11 +172,7 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
             </Button>
 
             {isOpen ? (
-                <LightBox
-                    isLoading={isLoading}
-                    isSideOverlayOpened={showSideOverlay}
-                    isTopOverlayOpened={showTopOverlay}
-                >
+                <LightBox isLoading={isLoading} isSideOverlayOpened={false} isTopOverlayOpened={false}>
                     {lightBoxChildren}
                 </LightBox>
             ) : null}
@@ -224,25 +187,13 @@ type Story = StoryObj<LightBoxStoryArgs>;
 export const Playground: Story = {
     render: Template,
     args: {
-        isOpenInitially: false,
         isLoading: false,
         showControls: true,
-        showSideOverlay: false,
-        // showTopOverlay: false,
         stickyHeader: true,
         stickyFooter: true,
         pageWidth: 1000,
     },
     argTypes: {
-        isOpenInitially: {
-            control: { type: "boolean" },
-            description: "Открывать LightBox автоматически при загрузке story.",
-            table: {
-                category: "Поведение",
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
         isLoading: {
             control: { type: "boolean" },
             description: "Показать состояние загрузки LightBox.",
@@ -261,24 +212,6 @@ export const Playground: Story = {
                 defaultValue: { summary: "true" },
             },
         },
-        showSideOverlay: {
-            control: { type: "boolean" },
-            description: "Добавить боковую панель LightBox.SideOverlay.",
-            table: {
-                category: "Оверлеи",
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
-        // showTopOverlay: {
-        //     control: { type: "boolean" },
-        //     description: "Добавить верхнюю панель LightBox.TopOverlay.",
-        //     table: {
-        //         category: "Оверлеи",
-        //         type: { summary: "boolean" },
-        //         defaultValue: { summary: "false" },
-        //     },
-        // },
         stickyHeader: {
             control: { type: "boolean" },
             description: "Использовать sticky-позиционирование для Page.Header.",
@@ -316,31 +249,25 @@ export const Playground: Story = {
     },
 };
 
-const createStory = (partialArgs: Partial<LightBoxStoryArgs>, description: string): Story => ({
-    render: Template,
-    args: { ...Playground.args, ...partialArgs },
+export const DefaultView: Story = {
+    render: () => (
+        <div>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
+                Открыть LightBox
+            </Button>
+
+            {isOpen ? (
+                <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
+                    <LightBoxPageContent stickyHeader stickyFooter pageWidth={1000} />
+                </LightBox>
+            ) : null}
+        </div>
+    ),
     parameters: {
         docs: {
             description: {
-                story: description,
+                story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
             },
         },
     },
-});
-
-export const DefaultView = createStory(
-    { isOpenInitially: false, showControls: true },
-    "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
-);
-
-export const WithSideOverlay = createStory({ isOpenInitially: true, showSideOverlay: true }, "LightBox c SideOverlay.");
-
-// export const WithTopOverlay = createStory(
-//     { isOpenInitially: true, showTopOverlay: true },
-//     "Вариант с TopOverlay.",
-// );
-
-export const LoadingState = createStory(
-    { isOpenInitially: false, isLoading: true, showControls: true },
-    "Сценарий загрузки контента: стрелки скрыты, пока LightBox находится в состоянии loading.",
-);
+};

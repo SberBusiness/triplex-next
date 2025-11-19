@@ -8,7 +8,11 @@ export interface IHeaderTitleControlsProps extends React.HTMLAttributes<HTMLDivE
 /** Блок с кнопками действий HeaderTitle. */
 export const HeaderTitleControls = React.forwardRef<HTMLDivElement, IHeaderTitleControlsProps>(
     ({ children, className, ...rest }, ref) => (
-        <div className={clsx(styles.headerTitleControls, className)} {...rest} ref={ref}>
+        <div
+            className={clsx(styles.headerTitleControls, styles["global-HeaderTitleControls"], className)}
+            {...rest}
+            ref={ref}
+        >
             {children}
         </div>
     ),

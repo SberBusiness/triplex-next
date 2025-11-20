@@ -1,23 +1,22 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Footer } from "../../src/components/Footer";
 import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, ETextSize } from "../../src/components/Typography";
 import { Page, EFooterPageType } from "../../src/components/Page";
-import { IFooterPageProps } from "../../src/components/Page/components/FooterPage";
+import { IFooterPageProps, FooterPage } from "../../src/components/Page/components/FooterPage";
 import "./Footer.less";
 
 export default {
-    title: "Components/Footer",
-    component: Footer,
+    title: "Components/FooterPage",
+    component: FooterPage,
     tags: ["autodocs"],
     parameters: {
         docs: {
             description: {
                 component: `
-Компонент Footer — нижний блок страницы/контейнера с описанием и управляющими элементами.
+Компонент FooterPage — нижний блок страницы/контейнера с описанием и управляющими элементами.
 
 ## Возможности
 

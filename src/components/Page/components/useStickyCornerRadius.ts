@@ -35,8 +35,9 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
             return;
         }
 
-        const maxRadius = 16;
-        const initializationDelay = 16;
+        const maxRadius = 24;
+        // Задержка инициализации для того, чтобы SideOverlay выехал с анимацией, перед началом рассчета.
+        const initializationDelay = 600;
 
         let stickyOffset = 0;
         let raf = 0;

@@ -220,7 +220,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
     const renderLightBoxSideOverlaySM = () => (
         <LightBox.SideOverlay key="sideOverlaySM" opened={openedSideOverlaySM} size={ELightBoxSideOverlaySize.SM}>
             <Page>
-                <Page.Header type={EHeaderPageType.SECOND} sticky>
+                <Page.Header type={EHeaderPageType.SECOND} sticky={openedSideOverlaySM}>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
                             <Title
@@ -246,7 +246,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                     <PoemBlock />
                 </Page.Body>
 
-                <Page.Footer type={EFooterPageType.SECOND} sticky>
+                <Page.Footer type={EFooterPageType.SECOND} sticky={openedSideOverlaySM}>
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
@@ -382,7 +382,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
             isLoading={isLoading}
         >
             <Page>
-                <Page.Header type={EHeaderPageType.SECOND} sticky>
+                <Page.Header type={EHeaderPageType.SECOND} sticky={openedSideOverlayLG}>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
                             <Title
@@ -414,7 +414,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
                     ))}
                 </Page.Body>
 
-                <Page.Footer type={EFooterPageType.SECOND} sticky>
+                <Page.Footer type={EFooterPageType.SECOND} sticky={openedSideOverlayLG}>
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>

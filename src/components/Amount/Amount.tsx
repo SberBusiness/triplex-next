@@ -34,12 +34,6 @@ export const Amount: React.FC<IAmountProps> = ({
     ...restProps
 }) => {
     let formattedAmount = formatAmount(value, fractionLength);
-    const classNames = clsx(
-        {
-            [styles.amountAdaptive]: !!adaptive && formattedAmount.length >= adaptiveAmountLength,
-        },
-        className,
-    );
 
     if (formattedAmount[0] == "-") {
         // (Accessibility) Меняем дефис-минус на знак минуса для его озвучивания скрин-ридерами.
@@ -52,6 +46,13 @@ export const Amount: React.FC<IAmountProps> = ({
             {currency}
         </span>,
     ];
+
+    const classNames = clsx(
+        {
+            [styles.adaptive]: !!adaptive && formattedAmount.length >= adaptiveAmountLength,
+        },
+        className,
+    );
 
     return (
         <span className={classNames} {...restProps} data-tx={process.env.npm_package_version}>

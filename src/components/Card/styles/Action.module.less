@@ -32,6 +32,16 @@
             &:hover {
                 background: var(--triplex-next-Card-Action_General_Background_Selected_Hover);
                 box-shadow: var(--triplex-next-Card-Shadow_Hover);
+                --inner-shadow: var(--triplex-next-Card-Shadow_Selected_Hover);
+            }
+        }
+
+        &:focus {
+            outline: none;
+
+            &.focusVisible {
+                box-shadow: var(--triplex-next-Card-Shadow_Default);
+                --inner-shadow: var(--triplex-next-Card-Shadow_Focus);
             }
         }
     }
@@ -51,16 +61,17 @@
             &:hover {
                 background: var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover);
                 box-shadow: var(--triplex-next-Card-Shadow_Hover);
+                --inner-shadow: var(--triplex-next-Card-Shadow_Selected_Hover);
             }
         }
-    }
 
-    &:focus {
-        outline: none;
+        &:focus {
+            outline: none;
 
-        &.focusVisible {
-            box-shadow: var(--triplex-next-Card-Shadow_Default);
-            --inner-shadow: var(--triplex-next-Card-Shadow_Focus);
+            &.focusVisible {
+                box-shadow: none;
+                --inner-shadow: var(--triplex-next-Card-Shadow_Focus);
+            }
         }
     }
 }

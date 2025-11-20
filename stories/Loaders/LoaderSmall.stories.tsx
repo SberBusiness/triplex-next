@@ -2,6 +2,7 @@ import React from "react";
 import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
 import { Col } from "../../src/components/Col";
+import "./LoaderSmall.less";
 
 export default {
     title: "Components/Loaders/LoaderSmall",
@@ -53,16 +54,7 @@ export const Playground: StoryObj<typeof LoaderSmall> = {
     decorators: [
         (Story) => {
             return (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "#C4C4C4",
-                        padding: "16px",
-                        maxWidth: "50px",
-                    }}
-                >
+                <div className="loaderSmall-example">
                     <Story />
                 </div>
             );
@@ -92,16 +84,7 @@ export const Default: StoryObj<typeof LoaderSmall> = {
     decorators: [
         (Story) => {
             return (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "#C4C4C4",
-                        padding: "16px",
-                        maxWidth: "50px",
-                    }}
-                >
+                <div className="loaderSmall-example">
                     <Story />
                 </div>
             );
@@ -127,16 +110,7 @@ export const DifferentThemes: StoryObj<typeof LoaderSmall> = {
     decorators: [
         (Story) => {
             return (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "#C4C4C4",
-                        padding: "16px",
-                        maxWidth: "100px",
-                    }}
-                >
+                <div className="loaderSmall-example different-themes-example">
                     <Story />
                 </div>
             );
@@ -178,16 +152,7 @@ export const DifferentSizes: StoryObj<typeof LoaderSmall> = {
     decorators: [
         (Story) => {
             return (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "#C4C4C4",
-                        padding: "16px",
-                        maxWidth: "200px",
-                    }}
-                >
+                <div className="loaderSmall-example different-sizes-example">
                     <Story />
                 </div>
             );

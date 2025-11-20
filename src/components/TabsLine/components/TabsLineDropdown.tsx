@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { TestProps } from "../../../types/CoreTypes";
 import { Dropdown } from "../../Dropdown";
 import { DropdownList } from "../../Dropdown/desktop/DropdownList";
-import CaretdownStrokeSrvIcon16 from "@sberbusiness/icons-next/CaretdownStrokeSrvIcon16";
+import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { isKey } from "../../../utils/keyboard";
 import { DropdownListContext } from "../../Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";

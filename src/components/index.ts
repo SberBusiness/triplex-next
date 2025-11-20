@@ -45,3 +45,4 @@ export * from "./SelectField";
 export * from "./OrderedList";
 export * from "./UnorderedList";
 export * from "./SuggestField";
+export * from "./Tooltip";

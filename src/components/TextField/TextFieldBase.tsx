@@ -5,9 +5,9 @@ import { FormFieldLabel } from "@sberbusiness/triplex-next/components/FormField/
 import { FormFieldPostfix } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldPostfix";
 import { FormFieldPrefix } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldPrefix";
 import { FormFieldCounter } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldCounter";
-
 import { FormGroup } from "@sberbusiness/triplex-next/components/FormGroup/FormGroup";
-/** Свойства TextFieldBase. */
+
+/** Свойства компонента TextFieldBase. */
 export interface ITextFieldBaseProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
     /** Дочерние элементы. */
     children: React.ReactNode;

@@ -64,7 +64,6 @@ export const Playground: StoryObj<typeof LoaderScreen> = {
         (Story) => {
             return (
                 <div style={{ position: "relative", height: "200px" }}>
-                    <div>Контент под лоадером</div>
                     <Story />
                 </div>
             );
@@ -101,7 +100,6 @@ export const SmallLoader: StoryObj<typeof LoaderScreen> = {
         (Story) => {
             return (
                 <div style={{ position: "relative", height: "200px" }}>
-                    <div>Контент под лоадером</div>
                     <Story />
                 </div>
             );
@@ -136,7 +134,6 @@ export const MiddleLoader: StoryObj<typeof LoaderScreen> = {
         (Story) => {
             return (
                 <div style={{ position: "relative", height: "200px" }}>
-                    <div>Контент под лоадером</div>
                     <Story />
                 </div>
             );

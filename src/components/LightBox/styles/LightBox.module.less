@@ -1,0 +1,103 @@
+@import 'src/styles/style';
+
+.lightBox {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: @z-index-lightbox;
+    left: var(--lightBox-screen-left);
+    width: var(--lightBox-screen-width);
+    top: var(--lightBox-screen-top);
+    bottom: 0;
+    min-width: 0;
+    overflow-y: scroll;
+
+    .lightBoxBackdrop {
+        content: '';
+        position: fixed;
+        top: var(--lightBox-screen-top);
+        left: var(--lightBox-screen-left);
+        width: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0));
+        height: 100%;
+        pointer-events: none;
+        background-color: var(--triplex-next-LightBox-Backdrop_Background);
+    }
+
+    &.lightBoxSideOverlayActive {
+        overflow-y: hidden;
+    }
+
+    &.lightBoxTopOverlayActive {
+        overflow-y: hidden;
+    }
+
+    .lightBoxContent {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 0;
+        align-items: center;
+        position: relative;
+        margin: 16px 16px 0 16px;
+        padding: 0;
+        border-top-left-radius: 32px;
+        border-top-right-radius: 32px;
+        background-color: var(--triplex-next-LightBox-Content_Background);
+
+        .lightBoxBody {
+            flex-grow: 1;
+        }
+    }
+
+    .loadingContentOverlay {
+        border-top-left-radius: 32px;
+        border-top-right-radius: 32px;
+        opacity: 0.8;
+    }
+
+    .lightBoxContentResizeWrapper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 0;
+    }
+
+    // Скрытый элемент для вызова ререндера при закрытии оверлея, фикс бага в Safari - DCBSWT-2866.
+    .tempElSafariBug {
+        position: absolute;
+        left: -1000px;
+        top: 0;
+        visibility: hidden;
+    }
+}
+
+.bodyOverflowHidden {
+    overflow: hidden;
+}
+
+
+/*
+    Breakpoint для экранов менее 1024px.
+    < 1024px
+*/
+.global-LB-less-or-equal-media-point-0 {
+    .lightBox {
+        &.lightBoxSideOverlayActive {
+            overflow: hidden;
+        }
+    }
+
+    .lightBoxContent {
+        margin: 0;
+        border-radius: 0;
+    }
+}
+
+.global-LB-more-media-point-0 {
+    /* стили для экранов шире 1024px */
+    .lightBoxContent {
+        // Отступы для кнопок вперед/назад.
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+}

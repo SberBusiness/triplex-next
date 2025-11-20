@@ -1,0 +1,8 @@
+// Возможные размеры ширины скроллбара браузера.
+@scroll-sizes: 0, 15, 16, 17;
+
+each(@scroll-sizes, {
+    html.scroll-@{value} {
+        --triplex-next-scroll-width: ~'@{value}px';
+    }
+})

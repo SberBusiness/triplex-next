@@ -1,0 +1,18 @@
+.custom-top-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 0;
+    transition: height 0.25s;
+    background: cornflowerblue;
+    color: white;
+    padding: 0 32px;
+    box-sizing: border-box;
+    z-index: 1000000;
+    overflow: hidden;
+
+    &.opened {
+        height: 100px;
+    }
+}

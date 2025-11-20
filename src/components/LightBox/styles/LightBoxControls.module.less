@@ -1,0 +1,115 @@
+@import 'src/styles/style';
+
+.lightBoxControls {
+    z-index: 100;
+}
+
+.withKeyboardEvent {
+    display: inline-block;
+}
+
+.withoutKeyboardEvent {
+    display: none;
+}
+
+.lightBox.lightBoxSideOverlayActive,
+.lightBox.lightBoxTopOverlayActive,
+.lightBox.isLoading {
+    .withKeyboardEvent {
+        display: none;
+    }
+
+    .withoutKeyboardEvent {
+        display: inline-block;
+    }
+}
+
+.lightBox.isLoading {
+    .lightBoxPrev,
+    .lightBoxNext {
+        display: none;
+    }
+}
+
+/*
+    Breakpoint для экранов менее 1024px.
+    < 1024px
+*/
+.global-LB-less-or-equal-media-point-0 {
+    .lightBoxControls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        padding: 16px 16px 0 16px;
+    }
+
+    .lightBoxControlsDesktop {
+        display: none;
+    }
+
+    .lightBoxControlsMobile {
+        display: block;
+    }
+
+    .lightBoxClose {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+    }
+
+    .lightBoxPrev,
+    .lightBoxNext {
+        user-select: none;
+        display: inline-block;
+    }
+
+    .lightBoxPrev {
+        margin-right: 12px;
+    }
+
+    .lightBoxPrevButton,
+    .lightBoxNextButton {
+        margin-left: 0 !important;
+    }
+}
+
+/*
+    Breakpoint для экранов шире 1024px.
+    > 1024px
+*/
+.global-LB-more-media-point-0 {
+    .lightBoxControls {
+        position: static;
+    }
+
+    .lightBoxControlsDesktop {
+        display: block;
+    }
+
+    .lightBoxControlsMobile {
+        display: none;
+    }
+
+    .lightBoxClose {
+        position: fixed;
+        right: calc(40px + var(--triplex-next-scroll-width, 0));
+        top: calc(40px + var(--lightBox-screen-top));
+    }
+    
+    .lightBoxPrev,
+    .lightBoxNext {
+        user-select: none;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .lightBoxPrev {
+        left: 40px;
+    }
+    
+    .lightBoxNext {
+        right: calc(40px + var(--triplex-next-scroll-width, 0));
+    }
+}

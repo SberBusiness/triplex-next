@@ -38,6 +38,7 @@ import {
     TDesignTokensComponentsTooltip,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsUploadZone,
+    TDesignTokensComponentsLightBox,
     TDesignTokensComponentsNotification,
 } from "../components";
 
@@ -310,6 +311,8 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTabsLine
     | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsTypography
+    | TDesignTokensComponentsUploadZone
+    | TDesignTokensComponentsLightBox
     | TDesignTokensComponentsUploadZone
     | TDesignTokensComponentsNotification;
 

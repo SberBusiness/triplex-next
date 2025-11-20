@@ -1,2 +1,3 @@
-export * from "@sberbusiness/triplex-next/components/Tooltip/Tooltip";
-export { ETooltipPreferPlace, ETooltipSize } from "@sberbusiness/triplex-next/components/Tooltip/enums";
+export { Tooltip } from "./Tooltip";
+export { ETooltipPreferPlace, ETooltipSize } from "./enums";
+export type { ITooltipProps, ITooltipDesktopProps } from "./types";

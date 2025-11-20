@@ -1,19 +1,22 @@
-import React, {FocusEventHandler, useContext, useEffect, useRef, useState} from 'react';
-import {FormFieldContext} from '../FormFieldContext';
-import clsx from 'clsx';
-import { uniqueId } from 'lodash-es';
-import styles from '../styles/FormFieldTextarea.module.less';
-import { EFormFieldStatus } from '../enums';
+import React, { useContext, useEffect, useRef } from "react";
+import { FormFieldContext } from "../FormFieldContext";
+import clsx from "clsx";
+import { uniqueId } from "lodash-es";
+import styles from "../styles/FormFieldTextarea.module.less";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField/enums";
 
 /** Свойства компонента FormFieldTextarea. */
 export interface IFormFieldTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Компонент, отображающий textarea. */
 export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFieldTextareaProps>(
-    ({className, id, onBlur, onFocus, placeholder, value, ...htmlTextareaHTMLAttributes}, ref) => {
-        const {status, focused, setFocused, setId, setValueExist} = useContext(FormFieldContext);
-        const instanceId = useRef(id || uniqueId());
-        const classNames = clsx(styles.formFieldTextarea, className);
+    ({ className, id, onBlur, onFocus, placeholder, value, ...htmlTextareaHTMLAttributes }, ref) => {
+        const { size, status, focused, setFocused, setId, setValueExist } = useContext(FormFieldContext);
+        const instanceId = useRef(id === undefined ? uniqueId() : "");
+        const classNames = clsx(styles.formFieldTextarea, sizeToClassNameMap[size], className);
 
         useEffect(() => {
             setId(instanceId.current);
@@ -30,12 +33,12 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
             setValueExist(Boolean(value));
         }, [setValueExist, value]);
 
-        const handleBlur: FocusEventHandler<HTMLTextAreaElement> = (event) => {
+        const handleBlur: React.FocusEventHandler<HTMLTextAreaElement> = (event) => {
             setFocused(false);
             onBlur?.(event);
         };
 
-        const handleFocus: FocusEventHandler<HTMLTextAreaElement> = (event) => {
+        const handleFocus: React.FocusEventHandler<HTMLTextAreaElement> = (event) => {
             setFocused(true);
             onFocus?.(event);
         };
@@ -54,7 +57,7 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
                 ref={ref}
             />
         );
-    }
+    },
 );
 
-FormFieldTextarea.displayName = 'FormFieldTextarea';
+FormFieldTextarea.displayName = "FormFieldTextarea";

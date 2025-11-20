@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { NumberField, EComponentSize, EFormFieldStatus, Text, ETextSize, EFontType } from "../../src";
+import { TextareaField, EComponentSize, EFormFieldStatus, Text, ETextSize, EFontType } from "../../src";
 
-const meta: Meta<typeof NumberField> = {
-    title: "Components/TextFields/NumberField",
-    component: NumberField,
+const meta: Meta<typeof TextareaField> = {
+    title: "Components/TextFields/TextareaField",
+    component: TextareaField,
     parameters: {
         layout: "padded",
         docs: {
             description: {
                 component: `
-NumberField - текстовое поле для ввода числовых значений.
+TextareaField - многострочное текстовое поле для ввода большого объема текста.
 
 ## Использование
 
 \`\`\`tsx
 import React, { useState } from "react";
-import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { TextareaField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 
 const [value, setValue] = useState("");
 
@@ -24,10 +24,10 @@ const handleChange: React.ChangeEventHandler<HTMLTextareaElement> = (event) => {
     setValue(event.target.value);
 };
 
-<NumberField
+<TextareaField
     size={EComponentSize.LG}
     status={EFormFieldStatus.DEFAULT}
-    inputProps={{ value, placeholder: "0", onChange: handleChange }}
+    textareaProps={{ value, placeholder: "0", onChange: handleChange }}
     label="Label"
     prefix="Prefix"
     postfix="Postfix"
@@ -88,20 +88,20 @@ const handleChange: React.ChangeEventHandler<HTMLTextareaElement> = (event) => {
 };
 
 export default meta;
-type Story = StoryObj<typeof NumberField>;
+type Story = StoryObj<typeof TextareaField>;
 
-const NumberFieldTemplate = (args) => {
+const TextareaFieldTemplate = (args) => {
     const [value, setValue] = useState("");
     const { inputProps, prefix, postfix, description, counter, ...restArgs } = args;
     const targetTextType = args.status === EFormFieldStatus.DISABLED ? EFontType.DISABLED : EFontType.SECONDARY;
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         setValue(event.target.value);
     };
 
     return (
-        <NumberField
-            inputProps={{ ...inputProps, value: value, onChange: handleChange }}
+        <TextareaField
+            textareaProps={{ ...inputProps, value: value, onChange: handleChange }}
             prefix={
                 prefix?.length !== 0 && (
                     <Text tag="div" size={ETextSize.B2} type={targetTextType}>
@@ -139,14 +139,14 @@ export const Default: Story = {
     args: {
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
-        inputProps: { placeholder: "0" },
+        textareaProps: { placeholder: "0" },
         label: "Label",
         prefix: "Prefix",
         postfix: "Postfix",
         description: "Description",
         counter: "Counter",
     },
-    render: NumberFieldTemplate,
+    render: TextareaFieldTemplate,
 };
 
 const sizeToLabelMap = {
@@ -163,12 +163,12 @@ export const Sizes: Story = {
     },
     args: {
         status: EFormFieldStatus.DEFAULT,
-        inputProps: { placeholder: "0" },
+        textareaProps: { placeholder: "0" },
     },
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {Object.values(EComponentSize).map((size) => (
-                <NumberFieldTemplate key={size} size={size} label={sizeToLabelMap[size]} {...args} />
+                <TextareaFieldTemplate key={size} size={size} label={sizeToLabelMap[size]} {...args} />
             ))}
         </div>
     ),
@@ -189,12 +189,12 @@ export const Statuses: Story = {
     },
     args: {
         size: EComponentSize.LG,
-        inputProps: { placeholder: "0" },
+        textareaProps: { placeholder: "0" },
     },
     render: (args) => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {Object.values(EFormFieldStatus).map((status) => (
-                <NumberFieldTemplate key={status} status={status} label={statusToLabelMap[status]} {...args} />
+                <TextareaFieldTemplate key={status} status={status} label={statusToLabelMap[status]} {...args} />
             ))}
         </div>
     ),

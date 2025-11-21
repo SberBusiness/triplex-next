@@ -3,8 +3,7 @@ import { Amount, IAmountProps } from "../../src/components/Amount";
 import { Row } from "../../src/components/Row";
 import { Col } from "../../src/components/Col";
 import { StoryObj } from "@storybook/react";
-import { EFontType, ETextSize, Text } from "../../src/components/Typography";
-import "./Amount.less";
+import { EFontType, EFontWeightText, ETextSize, Text } from "../../src/components/Typography";
 
 export default {
     title: "Components/Amount",
@@ -90,15 +89,27 @@ export const Default: StoryObj<IAmountStoriesProps> = {
         const data = [
             {
                 title: "Обычный",
-                element: <Amount value="8967452.3145" {...commonProps} />,
+                element: (
+                    <Text size={ETextSize.B2}>
+                        <Amount value="8967452.3145" {...commonProps} />
+                    </Text>
+                ),
             },
             {
                 title: "Без копеек",
-                element: <Amount value="8967452.31" fractionLength={0} {...commonProps} />,
+                element: (
+                    <Text size={ETextSize.B2}>
+                        <Amount value="8967452.31" fractionLength={0} {...commonProps} />
+                    </Text>
+                ),
             },
             {
                 title: "С 4 знаками после разделителя",
-                element: <Amount key="2" value="8967452.31" fractionLength={4} {...commonProps} />,
+                element: (
+                    <Text size={ETextSize.B2}>
+                        <Amount key="2" value="8967452.31" fractionLength={4} {...commonProps} />
+                    </Text>
+                ),
             },
             {
                 title: "Положительный",
@@ -134,21 +145,33 @@ export const Default: StoryObj<IAmountStoriesProps> = {
             },
             {
                 title: "Без валюты",
-                element: <Amount value="8967452.31" />,
+                element: (
+                    <Text size={ETextSize.B2}>
+                        <Amount value="8967452.31" />
+                    </Text>
+                ),
             },
             {
                 title: "Большая сумма (50 миллиардов)",
-                element: <Amount value="50000000000.31" {...commonProps} />,
+                element: (
+                    <Text size={ETextSize.B2}>
+                        <Amount value="50000000000.31" {...commonProps} />
+                    </Text>
+                ),
             },
             {
                 title: "Адаптивная большая сумма (50 миллиардов)",
-                element: <Amount value="50000000000.31" {...commonProps} adaptive />,
+                element: (
+                    <Text size={ETextSize.B2}>
+                        <Amount value="50000000000.31" {...commonProps} adaptive />
+                    </Text>
+                ),
             },
             {
                 title: "Акцент",
                 element: (
-                    <Text size={ETextSize.B3}>
-                        <Amount value="8967452.31" className="accent" {...commonProps} />
+                    <Text size={ETextSize.B3} weight={EFontWeightText.SEMIBOLD}>
+                        <Amount value="8967452.31" {...commonProps} />
                     </Text>
                 ),
             },
@@ -158,7 +181,9 @@ export const Default: StoryObj<IAmountStoriesProps> = {
             <>
                 {data.map(({ title, element }, index) => (
                     <Row key={index}>
-                        <Col size={4}>{title}</Col>
+                        <Col size={4}>
+                            <Text size={ETextSize.B2}>{title}</Text>
+                        </Col>
                         <Col size={4}>{element}</Col>
                     </Row>
                 ))}

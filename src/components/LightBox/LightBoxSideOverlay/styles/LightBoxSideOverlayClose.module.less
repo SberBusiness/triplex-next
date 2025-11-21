@@ -1,3 +1,5 @@
+@import 'src/styles/style';
+
 .lightBoxSideOverlayCloseDesktop {
     position: absolute;
     top: 24px;
@@ -6,7 +8,7 @@
 
 .lightBoxSideOverlayCloseMobile {
     position: absolute;
-    top: 16px;
+    top: 22px;
     right: 16px;
     margin: 0 !important;
 }
@@ -19,6 +21,12 @@
 
     .lightBoxSideOverlayCloseMobile {
         display: block;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        .lightBoxSideOverlayCloseMobile {
+            top: 14px;
+        }
     }
 }
 

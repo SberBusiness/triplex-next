@@ -44,6 +44,7 @@ import {
     UploadZone_Tokens,
     LightBox_Tokens,
     Notification_Tokens,
+    StatusTracker_Tokens,
     TDesignTokensComponentsAlertContextValue,
     TDesignTokensComponentsAlertProcessValue,
     TDesignTokensComponentsButtonValue,
@@ -85,6 +86,7 @@ import {
     TDesignTokensComponentsUploadZoneValue,
     TDesignTokensComponentsLightBoxValue,
     TDesignTokensComponentsNotificationValue,
+    TDesignTokensComponentsStatusTrackerValue,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -182,5 +184,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     Notification: GetTokensValueByTheme<TDesignTokensComponentsNotificationValue>(
         ETriplexNextTheme.LIGHT,
         Notification_Tokens,
+    ),
+    StatusTracker: GetTokensValueByTheme<TDesignTokensComponentsStatusTrackerValue>(
+        ETriplexNextTheme.LIGHT,
+        StatusTracker_Tokens,
     ),
 };

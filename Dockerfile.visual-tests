@@ -1,0 +1,58 @@
+# Dockerfile.visual-tests
+FROM mcr.microsoft.com/playwright:v1.50.0-noble
+
+WORKDIR /app
+
+# 1. Копируем package-файлы для кэширования зависимостей
+COPY package.json package-lock.json ./
+
+# 2. Копируем конфигурационные файлы
+COPY vite.config.ts ./
+COPY tsconfig.json ./
+COPY .storybook/ ./.storybook/
+
+# 3. Копируем скрипты, которые используются в сборке
+COPY scripts/ ./scripts/
+
+# 4. Устанавливаем зависимости
+RUN npm ci
+
+# 5. Копируем исходный код
+COPY src/ ./src/
+COPY stories/ ./stories/
+COPY public/ ./public/
+
+# 6. Собираем Storybook
+RUN npm run storybook:build
+
+# 7. Создаем директорию для снепшотов
+RUN mkdir -p /app/__snapshots__
+
+# 8. Запускаем тесты
+CMD ["sh", "-c", "npm run storybook:serve & npx wait-on tcp:6006 --timeout 60000 && npm run test:visual:ci"]
+
+
+# # Устанавливаем рабочую директорию
+# WORKDIR /app
+
+# # Копируем package files
+# COPY package*.json ./
+# COPY .storybook ./.storybook
+# COPY scripts ./scripts
+# COPY stories ./stories
+# COPY src ./src
+# COPY public ./public
+
+# # Устанавливаем зависимости
+# RUN npm ci
+
+# # Собираем Storybook
+# RUN npm run storybook:build
+
+# # 7. Создаем директорию для снепшотов
+# RUN mkdir -p /app/__snapshots__
+
+# # 8. Запускаем тесты
+# # CMD ["npm", "run", "test:visual:ci"]
+
+# CMD ["sh", "-c", "npm run storybook:serve & npx wait-on tcp:6006 --timeout 60000 && npm run test:visual:ci"]

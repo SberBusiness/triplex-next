@@ -12,7 +12,7 @@ import {
     EFontWeightText,
     Link,
     Gap,
-} from "@sberbusiness/triplex-next";
+} from "../../src/components";
 import "./Cards.less";
 
 // TODO: Проработать это

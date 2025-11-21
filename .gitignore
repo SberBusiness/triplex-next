@@ -34,6 +34,9 @@ tsconfig.tsbuildinfo
 # Папка отчета покрытия
 coverage/
 
+# Временные diff файлы снимков
+__snapshots__/__diff_output__/
+
 .npmrc
 /test-results/
 /helm/

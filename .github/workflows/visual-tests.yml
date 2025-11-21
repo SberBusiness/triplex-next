@@ -6,19 +6,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install
-
-      - name: Build Storybook
-        run: npm run storybook:build
-
-      - name: Run visual tests
+      - name: Setup Docker
         run: |
-          npm run storybook:serve &
-          npx wait-on http://localhost:6006
-          npm run test:visual:ci
+          docker version
+
+      - name: Run visual tests in Docker
+        run: npm run test:visual:docker
+
+      - name: Upload snapshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-snapshots
+          path: __snapshots__/
+          retention-days: 7
+  

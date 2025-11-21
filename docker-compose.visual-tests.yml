@@ -1,0 +1,10 @@
+# docker-compose.visual-tests.yml
+version: '3.8'
+services:
+  visual-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.visual-tests
+    volumes:
+      - ./__snapshots__:/app/__snapshots__
+    working_dir: /app

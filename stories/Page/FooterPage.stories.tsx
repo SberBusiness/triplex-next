@@ -5,7 +5,11 @@ import { EButtonTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, ETextSize } from "../../src/components/Typography";
 import { Page, EFooterPageType } from "../../src/components/Page";
-import { IFooterPageProps, FooterPage } from "../../src/components/Page/components/FooterPage";
+import {
+    IFooterPageTypeFirstProps,
+    IFooterPageTypeSecondProps,
+    FooterPage,
+} from "../../src/components/Page/components/FooterPage";
 import "./Footer.less";
 
 export default {
@@ -28,7 +32,7 @@ export default {
     },
 };
 
-export const Playground: StoryObj<IFooterPageProps> = {
+export const Playground: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
     args: {
         type: EFooterPageType.FIRST,
     },
@@ -66,7 +70,7 @@ export const Playground: StoryObj<IFooterPageProps> = {
     },
 };
 
-export const Basic: StoryObj<IFooterPageProps> = {
+export const Basic: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
     args: {
         type: EFooterPageType.SECOND,
     },
@@ -100,7 +104,7 @@ export const Basic: StoryObj<IFooterPageProps> = {
     },
 };
 
-export const WithLink: StoryObj<IFooterPageProps> = {
+export const WithLink: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
     args: {
         type: EFooterPageType.SECOND,
     },

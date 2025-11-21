@@ -4,6 +4,7 @@ import { Island, EIslandType } from "../src/components/Island";
 import { IslandHeader } from "../src/components/Island/components/IslandHeader";
 import { IslandBody } from "../src/components/Island/components/IslandBody";
 import { IslandFooter } from "../src/components/Island/components/IslandFooter";
+import { EComponentSize } from "@sberbusiness/triplex-next";
 
 const meta = {
     title: "Components/Island",
@@ -21,8 +22,7 @@ const meta = {
 ## Особенности
 
 - **Типы**: type1, type2, type3
-- **Скругление**: 16, 24, 32
-- **Внутренние отступы**: 16, 24, 32
+- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.
 
 ## Состав
 
@@ -40,17 +40,11 @@ const meta = {
             description: "Тип визуального оформления острова",
             table: { type: { summary: "EIslandType" }, defaultValue: { summary: EIslandType.TYPE_1 } },
         },
-        borderRadius: {
+        size: {
             control: { type: "select" },
-            options: [16, 24, 32],
-            description: "Размер скругления",
-            table: { type: { summary: "BorderRadius" }, defaultValue: { summary: "16" } },
-        },
-        paddingSize: {
-            control: { type: "select" },
-            options: [16, 24, 32],
-            description: "Размер внутреннего отступа",
-            table: { type: { summary: "PaddingSize" }, defaultValue: { summary: "16" } },
+            options: Object.values(EComponentSize),
+            description: "Размер острова",
+            table: { type: { summary: "EComponentSize" }, defaultValue: { summary: EComponentSize.MD } },
         },
         className: {
             control: { type: "text" },
@@ -76,8 +70,7 @@ export const Playground: StoryObj<IPlaygroundProps> = {
     name: "Playground",
     args: {
         type: EIslandType.TYPE_1,
-        borderRadius: 16,
-        paddingSize: 16,
+        size: EComponentSize.MD,
         headerText: "Island Header",
         bodyText: "Island Body",
         footerText: "Island Footer",
@@ -148,8 +141,7 @@ export const Types: Story = {
     },
     argTypes: {
         type: { table: { disable: true } },
-        borderRadius: { table: { disable: true } },
-        paddingSize: { table: { disable: true } },
+        size: { table: { disable: true } },
         className: { table: { disable: true } },
         children: { table: { disable: true } },
     },
@@ -161,17 +153,17 @@ export const Types: Story = {
                 gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             }}
         >
-            <Island type={EIslandType.TYPE_1} paddingSize={16} borderRadius={16}>
+            <Island type={EIslandType.TYPE_1}>
                 <Island.Header>Type 1</Island.Header>
                 <Island.Body>Body content</Island.Body>
                 <Island.Footer>Footer content</Island.Footer>
             </Island>
-            <Island type={EIslandType.TYPE_2} paddingSize={16} borderRadius={16}>
+            <Island type={EIslandType.TYPE_2}>
                 <Island.Header>Type 2</Island.Header>
                 <Island.Body>Body content</Island.Body>
                 <Island.Footer>Footer content</Island.Footer>
             </Island>
-            <Island type={EIslandType.TYPE_3} paddingSize={16} borderRadius={16}>
+            <Island type={EIslandType.TYPE_3}>
                 <IslandHeader>Type 3</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
@@ -180,8 +172,8 @@ export const Types: Story = {
     ),
 };
 
-export const BorderRadius: Story = {
-    name: "Border radius",
+export const Sizes: Story = {
+    name: "Sizes",
     parameters: {
         docs: {
             description: { story: "Демонстрация размеров скругления: SM и MD." },
@@ -189,8 +181,7 @@ export const BorderRadius: Story = {
     },
     argTypes: {
         type: { table: { disable: true } },
-        borderRadius: { table: { disable: true } },
-        paddingSize: { table: { disable: true } },
+        size: { table: { disable: true } },
         className: { table: { disable: true } },
         children: { table: { disable: true } },
     },
@@ -202,59 +193,18 @@ export const BorderRadius: Story = {
                 gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             }}
         >
-            <Island type={EIslandType.TYPE_1} paddingSize={16} borderRadius={16}>
-                <IslandHeader>BorderRadius 16</IslandHeader>
+            <Island type={EIslandType.TYPE_1} size={EComponentSize.SM}>
+                <IslandHeader>Size SM</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
             </Island>
-            <Island type={EIslandType.TYPE_1} paddingSize={24} borderRadius={24}>
-                <IslandHeader>BorderRadius 24</IslandHeader>
+            <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
+                <IslandHeader>Size MD</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
             </Island>
-            <Island type={EIslandType.TYPE_1} paddingSize={32} borderRadius={32}>
-                <IslandHeader>BorderRadius 32</IslandHeader>
-                <IslandBody>Body content</IslandBody>
-                <IslandFooter>Footer content</IslandFooter>
-            </Island>
-        </div>
-    ),
-};
-
-export const PaddingSizes: Story = {
-    name: "Padding sizes",
-    parameters: {
-        docs: {
-            description: { story: "Демонстрация размеров внутренних отступов: SM, MD, LG." },
-        },
-    },
-    argTypes: {
-        type: { table: { disable: true } },
-        borderRadius: { table: { disable: true } },
-        paddingSize: { table: { disable: true } },
-        className: { table: { disable: true } },
-        children: { table: { disable: true } },
-    },
-    render: () => (
-        <div
-            style={{
-                display: "grid",
-                gap: 16,
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            }}
-        >
-            <Island type={EIslandType.TYPE_1} paddingSize={16} borderRadius={16}>
-                <IslandHeader>Padding 16</IslandHeader>
-                <IslandBody>Body content</IslandBody>
-                <IslandFooter>Footer content</IslandFooter>
-            </Island>
-            <Island type={EIslandType.TYPE_1} paddingSize={24} borderRadius={24}>
-                <IslandHeader>Padding 24</IslandHeader>
-                <IslandBody>Body content</IslandBody>
-                <IslandFooter>Footer content</IslandFooter>
-            </Island>
-            <Island type={EIslandType.TYPE_1} paddingSize={32} borderRadius={32}>
-                <IslandHeader>Padding 32</IslandHeader>
+            <Island type={EIslandType.TYPE_1} size={EComponentSize.LG}>
+                <IslandHeader>Size LG</IslandHeader>
                 <IslandBody>Body content</IslandBody>
                 <IslandFooter>Footer content</IslandFooter>
             </Island>

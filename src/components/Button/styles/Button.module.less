@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .button {
     position: relative;
@@ -19,7 +19,6 @@
     }
 
     &.sm {
-        border-radius: 6px;
         line-height: 16px;
         font-size: 12px;
 
@@ -30,6 +29,7 @@
             height: 28px;
             min-width: 58px;
             padding: 6px 16px;
+            border-radius: 6px;
         }
 
         &.icon {
@@ -40,7 +40,6 @@
     }
 
     &.md {
-        border-radius: 8px;
         line-height: 20px;
         font-size: 14px;
 
@@ -51,6 +50,7 @@
             height: 40px;
             min-width: 72px;
             padding: 10px 20px;
+            border-radius: 8px;
         }
 
         &.icon {
@@ -61,7 +61,6 @@
     }
 
     &.lg {
-        border-radius: 10px;
         line-height: 20px;
         font-size: 16px;
 
@@ -72,6 +71,7 @@
             height: 56px;
             min-width: 84px;
             padding: 18px 24px;
+            border-radius: 10px;
         }
 
         &.icon {
@@ -89,7 +89,7 @@
         }
     }
 
-    &+.button {
+    & + .button {
         &:not(.block) {
             margin-left: 12px;
         }

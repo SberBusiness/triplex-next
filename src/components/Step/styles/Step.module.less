@@ -1,8 +1,4 @@
 .step {
-    font-weight: 600;
-    font-family: 'SBSansUI', 'Arial', sans-serif;
-    font-size: 18px;
-    line-height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,28 +9,51 @@
     cursor: default;
     border-radius: 50%;
 
-    &.success {
-        color: var(--triplex-next-Step-Color_Success);
-        background-color: var(--triplex-next-Step-Background_Success);
+    &.default {
+        background-color: var(--triplex-next-Step-Background_Default);
+
+        & > span {
+            color: var(--triplex-next-Step-Color_Default) ;
+        }
+    }
+
+    &.done {
+        & > span {
+            color: var(--triplex-next-Step-Color_Done);
+        }
+
+        background-color: var(--triplex-next-Step-Background_Done);
     }
 
     &.warning {
-        color: var(--triplex-next-Step-Color_Warning);
+        & > span {
+            color: var(--triplex-next-Step-Color_Warning);
+        }
+        
         background-color: var(--triplex-next-Step-Background_Warning);
     }
 
-    &.wait {
-        color: var(--triplex-next-Step-Color_Wait);
-        background-color: var(--triplex-next-Step-Background_Wait);
+    &.active {
+        & > span {
+            color: var(--triplex-next-Step-Color_Active);
+        }
+        
+        background-color: var(--triplex-next-Step-Background_Active);
     }
 
     &.error {
-        color: var(--triplex-next-Step-Color_Error);
+        & > span {
+            color: var(--triplex-next-Step-Color_Error);
+        }
+        
         background-color: var(--triplex-next-Step-Background_Error);
     }
 
     &.disabled {
-        color: var(--triplex-next-Step-Color_Disabled);
+        & > span {
+            color: var(--triplex-next-Step-Color_Disabled);
+        }
+        
         background-color: var(--triplex-next-Step-Background_Disabled);
     }
 }

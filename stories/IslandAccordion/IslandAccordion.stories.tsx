@@ -38,6 +38,7 @@ type IIslandAccordionStoryType = React.ComponentProps<typeof IslandAccordion> & 
     removable: boolean;
     disabled: boolean;
     size: EComponentSize;
+    status: EStepStatus;
 };
 
 export const Playground: StoryObj<IIslandAccordionStoryType> = {
@@ -47,6 +48,7 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
         type: EIslandType.TYPE_1,
         removable: true,
         disabled: false,
+        status: EStepStatus.DEFAULT,
     },
     argTypes: {
         size: {
@@ -60,6 +62,12 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
             options: Object.values(EIslandType),
             description: "Тип визуального оформления острова",
             table: { type: { summary: "EIslandType" }, defaultValue: { summary: EIslandType.TYPE_1 } },
+        },
+        status: {
+            control: { type: "select" },
+            options: Object.values(EStepStatus),
+            description: "Статус компонента",
+            table: { type: { summary: "EStepStatus" }, defaultValue: { summary: EStepStatus.DEFAULT } },
         },
         removable: {
             control: { type: "boolean" },
@@ -83,6 +91,7 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
                         disabled={args.disabled}
                         onRemove={args.removable ? handleRemove : undefined}
                         size={args.size}
+                        status={args.status}
                     >
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
@@ -240,12 +249,16 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
 
         const items = [
             {
+                id: "accordion-form-item-0",
+                status: EStepStatus.DEFAULT,
+            },
+            {
                 id: "accordion-form-item-1",
-                status: EStepStatus.SUCCESS,
+                status: EStepStatus.DONE,
             },
             {
                 id: "accordion-form-item-2",
-                status: EStepStatus.WAIT,
+                status: EStepStatus.ACTIVE,
             },
             {
                 id: "accordion-form-item-3",
@@ -303,37 +316,26 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
 
-        const items = [
-            {
-                id: "accordion-form-item-1",
-                status: EStepStatus.SUCCESS,
-            },
-            {
-                id: "accordion-form-item-2",
-                status: EStepStatus.WAIT,
-            },
-        ];
-
-        const renderIslandAccordionItem = ({ id, status }) => (
-            <IslandAccordion.Item key={id} id={id} status={status} title={title} stepHint="Текст подсказки.">
-                <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
-                <IslandAccordion.Item.Footer>
-                    <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                        Button link text
-                    </Button>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
-                        Button text
-                    </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
-                        Button text
-                    </Button>
-                </IslandAccordion.Item.Footer>
-            </IslandAccordion.Item>
-        );
-
         return (
             <div className="island-accordion-example">
-                <IslandAccordion>{items.map((item) => renderIslandAccordionItem(item))}</IslandAccordion>
+                <IslandAccordion>
+                    {
+                        <IslandAccordion.Item status={EStepStatus.DONE} title={title} stepHint="Текст подсказки.">
+                            <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
+                            <IslandAccordion.Item.Footer>
+                                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                                    Button link text
+                                </Button>
+                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                                    Button text
+                                </Button>
+                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                                    Button text
+                                </Button>
+                            </IslandAccordion.Item.Footer>
+                        </IslandAccordion.Item>
+                    }
+                </IslandAccordion>
             </div>
         );
     },

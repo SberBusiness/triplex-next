@@ -1,7 +1,8 @@
 /** Статус шага. */
 export enum EStepStatus {
-    SUCCESS = "success",
-    WAIT = "wait",
+    DEFAULT = "default",
+    DONE = "done",
+    ACTIVE = "active",
     ERROR = "error",
     WARNING = "warning",
     DISABLED = "disabled",

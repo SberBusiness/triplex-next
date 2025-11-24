@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { EStepPosition, EStepStatus } from "./enums";
 import { ETooltipAlign, ETooltipSize } from "../Tooltip/enums";
 import { Tooltip } from "../Tooltip/Tooltip";
+import { Text, ETextSize, EFontWeightText } from "../Typography";
 import clsx from "clsx";
 import styles from "./styles/Step.module.less";
 
@@ -16,10 +17,11 @@ export interface IStepProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const statusToClassNameMap = {
-    [EStepStatus.WAIT]: styles.wait,
+    [EStepStatus.DEFAULT]: styles.default,
+    [EStepStatus.ACTIVE]: styles.active,
     [EStepStatus.WARNING]: styles.warning,
     [EStepStatus.ERROR]: styles.error,
-    [EStepStatus.SUCCESS]: styles.success,
+    [EStepStatus.DONE]: styles.done,
     [EStepStatus.DISABLED]: styles.disabled,
 };
 
@@ -51,9 +53,13 @@ export const Step: React.FC<IStepProps> = ({
     const ref = useRef<HTMLDivElement | null>(null);
     const tooltipAlign = stepPositionToTooltipAlignMap[position];
 
+    const classNames = clsx(styles.step, statusToClassNameMap[status], className);
+
     const renderContent = () => (
-        <div ref={ref} className={clsx(styles.step, statusToClassNameMap[status], className)} {...rest}>
-            {step}
+        <div ref={ref} className={classNames} {...rest}>
+            <Text size={ETextSize.B1} weight={EFontWeightText.SEMIBOLD}>
+                {step}
+            </Text>
         </div>
     );
 

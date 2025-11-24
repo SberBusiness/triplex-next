@@ -202,6 +202,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             window.addEventListener("resize", handleReposition);
             toggleScrollEventListener(true);
             document.body.classList.add(overflowHiddenClassName);
+            handleReposition();
 
             return () => {
                 document.removeEventListener("scroll", handleReposition, true);

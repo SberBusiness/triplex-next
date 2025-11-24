@@ -1,0 +1,101 @@
+@import "src/styles/style";
+
+.smsInput {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    .input {
+        text-align: center;
+
+        &::placeholder {
+            opacity: 1;
+        }
+
+        &:disabled {
+            &::placeholder {
+                color: var(--triplex-next-FormField-Input_Color_Disabled);
+            }
+        }
+
+        &.lg {
+            padding: 18px 40px;
+        }
+
+        &.md {
+            padding-left: 26px;
+            padding-right: 26px;
+        }
+
+        &.sm {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+
+    .btnRefresh {
+        position: absolute;
+        outline: none;
+        z-index: 1;
+
+        &.lg {
+            top: 12px;
+            left: 12px;
+            height: 32px;
+            width: 32px;
+        }
+
+        &.md {
+            top: 10px;
+            left: 10px;
+        }
+
+        &.sm {
+            top: 4px;
+            left: 4px;
+        }
+
+        .full {
+            fill: var(--triplex-next-SMSInput-Refresh_Fill_Full);
+        }
+
+        .empty {
+            fill: var(--triplex-next-SMSInput-Refresh_Fill_Empty);
+        }
+
+        &:disabled {
+            cursor: default;
+            fill: var(--triplex-next-SMSInput-Refresh_Disabled);
+        }
+    }
+
+    .btnSubmit {
+        position: absolute;
+        fill: var(--triplex-next-SMSInput-Submit_Background_Default);
+
+        &.active:not(:disabled) {
+            fill: var(--triplex-next-SMSInput-Submit_Background_Active);
+
+            &:hover {
+                fill: var(--triplex-next-SMSInput-Submit_Background_Hover);
+            }
+        }
+
+        &.lg {
+            top: 15px;
+            right: 15px;
+            height: 26px;
+            width: 26px;
+        }
+
+        &.md {
+            top: 10px;
+            right: 10px;
+        }
+
+        &.sm {
+            top: 4px;
+            right: 4px;
+        }
+    }
+}

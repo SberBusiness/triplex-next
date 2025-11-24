@@ -48,3 +48,4 @@ export * from "./UnorderedList";
 export * from "./SuggestField";
 export * from "./LightBox";
 export * from "./Tooltip";
+export * from "./SMSInput";

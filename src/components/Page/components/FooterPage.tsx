@@ -4,6 +4,8 @@ import { Footer, IFooterProps } from "@sberbusiness/triplex-next/components/Foot
 import { EFooterPageType } from "./enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import { EIslandType, Island } from "../../Island";
+import { useMatchMedia } from "../../MediaWidth/useMatchMedia";
+import { EScreenWidth } from "../../../helpers/breakpoints";
 import styles from "../styles/Page.module.less";
 
 export interface IFooterPageProps extends IFooterProps {
@@ -23,6 +25,14 @@ export const FooterPage = Object.assign(
             // Плавное обнуление нижних углов и добавление тени при прилипания к низу.
             useStickyCornerRadius(footerRef, "bottom", sticky);
 
+            const isMobileScreenWidth = useMatchMedia(
+                `(max-width: ${EScreenWidth.SM_MAX})`,
+                window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
+            );
+
+            const islandPaddingSize = isMobileScreenWidth ? 16 : 24;
+            const islandBorderRadius = isMobileScreenWidth ? 16 : 24;
+
             const setFooterRef = (instance: HTMLDivElement | null) => {
                 footerRef.current = instance;
                 if (typeof ref === "function") {
@@ -32,22 +42,22 @@ export const FooterPage = Object.assign(
                 }
             };
 
-            const footerPageTypeSecondClassNames = clsx(className, styles.footerPageTypeSecond, {
+            const footerPageTypeFirstClassNames = clsx(className, styles.footerPageTypeFirst, {
                 [styles.sticky]: sticky,
             });
 
-            return type === EFooterPageType.SECOND ? (
+            return type === EFooterPageType.FIRST ? (
                 <Island
-                    className={footerPageTypeSecondClassNames}
+                    className={footerPageTypeFirstClassNames}
                     type={EIslandType.TYPE_1}
-                    borderRadius={16}
-                    paddingSize={16}
+                    borderRadius={islandBorderRadius}
+                    paddingSize={islandPaddingSize}
                     ref={setFooterRef}
                 >
                     <Footer {...rest} />
                 </Island>
             ) : (
-                <Footer ref={ref} className={clsx(styles.footerPageTypeFirst, className)} {...rest} />
+                <Footer ref={ref} className={className} {...rest} />
             );
         },
     ),

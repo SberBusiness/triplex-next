@@ -44,7 +44,6 @@ export default {
     tags: ["autodocs"],
 };
 
-
 interface IFormFieldPlaygroundProps extends React.ComponentProps<typeof FormField> {
     labelText?: string;
     placeholder?: string;

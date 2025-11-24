@@ -23,6 +23,7 @@ export * from "./TabsLine";
 export * from "./Tag";
 export * from "./TagGroup";
 export * from "./TextField";
+export * from "./TextareaField";
 export * from "./ThemeProvider";
 export * from "./Typography";
 export * from "./Dropdown";

@@ -20,7 +20,7 @@ export type TDesignTokensComponentsIsland = { Island: TDesignTokensComponentsIsl
 
 // Токены компонента Island в светлой и темной темах.
 export const Island_Tokens: TDesignTokensComponentsIslandValues = {
-    Type1_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-Island-Type1_Background)
+    Type1_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.40" }], // var(--triplex-next-Island-Type1_Background)
     Type2_Background: [{ ref: "ColorNeutralAlpha.70" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-Island-Type2_Background)
     Type3_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-Island-Type3_Background)
     Type1_Shadow: [{ value: "0 0 0 1px #FFFFFF inset" }, { value: "0 0 0 1px #1F1F22 inset" }], // var(--triplex-next-Island-Type1_Shadow)

@@ -5,6 +5,9 @@ import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, ETextSize } from "../../src/components/Typography";
+import { Page, EFooterPageType } from "../../src/components/Page";
+import { IFooterPageProps } from "../../src/components/Page/components/FooterPage";
+import "./Footer.less";
 
 export default {
     title: "Components/Footer",
@@ -18,8 +21,6 @@ export default {
 
 ## Возможности
 
-- **Прилипающий футер**: опционально фиксируется у нижней границы экрана (
-  \`sticky\`)
 - **Композиция**: \`Footer.Description\` с областями \`Content\` и \`Controls\`
 - **Гибкость**: можно передавать любой произвольный контент
                 `,
@@ -28,27 +29,117 @@ export default {
     },
 };
 
-export const Basic: StoryObj<typeof Footer> = {
-    render: () => (
-        <Footer>
-            <Footer.Description>
-                <Footer.Description.Content>
-                    <Text size={ETextSize.B3}>Footer page text</Text>
-                </Footer.Description.Content>
-                <Footer.Description.Controls>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
-                        Button text
-                    </Button>
-                </Footer.Description.Controls>
-            </Footer.Description>
-        </Footer>
-    ),
-    parameters: {
-        docs: {
-            description: { story: "Базовый футер с описанием и кнопками действий." },
+export const Playground: StoryObj<IFooterPageProps> = {
+    args: {
+        type: EFooterPageType.FIRST,
+    },
+    argTypes: {
+        type: {
+            control: { type: "select" },
+            options: [EFooterPageType.FIRST, EFooterPageType.SECOND],
+            description: "Тип футера страницы",
+            table: { type: { summary: "EFooterPageType" }, defaultValue: { summary: "first" } },
         },
     },
+    render: (args) => (
+        <div className="footer-example">
+            <Page.Footer type={args.type}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Content>
+                        <Text size={ETextSize.B3}>Footer page content</Text>
+                    </Page.Footer.Description.Content>
+                    <Page.Footer.Description.Controls>
+                        <Button
+                            size={EComponentSize.MD}
+                            theme={
+                                args.type === EFooterPageType.FIRST
+                                    ? EButtonTheme.SECONDARY
+                                    : EButtonTheme.SECONDARY_LIGHT
+                            }
+                        >
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </div>
+    ),
+};
+
+export const Basic: StoryObj<IFooterPageProps> = {
+    args: {
+        type: EFooterPageType.FIRST,
+    },
+    argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(EFooterPageType),
+        },
+    },
+    render: (args) => (
+        <div className="footer-example">
+            <Page.Footer type={args.type}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Controls>
+                        <Button
+                            size={EComponentSize.MD}
+                            theme={
+                                args.type === EFooterPageType.FIRST
+                                    ? EButtonTheme.SECONDARY
+                                    : EButtonTheme.SECONDARY_LIGHT
+                            }
+                        >
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </div>
+    ),
+};
+
+export const WithLink: StoryObj<IFooterPageProps> = {
+    args: {
+        type: EFooterPageType.FIRST,
+    },
+    argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(EFooterPageType),
+        },
+    },
+    render: (args) => (
+        <div className="footer-example">
+            <Page.Footer type={args.type}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Content>
+                        <Button theme={EButtonTheme.LINK} size={EComponentSize.MD}>
+                            Button link text
+                        </Button>
+                    </Page.Footer.Description.Content>
+                    <Page.Footer.Description.Controls>
+                        <Button
+                            size={EComponentSize.MD}
+                            theme={
+                                args.type === EFooterPageType.FIRST
+                                    ? EButtonTheme.SECONDARY
+                                    : EButtonTheme.SECONDARY_LIGHT
+                            }
+                        >
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </div>
+    ),
 };

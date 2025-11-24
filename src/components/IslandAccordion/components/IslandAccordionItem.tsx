@@ -22,9 +22,9 @@ export interface IIslandAccordionItemProps
     /** Нода с названием заголовка. */
     title: React.ReactNode;
     /** Идентификатор вкладки (если не передать извне, то используется индекс. Также используется как ключ при рендере списка вкладок). */
-    id?: string;
+    id: string;
     /** Цифра в кружке. */
-    num?: number;
+    num: number;
     /** Раскрыт ли элемент. */
     opened?: boolean;
     /** Статус шага. */
@@ -103,7 +103,7 @@ export const IslandAccordionItem = Object.assign(
                     return;
                 }
                 const newOpened = !isOpen;
-                onToggle?.(newOpened, id!);
+                onToggle?.(newOpened, id);
 
                 if (opened === undefined) {
                     setIsOpen(newOpened);
@@ -114,7 +114,7 @@ export const IslandAccordionItem = Object.assign(
                 if (disabled) {
                     return;
                 }
-                onRemove?.(id!);
+                onRemove?.(id);
             };
 
             const renderTitle = () => {
@@ -148,7 +148,7 @@ export const IslandAccordionItem = Object.assign(
                             >
                                 {status && (
                                     <div className={styles.step}>
-                                        <Step step={num!} status={status!} position={EStepPosition.XFirst}>
+                                        <Step step={num} status={status!} position={EStepPosition.XFirst}>
                                             {disabled ? undefined : stepHint}
                                         </Step>
                                     </div>

@@ -85,7 +85,8 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
             <div className="island-accordion-example">
                 <IslandAccordion>
                     <IslandAccordion.Item
-                        id="island-accordion-item-removable"
+                        id="island-accordion-item-example-playground"
+                        num={1}
                         title={title}
                         type={args.type}
                         disabled={args.disabled}
@@ -132,7 +133,7 @@ export const Default: StoryObj<IIslandAccordionStoryType> = {
         return (
             <div className="island-accordion-example">
                 <IslandAccordion>
-                    <IslandAccordion.Item title={title}>
+                    <IslandAccordion.Item id="island-accordion-item-example-default" num={1} title={title}>
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
                             <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
@@ -172,7 +173,7 @@ export const Disabled: StoryObj<IIslandAccordionStoryType> = {
         return (
             <div className="island-accordion-example">
                 <IslandAccordion>
-                    <IslandAccordion.Item title={title} disabled>
+                    <IslandAccordion.Item id="island-accordion-item-example-disabled" num={1} title={title} disabled>
                         <IslandAccordion.Item.Content>Контент аккордеона</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
                             <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
@@ -208,7 +209,12 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
         return (
             <div className="island-accordion-example">
                 <IslandAccordion>
-                    <IslandAccordion.Item id="island-accordion-item-removable-1" title={title} onRemove={handleRemove}>
+                    <IslandAccordion.Item
+                        id="island-accordion-item-example-removable"
+                        num={1}
+                        title={title}
+                        onRemove={handleRemove}
+                    >
                         <IslandAccordion.Item.Content>Контент аккордеона</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
                             <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
@@ -274,8 +280,8 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
             },
         ];
 
-        const renderIslandAccordionItem = ({ id, status }) => (
-            <IslandAccordion.Item key={id} id={id} status={status} title={title} size={args.size}>
+        const renderIslandAccordionItem = ({ id, status }, index: number) => (
+            <IslandAccordion.Item key={id} id={id} num={index + 1} status={status} title={title} size={args.size}>
                 <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                 <IslandAccordion.Item.Footer>
                     <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
@@ -293,7 +299,7 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion>{items.map((item) => renderIslandAccordionItem(item))}</IslandAccordion>
+                <IslandAccordion>{items.map((item, index) => renderIslandAccordionItem(item, index))}</IslandAccordion>
             </div>
         );
     },
@@ -320,7 +326,13 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
             <div className="island-accordion-example">
                 <IslandAccordion>
                     {
-                        <IslandAccordion.Item status={EStepStatus.DONE} title={title} stepHint="Текст подсказки.">
+                        <IslandAccordion.Item
+                            id="island-accordion-item-with-step-hint"
+                            num={1}
+                            status={EStepStatus.DONE}
+                            title={title}
+                            stepHint="Текст подсказки."
+                        >
                             <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                             <IslandAccordion.Item.Footer>
                                 <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>

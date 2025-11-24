@@ -10,8 +10,10 @@ describe("IslandAccordion", () => {
     it("Should render with default props", () => {
         render(
             <IslandAccordion>
-                <IslandAccordion.Item title="First item">First content</IslandAccordion.Item>
-                <IslandAccordion.Item title="Second item" id="custom-id">
+                <IslandAccordion.Item title="First item" id="first-item" num={1}>
+                    First content
+                </IslandAccordion.Item>
+                <IslandAccordion.Item title="Second item" id="custom-id" num={2}>
                     Second content
                 </IslandAccordion.Item>
             </IslandAccordion>,
@@ -27,7 +29,7 @@ describe("IslandAccordion", () => {
     it("Should apply size classes", () => {
         render(
             <IslandAccordion>
-                <IslandAccordion.Item title="First item" size={EComponentSize.SM}>
+                <IslandAccordion.Item title="First item" id="first-item" num={1} size={EComponentSize.SM}>
                     First content
                 </IslandAccordion.Item>
             </IslandAccordion>,

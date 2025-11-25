@@ -5,6 +5,7 @@ import { uniqueId } from "lodash-es";
 import styles from "../styles/FormFieldInput.module.less";
 import { EFormFieldStatus } from "../enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 /** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
 export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
@@ -19,12 +20,14 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
     render?: (props: IFormFieldInputProvideProps, ref?: React.Ref<HTMLInputElement>) => React.ReactElement | null;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Компонент, отображающий input. */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
     const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
     const { render, ...renderProvideProps } = props;
     const { focused, status, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldInput, styles[`size-${size}`], className);
+    const classNames = clsx(styles.formFieldInput, sizeToClassNameMap[size], className);
 
     const instanceId = useRef(id || uniqueId("input_"));
 
@@ -57,7 +60,6 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
     /**
      * Обработчик начала анимации.
      *
-     * Примечание:
      * Текущая реализация необходима для кейсов с автозаполнением:
      * - Браузер устанавливает значение в поле при загрузке страницы;
      * - Браузер устанавливает значение в поле при навигации пользователем по сохранённым опциям заполнения.
@@ -67,8 +69,9 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             setValueExist(true);
         } else if (event.animationName.startsWith("autofill-cancelled-hook")) {
             // Необходимо проверить, что при отмене автозаполнения, в поле не находится значение.
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            !value && setValueExist(false);
+            if (!value) {
+                setValueExist(false);
+            }
         }
         onAnimationStart?.(event);
     };

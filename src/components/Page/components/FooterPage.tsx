@@ -48,13 +48,13 @@ export const FooterPage = Object.assign(
                 }
             };
 
-            const footerPageTypeSecondClassNames = clsx(className, styles.footerPageTypeSecond, {
+            const footerPageTypeFirstClassNames = clsx(className, styles.footerPageTypeFirst, {
                 [styles.sticky]: type === EFooterPageType.SECOND && rest.sticky,
             });
 
-            return type === EFooterPageType.SECOND ? (
+            return type === EFooterPageType.FIRST ? (
                 <Island
-                    className={footerPageTypeSecondClassNames}
+                    className={footerPageTypeFirstClassNames}
                     type={EIslandType.TYPE_1}
                     ref={setFooterRef}
                     size={size}
@@ -62,7 +62,7 @@ export const FooterPage = Object.assign(
                     <Footer {...rest} />
                 </Island>
             ) : (
-                <Footer ref={ref} className={clsx(styles.footerPageTypeFirst, className)} {...rest} />
+                <Footer ref={ref} className={className} {...rest} />
             );
         },
     ),

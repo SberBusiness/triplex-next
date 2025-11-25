@@ -10,17 +10,17 @@ vi.mock("@sberbusiness/triplex-next/components/TextField/TextFieldBase", () => (
     )),
 }));
 
-vi.mock("@sberbusiness/triplex-next/components/NumberField/NumberFieldInput", () => ({
-    NumberFieldInput: vi.fn((props) => <input data-testid="number-field-input" {...props} />),
+vi.mock("@sberbusiness/triplex-next/components/FormField/components/FormFieldTextarea", () => ({
+    FormFieldTextarea: vi.fn((props) => <input data-testid="number-field-textarea" {...props} />),
 }));
 
-import { NumberField } from "@sberbusiness/triplex-next/components/NumberField";
+import { TextareaField } from "@sberbusiness/triplex-next/components/TextareaField";
 import { TextFieldBase } from "@sberbusiness/triplex-next/components/TextField/TextFieldBase";
-import { NumberFieldInput } from "@sberbusiness/triplex-next/components/NumberField/NumberFieldInput";
+import { FormFieldTextarea } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldTextarea";
 
-describe("NumberField", () => {
+describe("TextareaField", () => {
     const defaultProps = {
-        inputProps: {
+        textareaProps: {
             value: "123",
             placeholder: "0",
         },
@@ -36,7 +36,7 @@ describe("NumberField", () => {
     });
 
     it("should render TextFieldBase with correct props", () => {
-        render(<NumberField {...defaultProps} className="test-class" />);
+        render(<TextareaField {...defaultProps} className="test-class" />);
 
         expect(TextFieldBase).toHaveBeenCalledWith(
             {
@@ -55,28 +55,28 @@ describe("NumberField", () => {
     it("should render NumberFieldInput with correct inputProps", () => {
         const propsWithInputAttributes = {
             ...defaultProps,
-            inputProps: {
-                ...defaultProps.inputProps,
+            textareaProps: {
+                ...defaultProps.textareaProps,
                 required: true,
                 name: "test-field",
             },
         };
 
-        render(<NumberField {...propsWithInputAttributes} />);
+        render(<TextareaField {...propsWithInputAttributes} />);
 
-        expect(NumberFieldInput).toHaveBeenCalledWith(
+        expect(FormFieldTextarea).toHaveBeenCalledWith(
             { value: "123", placeholder: "0", required: true, name: "test-field" },
             {},
         );
     });
 
     it("should render NumberFieldInput as child of TextFieldBase", () => {
-        render(<NumberField {...defaultProps} />);
+        render(<TextareaField {...defaultProps} />);
 
         const textFieldBaseCall = (TextFieldBase as any).mock.calls[0];
         const children = textFieldBaseCall[0].children;
 
-        expect(children.type).toBe(NumberFieldInput);
+        expect(children.type).toBe(FormFieldTextarea);
         expect(children.props).toEqual({ value: "123", placeholder: "0" });
     });
 });

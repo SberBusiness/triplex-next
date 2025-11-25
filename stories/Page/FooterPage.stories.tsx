@@ -52,7 +52,14 @@ export const Playground: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSec
                         <Text size={ETextSize.B3}>Footer page content</Text>
                     </Page.Footer.Description.Content>
                     <Page.Footer.Description.Controls>
-                        <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
+                        <Button
+                            size={EComponentSize.MD}
+                            theme={
+                                args.type === EFooterPageType.FIRST
+                                    ? EButtonTheme.SECONDARY
+                                    : EButtonTheme.SECONDARY_LIGHT
+                            }
+                        >
                             Button text
                         </Button>
                         <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
@@ -63,22 +70,16 @@ export const Playground: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSec
             </Page.Footer>
         </div>
     ),
-    parameters: {
-        docs: {
-            description: { story: "Базовый футер с описанием и кнопками действий." },
-        },
-    },
 };
 
 export const Basic: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
     args: {
-        type: EFooterPageType.SECOND,
+        type: EFooterPageType.FIRST,
     },
     argTypes: {
         type: {
-            table: {
-                disable: true,
-            },
+            control: { type: "select" },
+            options: Object.values(EFooterPageType),
         },
     },
     render: (args) => (
@@ -86,7 +87,14 @@ export const Basic: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondPr
             <Page.Footer type={args.type}>
                 <Page.Footer.Description>
                     <Page.Footer.Description.Controls>
-                        <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
+                        <Button
+                            size={EComponentSize.MD}
+                            theme={
+                                args.type === EFooterPageType.FIRST
+                                    ? EButtonTheme.SECONDARY
+                                    : EButtonTheme.SECONDARY_LIGHT
+                            }
+                        >
                             Button text
                         </Button>
                         <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
@@ -97,22 +105,16 @@ export const Basic: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondPr
             </Page.Footer>
         </div>
     ),
-    parameters: {
-        docs: {
-            description: { story: "Базовый футер с описанием и кнопками действий." },
-        },
-    },
 };
 
 export const WithLink: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
     args: {
-        type: EFooterPageType.SECOND,
+        type: EFooterPageType.FIRST,
     },
     argTypes: {
         type: {
-            table: {
-                disable: true,
-            },
+            control: { type: "select" },
+            options: Object.values(EFooterPageType),
         },
     },
     render: (args) => (
@@ -125,7 +127,14 @@ export const WithLink: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecon
                         </Button>
                     </Page.Footer.Description.Content>
                     <Page.Footer.Description.Controls>
-                        <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
+                        <Button
+                            size={EComponentSize.MD}
+                            theme={
+                                args.type === EFooterPageType.FIRST
+                                    ? EButtonTheme.SECONDARY
+                                    : EButtonTheme.SECONDARY_LIGHT
+                            }
+                        >
                             Button text
                         </Button>
                         <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
@@ -136,9 +145,4 @@ export const WithLink: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecon
             </Page.Footer>
         </div>
     ),
-    parameters: {
-        docs: {
-            description: { story: "Базовый футер с описанием и кнопками действий." },
-        },
-    },
 };

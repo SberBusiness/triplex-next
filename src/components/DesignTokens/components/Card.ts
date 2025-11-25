@@ -49,7 +49,7 @@ export const Card_Tokens: TDesignTokensComponentsCardValues = {
     Action_General_Background_Selected_Hover: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Card-Action_General_Background_Selected_Hover)
 
     Action_Secondary_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Card-Action_Secondary_Background)
-    Action_Secondary_Background_Hover: [{ ref: "ColorNeutral.70" }, { value: "none" }], // var(--triplex-next-Card-Action_Secondary_Background_Hover)
+    Action_Secondary_Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Card-Action_Secondary_Background_Hover)
     Action_Secondary_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected)
     Action_Secondary_Background_Selected_Hover: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover)
 

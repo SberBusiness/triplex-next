@@ -11,7 +11,7 @@
         inset: 0;
         z-index: 10;
         pointer-events: none;
-        box-shadow: var(--inner-shadow, none);
+        box-shadow: var(--card-inner-shadow, none);
         border-radius: var(--radius);
     }
 
@@ -27,12 +27,12 @@
         &.selected {
             background: var(--triplex-next-Card-Action_General_Background_Selected);
             box-shadow: var(--triplex-next-Card-Shadow_Default);
-            --inner-shadow: var(--triplex-next-Card-Shadow_Selected);
+            --card-inner-shadow: var(--triplex-next-Card-Shadow_Selected);
 
             &:hover {
                 background: var(--triplex-next-Card-Action_General_Background_Selected_Hover);
                 box-shadow: var(--triplex-next-Card-Shadow_Hover);
-                --inner-shadow: var(--triplex-next-Card-Shadow_Selected_Hover);
+                --card-inner-shadow: var(--triplex-next-Card-Shadow_Selected_Hover);
             }
         }
 
@@ -41,7 +41,7 @@
 
             &.focusVisible {
                 box-shadow: var(--triplex-next-Card-Shadow_Default);
-                --inner-shadow: var(--triplex-next-Card-Shadow_Focus);
+                --card-inner-shadow: var(--triplex-next-Card-Shadow_Focus);
             }
         }
     }
@@ -56,12 +56,12 @@
         &.selected {
             background: var(--triplex-next-Card-Action_Secondary_Background_Selected);
             box-shadow: var(--triplex-next-Card-Shadow_Selected);
-            --inner-shadow: var(--triplex-next-Card-Shadow_Selected);
+            --card-inner-shadow: var(--triplex-next-Card-Shadow_Selected);
 
             &:hover {
                 background: var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover);
-                box-shadow: var(--triplex-next-Card-Shadow_Hover);
-                --inner-shadow: var(--triplex-next-Card-Shadow_Selected_Hover);
+                box-shadow: none;
+                --card-inner-shadow: var(--triplex-next-Card-Shadow_Selected_Hover);
             }
         }
 
@@ -70,7 +70,7 @@
 
             &.focusVisible {
                 box-shadow: none;
-                --inner-shadow: var(--triplex-next-Card-Shadow_Focus);
+                --card-inner-shadow: var(--triplex-next-Card-Shadow_Focus);
             }
         }
     }

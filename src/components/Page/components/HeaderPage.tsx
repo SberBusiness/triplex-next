@@ -33,10 +33,10 @@ export interface IHeaderPageTypeFirstProps extends IHeaderProps {
 }
 export const HeaderPage = Object.assign(
     React.forwardRef<HTMLDivElement, IHeaderPageTypeFirstProps | IHeaderPageTypeSecondProps>(
-        ({ className, type, size, ...rest }, ref) => {
+        ({ className, type, size, sticky, ...rest }, ref) => {
             const islandRef = useRef<HTMLDivElement | null>(null);
 
-            useStickyCornerRadius(islandRef, "top", type === EHeaderPageType.FIRST && rest.sticky);
+            useStickyCornerRadius(islandRef, "top", type === EHeaderPageType.FIRST && sticky);
 
             const setIslandRef = (instance: HTMLDivElement | null) => {
                 islandRef.current = instance;
@@ -48,7 +48,7 @@ export const HeaderPage = Object.assign(
             };
 
             const headerPageFirstClassNames = clsx(className, styles.headerPageTypeFirst, {
-                [styles.sticky]: type === EHeaderPageType.FIRST && rest.sticky,
+                [styles.sticky]: type === EHeaderPageType.FIRST && sticky,
             });
 
             return type === EHeaderPageType.FIRST ? (

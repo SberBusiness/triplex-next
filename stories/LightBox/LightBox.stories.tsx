@@ -61,7 +61,7 @@ const POEM_LINES: string[] = [
 ];
 
 const PoemBlock: React.FC = () => (
-    <Island type={EIslandType.TYPE_1} borderRadius={16} paddingSize={16}>
+    <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
         <IslandBody>
             {POEM_LINES.map((line) => (
                 <React.Fragment key={line}>
@@ -78,7 +78,7 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
     stickyFooter,
 }) => (
     <Page>
-        <Page.Header type={EHeaderPageType.SECOND} sticky={stickyHeader}>
+        <Page.Header type={EHeaderPageType.FIRST} sticky={stickyHeader}>
             <Page.Header.Title>
                 <Page.Header.Title.Content>
                     <Title
@@ -119,7 +119,7 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
             ))}
         </Page.Body>
 
-        <Page.Footer type={EFooterPageType.SECOND} sticky={stickyFooter}>
+        <Page.Footer type={EFooterPageType.FIRST} sticky={stickyFooter}>
             <Page.Footer.Description>
                 <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                 <Page.Footer.Description.Controls>

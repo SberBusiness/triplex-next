@@ -36,12 +36,9 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
         }
 
         const maxRadius = 24;
-        // Задержка инициализации для того, чтобы SideOverlay выехал с анимацией, перед началом рассчета.
-        const initializationDelay = 600;
 
         let stickyOffset = 0;
         let raf = 0;
-        let timeoutId: number | null = null;
         let scroller: HTMLElement | Window = window;
         let target: HTMLElement | Window | null = null;
 
@@ -73,7 +70,6 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
         };
 
         const initialize = () => {
-            timeoutId = null;
             const computed = getComputedStyle(el);
             const offsetRaw = edge === "top" ? computed.top : computed.bottom;
             stickyOffset = parseFloat(offsetRaw || "0") || 0;
@@ -84,18 +80,31 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
 
             target.addEventListener("scroll", handleScrollOrResize, { passive: true });
             window.addEventListener("resize", handleScrollOrResize);
+            window.addEventListener("transitionend", handleTransitionEnd);
         };
 
-        timeoutId = window.setTimeout(initialize, initializationDelay);
+        const handleTransitionEnd = (event: TransitionEvent) => {
+            if (event.target && event.target instanceof HTMLElement && event.target.classList) {
+                // Обновляем радиус скругления и тень при завершении анимации SideOverlay.
+                if (
+                    event.propertyName === "transform" &&
+                    Array.from(event.target.classList).some((className) =>
+                        className.includes("lightBoxSideOverlayContent"),
+                    )
+                ) {
+                    update();
+                }
+            }
+        };
+
+        initialize();
 
         return () => {
-            if (timeoutId !== null) {
-                window.clearTimeout(timeoutId);
-            }
             if (target) {
                 target.removeEventListener("scroll", handleScrollOrResize);
             }
             window.removeEventListener("resize", handleScrollOrResize);
+            window.removeEventListener("transitionend", handleTransitionEnd);
             if (raf) cancelAnimationFrame(raf);
         };
     }, [ref, edge, isEnabled]);

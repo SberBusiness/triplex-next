@@ -4,8 +4,8 @@ import { Footer, IFooterProps } from "@sberbusiness/triplex-next/components/Foot
 import { EFooterPageType } from "./enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import { EIslandType, Island } from "../../Island";
-import styles from "../styles/Page.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next";
+import styles from "../styles/Page.module.less";
 
 export interface IFooterPageTypeSecondProps extends IFooterProps {
     children: React.ReactNode;
@@ -34,10 +34,10 @@ export interface IFooterPageTypeFirstProps extends IFooterProps {
 /** Свойства компонента FooterPage. */
 export const FooterPage = Object.assign(
     React.forwardRef<HTMLDivElement, IFooterPageTypeFirstProps | IFooterPageTypeSecondProps>(
-        ({ className, type, size, ...rest }, ref) => {
+        ({ className, type, size, sticky, ...rest }, ref) => {
             const footerRef = useRef<HTMLDivElement | null>(null);
             // Плавное обнуление нижних углов и добавление тени при прилипания к низу.
-            useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && rest.sticky);
+            useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && sticky);
 
             const setFooterRef = (instance: HTMLDivElement | null) => {
                 footerRef.current = instance;
@@ -49,7 +49,7 @@ export const FooterPage = Object.assign(
             };
 
             const footerPageTypeFirstClassNames = clsx(className, styles.footerPageTypeFirst, {
-                [styles.sticky]: type === EFooterPageType.FIRST && rest.sticky,
+                [styles.sticky]: type === EFooterPageType.FIRST && sticky,
             });
 
             return type === EFooterPageType.FIRST ? (

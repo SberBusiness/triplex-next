@@ -246,7 +246,9 @@ export const DefaultView: Story = {
 
                 {isOpen ? (
                     <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
-                        <LightBoxPageContent stickyHeader stickyFooter />
+                        <LightBox.Content key="content" isLoading={false}>
+                            <LightBoxPageContent stickyHeader stickyFooter />
+                        </LightBox.Content>
 
                         <LightBox.Controls>
                             <LightBox.Controls.Close

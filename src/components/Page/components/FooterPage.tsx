@@ -7,10 +7,10 @@ import { EIslandType, Island } from "../../Island";
 import styles from "../styles/Page.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next";
 
-export interface IFooterPageTypeFirstProps extends IFooterProps {
+export interface IFooterPageTypeSecondProps extends IFooterProps {
     children: React.ReactNode;
     /** Тип компонента FooterPage. */
-    type: EFooterPageType.FIRST;
+    type: EFooterPageType.SECOND;
     /**
      * Footer прилипает к нижней границе экрана при скролле. Не используется.
      * */
@@ -19,10 +19,10 @@ export interface IFooterPageTypeFirstProps extends IFooterProps {
     size?: never;
 }
 
-export interface IFooterPageTypeSecondProps extends IFooterProps {
+export interface IFooterPageTypeFirstProps extends IFooterProps {
     children: React.ReactNode;
     /** Тип компонента FooterPage. */
-    type: EFooterPageType.SECOND;
+    type: EFooterPageType.FIRST;
     /**
      * Footer прилипает к нижней границе экрана при скролле. Только для второго типа FooterPage и только внутри LightBox.
      * */
@@ -37,7 +37,7 @@ export const FooterPage = Object.assign(
         ({ className, type, size, ...rest }, ref) => {
             const footerRef = useRef<HTMLDivElement | null>(null);
             // Плавное обнуление нижних углов и добавление тени при прилипания к низу.
-            useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.SECOND && rest.sticky);
+            useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && rest.sticky);
 
             const setFooterRef = (instance: HTMLDivElement | null) => {
                 footerRef.current = instance;
@@ -49,7 +49,7 @@ export const FooterPage = Object.assign(
             };
 
             const footerPageTypeFirstClassNames = clsx(className, styles.footerPageTypeFirst, {
-                [styles.sticky]: type === EFooterPageType.SECOND && rest.sticky,
+                [styles.sticky]: type === EFooterPageType.FIRST && rest.sticky,
             });
 
             return type === EFooterPageType.FIRST ? (

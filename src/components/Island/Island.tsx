@@ -5,9 +5,9 @@ import { IslandBody } from "./components/IslandBody";
 import { IslandHeader } from "./components/IslandHeader";
 import { IslandFooter } from "./components/IslandFooter";
 import { mapTypeToClassName } from "./utils";
-import styles from "./styles/Island.module.less";
-import { EComponentSize } from "@sberbusiness/triplex-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import styles from "./styles/Island.module.less";
 
 export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Тип компонента Island. Отличаются цвет и тень. */

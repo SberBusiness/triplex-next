@@ -4,7 +4,7 @@ import { Footer, IFooterProps } from "@sberbusiness/triplex-next/components/Foot
 import { EFooterPageType } from "./enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import { EIslandType, Island } from "../../Island";
-import { EComponentSize } from "@sberbusiness/triplex-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/Page.module.less";
 
 export interface IFooterPageTypeSecondProps extends IFooterProps {

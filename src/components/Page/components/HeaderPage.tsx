@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { Island } from "../../Island/Island";
 import { EIslandType } from "../../Island/enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
-import { EComponentSize } from "@sberbusiness/triplex-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/Page.module.less";
 
 export interface IHeaderPageTypeSecondProps extends IHeaderProps {

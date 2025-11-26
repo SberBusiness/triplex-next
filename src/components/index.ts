@@ -1,6 +1,7 @@
 export * from "./Alert";
 export * from "./Amount";
 export * from "./Button";
+export * from "./Chip";
 export * from "./Col";
 export * from "./Checkbox";
 export * from "./Ellipsis";

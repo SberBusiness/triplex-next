@@ -30,6 +30,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
             } else {
                 onClose?.();
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [opened]);
 
         return (
@@ -53,7 +54,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
                 )}
             </Portal>
         );
-    }
+    },
 );
 
 Dropdown.displayName = "Dropdown";

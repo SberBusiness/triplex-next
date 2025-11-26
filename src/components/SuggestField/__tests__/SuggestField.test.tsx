@@ -116,7 +116,7 @@ describe("SuggestField", () => {
                 <input
                     data-testid="custom-input"
                     value={props.inputValue}
-                    onChange={props.onInputChange}
+                    onChange={props.onChange}
                     placeholder={props.placeholder}
                 />
             </div>

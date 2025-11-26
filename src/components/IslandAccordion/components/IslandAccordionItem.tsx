@@ -1,30 +1,26 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { CaretdownStrokeSrvIcon24, CrossStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import { Island } from "../../Island/Island";
 import { uniqueId } from "lodash-es";
 import { ExpandAnimation, IExpandAnimationProps } from "../../ExpandAnimation/ExpandAnimation";
 import styles from "../styles/IslandAccordion.module.less";
-import { EComponentSize } from "../../../enums/EComponentSize";
-import { TIslandBorderRadiusSize } from "../../Island/types";
-import { IIslandAccordionTitleProps, IslandAccordionTitle } from "./IslandAccordionTitle";
+import { IslandAccordionTitle } from "./IslandAccordionTitle";
 import { IslandAccordionContent } from "./IslandAccordionContent";
 import { IslandAccordionFooter } from "./IslandAccordionFooter";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { ButtonIcon } from "../../Button";
-import { IIslandProps, EIslandType } from "../../Island";
-import { ETitleSize } from "../../Typography/enums";
+import { EIslandType } from "../../Island";
 import { Step, EStepStatus, EStepPosition } from "../../Step";
+import { IslandAccordionContext } from "../IslandAccordionContext";
 
-export interface IIslandAccordionItemProps
-    extends Omit<React.HTMLAttributes<HTMLLIElement>, "title">,
-        Pick<IIslandProps, "type"> {
+export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
     /** Нода с названием заголовка. */
     title: React.ReactNode;
     /** Идентификатор вкладки (если не передать извне, то используется индекс. Также используется как ключ при рендере списка вкладок). */
     id: string;
     /** Цифра в кружке. */
-    num: number;
+    num?: number;
     /** Раскрыт ли элемент. */
     opened?: boolean;
     /** Статус шага. */
@@ -39,21 +35,7 @@ export interface IIslandAccordionItemProps
     onRemove?: (id: string) => void;
     /** Свойства компонента Transition (react-transition-group). */
     transitionProps?: IExpandAnimationProps["transitionProps"];
-    /** Размер компонента. */
-    size?: EComponentSize;
 }
-
-const sizeToBorderRadiusMap: Record<EComponentSize, TIslandBorderRadiusSize> = {
-    [EComponentSize.SM]: 16,
-    [EComponentSize.MD]: 24,
-    [EComponentSize.LG]: 32,
-};
-
-const sizeToTitleSizeMap: Record<EComponentSize, ETitleSize> = {
-    [EComponentSize.SM]: ETitleSize.H3,
-    [EComponentSize.MD]: ETitleSize.H2,
-    [EComponentSize.LG]: ETitleSize.H1,
-};
 
 const typeToClassNameMap: Record<EIslandType, string> = {
     [EIslandType.TYPE_1]: styles.type1,
@@ -79,13 +61,12 @@ export const IslandAccordionItem = Object.assign(
                 status,
                 stepHint,
                 transitionProps,
-                size = EComponentSize.MD,
-                type = EIslandType.TYPE_1,
                 ...rest
             },
             ref,
         ) => {
             const [isOpen, setIsOpen] = useState(opened || false);
+            const { size, type } = useContext(IslandAccordionContext);
 
             // eslint-disable-next-line react-hooks/refs
             const instanceId = useRef(uniqueId()).current;
@@ -117,16 +98,6 @@ export const IslandAccordionItem = Object.assign(
                 onRemove?.(id);
             };
 
-            const renderTitle = () => {
-                if (!React.isValidElement<IIslandAccordionTitleProps>(title)) {
-                    return title;
-                }
-
-                return React.cloneElement(title, {
-                    size: sizeToTitleSizeMap[size],
-                });
-            };
-
             const classNames = clsx(className, styles.item, sizeToClassNameMap[size], typeToClassNameMap[type], {
                 [styles.disabled]: !!disabled,
                 [styles.opened]: isOpen,
@@ -134,7 +105,7 @@ export const IslandAccordionItem = Object.assign(
 
             return (
                 <li {...rest} className={classNames} id={id} ref={ref}>
-                    <Island className={styles.island} borderRadius={sizeToBorderRadiusMap[size]} type={type}>
+                    <Island className={styles.island} size={size} type={type}>
                         <Island.Header>
                             <button
                                 id={headerInstanceId}
@@ -146,15 +117,15 @@ export const IslandAccordionItem = Object.assign(
                                 disabled={disabled}
                                 data-tx={process.env.npm_package_version}
                             >
-                                {status && (
+                                {status && num && (
                                     <div className={styles.step}>
-                                        <Step step={num} status={status!} position={EStepPosition.XFirst}>
+                                        <Step step={num} status={status} position={EStepPosition.XFirst}>
                                             {disabled ? undefined : stepHint}
                                         </Step>
                                     </div>
                                 )}
 
-                                <div className={styles.titleWrapper}> {renderTitle()}</div>
+                                <div className={styles.titleWrapper}> {title}</div>
 
                                 <span
                                     className={clsx(styles.caretWrapper, "hoverable", {

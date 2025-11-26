@@ -83,15 +83,13 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion>
+                <IslandAccordion size={args.size} type={args.type}>
                     <IslandAccordion.Item
                         id="island-accordion-item-example-playground"
                         num={1}
                         title={title}
-                        type={args.type}
                         disabled={args.disabled}
                         onRemove={args.removable ? handleRemove : undefined}
-                        size={args.size}
                         status={args.status}
                     >
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
@@ -281,7 +279,7 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
         ];
 
         const renderIslandAccordionItem = ({ id, status }, index: number) => (
-            <IslandAccordion.Item key={id} id={id} num={index + 1} status={status} title={title} size={args.size}>
+            <IslandAccordion.Item key={id} id={id} num={index + 1} status={status} title={title}>
                 <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                 <IslandAccordion.Item.Footer>
                     <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
@@ -299,7 +297,9 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion>{items.map((item, index) => renderIslandAccordionItem(item, index))}</IslandAccordion>
+                <IslandAccordion size={args.size}>
+                    {items.map((item, index) => renderIslandAccordionItem(item, index))}
+                </IslandAccordion>
             </div>
         );
     },

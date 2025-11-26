@@ -28,8 +28,8 @@ describe("IslandAccordion", () => {
 
     it("Should apply size classes", () => {
         render(
-            <IslandAccordion>
-                <IslandAccordion.Item title="First item" id="first-item" num={1} size={EComponentSize.SM}>
+            <IslandAccordion size={EComponentSize.SM}>
+                <IslandAccordion.Item title="First item" id="first-item" num={1}>
                     First content
                 </IslandAccordion.Item>
             </IslandAccordion>,

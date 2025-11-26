@@ -104,9 +104,19 @@ vi.mock("../../Loader", () => ({
 
 // Mock для иконки
 vi.mock("@sberbusiness/icons-next", () => ({
+    CaretdownStrokeSrvIcon16: ({ className }: { className?: string }) => (
+        <div data-testid="caret-icon-16" className={className}>
+            Caret Icon 16
+        </div>
+    ),
+    CaretdownStrokeSrvIcon20: ({ className }: { className?: string }) => (
+        <div data-testid="caret-icon-20" className={className}>
+            Caret Icon 20
+        </div>
+    ),
     CaretdownStrokeSrvIcon24: ({ className }: { className?: string }) => (
-        <div data-testid="caret-icon" className={className}>
-            Caret Icon
+        <div data-testid="caret-icon-24" className={className}>
+            Caret Icon 24
         </div>
     ),
 }));
@@ -324,7 +334,7 @@ describe("SelectExtendedFieldTarget", () => {
         expect(screen.getByTestId("form-field-label")).toHaveTextContent("Test Field");
         expect(screen.getByTestId("form-field-target")).toBeInTheDocument();
         expect(screen.getByTestId("form-field-postfix")).toBeInTheDocument();
-        expect(screen.getByTestId("caret-icon")).toBeInTheDocument();
+        expect(screen.getByTestId("caret-icon-20")).toBeInTheDocument();
     });
 
     it("Should display label when provided", () => {

@@ -35,4 +35,16 @@
         line-height: 20px;
         font-size: 16px;
     }
+
+    & .placeholderWrapper {
+        opacity: 0;
+        transition: opacity .3s ease-out;
+        pointer-events: none;
+    }
+    
+    &:focus {
+        & .placeholderWrapper {
+            opacity: 1;
+        }
+    }
 }

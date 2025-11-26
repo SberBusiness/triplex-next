@@ -1,36 +1,28 @@
 import React from "react";
+import clsx from "clsx";
 import { CrossStrokeSrvIcon16, CrossStrokeSrvIcon20, CrossStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { ButtonIcon, IButtonIconProps } from "../Button/ButtonIcon";
 import styles from "./styles/ChipClearButton.module.less";
 
-export interface IChipClearButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    children?: never;
+/** Свойства компонента ChipClearButton. */
+export interface IChipClearButtonProps extends Omit<IButtonIconProps, "children"> {
     size?: EComponentSize;
 }
 
-/**
- * Кнопка отмены выбора для Chip.
- */
+const sizeToCrossIconMap = {
+    [EComponentSize.SM]: <CrossStrokeSrvIcon16 paletteIndex={6} />,
+    [EComponentSize.MD]: <CrossStrokeSrvIcon20 paletteIndex={6} />,
+    [EComponentSize.LG]: <CrossStrokeSrvIcon24 paletteIndex={6} />,
+};
+
+/** Кнопка отмены выбора для Chip. */
 export const ChipClearButton = React.forwardRef<HTMLButtonElement, IChipClearButtonProps>(
-    ({ size = EComponentSize.MD, ...props }, ref) => {
-        const getSizeIcon = (size: EComponentSize) => {
-            switch (size) {
-                case EComponentSize.SM:
-                    return <CrossStrokeSrvIcon16 paletteIndex={6} />;
-                case EComponentSize.MD:
-                    return <CrossStrokeSrvIcon20 paletteIndex={6} />;
-                case EComponentSize.LG:
-                    return <CrossStrokeSrvIcon24 paletteIndex={6} />;
-                default:
-                    return null;
-            }
-        };
-        return (
-            <button className={styles.chipClearButton} type="button" {...props} ref={ref}>
-                {getSizeIcon(size)}
-            </button>
-        );
-    },
+    ({ className, size = EComponentSize.MD, ...restProps }, ref) => (
+        <ButtonIcon className={clsx(styles.chipClearButton, className)} {...restProps} ref={ref}>
+            {sizeToCrossIconMap[size]}
+        </ButtonIcon>
+    ),
 );
 
 ChipClearButton.displayName = "ChipClearButton";

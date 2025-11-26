@@ -70,7 +70,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [onSelect],
     );
 
-    const handleTargetInputFocus = useCallback(
+    const handleTargetFocus = useCallback(
         (event: React.FocusEvent<HTMLInputElement>) => {
             setInputFocused(true);
             setDropdownOpen(true);
@@ -84,7 +84,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [clearInputOnFocus, inputValue, onTargetInputFocus],
     );
 
-    const handleTargetInputBlur = useCallback(
+    const handleTargetBlur = useCallback(
         (event: React.FocusEvent<HTMLInputElement>) => {
             setActiveDescendant(undefined);
             setInputFocused(false);
@@ -102,14 +102,14 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [value?.label, inputValue, onSelect, onTargetInputBlur],
     );
 
-    const handleClick = useCallback(() => {
+    const handleTargetClick = useCallback(() => {
         if (inputFocused && !dropdownOpen) {
             setDropdownOpen(true);
             setDropdownDisabled(false);
         }
     }, [inputFocused, dropdownOpen]);
 
-    const handleInputChange = useCallback(
+    const handleTargetChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             const newValue = event.target.value;
             setInputValue(newValue);
@@ -119,7 +119,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [onFilter],
     );
 
-    const handleClear = useCallback(() => {
+    const handleTargetClear = useCallback(() => {
         if (inputFocused) {
             setInputValue("");
             onFilter("");
@@ -215,11 +215,12 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                         aria-controls={dropdownListId.current}
                         aria-activedescendant={activeDescendant}
                         loading={loading}
-                        onClick={handleClick}
-                        onClear={handleClear}
-                        onInputFocus={handleTargetInputFocus}
-                        onInputBlur={handleTargetInputBlur}
-                        onInputChange={handleInputChange}
+                        dropdownOpen={dropdownOpen}
+                        onFocus={handleTargetFocus}
+                        onBlur={handleTargetBlur}
+                        onClick={handleTargetClick}
+                        onChange={handleTargetChange}
+                        onClear={handleTargetClear}
                         renderInput={renderTargetInput}
                         renderLabel={renderTargetLabel}
                         renderPrefix={renderTargetPrefix}

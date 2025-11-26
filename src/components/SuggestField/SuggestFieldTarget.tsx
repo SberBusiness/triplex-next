@@ -20,9 +20,11 @@ export const SuggestFieldTargetBase: React.FC<ISuggestFieldTargetProps> = ({
     "aria-activedescendant": ariaActiveDescendant,
     dataTestId,
     loading,
-    onInputFocus,
-    onInputBlur,
-    onInputChange,
+    dropdownOpen,
+    onFocus,
+    onBlur,
+    onClick,
+    onChange,
     onClear,
     renderInput,
     renderLabel,
@@ -47,9 +49,10 @@ export const SuggestFieldTargetBase: React.FC<ISuggestFieldTargetProps> = ({
                 aria-activedescendant={ariaActiveDescendant}
                 data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.input}`}
                 disabled={status === EFormFieldStatus.DISABLED}
-                onFocus={onInputFocus}
-                onBlur={onInputBlur}
-                onChange={onInputChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onClick={onClick}
+                onChange={onChange}
             />
             <Postfix size={size} loading={loading} onClear={onClear} />
         </FormField>

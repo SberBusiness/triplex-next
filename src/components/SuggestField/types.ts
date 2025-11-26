@@ -5,13 +5,13 @@ import {
     IFormFieldLabelProps,
     IFormFieldPostfixProps,
 } from "@sberbusiness/triplex-next/components/FormField";
-import { TestProps } from "@sberbusiness/triplex-next/types/CoreTypes";
+import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 
 /** Свойства компонента SuggestField. */
 export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFieldOption>
     extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect">,
         Required<Pick<IFormFieldProps, "size" | "status">>,
-        TestProps {
+        DataAttributes {
     /** Выбранное значение. */
     value: T | undefined;
     /** Список значений. */
@@ -64,19 +64,15 @@ export interface ISuggestFieldOption {
 
 /** Свойство компонента SuggestFieldTarget. */
 export interface ISuggestFieldTargetProps
-    extends Omit<IFormFieldProps, "size">,
-        Pick<ISuggestFieldProps, "size" | "label" | "placeholder" | "loading">,
+    extends React.HTMLAttributes<HTMLElement>,
+        Pick<ISuggestFieldProps, "size" | "status" | "label" | "placeholder" | "loading">,
         Pick<ISuggestFieldTargetPostfixProps, "onClear"> {
     /** Значение поля ввода. */
     inputValue: string;
     /** Идентификатор для тестирования. */
     dataTestId?: string;
-    /** Обработчик получения фокуса Input. */
-    onInputFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-    /** Обработчик потери фокуса Input. */
-    onInputBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-    /** Обработчик изменения значения Input. */
-    onInputChange?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    /** Dropdown открыт. */
+    dropdownOpen: boolean;
     /** Рендер поля ввода. */
     renderInput?: (props: ISuggestFieldInputProvideProps) => JSX.Element;
     /** Рендер лейбла. */

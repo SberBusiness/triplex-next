@@ -5,15 +5,10 @@ import { SuggestFieldDesktop } from "@sberbusiness/triplex-next/components/Sugge
 import { SuggestFieldMobile } from "@sberbusiness/triplex-next/components/SuggestField/mobile/SuggestFieldMobile";
 import { SuggestFieldTarget } from "@sberbusiness/triplex-next/components/SuggestField/SuggestFieldTarget";
 
-/**
- * Выпадающий список с возможностью поиска по введённому значению.
- * @example
- *   <SuggestField value={...} /> - опция имеет тип по умолчанию ISuggestFieldOption
- *   <SuggestField<MyOption> value={...} /> - опция имеет тип MyOption
- */
-function SuggestFieldBase<T extends ISuggestFieldOption = ISuggestFieldOption>(
+// TODO: Переписать через Suggest.
+const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
     props: ISuggestFieldProps<T>,
-): JSX.Element {
+): JSX.Element => {
     const {
         status,
         size,
@@ -64,6 +59,7 @@ function SuggestFieldBase<T extends ISuggestFieldOption = ISuggestFieldOption>(
             />
         </MobileView>
     );
-}
+};
 
+/** Выпадающий список с возможностью поиска по введённому значению. */
 export const SuggestField = Object.assign(SuggestFieldBase, { Target: SuggestFieldTarget });

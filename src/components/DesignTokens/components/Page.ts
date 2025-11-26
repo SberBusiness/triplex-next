@@ -16,5 +16,5 @@ export type TDesignTokensComponentsPage = { Page: TDesignTokensComponentsPageVal
 
 // Токены компонента Page в светлой и темной темах.
 export const Page_Tokens: TDesignTokensComponentsPageValues = {
-    Background: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.10" }], // var(--triplex-next-Page-Background)
+    Background: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-Page-Background)
 };

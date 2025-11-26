@@ -24,7 +24,7 @@ export interface IFooterPageTypeFirstProps extends IFooterProps {
     /** Тип компонента FooterPage. */
     type: EFooterPageType.FIRST;
     /**
-     * Footer прилипает к нижней границе экрана при скролле. Только для второго типа FooterPage и только внутри LightBox.
+     * Footer прилипает к нижней границе экрана при скролле. Только для первого типа FooterPage внутри LightBox.
      * */
     sticky?: boolean;
     /** Размер острова. */

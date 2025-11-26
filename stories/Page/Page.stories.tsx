@@ -6,6 +6,7 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, Title } from "../../src/components/Typography";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { Gap } from "../../src/components/Gap";
+import { EBodyVerticalMargin } from "../../src/components/Body/enums";
 
 export default {
     title: "Components/Page",
@@ -35,12 +36,14 @@ export default {
 interface IWithTypeControlsArgs {
     headerType: EHeaderPageType;
     footerType: EFooterPageType;
+    verticalMargin: EBodyVerticalMargin;
 }
 
 export const Playground: StoryObj<IWithTypeControlsArgs> = {
     args: {
         headerType: EHeaderPageType.FIRST,
         footerType: EFooterPageType.FIRST,
+        verticalMargin: EBodyVerticalMargin.LARGE,
     },
     argTypes: {
         headerType: {
@@ -61,6 +64,15 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                 defaultValue: { summary: "first" },
             },
         },
+        verticalMargin: {
+            control: { type: "select" },
+            options: [EBodyVerticalMargin.LARGE, EBodyVerticalMargin.SMALL],
+            description: "Вертикальные отступы у компонента Body",
+            table: {
+                type: { summary: "EBodyVerticalMargin" },
+                defaultValue: { summary: EBodyVerticalMargin.LARGE },
+            },
+        },
     },
     render: (args: IWithTypeControlsArgs) => (
         <div className="page-example" style={{ maxHeight: "400px", overflow: "auto" }}>
@@ -77,7 +89,14 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                             </Text>
                         </Page.Header.Title.Content>
                         <Page.Header.Title.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            <Button
+                                theme={
+                                    args.headerType === EHeaderPageType.FIRST
+                                        ? EButtonTheme.SECONDARY
+                                        : EButtonTheme.SECONDARY_LIGHT
+                                }
+                                size={EComponentSize.MD}
+                            >
                                 Button text
                             </Button>
                             <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
@@ -87,7 +106,7 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body>
+                <Page.Body verticalMargin={args.verticalMargin}>
                     <div style={{ height: 800 }} />
                 </Page.Body>
 
@@ -97,7 +116,14 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                             <Text size={ETextSize.B3}>Footer page text</Text>
                         </Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
-                            <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
+                            <Button
+                                size={EComponentSize.MD}
+                                theme={
+                                    args.footerType === EFooterPageType.FIRST
+                                        ? EButtonTheme.SECONDARY
+                                        : EButtonTheme.SECONDARY_LIGHT
+                                }
+                            >
                                 Button text
                             </Button>
                             <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>

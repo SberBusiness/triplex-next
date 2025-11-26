@@ -12,7 +12,7 @@ export const TableBasicSettingsHeader: React.FC<ITableBasicSettingsHeaderProps> 
 }) => (
     <Text
         className={clsx(styles.tableBasicSettingsHeader, className)}
-        size={ETextSize.B1}
+        size={ETextSize.B3}
         weight={EFontWeightText.SEMIBOLD}
         tag="div"
         {...rest}

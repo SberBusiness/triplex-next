@@ -6,6 +6,7 @@ import { TableBasicHeader } from "@sberbusiness/triplex-next/components/Table/Ta
 import { TableBasicBody } from "@sberbusiness/triplex-next/components/Table/TableBasic/components/TableBasicBody";
 import { ITableBasicProps } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
 import { LoaderMiddle } from "@sberbusiness/triplex-next/components/Loader/LoaderMiddle/LoaderMiddle";
+import { LoaderScreen } from "@sberbusiness/triplex-next/components/LoaderScreen/LoaderScreen";
 
 /** Компонент обычной таблицы. */
 export const TableBasic = ({
@@ -54,14 +55,16 @@ export const TableBasic = ({
         } else if (!loading && isEmptyData) {
             return renderFooterEmptyData(renderNoData());
         } else if (loading && !isEmptyData) {
-            // TODO TRIPLEX-576: поменять на LoaderMiddle с overlay (пока в разработке)
-            return renderSpinnerWrapper(<LoaderMiddle />);
+            return (
+                <div className={styles.spinnerWrapper}>
+                    <LoaderScreen type="middle" />
+                </div>
+            );
         } else {
             return null;
         }
     };
 
-    const renderSpinnerWrapper = (content: React.JSX.Element) => <div className={styles.spinnerWrapper}>{content}</div>;
     const renderFooterEmptyData = (content: React.JSX.Element | React.JSX.Element[]) => (
         <div className={styles.footerEmptyData}>{content}</div>
     );

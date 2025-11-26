@@ -8,7 +8,7 @@
 
     .tableFooter {
         background: var(--triplex-next-TableBasic-TableFooter_Background);
-        padding: 24px 12px;
+        padding: 16px 12px;
 
         &::before {
             content: "";
@@ -26,9 +26,15 @@
             align-items: center;
 
             .tableFooterSummarySelectedCount,
-            .tableFooterSummaryAmount,
             .tableFooterSummarySelectAllButton,
-            .tableFooterSummaryDivider {
+            .tableFooterSummaryAmount {
+                display: inline-flex;
+            }
+
+            .tableFooterSummarySelectedCount,
+            .tableFooterSummarySelectAllButton,
+            .tableFooterSummaryAmount,
+            .tableFooterSummaryLabel {
                 margin-left: 24px;
             }
         }

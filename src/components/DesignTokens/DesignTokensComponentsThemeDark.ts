@@ -27,7 +27,6 @@ import {
     Marker_Tokens,
     MarkerStatus_Tokens,
     Overlay_Tokens,
-    Page_Tokens,
     Pagination_Tokens,
     Radio_Tokens,
     SegmentedControlSegment_Tokens,
@@ -68,7 +67,6 @@ import {
     TDesignTokensComponentsMarkerValue,
     TDesignTokensComponentsMarkerStatusValue,
     TDesignTokensComponentsOverlayValue,
-    TDesignTokensComponentsPageValue,
     TDesignTokensComponentsPaginationValue,
     TDesignTokensComponentsRadioValue,
     TDesignTokensComponentsSegmentedControlSegmentValue,
@@ -147,7 +145,6 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
         MarkerStatus_Tokens,
     ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.DARK, Overlay_Tokens),
-    Page: GetTokensValueByTheme<TDesignTokensComponentsPageValue>(ETriplexNextTheme.DARK, Page_Tokens),
     Pagination: GetTokensValueByTheme<TDesignTokensComponentsPaginationValue>(
         ETriplexNextTheme.DARK,
         Pagination_Tokens,

@@ -1,0 +1,37 @@
+@import 'src/styles/style';
+
+.confirm {
+    box-shadow: var(--triplex-Confirm-Shadow);
+    background-color: var(--triplex-Confirm-Background);
+    padding: @ufs-theme-page-padding-y 76px @ufs-theme-page-padding-y @ufs-theme-page-padding-x;
+    flex-grow: 1;
+
+    .confirmCloseButton {
+        position: absolute;
+        top: @ufs-theme-page-padding-y;
+        right: @ufs-theme-page-padding-x;
+    }
+
+    .confirmContent {
+        margin-bottom: @metric-32;
+    }
+
+    .confirmControls {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .confirm {
+        padding: 20px 52px 20px 16px;
+
+        .confirmCloseButton {
+            top: 26px;
+            right: 16px;
+        }
+
+        .confirmContent {
+            margin-bottom: 16px;
+        }
+    }
+}

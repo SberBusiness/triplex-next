@@ -24,7 +24,6 @@ import {
     TDesignTokensComponentsMarker,
     TDesignTokensComponentsMarkerStatus,
     TDesignTokensComponentsOverlay,
-    TDesignTokensComponentsPage,
     TDesignTokensComponentsPagination,
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
@@ -299,7 +298,6 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsMarker
     | TDesignTokensComponentsMarkerStatus
     | TDesignTokensComponentsOverlay
-    | TDesignTokensComponentsPage
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl

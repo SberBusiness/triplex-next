@@ -1,5 +1,12 @@
 @import "src/styles/style";
 
+.confirm {
+    flex-grow: 1;
+    margin: 0 auto;
+    max-width: calc(800px - 48px); // 48px - padding у Page
+    box-sizing: border-box;
+}
+
 .confirmCloseButton {
     position: absolute;
     top: 24px;
@@ -7,11 +14,16 @@
 }
 
 .confirmContent {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
+    padding-right: 56px;
 }
 
 .confirmControls {
     white-space: nowrap;
+}
+
+.confirmContentTitle {
+    margin-bottom: 12px;
 }
 
 @media (max-width: @screen-sm-max) {

@@ -2,9 +2,9 @@ import React from "react";
 import { ConfirmClose } from "./components/ConfirmClose";
 import { ConfirmContent } from "./components/ConfirmContent";
 import { ConfirmControls } from "./components/ConfirmControls";
-// import clsx from "clsx";
+import clsx from "clsx";
 import { EIslandType, IIslandProps, Island } from "../Island";
-// import styles from "./styles/Confirm.module.less";
+import styles from "./styles/Confirm.module.less";
 
 /** Свойства компонента Confirm. */
 export interface IConfirmProps extends IIslandProps {}
@@ -18,9 +18,8 @@ export interface IConfirmFC extends React.FC<IConfirmProps> {
 /** Компонент предупреждения, о закрытии лайтбокса / боковой панели лайтбокса. */
 export const Confirm: IConfirmFC = ({ children, className, ...htmlDivAttributes }) => (
     <Island
-        type={EIslandType.TYPE_2}
-        // className={clsx(className, styles.confirm)}
-        className={className}
+        type={EIslandType.TYPE_1}
+        className={clsx(className, styles.confirm)}
         role="dialog"
         aria-modal="true"
         {...htmlDivAttributes}

@@ -16,9 +16,9 @@ export interface ITableFooterSummaryAmountProps {
 /** Компонент подытога денежной суммы в подвале таблицы. */
 export const TableFooterSummaryAmount: React.FC<ITableFooterSummaryAmountProps> = ({ label, sum, currency }) => {
     return (
-        <Text size={ETextSize.B3}>
+        <Text size={ETextSize.B3} className={styles.tableFooterSummaryAmount}>
             <span className={styles.tableFooterSummaryDivider}>|</span>
-            <span className={styles.tableFooterSummaryAmount}>
+            <span className={styles.tableFooterSummaryLabel}>
                 {label} <Amount value={sum} currency={currency} />
             </span>
         </Text>

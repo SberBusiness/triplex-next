@@ -10,7 +10,7 @@ import {
     EFontType,
 } from "../src";
 
-export default {
+const meta = {
     title: "Components/SuggestField",
     tags: ["autodocs"],
     parameters: {
@@ -76,7 +76,10 @@ export default {
             description: "Определяет, нужно ли очищать поле ввода при получении фокуса.",
         },
     },
-} as Meta<typeof SuggestField>;
+} satisfies Meta<typeof SuggestField>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 const fruits = [
     "Hot Pepper",
@@ -153,7 +156,7 @@ const useSuggestFieldLogic = (customInitialOptions?: ISuggestFieldOption[]) => {
     };
 };
 
-export const Playground: StoryObj = {
+export const Playground: Story = {
     args: {
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
@@ -187,29 +190,35 @@ const sizeToLabelMap = {
     [EComponentSize.LG]: "LG",
 };
 
-export const DifferentSizes = {
+export const DifferentSizes: Story = {
+    name: "Different sizes",
     render: () => {
         const sizes = Object.values(EComponentSize);
 
-        return sizes.map((size) => {
-            const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
+        return (
+            <>
+                {sizes.map((size) => {
+                    const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
+                        useSuggestFieldLogic();
 
-            return (
-                <SuggestField
-                    key={size}
-                    size={size}
-                    label={sizeToLabelMap[size]}
-                    value={value}
-                    options={options}
-                    placeholder="Type to proceed"
-                    tooltipHint="No matches found."
-                    tooltipOpen={tooltipOpen}
-                    onTargetInputFocus={onTargetInputFocus}
-                    onFilter={onFilter}
-                    onSelect={onSelect}
-                />
-            );
-        });
+                    return (
+                        <SuggestField
+                            key={size}
+                            size={size}
+                            label={sizeToLabelMap[size]}
+                            value={value}
+                            options={options}
+                            placeholder="Type to proceed"
+                            tooltipHint="No matches found."
+                            tooltipOpen={tooltipOpen}
+                            onTargetInputFocus={onTargetInputFocus}
+                            onFilter={onFilter}
+                            onSelect={onSelect}
+                        />
+                    );
+                })}
+            </>
+        );
     },
 };
 
@@ -220,63 +229,71 @@ const statusToLabelMap = {
     [EFormFieldStatus.WARNING]: "Warning",
 };
 
-export const DifferentStates = {
+export const DifferentStates: Story = {
     render: () => {
         const statuses = Object.values(EFormFieldStatus);
 
-        return statuses.map((status) => {
-            const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
+        return (
+            <>
+                {statuses.map((status) => {
+                    const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
+                        useSuggestFieldLogic();
 
-            return (
-                <SuggestField
-                    key={status}
-                    status={status}
-                    value={value}
-                    options={options}
-                    label={statusToLabelMap[status]}
-                    placeholder="Type to proceed"
-                    tooltipHint="No matches found."
-                    tooltipOpen={tooltipOpen}
-                    onTargetInputFocus={onTargetInputFocus}
-                    onFilter={onFilter}
-                    onSelect={onSelect}
-                />
-            );
-        });
+                    return (
+                        <SuggestField
+                            key={status}
+                            status={status}
+                            value={value}
+                            options={options}
+                            label={statusToLabelMap[status]}
+                            placeholder="Type to proceed"
+                            tooltipHint="No matches found."
+                            tooltipOpen={tooltipOpen}
+                            onTargetInputFocus={onTargetInputFocus}
+                            onFilter={onFilter}
+                            onSelect={onSelect}
+                        />
+                    );
+                })}
+            </>
+        );
     },
 };
 
-export const WithLoadingStates = {
+export const WithLoadingStates: Story = {
     render: () => {
         const sizes = Object.values(EComponentSize);
 
-        return sizes.map((size) => {
-            const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic(
-                initialOptions.slice(0, 3),
-            );
+        return (
+            <>
+                {sizes.map((size) => {
+                    const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
+                        useSuggestFieldLogic(initialOptions.slice(0, 3));
 
-            return (
-                <SuggestField
-                    key={size}
-                    size={size}
-                    value={value}
-                    options={options}
-                    label="Label"
-                    placeholder="Type to proceed"
-                    tooltipHint="No matches found."
-                    tooltipOpen={tooltipOpen}
-                    loading={true}
-                    dropdownListLoading={true}
-                    onTargetInputFocus={onTargetInputFocus}
-                    onFilter={onFilter}
-                    onSelect={onSelect}
-                />
-            );
-        });
+                    return (
+                        <SuggestField
+                            key={size}
+                            size={size}
+                            value={value}
+                            options={options}
+                            label="Label"
+                            placeholder="Type to proceed"
+                            tooltipHint="No matches found."
+                            tooltipOpen={tooltipOpen}
+                            loading={true}
+                            dropdownListLoading={true}
+                            onTargetInputFocus={onTargetInputFocus}
+                            onFilter={onFilter}
+                            onSelect={onSelect}
+                        />
+                    );
+                })}
+            </>
+        );
     },
 };
 
-const fruitToTupleMap = {
+const fruitToTupleMap: Record<string, [string, string]> = {
     "Hot Pepper": ["🌶️", "Berries"],
     Corn: ["🌽", "Dry Fruits"],
     Tomato: ["🍅", "Berries"],
@@ -305,7 +322,7 @@ const fruitToTupleMap = {
     "Pea Pod": ["🫛", "Dry Fruits"],
 };
 
-export const WithCustomOptions = {
+export const WithCustomOptions: Story = {
     render: () => {
         const customInitialOptions: ISuggestFieldOption[] = initialOptions.map((option) => ({
             ...option,

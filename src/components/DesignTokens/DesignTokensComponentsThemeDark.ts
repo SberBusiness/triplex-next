@@ -83,6 +83,8 @@ import {
     TDesignTokensComponentsUploadZoneValue,
     TDesignTokensComponentsLightBoxValue,
     TDesignTokensComponentsNotificationValue,
+    TDesignTokensComponentsTableBasicValue,
+    TableBasic_Tokens,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -160,6 +162,10 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.DARK, Skeleton_Tokens),
     SMSInput: GetTokensValueByTheme<TDesignTokensComponentsSMSInputValue>(ETriplexNextTheme.DARK, SMSInput_Tokens),
     Stepper: GetTokensValueByTheme<TDesignTokensComponentsStepperValue>(ETriplexNextTheme.DARK, Stepper_Tokens),
+    TableBasic: GetTokensValueByTheme<TDesignTokensComponentsTableBasicValue>(
+        ETriplexNextTheme.DARK,
+        TableBasic_Tokens,
+    ),
     Tabs: GetTokensValueByTheme<TDesignTokensComponentsTabsValue>(ETriplexNextTheme.DARK, Tabs_Tokens),
     Tag: GetTokensValueByTheme<TDesignTokensComponentsTagValue>(ETriplexNextTheme.DARK, Tag_Tokens),
     TabsLine: GetTokensValueByTheme<TDesignTokensComponentsTabsLineValue>(ETriplexNextTheme.DARK, TabsLine_Tokens),

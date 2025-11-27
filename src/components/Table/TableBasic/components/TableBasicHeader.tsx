@@ -34,15 +34,15 @@ export const TableBasicHeader = ({ columns, onOrderBy }: ITableBasicHeaderProps)
         let icon;
         switch (c.orderDirection) {
             case EOrderDirection.NONE: {
-                icon = <SortStrokeSrvIcon16 paletteIndex={0} />;
+                icon = <SortStrokeSrvIcon16 paletteIndex={5} />;
                 break;
             }
             case EOrderDirection.ASC: {
-                icon = <SortincreaseStrokeSrvIcon16 paletteIndex={0} />;
+                icon = <SortincreaseStrokeSrvIcon16 paletteIndex={5} />;
                 break;
             }
             case EOrderDirection.DESC: {
-                icon = <SortdecreaseStrokeSrvIcon16 paletteIndex={0} />;
+                icon = <SortdecreaseStrokeSrvIcon16 paletteIndex={5} />;
                 break;
             }
         }
@@ -71,9 +71,10 @@ export const TableBasicHeader = ({ columns, onOrderBy }: ITableBasicHeaderProps)
               }
             : undefined;
         const orderIcon = orderEnabled && renderOrderIcon(c);
-        const classNameTh = mapHorizontalAlignToClassName(c.horizontalAlign);
-        const classNameThBlock = clsx(styles.thBlock, "hoverable", {
+        const classNameTh = clsx(mapHorizontalAlignToClassName(c.horizontalAlign), {
             [styles.checkboxType]: c.cellType === ECellType.CHECKBOX,
+        });
+        const classNameThBlock = clsx(styles.thBlock, "hoverable", {
             [styles.order]: orderEnabled,
         });
 

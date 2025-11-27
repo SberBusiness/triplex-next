@@ -1,5 +1,7 @@
 @import '../../../styles/style';
 
+@page-island-border-radius: 24px;
+
 .page {
     height: 100%;
     display: flex;
@@ -8,6 +10,10 @@
     padding: 24px;
     box-sizing: border-box;
     background-color: var(--triplex-next-Page-Background);
+}
+
+.global-page {
+    position: relative;
 }
 
 @media (max-width: @screen-sm-max) {
@@ -20,21 +26,17 @@
     flex-grow: 1;
 }
 
-.headerPageTypeFirst {
-    padding-bottom: 24px;
-}
-
 /*
     Breakpoint для экранов шире 1024px.
     > 1024px
 */
 .global-LB-more-media-point-0 {
-    .headerPageTypeSecond.sticky {
+    .headerPageTypeFirst.sticky {
             z-index: @page-header-sticky-z-index;
             position: sticky;
             top: 0;
-            border-top-left-radius: var(--r-top, 0) !important;
-            border-top-right-radius: var(--r-top, 0) !important;
+            border-top-left-radius: var(--r-top, @page-island-border-radius) !important;
+            border-top-right-radius: var(--r-top, @page-island-border-radius) !important;
             transition: border-radius 0.2s ease, box-shadow 0.2s ease;
 
             &[data-stuck="true"] {
@@ -47,8 +49,8 @@
         position: sticky;
         bottom: 0;
         transition: border-radius 0.2s ease, box-shadow 0.2s ease;
-        border-bottom-left-radius: var(--r-bottom, 0) !important;
-        border-bottom-right-radius: var(--r-bottom, 0) !important;
+        border-bottom-left-radius: var(--r-bottom, @page-island-border-radius) !important;
+        border-bottom-right-radius: var(--r-bottom, @page-island-border-radius) !important;
     
         &[data-stuck="true"] {
             box-shadow: var(--triplex-next-HeaderPage-StickyShadow) !important;

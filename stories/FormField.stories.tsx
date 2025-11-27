@@ -16,7 +16,9 @@ import { EFormFieldSize, EFormFieldStatus } from "../src/components/FormField/en
 import { FormGroup } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
-import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { HelpBox } from "../src/components/HelpBox/HelpBox";
+import { ETooltipSize } from "../src/components/Tooltip/enums";
+import { ETooltipPreferPlace } from "../src/components/Tooltip/enums";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 export default {
@@ -186,7 +188,6 @@ export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
     },
 };
 
-
 export const Basic: StoryObj<typeof FormField> = {
     render: function Render() {
         const [value, setValue] = useState("");
@@ -230,8 +231,9 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} />
                     <FormFieldPostfix>
-                        <HintFilledSrvIcon16 paletteIndex={5} />
-                        <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                            Text
+                        </HelpBox>
                     </FormFieldPostfix>
                 </FormField>
             </div>
@@ -265,6 +267,9 @@ export const WithClearButton: StoryObj<typeof FormField> = {
                     <FormFieldInput value={value} onChange={handleChange} />
                     <FormFieldPostfix>
                         <FormFieldClear onClick={handleClear} />
+                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                            Text
+                        </HelpBox>
                     </FormFieldPostfix>
                 </FormField>
             </div>

@@ -5,23 +5,38 @@ import clsx from "clsx";
 import { Island } from "../../Island/Island";
 import { EIslandType } from "../../Island/enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/Page.module.less";
 
-export interface IHeaderPage extends IHeaderProps {
+export interface IHeaderPageTypeSecondProps extends IHeaderProps {
+    children: React.ReactNode;
     /** Тип компонента HeaderPage. */
-    type?: EHeaderPageType;
+    type: EHeaderPageType.SECOND;
+    /**
+     * Header прилипает к верхней границе экрана при скролле. Только для второго типа HeaderPage и только внутри LightBox.
+     * */
+    sticky?: never;
+    /** Размер острова. */
+    size?: never;
+}
+
+export interface IHeaderPageTypeFirstProps extends IHeaderProps {
+    children: React.ReactNode;
+    /** Тип компонента HeaderPage. */
+    type: EHeaderPageType.FIRST;
     /**
      * Header прилипает к верхней границе экрана при скролле. Только для второго типа HeaderPage и только внутри LightBox.
      * */
     sticky?: boolean;
+    /** Размер острова. */
+    size?: EComponentSize;
 }
-
 export const HeaderPage = Object.assign(
-    React.forwardRef<HTMLDivElement, IHeaderPage>(
-        ({ className, type = EHeaderPageType.FIRST, sticky = false, ...rest }, ref) => {
+    React.forwardRef<HTMLDivElement, IHeaderPageTypeFirstProps | IHeaderPageTypeSecondProps>(
+        ({ className, type, size, sticky, ...rest }, ref) => {
             const islandRef = useRef<HTMLDivElement | null>(null);
 
-            useStickyCornerRadius(islandRef, "top", sticky);
+            useStickyCornerRadius(islandRef, "top", type === EHeaderPageType.FIRST && sticky);
 
             const setIslandRef = (instance: HTMLDivElement | null) => {
                 islandRef.current = instance;
@@ -32,22 +47,16 @@ export const HeaderPage = Object.assign(
                 }
             };
 
-            const headerPageSecondClassNames = clsx(className, styles.headerPageTypeSecond, {
-                [styles.sticky]: sticky,
+            const headerPageFirstClassNames = clsx(className, styles.headerPageTypeFirst, {
+                [styles.sticky]: type === EHeaderPageType.FIRST && sticky,
             });
 
-            return type === EHeaderPageType.SECOND ? (
-                <Island
-                    className={headerPageSecondClassNames}
-                    type={EIslandType.TYPE_1}
-                    borderRadius={16}
-                    paddingSize={16}
-                    ref={setIslandRef}
-                >
+            return type === EHeaderPageType.FIRST ? (
+                <Island className={headerPageFirstClassNames} type={EIslandType.TYPE_1} size={size} ref={setIslandRef}>
                     <Header {...rest} />
                 </Island>
             ) : (
-                <Header ref={ref} className={clsx(styles.headerPageTypeFirst, className)} {...rest} />
+                <Header ref={ref} className={clsx(styles.headerPageTypeSecond, className)} {...rest} />
             );
         },
     ),

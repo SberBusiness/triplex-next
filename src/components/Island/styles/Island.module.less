@@ -1,4 +1,8 @@
+@import '../../../styles/style';
+
 .island {
+    position: relative;
+    
     &.type1 {
         background-color: var(--triplex-next-Island-Type1_Background);
         box-shadow: var(--triplex-next-Island-Type1_Shadow);
@@ -14,27 +18,18 @@
         box-shadow: var(--triplex-next-Island-Type3_Shadow);
     }
 
-    &.borderRadius16 {
+    &.sm {
         border-radius: 16px;
-    }
-
-    &.borderRadius24 {
-        border-radius: 24px;
-    }
-
-    &.borderRadius32 {
-        border-radius: 32px;
-    }
-
-    &.padding16 {
         padding: 16px;
     }
 
-    &.padding24 {
+    &.md {
+        border-radius: 24px;
         padding: 24px;
     }
 
-    &.padding32 {
+    &.lg {
+        border-radius: 32px;
         padding: 32px;
     }
 
@@ -42,5 +37,22 @@
     .islandHeader + .islandFooter,
     .islandBody + .islandFooter {
         margin-top: 16px;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        &.sm {
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        &.md {
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        &.lg {
+            border-radius: 24px;
+            padding: 24px;
+        }
     }
 }

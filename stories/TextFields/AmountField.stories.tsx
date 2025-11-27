@@ -4,7 +4,9 @@ import { AmountField } from "../../src/components/AmountField/AmountField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
 import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
-import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { HelpBox } from "../../src/components/HelpBox/HelpBox";
+import { ETooltipSize } from "../../src/components/Tooltip/enums";
+import { ETooltipPreferPlace } from "../../src/components/Tooltip/enums";
 
 export default {
     title: "Components/TextFields/AmountField",
@@ -198,7 +200,11 @@ export const WithCurrencyAndPostfix: StoryObj<typeof AmountField> = {
                         </Text>
                     }
                     currency="RUB"
-                    postfix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                    postfix={
+                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                            Text
+                        </HelpBox>
+                    }
                     inputProps={{
                         value,
                         onChange: setValue,

@@ -4,7 +4,9 @@ import clsx from "clsx";
 import styles from "../styles/Page.module.less";
 
 /** Свойства компонента BodyPage. */
-export interface IBodyPageProps extends IBodyProps {}
+export interface IBodyPageProps extends IBodyProps {
+    children: React.ReactNode;
+}
 
 /** Тело компонента Page. */
 export const BodyPage = React.forwardRef<HTMLDivElement, IBodyPageProps>(({ className, ...rest }, ref) => (

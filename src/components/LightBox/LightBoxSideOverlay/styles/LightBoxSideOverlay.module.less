@@ -1,14 +1,18 @@
 @import 'src/styles/style';
 
+@sideOverlayBorderRadius: 32px;
+@sideOverlayBorderRadiusMobile: 16px;
+
 .lightBoxSideOverlayMask {
-    transition: opacity 0s;
+    transition: opacity 0.6s;
+    background-color: var(--triplex-next-LightBox-Backdrop_Background);
 }
 
 .lightBoxSideOverlayWrapper {
     position: fixed;
     min-height: calc(100% - var(--lightBox-screen-top));
     top: var(--lightBox-screen-top);
-    left: 0;
+    left: 0; 
     width: 0;
     z-index: @z-index-step * 2;
     overflow-y: auto;
@@ -28,18 +32,32 @@
         visibility: visible;
         left: var(--lightBox-screen-left);
         width: var(--lightBox-screen-width);
+        right: auto;
     }
 
     &.closing {
         pointer-events: none;
     }
 
+    .global-page {
+        // Фон задает lightBoxSideOverlayContent.
+        background-color: transparent !important;
+    }
+
     .lightBoxSideOverlayContent {
         position: relative;
-        margin-left: auto;
-        box-shadow: -13px 0 17px 0 rgba(0, 0, 0, 0.14);
-        transform: translateX(100%);
+        transform: translateY(100%);
         transition: transform 0.6s;
+        border-top-left-radius: @sideOverlayBorderRadius;
+        border-top-right-radius: @sideOverlayBorderRadius;
+        background-color: var(--triplex-next-LightBox-Content_Background);
+
+        width: 1100px;
+        max-width: calc(100% - 32px);
+        margin: 16px auto 0;
+        display: flex;
+        justify-content: center;
+
 
         &.opened {
             // Убирается контекст для вложенных элементов с position: fixed.
@@ -47,30 +65,23 @@
         }
 
         &.opening {
-            transform: translateX(0);
+            transform: translateY(0);
         }
     }
 
-    // Открыт SideOverlay поверх текущего.
-    &.openedTopLevelSideOverlay {
-        .lightBoxSideOverlayContent {
-            box-shadow: -13px 0 17px 0 rgba(0, 0, 0, 0.5);
-        }
-    }
-
-    &.sizeSM .lightBoxSideOverlayContent {
+    &.sizeSM .global-page {
         width: @sideOverlaySMWidth;
         // На мобильном устройстве, ширина не более ширины экрана.
         max-width: 100%;
     }
 
-    &.sizeMD .lightBoxSideOverlayContent {
+    &.sizeMD .global-page {
         width: @sideOverlayMDWidth;
         // На мобильном устройстве, ширина не более ширины экрана.
         max-width: 100%;
     }
 
-    &.sizeLG .lightBoxSideOverlayContent {
+    &.sizeLG .global-page {
         width: @sideOverlayLGWidth;
         // На мобильном устройстве, ширина не более ширины экрана.
         max-width: 100%;
@@ -83,14 +94,21 @@
     }
 
     @media (max-width: @screen-sm-max) {
-        // На мобильных устройствах блок с кнопкой закрыть не должен уезжать на вторую строку.
-        .globalHeaderTitleControls {
-            position: absolute;
-            top: 0;
-            right: 20px;
+        .lightBoxSideOverlayContent {
+            margin-top: 28px;
+            max-width: 100%;
+            border-top-left-radius: @sideOverlayBorderRadiusMobile;
+            border-top-right-radius: @sideOverlayBorderRadiusMobile;
         }
 
-        .globalHeaderTitleContentText {
+        // На мобильных устройствах блок с кнопкой закрыть не должен уезжать на вторую строку.
+        .global-HeaderTitleControls {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .global-HeaderTitleContent {
             // На мобильных устройствах отступ справа, чтобы не наезжать на кнопку закрыть.
             padding-right: 40px !important;
         }
@@ -101,6 +119,8 @@
     display: flex;
     position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
     min-height: 100%;
 
     &.closing,
@@ -108,30 +128,3 @@
         overflow-x: hidden;
     }
 }
-
-// Миксин скролл-зависимых стилей.
-// each(@scroll-sizes, {
-//     @scroll-width: @value;
-//     @scroll-width-px: ~'@{scroll-width}px';
-//     // Ширина экрана без скрола.
-//     @screen-width-without-scroll: calc(var(--lightBox-screen-width) - @scroll-width-px);
-
-//     html.scroll-@{scroll-width} {
-//         /*
-//           Breakpoint для размера менее 1024px.
-//         */
-//         .LB-less-or-equal-media-point-0-no-hash {
-//             .lightBoxSideOverlay {
-//                 left: 0;
-//                 width: 100%;
-//             }
-
-//             .lightBoxSideOverlayWrapper.opened {
-//                 left: var(--lightBox-screen-left);
-//                 width: var(--lightBox-screen-width);
-//                 position: fixed;
-//                 right: auto;
-//             }
-//         }
-//     }
-// })

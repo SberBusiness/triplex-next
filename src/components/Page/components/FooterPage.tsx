@@ -4,34 +4,40 @@ import { Footer, IFooterProps } from "@sberbusiness/triplex-next/components/Foot
 import { EFooterPageType } from "./enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import { EIslandType, Island } from "../../Island";
-import { useMatchMedia } from "../../MediaWidth/useMatchMedia";
-import { EScreenWidth } from "../../../helpers/breakpoints";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/Page.module.less";
 
-export interface IFooterPageProps extends IFooterProps {
+export interface IFooterPageTypeSecondProps extends IFooterProps {
+    children: React.ReactNode;
     /** Тип компонента FooterPage. */
-    type?: EFooterPageType;
+    type: EFooterPageType.SECOND;
+    /**
+     * Footer прилипает к нижней границе экрана при скролле. Не используется.
+     * */
+    sticky?: never;
+    /** Размер острова. */
+    size?: never;
+}
+
+export interface IFooterPageTypeFirstProps extends IFooterProps {
+    children: React.ReactNode;
+    /** Тип компонента FooterPage. */
+    type: EFooterPageType.FIRST;
     /**
      * Footer прилипает к нижней границе экрана при скролле. Только для второго типа FooterPage и только внутри LightBox.
      * */
     sticky?: boolean;
+    /** Размер острова. */
+    size?: EComponentSize;
 }
 
 /** Свойства компонента FooterPage. */
 export const FooterPage = Object.assign(
-    React.forwardRef<HTMLDivElement, IFooterPageProps>(
-        ({ className, type = EFooterPageType.FIRST, sticky = false, ...rest }, ref) => {
+    React.forwardRef<HTMLDivElement, IFooterPageTypeFirstProps | IFooterPageTypeSecondProps>(
+        ({ className, type, size, sticky, ...rest }, ref) => {
             const footerRef = useRef<HTMLDivElement | null>(null);
             // Плавное обнуление нижних углов и добавление тени при прилипания к низу.
-            useStickyCornerRadius(footerRef, "bottom", sticky);
-
-            const isMobileScreenWidth = useMatchMedia(
-                `(max-width: ${EScreenWidth.SM_MAX})`,
-                window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-            );
-
-            const islandPaddingSize = isMobileScreenWidth ? 16 : 24;
-            const islandBorderRadius = isMobileScreenWidth ? 16 : 24;
+            useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && sticky);
 
             const setFooterRef = (instance: HTMLDivElement | null) => {
                 footerRef.current = instance;
@@ -43,16 +49,15 @@ export const FooterPage = Object.assign(
             };
 
             const footerPageTypeFirstClassNames = clsx(className, styles.footerPageTypeFirst, {
-                [styles.sticky]: sticky,
+                [styles.sticky]: type === EFooterPageType.FIRST && sticky,
             });
 
             return type === EFooterPageType.FIRST ? (
                 <Island
                     className={footerPageTypeFirstClassNames}
                     type={EIslandType.TYPE_1}
-                    borderRadius={islandBorderRadius}
-                    paddingSize={islandPaddingSize}
                     ref={setFooterRef}
+                    size={size}
                 >
                     <Footer {...rest} />
                 </Island>

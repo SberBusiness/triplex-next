@@ -4,7 +4,9 @@ import { TextField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
 import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
-import { FormFieldClear } from "../../src/components";
+import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
+import { FormFieldClear } from "../../src/components/FormField/components/FormFieldClear";
+import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 export default {
@@ -284,7 +286,11 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
                         </Text>
                     }
                     prefix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
-                    postfix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                    postfix={
+                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                            Text
+                        </HelpBox>
+                    }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
@@ -531,7 +537,7 @@ export const States: StoryObj<typeof TextField> = {
                 <TextField
                     status={EFormFieldStatus.DISABLED}
                     inputProps={{
-                        value: "Value disabled"
+                        value: "Value disabled",
                     }}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>

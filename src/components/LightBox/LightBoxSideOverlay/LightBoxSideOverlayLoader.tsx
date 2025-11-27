@@ -19,7 +19,11 @@ export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps
                 const position = loaderRef.current.getBoundingClientRect();
                 // position.top равен высоте скролла родителя.
                 if (position.top !== topPosition) {
-                    setTopPosition(Math.abs(position.top));
+                    if (position.top > 0) {
+                        setTopPosition(0);
+                    } else {
+                        setTopPosition(Math.abs(position.top));
+                    }
                 }
             }
         });

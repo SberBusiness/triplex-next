@@ -1,12 +1,17 @@
 import React from "react";
-import { Text } from "@sber-business/triplex/components/Typography/Text";
-import { ETextSize, ELineType } from "@sber-business/triplex/components/Typography/enums";
+import { Text } from "../../Typography";
+import { ETextSize } from "../../Typography/enums";
+import { TTextProps } from "../../Typography/Text";
 
 /** Свойства компонента ConfirmContentSubTitle. */
-export interface IConfirmContentSubTitleProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IConfirmContentSubTitleProps extends TTextProps<"div"> {}
 
-export const ConfirmContentSubTitle: React.FC<IConfirmContentSubTitleProps> = ({ children, ...htmlDivAttributes }) => (
-    <Text size={ETextSize.B1} line={ELineType.EXTRA} tag="div" {...htmlDivAttributes}>
+export const ConfirmContentSubTitle: React.FC<IConfirmContentSubTitleProps> = ({
+    children,
+    size = ETextSize.B2,
+    ...rest
+}) => (
+    <Text size={size} tag="div" {...rest}>
         {children}
     </Text>
 );

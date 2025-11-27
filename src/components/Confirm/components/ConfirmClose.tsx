@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import { TriggerClickOnKeyDownEvent } from "@sber-business/triplex/components/Triggers/TriggerClickOnKeyDownEvent";
-import { EVENT_KEY_CODES } from "@sber-business/triplex/utils/keyboard";
+import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { ConfirmCloseButton, IConfirmCloseButtonProps } from "./ConfirmCloseButton";
 
 export interface IConfirmCloseProps extends IConfirmCloseButtonProps {

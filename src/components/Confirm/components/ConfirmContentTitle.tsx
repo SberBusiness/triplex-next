@@ -1,16 +1,17 @@
 import React from "react";
-import { Title } from "@sber-business/triplex/components/Typography/Title";
-import { ETitleSize } from "@sber-business/triplex/components/Typography/enums";
-import { EScreenWidth } from "@sber-business/triplex/enums/EScreenWidth";
+import { ETitleSize } from "../../Typography/enums";
+import { TTitleProps } from "../../Typography/Title";
+import { Title } from "../../Typography/Title";
 
 /** Свойства компонента ConfirmContentTitle. */
-export interface IConfirmContentTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
+export interface IConfirmContentTitleProps extends TTitleProps<"h1"> {}
 
-export const ConfirmContentTitle: React.FC<IConfirmContentTitleProps> = ({ children, ...htmlAttributes }) => (
-    <Title
-        size={window.matchMedia(`(max-width: ${EScreenWidth.SM_MAX})`).matches ? ETitleSize.H4 : ETitleSize.H2}
-        {...htmlAttributes}
-    >
+export const ConfirmContentTitle: React.FC<IConfirmContentTitleProps> = ({
+    children,
+    size = ETitleSize.H3,
+    ...rest
+}) => (
+    <Title size={size} {...rest}>
         {children}
     </Title>
 );

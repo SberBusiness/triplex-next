@@ -1,10 +1,11 @@
 @import url('src/styles/style');
 
-.lightBoxTopOverlayMask {
+.topOverlayMask {
     transition: opacity 0s;
+    background: var(--triplex-next-TopOverlay-Background);
 }
 
-.lightBoxTopOverlayWrapper {
+.topOverlayWrapper {
     position: absolute;
     left: 0;
     right: 0;
@@ -15,13 +16,13 @@
         bottom: 0;
     }
 
-    .lightBoxTopOverlayPanel {
+    .topOverlayPanel {
         transition: transform 0.6s;
         box-shadow: none;
     }
 }
 
-.lightBoxTopOverlay {
+.topOverlay {
     // Нужен, чтобы панель была над .lightBoxControls.
     z-index: @z-index-step * 5;
 }

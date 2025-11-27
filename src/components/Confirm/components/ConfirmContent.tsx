@@ -1,7 +1,8 @@
 import React from "react";
-import { ConfirmContentSubTitle } from "@sber-business/triplex/components/Confirm/components/ConfirmContentSubTitle";
-import { ConfirmContentTitle } from "@sber-business/triplex/components/Confirm/components/ConfirmContentTitle";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { ConfirmContentSubTitle } from "./ConfirmContentSubTitle";
+import { ConfirmContentTitle } from "./ConfirmContentTitle";
+import clsx from "clsx";
+import styles from "../styles/Confirm.module.less";
 
 /** Свойства компонента ConfirmContent. */
 export interface IConfirmContentProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -12,7 +13,7 @@ export interface IConfirmContentFC extends React.FC<IConfirmContentProps> {
 }
 
 export const ConfirmContent: IConfirmContentFC = ({ children, className, ...htmlDivAttributes }) => (
-    <div className={classnames("cssClass[confirmContent]", className)} {...htmlDivAttributes}>
+    <div className={clsx(className, styles.confirmContent)} {...htmlDivAttributes}>
         {children}
     </div>
 );

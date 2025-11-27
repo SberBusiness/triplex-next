@@ -40,4 +40,3 @@ export * from "./Tag";
 export * from "./Notification";
 export * from "./SMSInput";
 export * from "./TopOverlay";
-export * from "./Confirm";

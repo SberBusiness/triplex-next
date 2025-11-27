@@ -85,6 +85,8 @@ import {
     TDesignTokensComponentsUploadZoneValue,
     TDesignTokensComponentsLightBoxValue,
     TDesignTokensComponentsNotificationValue,
+    TDesignTokensComponentsTopOverlayValue,
+    TopOverlay_Tokens,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -182,5 +184,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     Notification: GetTokensValueByTheme<TDesignTokensComponentsNotificationValue>(
         ETriplexNextTheme.LIGHT,
         Notification_Tokens,
+    ),
+    TopOverlay: GetTokensValueByTheme<TDesignTokensComponentsTopOverlayValue>(
+        ETriplexNextTheme.LIGHT,
+        TopOverlay_Tokens,
     ),
 };

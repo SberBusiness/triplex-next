@@ -1,7 +1,8 @@
 import React from "react";
-import { ClosemediumNavIcon20 } from "@sberbusiness/icons/ClosemediumNavIcon20";
-import { ButtonIcon, IButtonIconProps } from "@sber-business/triplex/components/Button/ButtonIcon";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
+import { CrossStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { ButtonIcon, IButtonIconProps } from "../../Button/ButtonIcon";
+import clsx from "clsx";
+import styles from "../styles/Confirm.module.less";
 
 export interface IConfirmCloseButtonProps extends Omit<IButtonIconProps, "children"> {}
 
@@ -10,15 +11,10 @@ export interface IConfirmCloseButtonProps extends Omit<IButtonIconProps, "childr
  */
 export const ConfirmCloseButton = React.forwardRef<HTMLButtonElement, IConfirmCloseButtonProps>(
     ({ className, title = "Закрыть", ...props }, ref) => (
-        <ButtonIcon
-            ref={ref}
-            className={classnames(className, "cssClass[confirmCloseButton]")}
-            title={title}
-            {...props}
-        >
-            <ClosemediumNavIcon20 />
+        <ButtonIcon ref={ref} className={clsx(className, styles.confirmCloseButton)} title={title} {...props}>
+            <CrossStrokeSrvIcon20 paletteIndex={0} />
         </ButtonIcon>
-    )
+    ),
 );
 
 ConfirmCloseButton.displayName = "ConfirmCloseButton";

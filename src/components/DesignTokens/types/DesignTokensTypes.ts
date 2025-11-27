@@ -3,6 +3,7 @@ import {
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
     TDesignTokensComponentsButton,
+    TDesignTokensComponentsCalendar,
     TDesignTokensComponentsCard,
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsChip,
@@ -278,6 +279,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
     | TDesignTokensComponentsButton
+    | TDesignTokensComponentsCalendar
     | TDesignTokensComponentsCard
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsChip

@@ -15,6 +15,7 @@ import {
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsHeaderPage,
     TDesignTokensComponentsIsland,
+    TDesignTokensComponentsIslandAccordion,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsListItem,
     TDesignTokensComponentsListItemControlsButton,
@@ -30,6 +31,7 @@ import {
     TDesignTokensComponentsSegmentedControlSegment,
     TDesignTokensComponentsSkeleton,
     TDesignTokensComponentsSMSInput,
+    TDesignTokensComponentsStep,
     TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
     TDesignTokensComponentsTabs,
@@ -290,6 +292,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsHeaderPage
     | TDesignTokensComponentsIsland
+    | TDesignTokensComponentsIslandAccordion
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsListItem
     | TDesignTokensComponentsListItemControlsButton
@@ -305,6 +308,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsSegmentedControlSegment
     | TDesignTokensComponentsSkeleton
     | TDesignTokensComponentsSMSInput
+    | TDesignTokensComponentsStep
     | TDesignTokensComponentsStepper
     | TDesignTokensComponentsTableBasic
     | TDesignTokensComponentsTabs

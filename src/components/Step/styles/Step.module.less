@@ -1,0 +1,59 @@
+.step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
+    user-select: none;
+    cursor: default;
+    border-radius: 50%;
+
+    &.default {
+        background-color: var(--triplex-next-Step-Background_Default);
+
+        & > span {
+            color: var(--triplex-next-Step-Color_Default) ;
+        }
+    }
+
+    &.done {
+        & > span {
+            color: var(--triplex-next-Step-Color_Done);
+        }
+
+        background-color: var(--triplex-next-Step-Background_Done);
+    }
+
+    &.warning {
+        & > span {
+            color: var(--triplex-next-Step-Color_Warning);
+        }
+        
+        background-color: var(--triplex-next-Step-Background_Warning);
+    }
+
+    &.active {
+        & > span {
+            color: var(--triplex-next-Step-Color_Active);
+        }
+        
+        background-color: var(--triplex-next-Step-Background_Active);
+    }
+
+    &.error {
+        & > span {
+            color: var(--triplex-next-Step-Color_Error);
+        }
+        
+        background-color: var(--triplex-next-Step-Background_Error);
+    }
+
+    &.disabled {
+        & > span {
+            color: var(--triplex-next-Step-Color_Disabled);
+        }
+        
+        background-color: var(--triplex-next-Step-Background_Disabled);
+    }
+}

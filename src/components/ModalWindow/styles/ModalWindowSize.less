@@ -1,0 +1,53 @@
+/* stylelint-disable no-descending-specificity */
+
+@import 'src/styles/style';
+
+.modalWindowContainer .modalWindow {
+    &.modalWindowSm {
+        .modalWindowContentWrapper {
+            max-width: @ufs-theme-modal-window-sm-width;
+        }
+
+        .modalWindowContent .modalWindowBody {
+            min-height: @ufs-theme-modal-window-sm-body-height;
+        }
+
+        @media (max-width: @screen-xs-max) {
+            .modalWindowContentWrapper {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &.modalWindowMd {
+        .modalWindowContentWrapper {
+            max-width: @ufs-theme-modal-window-md-width;
+        }
+
+        .modalWindowContent .modalWindowBody {
+            min-height: @ufs-theme-modal-window-md-body-height;
+        }
+
+        @media (max-width: @screen-sm-max) {
+            .modalWindowContentWrapper {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &.modalWindowLg {
+        .modalWindowContentWrapper {
+            max-width: @ufs-theme-modal-window-lg-width;
+        }
+
+        .modalWindowContent .modalWindowBody {
+            min-height: @ufs-theme-modal-window-lg-body-height;
+        }
+
+        @media (max-width: @screen-md-max) {
+            .modalWindowContentWrapper {
+                max-width: 100%;
+            }
+        }
+    }
+}

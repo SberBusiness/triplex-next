@@ -1,0 +1,35 @@
+@import 'src/styles/style';
+
+.modalWindowTopOverlayWrapper {
+    position: absolute;
+    top: 0;
+    width: inherit;
+    z-index: @z-index-step * 2;
+
+    .globalTopOverlay {
+        border-radius: @radius-16 @radius-16 0 0;
+    }
+
+    .globalTopOverlayClose {
+        top: 30px;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        .globalTopOverlayInner {
+            padding: 20px 52px 20px 16px;
+        }
+
+        .globalTopOverlayClose {
+            top: 22px;
+            right: 16px;
+        }
+
+        .globalTopOverlayContent {
+            margin-bottom: 20px;
+        }
+
+        .globalTopOverlayTitle {
+            .font-size(@font-size-16);
+        }
+    }
+}

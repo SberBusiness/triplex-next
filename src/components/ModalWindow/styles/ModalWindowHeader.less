@@ -1,0 +1,22 @@
+@import 'src/styles/style';
+
+// Отступ в хедере с учетом крестика.
+@close-icon-offset: @ufs-theme-page-padding-x + @modal-close-icon-width + @ufs-theme-page-padding-x;
+
+// Отступ в хедере с учетом крестика размера md.
+@close-icon-offset-md: @page-padding-sm + @modal-close-icon-width + @page-padding-sm;
+
+.modalWindowHeader {
+    border-radius: @radius-16 @radius-16 0 0;
+    overflow: hidden;
+
+    .globalHeaderTitle {
+        padding-right: @close-icon-offset;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        .globalHeaderTitle {
+            padding-right: @close-icon-offset-md;
+        }
+    }
+}

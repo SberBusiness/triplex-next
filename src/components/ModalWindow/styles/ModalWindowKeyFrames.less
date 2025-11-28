@@ -1,0 +1,37 @@
+@import 'src/styles/style';
+
+//Позиция контента, в которую двигается элемент для отображения (для анимации появления и скрытия сверху экрана).
+@ufs-theme-modal-content-translate-enter: translate(0, 0);
+
+//Позиция контента, в которую двигается элемент для скрытия (для анимации появления и скрытия сверху экрана).
+@ufs-theme-modal-content-translate-exit: translate(0, calc(-100% - @ufs-theme-modal-window-top));
+
+//Позиция контента, в которую двигается элемент для скрытия (для анимации появления и скрытия сверху экрана) (костыль для IE11).
+//IE11: calc не работает в translate.
+@ufs-theme-modal-content-translate-exit-ie11: translate(0, -120%);
+
+//Для анимации появления контента.
+@keyframes modalWindowContentAnimationOnEnter {
+    from {
+        transform: @ufs-theme-modal-content-translate-exit;
+        -ms-transform: @ufs-theme-modal-content-translate-exit-ie11;
+    }
+
+    to {
+        transform: @ufs-theme-modal-content-translate-enter;
+        -ms-transform: @ufs-theme-modal-content-translate-enter;
+    }
+}
+
+//Для анимации скрытия контента.
+@keyframes modalWindowContentAnimationOnExit {
+    from {
+        transform: @ufs-theme-modal-content-translate-enter;
+        -ms-transform: @ufs-theme-modal-content-translate-enter;
+    }
+
+    to {
+        transform: @ufs-theme-modal-content-translate-exit;
+        -ms-transform: @ufs-theme-modal-content-translate-exit-ie11;
+    }
+}

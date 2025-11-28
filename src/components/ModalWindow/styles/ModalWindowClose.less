@@ -1,0 +1,15 @@
+@import 'src/styles/style';
+
+.modalWindowClose {
+    position: absolute;
+    top: 30px;
+    right: @ufs-theme-page-padding-x;
+    z-index: @z-index-spinner-widget + @z-index-step / 2;
+}
+
+@media (max-width: @screen-sm-max) {
+    .modalWindowClose {
+        top: 22px;
+        right: @page-padding-sm;
+    }
+}

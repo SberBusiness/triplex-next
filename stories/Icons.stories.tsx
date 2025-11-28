@@ -20,7 +20,7 @@ const iconCategoryMap: Record<string, string[]> = Object.keys(iconModule)
         return map;
     }, {});
 
-const paletteIndexes = Array.from(Array(8).keys());
+const paletteIndexes = Array.from(Array(9).keys());
 
 export default {
     title: "Icons/Icons",
@@ -163,6 +163,12 @@ export const Palettes: StoryObj<IIconStoryArgs> = {
                     <div style={{ textAlign: "center" }}>7</div>
                     <IconItem inverted={false} {...args}>
                         <DefaulticonStrokePrdIcon32 paletteIndex={7} />
+                    </IconItem>
+                </div>
+                <div style={{ display: "inline-block" }}>
+                    <div style={{ textAlign: "center" }}>8</div>
+                    <IconItem inverted={false} {...args}>
+                        <DefaulticonStrokePrdIcon32 paletteIndex={8} />
                     </IconItem>
                 </div>
             </div>

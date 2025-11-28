@@ -1,8 +1,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import ReactResizeDetector from "react-resize-detector";
+import { useResizeDetector } from "react-resize-detector";
 import isEqual from "lodash-es/isEqual";
 import pick from "lodash-es/pick";
 import { Portal } from "../../Portal/Portal";
+import styles from "../styles/ModalWindow.module.less";
 
 // Id элемента, в визуальных границах (левая и правая координата) которого рендерится ModalWindow. Отступ ModalWindow от верхней границы экрана равен высоте этого элемента.
 export const modalWindowViewManagerNodeId = "modalWindowViewManagerNodeId";
@@ -24,7 +25,7 @@ export const ModalWindowViewManager: React.FC = () => {
             if (
                 !isEqual(
                     pick(rectViewNode, ["top", "left", "width", "height"]),
-                    pick(nextRect, ["top", "left", "width", "height"])
+                    pick(nextRect, ["top", "left", "width", "height"]),
                 )
             ) {
                 setRectViewNode(nextRect);
@@ -52,11 +53,18 @@ export const ModalWindowViewManager: React.FC = () => {
         updateRect();
     });
 
+    const { ref: resizeRef } = useResizeDetector({
+        handleWidth: true,
+        onResize: updateRect,
+        refreshMode: "debounce",
+        refreshRate: 100,
+    });
+
     return modalWindowViewManagerNode ? (
         <Portal container={modalWindowViewManagerNode}>
             {/* Высота div должна быть равной высоте ModalWindowManagerNode. */}
             <div ref={viewNodeRef} style={{ height: "100%" }}>
-                <ReactResizeDetector onResize={updateRect} />
+                <div ref={resizeRef} className={styles.modalWindowResizeWrapper} />
                 {rectViewNode && (
                     <style>
                         {`

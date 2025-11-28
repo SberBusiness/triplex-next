@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { EModalWindowSize } from "@sber-business/triplex/components/ModalWindow/enums";
-import { mapModalWindowSizeToClassName } from "@sber-business/triplex/components/ModalWindow/utils";
-import { overlayDataAttributeIsOpen } from "@sber-business/triplex/components/ModalWindow/components/ModalWindowTopOverlay";
-import { Portal } from "@sber-business/triplex/components/Portal/Portal";
-import FocusTrap from "focus-trap-react";
-import { ModalWindowViewManager } from "@sber-business/triplex/components/ModalWindow/components/ModalWindowViewManager";
-import { useToken } from "@sber-business/triplex/components/ThemeProvider/useToken";
+import { Portal } from "../Portal/Portal";
+import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import { ModalWindowViewManager } from "./components/ModalWindowViewManager";
+import { useToken } from "../ThemeProvider/useToken";
+import clsx from "clsx";
+import styles from "./styles/ModalWindow.module.less";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 /** Свойства компонента модального окна. */
 export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,7 +17,7 @@ export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> 
     /** ClassName контейнера модального окна. */
     containerClassName?: string;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    focusTrapProps?: FocusTrapProps;
     /** Состояние загрузки. */
     isLoading?: boolean;
     /** Callback после анимации закрытия модального окна. */
@@ -25,7 +25,7 @@ export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> 
     /** Кнопка закрыть. */
     closeButton: React.ReactNode;
     /** Размер модального окна. */
-    size?: EModalWindowSize;
+    size?: EComponentSize;
 }
 
 /** Имя класса для некоторых элементов связанных с компонентом. */
@@ -37,6 +37,8 @@ const animationExitTime = 300;
 /** Класс от Layout(сббола), который блюрит(blur) фоновый контент. */
 const bodyClassNameModalOpen = ["modal-open", "no-hash-overflow-hidden"];
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((props, ref) => {
     const {
         isOpen,
@@ -46,22 +48,18 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
         isLoading,
         onExited,
         closeButton,
-        size = EModalWindowSize.MD,
+        size = EComponentSize.MD,
         className,
         ...rest
     } = props;
 
     const [renderPortal, setRenderPortal] = useState(false);
-    const [isTopOverlayOpen, setIsTopOverlayOpen] = useState(false);
 
     const mountNode = useRef<HTMLDivElement | null>(null);
-    const modalWindowNode = useRef<HTMLDivElement | null>(null);
 
     const { scopeClassName } = useToken();
 
     useEffect(() => {
-        checkTopOverlaysIsOpen();
-
         return () => {
             unmountPortalNode();
             removeBodyClasses();
@@ -74,27 +72,6 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
             setRenderPortal(true);
         }
     }, [isOpen]);
-
-    useEffect(() => {
-        checkTopOverlaysIsOpen();
-    }, [children]);
-
-    /**
-     * Проверка открытости TopOverlay.
-     */
-    const checkTopOverlaysIsOpen = () => {
-        const nextTopOverlayIsOpen = Boolean(
-            mountNode.current && mountNode?.current.querySelectorAll(`[${overlayDataAttributeIsOpen}]`).length > 0
-        );
-
-        if (isTopOverlayOpen !== nextTopOverlayIsOpen) {
-            setIsTopOverlayOpen(nextTopOverlayIsOpen);
-
-            if (nextTopOverlayIsOpen && modalWindowNode.current) {
-                modalWindowNode.current.scrollTop = 0;
-            }
-        }
-    };
 
     /** Подключение собственной node для портала. */
     const mountPortalNode = () => {
@@ -163,18 +140,9 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
 
     if (!renderPortal || !mountNode.current) return null;
 
-    const classNameContainer = classnames(
-        "cssClass[modalWindowContainer]",
-        { "cssClass[modalTopOverlayActive]": isTopOverlayOpen },
-        containerClassName
-    );
+    const classNameContainer = clsx(scopeClassName, styles.modalWindowContainer, containerClassName);
 
-    const classNameModalWindow = classnames(
-        scopeClassName,
-        "cssClass[modalWindow]",
-        mapModalWindowSizeToClassName[size],
-        className
-    );
+    const classNameModalWindow = clsx(styles.modalWindow, sizeToClassNameMap[size], className);
 
     return (
         <>
@@ -201,7 +169,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                         }}
                     >
                         <div className={classNameContainer}>
-                            <div className="cssClass[modalWindowBackdrop]" />
+                            <div className={styles.modalWindowBackdrop} />
                             <div
                                 role="dialog"
                                 aria-modal="true"
@@ -209,7 +177,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                                 ref={setRef}
                                 className={classNameModalWindow}
                             >
-                                <div className="cssClass[modalWindowContentWrapper]">
+                                <div className={styles.modalWindowContentWrapper}>
                                     {React.cloneElement(children, { isLoading, key: "content" })}
                                     {closeButton}
                                 </div>

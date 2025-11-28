@@ -1,0 +1,167 @@
+/* stylelint-disable no-descending-specificity */
+@import 'src/styles/style';
+@import 'src/components/ModalWindow/styles/ModalWindowKeyFrames';
+
+.modalWindowContainer {
+    position: fixed;
+    left: var(--modalWindow-screen-left, 0);
+    top: var(--modalWindow-screen-top, 0);
+    width: var(--modalWindow-screen-width, 100%);
+    bottom: 0;
+    z-index: @z-index-modal-window;
+}
+
+.modalWindowBackdrop {
+    content: '';
+    position: fixed;
+    top: var(--modalWindow-screen-top);
+    left: var(--modalWindow-screen-left);
+    height: 100%;
+    pointer-events: none;
+    background: var(--triplex-next-ModalWindow-Backdrop_Background);
+    width: var(--modalWindow-screen-width, 100%);
+}
+
+.modalWindow {
+    position: fixed;
+    height: calc(100% - var(--modalWindow-screen-top, 0));
+    width: var(--modalWindow-screen-width, 100%);
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .modalWindowContentWrapper {
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        width: calc(100% - 32px);
+        animation: modalWindowContentAnimationOnEnter 0.6s ease;
+    }
+
+    .modalWindowContent {
+        margin-top: @modal-window-top;
+        width: 100%;
+
+        .modalWindowBody {
+            .keyframes-fadeIn();
+
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .spinnerSm {
+            display: none;
+        }
+
+        @media (max-width: @screen-sm-max) {
+            .spinner {
+                display: none;
+            }
+
+            .spinnerSm {
+                display: flex;
+            }
+        }
+    }
+
+    .modalWindowContentPage {
+        background: var(--triplex-next-ModalWindow-Background);
+        border-radius: 32px;
+    }
+}
+
+.modalWindowClose {
+    transition: visibility 0s 0.3s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+&.modalTopOverlayActive {
+    .modalWindowClose {
+        visibility: hidden;
+        transition: none;
+    }
+
+    // Overlay.
+    .modalWindowContent::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        background-color: @overlay-white-background-color;
+        width: 100%;
+        border-radius: 16px;
+        animation: fadeIn 0.3s ease;
+    }
+}
+
+
+.modalWindowTransition-exit .modalWindow .modalWindowContentWrapper {
+    transform: @modal-content-translate-exit;
+    -ms-transform: @modal-content-translate-exit-ie11;
+    animation: modalWindowContentAnimationOnExit 0.3s ease;
+
+    .modalWindowBody {
+        .keyframes-fadeOut();
+
+        animation: fadeOut 0.3s ease;
+    }
+}
+
+.modalWindowResizeWrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+}
+
+
+.modalWindow {
+    &.sm {
+        .modalWindowContentWrapper {
+            max-width: @modal-window-sm-width;
+        }
+
+        .modalWindowContent .modalWindowBody {
+            min-height: @modal-window-sm-body-height;
+        }
+
+        @media (max-width: @screen-xs-max) {
+            .modalWindowContentWrapper {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &.md {
+        .modalWindowContentWrapper {
+            max-width: @modal-window-md-width;
+        }
+
+        .modalWindowContent .modalWindowBody {
+            min-height: @modal-window-md-body-height;
+        }
+
+        @media (max-width: @screen-sm-max) {
+            .modalWindowContentWrapper {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &.lg {
+        .modalWindowContentWrapper {
+            max-width: @modal-window-lg-width;
+        }
+
+        .modalWindowContent .modalWindowBody {
+            min-height: @modal-window-lg-body-height;
+        }
+
+        @media (max-width: @screen-md-max) {
+            .modalWindowContentWrapper {
+                max-width: 100%;
+            }
+        }
+    }
+}

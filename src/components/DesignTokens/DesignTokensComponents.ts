@@ -89,6 +89,8 @@ import {
     TDesignTokensComponentsLightBoxValue,
     TDesignTokensComponentsNotificationValue,
     TDesignTokensComponentsStatusTrackerValue,
+    TDesignTokensComponentsModalWindowValue,
+    ModalWindow_Tokens,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -194,5 +196,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     StatusTracker: GetTokensValueByTheme<TDesignTokensComponentsStatusTrackerValue>(
         ETriplexNextTheme.LIGHT,
         StatusTracker_Tokens,
+    ),
+    ModalWindow: GetTokensValueByTheme<TDesignTokensComponentsModalWindowValue>(
+        ETriplexNextTheme.LIGHT,
+        ModalWindow_Tokens,
     ),
 };

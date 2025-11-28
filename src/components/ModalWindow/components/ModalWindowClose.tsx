@@ -1,31 +1,35 @@
-import { ClosemediumNavIcon20 } from "@sberbusiness/icons/ClosemediumNavIcon20";
-import { ButtonIcon, IButtonIconProps } from "@sber-business/triplex/components/Button/ButtonIcon";
-import { TriggerClickOnKeyDownEvent } from "@sber-business/triplex/components/Triggers/TriggerClickOnKeyDownEvent";
-import { EVENT_KEY_CODES } from "@sber-business/triplex/utils/keyboard";
+import { IButtonSecondaryProps } from "@sberbusiness/triplex-next/components/Button/Button";
+import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import React, { useRef } from "react";
+import { Button } from "../../Button/Button";
+import { CrossStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EButtonTheme } from "../../Button/enums";
+import styles from "../styles/ModalWindowClose.module.less";
 
 /**
  * Свойства компонента кнопки закрытия модального окна.
  */
-interface IModalWindowCloseProps extends Omit<IButtonIconProps, "children"> {
-    /** Дочерний элемент. */
-    children?: never;
-    /** Обработчик закрытия. */
-    onClick: () => void;
-}
+interface IModalWindowCloseProps extends IButtonSecondaryProps {}
 
 /**
  * Компонент кнопки закрытия модального окна.
  */
-export const ModalWindowClose: React.FC<IModalWindowCloseProps> = ({ title, ...restProps }) => {
+export const ModalWindowClose: React.FC<IModalWindowCloseProps> = (props) => {
     const ref = useRef<HTMLButtonElement>(null);
 
     return (
-        <div className="cssClass[modalWindowClose]">
+        <div className={styles.modalWindowClose}>
             <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={ref}>
-                <ButtonIcon {...restProps} title={title ?? "Закрыть"} ref={ref}>
-                    <ClosemediumNavIcon20 />
-                </ButtonIcon>
+                <Button
+                    title="Закрыть"
+                    ref={ref}
+                    icon={<CrossStrokeSrvIcon20 paletteIndex={0} />}
+                    {...props}
+                    size={EComponentSize.MD}
+                    theme={EButtonTheme.SECONDARY}
+                />
             </TriggerClickOnKeyDownEvent>
         </div>
     );

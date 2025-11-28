@@ -1,27 +1,9 @@
-import { Header } from "@sber-business/triplex/components/Header/Header";
+import { HeaderPage, IHeaderPageTypeFirstProps } from "../../Page/components/HeaderPage";
 import React from "react";
+import { EHeaderPageType } from "../../Page/components/enums";
 
-/**
- * Свойства компонента заголовка модального окна.
- * @prop {React.ReactNode} children Children.
- */
-interface IModalWindowHeaderProps {
-    children: React.ReactNode;
-}
+export const ModalWindowHeader: React.FC<IHeaderPageTypeFirstProps> = (props) => (
+    <HeaderPage {...props} type={EHeaderPageType.FIRST} />
+);
 
-/**
- * Компонент заголовка модального окна.
- */
-export class ModalWindowHeader extends React.PureComponent<IModalWindowHeaderProps> {
-    public static displayName = "ModalWindowHeader";
-
-    public render() {
-        const { children } = this.props;
-
-        return (
-            <div className="cssClass[modalWindowHeader]">
-                <Header>{children}</Header>
-            </div>
-        );
-    }
-}
+ModalWindowHeader.displayName = "ModalWindowHeader";

@@ -1,16 +1,9 @@
 import React from "react";
-import { Footer } from "@sber-business/triplex/components/Footer/Footer";
+import { FooterPage, IFooterPageTypeFirstProps } from "../../Page/components/FooterPage";
+import { EFooterPageType } from "../../Page/components/enums";
 
-/** Свойства компонента ModalWindowFooter. */
-interface IModalWindowFooterProps {
-    children?: React.ReactNode;
-}
-
-/** Футер модального окна. */
-export const ModalWindowFooter: React.FC<IModalWindowFooterProps> = ({ children }) => (
-    <div>
-        <Footer className="cssClass[modalWindowFooter]">{children}</Footer>
-    </div>
+export const ModalWindowFooter: React.FC<IFooterPageTypeFirstProps> = (props) => (
+    <FooterPage {...props} type={EFooterPageType.FIRST} />
 );
 
 ModalWindowFooter.displayName = "ModalWindowFooter";

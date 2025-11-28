@@ -1,7 +1,8 @@
+import clsx from "clsx";
 import React from "react";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { ESpinnerSize } from "@sber-business/triplex/components/Spinner/enum";
-import { SpinnerWidget } from "@sber-business/triplex/components/SpinnerWidget/SpinnerWidget";
+import { LoaderScreen } from "../../LoaderScreen/LoaderScreen";
+import styles from "../styles/ModalWindow.module.less";
+import { Page } from "../../Page/Page";
 
 /** Свойства компонента ModalWindowContent. */
 interface IModalWindowContentProps {
@@ -14,19 +15,11 @@ interface IModalWindowContentProps {
 
 /** Компонент контента модального окна. */
 export const ModalWindowContent: React.FC<IModalWindowContentProps> = ({ isLoading, loadingTitle, children }) => {
-    const className = classnames("cssClass[modalWindowContent]", { "cssClass[isLoading]": !!isLoading });
-
     return (
-        <div className={className}>
-            {children}
-            {isLoading && (
-                <>
-                    <SpinnerWidget className="cssClass[spinner]">{loadingTitle}</SpinnerWidget>
-                    <SpinnerWidget className="cssClass[spinnerSm]" size={ESpinnerSize.SM}>
-                        {loadingTitle}
-                    </SpinnerWidget>
-                </>
-            )}
+        <div className={clsx(styles.modalWindowContent, { [styles.isLoading]: !!isLoading })}>
+            <Page className={styles.modalWindowContentPage}>{children}</Page>
+
+            {isLoading && <LoaderScreen type="middle">{loadingTitle}</LoaderScreen>}
         </div>
     );
 };

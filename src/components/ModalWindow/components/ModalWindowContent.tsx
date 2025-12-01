@@ -19,7 +19,11 @@ export const ModalWindowContent: React.FC<IModalWindowContentProps> = ({ isLoadi
         <div className={clsx(styles.modalWindowContent, { [styles.isLoading]: !!isLoading })}>
             <Page className={styles.modalWindowContentPage}>{children}</Page>
 
-            {isLoading && <LoaderScreen type="middle">{loadingTitle}</LoaderScreen>}
+            {isLoading && (
+                <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle">
+                    {loadingTitle}
+                </LoaderScreen>
+            )}
         </div>
     );
 };

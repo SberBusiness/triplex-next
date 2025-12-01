@@ -13,8 +13,6 @@ import { Title } from "../../src/components/Typography/Title";
 import { Text } from "../../src/components/Typography/Text";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { HeaderPage } from "../../src/components/Page/components/HeaderPage";
-import { FooterPage } from "../../src/components/Page/components/FooterPage";
 
 type ModalWindowStoryArgs = {
     isLoading: boolean;
@@ -28,7 +26,6 @@ const STORY_META_DESCRIPTION = `
 
 - **Размеры**: SM, MD, LG
 - **Состояние загрузки**: отображение лоадера поверх контента
-- **Sticky Header/Footer**: прилипание к краям при скролле
 - **Фокус-ловушка**: фокус остаётся внутри модального окна
 - **Закрытие по Escape**: автоматическое закрытие при нажатии Escape
 
@@ -73,29 +70,24 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
 
             <ModalWindow
                 isOpen={isOpen}
-                isLoading={isLoading}
                 size={size}
                 closeButton={<ModalWindowClose onClick={handleClose} />}
                 onExited={() => console.log("Modal closed")}
             >
                 <ModalWindowContent isLoading={isLoading} loadingTitle="Загрузка...">
                     <ModalWindowHeader>
-                        <HeaderPage.Title>
-                            <HeaderPage.Title.Content>
+                        <ModalWindowHeader.Title>
+                            <ModalWindowHeader.Title.Content>
                                 <Title tag="h1" size={ETitleSize.H1}>
-                                    Заголовок модального окна
+                                    Title text
                                 </Title>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                    Описание или подзаголовок модального окна
-                                </Text>
-                            </HeaderPage.Title.Content>
-                            <HeaderPage.Title.Controls>
+                            </ModalWindowHeader.Title.Content>
+                            <ModalWindowHeader.Title.Controls>
                                 <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                                     Действие
                                 </Button>
-                            </HeaderPage.Title.Controls>
-                        </HeaderPage.Title>
+                            </ModalWindowHeader.Title.Controls>
+                        </ModalWindowHeader.Title>
                     </ModalWindowHeader>
 
                     <ModalWindowBody>
@@ -115,21 +107,21 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
                     </ModalWindowBody>
 
                     <ModalWindowFooter>
-                        <FooterPage.Description>
-                            <FooterPage.Description.Content>
+                        <ModalWindowFooter.Description>
+                            <ModalWindowFooter.Description.Content>
                                 <Text size={ETextSize.B3} type={EFontType.SECONDARY}>
                                     Дополнительная информация
                                 </Text>
-                            </FooterPage.Description.Content>
-                            <FooterPage.Description.Controls>
+                            </ModalWindowFooter.Description.Content>
+                            <ModalWindowFooter.Description.Controls>
                                 <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleClose}>
                                     Отмена
                                 </Button>
                                 <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleClose}>
                                     Подтвердить
                                 </Button>
-                            </FooterPage.Description.Controls>
-                        </FooterPage.Description>
+                            </ModalWindowFooter.Description.Controls>
+                        </ModalWindowFooter.Description>
                     </ModalWindowFooter>
                 </ModalWindowContent>
             </ModalWindow>
@@ -190,13 +182,13 @@ export const Sizes: Story = {
                     <ModalWindow isOpen={isOpen} size={size} closeButton={<ModalWindowClose onClick={handleClose} />}>
                         <ModalWindowContent>
                             <ModalWindowHeader>
-                                <HeaderPage.Title>
-                                    <HeaderPage.Title.Content>
+                                <ModalWindowHeader.Title>
+                                    <ModalWindowHeader.Title.Content>
                                         <Title tag="h1" size={ETitleSize.H1}>
-                                            Модальное окно ({title})
+                                            Title text
                                         </Title>
-                                    </HeaderPage.Title.Content>
-                                </HeaderPage.Title>
+                                    </ModalWindowHeader.Title.Content>
+                                </ModalWindowHeader.Title>
                             </ModalWindowHeader>
 
                             <ModalWindowBody>
@@ -206,13 +198,13 @@ export const Sizes: Story = {
                             </ModalWindowBody>
 
                             <ModalWindowFooter>
-                                <FooterPage.Description>
-                                    <FooterPage.Description.Controls>
+                                <ModalWindowFooter.Description>
+                                    <ModalWindowFooter.Description.Controls>
                                         <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                             Button text
                                         </Button>
-                                    </FooterPage.Description.Controls>
-                                </FooterPage.Description>
+                                    </ModalWindowFooter.Description.Controls>
+                                </ModalWindowFooter.Description>
                             </ModalWindowFooter>
                         </ModalWindowContent>
                     </ModalWindow>
@@ -268,37 +260,29 @@ export const WithLongContent: Story = {
                     closeButton={<ModalWindowClose onClick={handleClose} />}
                 >
                     <ModalWindowContent>
-                        <ModalWindowHeader sticky>
-                            <HeaderPage.Title>
-                                <HeaderPage.Title.Content>
+                        <ModalWindowHeader>
+                            <ModalWindowHeader.Title>
+                                <ModalWindowHeader.Title.Content>
                                     <Title tag="h1" size={ETitleSize.H1}>
-                                        Модальное окно с длинным контентом
+                                        Модальное окно
                                     </Title>
-                                    <Gap size={8} />
-                                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                        Заголовок прилипает при скролле
-                                    </Text>
-                                </HeaderPage.Title.Content>
-                            </HeaderPage.Title>
+                                </ModalWindowHeader.Title.Content>
+                            </ModalWindowHeader.Title>
                         </ModalWindowHeader>
 
                         <ModalWindowBody>{paragraphs}</ModalWindowBody>
 
                         <ModalWindowFooter>
-                            <FooterPage.Description>
-                                <FooterPage.Description.Controls>
-                                    <Button
-                                        theme={EButtonTheme.SECONDARY}
-                                        size={EComponentSize.MD}
-                                        onClick={handleClose}
-                                    >
-                                        Отмена
+                            <ModalWindowFooter.Description>
+                                <ModalWindowFooter.Description.Controls>
+                                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                        Button text
                                     </Button>
-                                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleClose}>
-                                        Подтвердить
+                                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                        Button text
                                     </Button>
-                                </FooterPage.Description.Controls>
-                            </FooterPage.Description>
+                                </ModalWindowFooter.Description.Controls>
+                            </ModalWindowFooter.Description>
                         </ModalWindowFooter>
                     </ModalWindowContent>
                 </ModalWindow>
@@ -336,13 +320,13 @@ export const LoadingState: Story = {
                 >
                     <ModalWindowContent isLoading loadingTitle="Загрузка данных...">
                         <ModalWindowHeader>
-                            <HeaderPage.Title>
-                                <HeaderPage.Title.Content>
+                            <ModalWindowHeader.Title>
+                                <ModalWindowHeader.Title.Content>
                                     <Title tag="h1" size={ETitleSize.H1}>
-                                        Загрузка
+                                        Модальное окно
                                     </Title>
-                                </HeaderPage.Title.Content>
-                            </HeaderPage.Title>
+                                </ModalWindowHeader.Title.Content>
+                            </ModalWindowHeader.Title>
                         </ModalWindowHeader>
 
                         <ModalWindowBody>
@@ -352,17 +336,13 @@ export const LoadingState: Story = {
                         </ModalWindowBody>
 
                         <ModalWindowFooter>
-                            <FooterPage.Description>
-                                <FooterPage.Description.Controls>
-                                    <Button
-                                        theme={EButtonTheme.SECONDARY}
-                                        size={EComponentSize.MD}
-                                        onClick={handleClose}
-                                    >
-                                        Отмена
+                            <ModalWindowFooter.Description>
+                                <ModalWindowFooter.Description.Controls>
+                                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                        Button text
                                     </Button>
-                                </FooterPage.Description.Controls>
-                            </FooterPage.Description>
+                                </ModalWindowFooter.Description.Controls>
+                            </ModalWindowFooter.Description>
                         </ModalWindowFooter>
                     </ModalWindowContent>
                 </ModalWindow>

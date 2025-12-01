@@ -63,39 +63,12 @@
             }
         }
     }
-
-    .modalWindowContentPage {
-        background: var(--triplex-next-ModalWindow-Background);
-        border-radius: 32px;
-    }
 }
 
 .modalWindowClose {
     transition: visibility 0s 0.3s;
     -webkit-tap-highlight-color: transparent;
 }
-
-&.modalTopOverlayActive {
-    .modalWindowClose {
-        visibility: hidden;
-        transition: none;
-    }
-
-    // Overlay.
-    .modalWindowContent::after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        z-index: 100;
-        background-color: @overlay-white-background-color;
-        width: 100%;
-        border-radius: 16px;
-        animation: fadeIn 0.3s ease;
-    }
-}
-
 
 .modalWindowTransition-exit .modalWindow .modalWindowContentWrapper {
     transform: @modal-content-translate-exit;
@@ -115,7 +88,6 @@
     right: 0;
     height: 0;
 }
-
 
 .modalWindow {
     &.sm {
@@ -164,5 +136,21 @@
                 max-width: 100%;
             }
         }
+    }
+}
+
+.modalWindowContentPage {
+    background: var(--triplex-next-ModalWindow-Background);
+}
+
+.modalWindowContentPage,
+.modalWindowLoaderScreen {
+    border-radius: 32px;
+}
+
+@media (max-width: @screen-sm-max) {
+    .modalWindowContentPage,
+    .modalWindowLoaderScreen {
+        border-radius: 24px;
     }
 }

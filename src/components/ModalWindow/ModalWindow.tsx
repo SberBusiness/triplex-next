@@ -18,8 +18,6 @@ export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> 
     containerClassName?: string;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrapProps;
-    /** Состояние загрузки. */
-    isLoading?: boolean;
     /** Callback после анимации закрытия модального окна. */
     onExited?: () => void;
     /** Кнопка закрыть. */
@@ -45,7 +43,6 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
         children,
         containerClassName,
         focusTrapProps,
-        isLoading,
         onExited,
         closeButton,
         size = EComponentSize.MD,
@@ -178,7 +175,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                                 className={classNameModalWindow}
                             >
                                 <div className={styles.modalWindowContentWrapper}>
-                                    {React.cloneElement(children, { isLoading, key: "content" })}
+                                    {children}
                                     {closeButton}
                                 </div>
                             </div>

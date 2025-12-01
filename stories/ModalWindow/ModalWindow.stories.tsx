@@ -82,7 +82,7 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
                     <ModalWindowHeader>
                         <HeaderPage.Title>
                             <HeaderPage.Title.Content>
-                                <Title tag="h2" size={ETitleSize.H2}>
+                                <Title tag="h1" size={ETitleSize.H1}>
                                     Заголовок модального окна
                                 </Title>
                                 <Gap size={8} />
@@ -99,37 +99,37 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
                     </ModalWindowHeader>
 
                     <ModalWindowBody>
-                        <Text tag="p" size={ETextSize.B1}>
+                        <Text tag="div" size={ETextSize.B2}>
                             Содержимое модального окна. Здесь может быть любой контент: формы, текст, изображения и
                             другие элементы интерфейса.
                         </Text>
                         <Gap size={16} />
-                        <Text tag="p" size={ETextSize.B1}>
+                        <Text tag="div" size={ETextSize.B2}>
                             Модальное окно поддерживает различные размеры (SM, MD, LG), состояние загрузки и прилипание
                             заголовка/футера при скролле.
                         </Text>
                         <Gap size={16} />
-                        <Text tag="p" size={ETextSize.B1}>
+                        <Text tag="div" size={ETextSize.B2}>
                             Фокус автоматически остаётся внутри модального окна, а нажатие Escape закрывает его.
                         </Text>
                     </ModalWindowBody>
 
                     <ModalWindowFooter>
-                        <ModalWindowFooter.Description>
-                            <ModalWindowFooter.Description.Content>
+                        <FooterPage.Description>
+                            <FooterPage.Description.Content>
                                 <Text size={ETextSize.B3} type={EFontType.SECONDARY}>
                                     Дополнительная информация
                                 </Text>
-                            </ModalWindowFooter.Description.Content>
-                            <ModalWindowFooter.Description.Controls>
+                            </FooterPage.Description.Content>
+                            <FooterPage.Description.Controls>
                                 <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleClose}>
                                     Отмена
                                 </Button>
                                 <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleClose}>
                                     Подтвердить
                                 </Button>
-                            </ModalWindowFooter.Description.Controls>
-                        </ModalWindowFooter.Description>
+                            </FooterPage.Description.Controls>
+                        </FooterPage.Description>
                     </ModalWindowFooter>
                 </ModalWindowContent>
             </ModalWindow>
@@ -192,7 +192,7 @@ export const Sizes: Story = {
                             <ModalWindowHeader>
                                 <HeaderPage.Title>
                                     <HeaderPage.Title.Content>
-                                        <Title tag="h2" size={ETitleSize.H2}>
+                                        <Title tag="h1" size={ETitleSize.H1}>
                                             Модальное окно ({title})
                                         </Title>
                                     </HeaderPage.Title.Content>
@@ -200,7 +200,7 @@ export const Sizes: Story = {
                             </ModalWindowHeader>
 
                             <ModalWindowBody>
-                                <Text tag="p" size={ETextSize.B1}>
+                                <Text tag="div" size={ETextSize.B2}>
                                     Пример модального окна размера {title}.
                                 </Text>
                             </ModalWindowBody>
@@ -208,12 +208,8 @@ export const Sizes: Story = {
                             <ModalWindowFooter>
                                 <FooterPage.Description>
                                     <FooterPage.Description.Controls>
-                                        <Button
-                                            theme={EButtonTheme.GENERAL}
-                                            size={EComponentSize.MD}
-                                            onClick={handleClose}
-                                        >
-                                            Закрыть
+                                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                            Button text
                                         </Button>
                                     </FooterPage.Description.Controls>
                                 </FooterPage.Description>
@@ -251,7 +247,7 @@ export const WithLongContent: Story = {
 
         const paragraphs = Array.from({ length: 10 }, (_, i) => (
             <React.Fragment key={i}>
-                <Text tag="p" size={ETextSize.B1}>
+                <Text tag="div" size={ETextSize.B2}>
                     Параграф {i + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                     incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                     ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -275,7 +271,7 @@ export const WithLongContent: Story = {
                         <ModalWindowHeader sticky>
                             <HeaderPage.Title>
                                 <HeaderPage.Title.Content>
-                                    <Title tag="h2" size={ETitleSize.H2}>
+                                    <Title tag="h1" size={ETitleSize.H1}>
                                         Модальное окно с длинным контентом
                                     </Title>
                                     <Gap size={8} />
@@ -342,7 +338,7 @@ export const LoadingState: Story = {
                         <ModalWindowHeader>
                             <HeaderPage.Title>
                                 <HeaderPage.Title.Content>
-                                    <Title tag="h2" size={ETitleSize.H2}>
+                                    <Title tag="h1" size={ETitleSize.H1}>
                                         Загрузка
                                     </Title>
                                 </HeaderPage.Title.Content>
@@ -350,7 +346,7 @@ export const LoadingState: Story = {
                         </ModalWindowHeader>
 
                         <ModalWindowBody>
-                            <Text tag="p" size={ETextSize.B1}>
+                            <Text tag="div" size={ETextSize.B2}>
                                 Этот контент скрыт под индикатором загрузки.
                             </Text>
                         </ModalWindowBody>

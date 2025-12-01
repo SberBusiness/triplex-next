@@ -137,7 +137,7 @@ const place = (
 // Расчеты размеров элемента
 /**
  * Поиск границ элемента.
- * @param {HTMLElement | Window} el Элементя для которого ищутся границы.
+ * @param {HTMLElement | Window} el Элемент, для которого ищутся границы.
  */
 const calcBounds = (el: HTMLElement | Window): ITooltipBounds => {
     if (el === window) {

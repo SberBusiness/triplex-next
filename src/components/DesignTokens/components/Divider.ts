@@ -13,5 +13,5 @@ export type TDesignTokensComponentsDivider = { Divider: TDesignTokensComponentsD
 
 // Токены компонента Divider в светлой и темной темах.
 export const Divider_Tokens: TDesignTokensComponentsDividerValues = {
-    Background: [{ ref: "ColorNeutral.20" }, { value: "#D6D9E0" }], // var(--triplex-next-Divider-Background)
+    Background: [{ ref: "ColorNeutral.20" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Divider-Background)
 };

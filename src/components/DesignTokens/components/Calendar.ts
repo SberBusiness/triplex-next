@@ -2,18 +2,18 @@ import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes
 
 // Название токенов компонента Calendar.
 export const designTokensComponentsCalendarKeys = [
-    "Background",
+    // "Background",
     "Background_Shadow",
     "View_Header_Color",
     "View_Item_Background_Default",
     "View_Item_Background_Hover",
-    "View_Item_Background_Range",
+    // "View_Item_Background_Range",
     "View_Item_Background_Selected_Default",
     "View_Item_Background_Selected_Hover",
     "View_Item_Background_Selected_Muted_Default",
     "View_Item_Background_Selected_Muted_Hover",
-    "View_Item_BorderColor_Default",
-    "View_Item_BorderColor_Focus",
+    // "View_Item_BorderColor_Default",
+    // "View_Item_BorderColor_Focus",
     "View_Item_Color_Default",
     "View_Item_Color_Hover",
     "View_Item_Color_Disabled",

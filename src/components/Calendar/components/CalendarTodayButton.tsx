@@ -2,9 +2,10 @@ import React, { useContext } from "react";
 import moment from "moment";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
-import { EButtonTheme, EButtonSize } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
 import { isDateOutOfRange, isDayDisabled } from "@sberbusiness/triplex-next/components/Calendar/utils";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства компонента CalendarTodayButton. */
 export interface ICalendarTodayButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -56,7 +57,7 @@ export const CalendarTodayButton = React.forwardRef<HTMLButtonElement, ICalendar
         return (
             <Button
                 theme={EButtonTheme.SECONDARY}
-                size={EButtonSize.SM}
+                size={EComponentSize.SM}
                 onClick={handleClick}
                 disabled={isDisabled()}
                 {...rest}

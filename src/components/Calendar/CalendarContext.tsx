@@ -1,8 +1,8 @@
 import React from "react";
 import moment from "moment";
-import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/Calendar";
 import { dateFormatYYYYMMDD, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
 import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
+import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 
 /** Свойства контекста CalendarView. */
 export interface ICalendarContext

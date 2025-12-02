@@ -1,18 +1,15 @@
 import clsx from "clsx";
 import React from "react";
 import { uniqueId } from "lodash-es";
-import moment, { Moment } from "moment";
+import moment from "moment";
 import { dateFormatYYYYMMDD, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
 import {
-    ICalendarNestedProps,
-    TCalendarMarkedDays,
+    ICalendarRangeProps,
+    ICalendarSingleProps,
     TPickedDate,
-    TPickedDateProp,
     TPickedRange,
-    TPickedRangeProp,
 } from "@sberbusiness/triplex-next/components/Calendar/types";
 import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { IDateLimitRange } from "@sberbusiness/triplex-next/types/DateTypes";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
 import { CalendarControls } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarControls";
 import { CalendarView } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarView";
@@ -22,49 +19,6 @@ import { CalendarRange } from "@sberbusiness/triplex-next/components/Calendar/Ca
 import { formatDate, getHeader, parsePickedDate } from "@sberbusiness/triplex-next/components/Calendar/utils";
 import styles from "./styles/Calendar.module.less";
 
-/** Общие свойства компонента календаря. */
-export interface ICalendarCommonProps extends ICalendarNestedProps {
-    /** Отображаемая по умолчанию дата. */
-    defaultViewDate?: string | Moment;
-    /** Формат для значения. */
-    format?: string;
-    /** Вариант выбора даты. */
-    pickType?: ECalendarPickType;
-    /** Ограничение выбираемого периода. */
-    limitRange?: IDateLimitRange;
-    /** Отмеченные дни. */
-    markedDays?: TCalendarMarkedDays;
-    /** Дни недоступные для выбора. */
-    disabledDays?: string[];
-    /** Обратный порядок выбора даты. */
-    reversedPick?: boolean;
-    /** Обработчик изменения страницы. */
-    onPageChange?: (viewDate: Moment, viewMode: ECalendarViewMode) => void;
-    /** Обработчик изменения вида. */
-    onViewChange?: (viewDate: Moment, viewMode: ECalendarViewMode) => void;
-}
-
-/** Свойства обычного календаря. */
-export interface ICalendarSingleProps extends ICalendarCommonProps {
-    isRange?: false;
-    /** Выбранная дата. */
-    pickedDate: TPickedDateProp;
-    /** Адаптированный режим. */
-    adaptiveMode?: boolean;
-    /** Обработчик изменения даты. */
-    onDateChange: (date: Moment) => void;
-}
-
-/** Свойства календаря для выбора периода. */
-export interface ICalendarRangeProps extends ICalendarCommonProps {
-    isRange: true;
-    /** Выбранный период. */
-    pickedDate: TPickedRangeProp;
-    /** Дата календаря по умолчанию. */
-    defaultDate?: TPickedDateProp;
-    /** Обработчик изменения периода. */
-    onDateChange: (date: TPickedRange) => void;
-}
 
 /** Свойства компонента Calendar. */
 export type TCalendarProps = ICalendarSingleProps | ICalendarRangeProps;

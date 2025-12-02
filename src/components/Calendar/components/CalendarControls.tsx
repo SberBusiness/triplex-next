@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
 import CaretleftStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretleftStrokeSrvIcon24";
 import CaretrightStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretrightStrokeSrvIcon24";
-import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/Calendar";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
+import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
 import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
-import { EButtonIconShape, EButtonSize, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EButtonIconShape, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
 import { ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
 import { globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/CalendarControls.module.less";
 
 /** Свойства компонента CalendarControls. */
@@ -69,7 +70,7 @@ export const CalendarControls: React.FC<ICalendarControlsProps> = ({
                 id={periodId}
                 aria-live="polite"
                 theme={EButtonTheme.LINK}
-                size={EButtonSize.SM}
+                size={EComponentSize.SM}
                 onClick={handleViewButtonClick(onClick)}
                 {...rest}
             >

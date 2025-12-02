@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import moment from "moment";
-import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarView";
 import { isDateOutOfRange, isDayDisabled } from "@sberbusiness/triplex-next/components/Calendar/utils";
 import { WEEKDAYS_SET } from "@sberbusiness/triplex-next/consts/DateConst";
 import { CalendarViewContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarViewContext";
@@ -9,6 +8,7 @@ import { CalendarViewItem } from "@sberbusiness/triplex-next/components/Calendar
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { ECalendarDateMarkType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
+import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 import styles from "../styles/CalendarView.module.less";
 
 /** Свойства компонента CalendarViewDays. */

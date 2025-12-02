@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
-import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/Calendar";
 import {
+    ICalendarCommonProps,
     ICalendarProvideProps,
     TPickedRange,
     TPickedRangeProp,

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import moment from "moment";
-import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarView";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
 import { CalendarViewContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarViewContext";
 import { isDateOutOfRange } from "@sberbusiness/triplex-next/components/Calendar/utils";
 import { CalendarViewItem } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarViewItem";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
+import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 import styles from "../styles/CalendarView.module.less";
 
 /** Свойства компонента CalendarViewMonths. */

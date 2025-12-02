@@ -14,7 +14,7 @@ import {
     ITableBasicRow,
     ITableRowCellSpanProps,
 } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
-import { ECellType } from "@sberbusiness/triplex-next/components/Table/TableBasic/enums";
+import { ECellType, EVerticalAlign } from "@sberbusiness/triplex-next/components/Table/TableBasic/enums";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 
@@ -48,16 +48,26 @@ export const TableBasicRow = ({ columns, data, onClickRow }: ITableBasicRowProps
         }
 
         const cellNode: React.ReactNode = column.renderCell ? column.renderCell(value) : value;
+        const cellType = column.cellType ?? ECellType.TEXT;
+        const verticalAlign =
+            column.verticalAlign ?? (cellType === ECellType.TEXT ? EVerticalAlign.BASELINE : EVerticalAlign.TOP);
         const classNames = clsx(
-            mapCellTypeToClassName(column.cellType),
+            mapCellTypeToClassName(cellType),
             mapHorizontalAlignToClassName(column.horizontalAlign),
-            mapVerticalAlignToClassName(column.verticalAlign),
+            mapVerticalAlignToClassName(verticalAlign),
         );
         const style = column.width ? { width: column.width } : undefined;
 
         const renderContent = () => {
-            if (cellNode) return cellNode;
-            if (column.cellType !== ECellType.COMPONENTS) return "---";
+            if (!cellNode) {
+                return <Text size={ETextSize.B3}>---</Text>;
+            }
+
+            if (cellType === ECellType.CHECKBOX || cellType === ECellType.COMPONENTS) {
+                return cellNode;
+            }
+
+            return <Text size={ETextSize.B3}>{cellNode}</Text>;
         };
 
         return (
@@ -68,7 +78,7 @@ export const TableBasicRow = ({ columns, data, onClickRow }: ITableBasicRowProps
                 data-test-id={dataTestId && `${dataTestId}__${column.fieldKey}${DataTestId.Table.TableBasic.td}`}
                 style={style}
             >
-                <Text size={ETextSize.B3}>{renderContent()}</Text>
+                {renderContent()}
             </td>
         );
     };

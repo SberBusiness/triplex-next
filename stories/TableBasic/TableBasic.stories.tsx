@@ -99,7 +99,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 fieldKey: ETableField.checkbox,
                 cellType: ECellType.CHECKBOX,
                 label: renderHeaderCheckbox(),
-                verticalAlign: EVerticalAlign.TOP,
                 width: 48,
             },
             {

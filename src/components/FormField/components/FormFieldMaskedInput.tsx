@@ -192,11 +192,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
         <div className={clsx(styles.formFieldMaskedInputWrapper, styles[`size-${size}`])}>
             {/* Input, отображающий маску. */}
             <input
-                className={clsx(
-                    stylesFormFieldInput.formFieldInput,
-                    styles.formFieldMaskedInputPlaceholder,
-                    className,
-                )}
+                className={clsx(stylesFormFieldInput.formFieldInput, styles.formFieldMaskedInputPlaceholder, className)}
                 disabled={disabled}
                 placeholder={getPlaceholderValue()}
                 readOnly

@@ -65,7 +65,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             prefix,
             setOpened,
             loading,
-            size,
+            size = EComponentSize.MD,
             status,
             tabIndex,
             fieldLabel,
@@ -158,9 +158,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 </FormFieldTarget>
 
                 <FormFieldPostfix>
-                    {loading
-                        ? sizeToLoaderSizeMap[size || EComponentSize.MD]
-                        : sizeToCaretIconMap[size || EComponentSize.MD]}
+                    {loading ? sizeToLoaderSizeMap[size] : sizeToCaretIconMap[size]}
                     {postfix ? postfix : null}
                 </FormFieldPostfix>
             </FormField>

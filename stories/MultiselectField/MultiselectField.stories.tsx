@@ -1,33 +1,34 @@
 import React, { useRef, useState } from "react";
-import { MultiselectField } from "../src/components/MultiselectField";
+import { MultiselectField } from "../../src/components/MultiselectField";
 import { StoryObj } from "@storybook/react";
-import { DropdownMobileHeader } from "../src/components/Dropdown/mobile/DropdownMobileHeader";
-import { DropdownMobileInput } from "../src/components/Dropdown/mobile/DropdownMobileInput";
-import { DropdownMobileClose } from "../src/components/Dropdown/mobile/DropdownMobileClose";
-import { DropdownMobileBody } from "../src/components/Dropdown/mobile/DropdownMobileBody";
-import { DropdownMobileFooter } from "../src/components/Dropdown/mobile/DropdownMobileFooter";
-import { Button } from "../src/components/Button";
-import { EButtonTheme } from "../src/components/Button";
-import { EComponentSize } from "../src/enums/EComponentSize";
-import { FormField } from "../src/components/FormField";
-import { FormFieldInput, FormFieldLabel } from "../src/components/FormField";
-import { CheckboxTreeExtended } from "../src/components/CheckboxTreeExtended/CheckboxTreeExtended";
+import { DropdownMobileHeader } from "../../src/components/Dropdown/mobile/DropdownMobileHeader";
+import { DropdownMobileInput } from "../../src/components/Dropdown/mobile/DropdownMobileInput";
+import { DropdownMobileClose } from "../../src/components/Dropdown/mobile/DropdownMobileClose";
+import { DropdownMobileBody } from "../../src/components/Dropdown/mobile/DropdownMobileBody";
+import { DropdownMobileFooter } from "../../src/components/Dropdown/mobile/DropdownMobileFooter";
+import { Button } from "../../src/components/Button";
+import { EButtonTheme } from "../../src/components/Button";
+import { EComponentSize } from "../../src/enums/EComponentSize";
+import { FormField } from "../../src/components/FormField";
+import { FormFieldInput, FormFieldLabel } from "../../src/components/FormField";
+import { CheckboxTreeExtended } from "../../src/components/CheckboxTreeExtended/CheckboxTreeExtended";
 import {
     checkChildrenCheckboxes,
     checkParentCheckboxes,
     traverseCheckboxes,
-} from "../src/components/CheckboxTree/utils";
-import { ICheckboxTreeCheckboxData } from "../src/components/CheckboxTree/types";
-import { TagGroup } from "../src/components/TagGroup";
-import { Tag } from "../src/components/Tag";
-import { EFormFieldStatus } from "../src/components/FormField/enums";
-import { FormFieldDescription } from "../src/components/FormField/components/FormFieldDescription";
-import { Text } from "../src/components/Typography";
-import { ETextSize } from "../src/components/Typography/enums";
-import { EFontType } from "../src/components/Typography/enums";
-import { FormGroup } from "../src/components/FormGroup";
-import { Link } from "../src/components/Link";
+} from "../../src/components/CheckboxTree/utils";
+import { ICheckboxTreeCheckboxData } from "../../src/components/CheckboxTree/types";
+import { TagGroup } from "../../src/components/TagGroup";
+import { Tag } from "../../src/components/Tag";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
+import { FormFieldDescription } from "../../src/components/FormField/components/FormFieldDescription";
+import { Text } from "../../src/components/Typography";
+import { ETextSize } from "../../src/components/Typography/enums";
+import { EFontType } from "../../src/components/Typography/enums";
+import { FormGroup } from "../../src/components/FormGroup";
+import { Link } from "../../src/components/Link";
 import { DefaulticonStrokePrdIcon20, HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import "./MultiselectField.less";
 
 export default {
     title: "Components/MultiselectField",

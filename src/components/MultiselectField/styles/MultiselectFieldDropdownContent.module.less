@@ -2,7 +2,21 @@
     padding: 0 12px;
 
     .multiselectFieldContent {
-        margin: -1em 0;
         padding-bottom: 12px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        outline: none;
+
+        &.sm {
+            height: 204px;
+        }
+
+        &.md {
+            height: 245px;
+        }
+
+        &.lg {
+            height: 324px;
+        }
     }
 }

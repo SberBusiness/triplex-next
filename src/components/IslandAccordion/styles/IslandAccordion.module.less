@@ -34,10 +34,22 @@
             text-align: left;
             cursor: pointer;
             background: none;
+        }
 
-            &:focus-visible {
-                box-shadow: var(--triplex-next-IslandAccordion-Shadow_Focus);
-            }
+        .focused {
+            box-shadow: var(--triplex-next-IslandAccordion-Shadow_Focus);
+        }
+
+        &.type1:not(.opened):hover .island {
+            background: var(--triplex-next-IslandAccordion-Type1_Header_Background_Hover);
+        }
+
+        &.type2:not(.opened):hover .island {
+            background: var(--triplex-next-IslandAccordion-Type2_Header_Background_Hover);
+        }
+
+        &.type3:not(.opened):hover .island {
+            background: var(--triplex-next-IslandAccordion-Type3_Header_Background_Hover);
         }
 
         .footer {

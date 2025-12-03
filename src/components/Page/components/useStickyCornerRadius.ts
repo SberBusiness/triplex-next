@@ -97,7 +97,8 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
             }
         };
 
-        initialize();
+        // При открытии LightBox без задержки, анимация не работает.
+        setTimeout(initialize, 100);
 
         return () => {
             if (target) {

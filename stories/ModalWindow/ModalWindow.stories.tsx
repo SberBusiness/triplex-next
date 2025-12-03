@@ -13,6 +13,7 @@ import { Title } from "../../src/components/Typography/Title";
 import { Text } from "../../src/components/Typography/Text";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { MobileView } from "../../src/components/MobileView/MobileView";
 
 type ModalWindowStoryArgs = {
     isLoading: boolean;
@@ -184,9 +185,17 @@ export const Sizes: Story = {
                             <ModalWindowHeader>
                                 <ModalWindowHeader.Title>
                                     <ModalWindowHeader.Title.Content>
-                                        <Title tag="h1" size={ETitleSize.H1}>
-                                            Title text
-                                        </Title>
+                                        <MobileView
+                                            fallback={
+                                                <Title tag="h1" size={ETitleSize.H1}>
+                                                    Title text
+                                                </Title>
+                                            }
+                                        >
+                                            <Title tag="h2" size={ETitleSize.H2}>
+                                                Title text
+                                            </Title>
+                                        </MobileView>
                                     </ModalWindowHeader.Title.Content>
                                 </ModalWindowHeader.Title>
                             </ModalWindowHeader>
@@ -263,9 +272,17 @@ export const WithLongContent: Story = {
                         <ModalWindowHeader>
                             <ModalWindowHeader.Title>
                                 <ModalWindowHeader.Title.Content>
-                                    <Title tag="h1" size={ETitleSize.H1}>
-                                        Модальное окно
-                                    </Title>
+                                    <MobileView
+                                        fallback={
+                                            <Title tag="h1" size={ETitleSize.H1}>
+                                                Title text
+                                            </Title>
+                                        }
+                                    >
+                                        <Title tag="h2" size={ETitleSize.H2}>
+                                            Title text
+                                        </Title>
+                                    </MobileView>
                                 </ModalWindowHeader.Title.Content>
                             </ModalWindowHeader.Title>
                         </ModalWindowHeader>
@@ -322,9 +339,17 @@ export const LoadingState: Story = {
                         <ModalWindowHeader>
                             <ModalWindowHeader.Title>
                                 <ModalWindowHeader.Title.Content>
-                                    <Title tag="h1" size={ETitleSize.H1}>
-                                        Модальное окно
-                                    </Title>
+                                    <MobileView
+                                        fallback={
+                                            <Title tag="h1" size={ETitleSize.H1}>
+                                                Title text
+                                            </Title>
+                                        }
+                                    >
+                                        <Title tag="h2" size={ETitleSize.H2}>
+                                            Title text
+                                        </Title>
+                                    </MobileView>
                                 </ModalWindowHeader.Title.Content>
                             </ModalWindowHeader.Title>
                         </ModalWindowHeader>

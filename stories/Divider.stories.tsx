@@ -4,6 +4,8 @@ import { Divider } from "../src/components/Divider";
 import { Text } from "../src/components/Typography";
 import { ETextSize } from "../src/components/Typography/enums";
 import { EFontType } from "../src/components/Typography/enums";
+import { Row } from "../src/components/Row";
+import { Col } from "../src/components/Col";
 
 export default {
     title: "Components/Divider",
@@ -65,13 +67,17 @@ export const Default: StoryObj<typeof Divider> = {
                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
                 ex ea commodo consequat.
             </Text>
-            <Divider marginTopSize={16} marginBottomSize={16} />
+            <Divider marginTopSize={24} marginBottomSize={16} />
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
                 laborum.
             </Text>
-            <Divider marginTopSize={16} marginBottomSize={16} />
+            <Row>
+                <Col size={4} offset={4}>
+                    <Divider marginTopSize={24} marginBottomSize={16} />
+                </Col>
+            </Row>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
                 rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
@@ -84,7 +90,7 @@ export const Default: StoryObj<typeof Divider> = {
 export const Playground: StoryObj<typeof Divider> = {
     name: "Playground",
     args: {
-        marginTopSize: 16,
+        marginTopSize: 24,
         marginBottomSize: 16,
     },
     render: (args) => (
@@ -100,7 +106,11 @@ export const Playground: StoryObj<typeof Divider> = {
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
                 laborum.
             </Text>
-            <Divider {...args} />
+            <Row>
+                <Col size={4} offset={4}>
+                    <Divider {...args} />
+                </Col>
+            </Row>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
                 rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Tooltip } from "../src/components/Tooltip/Tooltip";
 import { ButtonIcon } from "../src/components/Button";
@@ -26,6 +26,8 @@ export default {
                 `,
             },
         },
+        // не работает
+        // disableZoom: true,
     },
 };
 
@@ -109,7 +111,7 @@ export const Playground: StoryObj<ITooltipPlaygroundProps> = {
         const targetRef = useRef<HTMLElement | null>(null);
 
         return (
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
                 <Tooltip
                     size={size}
                     toggleType={toggleType}
@@ -158,7 +160,16 @@ export const DifferentPlaces: StoryObj = {
         ];
 
         return (
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "start",
+                    alignItems: "center",
+                    gap: 32,
+                    height: 200,
+                    marginLeft: 100,
+                }}
+            >
                 {places.map((place, index) => (
                     <Tooltip
                         key={place}
@@ -168,13 +179,101 @@ export const DifferentPlaces: StoryObj = {
                         targetRef={refs[index]}
                     >
                         <Tooltip.Target>
-                            <ButtonIcon ref={(el) => (refs[index].current = el)} aria-label={`Tooltip ${place}`}>
-                                <HintFilledSrvIcon16 paletteIndex={5} />
-                            </ButtonIcon>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 8,
+                                    textTransform: "capitalize",
+                                }}
+                            >
+                                {place}
+                                <ButtonIcon ref={(el) => (refs[index].current = el)} aria-label={`Tooltip ${place}`}>
+                                    <HintFilledSrvIcon16 paletteIndex={5} />
+                                </ButtonIcon>
+                            </div>
                         </Tooltip.Target>
                         <Tooltip.Body>{place}</Tooltip.Body>
                     </Tooltip>
                 ))}
+            </div>
+        );
+    },
+};
+
+export const MobileHeader: StoryObj = {
+    name: "Mobile Header",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Примеры тултипа с заголовком для адаптивного режима.\nВ адаптиве открывается только по клику.",
+            },
+        },
+    },
+    render: () => {
+        const ref = useRef<HTMLButtonElement | null>(null);
+
+        return (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <Tooltip size={ETooltipSize.SM} toggleType="hover" targetRef={ref}>
+                    <Tooltip.Target>
+                        <ButtonIcon ref={ref}>
+                            <HintFilledSrvIcon16 paletteIndex={5} />
+                        </ButtonIcon>
+                    </Tooltip.Target>
+                    <Tooltip.Body>Текст подсказки</Tooltip.Body>
+                    <Tooltip.MobileHeader>Заголовок для адаптивного режима</Tooltip.MobileHeader>
+                </Tooltip>
+            </div>
+        );
+    },
+};
+
+export const RenderContainer: StoryObj = {
+    name: "Render container",
+    parameters: {
+        controls: { disable: true },
+        // не работает
+        // disableZoom: true,
+        docs: {
+            description: {
+                story:
+                    "!!Смотреть в отдельном окне (особенность разметки storybook)!!\n " +
+                    "Примеры с render-ом в указанный контейнер (DOM-node). Предупреждение: position или " +
+                    "transform контейнера или его родителей могут повлиять на позиционирование Tooltip. ",
+            },
+        },
+    },
+    render: () => {
+        const [container, setContainer] = useState<Element | null>(null);
+        const ref = useRef<HTMLButtonElement | null>(null);
+
+        useEffect(() => {
+            setContainer(document.querySelector("#tooltip-render-container"));
+        }, []);
+
+        return (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <div id="tooltip-render-container" style={{ height: 16, width: 16, border: "solid 1px red" }} />
+
+                {container && (
+                    <Tooltip
+                        size={ETooltipSize.SM}
+                        targetRef={ref}
+                        renderContainer={container}
+                        // чтобы можно было посмотреть позиционирование в dev tools
+                        toggleType="click"
+                    >
+                        <Tooltip.Target>
+                            <ButtonIcon ref={ref}>
+                                <HintFilledSrvIcon16 paletteIndex={5} />
+                            </ButtonIcon>
+                        </Tooltip.Target>
+                        <Tooltip.Body>Текст подсказки</Tooltip.Body>
+                        <Tooltip.XButton aria-label="Закрыть" />
+                    </Tooltip>
+                )}
             </div>
         );
     },

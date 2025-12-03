@@ -11,7 +11,7 @@ import { EButtonTheme } from "../../src/components/Button/enums";
 import { Gap } from "../../src/components/Gap";
 import { Title } from "../../src/components/Typography/Title";
 import { Text } from "../../src/components/Typography/Text";
-import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
+import { ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { MobileView } from "../../src/components/MobileView/MobileView";
 
@@ -44,7 +44,7 @@ const meta = {
     title: "Components/ModalWindow",
     tags: ["autodocs"],
     parameters: {
-        layout: "fullscreen",
+        layout: "centered",
         docs: {
             description: {
                 component: STORY_META_DESCRIPTION,
@@ -83,11 +83,6 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
                                     Title text
                                 </Title>
                             </ModalWindowHeader.Title.Content>
-                            <ModalWindowHeader.Title.Controls>
-                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                                    Действие
-                                </Button>
-                            </ModalWindowHeader.Title.Controls>
                         </ModalWindowHeader.Title>
                     </ModalWindowHeader>
 
@@ -98,8 +93,7 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
                         </Text>
                         <Gap size={16} />
                         <Text tag="div" size={ETextSize.B2}>
-                            Модальное окно поддерживает различные размеры (SM, MD, LG), состояние загрузки и прилипание
-                            заголовка/футера при скролле.
+                            Модальное окно поддерживает различные размеры (SM, MD, LG), состояние загрузки.
                         </Text>
                         <Gap size={16} />
                         <Text tag="div" size={ETextSize.B2}>
@@ -109,17 +103,12 @@ const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size
 
                     <ModalWindowFooter>
                         <ModalWindowFooter.Description>
-                            <ModalWindowFooter.Description.Content>
-                                <Text size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                    Дополнительная информация
-                                </Text>
-                            </ModalWindowFooter.Description.Content>
                             <ModalWindowFooter.Description.Controls>
-                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleClose}>
-                                    Отмена
+                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                    Button text
                                 </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleClose}>
-                                    Подтвердить
+                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                    Button text
                                 </Button>
                             </ModalWindowFooter.Description.Controls>
                         </ModalWindowFooter.Description>

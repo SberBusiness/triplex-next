@@ -44,7 +44,6 @@ const meta = {
     title: "Components/ModalWindow",
     tags: ["autodocs"],
     parameters: {
-        layout: "centered",
         docs: {
             description: {
                 component: STORY_META_DESCRIPTION,

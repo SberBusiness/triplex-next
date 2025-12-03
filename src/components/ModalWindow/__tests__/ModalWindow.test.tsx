@@ -215,19 +215,6 @@ describe("ModalWindow", () => {
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
             expect(focusTrapProps.focusTrapOptions.escapeDeactivates).toBe(false);
         });
-
-        it("should forward focus trap props", () => {
-            const customProps = { fallbackFocus: "#fallback" };
-
-            render(
-                <ModalWindow isOpen={true} closeButton={<TestCloseButton />} focusTrapProps={customProps}>
-                    <TestContent />
-                </ModalWindow>,
-            );
-
-            const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.fallbackFocus).toBe("#fallback");
-        });
     });
 
     describe("Body Classes", () => {

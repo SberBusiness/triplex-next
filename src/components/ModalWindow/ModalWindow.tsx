@@ -147,7 +147,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                 <CSSTransition
                     in={isOpen}
                     timeout={animationExitTime}
-                    classNames="modalWindowTransition"
+                    classNames="global-modalWindowTransition"
                     appear // Нужен для срабатывания onEnter.
                     enter
                     exit

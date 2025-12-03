@@ -6,20 +6,14 @@
 //Позиция контента, в которую двигается элемент для скрытия (для анимации появления и скрытия сверху экрана).
 @modal-content-translate-exit: translate(0, calc(-100% - @modal-window-top));
 
-//Позиция контента, в которую двигается элемент для скрытия (для анимации появления и скрытия сверху экрана) (костыль для IE11).
-//IE11: calc не работает в translate.
-@modal-content-translate-exit-ie11: translate(0, -120%);
-
 //Для анимации появления контента.
 @keyframes modalWindowContentAnimationOnEnter {
     from {
         transform: @modal-content-translate-exit;
-        -ms-transform: @modal-content-translate-exit-ie11;
     }
 
     to {
         transform: @modal-content-translate-enter;
-        -ms-transform: @modal-content-translate-enter;
     }
 }
 
@@ -27,11 +21,9 @@
 @keyframes modalWindowContentAnimationOnExit {
     from {
         transform: @modal-content-translate-enter;
-        -ms-transform: @modal-content-translate-enter;
     }
 
     to {
         transform: @modal-content-translate-exit;
-        -ms-transform: @modal-content-translate-exit-ie11;
     }
 }

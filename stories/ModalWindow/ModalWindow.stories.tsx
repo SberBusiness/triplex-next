@@ -331,7 +331,6 @@ export const LoadingState: Story = {
 
                 <ModalWindow
                     isOpen={isOpen}
-                    isLoading
                     size={EComponentSize.MD}
                     closeButton={<ModalWindowClose onClick={handleClose} />}
                 >

@@ -1,14 +1,26 @@
 @import "src/styles/style";
 
 .stepper {
-    padding-left: 32px;
-    padding-right: 32px;
+    &.sm {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    &.md {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    &.lg {
+        padding-left: 56px;
+        padding-right: 56px;
+    }
 }
 
 .stepperCarousel {
-    margin-left: -32px;
-    margin-right: -32px;
     position: relative;
+    padding-left: 1px;
+    padding-right: 1px;
 
     .buttonPrev,
     .buttonNext {
@@ -16,6 +28,7 @@
         top: 0;
         bottom: 0;
         z-index: 1;
+        line-height: 0;
 
         &.sm {
             height: 28px;
@@ -34,12 +47,12 @@
     }
 
     .buttonPrev {
-        left: 0;
+        left: 1px;
         background: var(--triplex-next-Stepper-ButtonPrev_Background);
     }
 
     .buttonNext {
-        right: 0;
+        right: 1px;
         background: var(--triplex-next-Stepper-ButtonNext_Background);
     }
 }

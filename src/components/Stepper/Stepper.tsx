@@ -55,7 +55,7 @@ export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
     const [state, setState] = useState({ stepNext: 0, stepPrev: 0 });
     const carouselRef = useRef<HTMLDivElement>(null);
     const stepRefs = useRef<Record<string, HTMLLIElement | null>>({});
-    const classNames = clsx(styles.stepper, className);
+    const classNames = clsx(styles.stepper, getStepperSizeClass(size), className);
     const selectedIndex = steps.findIndex((s) => s.id === selectedStepId);
 
     const renderPrevButton = ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
@@ -148,7 +148,7 @@ export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
 
     return (
         <CarouselExtended
-            className={clsx(styles.stepperCarousel)}
+            className={clsx(styles.stepperCarousel, getStepperSizeClass(size))}
             buttonPrev={renderPrevButton}
             buttonNext={renderNextButton}
             stepPrev={state.stepPrev}

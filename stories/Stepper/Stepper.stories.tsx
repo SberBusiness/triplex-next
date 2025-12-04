@@ -127,6 +127,13 @@ export const Playground: StoryObj<typeof Stepper> = {
 
 export const Sizes: StoryObj<typeof Stepper> = {
     name: "Sizes",
+    argTypes: {
+        size: {
+            table: {
+                disable: true,
+            },
+        },
+    },
     render: () => {
         const [selectedStepIdSM, setSelectedStepIdSM] = useState("step3");
         const [selectedStepIdMD, setSelectedStepIdMD] = useState("step3");
@@ -212,8 +219,15 @@ export const Sizes: StoryObj<typeof Stepper> = {
 
 export const Types: StoryObj<typeof Stepper> = {
     name: "Types",
+    argTypes: {
+        size: {
+            table: {
+                disable: true,
+            },
+        },
+    },
     render: () => {
-        const [selectedStepIdNeutral, setSelectedStepIdNeutral] = useState("step3");
+        const [selectedStepIdNeutral, setSelectedStepIdNeutral] = useState("step4");
         const [selectedStepIdError, setSelectedStepIdError] = useState("step3");
         const [selectedStepIdWarning, setSelectedStepIdWarning] = useState("step3");
 
@@ -241,12 +255,19 @@ export const Types: StoryObj<typeof Stepper> = {
             },
             {
                 id: "step4",
+                label: "In Progress",
+                disabled: false,
+                type: EStepperStepType.NEUTRAL,
+                icon: <StepperStepIcon type={EStepperStepIconType.WAIT} />,
+            },
+            {
+                id: "step5",
                 label: "Available",
                 disabled: false,
                 type: EStepperStepType.NEUTRAL,
             },
             {
-                id: "step5",
+                id: "step6",
                 label: "Disabled",
                 disabled: true,
                 type: EStepperStepType.NEUTRAL,
@@ -275,18 +296,6 @@ export const Types: StoryObj<typeof Stepper> = {
                 type: EStepperStepType.ERROR,
                 icon: <StepperStepIcon type={EStepperStepIconType.ERROR} />,
             },
-            {
-                id: "step4",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.ERROR,
-            },
-            {
-                id: "step5",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.ERROR,
-            },
         ];
 
         const warningSteps = [
@@ -310,18 +319,6 @@ export const Types: StoryObj<typeof Stepper> = {
                 disabled: false,
                 type: EStepperStepType.WARNING,
                 icon: <StepperStepIcon type={EStepperStepIconType.WARNING} />,
-            },
-            {
-                id: "step4",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.WARNING,
-            },
-            {
-                id: "step5",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.WARNING,
             },
         ];
 
@@ -373,7 +370,7 @@ export const ManySteps: StoryObj<typeof Stepper> = {
         steps: [
             {
                 id: "step1",
-                label: "Completed",
+                label: "In Progress",
                 disabled: false,
                 type: EStepperStepType.NEUTRAL,
                 icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
@@ -465,23 +462,23 @@ export const ManySteps: StoryObj<typeof Stepper> = {
                 type: EStepperStepType.NEUTRAL,
             },
         ],
-        size: EStepperSize.MD,
-        selectedStepId: "step3",
+        selectedStepId: "step1",
         onSelectStep: action("On Select Step"),
     },
     argTypes: {
-        steps: {
-            control: { type: "object" },
-            description: "Массив шагов для отображения",
+        size: {
             table: {
-                type: { summary: "Array<IStepperStep>" },
+                disable: true,
+            },
+        },
+        steps: {
+            table: {
+                disable: true,
             },
         },
         selectedStepId: {
-            control: { type: "text" },
-            description: "ID выбранного шага",
             table: {
-                type: { summary: "string" },
+                disable: true,
             },
         },
         onSelectStep: {
@@ -493,9 +490,43 @@ export const ManySteps: StoryObj<typeof Stepper> = {
     render: (args) => {
         const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);
         return (
-            <Stepper.Wrapper>
-                <Stepper {...args} selectedStepId={selectedStepId} onSelectStep={setSelectedStepId} />
-            </Stepper.Wrapper>
+            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+                <div>
+                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Small (SM)</h3>
+                    <Stepper.Wrapper>
+                        <Stepper
+                            {...args}
+                            size={EStepperSize.SM}
+                            selectedStepId={selectedStepId}
+                            onSelectStep={setSelectedStepId}
+                        />
+                    </Stepper.Wrapper>
+                </div>
+
+                <div>
+                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Medium (MD)</h3>
+                    <Stepper.Wrapper>
+                        <Stepper
+                            {...args}
+                            size={EStepperSize.MD}
+                            selectedStepId={selectedStepId}
+                            onSelectStep={setSelectedStepId}
+                        />
+                    </Stepper.Wrapper>
+                </div>
+
+                <div>
+                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Large (LG)</h3>
+                    <Stepper.Wrapper>
+                        <Stepper
+                            {...args}
+                            size={EStepperSize.LG}
+                            selectedStepId={selectedStepId}
+                            onSelectStep={setSelectedStepId}
+                        />
+                    </Stepper.Wrapper>
+                </div>
+            </div>
         );
     },
 };
@@ -508,11 +539,14 @@ export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
         onSelectStep: action("On Select Step"),
     },
     argTypes: {
-        selectedStepId: {
-            control: { type: "text" },
-            description: "ID выбранного шага",
+        size: {
             table: {
-                type: { summary: "string" },
+                disable: true,
+            },
+        },
+        selectedStepId: {
+            table: {
+                disable: true,
             },
         },
         onSelectStep: {

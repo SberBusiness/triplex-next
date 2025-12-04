@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
+import clsx from "clsx";
 import { CrossStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { FormFieldContext } from "@sberbusiness/triplex-next/components/FormField/FormFieldContext";
 import { EFormFieldStatus } from "../enums";
-import clsx from "clsx";
-import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button";
+import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
 import styles from "../styles/FormFieldClear.module.less";
 
 /** Свойства компонета FormFieldClear. */

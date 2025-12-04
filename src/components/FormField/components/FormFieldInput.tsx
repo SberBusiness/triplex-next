@@ -6,6 +6,7 @@ import styles from "../styles/FormFieldInput.module.less";
 import { EFormFieldStatus } from "../enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 
 /** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
 export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
@@ -13,7 +14,7 @@ export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, 
 }
 
 /** Свойства компонента FormFieldInput. */
-export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement>, DataAttributes {
     /** Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
      *  Через аргументы props инпуту передастся нужная стилизация.
      * */

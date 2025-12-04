@@ -7,7 +7,6 @@ export const designTokensComponentsCalendarKeys = [
     "View_Header_Color",
     "View_Item_Background_Default",
     "View_Item_Background_Hover",
-    // "View_Item_Background_Range",
     "View_Item_Background_Selected_Default",
     "View_Item_Background_Selected_Hover",
     "View_Item_Background_Selected_Muted_Default",
@@ -62,7 +61,6 @@ export const Calendar_Tokens: TDesignTokensComponentsCalendarValues = {
 
     View_Item_Background_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-Calendar-View_Item_Background_Default)
     View_Item_Background_Hover: [{ ref: "ColorBrand.60" }, { ref: "ColorBrand.60" }], // var(--triplex-Calendar-View_Item_Background_Hover)
-    // View_Item_Background_Range: [{ ref: "ColorNeutral.100" }, { ref: "ColorNeutral.900" }], // var(--triplex-Calendar-View_Item_Background_Range)
     View_Item_Background_Selected_Default: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-Calendar-View_Item_Background_Selected_Default)
     View_Item_Background_Selected_Hover: [{ ref: "ColorBrand.30" }, { ref: "ColorBrand.30" }], // var(--triplex-Calendar-View_Item_Background_Selected_Hover)
     View_Item_Background_Selected_Muted_Default: [{ ref: "ColorBrand.100" }, { ref: "ColorBrand.20" }], // var(--triplex-Calendar-View_Item_Background_Selected_Muted_Default)

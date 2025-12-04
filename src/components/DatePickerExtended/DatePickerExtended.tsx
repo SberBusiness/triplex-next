@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import { FocusTrapProps } from "focus-trap-react";
 import { isKey } from "../../utils/keyboard";
-import { Calendar, ICalendarSingleProps } from "../Calendar";
+import { Calendar, ICalendarProps } from "../Calendar";
 import { EDropdownAlignment, IDropdownProps } from "../Dropdown";
 import { DatePickerExtendedContext } from "./DatePickerExtendedContext";
 import { DatePickerExtendedDropdown } from "./DatePickerExtendedDropdown";
@@ -12,7 +12,7 @@ import { EComponentSize } from "../../enums";
 export interface IDatePickerExtendedProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
         Pick<IDropdownProps, "alignment">,
-        ICalendarSingleProps {
+        ICalendarProps {
     /** Рендер-функция целевого элемента. */
     renderTarget: () => React.ReactNode;
     /** Рендер-функция целевого элемента в заголовке DropdownMobile. */

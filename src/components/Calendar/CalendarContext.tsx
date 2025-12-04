@@ -2,12 +2,12 @@ import React from "react";
 import moment from "moment";
 import { dateFormatYYYYMMDD, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
 import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/types";
+import { ICalendarProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 
 /** Свойства контекста CalendarView. */
 export interface ICalendarContext
-    extends Pick<ICalendarCommonProps, "format" | "markedDays" | "disabledDays">,
-        Required<Pick<ICalendarCommonProps, "pickType" | "limitRange" | "onPageChange" | "onViewChange">> {
+    extends Pick<ICalendarProps, "format" | "markedDays" | "disabledDays">,
+        Required<Pick<ICalendarProps, "pickType" | "limitRange" | "onPageChange" | "onViewChange">> {
     /** Дата, являющая курсором для навигации по интерфейсу. */
     viewDate: moment.Moment;
     /** Вид отображения. */

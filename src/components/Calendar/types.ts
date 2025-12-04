@@ -3,7 +3,7 @@ import { Moment } from "moment";
 import {
     ECalendarViewMode,
     ECalendarDateMarkType,
-    ECalendarPickType
+    ECalendarPickType,
 } from "@sberbusiness/triplex-next/components/Calendar/enums";
 import { IDateLimitRange } from "@sberbusiness/triplex-next/types/DateTypes";
 
@@ -13,17 +13,11 @@ export type TPickedDateProp = string | Moment | null;
 /** Приведенный к Moment тип даты, используемый для внутренних вычислений. */
 export type TPickedDate = Moment | null;
 
-/** Внешний тип периода, который можно передать в компонент через свойства компонента. */
-export type TPickedRangeProp = [TPickedDateProp, TPickedDateProp];
-
-/** Приведенный к Moment тип периода для внутренних вычислений. */
-export type TPickedRange = [TPickedDate, TPickedDate];
-
 /** Тип отмеченных дней календаря. */
 export type TCalendarMarkedDays = string[] | Record<string, ECalendarDateMarkType>;
 
-/** Общие свойства компонента календаря. */
-export interface ICalendarCommonProps extends ICalendarNestedProps {
+/** Свойства компонента календаря. */
+export interface ICalendarProps extends ICalendarNestedProps {
     /** Отображаемая по умолчанию дата. */
     defaultViewDate?: string | Moment;
     /** Формат для значения. */
@@ -42,28 +36,12 @@ export interface ICalendarCommonProps extends ICalendarNestedProps {
     onPageChange?: (viewDate: Moment, viewMode: ECalendarViewMode) => void;
     /** Обработчик изменения вида. */
     onViewChange?: (viewDate: Moment, viewMode: ECalendarViewMode) => void;
-}
-
-/** Свойства обычного календаря. */
-export interface ICalendarSingleProps extends ICalendarCommonProps {
-    isRange?: false;
     /** Выбранная дата. */
     pickedDate: TPickedDateProp;
     /** Адаптированный режим. */
     adaptiveMode?: boolean;
     /** Обработчик изменения даты. */
     onDateChange: (date: Moment) => void;
-}
-
-/** Свойства календаря для выбора периода. */
-export interface ICalendarRangeProps extends ICalendarCommonProps {
-    isRange: true;
-    /** Выбранный период. */
-    pickedDate: TPickedRangeProp;
-    /** Дата календаря по умолчанию. */
-    defaultDate?: TPickedDateProp;
-    /** Обработчик изменения периода. */
-    onDateChange: (date: TPickedRange) => void;
 }
 
 /**
@@ -83,52 +61,53 @@ export type TDayHtmlAttributesFunction = (
 /** Alias для data атрибутов. */
 type TDataAttributeAlias = `data-${string}`;
 
-export type THTMLAttributesWithData = {
+type TWithDataAttributes = {
     [dataAttribute in TDataAttributeAlias]: string;
-} & React.TdHTMLAttributes<HTMLTableCellElement>;
+};
+
+export type TTdHTMLAttributesWithData = React.TdHTMLAttributes<HTMLTableCellElement> & TWithDataAttributes;
+
+export type TButtonHTMLAttributesWithData = React.ButtonHTMLAttributes<HTMLButtonElement> & TWithDataAttributes;
 
 /** Тип HTML атрибутов компонента дня. */
-export type TDayHtmlAttributes = THTMLAttributesWithData | TDayHtmlAttributesFunction;
+export type TDayHtmlAttributes = TTdHTMLAttributesWithData | TDayHtmlAttributesFunction;
 
 export interface ICalendarNestedProps {
     /** HTML атрибуты компонента дня. */
     dayHtmlAttributes?: TDayHtmlAttributes;
     /** HTML атрибуты компонента месяца. */
-    monthHtmlAttributes?: React.TdHTMLAttributes<HTMLTableCellElement>;
+    monthHtmlAttributes?: TTdHTMLAttributesWithData;
     /** HTML атрибуты компонента года. */
-    yearHtmlAttributes?: React.TdHTMLAttributes<HTMLTableCellElement>;
+    yearHtmlAttributes?: TTdHTMLAttributesWithData;
     /** Свойства кнопки переключения на предыдущую страницу календаря. */
-    prevButtonProps?:
-        | React.ButtonHTMLAttributes<HTMLButtonElement>
-        | ((viewMode: ECalendarViewMode) => React.ButtonHTMLAttributes<HTMLButtonElement>);
+    prevButtonProps?: TButtonHTMLAttributesWithData | ((viewMode: ECalendarViewMode) => TButtonHTMLAttributesWithData);
     /** Свойства кнопки переключения на следующую страницу календаря. */
-    nextButtonProps?:
-        | React.ButtonHTMLAttributes<HTMLButtonElement>
-        | ((viewMode: ECalendarViewMode) => React.ButtonHTMLAttributes<HTMLButtonElement>);
+    nextButtonProps?: TButtonHTMLAttributesWithData | ((viewMode: ECalendarViewMode) => TButtonHTMLAttributesWithData);
     /** Свойства кнопки для смены вида календаря. */
-    viewButtonProps?:
-        | React.ButtonHTMLAttributes<HTMLButtonElement>
-        | ((viewMode: ECalendarViewMode) => React.ButtonHTMLAttributes<HTMLButtonElement>);
+    viewButtonProps?: TButtonHTMLAttributesWithData | ((viewMode: ECalendarViewMode) => TButtonHTMLAttributesWithData);
+    /** Свойства кнопки "Вчера". */
+    yesterdayButtonProps?:
+        | TButtonHTMLAttributesWithData
+        | ((viewMode: ECalendarViewMode) => TButtonHTMLAttributesWithData);
     /** Свойства кнопки "Сегодня". */
     todayButtonProps?:
-        | React.ButtonHTMLAttributes<HTMLButtonElement>
+        | TButtonHTMLAttributesWithData
         | (({
               viewMode,
               currentPeriodSelected,
           }: {
               viewMode: ECalendarViewMode;
               currentPeriodSelected: boolean;
-          }) => React.ButtonHTMLAttributes<HTMLButtonElement>);
+          }) => TButtonHTMLAttributesWithData);
+    /** Свойства кнопки "Завтра". */
+    tomorrowButtonProps?:
+        | TButtonHTMLAttributesWithData
+        | ((viewMode: ECalendarViewMode) => TButtonHTMLAttributesWithData);
 }
-
-/** Свойства Calendar, передаваемые в рендер-функцию CalendarRange. */
-export interface ICalendarProvideProps extends ICalendarRangeProps {}
 
 /** Свойства компонента CalendarView. */
 export interface ICalendarViewProps
-    extends Pick<ICalendarCommonProps, "dayHtmlAttributes" | "monthHtmlAttributes" | "yearHtmlAttributes"> {
+    extends Pick<ICalendarProps, "dayHtmlAttributes" | "monthHtmlAttributes" | "yearHtmlAttributes"> {
     /** Выбранная дата. */
     pickedDate?: TPickedDate;
-    /** Выбранный период. */
-    pickedRange?: TPickedRange;
 }

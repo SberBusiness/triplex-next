@@ -18,7 +18,6 @@ export interface ICalendarViewDaysProps
 /** Вид календаря с выбором дня. */
 export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({
     pickedDate,
-    pickedRange,
     dayHtmlAttributes = {},
 }) => {
     const { format, periodId, limitRange, viewDate, markedDays, disabledDays, onDateSelect, onPageChange } =
@@ -94,7 +93,7 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({
     /** Рендер ячейки таблицы. */
     const renderTableData = (row: number, cell: number) => {
         const date = moment(startDate).add(row * 7 + cell, "day");
-        const classNames = clsx({ [styles.current]: isCurrentDate(date) }, getRangeClassName(date));
+        const classNames = clsx({ [styles.current]: isCurrentDate(date) });
         const active = isActiveDate(date);
         const disabled = isDisabledDate(date);
         const tabbable = !disabled && isTabbableDay(date);
@@ -144,11 +143,7 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({
 
     /** Проверяет, является ли дата активной. */
     const isActiveDate = (date: moment.Moment) => {
-        if (pickedRange) {
-            return !!(pickedRange[0]?.isSame(date, "day") || pickedRange[1]?.isSame(date, "day"));
-        } else {
-            return !!pickedDate && date.isSame(pickedDate, "day");
-        }
+        return !!pickedDate && date.isSame(pickedDate, "day");
     };
 
     /** Проверяет, является ли дата отмеченной. */
@@ -164,32 +159,6 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({
                 return markedDays[date.format(format)];
             }
         }
-    };
-
-    /** Возвращает класс положения даты в выбранном периоде. */
-    const getRangeClassName = (date: moment.Moment) => {
-        if (
-            !pickedRange ||
-            !pickedRange[0] ||
-            !pickedRange[1] ||
-            !date.isBetween(pickedRange[0], pickedRange[1], "day", "[]")
-        ) {
-            return;
-        }
-
-        let className: string;
-
-        if (pickedRange[0].isSame(pickedRange[1], "day")) {
-            className = styles.rangeSingle;
-        } else if (date.isSame(pickedRange[0], "day")) {
-            className = styles.rangeStart;
-        } else if (date.isSame(pickedRange[1], "day")) {
-            className = styles.rangeEnd;
-        } else {
-            className = styles.rangeBetween;
-        }
-
-        return className;
     };
 
     /** Возвращает доступную для выбора дату после сдвига. */

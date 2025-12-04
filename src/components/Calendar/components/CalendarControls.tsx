@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import CaretleftStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretleftStrokeSrvIcon24";
 import CaretrightStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretrightStrokeSrvIcon24";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { ICalendarCommonProps } from "@sberbusiness/triplex-next/components/Calendar/types";
+import { ICalendarProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
 import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
 import { EButtonIconShape, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
@@ -13,7 +13,7 @@ import styles from "../styles/CalendarControls.module.less";
 
 /** Свойства компонента CalendarControls. */
 export interface ICalendarControlsProps
-    extends Pick<ICalendarCommonProps, "prevButtonProps" | "nextButtonProps" | "viewButtonProps"> {
+    extends Pick<ICalendarProps, "prevButtonProps" | "nextButtonProps" | "viewButtonProps"> {
     children: React.ReactNode;
 }
 

@@ -346,7 +346,7 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFD169", //     var(--triplex-next-ColorWarning-80)
         },
         90: {
-            value: "#FFE7B1", //     var(--triplex-next-ColorWarning-90)
+            value: "#FCEAC7", //     var(--triplex-next-ColorWarning-90)
         },
         100: {
             value: "#FFF4DB", //     var(--triplex-next-ColorWarning-100)

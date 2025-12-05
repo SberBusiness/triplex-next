@@ -1,5 +1,5 @@
 import React from "react";
-import { SortStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { OptionsStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { Chip, IChipProps } from "./Chip";
 import { ChipClearButton } from "./ChipClearButton";
 import styles from "./styles/ChipOptions.module.less";
@@ -23,7 +23,9 @@ export const ChipOptions = React.forwardRef<HTMLSpanElement, IChipOptionsProps>(
 
         return (
             <Chip
-                prefix={selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
+                prefix={
+                    selected ? <OptionsStrokeSrvIcon24 paletteIndex={6} /> : <OptionsStrokeSrvIcon24 paletteIndex={5} />
+                }
                 postfix={selected ? <ChipClearButton onClick={handleClickClearButton} size={rest.size} /> : <span />}
                 selected={selected}
                 {...rest}

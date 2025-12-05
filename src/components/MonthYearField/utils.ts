@@ -1,7 +1,7 @@
 import moment from "moment";
 import { TPickedDate } from "../Calendar/types";
 import { IDateLimitRange } from "../../types/DateTypes";
-import { inputMonthYearFormat } from "./const";
+import { inputMonthYearFormat } from "./constants";
 
 /** Значения MonthYearPicker. */
 interface IMonthYearPickerValues {

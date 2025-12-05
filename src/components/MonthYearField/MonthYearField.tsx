@@ -78,4 +78,4 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
     );
 });
 
-MonthYearField.displayName = "MonthYearPicker";
+MonthYearField.displayName = "MonthYearField";

@@ -5,6 +5,7 @@ export * from "./Calendar";
 export * from "./Chip";
 export * from "./Col";
 export * from "./Checkbox";
+export * from "./DateField";
 export * from "./Ellipsis";
 export * from "./FormField";
 export * from "./FormGroup";

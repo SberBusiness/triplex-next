@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { MonthYearField } from "../MonthYearField";
+import { DateField } from "../DateField";
 import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
 import { EFormFieldStatus } from "../../FormField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
@@ -12,10 +12,11 @@ vi.mock("@sberbusiness/icons-next", () => ({
     CrossStrokeSrvIcon16: () => <span data-testid="cross-icon" />,
 }));
 
-describe("MonthYearField", () => {
+describe("DateField", () => {
     const defaultProps = {
         value: "19700101",
-        placeholder: "Select month",
+        placeholderMask: "dd.mm.yyyy",
+        invalidDateHint: "",
         onChange: vi.fn(),
         format: dateFormatYYYYMMDD,
     };
@@ -24,23 +25,23 @@ describe("MonthYearField", () => {
         vi.clearAllMocks();
     });
 
-    it("renders input with correct value and placeholder", () => {
-        render(<MonthYearField {...defaultProps} />);
+    it("renders input with correct value", () => {
+        render(<DateField {...defaultProps} />);
 
-        const input = screen.getByPlaceholderText("Select month");
+        const input = screen.getByRole("textbox");
         expect(input).toBeInTheDocument();
-        expect(input).toHaveValue("Jan 1970");
+        expect(input).toHaveValue("01.01.1970");
     });
 
     it("renders empty input when value is empty", () => {
-        render(<MonthYearField {...defaultProps} value="" />);
+        render(<DateField {...defaultProps} value="" />);
 
-        const input = screen.getByPlaceholderText("Select month");
+        const input = screen.getByRole("textbox");
         expect(input).toHaveValue("");
     });
 
     it("calls onChange with empty string when clear button is clicked", async () => {
-        render(<MonthYearField {...defaultProps} />);
+        render(<DateField {...defaultProps} />);
 
         const crossIcon = screen.getByTestId("cross-icon");
         const clearButton = crossIcon.closest("button");
@@ -52,34 +53,34 @@ describe("MonthYearField", () => {
     });
 
     it("disables input when status is disabled", () => {
-        render(<MonthYearField {...defaultProps} status={EFormFieldStatus.DISABLED} />);
+        render(<DateField {...defaultProps} status={EFormFieldStatus.DISABLED} />);
 
-        const input = screen.getByPlaceholderText("Select month");
+        const input = screen.getByRole("textbox");
         expect(input).toBeDisabled();
     });
 
     it("updates displayed value when value prop changes", () => {
-        const { rerender } = render(<MonthYearField {...defaultProps} />);
+        const { rerender } = render(<DateField {...defaultProps} />);
 
-        expect(screen.getByDisplayValue("Jan 1970")).toBeInTheDocument();
+        expect(screen.getByDisplayValue("01.01.1970")).toBeInTheDocument();
 
-        rerender(<MonthYearField {...defaultProps} value="19700201" />);
+        rerender(<DateField {...defaultProps} value="19700201" />);
 
-        expect(screen.getByDisplayValue("Feb 1970")).toBeInTheDocument();
+        expect(screen.getByDisplayValue("01.02.1970")).toBeInTheDocument();
     });
 
     it("handles different date formats", () => {
-        const { rerender } = render(<MonthYearField {...defaultProps} value="01/1970" format="MM/YYYY" />);
+        const { rerender } = render(<DateField {...defaultProps} value="01/1970" format="MM/YYYY" />);
 
-        expect(screen.getByDisplayValue("Jan 1970")).toBeInTheDocument();
+        expect(screen.getByDisplayValue("01.01.1970")).toBeInTheDocument();
 
-        rerender(<MonthYearField {...defaultProps} value="1970.01" format="YYYY.MM" />);
+        rerender(<DateField {...defaultProps} value="1970.01" format="YYYY.MM" />);
 
-        expect(screen.getByDisplayValue("Jan 1970")).toBeInTheDocument();
+        expect(screen.getByDisplayValue("01.01.1970")).toBeInTheDocument();
     });
 
     it("opens calendar dropdown when calendar button is clicked", async () => {
-        render(<MonthYearField {...defaultProps} />);
+        render(<DateField {...defaultProps} />);
 
         const calendarIcon = screen.getByTestId("calendar-icon");
         const calendarButton = calendarIcon.closest("button");
@@ -95,17 +96,17 @@ describe("MonthYearField", () => {
     });
 
     it("applies custom className", () => {
-        const { container } = render(<MonthYearField {...defaultProps} className="custom-class" />);
+        const { container } = render(<DateField {...defaultProps} className="custom-class" />);
 
         expect(container.firstChild).toHaveClass("custom-class");
     });
 
     it("accepts custom target props", () => {
         render(
-            <MonthYearField
+            <DateField
                 {...defaultProps}
                 targetProps={{
-                    inputProps: {
+                    maskedInputProps: {
                         "data-testid": "custom-input",
                     },
                 }}
@@ -116,13 +117,15 @@ describe("MonthYearField", () => {
     });
 
     it("renders with different sizes", () => {
-        const { rerender } = render(<MonthYearField {...defaultProps} size={EComponentSize.SM} />);
+        const { rerender } = render(<DateField {...defaultProps} size={EComponentSize.SM} />);
+        let input;
 
-        const input = screen.getByPlaceholderText("Select month");
+        input = screen.getByRole("textbox");
         expect(input).toBeInTheDocument();
 
-        rerender(<MonthYearField {...defaultProps} size={EComponentSize.LG} />);
+        rerender(<DateField {...defaultProps} size={EComponentSize.LG} />);
 
-        expect(screen.getByPlaceholderText("Select month")).toBeInTheDocument();
+        input = screen.getByRole("textbox");
+        expect(input).toBeInTheDocument();
     });
 });

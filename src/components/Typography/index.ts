@@ -1,4 +1,4 @@
-export { Title } from "./Title";
+export * from "./Title";
 export { Text } from "./Text";
 export { Caption } from "./Caption";
 export * from "./enums";

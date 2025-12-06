@@ -96,7 +96,6 @@ export const Spoiler = React.forwardRef<HTMLDivElement, TSpoilerProps>((props, r
                 <Button
                     aria-expanded={open}
                     aria-controls={instanceId.current}
-                    className={styles.toggleButton}
                     theme={EButtonTheme.LINK}
                     size={size}
                     onClick={handleToggle}

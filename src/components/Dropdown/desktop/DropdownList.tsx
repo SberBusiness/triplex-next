@@ -7,8 +7,9 @@ import {
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
-import styles from "../styles/DropdownDesktopList.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,9 +26,13 @@ export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement>
 /** Индекс текущего выделенного элемента списка при навигации с клавиатуры. */
 type TActiveListItemIndex = number | undefined;
 
+/** Композиция компонента DropdownList. */
 export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
     Item: typeof DropdownListItem;
 }
+
+// Соответствие размера имени класса.
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /**
  * Компонент DropdownList.
@@ -44,7 +49,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
         size = EComponentSize.MD,
         ...htmlDivAttributes
     } = props;
-    const classNames = clsx(styles.dropdownDesktopList, className, styles[`dropdownDesktopList-${size}`]);
+    const classNames = clsx(styles.dropdownDesktopList, sizeToClassNameMap[size], className);
 
     const { activeDescendant, setActiveDescendant } = useContext(DropdownListContext);
 

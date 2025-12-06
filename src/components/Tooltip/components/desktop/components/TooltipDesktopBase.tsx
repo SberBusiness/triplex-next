@@ -487,7 +487,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         window.addEventListener("resize", this.onWindowResize);
 
         // Запуск лейаута при первой прогрузке
-        this.windowBounds = calcBounds(window); // заполнили размер окна
+        this.windowBounds = calcBounds(window); // запомнили размер окна
         this.setTooltipBodySize(); // заполнили размер тултипа
         this.setAndCheckResizeTargetBounds();
         this.resolveTooltipLayout();

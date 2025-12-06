@@ -3,6 +3,7 @@ import {
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
     TDesignTokensComponentsButton,
+    TDesignTokensComponentsCalendar,
     TDesignTokensComponentsCard,
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsChip,
@@ -15,6 +16,7 @@ import {
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsHeaderPage,
     TDesignTokensComponentsIsland,
+    TDesignTokensComponentsIslandAccordion,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsListItem,
     TDesignTokensComponentsListItemControlsButton,
@@ -24,13 +26,13 @@ import {
     TDesignTokensComponentsMarker,
     TDesignTokensComponentsMarkerStatus,
     TDesignTokensComponentsOverlay,
-    TDesignTokensComponentsPage,
     TDesignTokensComponentsPagination,
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
     TDesignTokensComponentsSegmentedControlSegment,
     TDesignTokensComponentsSkeleton,
     TDesignTokensComponentsSMSInput,
+    TDesignTokensComponentsStep,
     TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
     TDesignTokensComponentsTabs,
@@ -41,6 +43,8 @@ import {
     TDesignTokensComponentsUploadZone,
     TDesignTokensComponentsLightBox,
     TDesignTokensComponentsNotification,
+    TDesignTokensComponentsStatusTracker,
+    TDesignTokensComponentsModalWindow,
     TDesignTokensComponentsTopOverlay,
 } from "../components";
 
@@ -279,6 +283,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
     | TDesignTokensComponentsButton
+    | TDesignTokensComponentsCalendar
     | TDesignTokensComponentsCard
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsChip
@@ -291,6 +296,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsHeaderPage
     | TDesignTokensComponentsIsland
+    | TDesignTokensComponentsIslandAccordion
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsListItem
     | TDesignTokensComponentsListItemControlsButton
@@ -300,13 +306,13 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsMarker
     | TDesignTokensComponentsMarkerStatus
     | TDesignTokensComponentsOverlay
-    | TDesignTokensComponentsPage
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment
     | TDesignTokensComponentsSkeleton
     | TDesignTokensComponentsSMSInput
+    | TDesignTokensComponentsStep
     | TDesignTokensComponentsStepper
     | TDesignTokensComponentsTableBasic
     | TDesignTokensComponentsTabs
@@ -316,6 +322,9 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsUploadZone
     | TDesignTokensComponentsLightBox
+    | TDesignTokensComponentsModalWindow
+    | TDesignTokensComponentsNotification
+    | TDesignTokensComponentsStatusTracker
     | TDesignTokensComponentsUploadZone
     | TDesignTokensComponentsNotification
     | TDesignTokensComponentsTopOverlay;

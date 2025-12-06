@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useRef, useState, useCallback } from "react";
 import clsx from "clsx";
 import MaskedInputTextMask, { conformToMask, MaskedInputProps, PipeConfig } from "react-text-mask";
+import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 import { presets, TFormFieldMaskedInputPresets } from "./FormFieldMaskedInputPresets";
 import { FormFieldInput } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldInput";
 import { FormFieldContext } from "../FormFieldContext";
@@ -9,7 +10,9 @@ import stylesFormFieldInput from "../styles/FormFieldInput.module.less";
 import styles from "../styles/FormFieldMaskedInput.module.less";
 
 /** Свойства компонента FormFieldInput. */
-export interface IFormFieldMaskedInputProps extends Omit<MaskedInputProps, "guide" | "mask" | "render"> {
+export interface IFormFieldMaskedInputProps
+    extends Omit<MaskedInputProps, "guide" | "mask" | "render">,
+        DataAttributes {
     value: string;
     /** Состояние ошибки. */
     error?: boolean;
@@ -192,11 +195,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
         <div className={clsx(styles.formFieldMaskedInputWrapper, styles[`size-${size}`])}>
             {/* Input, отображающий маску. */}
             <input
-                className={clsx(
-                    stylesFormFieldInput.formFieldInput,
-                    styles.formFieldMaskedInputPlaceholder,
-                    className,
-                )}
+                className={clsx(stylesFormFieldInput.formFieldInput, styles.formFieldMaskedInputPlaceholder, className)}
                 disabled={disabled}
                 placeholder={getPlaceholderValue()}
                 readOnly

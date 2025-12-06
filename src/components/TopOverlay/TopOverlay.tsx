@@ -4,6 +4,7 @@ import { Overlay, IOverlayProps } from "../Overlay/Overlay";
 import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import clsx from "clsx";
 import styles from "./styles/TopOverlay.module.less";
+import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
 
 /** Свойства компонента TopOverlay. */
 export interface ITopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
@@ -46,7 +47,7 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
                     (overlayWrapperTopPositionPrev) =>
                         parseInt(overlayWrapperTopPositionPrev as string, 10) +
                         Math.abs(position.top) +
-                        parseInt(lightBoxTopPosition, 10)
+                        parseInt(lightBoxTopPosition, 10),
                 );
             } else {
                 setOverlayWrapperTopPosition(
@@ -54,7 +55,7 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
                     (overlayWrapperTopPositionPrev) =>
                         parseInt(overlayWrapperTopPositionPrev as string, 10) -
                         position.top +
-                        parseInt(lightBoxTopPosition, 10)
+                        parseInt(lightBoxTopPosition, 10),
                 );
             }
         }
@@ -96,7 +97,6 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
         </>
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const setOpened = () => {};
 
     const classNameOverlayWrapper = clsx(styles.topOverlayWrapper, {
@@ -113,7 +113,11 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
             setOpened={setOpened}
             {...OverlayBaseProps}
             className={styles.topOverlay}
-            direction={EOverlayDirection.TOP}
+            direction={
+                window.matchMedia(`(max-width: ${EScreenWidth.SM_MAX})`).matches
+                    ? EOverlayDirection.BOTTOM
+                    : EOverlayDirection.TOP
+            }
         >
             {renderOverlay}
         </Overlay>

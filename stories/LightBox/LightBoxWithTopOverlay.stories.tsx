@@ -14,6 +14,7 @@ import { EIslandType } from "../../src/components/Island/enums";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Confirm } from "../../src/components/Confirm";
+import { EBodyVerticalMargin } from "../../src/components/Body/enums";
 
 const STORY_META_DESCRIPTION = `
 Компонент **LightBoxWithTopOverlay** отображает крупный контент поверх страницы.
@@ -137,7 +138,7 @@ export const LightBoxWithTopOverlay: React.FC = () => {
             {isOpen ? (
                 <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={openedTopOverlay}>
                     <LightBox.Content key="content" isLoading={false}>
-                        <Page style={{ maxWidth: 800 }}>
+                        <Page>
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
                                 <Page.Header.Title>
                                     <Page.Header.Title.Content>
@@ -164,7 +165,7 @@ export const LightBoxWithTopOverlay: React.FC = () => {
                                 </Page.Header.Title>
                             </Page.Header>
 
-                            <Page.Body verticalMargin={16}>
+                            <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />

@@ -14,6 +14,8 @@ import { EIslandType } from "../../src/components/Island/enums";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/LightBoxSideOverlay";
+import { EBodyVerticalMargin } from "../../src/components/Body/enums";
+import { MobileView } from "../../src/components/MobileView/MobileView";
 import "./styles.less";
 
 const STORY_META_DESCRIPTION = `
@@ -100,15 +102,23 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
-                            <Title
-                                tag="h1"
-                                size={ETitleSize.H1}
-                                tabIndex={-1}
-                                // Устанавливает фокус на первый элемент при открытии LightBox.
-                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                            <MobileView
+                                fallback={
+                                    <Title
+                                        tag="h1"
+                                        size={ETitleSize.H1}
+                                        tabIndex={-1}
+                                        // Устанавливает фокус на первый элемент при открытии LightBox.
+                                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                    >
+                                        Евгений Онегин
+                                    </Title>
+                                }
                             >
-                                Евгений Онегин
-                            </Title>
+                                <Title tag="h2" size={ETitleSize.H2}>
+                                    Евгений Онегин
+                                </Title>
+                            </MobileView>
                         </Page.Header.Title.Content>
                         <Page.Header.Title.Controls>
                             {/* Кнопка закрытия SideOverlay для мобильного устройства. Отображается только на мобильном устройстве, внутри заголовка SideOverlay. */}
@@ -120,7 +130,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body verticalMargin={16}>
+                <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                     {[0, 1, 2].map((index) => (
                         <React.Fragment key={index}>
                             <PoemBlock />
@@ -165,15 +175,23 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
-                            <Title
-                                tag="h1"
-                                size={ETitleSize.H1}
-                                tabIndex={-1}
-                                // Устанавливает фокус на первый элемент при открытии LightBox.
-                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                            <MobileView
+                                fallback={
+                                    <Title
+                                        tag="h1"
+                                        size={ETitleSize.H1}
+                                        tabIndex={-1}
+                                        // Устанавливает фокус на первый элемент при открытии LightBox.
+                                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                    >
+                                        Евгений Онегин
+                                    </Title>
+                                }
                             >
-                                Евгений Онегин
-                            </Title>
+                                <Title tag="h2" size={ETitleSize.H2}>
+                                    Евгений Онегин
+                                </Title>
+                            </MobileView>
                         </Page.Header.Title.Content>
                         <Page.Header.Title.Controls>
                             <LightBox.SideOverlay.CloseMobile
@@ -184,7 +202,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body verticalMargin={16}>
+                <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                     {[0, 1, 2].map((index) => (
                         <React.Fragment key={index}>
                             <PoemBlock />
@@ -223,15 +241,23 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
                     <Page.Header.Title>
                         <Page.Header.Title.Content>
-                            <Title
-                                tag="h1"
-                                size={ETitleSize.H1}
-                                tabIndex={-1}
-                                // Устанавливает фокус на первый элемент при открытии LightBox.
-                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                            <MobileView
+                                fallback={
+                                    <Title
+                                        tag="h1"
+                                        size={ETitleSize.H1}
+                                        tabIndex={-1}
+                                        // Устанавливает фокус на первый элемент при открытии LightBox.
+                                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                    >
+                                        Евгений Онегин
+                                    </Title>
+                                }
                             >
-                                Евгений Онегин
-                            </Title>
+                                <Title tag="h2" size={ETitleSize.H2}>
+                                    Евгений Онегин
+                                </Title>
+                            </MobileView>
                         </Page.Header.Title.Content>
                         <Page.Header.Title.Controls>
                             <LightBox.SideOverlay.CloseMobile
@@ -242,7 +268,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body verticalMargin={16}>
+                <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                     <PoemBlock />
                 </Page.Body>
 
@@ -290,15 +316,24 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
                                 <Page.Header.Title>
                                     <Page.Header.Title.Content>
-                                        <Title
-                                            tag="h1"
-                                            size={ETitleSize.H1}
-                                            tabIndex={-1}
-                                            // Устанавливает фокус на первый элемент при открытии LightBox.
-                                            {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                        <MobileView
+                                            fallback={
+                                                <Title
+                                                    tag="h1"
+                                                    size={ETitleSize.H1}
+                                                    tabIndex={-1}
+                                                    // Устанавливает фокус на первый элемент при открытии LightBox.
+                                                    {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                                >
+                                                    Евгений Онегин
+                                                </Title>
+                                            }
                                         >
-                                            Евгений Онегин
-                                        </Title>
+                                            <Title tag="h2" size={ETitleSize.H2}>
+                                                Евгений Онегин
+                                            </Title>
+                                        </MobileView>
+
                                         <Gap size={8} />
                                         <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                                             Русский поэт, драматург и прозаик, заложивший основы русского
@@ -317,7 +352,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
                                 </Page.Header.Title>
                             </Page.Header>
 
-                            <Page.Body verticalMargin={16}>
+                            <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />
@@ -405,7 +440,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body verticalMargin={16}>
+                <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                     {[0, 1, 2].map((index) => (
                         <React.Fragment key={index}>
                             <PoemBlock />
@@ -479,7 +514,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
                                 </Page.Header.Title>
                             </Page.Header>
 
-                            <Page.Body verticalMargin={16}>
+                            <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />

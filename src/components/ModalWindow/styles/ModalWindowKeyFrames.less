@@ -1,0 +1,29 @@
+@import 'src/styles/style';
+
+//Позиция контента, в которую двигается элемент для отображения (для анимации появления и скрытия сверху экрана).
+@modal-content-translate-enter: translate(0, 0);
+
+//Позиция контента, в которую двигается элемент для скрытия (для анимации появления и скрытия сверху экрана).
+@modal-content-translate-exit: translate(0, calc(-100% - @modal-window-top));
+
+//Для анимации появления контента.
+@keyframes modalWindowContentAnimationOnEnter {
+    from {
+        transform: @modal-content-translate-exit;
+    }
+
+    to {
+        transform: @modal-content-translate-enter;
+    }
+}
+
+//Для анимации скрытия контента.
+@keyframes modalWindowContentAnimationOnExit {
+    from {
+        transform: @modal-content-translate-enter;
+    }
+
+    to {
+        transform: @modal-content-translate-exit;
+    }
+}

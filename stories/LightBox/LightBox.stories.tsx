@@ -15,6 +15,7 @@ import { EIslandType } from "../../src/components/Island/enums";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { EBodyVerticalMargin } from "../../src/components/Body/enums";
 import "./styles.less";
 
 type LightBoxStoryArgs = {
@@ -110,7 +111,7 @@ const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boole
             </Page.Header.Title>
         </Page.Header>
 
-        <Page.Body verticalMargin={16}>
+        <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
             {[0, 1, 2].map((index) => (
                 <React.Fragment key={index}>
                     <PoemBlock />

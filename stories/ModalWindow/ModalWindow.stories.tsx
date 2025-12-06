@@ -197,6 +197,9 @@ export const Sizes: Story = {
                             <ModalWindowFooter>
                                 <ModalWindowFooter.Description>
                                     <ModalWindowFooter.Description.Controls>
+                                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                            Button text
+                                        </Button>
                                         <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                             Button text
                                         </Button>
@@ -351,6 +354,9 @@ export const LoadingState: Story = {
                             <ModalWindowFooter.Description>
                                 <ModalWindowFooter.Description.Controls>
                                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                        Button text
+                                    </Button>
+                                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                         Button text
                                     </Button>
                                 </ModalWindowFooter.Description.Controls>

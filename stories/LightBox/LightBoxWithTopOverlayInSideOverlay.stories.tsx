@@ -16,8 +16,8 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/LightBoxSideOverlay";
 import { EBodyVerticalMargin } from "../../src/components/Body/enums";
 import { MobileView } from "../../src/components/MobileView/MobileView";
-import "./styles.less";
 import { Confirm } from "../../src/components/Confirm/Confirm";
+import { EConfirmParentComponent } from "../../src/components/Confirm/enums";
 
 const STORY_META_DESCRIPTION = `
 Компонент **LightBoxWithSideOverlay** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
@@ -68,8 +68,8 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const LightBoxWithSideOverlay: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(true);
+export const LightBoxWithTopOverlayInSideOverlay: React.FC = () => {
+    const [isOpen, setIsOpen] = useState(false);
     const [openedSideOverlayMD, setOpenedSideOverlayMD] = useState(false);
 
     const [openedTopOverlay, setOpenedTopOverlay] = useState(false);
@@ -101,7 +101,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
 
     const renderTopOverlay = () => (
         <LightBox.TopOverlay opened={openedTopOverlay} onClose={handleCloseTopOverlay} onOpen={handleOpenTopOverlay}>
-            <Confirm>
+            <Confirm parentComponent={EConfirmParentComponent.SIDE_OVERLAY_MD}>
                 <Confirm.Content>
                     <Confirm.Content.Title>Внимание</Confirm.Content.Title>
                     <Confirm.Content.SubTitle>
@@ -143,6 +143,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
             opened={openedSideOverlayMD}
             size={ELightBoxSideOverlaySize.MD}
             isTopLevelSideOverlayOpened={false}
+            isTopOverlayOpened={openedTopOverlay}
         >
             <Page>
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
@@ -198,7 +199,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
 
             <LightBox.SideOverlay.CloseDesktop
                 data-test-id="lightbox-side-overlay-close"
-                // clickByEsc={!openedSideOverlaySM}
+                clickByEsc={!openedTopOverlay}
                 onClick={handleCloseSideOverlayMD}
             />
 

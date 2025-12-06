@@ -4,7 +4,6 @@ import { Overlay, IOverlayProps } from "../Overlay/Overlay";
 import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import clsx from "clsx";
 import styles from "./styles/TopOverlay.module.less";
-import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
 
 /** Свойства компонента TopOverlay. */
 export interface ITopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
@@ -113,11 +112,7 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
             setOpened={setOpened}
             {...OverlayBaseProps}
             className={styles.topOverlay}
-            direction={
-                window.matchMedia(`(max-width: ${EScreenWidth.SM_MAX})`).matches
-                    ? EOverlayDirection.BOTTOM
-                    : EOverlayDirection.TOP
-            }
+            direction={EOverlayDirection.TOP}
         >
             {renderOverlay}
         </Overlay>

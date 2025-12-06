@@ -4,10 +4,16 @@ import { ConfirmContent } from "./components/ConfirmContent";
 import { ConfirmControls } from "./components/ConfirmControls";
 import clsx from "clsx";
 import { EIslandType, IIslandProps, Island } from "../Island";
+import { EConfirmParentComponent } from "./enums";
 import styles from "./styles/Confirm.module.less";
 
 /** Свойства компонента Confirm. */
-export interface IConfirmProps extends IIslandProps {}
+export interface IConfirmProps extends IIslandProps {
+    /** Компонент, в котором используется Confirm.
+     *  От этого зависит максимальная ширина контента Confirm.
+     */
+    parentComponent?: EConfirmParentComponent;
+}
 
 export interface IConfirmFC extends React.FC<IConfirmProps> {
     Close: typeof ConfirmClose;
@@ -15,18 +21,40 @@ export interface IConfirmFC extends React.FC<IConfirmProps> {
     Controls: typeof ConfirmControls;
 }
 
+const getConfirmClassNameDependingOnParentComponent = (parentComponent: EConfirmParentComponent) => {
+    switch (parentComponent) {
+        case EConfirmParentComponent.LIGHTBOX:
+            return styles.isInLightBox;
+        case EConfirmParentComponent.SIDE_OVERLAY_SM:
+            return styles.isInSideOverlaySM;
+        case EConfirmParentComponent.SIDE_OVERLAY_MD:
+            return styles.isInSideOverlayMD;
+        case EConfirmParentComponent.SIDE_OVERLAY_LG:
+            return styles.isInSideOverlayLG;
+    }
+};
+
 /** Компонент предупреждения, о закрытии лайтбокса / боковой панели лайтбокса. */
-export const Confirm: IConfirmFC = ({ children, className, ...htmlDivAttributes }) => (
-    <Island
-        type={EIslandType.TYPE_1}
-        className={clsx(className, styles.confirm)}
-        role="dialog"
-        aria-modal="true"
-        {...htmlDivAttributes}
-    >
-        <Island.Body>{children}</Island.Body>
-    </Island>
-);
+export const Confirm: IConfirmFC = ({
+    children,
+    className,
+    parentComponent = EConfirmParentComponent.LIGHTBOX,
+    ...htmlDivAttributes
+}) => {
+    const confirmClassName = getConfirmClassNameDependingOnParentComponent(parentComponent);
+
+    return (
+        <Island
+            type={EIslandType.TYPE_1}
+            className={clsx(className, styles.confirm, confirmClassName)}
+            role="dialog"
+            aria-modal="true"
+            {...htmlDivAttributes}
+        >
+            <Island.Body>{children}</Island.Body>
+        </Island>
+    );
+};
 
 Confirm.displayName = "Confirm";
 Confirm.Close = ConfirmClose;

@@ -5,6 +5,22 @@
     margin: 0 auto;
     max-width: calc(@lightBox-content-max-width - 48px); // 48px - padding у Page
     box-sizing: border-box;
+
+    &.isInLightBox {
+        max-width: calc(@lightBox-content-max-width - 48px); // 48px - padding у Page
+    }
+
+    &.isInSideOverlaySM {
+        max-width: calc(@sideOverlaySMWidth - 48px); // 48px - padding у Page
+    }
+
+    &.isInSideOverlayMD {
+        max-width: calc(@sideOverlayMDWidth - 48px); // 48px - padding у Page
+    }
+
+    &.isInSideOverlayLG {
+        max-width: calc(@sideOverlayLGWidth - 48px); // 48px - padding у Page
+    }
 }
 
 .confirmCloseButton {

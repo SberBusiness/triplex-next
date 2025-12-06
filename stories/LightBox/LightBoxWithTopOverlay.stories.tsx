@@ -188,11 +188,11 @@ export const LightBoxWithTopOverlay: React.FC = () => {
                                 </Page.Footer.Description>
                             </Page.Footer>
                         </Page>
+
+                        {renderTopOverlay()}
                     </LightBox.Content>
 
                     {renderLightBoxControls()}
-
-                    {renderTopOverlay()}
                 </LightBox>
             ) : null}
         </div>

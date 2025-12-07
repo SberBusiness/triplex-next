@@ -1,3 +1,6 @@
+/** Компоненты, в которых можно открыть Confirm.
+ *  От этого зависит максимальная ширина Confirm.
+ */
 export enum EConfirmParentComponent {
     LIGHTBOX = "lightBox",
     SIDE_OVERLAY_SM = "sideOverlaySM",

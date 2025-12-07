@@ -3,6 +3,10 @@
 .topOverlayMask {
     transition: opacity 0.3s;
     background: var(--triplex-next-TopOverlay-Background);
+    // Переопределение position: absolute, которое задается в OverlayMask.
+    position: fixed !important;
+    left: var(--lightBox-screen-left);
+    width: var(--lightBox-screen-width);
 }
 
 .topOverlayWrapper {

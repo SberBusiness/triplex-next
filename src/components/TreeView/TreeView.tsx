@@ -13,6 +13,7 @@ import { TreeViewAbstractNode } from "./TreeViewAbstractNode";
 import { TreeViewNode } from "./components/TreeViewNode";
 import { TreeViewGroup } from "./components/TreeViewGroup";
 import clsx from "clsx";
+import styles from "./styles/TreeView.module.less";
 
 /** Свойства TreeView. */
 export interface ITreeViewProps extends React.HTMLAttributes<HTMLUListElement> {
@@ -84,7 +85,7 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
                     updateCount,
                 }}
             >
-                <ul className={clsx("cssClass[treeView]", className)} role="tree" {...props} ref={this.setTreeDOMNode}>
+                <ul className={clsx(styles.treeView, className)} role="tree" {...props} ref={this.setTreeDOMNode}>
                     {children}
                 </ul>
             </TreeViewContext.Provider>

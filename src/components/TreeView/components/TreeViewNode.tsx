@@ -3,6 +3,7 @@ import { IWithTreeViewContextProps, TreeViewContext, withTreeViewContext } from 
 import { TreeViewAbstractNode } from "../TreeViewAbstractNode";
 import { TreeViewAbstractNodeUtils } from "../TreeViewAbstractNodeUtils";
 import clsx from "clsx";
+import styles from "../styles/TreeView.module.less";
 
 /** Свойства передаваемые TreeViewNode в render-функцию children. */
 export interface ITreeViewNodeProvideProps {
@@ -99,7 +100,7 @@ export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsW
                     role="treeitem"
                     tabIndex={this.abstractNode.getTabIndex()}
                     aria-expanded={this.abstractNode.getOpened()}
-                    className={clsx("cssClass[treeViewNode]", className)}
+                    className={clsx(styles.treeViewNode, className)}
                     {...props}
                     onBlur={this.handleBlur}
                     onFocus={this.handleFocus}

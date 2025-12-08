@@ -112,8 +112,8 @@ export class AccordionBase extends React.Component<IAccordionBaseProps, IAccordi
         return (
             <ExpandAnimation
                 className={clsx(expandAnimationClassName, {
-                    "cssClass[globalExpandAnimationAnimating]": animating,
-                    "cssClass[globalExpandAnimationOpened]": isOpen,
+                    // "cssClass[globalExpandAnimationAnimating]": animating,
+                    // "cssClass[globalExpandAnimationOpened]": isOpen,
                 })}
                 expanded={isOpen}
                 onEnd={this.handleAnimationEnd}

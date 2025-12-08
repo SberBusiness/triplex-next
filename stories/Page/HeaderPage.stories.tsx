@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Header } from "../../src/components/Header";
 import { Text, Title } from "../../src/components/Typography";
@@ -7,11 +7,17 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { Gap } from "../../src/components/Gap";
 import { Link } from "../../src/components/Link";
+import { HeaderPage } from "../../src/components/Page/components/HeaderPage";
+import { EHeaderPageType } from "../../src/components/Page/components/enums";
+import { DocumentNumberEdit } from "../../src/components/DocumentNumberEdit/DocumentNumberEdit";
 
 export default {
-    title: "Components/Header",
+    title: "Components/HeaderPage",
     component: Header,
     tags: ["autodocs"],
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     parameters: {
         docs: {
             description: {
@@ -31,9 +37,9 @@ export default {
 
 export const Basic: StoryObj<typeof Header> = {
     render: () => (
-        <Header>
-            <Header.Title>
-                <Header.Title.Content>
+        <HeaderPage type={EHeaderPageType.FIRST}>
+            <HeaderPage.Title>
+                <HeaderPage.Title.Content>
                     <Title tag="h1" size={ETitleSize.H1}>
                         Title text
                     </Title>
@@ -41,17 +47,17 @@ export const Basic: StoryObj<typeof Header> = {
                     <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                         Optional description about the page
                     </Text>
-                </Header.Title.Content>
-                <Header.Title.Controls>
+                </HeaderPage.Title.Content>
+                <HeaderPage.Title.Controls>
                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                </Header.Title.Controls>
-            </Header.Title>
-        </Header>
+                </HeaderPage.Title.Controls>
+            </HeaderPage.Title>
+        </HeaderPage>
     ),
     parameters: {
         docs: {
@@ -60,11 +66,42 @@ export const Basic: StoryObj<typeof Header> = {
     },
 };
 
+export const TypeSecond: StoryObj<typeof Header> = {
+    render: () => (
+        <HeaderPage type={EHeaderPageType.SECOND}>
+            <HeaderPage.Title>
+                <HeaderPage.Title.Content>
+                    <Title tag="h1" size={ETitleSize.H1}>
+                        Title text
+                    </Title>
+                    <Gap size={8} />
+                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                        Optional description about the page
+                    </Text>
+                </HeaderPage.Title.Content>
+                <HeaderPage.Title.Controls>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                        Button text
+                    </Button>
+                </HeaderPage.Title.Controls>
+            </HeaderPage.Title>
+        </HeaderPage>
+    ),
+    parameters: {
+        docs: {
+            description: { story: "HeaderPage типа second. Не включает белый фон." },
+        },
+    },
+};
+
 export const WithLinkInTitle: StoryObj<typeof Header> = {
     render: () => (
-        <Header>
-            <Header.Title>
-                <Header.Title.Content>
+        <HeaderPage type={EHeaderPageType.FIRST}>
+            <HeaderPage.Title>
+                <HeaderPage.Title.Content>
                     <Text size={ETextSize.B2}>
                         <Link href="#">Link text</Link>
                     </Text>
@@ -76,17 +113,17 @@ export const WithLinkInTitle: StoryObj<typeof Header> = {
                     <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                         Optional description about the page
                     </Text>
-                </Header.Title.Content>
-                <Header.Title.Controls>
+                </HeaderPage.Title.Content>
+                <HeaderPage.Title.Controls>
                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                </Header.Title.Controls>
-            </Header.Title>
-        </Header>
+                </HeaderPage.Title.Controls>
+            </HeaderPage.Title>
+        </HeaderPage>
     ),
     parameters: {
         docs: {
@@ -95,11 +132,49 @@ export const WithLinkInTitle: StoryObj<typeof Header> = {
     },
 };
 
+export const DocumentNumberEditExample: StoryObj<typeof Header> = {
+    render: () => {
+        const [value, setValue] = useState("");
+
+        const handleChange = (event) => setValue(event.target.value);
+        return (
+            <HeaderPage type={EHeaderPageType.FIRST}>
+                <HeaderPage.Title>
+                    <HeaderPage.Title.Content>
+                        <Title tag="h1" size={ETitleSize.H1}>
+                            Title text
+                        </Title>
+                        <Gap size={8} />
+                        <DocumentNumberEdit
+                            value={value}
+                            buttonLabel="Изменить"
+                            emptyNumberButtonLabel="Задать номер"
+                            emptyNumberLabel="Номер документа будет присвоен автоматически"
+                            numberLabel="Документ №"
+                            onChange={handleChange}
+                        />
+                    </HeaderPage.Title.Content>
+                    <HeaderPage.Title.Controls>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </HeaderPage.Title.Controls>
+                </HeaderPage.Title>
+            </HeaderPage>
+        );
+    },
+    parameters: {
+        docs: {
+            description: { story: "Базовый Header с полем для редактирования номера документа." },
+        },
+    },
+};
+
 export const WithTabsAndControls: StoryObj<typeof Header> = {
     render: () => (
-        <Header>
-            <Header.Title>
-                <Header.Title.Content>
+        <HeaderPage type={EHeaderPageType.FIRST}>
+            <HeaderPage.Title>
+                <HeaderPage.Title.Content>
                     <Title tag="h1" size={ETitleSize.H1}>
                         Title with tabs
                     </Title>
@@ -107,25 +182,25 @@ export const WithTabsAndControls: StoryObj<typeof Header> = {
                     <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                         Optional description about the page
                     </Text>
-                </Header.Title.Content>
-            </Header.Title>
+                </HeaderPage.Title.Content>
+            </HeaderPage.Title>
 
-            <Header.Tabs>
-                <Header.Tabs.Content>
+            <HeaderPage.Tabs>
+                <HeaderPage.Tabs.Content>
                     <Text tag="div" size={ETextSize.B3}>
                         Tabs content
                     </Text>
-                </Header.Tabs.Content>
-                <Header.Tabs.Controls>
+                </HeaderPage.Tabs.Content>
+                <HeaderPage.Tabs.Controls>
                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                </Header.Tabs.Controls>
-            </Header.Tabs>
-        </Header>
+                </HeaderPage.Tabs.Controls>
+            </HeaderPage.Tabs>
+        </HeaderPage>
     ),
     parameters: {
         docs: {
@@ -136,9 +211,9 @@ export const WithTabsAndControls: StoryObj<typeof Header> = {
 
 export const WithSubheader: StoryObj<typeof Header> = {
     render: () => (
-        <Header>
-            <Header.Title>
-                <Header.Title.Content>
+        <HeaderPage type={EHeaderPageType.FIRST}>
+            <HeaderPage.Title>
+                <HeaderPage.Title.Content>
                     <Title tag="h1" size={ETitleSize.H1}>
                         Title with tabs
                     </Title>
@@ -146,22 +221,22 @@ export const WithSubheader: StoryObj<typeof Header> = {
                     <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                         Optional description about the page
                     </Text>
-                </Header.Title.Content>
-                <Header.Title.Controls>
+                </HeaderPage.Title.Content>
+                <HeaderPage.Title.Controls>
                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
-                </Header.Title.Controls>
-            </Header.Title>
-            <Header.Subhead withoutPaddings>
+                </HeaderPage.Title.Controls>
+            </HeaderPage.Title>
+            <HeaderPage.Subhead withoutPaddings>
                 <Text tag="div" size={ETextSize.B3}>
                     Subheader text
                 </Text>
-            </Header.Subhead>
-        </Header>
+            </HeaderPage.Subhead>
+        </HeaderPage>
     ),
     parameters: {
         docs: {
@@ -172,11 +247,11 @@ export const WithSubheader: StoryObj<typeof Header> = {
 
 export const LayoutWithSidebar: StoryObj<typeof Header> = {
     render: () => (
-        <Header>
-            <Header.LayoutSidebar>
-                <Header.LayoutSidebar.Content>
-                    <Header.Title>
-                        <Header.Title.Content>
+        <HeaderPage type={EHeaderPageType.FIRST}>
+            <HeaderPage.LayoutSidebar>
+                <HeaderPage.LayoutSidebar.Content>
+                    <HeaderPage.Title>
+                        <HeaderPage.Title.Content>
                             <Title tag="h1" size={ETitleSize.H1}>
                                 Title text
                             </Title>
@@ -184,18 +259,18 @@ export const LayoutWithSidebar: StoryObj<typeof Header> = {
                             <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                                 Optional description about the page
                             </Text>
-                        </Header.Title.Content>
-                    </Header.Title>
-                </Header.LayoutSidebar.Content>
-                <Header.LayoutSidebar.Sidebar>
+                        </HeaderPage.Title.Content>
+                    </HeaderPage.Title>
+                </HeaderPage.LayoutSidebar.Content>
+                <HeaderPage.LayoutSidebar.Sidebar>
                     <div style={{ width: 200 }}>
                         <Text tag="div" size={ETextSize.B3}>
                             Sidebar
                         </Text>
                     </div>
-                </Header.LayoutSidebar.Sidebar>
-            </Header.LayoutSidebar>
-        </Header>
+                </HeaderPage.LayoutSidebar.Sidebar>
+            </HeaderPage.LayoutSidebar>
+        </HeaderPage>
     ),
     parameters: {
         docs: {

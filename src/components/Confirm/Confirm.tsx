@@ -21,17 +21,11 @@ export interface IConfirmFC extends React.FC<IConfirmProps> {
     Controls: typeof ConfirmControls;
 }
 
-const getConfirmClassNameDependingOnParentComponent = (parentComponent: EConfirmParentComponent) => {
-    switch (parentComponent) {
-        case EConfirmParentComponent.LIGHTBOX:
-            return styles.isInLightBox;
-        case EConfirmParentComponent.SIDE_OVERLAY_SM:
-            return styles.isInSideOverlaySM;
-        case EConfirmParentComponent.SIDE_OVERLAY_MD:
-            return styles.isInSideOverlayMD;
-        case EConfirmParentComponent.SIDE_OVERLAY_LG:
-            return styles.isInSideOverlayLG;
-    }
+const parentComponentToClassNameMap = {
+    [EConfirmParentComponent.LIGHTBOX]: styles.isInLightBox,
+    [EConfirmParentComponent.SIDE_OVERLAY_SM]: styles.isInSideOverlaySM,
+    [EConfirmParentComponent.SIDE_OVERLAY_MD]: styles.isInSideOverlayMD,
+    [EConfirmParentComponent.SIDE_OVERLAY_LG]: styles.isInSideOverlayLG,
 };
 
 /** Компонент предупреждения, о закрытии лайтбокса / боковой панели лайтбокса. */
@@ -40,21 +34,17 @@ export const Confirm: IConfirmFC = ({
     className,
     parentComponent = EConfirmParentComponent.LIGHTBOX,
     ...htmlDivAttributes
-}) => {
-    const confirmClassName = getConfirmClassNameDependingOnParentComponent(parentComponent);
-
-    return (
-        <Island
-            type={EIslandType.TYPE_1}
-            className={clsx(className, styles.confirm, confirmClassName)}
-            role="dialog"
-            aria-modal="true"
-            {...htmlDivAttributes}
-        >
-            <Island.Body>{children}</Island.Body>
-        </Island>
-    );
-};
+}) => (
+    <Island
+        type={EIslandType.TYPE_1}
+        className={clsx(className, styles.confirm, parentComponentToClassNameMap[parentComponent])}
+        role="dialog"
+        aria-modal="true"
+        {...htmlDivAttributes}
+    >
+        <Island.Body>{children}</Island.Body>
+    </Island>
+);
 
 Confirm.displayName = "Confirm";
 Confirm.Close = ConfirmClose;

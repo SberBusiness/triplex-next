@@ -3,23 +3,23 @@
 .confirm {
     flex-grow: 1;
     margin: 0 auto;
-    max-width: calc(@lightBox-content-max-width - 48px); // 48px - padding у Page
+    max-width: calc(@lightBox-content-max-width - @page-padding-desktop * 2);
     box-sizing: border-box;
 
     &.isInLightBox {
-        max-width: calc(@lightBox-content-max-width - 48px); // 48px - padding у Page
+        max-width: calc(@lightBox-content-max-width - @page-padding-desktop * 2);
     }
 
     &.isInSideOverlaySM {
-        max-width: calc(@sideOverlaySMWidth - 48px); // 48px - padding у Page
+        max-width: calc(@sideOverlaySMWidth - @page-padding-desktop * 2);
     }
 
     &.isInSideOverlayMD {
-        max-width: calc(@sideOverlayMDWidth - 48px); // 48px - padding у Page
+        max-width: calc(@sideOverlayMDWidth - @page-padding-desktop * 2);
     }
 
     &.isInSideOverlayLG {
-        max-width: calc(@sideOverlayLGWidth - 48px); // 48px - padding у Page
+        max-width: calc(@sideOverlayLGWidth - @page-padding-desktop * 2);
     }
 }
 

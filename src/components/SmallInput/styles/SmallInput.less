@@ -1,0 +1,23 @@
+.smallInput {
+    height: 20px;
+    width: 100%;
+    padding: 0 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    vertical-align: top;
+    color: var(--triplex-Input-Color_Default);
+    background: var(--triplex-SmallInput-Background);
+    border: none;
+    outline: none;
+    border-radius: 4px;
+
+    &::placeholder {
+        color: var(--triplex-Input-Placeholder_Color);
+        opacity: 1; // На Firefox по-дефолту цвет полупрозрачный
+    }
+
+    &::-ms-clear {
+        display: none;
+    }
+}

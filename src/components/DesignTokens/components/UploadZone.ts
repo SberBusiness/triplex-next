@@ -25,7 +25,7 @@ export const UploadZone_Tokens: TDesignTokensComponentsUploadZoneValues = {
     Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-UploadZone-Background_Default)
     Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-UploadZone-Background_Hover)
 
-    BorderColor_Default: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.40" }], // var(--triplex-next-UploadZone-BorderColor_Default)
+    BorderColor_Default: [{ ref: "ColorDarkNeutral.50" }, { ref: "ColorNeutral.50" }], // var(--triplex-next-UploadZone-BorderColor_Default)
 
     DragArea_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-UploadZone-DragArea_Background)
     DragArea_BorderColor: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.50" }], // var(--triplex-next-UploadZone-DragArea_BorderColor)

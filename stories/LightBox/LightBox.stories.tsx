@@ -281,3 +281,60 @@ export const DefaultView: Story = {
         },
     },
 };
+
+export const SplitMode: Story = {
+    render: () => {
+        const [isOpen, setIsOpen] = useState(false);
+
+        const handleOpen = () => setIsOpen(true);
+        const handleClose = () => setIsOpen(false);
+
+        return (
+            <div>
+                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
+                    Открыть LightBox
+                </Button>
+
+                <div id="LightBox-next-view-manager-node-example" />
+
+                {isOpen ? (
+                    <LightBox
+                        isLoading={false}
+                        isSideOverlayOpened={false}
+                        isTopOverlayOpened={false}
+                        lightBoxViewManagerNodeId="LightBox-next-view-manager-node-example"
+                    >
+                        <LightBox.Content key="content" isLoading={false}>
+                            <LightBoxPageContent stickyHeader stickyFooter />
+                        </LightBox.Content>
+
+                        <LightBox.Controls>
+                            <LightBox.Controls.Close
+                                title="Закрыть"
+                                data-test-id="lightbox-close"
+                                onClick={handleClose}
+                            />
+                            <LightBox.Controls.Prev
+                                title="Назад"
+                                clickByArrowLeft
+                                onClick={() => console.log("Prev clicked")}
+                            />
+                            <LightBox.Controls.Next
+                                title="Вперёд"
+                                clickByArrowRight
+                                onClick={() => console.log("Next clicked")}
+                            />
+                        </LightBox.Controls>
+                    </LightBox>
+                ) : null}
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Конфигурация LightBox в режиме split-mode. LightBox занимает 90% ширины экрана и располагается по центру. DOM-элемент с идентификатором LightBox-next-view-manager-node-example используется для позиционирования LightBox. Граница этого элемента равна границам LightBox.",
+            },
+        },
+    },
+};

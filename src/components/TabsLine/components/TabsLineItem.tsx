@@ -26,6 +26,7 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
     ({ id, label, selected, showNotificationIcon, size = EComponentSize.MD, ...htmlButtonAttributes }, ref) => {
         return (
             <button
+                type="button"
                 {...htmlButtonAttributes}
                 key={id}
                 className={clsx(styles.tab, sizeToClassNameMap[size], { [styles.active]: Boolean(selected) })}

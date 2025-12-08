@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
+import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
+import { Overlay, IOverlayProps } from "../Overlay/Overlay";
 import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import clsx from "clsx";
-import { EOverlayDirection, IOverlayChildrenProvideProps } from "../../Overlay/OverlayBase";
-import { Overlay, IOverlayProps } from "../../Overlay/Overlay";
-import styles from "./styles/LightBoxTopOverlay.module.less";
+import styles from "./styles/TopOverlay.module.less";
 
-/** Свойства компонента LightBoxTopOverlay. */
-export interface ILightBoxTopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
+/** Свойства компонента TopOverlay. */
+export interface ITopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
     children?: React.ReactNode;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrapProps;
 }
 
-export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
+export const TopOverlay: React.FC<ITopOverlayProps> = ({
     children,
     focusTrapProps,
     opened,
@@ -89,8 +89,8 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
 
     const renderOverlay = (overlayProps: IOverlayChildrenProvideProps) => (
         <>
-            <Overlay.Mask opened={overlayProps.opened} className={styles.lightBoxTopOverlayMask} />
-            <Overlay.Panel className={styles.lightBoxTopOverlayPanel} {...overlayProps}>
+            <Overlay.Mask opened={overlayProps.opened} className={styles.topOverlayMask} />
+            <Overlay.Panel className={styles.topOverlayPanel} {...overlayProps}>
                 {children}
             </Overlay.Panel>
         </>
@@ -98,7 +98,7 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
 
     const setOpened = () => {};
 
-    const classNameOverlayWrapper = clsx(styles.lightBoxTopOverlayWrapper, {
+    const classNameOverlayWrapper = clsx(styles.topOverlayWrapper, {
         [styles.closing]: closing,
         [styles.opened]: opened,
     });
@@ -111,7 +111,7 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
             opened={opened}
             setOpened={setOpened}
             {...OverlayBaseProps}
-            className={styles.lightBoxTopOverlay}
+            className={styles.topOverlay}
             direction={EOverlayDirection.TOP}
         >
             {renderOverlay}
@@ -138,5 +138,3 @@ export const LightBoxTopOverlay: React.FC<ILightBoxTopOverlayProps> = ({
         </FocusTrap>
     );
 };
-
-LightBoxTopOverlay.displayName = "LightBoxTopOverlay";

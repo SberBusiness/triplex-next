@@ -1,0 +1,42 @@
+@import url('src/styles/style');
+
+.topOverlayMask {
+    transition: opacity 0.3s;
+    background: var(--triplex-next-TopOverlay-Background);
+    // Переопределение position: absolute, которое задается в OverlayMask.
+    position: fixed !important;
+    left: var(--lightBox-screen-left);
+    width: var(--lightBox-screen-width);
+}
+
+.topOverlayWrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+
+    &.closing,
+    &.opened {
+        bottom: 0;
+    }
+
+    .topOverlayPanel {
+        transition: transform 0.6s;
+        box-shadow: none;
+        background: none;
+        margin-top: 40px;
+    }
+}
+
+.topOverlay {
+    // Нужен, чтобы панель была над .lightBoxControls.
+    z-index: @z-index-step * 5;
+}
+
+@media (max-width: @screen-sm-max) {
+    .topOverlayPanel {
+        margin-left: 16px;
+        margin-right: 16px;
+        margin-bottom: 16px;
+    }
+}

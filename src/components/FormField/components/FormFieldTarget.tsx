@@ -52,13 +52,14 @@ export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTarget
             {...restProps}
             className={classNames}
             aria-disabled={status === EFormFieldStatus.DISABLED}
+            // eslint-disable-next-line react-hooks/refs
             id={instanceId.current}
             onFocus={handleFocus}
             onBlur={handleBlur}
             tabIndex={status === EFormFieldStatus.DISABLED ? -1 : 0}
             ref={ref}
         >
-            {children || placeholder}
+            {children || <span className={styles.placeholderWrapper}>{placeholder}</span>}
         </div>
     );
 });

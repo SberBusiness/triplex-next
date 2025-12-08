@@ -23,6 +23,7 @@ export * from "./ListItemControlsButton";
 export * from "./ListMaster";
 export * from "./Marker";
 export * from "./MarkerStatus";
+export * from "./MultiselectField";
 export * from "./UploadZone";
 export * from "./Pagination";
 export * from "./Card";

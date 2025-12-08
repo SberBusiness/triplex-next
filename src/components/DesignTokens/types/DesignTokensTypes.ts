@@ -25,6 +25,7 @@ import {
     TDesignTokensComponentsLoaderScreen,
     TDesignTokensComponentsMarker,
     TDesignTokensComponentsMarkerStatus,
+    TDesignTokensComponentsMultiselectField,
     TDesignTokensComponentsOverlay,
     TDesignTokensComponentsPagination,
     TDesignTokensComponentsRadio,
@@ -304,6 +305,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsLoaderScreen
     | TDesignTokensComponentsMarker
     | TDesignTokensComponentsMarkerStatus
+    | TDesignTokensComponentsMultiselectField
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsRadio

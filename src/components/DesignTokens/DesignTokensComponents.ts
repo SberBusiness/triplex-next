@@ -28,6 +28,7 @@ import {
     LoaderScreen_Tokens,
     Marker_Tokens,
     MarkerStatus_Tokens,
+    MultiselectField_Tokens,
     Overlay_Tokens,
     Pagination_Tokens,
     Radio_Tokens,
@@ -72,6 +73,7 @@ import {
     TDesignTokensComponentsLoaderScreenValue,
     TDesignTokensComponentsMarkerValue,
     TDesignTokensComponentsMarkerStatusValue,
+    TDesignTokensComponentsMultiselectFieldValue,
     TDesignTokensComponentsOverlayValue,
     TDesignTokensComponentsPaginationValue,
     TDesignTokensComponentsRadioValue,
@@ -156,6 +158,10 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     MarkerStatus: GetTokensValueByTheme<TDesignTokensComponentsMarkerStatusValue>(
         ETriplexNextTheme.LIGHT,
         MarkerStatus_Tokens,
+    ),
+    MultiselectField: GetTokensValueByTheme<TDesignTokensComponentsMultiselectFieldValue>(
+        ETriplexNextTheme.LIGHT,
+        MultiselectField_Tokens,
     ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.LIGHT, Overlay_Tokens),
     Pagination: GetTokensValueByTheme<TDesignTokensComponentsPaginationValue>(

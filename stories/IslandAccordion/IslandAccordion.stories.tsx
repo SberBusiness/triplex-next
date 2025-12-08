@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IslandAccordion, IslandAccordionItem } from "../../src/components/IslandAccordion";
 import { StoryObj } from "@storybook/react";
 import { EComponentSize } from "../../src/enums/EComponentSize";
@@ -347,6 +347,79 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
                             </IslandAccordion.Item.Footer>
                         </IslandAccordion.Item>
                     }
+                </IslandAccordion>
+            </div>
+        );
+    },
+};
+
+export const OnlyOneOpenAtATime: StoryObj<IIslandAccordionStoryType> = {
+    args: {
+        size: EComponentSize.SM,
+    },
+    argTypes: {
+        size: {
+            table: {
+                disable: true,
+            },
+        },
+        type: {
+            table: {
+                disable: true,
+            },
+        },
+    },
+    render: (args) => {
+        const [openItemId, setOpenItemId] = useState();
+
+        const items = [
+            {
+                id: "accordion-form-item-0",
+                status: EStepStatus.DEFAULT,
+            },
+            {
+                id: "accordion-form-item-1",
+                status: EStepStatus.DONE,
+            },
+            {
+                id: "accordion-form-item-2",
+                status: EStepStatus.ACTIVE,
+            },
+        ];
+
+        const handleToggle = (open, id) => setOpenItemId(open ? id : undefined);
+
+        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+
+        const renderIslandAccordionItem = ({ id, status }, index: number) => (
+            <IslandAccordion.Item
+                key={id}
+                id={id}
+                num={index + 1}
+                status={status}
+                title={title}
+                opened={id == openItemId}
+                onToggle={handleToggle}
+            >
+                <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
+                <IslandAccordion.Item.Footer>
+                    <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
+                        Button link text
+                    </Button>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
+                </IslandAccordion.Item.Footer>
+            </IslandAccordion.Item>
+        );
+
+        return (
+            <div className="island-accordion-example">
+                <IslandAccordion size={args.size}>
+                    {items.map((item, index) => renderIslandAccordionItem(item, index))}
                 </IslandAccordion>
             </div>
         );

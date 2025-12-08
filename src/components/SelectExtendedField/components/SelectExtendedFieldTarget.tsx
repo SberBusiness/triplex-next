@@ -1,15 +1,22 @@
 import React, { useRef } from "react";
-import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import clsx from "clsx";
 import styles from "../styles/SelectExtendedFieldTarget.module.less";
-import { EFormFieldStatus, FormField, FormFieldLabel, FormFieldPostfix, IFormFieldProps } from "../../FormField";
+import {
+    EFormFieldStatus,
+    FormField,
+    FormFieldLabel,
+    FormFieldPostfix,
+    FormFieldPrefix,
+    IFormFieldProps,
+} from "../../FormField";
 import { FormFieldTarget } from "../../FormField/components/FormFieldTarget";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /* Свойства SelectExtendedFieldTarget. */
-export interface ISelectExtendedFieldTargetProps extends IFormFieldProps {
+export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
     /* Текст, или компонент отображающий выбранное значение. */
     label?: React.ReactNode;
     /* Текст, или компонент отображающий выбранное значение для Target. */
@@ -20,9 +27,25 @@ export interface ISelectExtendedFieldTargetProps extends IFormFieldProps {
     opened: boolean;
     /* Текст, или компонент отображающий выбранное placeholder. */
     placeholder?: React.ReactNode;
+    /** Префикс поля ввода. */
+    prefix?: React.ReactNode;
+    /** Постфикс поля ввода. */
+    postfix?: React.ReactNode;
     /* Функция открытия/закрытия выпадающего списка. */
     setOpened: (opened: boolean) => void;
 }
+
+const sizeToCaretIconMap = {
+    [EComponentSize.SM]: <CaretdownStrokeSrvIcon16 paletteIndex={5} className={styles.caretIcon} />,
+    [EComponentSize.MD]: <CaretdownStrokeSrvIcon20 paletteIndex={5} className={styles.caretIcon} />,
+    [EComponentSize.LG]: <CaretdownStrokeSrvIcon24 paletteIndex={5} className={styles.caretIcon} />,
+};
+
+const sizeToLoaderSizeMap = {
+    [EComponentSize.SM]: <LoaderSmall size={EComponentSize.SM} theme={ELoaderSmallTheme.BRAND} />,
+    [EComponentSize.MD]: <LoaderSmall size={EComponentSize.MD} theme={ELoaderSmallTheme.BRAND} />,
+    [EComponentSize.LG]: <LoaderSmall size={EComponentSize.LG} theme={ELoaderSmallTheme.BRAND} />,
+};
 
 /**
  * Компонент SelectTarget.
@@ -38,9 +61,11 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             onKeyDown,
             onClick,
             opened,
+            postfix,
+            prefix,
             setOpened,
             loading,
-            size,
+            size = EComponentSize.MD,
             status,
             tabIndex,
             fieldLabel,
@@ -118,7 +143,9 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 data-tx={process.env.npm_package_version}
                 {...rest}
             >
-                <FormFieldLabel floating={!!label || !!placeholder}>{fieldLabel}</FormFieldLabel>
+                {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
+
+                <FormFieldLabel>{fieldLabel}</FormFieldLabel>
                 <FormFieldTarget
                     ref={setRef}
                     className={clsx(styles.target, {
@@ -129,12 +156,10 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 >
                     {label}
                 </FormFieldTarget>
+
                 <FormFieldPostfix>
-                    {loading ? (
-                        <LoaderSmall size={EComponentSize.LG} theme={ELoaderSmallTheme.BRAND} />
-                    ) : (
-                        <CaretdownStrokeSrvIcon24 paletteIndex={5} className={styles.caretIcon} />
-                    )}
+                    {loading ? sizeToLoaderSizeMap[size] : sizeToCaretIconMap[size]}
+                    {postfix ? postfix : null}
                 </FormFieldPostfix>
             </FormField>
         );

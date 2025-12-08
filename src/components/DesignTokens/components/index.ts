@@ -45,3 +45,4 @@ export * from "./StatusTracker";
 export * from "./Step";
 export * from "./ModalWindow";
 export * from "./TopOverlay";
+export * from "./SmallInput";

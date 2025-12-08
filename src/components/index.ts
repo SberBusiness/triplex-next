@@ -56,3 +56,5 @@ export * from "./Tooltip";
 export * from "./SMSInput";
 export * from "./Spoiler";
 export * from "./StatusTracker";
+export * from "./SmallInput";
+export * from "./DocumentNumberEdit";

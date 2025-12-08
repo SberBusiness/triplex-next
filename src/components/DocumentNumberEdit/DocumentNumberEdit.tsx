@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from "react";
-import { SmallInput, ISmallInputProps } from "@sber-business/triplex/components/SmallInput/SmallInput";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { Text } from "@sber-business/triplex/components/Typography/Text";
-import { EFontType, ELineType, ETextSize } from "@sber-business/triplex/components/Typography/enums";
-import { getCaretPosition, setCaretPosition } from "@sber-business/triplex/utils/inputUtils";
-import { StringUtils } from "@sber-business/triplex/utils/stringUtils";
-import { isKey } from "@sber-business/triplex/utils/keyboard";
+import { SmallInput, ISmallInputProps } from "../SmallInput/SmallInput";
+import { Text } from "../Typography/Text";
+import { EFontType, ETextSize } from "../Typography/enums";
+import { getCaretPosition, setCaretPosition } from "../../utils/inputUtils";
+import { StringUtils } from "../../utils/stringUtils";
+import { isKey } from "../../utils/keyboard";
+import styles from "./styles/DocumentNumberEdit.module.less";
+import clsx from "clsx";
+import { Link } from "../Link/Link";
 
 /** Свойства компонента DocumentNumberEdit. */
 export interface IDocumentNumberEditProps extends ISmallInputProps {
@@ -55,7 +57,7 @@ export const DocumentNumberEdit: React.FC<IDocumentNumberEditProps> = ({
 
     /** Рендер поля ввода. */
     const renderInput = () => (
-        <div className="cssClass[inputEditWrapper]">
+        <div className={styles.inputEditWrapper}>
             <SmallInput
                 {...rest}
                 value={value || ""}
@@ -70,9 +72,7 @@ export const DocumentNumberEdit: React.FC<IDocumentNumberEditProps> = ({
     );
 
     /** Плейсхолдер поля ввода. */
-    const inputPlaceholder = useMemo(() => {
-        return "0".repeat(maxLength);
-    }, [maxLength]);
+    const inputPlaceholder = "0".repeat(maxLength);
 
     /** Обработчик потери фокуса поля ввода. */
     const handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -119,17 +119,22 @@ export const DocumentNumberEdit: React.FC<IDocumentNumberEditProps> = ({
 
     /** Рендер кнопки. */
     const renderButton = () => (
-        <button type="button" className="cssClass[buttonEdit]" onClick={handleButtonClick}>
-            <span className="cssClass[buttonEditInner]">{value ? buttonLabel : emptyNumberButtonLabel}</span>
-        </button>
+        <Text className={styles.label} tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            <Link href="#" onClick={handleButtonClick}>
+                {value ? buttonLabel : emptyNumberButtonLabel}
+            </Link>
+        </Text>
     );
 
     /** Обработчик клика кнопки. */
-    const handleButtonClick = () => setEditingMode(true);
+    const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        setEditingMode(true);
+    };
 
     return (
-        <div className={classnames("cssClass[documentNumberEdit]", className)}>
-            <Text className="cssClass[label]" type={EFontType.SECONDARY} size={ETextSize.B1} line={ELineType.EXTRA}>
+        <div className={clsx(styles.documentNumberEdit, className)}>
+            <Text className={styles.label} tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                 {labelText}
             </Text>
 

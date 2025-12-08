@@ -7,6 +7,8 @@ import { Link } from "../../src/components/Link";
 import { UploadZone } from "../../src/components/UploadZone/UploadZone";
 import { ClouddraguploadStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import "./UploadZone.less";
+import { HelpBox } from "../../src/components/HelpBox/HelpBox";
+import { ETooltipSize } from "../../src/components/Tooltip/enums";
 
 export default {
     title: "Components/UploadZone",
@@ -31,7 +33,7 @@ export const Default: StoryObj<typeof UploadZone> = {
             <div className="uploadZoneContainerContent">
                 <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
-                <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">
+                <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
                     Положите файлы сюда
                 </Text>
             </div>
@@ -48,15 +50,15 @@ export const Default: StoryObj<typeof UploadZone> = {
                 <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
                 <div>
-                    <Text type={EFontType.SECONDARY} size={ETextSize.B3} tag="div">
+                    <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
                         Перетащите файлы или
                         {"\u00A0"}
                         <Link onClick={openUploadDialog}>выберите на компьютере</Link>
-                    </Text>{" "}
-                    {/* {"\u00A0"}
-                    <HelpBox tooltipSize={ETooltipSize.SM}>
-                        Допустимые форматы файлов: PDF, TIFF, JPEG, PNG, PCX, DOCX.
-                    </HelpBox> */}
+                        {"\u00A0"}
+                        <HelpBox tooltipSize={ETooltipSize.SM}>
+                            Допустимые форматы файлов: PDF, TIFF, JPEG, PNG, PCX, DOCX.
+                        </HelpBox>
+                    </Text>
                 </div>
                 <Gap size={16} />
             </div>

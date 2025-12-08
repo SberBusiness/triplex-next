@@ -1,11 +1,12 @@
 import React from "react";
-import { IMultiselectProps, Multiselect } from "../Multiselect";
+import { IMultiselectFieldProps, MultiselectField } from "../MultiselectField";
 import { Chip, ChipClearButton, ChipDropdownArrow } from ".";
 import { ISelectExtendedFieldTargetProvideProps } from "../SelectExtendedField";
-import styles from "./Chip.module.less";
+import { isKey } from "../../utils/keyboard";
+import styles from "./styles/Chip.module.less";
 import clsx from "clsx";
 
-export interface IChipMultiselectProps extends Omit<IMultiselectProps, "renderTarget"> {
+export interface IChipMultiselectProps extends Omit<IMultiselectFieldProps, "renderTarget"> {
     /** Функция отмены выбора. */
     clearSelected: () => void;
     /** Состояние disabled. */
@@ -23,7 +24,7 @@ export interface IChipMultiselectProps extends Omit<IMultiselectProps, "renderTa
  * Количество выбранных значений отображается компонентом Chip.
  */
 export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselectProps>(
-    ({ children, className, clearSelected, disabled, label, displayedValue, selected, ...rest }, ref) => {
+    ({ children, className, clearSelected, disabled, label, displayedValue, selected, size, ...rest }, ref) => {
         const handleClickClearButton = (event: React.MouseEvent<HTMLButtonElement>) => {
             // Предотвращение нажатия на родительский элемент Chip.
             event.stopPropagation();
@@ -31,30 +32,45 @@ export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselect
             clearSelected();
         };
 
-        const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => (
-            <Chip
-                aria-expanded={opened}
-                disabled={disabled}
-                onClick={() => setOpened(true)}
-                postfix={
-                    selected ? (
-                        <ChipClearButton onClick={handleClickClearButton} />
-                    ) : (
-                        <ChipDropdownArrow rotated={opened} />
-                    )
+        const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => {
+            const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+                if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+                    setOpened(!opened);
                 }
-                ref={ref}
-                role="listbox"
-                selected={Boolean(selected)}
-            >
-                {selected ? (displayedValue ?? label) : label}
-            </Chip>
-        );
+            };
+
+            return (
+                <Chip
+                    aria-expanded={opened}
+                    disabled={disabled}
+                    size={size}
+                    onClick={() => setOpened(!opened)}
+                    onKeyDown={handleKeyDown}
+                    postfix={
+                        selected ? (
+                            <ChipClearButton onClick={handleClickClearButton} />
+                        ) : (
+                            <ChipDropdownArrow rotated={opened} />
+                        )
+                    }
+                    ref={ref}
+                    role="listbox"
+                    selected={Boolean(selected)}
+                >
+                    {selected ? (displayedValue ?? label) : label}
+                </Chip>
+            );
+        };
 
         return (
-            <Multiselect renderTarget={renderTarget} className={clsx(styles.chipGroupItem, className)} {...rest}>
+            <MultiselectField
+                size={size}
+                renderTarget={renderTarget}
+                className={clsx(styles.chipGroupItem, className)}
+                {...rest}
+            >
                 {children}
-            </Multiselect>
+            </MultiselectField>
         );
     },
 );

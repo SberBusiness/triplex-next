@@ -28,7 +28,7 @@ export const MultiselectFieldDropdown = Object.assign(
 
             const renderDropdown = () => (
                 <Dropdown
-                    fixedWidth
+                    fixedWidth={false}
                     mobileViewProps={{
                         ...mobileViewProps,
                         className: mobileViewProps?.className,

@@ -1,6 +1,7 @@
 import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import React from "react";
+import styles from "../styles/CheckboxTreeExtended.module.less";
 
 /**
  * Свойства CheckboxTreeExtendedArrow.
@@ -34,7 +35,7 @@ export class CheckboxTreeExtendedArrow extends React.Component<ICheckboxTreeExte
     public render(): JSX.Element {
         return (
             <span
-                className="cssClass[caretIconWrapper]"
+                className={styles.caretIconWrapper}
                 onClick={this.handleClick}
                 onKeyUp={this.handleKeyUp}
                 ref={this.setArrowNode}

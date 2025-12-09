@@ -2,6 +2,7 @@ import React from "react";
 import { Checkbox, ICheckboxProps } from "../../Checkbox/Checkbox";
 import clsx from "clsx";
 import { isStaticCheckboxTreeExtended } from "../isStaticCheckboxTreeExtended";
+import styles from "../styles/CheckboxTreeExtended.module.less";
 
 /**
  * Свойства CheckboxTreeExtendedCheckbox.
@@ -38,9 +39,9 @@ export class CheckboxTreeExtendedCheckbox extends React.Component<ICheckboxTreeE
 
         return (
             <Checkbox
-                className={clsx("cssClass[checkboxTreeCheckbox]", className)}
+                className={clsx(styles.checkboxTreeCheckbox, className)}
                 ref={this.setCheckboxNode}
-                labelAttributes={{ className: "cssClass[checkboxTreeCheckboxLabel]", onFocus: this.handleFocus }}
+                labelAttributes={{ className: styles.checkboxTreeCheckboxLabel, onFocus: this.handleFocus }}
                 {...checkboxProps}
             />
         );

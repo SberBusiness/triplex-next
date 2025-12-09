@@ -3,6 +3,7 @@ import { CollapsableTree, ICollapsableTreeProps } from "../CollapsableTree/Colla
 import { CheckboxTreeExtendedCheckbox } from "./components/CheckboxTreeExtendedCheckbox";
 import { CheckboxTreeExtendedNode } from "./components/CheckboxTreeExtendedNode";
 import clsx from "clsx";
+import styles from "./styles/CheckboxTreeExtended.module.less";
 
 /** Свойства CheckboxTreeExtended. */
 export interface ICheckboxTreeExtendedProps extends ICollapsableTreeProps {}
@@ -17,7 +18,7 @@ export interface ICheckboxTreeExtendedSFC extends React.FC<ICheckboxTreeExtended
  * Является оберткой над CollapsableTree.
  */
 export const CheckboxTreeExtended: ICheckboxTreeExtendedSFC = ({ className, ...rest }) => (
-    <CollapsableTree className={clsx("cssClass[checkboxTreeExtended]", className)} {...rest} />
+    <CollapsableTree className={clsx(styles.checkboxTreeExtended, className)} {...rest} />
 );
 
 CheckboxTreeExtended.displayName = "CheckboxTreeExtended";

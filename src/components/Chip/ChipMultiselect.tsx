@@ -1,6 +1,8 @@
 import React from "react";
 import { IMultiselectFieldProps, MultiselectField } from "../MultiselectField";
-import { Chip, ChipClearButton, ChipDropdownArrow } from ".";
+import { Chip } from "./Chip";
+import { ChipClearButton } from "./ChipClearButton";
+import { ChipDropdownArrow } from "./ChipDropdownArrow";
 import { ISelectExtendedFieldTargetProvideProps } from "../SelectExtendedField";
 import { isKey } from "../../utils/keyboard";
 import styles from "./styles/Chip.module.less";

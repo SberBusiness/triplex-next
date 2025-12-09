@@ -19,6 +19,7 @@ import {
 } from "../../src/components/CheckboxTree/utils";
 import "./ChipMultiselect.less";
 import { ChipMultiselect } from "../../src/components/Chip/ChipMultiselect";
+import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
 
 export default {
     title: "Components/Chips/ChipMultiselect",
@@ -27,7 +28,7 @@ export default {
         docs: {
             description: {
                 component: `
-
+Компонент выбора нескольких значений из списка.
                 `,
             },
         },
@@ -179,6 +180,7 @@ function createMultiselectFieldStoriesLogic() {
             setOpened={setOpened}
             targetRef={targetRef}
             ref={dropdownRef}
+            alignment={EDropdownAlignment.LEFT}
             focusTrapProps={{
                 focusTrapOptions: { initialFocus: false },
             }}

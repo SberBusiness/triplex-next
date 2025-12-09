@@ -1,0 +1,54 @@
+@import "src/styles/style";
+
+.confirm {
+    flex-grow: 1;
+    margin: 0 auto;
+    max-width: calc(@lightBox-content-max-width - @page-padding-desktop * 2);
+    box-sizing: border-box;
+
+    &.isInLightBox {
+        max-width: calc(@lightBox-content-max-width - @page-padding-desktop * 2);
+    }
+
+    &.isInSideOverlaySM {
+        max-width: calc(@sideOverlaySMWidth - @page-padding-desktop * 2);
+    }
+
+    &.isInSideOverlayMD {
+        max-width: calc(@sideOverlayMDWidth - @page-padding-desktop * 2);
+    }
+
+    &.isInSideOverlayLG {
+        max-width: calc(@sideOverlayLGWidth - @page-padding-desktop * 2);
+    }
+}
+
+.confirmCloseButton {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+}
+
+.confirmContent {
+    margin-bottom: 24px;
+    padding-right: 56px;
+}
+
+.confirmControls {
+    white-space: nowrap;
+}
+
+.confirmContentTitle {
+    margin-bottom: 12px;
+}
+
+@media (max-width: @screen-sm-max) {
+    .confirmCloseButton {
+        top: 16px;
+        right: 16px;
+    }
+
+    .confirmContent {
+        margin-bottom: 16px;
+    }
+}

@@ -5,7 +5,7 @@ import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
 import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";
 import { Portal } from "../Portal/Portal";
 import { addClassNameWithScrollbarWidth } from "../../utils/scroll/scrollbar";
-import { LightBoxTopOverlay } from "./LightBoxTopOverlay/LightBoxTopOverlay";
+import { TopOverlay } from "../TopOverlay/TopOverlay";
 import { LightBoxViewManager } from "./LightBoxViewManager/LightBoxViewManager";
 import { MobileView } from "../MobileView/MobileView";
 import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
@@ -42,7 +42,7 @@ export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
 interface ILightBoxFC extends React.FC<ILightBoxProps> {
     Content: typeof LightBoxContent;
     SideOverlay: typeof LightBoxSideOverlay;
-    TopOverlay: typeof LightBoxTopOverlay;
+    TopOverlay: typeof TopOverlay;
     Controls: typeof LightBoxControls;
 }
 
@@ -198,7 +198,7 @@ export const LightBox: ILightBoxFC = ({
 
 LightBox.Content = LightBoxContent;
 LightBox.SideOverlay = LightBoxSideOverlay;
-LightBox.TopOverlay = LightBoxTopOverlay;
+LightBox.TopOverlay = TopOverlay;
 LightBox.Controls = LightBoxControls;
 
 LightBox.displayName = "LightBox";

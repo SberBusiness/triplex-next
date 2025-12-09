@@ -25,7 +25,7 @@ export const ButtonIcon = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
             disabled: !!disabled,
         });
 
-        return <button className={classNames} disabled={disabled} {...rest} ref={ref} />;
+        return <button type="button" className={classNames} disabled={disabled} {...rest} ref={ref} />;
     },
 );
 

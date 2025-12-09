@@ -95,6 +95,8 @@ import {
     TDesignTokensComponentsStatusTrackerValue,
     TDesignTokensComponentsModalWindowValue,
     ModalWindow_Tokens,
+    TDesignTokensComponentsTopOverlayValue,
+    TopOverlay_Tokens,
 } from "./components";
 
 export const DesignTokensComponents: TDesignTokensComponents = {
@@ -209,5 +211,9 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     ModalWindow: GetTokensValueByTheme<TDesignTokensComponentsModalWindowValue>(
         ETriplexNextTheme.LIGHT,
         ModalWindow_Tokens,
+    ),
+    TopOverlay: GetTokensValueByTheme<TDesignTokensComponentsTopOverlayValue>(
+        ETriplexNextTheme.LIGHT,
+        TopOverlay_Tokens,
     ),
 };

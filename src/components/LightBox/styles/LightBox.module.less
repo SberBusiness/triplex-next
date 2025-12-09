@@ -38,14 +38,14 @@
         flex-shrink: 0;
         align-items: center;
         position: relative;
-        margin: 16px 16px 0 16px;
+        margin: 16px @lightBoxContentMarginX 0 @lightBoxContentMarginX;
         padding: 0;
         border-top-left-radius: 32px;
         border-top-right-radius: 32px;
         background-color: var(--triplex-next-LightBox-Content_Background);
 
         & > .global-page {
-            max-width: 800px;
+            max-width: @lightBox-content-max-width;
         }
     }
 

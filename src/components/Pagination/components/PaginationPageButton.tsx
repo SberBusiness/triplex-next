@@ -15,6 +15,7 @@ export const PaginationPageButton = React.forwardRef<HTMLButtonElement, TPaginat
     ({ isCurrent = false, children, className, ...rest }, ref) => {
         return (
             <button
+                type="button"
                 className={clsx(
                     styles.paginationPageButton,
                     {

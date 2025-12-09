@@ -31,7 +31,7 @@ export const TabsExtendedTabButton = React.forwardRef<HTMLButtonElement, ITabsEx
         );
 
         return (
-            <button className={classNames} role="tab" aria-selected={selected} ref={ref} {...rest}>
+            <button type="button" className={classNames} role="tab" aria-selected={selected} ref={ref} {...rest}>
                 <Text size={tabsExtendedSizeToTextSizeMap[size]} className={styles.tabButtonText}>
                     {children}
                 </Text>

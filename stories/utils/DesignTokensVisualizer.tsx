@@ -16,6 +16,7 @@ export const DesignTokensVisualizer: React.FC = () => {
             <div className={styles.tabs}>
                 {Object.keys(DesignTokensCore).map((groupName) => (
                     <button
+                        type="button"
                         key={groupName}
                         onClick={() => setActiveTab(groupName as DesignTokensGroupName)}
                         className={styles.tab}

@@ -312,7 +312,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
             {isOpen ? (
                 <LightBox isLoading={false} isSideOverlayOpened={openedSideOverlayLG} isTopOverlayOpened={false}>
                     <LightBox.Content key="content" isLoading={false}>
-                        <Page style={{ maxWidth: 800 }}>
+                        <Page>
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
                                 <Page.Header.Title>
                                     <Page.Header.Title.Content>
@@ -483,7 +483,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
             {isOpen ? (
                 <LightBox isLoading={false} isSideOverlayOpened={openedSideOverlayLG} isTopOverlayOpened={false}>
                     <LightBox.Content key="content" isLoading={false}>
-                        <Page style={{ maxWidth: 800 }}>
+                        <Page>
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
                                 <Page.Header.Title>
                                     <Page.Header.Title.Content>

@@ -8,7 +8,7 @@ import { MobileView } from "../../MobileView/MobileView";
 import { MultiselectFieldContext } from "../MultiselectFieldContext";
 
 /** Свойства компонента MultiselectFieldDropdown. */
-interface IMultiselectFieldDropdownProps extends IDropdownProps {
+export interface IMultiselectFieldDropdownProps extends IDropdownProps {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrapProps;
 }
@@ -28,7 +28,7 @@ export const MultiselectFieldDropdown = Object.assign(
 
             const renderDropdown = () => (
                 <Dropdown
-                    fixedWidth
+                    fixedWidth={false}
                     mobileViewProps={{
                         ...mobileViewProps,
                         className: mobileViewProps?.className,

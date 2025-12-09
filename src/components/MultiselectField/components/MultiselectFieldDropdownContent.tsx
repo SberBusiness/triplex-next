@@ -5,7 +5,7 @@ import clsx from "clsx";
 import styles from "../styles/MultiselectFieldDropdownContent.module.less";
 
 /** Свойства компонента MultiselectFieldDropdownContent. */
-interface IMultiselectFieldDropdownContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IMultiselectFieldDropdownContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 

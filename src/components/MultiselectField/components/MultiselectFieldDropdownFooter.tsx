@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "../styles/MultiselectFieldDropdownFooter.module.less";
 
 /** Свойства компонента MultiselectFieldDropdownFooter. */
-interface IMultiselectFieldDropdownFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IMultiselectFieldDropdownFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const MultiselectFieldDropdownFooter: React.FC<IMultiselectFieldDropdownFooterProps> = ({
     children,

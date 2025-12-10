@@ -9,7 +9,6 @@ import { Link } from "../../src/components/Link";
 import { Text, ETextSize, ETitleSize, Title, EFontType } from "../../src/components/Typography";
 import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { DateField } from "../../src/components/DateField";
-import { EFormFieldStatus } from "../../src/components/FormField/enums";
 import { IIslandWidgetProps } from "../../src/components/IslandWidget";
 
 export default {
@@ -34,8 +33,6 @@ export default {
         placeholderMask: "дд.мм.гггг",
         label: "дд.мм.гггг",
         invalidDateHint: "Указана недоступная для выбора дата.",
-        status: EFormFieldStatus.DEFAULT,
-        size: EComponentSize.SM,
     },
     argTypes: {
         placeholderMask: {
@@ -49,16 +46,6 @@ export default {
             },
         },
         invalidDateHint: {
-            table: {
-                disable: true,
-            },
-        },
-        status: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
             table: {
                 disable: true,
             },
@@ -77,8 +64,6 @@ interface IIslandWidgetStoryProps extends IIslandWidgetProps {
     placeholderMask: string;
     label: string;
     invalidDateHint: string;
-    status: EFormFieldStatus;
-    size: EComponentSize;
 }
 
 export const Basic: StoryObj<IIslandWidgetStoryProps> = {

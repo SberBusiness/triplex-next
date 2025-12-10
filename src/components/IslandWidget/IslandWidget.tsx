@@ -1,5 +1,5 @@
 import React from "react";
-import { Island, IIslandProps, EIslandType } from "../Island";
+import { Island, EIslandType } from "../Island";
 import { IIslandWidgetHeaderProps, IslandWidgetHeader } from "./components/IslandWidgetHeader";
 import { IIslandWidgetBodyProps, IslandWidgetBody } from "./components/IslandWidgetBody";
 import { IIslandWidgetFooterProps, IslandWidgetFooter } from "./components/IslandWidgetFooter";
@@ -8,7 +8,7 @@ import { EComponentSize } from "../../enums/EComponentSize";
 import styles from "./styles/IslandWidget.module.less";
 import clsx from "clsx";
 
-export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement>, Pick<IIslandProps, "type" | "size"> {
+export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
     renderBody: (props: IIslandWidgetBodyProps) => JSX.Element;
     renderFooter?: (props: IIslandWidgetFooterProps) => JSX.Element;
     renderExtraFooter?: (props: IIslandWidgetExtraFooterProps) => JSX.Element;

@@ -1,11 +1,10 @@
 import React from "react";
 import moment from "moment";
-import { RangeSrvIcon24 } from "@sberbusiness/icons/RangeSrvIcon24";
-import { classnames } from "@sber-business/triplex/utils/classnames/classnames";
-import { dateFormatYYYYMMDD } from "@sber-business/triplex/consts/DateConst";
+import { MinusStrokeSrvIcon20, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { dateFormatYYYYMMDD } from "../../consts/DateConst";
 import { EDateRangeShiftUnit } from "./enums";
-import { TabfoldercarouselleftSrvxIcon32 } from "@sberbusiness/icons/TabfoldercarouselleftSrvxIcon32";
-import { TabfoldercarouselrightSrvxIcon32 } from "@sberbusiness/icons/TabfoldercarouselrightSrvxIcon32";
+import clsx from "clsx";
+import styles from "./styles/DateRange.module.less";
 
 /** Свойства функции рендеринга кнопки сдвига диапазона дат. */
 export interface IDateRangeButtonProvideProps {
@@ -62,7 +61,7 @@ export const DateRange: React.FC<IDateRangeProps> = ({
     ...rest
 }) => {
     const [start, end] = value;
-    const classNames = classnames("cssClass[dateRange]", className);
+    const classNames = clsx(styles.dateRange, className);
 
     /** Обработчик изменения значения в поле выбора даты "от". */
     const handleChangePickerFrom = (date: string) => {
@@ -116,8 +115,8 @@ export const DateRange: React.FC<IDateRangeProps> = ({
         <div className={classNames} {...rest}>
             {!hideNavigation &&
                 renderButtonBack({
-                    children: <TabfoldercarouselleftSrvxIcon32 />,
-                    className: classnames("cssClass[dateRangeButton]", { disabled: !(start && end) }),
+                    children: <CaretleftStrokeSrvIcon20 paletteIndex={5} />,
+                    className: clsx(styles.dateRangeButton, { disabled: !(start && end) }),
                     disabled: !(start && end),
                     onClick: shiftRangeBack,
                 })}
@@ -125,15 +124,15 @@ export const DateRange: React.FC<IDateRangeProps> = ({
                 onChange: handleChangePickerFrom,
                 value: start,
             })}
-            <RangeSrvIcon24 />
+            <MinusStrokeSrvIcon20 className={styles.separator} paletteIndex={5} />
             {renderPickerTo({
                 onChange: handleChangePickerTo,
                 value: end,
             })}
             {!hideNavigation &&
                 renderButtonForward({
-                    children: <TabfoldercarouselrightSrvxIcon32 />,
-                    className: classnames("cssClass[dateRangeButton]", { disabled: !(start && end) }),
+                    children: <CaretrightStrokeSrvIcon20 paletteIndex={5} />,
+                    className: clsx(styles.dateRangeButton, { disabled: !(start && end) }),
                     disabled: !(start && end),
                     onClick: shiftRangeForward,
                 })}

@@ -45,6 +45,7 @@ export * from "./KeyDownListener";
 export * from "./SelectExtendedField";
 export * from "./Island";
 export * from "./IslandAccordion";
+export * from "./IslandWidget";
 export * from "./Table";
 export * from "./AmountField";
 export * from "./SelectField";

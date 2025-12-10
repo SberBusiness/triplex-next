@@ -1,0 +1,29 @@
+@import 'src/styles/style';
+
+.sliderExtendedRail {
+    height: 4px;
+    background: var(--triplex-next-Slider-Rail_Background);
+    cursor: pointer;
+}
+
+.sliderExtended {
+    user-select: none;
+    position: relative;
+    // Высота .sliderExtendedDot над .sliderExtendedRail.
+    padding-top: 10px;
+    // Высота .sliderExtendedMarkText под .sliderExtendedRail.
+    padding-bottom: 30px;
+
+    &.disabled {
+        .sliderExtendedRail {
+            pointer-events: none;
+            cursor: default;
+            background: var(--triplex-next-Slider-Rail_Background_Disabled);
+        }
+    }
+
+    &.lg {
+        padding-top: 12px;
+        padding-bottom: 35px;
+    }
+}

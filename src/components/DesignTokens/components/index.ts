@@ -46,3 +46,4 @@ export * from "./Step";
 export * from "./ModalWindow";
 export * from "./TopOverlay";
 export * from "./SmallInput";
+export * from "./Slider";

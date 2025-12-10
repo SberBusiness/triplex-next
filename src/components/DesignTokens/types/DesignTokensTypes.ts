@@ -49,6 +49,7 @@ import {
     TDesignTokensComponentsTopOverlay,
     TDesignTokensComponentsSmallInput,
 } from "../components";
+import { TDesignTokensComponentsSlider } from "@sberbusiness/triplex-next/components/DesignTokens/components/Slider";
 
 // Название токенов группы ColorBrand.
 export const designTokensCoreGroupColorBrandKeys = [
@@ -315,6 +316,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsSegmentedControlSegment
     | TDesignTokensComponentsSkeleton
     | TDesignTokensComponentsSMSInput
+    | TDesignTokensComponentsSlider
     | TDesignTokensComponentsStep
     | TDesignTokensComponentsStepper
     | TDesignTokensComponentsTableBasic

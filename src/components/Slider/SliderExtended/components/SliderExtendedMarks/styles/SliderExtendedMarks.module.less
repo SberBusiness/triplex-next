@@ -1,0 +1,117 @@
+@import 'src/styles/style';
+
+.sliderExtendedMarks {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+}
+
+.sliderExtendedMark {
+    position: absolute;
+    top: 15px;
+    transform: translateX(-50%);
+    cursor: pointer;
+
+    .sliderExtendedMarkDot {
+        background: var(--triplex-next-Slider-Mark_Dot_Background_Default);
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        display: block;
+        position: absolute;
+        top: -17px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        &.inSelectedRange {
+            background: var(--triplex-next-Slider-Mark_Dot_Background_Selected);
+        }
+    }
+
+    &.lg {
+        top: 20px;
+
+        .sliderExtendedMarkDot {
+            top: -20px;
+        }
+    }
+
+    .sliderExtendedMarkText {
+        user-select: none;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    &.disabled {
+        pointer-events: none;
+
+        .sliderExtendedMarkText {
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        .sliderExtendedMarkDot {
+            background: var(--triplex-next-Slider-Mark_Dot_Background_Selected_Disabled);
+        }
+    }
+
+    &:first-child,
+    &:last-child {
+        transform: none;
+    }
+
+    &:first-child {
+        &.reverse {
+            .sliderExtendedMarkDot {
+                right: 0;
+                left: auto;
+                transform: translateX(50%);
+            }
+
+            .sliderExtendedMarkText {
+                margin-right: -4px;
+            }
+        }
+
+        &:not(.reverse) {
+            .sliderExtendedMarkDot {
+                left: 0;
+                transform: translateX(-50%);
+            }
+        }
+
+        .sliderExtendedMarkText {
+            margin-left: -4px;
+        }
+    }
+
+    &:last-child {
+        &.reverse {
+            .sliderExtendedMarkDot {
+                left: 0;
+                transform: translateX(-50%);
+            }
+
+            .sliderExtendedMarkText {
+                margin-left: -4px;
+            }
+        }
+
+        &:not(.reverse) {
+            .sliderExtendedMarkDot {
+                right: 0;
+                left: auto;
+                transform: translateX(50%);
+            }
+        }
+
+        .sliderExtendedMarkText {
+            margin-right: -4px;
+        }
+    }
+
+    &.active {
+        pointer-events: none;
+    }
+}

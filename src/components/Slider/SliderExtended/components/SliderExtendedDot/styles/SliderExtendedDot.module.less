@@ -1,0 +1,102 @@
+@import 'src/styles/style';
+
+.sliderExtendedDot {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--triplex-next-Slider-Dot_Background_Default);
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    z-index: @slider-dot-z-index;
+
+    &:focus {
+        box-shadow: inset 0 0 1px 1px var(--triplex-next-Slider-Dot_Focus);
+    }
+
+    &.focusedByClick {
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    &::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        background: var(--triplex-next-Slider-Dot_Background_Default);
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+    }
+
+    &::before {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        background: var(--triplex-next-Slider-Dot_Inner_Background);
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        background: var(--triplex-next-Slider-Dot_Background_Disabled);
+
+        &::before {
+            background: var(--triplex-next-Slider-Dot_Inner_Background_Disabled);
+        }
+
+        &::after {
+            background: var(--triplex-next-Slider-Dot_Background_Disabled);
+        }
+    }
+
+    &:hover {
+        background: var(--triplex-next-Slider-Dot_Background_Hover);
+
+        &::after {
+            background: var(--triplex-next-Slider-Dot_Inner_Background);
+        }
+    }
+
+    &.dragByMouse {
+        background: var(--triplex-next-Slider-Dot_Background_Select);
+
+        &::after {
+            background: var(--triplex-next-Slider-Dot_Inner_Background);
+        }
+    }
+
+    &:hover,
+    &:focus {
+        .sliderExtendedTooltipOverlay {
+            visibility: visible;
+        }
+    }
+
+    &.lg {
+        width: 28px;
+        height: 28px;
+
+        &::after {
+            width: 10px;
+            height: 10px;
+        }
+
+        &::before {
+            width: 14px;
+            height: 14px;
+        }
+    }
+}

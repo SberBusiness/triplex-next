@@ -1,0 +1,39 @@
+@import 'src/styles/style';
+
+.sliderExtendedTrack {
+    height: 4px;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    background: var(--triplex-next-Slider-Track_Background_Default);
+    z-index: @slider-track-z-index;
+
+    &.lg {
+        top: 12px;
+    }
+
+    &:focus {
+        box-shadow: inset 0 0 1px 1px var(--triplex-next-Slider-Dot_Focus);
+    }
+
+    &.focusedByClick {
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    &.hoverOrDragByMouse {
+        background: var(--triplex-next-Slider-Track_Background_Hover);
+    }
+
+    &.staticSlider {
+        cursor: default;
+        pointer-events: none;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        background: var(--triplex-next-Slider-Track_Background_Disabled);
+    }
+}

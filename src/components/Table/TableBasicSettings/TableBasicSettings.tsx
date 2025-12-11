@@ -11,9 +11,7 @@ import { ColumnSettings } from "@sberbusiness/triplex-next/components/Table/Tabl
 import { TableBasicSettingsFooter } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/components/TableBasicSettingsFooter";
 import { TableBasicSettingsHeader } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/components/TableBasicSettingsHeader";
 import { ITableBasicSettingsProps } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
-import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import { Link } from "@sberbusiness/triplex-next/components/Link/Link";
-import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 
 interface ITableBasicSettingsFC extends React.FC<ITableBasicSettingsProps> {
     Body: typeof TableBasicSettingsBody;
@@ -28,21 +26,19 @@ export const TableBasicSettings: ITableBasicSettingsFC = ({ children, className,
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => (
-        <Text size={ETextSize.B3}>
-            <Link
-                href="#"
-                aria-haspopup="listbox"
-                aria-controls="button-dropdown-extended-list"
-                aria-expanded={opened}
-                onClick={(event) => {
-                    event.preventDefault();
-                    setOpened(!opened);
-                }}
-                ref={targetRef}
-            >
-                {linkTitle}
-            </Link>
-        </Text>
+        <Link
+            href="#"
+            aria-haspopup="listbox"
+            aria-controls="button-dropdown-extended-list"
+            aria-expanded={opened}
+            onClick={(event) => {
+                event.preventDefault();
+                setOpened(!opened);
+            }}
+            ref={targetRef}
+        >
+            {linkTitle}
+        </Link>
     );
 
     const renderDropdown = ({ className, ...dropdownProps }: IButtonDropdownExtendedDropdownProvideProps) => (

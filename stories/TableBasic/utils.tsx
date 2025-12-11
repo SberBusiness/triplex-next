@@ -12,10 +12,11 @@ import { MasterTable } from "../../src/components/Table/MasterTable";
 export const renderNoData = (isFiltered: boolean) => (
     <>
         {isFiltered ? <NotfoundSysIcon96 /> : <EmptytableSysIcon96 />}
+        <Gap size={8} />
         <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
             Текст заголовка
         </Title>
-        <Gap size={8} />
+        <Gap size={12} />
         <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
             Нет данных, но можно предложить какие-то действия для заполнения таблицы
         </Text>
@@ -36,8 +37,8 @@ export const renderNoColumns = (onClick: () => void) => (
         <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
             Все колонки таблицы скрыты
         </Title>
-        <Gap size={8} />
-        <Text tag="div" size={ETextSize.B3}>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
             Выберите нужные вам для отображения колонки в настройках таблицы.
         </Text>
         <Gap size={24} />

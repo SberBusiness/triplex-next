@@ -57,7 +57,7 @@ export const TableBasic = ({
         } else if (loading && !isEmptyData) {
             return (
                 <div className={styles.spinnerWrapper}>
-                    <LoaderScreen type="middle" />
+                    <LoaderScreen type="middle" className={styles.tableLoaderScreen} />
                 </div>
             );
         } else {

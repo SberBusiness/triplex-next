@@ -1,4 +1,5 @@
 import { ISelectFieldOption } from "../../src";
+import { ITableFilters } from "./types";
 
 export const counterpartyExampleOptions: ISelectFieldOption[] = [
     { id: "0", value: "", label: "Не указан" },
@@ -82,14 +83,7 @@ export const dataSetForTest = [
     },
 ];
 
-interface IDefaultTableFilters {
-    counterparty: string;
-    docNumber: string;
-    counterpartyOption: ISelectFieldOption | undefined;
-    statusOption: ISelectFieldOption | undefined;
-}
-
-export const defaultTableFilters: IDefaultTableFilters = {
+export const defaultTableFilters: ITableFilters = {
     counterparty: "",
     docNumber: "",
     counterpartyOption: undefined,

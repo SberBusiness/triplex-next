@@ -51,7 +51,8 @@ body {
 }
 
 .theme-dark .sbdocs-wrapper,
-.theme-dark .sbdocs-content {
+.theme-dark .sbdocs-content,
+.theme-dark .docs-story {
     background-color: rgb(38, 38, 41) !important;
 }
 

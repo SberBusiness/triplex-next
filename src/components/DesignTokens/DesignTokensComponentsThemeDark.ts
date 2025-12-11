@@ -97,6 +97,8 @@ import {
     ModalWindow_Tokens,
     TDesignTokensComponentsTopOverlayValue,
     TopOverlay_Tokens,
+    SmallInput_Tokens,
+    TDesignTokensComponentsSmallInputValue,
 } from "./components";
 
 export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
@@ -215,5 +217,9 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     TopOverlay: GetTokensValueByTheme<TDesignTokensComponentsTopOverlayValue>(
         ETriplexNextTheme.DARK,
         TopOverlay_Tokens,
+    ),
+    SmallInput: GetTokensValueByTheme<TDesignTokensComponentsSmallInputValue>(
+        ETriplexNextTheme.DARK,
+        SmallInput_Tokens,
     ),
 };

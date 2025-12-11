@@ -3,25 +3,15 @@ import React from "react";
 import { uniqueId } from "lodash-es";
 import moment from "moment";
 import { dateFormatYYYYMMDD, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
-import {
-    ICalendarRangeProps,
-    ICalendarSingleProps,
-    TPickedDate,
-    TPickedRange,
-} from "@sberbusiness/triplex-next/components/Calendar/types";
+import { ICalendarProps, TPickedDate } from "@sberbusiness/triplex-next/components/Calendar/types";
 import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
 import { CalendarControls } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarControls";
 import { CalendarView } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarView";
 import { CalendarFooter } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarFooter";
-import { CalendarTodayButton } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarTodayButton";
-import { CalendarRange } from "@sberbusiness/triplex-next/components/Calendar/CalendarRange";
+import { CalendarFooterButton } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarFooterButton";
 import { formatDate, getHeader, parsePickedDate } from "@sberbusiness/triplex-next/components/Calendar/utils";
 import styles from "./styles/Calendar.module.less";
-
-
-/** Свойства компонента Calendar. */
-export type TCalendarProps = ICalendarSingleProps | ICalendarRangeProps;
 
 /** Состояния компонента Calendar. */
 interface ICalendarState {
@@ -36,9 +26,7 @@ interface ICalendarState {
 }
 
 /** Календарь. */
-export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState> {
-    public static Range = CalendarRange;
-
+export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState> {
     public static defaultProps = {
         format: dateFormatYYYYMMDD,
         limitRange: globalLimitRange,
@@ -51,13 +39,11 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
     // Уникальный идентификатор для связи периода с таблицей.
     private periodId = `calendar-period-${uniqueId()}`;
 
-    constructor(props: Readonly<TCalendarProps>) {
+    constructor(props: Readonly<ICalendarProps>) {
         super(props);
 
         const { format, pickType, reversedPick } = this.props;
-        const pickedDate = this.props.isRange
-            ? parsePickedDate(this.props.defaultDate, format)
-            : parsePickedDate(this.props.pickedDate, format);
+        const pickedDate = parsePickedDate(this.props.pickedDate, format);
         const viewDate = this.getInitialViewDate(pickedDate);
 
         let viewMode: ECalendarViewMode;
@@ -109,20 +95,16 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
         return todayDate;
     }
 
-    public componentDidUpdate(prevProps: TCalendarProps, prevState: ICalendarState): void {
+    public componentDidUpdate(prevProps: ICalendarProps, prevState: ICalendarState): void {
         const { format } = this.props;
         const { viewDate } = this.state;
         const { viewDate: prevViewDate } = prevState;
 
-        const pickedDateState = this.props.isRange
-            ? parsePickedDate(this.state.viewDate, format)
-            : parsePickedDate(this.props.pickedDate, format);
+        const pickedDateState = parsePickedDate(this.props.pickedDate, format);
         const pickedDateValid = pickedDateState?.isValid();
         const resultDate = pickedDateValid ? pickedDateState : prevViewDate;
 
-        const prevPickedDate = prevProps.isRange
-            ? parsePickedDate(prevState.viewDate, format)
-            : parsePickedDate(prevProps.pickedDate, format);
+        const prevPickedDate = parsePickedDate(prevProps.pickedDate, format);
 
         if (!(!pickedDateValid || prevPickedDate?.isSame(resultDate, "day"))) {
             let newDateContext = {};
@@ -159,20 +141,10 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
         } = this.props;
         const { viewMode, viewDate, header } = this.state;
         const classNames = clsx(styles.calendar, {
-            [styles.adaptive]: !this.props.isRange && !!this.props.adaptiveMode,
+            [styles.adaptive]: !!this.props.adaptiveMode,
         });
 
-        let pickedDate: TPickedDate | undefined;
-        let pickedRange: TPickedRange | undefined;
-
-        if (this.props.isRange) {
-            pickedRange = [
-                parsePickedDate(this.props.pickedDate[0], format),
-                parsePickedDate(this.props.pickedDate[1], format),
-            ] as TPickedRange;
-        } else {
-            pickedDate = parsePickedDate(this.props.pickedDate, format);
-        }
+        const pickedDate = parsePickedDate(this.props.pickedDate, format);
 
         return (
             <div className={classNames} data-tx={process.env.npm_package_version}>
@@ -200,7 +172,6 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
                     </CalendarControls>
                     <CalendarView
                         pickedDate={pickedDate}
-                        pickedRange={pickedRange}
                         dayHtmlAttributes={dayHtmlAttributes}
                         monthHtmlAttributes={monthHtmlAttributes}
                         yearHtmlAttributes={yearHtmlAttributes}
@@ -213,18 +184,7 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
 
     /** Обработчик выбора даты. */
     private handleDateSelect = (date: moment.Moment) => {
-        if (this.props.isRange) {
-            let newRange: TPickedRange;
-            if (this.props.pickedDate[0] && !this.props.pickedDate[1]) {
-                const firstDate = parsePickedDate(this.props.pickedDate[0], this.props.format);
-                newRange = date.isBefore(firstDate) ? [date, firstDate] : [firstDate, date];
-            } else {
-                newRange = [date, null];
-            }
-            this.props.onDateChange(newRange);
-        } else {
-            this.props.onDateChange(date);
-        }
+        this.props.onDateChange(date);
     };
 
     /** Обработчик смены страницы. */
@@ -254,7 +214,7 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
 
     /** Рендер футера. */
     private renderFooter = () => {
-        const { pickType, todayButtonProps } = this.props;
+        const { pickType, yesterdayButtonProps, todayButtonProps, tomorrowButtonProps } = this.props;
         const { viewDate, viewMode } = this.state;
         let todayDate: moment.Moment;
         let currentPeriodSelected: boolean;
@@ -267,15 +227,38 @@ export class Calendar extends React.PureComponent<TCalendarProps, ICalendarState
             currentPeriodSelected = viewMode === ECalendarViewMode.MONTHS && viewDate.isSame(todayDate, "year");
         }
 
+        const needShowAsideButtons = currentPeriodSelected && viewMode === ECalendarViewMode.DAYS;
+
         return (
             <CalendarFooter>
-                <CalendarTodayButton
-                    todayDate={todayDate}
+                {/* Вчера */}
+                {needShowAsideButtons && yesterdayButtonProps && (
+                    <CalendarFooterButton
+                        date={todayDate.clone().subtract(1, "day")}
+                        currentPeriodSelected={currentPeriodSelected}
+                        {...(typeof yesterdayButtonProps === "function"
+                            ? yesterdayButtonProps(viewMode)
+                            : yesterdayButtonProps)}
+                    />
+                )}
+                {/* Сегодня / К текущей дате */}
+                <CalendarFooterButton
+                    date={todayDate}
                     currentPeriodSelected={currentPeriodSelected}
                     {...(typeof todayButtonProps === "function"
                         ? todayButtonProps({ viewMode, currentPeriodSelected })
                         : todayButtonProps)}
                 />
+                {/* Завтра */}
+                {needShowAsideButtons && tomorrowButtonProps && (
+                    <CalendarFooterButton
+                        date={todayDate.clone().add(1, "day")}
+                        currentPeriodSelected={currentPeriodSelected}
+                        {...(typeof tomorrowButtonProps === "function"
+                            ? tomorrowButtonProps(viewMode)
+                            : tomorrowButtonProps)}
+                    />
+                )}
             </CalendarFooter>
         );
     };

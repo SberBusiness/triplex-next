@@ -2,6 +2,8 @@ import moment from "moment/dist/moment";
 import ru from "moment/dist/locale/ru";
 import React, { useState } from "react";
 import { Calendar, ECalendarPickType, ECalendarDateMarkType } from "../src/components/Calendar";
+import { dateFormatYYYYMMDD } from "../src/consts/DateConst";
+
 import { StoryObj } from "@storybook/react";
 
 // Устанавливаем российскую локаль.
@@ -111,26 +113,38 @@ export const Playground: StoryObj<typeof Calendar> = {
         // Устанавливаем российскую локаль.
         moment.locale("ru");
 
-        console.log(moment());
-
         const [pickedDate, setPickedDate] = useState(moment());
+
+        const markedDays = {
+            [moment().subtract(1, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.BASIC,
+            [moment().subtract(2, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.STANDARD,
+            [moment().add(1, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.ATTENTION,
+            [moment().add(2, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.CRITICAL,
+        };
+
+        const disabledDays = [
+            moment().subtract(3, "days").format(dateFormatYYYYMMDD),
+            moment().subtract(4, "days").format(dateFormatYYYYMMDD),
+            moment().add(3, "days").format(dateFormatYYYYMMDD),
+            moment().add(4, "days").format(dateFormatYYYYMMDD),
+        ];
 
         return (
             <Calendar
                 {...args}
                 pickedDate={pickedDate}
                 onDateChange={setPickedDate}
-                markedDays={{
-                    "20251010": ECalendarDateMarkType.BASIC,
-                    "20251011": ECalendarDateMarkType.STANDARD,
-                    "20251012": ECalendarDateMarkType.ATTENTION,
-                    "20251013": ECalendarDateMarkType.CRITICAL,
+                markedDays={markedDays}
+                disabledDays={disabledDays}
+                yesterdayButtonProps={{
+                    children: "Вчера",
                 }}
-                disabledDays={["20251005"]}
                 todayButtonProps={({ currentPeriodSelected }) => ({
                     children: currentPeriodSelected ? "Сегодня" : "К текущей дате",
                 })}
-                // adaptiveMode={true}
+                tomorrowButtonProps={{
+                    children: "Завтра",
+                }}
             />
         );
     },

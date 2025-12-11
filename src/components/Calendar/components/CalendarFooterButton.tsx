@@ -7,34 +7,34 @@ import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next
 import { isDateOutOfRange, isDayDisabled } from "@sberbusiness/triplex-next/components/Calendar/utils";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
-/** Свойства компонента CalendarTodayButton. */
-export interface ICalendarTodayButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    /** Сегодняшняя дата. */
-    todayDate: moment.Moment;
+/** Свойства компонента CalendarFooterButton. */
+export interface ICalendarFooterButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Дата. */
+    date: moment.Moment;
     /** Выбран текущий период. */
     currentPeriodSelected: boolean;
 }
 
-/** Кнопка "Сегодня". */
-export const CalendarTodayButton = React.forwardRef<HTMLButtonElement, ICalendarTodayButtonProps>(
-    ({ todayDate, currentPeriodSelected, disabled, onClick, ...rest }, ref) => {
+/** Кнопка футера "Вчера", "Сегодня", "Завтра", "К текущей дате" или "Текущий период". */
+export const CalendarFooterButton = React.forwardRef<HTMLButtonElement, ICalendarFooterButtonProps>(
+    ({ date, currentPeriodSelected, disabled, onClick, ...rest }, ref) => {
         const { format, limitRange, pickType, viewMode, disabledDays, onPageChange, onViewChange, onDateSelect } =
             useContext(CalendarContext);
 
         const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
             if (currentPeriodSelected) {
-                onDateSelect(todayDate);
+                onDateSelect(date);
             } else if (pickType === ECalendarPickType.datePick) {
                 if (viewMode === ECalendarViewMode.DAYS) {
-                    onPageChange(todayDate, ECalendarViewMode.DAYS);
+                    onPageChange(date, ECalendarViewMode.DAYS);
                 } else {
-                    onViewChange(todayDate, ECalendarViewMode.DAYS);
+                    onViewChange(date, ECalendarViewMode.DAYS);
                 }
             } else {
                 if (viewMode === ECalendarViewMode.MONTHS) {
-                    onPageChange(todayDate, ECalendarViewMode.MONTHS);
+                    onPageChange(date, ECalendarViewMode.MONTHS);
                 } else {
-                    onViewChange(todayDate, ECalendarViewMode.MONTHS);
+                    onViewChange(date, ECalendarViewMode.MONTHS);
                 }
             }
 
@@ -45,12 +45,9 @@ export const CalendarTodayButton = React.forwardRef<HTMLButtonElement, ICalendar
             if (disabled !== undefined) {
                 return disabled;
             } else if (pickType === ECalendarPickType.datePick) {
-                return (
-                    isDateOutOfRange(todayDate, limitRange, "day") ||
-                    isDayDisabled(todayDate.format(format), disabledDays)
-                );
+                return isDateOutOfRange(date, limitRange, "day") || isDayDisabled(date.format(format), disabledDays);
             } else {
-                return isDateOutOfRange(todayDate, limitRange, "month");
+                return isDateOutOfRange(date, limitRange, "month");
             }
         };
 
@@ -67,4 +64,4 @@ export const CalendarTodayButton = React.forwardRef<HTMLButtonElement, ICalendar
     },
 );
 
-CalendarTodayButton.displayName = "CalendarTodayButton";
+CalendarFooterButton.displayName = "CalendarFooterButton";

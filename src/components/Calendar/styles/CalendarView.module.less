@@ -63,37 +63,6 @@
         font-weight: 600;
     }
 
-    &.rangeSingle,
-    &.rangeStart,
-    &.rangeEnd,
-    &.rangeBetween {
-        background: var(--triplex-next-Calendar-View_Item_Background_Range);
-    }
-
-    &.rangeSingle,
-    &.rangeStart:last-child,
-    &.rangeEnd:first-child {
-        border-radius: 50%;
-        box-shadow: none;
-    }
-
-    &.rangeStart,
-    &.rangeBetween:first-child {
-        border-radius: 50% 0 0 50%;
-        box-shadow: 1px 0 var(--triplex-next-Calendar-View_Item_Background_Range);
-    }
-
-    &.rangeEnd,
-    &.rangeBetween:last-child {
-        border-radius: 0 50% 50% 0;
-        box-shadow: -1px 0 var(--triplex-next-Calendar-View_Item_Background_Range);
-    }
-
-    &.rangeBetween {
-        border-radius: 0;
-        box-shadow: 1px 0 var(--triplex-next-Calendar-View_Item_Background_Range), -1px 0 var(--triplex-next-Calendar-View_Item_Background_Range);
-    }
-
     &.disabled {
         pointer-events: none;
     }

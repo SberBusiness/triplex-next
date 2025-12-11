@@ -79,10 +79,12 @@
 
                 &:first-child {
                     border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
                 }
 
                 &:last-child {
                     border-top-right-radius: 8px;
+                    border-bottom-right-radius: 8px;
                 }
 
                 &.checkboxType {
@@ -194,6 +196,10 @@
         left: 0;
         width: 100%;
         height: calc(100% - 16px);
+
+        .tableLoaderScreen {
+            border-radius: 8px 8px 0 0;
+        }
     }
 
     .overlayCover {

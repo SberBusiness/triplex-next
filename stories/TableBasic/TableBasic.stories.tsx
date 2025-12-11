@@ -15,22 +15,28 @@ import { ISortOrder, ITableBasicColumn, ITableBasicRow } from "../../src/compone
 import { Gap } from "../../src/components/Gap/Gap";
 import { Text } from "../../src/components/Typography/Text";
 import { EFontType, ETextSize } from "../../src/components/Typography/enums";
-import { Button } from "../../src/components/Button";
-import { EButtonTheme } from "../../src/components/Button/enums";
+import { Button } from "../../src/components/Button/Button";
+import { ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
+import { EButtonDotsTheme, EButtonTheme } from "../../src/components/Button/enums";
 import { Checkbox } from "../../src/components/Checkbox/Checkbox";
 import { amountComparator, formatAmount } from "../../src/utils/amountUtils";
 import { AmountConst } from "../../src/consts/AmountConst";
 import Big from "big.js";
-import { DeleteStrokeSrvIcon20 } from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../../src/components/Button/ButtonIcon";
 import { Col } from "../../src/components/Col/Col";
 import { Row } from "../../src/components/Row/Row";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { SelectField, ISelectFieldOption } from "../../src/components/SelectField";
+import { ISelectFieldOption, SelectField } from "../../src/components/SelectField";
 import { TextField } from "../../src/components/TextField";
 import { ETableField } from "./enums";
 import { renderCounterpartyDetails, renderNoColumns, renderNoData } from "./utils";
-import { dataSetForTest, counterpartyExampleOptions, statusExampleOptions, defaultTableFilters } from "./const";
+import { counterpartyExampleOptions, dataSetForTest, defaultTableFilters, statusExampleOptions } from "./const";
+import { MarkerStatus } from "../../src/components/MarkerStatus/MarkerStatus";
+import { EMarkerStatus } from "../../src/components/Marker/enums";
+import { Tag } from "../../src/components/Tag/Tag";
+import { TagGroup } from "../../src/components/TagGroup/TagGroup";
+import { Link } from "../../src/components/Link/Link";
+import { ITableFilters } from "./types";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -59,11 +65,11 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     render: (args) => {
         const [data, setData] = useState<ITableBasicRow[]>([]);
         const [checkedRows, setCheckedRows] = useState<string[]>([]);
-        const [order, setOrder] = useState<ISortOrder>({ fieldKey: ETableField.sum, direction: EOrderDirection.NONE });
-        const [isShowFilterPanel, setIsShowFilterPanel] = useState<boolean>(false);
+        const [order, setOrder] = useState<ISortOrder>({ fieldKey: ETableField.Sum, direction: EOrderDirection.NONE });
+        const [isShowAdditionalFilterPanel, setIsShowAdditionalFilterPanel] = useState<boolean>(false);
         const [appliedFilters, setAppliedFilters] = useState(defaultTableFilters);
         const [tempFilters, setTempFilters] = useState(defaultTableFilters);
-        const [tags, setTags] = useState<string[]>([]);
+        const [tagNodes, setTagNodes] = useState<React.JSX.Element[]>([]);
 
         const isCheckedAllItems = checkedRows.length === dataSetForTest.length;
         const isSpoilerFilterChanged = !!appliedFilters.statusOption || !!appliedFilters.counterpartyOption;
@@ -96,35 +102,43 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
         const columns: ITableBasicColumn[] = [
             {
-                fieldKey: ETableField.checkbox,
+                fieldKey: ETableField.Checkbox,
                 cellType: ECellType.CHECKBOX,
                 label: renderHeaderCheckbox(),
                 width: 48,
             },
             {
-                fieldKey: ETableField.number,
+                fieldKey: ETableField.Number,
                 label: "Номер",
                 title: "Номер",
                 width: 100,
-                orderDirection: order.fieldKey === ETableField.number ? order.direction : EOrderDirection.NONE,
+                orderDirection: order.fieldKey === ETableField.Number ? order.direction : EOrderDirection.NONE,
             },
-            { fieldKey: ETableField.recipient, label: "Получатель", title: "Получатель", width: 300 },
+            { fieldKey: ETableField.Recipient, label: "Получатель", title: "Получатель", width: 300 },
             {
-                fieldKey: ETableField.sum,
+                fieldKey: ETableField.Sum,
                 label: "Сумма",
                 title: "Сумма",
                 horizontalAlign: EHorizontalAlign.RIGHT,
                 renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
-                orderDirection: order.fieldKey === ETableField.sum ? order.direction : EOrderDirection.NONE,
+                orderDirection: order.fieldKey === ETableField.Sum ? order.direction : EOrderDirection.NONE,
             },
-            { fieldKey: "status", label: "Статус", title: "Статус", width: 120 },
+            {
+                fieldKey: ETableField.Status,
+                label: "Статус",
+                title: "Статус",
+                width: 120,
+                renderCell: (status: string) => (
+                    <MarkerStatus size={EComponentSize.LG} status={EMarkerStatus.SUCCESS}>
+                        {status}
+                    </MarkerStatus>
+                ),
+            },
             ...(args.withButtons
                 ? [
                       {
-                          fieldKey: ETableField.button,
+                          fieldKey: ETableField.Button,
                           cellType: ECellType.COMPONENTS,
-                          label: "Button",
-                          title: "Button",
                           renderCell: () => (
                               <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                   Напечатать
@@ -132,14 +146,29 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                           ),
                       },
                       {
-                          fieldKey: ETableField.buttonIcon,
+                          fieldKey: ETableField.ButtonIcon,
                           cellType: ECellType.COMPONENTS,
-                          label: "ButtonIcon",
-                          title: "ButtonIcon",
                           renderCell: () => (
-                              <ButtonIcon>
-                                  <DeleteStrokeSrvIcon20 paletteIndex={0} />
-                              </ButtonIcon>
+                              <ButtonDropdown
+                                  theme={EButtonDotsTheme.DOTS_SECONDARY}
+                                  size={EComponentSize.MD}
+                                  options={
+                                      [
+                                          {
+                                              id: "option1",
+                                              label: "Действие 1",
+                                          },
+                                          {
+                                              id: "option2",
+                                              label: "Действие 2",
+                                          },
+                                          {
+                                              id: "option3",
+                                              label: "Действие 3",
+                                          },
+                                      ] satisfies IButtonDropdownOption[]
+                                  }
+                              />
                           ),
                       },
                   ]
@@ -147,25 +176,25 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             ...(args.withHorizontalScroll
                 ? [
                       {
-                          fieldKey: ETableField.toHorizontalScroll1,
+                          fieldKey: ETableField.ToHorizontalScroll1,
                           label: "Пример колонки 1",
                           title: "Пример колонки 1",
                           width: 170,
                       },
                       {
-                          fieldKey: ETableField.toHorizontalScroll2,
+                          fieldKey: ETableField.ToHorizontalScroll2,
                           label: "Пример колонки 2",
                           title: "Пример колонки 2",
                           width: 170,
                       },
                       {
-                          fieldKey: ETableField.toHorizontalScroll3,
+                          fieldKey: ETableField.ToHorizontalScroll3,
                           label: "Пример колонки 3",
                           title: "Пример колонки 3",
                           width: 170,
                       },
                       {
-                          fieldKey: ETableField.toHorizontalScroll4,
+                          fieldKey: ETableField.ToHorizontalScroll4,
                           label: "Пример колонки 4",
                           title: "Пример колонки 4",
                           width: 170,
@@ -211,13 +240,13 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                       )
                       .sort((a, b) => {
                           switch (order.fieldKey) {
-                              case ETableField.number: {
+                              case ETableField.Number: {
                                   if (order.direction === EOrderDirection.DESC) {
                                       return amountComparator(b.docNumber, a.docNumber);
                                   }
                                   break;
                               }
-                              case ETableField.sum: {
+                              case ETableField.Sum: {
                                   if (order.direction === EOrderDirection.ASC) {
                                       return amountComparator(a.sum, b.sum);
                                   } else if (order.direction === EOrderDirection.DESC) {
@@ -231,22 +260,21 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                       .map((doc) => ({
                           rowKey: String(doc.docNumber),
                           rowData: {
-                              [ETableField.checkbox]: renderRowCheckbox(doc.docNumber),
-                              [ETableField.number]: doc.docNumber,
-                              [ETableField.recipient]: renderCounterpartyDetails(
+                              [ETableField.Checkbox]: renderRowCheckbox(doc.docNumber),
+                              [ETableField.Number]: doc.docNumber,
+                              [ETableField.Recipient]: renderCounterpartyDetails(
                                   doc.purpose,
                                   doc.recipient.account,
                                   doc.tax,
                               ),
-                              [ETableField.sum]: doc.sum,
-                              // TODO TRIPLEX-576: отсутствует компонент MarkerStatus
-                              [ETableField.status]: doc.status,
-                              [ETableField.button]: null,
-                              [ETableField.buttonIcon]: null,
-                              [ETableField.toHorizontalScroll1]: null,
-                              [ETableField.toHorizontalScroll2]: null,
-                              [ETableField.toHorizontalScroll3]: null,
-                              [ETableField.toHorizontalScroll4]: null,
+                              [ETableField.Sum]: doc.sum,
+                              [ETableField.Status]: doc.status,
+                              [ETableField.Button]: null,
+                              [ETableField.ButtonIcon]: null,
+                              [ETableField.ToHorizontalScroll1]: null,
+                              [ETableField.ToHorizontalScroll2]: null,
+                              [ETableField.ToHorizontalScroll3]: null,
+                              [ETableField.ToHorizontalScroll4]: null,
                           },
                           selected: checkedRows.includes(doc.docNumber),
                       }))
@@ -299,17 +327,52 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         };
 
         const handleClickResetFilters = () => {
-            setTags([]);
+            setTagNodes([]);
             setAppliedFilters(defaultTableFilters);
         };
 
         const handleClickShowFilterPanel = () => {
-            setIsShowFilterPanel((prevState) => !prevState);
+            setIsShowAdditionalFilterPanel((prevState) => !prevState);
             setTempFilters(appliedFilters);
         };
 
         const handleClickResetTempFilters = () => {
             setTempFilters(defaultTableFilters);
+        };
+
+        const updateTagNodes = (newFilters: ITableFilters) => {
+            const tags = [];
+
+            if (newFilters.counterpartyOption !== defaultTableFilters.counterpartyOption) {
+                tags.push(
+                    <Tag
+                        key="tag-filter-counterparty"
+                        id="tag-filter-counterparty"
+                        size={EComponentSize.MD}
+                        onRemove={handleTagRemove({
+                            ...newFilters,
+                            counterpartyOption: defaultTableFilters.counterpartyOption,
+                        })}
+                    >
+                        {`Получатель: ${newFilters.counterpartyOption?.value}`}
+                    </Tag>,
+                );
+            }
+
+            if (newFilters.statusOption !== defaultTableFilters.statusOption) {
+                tags.push(
+                    <Tag
+                        key="tag-filter-status"
+                        id="tag-filter-status"
+                        size={EComponentSize.MD}
+                        onRemove={handleTagRemove({ ...newFilters, statusOption: defaultTableFilters.statusOption })}
+                    >
+                        {`Статус: ${newFilters.statusOption?.value}`}
+                    </Tag>,
+                );
+            }
+
+            setTagNodes(tags);
         };
 
         const handleClickApplyTempFilters = () => {
@@ -318,9 +381,69 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 statusOption: tempFilters.statusOption,
                 counterpartyOption: tempFilters.counterpartyOption,
             }));
-            setTags([tempFilters.counterpartyOption?.value, tempFilters.statusOption?.value].filter(Boolean));
-            setIsShowFilterPanel((prevState) => !prevState);
+            updateTagNodes(tempFilters);
+            setIsShowAdditionalFilterPanel((prevState) => !prevState);
         };
+
+        const handleTagRemove = (newFilters: ITableFilters) => () => {
+            setTempFilters(newFilters);
+            setAppliedFilters(newFilters);
+            updateTagNodes(newFilters);
+        };
+
+        const renderAdditionalFilters = () => (
+            <>
+                <Gap size={12} />
+                <Row paddingBottom={false}>
+                    <Col size={6}>
+                        <SelectField
+                            status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
+                            size={EComponentSize.LG}
+                            value={tempFilters.counterpartyOption}
+                            options={counterpartyExampleOptions}
+                            onChange={handleChangeCounterpartyOption}
+                            placeholder="Выберите получателя из списка"
+                            targetProps={{
+                                fieldLabel: "Выберите получателя",
+                            }}
+                        />
+                    </Col>
+                    <Col size={6}>
+                        <SelectField
+                            status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
+                            size={EComponentSize.LG}
+                            value={tempFilters.statusOption}
+                            options={statusExampleOptions}
+                            onChange={handleChangeStatusOption}
+                            placeholder="Выберите статус документа из списка"
+                            targetProps={{
+                                fieldLabel: "Выберите статус документа",
+                            }}
+                        />
+                    </Col>
+                </Row>
+                <Gap size={12} />
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                    <Button
+                        theme={EButtonTheme.SECONDARY}
+                        size={EComponentSize.MD}
+                        onClick={handleClickResetTempFilters}
+                    >
+                        Сбросить
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleClickApplyTempFilters}>
+                        Применить
+                    </Button>
+                </div>
+            </>
+        );
+
+        const renderTags = () => (
+            <>
+                <Gap size={16} />
+                <TagGroup size={EComponentSize.MD}>{tagNodes}</TagGroup>
+            </>
+        );
 
         const renderTableFooter = () => (
             <MasterTable.TableFooter data-test-id="TestTable__MasterTable.TableFooter">
@@ -347,110 +470,62 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             </MasterTable.TableFooter>
         );
 
+        const renderFilterPanel = () => {
+            let additionalFilters;
+
+            if (isShowAdditionalFilterPanel) {
+                additionalFilters = renderAdditionalFilters();
+            } else if (tagNodes.length > 0) {
+                additionalFilters = renderTags();
+            }
+
+            return (
+                <MasterTable.FilterPanel>
+                    <Row paddingBottom={false}>
+                        <Col size={6}>
+                            <TextField
+                                status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
+                                inputProps={{
+                                    value: appliedFilters.docNumber,
+                                    onChange: handleChangeDocNumber,
+                                    placeholder: "Введите номер документа",
+                                }}
+                                label="Номер документа"
+                            />
+                        </Col>
+                        <Col size={6}>
+                            <TextField
+                                status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
+                                inputProps={{
+                                    value: appliedFilters.counterparty,
+                                    onChange: handleChangeCounterparty,
+                                    placeholder: "Введите получателя",
+                                }}
+                                label="Получатель"
+                            />
+                        </Col>
+                    </Row>
+                    {additionalFilters}
+                </MasterTable.FilterPanel>
+            );
+        };
+
         return (
             <div style={args.withHorizontalScroll ? { width: "100%" } : undefined}>
                 <MasterTable loading={args.isLoading}>
                     <MasterTable.TabsLinePanel>
                         <MasterTable.TabsLinePanel.Links>
-                            {isAnyFilterChanged && (
-                                <Button
-                                    theme={EButtonTheme.LINK}
-                                    size={EComponentSize.MD}
-                                    onClick={handleClickResetFilters}
-                                >
-                                    Сбросить всё
-                                </Button>
-                            )}
-                            <Button
-                                theme={EButtonTheme.LINK}
-                                size={EComponentSize.MD}
-                                onClick={handleClickShowFilterPanel}
-                            >
-                                {isShowFilterPanel
+                            {isAnyFilterChanged && <Link onClick={handleClickResetFilters}>Сбросить всё</Link>}
+                            <Link onClick={handleClickShowFilterPanel}>
+                                {isShowAdditionalFilterPanel
                                     ? "Скрыть фильтры"
                                     : isSpoilerFilterChanged
                                       ? "Изменить фильтры"
                                       : "Фильтры"}
-                            </Button>
+                            </Link>
                         </MasterTable.TabsLinePanel.Links>
                     </MasterTable.TabsLinePanel>
-                    <MasterTable.FilterPanel>
-                        <Row paddingBottom={false}>
-                            <Col size={6}>
-                                <TextField
-                                    inputProps={{
-                                        value: appliedFilters.docNumber,
-                                        onChange: handleChangeDocNumber,
-                                        placeholder: "Введите номер документа",
-                                    }}
-                                    label="Номер документа"
-                                />
-                            </Col>
-                            <Col size={6}>
-                                <TextField
-                                    inputProps={{
-                                        value: appliedFilters.counterparty,
-                                        onChange: handleChangeCounterparty,
-                                        placeholder: "Введите получателя",
-                                    }}
-                                    label="Получатель"
-                                />
-                            </Col>
-                        </Row>
-                        {isShowFilterPanel ? (
-                            <>
-                                <Gap size={12} />
-                                <Row paddingBottom={false}>
-                                    <Col size={6}>
-                                        <SelectField
-                                            size={EComponentSize.LG}
-                                            value={tempFilters.counterpartyOption}
-                                            options={counterpartyExampleOptions}
-                                            onChange={handleChangeCounterpartyOption}
-                                            placeholder="Выберите получателя из списка"
-                                            targetProps={{
-                                                fieldLabel: "Выберите получателя",
-                                            }}
-                                        />
-                                    </Col>
-                                    <Col size={6}>
-                                        <SelectField
-                                            size={EComponentSize.LG}
-                                            value={tempFilters.statusOption}
-                                            options={statusExampleOptions}
-                                            onChange={handleChangeStatusOption}
-                                            placeholder="Выберите статус документа из списка"
-                                            targetProps={{
-                                                fieldLabel: "Выберите статус документа",
-                                            }}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Gap size={12} />
-                                <div style={{ display: "flex", justifyContent: "end" }}>
-                                    <Button
-                                        theme={EButtonTheme.SECONDARY}
-                                        size={EComponentSize.MD}
-                                        onClick={handleClickResetTempFilters}
-                                    >
-                                        Сбросить
-                                    </Button>
-                                    <Button
-                                        theme={EButtonTheme.GENERAL}
-                                        size={EComponentSize.MD}
-                                        onClick={handleClickApplyTempFilters}
-                                    >
-                                        Применить
-                                    </Button>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <Gap size={16} />
-                                {tags.join(", ")}
-                            </>
-                        )}
-                    </MasterTable.FilterPanel>
+                    {renderFilterPanel()}
                     <div style={args.withHorizontalScroll ? { overflow: "auto hidden" } : undefined}>
                         <MasterTable.TableBasic
                             columns={columns}
@@ -706,9 +781,7 @@ export const TableSettingsColumn: StoryObj = {
                     columns={columns}
                     data={data}
                     renderNoData={renderNoData}
-                    renderNoColumns={() => {
-                        renderNoColumns(resetColumns);
-                    }}
+                    renderNoColumns={() => renderNoColumns(resetColumns)}
                 />
             </MasterTable>
         );

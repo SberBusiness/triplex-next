@@ -14,6 +14,7 @@ interface ITableFooterFC extends React.FC<ITableFooterProps> {
 /** Компонент подвала таблицы. */
 export const TableFooter: ITableFooterFC = ({ children, className, ...rest }) => (
     <div className={clsx(styles.tableFooterWrapper, className)} {...rest}>
+        <div className={styles.tableFooterShadow} />
         <div className={styles.tableFooter}>
             <FooterDescription>{children}</FooterDescription>
         </div>

@@ -9,10 +9,10 @@ import styles from "./styles/IslandWidget.module.less";
 import clsx from "clsx";
 
 export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
-    renderBody: (props: IIslandWidgetBodyProps) => JSX.Element;
-    renderFooter?: (props: IIslandWidgetFooterProps) => JSX.Element;
-    renderExtraFooter?: (props: IIslandWidgetExtraFooterProps) => JSX.Element;
-    renderHeader: (props: IIslandWidgetHeaderProps) => JSX.Element;
+    renderBody: (props: IIslandWidgetBodyProps) => React.ReactNode;
+    renderFooter?: (props: IIslandWidgetFooterProps) => React.ReactNode;
+    renderExtraFooter?: (props: IIslandWidgetExtraFooterProps) => React.ReactNode;
+    renderHeader: (props: IIslandWidgetHeaderProps) => React.ReactNode;
 }
 
 export const IslandWidget = Object.assign(

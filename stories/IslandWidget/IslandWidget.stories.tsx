@@ -9,16 +9,20 @@ import { Link } from "../../src/components/Link";
 import { Text, ETextSize, ETitleSize, Title, EFontType } from "../../src/components/Typography";
 import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { DateField } from "../../src/components/DateField";
-import { IIslandWidgetProps } from "../../src/components/IslandWidget";
+import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
 
 export default {
     title: "Components/IslandWidget",
     tags: ["autodocs"],
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     parameters: {
         docs: {
             description: {
                 component: `
-Визуально обособленный блок, предназначенный для представления сгруппированной информации, набора связанных действий или определенной функциональности. Является строительным блоком для создания дашбордов.
+Визуально обособленный блок, предназначенный для представления сгруппированной информации, набора связанных действий или определенной функциональности.
 
 ## Состав
 
@@ -26,28 +30,6 @@ export default {
 - Body — основной контент
 - Footer — нижняя часть
 `,
-            },
-        },
-    },
-    args: {
-        placeholderMask: "дд.мм.гггг",
-        label: "дд.мм.гггг",
-        invalidDateHint: "Указана недоступная для выбора дата.",
-    },
-    argTypes: {
-        placeholderMask: {
-            table: {
-                disable: true,
-            },
-        },
-        label: {
-            table: {
-                disable: true,
-            },
-        },
-        invalidDateHint: {
-            table: {
-                disable: true,
             },
         },
     },
@@ -60,13 +42,7 @@ export default {
     ],
 };
 
-interface IIslandWidgetStoryProps extends IIslandWidgetProps {
-    placeholderMask: string;
-    label: string;
-    invalidDateHint: string;
-}
-
-export const Basic: StoryObj<IIslandWidgetStoryProps> = {
+export const Basic: StoryObj<typeof IslandWidget> = {
     render: (args) => {
         const [value, setValue] = useState("");
 
@@ -95,7 +71,17 @@ export const Basic: StoryObj<IIslandWidgetStoryProps> = {
                     <ButtonIcon>
                         <SettingsStrokeSrvIcon20 paletteIndex={5} />
                     </ButtonIcon>
-                    <DateField value={value} onChange={setValue} className="island-widget-date-field" {...args} />
+                    <DateField
+                        value={value}
+                        onChange={setValue}
+                        className="island-widget-date-field"
+                        placeholderMask="дд.мм.гггг"
+                        label="дд.мм.гггг"
+                        invalidDateHint="Указана недоступная для выбора дата."
+                        alignment={EDropdownAlignment.LEFT}
+                        size={EComponentSize.SM}
+                        status={EFormFieldStatus.DEFAULT}
+                    />
                 </IslandWidget.Header.Content>
                 <IslandWidget.Header.Description>
                     <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -111,20 +97,14 @@ export const Basic: StoryObj<IIslandWidgetStoryProps> = {
     },
 };
 
-export const WithoutFooter: StoryObj<IIslandWidgetStoryProps> = {
-    render: (args) => {
-        const [value, setValue] = useState("");
-
+export const WithoutFooter: StoryObj<typeof IslandWidget> = {
+    render: () => {
         const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
 
         const renderHeader = (props) => (
             <IslandWidget.Header {...props}>
                 <IslandWidget.Header.Content>
                     <Title size={ETitleSize.H3}>Title</Title>
-                    <ButtonIcon>
-                        <SettingsStrokeSrvIcon20 paletteIndex={5} />
-                    </ButtonIcon>
-                    <DateField value={value} onChange={setValue} className="island-widget-date-field" {...args} />
                 </IslandWidget.Header.Content>
                 <IslandWidget.Header.Description>
                     <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -138,20 +118,21 @@ export const WithoutFooter: StoryObj<IIslandWidgetStoryProps> = {
     },
 };
 
-export const WithFooterAndExtraFooter: StoryObj<IIslandWidgetStoryProps> = {
-    render: (args) => {
-        const [value, setValue] = useState("");
+export const WithFooterAndExtraFooter: StoryObj<typeof IslandWidget> = {
+    render: () => {
+        const [extraFooterOpen, setExtraFooterOpen] = useState(false);
+        const [bodyHeight, setBodyHeight] = useState(260);
 
-        const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
+        const renderBody = (props) => (
+            <IslandWidget.Body {...props}>
+                <div style={{ height: bodyHeight, transition: "height 0.3s ease-in-out" }}>Content</div>
+            </IslandWidget.Body>
+        );
 
         const renderHeader = (props) => (
             <IslandWidget.Header {...props}>
                 <IslandWidget.Header.Content>
                     <Title size={ETitleSize.H3}>Title</Title>
-                    <ButtonIcon>
-                        <SettingsStrokeSrvIcon20 paletteIndex={5} />
-                    </ButtonIcon>
-                    <DateField value={value} onChange={setValue} className="island-widget-date-field" {...args} />
                 </IslandWidget.Header.Content>
                 <IslandWidget.Header.Description>
                     <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -178,38 +159,66 @@ export const WithFooterAndExtraFooter: StoryObj<IIslandWidgetStoryProps> = {
         );
 
         const renderExtraFooter = (props) => (
-            <IslandWidget.ExtraFooter {...props}>
-                <Text tag="div" size={ETextSize.B3}>
-                    Extra footer content
-                </Text>
+            <IslandWidget.ExtraFooter open={extraFooterOpen} {...props}>
+                <div className="island-widget-extra-footer">
+                    <Text size={ETextSize.B3}>Extra footer content</Text>
+                </div>
             </IslandWidget.ExtraFooter>
         );
 
+        const handleExtraFooterOpen = (open) => {
+            setExtraFooterOpen(open);
+            setBodyHeight(open ? 196 : 260);
+        };
+
+        const renderControlPanel = () => (
+            <div className="island-widget-control-panel">
+                <Button
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    onClick={() => handleExtraFooterOpen(true)}
+                >
+                    Open Extra Footer
+                </Button>
+                <Button
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    onClick={() => handleExtraFooterOpen(false)}
+                >
+                    Close Extra Footer
+                </Button>
+            </div>
+        );
+
         return (
-            <IslandWidget
-                renderBody={renderBody}
-                renderHeader={renderHeader}
-                renderFooter={renderFooter}
-                renderExtraFooter={renderExtraFooter}
-            />
+            <>
+                {renderControlPanel()}
+                <IslandWidget
+                    renderBody={renderBody}
+                    renderHeader={renderHeader}
+                    renderFooter={renderFooter}
+                    renderExtraFooter={renderExtraFooter}
+                />
+            </>
         );
     },
 };
 
-export const WithoutFooterAndWithExtraFooter: StoryObj<IIslandWidgetStoryProps> = {
-    render: (args) => {
-        const [value, setValue] = useState("");
+export const WithoutFooterAndWithExtraFooter: StoryObj<typeof IslandWidget> = {
+    render: () => {
+        const [extraFooterOpen, setExtraFooterOpen] = useState(false);
+        const [bodyHeight, setBodyHeight] = useState(260);
 
-        const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
+        const renderBody = (props) => (
+            <IslandWidget.Body {...props}>
+                <div style={{ height: bodyHeight, transition: "height 0.3s ease-in-out" }}>Content</div>
+            </IslandWidget.Body>
+        );
 
         const renderHeader = (props) => (
             <IslandWidget.Header {...props}>
                 <IslandWidget.Header.Content>
                     <Title size={ETitleSize.H3}>Title</Title>
-                    <ButtonIcon>
-                        <SettingsStrokeSrvIcon20 paletteIndex={5} />
-                    </ButtonIcon>
-                    <DateField value={value} onChange={setValue} className="island-widget-date-field" {...args} />
                 </IslandWidget.Header.Content>
                 <IslandWidget.Header.Description>
                     <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -220,15 +229,46 @@ export const WithoutFooterAndWithExtraFooter: StoryObj<IIslandWidgetStoryProps> 
         );
 
         const renderExtraFooter = (props) => (
-            <IslandWidget.ExtraFooter {...props}>
-                <Text tag="div" size={ETextSize.B3}>
-                    Extra footer content
-                </Text>
+            <IslandWidget.ExtraFooter open={extraFooterOpen} {...props}>
+                <div className="island-widget-extra-footer">
+                    <Text size={ETextSize.B3}>Extra footer content</Text>
+                </div>
             </IslandWidget.ExtraFooter>
         );
 
+        const handleExtraFooterOpen = (open) => {
+            setExtraFooterOpen(open);
+            setBodyHeight(open ? 196 : 260);
+        };
+
+        const renderControlPanel = () => (
+            <div className="island-widget-control-panel">
+                <Button
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    onClick={() => handleExtraFooterOpen(true)}
+                >
+                    Open Extra Footer
+                </Button>
+                <Button
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    onClick={() => handleExtraFooterOpen(false)}
+                >
+                    Close Extra Footer
+                </Button>
+            </div>
+        );
+
         return (
-            <IslandWidget renderBody={renderBody} renderHeader={renderHeader} renderExtraFooter={renderExtraFooter} />
+            <>
+                {renderControlPanel()}
+                <IslandWidget
+                    renderBody={renderBody}
+                    renderHeader={renderHeader}
+                    renderExtraFooter={renderExtraFooter}
+                />
+            </>
         );
     },
 };

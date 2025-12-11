@@ -58,3 +58,5 @@ export * from "./Spoiler";
 export * from "./StatusTracker";
 export * from "./SmallInput";
 export * from "./DocumentNumberEdit";
+export * from "./Notification";
+export * from "./ModalWindow";

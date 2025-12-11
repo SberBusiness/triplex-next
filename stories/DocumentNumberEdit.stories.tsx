@@ -19,12 +19,74 @@ export default meta;
 
 type Story = StoryObj<typeof DocumentNumberEdit>;
 
+export const Playground: Story = {
+    name: "Playground",
+    args: {
+        buttonLabel: "Изменить",
+        emptyNumberButtonLabel: "Задать номер",
+        emptyNumberLabel: "Номер документа будет присвоен автоматически",
+        numberLabel: "Документ №",
+        maxLength: 6,
+    },
+    argTypes: {
+        value: {
+            table: {
+                disable: true,
+            },
+        },
+        buttonLabel: {
+            control: { type: "text" },
+            description: "Текст кнопки редактирования",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        emptyNumberButtonLabel: {
+            control: { type: "text" },
+            description: "Текст кнопки при отсутствии номера",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        emptyNumberLabel: {
+            control: { type: "text" },
+            description: "Текст при отсутствии номера",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        numberLabel: {
+            control: { type: "text" },
+            description: "Текст перед номером документа",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        maxLength: {
+            control: { type: "select" },
+            options: [0, 1, 2, 3, 4, 5, 6],
+            description: "Максимальная длина поля ввода",
+            table: {
+                type: { summary: "0 | 1 | 2 | 3 | 4 | 5 | 6" },
+                defaultValue: { summary: "6" },
+            },
+        },
+    },
+    render: (args) => {
+        const [value, setValue] = useState("");
+
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
+
+        return <DocumentNumberEdit {...args} value={value} onChange={handleChange} />;
+    },
+};
+
 export const Default: Story = {
     name: "Default",
     render: () => {
         const [value, setValue] = useState("");
 
-        const handleChange = (event) => setValue(event.target.value);
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
         return (
             <DocumentNumberEdit

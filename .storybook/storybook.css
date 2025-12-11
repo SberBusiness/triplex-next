@@ -47,7 +47,12 @@ body {
 
 .theme-dark > body {
     color: rgb(201, 205, 207);
-    background-color: rgb(24, 24, 25);
+    background-color: rgb(38, 38, 41);
+}
+
+.theme-dark .sbdocs-wrapper,
+.theme-dark .sbdocs-content {
+    background-color: rgb(38, 38, 41) !important;
 }
 
 .theme-light .icon-item,

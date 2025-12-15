@@ -36,6 +36,7 @@ import {
     SegmentedControl_Tokens,
     Skeleton_Tokens,
     SMSInput_Tokens,
+    Slider_Tokens,
     Step_Tokens,
     Stepper_Tokens,
     TableBasic_Tokens,
@@ -81,6 +82,7 @@ import {
     TDesignTokensComponentsSegmentedControlValue,
     TDesignTokensComponentsSkeletonValue,
     TDesignTokensComponentsSMSInputValue,
+    TDesignTokensComponentsSliderValue,
     TDesignTokensComponentsStepValue,
     TDesignTokensComponentsStepperValue,
     TDesignTokensComponentsTableBasicValue,
@@ -183,6 +185,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
     ),
     Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.LIGHT, Skeleton_Tokens),
     SMSInput: GetTokensValueByTheme<TDesignTokensComponentsSMSInputValue>(ETriplexNextTheme.LIGHT, SMSInput_Tokens),
+    Slider: GetTokensValueByTheme<TDesignTokensComponentsSliderValue>(ETriplexNextTheme.LIGHT, Slider_Tokens),
     Step: GetTokensValueByTheme<TDesignTokensComponentsStepValue>(ETriplexNextTheme.LIGHT, Step_Tokens),
     Stepper: GetTokensValueByTheme<TDesignTokensComponentsStepperValue>(ETriplexNextTheme.LIGHT, Stepper_Tokens),
     TableBasic: GetTokensValueByTheme<TDesignTokensComponentsTableBasicValue>(

@@ -6,6 +6,7 @@ import { ETextSize } from "../src/components/Typography/enums";
 import { EFontType } from "../src/components/Typography/enums";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Divider",
@@ -30,6 +31,15 @@ import { Divider } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -48,17 +58,8 @@ import { Divider } from '@sberbusiness/triplex-next';
 
 export const Default: StoryObj<typeof Divider> = {
     name: "Default",
-    argTypes: {
-        marginTopSize: {
-            table: {
-                disable: true,
-            },
-        },
-        marginBottomSize: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => (
         <div style={{ maxWidth: 600 }}>
@@ -92,6 +93,11 @@ export const Playground: StoryObj<typeof Divider> = {
     args: {
         marginTopSize: 24,
         marginBottomSize: 16,
+    },
+    parameters: {
+        controls: {
+            include: ["marginTopSize", "marginBottomSize"],
+        },
     },
     render: (args) => (
         <div style={{ maxWidth: 600 }}>

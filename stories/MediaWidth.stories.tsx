@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { EScreenWidth } from "../src/helpers/breakpoints";
 import { MediaWidth } from "../src/components/MediaWidth";
 import { MobileView } from "../src/components/MobileView";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/MediaWidth",
@@ -30,6 +31,15 @@ import { MediaWidth } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={BetweenWidth} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -69,6 +79,9 @@ export const BetweenWidth: StoryObj<typeof MediaWidth> = {
         maxWidth: EScreenWidth.LG_MAX,
     },
     parameters: {
+        controls: {
+            include: ["minWidth", "maxWidth", "children", "fallback"],
+        },
         docs: {
             description: {
                 story: "Заданы максимальная и минимальная допустимая ширина - minWidth и maxWidth. Контент отображается на экранах, чья ширина находится в диапазоне от 768px до 1199px включительно.",
@@ -103,28 +116,20 @@ export const BetweenWidth: StoryObj<typeof MediaWidth> = {
 
 export const MinWidth: StoryObj<typeof MediaWidth> = {
     name: "Min Width",
-    args: {
-        minWidth: EScreenWidth.MD_MIN,
-    },
-    argTypes: {
-        maxWidth: { table: { disable: true } },
-    },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Задана только минимальная необходимая ширина - minWidth. Контент отображается на экранах шириной 768px и более.",
             },
         },
     },
-    render: (args) => {
-        const { minWidth, children, fallback } = args;
+    render: () => {
+        const minWidth = EScreenWidth.MD_MIN;
 
         return (
-            <MediaWidth
-                minWidth={minWidth}
-                fallback={fallback || <div>Fallback на экранах шириной менее {minWidth}</div>}
-            >
-                {children || <div>Контент виден только на экранах шириной {minWidth} и более</div>}
+            <MediaWidth minWidth={minWidth} fallback={<div>Fallback на экранах шириной менее {minWidth}</div>}>
+                <div>Контент виден только на экранах шириной {minWidth} и более</div>
             </MediaWidth>
         );
     },
@@ -132,28 +137,20 @@ export const MinWidth: StoryObj<typeof MediaWidth> = {
 
 export const MaxWidth: StoryObj<typeof MediaWidth> = {
     name: "Max Width",
-    args: {
-        maxWidth: EScreenWidth.LG_MAX,
-    },
-    argTypes: {
-        minWidth: { table: { disable: true } },
-    },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Задана только максимальная допустимая ширина - maxWidth. Контент отображается на экранах шириной до 767px включительно.",
             },
         },
     },
-    render: (args) => {
-        const { maxWidth, children, fallback } = args;
+    render: () => {
+        const maxWidth = EScreenWidth.LG_MAX;
 
         return (
-            <MediaWidth
-                maxWidth={maxWidth}
-                fallback={fallback || <div>Fallback на экранах шириной более {maxWidth}</div>}
-            >
-                {children || <div>Контент виден только на экранах шириной до {maxWidth} включительно</div>}
+            <MediaWidth maxWidth={maxWidth} fallback={<div>Fallback на экранах шириной более {maxWidth}</div>}>
+                <div>Контент виден только на экранах шириной до {maxWidth} включительно</div>
             </MediaWidth>
         );
     },
@@ -161,40 +158,30 @@ export const MaxWidth: StoryObj<typeof MediaWidth> = {
 
 export const Fallback: StoryObj<typeof MediaWidth> = {
     name: "Fallback",
-    args: {
-        fallback: <div>Fallback отображается всегда</div>,
-    },
-    argTypes: {
-        minWidth: { table: { disable: true } },
-        maxWidth: { table: { disable: true } },
-        children: { table: { disable: true } },
-    },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Не указаны ни minWidth, ни maxWidth. В этом случае всегда отображается fallback.",
             },
         },
     },
-    render: (args) => <MediaWidth {...args} />,
+    render: () => <MediaWidth fallback={<div>Fallback отображается всегда</div>} />,
 };
 
 export const MobileVersion: StoryObj<typeof MediaWidth> = {
     name: "Mobile View",
-    args: {
-        fallback: <div>Десктоп контент</div>,
-        children: <div>Мобильный контент</div>,
-    },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Контент переключается между мобильной (экран шириной менее 768px) и десктоп (экран шириной 768px и более) версиями.",
             },
         },
     },
-    argTypes: {
-        minWidth: { table: { disable: true } },
-        maxWidth: { table: { disable: true } },
-    },
-    render: (args) => <MobileView {...args} />,
+    render: () => (
+        <MobileView fallback={<div>Десктоп контент</div>}>
+            <div>Мобильный контент</div>
+        </MobileView>
+    ),
 };

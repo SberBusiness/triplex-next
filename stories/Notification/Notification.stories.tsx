@@ -1,3 +1,4 @@
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Notification } from "../../src/components/Notification/Notification";
 import { NotificationGrouped } from "../../src/components/Notification/NotificationGrouped";
 import {
@@ -30,6 +31,15 @@ export default {
                 component:
                     "Компонент уведомлений, используемый для отображения сообщений об успехе, ошибках или предупреждениях. Он включает в себя иконку, текстовое описание и, по желанию, список. Также включает кнопку для закрытия уведомления.",
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -181,6 +191,24 @@ export const Playground: StoryObj<INotificationPlaygroundProps> = {
         },
     },
     parameters: {
+        controls: {
+            include: [
+                "withExtraBottomPadding",
+                "isShowCloseOnHover",
+                "showIcon",
+                "iconType",
+                "showHeader",
+                "headerText",
+                "showContent",
+                "contentText",
+                "showList",
+                "listItems",
+                "showFooter",
+                "showClose",
+                "showTime",
+                "time",
+            ],
+        },
         docs: {
             description: {
                 story: "Интерактивная демонстрация Notification с расширенными controls. Позволяет настраивать все основные свойства компонента, включая отображение иконки, заголовка, содержимого, списка, футера, кнопки закрытия и времени.",
@@ -251,6 +279,9 @@ export const Playground: StoryObj<INotificationPlaygroundProps> = {
 
 export const Status: StoryObj<typeof Notification> = {
     name: "Status",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
@@ -308,6 +339,9 @@ export const Status: StoryObj<typeof Notification> = {
 
 export const Business: StoryObj<typeof Notification> = {
     name: "Business",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
@@ -378,6 +412,9 @@ export const Business: StoryObj<typeof Notification> = {
 
 export const BusinessStack: StoryObj<typeof Notification> = {
     name: "Business Stack",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
@@ -454,6 +491,9 @@ export const BusinessStack: StoryObj<typeof Notification> = {
 
 export const FeedbackWithoutStars: StoryObj<typeof Notification> = {
     name: "Feedback Without Stars",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [defaultValue, setDefaultValue] = useState("");
         const [filledValue, setFilledValue] = useState("Нет возможности экспортировать данные из заказов");
@@ -581,6 +621,9 @@ export const FeedbackWithoutStars: StoryObj<typeof Notification> = {
 
 export const FeedbackWithStars: StoryObj<typeof Notification> = {
     name: "Feedback With Stars",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [value, setValue] = useState("");
         const checkboxes = [

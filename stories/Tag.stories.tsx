@@ -2,11 +2,25 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Tag } from "../src/components/Tag";
 import { EComponentSize } from "../src/enums";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/Tag",
     component: Tag,
     tags: ["autodocs"],
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
+        },
+    },
     argTypes: {
         children: {
             table: {
@@ -28,6 +42,48 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Playground: Story = {
+    name: "Playground",
+    args: {
+        children: "Selected value",
+        id: "playground-tag",
+        size: EComponentSize.LG,
+        disabled: false,
+    },
+    argTypes: {
+        children: {
+            control: { type: "text" },
+            description: "Контент тега",
+        },
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+            description: "Размер тега",
+        },
+        disabled: {
+            control: { type: "boolean" },
+            description: "Состояние disabled",
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["children", "size", "disabled"],
+        },
+    },
+};
+
+export const Default: Story = {
+    name: "Default",
+    args: {
+        children: "Selected value",
+        id: "default-tag",
+        size: EComponentSize.LG,
+    },
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
 export const Basic: Story = {
     args: {
         children: "Selected value",
@@ -42,6 +98,7 @@ export const Basic: Story = {
                 story: "Базовый тег с функцией удаления.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -57,19 +114,20 @@ export const Edit: Story = {
                 story: "Тег с возможностью редактирования и удаления.",
             },
         },
+        controls: { disable: true },
     },
 };
 
 export const Sizes: Story = {
-    render: (args) => (
+    render: () => (
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <Tag {...args} id="small-tag" size={EComponentSize.SM}>
+            <Tag id="small-tag" size={EComponentSize.SM}>
                 Selected value
             </Tag>
-            <Tag {...args} id="medium-tag" size={EComponentSize.MD}>
+            <Tag id="medium-tag" size={EComponentSize.MD}>
                 Selected value
             </Tag>
-            <Tag {...args} id="large-tag" size={EComponentSize.LG}>
+            <Tag id="large-tag" size={EComponentSize.LG}>
                 Selected value
             </Tag>
         </div>
@@ -80,6 +138,7 @@ export const Sizes: Story = {
                 story: "Теги разных размеров: SM, MD, LG.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -96,6 +155,7 @@ export const Disabled: Story = {
                 story: "Отключенный тег.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -120,14 +180,15 @@ export const WithCustomButtonProps: Story = {
                 story: "Тег с кастомными свойствами для кнопок редактирования и удаления.",
             },
         },
+        controls: { disable: true },
     },
 };
 
 export const WithOverflow: Story = {
     name: "With overflow",
-    render: (args) => (
+    render: () => (
         <div style={{ maxWidth: "440px" }}>
-            <Tag {...args} id="long-tag" size={EComponentSize.LG}>
+            <Tag id="long-tag" size={EComponentSize.LG}>
                 Very long tag text that should be truncated with ellipsis
             </Tag>
         </div>
@@ -138,5 +199,6 @@ export const WithOverflow: Story = {
                 story: "Тег с длинным текстом, который обрезается многоточием.",
             },
         },
+        controls: { disable: true },
     },
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { WaitStsIcon84, WarningStsIcon84, ErrorStsIcon84, SuccessStsIcon84 } from "@sberbusiness/icons-next";
 import { IStatusTrackerProps, StatusTracker } from "../../src/components/StatusTracker";
 import { EStatusTrackerType, EVerticalAlign } from "../../src/components/StatusTracker/enums";
@@ -34,6 +35,15 @@ Approved - документ исполнен банком
 
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -60,6 +70,11 @@ export const Playground: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.WAITING,
         verticalAlign: EVerticalAlign.TOP,
+    },
+    parameters: {
+        controls: {
+            include: ["type", "verticalAlign"],
+        },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
@@ -107,6 +122,9 @@ export const Draft: StoryObj<typeof StatusTracker> = {
         type: EStatusTrackerType.DRAFT,
         verticalAlign: EVerticalAlign.MIDDLE,
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
             <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
@@ -132,6 +150,9 @@ export const Waiting: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.WAITING,
         verticalAlign: EVerticalAlign.TOP,
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
@@ -164,6 +185,9 @@ export const Warning: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.WARNING,
         verticalAlign: EVerticalAlign.TOP,
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
@@ -198,6 +222,9 @@ export const Rejected: StoryObj<typeof StatusTracker> = {
         type: EStatusTrackerType.REJECTED,
         verticalAlign: EVerticalAlign.TOP,
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
             <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
@@ -222,6 +249,9 @@ export const Approved: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.APPROVED,
         verticalAlign: EVerticalAlign.TOP,
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
@@ -248,6 +278,9 @@ export const VerticalAlignTop: StoryObj<typeof StatusTracker> = {
         type: EStatusTrackerType.WAITING,
         verticalAlign: EVerticalAlign.TOP,
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
             <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
@@ -271,6 +304,9 @@ export const VerticalAlignMiddle: StoryObj<typeof StatusTracker> = {
         type: EStatusTrackerType.DRAFT,
         verticalAlign: EVerticalAlign.MIDDLE,
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
             <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
@@ -292,6 +328,9 @@ export const VerticalAlignBottom: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.DRAFT,
         verticalAlign: EVerticalAlign.BOTTOM,
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>
@@ -317,6 +356,9 @@ export const WideParent: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.APPROVED,
         verticalAlign: EVerticalAlign.TOP,
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "600px" }}>
@@ -349,6 +391,9 @@ export const WithMediaOnly: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.WAITING,
         verticalAlign: EVerticalAlign.MIDDLE,
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args: IStatusTrackerProps) => (
         <Page style={{ width: "372px" }}>

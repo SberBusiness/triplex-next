@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import { CheckboxTree, ICheckboxTreeProps } from "../src/components/CheckboxTree/CheckboxTree";
 import { ICheckboxTreeCheckboxData } from "../src/components/CheckboxTree/types";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta: Meta<typeof CheckboxTree> = {
     title: "Components/CheckboxTree",
@@ -38,6 +39,15 @@ const checkboxes = [
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -153,6 +163,10 @@ const InteractiveCheckboxTree = (args: ICheckboxTreeProps) => {
  * ```
  */
 export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args) => <InteractiveCheckboxTree {...args} />,
     args: {
         checkboxes: sampleCheckboxes,

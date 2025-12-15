@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Stories, Subtitle, Title as DocsTitle } from "@storybook/addon-docs/blocks";
 import { Header } from "../../src/components/Header";
 import { Text, Title } from "../../src/components/Typography";
 import { Button, EButtonTheme } from "../../src/components/Button";
@@ -31,6 +32,16 @@ export default {
 - **Гибкость**: можно передавать любой произвольный контент
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Basic} />
+                    <Stories />
+                </>
+            ),
         },
     },
 } as const;
@@ -63,6 +74,7 @@ export const Basic: StoryObj<typeof Header> = {
         docs: {
             description: { story: "Базовый Header с заголовком и кнопкой действия." },
         },
+        controls: { disable: true },
     },
 };
 
@@ -94,6 +106,7 @@ export const TypeSecond: StoryObj<typeof Header> = {
         docs: {
             description: { story: "HeaderPage типа second. Не включает белый фон." },
         },
+        controls: { disable: true },
     },
 };
 
@@ -129,6 +142,7 @@ export const WithLinkInTitle: StoryObj<typeof Header> = {
         docs: {
             description: { story: "Базовый Header с заголовком и кнопкой действия." },
         },
+        controls: { disable: true },
     },
 };
 
@@ -167,6 +181,7 @@ export const DocumentNumberEditExample: StoryObj<typeof Header> = {
         docs: {
             description: { story: "Базовый Header с полем для редактирования номера документа." },
         },
+        controls: { disable: true },
     },
 };
 
@@ -206,6 +221,7 @@ export const WithTabsAndControls: StoryObj<typeof Header> = {
         docs: {
             description: { story: "Заголовок с табами и дополнительными контролами." },
         },
+        controls: { disable: true },
     },
 };
 
@@ -242,6 +258,7 @@ export const WithSubheader: StoryObj<typeof Header> = {
         docs: {
             description: { story: "Header с подзаголовком и произвольным контентом." },
         },
+        controls: { disable: true },
     },
 };
 
@@ -276,5 +293,6 @@ export const LayoutWithSidebar: StoryObj<typeof Header> = {
         docs: {
             description: { story: "Пример layout с сайдбаром для Header." },
         },
+        controls: { disable: true },
     },
 };

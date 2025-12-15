@@ -4,6 +4,7 @@ import { StoryObj } from "@storybook/react";
 import { EMarkerStatus } from "../src/components/Marker/enums";
 import { Gap } from "../src/components/Gap";
 import { EComponentSize } from "../src/enums/EComponentSize";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/MarkerStatus",
@@ -29,6 +30,15 @@ import { MarkerStatus } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -61,6 +71,11 @@ export const Playground: StoryObj<typeof MarkerStatus> = {
         description: "Description",
         children: "Status text",
     },
+    parameters: {
+        controls: {
+            include: ["status", "size", "description", "children"],
+        },
+    },
     render: (args) => (
         <MarkerStatus {...args} description={args.description}>
             {args.children}
@@ -68,105 +83,94 @@ export const Playground: StoryObj<typeof MarkerStatus> = {
     ),
 };
 
+export const Default: StoryObj<typeof MarkerStatus> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => (
+        <MarkerStatus status={EMarkerStatus.SUCCESS} description="Description">
+            Status text
+        </MarkerStatus>
+    ),
+};
+
 export const DifferentSizes: StoryObj<typeof MarkerStatus> = {
     name: "Different Sizes",
-    argTypes: {
-        status: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        description: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
-    args: {
-        children: "Status text",
-        description: "Description",
-    },
-    render: (args) => (
+    render: () => (
         <>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.MD} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.MD} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.MD}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
-                <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
             </div>
             <Gap size={16} />
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.MD} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.MD} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.MD}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
-                <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.LG} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.LG} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.LG}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
             </div>
             <Gap size={16} />
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.MD} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.MD} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.MD}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
-                <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.LG} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.LG} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.LG}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
             </div>
             <Gap size={16} />
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.MD} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.MD} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.MD}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
-                <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.LG} description={args.description}>
-                    {args.children}
+                <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.LG} description="Description">
+                    Status text
                 </MarkerStatus>
                 <Gap size={16} />
                 <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.LG}>
-                    {args.children}
+                    Status text
                 </MarkerStatus>
             </div>
         </>
@@ -175,49 +179,25 @@ export const DifferentSizes: StoryObj<typeof MarkerStatus> = {
 
 export const DifferentStatuses: StoryObj<typeof MarkerStatus> = {
     name: "Different Statuses",
-    argTypes: {
-        status: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        description: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
-    args: {
-        children: "Status text",
-        description: "Description",
-        size: EComponentSize.MD,
-    },
-    render: (args) => (
+    render: () => (
         <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-            <MarkerStatus status={EMarkerStatus.SUCCESS} size={args.size} description={args.description}>
-                {args.children}
+            <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.MD} description="Description">
+                Status text
             </MarkerStatus>
             <Gap size={16} />
-            <MarkerStatus status={EMarkerStatus.ERROR} size={args.size} description={args.description}>
-                {args.children}
+            <MarkerStatus status={EMarkerStatus.ERROR} size={EComponentSize.MD} description="Description">
+                Status text
             </MarkerStatus>
             <Gap size={16} />
-            <MarkerStatus status={EMarkerStatus.WARNING} size={args.size} description={args.description}>
-                {args.children}
+            <MarkerStatus status={EMarkerStatus.WARNING} size={EComponentSize.MD} description="Description">
+                Status text
             </MarkerStatus>
             <Gap size={16} />
-            <MarkerStatus status={EMarkerStatus.WAITING} size={args.size} description={args.description}>
-                {args.children}
+            <MarkerStatus status={EMarkerStatus.WAITING} size={EComponentSize.MD} description="Description">
+                Status text
             </MarkerStatus>
         </div>
     ),

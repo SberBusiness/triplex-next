@@ -60,3 +60,4 @@ export * from "./SmallInput";
 export * from "./DocumentNumberEdit";
 export * from "./Notification";
 export * from "./ModalWindow";
+export * from "./Slider";

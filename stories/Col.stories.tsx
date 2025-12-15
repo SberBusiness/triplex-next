@@ -3,9 +3,11 @@ import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { Gap } from "../src/components/Gap";
 import { StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Col",
+    component: Col,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -41,6 +43,15 @@ import { Row, Col } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -93,6 +104,11 @@ export const Playground: StoryObj = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["children", "size", "offset", "hidden", "block"],
+        },
+    },
     render: (args) => (
         <Row style={{ width: "600px" }}>
             <Col {...args}>
@@ -133,6 +149,7 @@ export const Default: StoryObj = {
                 story: "Размер колонки по-умолчанию",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -198,6 +215,7 @@ export const DifferentSizes: StoryObj = {
                 story: "Демонстрация различных размеров колонок, включая размер по-умолчанию",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -239,6 +257,7 @@ export const ResponsiveSizes: StoryObj = {
                 story: "Колонки с адаптивными размерами для разных экранов",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -319,6 +338,7 @@ export const WithOffsets: StoryObj = {
                 story: "Колонки с отступами (offset)",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -363,6 +383,7 @@ export const ResponsiveOffsets: StoryObj = {
                 story: "Адаптивные отступы для разных размеров экрана",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -444,5 +465,6 @@ export const HiddenColumns: StoryObj = {
                 story: "Колонки, скрытые на определенных размерах экрана",
             },
         },
+        controls: { disable: true },
     },
 };

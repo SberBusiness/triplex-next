@@ -12,6 +12,7 @@ import {
     ETitleSize,
     ECaptionSize,
 } from "../src/components/Typography/enums";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Typography",
@@ -87,6 +88,15 @@ export default {
 
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={TitleStory} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -191,10 +201,14 @@ export const TitlePlayground: StoryObj<typeof Title> = {
                 story: "Интерактивная демонстрация компонента Title с возможностью изменения всех пропсов через controls панель.",
             },
         },
+        controls: {
+            include: ["size", "weight", "type", "tag", "underline", "strikethrough"],
+        },
     },
 };
 
 export const TitleStory: StoryObj<typeof Title> = {
+    name: "Title Sizes",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Title size={ETitleSize.H1}>Заголовок H1</Title>
@@ -208,6 +222,7 @@ export const TitleStory: StoryObj<typeof Title> = {
                 story: "Основные размеры заголовков: H1 (28px), H2 (24px), H3 (20px)",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -234,6 +249,7 @@ export const TitleWeights: StoryObj<typeof Title> = {
                 story: "Различные веса шрифта для заголовков: Regular, Medium, Semibold, Bold",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -281,6 +297,7 @@ export const TitleTypes: StoryObj<typeof Title> = {
                 story: "Различные типы цветов для заголовков: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -388,10 +405,14 @@ export const TextPlayground: StoryObj<typeof Text> = {
                 story: "Интерактивная демонстрация компонента Text с возможностью изменения всех пропсов через controls панель. Включает control для выбора высоты строки (Normal/Compact).",
             },
         },
+        controls: {
+            include: ["size", "weight", "line", "type", "tag", "underline", "strikethrough"],
+        },
     },
 };
 
 export const TextStory: StoryObj<typeof Text> = {
+    name: "Text Sizes",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Text size={ETextSize.B1}>B1 - Основной текст большого размера (18px)</Text>
@@ -406,6 +427,7 @@ export const TextStory: StoryObj<typeof Text> = {
                 story: "Основные размеры текста: B1 (18px), B2 (16px), B3 (14px), B4 (12px)",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -426,6 +448,7 @@ export const TextWeights: StoryObj<typeof Text> = {
                 story: "Различные веса шрифта для текста: Regular, Semibold",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -447,6 +470,7 @@ export const TextLineTypes: StoryObj<typeof Text> = {
                 story: "Различные типы высоты строки для текста: Normal (обычная), Compact (компактная)",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -494,6 +518,7 @@ export const TextTypes: StoryObj<typeof Text> = {
                 story: "Различные типы цветов для текста: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -591,10 +616,14 @@ export const CaptionPlayground: StoryObj<typeof Caption> = {
                 story: "Интерактивная демонстрация компонента Caption с возможностью изменения всех пропсов через controls панель.",
             },
         },
+        controls: {
+            include: ["size", "weight", "type", "tag", "underline", "strikethrough"],
+        },
     },
 };
 
 export const CaptionStory: StoryObj<typeof Caption> = {
+    name: "Caption Sizes",
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Caption size={ECaptionSize.C1}>C1 - Подпись малого размера (10px)</Caption>
@@ -608,6 +637,7 @@ export const CaptionStory: StoryObj<typeof Caption> = {
                 story: "Основные размеры подписей: C1 (10px), C2 (8px), D1 (32px)",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -628,6 +658,7 @@ export const CaptionWeights: StoryObj<typeof Caption> = {
                 story: "Различные веса шрифта для подписей: Regular, Semibold",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -675,6 +706,7 @@ export const CaptionTypes: StoryObj<typeof Caption> = {
                 story: "Различные типы цветов для подписей: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -699,5 +731,6 @@ export const TextDecoration: StoryObj<typeof Text> = {
                 story: "Различные варианты декорации текста: без декораций, подчеркивание, зачеркивание, комбинация",
             },
         },
+        controls: { disable: true },
     },
 };

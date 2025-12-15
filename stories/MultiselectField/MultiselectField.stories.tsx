@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { MultiselectField } from "../../src/components/MultiselectField";
 import { StoryObj } from "@storybook/react";
 import { DropdownMobileHeader } from "../../src/components/Dropdown/mobile/DropdownMobileHeader";
@@ -32,6 +33,7 @@ import "./MultiselectField.less";
 
 export default {
     title: "Components/MultiselectField",
+    component: MultiselectField,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -49,6 +51,15 @@ export default {
 - Dropdown — выпадающий список
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -359,6 +370,11 @@ export const Playground: StoryObj<IMultiselectFieldPlaygroundProps> = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["size", "status", "descriptionText"],
+        },
+    },
     render: (args) => {
         const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
 
@@ -400,6 +416,9 @@ export const Playground: StoryObj<IMultiselectFieldPlaygroundProps> = {
 };
 
 export const DifferentSizes = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const sm = createMultiselectFieldStoriesLogic({ size: EComponentSize.SM, status: EFormFieldStatus.DEFAULT });
         const md = createMultiselectFieldStoriesLogic({ size: EComponentSize.MD, status: EFormFieldStatus.DEFAULT });
@@ -459,6 +478,9 @@ export const DifferentSizes = {
 };
 
 export const DifferentStatuses = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const disabled = createMultiselectFieldStoriesLogic({ status: EFormFieldStatus.DISABLED });
         const error = createMultiselectFieldStoriesLogic({ status: EFormFieldStatus.ERROR });
@@ -518,6 +540,9 @@ export const DifferentStatuses = {
 };
 
 export const Loading: StoryObj<IMultiselectFieldPlaygroundProps> = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const sm = createMultiselectFieldStoriesLogic({
             size: EComponentSize.SM,

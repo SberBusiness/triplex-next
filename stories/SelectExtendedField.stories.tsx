@@ -5,12 +5,14 @@ import { SelectExtendedFieldTarget } from "../src/components/SelectExtendedField
 import { SelectExtendedFieldDropdown } from "../src/components/SelectExtendedField/components/SelectExtendedFieldDropdown";
 import { DropdownListItem } from "../src/components/Dropdown/desktop/DropdownListItem";
 import { EFormFieldSize, EFormFieldStatus, FormFieldDescription } from "../src/components/FormField";
-import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
+import { Text, ETextSize, EFontType, Title as TypographyTitle, ETitleSize } from "../src/components/Typography";
 import { Gap } from "../src/components/Gap";
 import { FormGroup } from "../src/components/FormGroup";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SelectExtendedField",
+    component: SelectExtendedField,
     parameters: {
         docs: {
             description: {
@@ -33,6 +35,15 @@ SelectExtendedField - это расширенный компонент выбо�
 Каждая функция получает необходимые пропсы для управления состоянием.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -199,6 +210,17 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
         selectedValue: "",
     },
     parameters: {
+        controls: {
+            include: [
+                "fieldLabel",
+                "placeholder",
+                "loading",
+                "status",
+                "descriptionText",
+                "errorText",
+                "selectedValue",
+            ],
+        },
         docs: {
             description: {
                 story: "Интерактивная демонстрация SelectExtendedField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая текст лейбла, плейсхолдер, состояния (отключенное, ошибка, загрузка) и предварительно выбранное значение. Также включает отладочную информацию для демонстрации состояния компонента.",
@@ -208,6 +230,15 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
 };
 
 export const Basic: StoryObj<typeof SelectExtendedField> = {
+    name: "Basic",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Базовый пример использования SelectExtendedField с простым списком опций.",
+            },
+        },
+    },
     render: function Render() {
         const [selectedValue, setSelectedValue] = useState<string>("");
 
@@ -252,16 +283,18 @@ export const Basic: StoryObj<typeof SelectExtendedField> = {
             </div>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования SelectExtendedField с простым списком опций.",
-            },
-        },
-    },
 };
 
 export const States: StoryObj<typeof SelectExtendedField> = {
+    name: "States",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Демонстрация различных состояний SelectExtendedField: обычное, загрузка, ошибка и отключенное состояние.",
+            },
+        },
+    },
     render: function Render() {
         const [selectedValue, setSelectedValue] = useState<string>("option2");
 
@@ -275,9 +308,14 @@ export const States: StoryObj<typeof SelectExtendedField> = {
         return (
             <div style={{ maxWidth: "304px" }}>
                 <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                    <TypographyTitle
+                        tag="h3"
+                        size={ETitleSize.H3}
+                        type={EFontType.PRIMARY}
+                        style={{ marginBottom: "16px" }}
+                    >
                         Обычное состояние
-                    </Title>
+                    </TypographyTitle>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
@@ -316,9 +354,14 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                 <Gap size={24} />
 
                 <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                    <TypographyTitle
+                        tag="h3"
+                        size={ETitleSize.H3}
+                        type={EFontType.PRIMARY}
+                        style={{ marginBottom: "16px" }}
+                    >
                         Состояние загрузки
-                    </Title>
+                    </TypographyTitle>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
@@ -358,9 +401,14 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                 <Gap size={24} />
 
                 <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                    <TypographyTitle
+                        tag="h3"
+                        size={ETitleSize.H3}
+                        type={EFontType.PRIMARY}
+                        style={{ marginBottom: "16px" }}
+                    >
                         Состояние ошибки
-                    </Title>
+                    </TypographyTitle>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
@@ -405,9 +453,14 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                 <Gap size={24} />
 
                 <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                    <TypographyTitle
+                        tag="h3"
+                        size={ETitleSize.H3}
+                        type={EFontType.PRIMARY}
+                        style={{ marginBottom: "16px" }}
+                    >
                         Состояние предупреждения
-                    </Title>
+                    </TypographyTitle>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
@@ -452,9 +505,14 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                 <Gap size={24} />
 
                 <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                    <TypographyTitle
+                        tag="h3"
+                        size={ETitleSize.H3}
+                        type={EFontType.PRIMARY}
+                        style={{ marginBottom: "16px" }}
+                    >
                         Отключенное состояние
-                    </Title>
+                    </TypographyTitle>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
@@ -497,12 +555,5 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                 </FormGroup>
             </div>
         );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация различных состояний SelectExtendedField: обычное, загрузка, ошибка и отключенное состояние.",
-            },
-        },
     },
 };

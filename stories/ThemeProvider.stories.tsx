@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { ETriplexNextTheme } from "../src/components/ThemeProvider/ETriplexNextTheme";
 import { ThemeProvider } from "../src/components/ThemeProvider";
 import { Button } from "../src/components/Button";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/ThemeProvider",
@@ -14,6 +15,15 @@ export default {
                 component:
                     "ThemeProvider - компонент для управления темами в приложении. Позволяет переключаться между светлой и темной темами, а также переопределять дизайн-токены.",
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -40,9 +50,17 @@ export default {
 };
 
 export const Default: StoryObj<typeof ThemeProvider> = {
-    name: "ThemeProvider Default",
+    name: "Default",
     args: {
         theme: ETriplexNextTheme.LIGHT,
+    },
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "ThemeProvider с темой по умолчанию (светлая тема).",
+            },
+        },
     },
     render: function Render(args) {
         const scopeRef = useRef<HTMLDivElement>(null);
@@ -57,25 +75,23 @@ export const Default: StoryObj<typeof ThemeProvider> = {
             </ThemeProvider>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "ThemeProvider с темой по умолчанию (светлая тема).",
-            },
-        },
-    },
 };
 
 export const DarkTheme: StoryObj<typeof ThemeProvider> = {
     name: "Dark Theme",
-    args: {
-        theme: ETriplexNextTheme.DARK,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "ThemeProvider с темной темой.",
+            },
+        },
     },
-    render: function Render(args) {
+    render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);
 
         return (
-            <ThemeProvider {...args} scopeRef={scopeRef}>
+            <ThemeProvider theme={ETriplexNextTheme.DARK} scopeRef={scopeRef}>
                 <div ref={scopeRef}>
                     <h2>Темная тема</h2>
                     <p>Это пример использования ThemeProvider с темной темой.</p>
@@ -84,30 +100,31 @@ export const DarkTheme: StoryObj<typeof ThemeProvider> = {
             </ThemeProvider>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "ThemeProvider с темной темой.",
-            },
-        },
-    },
 };
 
 export const CustomTokens: StoryObj<typeof ThemeProvider> = {
     name: "Custom Tokens",
-    args: {
-        theme: ETriplexNextTheme.LIGHT,
-        tokens: {
-            ColorBrand: {
-                "30": { value: "grey" },
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "ThemeProvider с переопределенными токенами.",
             },
         },
     },
-    render: function Render(args) {
+    render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);
 
         return (
-            <ThemeProvider {...args} scopeRef={scopeRef}>
+            <ThemeProvider
+                theme={ETriplexNextTheme.LIGHT}
+                tokens={{
+                    ColorBrand: {
+                        "30": { value: "grey" },
+                    },
+                }}
+                scopeRef={scopeRef}
+            >
                 <div ref={scopeRef}>
                     <h2>Кастомные токены</h2>
                     <p>Этот пример демонстрирует переопределение токенов темы.</p>
@@ -116,22 +133,20 @@ export const CustomTokens: StoryObj<typeof ThemeProvider> = {
             </ThemeProvider>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "ThemeProvider с переопределенными токенами.",
-            },
-        },
-    },
 };
 
 export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
     name: "Theme Switcher",
-    args: {
-        theme: ETriplexNextTheme.LIGHT,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Интерактивный пример переключения между темами.",
+            },
+        },
     },
-    render: function Render(args) {
-        const [currentTheme, setCurrentTheme] = useState(args.theme);
+    render: function Render() {
+        const [currentTheme, setCurrentTheme] = useState(ETriplexNextTheme.LIGHT);
 
         const handleThemeToggle = () => {
             setCurrentTheme(
@@ -153,17 +168,18 @@ export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
             </ThemeProvider>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "Интерактивный пример переключения между темами.",
-            },
-        },
-    },
 };
 
 export const ScopedTheme: StoryObj<typeof ThemeProvider> = {
     name: "Scoped Theme",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Пример использования scopeRef для ограничения области действия темы.",
+            },
+        },
+    },
     render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);
 
@@ -182,12 +198,5 @@ export const ScopedTheme: StoryObj<typeof ThemeProvider> = {
                 </ThemeProvider>
             </div>
         );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Пример использования scopeRef для ограничения области действия темы.",
-            },
-        },
     },
 };

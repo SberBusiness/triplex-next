@@ -5,9 +5,11 @@ import { StoryObj } from "@storybook/react";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { EComponentSize } from "../src/enums/EComponentSize";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Radio",
+    component: Radio,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -55,6 +57,15 @@ import { Radio } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -97,107 +108,52 @@ export const Playground: StoryObj<typeof Radio> = {
                 defaultValue: { summary: "EComponentSize.MD" },
             },
         },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-        labelAttributes: {
-            table: {
-                disable: true,
-            },
-        },
-        name: {
-            table: {
-                disable: true,
-            },
-        },
-        value: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["children", "checked", "disabled", "size"],
         },
     },
     render: (args) => <Radio {...args} />,
 };
 
+export const Default: StoryObj<typeof Radio> = {
+    name: "Default",
+    render: () => <Radio>Radio text</Radio>,
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
 export const DifferentSizes: StoryObj<typeof Radio> = {
     name: "Different Sizes",
-    args: {
-        children: "Radio text",
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        name: {
-            table: {
-                disable: true,
-            },
-        },
-        value: {
-            table: {
-                disable: true,
-            },
-        },
-        checked: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        disabled: {
-            table: {
-                disable: true,
-            },
-        },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => (
+    render: () => (
         <div style={{ width: "250px" }}>
-            <Radio {...args} />
+            <Radio>Radio text</Radio>
             <Gap size={16} />
-            <Radio {...args} size={EComponentSize.LG} />
+            <Radio size={EComponentSize.LG}>Radio text</Radio>
         </div>
     ),
 };
 
 export const XGroup: StoryObj<typeof Radio> = {
     name: "X Group",
-    args: {
-        disabled: false,
-    },
-    argTypes: {
-        disabled: {
-            control: { type: "boolean" },
-            description: "Состояние disabled",
-            table: {
-                type: { summary: "boolean" },
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Группа радио-кнопок с направлением по оси X",
             },
         },
+        controls: { disable: true },
     },
-    render: (args) => (
+    render: () => (
         <>
             <RadioXGroup aria-labelledby="radio-x-group-label" indent={16}>
                 {[1, 2, 3].map((value, index) => (
-                    <Radio key={index} name="radio-x-group-md" value={value} disabled={args.disabled}>
+                    <Radio key={index} name="radio-x-group-md" value={value}>
                         Radio text
                     </Radio>
                 ))}
@@ -205,13 +161,7 @@ export const XGroup: StoryObj<typeof Radio> = {
             <Gap size={16} />
             <RadioXGroup aria-labelledby="radio-x-group-label" indent={20}>
                 {[1, 2, 3].map((value, index) => (
-                    <Radio
-                        key={index}
-                        name="radio-x-group-lg"
-                        value={value}
-                        size={EComponentSize.LG}
-                        disabled={args.disabled}
-                    >
+                    <Radio key={index} name="radio-x-group-lg" value={value} size={EComponentSize.LG}>
                         Radio text
                     </Radio>
                 ))}
@@ -222,31 +172,20 @@ export const XGroup: StoryObj<typeof Radio> = {
 
 export const YGroup: StoryObj<typeof Radio> = {
     name: "Y Group",
-    args: {
-        disabled: false,
-    },
-    argTypes: {
-        disabled: {
-            control: { type: "boolean" },
-            description: "Состояние disabled",
-            table: {
-                type: { summary: "boolean" },
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Группа радио-кнопок с направлением по оси Y",
             },
         },
+        controls: { disable: true },
     },
-    render: (args) => (
+    render: () => (
         <Row>
             <Col size={3}>
                 <RadioYGroup>
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Radio key={index} name="radio-y-group-md" value={value} disabled={args.disabled}>
+                        <Radio key={index} name="radio-y-group-md" value={value}>
                             Radio text
                         </Radio>
                     ))}
@@ -255,13 +194,7 @@ export const YGroup: StoryObj<typeof Radio> = {
             <Col size={3}>
                 <RadioYGroup>
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Radio
-                            key={index}
-                            name="radio-y-group-lg"
-                            value={value}
-                            size={EComponentSize.LG}
-                            disabled={args.disabled}
-                        >
+                        <Radio key={index} name="radio-y-group-lg" value={value} size={EComponentSize.LG}>
                             Radio text
                         </Radio>
                     ))}
@@ -279,6 +212,7 @@ export const Selected: StoryObj<typeof Radio> = {
                 story: "Группа радио-кнопок с одной предварительно выбранной",
             },
         },
+        controls: { disable: true },
     },
     render: () => (
         <>

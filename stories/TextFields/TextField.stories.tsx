@@ -8,9 +8,11 @@ import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/
 import { FormFieldClear } from "../../src/components/FormField/components/FormFieldClear";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/TextFields/TextField",
+    component: TextField,
     parameters: {
         docs: {
             description: {
@@ -25,6 +27,15 @@ export default {
 - **Префикс/Постфикс** - дополнительные элементы слева и справа от поля
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -188,6 +199,46 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                 story: "Интерактивная демонстрация TextField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, префикс, постфикс и описание.",
             },
         },
+        controls: {
+            include: [
+                "status",
+                "labelText",
+                "showLabel",
+                "placeholder",
+                "prefixText",
+                "postfixText",
+                "descriptionText",
+                "counter",
+                "size",
+                "className",
+            ],
+        },
+    },
+};
+
+export const Default: StoryObj<typeof TextField> = {
+    render: () => {
+        const [value, setValue] = useState("");
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <TextField
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                        placeholder: "Введите текст...",
+                    }}
+                    label="Название поля"
+                />
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
     },
 };
 
@@ -223,6 +274,7 @@ export const Basic: StoryObj<typeof TextField> = {
                 story: "Базовый пример использования TextField с лейблом и описанием.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -266,6 +318,7 @@ export const PassRefToInput: StoryObj<typeof TextField> = {
                 story: "Пример использования TextField с передачей ref на input.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -306,6 +359,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
                 story: `TextField с префиксом и постфиксом.`,
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -341,6 +395,7 @@ export const WithClearButton: StoryObj<typeof TextField> = {
                 story: "TextField с кнопкой очистки значения.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -387,6 +442,7 @@ export const WithCounter: StoryObj<typeof TextField> = {
                 story: "TextField с динамическим счетчиком символов. Счетчик показывает текущее количество символов и максимально допустимое.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -463,6 +519,7 @@ export const Sizes: StoryObj<typeof TextField> = {
                 story: "Демонстрация различных размеров TextField: SM (маленький), MD (средний), LG (большой - по умолчанию). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -555,5 +612,6 @@ export const States: StoryObj<typeof TextField> = {
                 story: "Различные состояния TextField: обычное, с ошибкой, отключенное.",
             },
         },
+        controls: { disable: true },
     },
 };

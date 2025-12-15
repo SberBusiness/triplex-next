@@ -5,6 +5,7 @@ import { Gap } from "../src/components/Gap";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Checkbox",
@@ -61,6 +62,15 @@ import { Checkbox } from '../src/components/Checkbox/Checkbox';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -111,20 +121,10 @@ export const Playground: StoryObj<typeof Checkbox> = {
                 defaultValue: { summary: EComponentSize.MD },
             },
         },
-        labelAttributes: {
-            table: {
-                disable: true,
-            },
-        },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["children", "checked", "disabled", "bulk", "size"],
         },
     },
     render: (args) => <Checkbox {...args} />,
@@ -136,47 +136,8 @@ export const Default: StoryObj<typeof Checkbox> = {
         children: "Checkbox label",
         size: EComponentSize.MD,
     },
-    argTypes: {
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        checked: {
-            table: {
-                disable: true,
-            },
-        },
-        disabled: {
-            table: {
-                disable: true,
-            },
-        },
-        bulk: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        labelAttributes: {
-            table: {
-                disable: true,
-            },
-        },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args) => (
         <>
@@ -189,65 +150,19 @@ export const Default: StoryObj<typeof Checkbox> = {
 
 export const XGroup: StoryObj<typeof Checkbox> = {
     name: "X Group",
-    args: {
-        disabled: false,
-    },
-    argTypes: {
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        checked: {
-            table: {
-                disable: true,
-            },
-        },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Состояние disabled",
-            table: {
-                type: { summary: "boolean" },
-            },
-        },
-        bulk: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        labelAttributes: {
-            table: {
-                disable: true,
-            },
-        },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Группа чекбоксов с направлением по оси X",
             },
         },
+        controls: { disable: true },
     },
-    render: (args) => (
+    render: () => (
         <>
             <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={16}>
                 {[1, 2, 3].map((value, index) => (
-                    <Checkbox key={index} name="checkbox-x-group" value={value} disabled={args.disabled}>
+                    <Checkbox key={index} name="checkbox-x-group" value={value}>
                         Checkbox text
                     </Checkbox>
                 ))}
@@ -255,13 +170,7 @@ export const XGroup: StoryObj<typeof Checkbox> = {
             <Gap size={16} />
             <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={20}>
                 {[1, 2, 3].map((value, index) => (
-                    <Checkbox
-                        key={index}
-                        name="checkbox-x-group"
-                        value={value}
-                        size={EComponentSize.LG}
-                        disabled={args.disabled}
-                    >
+                    <Checkbox key={index} name="checkbox-x-group" value={value} size={EComponentSize.LG}>
                         Checkbox text
                     </Checkbox>
                 ))}
@@ -272,66 +181,20 @@ export const XGroup: StoryObj<typeof Checkbox> = {
 
 export const YGroup: StoryObj<typeof Checkbox> = {
     name: "Y Group",
-    args: {
-        disabled: false,
-    },
-    argTypes: {
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        checked: {
-            table: {
-                disable: true,
-            },
-        },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Состояние disabled",
-            table: {
-                type: { summary: "boolean" },
-            },
-        },
-        bulk: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        labelAttributes: {
-            table: {
-                disable: true,
-            },
-        },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Группа чекбоксов с направлением по оси Y",
             },
         },
+        controls: { disable: true },
     },
-    render: (args) => (
+    render: () => (
         <Row>
             <Col size={3}>
                 <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox key={index} name="checkbox-y-group" value={value} disabled={args.disabled}>
+                        <Checkbox key={index} name="checkbox-y-group" value={value}>
                             Checkbox text
                         </Checkbox>
                     ))}
@@ -340,13 +203,7 @@ export const YGroup: StoryObj<typeof Checkbox> = {
             <Col size={3}>
                 <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
                     {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox
-                            key={index}
-                            name="checkbox-y-group"
-                            value={value}
-                            size={EComponentSize.LG}
-                            disabled={args.disabled}
-                        >
+                        <Checkbox key={index} name="checkbox-y-group" value={value} size={EComponentSize.LG}>
                             Checkbox text
                         </Checkbox>
                     ))}

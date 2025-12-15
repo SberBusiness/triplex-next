@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { ModalWindow } from "../../src/components/ModalWindow/ModalWindow";
 import { ModalWindowContent } from "../../src/components/ModalWindow/components/ModalWindowContent";
 import { ModalWindowHeader } from "../../src/components/ModalWindow/components/ModalWindowHeader";
@@ -42,15 +43,25 @@ const STORY_META_DESCRIPTION = `
 
 const meta = {
     title: "Components/ModalWindow",
+    component: ModalWindow,
     tags: ["autodocs"],
     parameters: {
         docs: {
             description: {
                 component: STORY_META_DESCRIPTION,
             },
+            page: () => (
+                <>
+                    <SBTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
-} satisfies Meta<ModalWindowStoryArgs>;
+} satisfies Meta<typeof ModalWindow>;
 
 export default meta;
 
@@ -146,6 +157,9 @@ export const Playground: Story = {
         },
     },
     parameters: {
+        controls: {
+            include: ["isLoading", "size"],
+        },
         docs: {
             description: {
                 story: "Интерактивный пример модального окна. Управляйте состояниями через панель Storybook.",

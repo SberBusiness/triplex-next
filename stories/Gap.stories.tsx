@@ -1,6 +1,7 @@
 import React from "react";
 import { Gap } from "../src/components/Gap";
 import { StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Gap",
@@ -31,14 +32,35 @@ import { Gap } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
 
-export const Default: StoryObj<typeof Gap> = {
-    name: "Default",
+export const Playground: StoryObj<typeof Gap> = {
+    name: "Playground",
     args: {
-        size: 4,
+        size: 16,
+    },
+    argTypes: {
+        size: {
+            control: { type: "select" },
+            options: [4, 8, 12, 16, 24, 32, 64, 128],
+            description: "Размер отступа",
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["size"],
+        },
     },
     render: (args) => (
         <div>
@@ -53,6 +75,38 @@ export const Default: StoryObj<typeof Gap> = {
             </div>
 
             <Gap size={args.size} />
+
+            <div
+                style={{
+                    padding: "16px",
+                    textAlign: "center",
+                    backgroundColor: "rgb(255, 217, 160)",
+                }}
+            >
+                Sample Text Below
+            </div>
+        </div>
+    ),
+};
+
+export const Default: StoryObj<typeof Gap> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => (
+        <div>
+            <div
+                style={{
+                    padding: "16px",
+                    textAlign: "center",
+                    backgroundColor: "rgb(255, 217, 160)",
+                }}
+            >
+                Sample Text Above
+            </div>
+
+            <Gap size={16} />
 
             <div
                 style={{

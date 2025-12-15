@@ -2,14 +2,25 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/HelpBox",
+    component: HelpBox,
     parameters: {
         docs: {
             description: {
                 component: `\nИконка помощи с всплывающей подсказкой.\n\n- **Размеры тултипа**: SM, LG\n- **Расположение**: above, below, left, right\n- **Мобильный заголовок**: отдельная зона для мобильной версии\n                `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -76,6 +87,9 @@ export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
         mobileHeaderText: "Заголовок подсказки",
     },
     parameters: {
+        controls: {
+            include: ["tooltipSize", "preferPlace", "contentText", "mobileHeaderText"],
+        },
         docs: {
             description: {
                 story: "Интерактивная демонстрация HelpBox с контролами размера, положения и текстов.",
@@ -85,12 +99,14 @@ export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
 };
 
 export const Default: StoryObj<typeof HelpBox> = {
+    name: "Default",
     render: () => (
         <div style={{ padding: 50 }}>
             <HelpBox tooltipSize={ETooltipSize.SM}>Подсказка по элементу интерфейса</HelpBox>
         </div>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: { story: "Базовый HelpBox c тултипом большого размера." },
         },
@@ -98,6 +114,7 @@ export const Default: StoryObj<typeof HelpBox> = {
 };
 
 export const Sizes: StoryObj<typeof HelpBox> = {
+    name: "Sizes",
     render: () => (
         <div style={{ padding: 50, display: "flex", gap: 100 }}>
             <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
@@ -109,6 +126,7 @@ export const Sizes: StoryObj<typeof HelpBox> = {
         </div>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: { story: "Демонстрация размеров тултипа: SM и LG." },
         },
@@ -116,6 +134,13 @@ export const Sizes: StoryObj<typeof HelpBox> = {
 };
 
 export const Placement: StoryObj<typeof HelpBox> = {
+    name: "Placement",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: { story: "Варианты расположения тултипа относительно иконки HelpBox." },
+        },
+    },
     render: () => (
         <div style={{ padding: 50, display: "grid", gridTemplateColumns: "repeat(2, minmax(120px, 1fr))", gap: 32 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -144,14 +169,10 @@ export const Placement: StoryObj<typeof HelpBox> = {
             </div>
         </div>
     ),
-    parameters: {
-        docs: {
-            description: { story: "Варианты расположения тултипа относительно иконки HelpBox." },
-        },
-    },
 };
 
 export const WithMobileHeader: StoryObj<typeof HelpBox> = {
+    name: "With Mobile Header",
     render: () => (
         <div style={{ padding: 50 }}>
             <HelpBox tooltipSize={ETooltipSize.SM} mobileHeaderContent="Заголовок">
@@ -160,6 +181,7 @@ export const WithMobileHeader: StoryObj<typeof HelpBox> = {
         </div>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: { story: "Пример использования мобильного заголовка у тултипа." },
         },
@@ -167,6 +189,13 @@ export const WithMobileHeader: StoryObj<typeof HelpBox> = {
 };
 
 export const Controlled: StoryObj<typeof HelpBox> = {
+    name: "Controlled",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: { story: "Пример контролируемого состояния HelpBox через свойства isOpen/toggle." },
+        },
+    },
     render: () => {
         const [open, setOpen] = useState(false);
 
@@ -192,10 +221,5 @@ export const Controlled: StoryObj<typeof HelpBox> = {
                 </HelpBox>
             </div>
         );
-    },
-    parameters: {
-        docs: {
-            description: { story: "Пример контролируемого состояния HelpBox через свойства isOpen/toggle." },
-        },
     },
 };

@@ -13,6 +13,7 @@ import {
     Link,
     Gap,
 } from "@sberbusiness/triplex-next";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import "./Cards.less";
 
 // TODO: Проработать это
@@ -24,6 +25,7 @@ interface ICardStaticPlaygroundProps {
 
 const meta = {
     title: "Components/Cards/CardStatic",
+    component: CardStatic,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -60,6 +62,15 @@ import { CardAction, ECardTheme, ECardRoundingSize, ECardContentPaddingSize } fr
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 } satisfies Meta<typeof CardStatic>;
@@ -75,6 +86,9 @@ export const Playground: StoryObj<ICardStaticPlaygroundProps> = {
             description: {
                 story: "Интерактивная демонстрация Card Static. Позволяет настраивать все основные свойства компонента.",
             },
+        },
+        controls: {
+            include: ["paddingSize", "roundingSize", "theme"],
         },
     },
     argTypes: {
@@ -160,6 +174,31 @@ export const Playground: StoryObj<ICardStaticPlaygroundProps> = {
     },
 };
 
+export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: function Render() {
+        return (
+            <div className="card-static-general-playground-preview">
+                <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
+                    <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
+                        <CardStatic.Content.Header>
+                            <Text size={ETextSize.B3}>Subtitle text</Text>
+                        </CardStatic.Content.Header>
+                        <CardStatic.Content.Body>
+                            <Text tag="div" size={ETextSize.B3} line={ELineType.EXTRA}>
+                                This message provides context or highlights important information to note.
+                            </Text>
+                        </CardStatic.Content.Body>
+                    </CardStatic.Content>
+                </CardStatic>
+            </div>
+        );
+    },
+};
+
 export const General: Story = {
     name: "General",
     parameters: {
@@ -168,6 +207,7 @@ export const General: Story = {
                 story: "Пример использования Card Static General. Скругление карточки: MD, размер внутреннего отступа контента карточки: MD.",
             },
         },
+        controls: { disable: true },
     },
     render: function Render() {
         return (
@@ -226,6 +266,7 @@ export const Secondary: Story = {
                 story: "Пример использования Card Action Secondary. Скругление карточки: MD, размер внутреннего отступа контента карточки: MD.",
             },
         },
+        controls: { disable: true },
     },
     render: function Render() {
         return (
@@ -284,6 +325,7 @@ export const SmallPaddingSize: Story = {
                 story: "Пример использования Card Static. Размер внутреннего отступа контента карточки: SM.",
             },
         },
+        controls: { disable: true },
     },
     render: function Render() {
         return (
@@ -342,6 +384,7 @@ export const SmallRoundingSize: Story = {
                 story: "Пример использования Card Action. Скругление карточки: SM.",
             },
         },
+        controls: { disable: true },
     },
     render: function Render() {
         return (

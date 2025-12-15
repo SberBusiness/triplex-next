@@ -1,11 +1,11 @@
 import React from "react";
 import { Button } from "../../src/components/Button";
 import { StoryObj } from "@storybook/react";
-import { action } from "storybook/actions";
 import { Gap } from "../../src/components/Gap";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon32, DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Buttons/Button",
@@ -26,6 +26,15 @@ export default {
 - **Доступность**: поддержка ARIA атрибутов и клавиатурной навигации
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -34,7 +43,6 @@ export const Playground: StoryObj<typeof Button> = {
     name: "Playground",
     args: {
         children: "Button text",
-        onClick: action("On Click"),
         theme: EButtonTheme.GENERAL,
         size: EComponentSize.MD,
         block: false,
@@ -75,10 +83,10 @@ export const Playground: StoryObj<typeof Button> = {
                 type: { summary: "React.ReactNode" },
             },
         },
-        onClick: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["theme", "size", "block", "loading", "children"],
         },
     },
     render: (args) => (
@@ -90,45 +98,10 @@ export const Playground: StoryObj<typeof Button> = {
 
 export const Default: StoryObj<typeof Button> = {
     name: "Default",
-    args: {
-        children: "Button text",
-        onClick: action("On Click"),
-        theme: EButtonTheme.GENERAL,
-        size: EComponentSize.MD,
-    },
-    argTypes: {
-        theme: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        block: {
-            table: {
-                disable: true,
-            },
-        },
-        loading: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
-    },
 
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args) => (
         <div style={{ width: "250px" }}>
             <Button {...args} />
@@ -165,14 +138,12 @@ export const DifferentThemes: StoryObj<typeof Button> = {
                 story: "Доступные темы кнопок",
             },
         },
+        controls: { disable: true },
     },
 };
 
 export const Icon: StoryObj<typeof Button> = {
     name: "Icon",
-    argTypes: {
-        icon: { table: { disable: true } },
-    },
     render: () => (
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <Button
@@ -203,6 +174,7 @@ export const Icon: StoryObj<typeof Button> = {
                 story: "Кнопка с иконкой, переданной свойством icon",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -277,6 +249,7 @@ export const DifferentSizes: StoryObj<typeof Button> = {
                 story: "Доступные размеры кнопок",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -310,6 +283,7 @@ export const BlockMode: StoryObj<typeof Button> = {
                 story: "Кнопка в блочном режиме",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -340,6 +314,7 @@ export const Disabled: StoryObj<typeof Button> = {
                 story: "Кнопка в состоянии disabled",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -373,6 +348,7 @@ export const Loading: StoryObj<typeof Button> = {
                 story: "Кнопка в состоянии loading",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -408,6 +384,7 @@ export const Expanded: StoryObj<typeof Button> = {
                 story: "Кнопка в состоянии expanded",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -418,26 +395,13 @@ export const TextWithIcon: StoryObj<typeof Button> = {
         theme: EButtonTheme.LINK,
         size: EComponentSize.MD,
     },
-    argTypes: {
-        icon: { table: { disable: true } },
-        theme: {
-            control: { type: "select" },
-            options: Object.values(EButtonTheme),
-        },
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            table: {
-                defaultValue: { summary: EComponentSize.MD },
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Контент кнопки состоит из текста и иконки",
             },
         },
+        controls: { disable: true },
     },
     render: (args) => (
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

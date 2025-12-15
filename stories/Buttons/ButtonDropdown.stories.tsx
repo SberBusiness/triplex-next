@@ -4,6 +4,7 @@ import { action } from "storybook/actions";
 import { ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
 import { EButtonTheme, EButtonDotsTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import "./ButtonDropdown.less";
 
 export default {
@@ -24,6 +25,15 @@ export default {
 - **Доступность**: ARIA-атрибуты, поддержка клавиатурной навигации
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -110,6 +120,26 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
                 story: "Интерактивная демонстрация ButtonDropdown с контролами.",
             },
         },
+        controls: {
+            include: ["children", "theme", "size", "block", "disabled"],
+        },
+    },
+};
+
+export const Default: StoryObj<typeof ButtonDropdown> = {
+    name: "Default",
+    render: () => {
+        const options = useMemo(() => createOptions(), []);
+        return (
+            <div style={{ width: 280 }}>
+                <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
+                    Button text
+                </ButtonDropdown>
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
     },
 };
 

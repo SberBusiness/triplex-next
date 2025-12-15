@@ -1,4 +1,5 @@
 import React from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { LoaderMiddle } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
 
@@ -21,6 +22,15 @@ import { LoaderMiddle } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Default} />
+                </>
+            ),
         },
     },
 };
@@ -28,4 +38,7 @@ import { LoaderMiddle } from '@sberbusiness/triplex-next';
 export const Default: StoryObj<typeof LoaderMiddle> = {
     name: "Default",
     render: (args) => <LoaderMiddle {...args} />,
+    parameters: {
+        controls: { disable: true },
+    },
 };

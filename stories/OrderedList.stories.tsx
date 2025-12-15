@@ -1,6 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { OrderedList } from "../src/components/OrderedList";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/OrderedList",
@@ -25,6 +26,15 @@ import { OrderedList } from "@sberbusiness/triplex-next/components/OrderedList";
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     decorators: [
@@ -39,8 +49,12 @@ import { OrderedList } from "@sberbusiness/triplex-next/components/OrderedList";
 type Story = StoryObj<typeof OrderedList>;
 
 export const Default: Story = {
-    render: (args) => (
-        <OrderedList {...args}>
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => (
+        <OrderedList>
             <OrderedList.Item>List item text;</OrderedList.Item>
             <OrderedList.Item>List item text;</OrderedList.Item>
             <OrderedList.Item>List item text.</OrderedList.Item>
@@ -49,14 +63,16 @@ export const Default: Story = {
 };
 
 export const WithLongContent: Story = {
-    render: (args) => (
-        <OrderedList {...args}>
+    name: "With Long Content",
+    render: () => (
+        <OrderedList>
             <OrderedList.Item>List item text;</OrderedList.Item>
             <OrderedList.Item>List item text;</OrderedList.Item>
             <OrderedList.Item>Extremely long list item that fits in two lines.</OrderedList.Item>
         </OrderedList>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "List with items containing multiline text.",

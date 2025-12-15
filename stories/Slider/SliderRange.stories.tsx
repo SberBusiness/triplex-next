@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { ISliderRangeProps, SliderRange, TSliderRangeValues } from "../../src/components/Slider";
 import { EComponentSize } from "../../src";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Slider/SliderRange",
@@ -24,6 +25,15 @@ export default {
 - **Состояния**: disabled, reverse
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 } as const;
@@ -130,15 +140,10 @@ export const Playground: StoryObj<ISliderRangeProps> = {
                 type: { summary: "ISliderRangeMark[]" },
             },
         },
-        onChange: {
-            table: {
-                disable: true,
-            },
-        },
-        renderTooltipContent: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["min", "max", "values", "step", "disabled", "reverse", "size", "draggableTrack", "marks"],
         },
     },
 };
@@ -169,6 +174,7 @@ export const Default: StoryObj<ISliderRangeProps> = {
                 story: "Базовый пример использования слайдера диапазона с метками.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -204,6 +210,7 @@ export const WithTooltip: StoryObj<ISliderRangeProps> = {
                 story: "Слайдер диапазона с тултипами, отображающими текущие значения в процентах.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -239,6 +246,7 @@ export const WithCustomSteps: StoryObj<ISliderRangeProps> = {
                 story: "Слайдер диапазона с кастомными шагами. Ползунки могут находиться только в определенных позициях.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -273,6 +281,7 @@ export const NonDraggableTrack: StoryObj<ISliderRangeProps> = {
                 story: "Слайдер диапазона с отключенной возможностью перетаскивания трека.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -303,6 +312,7 @@ export const Disabled: StoryObj<ISliderRangeProps> = {
                 story: "Слайдер диапазона в состоянии disabled.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -337,5 +347,6 @@ export const Reverse: StoryObj<ISliderRangeProps> = {
                 story: "Реверсивный слайдер диапазона.",
             },
         },
+        controls: { disable: true },
     },
 };

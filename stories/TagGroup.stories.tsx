@@ -2,17 +2,26 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Tag, TagGroup } from "../src";
 import { EComponentSize } from "../src/enums";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/TagGroup",
     component: TagGroup,
     tags: ["autodocs"],
-    argTypes: {
-        children: {
-            table: {
-                disable: true,
-            },
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Basic} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
+    },
+    argTypes: {
         size: {
             options: Object.values(EComponentSize),
         },
@@ -29,6 +38,7 @@ const tags = [
 ];
 
 export const Basic: Story = {
+    name: "Basic",
     args: {
         size: EComponentSize.LG,
     },
@@ -40,6 +50,9 @@ export const Basic: Story = {
         </TagGroup>
     ),
     parameters: {
+        controls: {
+            include: ["size"],
+        },
         docs: {
             description: {
                 story: "Базовая группа тегов.",
@@ -55,19 +68,21 @@ const sizeToLabelMap = {
 };
 
 export const Sizes: Story = {
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
+    name: "Sizes",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Группы тегов разных размеров.",
             },
         },
     },
-    render: (args) => (
+    render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {Object.values(EComponentSize).map((size) => (
                 <div key={size}>
                     <h4>{sizeToLabelMap[size]}</h4>
-                    <TagGroup {...args} size={size}>
+                    <TagGroup size={size}>
                         {tags.map((tag) => (
                             <Tag key={tag.id} size={size} {...tag} />
                         ))}
@@ -76,36 +91,27 @@ export const Sizes: Story = {
             ))}
         </div>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: "Группы тегов разных размеров.",
-            },
-        },
-    },
 };
 
 export const WithOverflow: Story = {
     name: "With overflow",
-    args: {
-        size: EComponentSize.LG,
-    },
-    render: (args) => (
-        <div style={{ width: "400px", border: "1px dashed #808080" }}>
-            <TagGroup {...args}>
-                {Array.from({ length: 10 }, (_, i) => (
-                    <Tag key={i} id={`tag-${i}`} size={args.size}>
-                        Tag {i}
-                    </Tag>
-                ))}
-            </TagGroup>
-        </div>
-    ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Группа тегов в ограниченном по ширине контейнере.",
             },
         },
     },
+    render: () => (
+        <div style={{ width: "400px", border: "1px dashed #808080" }}>
+            <TagGroup size={EComponentSize.LG}>
+                {Array.from({ length: 10 }, (_, i) => (
+                    <Tag key={i} id={`tag-${i}`} size={EComponentSize.LG}>
+                        Tag {i}
+                    </Tag>
+                ))}
+            </TagGroup>
+        </div>
+    ),
 };

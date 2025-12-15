@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { TabsLine } from "../src/components/TabsLine";
 import { EComponentSize } from "../src/enums/EComponentSize";
 import { Gap } from "../src/components/Gap";
 
 export default {
     title: "Components/TabsLine",
+    component: TabsLine,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -20,6 +22,15 @@ export default {
 - Добавление значка новых уведомлений возможно через свойство showNotificationIcon у конкретного таба
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -58,6 +69,11 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
         },
         showNotificationIcon: {
             description: "Флаг отображения значка новых уведомлений",
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["paddingX", "maxVisible", "size", "showNotificationIcon"],
         },
     },
     render: (args) => {
@@ -123,6 +139,9 @@ export const Default: StoryObj<ITabsLineStoriesProps> = {
             },
         },
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args) => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
 
@@ -184,6 +203,9 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args) => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");

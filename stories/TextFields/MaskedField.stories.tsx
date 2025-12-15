@@ -5,9 +5,11 @@ import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/compone
 import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldMaskedInput } from "../../src/components/FormField";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/TextFields/MaskedField",
+    component: MaskedField,
     parameters: {
         docs: {
             description: {
@@ -65,6 +67,15 @@ export default {
 - Код подразделения (000-000)
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -302,6 +313,36 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
                 story: "Интерактивная демонстрация MaskedField с расширенными controls. Позволяет настраивать тип маски, текст лейбла, описание и состояния компонента.",
             },
         },
+        controls: {
+            include: ["status", "labelText", "descriptionText", "maskType", "size", "className"],
+        },
+    },
+};
+
+export const Default: StoryObj<typeof MaskedField> = {
+    render: () => {
+        const [phoneValue, setPhoneValue] = useState("");
+
+        const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setPhoneValue(e.target.value);
+        };
+
+        return (
+            <div style={{ width: "304px" }}>
+                <MaskedField
+                    maskedInputProps={{
+                        value: phoneValue,
+                        onChange: handlePhoneChange,
+                        mask: FormFieldMaskedInput.presets.masks.phone,
+                        placeholder: "Введите номер телефона",
+                    }}
+                    label="Номер телефона"
+                />
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
     },
 };
 
@@ -338,6 +379,7 @@ export const Basic: StoryObj<typeof MaskedField> = {
                 story: "Базовый пример использования MaskedInputField.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -433,6 +475,7 @@ export const States: StoryObj<typeof MaskedField> = {
                 story: "Различные состояния MaskedInputField: обычное, с ошибкой, отключенное.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -512,6 +555,7 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                 story: "Демонстрация различных размеров MaskedInputField: SM (маленький), MD (средний), LG (большой - по умолчанию). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -759,5 +803,6 @@ export const AllMasks: StoryObj<typeof MaskedField> = {
                 story: "Демонстрация всех доступных масок MaskedField. Показывает, как выглядят и работают различные типы масок для ввода структурированных данных.",
             },
         },
+        controls: { disable: true },
     },
 };

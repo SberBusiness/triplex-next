@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StoryObj, Meta } from "@storybook/react";
 import { DocumentNumberEdit } from "../src/components/DocumentNumberEdit/DocumentNumberEdit";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta: Meta<typeof DocumentNumberEdit> = {
     title: "Components/DocumentNumberEdit",
@@ -11,6 +12,15 @@ const meta: Meta<typeof DocumentNumberEdit> = {
             description: {
                 component: `Компонент для редактирования номера документа.`,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -29,11 +39,6 @@ export const Playground: Story = {
         maxLength: 6,
     },
     argTypes: {
-        value: {
-            table: {
-                disable: true,
-            },
-        },
         buttonLabel: {
             control: { type: "text" },
             description: "Текст кнопки редактирования",
@@ -72,6 +77,11 @@ export const Playground: Story = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["buttonLabel", "emptyNumberButtonLabel", "emptyNumberLabel", "numberLabel", "maxLength"],
+        },
+    },
     render: (args) => {
         const [value, setValue] = useState("");
 
@@ -83,6 +93,9 @@ export const Playground: Story = {
 
 export const Default: Story = {
     name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [value, setValue] = useState("");
 

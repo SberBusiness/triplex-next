@@ -3,6 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { DateField } from "../src/components/DateField";
 import { EComponentSize } from "../src/enums";
 import { EFormFieldStatus } from "../src/components/FormField";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/DateField",
@@ -15,11 +16,25 @@ export default {
             </div>
         ),
     ],
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
+        },
+    },
 } satisfies Meta<typeof DateField>;
 
 type Story = StoryObj<typeof DateField>;
 
 export const Playground: Story = {
+    name: "Playground",
     args: {
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
@@ -28,11 +43,6 @@ export const Playground: Story = {
         invalidDateHint: "Указана недоступная для выбора дата.",
     },
     argTypes: {
-        value: {
-            table: {
-                disable: true,
-            },
-        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
@@ -48,9 +58,26 @@ export const Playground: Story = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["size", "status", "placeholderMask", "label", "invalidDateHint"],
+        },
+    },
     render: (args) => {
         const [value, setValue] = useState("");
 
         return <DateField value={value} onChange={setValue} {...args} />;
+    },
+};
+
+export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return <DateField value={value} onChange={setValue} label="Label" placeholderMask="дд.мм.гггг" />;
     },
 };

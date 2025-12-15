@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { ChipSort } from "../../src/components/Chip/ChipSort";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipSort",
@@ -19,6 +20,15 @@ ChipSelect с иконкой выбора сортировки.
 - Элемент отображается как selected, если выбранное значение (value) отличается от свойства defaultValue.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -30,6 +40,7 @@ const options = [
 ];
 
 export const Playground: StoryObj<typeof ChipSort> = {
+    name: "Playground",
     args: {
         size: EComponentSize.MD,
         disabled: false,
@@ -49,6 +60,11 @@ export const Playground: StoryObj<typeof ChipSort> = {
             description: "Дефолтное значение",
         },
     },
+    parameters: {
+        controls: {
+            include: ["size", "disabled", "defaultValue"],
+        },
+    },
     render: (args) => {
         const [value, setValue] = useState(options[0]);
 
@@ -59,34 +75,51 @@ export const Playground: StoryObj<typeof ChipSort> = {
     },
 };
 
+export const Default: StoryObj<typeof ChipSort> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState(options[0]);
+
+        return <ChipSort defaultValue={options[0]} value={value} options={options} onChange={setValue} />;
+    },
+};
+
 export const DifferentSizes: StoryObj<typeof ChipSort> = {
-    args: {
-        disabled: false,
-        defaultValue: options[0],
+    name: "Different Sizes",
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        disabled: { control: { type: "boolean" } },
-        defaultValue: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => {
+    render: () => {
         const [valueSM, setValueSM] = useState(options[0]);
         const [valueMD, setValueMD] = useState(options[0]);
         const [valueLG, setValueLG] = useState(options[0]);
 
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-                <ChipSort {...args} size={EComponentSize.SM} value={valueSM} options={options} onChange={setValueSM} />
-                <ChipSort {...args} size={EComponentSize.MD} value={valueMD} options={options} onChange={setValueMD} />
-                <ChipSort {...args} size={EComponentSize.LG} value={valueLG} options={options} onChange={setValueLG} />
+                <ChipSort
+                    defaultValue={options[0]}
+                    size={EComponentSize.SM}
+                    value={valueSM}
+                    options={options}
+                    onChange={setValueSM}
+                />
+                <ChipSort
+                    defaultValue={options[0]}
+                    size={EComponentSize.MD}
+                    value={valueMD}
+                    options={options}
+                    onChange={setValueMD}
+                />
+                <ChipSort
+                    defaultValue={options[0]}
+                    size={EComponentSize.LG}
+                    value={valueLG}
+                    options={options}
+                    onChange={setValueLG}
+                />
             </div>
         );
     },

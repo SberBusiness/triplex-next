@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { ISliderProps, Slider } from "../../src/components/Slider";
 import { EComponentSize } from "../../src";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Slider/Slider",
@@ -23,6 +24,15 @@ export default {
 - **Состояния**: disabled, reverse
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 } as const;
@@ -131,6 +141,11 @@ export const Playground: StoryObj<ISliderProps> = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["min", "max", "value", "step", "disabled", "reverse", "size", "marks"],
+        },
+    },
 };
 
 export const Default: StoryObj<ISliderProps> = {
@@ -164,6 +179,7 @@ export const Default: StoryObj<ISliderProps> = {
                 story: "Базовый пример использования слайдера с метками.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -199,6 +215,7 @@ export const WithTooltip: StoryObj<ISliderProps> = {
                 story: "Слайдер с тултипом, отображающим текущее значение в процентах.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -235,6 +252,7 @@ export const WithCustomSteps: StoryObj<ISliderProps> = {
                 story: "Слайдер с кастомными шагами. Ползунок может находиться только в определенных позициях.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -266,6 +284,7 @@ export const Disabled: StoryObj<ISliderProps> = {
                 story: "Слайдер в состоянии disabled.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -301,5 +320,6 @@ export const Reverse: StoryObj<ISliderProps> = {
                 story: "Реверсивный слайдер.",
             },
         },
+        controls: { disable: true },
     },
 };

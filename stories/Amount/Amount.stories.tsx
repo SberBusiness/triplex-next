@@ -4,6 +4,7 @@ import { Row } from "../../src/components/Row";
 import { Col } from "../../src/components/Col";
 import { StoryObj } from "@storybook/react";
 import { EFontType, EFontWeightText, ETextSize, Text } from "../../src/components/Typography";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Amount",
@@ -16,6 +17,15 @@ export default {
 Компонент отображения суммы.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -49,21 +59,6 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
             control: { type: "boolean" },
             description: "При большом количестве цифр уменьшает размер шрифта",
         },
-        dataTestId: {
-            table: {
-                disable: true,
-            },
-        },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
     },
     args: {
         value: "8967452.3145",
@@ -71,6 +66,11 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
         currency: "RUB",
         currencyTitle: "Российские рубли",
         adaptive: false,
+    },
+    parameters: {
+        controls: {
+            include: ["value", "fractionLength", "currency", "currencyTitle", "adaptive"],
+        },
     },
     render: (args) => {
         return (
@@ -83,6 +83,9 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
 
 export const Default: StoryObj<IAmountStoriesProps> = {
     name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const commonProps = { currency: "RUB", currencyTitle: "Российские рубли" };
 

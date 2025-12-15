@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { EComponentSize } from "../../src";
 import { SliderExtended, ISliderExtendedProps } from "../../src/components/Slider";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Slider/SliderExtended",
@@ -23,6 +24,15 @@ export default {
 - **Кастомизация**: полный контроль над структурой и поведением слайдера
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 } as const;
@@ -111,6 +121,11 @@ export const Playground: StoryObj<ISliderExtendedProps> = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["min", "max", "step", "disabled", "reverse", "size"],
+        },
+    },
 };
 
 export const Default: StoryObj<ISliderExtendedProps> = {
@@ -144,6 +159,7 @@ export const Default: StoryObj<ISliderExtendedProps> = {
                 story: "Базовый пример использования SliderExtended с одним ползунком и метками.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -178,6 +194,7 @@ export const Range: StoryObj<ISliderExtendedProps> = {
                 story: "Пример использования SliderExtended для создания слайдера диапазона с двумя ползунками.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -216,6 +233,7 @@ export const RangeWithTooltip: StoryObj<ISliderExtendedProps> = {
                 story: "Слайдер диапазона с тултипами для обоих ползунков.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -251,6 +269,7 @@ export const WithCustomSteps: StoryObj<ISliderExtendedProps> = {
                 story: "SliderExtended с кастомными шагами. Ползунок может находиться только в определенных позициях.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -283,6 +302,7 @@ export const WithoutTooltip: StoryObj<ISliderExtendedProps> = {
                 story: "SliderExtended без тултипа.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -313,6 +333,7 @@ export const Disabled: StoryObj<ISliderExtendedProps> = {
                 story: "SliderExtended в состоянии disabled.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -347,5 +368,6 @@ export const Reverse: StoryObj<ISliderExtendedProps> = {
                 story: "Реверсивный SliderExtended.",
             },
         },
+        controls: { disable: true },
     },
 };

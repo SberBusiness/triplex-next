@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { ChipSelect, IChipSelectProps } from "../../src/components/Chip/ChipSelect";
 import { ISelectFieldOption } from "../../src/components/SelectField/SelectField";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipSelect",
@@ -27,6 +28,15 @@ export default {
 Компонент принимает массив опций и обрабатывает выбор через onChange. При выборе опции она отображается в Chip, а при клике на кнопку очистки вызывается clearSelected.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -133,9 +143,38 @@ export const Playground: StoryObj<IChipSelectPlaygroundProps> = {
         className: undefined,
         selectedValueId: "",
     },
+    parameters: {
+        controls: {
+            include: ["label", "displayedValue", "size", "disabled", "selectedValueId"],
+        },
+    },
+};
+
+export const Default: StoryObj = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [selected, setSelected] = useState<ISelectFieldOption | undefined>();
+
+        return (
+            <ChipSelect
+                label="Выберите опцию"
+                options={demoOptions}
+                value={selected}
+                onChange={setSelected}
+                clearSelected={() => setSelected(undefined)}
+            />
+        );
+    },
 };
 
 export const Sizes: StoryObj = {
+    name: "Sizes",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [selectedSM, setSelectedSM] = useState<ISelectFieldOption | undefined>();
         const [selectedMD, setSelectedMD] = useState<ISelectFieldOption | undefined>();
@@ -182,6 +221,10 @@ export const Sizes: StoryObj = {
 };
 
 export const States: StoryObj = {
+    name: "States",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [selectedDefault, setSelectedDefault] = useState<ISelectFieldOption | undefined>();
         const [selectedWithValue, setSelectedWithValue] = useState<ISelectFieldOption | undefined>(demoOptions[0]);
@@ -229,6 +272,10 @@ export const States: StoryObj = {
 };
 
 export const WithDisplayedValue: StoryObj = {
+    name: "With Displayed Value",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [selected, setSelected] = useState<ISelectFieldOption | undefined>(demoOptions[0]);
 

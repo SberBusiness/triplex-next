@@ -20,9 +20,11 @@ import {
 import "./ChipMultiselect.less";
 import { ChipMultiselect } from "../../src/components/Chip/ChipMultiselect";
 import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipMultiselect",
+    component: ChipMultiselect,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -31,6 +33,15 @@ export default {
 Компонент выбора нескольких значений из списка.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -238,6 +249,7 @@ function createMultiselectFieldStoriesLogic() {
 }
 
 export const Playground: StoryObj<typeof ChipMultiselect> = {
+    name: "Playground",
     args: {
         size: EComponentSize.MD,
         label: "Multiselect label",
@@ -262,6 +274,11 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
             description: "Лейбл, который отображается вместо выбранного значения",
         },
     },
+    parameters: {
+        controls: {
+            include: ["size", "label", "displayedValue"],
+        },
+    },
     render: (args) => {
         const { renderDropdown, unselectAll, checkboxes } = createMultiselectFieldStoriesLogic();
 
@@ -279,30 +296,32 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
     },
 };
 
+export const Default: StoryObj<typeof ChipMultiselect> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const { renderDropdown, unselectAll, checkboxes } = createMultiselectFieldStoriesLogic();
+
+        return (
+            <ChipMultiselect
+                clearSelected={unselectAll}
+                selected={Boolean(checkboxes.filter((checkbox) => checkbox.checked).length)}
+                label="Multiselect label"
+            >
+                {(dropdownProps) => renderDropdown(dropdownProps)}
+            </ChipMultiselect>
+        );
+    },
+};
+
 export const DifferentSizes: StoryObj<typeof ChipMultiselect> = {
-    args: {
-        size: EComponentSize.SM,
-        label: "Multiselect label",
-        displayedValue: "Multiselect value",
+    name: "Different Sizes",
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        label: {
-            table: {
-                disable: true,
-            },
-        },
-        displayedValue: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => {
+    render: () => {
         const sm = createMultiselectFieldStoriesLogic();
         const md = createMultiselectFieldStoriesLogic();
         const lg = createMultiselectFieldStoriesLogic();
@@ -310,31 +329,26 @@ export const DifferentSizes: StoryObj<typeof ChipMultiselect> = {
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
                 <ChipMultiselect
-                    {...args}
+                    size={EComponentSize.SM}
                     clearSelected={sm.unselectAll}
                     selected={Boolean(sm.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label={args.label}
-                    displayedValue={args.displayedValue}
+                    label="Multiselect label"
                 >
                     {(dropdownProps) => sm.renderDropdown(dropdownProps)}
                 </ChipMultiselect>
                 <ChipMultiselect
-                    {...args}
                     size={EComponentSize.MD}
                     clearSelected={md.unselectAll}
                     selected={Boolean(md.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label={args.label}
-                    displayedValue={args.displayedValue}
+                    label="Multiselect label"
                 >
                     {(dropdownProps) => md.renderDropdown(dropdownProps)}
                 </ChipMultiselect>
                 <ChipMultiselect
-                    {...args}
                     size={EComponentSize.LG}
                     clearSelected={lg.unselectAll}
                     selected={Boolean(lg.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label={args.label}
-                    displayedValue={args.displayedValue}
+                    label="Multiselect label"
                 >
                     {(dropdownProps) => lg.renderDropdown(dropdownProps)}
                 </ChipMultiselect>

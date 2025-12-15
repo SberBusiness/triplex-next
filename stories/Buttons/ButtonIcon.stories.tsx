@@ -9,9 +9,11 @@ import {
     DefaulticonStrokePrdIcon24,
     DefaulticonStrokePrdIcon32,
 } from "@sberbusiness/icons-next";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Buttons/ButtonIcon",
+    component: ButtonIcon,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -51,6 +53,15 @@ import { ButtonIcon, EButtonIconShape } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -99,6 +110,11 @@ export const Playground: StoryObj<typeof ButtonIcon> = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["shape", "active", "disabled"],
+        },
+    },
     render: (args) => (
         <ButtonIcon {...args}>
             <DefaulticonStrokePrdIcon32 paletteIndex={5} />
@@ -106,49 +122,38 @@ export const Playground: StoryObj<typeof ButtonIcon> = {
     ),
 };
 
+export const Default: StoryObj<typeof ButtonIcon> = {
+    render: () => (
+        <ButtonIcon>
+            <DefaulticonStrokePrdIcon32 paletteIndex={5} />
+        </ButtonIcon>
+    ),
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
 export const DifferentSizes: StoryObj<typeof ButtonIcon> = {
-    args: {
-        shape: EButtonIconShape.SQUIRCLE,
-    },
-    argTypes: {
-        shape: {
-            control: { type: "select" },
-            options: Object.values(EButtonIconShape),
-            table: {
-                type: { summary: "EButtonIconShape" },
-                defaultValue: { summary: EButtonIconShape.SQUIRCLE },
-            },
-        },
-        active: {
-            table: {
-                disable: true,
-            },
-        },
-        disabled: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Кнопка-иконка разных размеров (16, 20, 24, 32)",
             },
         },
+        controls: { disable: true },
     },
-    render: (args) => (
+    render: () => (
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <ButtonIcon shape={args.shape}>
+            <ButtonIcon>
                 <DefaulticonStrokePrdIcon16 paletteIndex={5} />
             </ButtonIcon>
-            <ButtonIcon shape={args.shape}>
+            <ButtonIcon>
                 <DefaulticonStrokePrdIcon20 paletteIndex={5} />
             </ButtonIcon>
-            <ButtonIcon shape={args.shape}>
+            <ButtonIcon>
                 <DefaulticonStrokePrdIcon24 paletteIndex={5} />
             </ButtonIcon>
-            <ButtonIcon shape={args.shape}>
+            <ButtonIcon>
                 <DefaulticonStrokePrdIcon32 paletteIndex={5} />
             </ButtonIcon>
         </div>
@@ -156,32 +161,13 @@ export const DifferentSizes: StoryObj<typeof ButtonIcon> = {
 };
 
 export const Disabled: StoryObj<typeof ButtonIcon> = {
-    args: {
-        disabled: true,
-    },
-    argTypes: {
-        disabled: {
-            table: {
-                disable: true,
-            },
-        },
-        active: {
-            table: {
-                disable: true,
-            },
-        },
-        shape: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     parameters: {
         docs: {
             description: {
                 story: "Кнопка-иконка в состоянии disabled",
             },
         },
+        controls: { disable: true },
     },
     render: () => (
         <ButtonIcon disabled>

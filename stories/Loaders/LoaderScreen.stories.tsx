@@ -1,4 +1,5 @@
 import React from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { LoaderScreen } from "../../src/components/LoaderScreen";
 import { ELoaderSmallTheme, ELoaderSmallSize } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
@@ -30,6 +31,15 @@ import { LoaderScreen } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -58,6 +68,11 @@ export const Playground: StoryObj<typeof LoaderScreen> = {
             options: Object.values(ELoaderSmallSize),
             description: "Размер (только для типа small)",
             if: { arg: "type", eq: "small" },
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["type", "theme", "size"],
         },
     },
     decorators: [
@@ -96,6 +111,9 @@ export const SmallLoader: StoryObj<typeof LoaderScreen> = {
             },
         },
     },
+    parameters: {
+        controls: { disable: true },
+    },
     decorators: [
         (Story) => {
             return (
@@ -129,6 +147,9 @@ export const MiddleLoader: StoryObj<typeof LoaderScreen> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     decorators: [
         (Story) => {

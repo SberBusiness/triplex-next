@@ -102,9 +102,11 @@ export const Default: StoryObj<typeof Button> = {
     parameters: {
         controls: { disable: true },
     },
-    render: (args) => (
-        <div style={{ width: "250px" }}>
-            <Button {...args} />
+    render: () => (
+        <div style={{ maxWidth: "250px" }}>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                Button text
+            </Button>
         </div>
     ),
 };

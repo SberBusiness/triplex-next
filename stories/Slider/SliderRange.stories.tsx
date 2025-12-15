@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { ISliderRangeProps, SliderRange, TSliderRangeValues } from "../../src/components/Slider";
-import { EComponentSize } from "../../src";
+import { ISliderRangeProps, SliderRange, TSliderRangeValues } from "../../src/components/SliderRange/SliderRange";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {

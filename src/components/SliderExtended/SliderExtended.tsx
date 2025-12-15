@@ -10,7 +10,7 @@ import { ISliderExtendedDot, ISliderExtendedStep, SliderExtendedContext } from "
 import { SliderExtendedUtils } from "./SliderExtendedUtils";
 import { SliderExtendedTooltip } from "./components/SliderExtendedTooltip/SliderExtendedTooltip";
 import clsx from "clsx";
-import { EComponentSize } from "@sberbusiness/triplex-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/SliderExtended.module.less";
 

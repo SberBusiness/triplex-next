@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { EComponentSize } from "../../src";
-import { SliderExtended, ISliderExtendedProps } from "../../src/components/Slider";
+import { SliderExtended, ISliderExtendedProps } from "../../src/components/SliderExtended/SliderExtended";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {

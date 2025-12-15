@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { Gap } from "../../src/components/Gap";
 import { EFontType, ETextSize } from "../../src/components/Typography/enums";
@@ -29,6 +29,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Default} />
+                    <Stories />
                 </>
             ),
         },

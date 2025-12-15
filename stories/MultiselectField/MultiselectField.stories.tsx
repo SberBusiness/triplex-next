@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { MultiselectField } from "../../src/components/MultiselectField";
 import { StoryObj } from "@storybook/react";
 import { DropdownMobileHeader } from "../../src/components/Dropdown/mobile/DropdownMobileHeader";
@@ -58,6 +58,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

@@ -1,5 +1,5 @@
 import React from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { LoaderMiddle } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
 
@@ -29,6 +29,7 @@ import { LoaderMiddle } from '@sberbusiness/triplex-next';
                     <Description />
                     <Primary />
                     <Controls of={Default} />
+                    <Stories />
                 </>
             ),
         },

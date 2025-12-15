@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import {
     List,
     ListItem,
@@ -35,6 +35,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

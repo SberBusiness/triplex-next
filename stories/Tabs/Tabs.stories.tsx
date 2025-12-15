@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Tabs } from "../../src/components/Tabs";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
@@ -32,6 +32,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

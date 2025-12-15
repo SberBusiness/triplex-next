@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { TextareaField, EComponentSize, EFormFieldStatus, Text, ETextSize, EFontType } from "../../src";
+import { TextareaField, EComponentSize, EFormFieldStatus, Text, ETextSize, EFontType, ETooltipSize } from "../../src";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 
 const meta: Meta<typeof TextareaField> = {
     title: "Components/TextFields/TextareaField",
@@ -103,7 +104,6 @@ type Story = StoryObj<typeof TextareaField>;
 const TextareaFieldTemplate = (args) => {
     const [value, setValue] = useState("");
     const { inputProps, prefix, postfix, description, counter, ...restArgs } = args;
-    const targetTextType = args.status === EFormFieldStatus.DISABLED ? EFontType.DISABLED : EFontType.SECONDARY;
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         setValue(event.target.value);
@@ -112,20 +112,7 @@ const TextareaFieldTemplate = (args) => {
     return (
         <TextareaField
             textareaProps={{ ...inputProps, value: value, onChange: handleChange }}
-            prefix={
-                prefix?.length !== 0 && (
-                    <Text tag="div" size={ETextSize.B2} type={targetTextType}>
-                        {prefix}
-                    </Text>
-                )
-            }
-            postfix={
-                postfix?.length !== 0 && (
-                    <Text tag="div" size={ETextSize.B2} type={targetTextType}>
-                        {postfix}
-                    </Text>
-                )
-            }
+            postfix={<HelpBox tooltipSize={ETooltipSize.SM}>Текст подсказки</HelpBox>}
             description={
                 description?.length !== 0 && (
                     <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -151,8 +138,6 @@ export const Default: Story = {
         status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "0" },
         label: "Label",
-        prefix: "Prefix",
-        postfix: "Postfix",
         description: "Description",
         counter: "Counter",
     },
@@ -168,8 +153,6 @@ export const Playground: Story = {
         status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "0" },
         label: "Label",
-        prefix: "Prefix",
-        postfix: "Postfix",
         description: "Description",
         counter: "Counter",
     },

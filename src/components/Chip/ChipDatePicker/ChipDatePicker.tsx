@@ -32,6 +32,7 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         onChange,
         onDropdownOpen,
         onDropdownClose,
+        size,
         ...rest
     } = props;
     const [pickerValues, setPickerValues] = useState(
@@ -52,32 +53,27 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, format, limitRange, disabledDays]);
 
-    /** Рендер управляющего элемента. */
     const renderTarget = () => {
-        // При открытом Dropdown фиксируем отображаемое значение, чтобы при работе с полем ввода оно не менялось.
         const currentPickerValues = dropdownOpenRef.current ? lastValidPickerValuesRef.current : pickerValues;
         const selected = currentPickerValues.calendarDate !== null;
 
         return (
-            <ChipDatePickerTarget selected={selected} disabled={disabled} onClear={handleClear}>
+            <ChipDatePickerTarget selected={selected} disabled={disabled} onClear={handleClear} size={size}>
                 {selected ? (displayedValue ?? currentPickerValues.inputString) : label}
             </ChipDatePickerTarget>
         );
     };
 
-    /** Обработчик сброса значения. */
     const handleClear = () => {
         onChange("");
     };
 
-    /** Обработчик открытия Dropdown. */
     const handleDropdownOpen = () => {
         dropdownOpenRef.current = true;
 
         onDropdownOpen?.();
     };
 
-    /** Обработчик закрытия Dropdown. */
     const handleDropdownClose = () => {
         dropdownOpenRef.current = false;
 
@@ -100,7 +96,6 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         />
     );
 
-    /** Обработчик изменения значения ChipDatePickerHeaderTarget. */
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let date: moment.Moment | null = null;
 
@@ -118,7 +113,6 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         setPickerValues({ calendarDate: date, inputString: event.target.value });
     };
 
-    /** Триггер изменения значения из поля ввода. */
     const triggerChangeFromInput = () => {
         if (pickerValues.inputString.length === 0 && value.length !== 0) {
             return onChange(pickerValues.inputString);
@@ -138,13 +132,11 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
             }
         }
 
-        // Текущее значение в поле невалидно, возвращаем последнее валидное.
         if (pickerValues.inputString !== lastValidPickerValuesRef.current.inputString) {
             setPickerValues(lastValidPickerValuesRef.current);
         }
     };
 
-    /** Обработчик изменения даты. */
     const handleDateChange = (date: moment.Moment) => {
         dropdownClosedByCalendarRef.current = true;
 
@@ -162,6 +154,7 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
             onDropdownOpen={handleDropdownOpen}
             onDropdownClose={handleDropdownClose}
             onDateChange={handleDateChange}
+            disabledDays={disabledDays}
             {...rest}
             ref={ref}
         />

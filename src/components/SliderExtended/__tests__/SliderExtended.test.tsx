@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SliderExtended } from "@sberbusiness/triplex-next/components/Slider";
-import { EComponentSize } from "@sberbusiness/triplex-next";
+import { SliderExtended } from "@sberbusiness/triplex-next/components/SliderExtended";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 type TSliderExtendedTestProps = React.ComponentProps<typeof SliderExtended> & {
     value?: number;

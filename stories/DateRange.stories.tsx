@@ -10,9 +10,11 @@ import { EDateRangeShiftUnit } from "../src/components/DateRange/enums";
 import { DateField } from "../src/components/DateField";
 import { ButtonIcon } from "../src/components/Button/ButtonIcon";
 import { presets } from "../src/components/FormField/components/FormFieldMaskedInputPresets";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/DateRange",
+    component: DateRange,
     parameters: {
         docs: {
             description: {
@@ -27,6 +29,21 @@ export default {
 - **Кастомизация** - рендер-пропы для пикеров и кнопок
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+
+                    {/* Полная таблица props компонента. */}
+                    <Controls of={Default} />
+
+                    {/* Основная стори (обычно Playground или первая). */}
+                    <Primary />
+
+                    {/* Остальные истории. */}
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -89,24 +106,6 @@ export const Playground: StoryObj<IDateRangeWithControlsProps> = {
                 defaultValue: { summary: "false" },
             },
         },
-        renderButtonForward: {
-            table: { disable: true },
-        },
-        renderButtonBack: {
-            table: { disable: true },
-        },
-        renderPickerFrom: {
-            table: { disable: true },
-        },
-        renderPickerTo: {
-            table: { disable: true },
-        },
-        value: {
-            table: { disable: true },
-        },
-        onChange: {
-            table: { disable: true },
-        },
     },
     args: {
         shiftAmount: 1,
@@ -118,6 +117,9 @@ export const Playground: StoryObj<IDateRangeWithControlsProps> = {
             description: {
                 story: "Интерактивная демонстрация DateRange с расширенными controls. Позволяет настраивать все основные свойства компонента, включая величину и единицу сдвига, начальные значения и отображение кнопок навигации.",
             },
+        },
+        controls: {
+            include: ["shiftAmount", "shiftUnit", "hideNavigation"],
         },
     },
 };
@@ -158,6 +160,7 @@ export const Default: StoryObj<typeof DateRange> = {
                 story: "Базовый пример использования DateRange с стандартными настройками.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -198,5 +201,6 @@ export const WithoutNavigation: StoryObj<typeof DateRange> = {
                 story: "DateRange без кнопок навигации - только поля выбора дат.",
             },
         },
+        controls: { disable: true },
     },
 };

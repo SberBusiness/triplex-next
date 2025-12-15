@@ -6,7 +6,7 @@ import { SliderExtendedUtils } from "../../SliderExtendedUtils";
 import { SliderExtendedTrackActions } from "./SliderExtendedTrackActions";
 import clsx from "clsx";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
-import { KeyDownListener } from "@sberbusiness/triplex-next";
+import { KeyDownListener } from "@sberbusiness/triplex-next/components/KeyDownListener";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/SliderExtendedTrack.module.less";
 

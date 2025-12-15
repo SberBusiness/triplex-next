@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import {
     List,
     ListItem,
@@ -27,6 +28,15 @@ export default {
 Компонент List — контейнер для набора элементов. Поддерживает состояние загрузки, пустого списка, выбор элементов и сортировку (drag-and-drop).
                 `,
             },
+            page: () => (
+                <>
+                    <SBTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -57,6 +67,9 @@ export const Playground: StoryObj<typeof List> = {
         </List>
     ),
     parameters: {
+        controls: {
+            include: ["loading"],
+        },
         docs: { description: { story: "Базовый список с элементами и контролами." } },
     },
 };
@@ -70,6 +83,7 @@ export const Default: StoryObj<typeof List> = {
         </List>
     ),
     parameters: {
+        controls: { disable: true },
         docs: { description: { story: "Базовый список с элементами и контролами." } },
     },
 };
@@ -85,6 +99,7 @@ export const Loading: StoryObj<typeof List> = {
         </div>
     ),
     parameters: {
+        controls: { disable: true },
         docs: { description: { story: "Список в состоянии загрузки." } },
     },
 };
@@ -117,6 +132,7 @@ export const EmptyState: StoryObj<typeof List> = {
         </ListEmptyState>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка.",
@@ -143,6 +159,7 @@ export const Virtualized: StoryObj<typeof List> = {
         );
     },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка.",
@@ -170,6 +187,9 @@ export const Sortable: StoryObj<typeof List> = {
             </ListSortable>
         );
     },
+    parameters: {
+        controls: { disable: true },
+    },
 };
 
 export const SortableWithInteractiveElements: StoryObj<typeof List> = {
@@ -193,5 +213,8 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
                 ))}
             </ListSortable>
         );
+    },
+    parameters: {
+        controls: { disable: true },
     },
 };

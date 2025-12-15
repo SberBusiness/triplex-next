@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Tabs } from "../../src/components/Tabs";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
@@ -8,6 +9,7 @@ import "./Tabs.less";
 
 export default {
     title: "Components/Tabs",
+    component: Tabs,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -23,6 +25,15 @@ export default {
 
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -49,6 +60,11 @@ export const Playground: StoryObj<typeof Tabs> = {
             table: {
                 defaultValue: { summary: ETabsExtendedType.TYPE_1 },
             },
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["size", "type"],
         },
     },
     render: (args) => {
@@ -81,6 +97,9 @@ export const Playground: StoryObj<typeof Tabs> = {
 
 export const Type1: StoryObj<typeof Tabs> = {
     name: "Type 1",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-tab-0");
 
@@ -155,6 +174,9 @@ export const Type1: StoryObj<typeof Tabs> = {
 
 export const Type2: StoryObj<typeof Tabs> = {
     name: "Type 2",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-tab-0");
 

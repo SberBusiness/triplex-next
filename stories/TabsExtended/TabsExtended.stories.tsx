@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { TabsExtended } from "../../src/components/TabsExtended";
 import { ButtonDropdown } from "../../src/components/Button/ButtonDropdown";
 import { EButtonDotsTheme } from "../../src/components/Button/enums";
@@ -8,6 +9,7 @@ import "./styles.less";
 
 export default {
     title: "Components/TabsExtended",
+    component: TabsExtended,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -21,6 +23,15 @@ export default {
 
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Default} />
+                </>
+            ),
         },
     },
 };
@@ -28,6 +39,9 @@ export default {
 export const Default: StoryObj<typeof TabsExtended> = {
     name: "Default",
     argTypes: {},
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-extended-tab-0-0");
 

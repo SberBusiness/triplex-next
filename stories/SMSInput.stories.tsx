@@ -5,6 +5,7 @@ import { Gap } from "../src/components/Gap";
 import { Link } from "../src/components/Link";
 import { SMSInput } from "../src/components/SMSInput";
 import { EFontType, ETextSize, Text } from "../src/components/Typography";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SMSInput",
@@ -21,6 +22,15 @@ export default {
 \`SMSInput\` состоит из подсказки \`SMSInput.Tooltip\` с кнопкой \`SMSInput.Refresh\`, поля ввода \`SMSInput.Input\` и кнопки отправки \`SMSInput.Submit\`. Можно добавить описание и счётчик.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -63,9 +73,11 @@ export const Playground: StoryObj<ISMSInputProps> = {
             options: Object.values(EFormFieldSize),
             description: "Размер поля",
         },
-        children: { table: { disable: true } },
     },
     parameters: {
+        controls: {
+            include: ["counter", "description", "disabled", "maxLength", "placeholder", "size"],
+        },
         docs: {
             description: {
                 story: "Интерактивная демонстрация SMSInput. Позволяет настраивать основные свойства компонента.",
@@ -137,7 +149,9 @@ export const Playground: StoryObj<ISMSInputProps> = {
 };
 
 export const Error: StoryObj<ISMSInputProps> = {
+    name: "Error",
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "SMSInput в состоянии error.",
@@ -188,7 +202,9 @@ export const Error: StoryObj<ISMSInputProps> = {
 };
 
 export const Disabled: StoryObj<ISMSInputProps> = {
+    name: "Disabled",
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "SMSInput в состоянии disabled с введённым кодом и без.",
@@ -252,7 +268,9 @@ export const Disabled: StoryObj<ISMSInputProps> = {
 };
 
 export const Sizes: StoryObj<ISMSInputProps> = {
+    name: "Sizes",
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Демонстрация различных размеров SMSInput: SM (маленький), MD (средний), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",

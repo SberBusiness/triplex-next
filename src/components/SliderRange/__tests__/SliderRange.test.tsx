@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SliderRange } from "@sberbusiness/triplex-next/components/Slider";
+import { SliderRange } from "@sberbusiness/triplex-next/components/SliderRange/SliderRange";
 
 const setRailMeasurements = (rail: HTMLDivElement) => {
     Object.defineProperty(rail, "getBoundingClientRect", {

@@ -3,7 +3,9 @@ import { SliderExtendedContext } from "../../SliderExtendedContext";
 import { SliderExtendedMarkActions } from "./SliderExtendedMarkActions";
 import clsx from "clsx";
 import styles from "./styles/SliderExtendedMarks.module.less";
-import { EComponentSize, ETextSize, Text } from "@sberbusiness/triplex-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);

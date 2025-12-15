@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Stepper, StepperExtended } from "../../src/components/Stepper";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
@@ -34,6 +35,15 @@ export default {
 Компонент принимает массив шагов и автоматически создает интерактивную навигацию.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -117,6 +127,9 @@ export const Playground: StoryObj<typeof Stepper> = {
         );
     },
     parameters: {
+        controls: {
+            include: ["steps", "size", "selectedStepId"],
+        },
         docs: {
             description: {
                 story: "Интерактивная демонстрация Stepper. Позволяет настраивать список шагов, размер, а также контролировать текущий выбранный шаг.",
@@ -133,6 +146,9 @@ export const Sizes: StoryObj<typeof Stepper> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => {
         const [selectedStepIdSM, setSelectedStepIdSM] = useState("step3");
@@ -225,6 +241,9 @@ export const Types: StoryObj<typeof Stepper> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => {
         const [selectedStepIdNeutral, setSelectedStepIdNeutral] = useState("step4");
@@ -487,6 +506,9 @@ export const ManySteps: StoryObj<typeof Stepper> = {
             },
         },
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: (args) => {
         const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);
         return (
@@ -554,6 +576,9 @@ export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args) => {
         const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);

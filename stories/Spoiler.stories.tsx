@@ -3,6 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { EComponentSize } from "../src/enums";
 import { Spoiler } from "../src/components/Spoiler";
 import { Text, ETextSize, EFontType } from "../src/components/Typography";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Spoiler",
@@ -18,6 +19,15 @@ export default {
 - Размеры - small (SM), medium (MD), large (LG)
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -54,6 +64,11 @@ export const Playground: StoryObj<typeof Spoiler> = {
             description: "Текст кнопки скрытия содержимого",
         },
     },
+    parameters: {
+        controls: {
+            include: ["size", "labelExpand", "labelCollapse"],
+        },
+    },
     render: (args) => (
         <Spoiler {...args}>
             <Text size={sizeToTextSizeMap[args.size!]} type={EFontType.PRIMARY}>
@@ -65,30 +80,11 @@ export const Playground: StoryObj<typeof Spoiler> = {
 
 export const Default: StoryObj<typeof Spoiler> = {
     name: "Default",
-    args: {
-        labelExpand: "Развернуть",
-        labelCollapse: "Свернуть",
-        size: EComponentSize.MD,
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        labelExpand: {
-            table: {
-                disable: true,
-            },
-        },
-        labelCollapse: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => (
-        <Spoiler {...args}>
+    render: () => (
+        <Spoiler labelExpand="Развернуть" labelCollapse="Свернуть" size={EComponentSize.MD}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 Скрытый контент
             </Text>
@@ -98,40 +94,22 @@ export const Default: StoryObj<typeof Spoiler> = {
 
 export const DifferentSizes: StoryObj<typeof Spoiler> = {
     name: "Different Sizes",
-    args: {
-        labelExpand: "Развернуть",
-        labelCollapse: "Свернуть",
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        labelExpand: {
-            table: {
-                disable: true,
-            },
-        },
-        labelCollapse: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => (
+    render: () => (
         <>
-            <Spoiler size={EComponentSize.SM} {...args}>
+            <Spoiler size={EComponentSize.SM} labelExpand="Развернуть" labelCollapse="Свернуть">
                 <Text size={ETextSize.B4} type={EFontType.PRIMARY}>
                     Скрытый контент
                 </Text>
             </Spoiler>
-            <Spoiler size={EComponentSize.MD} {...args}>
+            <Spoiler size={EComponentSize.MD} labelExpand="Развернуть" labelCollapse="Свернуть">
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                     Скрытый контент
                 </Text>
             </Spoiler>
-            <Spoiler size={EComponentSize.LG} {...args}>
+            <Spoiler size={EComponentSize.LG} labelExpand="Развернуть" labelCollapse="Свернуть">
                 <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
                     Скрытый контент
                 </Text>
@@ -143,9 +121,6 @@ export const DifferentSizes: StoryObj<typeof Spoiler> = {
 export const Controlled: StoryObj<typeof Spoiler> = {
     name: "Controlled",
     args: {
-        labelExpand: "Развернуть",
-        labelCollapse: "Свернуть",
-        size: EComponentSize.MD,
         expanded: false,
     },
     argTypes: {
@@ -156,24 +131,14 @@ export const Controlled: StoryObj<typeof Spoiler> = {
                 type: { summary: "boolean" },
             },
         },
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        labelExpand: {
-            table: {
-                disable: true,
-            },
-        },
-        labelCollapse: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["expanded"],
         },
     },
     render: (args) => (
-        <Spoiler {...args}>
+        <Spoiler {...args} labelExpand="Развернуть" labelCollapse="Свернуть" size={EComponentSize.MD}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 Скрытый контент
             </Text>

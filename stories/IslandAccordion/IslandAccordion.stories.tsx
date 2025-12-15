@@ -6,6 +6,7 @@ import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EIslandType } from "../../src/components/Island";
 import { EStepStatus } from "../../src/components/Step";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import "./IslandAccordion.less";
 
 export default {
@@ -29,6 +30,15 @@ export default {
 - Footer — нижняя часть
 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -76,6 +86,11 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
             control: { type: "boolean" },
         },
     },
+    parameters: {
+        controls: {
+            include: ["size", "type", "status", "removable", "disabled"],
+        },
+    },
     render: (args) => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
 
@@ -113,17 +128,8 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
 
 export const Default: StoryObj<IIslandAccordionStoryType> = {
     name: "Default",
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -153,17 +159,8 @@ export const Default: StoryObj<IIslandAccordionStoryType> = {
 
 export const Disabled: StoryObj<IIslandAccordionStoryType> = {
     name: "Disabled",
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -187,17 +184,8 @@ export const Disabled: StoryObj<IIslandAccordionStoryType> = {
 
 export const Removable: StoryObj<IIslandAccordionStoryType> = {
     name: "Removable",
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -234,21 +222,10 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
 
 export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
     name: "With Status",
-    args: {
-        size: EComponentSize.SM,
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => {
+    render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
 
         const items = [
@@ -297,9 +274,7 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion size={args.size}>
-                    {items.map((item, index) => renderIslandAccordionItem(item, index))}
-                </IslandAccordion>
+                <IslandAccordion>{items.map((item, index) => renderIslandAccordionItem(item, index))}</IslandAccordion>
             </div>
         );
     },
@@ -307,17 +282,8 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
 
 export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
     name: "With Step Hint",
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => {
         const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
@@ -354,22 +320,11 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
 };
 
 export const OnlyOneOpenAtATime: StoryObj<IIslandAccordionStoryType> = {
-    args: {
-        size: EComponentSize.SM,
+    name: "Only One Open At A Time",
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        type: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => {
+    render: () => {
         const [openItemId, setOpenItemId] = useState();
 
         const items = [
@@ -418,9 +373,7 @@ export const OnlyOneOpenAtATime: StoryObj<IIslandAccordionStoryType> = {
 
         return (
             <div className="island-accordion-example">
-                <IslandAccordion size={args.size}>
-                    {items.map((item, index) => renderIslandAccordionItem(item, index))}
-                </IslandAccordion>
+                <IslandAccordion>{items.map((item, index) => renderIslandAccordionItem(item, index))}</IslandAccordion>
             </div>
         );
     },

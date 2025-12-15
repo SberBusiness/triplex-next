@@ -6,7 +6,7 @@ import { SliderExtendedMoveHandler, TOnTargetMouseDown, TOnTargetTouchStart } fr
 import { SliderExtendedDotActions } from "./SliderExtendedDotActions";
 import { useSliderExtendedDotTabIndex } from "./useSliderExtendedDotTabIndex";
 import { uniqueId } from "lodash-es";
-import { KeyDownListener } from "@sberbusiness/triplex-next";
+import { KeyDownListener } from "@sberbusiness/triplex-next/components/KeyDownListener";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import clsx from "clsx";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";

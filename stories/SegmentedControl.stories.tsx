@@ -6,6 +6,7 @@ import {
     ESegmentedControlType,
     ESegmentedControlSize,
 } from "../src/components/SegmentedControl";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SegmentedControl",
@@ -73,6 +74,15 @@ export default {
 ## Примеры использования
 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -86,6 +96,9 @@ export const Playground: StoryObj<typeof SegmentedControl> = {
         disabled: false,
     },
     parameters: {
+        controls: {
+            include: ["type", "theme", "size", "disabled"],
+        },
         docs: {
             description: {
                 story: `

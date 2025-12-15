@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -31,6 +32,7 @@ const STORY_META_DESCRIPTION = `
 
 const meta = {
     title: "Components/LightBox/LightBox",
+    component: LightBox,
     tags: ["autodocs"],
     parameters: {
         layout: "fullscreen",
@@ -38,9 +40,18 @@ const meta = {
             description: {
                 component: STORY_META_DESCRIPTION,
             },
+            page: () => (
+                <>
+                    <SBTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
-} satisfies Meta<LightBoxStoryArgs>;
+} satisfies Meta<typeof LightBox>;
 
 export default meta;
 
@@ -224,6 +235,9 @@ export const Playground: Story = {
         },
     },
     parameters: {
+        controls: {
+            include: ["isLoading", "showControls", "stickyHeader", "stickyFooter"],
+        },
         docs: {
             description: {
                 story: "Интерактивный пример LightBox. Управляйте состояниями и оверлеями через панель Storybook.",
@@ -274,6 +288,7 @@ export const DefaultView: Story = {
         );
     },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
@@ -331,6 +346,7 @@ export const SplitMode: Story = {
         );
     },
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Конфигурация LightBox в режиме split-mode. LightBox занимает 90% ширины экрана и располагается по центру. DOM-элемент с идентификатором LightBox-next-view-manager-node-example используется для позиционирования LightBox. Граница этого элемента равна границам LightBox.",

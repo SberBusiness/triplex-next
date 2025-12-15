@@ -1,5 +1,6 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { ListItemControls, ListItemControlsButtonDropdown, ListItemControlsButton } from "../../src/components/List";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
@@ -14,6 +15,16 @@ export default {
 Компонент ListItemControls — контейнер с кнопками действий..
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Default} />
+                    <Stories />
+                </>
+            ),
         },
     },
 } as const;
@@ -83,5 +94,8 @@ export const Default: StoryObj<typeof ListItemControls> = {
                 </ListItemControls>
             </>
         );
+    },
+    parameters: {
+        controls: { disable: true },
     },
 };

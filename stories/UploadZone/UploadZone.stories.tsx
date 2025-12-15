@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { Gap } from "../../src/components/Gap";
 import { EFontType, ETextSize } from "../../src/components/Typography/enums";
@@ -12,6 +13,7 @@ import { ETooltipSize } from "../../src/components/Tooltip/enums";
 
 export default {
     title: "Components/UploadZone",
+    component: UploadZone,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -20,12 +22,24 @@ export default {
 Компонент зоны загрузки файлов.
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Default} />
+                </>
+            ),
         },
     },
 };
 
 export const Default: StoryObj<typeof UploadZone> = {
     name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [container, setContainer] = useState<HTMLDivElement | null>(null);
 

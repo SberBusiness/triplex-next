@@ -5,6 +5,7 @@ import { IslandHeader } from "../src/components/Island/components/IslandHeader";
 import { IslandBody } from "../src/components/Island/components/IslandBody";
 import { IslandFooter } from "../src/components/Island/components/IslandFooter";
 import { EComponentSize } from "@sberbusiness/triplex-next";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/Island",
@@ -31,6 +32,15 @@ const meta = {
 - Footer — нижняя часть
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -116,6 +126,9 @@ export const Playground: StoryObj<IPlaygroundProps> = {
                 story: "Интерактивная демонстрация Island с управлением типом, скруглением, отступами и составными частями.",
             },
         },
+        controls: {
+            include: ["type", "size", "headerText", "bodyText", "footerText", "showHeader", "showBody", "showFooter"],
+        },
     },
     render: (args) => {
         const { showHeader, showBody, showFooter, headerText, bodyText, footerText, ...rest } = args;
@@ -132,18 +145,29 @@ export const Playground: StoryObj<IPlaygroundProps> = {
     },
 };
 
+export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => (
+        <div style={{ maxWidth: 360 }}>
+            <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
+                <Island.Header>Island Header</Island.Header>
+                <Island.Body>Island Body</Island.Body>
+                <Island.Footer>Island Footer</Island.Footer>
+            </Island>
+        </div>
+    ),
+};
+
 export const Types: Story = {
     name: "Types",
     parameters: {
         docs: {
             description: { story: "Варианты визуального типа: type1, type2, type3." },
         },
-    },
-    argTypes: {
-        type: { table: { disable: true } },
-        size: { table: { disable: true } },
-        className: { table: { disable: true } },
-        children: { table: { disable: true } },
+        controls: { disable: true },
     },
     render: () => (
         <div
@@ -178,12 +202,7 @@ export const Sizes: Story = {
         docs: {
             description: { story: "Демонстрация размеров скругления: SM и MD." },
         },
-    },
-    argTypes: {
-        type: { table: { disable: true } },
-        size: { table: { disable: true } },
-        className: { table: { disable: true } },
-        children: { table: { disable: true } },
+        controls: { disable: true },
     },
     render: () => (
         <div

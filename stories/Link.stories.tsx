@@ -6,6 +6,7 @@ import { ETextSize } from "../src/components/Typography/enums";
 import { EFontType } from "../src/components/Typography/enums";
 import { Col } from "../src/components/Col";
 import { Gap } from "../src/components/Gap";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const ExternalLinkStrokePrdIcon16 = () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,6 +39,15 @@ export default {
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -75,30 +85,10 @@ export const Playground: StoryObj<typeof Link> = {
             control: { type: "text" },
             description: "Текст ссылки",
         },
-        contentAfter: {
-            table: {
-                disable: true,
-            },
-        },
-        contentBefore: {
-            table: {
-                disable: true,
-            },
-        },
-        href: {
-            table: {
-                disable: true,
-            },
-        },
-        target: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["children"],
         },
     },
     render: (args) => (
@@ -112,37 +102,8 @@ export const Playground: StoryObj<typeof Link> = {
 
 export const Default: StoryObj<typeof Link> = {
     name: "Default",
-    argTypes: {
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        contentAfter: {
-            table: {
-                disable: true,
-            },
-        },
-        contentBefore: {
-            table: {
-                disable: true,
-            },
-        },
-        href: {
-            table: {
-                disable: true,
-            },
-        },
-        target: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
     render: () => (
         <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
@@ -155,39 +116,10 @@ export const Default: StoryObj<typeof Link> = {
 
 export const ExternalLink: StoryObj<typeof Link> = {
     name: "External Link",
-    argTypes: {
-        contentAfter: {
-            table: {
-                disable: true,
-            },
-        },
-        contentBefore: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        href: {
-            table: {
-                disable: true,
-            },
-        },
-        target: {
-            table: {
-                disable: true,
-            },
-        },
-        onClick: {
-            table: {
-                disable: true,
-            },
-        },
+    parameters: {
+        controls: { disable: true },
     },
-    render: (args) => {
+    render: () => {
         const renderContentAfter = () => (
             <div style={{ paddingTop: "4px" }}>
                 <ExternalLinkStrokePrdIcon16 />
@@ -203,30 +135,19 @@ export const ExternalLink: StoryObj<typeof Link> = {
         return (
             <Col size={6}>
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link
-                        {...args}
-                        href="#"
-                        contentAfter={renderContentAfter}
-                        onClick={(event) => event.preventDefault()}
-                    >
+                    <Link href="#" contentAfter={renderContentAfter} onClick={(event) => event.preventDefault()}>
                         External link with content after
                     </Link>
                 </Text>
                 <Gap size={16} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link
-                        {...args}
-                        href="#"
-                        contentBefore={renderContentBefore}
-                        onClick={(event) => event.preventDefault()}
-                    >
+                    <Link href="#" contentBefore={renderContentBefore} onClick={(event) => event.preventDefault()}>
                         External link with content before
                     </Link>
                 </Text>
                 <Gap size={16} />
                 <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                     <Link
-                        {...args}
                         href="#"
                         contentBefore={renderContentBefore}
                         contentAfter={renderContentAfter}

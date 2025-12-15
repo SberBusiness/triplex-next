@@ -1,10 +1,12 @@
 import React from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Skeleton, ESkeletonType } from "../../src/components/Skeleton";
 import { StoryObj } from "@storybook/react";
 import "./Skeleton.less";
 
 export default {
     title: "Components/Loaders/Skeleton",
+    component: Skeleton,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -33,6 +35,15 @@ import { Skeleton, ESkeletonType } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -51,6 +62,11 @@ export const Playground: StoryObj<typeof Skeleton> = {
                 defaultValue: { summary: ESkeletonType.DARK },
                 type: { summary: "ESkeletonType" },
             },
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["type"],
         },
     },
     render: (args) => (
@@ -104,6 +120,9 @@ export const Default: StoryObj<typeof Skeleton> = {
             },
         },
     },
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => (
         <div className="skeleton-example-default">
             <div className="skeleton-example-grid">
@@ -124,6 +143,9 @@ export const LightBackground: StoryObj<typeof Skeleton> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     render: (args) => (
         <div className="skeleton-example-gray">

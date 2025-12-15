@@ -1,5 +1,6 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
@@ -28,6 +29,16 @@ export default {
 - **Гибкость**: можно передавать любой произвольный контент
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -70,6 +81,9 @@ export const Playground: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSec
             </Page.Footer>
         </div>
     ),
+    parameters: {
+        controls: { include: ["type"] },
+    },
 };
 
 export const Basic: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
@@ -105,6 +119,9 @@ export const Basic: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondPr
             </Page.Footer>
         </div>
     ),
+    parameters: {
+        controls: { disable: true },
+    },
 };
 
 export const WithLink: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecondProps> = {
@@ -145,4 +162,7 @@ export const WithLink: StoryObj<IFooterPageTypeFirstProps | IFooterPageTypeSecon
             </Page.Footer>
         </div>
     ),
+    parameters: {
+        controls: { disable: true },
+    },
 };

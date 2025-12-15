@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { MasterTable } from "../../src/components/Table/MasterTable";
 import { Amount } from "../../src/components/Amount/Amount";
 import { ColumnSettings } from "../../src/components/Table/TableBasicSettings/components/ColumnSettings";
@@ -41,12 +42,22 @@ import { EFormFieldStatus } from "../../src/components/FormField/enums";
 // noinspection JSUnusedGlobalSymbols
 export default {
     title: "Components/TableBasic",
+    component: MasterTable,
     parameters: {
         docs: {
             description: {
                 component:
                     "Компонент таблицы отображает структурированный набор данных, состоящий из строк и столбцов (табличных данных).",
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -583,6 +594,16 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         withButtons: false,
     },
     parameters: {
+        controls: {
+            include: [
+                "isLoading",
+                "isHeadless",
+                "withHighlightRowOnHover",
+                "withData",
+                "withHorizontalScroll",
+                "withButtons",
+            ],
+        },
         docs: {
             source: {
                 code: "disabled",
@@ -593,6 +614,9 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
 // noinspection JSUnusedGlobalSymbols
 export const TableSpan: StoryObj = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const backendData = [
             {
@@ -669,6 +693,9 @@ export const TableSpan: StoryObj = {
 
 // noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumn: StoryObj = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
             {
@@ -797,6 +824,9 @@ export const TableSettingsColumn: StoryObj = {
 
 // noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumnExtended: StoryObj = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
             {

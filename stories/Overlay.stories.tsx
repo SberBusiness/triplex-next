@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { Overlay } from "../src/components/Overlay/Overlay";
 import { EOverlayDirection } from "../src/components/Overlay/OverlayBase";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Overlay",
+    component: Overlay,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -21,6 +23,15 @@ export default {
 - **Доступность**: кликабельная маска, управление с клавиатуры в содержимом панели
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -68,7 +79,11 @@ export const Playground: StoryObj<IOverlayPlaygroundProps> = {
                 >
                     {(props) => (
                         <>
-                            <Overlay.Mask opened={opened} onClick={() => setOpened(false)} aria-label="Overlay backdrop" />
+                            <Overlay.Mask
+                                opened={opened}
+                                onClick={() => setOpened(false)}
+                                aria-label="Overlay backdrop"
+                            />
                             <Overlay.Panel {...props} direction={direction} aria-label="Overlay panel">
                                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                                     <div>Содержимое оверлея</div>
@@ -112,6 +127,9 @@ export const Playground: StoryObj<IOverlayPlaygroundProps> = {
         label: "Открыть оверлей",
     },
     parameters: {
+        controls: {
+            include: ["direction", "fixed", "opened", "label"],
+        },
         docs: {
             description: {
                 story: "Интерактивная демонстрация Overlay: выбор направления, fixed и состояния opened.",
@@ -121,11 +139,22 @@ export const Playground: StoryObj<IOverlayPlaygroundProps> = {
 };
 
 export const Directions: StoryObj<typeof Overlay> = {
+    name: "Directions",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Примеры всех направлений выезжающей панели.",
+            },
+        },
+    },
     render: () => {
         const Example = ({ direction, title }: { direction: EOverlayDirection; title: string }) => {
             const [opened, setOpened] = useState(false);
             return (
-                <div style={{ position: "relative", width: 320, height: 200, border: "1px dashed #D0D4D9", padding: 12 }}>
+                <div
+                    style={{ position: "relative", width: 320, height: 200, border: "1px dashed #D0D4D9", padding: 12 }}
+                >
                     <div style={{ marginBottom: 8 }}>{title}</div>
                     <button type="button" onClick={() => setOpened(true)} style={{ padding: "6px 12px" }}>
                         Открыть
@@ -158,17 +187,18 @@ export const Directions: StoryObj<typeof Overlay> = {
             </div>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "Примеры всех направлений выезжающей панели.",
-            },
-        },
-        controls: { disable: true },
-    },
 };
 
 export const Fixed: StoryObj<typeof Overlay> = {
+    name: "Fixed",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Fixed-оверлей занимает всю страницу поверх контента.",
+            },
+        },
+    },
     render: () => {
         const [opened, setOpened] = useState(false);
         return (
@@ -194,14 +224,4 @@ export const Fixed: StoryObj<typeof Overlay> = {
             </div>
         );
     },
-    parameters: {
-        docs: {
-            description: {
-                story: "Fixed-оверлей занимает всю страницу поверх контента.",
-            },
-        },
-        controls: { disable: true },
-    },
 };
-
-

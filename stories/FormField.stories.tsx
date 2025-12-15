@@ -20,9 +20,11 @@ import { HelpBox } from "../src/components/HelpBox/HelpBox";
 import { ETooltipSize } from "../src/components/Tooltip/enums";
 import { ETooltipPreferPlace } from "../src/components/Tooltip/enums";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/FormField",
+    component: FormField,
     parameters: {
         docs: {
             description: {
@@ -41,6 +43,15 @@ export default {
 - **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -185,6 +196,32 @@ export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
                 story: "Интерактивная демонстрация FormField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая тип поля, текст лейбла, плейсхолдер, отображение кнопки очистки и описания. Также включает отладочную информацию для демонстрации состояния компонента.",
             },
         },
+        controls: {
+            include: ["status", "labelText", "placeholder", "showClear", "descriptionText", "counter", "size"],
+        },
+    },
+};
+
+export const Default: StoryObj<typeof FormField> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: function Render() {
+        const [value, setValue] = useState("");
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+        };
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <FormField>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput value={value} onChange={handleChange} placeholder="Введите текст..." />
+                </FormField>
+            </div>
+        );
     },
 };
 
@@ -211,6 +248,7 @@ export const Basic: StoryObj<typeof FormField> = {
                 story: "Базовые примеры использования FormField с различными типами полей ввода.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -245,6 +283,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
                 story: "FormField с префиксами и постфиксами. Префиксы отображаются слева от поля, постфиксы - справа.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -281,6 +320,7 @@ export const WithClearButton: StoryObj<typeof FormField> = {
                 story: "FormField с префиксами и постфиксами. Префиксы отображаются слева от поля, постфиксы - справа.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -323,6 +363,7 @@ export const WithCounter: StoryObj<typeof FormField> = {
                 story: "FormField со счетчиком символов. Счетчик показывает текущее количество символов и максимально допустимое.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -408,6 +449,7 @@ export const States: StoryObj<typeof FormField> = {
                 story: "Различные состояния FormField: обычное, с ошибкой, отключенное.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -451,6 +493,7 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
                 story: "FormField с многострочным полем ввода (textarea). Счетчик показывает текущее количество символов и максимально допустимое.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -518,6 +561,7 @@ export const Sizes: StoryObj<typeof FormField> = {
                 story: "Демонстрация различных размеров FormField: SM (маленький), MD (средний - по умолчанию), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -580,5 +624,6 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
                 story: "FormField с маскированным вводом. Поддерживает различные предустановленные маски для телефонных номеров, номеров карт, дат и других форматов данных.",
             },
         },
+        controls: { disable: true },
     },
 };

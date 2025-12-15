@@ -1,4 +1,5 @@
 import React from "react";
+import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
 import { Col } from "../../src/components/Col";
@@ -29,6 +30,15 @@ import { LoaderSmall, ELoaderSmallTheme, ELoaderSmallSize } from '@sberbusiness/
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 };
@@ -49,6 +59,11 @@ export const Playground: StoryObj<typeof LoaderSmall> = {
             control: { type: "select" },
             options: Object.values(ELoaderSmallSize),
             description: "Размер",
+        },
+    },
+    parameters: {
+        controls: {
+            include: ["theme", "size"],
         },
     },
     decorators: [
@@ -80,6 +95,9 @@ export const Default: StoryObj<typeof LoaderSmall> = {
                 disable: true,
             },
         },
+    },
+    parameters: {
+        controls: { disable: true },
     },
     decorators: [
         (Story) => {
@@ -127,6 +145,7 @@ export const DifferentThemes: StoryObj<typeof LoaderSmall> = {
         </div>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Доступные темы",
@@ -173,6 +192,7 @@ export const DifferentSizes: StoryObj<typeof LoaderSmall> = {
         </Col>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Доступные размеры",

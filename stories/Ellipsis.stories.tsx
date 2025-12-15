@@ -1,6 +1,7 @@
 import React from "react";
 import { Ellipsis } from "../src/components";
 import { StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Ellipsis",
@@ -27,6 +28,15 @@ import { Ellipsis } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -44,10 +54,10 @@ export const Playground: StoryObj<typeof Ellipsis> = {
                 type: { summary: "number" },
             },
         },
-        children: {
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["maxLines"],
         },
     },
     render: (args) => (
@@ -63,11 +73,11 @@ export const Playground: StoryObj<typeof Ellipsis> = {
 
 export const Default: StoryObj<typeof Ellipsis> = {
     name: "Default",
-    args: {
-        maxLines: 2,
+    parameters: {
+        controls: { disable: true },
     },
-    render: (args) => (
-        <Ellipsis {...args}>
+    render: () => (
+        <Ellipsis maxLines={2}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
             ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat

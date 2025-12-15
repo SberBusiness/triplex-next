@@ -1,6 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { UnorderedList } from "../src/components/UnorderedList";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/UnorderedList",
@@ -25,6 +26,15 @@ import { UnorderedList } from "@sberbusiness/triplex-next/components/UnorderedLi
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     decorators: [
@@ -39,8 +49,12 @@ import { UnorderedList } from "@sberbusiness/triplex-next/components/UnorderedLi
 type Story = StoryObj<typeof UnorderedList>;
 
 export const Default: Story = {
-    render: (args) => (
-        <UnorderedList {...args}>
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => (
+        <UnorderedList>
             <UnorderedList.Item>List item text;</UnorderedList.Item>
             <UnorderedList.Item>List item text;</UnorderedList.Item>
             <UnorderedList.Item>List item text.</UnorderedList.Item>
@@ -49,14 +63,16 @@ export const Default: Story = {
 };
 
 export const WithLongContent: Story = {
-    render: (args) => (
-        <UnorderedList {...args}>
+    name: "With Long Content",
+    render: () => (
+        <UnorderedList>
             <UnorderedList.Item>List item text;</UnorderedList.Item>
             <UnorderedList.Item>List item text;</UnorderedList.Item>
             <UnorderedList.Item>Extremely long list item that fits in two lines.</UnorderedList.Item>
         </UnorderedList>
     ),
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "List with items containing multiline text.",

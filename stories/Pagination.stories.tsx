@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Pagination, PaginationExtended, PaginationNavigation, PaginationSelect } from "../src/components/Pagination";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta: Meta<typeof Pagination> = {
     title: "Components/Pagination",
+    component: Pagination,
     parameters: {
         docs: {
             description: {
                 component: "Компонент Pagination:",
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -117,10 +128,17 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
                 story: "Интерактивная демонстрация Pagination с controls: текущая страница, общее количество страниц, boundary/sibling и отображение селекта.",
             },
         },
+        controls: {
+            include: ["currentPage", "totalPages", "boundaryCount", "siblingCount", "hidden", "paginationLabel"],
+        },
     },
 };
 
 export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [page, setPage] = useState(1);
 
@@ -139,6 +157,9 @@ export const Default: Story = {
 };
 
 export const WithBoundariesAndSiblings: Story = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [page, setPage] = useState(5);
 
@@ -163,6 +184,9 @@ export const WithBoundariesAndSiblings: Story = {
 };
 
 export const ManyPages: Story = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [page, setPage] = useState(50);
 
@@ -187,6 +211,9 @@ export const ManyPages: Story = {
 };
 
 export const WithSelect: Story = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [page, setPage] = useState(1);
         const [pageSize, setPageSize] = useState(10);
@@ -208,6 +235,9 @@ export const WithSelect: Story = {
 };
 
 export const FullExample: Story = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [page, setPage] = useState(7);
         const [pageSize, setPageSize] = useState(10);
@@ -260,11 +290,15 @@ export const WithoutPaginationSelect: Story = {
                 story: "Пример использования Pagination без селекта количества элементов. Навигация работает, селект скрыт с помощью props hidden.",
             },
         },
+        controls: { disable: true },
     },
 };
 
 export const Extended: Story = {
     name: "Extended (container only)",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const [page, setPage] = useState(1);
 

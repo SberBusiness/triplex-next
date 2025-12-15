@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
+import { Controls, Description, Primary, Stories, Subtitle, Title as DocsTitle } from "@storybook/addon-docs/blocks";
 import {
     List,
     ListItem,
@@ -33,6 +34,16 @@ export default {
 Элемент списка.
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Default} />
+                    <Stories />
+                </>
+            ),
         },
     },
 } as const;
@@ -47,6 +58,7 @@ export const Default: StoryObj<typeof ListItem> = {
     ),
     parameters: {
         docs: { description: { story: "Базовый элемент списка с контентом." } },
+        controls: { disable: true },
     },
 };
 
@@ -64,6 +76,7 @@ export const Loading: StoryObj<typeof ListItem> = {
                 story: "Элемент списка, отображающий подгрузку данных. Отображается последним, при доскролле до него загружаются новые элементы.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -84,6 +97,7 @@ export const Selectable: StoryObj<typeof ListItem> = {
     },
     parameters: {
         docs: { description: { story: "Элемент списка с возможностью выбора." } },
+        controls: { disable: true },
     },
 };
 
@@ -158,6 +172,7 @@ export const Swipeable: StoryObj<typeof ListItem> = {
     },
     parameters: {
         docs: { description: { story: "Эмуляция свайпа" } },
+        controls: { disable: true },
     },
 };
 
@@ -224,6 +239,7 @@ export const ListItemForTable: StoryObj<typeof ListItem> = {
     },
     parameters: {
         docs: { description: { story: "Элемент списка для отображения табличных данных на мобильных устройствах." } },
+        controls: { disable: true },
     },
 };
 
@@ -317,6 +333,7 @@ export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
                 story: "Элемент списка для отображения табличных данных на мобильных устройствах с эмуляцией свайпа.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -391,5 +408,6 @@ export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
                 story: "Элемент списка для отображения табличных данных на мобильных устройствах с возможностью выбора элемента.",
             },
         },
+        controls: { disable: true },
     },
 };

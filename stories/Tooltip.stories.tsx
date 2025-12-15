@@ -4,6 +4,7 @@ import { Tooltip } from "../src/components/Tooltip/Tooltip";
 import { ButtonIcon } from "../src/components/Button";
 import { ETooltipPreferPlace, ETooltipSize } from "../src/components/Tooltip/enums";
 import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Tooltip",
@@ -25,6 +26,15 @@ export default {
 Поддерживается адаптивный режим (отображение снизу и только по клику).
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
         // не работает
         // disableZoom: true,
@@ -79,18 +89,27 @@ export const Playground: StoryObj<ITooltipPlaygroundProps> = {
         linkText: { control: { type: "text" }, description: "Текст ссылки (опционально)" },
         linkHref: { control: { type: "text" }, description: "Href ссылки (опционально)" },
         withClose: { control: { type: "boolean" }, description: "Показать кнопку закрытия" },
-        targetRef: { table: { disable: true } },
-        children: { table: { disable: true } },
-        renderContainer: { table: { disable: true } },
-        onShow: { table: { disable: true } },
-        toggle: { table: { disable: true } },
-        className: { table: { disable: true } },
     },
     parameters: {
         docs: {
             description: {
                 story: "Интерактивная площадка с контролами для размера, способа открытия и позиции.",
             },
+        },
+        controls: {
+            include: [
+                "size",
+                "toggleType",
+                "preferPlace",
+                "disableAdaptiveMode",
+                "isOpen",
+                "label",
+                "text",
+                "modalTitle",
+                "linkText",
+                "linkHref",
+                "withClose",
+            ],
         },
     },
     render: (args) => {
@@ -133,6 +152,34 @@ export const Playground: StoryObj<ITooltipPlaygroundProps> = {
                     ) : null}
                     {withClose ? <Tooltip.XButton aria-label="Закрыть подсказку" /> : null}
                     {modalTitle && <Tooltip.MobileHeader>{modalTitle}</Tooltip.MobileHeader>}
+                </Tooltip>
+            </div>
+        );
+    },
+};
+
+export const Default: StoryObj = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const targetRef = useRef<HTMLElement | null>(null);
+
+        return (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <Tooltip
+                    size={ETooltipSize.SM}
+                    toggleType="hover"
+                    preferPlace={ETooltipPreferPlace.BELOW}
+                    targetRef={targetRef}
+                >
+                    <Tooltip.Target>
+                        <ButtonIcon ref={(el) => (targetRef.current = el)} aria-label="Подсказка">
+                            <HintFilledSrvIcon16 paletteIndex={5} />
+                        </ButtonIcon>
+                    </Tooltip.Target>
+                    <Tooltip.Body>Текст подсказки</Tooltip.Body>
                 </Tooltip>
             </div>
         );

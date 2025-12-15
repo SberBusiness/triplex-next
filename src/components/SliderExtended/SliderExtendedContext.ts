@@ -1,5 +1,5 @@
 import React from "react";
-import { EComponentSize } from "@sberbusiness/triplex-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 export interface ISliderExtendedDot {
     // Функция изменения позиции точки, вызывается из любого компонента.

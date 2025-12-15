@@ -3,11 +3,25 @@ import { Meta, StoryObj } from "@storybook/react";
 import { ChipSuggest } from "../../src/components/Chip/ChipSuggest/ChipSuggest";
 import { ISuggestFieldOption } from "../../src/components/SuggestField/types";
 import { EComponentSize } from "../../src/enums";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/Chips/ChipSuggest",
     component: ChipSuggest,
     tags: ["autodocs"],
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
+        },
+    },
     argTypes: {
         size: {
             control: { type: "select" },
@@ -122,6 +136,7 @@ const useChipSuggestLogic = () => {
 };
 
 export const Playground: Story = {
+    name: "Playground",
     args: {
         size: EComponentSize.LG,
         label: "Label",
@@ -132,10 +147,35 @@ export const Playground: Story = {
         clearInputOnFocus: false,
         targetProps: { disabled: false },
     },
+    parameters: {
+        controls: {
+            include: [
+                "size",
+                "label",
+                "displayedValue",
+                "placeholder",
+                "noOptionsText",
+                "loading",
+                "clearInputOnFocus",
+            ],
+        },
+    },
     render: (args) => {
         const props = useChipSuggestLogic(args);
 
         return <ChipSuggest {...props} {...args} targetProps={{ ...props.targetProps, ...args.targetProps }} />;
+    },
+};
+
+export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const props = useChipSuggestLogic({});
+
+        return <ChipSuggest {...props} label="Label" placeholder="Type to proceed" noOptionsText="No matches found." />;
     },
 };
 
@@ -147,42 +187,25 @@ const sizeToLabelMap = {
 
 export const DifferentSizes: Story = {
     name: "Different sizes",
-    args: {
-        placeholder: "Type to proceed",
-        displayedValue: undefined,
-        noOptionsText: "No matches found.",
-        loading: false,
-        clearInputOnFocus: false,
-        targetProps: { disabled: false },
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        label: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => {
+    render: () => {
         const sizes = Object.values(EComponentSize);
 
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
                 {sizes.map((size) => {
-                    const props = useChipSuggestLogic(args);
+                    const props = useChipSuggestLogic({});
 
                     return (
                         <ChipSuggest
                             key={size}
                             size={size}
                             label={sizeToLabelMap[size]}
+                            placeholder="Type to proceed"
+                            noOptionsText="No matches found."
                             {...props}
-                            {...args}
-                            targetProps={{ ...props.targetProps, ...args.targetProps }}
                         />
                     );
                 })}
@@ -193,42 +216,26 @@ export const DifferentSizes: Story = {
 
 export const DifferentStates: Story = {
     name: "Different states",
-    args: {
-        size: EComponentSize.LG,
-        placeholder: "Type to proceed",
-        displayedValue: undefined,
-        noOptionsText: "No matches found.",
-        loading: false,
-        clearInputOnFocus: false,
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        loading: {
-            table: {
-                disable: true,
-            },
-        },
-        label: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => (
+    render: () => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
             {[
                 { label: "Default", targetProps: {} },
                 { label: "Selected", targetProps: { selected: true } },
                 { label: "Disabled", targetProps: { disabled: true } },
             ].map((state) => {
-                const props = useChipSuggestLogic(args);
+                const props = useChipSuggestLogic({});
 
                 return (
                     <ChipSuggest
                         key={state.label}
                         label={state.label}
+                        placeholder="Type to proceed"
+                        noOptionsText="No matches found."
                         {...props}
-                        {...args}
-                        targetProps={{ ...props.targetProps, ...args.targetProps, ...state.targetProps }}
+                        targetProps={{ ...props.targetProps, ...state.targetProps }}
                     />
                 );
             })}

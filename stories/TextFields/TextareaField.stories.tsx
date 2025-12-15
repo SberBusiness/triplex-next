@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { TextareaField, EComponentSize, EFormFieldStatus, Text, ETextSize, EFontType } from "../../src";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta: Meta<typeof TextareaField> = {
     title: "Components/TextFields/TextareaField",
@@ -37,6 +38,15 @@ const handleChange: React.ChangeEventHandler<HTMLTextareaElement> = (event) => {
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -147,6 +157,28 @@ export const Default: Story = {
         counter: "Counter",
     },
     render: TextareaFieldTemplate,
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
+export const Playground: Story = {
+    args: {
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
+        textareaProps: { placeholder: "0" },
+        label: "Label",
+        prefix: "Prefix",
+        postfix: "Postfix",
+        description: "Description",
+        counter: "Counter",
+    },
+    render: TextareaFieldTemplate,
+    parameters: {
+        controls: {
+            include: ["size", "status", "description", "counter"],
+        },
+    },
 };
 
 const sizeToLabelMap = {
@@ -156,11 +188,6 @@ const sizeToLabelMap = {
 };
 
 export const Sizes: Story = {
-    argTypes: {
-        size: { table: { disable: true } },
-        description: { table: { disable: true } },
-        counter: { table: { disable: true } },
-    },
     args: {
         status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "0" },
@@ -172,6 +199,9 @@ export const Sizes: Story = {
             ))}
         </div>
     ),
+    parameters: {
+        controls: { disable: true },
+    },
 };
 
 const statusToLabelMap = {
@@ -182,11 +212,6 @@ const statusToLabelMap = {
 };
 
 export const Statuses: Story = {
-    argTypes: {
-        status: { table: { disable: true } },
-        description: { table: { disable: true } },
-        counter: { table: { disable: true } },
-    },
     args: {
         size: EComponentSize.LG,
         textareaProps: { placeholder: "0" },
@@ -198,4 +223,7 @@ export const Statuses: Story = {
             ))}
         </div>
     ),
+    parameters: {
+        controls: { disable: true },
+    },
 };

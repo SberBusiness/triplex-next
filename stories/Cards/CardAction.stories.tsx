@@ -21,6 +21,7 @@ import {
 } from "../../src/components";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import "./Cards.less";
 
 /** Высота блока Media */
@@ -35,6 +36,7 @@ type TCardActionPlaygroundProps = Pick<
 
 const meta = {
     title: "Components/Cards/CardAction",
+    component: CardAction,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -82,6 +84,15 @@ const handleChangeSelect = () => setSelected((prev) => !prev);
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -121,7 +132,9 @@ export const Playground: Story = {
                 story: "Интерактивная демонстрация Card Action. Позволяет настраивать все основные свойства компонента.",
             },
         },
-        controls: { exclude: ["selected"] },
+        controls: {
+            include: ["paddingSize", "roundingSize", "theme"],
+        },
     },
     args: {
         paddingSize: ECardContentPaddingSize.MD,
@@ -199,6 +212,42 @@ export const Playground: Story = {
     },
 };
 
+export const Default: Story = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    args: {
+        paddingSize: ECardContentPaddingSize.MD,
+        roundingSize: ECardRoundingSize.MD,
+        theme: ECardTheme.GENERAL,
+        selected: false,
+    },
+    render: function Render(args) {
+        const { paddingSize, ...cardArgs } = args;
+        const [isSelected, setIsSelected] = useState(false);
+
+        return (
+            <div className="card-playground-preview">
+                <CardAction {...cardArgs} selected={isSelected} toggle={setIsSelected}>
+                    <CardAction.Content paddingSize={paddingSize}>
+                        <CardAction.Content.Header>
+                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                Title text
+                            </Title>
+                        </CardAction.Content.Header>
+                        <CardAction.Content.Body>
+                            <Text tag="div" size={ETextSize.B3}>
+                                Body content
+                            </Text>
+                        </CardAction.Content.Body>
+                    </CardAction.Content>
+                </CardAction>
+            </div>
+        );
+    },
+};
+
 export const General: Story = {
     name: "General",
     parameters: {
@@ -207,7 +256,7 @@ export const General: Story = {
                 story: "Пример использования Card Action General. Скругление карточки: MD, размер внутреннего отступа контента карточки: MD.",
             },
         },
-        controls: { exclude: ["theme", "selected"] },
+        controls: { disable: true },
     },
     args: {
         paddingSize: ECardContentPaddingSize.MD,
@@ -290,7 +339,7 @@ export const Secondary: Story = {
                 story: "Пример использования Card Action Secondary. Скругление карточки: MD, размер внутреннего отступа контента карточки: MD.",
             },
         },
-        controls: { exclude: ["theme", "selected"] },
+        controls: { disable: true },
     },
     args: {
         paddingSize: ECardContentPaddingSize.MD,
@@ -366,7 +415,7 @@ export const SmallPaddingSize: Story = {
                 story: "Пример использования Card Action. Размер внутреннего отступа контента карточки: SM.",
             },
         },
-        controls: { exclude: ["paddingSize", "selected"] },
+        controls: { disable: true },
     },
     args: {
         paddingSize: ECardContentPaddingSize.SM,
@@ -452,7 +501,7 @@ export const SmallRoundingSize: Story = {
                 story: "Пример использования Card Action. Скругление карточки: SM.",
             },
         },
-        controls: { exclude: ["roundingSize", "selected"] },
+        controls: { disable: true },
     },
     args: {
         paddingSize: ECardContentPaddingSize.SM,
@@ -538,7 +587,7 @@ export const Controlled: Story = {
                 story: "Пример использования Card Action. Позволяет переключаться в состояние Selected и обратно",
             },
         },
-        controls: { exclude: ["selected"] },
+        controls: { disable: true },
     },
     args: {
         paddingSize: ECardContentPaddingSize.MD,

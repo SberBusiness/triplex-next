@@ -1,4 +1,5 @@
 import React from "react";
+import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { Page, EHeaderPageType, EFooterPageType } from "../../src/components/Page";
 import { Button, EButtonTheme } from "../../src/components/Button";
@@ -30,6 +31,15 @@ export default {
 - **Совместимость**: использует те же подкомпоненты, что и \`Header\` и \`Footer\`
                 `,
             },
+            page: () => (
+                <>
+                    <SBTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={Playground} />
+                </>
+            ),
         },
     },
 } as const;
@@ -85,6 +95,11 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["headerType", "footerType", "verticalMargin"],
+        },
+    },
     render: (args: IWithTypeControlsArgs) => (
         <div className="page-example" style={{ maxHeight: "400px", overflow: "auto" }}>
             <Page>
@@ -135,6 +150,9 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
 };
 
 export const Default: StoryObj<typeof Page> = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => (
         <div className="page-example">
             <Page>

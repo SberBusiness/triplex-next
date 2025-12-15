@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Controls, Description, Primary, Stories, Subtitle, Title as DocsTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -32,6 +33,16 @@ const meta = {
             description: {
                 component: STORY_META_DESCRIPTION,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Subtitle />
+                    <Description />
+                    <Primary />
+                    <Controls of={LightBoxWithTopOverlayInSideOverlay} />
+                    <Stories />
+                </>
+            ),
         },
     },
 };

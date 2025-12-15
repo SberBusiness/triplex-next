@@ -3,6 +3,7 @@ import { AlertContext } from "../../src/components/Alert/AlertContext/AlertConte
 import { StoryObj } from "@storybook/react";
 import { EAlertType } from "../../src/components/Alert/EAlertType";
 import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Alerts/AlertContext",
@@ -19,6 +20,15 @@ export default {
 - **Типы**: Info, Warning, Error, System
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -38,11 +48,6 @@ export const Playground: StoryObj<typeof AlertContext> = {
                 type: { summary: "EAlertType" },
             },
         },
-        renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
         children: {
             control: { type: "text" },
             description: "Текст сообщения",
@@ -51,49 +56,31 @@ export const Playground: StoryObj<typeof AlertContext> = {
             },
         },
     },
+    parameters: {
+        controls: {
+            include: ["type", "children"],
+        },
+    },
 };
 
 export const Default: StoryObj<typeof AlertContext> = {
     name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
     args: {
         children: "This message provides context or highlights important information to note.",
         type: EAlertType.INFO,
-    },
-    argTypes: {
-        type: {
-            table: {
-                disable: true,
-            },
-        },
-        renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
     },
 };
 
 export const DifferentTypes: StoryObj<typeof AlertContext> = {
     name: "Different Types",
-    argTypes: {
-        type: {
-            table: {
-                disable: true,
-            },
-        },
-        renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Компонент разных типов.",
             },
         },
     },
@@ -113,31 +100,15 @@ export const DifferentTypes: StoryObj<typeof AlertContext> = {
             </AlertContext>
         </div>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: "Компонент разных типов.",
-            },
-        },
-    },
 };
 
 export const WithCustomIcon: StoryObj<typeof AlertContext> = {
     name: "With Custom Icon",
-    argTypes: {
-        type: {
-            table: {
-                disable: true,
-            },
-        },
-        renderIcon: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Компонент с иконкой, переданной через свойство renderIcon.",
             },
         },
     },
@@ -148,11 +119,4 @@ export const WithCustomIcon: StoryObj<typeof AlertContext> = {
             </AlertContext>
         </div>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: "Компонент с иконкой, переданной через свойство renderIcon.",
-            },
-        },
-    },
 };

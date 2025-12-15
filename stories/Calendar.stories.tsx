@@ -3,8 +3,8 @@ import ru from "moment/dist/locale/ru";
 import React, { useState } from "react";
 import { Calendar, ECalendarPickType, ECalendarDateMarkType } from "../src/components/Calendar";
 import { dateFormatYYYYMMDD } from "../src/consts/DateConst";
-
 import { StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 // Устанавливаем российскую локаль.
 moment.locale("ru", ru);
@@ -26,6 +26,15 @@ import { Calendar } from '@sberbusiness/triplex-next';
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
 };
@@ -60,27 +69,6 @@ export const Playground: StoryObj<typeof Calendar> = {
                 defaultValue: undefined,
             },
         },
-        limitRange: {
-            control: { type: "text" },
-            description: "Ограничение выбираемого периода",
-            table: {
-                type: { summary: "IDateLimitRange | undefined" },
-            },
-        },
-        markedDays: {
-            control: { type: "text" },
-            description: "Отмеченные дни",
-            table: {
-                type: { summary: "TCalendarMarkedDays | undefined" },
-            },
-        },
-        disabledDays: {
-            control: { type: "text" },
-            description: "Дни недоступные для выбора",
-            table: {
-                type: { summary: "string[] | undefined" },
-            },
-        },
         reversedPick: {
             control: { type: "boolean" },
             description: "Обратный порядок выбора даты",
@@ -88,25 +76,10 @@ export const Playground: StoryObj<typeof Calendar> = {
                 type: { summary: "boolean" },
             },
         },
-        onPageChange: {
-            // control: { type: "text" },
-            // description: "Обработчик изменения страницы",
-            // table: {
-            //     type: { summary: "(viewDate: Moment, viewMode: ECalendarViewMode) => void" },
-            // },
-            table: {
-                disable: true,
-            },
-        },
-        onViewChange: {
-            // control: { type: "text" },
-            // description: "Обработчик изменения вида",
-            // table: {
-            //     type: { summary: "(viewDate: Moment, viewMode: ECalendarViewMode) => void" },
-            // },
-            table: {
-                disable: true,
-            },
+    },
+    parameters: {
+        controls: {
+            include: ["defaultViewDate", "format", "pickType", "reversedPick"],
         },
     },
     render: (args) => {
@@ -147,5 +120,20 @@ export const Playground: StoryObj<typeof Calendar> = {
                 }}
             />
         );
+    },
+};
+
+export const Default: StoryObj<typeof Calendar> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        // Устанавливаем российскую локаль.
+        moment.locale("ru");
+
+        const [pickedDate, setPickedDate] = useState(moment());
+
+        return <Calendar pickedDate={pickedDate} onDateChange={setPickedDate} />;
     },
 };

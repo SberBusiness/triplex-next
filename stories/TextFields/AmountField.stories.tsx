@@ -7,9 +7,11 @@ import { Gap } from "../../src/components/Gap";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { ETooltipSize } from "../../src/components/Tooltip/enums";
 import { ETooltipPreferPlace } from "../../src/components/Tooltip/enums";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/TextFields/AmountField",
+    component: AmountField,
     parameters: {
         docs: {
             description: {
@@ -24,6 +26,15 @@ export default {
 - Состояния и размеры из FormField
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -156,6 +167,42 @@ export const Playground: StoryObj<IAmountFieldWithControlsProps> = {
                 story: "Интерактивная демонстрация AmountField с управлением лейблом, плейсхолдером, валютой и точностью.",
             },
         },
+        controls: {
+            include: [
+                "status",
+                "size",
+                "labelText",
+                "descriptionText",
+                "placeholder",
+                "postfixText",
+                "currency",
+                "maxIntegerDigits",
+                "fractionDigits",
+            ],
+        },
+    },
+};
+
+export const Default: StoryObj<typeof AmountField> = {
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <AmountField
+                    currency="RUB"
+                    inputProps={{
+                        value,
+                        onChange: setValue,
+                        placeholder: "0,00",
+                    }}
+                    label="Сумма"
+                />
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
     },
 };
 
@@ -184,6 +231,7 @@ export const Basic: StoryObj<typeof AmountField> = {
     },
     parameters: {
         docs: { description: { story: "Базовый пример AmountField с лейблом и описанием." } },
+        controls: { disable: true },
     },
 };
 
@@ -216,6 +264,7 @@ export const WithCurrencyAndPostfix: StoryObj<typeof AmountField> = {
     },
     parameters: {
         docs: { description: { story: "AmountField с валютой и постфиксом." } },
+        controls: { disable: true },
     },
 };
 
@@ -240,7 +289,10 @@ export const WithClearButton: StoryObj<typeof AmountField> = {
             </div>
         );
     },
-    parameters: { docs: { description: { story: "Кнопка очистки встроена в AmountField по умолчанию." } } },
+    parameters: {
+        docs: { description: { story: "Кнопка очистки встроена в AmountField по умолчанию." } },
+        controls: { disable: true },
+    },
 };
 
 export const Sizes: StoryObj<typeof AmountField> = {
@@ -292,6 +344,7 @@ export const Sizes: StoryObj<typeof AmountField> = {
                 story: "Демонстрация размеров AmountField: SM, MD, LG. Размер влияет на высоту поля и отступы, как и в TextField.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -356,5 +409,6 @@ export const States: StoryObj<typeof AmountField> = {
     },
     parameters: {
         docs: { description: { story: "Состояния AmountField: обычное, ошибка, предупреждение, отключено." } },
+        controls: { disable: true },
     },
 };

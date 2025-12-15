@@ -9,9 +9,11 @@ import {
     ETextSize,
     EFontType,
 } from "../src";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/SuggestField",
+    component: SuggestField,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -19,6 +21,15 @@ const meta = {
                 component:
                     "Выпадающий список с возможностью поиска по введённому значению. Поддерживает кастомные опции, различные состояния и размеры.",
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     decorators: [
@@ -157,6 +168,7 @@ const useSuggestFieldLogic = (customInitialOptions?: ISuggestFieldOption[]) => {
 };
 
 export const Playground: Story = {
+    name: "Playground",
     args: {
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
@@ -166,6 +178,20 @@ export const Playground: Story = {
         loading: false,
         dropdownListLoading: false,
         clearInputOnFocus: false,
+    },
+    parameters: {
+        controls: {
+            include: [
+                "size",
+                "status",
+                "label",
+                "placeholder",
+                "tooltipHint",
+                "loading",
+                "dropdownListLoading",
+                "clearInputOnFocus",
+            ],
+        },
     },
     render: (args) => {
         const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
@@ -192,6 +218,9 @@ const sizeToLabelMap = {
 
 export const DifferentSizes: Story = {
     name: "Different sizes",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const sizes = Object.values(EComponentSize);
 
@@ -230,6 +259,10 @@ const statusToLabelMap = {
 };
 
 export const DifferentStates: Story = {
+    name: "Different States",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const statuses = Object.values(EFormFieldStatus);
 
@@ -261,6 +294,10 @@ export const DifferentStates: Story = {
 };
 
 export const WithLoadingStates: Story = {
+    name: "With Loading States",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const sizes = Object.values(EComponentSize);
 
@@ -323,6 +360,10 @@ const fruitToTupleMap: Record<string, [string, string]> = {
 };
 
 export const WithCustomOptions: Story = {
+    name: "With Custom Options",
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const customInitialOptions: ISuggestFieldOption[] = initialOptions.map((option) => ({
             ...option,

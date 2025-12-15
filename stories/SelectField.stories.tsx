@@ -6,9 +6,11 @@ import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components
 import { Gap } from "../src/components/Gap";
 import { FormGroup } from "../src/components/FormGroup";
 import { EComponentSize } from "../src/enums/EComponentSize";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SelectField",
+    component: SelectField,
     parameters: {
         docs: {
             description: {
@@ -26,6 +28,15 @@ SelectField - это упрощенный компонент выбора, по�
 Компонент принимает массив опций и обрабатывает выбор автоматически. Для отображения лейбла поля необходимо передать \`targetProps\` с обязательным свойством \`fieldLabel\`.
                 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     tags: ["autodocs"],
@@ -186,6 +197,47 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
                 story: "Интерактивная демонстрация SelectField с расширенными controls. Позволяет настраивать все основные свойства компонента, включая текст лейбла, плейсхолдер, состояния (отключенное, ошибка, загрузка) и предварительно выбранное значение. Также включает отладочную информацию для демонстрации состояния компонента.",
             },
         },
+        controls: {
+            include: [
+                "fieldLabel",
+                "placeholder",
+                "loading",
+                "status",
+                "descriptionText",
+                "errorText",
+                "selectedValue",
+                "size",
+            ],
+        },
+    },
+};
+
+export const Default: StoryObj<typeof SelectField> = {
+    name: "Default",
+    parameters: {
+        controls: { disable: true },
+    },
+    render: function Render() {
+        const [selectedValue, setSelectedValue] = useState<ISelectFieldOption | undefined>();
+
+        const handleChange = (option: ISelectFieldOption) => {
+            setSelectedValue(option);
+        };
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <SelectField
+                    size={EComponentSize.LG}
+                    value={selectedValue}
+                    options={options}
+                    onChange={handleChange}
+                    placeholder="Выберите опцию из списка"
+                    targetProps={{
+                        fieldLabel: "Выберите опцию",
+                    }}
+                />
+            </div>
+        );
     },
 };
 
@@ -218,6 +270,7 @@ export const Basic: StoryObj<typeof SelectField> = {
                 story: "Базовый пример использования SelectField с простым списком опций.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -346,6 +399,7 @@ export const States: StoryObj<typeof SelectField> = {
                 story: "Демонстрация различных состояний SelectField: обычное, загрузка, ошибка, предупреждение и отключенное состояние.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -425,6 +479,7 @@ export const Sizes: StoryObj<typeof SelectField> = {
                 story: "Демонстрация различных размеров SelectField: SM (маленький), MD (средний), LG (большой - по умолчанию). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
+        controls: { disable: true },
     },
 };
 
@@ -464,5 +519,6 @@ export const WithDescription: StoryObj<typeof SelectField> = {
                 story: "SelectField с описанием поля. Описание отображается под полем ввода и используется для предоставления дополнительной информации пользователю.",
             },
         },
+        controls: { disable: true },
     },
 };

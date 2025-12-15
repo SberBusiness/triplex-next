@@ -614,9 +614,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
 // noinspection JSUnusedGlobalSymbols
 export const TableSpan: StoryObj = {
-    parameters: {
-        controls: { disable: true },
-    },
     render: () => {
         const backendData = [
             {
@@ -688,14 +685,12 @@ export const TableSpan: StoryObj = {
         docs: {
             description: { story: "Пример таблицы с объединёнными ячейками." },
         },
+        controls: { disable: true },
     },
 };
 
 // noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumn: StoryObj = {
-    parameters: {
-        controls: { disable: true },
-    },
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
             {
@@ -819,14 +814,12 @@ export const TableSettingsColumn: StoryObj = {
                 story: "Базовая настройка колонок. Реализуется через компоненты TableBasicSettings, ColumnSettings и CheckboxYGroup. Отображение колонки зависит от свойства hidden в объекте, описывающем column.",
             },
         },
+        controls: { disable: true },
     },
 };
 
 // noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumnExtended: StoryObj = {
-    parameters: {
-        controls: { disable: true },
-    },
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
             {
@@ -1087,5 +1080,6 @@ export const TableSettingsColumnExtended: StoryObj = {
                 story: "Расширенная настройка колонок. Позволяет скрывать/показывать не только колонки, но и элементы внутри колонок. Отображение колонки зависит от свойства hidden в объекте, описывающем column. Логика отображения элементов внутри колонок всегда кастомная, это только один из возможных вариантов.",
             },
         },
+        controls: { disable: true },
     },
 };

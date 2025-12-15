@@ -8,7 +8,7 @@ export enum EStatusTrackerType {
 }
 
 /** Вертикальное выравнивание блоков статус-трекера. */
-export enum EVerticalAlign {
+export enum EStatusTrackerVerticalAlign {
     TOP = "top",
     MIDDLE = "middle",
     BOTTOM = "bottom",

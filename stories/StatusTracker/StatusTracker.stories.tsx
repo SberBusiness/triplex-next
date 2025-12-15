@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { WaitStsIcon84, WarningStsIcon84, ErrorStsIcon84, SuccessStsIcon84 } from "@sberbusiness/icons-next";
 import { IStatusTrackerProps, StatusTracker } from "../../src/components/StatusTracker";
-import { EStatusTrackerType, EVerticalAlign } from "../../src/components/StatusTracker/enums";
+import { EStatusTrackerType, EStatusTrackerVerticalAlign } from "../../src/components/StatusTracker/enums";
 import { Page } from "../../src/components/Page";
 import { EMarkerStatus } from "../../src/components/Marker";
 import { EComponentSize } from "../../src/enums";
@@ -55,11 +55,11 @@ Approved - документ исполнен банком
         },
         verticalAlign: {
             control: "select",
-            options: Object.values(EVerticalAlign),
+            options: Object.values(EStatusTrackerVerticalAlign),
             description: "Вертикальное выравнивание блоков",
             table: {
-                type: { summary: "EVerticalAlign" },
-                defaultValue: { summary: "EVerticalAlign.TOP" },
+                type: { summary: "EStatusTrackerVerticalAlign" },
+                defaultValue: { summary: "EStatusTrackerVerticalAlign.TOP" },
             },
         },
     },
@@ -70,7 +70,7 @@ export default meta;
 export const Playground: StoryObj<typeof StatusTracker> = {
     args: {
         type: EStatusTrackerType.WAITING,
-        verticalAlign: EVerticalAlign.TOP,
+        verticalAlign: EStatusTrackerVerticalAlign.TOP,
     },
     parameters: {
         controls: {
@@ -119,16 +119,12 @@ export const Playground: StoryObj<typeof StatusTracker> = {
 
 export const Draft: StoryObj<typeof StatusTracker> = {
     name: "Draft - Черновик, Выравнивание - middle, только Header и Footer",
-    args: {
-        type: EStatusTrackerType.DRAFT,
-        verticalAlign: EVerticalAlign.MIDDLE,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
-        <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+    render: () => (
+        <Page style={{ maxWidth: "372px" }}>
+            <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Header>
                     <StatusTracker.Header.Sum value={"50000.00"} currency={"₽"} />
                     <StatusTracker.Header.Title>Черновик документа</StatusTracker.Header.Title>
@@ -148,16 +144,12 @@ export const Draft: StoryObj<typeof StatusTracker> = {
 
 export const Waiting: StoryObj<typeof StatusTracker> = {
     name: "Waiting - В обработке, без Footer",
-    args: {
-        type: EStatusTrackerType.WAITING,
-        verticalAlign: EVerticalAlign.TOP,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
-        <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+    render: () => (
+        <Page style={{ maxWidth: "372px" }}>
+            <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
@@ -183,16 +175,12 @@ export const Waiting: StoryObj<typeof StatusTracker> = {
 
 export const Warning: StoryObj<typeof StatusTracker> = {
     name: "Warning - Предупреждение, без Header",
-    args: {
-        type: EStatusTrackerType.WARNING,
-        verticalAlign: EVerticalAlign.TOP,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
-        <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+    render: () => (
+        <Page style={{ maxWidth: "372px" }}>
+            <StatusTracker type={EStatusTrackerType.WARNING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WarningStsIcon84 />
                 </StatusTracker.Media>
@@ -219,16 +207,12 @@ export const Warning: StoryObj<typeof StatusTracker> = {
 
 export const Rejected: StoryObj<typeof StatusTracker> = {
     name: "Rejected - Отклонен, только Media и Body",
-    args: {
-        type: EStatusTrackerType.REJECTED,
-        verticalAlign: EVerticalAlign.TOP,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
-        <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+    render: () => (
+        <Page style={{ maxWidth: "372px" }}>
+            <StatusTracker type={EStatusTrackerType.REJECTED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <ErrorStsIcon84 />
                 </StatusTracker.Media>
@@ -247,16 +231,12 @@ export const Rejected: StoryObj<typeof StatusTracker> = {
 
 export const Approved: StoryObj<typeof StatusTracker> = {
     name: "Approved - Исполнен, только Media и Footer",
-    args: {
-        type: EStatusTrackerType.APPROVED,
-        verticalAlign: EVerticalAlign.TOP,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
+    render: () => (
         <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+            <StatusTracker type={EStatusTrackerType.APPROVED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <SuccessStsIcon84 />
                 </StatusTracker.Media>
@@ -275,16 +255,12 @@ export const Approved: StoryObj<typeof StatusTracker> = {
 
 export const VerticalAlignTop: StoryObj<typeof StatusTracker> = {
     name: "Vertical Align - Top",
-    args: {
-        type: EStatusTrackerType.WAITING,
-        verticalAlign: EVerticalAlign.TOP,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
+    render: () => (
         <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+            <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
@@ -301,16 +277,12 @@ export const VerticalAlignTop: StoryObj<typeof StatusTracker> = {
 
 export const VerticalAlignMiddle: StoryObj<typeof StatusTracker> = {
     name: "Vertical Align - Middle",
-    args: {
-        type: EStatusTrackerType.DRAFT,
-        verticalAlign: EVerticalAlign.MIDDLE,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
+    render: () => (
         <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+            <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Body>
                     <StatusTracker.Body.Status status={EMarkerStatus.WAITING} size={EComponentSize.LG}>
                         Создан
@@ -326,16 +298,12 @@ export const VerticalAlignMiddle: StoryObj<typeof StatusTracker> = {
 
 export const VerticalAlignBottom: StoryObj<typeof StatusTracker> = {
     name: "Vertical Align - Bottom",
-    args: {
-        type: EStatusTrackerType.DRAFT,
-        verticalAlign: EVerticalAlign.BOTTOM,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
+    render: () => (
         <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+            <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.BOTTOM}>
                 <StatusTracker.Footer>
                     <StatusTracker.Footer.Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Принять
@@ -354,16 +322,12 @@ export const VerticalAlignBottom: StoryObj<typeof StatusTracker> = {
 
 export const WideParent: StoryObj<typeof StatusTracker> = {
     name: "При широком родительском компоненте",
-    args: {
-        type: EStatusTrackerType.APPROVED,
-        verticalAlign: EVerticalAlign.TOP,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
+    render: () => (
         <Page style={{ width: "600px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+            <StatusTracker type={EStatusTrackerType.APPROVED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <SuccessStsIcon84 />
                 </StatusTracker.Media>
@@ -389,16 +353,12 @@ export const WideParent: StoryObj<typeof StatusTracker> = {
 
 export const WithMediaOnly: StoryObj<typeof StatusTracker> = {
     name: "With Media Only - Только медиа",
-    args: {
-        type: EStatusTrackerType.WAITING,
-        verticalAlign: EVerticalAlign.MIDDLE,
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args: IStatusTrackerProps) => (
+    render: () => (
         <Page style={{ width: "372px" }}>
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+            <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
                 </StatusTracker.Media>

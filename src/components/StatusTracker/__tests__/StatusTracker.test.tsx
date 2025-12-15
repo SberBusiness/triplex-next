@@ -12,7 +12,10 @@ import { StatusTrackerStatus } from "@sberbusiness/triplex-next/components/Statu
 import { StatusTrackerDescription } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerDescription";
 import { StatusTrackerTitle } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerTitle";
 import { StatusTrackerSum } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerSum";
-import { EStatusTrackerType, EVerticalAlign } from "@sberbusiness/triplex-next/components/StatusTracker/enums";
+import {
+    EStatusTrackerType,
+    EStatusTrackerVerticalAlign,
+} from "@sberbusiness/triplex-next/components/StatusTracker/enums";
 import { EMarkerStatus } from "@sberbusiness/triplex-next/components/Marker/enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { EAlertType } from "@sberbusiness/triplex-next/components/Alert/EAlertType";
@@ -75,7 +78,7 @@ describe("StatusTracker", () => {
         const { rerender } = render(
             <StatusTracker
                 type={EStatusTrackerType.WAITING}
-                verticalAlign={EVerticalAlign.TOP}
+                verticalAlign={EStatusTrackerVerticalAlign.TOP}
                 data-testid="status-tracker"
             >
                 Content
@@ -91,7 +94,7 @@ describe("StatusTracker", () => {
         rerender(
             <StatusTracker
                 type={EStatusTrackerType.WAITING}
-                verticalAlign={EVerticalAlign.MIDDLE}
+                verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}
                 data-testid="status-tracker"
             >
                 Content
@@ -102,7 +105,7 @@ describe("StatusTracker", () => {
         rerender(
             <StatusTracker
                 type={EStatusTrackerType.WAITING}
-                verticalAlign={EVerticalAlign.BOTTOM}
+                verticalAlign={EStatusTrackerVerticalAlign.BOTTOM}
                 data-testid="status-tracker"
             >
                 Content

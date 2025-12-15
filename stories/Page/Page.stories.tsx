@@ -1,5 +1,5 @@
 import React from "react";
-import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { Page, EHeaderPageType, EFooterPageType } from "../../src/components/Page";
 import { Button, EButtonTheme } from "../../src/components/Button";
@@ -38,6 +38,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

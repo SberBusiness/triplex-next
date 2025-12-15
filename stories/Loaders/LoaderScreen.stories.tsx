@@ -1,5 +1,5 @@
 import React from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { LoaderScreen } from "../../src/components/LoaderScreen";
 import { ELoaderSmallTheme, ELoaderSmallSize } from "../../src/components/Loader";
 import { StoryObj } from "@storybook/react";
@@ -38,6 +38,7 @@ import { LoaderScreen } from '@sberbusiness/triplex-next';
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

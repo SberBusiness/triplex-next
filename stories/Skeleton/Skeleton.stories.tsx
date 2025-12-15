@@ -1,5 +1,5 @@
 import React from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Skeleton, ESkeletonType } from "../../src/components/Skeleton";
 import { StoryObj } from "@storybook/react";
 import "./Skeleton.less";
@@ -42,6 +42,7 @@ import { Skeleton, ESkeletonType } from '@sberbusiness/triplex-next';
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

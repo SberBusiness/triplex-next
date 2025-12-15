@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { MasterTable } from "../../src/components/Table/MasterTable";
 import { Amount } from "../../src/components/Amount/Amount";
 import { ColumnSettings } from "../../src/components/Table/TableBasicSettings/components/ColumnSettings";
@@ -56,6 +56,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

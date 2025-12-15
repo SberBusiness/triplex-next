@@ -2,8 +2,9 @@ import React, { useState, useRef } from "react";
 import { StoryObj } from "@storybook/react";
 import { ETriplexNextTheme } from "../src/components/ThemeProvider/ETriplexNextTheme";
 import { ThemeProvider } from "../src/components/ThemeProvider";
-import { Button } from "../src/components/Button";
+import { Button, EButtonTheme } from "../src/components/Button";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { EComponentSize } from "../src/enums/EComponentSize";
 
 export default {
     title: "Components/ThemeProvider",
@@ -51,9 +52,6 @@ export default {
 
 export const Default: StoryObj<typeof ThemeProvider> = {
     name: "Default",
-    args: {
-        theme: ETriplexNextTheme.LIGHT,
-    },
     parameters: {
         controls: { disable: true },
         docs: {
@@ -62,15 +60,17 @@ export const Default: StoryObj<typeof ThemeProvider> = {
             },
         },
     },
-    render: function Render(args) {
+    render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);
 
         return (
-            <ThemeProvider {...args} scopeRef={scopeRef}>
+            <ThemeProvider theme={ETriplexNextTheme.LIGHT} scopeRef={scopeRef}>
                 <div ref={scopeRef}>
                     <h2>Тема по умолчанию</h2>
                     <p>Это пример использования ThemeProvider с темой по умолчанию.</p>
-                    <Button>Button name</Button>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                        Button text
+                    </Button>
                 </div>
             </ThemeProvider>
         );
@@ -95,7 +95,9 @@ export const DarkTheme: StoryObj<typeof ThemeProvider> = {
                 <div ref={scopeRef}>
                     <h2>Темная тема</h2>
                     <p>Это пример использования ThemeProvider с темной темой.</p>
-                    <Button>Button name</Button>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                        Button text
+                    </Button>
                 </div>
             </ThemeProvider>
         );
@@ -120,7 +122,7 @@ export const CustomTokens: StoryObj<typeof ThemeProvider> = {
                 theme={ETriplexNextTheme.LIGHT}
                 tokens={{
                     ColorBrand: {
-                        "30": { value: "grey" },
+                        "50": { value: "blue" },
                     },
                 }}
                 scopeRef={scopeRef}
@@ -128,7 +130,9 @@ export const CustomTokens: StoryObj<typeof ThemeProvider> = {
                 <div ref={scopeRef}>
                     <h2>Кастомные токены</h2>
                     <p>Этот пример демонстрирует переопределение токенов темы.</p>
-                    <Button>Button name</Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                        Button text
+                    </Button>
                 </div>
             </ThemeProvider>
         );
@@ -161,7 +165,7 @@ export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
                 <div ref={scopeRef}>
                     <h2>Переключатель тем</h2>
                     <p>Текущая тема: {currentTheme === ETriplexNextTheme.LIGHT ? "Светлая" : "Темная"}</p>
-                    <Button onClick={handleThemeToggle}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={() => handleThemeToggle()}>
                         Переключить на {currentTheme === ETriplexNextTheme.LIGHT ? "темную" : "светлую"} тему
                     </Button>
                 </div>
@@ -187,13 +191,17 @@ export const ScopedTheme: StoryObj<typeof ThemeProvider> = {
             <div>
                 <h2>Область вне ThemeProvider</h2>
                 <p>Этот контент использует стандартные стили браузера.</p>
-                <Button>Button name</Button>
+                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                    Button text
+                </Button>
 
                 <ThemeProvider theme={ETriplexNextTheme.DARK} scopeRef={scopeRef}>
                     <div ref={scopeRef}>
                         <h2>Область с темной темой</h2>
                         <p>Этот контент использует темную тему через scopeRef.</p>
-                        <Button>Button name</Button>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
                     </div>
                 </ThemeProvider>
             </div>

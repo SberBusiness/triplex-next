@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { WaitStsIcon84, WarningStsIcon84, ErrorStsIcon84, SuccessStsIcon84 } from "@sberbusiness/icons-next";
 import { IStatusTrackerProps, StatusTracker } from "../../src/components/StatusTracker";
 import { EStatusTrackerType, EVerticalAlign } from "../../src/components/StatusTracker/enums";
@@ -42,6 +42,7 @@ Approved - документ исполнен банком
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

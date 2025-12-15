@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { TabsExtended } from "../../src/components/TabsExtended";
 import { ButtonDropdown } from "../../src/components/Button/ButtonDropdown";
 import { EButtonDotsTheme } from "../../src/components/Button/enums";
@@ -30,6 +30,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Default} />
+                    <Stories />
                 </>
             ),
         },

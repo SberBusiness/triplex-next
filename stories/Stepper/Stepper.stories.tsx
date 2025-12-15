@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Stepper, StepperExtended } from "../../src/components/Stepper";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
@@ -42,6 +42,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

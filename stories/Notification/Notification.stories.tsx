@@ -1,4 +1,4 @@
-import { Controls, Description, Primary, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Notification } from "../../src/components/Notification/Notification";
 import { NotificationGrouped } from "../../src/components/Notification/NotificationGrouped";
 import {
@@ -38,6 +38,7 @@ export default {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

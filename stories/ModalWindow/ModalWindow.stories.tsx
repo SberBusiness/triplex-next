@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { ModalWindow } from "../../src/components/ModalWindow/ModalWindow";
 import { ModalWindowContent } from "../../src/components/ModalWindow/components/ModalWindowContent";
 import { ModalWindowHeader } from "../../src/components/ModalWindow/components/ModalWindowHeader";
@@ -57,6 +57,7 @@ const meta = {
                     <Description />
                     <Primary />
                     <Controls of={Playground} />
+                    <Stories />
                 </>
             ),
         },

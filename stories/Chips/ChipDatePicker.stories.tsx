@@ -3,19 +3,30 @@ import { StoryObj } from "@storybook/react";
 import { ChipDatePicker } from "../../src/components/Chip/ChipDatePicker/ChipDatePicker";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipDatePicker",
     component: ChipDatePicker,
     tags: ["autodocs"],
-    parameters: {},
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Default} />
+                    <Stories />
+                </>
+            ),
+        },
+    },
 };
 
 export const Playground: StoryObj<typeof ChipDatePicker> = {
     args: {
         size: EComponentSize.MD,
         label: "Date label",
-        displayedValue: "Date value",
     },
     argTypes: {
         size: {
@@ -44,7 +55,7 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
                 value={value}
                 label={args.label}
                 onChange={setValue}
-                displayedValue={args.displayedValue}
+                displayedValue={args.displayedValue || null}
                 alignment={EDropdownAlignment.LEFT}
                 size={args.size}
                 status="default"
@@ -53,56 +64,76 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
     },
 };
 
+export const Default: StoryObj<typeof ChipDatePicker> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <ChipDatePicker
+                value={value}
+                label="Date label"
+                onChange={setValue}
+                alignment={EDropdownAlignment.LEFT}
+                size={EComponentSize.MD}
+                status="default"
+            />
+        );
+    },
+};
+
+export const WithCustomDisplayedValue: StoryObj<typeof ChipDatePicker> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <ChipDatePicker
+                value={value}
+                label="Date label"
+                onChange={setValue}
+                alignment={EDropdownAlignment.LEFT}
+                size={EComponentSize.MD}
+                status="default"
+                displayedValue="Date value"
+            />
+        );
+    },
+};
+
 export const DifferentSizes: StoryObj<typeof ChipDatePicker> = {
-    args: {
-        label: "Date label",
-        displayedValue: "Date value",
+    parameters: {
+        controls: { disable: true },
     },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        label: {
-            table: {
-                disable: true,
-            },
-        },
-        displayedValue: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    render: (args) => {
+    render: () => {
         const [value, setValue] = useState("");
 
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
                 <ChipDatePicker
                     value={value}
-                    label={args.label}
+                    label="Date label"
                     onChange={setValue}
-                    displayedValue={args.displayedValue}
                     alignment={EDropdownAlignment.LEFT}
                     size={EComponentSize.SM}
                     status="default"
                 />
                 <ChipDatePicker
                     value={value}
-                    label={args.label}
+                    label="Date label"
                     onChange={setValue}
-                    displayedValue={args.displayedValue}
                     alignment={EDropdownAlignment.LEFT}
                     size={EComponentSize.MD}
                     status="default"
                 />
                 <ChipDatePicker
                     value={value}
-                    label={args.label}
+                    label="Date label"
                     onChange={setValue}
-                    displayedValue={args.displayedValue}
                     alignment={EDropdownAlignment.LEFT}
                     size={EComponentSize.LG}
                     status="default"

@@ -4,7 +4,8 @@
 @modal-content-translate-enter: translate(0, 0);
 
 //Позиция контента, в которую двигается элемент для скрытия (для анимации появления и скрытия сверху экрана).
-@modal-content-translate-exit: translate(0, calc(-100% - @modal-window-top));
+// --modal-window-top задается в ModalWindow.tsx.
+@modal-content-translate-exit: translate(0, calc(-100% - var(--modal-window-top)));
 
 //Для анимации появления контента.
 @keyframes modalWindowContentAnimationOnEnter {

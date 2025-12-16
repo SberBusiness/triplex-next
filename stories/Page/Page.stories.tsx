@@ -7,8 +7,7 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Text, Title } from "../../src/components/Typography";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
 import { Gap } from "../../src/components/Gap";
-import { EBodyVerticalMargin } from "../../src/components/Body/enums";
-import "./Page.less";
+import { EBodyPageType, EBodyPageVerticalMargin } from "../../src/components/Page/components/enums";
 
 export default {
     title: "Components/Page",
@@ -48,7 +47,7 @@ export default {
 interface IWithTypeControlsArgs {
     headerType: EHeaderPageType;
     footerType: EFooterPageType;
-    verticalMargin: EBodyVerticalMargin;
+    verticalMargin: EBodyPageVerticalMargin;
 }
 
 const headerTypeToControlButtonThemeMap = {
@@ -65,7 +64,7 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
     args: {
         headerType: EHeaderPageType.FIRST,
         footerType: EFooterPageType.FIRST,
-        verticalMargin: EBodyVerticalMargin.LARGE,
+        verticalMargin: EBodyPageVerticalMargin.LARGE,
     },
     argTypes: {
         headerType: {
@@ -88,11 +87,11 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
         },
         verticalMargin: {
             control: { type: "select" },
-            options: Object.values(EBodyVerticalMargin),
+            options: Object.values(EBodyPageVerticalMargin),
             description: "Вертикальные отступы у компонента Body",
             table: {
-                type: { summary: "EBodyVerticalMargin" },
-                defaultValue: { summary: EBodyVerticalMargin.LARGE },
+                type: { summary: "EBodyPageVerticalMargin" },
+                defaultValue: { summary: EBodyPageVerticalMargin.LARGE },
             },
         },
     },
@@ -126,7 +125,7 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body verticalMargin={args.verticalMargin}>
+                <Page.Body type={EBodyPageType.SECOND} verticalMargin={args.verticalMargin}>
                     <div style={{ height: 800 }} />
                 </Page.Body>
 
@@ -151,9 +150,6 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
 };
 
 export const Default: StoryObj<typeof Page> = {
-    parameters: {
-        controls: { disable: true },
-    },
     render: () => (
         <div className="page-example">
             <Page>
@@ -179,7 +175,7 @@ export const Default: StoryObj<typeof Page> = {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body>
+                <Page.Body type={EBodyPageType.SECOND}>
                     <Text tag="div" size={ETextSize.B3}>
                         Page content
                     </Text>
@@ -191,7 +187,7 @@ export const Default: StoryObj<typeof Page> = {
                             <Text size={ETextSize.B3}>Footer page text</Text>
                         </Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
-                            <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} style={{ marginRight: 8 }}>
+                            <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
                                 Button text
                             </Button>
                             <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
@@ -207,5 +203,6 @@ export const Default: StoryObj<typeof Page> = {
         docs: {
             description: { story: "Базовая страница с заголовком, контентом и футером." },
         },
+        controls: { disable: true },
     },
 };

@@ -5,7 +5,7 @@ import styles from "../styles/ModalWindow.module.less";
 import { Page } from "../../Page/Page";
 
 /** Свойства компонента ModalWindowContent. */
-interface IModalWindowContentProps {
+interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
     /** Состояние загрузки.*/
     isLoading?: boolean;
@@ -14,9 +14,15 @@ interface IModalWindowContentProps {
 }
 
 /** Компонент контента модального окна. */
-export const ModalWindowContent: React.FC<IModalWindowContentProps> = ({ isLoading, loadingTitle, children }) => {
+export const ModalWindowContent: React.FC<IModalWindowContentProps> = ({
+    isLoading,
+    className,
+    loadingTitle,
+    children,
+    ...rest
+}) => {
     return (
-        <div className={clsx(styles.modalWindowContent, { [styles.isLoading]: !!isLoading })}>
+        <div className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: !!isLoading })} {...rest}>
             <Page className={styles.modalWindowContentPage}>{children}</Page>
 
             {isLoading && (

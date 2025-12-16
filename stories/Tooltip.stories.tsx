@@ -3,7 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { Tooltip } from "../src/components/Tooltip/Tooltip";
 import { ButtonIcon } from "../src/components/Button";
 import { ETooltipPreferPlace, ETooltipSize } from "../src/components/Tooltip/enums";
-import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
@@ -141,7 +141,7 @@ export const Playground: StoryObj<ITooltipPlaygroundProps> = {
                 >
                     <Tooltip.Target>
                         <ButtonIcon ref={(el) => (targetRef.current = el)} aria-label={label}>
-                            <HintFilledSrvIcon16 paletteIndex={5} />
+                            <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
                         </ButtonIcon>
                     </Tooltip.Target>
                     <Tooltip.Body>{text}</Tooltip.Body>
@@ -176,7 +176,7 @@ export const Default: StoryObj = {
                 >
                     <Tooltip.Target>
                         <ButtonIcon ref={(el) => (targetRef.current = el)} aria-label="Подсказка">
-                            <HintFilledSrvIcon16 paletteIndex={5} />
+                            <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
                         </ButtonIcon>
                     </Tooltip.Target>
                     <Tooltip.Body>Текст подсказки</Tooltip.Body>
@@ -236,7 +236,7 @@ export const DifferentPlaces: StoryObj = {
                             >
                                 {place}
                                 <ButtonIcon ref={(el) => (refs[index].current = el)} aria-label={`Tooltip ${place}`}>
-                                    <HintFilledSrvIcon16 paletteIndex={5} />
+                                    <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
                                 </ButtonIcon>
                             </div>
                         </Tooltip.Target>
@@ -266,7 +266,7 @@ export const MobileHeader: StoryObj = {
                 <Tooltip size={ETooltipSize.SM} toggleType="hover" targetRef={ref}>
                     <Tooltip.Target>
                         <ButtonIcon ref={ref}>
-                            <HintFilledSrvIcon16 paletteIndex={5} />
+                            <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
                         </ButtonIcon>
                     </Tooltip.Target>
                     <Tooltip.Body>Текст подсказки</Tooltip.Body>
@@ -314,7 +314,7 @@ export const RenderContainer: StoryObj = {
                     >
                         <Tooltip.Target>
                             <ButtonIcon ref={ref}>
-                                <HintFilledSrvIcon16 paletteIndex={5} />
+                                <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
                             </ButtonIcon>
                         </Tooltip.Target>
                         <Tooltip.Body>Текст подсказки</Tooltip.Body>

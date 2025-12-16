@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import CaretleftStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretleftStrokeSrvIcon24";
-import CaretrightStrokeSrvIcon24 from "@sberbusiness/icons-next/CaretrightStrokeSrvIcon24";
+import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
 import { ICalendarProps } from "@sberbusiness/triplex-next/components/Calendar/types";
 import { Button } from "@sberbusiness/triplex-next/components/Button/Button";

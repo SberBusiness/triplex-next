@@ -1,41 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Island, EIslandType } from "../Island";
 import { IIslandWidgetHeaderProps, IslandWidgetHeader } from "./components/IslandWidgetHeader";
 import { IIslandWidgetBodyProps, IslandWidgetBody } from "./components/IslandWidgetBody";
 import { IIslandWidgetFooterProps, IslandWidgetFooter } from "./components/IslandWidgetFooter";
-import { IIslandWidgetExtraFooterProps, IslandWidgetExtraFooter } from "./components/IslandWidgetExtraFooter";
+import { IslandWidgetExtraFooter } from "./components/IslandWidgetExtraFooter";
 import { EComponentSize } from "../../enums/EComponentSize";
-import styles from "./styles/IslandWidget.module.less";
 import clsx from "clsx";
+import styles from "./styles/IslandWidget.module.less";
+import { IslandWidgetContext } from "./IslandWidgetContext";
 
 export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
     renderBody: (props: IIslandWidgetBodyProps) => React.ReactNode;
     renderFooter?: (props: IIslandWidgetFooterProps) => React.ReactNode;
-    renderExtraFooter?: (props: IIslandWidgetExtraFooterProps) => React.ReactNode;
     renderHeader: (props: IIslandWidgetHeaderProps) => React.ReactNode;
 }
 
 export const IslandWidget = Object.assign(
     React.forwardRef<HTMLDivElement, IIslandWidgetProps>(
-        ({ className, renderBody, renderFooter, renderExtraFooter, renderHeader, ...rest }, ref) => {
-            const classNames = clsx(className, { [styles.islandWidgetWithExtraFooter]: renderExtraFooter });
+        ({ className, renderBody, renderFooter, renderHeader, ...rest }, ref) => {
+            const { hasExtraFooter } = useContext(IslandWidgetContext);
 
             return (
-                <>
-                    <Island
-                        ref={ref}
-                        type={EIslandType.TYPE_1}
-                        size={EComponentSize.MD}
-                        className={classNames}
-                        data-tx={process.env.npm_package_version}
-                        {...rest}
-                    >
+                <div
+                    className={clsx(styles.islandWidget, className, {
+                        [styles.islandWidgetWithExtraFooter]: hasExtraFooter,
+                    })}
+                    data-tx={process.env.npm_package_version}
+                    {...rest}
+                    ref={ref}
+                >
+                    <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
                         {renderHeader({})}
                         {renderBody({})}
                         {renderFooter ? renderFooter({}) : null}
                     </Island>
-                    {renderExtraFooter ? renderExtraFooter({}) : null}
-                </>
+                </div>
             );
         },
     ),

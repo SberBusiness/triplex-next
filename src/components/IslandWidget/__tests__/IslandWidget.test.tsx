@@ -5,7 +5,7 @@ import { IslandWidget } from "../IslandWidget";
 import { IIslandWidgetBodyProps } from "../components/IslandWidgetBody";
 import { IIslandWidgetHeaderProps } from "../components/IslandWidgetHeader";
 import { IIslandWidgetFooterProps } from "../components/IslandWidgetFooter";
-import { IIslandWidgetExtraFooterProps } from "../components/IslandWidgetExtraFooter";
+import { IslandWidgetWrapper } from "../components/IslandWidgetWrapper";
 
 describe("IslandWidget", () => {
     const defaultRenderBody = (props: IIslandWidgetBodyProps) => (
@@ -22,9 +22,7 @@ describe("IslandWidget", () => {
         <IslandWidget.Footer {...props}>Footer content</IslandWidget.Footer>
     );
 
-    const defaultRenderExtraFooter = (props: IIslandWidgetExtraFooterProps) => (
-        <IslandWidget.ExtraFooter {...props}>Extra footer content</IslandWidget.ExtraFooter>
-    );
+    const defaultRenderExtraFooter = () => <IslandWidget.ExtraFooter>Extra footer content</IslandWidget.ExtraFooter>;
 
     it("Should render correctly with required props", () => {
         render(<IslandWidget renderBody={defaultRenderBody} renderHeader={defaultRenderHeader} />);
@@ -50,11 +48,10 @@ describe("IslandWidget", () => {
 
     it("Should render extra footer when renderExtraFooter is provided", () => {
         render(
-            <IslandWidget
-                renderBody={defaultRenderBody}
-                renderHeader={defaultRenderHeader}
-                renderExtraFooter={defaultRenderExtraFooter}
-            />,
+            <IslandWidgetWrapper>
+                <IslandWidget renderBody={defaultRenderBody} renderHeader={defaultRenderHeader} />
+                {defaultRenderExtraFooter()}
+            </IslandWidgetWrapper>,
         );
 
         expect(screen.getByText("Extra footer content")).toBeInTheDocument();
@@ -62,12 +59,14 @@ describe("IslandWidget", () => {
 
     it("Should render both footer and extra footer when both are provided", () => {
         render(
-            <IslandWidget
-                renderBody={defaultRenderBody}
-                renderHeader={defaultRenderHeader}
-                renderFooter={defaultRenderFooter}
-                renderExtraFooter={defaultRenderExtraFooter}
-            />,
+            <IslandWidgetWrapper>
+                <IslandWidget
+                    renderBody={defaultRenderBody}
+                    renderHeader={defaultRenderHeader}
+                    renderFooter={defaultRenderFooter}
+                />
+                {defaultRenderExtraFooter()}
+            </IslandWidgetWrapper>,
         );
 
         expect(screen.getByText("Footer content")).toBeInTheDocument();

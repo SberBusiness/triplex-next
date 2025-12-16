@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IslandWidget } from "../../src/components/IslandWidget";
+import { IslandWidget, IslandWidgetWrapper } from "../../src/components/IslandWidget";
 import { StoryObj } from "@storybook/react";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Button, ButtonIcon } from "../../src/components/Button";
@@ -11,9 +11,11 @@ import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { DateField } from "../../src/components/DateField";
 import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
 import { EFormFieldStatus } from "../../src/components/FormField/enums";
+import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/IslandWidget",
+    component: IslandWidget,
     tags: ["autodocs"],
     globals: {
         backgrounds: { value: "gray" },
@@ -31,6 +33,15 @@ export default {
 - Footer — нижняя часть
 `,
             },
+            page: () => (
+                <>
+                    <DocsTitle />
+                    <Description />
+                    <Controls of={Default} />
+                    <Primary />
+                    <Stories />
+                </>
+            ),
         },
     },
     decorators: [
@@ -42,25 +53,30 @@ export default {
     ],
 };
 
-export const Basic: StoryObj<typeof IslandWidget> = {
-    render: (args) => {
+export const Default: StoryObj<typeof IslandWidget> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
         const [value, setValue] = useState("");
 
         const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
 
         const renderFooter = (props) => (
             <IslandWidget.Footer {...props}>
-                <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                    <Link>Link text</Link>
-                </Text>
-                <div className="island-widget-footer-controls">
+                <IslandWidget.Footer.Content>
+                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                        <Link>Link text</Link>
+                    </Text>
+                </IslandWidget.Footer.Content>
+                <IslandWidget.Footer.Controls>
                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                         Button text
                     </Button>
-                </div>
+                </IslandWidget.Footer.Controls>
             </IslandWidget.Footer>
         );
 
@@ -91,13 +107,14 @@ export const Basic: StoryObj<typeof IslandWidget> = {
             </IslandWidget.Header>
         );
 
-        return (
-            <IslandWidget {...args} renderBody={renderBody} renderFooter={renderFooter} renderHeader={renderHeader} />
-        );
+        return <IslandWidget renderBody={renderBody} renderFooter={renderFooter} renderHeader={renderHeader} />;
     },
 };
 
 export const WithoutFooter: StoryObj<typeof IslandWidget> = {
+    parameters: {
+        controls: { disable: true },
+    },
     render: () => {
         const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
 
@@ -119,6 +136,14 @@ export const WithoutFooter: StoryObj<typeof IslandWidget> = {
 };
 
 export const WithFooterAndExtraFooter: StoryObj<typeof IslandWidget> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "IslandWidget с Footer и ExtraFooter.",
+            },
+        },
+    },
     render: () => {
         const [extraFooterOpen, setExtraFooterOpen] = useState(false);
         const [bodyHeight, setBodyHeight] = useState(260);
@@ -144,22 +169,24 @@ export const WithFooterAndExtraFooter: StoryObj<typeof IslandWidget> = {
 
         const renderFooter = (props) => (
             <IslandWidget.Footer {...props}>
-                <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                    <Link>Link text</Link>
-                </Text>
-                <div className="island-widget-footer-controls">
+                <IslandWidget.Footer.Content>
+                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                        <Link>Link text</Link>
+                    </Text>
+                </IslandWidget.Footer.Content>
+                <IslandWidget.Footer.Controls>
                     <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
                         Button text
                     </Button>
-                </div>
+                </IslandWidget.Footer.Controls>
             </IslandWidget.Footer>
         );
 
-        const renderExtraFooter = (props) => (
-            <IslandWidget.ExtraFooter open={extraFooterOpen} {...props}>
+        const renderExtraFooter = () => (
+            <IslandWidget.ExtraFooter open={extraFooterOpen}>
                 <div className="island-widget-extra-footer">
                     <Text size={ETextSize.B3}>Extra footer content</Text>
                 </div>
@@ -193,18 +220,24 @@ export const WithFooterAndExtraFooter: StoryObj<typeof IslandWidget> = {
         return (
             <>
                 {renderControlPanel()}
-                <IslandWidget
-                    renderBody={renderBody}
-                    renderHeader={renderHeader}
-                    renderFooter={renderFooter}
-                    renderExtraFooter={renderExtraFooter}
-                />
+                <IslandWidgetWrapper>
+                    <IslandWidget renderBody={renderBody} renderHeader={renderHeader} renderFooter={renderFooter} />
+                    {renderExtraFooter()}
+                </IslandWidgetWrapper>
             </>
         );
     },
 };
 
 export const WithoutFooterAndWithExtraFooter: StoryObj<typeof IslandWidget> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "IslandWidget с ExtraFooter без Footer.",
+            },
+        },
+    },
     render: () => {
         const [extraFooterOpen, setExtraFooterOpen] = useState(false);
         const [bodyHeight, setBodyHeight] = useState(260);
@@ -228,8 +261,8 @@ export const WithoutFooterAndWithExtraFooter: StoryObj<typeof IslandWidget> = {
             </IslandWidget.Header>
         );
 
-        const renderExtraFooter = (props) => (
-            <IslandWidget.ExtraFooter open={extraFooterOpen} {...props}>
+        const renderExtraFooter = () => (
+            <IslandWidget.ExtraFooter open={extraFooterOpen}>
                 <div className="island-widget-extra-footer">
                     <Text size={ETextSize.B3}>Extra footer content</Text>
                 </div>
@@ -263,11 +296,80 @@ export const WithoutFooterAndWithExtraFooter: StoryObj<typeof IslandWidget> = {
         return (
             <>
                 {renderControlPanel()}
-                <IslandWidget
-                    renderBody={renderBody}
-                    renderHeader={renderHeader}
-                    renderExtraFooter={renderExtraFooter}
-                />
+                <IslandWidgetWrapper>
+                    <IslandWidget renderBody={renderBody} renderHeader={renderHeader} />
+                    {renderExtraFooter()}
+                </IslandWidgetWrapper>
+            </>
+        );
+    },
+};
+
+export const WithExtraFooterAndIslandWidgetHeight: StoryObj<typeof IslandWidget> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "IslandWidget с ExtraFooter и передачей высоты для IslandWidgetWrapper.",
+            },
+        },
+    },
+    render: () => {
+        const [extraFooterOpen, setExtraFooterOpen] = useState(false);
+
+        const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
+
+        const renderHeader = (props) => (
+            <IslandWidget.Header {...props}>
+                <IslandWidget.Header.Content>
+                    <Title size={ETitleSize.H3}>Title</Title>
+                </IslandWidget.Header.Content>
+                <IslandWidget.Header.Description>
+                    <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Description
+                    </Text>
+                </IslandWidget.Header.Description>
+            </IslandWidget.Header>
+        );
+
+        const renderExtraFooter = () => (
+            <IslandWidget.ExtraFooter open={extraFooterOpen}>
+                <div className="island-widget-extra-footer">
+                    <Text size={ETextSize.B3}>Extra footer content</Text>
+                </div>
+            </IslandWidget.ExtraFooter>
+        );
+
+        const handleExtraFooterOpen = (open) => {
+            setExtraFooterOpen(open);
+        };
+
+        const renderControlPanel = () => (
+            <div className="island-widget-control-panel">
+                <Button
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    onClick={() => handleExtraFooterOpen(true)}
+                >
+                    Open Extra Footer
+                </Button>
+                <Button
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    onClick={() => handleExtraFooterOpen(false)}
+                >
+                    Close Extra Footer
+                </Button>
+            </div>
+        );
+
+        return (
+            <>
+                {renderControlPanel()}
+                <IslandWidgetWrapper style={{ height: "500px" }}>
+                    <IslandWidget renderBody={renderBody} renderHeader={renderHeader} />
+                    {renderExtraFooter()}
+                </IslandWidgetWrapper>
             </>
         );
     },

@@ -10,6 +10,8 @@ vi.mock("@sberbusiness/icons-next", () => ({
     CalendarStrokeSrvIcon16: () => <span data-testid="calendar-icon" />,
     CalendarStrokeSrvIcon20: () => <span data-testid="calendar-icon" />,
     CrossStrokeSrvIcon16: () => <span data-testid="cross-icon" />,
+    CaretleftStrokeSrvIcon24: () => <span data-testid="caret-left-icon-24" />,
+    CaretrightStrokeSrvIcon24: () => <span data-testid="caret-right-icon-24" />,
 }));
 
 describe("MonthYearField", () => {

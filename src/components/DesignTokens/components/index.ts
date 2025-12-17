@@ -35,6 +35,7 @@ export * from "./HeaderPage";
 export * from "./FooterPage";
 export * from "./Island";
 export * from "./IslandAccordion";
+export * from "./IslandWidget";
 export * from "./TableBasic";
 export * from "./Chip";
 export * from "./LightBox";

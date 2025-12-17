@@ -4,6 +4,7 @@ import { action } from "storybook/actions";
 import { ISliderProps, Slider } from "../../src/components/Slider";
 import { EComponentSize } from "../../src";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { range } from "lodash";
 
 export default {
     title: "Components/Slider/Slider",
@@ -318,6 +319,58 @@ export const Reverse: StoryObj<ISliderProps> = {
         docs: {
             description: {
                 story: "Реверсивный слайдер.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const Amounts: StoryObj<ISliderProps> = {
+    name: "Amounts",
+    render: () => {
+        const [value, setValue] = useState(1000000);
+
+        const amounts = [
+            0,
+            10000,
+            ...range(20000, 240000, 20000),
+            ...range(240000, 1000000, 40000),
+            ...range(1000000, 2150000, 50000),
+            ...range(2150000, 2600000, 75000),
+            ...range(2600000, 3000000, 100000),
+            ...range(3000000, 3800000, 200000),
+            ...range(3800000, 9000000, 400000),
+            ...range(9000000, 10000000, 500000),
+            ...range(10000000, 25000000, 2500000),
+            ...range(25000000, 40000000, 5000000),
+            ...range(40000000, 90000001, 10000000),
+            100000000,
+        ];
+
+        return (
+            <div style={{ maxWidth: "750px", padding: "30px" }}>
+                <div>{new Intl.NumberFormat("ru-RU").format(value)}</div>
+                <br />
+                <Slider
+                    size={EComponentSize.MD}
+                    min={0}
+                    max={99}
+                    value={amounts.findIndex((v) => value === v)}
+                    onChange={(value) => setValue(amounts[value])}
+                    marks={[
+                        { value: 0, label: "0 млн" },
+                        { value: 32, label: "1 млн" },
+                        { value: 65, label: "3 млн" },
+                        { value: 99, label: "100 млн" },
+                    ]}
+                />
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Слайдер с нелинейной шкалой.",
             },
         },
         controls: { disable: true },

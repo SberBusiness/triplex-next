@@ -2,12 +2,25 @@ import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { HelpBox } from "../HelpBox";
-import { ETooltipSize, ETooltipPreferPlace } from "@sberbusiness/triplex-next/components/Tooltip/enums";
+import { ETooltipSize, ETooltipPreferPlace } from "../../Tooltip/enums";
 
 vi.mock("focus-trap-react", () => {
     const FocusTrap = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
     return { FocusTrap, default: FocusTrap };
 });
+
+vi.mock("@sberbusiness/icons-next", () => ({
+    QuestioncircleFilledSrvIcon16: ({ paletteIndex }: { paletteIndex?: number }) => (
+        <div data-testid="question-icon" data-palette-index={paletteIndex}>
+            Question Icon
+        </div>
+    ),
+    CrossStrokeSrvIcon16: ({ paletteIndex }: { paletteIndex?: number }) => (
+        <div data-testid="cross-icon" data-palette-index={paletteIndex}>
+            Cross Icon
+        </div>
+    ),
+}));
 
 describe("HelpBox", () => {
     it("renders target button with aria-label", () => {

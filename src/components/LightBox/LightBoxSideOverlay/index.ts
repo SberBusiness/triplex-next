@@ -1,2 +1,2 @@
-export * from "./LightBox";
 export * from "./LightBoxSideOverlay";
+export * from "./enums";

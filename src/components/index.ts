@@ -77,3 +77,4 @@ export * from "./Suggest";
 export * from "./SwipeableArea";
 export * from "./TopOverlay";
 export * from "./UploadZone";
+export * from "./HelpBox";

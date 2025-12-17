@@ -8,14 +8,13 @@ import { Gap } from "../../src/components/Gap";
 import { Title } from "../../src/components/Typography/Title";
 import { Text } from "../../src/components/Typography/Text";
 import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { EHeaderPageType, EFooterPageType } from "../../src/components/Page/components/enums";
+import { EHeaderPageType, EFooterPageType, EBodyPageType } from "../../src/components/Page/components/enums";
 import { Island } from "../../src/components/Island/Island";
 import { IslandBody } from "../../src/components/Island/components/IslandBody";
 import { EIslandType } from "../../src/components/Island/enums";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/LightBoxSideOverlay";
-import { EBodyVerticalMargin } from "../../src/components/Body/enums";
+import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/enums";
 import { MobileView } from "../../src/components/MobileView/MobileView";
 import { Confirm } from "../../src/components/Confirm/Confirm";
 import { EConfirmParentComponent } from "../../src/components/Confirm/enums";
@@ -187,11 +186,11 @@ export const LightBoxWithTopOverlayInSideOverlay: React.FC = () => {
                     </Page.Header.Title>
                 </Page.Header>
 
-                <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
+                <Page.Body type={EBodyPageType.SECOND}>
                     {[0, 1, 2].map((index) => (
                         <React.Fragment key={index}>
                             <PoemBlock />
-                            {index < 2 && <Gap size={16} />}
+                            {index < 2 && <Gap size={24} />}
                         </React.Fragment>
                     ))}
                 </Page.Body>
@@ -267,11 +266,11 @@ export const LightBoxWithTopOverlayInSideOverlay: React.FC = () => {
                                 </Page.Header.Title>
                             </Page.Header>
 
-                            <Page.Body verticalMargin={EBodyVerticalMargin.SMALL}>
+                            <Page.Body type={EBodyPageType.SECOND}>
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />
-                                        {index < 2 && <Gap size={16} />}
+                                        {index < 2 && <Gap size={24} />}
                                     </React.Fragment>
                                 ))}
                             </Page.Body>

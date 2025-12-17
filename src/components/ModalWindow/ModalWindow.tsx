@@ -24,6 +24,8 @@ export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> 
     closeButton: React.ReactNode;
     /** Размер модального окна. */
     size?: EComponentSize;
+    /** Отступ сверху модального окна. */
+    topPosition?: number;
 }
 
 /** Имя класса для некоторых элементов связанных с компонентом. */
@@ -47,9 +49,12 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
         closeButton,
         size = EComponentSize.MD,
         className,
+        topPosition = 100,
         ...rest
     } = props;
 
+    // topPosition нужен, чтобы команда могла переопределить значение.
+    const topPositionStyle = { "--modal-window-top": `${topPosition}px` } as React.CSSProperties;
     const [renderPortal, setRenderPortal] = useState(false);
 
     const mountNode = useRef<HTMLDivElement | null>(null);
@@ -165,7 +170,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >
-                        <div className={classNameContainer}>
+                        <div className={classNameContainer} style={topPositionStyle}>
                             <div className={styles.modalWindowBackdrop} />
                             <div
                                 role="dialog"

@@ -12,13 +12,8 @@ import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
 import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
+import { ELightBoxSideOverlaySize } from "./enums";
 import styles from "./styles/LightBoxSideOverlay.module.less";
-
-export enum ELightBoxSideOverlaySize {
-    SM,
-    MD,
-    LG,
-}
 
 /** Свойства компонента LightBoxSideOverlay. */
 export interface ILightBoxSideOverlayProps

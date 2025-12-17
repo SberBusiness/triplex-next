@@ -1,6 +1,6 @@
 import React, { useState, useRef, useId } from "react";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
-import { HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { EButtonIconShape } from "../Button/enums";
 import { Tooltip } from "../Tooltip/Tooltip";
@@ -114,7 +114,7 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
                         ref={ref}
                         {...targetHtmlAttrs}
                     >
-                        <HintFilledSrvIcon16 paletteIndex={5} />
+                        <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
                     </ButtonIcon>
                 </Tooltip.Target>
                 {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}

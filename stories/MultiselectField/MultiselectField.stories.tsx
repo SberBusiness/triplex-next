@@ -28,7 +28,7 @@ import { ETextSize } from "../../src/components/Typography/enums";
 import { EFontType } from "../../src/components/Typography/enums";
 import { FormGroup } from "../../src/components/FormGroup";
 import { Link } from "../../src/components/Link";
-import { DefaulticonStrokePrdIcon20, HintFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon20, QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import "./MultiselectField.less";
 
 export default {
@@ -251,7 +251,7 @@ function createMultiselectFieldStoriesLogic(args) {
             {...props}
             ref={targetRef}
             prefix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
-            postfix={<HintFilledSrvIcon16 paletteIndex={5} />}
+            postfix={<QuestioncircleFilledSrvIcon16 paletteIndex={5} />}
         />
     );
 

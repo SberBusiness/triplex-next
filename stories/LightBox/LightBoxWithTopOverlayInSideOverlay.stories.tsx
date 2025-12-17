@@ -14,7 +14,7 @@ import { IslandBody } from "../../src/components/Island/components/IslandBody";
 import { EIslandType } from "../../src/components/Island/enums";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/LightBoxSideOverlay";
+import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/enums";
 import { MobileView } from "../../src/components/MobileView/MobileView";
 import { Confirm } from "../../src/components/Confirm/Confirm";
 import { EConfirmParentComponent } from "../../src/components/Confirm/enums";

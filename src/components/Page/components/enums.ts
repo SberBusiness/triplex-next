@@ -13,7 +13,6 @@ export enum EBodyPageType {
     SECOND = "second",
 }
 
-/** Форма границы кнопки. */
 export enum EBodyPageVerticalMargin {
     LARGE = "large", // 24px
     SMALL = "small", // 16px

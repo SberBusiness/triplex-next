@@ -1,5 +1,5 @@
 import React from "react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { Page, EHeaderPageType, EFooterPageType } from "../../src/components/Page";
 import { Button, EButtonTheme } from "../../src/components/Button";
@@ -13,6 +13,9 @@ export default {
     title: "Components/Page",
     component: Page,
     tags: ["autodocs"],
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     parameters: {
         docs: {
             description: {
@@ -21,13 +24,7 @@ export default {
 
 ## Особенности
 
-- **Типы**: headerPage и footerPage могут быть двух типов: \`first\` (без стилей) и \`second\` (с фоном и возможностью фиксирования)
-
-## Возможности
-
-- **Структура**: фиксированные области Header/Body/Footer
-- **Гибкость**: произвольный контент внутри каждой области
-- **Совместимость**: использует те же подкомпоненты, что и \`Header\` и \`Footer\`
+- **Типы**: Page.Header, Page.Body и Page.Footer могут быть двух типов: \`first\` (на основе острова) и \`second\` (без фона)
                 `,
             },
             page: () => (
@@ -35,7 +32,6 @@ export default {
                     <SBTitle />
                     <Subtitle />
                     <Description />
-                    <Primary />
                     <Controls of={Playground} />
                     <Stories />
                 </>
@@ -101,107 +97,223 @@ export const Playground: StoryObj<IWithTypeControlsArgs> = {
         },
     },
     render: (args: IWithTypeControlsArgs) => (
-        <div className="page-example" style={{ maxHeight: "400px", overflow: "auto" }}>
-            <Page>
-                <Page.Header type={args.headerType}>
-                    <Page.Header.Title>
-                        <Page.Header.Title.Content>
-                            <Title tag="h1" size={ETitleSize.H1}>
-                                Title text
-                            </Title>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                Description text
-                            </Text>
-                        </Page.Header.Title.Content>
-                        <Page.Header.Title.Controls>
-                            <Button theme={headerTypeToControlButtonThemeMap[args.headerType]} size={EComponentSize.MD}>
-                                Button text
-                            </Button>
-                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                Button text
-                            </Button>
-                        </Page.Header.Title.Controls>
-                    </Page.Header.Title>
-                </Page.Header>
+        <Page>
+            <Page.Header type={args.headerType}>
+                <Page.Header.Title>
+                    <Page.Header.Title.Content>
+                        <Title tag="h1" size={ETitleSize.H1}>
+                            Title text
+                        </Title>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                            Description text
+                        </Text>
+                    </Page.Header.Title.Content>
+                    <Page.Header.Title.Controls>
+                        <Button theme={headerTypeToControlButtonThemeMap[args.headerType]} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </Page.Header.Title.Controls>
+                </Page.Header.Title>
+            </Page.Header>
 
-                <Page.Body type={EBodyPageType.SECOND} verticalMargin={args.verticalMargin}>
-                    <div style={{ height: 800 }} />
-                </Page.Body>
+            <Page.Body type={EBodyPageType.SECOND} verticalMargin={args.verticalMargin}>
+                <Text tag="div" size={ETextSize.B3}>
+                    Page content
+                </Text>
+            </Page.Body>
 
-                <Page.Footer type={args.footerType}>
-                    <Page.Footer.Description>
-                        <Page.Footer.Description.Content>
-                            <Text size={ETextSize.B3}>Footer page text</Text>
-                        </Page.Footer.Description.Content>
-                        <Page.Footer.Description.Controls>
-                            <Button size={EComponentSize.MD} theme={footerTypeToControlButtonThemeMap[args.footerType]}>
-                                Button text
-                            </Button>
-                            <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
-                                Button text
-                            </Button>
-                        </Page.Footer.Description.Controls>
-                    </Page.Footer.Description>
-                </Page.Footer>
-            </Page>
-        </div>
+            <Page.Footer type={args.footerType}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Content>
+                        <Text size={ETextSize.B3}>Footer page text</Text>
+                    </Page.Footer.Description.Content>
+                    <Page.Footer.Description.Controls>
+                        <Button size={EComponentSize.MD} theme={footerTypeToControlButtonThemeMap[args.footerType]}>
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </Page>
     ),
 };
 
 export const Default: StoryObj<typeof Page> = {
     render: () => (
-        <div className="page-example">
-            <Page>
-                <Page.Header type={EHeaderPageType.FIRST}>
-                    <Page.Header.Title>
-                        <Page.Header.Title.Content>
-                            <Title tag="h1" size={ETitleSize.H1}>
-                                Title text
-                            </Title>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                Optional description about the page
-                            </Text>
-                        </Page.Header.Title.Content>
-                        <Page.Header.Title.Controls>
-                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                                Button text
-                            </Button>
-                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                Button text
-                            </Button>
-                        </Page.Header.Title.Controls>
-                    </Page.Header.Title>
-                </Page.Header>
+        <Page>
+            <Page.Header type={EHeaderPageType.FIRST}>
+                <Page.Header.Title>
+                    <Page.Header.Title.Content>
+                        <Title tag="h1" size={ETitleSize.H1}>
+                            Title text
+                        </Title>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                            Optional description about the page
+                        </Text>
+                    </Page.Header.Title.Content>
+                    <Page.Header.Title.Controls>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </Page.Header.Title.Controls>
+                </Page.Header.Title>
+            </Page.Header>
 
-                <Page.Body type={EBodyPageType.SECOND}>
-                    <Text tag="div" size={ETextSize.B3}>
-                        Page content
-                    </Text>
-                </Page.Body>
+            <Page.Body type={EBodyPageType.SECOND}>
+                <Text tag="div" size={ETextSize.B3}>
+                    Page content
+                </Text>
+            </Page.Body>
 
-                <Page.Footer type={EFooterPageType.FIRST}>
-                    <Page.Footer.Description>
-                        <Page.Footer.Description.Content>
-                            <Text size={ETextSize.B3}>Footer page text</Text>
-                        </Page.Footer.Description.Content>
-                        <Page.Footer.Description.Controls>
-                            <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
-                                Button text
-                            </Button>
-                            <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
-                                Button text
-                            </Button>
-                        </Page.Footer.Description.Controls>
-                    </Page.Footer.Description>
-                </Page.Footer>
-            </Page>
-        </div>
+            <Page.Footer type={EFooterPageType.FIRST}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Content>
+                        <Text size={ETextSize.B3}>Footer page text</Text>
+                    </Page.Footer.Description.Content>
+                    <Page.Footer.Description.Controls>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </Page>
     ),
     parameters: {
         docs: {
-            description: { story: "Базовая страница с заголовком, контентом и футером." },
+            description: {
+                story: "Базовая страница с заголовком, контентом и футером. Это дефолтная Page для использования в LightBox. Если контента мало, рекомендуется использовать Page.Body типа FIRST, чтобы не было пустого пространства.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const WithoutIslands: StoryObj<typeof Page> = {
+    render: () => (
+        <Page>
+            <Page.Header type={EHeaderPageType.SECOND}>
+                <Page.Header.Title>
+                    <Page.Header.Title.Content>
+                        <Title tag="h1" size={ETitleSize.H1}>
+                            Title text
+                        </Title>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                            Optional description about the page
+                        </Text>
+                    </Page.Header.Title.Content>
+                    <Page.Header.Title.Controls>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </Page.Header.Title.Controls>
+                </Page.Header.Title>
+            </Page.Header>
+
+            <Page.Body type={EBodyPageType.SECOND}>
+                <Text tag="div" size={ETextSize.B3}>
+                    Page content
+                </Text>
+            </Page.Body>
+
+            <Page.Footer type={EFooterPageType.SECOND}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Content>
+                        <Text size={ETextSize.B3}>Footer page text</Text>
+                    </Page.Footer.Description.Content>
+                    <Page.Footer.Description.Controls>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </Page>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Страница, где header, body и footer не являются островами. Используется в layout, а не в LightBox.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const Withlands: StoryObj<typeof Page> = {
+    render: () => (
+        <Page>
+            <Page.Header type={EHeaderPageType.FIRST}>
+                <Page.Header.Title>
+                    <Page.Header.Title.Content>
+                        <Title tag="h1" size={ETitleSize.H1}>
+                            Title text
+                        </Title>
+                        <Gap size={8} />
+                        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                            Optional description about the page
+                        </Text>
+                    </Page.Header.Title.Content>
+                    <Page.Header.Title.Controls>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </Page.Header.Title.Controls>
+                </Page.Header.Title>
+            </Page.Header>
+
+            <Page.Body type={EBodyPageType.FIRST}>
+                <Text tag="div" size={ETextSize.B3}>
+                    Page content
+                </Text>
+            </Page.Body>
+
+            <Page.Footer type={EFooterPageType.FIRST}>
+                <Page.Footer.Description>
+                    <Page.Footer.Description.Content>
+                        <Text size={ETextSize.B3}>Footer page text</Text>
+                    </Page.Footer.Description.Content>
+                    <Page.Footer.Description.Controls>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
+                            Button text
+                        </Button>
+                        <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
+                            Button text
+                        </Button>
+                    </Page.Footer.Description.Controls>
+                </Page.Footer.Description>
+            </Page.Footer>
+        </Page>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Страница, где header, body и footer являются островами. Используется в LightBox.",
+            },
         },
         controls: { disable: true },
     },

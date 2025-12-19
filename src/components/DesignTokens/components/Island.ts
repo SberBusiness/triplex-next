@@ -22,8 +22,8 @@ export type TDesignTokensComponentsIsland = { Island: TDesignTokensComponentsIsl
 export const Island_Tokens: TDesignTokensComponentsIslandValues = {
     Type1_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.40" }], // var(--triplex-next-Island-Type1_Background)
     Type2_Background: [{ ref: "ColorNeutralAlpha.70" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-Island-Type2_Background)
-    Type3_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-Island-Type3_Background)
+    Type3_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.10" }], // var(--triplex-next-Island-Type3_Background)
     Type1_Shadow: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Island-Type1_Shadow)
-    Type2_Shadow: [{ value: "0 0 0 1px #FFFFFF inset" }, { value: "0 0 0 1px #19BDB0 inset" }], // var(--triplex-next-Island-Type2_Shadow)
+    Type2_Shadow: [{ value: "0 0 0 1px #FFFFFF inset" }, { value: "0 0 0 1px #4f4f52 inset" }], // var(--triplex-next-Island-Type2_Shadow)
     Type3_Shadow: [{ value: "none" }, { value: "none" }], // var(--triplex-next-Island-Type3_Shadow)
 };

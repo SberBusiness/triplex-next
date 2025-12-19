@@ -28,7 +28,7 @@ export type TDesignTokensComponentsDropdownMobile = { DropdownMobile: TDesignTok
 
 // Токены компонента DropdownMobile в светлой и темной темах.
 export const DropdownMobile_Tokens: TDesignTokensComponentsDropdownMobileValues = {
-    Backdrop: [{ ref: "ColorDarkNeutralAlpha.40" }, { ref: "ColorDarkNeutralAlpha.40" }], // var(--triplex-next-DropdownMobile-Backdrop)
+    Backdrop: [{ ref: "ColorDarkNeutralAlpha.40" }, { ref: "ColorDarkNeutralAlpha.20" }], // var(--triplex-next-DropdownMobile-Backdrop)
     Border_Color: [{ ref: "ColorNeutral.20" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-DropdownMobile-Border_Color)
     Content_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-DropdownMobile-Content_Background)
     Footer_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-DropdownMobile-Footer_Background)

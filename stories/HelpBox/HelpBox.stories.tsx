@@ -36,7 +36,7 @@ export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
         const { contentText, mobileHeaderText, ...helpBoxProps } = args;
 
         return (
-            <div style={{ padding: 40 }}>
+            <div style={{ display: "flex", justifyContent: "center", padding: 50 }}>
                 <HelpBox {...helpBoxProps} mobileHeaderContent={mobileHeaderText || undefined}>
                     {contentText || "Текст подсказки"}
                 </HelpBox>

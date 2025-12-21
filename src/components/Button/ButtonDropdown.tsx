@@ -79,10 +79,14 @@ const sizeToDotsIconMap = {
     [EComponentSize.LG]: <DotshorizontalStrokeSrvIcon32 paletteIndex={0} />,
 };
 
-const sizeToCaretIconMap = {
-    [EComponentSize.SM]: <CaretdownStrokeSrvIcon16 paletteIndex={7} className={styles.caretIcon} />,
-    [EComponentSize.MD]: <CaretdownStrokeSrvIcon20 paletteIndex={7} className={styles.caretIcon} />,
-    [EComponentSize.LG]: <CaretdownStrokeSrvIcon24 paletteIndex={7} className={styles.caretIcon} />,
+const sizeToCaretIconMap = (size: EComponentSize, paletteIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8) => {
+    if (size === EComponentSize.SM) {
+        return <CaretdownStrokeSrvIcon16 paletteIndex={paletteIndex} className={styles.caretIcon} />;
+    } else if (size === EComponentSize.MD) {
+        return <CaretdownStrokeSrvIcon20 paletteIndex={paletteIndex} className={styles.caretIcon} />;
+    } else {
+        return <CaretdownStrokeSrvIcon24 paletteIndex={paletteIndex} className={styles.caretIcon} />;
+    }
 };
 
 /** Кнопка с выпадающим списком действий. */
@@ -177,10 +181,10 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                 case EButtonTheme.DANGER:
                 case EButtonDotsTheme.DOTS_SECONDARY:
                 case EButtonDotsTheme.DOTS_SECONDARY_LIGHT:
-                    return sizeToCaretIconMap[size];
+                    return sizeToCaretIconMap(size, 7);
                 case EButtonTheme.SECONDARY:
                 case EButtonTheme.SECONDARY_LIGHT:
-                    return sizeToCaretIconMap[size];
+                    return sizeToCaretIconMap(size, 0);
                 default:
                     return null;
             }

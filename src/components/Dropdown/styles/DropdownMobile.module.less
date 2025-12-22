@@ -62,6 +62,7 @@
 
     .dropdownMobileHeaderContent {
         margin-right: 28px;
+        min-height: 20px;
     }
 }
 
@@ -90,14 +91,23 @@
     }
 }
 
-.dropdownMobileLoader + .dropdownMobileClose {
-    margin-left: 8px;
-}
-
 .dropdownMobileListLoader {
-    margin: -2px auto;
+    position: absolute;
+    right: 16px;
+    top: 18px;
 }
 
 .dropdownMobileBodyOverflow {
     overflow: hidden;
 }
+
+.controlButtons {
+    display: flex;
+    position: absolute;
+    right: 16px;
+    top: 18px;
+}
+
+.dropdownMobileLoader {
+    margin-right: 8px;
+}   

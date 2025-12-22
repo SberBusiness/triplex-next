@@ -66,10 +66,8 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
             mobileViewProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader
-                            closeButton={() => <DropdownMobileClose onClick={() => setOpened(false)} />}
-                        >
-                            <Text tag="div" size={ETextSize.B1}>
+                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
+                            <Text tag="div" size={ETextSize.B3}>
                                 {mobileTitle}
                             </Text>
                         </DropdownMobileHeader>

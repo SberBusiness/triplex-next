@@ -11,10 +11,10 @@ export const TooltipMobileHeader: React.FC<ITooltipMobileHeaderProps> = ({ child
     const { elements } = useContext(TooltipContext);
 
     /** Рендер кнопки закрытия DropdownMobile. */
-    const renderCloseButton = () => <TooltipMobileCloseButton {...elements.closeButton?.props} />;
+    const renderCloseButton = <TooltipMobileCloseButton {...elements.closeButton?.props} />;
 
     return (
-        <DropdownMobileHeader closeButton={renderCloseButton} {...rest}>
+        <DropdownMobileHeader controlButtons={renderCloseButton} {...rest}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY} tag="div">
                 {children}
             </Text>

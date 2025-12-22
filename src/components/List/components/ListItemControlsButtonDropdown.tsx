@@ -88,11 +88,12 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
                         mobileViewProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader>
+                                    <DropdownMobileHeader
+                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
+                                    >
                                         <Text tag="div" size={ETextSize.B1}>
                                             {children}
                                         </Text>
-                                        <DropdownMobileClose onClick={() => setOpened(false)} />
                                     </DropdownMobileHeader>
                                     <DropdownMobileBody>
                                         <DropdownMobileList>
@@ -156,7 +157,7 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
                 {...rest}
             />
         );
-    }
+    },
 );
 
 ListItemControlsButtonDropdown.displayName = "ListItemControlsButtonDropdown";

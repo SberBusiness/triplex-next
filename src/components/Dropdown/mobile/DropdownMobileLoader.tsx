@@ -12,7 +12,7 @@ export const DropdownMobileLoader: React.FC<IDropownMobileLoaderProps> = ({ clas
     <LoaderSmall
         className={clsx(styles.dropdownMobileLoader, className)}
         theme={ELoaderSmallTheme.BRAND}
-        size={EComponentSize.MD}
+        size={EComponentSize.SM}
         {...restProps}
     />
 );

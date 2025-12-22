@@ -88,7 +88,14 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
             mobileViewProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader closeButton={() => <DropdownMobileClose onClick={handleCloseClick} />}>
+                        <DropdownMobileHeader
+                            controlButtons={
+                                <>
+                                    {loading && <DropdownMobileLoader />}
+                                    <DropdownMobileClose onClick={handleCloseClick} />
+                                </>
+                            }
+                        >
                             <DropdownMobileInput
                                 value={inputValue}
                                 placeholder={placeholder}
@@ -96,8 +103,6 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                                 onFocus={handleInputFocus}
                                 onChange={handleInputChange}
                             />
-
-                            {loading && <DropdownMobileLoader />}
                         </DropdownMobileHeader>
 
                         <DropdownMobileBody className={styles.suggestFieldMobileBody} onScroll={handleScrollList}>

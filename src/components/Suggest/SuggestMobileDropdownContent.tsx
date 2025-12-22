@@ -62,7 +62,14 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
 
     return (
         <>
-            <DropdownMobileHeader closeButton={() => <DropdownMobileClose onClick={handleMobileDropdownClose} />}>
+            <DropdownMobileHeader
+                controlButtons={
+                    <>
+                        {loading && <DropdownMobileLoader />}
+                        <DropdownMobileClose onClick={handleMobileDropdownClose} />
+                    </>
+                }
+            >
                 <DropdownMobileInput
                     value={inputValue}
                     placeholder={placeholder}
@@ -70,8 +77,6 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
                     onFocus={handleInputFocus}
                     onChange={handleInputChange}
                 />
-
-                {loading && <DropdownMobileLoader />}
             </DropdownMobileHeader>
 
             <DropdownMobileBody className={styles.suggestDropdownMobileBody} onScroll={handleDropdownScroll}>

@@ -9,6 +9,8 @@ import styles from "./styles/TabsLine.module.less";
 export interface ITabsLineProps extends ITabsLineDesktopProps {
     /** Горизонтальный отступ от первого таба слева и последнего таба справа. */
     paddingX?: 0 | 8 | 16 | 24;
+    /** Разделитель в виде нижнего бордера. */
+    withSeparator?: boolean;
 }
 
 /** Компонент TabsLine. */
@@ -21,12 +23,13 @@ export const TabsLine: React.FC<ITabsLineProps> = ({
     selectedId,
     tabs,
     size,
+    withSeparator,
     ...htmlDivAttributes
 }) => {
     return (
         <div
             role="tablist"
-            className={clsx(className, styles.tabsLineWrapper)}
+            className={clsx(className, styles.tabsLineWrapper, { [styles.withSeparator]: withSeparator })}
             {...htmlDivAttributes}
             data-paddingx-size={paddingX}
         >

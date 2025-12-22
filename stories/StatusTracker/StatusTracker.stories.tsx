@@ -4,11 +4,11 @@ import { Controls, Description, Primary, Stories, Subtitle, Title } from "@story
 import { WaitStsIcon84, WarningStsIcon84, ErrorStsIcon84, SuccessStsIcon84 } from "@sberbusiness/icons-next";
 import { IStatusTrackerProps, StatusTracker } from "../../src/components/StatusTracker";
 import { EStatusTrackerType, EStatusTrackerVerticalAlign } from "../../src/components/StatusTracker/enums";
-import { Page } from "../../src/components/Page";
 import { EMarkerStatus } from "../../src/components/Marker";
 import { EComponentSize } from "../../src/enums";
 import { EAlertType } from "../../src/components/Alert";
 import { EButtonTheme } from "../../src/components/Button";
+import "./StatusTracker.less";
 
 const meta: Meta<typeof StatusTracker> = {
     title: "Components/StatusTracker",
@@ -78,7 +78,7 @@ export const Playground: StoryObj<typeof StatusTracker> = {
         },
     },
     render: (args: IStatusTrackerProps) => (
-        <Page style={{ width: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
@@ -113,7 +113,7 @@ export const Playground: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Footer.Description>
                 </StatusTracker.Footer>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -123,10 +123,10 @@ export const Draft: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ maxWidth: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum value={"50000.00"} currency={"₽"} />
+                    <StatusTracker.Header.Sum amountProps={{ value: "50000.00", currency: "₽" }} />
                     <StatusTracker.Header.Title>Черновик документа</StatusTracker.Header.Title>
                     <StatusTracker.Header.Description>
                         Документ создан без ошибок и еще не отправлен в банк.
@@ -138,7 +138,7 @@ export const Draft: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Footer.Button>
                 </StatusTracker.Footer>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -148,13 +148,13 @@ export const Waiting: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ maxWidth: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum value={"123747.123"} currency={"₽"} />
+                    <StatusTracker.Header.Sum amountProps={{ value: "123747.123", currency: "₽" }} />
                     <StatusTracker.Header.Title>Документ в обработке</StatusTracker.Header.Title>
                     <StatusTracker.Header.Description>
                         Документ ожидает ответ от банка. Обычно обработка занимает несколько минут.
@@ -169,7 +169,7 @@ export const Waiting: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Body.Alert>
                 </StatusTracker.Body>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -179,7 +179,7 @@ export const Warning: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ maxWidth: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.WARNING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WarningStsIcon84 />
@@ -201,7 +201,7 @@ export const Warning: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Footer.Button>
                 </StatusTracker.Footer>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -211,7 +211,7 @@ export const Rejected: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ maxWidth: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.REJECTED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <ErrorStsIcon84 />
@@ -225,7 +225,7 @@ export const Rejected: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Body.Alert>
                 </StatusTracker.Body>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -235,7 +235,7 @@ export const Approved: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ width: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.APPROVED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <SuccessStsIcon84 />
@@ -249,7 +249,7 @@ export const Approved: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Footer.Description>
                 </StatusTracker.Footer>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -259,7 +259,7 @@ export const VerticalAlignTop: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ width: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
@@ -271,7 +271,7 @@ export const VerticalAlignTop: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Header.Description>
                 </StatusTracker.Header>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -281,7 +281,7 @@ export const VerticalAlignMiddle: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ width: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Body>
                     <StatusTracker.Body.Status status={EMarkerStatus.WAITING} size={EComponentSize.LG}>
@@ -292,7 +292,7 @@ export const VerticalAlignMiddle: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Body.Alert>
                 </StatusTracker.Body>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -302,7 +302,7 @@ export const VerticalAlignBottom: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ width: "372px" }}>
+        <div className="statusTracker-example-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.BOTTOM}>
                 <StatusTracker.Footer>
                     <StatusTracker.Footer.Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
@@ -316,7 +316,7 @@ export const VerticalAlignBottom: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Footer.Description>
                 </StatusTracker.Footer>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -326,13 +326,13 @@ export const WideParent: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ width: "600px" }}>
+        <div className="statusTracker-example-wrapper statusTracker-example-wide-wrapper">
             <StatusTracker type={EStatusTrackerType.APPROVED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <SuccessStsIcon84 />
                 </StatusTracker.Media>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum value={"250000.75"} currency={"₽"} />
+                    <StatusTracker.Header.Sum amountProps={{ value: "250000.75", currency: "₽" }} />
                     <StatusTracker.Header.Title>Документ исполнен</StatusTracker.Header.Title>
                     <StatusTracker.Header.Description>
                         Документ успешно исполнен банком. Операция завершена.
@@ -347,7 +347,7 @@ export const WideParent: StoryObj<typeof StatusTracker> = {
                     </StatusTracker.Body.Alert>
                 </StatusTracker.Body>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };
 
@@ -357,12 +357,12 @@ export const WithMediaOnly: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <Page style={{ width: "372px" }}>
-            <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
+        <div className="statusTracker-example-wrapper">
+            <StatusTracker type={EStatusTrackerType.WARNING} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
             </StatusTracker>
-        </Page>
+        </div>
     ),
 };

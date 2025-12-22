@@ -61,6 +61,10 @@
         .statusTrackerFooterWrapper {
             display: grid;
 
+            .statusTrackerDescription:last-child {
+                padding-top: 0;
+            }
+
             .statusTrackerButton {
                 margin-left: 0;
                 margin-bottom: 12px;
@@ -71,12 +75,11 @@
     .statusTrackerColor {
         position: absolute;
         width: 75%;
-        height: 76%;
-        left: -15px;
+        height: 209px;
+        left: -30px;
         right: 92px;
         top: -10px;
         bottom: 89px;
-        filter: blur(70px);
         border-radius: 50%;
 
         &.waiting {
@@ -99,12 +102,12 @@
     .statusTrackerBackground {
         position: absolute;
         width: 88%;
-        height: 42%;
+        height: 287px;
         left: 15px;
         right: 0;
-        top: -13%;
+        top: -80px;
         bottom: 0;
-        filter: blur(70px);
+        filter: blur(50px);
         border-radius: 50%;
 
         &.waiting {

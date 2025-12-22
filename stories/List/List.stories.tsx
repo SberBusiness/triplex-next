@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import {
     List,
     ListItem,
@@ -33,18 +33,10 @@ export default {
                     <SBTitle />
                     <Subtitle />
                     <Description />
-                    <Primary />
-                    <Controls of={Playground} />
+                    <Controls of={Default} />
                     <Stories />
                 </>
             ),
-        },
-    },
-    argTypes: {
-        loading: {
-            table: {
-                disable: true,
-            },
         },
     },
 } as const;
@@ -71,7 +63,11 @@ export const Playground: StoryObj<typeof List> = {
         controls: {
             include: ["loading"],
         },
-        docs: { description: { story: "Базовый список с элементами и контролами." } },
+        docs: {
+            description: {
+                story: "Интерактивный пример списка. Управляйте состоянием loading через панель Storybook.",
+            },
+        },
     },
 };
 
@@ -85,7 +81,7 @@ export const Default: StoryObj<typeof List> = {
     ),
     parameters: {
         controls: { disable: true },
-        docs: { description: { story: "Базовый список с элементами и контролами." } },
+        docs: { description: { story: "Базовый список." } },
     },
 };
 
@@ -136,7 +132,7 @@ export const EmptyState: StoryObj<typeof List> = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка.",
+                story: "Используется, если нет данных для отображения хотя бы одного элемента списка.",
             },
         },
     },
@@ -163,7 +159,7 @@ export const Virtualized: StoryObj<typeof List> = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Используется, когда еще нет данных для отображения хотя бы одного элемента списка.",
+                story: "Список с виртуализацией для работы с большими наборами данных. Рендерится только видимая область.",
             },
         },
     },
@@ -190,6 +186,11 @@ export const Sortable: StoryObj<typeof List> = {
     },
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: "Список с возможностью сортировки элементов.",
+            },
+        },
     },
 };
 
@@ -217,5 +218,10 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
     },
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: "Список с возможностью сортировки интерактивных элементов.",
+            },
+        },
     },
 };

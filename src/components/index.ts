@@ -78,3 +78,4 @@ export * from "./SwipeableArea";
 export * from "./TopOverlay";
 export * from "./UploadZone";
 export * from "./HelpBox";
+export * from "./NotificationIcon";

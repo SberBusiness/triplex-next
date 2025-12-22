@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import clsx from "clsx";
+import { NotificationIcon } from "../../NotificationIcon/NotificationIcon";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownListItem. */
@@ -15,6 +16,8 @@ export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElem
     selected?: boolean;
     /** Коды клавиш для выбора элемента с помощью клавиатуры. */
     keyCodesForSelection?: number[];
+    /** Флаг отображения значка новых уведомлений. */
+    showNotificationIcon?: boolean;
 }
 
 const KEY_CODES_FOR_SELECTION_DEFAULT = [EVENT_KEY_CODES.SPACE, EVENT_KEY_CODES.ENTER];
@@ -30,6 +33,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
             onClick,
             onSelect,
             selected,
+            showNotificationIcon,
             ...htmlDivAttributes
         },
         ref,
@@ -77,6 +81,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
                 ref={ref}
             >
                 {children}
+                {showNotificationIcon && <NotificationIcon className={styles.notificationIcon} />}
             </div>
         );
     },

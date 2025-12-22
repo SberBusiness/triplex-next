@@ -11,6 +11,7 @@ import clsx from "clsx";
 
 export interface ITabsItem extends Omit<ITabsExtendedTabProps, "children" | "onSelect"> {
     label: React.ReactNode;
+    showNotificationIcon?: boolean;
 }
 
 export interface ITabsProps extends ITabsExtendedProps {
@@ -75,6 +76,7 @@ export const Tabs: React.FC<ITabsProps> = ({
                             /* Установка ref для предыдущего или следующего за фокусируемым табом элемента, */
                             ref={getRef()}
                             size={size}
+                            showNotificationIcon={item.showNotificationIcon}
                             onFocus={() => {
                                 setPrevAvailableToFocusTabId(tabs[index - 1] ? tabs[index - 1].id : "");
                                 setNextAvailableToFocusTabId(tabs[index + 1] ? tabs[index + 1].id : "");

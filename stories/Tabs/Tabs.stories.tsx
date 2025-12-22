@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Tabs } from "../../src/components/Tabs";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
@@ -30,7 +30,6 @@ export default {
                     <Title />
                     <Subtitle />
                     <Description />
-                    <Primary />
                     <Controls of={Playground} />
                     <Stories />
                 </>
@@ -74,14 +73,14 @@ export const Playground: StoryObj<typeof Tabs> = {
         const tabs = [
             { id: "tabs-tab-0", label: "Tab Name" },
             { id: "tabs-tab-1", label: "Tab Name" },
-            { id: "tabs-tab-2", label: "Tab Name" },
+            { id: "tabs-tab-2", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-3", label: "Tab Name" },
             { id: "tabs-tab-4", label: "Tab Name" },
             { id: "tabs-tab-5", label: "Tab Name" },
             { id: "tabs-tab-6", label: "Tab Name" },
             { id: "tabs-tab-7", label: "Tab Name" },
             { id: "tabs-tab-8", label: "Tab Name" },
-            { id: "tabs-tab-9", label: "Tab Name" },
+            { id: "tabs-tab-9", label: "Tab Name", showNotificationIcon: true },
         ];
 
         return (

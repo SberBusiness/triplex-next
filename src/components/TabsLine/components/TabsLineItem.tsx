@@ -1,9 +1,10 @@
 import React from "react";
 import { TestProps } from "../../../types/CoreTypes";
 import clsx from "clsx";
-import styles from "../styles/TabsLine.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { NotificationIcon } from "../../NotificationIcon/NotificationIcon";
+import styles from "../styles/TabsLine.module.less";
 
 /** Свойства TabsLineItem. */
 export interface ITabsLineItemProps extends React.HTMLAttributes<HTMLButtonElement>, TestProps {
@@ -35,7 +36,7 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
                 ref={ref}
             >
                 {label}
-                {showNotificationIcon && <span className={styles.notificationIcon} />}
+                {showNotificationIcon && <NotificationIcon className={styles.notificationIcon} />}
             </button>
         );
     },

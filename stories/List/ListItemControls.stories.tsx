@@ -1,6 +1,6 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { ListItemControls, ListItemControlsButtonDropdown, ListItemControlsButton } from "../../src/components/List";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
@@ -12,7 +12,7 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент ListItemControls — контейнер с кнопками действий..
+Контейнер с кнопками действий.
                 `,
             },
             page: () => (
@@ -20,7 +20,6 @@ export default {
                     <Title />
                     <Subtitle />
                     <Description />
-                    <Primary />
                     <Controls of={Default} />
                     <Stories />
                 </>

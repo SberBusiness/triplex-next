@@ -40,8 +40,15 @@
     }
 
     .global-page {
-        // Фон задает lightBoxSideOverlayContent.
-        background-color: transparent !important;
+        max-width: @lightBox-content-max-width;
+        padding-top: 24px; // Переопределение отступов Page.module.less
+        padding-bottom: 24px; // Переопределение отступов Page.module.less
+
+        @media (max-width: @screen-sm-max) {
+            & {
+                padding: @page-padding-mobile-y @page-padding-mobile-x;
+            }
+        }
     }
 
     .lightBoxSideOverlayContent {

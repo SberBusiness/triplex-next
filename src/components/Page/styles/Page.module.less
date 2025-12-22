@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
     max-width: 100%;
-    padding: @page-padding-desktop;
+    padding: @page-padding-desktop-y @page-padding-desktop-x;
     box-sizing: border-box;
 }
 
@@ -17,7 +17,7 @@
 
 @media (max-width: @screen-sm-max) {
     .page {
-        padding: @page-padding-mobile;
+        padding: @page-padding-mobile-y @page-padding-mobile-x;
     }
 }
 

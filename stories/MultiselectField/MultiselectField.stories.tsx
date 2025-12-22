@@ -296,13 +296,12 @@ function createMultiselectFieldStoriesLogic(args) {
             mobileViewProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader>
+                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
                             <DropdownMobileInput
                                 placeholder="Type to proceed"
                                 value={filter}
                                 onChange={handleFilterChange}
                             />
-                            <DropdownMobileClose onClick={() => setOpened(false)} />
                         </DropdownMobileHeader>
                         <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
                         <DropdownMobileFooter>

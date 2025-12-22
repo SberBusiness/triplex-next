@@ -121,8 +121,8 @@ export interface ITooltipMobileHeaderProps extends Omit<IDropdownMobileHeaderPro
 
 /** Свойства компонента DropdownMobileHeader. */
 export interface IDropdownMobileHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Кнопка закрытия мобильной версии Dropdown. */
-    closeButton?: () => JSX.Element;
+    /** Кнопки действия мобильной версии Dropdown. */
+    controlButtons?: React.ReactNode;
 }
 
 /** Свойства компонента TooltipLink. */

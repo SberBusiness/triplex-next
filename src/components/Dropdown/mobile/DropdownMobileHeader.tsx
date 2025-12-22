@@ -5,10 +5,10 @@ import styles from "../styles/DropdownMobile.module.less";
 
 /** Заголовок мобильной версии Dropdown. */
 export const DropdownMobileHeader = React.forwardRef<HTMLDivElement, IDropdownMobileHeaderProps>(
-    ({ children, className, closeButton, ...htmlAttributes }, ref) => (
+    ({ children, className, controlButtons, ...htmlAttributes }, ref) => (
         <div className={clsx(styles.dropdownMobileHeader, className)} ref={ref} {...htmlAttributes}>
             <div className={styles.dropdownMobileHeaderContent}>{children}</div>
-            {closeButton?.()}
+            <div className={styles.controlButtons}>{controlButtons}</div>
         </div>
     ),
 );

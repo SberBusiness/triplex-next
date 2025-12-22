@@ -24,9 +24,8 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
         /** Отрисовка содержимого в мобильном режиме. */
         const renderMobileContent = () => (
             <>
-                <DropdownMobileHeader>
+                <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setDropdownOpen(false)} />}>
                     {renderHeaderTarget()}
-                    <DropdownMobileClose onClick={() => setDropdownOpen(false)} />
                 </DropdownMobileHeader>
                 <DropdownMobileBody>{renderCalendar(true)}</DropdownMobileBody>
             </>

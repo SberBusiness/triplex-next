@@ -91,6 +91,7 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
                         targetProps={{
                             fieldLabel: fieldLabel || "Выберите опцию",
                         }}
+                        mobileTitle={fieldLabel || "Выберите опцию"}
                     />
 
                     {(descriptionText || errorText) && (
@@ -235,6 +236,7 @@ export const Default: StoryObj<typeof SelectField> = {
                     targetProps={{
                         fieldLabel: "Выберите опцию",
                     }}
+                    mobileTitle="Выберите опцию"
                 />
             </div>
         );
@@ -260,6 +262,7 @@ export const Basic: StoryObj<typeof SelectField> = {
                     targetProps={{
                         fieldLabel: "Выберите опцию",
                     }}
+                    mobileTitle="Выберите опцию"
                 />
             </div>
         );
@@ -297,6 +300,7 @@ export const States: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Выберите опцию",
                         }}
+                        mobileTitle="Выберите опцию"
                     />
                 </FormGroup>
 
@@ -316,6 +320,7 @@ export const States: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Загрузка опций",
                         }}
+                        mobileTitle="Загрузка опций"
                     />
                 </FormGroup>
 
@@ -335,6 +340,7 @@ export const States: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Выберите опцию",
                         }}
+                        mobileTitle="Выберите опцию"
                     />
                     <FormFieldDescription>
                         <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
@@ -359,6 +365,7 @@ export const States: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Выберите опцию",
                         }}
+                        mobileTitle="Выберите опцию"
                     />
                     <FormFieldDescription>
                         <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
@@ -383,6 +390,7 @@ export const States: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Отключенное поле",
                         }}
+                        mobileTitle="Отключенное поле"
                     />
                     <FormFieldDescription>
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -436,6 +444,7 @@ export const Sizes: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Маленькое поле",
                         }}
+                        mobileTitle="Маленькое поле"
                     />
                 </div>
 
@@ -452,6 +461,7 @@ export const Sizes: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Среднее поле",
                         }}
+                        mobileTitle="Среднее поле"
                     />
                 </div>
 
@@ -468,6 +478,7 @@ export const Sizes: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Большое поле",
                         }}
+                        mobileTitle="Большое поле"
                     />
                 </div>
             </div>
@@ -503,6 +514,7 @@ export const WithDescription: StoryObj<typeof SelectField> = {
                         targetProps={{
                             fieldLabel: "Выберите опцию",
                         }}
+                        mobileTitle="Выберите опцию из списка"
                     />
                     <FormFieldDescription>
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>

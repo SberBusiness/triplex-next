@@ -132,9 +132,7 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
                     <DropdownList dropdownOpened={opened} id={this.instanceId}>
                         {tabs.map((tab) => {
                             const { id, label, showNotificationIcon, ...htmlDivAttributes } = tab;
-                            const className = clsx(styles.dropdownItem, {
-                                [styles.withNotification]: Boolean(tab.showNotificationIcon),
-                            });
+                            const className = clsx(styles.dropdownItem);
 
                             return (
                                 <DropdownList.Item
@@ -146,9 +144,9 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
                                         this.handleClickTab(tab);
                                     }}
                                     selected={tab === selected}
+                                    showNotificationIcon={tab.showNotificationIcon}
                                 >
                                     <span className={styles.dropdownItemInner}>{tab.label}</span>
-                                    {tab.showNotificationIcon && <span className={styles.notificationIcon} />}
                                 </DropdownList.Item>
                             );
                         })}

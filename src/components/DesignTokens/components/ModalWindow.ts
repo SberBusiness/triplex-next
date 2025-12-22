@@ -17,5 +17,5 @@ export type TDesignTokensComponentsModalWindow = { ModalWindow: TDesignTokensCom
 // Токены компонента ModalWindow в светлой и темной темах.
 export const ModalWindow_Tokens: TDesignTokensComponentsModalWindowValues = {
     Background: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.20" }], // var(--triplex-next-ModalWindow-Background)
-    Backdrop_Background: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-ModalWindow-Backdrop_Background)
+    Backdrop_Background: [{ value: "rgba(79, 79, 82, .5)" }, { value: "rgba(0, 0, 0, .5)" }], // var(--triplex-next-ModalWindow-Backdrop_Background)
 };

@@ -3,7 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { ChipIcon } from "../../src/components/Chip/ChipIcon";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipIcon",
@@ -11,12 +11,18 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
+            description: {
+                component: `Chip с иконкой.
+
+## Особенности:
+- **Размеры**: sm, md, lg
+                    `,
+            },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
-                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -25,7 +31,6 @@ export default {
 };
 
 export const Playground: StoryObj<typeof ChipIcon> = {
-    name: "Playground",
     render: (args) => {
         const [selected, setSelected] = useState(false);
         return (
@@ -50,7 +55,6 @@ export const Playground: StoryObj<typeof ChipIcon> = {
 };
 
 export const Default: StoryObj<typeof ChipIcon> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -60,6 +64,31 @@ export const Default: StoryObj<typeof ChipIcon> = {
             <ChipIcon selected={selected} onClick={() => setSelected((s) => !s)}>
                 <DefaulticonStrokePrdIcon24 paletteIndex={selected ? 6 : 5} />
             </ChipIcon>
+        );
+    },
+};
+
+export const Sizes: StoryObj<typeof ChipIcon> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [selectedSM, setSelectedSM] = useState(0);
+        const [selectedMD, setSelectedMD] = useState(0);
+        const [selectedLG, setSelectedLG] = useState(0);
+
+        return (
+            <div style={{ display: "flex", gap: 12 }}>
+                <ChipIcon size={EComponentSize.SM} selected={selectedSM} onClick={() => setSelectedSM((s) => !s)}>
+                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedSM ? 6 : 5} />
+                </ChipIcon>
+                <ChipIcon size={EComponentSize.MD} selected={selectedMD} onClick={() => setSelectedMD((s) => !s)}>
+                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedMD ? 6 : 5} />
+                </ChipIcon>
+                <ChipIcon size={EComponentSize.LG} selected={selectedLG} onClick={() => setSelectedLG((s) => !s)}>
+                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedLG ? 6 : 5} />
+                </ChipIcon>
+            </div>
         );
     },
 };

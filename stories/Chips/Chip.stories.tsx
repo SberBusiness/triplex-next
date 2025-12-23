@@ -13,7 +13,7 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент предоставляет возможность произвести действие по нажатию, также отображает выбранное состояние
+Компонент предоставляет возможность произвести действие по нажатию, также отображает выбранное состояние.
 
 ## Особенности:
 - **Размеры**: SM (маленький), MD (средний), LG (большой - по умолчанию)
@@ -77,17 +77,22 @@ export const Sizes: StoryObj<typeof Chip> = {
         controls: { disable: true },
     },
     render: () => {
-        const [selected, setSelected] = useState(false);
-        const handleClick = () => setSelected((s) => !s);
+        const [selectedSM, setSelectedSM] = useState(false);
+        const [selectedMD, setSelectedMD] = useState(false);
+        const [selectedLG, setSelectedLG] = useState(false);
+        const handleClickSM = () => setSelectedSM((s) => !s);
+        const handleClickMD = () => setSelectedMD((s) => !s);
+        const handleClickLG = () => setSelectedLG((s) => !s);
+
         return (
             <div style={{ display: "flex", gap: 12 }}>
-                <Chip size={EComponentSize.SM} selected={selected} onClick={handleClick}>
+                <Chip size={EComponentSize.SM} selected={selectedSM} onClick={handleClickSM}>
                     SM
                 </Chip>
-                <Chip size={EComponentSize.MD} selected={selected} onClick={handleClick}>
+                <Chip size={EComponentSize.MD} selected={selectedMD} onClick={handleClickMD}>
                     MD
                 </Chip>
-                <Chip size={EComponentSize.LG} selected={selected} onClick={handleClick}>
+                <Chip size={EComponentSize.LG} selected={selectedLG} onClick={handleClickLG}>
                     LG
                 </Chip>
             </div>

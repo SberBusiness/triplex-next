@@ -3,7 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { Chip } from "../../src/components/Chip/Chip";
 import { ChipGroup } from "../../src/components/ChipGroup/ChipGroup";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipGroup",
@@ -12,15 +12,18 @@ export default {
     parameters: {
         docs: {
             description: {
-                component:
-                    "Контейнер для Chip. Поддерживает перенос по строкам (multiLine) и однострочный режим (oneLine) со скроллом.",
+                component: `Контейнер для группировки нескольких компонентов Chip.
+
+## Особенности:
+- **Режим отображения**: oneLine (однострочный с горизонтальным скроллом), multiLine (перенос по строкам)
+- **Размеры**: sm, md, lg
+                    `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),
@@ -29,7 +32,6 @@ export default {
 };
 
 export const Playground: StoryObj<typeof ChipGroup> = {
-    name: "Playground",
     render: (args) => {
         const [selected, setSelected] = useState<number | null>(null);
         const chips = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta"];
@@ -57,7 +59,6 @@ export const Playground: StoryObj<typeof ChipGroup> = {
 };
 
 export const Default: StoryObj<typeof ChipGroup> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -77,8 +78,61 @@ export const Default: StoryObj<typeof ChipGroup> = {
     },
 };
 
+export const Sizes: StoryObj<typeof ChipGroup> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [selectedSM, setSelectedSM] = useState<number | null>(null);
+        const [selectedMD, setSelectedMD] = useState<number | null>(null);
+        const [selectedLG, setSelectedLG] = useState<number | null>(null);
+
+        const chips = ["Alpha", "Beta", "Gamma", "Delta"];
+
+        return (
+            <div style={{ display: "flex", gap: 12, flexDirection: "column" }}>
+                <ChipGroup size={EComponentSize.SM} style={{ maxWidth: 360 }}>
+                    {chips.map((label, index) => (
+                        <Chip
+                            key={label}
+                            size={EComponentSize.SM}
+                            selected={selectedSM === index}
+                            onClick={() => setSelectedSM(index)}
+                        >
+                            {label}
+                        </Chip>
+                    ))}
+                </ChipGroup>
+                <ChipGroup size={EComponentSize.MD} style={{ maxWidth: 360 }}>
+                    {chips.map((label, index) => (
+                        <Chip
+                            key={label}
+                            size={EComponentSize.MD}
+                            selected={selectedMD === index}
+                            onClick={() => setSelectedMD(index)}
+                        >
+                            {label}
+                        </Chip>
+                    ))}
+                </ChipGroup>
+                <ChipGroup size={EComponentSize.LG} style={{ maxWidth: 360 }}>
+                    {chips.map((label, index) => (
+                        <Chip
+                            key={label}
+                            size={EComponentSize.LG}
+                            selected={selectedLG === index}
+                            onClick={() => setSelectedLG(index)}
+                        >
+                            {label}
+                        </Chip>
+                    ))}
+                </ChipGroup>
+            </div>
+        );
+    },
+};
+
 export const OneLineScrollable: StoryObj<typeof ChipGroup> = {
-    name: "One Line Scrollable",
     parameters: {
         controls: { disable: true },
     },

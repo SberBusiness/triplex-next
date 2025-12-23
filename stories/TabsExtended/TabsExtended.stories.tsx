@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { TabsExtended } from "../../src/components/TabsExtended";
 import { ButtonDropdown } from "../../src/components/Button/ButtonDropdown";
 import { EButtonDotsTheme } from "../../src/components/Button/enums";
@@ -28,7 +28,6 @@ export default {
                     <Title />
                     <Subtitle />
                     <Description />
-                    <Primary />
                     <Controls of={Default} />
                     <Stories />
                 </>
@@ -38,8 +37,6 @@ export default {
 };
 
 export const Default: StoryObj<typeof TabsExtended> = {
-    name: "Default",
-    argTypes: {},
     parameters: {
         controls: { disable: true },
     },
@@ -54,14 +51,14 @@ export const Default: StoryObj<typeof TabsExtended> = {
         const options = [
             { id: "tabs-extended-tab-0-0", label: "Tab Name" },
             { id: "tabs-extended-tab-0-1", label: "Tab Name" },
-            { id: "tabs-extended-tab-0-2", label: "Tab Name" },
+            { id: "tabs-extended-tab-0-2", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-extended-tab-0-3", label: "Tab Name" },
             { id: "tabs-extended-tab-0-4", label: "Tab Name" },
             { id: "tabs-extended-tab-0-5", label: "Tab Name" },
             { id: "tabs-extended-tab-0-6", label: "Tab Name" },
             { id: "tabs-extended-tab-0-7", label: "Tab Name" },
             { id: "tabs-extended-tab-0-8", label: "Tab Name" },
-            { id: "tabs-extended-tab-0-9", label: "Tab Name" },
+            { id: "tabs-extended-tab-0-9", label: "Tab Name", showNotificationIcon: true },
         ];
 
         return (
@@ -69,10 +66,13 @@ export const Default: StoryObj<typeof TabsExtended> = {
                 <TabsExtended className="tabs-extended" selectedId={selectedTabId} onSelectTab={setSelectedTabId}>
                     <TabsExtended.Content className="tabs-extended-content">
                         <TabsExtended.Content.TabsWrapper>
-                            {options.map(({ id, label }) => (
+                            {options.map(({ id, label, showNotificationIcon }) => (
                                 <TabsExtended.Content.Tab key={id} id={id}>
                                     {({ selected }) => (
-                                        <TabsExtended.Content.TabButton selected={selected}>
+                                        <TabsExtended.Content.TabButton
+                                            selected={selected}
+                                            showNotificationIcon={showNotificationIcon}
+                                        >
                                             {label}
                                         </TabsExtended.Content.TabButton>
                                     )}

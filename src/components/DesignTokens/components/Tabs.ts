@@ -51,5 +51,5 @@ export const Tabs_Tokens: TDesignTokensComponentsTabsValues = {
     Type2_Tab_Color_Hover: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Tabs-Type2_Tab_Color_Hover)
 
     Tab_BorderColor_Default: [{ value: "transparent" }, { value: "transparent" }], // var(--triplex-next-Tabs-Tab_BorderColor_Default)
-    Tab_BorderColor_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Tabs-Tab_BorderColor_Focus)
+    Tab_BorderColor_Focus: [{ value: "#FFD169" }, { value: "#FFD169" }], // var(--triplex-next-Tabs-Tab_BorderColor_Focus)
 };

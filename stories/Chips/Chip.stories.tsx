@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Chip } from "../../src/components/Chip/Chip";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { SortStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
 export default {
     title: "Components/Chips/Chip",
@@ -11,14 +12,20 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: "Клик‑чип с поддержкой состояний selected/disabled, префикса и постфикса.",
+                component: `
+Компонент предоставляет возможность произвести действие по нажатию, также отображает выбранное состояние.
+
+## Особенности:
+- **Размеры**: SM (маленький), MD (средний), LG (большой - по умолчанию)
+- **Состояния**: selected (выбранное), disabled (отключено)
+- Возможно передать префикс и постфикс
+                `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),
@@ -27,7 +34,6 @@ export default {
 };
 
 export const Playground: StoryObj<typeof Chip> = {
-    name: "Playground",
     render: (args) => {
         const [selected, setSelected] = useState(false);
         const handleClick = () => setSelected((s) => !s);
@@ -40,24 +46,19 @@ export const Playground: StoryObj<typeof Chip> = {
     args: {
         size: EComponentSize.MD,
         disabled: false,
-        prefix: undefined,
-        postfix: undefined,
     },
     argTypes: {
         size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
-        prefix: { control: { type: "text" } },
-        postfix: { control: { type: "text" } },
     },
     parameters: {
         controls: {
-            include: ["size", "disabled", "prefix", "postfix"],
+            include: ["size", "disabled"],
         },
     },
 };
 
 export const Default: StoryObj<typeof Chip> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -72,22 +73,26 @@ export const Default: StoryObj<typeof Chip> = {
 };
 
 export const Sizes: StoryObj<typeof Chip> = {
-    name: "Sizes",
     parameters: {
         controls: { disable: true },
     },
     render: () => {
-        const [selected, setSelected] = useState(false);
-        const handleClick = () => setSelected((s) => !s);
+        const [selectedSM, setSelectedSM] = useState(false);
+        const [selectedMD, setSelectedMD] = useState(false);
+        const [selectedLG, setSelectedLG] = useState(false);
+        const handleClickSM = () => setSelectedSM((s) => !s);
+        const handleClickMD = () => setSelectedMD((s) => !s);
+        const handleClickLG = () => setSelectedLG((s) => !s);
+
         return (
             <div style={{ display: "flex", gap: 12 }}>
-                <Chip size={EComponentSize.SM} selected={selected} onClick={handleClick}>
+                <Chip size={EComponentSize.SM} selected={selectedSM} onClick={handleClickSM}>
                     SM
                 </Chip>
-                <Chip size={EComponentSize.MD} selected={selected} onClick={handleClick}>
+                <Chip size={EComponentSize.MD} selected={selectedMD} onClick={handleClickMD}>
                     MD
                 </Chip>
-                <Chip size={EComponentSize.LG} selected={selected} onClick={handleClick}>
+                <Chip size={EComponentSize.LG} selected={selectedLG} onClick={handleClickLG}>
                     LG
                 </Chip>
             </div>
@@ -96,7 +101,6 @@ export const Sizes: StoryObj<typeof Chip> = {
 };
 
 export const States: StoryObj<typeof Chip> = {
-    name: "States",
     parameters: {
         controls: { disable: true },
     },
@@ -107,4 +111,18 @@ export const States: StoryObj<typeof Chip> = {
             <Chip disabled>Disabled</Chip>
         </div>
     ),
+};
+
+export const WithPrefixIcon: StoryObj<typeof Chip> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => <Chip prefix={<SortStrokeSrvIcon20 paletteIndex={5} />}>Prefix</Chip>,
+};
+
+export const WithPostfixIcon: StoryObj<typeof Chip> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => <Chip postfix={<SortStrokeSrvIcon20 paletteIndex={5} />}>Postfix</Chip>,
 };

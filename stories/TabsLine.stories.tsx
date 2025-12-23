@@ -40,6 +40,7 @@ interface ITabsLineStoriesProps extends React.ComponentProps<typeof TabsLine> {
     maxVisible: number;
     size?: EComponentSize;
     showNotificationIcon?: boolean;
+    withSeparator?: boolean;
 }
 
 export const Playground: StoryObj<ITabsLineStoriesProps> = {
@@ -49,6 +50,7 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
         maxVisible: 3,
         size: EComponentSize.MD,
         showNotificationIcon: true,
+        withSeparator: false,
     },
     argTypes: {
         paddingX: {
@@ -71,10 +73,14 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
         showNotificationIcon: {
             description: "Флаг отображения значка новых уведомлений",
         },
+        withSeparator: {
+            description: "Разделитель в виде нижнего бордера",
+            control: { type: "boolean" },
+        },
     },
     parameters: {
         controls: {
-            include: ["paddingX", "maxVisible", "size", "showNotificationIcon"],
+            include: ["paddingX", "maxVisible", "size", "showNotificationIcon", "withSeparator"],
         },
     },
     render: (args) => {
@@ -129,21 +135,10 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
 };
 
 export const Default: StoryObj<ITabsLineStoriesProps> = {
-    name: "Default",
-    args: {
-        maxVisible: 4,
-    },
-    argTypes: {
-        maxVisible: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args) => {
+    render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
 
         const tabs = [
@@ -181,34 +176,23 @@ export const Default: StoryObj<ITabsLineStoriesProps> = {
 
         return (
             <TabsLine
-                {...args}
                 tabs={tabs}
                 selectedId={selectedTabId}
                 onChangeTab={setSelectedTabId}
                 dropdownTargetHtmlAttributes={{
                     "data-test-id": "TabsLine__DropdownTarget",
                 }}
+                maxVisible={4}
             />
         );
     },
 };
 
 export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
-    name: "DifferentSizes",
-    args: {
-        maxVisible: 4,
-    },
-    argTypes: {
-        maxVisible: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     parameters: {
         controls: { disable: true },
     },
-    render: (args) => {
+    render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
 
         const tabs = [
@@ -247,7 +231,6 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
         return (
             <>
                 <TabsLine
-                    {...args}
                     tabs={tabs}
                     selectedId={selectedTabId}
                     size={EComponentSize.SM}
@@ -255,10 +238,10 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                     dropdownTargetHtmlAttributes={{
                         "data-test-id": "TabsLine__DropdownTarget",
                     }}
+                    maxVisible={4}
                 />
                 <Gap size={16} />
                 <TabsLine
-                    {...args}
                     tabs={tabs}
                     selectedId={selectedTabId}
                     size={EComponentSize.MD}
@@ -266,10 +249,10 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                     dropdownTargetHtmlAttributes={{
                         "data-test-id": "TabsLine__DropdownTarget",
                     }}
+                    maxVisible={4}
                 />
                 <Gap size={16} />
                 <TabsLine
-                    {...args}
                     tabs={tabs}
                     selectedId={selectedTabId}
                     size={EComponentSize.LG}
@@ -277,8 +260,64 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
                     dropdownTargetHtmlAttributes={{
                         "data-test-id": "TabsLine__DropdownTarget",
                     }}
+                    maxVisible={4}
                 />
             </>
+        );
+    },
+};
+
+export const WithSeparator: StoryObj<ITabsLineStoriesProps> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
+
+        const tabs = [
+            {
+                id: "tabs-line-all",
+                label: "Все",
+                "aria-label": "Все",
+                "data-test-id": "TabsLine__All",
+            },
+            {
+                id: "tabs-line-draft",
+                label: "Черновики",
+                "aria-label": "Черновик",
+                "data-test-id": "TabsLine__Draft",
+            },
+            {
+                id: "tabs-line-sign",
+                label: "На подпись и отправку",
+                "aria-label": "На подпись и отправку",
+                "data-test-id": "TabsLine__Sign",
+            },
+            {
+                id: "tabs-line-executed",
+                label: "Исполненные",
+                "aria-label": "Исполненные",
+                "data-test-id": "TabsLine__Executed",
+            },
+            {
+                id: "tabs-line-rejected",
+                label: "Отклоненные",
+                "aria-label": "Отклоненные",
+                "data-test-id": "TabsLine__Rejected",
+            },
+        ];
+
+        return (
+            <TabsLine
+                tabs={tabs}
+                selectedId={selectedTabId}
+                onChangeTab={setSelectedTabId}
+                dropdownTargetHtmlAttributes={{
+                    "data-test-id": "TabsLine__DropdownTarget",
+                }}
+                withSeparator
+                maxVisible={4}
+            />
         );
     },
 };

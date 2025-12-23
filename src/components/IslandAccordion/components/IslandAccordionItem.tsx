@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, useCallback } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { CaretdownStrokeSrvIcon24, CrossStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import { Island } from "../../Island/Island";
@@ -66,21 +66,12 @@ export const IslandAccordionItem = Object.assign(
             ref,
         ) => {
             const [isOpen, setIsOpen] = useState(opened || false);
-            const [headerFocused, setHeaderFocused] = useState(false);
             const { size, type } = useContext(IslandAccordionContext);
 
             // eslint-disable-next-line react-hooks/refs
             const instanceId = useRef(uniqueId()).current;
             const headerInstanceId = `${instanceId}header`;
             const bodyInstanceId = `${instanceId}body`;
-
-            const handleHeaderFocus = useCallback(() => {
-                setHeaderFocused(true);
-            }, []);
-
-            const handleHeaderBlur = useCallback(() => {
-                setHeaderFocused(false);
-            }, []);
 
             useEffect(() => {
                 if (opened !== undefined && isOpen !== opened) {
@@ -112,9 +103,7 @@ export const IslandAccordionItem = Object.assign(
                 [styles.opened]: isOpen,
             });
 
-            const islandClassNames = clsx(styles.island, {
-                [styles.focused]: headerFocused,
-            });
+            const islandClassNames = clsx(styles.island);
 
             return (
                 <li {...rest} className={classNames} id={id} ref={ref}>
@@ -127,8 +116,6 @@ export const IslandAccordionItem = Object.assign(
                                 type="button"
                                 className={styles.header}
                                 onClick={handleHeaderClick}
-                                onFocus={handleHeaderFocus}
-                                onBlur={handleHeaderBlur}
                                 disabled={disabled}
                                 data-tx={process.env.npm_package_version}
                             >

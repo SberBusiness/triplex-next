@@ -6,7 +6,7 @@ import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EIslandType } from "../../src/components/Island";
 import { EStepStatus } from "../../src/components/Step";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 import "./IslandAccordion.less";
 
 export default {
@@ -35,7 +35,6 @@ export default {
                     <Title />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),

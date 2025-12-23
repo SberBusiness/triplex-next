@@ -103,11 +103,9 @@ export const IslandAccordionItem = Object.assign(
                 [styles.opened]: isOpen,
             });
 
-            const islandClassNames = clsx(styles.island);
-
             return (
                 <li {...rest} className={classNames} id={id} ref={ref}>
-                    <Island className={islandClassNames} size={size} type={type}>
+                    <Island className={styles.island} size={size} type={type}>
                         <Island.Header>
                             <button
                                 id={headerInstanceId}

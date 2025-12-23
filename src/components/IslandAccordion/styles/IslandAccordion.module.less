@@ -1,3 +1,5 @@
+@import "../../../styles/style";
+
 .islandAccordion {
     margin: 0;
     padding: 0;
@@ -166,6 +168,22 @@
 
         .remove {
             position: absolute;
+        }
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .islandAccordion {
+        .item {
+            .footer {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+
+                > * {
+                    margin-left: 0 !important;
+                }
+            }
         }
     }
 }

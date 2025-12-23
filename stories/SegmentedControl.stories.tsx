@@ -6,12 +6,15 @@ import {
     ESegmentedControlType,
     ESegmentedControlSize,
 } from "../src/components/SegmentedControl";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SegmentedControl",
     component: SegmentedControl,
     tags: ["autodocs"],
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     argTypes: {
         type: {
             control: { type: "select" },
@@ -71,39 +74,7 @@ export default {
 ### Множественный выбор
 Для множественного выбора используйте тип \`ESegmentedControlType.MULTIPLE\`. Значение должно быть массивом строк.
 
-## Примеры использования
-`,
-            },
-            page: () => (
-                <>
-                    <Title />
-                    <Description />
-                    <Controls of={Playground} />
-                    <Primary />
-                    <Stories />
-                </>
-            ),
-        },
-    },
-};
-
-export const Playground: StoryObj<typeof SegmentedControl> = {
-    name: "Playground",
-    args: {
-        type: ESegmentedControlType.SINGLE,
-        theme: ESegmentedControlTheme.GENERAL_1,
-        size: ESegmentedControlSize.MD,
-        disabled: false,
-    },
-    parameters: {
-        controls: {
-            include: ["type", "theme", "size", "disabled"],
-        },
-        docs: {
-            description: {
-                story: `
-Интерактивная площадка для экспериментов с компонентом SegmentedControl. Используйте панель Controls для изменения параметров компонента.
-
+## Пример использования
 \`\`\`tsx
 const [type, setType] = useState<ESegmentedControlType>(ESegmentedControlType.SINGLE);
 const [singleValue, setSingleValue] = useState("segment_3");
@@ -128,6 +99,35 @@ return (
     </SegmentedControl>
 );
 \`\`\`
+`,
+            },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Stories />
+                </>
+            ),
+        },
+    },
+};
+
+export const Playground: StoryObj<typeof SegmentedControl> = {
+    args: {
+        type: ESegmentedControlType.SINGLE,
+        theme: ESegmentedControlTheme.GENERAL_1,
+        size: ESegmentedControlSize.MD,
+        disabled: false,
+    },
+    parameters: {
+        controls: {
+            include: ["type", "theme", "size", "disabled"],
+        },
+        docs: {
+            description: {
+                story: `
+Интерактивная площадка для экспериментов с компонентом SegmentedControl. Используйте панель Controls для изменения параметров компонента.
                 `,
             },
         },
@@ -152,7 +152,6 @@ return (
 };
 
 export const Types: StoryObj = {
-    name: "Types",
     parameters: {
         controls: { disable: true },
         docs: {
@@ -254,7 +253,6 @@ return (
 };
 
 export const Themes: StoryObj = {
-    name: "Themes",
     parameters: {
         controls: { disable: true },
         docs: {
@@ -311,7 +309,6 @@ export const Themes: StoryObj = {
 };
 
 export const Sizes: StoryObj = {
-    name: "Sizes",
     parameters: {
         controls: { disable: true },
         docs: {
@@ -347,7 +344,6 @@ export const Sizes: StoryObj = {
 };
 
 export const Disabled: StoryObj = {
-    name: "Disabled",
     parameters: {
         controls: { disable: true },
         docs: {

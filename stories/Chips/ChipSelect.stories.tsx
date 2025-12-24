@@ -3,7 +3,7 @@ import { StoryObj } from "@storybook/react";
 import { ChipSelect, IChipSelectProps } from "../../src/components/Chip/ChipSelect";
 import { ISelectFieldOption } from "../../src/components/SelectField/SelectField";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipSelect",
@@ -13,16 +13,11 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент ChipSelect позволяет выбрать одно значение из списка опций. Выбранное значение отображается в виде Chip компонента.
+Компонент ChipSelect позволяет выбрать одно значение из списка опций. Выбранное значение отображается в виде компонента Chip.
 
-## Основные возможности:
-- Выбор одного значения из списка опций
-- Отображение выбранного значения в виде Chip
-- Возможность очистки выбранного значения через кнопку очистки
-- Поддержка кастомного отображаемого значения (displayedValue)
-- Поддержка различных размеров (SM, MD, LG)
-- Состояние disabled
-- Автоматическое открытие/закрытие выпадающего списка
+## Особенности:
+
+- **Размеры**: small (SM), medium (MD), large (LG)
 
 ## Использование:
 Компонент принимает массив опций и обрабатывает выбор через onChange. При выборе опции она отображается в Chip, а при клике на кнопку очистки вызывается clearSelected.
@@ -33,7 +28,6 @@ export default {
                     <Title />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),
@@ -151,7 +145,6 @@ export const Playground: StoryObj<IChipSelectPlaygroundProps> = {
 };
 
 export const Default: StoryObj = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -171,7 +164,6 @@ export const Default: StoryObj = {
 };
 
 export const Sizes: StoryObj = {
-    name: "Sizes",
     parameters: {
         controls: { disable: true },
     },
@@ -183,9 +175,8 @@ export const Sizes: StoryObj = {
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "24px", padding: "20px" }}>
                 <div>
-                    <h3 style={{ marginBottom: "12px" }}>Small (SM)</h3>
                     <ChipSelect
-                        label="Выберите опцию"
+                        label="SM"
                         options={demoOptions}
                         value={selectedSM}
                         onChange={setSelectedSM}
@@ -194,9 +185,8 @@ export const Sizes: StoryObj = {
                     />
                 </div>
                 <div>
-                    <h3 style={{ marginBottom: "12px" }}>Medium (MD)</h3>
                     <ChipSelect
-                        label="Выберите опцию"
+                        label="MD"
                         options={demoOptions}
                         value={selectedMD}
                         onChange={setSelectedMD}
@@ -205,9 +195,8 @@ export const Sizes: StoryObj = {
                     />
                 </div>
                 <div>
-                    <h3 style={{ marginBottom: "12px" }}>Large (LG)</h3>
                     <ChipSelect
-                        label="Выберите опцию"
+                        label="LG"
                         options={demoOptions}
                         value={selectedLG}
                         onChange={setSelectedLG}
@@ -221,7 +210,6 @@ export const Sizes: StoryObj = {
 };
 
 export const States: StoryObj = {
-    name: "States",
     parameters: {
         controls: { disable: true },
     },
@@ -233,9 +221,8 @@ export const States: StoryObj = {
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "24px", padding: "20px" }}>
                 <div>
-                    <h3 style={{ marginBottom: "12px" }}>Без выбранного значения</h3>
                     <ChipSelect
-                        label="Выберите опцию"
+                        label="Default"
                         options={demoOptions}
                         value={selectedDefault}
                         onChange={setSelectedDefault}
@@ -244,9 +231,8 @@ export const States: StoryObj = {
                     />
                 </div>
                 <div>
-                    <h3 style={{ marginBottom: "12px" }}>С выбранным значением</h3>
                     <ChipSelect
-                        label="Выберите опцию"
+                        label="Selected"
                         options={demoOptions}
                         value={selectedWithValue}
                         onChange={setSelectedWithValue}
@@ -255,9 +241,8 @@ export const States: StoryObj = {
                     />
                 </div>
                 <div>
-                    <h3 style={{ marginBottom: "12px" }}>Отключенное состояние</h3>
                     <ChipSelect
-                        label="Выберите опцию"
+                        label="Disabled"
                         options={demoOptions}
                         value={selectedDisabled}
                         onChange={setSelectedDisabled}
@@ -271,8 +256,7 @@ export const States: StoryObj = {
     },
 };
 
-export const WithDisplayedValue: StoryObj = {
-    name: "With Displayed Value",
+export const WithCustomDisplayedValue: StoryObj = {
     parameters: {
         controls: { disable: true },
     },
@@ -281,7 +265,6 @@ export const WithDisplayedValue: StoryObj = {
 
         return (
             <div style={{ padding: "20px" }}>
-                <h3 style={{ marginBottom: "12px" }}>С кастомным отображаемым значением</h3>
                 <ChipSelect
                     label="Выберите услугу"
                     options={demoOptions}

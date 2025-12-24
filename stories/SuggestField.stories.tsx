@@ -9,7 +9,7 @@ import {
     ETextSize,
     EFontType,
 } from "../src";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/SuggestField",
@@ -25,8 +25,7 @@ const meta = {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Playground} />
-                    <Primary />
+                    <Controls of={Default} />
                     <Stories />
                 </>
             ),
@@ -205,6 +204,31 @@ export const Playground: Story = {
                 onFilter={onFilter}
                 onSelect={onSelect}
                 {...args}
+            />
+        );
+    },
+};
+
+export const Default: Story = {
+    parameters: {
+        controls: {
+            disable: true,
+        },
+    },
+    render: () => {
+        const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
+
+        return (
+            <SuggestField
+                value={value}
+                options={options}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
+                tooltipOpen={tooltipOpen}
+                onTargetInputFocus={onTargetInputFocus}
+                onFilter={onFilter}
+                onSelect={onSelect}
             />
         );
     },

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ChipSelect } from "@sberbusiness/triplex-next/components/Chip/ChipSelect";
+import { ChipSelect } from "@sberbusiness/triplex-next/components/Chip/ChipSelect/ChipSelect";
 import { ISelectFieldOption } from "@sberbusiness/triplex-next/components/SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { ChipSelect, IChipSelectProps } from "../../src/components/Chip/ChipSelect";
+import { ChipSelect, IChipSelectProps } from "../../src/components/Chip/";
 import { ISelectFieldOption } from "../../src/components/SelectField/SelectField";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";

@@ -37,7 +37,6 @@ import { Tag } from "../../src/components/Tag/Tag";
 import { TagGroup } from "../../src/components/TagGroup/TagGroup";
 import { Link } from "../../src/components/Link/Link";
 import { ITableFilters } from "./types";
-import { EFormFieldStatus } from "../../src/components/FormField/enums";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -409,7 +408,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 <Row paddingBottom={false}>
                     <Col size={6}>
                         <SelectField
-                            status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
                             size={EComponentSize.LG}
                             value={tempFilters.counterpartyOption}
                             options={counterpartyExampleOptions}
@@ -422,7 +420,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                     </Col>
                     <Col size={6}>
                         <SelectField
-                            status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
                             size={EComponentSize.LG}
                             value={tempFilters.statusOption}
                             options={statusExampleOptions}
@@ -452,7 +449,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
         const renderTags = () => (
             <>
-                <Gap size={16} />
+                <Gap size={12} />
                 <TagGroup size={EComponentSize.MD}>{tagNodes}</TagGroup>
             </>
         );
@@ -496,7 +493,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                     <Row paddingBottom={false}>
                         <Col size={6}>
                             <TextField
-                                status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
                                 inputProps={{
                                     value: appliedFilters.docNumber,
                                     onChange: handleChangeDocNumber,
@@ -507,7 +503,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                         </Col>
                         <Col size={6}>
                             <TextField
-                                status={args.isLoading ? EFormFieldStatus.DISABLED : undefined}
                                 inputProps={{
                                     value: appliedFilters.counterparty,
                                     onChange: handleChangeCounterparty,

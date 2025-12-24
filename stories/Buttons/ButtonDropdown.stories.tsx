@@ -113,6 +113,8 @@ export const Playground: StoryObj<IButtonDropdownWithControlsProps> = {
         theme: EButtonTheme.GENERAL,
         size: EComponentSize.MD,
         children: "Button text",
+        block: false,
+        disabled: false,
     },
     parameters: {
         docs: {

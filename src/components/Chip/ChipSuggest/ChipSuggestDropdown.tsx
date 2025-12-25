@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { ISuggestOption } from "../../Suggest/types";
 import { IChipSuggestDropdownProps } from "./types";
@@ -10,7 +10,7 @@ import { SuggestMobileDropdownContent } from "../../Suggest/SuggestMobileDropdow
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
 const ChipSuggestDropdownBase = <T extends ISuggestOption>(
-    { children, size, targetRef, ...restProps }: IChipSuggestDropdownProps<T>,
+    { children, size, targetRef, chipTargetRef, ...restProps }: IChipSuggestDropdownProps<T>,
     ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
     const {
@@ -24,6 +24,9 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
         onSelect,
         setDropdownOpen,
     } = useSuggestContext<T>();
+
+    // Предыдущее состояние dropdownOpen.
+    const prevDropdownOpen = useRef(false);
 
     const setRef = (instance: HTMLDivElement | null) => {
         dropdownRef.current = instance;
@@ -45,6 +48,14 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
         },
         [setDropdownOpen, closeDropdown],
     );
+
+    useEffect(() => {
+        if (prevDropdownOpen.current && !dropdownOpen && chipTargetRef?.current) {
+            // Возвращение фокуса на target, когда dropdown закрывается после выбора.
+            chipTargetRef.current.focus();
+        }
+        prevDropdownOpen.current = dropdownOpen;
+    }, [dropdownOpen, chipTargetRef]);
 
     return (
         <Dropdown

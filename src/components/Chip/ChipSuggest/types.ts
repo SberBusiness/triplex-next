@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ISuggestProps, ISuggestOption } from "../../Suggest/types";
 import { IChipProps } from "../Chip";
 import { IDropdownProps } from "../../Dropdown";
@@ -23,4 +24,6 @@ export interface IChipSuggestTargetProps<T extends ISuggestOption> extends Omit<
 
 /** Свойства компонента ChipSuggestDropdown. */
 export interface IChipSuggestDropdownProps<T extends ISuggestOption>
-    extends Omit<IDropdownProps, "opened" | "setOpened"> {}
+    extends Omit<IDropdownProps, "opened" | "setOpened"> {
+    chipTargetRef?: React.RefObject<HTMLSpanElement>;
+}

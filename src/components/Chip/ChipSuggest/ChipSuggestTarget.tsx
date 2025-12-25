@@ -12,7 +12,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
 ) => {
     const { value, dropdownOpen, setDropdownOpen } = useSuggestContext<T>();
 
-    const handleClick = useCallback(
+    const handleTargetClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             setDropdownOpen(!dropdownOpen);
             onClick?.(event);
@@ -20,7 +20,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [dropdownOpen, setDropdownOpen, onClick],
     );
 
-    const handleKeyDown = useCallback(
+    const handleTargetKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLButtonElement>) => {
             if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
                 setDropdownOpen(!dropdownOpen);
@@ -28,6 +28,17 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
             }
         },
         [dropdownOpen, setDropdownOpen, onKeyDown],
+    );
+
+    const handleClearButtonKeyDown = useCallback(
+        (event: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+                event.preventDefault();
+                event.stopPropagation();
+                clearSelected?.();
+            }
+        },
+        [clearSelected],
     );
 
     const handleClearButtonClick = useCallback(
@@ -43,17 +54,17 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         if (value === undefined) {
             return <ChipDropdownArrow rotated={dropdownOpen} />;
         } else {
-            return <ChipClearButton onClick={handleClearButtonClick} />;
+            return <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />;
         }
-    }, [value, dropdownOpen, handleClearButtonClick]);
+    }, [value, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
 
     return (
         <Chip
             selected={value !== undefined}
             aria-expanded={dropdownOpen}
             postfix={renderTargetPostfix()}
-            onKeyDown={handleKeyDown}
-            onClick={handleClick}
+            onKeyDown={handleTargetKeyDown}
+            onClick={handleTargetClick}
             {...restProps}
             ref={ref}
         />

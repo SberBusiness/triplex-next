@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from "react";
-import { Chip, IChipProps } from "../../Chip";
+import { Chip, IChipProps } from "../Chip";
 import { ChipDropdownArrow } from "../ChipDropdownArrow";
 import { ChipClearButton } from "../ChipClearButton";
 import { SelectExtendedFieldContext } from "../../SelectExtendedField/SelectExtendedContext";

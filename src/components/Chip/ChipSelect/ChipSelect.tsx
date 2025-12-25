@@ -4,11 +4,11 @@ import {
     SelectExtendedField,
 } from "@sberbusiness/triplex-next/components/SelectExtendedField";
 import { IChipProps } from "../Chip";
-import styles from "../styles/Chip.module.less";
 import { SelectExtendedFieldDropdownDefault } from "@sberbusiness/triplex-next/components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
-import clsx from "clsx";
 import { ISelectFieldProps } from "@sberbusiness/triplex-next/components/SelectField";
 import { ChipSelectTarget } from "./ChipSelectTarget";
+import styles from "../styles/Chip.module.less";
+import clsx from "clsx";
 
 export interface IChipSelectProps
     extends Pick<IChipProps, "disabled" | "className">,

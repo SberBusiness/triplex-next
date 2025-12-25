@@ -4,6 +4,6 @@ export * from "./ChipDropdownArrow";
 export * from "./ChipIcon";
 export * from "./ChipMultiselect";
 export * from "./ChipOptions";
-export * from "./ChipSelect/ChipSelect";
+export * from "./ChipSelect";
 export * from "./ChipSort";
 export * from "./ChipSuggest";

@@ -29,7 +29,7 @@ const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
             <ChipSuggestTarget size={size} {...targetProps} ref={targetRef}>
                 {value ? (displayedValue ?? value.label) : label}
             </ChipSuggestTarget>
-            <ChipSuggestDropdown size={size} targetRef={suggestRef} chipTargetRef={targetRef} {...dropdownProps}>
+            <ChipSuggestDropdown size={size} targetRef={suggestRef} {...dropdownProps}>
                 {label}
             </ChipSuggestDropdown>
         </Suggest>

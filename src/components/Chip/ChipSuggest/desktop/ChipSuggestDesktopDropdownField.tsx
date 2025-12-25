@@ -5,7 +5,6 @@ import { EComponentSize } from "../../../../enums";
 import { Tooltip, ETooltipSize } from "../../../Tooltip";
 import { LoaderSmall, ELoaderSmallTheme } from "../../../Loader";
 import styles from "../../styles/ChipSuggest.module.less";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 
 export const ChipSuggestDesktopDropdownField: React.FC<React.PropsWithChildren> = ({ children }) => {
     const {
@@ -18,7 +17,6 @@ export const ChipSuggestDesktopDropdownField: React.FC<React.PropsWithChildren> 
         tooltipOpen,
         clearInputOnFocus,
         onFilter,
-        setDropdownOpen,
     } = useSuggestContext();
     const [inputFocused, setInputFocused] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -41,14 +39,6 @@ export const ChipSuggestDesktopDropdownField: React.FC<React.PropsWithChildren> 
 
     const handleInputBlur = useCallback(() => setInputFocused(false), []);
 
-    // Если не было произведено выбора, фокус находится на input.
-    // При следующем нажатии TAB необходимо закрыть dropdown, чтобы корректно передать фокус следующему элементу.
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (isKey(event.code, "TAB")) {
-            setDropdownOpen(false);
-        }
-    };
-
     return (
         <FormField className={styles.chipSuggestInputWrapper} size={EComponentSize.SM}>
             <FormFieldLabel>{children}</FormFieldLabel>
@@ -70,7 +60,6 @@ export const ChipSuggestDesktopDropdownField: React.FC<React.PropsWithChildren> 
                         onFocus={handleInputFocus}
                         onBlur={handleInputBlur}
                         onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
                         ref={inputRef}
                     />
                 </Tooltip.Target>

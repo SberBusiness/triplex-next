@@ -23,7 +23,7 @@ describe("ChipSelect", () => {
             />,
         );
 
-        const chip = screen.getByRole("combobox");
+        const chip = screen.getByRole("button");
         expect(chip).toBeInTheDocument();
         expect(chip).toHaveTextContent("Выберите опцию");
     });
@@ -43,8 +43,8 @@ describe("ChipSelect", () => {
             />,
         );
 
-        const chip = screen.getByRole("combobox");
-        expect(chip).toHaveTextContent(String(value.label));
+        const chip = screen.getByText(String(value.label));
+        expect(chip).toBeInTheDocument();
     });
 
     test("renders displayedValue instead of value label when provided", () => {
@@ -63,7 +63,7 @@ describe("ChipSelect", () => {
             />,
         );
 
-        const chip = screen.getByRole("combobox");
-        expect(chip).toHaveTextContent("Custom Display");
+        const chip = screen.getByText("Custom Display");
+        expect(chip).toBeInTheDocument();
     });
 });

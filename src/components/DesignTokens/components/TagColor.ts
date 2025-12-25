@@ -7,6 +7,8 @@ export const designTokensComponentsTagColorKeys = [
     "Background_Info",
     "Background_Warning",
     "Background_Error",
+
+    "Text_Color_Default",
 ] as const;
 // Тип, содержащий названия токенов компонента TagColor.
 export type TDesignTokensComponentsTagColorKeys = (typeof designTokensComponentsTagColorKeys)[number];
@@ -24,4 +26,6 @@ export const TagColor_Tokens: TDesignTokensComponentsTagColorValues = {
     Background_Info: [{ ref: "ColorInfo.100" }, { ref: "ColorInfo.80" }], // var(--triplex-next-TagColor-Background_Info)
     Background_Warning: [{ ref: "ColorWarning.100" }, { ref: "ColorWarning.80" }], // var(--triplex-next-TagColor-Background_Warning)
     Background_Error: [{ ref: "ColorError.100" }, { ref: "ColorError.80" }], // var(--triplex-next-TagColor-Background_Error)
+
+    Text_Color_Default: [{ ref: "ColorDarkNeutralAlpha.30" }, { ref: "ColorDarkNeutralAlpha.30" }], // var(--triplex-next-TagColor-Text_Color_Default)
 };

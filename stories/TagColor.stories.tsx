@@ -109,7 +109,7 @@ export const DifferentSizes: Story = {
         },
     },
     args: {
-        status: ETagColorStatus.DEFAULT,
+        status: ETagColorStatus.INFO,
         children: "Tag text",
     },
     parameters: {

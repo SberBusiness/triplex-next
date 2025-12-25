@@ -1,26 +1,35 @@
 .tagColor {
+    box-sizing: border-box;
+    max-width: 100%;
     position: relative;
     display: inline-flex;
     align-items: center;
-    box-sizing: border-box;
-    max-width: 100%;
-   
+
     &.sm {
         height: 16px;
         padding: 2px 6px 3px 6px;
         border-radius: 4px;
+
+        font-size: 10px;
+        line-height: 12px;
     }
 
     &.md {
         height: 20px;
         padding: 2px 8px 3px 8px;
         border-radius: 4px;
+
+        font-size: 12px;
+        line-height: 16px;
     }
 
     &.lg {
         height: 28px;
         padding: 4px 8px;
         border-radius: 8px;
+
+        font-size: 14px;
+        line-height: 20px;
     }
 
     &.default {
@@ -45,8 +54,10 @@
 }
 
 .content {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    min-width: 0;
+
+    color: var(--triplex-next-TagColor-Text_Color_Default);
 }

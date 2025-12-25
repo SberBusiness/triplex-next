@@ -1,0 +1,52 @@
+.tagColor {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 100%;
+   
+    &.sm {
+        height: 16px;
+        padding: 2px 6px 3px 6px;
+        border-radius: 4px;
+    }
+
+    &.md {
+        height: 20px;
+        padding: 2px 8px 3px 8px;
+        border-radius: 4px;
+    }
+
+    &.lg {
+        height: 28px;
+        padding: 4px 8px;
+        border-radius: 8px;
+    }
+
+    &.default {
+        background: var(--triplex-next-TagColor-Background_Default);
+    }
+
+    &.success {
+        background: var(--triplex-next-TagColor-Background_Success);
+    }
+
+    &.info {
+        background: var(--triplex-next-TagColor-Background_Info);
+    }
+
+    &.warning {
+        background: var(--triplex-next-TagColor-Background_Warning);
+    }
+
+    &.error {
+        background: var(--triplex-next-TagColor-Background_Error);
+    }
+}
+
+.content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}

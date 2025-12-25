@@ -39,6 +39,7 @@ import {
     TDesignTokensComponentsTableBasic,
     TDesignTokensComponentsTabs,
     TDesignTokensComponentsTag,
+    TDesignTokensComponentsTagColor,
     TDesignTokensComponentsTabsLine,
     TDesignTokensComponentsTooltip,
     TDesignTokensComponentsTypography,
@@ -324,6 +325,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTableBasic
     | TDesignTokensComponentsTabs
     | TDesignTokensComponentsTag
+    | TDesignTokensComponentsTagColor
     | TDesignTokensComponentsTabsLine
     | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsTypography

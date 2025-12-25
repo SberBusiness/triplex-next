@@ -40,6 +40,7 @@ export * from "./TableBasic";
 export * from "./Chip";
 export * from "./LightBox";
 export * from "./Tag";
+export * from "./TagColor";
 export * from "./Notification";
 export * from "./SMSInput";
 export * from "./StatusTracker";

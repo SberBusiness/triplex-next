@@ -12,7 +12,7 @@ export const designTokensComponentsCalendarKeys = [
     "View_Item_Background_Selected_Muted_Default",
     "View_Item_Background_Selected_Muted_Hover",
     // "View_Item_BorderColor_Default",
-    // "View_Item_BorderColor_Focus",
+    "View_Item_BorderColor_Focus",
     "View_Item_Color_Default",
     "View_Item_Color_Hover",
     "View_Item_Color_Disabled",
@@ -66,7 +66,7 @@ export const Calendar_Tokens: TDesignTokensComponentsCalendarValues = {
     View_Item_Background_Selected_Muted_Default: [{ ref: "ColorBrand.100" }, { ref: "ColorBrand.20" }], // var(--triplex-Calendar-View_Item_Background_Selected_Muted_Default)
     View_Item_Background_Selected_Muted_Hover: [{ ref: "ColorBrand.90" }, { ref: "ColorBrand.10" }], // var(--triplex-Calendar-View_Item_Background_Selected_Muted_Hover)
     // View_Item_BorderColor_Default: [{ ref: "ColorBasic.0" }, { ref: "ColorBasic.0" }], // var(--triplex-Calendar-View_Item_BorderColor_Default)
-    // View_Item_BorderColor_Focus: [{ ref: "ColorAccent.50" }, { ref: "ColorAccent.50" }], // var(--triplex-Calendar-View_Item_BorderColor_Focus)
+    View_Item_BorderColor_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-Calendar-View_Item_BorderColor_Focus)
     View_Item_Color_Default: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-Calendar-View_Item_Color_Default)
     View_Item_Color_Hover: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-Calendar-View_Item_Color_Default)
     View_Item_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorNeutralAlpha.70" }], // var(--triplex-Calendar-View_Item_Color_Disabled)

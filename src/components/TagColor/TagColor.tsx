@@ -24,16 +24,10 @@ export const TagColor: React.FC<ITagColorProps> = ({
     ...restProps
 }) =>
     children && (
-        <span
-            className={clsx(
-                styles.tagColor,
-                styles.content,
-                sizeToClassNameMap[size],
-                statusToClassNameMap[status],
-                className,
-            )}
+        <div
+            className={clsx(styles.tagColor, sizeToClassNameMap[size], statusToClassNameMap[status], className)}
             {...restProps}
         >
-            {children}
-        </span>
+            <span className={styles.content}>{children}</span>
+        </div>
     );

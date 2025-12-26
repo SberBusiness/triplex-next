@@ -13,13 +13,13 @@ export interface IFormFieldClearProps extends React.ButtonHTMLAttributes<HTMLBut
 
 /** Кнопка очищения введенного значения. */
 export const FormFieldClear = React.forwardRef<HTMLButtonElement, IFormFieldClearProps>(
-    ({ className, onMouseDown, onFocus, onBlur, ...htmlClearAttributes }, ref) => {
-        const { status, focused, hovered, valueExist, setFocused } = useContext(FormFieldContext);
+    ({ className, onMouseDown, ...htmlClearAttributes }, ref) => {
+        const { status, valueExist } = useContext(FormFieldContext);
         const classNames = clsx(
             styles.formFieldClear,
             "hoverable",
             {
-                [styles.hidden]: !valueExist || status === EFormFieldStatus.DISABLED || !(focused || hovered),
+                [styles.hidden]: !valueExist || status === EFormFieldStatus.DISABLED,
             },
             className,
         );
@@ -30,25 +30,8 @@ export const FormFieldClear = React.forwardRef<HTMLButtonElement, IFormFieldClea
             onMouseDown?.(event);
         };
 
-        const handleFocus = (event: React.FocusEvent<HTMLButtonElement>) => {
-            setFocused(true);
-            onFocus?.(event);
-        };
-
-        const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
-            setFocused(false);
-            onBlur?.(event);
-        };
-
         return (
-            <ButtonIcon
-                className={classNames}
-                onMouseDown={handleMouseDown}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                {...htmlClearAttributes}
-                ref={ref}
-            >
+            <ButtonIcon className={classNames} onMouseDown={handleMouseDown} {...htmlClearAttributes} ref={ref}>
                 <CrossStrokeSrvIcon16 paletteIndex={5} />
             </ButtonIcon>
         );

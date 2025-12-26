@@ -27,8 +27,15 @@ export interface IChipMultiselectProps extends Omit<IMultiselectFieldProps, "ren
  */
 export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselectProps>(
     ({ children, className, clearSelected, disabled, label, displayedValue, selected, size, ...rest }, ref) => {
+        const handleKeyDownClearButton = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+                // Предотвращаем всплытие события до Chip
+                event.stopPropagation();
+            }
+        };
+
         const handleClickClearButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-            // Предотвращение нажатия на родительский элемент Chip.
+            // Предотвращаем всплытие события до Chip
             event.stopPropagation();
 
             clearSelected();
@@ -50,7 +57,7 @@ export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselect
                     onKeyDown={handleKeyDown}
                     postfix={
                         selected ? (
-                            <ChipClearButton onClick={handleClickClearButton} />
+                            <ChipClearButton onKeyDown={handleKeyDownClearButton} onClick={handleClickClearButton} />
                         ) : (
                             <ChipDropdownArrow rotated={opened} />
                         )

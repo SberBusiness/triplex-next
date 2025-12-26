@@ -23,22 +23,49 @@ describe("TagColor", () => {
         expect(screen.getByText("Test tag")).toBeInTheDocument();
     });
 
-    it("Should not render when children is empty", () => {
-        const { container } = render(<TagColor size={EComponentSize.MD}>{""}</TagColor>);
+    it("Should render empty component when children is empty", () => {
+        render(
+            <TagColor size={EComponentSize.MD} data-testid="tag-color">
+                {""}
+            </TagColor>,
+        );
 
-        expect(container.firstChild).toBeNull();
+        const tagColor = getTagColor();
+        expect(tagColor).toBeInTheDocument();
+        expect(tagColor).toHaveClass("tagColor");
+        expect(tagColor).toHaveClass("md");
+        expect(tagColor).toHaveClass("default");
+        expect(tagColor).toHaveTextContent("");
     });
 
-    it("Should not render when children is null", () => {
-        const { container } = render(<TagColor size={EComponentSize.MD}>{null}</TagColor>);
+    it("Should render empty component when children is null", () => {
+        render(
+            <TagColor size={EComponentSize.MD} data-testid="tag-color">
+                {null}
+            </TagColor>,
+        );
 
-        expect(container.firstChild).toBeNull();
+        const tagColor = getTagColor();
+        expect(tagColor).toBeInTheDocument();
+        expect(tagColor).toHaveClass("tagColor");
+        expect(tagColor).toHaveClass("md");
+        expect(tagColor).toHaveClass("default");
+        expect(tagColor).toHaveTextContent("");
     });
 
-    it("Should not render when children is undefined", () => {
-        const { container } = render(<TagColor size={EComponentSize.MD}>{undefined}</TagColor>);
+    it("Should render empty component when children is undefined", () => {
+        render(
+            <TagColor size={EComponentSize.MD} data-testid="tag-color">
+                {undefined}
+            </TagColor>,
+        );
 
-        expect(container.firstChild).toBeNull();
+        const tagColor = getTagColor();
+        expect(tagColor).toBeInTheDocument();
+        expect(tagColor).toHaveClass("tagColor");
+        expect(tagColor).toHaveClass("md");
+        expect(tagColor).toHaveClass("default");
+        expect(tagColor).toHaveTextContent("");
     });
 
     it("Should correct apply SM size", () => {

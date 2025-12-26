@@ -16,18 +16,14 @@ const statusToClassNameMap = {
 };
 
 /** Компонент, который используется для маркировки и классификации. */
-export const TagColor: React.FC<ITagColorProps> = ({
-    children,
-    className,
-    size,
-    status = ETagColorStatus.DEFAULT,
-    ...restProps
-}) =>
-    children && (
-        <div
-            className={clsx(styles.tagColor, sizeToClassNameMap[size], statusToClassNameMap[status], className)}
-            {...restProps}
-        >
-            <span className={styles.content}>{children}</span>
-        </div>
-    );
+export const TagColor = React.forwardRef<HTMLSpanElement, ITagColorProps>(
+    ({ children, className, size, status = ETagColorStatus.DEFAULT, ...restProps }) =>
+        children && (
+            <span
+                className={clsx(styles.tagColor, sizeToClassNameMap[size], statusToClassNameMap[status], className)}
+                {...restProps}
+            >
+                <span className={styles.content}>{children}</span>
+            </span>
+        ),
+);

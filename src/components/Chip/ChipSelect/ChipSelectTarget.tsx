@@ -1,50 +1,45 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 import { Chip, IChipProps } from "../Chip";
 import { ChipDropdownArrow } from "../ChipDropdownArrow";
 import { ChipClearButton } from "../ChipClearButton";
-import { SelectExtendedFieldContext } from "../../SelectExtendedField/SelectExtendedContext";
 import { isKey } from "../../../utils/keyboard";
 
 export interface IChipSelectTargetProps extends IChipProps {
     onClear: () => void;
+    opened: boolean;
+    setOpened: (opened: boolean) => void;
 }
 
 export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTargetProps>((props, ref) => {
-    const { children, selected, onKeyDown, onClick, onClear, ...rest } = props;
-    const { dropdownOpen, setDropdownOpen } = useContext(SelectExtendedFieldContext);
+    const { children, selected, onKeyDown, onClick, onClear, opened, setOpened, ...rest } = props;
 
-    const handleTargetKeyDown = useCallback(
+    const handleKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (!dropdownOpen && (isKey(event.code, "ENTER") || isKey(event.code, "SPACE"))) {
+            if (!opened && (isKey(event.code, "ENTER") || isKey(event.code, "SPACE"))) {
                 event.preventDefault();
-                setDropdownOpen(!dropdownOpen);
-            } else if (dropdownOpen && isKey(event.code, "TAB")) {
-                setDropdownOpen(false);
+                setOpened(true);
+            } else if (opened && isKey(event.code, "TAB")) {
+                setOpened(false);
             }
 
             onKeyDown?.(event);
         },
-        [dropdownOpen, setDropdownOpen, onKeyDown],
+        [opened, setOpened, onKeyDown],
     );
 
-    const handleTargetClick = useCallback(
+    const handleClick = useCallback(
         (event: React.MouseEvent<HTMLSpanElement>) => {
-            setDropdownOpen(!dropdownOpen);
+            setOpened(!opened);
             onClick?.(event);
         },
-        [dropdownOpen, setDropdownOpen, onClick],
+        [opened, setOpened, onClick],
     );
 
-    const handleClearButtonKeyDown = useCallback(
-        (event: React.KeyboardEvent<HTMLButtonElement>) => {
-            if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
-                event.preventDefault();
-                event.stopPropagation();
-                onClear();
-            }
-        },
-        [onClear],
-    );
+    const handleClearButtonKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+            event.stopPropagation();
+        }
+    }, []);
 
     const handleClearButtonClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -58,17 +53,17 @@ export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTar
         if (selected) {
             return <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />;
         } else {
-            return <ChipDropdownArrow rotated={dropdownOpen} />;
+            return <ChipDropdownArrow rotated={opened} />;
         }
-    }, [selected, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
+    }, [selected, opened, handleClearButtonClick, handleClearButtonKeyDown]);
 
     return (
         <Chip
             postfix={renderTargetPostfix()}
             selected={selected}
-            aria-expanded={dropdownOpen}
-            onKeyDown={handleTargetKeyDown}
-            onClick={handleTargetClick}
+            aria-expanded={opened}
+            onKeyDown={handleKeyDown}
+            onClick={handleClick}
             {...rest}
             ref={ref}
         >

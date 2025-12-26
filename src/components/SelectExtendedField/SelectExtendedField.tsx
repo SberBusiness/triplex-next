@@ -6,7 +6,6 @@ import styles from "./styles/SelectExtendedField.module.less";
 import { SelectExtendedFieldTarget } from "./components/SelectExtendedFieldTarget";
 import { SelectExtendedFieldDropdown } from "./components/SelectExtendedFieldDropdown";
 import { IDropdownListItemProps } from "../Dropdown";
-import { SelectExtendedFieldContext } from "./SelectExtendedContext";
 
 /* Свойства опции списка. */
 export interface ISelectExtendedFieldDefaultOption
@@ -131,17 +130,13 @@ export const SelectExtendedField = Object.assign(
                     ref={setRef}
                     {...htmlDivAttributes}
                 >
-                    <SelectExtendedFieldContext.Provider
-                        value={{ dropdownOpen: opened, setDropdownOpen: handleSetOpened }}
-                    >
-                        {renderTarget({ opened, setOpened: handleSetOpened })}
-                        {children({
-                            dropdownRef,
-                            opened,
-                            setOpened: handleSetOpened,
-                            targetRef,
-                        })}
-                    </SelectExtendedFieldContext.Provider>
+                    {renderTarget({ opened, setOpened: handleSetOpened })}
+                    {children({
+                        dropdownRef,
+                        opened,
+                        setOpened: handleSetOpened,
+                        targetRef,
+                    })}
                 </div>
             </KeyDownListener>
         );

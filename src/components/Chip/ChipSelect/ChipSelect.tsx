@@ -1,6 +1,7 @@
 import React from "react";
 import {
     ISelectExtendedFieldDropdownProvideProps,
+    ISelectExtendedFieldTargetProvideProps,
     SelectExtendedField,
 } from "@sberbusiness/triplex-next/components/SelectExtendedField";
 import { IChipProps } from "../Chip";
@@ -48,11 +49,18 @@ export const ChipSelect = React.forwardRef<HTMLDivElement, IChipSelectProps>(
             />
         );
 
-        const renderTarget = () => {
+        const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => {
             const selected = value !== undefined;
 
             return (
-                <ChipSelectTarget selected={selected} disabled={disabled} onClear={clearSelected} size={size}>
+                <ChipSelectTarget
+                    selected={selected}
+                    disabled={disabled}
+                    onClear={clearSelected}
+                    size={size}
+                    opened={opened}
+                    setOpened={setOpened}
+                >
                     {value ? (displayedValue ?? value.label) : label}
                 </ChipSelectTarget>
             );

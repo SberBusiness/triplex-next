@@ -12,7 +12,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
 ) => {
     const { value, dropdownOpen, setDropdownOpen } = useSuggestContext<T>();
 
-    const handleTargetClick = useCallback(
+    const handleClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             setDropdownOpen(!dropdownOpen);
             onClick?.(event);
@@ -20,7 +20,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [dropdownOpen, setDropdownOpen, onClick],
     );
 
-    const handleTargetKeyDown = useCallback(
+    const handleKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLButtonElement>) => {
             if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
                 setDropdownOpen(!dropdownOpen);
@@ -30,16 +30,11 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [dropdownOpen, setDropdownOpen, onKeyDown],
     );
 
-    const handleClearButtonKeyDown = useCallback(
-        (event: React.KeyboardEvent<HTMLButtonElement>) => {
-            if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
-                event.preventDefault();
-                event.stopPropagation();
-                clearSelected?.();
-            }
-        },
-        [clearSelected],
-    );
+    const handleClearButtonKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+            event.stopPropagation();
+        }
+    }, []);
 
     const handleClearButtonClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,8 +58,8 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
             selected={value !== undefined}
             aria-expanded={dropdownOpen}
             postfix={renderTargetPostfix()}
-            onKeyDown={handleTargetKeyDown}
-            onClick={handleTargetClick}
+            onKeyDown={handleKeyDown}
+            onClick={handleClick}
             {...restProps}
             ref={ref}
         />

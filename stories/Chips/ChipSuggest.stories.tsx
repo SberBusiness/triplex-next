@@ -4,7 +4,6 @@ import { ChipSuggest } from "../../src/components/Chip/ChipSuggest/ChipSuggest";
 import { ISuggestFieldOption } from "../../src/components/SuggestField/types";
 import { EComponentSize } from "../../src/enums";
 import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
 
 const meta = {
     title: "Components/Chips/ChipSuggest",
@@ -143,7 +142,7 @@ const useChipSuggestLogic = () => {
         onSelect: setValue,
         onFilter: handleFilter,
         targetProps: { clearSelected: () => setValue(undefined) },
-        dropdownProps: { onOpen: handleDropdownOpen, alignment: EDropdownAlignment.LEFT },
+        dropdownProps: { onOpen: handleDropdownOpen },
     };
 };
 

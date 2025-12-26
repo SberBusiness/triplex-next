@@ -1,4 +1,5 @@
 import React from "react";
+import { Controls, Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { Meta, StoryObj } from "@storybook/react";
 import { TagColor } from "../src/components/TagColor";
 import { EComponentSize } from "../src/enums";
@@ -25,10 +26,18 @@ const meta = {
 \`\`\`tsx
 import { TagColor } from '@sberbusiness/triplex-next';   
 
-<TagColor size={EComponentSize.LG} status={EMarkerStatus.SUCCESS}>Tag text</TagColor>
+<TagColor size={EComponentSize.LG} status={ETagColorStatus.SUCCESS}>Tag text</TagColor>
 \`\`\`
                 `,
             },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Controls of={Playground} />
+                    <Stories />
+                </>
+            ),
         },
     },
     argTypes: {
@@ -58,7 +67,7 @@ import { TagColor } from '@sberbusiness/triplex-next';
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basic: StoryObj<typeof TagColor> = {
+export const Playground: StoryObj<typeof TagColor> = {
     args: {
         size: EComponentSize.MD,
         status: ETagColorStatus.SUCCESS,
@@ -68,13 +77,6 @@ export const Basic: StoryObj<typeof TagColor> = {
 };
 
 export const Default: StoryObj<typeof TagColor> = {
-    argTypes: {
-        status: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     args: {
         size: EComponentSize.MD,
         status: ETagColorStatus.DEFAULT,
@@ -86,28 +88,14 @@ export const Default: StoryObj<typeof TagColor> = {
                 story: "Тег без выбранного статуса.",
             },
         },
+        controls: {
+            disable: true,
+        },
     },
     render: (args) => <TagColor {...args}>{args.children}</TagColor>,
 };
 
 export const DifferentSizes: Story = {
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        status: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     args: {
         status: ETagColorStatus.INFO,
         children: "Tag text",
@@ -117,6 +105,9 @@ export const DifferentSizes: Story = {
             description: {
                 story: "Теги разных размеров: small (SM), medium (MD), large (LG).",
             },
+        },
+        controls: {
+            disable: true,
         },
     },
     render: (args) => (
@@ -137,23 +128,6 @@ export const DifferentSizes: Story = {
 };
 
 export const DifferentStatuses: StoryObj<typeof TagColor> = {
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        children: {
-            table: {
-                disable: true,
-            },
-        },
-        status: {
-            table: {
-                disable: true,
-            },
-        },
-    },
     args: {
         children: "Tag text",
         size: EComponentSize.MD,
@@ -163,6 +137,9 @@ export const DifferentStatuses: StoryObj<typeof TagColor> = {
             description: {
                 story: "Теги с разными цветовыми статусами: default(по умолчанию), success, info, warning, error.",
             },
+        },
+        controls: {
+            disable: true,
         },
     },
     render: (args) => (
@@ -203,9 +180,12 @@ export const WithOverflow: Story = {
                 story: "Тег с длинным текстом, который обрезается многоточием.",
             },
         },
+        controls: {
+            disable: true,
+        },
     },
     render: (args) => (
-        <div style={{ maxWidth: "440px" }}>
+        <div style={{ maxWidth: "400px" }}>
             <TagColor {...args}>{args.children}</TagColor>
         </div>
     ),

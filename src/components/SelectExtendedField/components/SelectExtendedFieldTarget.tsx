@@ -130,6 +130,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 ref.current = instance;
             }
         };
+
         return (
             <FormField
                 onClick={handleClick}

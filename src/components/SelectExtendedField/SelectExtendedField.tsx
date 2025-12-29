@@ -125,7 +125,7 @@ export const SelectExtendedField = Object.assign(
         return (
             <KeyDownListener onMatch={closeDropdown} eventKeyCode={EVENT_KEY_CODES.ESCAPE}>
                 <div
-                    className={clsx(styles.SelectExtendedField, className)}
+                    className={clsx(styles.selectExtendedField, className)}
                     onKeyDown={handleKeyDown}
                     ref={setRef}
                     {...htmlDivAttributes}

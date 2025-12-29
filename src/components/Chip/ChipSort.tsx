@@ -1,7 +1,7 @@
 import React from "react";
 import { isEqual } from "lodash";
 import { ChipIcon } from "./ChipIcon";
-import { IChipSelectProps } from "./ChipSelect";
+import { IChipSelectProps } from "./ChipSelect/ChipSelect";
 import { SortStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import {
     ISelectExtendedFieldDropdownProvideProps,

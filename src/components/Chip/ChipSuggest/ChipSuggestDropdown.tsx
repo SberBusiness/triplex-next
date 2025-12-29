@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { FocusTrap } from "focus-trap-react";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { ISuggestOption } from "../../Suggest/types";
 import { IChipSuggestDropdownProps } from "./types";
@@ -10,7 +11,7 @@ import { SuggestMobileDropdownContent } from "../../Suggest/SuggestMobileDropdow
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
 const ChipSuggestDropdownBase = <T extends ISuggestOption>(
-    { children, size, targetRef, ...restProps }: IChipSuggestDropdownProps<T>,
+    { children, size, targetRef, focusTrapProps, ...restProps }: IChipSuggestDropdownProps<T>,
     ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
     const {
@@ -46,6 +47,40 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
         [setDropdownOpen, closeDropdown],
     );
 
+    const renderDesktopDropdownContent = () => (
+        <FocusTrap
+            {...focusTrapProps}
+            focusTrapOptions={{
+                clickOutsideDeactivates: true,
+                returnFocusOnDeactivate: true,
+                ...focusTrapProps?.focusTrapOptions,
+            }}
+        >
+            <div role="presentation">
+                <ChipSuggestDesktopDropdownField>{children}</ChipSuggestDesktopDropdownField>
+                <DropdownList
+                    id={dropdownListId}
+                    size={size}
+                    dropdownOpened={dropdownOpen}
+                    loading={dropdownListLoading}
+                    style={options.length === 0 ? { display: "none" } : undefined}
+                >
+                    {options.map((option) => (
+                        <DropdownListItem
+                            key={option.id}
+                            id={option.id}
+                            keyCodesForSelection={KEY_CODES_SELECTABLE}
+                            selected={option.id === value?.id}
+                            onSelect={() => onSelect(option)}
+                        >
+                            {option.content || option.label}
+                        </DropdownListItem>
+                    ))}
+                </DropdownList>
+            </div>
+        </FocusTrap>
+    );
+
     return (
         <Dropdown
             size={size}
@@ -59,26 +94,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
             {...restProps}
             ref={setRef}
         >
-            <ChipSuggestDesktopDropdownField>{children}</ChipSuggestDesktopDropdownField>
-            <DropdownList
-                id={dropdownListId}
-                size={size}
-                dropdownOpened={dropdownOpen}
-                loading={dropdownListLoading}
-                style={options.length === 0 ? { display: "none" } : undefined}
-            >
-                {options.map((option) => (
-                    <DropdownListItem
-                        key={option.id}
-                        id={option.id}
-                        keyCodesForSelection={KEY_CODES_SELECTABLE}
-                        selected={option.id === value?.id}
-                        onSelect={() => onSelect(option)}
-                    >
-                        {option.content || option.label}
-                    </DropdownListItem>
-                ))}
-            </DropdownList>
+            {renderDesktopDropdownContent()}
         </Dropdown>
     );
 };

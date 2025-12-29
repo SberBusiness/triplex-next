@@ -11,6 +11,9 @@ import { ITabsLineItemProps } from "./TabsLineItem";
 import styles from "../styles/TabsLine.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { Text } from "../../Typography/Text";
+import { tabsLineSizeToTextSizeMap } from "../utils";
+import { EFontType } from "../../Typography/enums";
 
 /** Свойства компонента TabsLineDropdown. */
 interface ITabsLineDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,6 +39,10 @@ interface ITabsLineDropdownState {
     activeDescendant?: string;
     /** Состояние открытости дропдауна. */
     opened: boolean;
+    /** Состояние фокуса кнопки дропдауна. */
+    focused: boolean;
+    /** Состояние ховера над кнопкой дропдауна. */
+    hovered: boolean;
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -45,6 +52,8 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
     state = {
         activeDescendant: undefined,
         opened: false,
+        focused: false,
+        hovered: false,
     };
 
     private readonly targetRef: React.RefObject<HTMLDivElement>;
@@ -83,16 +92,42 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
     /** Рендер кнопки, раскрывающей список. */
     private renderTarget = () => {
         const { active, label, targetHtmlAttributes, size = EComponentSize.MD } = this.props;
-        const { activeDescendant, opened } = this.state;
+        const { activeDescendant, opened, focused, hovered } = this.state;
 
         const buttonClassName = clsx(styles.tab, sizeToClassNameMap[size], styles.dropdownTarget, {
             [styles.active]: active,
         });
         const caretClassName = clsx(styles.dropdownTargetCaret, { [styles.opened]: opened });
 
+        const { onFocus, onBlur, onMouseEnter, onMouseLeave, ...restTargetHtmlAttributes } = targetHtmlAttributes || {};
+
+        const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
+            this.setState({ focused: true });
+            onFocus?.(e);
+        };
+
+        const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
+            this.setState({ focused: false });
+            onBlur?.(e);
+        };
+
+        const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
+            this.setState({ hovered: true });
+            onMouseEnter?.(e);
+        };
+
+        const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+            this.setState({ hovered: false });
+            onMouseLeave?.(e);
+        };
+
         return (
             <button
-                {...targetHtmlAttributes}
+                {...restTargetHtmlAttributes}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 className={buttonClassName}
                 onClick={this.handleTargetClick}
                 onKeyDown={this.handleTargetKeyDown}
@@ -105,7 +140,12 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
             >
                 <span className={styles.tabInner}>
                     <span className={styles.dropdownTargetInner}>
-                        {label}
+                        <Text
+                            size={tabsLineSizeToTextSizeMap[size]}
+                            type={active || focused || hovered ? EFontType.PRIMARY : EFontType.SECONDARY}
+                        >
+                            {label}
+                        </Text>
                         <CaretdownStrokeSrvIcon16 className={caretClassName} paletteIndex={5} />
                     </span>
                 </span>

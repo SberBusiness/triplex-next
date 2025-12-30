@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { ChipSuggest } from "../../src/components/Chip/ChipSuggest/ChipSuggest";
 import { ISuggestFieldOption } from "../../src/components/SuggestField/types";
 import { EComponentSize } from "../../src/enums";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/Chips/ChipSuggest",
@@ -11,12 +11,23 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
+            description: {
+                component: `
+Компонент выбора одного значения из списка с возможностью фильтрации. Выбранное значение отображается в виде компонента Chip.
+
+## Особенности:
+
+- **Размеры**: small (SM), medium (MD), large (LG)
+
+## Использование:
+Компонент принимает массив опций и обрабатывает выбор через onChange. При выборе опции она отображается в Chip, а при клике на кнопку очистки вызывается clearSelected.
+                `,
+            },
             page: () => (
                 <>
                     <Title />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),
@@ -136,7 +147,6 @@ const useChipSuggestLogic = () => {
 };
 
 export const Playground: Story = {
-    name: "Playground",
     args: {
         size: EComponentSize.LG,
         label: "Label",
@@ -168,7 +178,6 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -185,8 +194,7 @@ const sizeToLabelMap = {
     [EComponentSize.LG]: "LG",
 };
 
-export const DifferentSizes: Story = {
-    name: "Different sizes",
+export const Sizes: Story = {
     parameters: {
         controls: { disable: true },
     },
@@ -214,8 +222,7 @@ export const DifferentSizes: Story = {
     },
 };
 
-export const DifferentStates: Story = {
-    name: "Different states",
+export const States: Story = {
     parameters: {
         controls: { disable: true },
     },

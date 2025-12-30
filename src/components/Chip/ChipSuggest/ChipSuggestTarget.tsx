@@ -30,6 +30,12 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [dropdownOpen, setDropdownOpen, onKeyDown],
     );
 
+    const handleClearButtonKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+            event.stopPropagation();
+        }
+    }, []);
+
     const handleClearButtonClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             // Предотвращение нажатия на родительский элемент Chip.
@@ -43,9 +49,9 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         if (value === undefined) {
             return <ChipDropdownArrow rotated={dropdownOpen} />;
         } else {
-            return <ChipClearButton onClick={handleClearButtonClick} />;
+            return <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />;
         }
-    }, [value, dropdownOpen, handleClearButtonClick]);
+    }, [value, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
 
     return (
         <Chip

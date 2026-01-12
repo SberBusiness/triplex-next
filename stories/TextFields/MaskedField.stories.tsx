@@ -4,8 +4,12 @@ import { MaskedField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
 import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
-import { FormFieldMaskedInput } from "../../src/components/FormField";
-import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { FormFieldClear, FormFieldMaskedInput } from "../../src/components/FormField";
+import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Link } from "../../src/components/Link";
+import { HelpBox } from "../../src/components/HelpBox/HelpBox";
+import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
+import { DefaulticonStrokePrdIcon20, DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 
 export default {
     title: "Components/TextFields/MaskedField",
@@ -72,7 +76,6 @@ export default {
                     <DocsTitle />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),
@@ -242,7 +245,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
                         onChange: handleChange,
                         ...maskConfig,
                     }}
-                    label={labelText || "Название поля"}
+                    label={labelText || "Label"}
                 />
             </div>
         );
@@ -262,7 +265,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
             description: "Текст лейбла",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "Название поля" },
+                defaultValue: { summary: "Label" },
             },
         },
         descriptionText: {
@@ -270,7 +273,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
             description: "Текст описания",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "Описание поля" },
+                defaultValue: { summary: "(21) Description" },
             },
         },
         maskType: {
@@ -302,8 +305,8 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
     args: {
         status: EFormFieldStatus.DEFAULT,
         size: EFormFieldSize.LG,
-        labelText: "Название поля",
-        descriptionText: "Описание поля",
+        labelText: "Label",
+        descriptionText: "(21) Description",
         maskType: "phone",
         className: "",
     },
@@ -328,47 +331,30 @@ export const Default: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
-                <MaskedField
-                    maskedInputProps={{
-                        value: phoneValue,
-                        onChange: handlePhoneChange,
-                        mask: FormFieldMaskedInput.presets.masks.phone,
-                        placeholder: "Введите номер телефона",
-                    }}
-                    label="Номер телефона"
-                />
-            </div>
-        );
-    },
-    parameters: {
-        controls: { disable: true },
-    },
-};
-
-export const Basic: StoryObj<typeof MaskedField> = {
-    render: () => {
-        const [phoneValue, setPhoneValue] = useState("");
-
-        const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setPhoneValue(e.target.value);
-        };
-
-        return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
                         </Text>
                     }
                     maskedInputProps={{
                         value: phoneValue,
                         onChange: handlePhoneChange,
                         mask: FormFieldMaskedInput.presets.masks.phone,
-                        placeholder: "Введите номер телефона",
                     }}
-                    label="Номер телефона"
+                    label="Label"
+                    postfix={
+                        <>
+                            <FormFieldClear onClick={() => setPhoneValue("")} />
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        </>
+                    }
                 />
             </div>
         );
@@ -376,7 +362,7 @@ export const Basic: StoryObj<typeof MaskedField> = {
     parameters: {
         docs: {
             description: {
-                story: "Базовый пример использования MaskedInputField.",
+                story: "Базовый пример использования MaskedInputField с маской номера телефона.",
             },
         },
         controls: { disable: true },
@@ -401,20 +387,19 @@ export const States: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "304px" }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
                     maskedInputProps={{
                         value: phoneValue,
                         onChange: handlePhoneChange,
                         mask: FormFieldMaskedInput.presets.masks.phone,
-                        placeholder: "Введите номер телефона",
                     }}
-                    label="Номер телефона"
+                    label="Label"
                 />
 
                 <Gap size={24} />
@@ -423,7 +408,7 @@ export const States: StoryObj<typeof MaskedField> = {
                     status={EFormFieldStatus.ERROR}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                            Неверный формат номера
+                            Error text
                         </Text>
                     }
                     maskedInputProps={{
@@ -431,7 +416,7 @@ export const States: StoryObj<typeof MaskedField> = {
                         onChange: handlePhoneChangeError,
                         mask: FormFieldMaskedInput.presets.masks.phone,
                     }}
-                    label="Номер телефона"
+                    label="Label"
                 />
 
                 <Gap size={24} />
@@ -440,7 +425,7 @@ export const States: StoryObj<typeof MaskedField> = {
                     status={EFormFieldStatus.WARNING}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
-                            Неверный формат номера
+                            Warning text
                         </Text>
                     }
                     maskedInputProps={{
@@ -448,7 +433,7 @@ export const States: StoryObj<typeof MaskedField> = {
                         onChange: handlePhoneChangeWarning,
                         mask: FormFieldMaskedInput.presets.masks.phone,
                     }}
-                    label="Номер телефона"
+                    label="Label"
                 />
 
                 <Gap size={24} />
@@ -457,14 +442,14 @@ export const States: StoryObj<typeof MaskedField> = {
                     status={EFormFieldStatus.DISABLED}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            Disabled text
                         </Text>
                     }
                     maskedInputProps={{
                         value: "9999999999",
                         mask: FormFieldMaskedInput.presets.masks.phone,
                     }}
-                    label="Номер телефона"
+                    label="Label"
                 />
             </div>
         );
@@ -501,7 +486,7 @@ export const Sizes: StoryObj<typeof MaskedField> = {
             <div style={{ maxWidth: "400px" }}>
                 <div style={{ marginBottom: "32px" }}>
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер SM (маленький)
+                        Size SM (small)
                     </Title>
                     <MaskedField
                         size={EFormFieldSize.SM}
@@ -509,15 +494,14 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                             value: valueSM,
                             onChange: handleChangeSM,
                             mask: FormFieldMaskedInput.presets.masks.phone,
-                            placeholder: "Введите номер телефона",
                         }}
-                        label="Номер телефона"
+                        label="Label"
                     />
                 </div>
 
                 <div style={{ marginBottom: "32px" }}>
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер MD (средний)
+                        Size MD (medium)
                     </Title>
                     <MaskedField
                         size={EFormFieldSize.MD}
@@ -525,15 +509,16 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                             value: valueMD,
                             onChange: handleChangeMD,
                             mask: FormFieldMaskedInput.presets.masks.phone,
-                            placeholder: "Введите номер телефона",
                         }}
-                        label="Номер телефона"
+                        label="Label"
+                        prefix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                        postfix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
                     />
                 </div>
 
                 <div style={{ marginBottom: "32px" }}>
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер LG (большой) - по умолчанию
+                        Size LG (large) - default
                     </Title>
                     <MaskedField
                         size={EFormFieldSize.LG}
@@ -541,9 +526,10 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                             value: valueLG,
                             onChange: handleChangeLG,
                             mask: FormFieldMaskedInput.presets.masks.phone,
-                            placeholder: "Введите номер телефона",
                         }}
-                        label="Номер телефона"
+                        label="Label"
+                        prefix={<DefaulticonStrokePrdIcon24 paletteIndex={5} />}
+                        postfix={<DefaulticonStrokePrdIcon24 paletteIndex={5} />}
                     />
                 </div>
             </div>

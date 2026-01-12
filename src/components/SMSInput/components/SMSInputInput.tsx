@@ -15,7 +15,7 @@ import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 /** Свойства SMSInput.Input. */
 export interface ISMSInputInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /** Счётчик символов */
-    counter: React.ReactNode;
+    counter?: React.ReactNode;
     /** Описание поля ввода */
     description?: React.ReactNode;
 }

@@ -48,7 +48,7 @@ export const SMSInputRefresh = forwardRef<HTMLButtonElement, ISMSInputRefreshPro
                 disabled={refreshDisabled}
                 onClick={handleClick}
                 ref={ref}
-                shape={EButtonIconShape.CIRCLE}
+                shape={EButtonIconShape.SQUIRCLE}
                 {...restProps}
             >
                 <RefreshIcon percent={percent || 0} size={size} disabled={Boolean(allDisabled || disabled)} />

@@ -74,12 +74,12 @@ export const RefreshIcon: React.FC<IProps> = (props: IProps) => {
     if (props.size === EComponentSize.LG) {
         return (
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" focusable="false">
-                <clipPath id={`clipFront${percent}`}>
+                <clipPath id={`clipFrontLG${percent}`}>
                     <path d={calculateSectorPath(16, 16, 18, percent)} />
                 </clipPath>
 
                 <path className={classNames} d={bigIconPath} />
-                <path className={styles.full} d={bigIconPath} clipPath={`url(#clipFront${percent})`} />
+                <path className={styles.full} d={bigIconPath} clipPath={`url(#clipFrontLG${percent})`} />
             </svg>
         );
     }

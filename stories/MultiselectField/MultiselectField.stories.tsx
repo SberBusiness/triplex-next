@@ -29,6 +29,7 @@ import { EFontType } from "../../src/components/Typography/enums";
 import { FormGroup } from "../../src/components/FormGroup";
 import { Link } from "../../src/components/Link";
 import { DefaulticonStrokePrdIcon20, QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { isKey } from "../../src/utils/keyboard";
 import "./MultiselectField.less";
 
 export default {
@@ -135,12 +136,19 @@ function createMultiselectFieldStoriesLogic(args) {
     const [filter, setFilter] = useState("");
     const [filteredCheckboxesId, setFilteredCheckboxesId] = useState<string[]>([]);
 
-    const renderTag = (tagId, tagText, onRemove) => (
+    const renderTag = (tagId: string, tagText: string, onRemove: () => void) => (
         <Tag
             key={tagId}
             id={tagId}
             size={EComponentSize.SM}
-            onClick={(event) => event.stopPropagation()}
+            onFocus={(event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation()}
+            onBlur={(event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation()}
+            onKeyDown={(event: React.KeyboardEvent<HTMLSpanElement>) => {
+                if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+                    event.stopPropagation();
+                }
+            }}
+            onClick={(event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation()}
             onRemove={onRemove}
         >
             {tagText}

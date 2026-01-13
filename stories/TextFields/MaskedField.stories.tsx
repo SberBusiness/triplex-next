@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { MaskedField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
-import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { FormFieldClear, FormFieldMaskedInput } from "../../src/components/FormField";
 import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
@@ -10,6 +10,7 @@ import { Link } from "../../src/components/Link";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
 import { DefaulticonStrokePrdIcon20, DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 
 export default {
     title: "Components/TextFields/MaskedField",
@@ -288,11 +289,11 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
         },
         size: {
             control: { type: "select" },
-            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер поля ввода",
             table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.LG" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         className: {
@@ -329,7 +330,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
     },
     args: {
         status: EFormFieldStatus.DEFAULT,
-        size: EFormFieldSize.LG,
+        size: EComponentSize.LG,
         prefix: "",
         postfix: "",
         placeholder: "Placeholder",
@@ -516,7 +517,7 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                         Size SM (small)
                     </Title>
                     <MaskedField
-                        size={EFormFieldSize.SM}
+                        size={EComponentSize.SM}
                         maskedInputProps={{
                             value: valueSM,
                             onChange: handleChangeSM,
@@ -531,7 +532,7 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                         Size MD (medium)
                     </Title>
                     <MaskedField
-                        size={EFormFieldSize.MD}
+                        size={EComponentSize.MD}
                         maskedInputProps={{
                             value: valueMD,
                             onChange: handleChangeMD,
@@ -548,7 +549,7 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                         Size LG (large) - default
                     </Title>
                     <MaskedField
-                        size={EFormFieldSize.LG}
+                        size={EComponentSize.LG}
                         maskedInputProps={{
                             value: valueLG,
                             onChange: handleChangeLG,

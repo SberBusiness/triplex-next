@@ -4,11 +4,12 @@ import { SelectExtendedField } from "../src/components/SelectExtendedField";
 import { SelectExtendedFieldTarget } from "../src/components/SelectExtendedField/components/SelectExtendedFieldTarget";
 import { SelectExtendedFieldDropdown } from "../src/components/SelectExtendedField/components/SelectExtendedFieldDropdown";
 import { DropdownListItem } from "../src/components/Dropdown/desktop/DropdownListItem";
-import { EFormFieldSize, EFormFieldStatus, FormFieldDescription } from "../src/components/FormField";
+import { EFormFieldStatus, FormFieldDescription } from "../src/components/FormField";
 import { Text, ETextSize, EFontType, Title as TypographyTitle, ETitleSize } from "../src/components/Typography";
 import { Gap } from "../src/components/Gap";
 import { FormGroup } from "../src/components/FormGroup";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { EComponentSize } from "../src/enums/EComponentSize";
 
 export default {
     title: "Components/SelectExtendedField",
@@ -93,7 +94,7 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
                                 opened={opened}
-                                size={EFormFieldSize.LG}
+                                size={EComponentSize.LG}
                                 setOpened={setOpened}
                                 fieldLabel={fieldLabel || "Выберите опцию"}
                                 label={selectedOption?.label}
@@ -174,6 +175,7 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
             table: {
                 type: { summary: "EFormFieldStatus" },
                 defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
+                options: Object.values(EFormFieldStatus),
             },
         },
         descriptionText: {
@@ -255,7 +257,7 @@ export const Basic: StoryObj<typeof SelectExtendedField> = {
                     renderTarget={({ opened, setOpened }) => (
                         <SelectExtendedFieldTarget
                             opened={opened}
-                            size={EFormFieldSize.LG}
+                            size={EComponentSize.LG}
                             setOpened={setOpened}
                             fieldLabel="Выберите опцию"
                             label={selectedOption?.label}
@@ -320,7 +322,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
                                 opened={opened}
-                                size={EFormFieldSize.LG}
+                                size={EComponentSize.LG}
                                 setOpened={setOpened}
                                 fieldLabel="Выберите опцию"
                                 label={selectedOption?.label}
@@ -366,7 +368,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
                                 opened={opened}
-                                size={EFormFieldSize.LG}
+                                size={EComponentSize.LG}
                                 setOpened={setOpened}
                                 fieldLabel="Загрузка опций"
                                 label={selectedOption?.label}
@@ -413,7 +415,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
                                 opened={opened}
-                                size={EFormFieldSize.LG}
+                                size={EComponentSize.LG}
                                 setOpened={setOpened}
                                 fieldLabel="Выберите опцию"
                                 label={selectedOption?.label}
@@ -465,7 +467,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
                                 opened={opened}
-                                size={EFormFieldSize.LG}
+                                size={EComponentSize.LG}
                                 setOpened={setOpened}
                                 fieldLabel="Выберите опцию"
                                 label={selectedOption?.label}
@@ -517,7 +519,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         renderTarget={({ opened, setOpened }) => (
                             <SelectExtendedFieldTarget
                                 opened={opened}
-                                size={EFormFieldSize.LG}
+                                size={EComponentSize.LG}
                                 setOpened={setOpened}
                                 fieldLabel="Отключенное поле"
                                 label={selectedOption?.label}

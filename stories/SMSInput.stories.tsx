@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { EFormFieldSize } from "../src/components/FormField";
 import { Gap } from "../src/components/Gap";
 import { Link } from "../src/components/Link";
 import { SMSInput } from "../src/components/SMSInput";
 import { EFontType, ETextSize, Text } from "../src/components/Typography";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { EComponentSize } from "../src/enums/EComponentSize";
 
 export default {
     title: "Components/SMSInput",
@@ -45,7 +45,7 @@ export const Playground: StoryObj<ISMSInputProps> = {
         disabled: false,
         maxLength: 8,
         placeholder: "Введите код",
-        size: EFormFieldSize.MD,
+        size: EComponentSize.MD,
     },
     argTypes: {
         counter: {
@@ -70,7 +70,7 @@ export const Playground: StoryObj<ISMSInputProps> = {
         },
         size: {
             control: { type: "select" },
-            options: Object.values(EFormFieldSize),
+            options: Object.values(EComponentSize),
             description: "Размер поля",
         },
     },
@@ -178,7 +178,7 @@ export const Error: StoryObj<ISMSInputProps> = {
                     maxLength={8}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
-                    size={EFormFieldSize.MD}
+                    size={EComponentSize.MD}
                 >
                     <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
                         <SMSInput.Refresh
@@ -228,7 +228,7 @@ export const Disabled: StoryObj<ISMSInputProps> = {
                     disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
-                    size={EFormFieldSize.MD}
+                    size={EComponentSize.MD}
                 >
                     <SMSInput.Tooltip targetRef={targetRefFull} message="Текст подсказки">
                         <SMSInput.Refresh
@@ -249,7 +249,7 @@ export const Disabled: StoryObj<ISMSInputProps> = {
                     disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
-                    size={EFormFieldSize.MD}
+                    size={EComponentSize.MD}
                 >
                     <SMSInput.Tooltip targetRef={targetRefEmpty} message="Текст подсказки">
                         <SMSInput.Refresh
@@ -307,7 +307,7 @@ export const Sizes: StoryObj<ISMSInputProps> = {
                     code={codeSM}
                     onChangeCode={handleChangeSM}
                     onSubmitCode={handleSubmit}
-                    size={EFormFieldSize.SM}
+                    size={EComponentSize.SM}
                 >
                     <SMSInput.Tooltip targetRef={targetRefSM} message="Текст подсказки">
                         <SMSInput.Refresh
@@ -325,7 +325,7 @@ export const Sizes: StoryObj<ISMSInputProps> = {
                     code={codeMD}
                     onChangeCode={handleChangeMD}
                     onSubmitCode={handleSubmit}
-                    size={EFormFieldSize.MD}
+                    size={EComponentSize.MD}
                 >
                     <SMSInput.Tooltip targetRef={targetRefMD} message="Текст подсказки">
                         <SMSInput.Refresh
@@ -343,7 +343,7 @@ export const Sizes: StoryObj<ISMSInputProps> = {
                     code={codeLG}
                     onChangeCode={handleChangeLG}
                     onSubmitCode={handleSubmit}
-                    size={EFormFieldSize.LG}
+                    size={EComponentSize.LG}
                 >
                     <SMSInput.Tooltip targetRef={targetRefLG} message="Текст подсказки">
                         <SMSInput.Refresh

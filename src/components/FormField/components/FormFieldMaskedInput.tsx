@@ -8,6 +8,7 @@ import { FormFieldContext } from "../FormFieldContext";
 import { TFormFieldMaskedInputMask } from "@sberbusiness/triplex-next/components/FormField/types";
 import stylesFormFieldInput from "../styles/FormFieldInput.module.less";
 import styles from "../styles/FormFieldMaskedInput.module.less";
+import { EFormFieldStatus } from "../enums";
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldMaskedInputProps
@@ -37,7 +38,6 @@ export interface IFormFieldIMaskedInputFC extends React.FC<IFormFieldMaskedInput
 export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     className,
     forwardedRef,
-    disabled,
     mask,
     onChange,
     placeholder,
@@ -49,7 +49,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     // Значение инпута, отображающего часть введенного значения и оставшуюся маску.
     const [placeholderValue, setPlaceholderValue] = useState("");
     const pasted = useRef(false);
-    const { valueExist, focused, size } = useContext(FormFieldContext);
+    const { valueExist, focused, size, status } = useContext(FormFieldContext);
 
     useEffect(() => {
         /**
@@ -196,7 +196,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
             {/* Input, отображающий маску. */}
             <input
                 className={clsx(stylesFormFieldInput.formFieldInput, styles.formFieldMaskedInputPlaceholder, className)}
-                disabled={disabled}
+                disabled={status === EFormFieldStatus.DISABLED}
                 placeholder={getPlaceholderValue()}
                 readOnly
                 aria-hidden="true"
@@ -209,7 +209,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
                 className={clsx(styles.formFieldMaskedInput, { [styles.error]: Boolean(inputProps.error) }, className)}
                 // https://github.com/text-mask/text-mask/pull/993
                 defaultValue=""
-                disabled={disabled}
+                disabled={status === EFormFieldStatus.DISABLED}
                 /* Input отображает только введенное значение без маски, маска рисуется в inputPlaceholder. */
                 guide={false}
                 render={(ref, props) => {

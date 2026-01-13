@@ -49,14 +49,14 @@ export const FormField_Tokens: TDesignTokensComponentsFormFieldValues = {
     Background_Warning_Hover: [{ ref: "ColorWarning.90" }, { ref: "ColorWarning.10" }], // var(--triplex-next-FormField-Background_Warning_Hover)
 
     Input_Color_Default: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-FormField-Input_Color_Default)
-    Input_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.70" }], // var(--triplex-next-FormField-Input_Color_Disabled)
+    Input_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-FormField-Input_Color_Disabled)
 
     Target_Color_Default: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-FormField-Target_Color_Default)
     Target_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.70" }], // var(--triplex-next-FormField-Target_Color_Disabled)
     Target_PlaceholderColor_Default: [{ ref: "ColorDarkNeutralAlpha.40" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-FormField-Target_PlaceholderColor_Default)
 
     Label_Color_Default: [{ ref: "ColorDarkNeutralAlpha.40" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-FormField-Label_Color_Default)
-    Label_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.70" }], // var(--triplex-next-FormField-Label_Color_Disabled)
+    Label_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-FormField-Label_Color_Disabled)
 
     Shadow_Active: [{ value: "0 0 0 1px #21A19A inset" }, { value: "0 0 0 1px #21A19A inset" }], // var(--triplex-next-FormField-Shadow_Active)
     Shadow_Default: [{ value: "none" }, { value: "none" }], // var(--triplex-next-FormField-Shadow_Default)

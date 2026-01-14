@@ -7,8 +7,9 @@ import { Gap } from "../../src/components/Gap";
 import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
 import { FormFieldClear } from "../../src/components/FormField/components/FormFieldClear";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
-import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
-import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Link } from "../../src/components/Link";
 
 export default {
     title: "Components/TextFields/TextField",
@@ -17,14 +18,13 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент TextField представляет собой упрощенный вариант поля ввода, построенный на основе FormField и FormGroup.
+Упрощенный компонент поля ввода, построенный на основе FormField и FormGroup.
 
 ## Основные возможности
 
-- **TextField** - текстовое поле ввода с лейблом и описанием
-- **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
-- **Счетчик символов** - динамический подсчет введенных символов
-- **Префикс/Постфикс** - дополнительные элементы слева и справа от поля
+- **Размеры**: SM (маленький), MD (средний), LG (большой - по умолчанию)
+- Возможность добавить **счетчик символов** для динамического подсчета введенных символов
+- Возможность добавить **префикс/постфикс**, дополнительные элементы слева и справа от поля
                 `,
             },
             page: () => (
@@ -32,16 +32,99 @@ export default {
                     <DocsTitle />
                     <Description />
                     <Controls of={Default} />
-                    <Primary />
                     <Stories />
                 </>
             ),
         },
     },
+    argTypes: {
+        status: {
+            control: { type: "select" },
+            options: Object.values(EFormFieldStatus),
+            description: "Состояние поля",
+            table: {
+                type: { summary: "EFormFieldStatus" },
+                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
+            },
+        },
+        labelText: {
+            control: { type: "text" },
+            description: "Текст лейбла",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        showLabel: {
+            control: { type: "boolean" },
+            description: "Показать лейбл",
+            table: {
+                type: { summary: "boolean" },
+                defaultValue: { summary: "true" },
+            },
+        },
+        placeholder: {
+            control: { type: "text" },
+            description: "Плейсхолдер поля ввода",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        prefixText: {
+            control: { type: "text" },
+            description: "Текст префикса",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        postfixText: {
+            control: { type: "text" },
+            description: "Текст постфикса",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        descriptionText: {
+            control: { type: "text" },
+            description: "Текст описания",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        counter: {
+            control: { type: "text" },
+            description: "Текст счетчика символов",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        size: {
+            control: { type: "select" },
+            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            description: "Размер поля ввода",
+            table: {
+                type: { summary: "EFormFieldSize" },
+                defaultValue: { summary: "EFormFieldSize.LG" },
+            },
+        },
+        className: {
+            control: { type: "text" },
+            description: "Дополнительные CSS классы",
+            table: {
+                type: { summary: "string" },
+            },
+        },
+        inputProps: {
+            control: { type: "object" },
+            description: "Свойства поля ввода",
+            table: {
+                type: { summary: "IFormFieldInputProps & { ref?: React.RefObject<HTMLInputElement> }" },
+            },
+        },
+    },
     tags: ["autodocs"],
 };
 
-interface ITextFieldWithControlsProps extends React.ComponentProps<typeof TextField> {
+interface IPlaygroundProps extends React.ComponentProps<typeof TextField> {
     labelText?: string;
     placeholder?: string;
     prefixText?: string;
@@ -50,7 +133,7 @@ interface ITextFieldWithControlsProps extends React.ComponentProps<typeof TextFi
     showLabel?: boolean;
 }
 
-export const Playground: StoryObj<ITextFieldWithControlsProps> = {
+export const Playground: StoryObj<IPlaygroundProps> = {
     render: (args) => {
         const [value, setValue] = useState("");
 
@@ -92,9 +175,9 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
                     inputProps={{
                         value: value,
                         onChange: handleChange,
-                        placeholder: placeholder || "Введите текст...",
+                        placeholder: placeholder || "Type to proceed",
                     }}
-                    label={showLabel ? labelText || "Название поля" : undefined}
+                    label={showLabel ? labelText || "Label" : undefined}
                 />
             </div>
         );
@@ -114,7 +197,6 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
             description: "Текст лейбла",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "Название поля" },
             },
         },
         showLabel: {
@@ -130,7 +212,6 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
             description: "Плейсхолдер поля ввода",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "Введите текст..." },
             },
         },
         prefixText: {
@@ -138,7 +219,6 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
             description: "Текст префикса",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "" },
             },
         },
         postfixText: {
@@ -146,7 +226,6 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
             description: "Текст постфикса",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "" },
             },
         },
         descriptionText: {
@@ -154,7 +233,6 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
             description: "Текст описания",
             table: {
                 type: { summary: "string" },
-                defaultValue: { summary: "Описание поля" },
             },
         },
         counter: {
@@ -184,12 +262,12 @@ export const Playground: StoryObj<ITextFieldWithControlsProps> = {
     args: {
         status: EFormFieldStatus.DEFAULT,
         size: EFormFieldSize.LG,
-        labelText: "Название поля",
+        labelText: "Label",
         showLabel: true,
-        placeholder: "Введите текст...",
+        placeholder: "Type to proceed",
         prefixText: "",
         postfixText: "",
-        descriptionText: "Описание поля",
+        descriptionText: "(21) Description",
         className: "",
         counter: "0/201",
     },
@@ -227,43 +305,17 @@ export const Default: StoryObj<typeof TextField> = {
         return (
             <div style={{ maxWidth: "304px" }}>
                 <TextField
-                    inputProps={{
-                        value: value,
-                        onChange: handleChange,
-                        placeholder: "Введите текст...",
-                    }}
-                    label="Название поля"
-                />
-            </div>
-        );
-    },
-    parameters: {
-        controls: { disable: true },
-    },
-};
-
-export const Basic: StoryObj<typeof TextField> = {
-    render: () => {
-        const [value, setValue] = useState("");
-
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(e.target.value);
-        };
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
-                        placeholder: "Введите текст...",
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
             </div>
         );
@@ -298,16 +350,16 @@ export const PassRefToInput: StoryObj<typeof TextField> = {
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
                     inputProps={{
                         ref: ref,
                         value: value,
                         onChange: handleChange,
-                        placeholder: "Введите текст...",
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
             </div>
         );
@@ -335,10 +387,10 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
-                    prefix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                    prefix={<DefaulticonStrokePrdIcon24 paletteIndex={5} />}
                     postfix={
                         <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
                             Text
@@ -347,8 +399,9 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
                     inputProps={{
                         value: value,
                         onChange: handleChange,
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
             </div>
         );
@@ -376,15 +429,16 @@ export const WithClearButton: StoryObj<typeof TextField> = {
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
                     postfix={<FormFieldClear onClick={() => setValue("")} />}
                     inputProps={{
                         value: value,
                         onChange: handleChange,
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
             </div>
         );
@@ -430,6 +484,7 @@ export const WithCounter: StoryObj<typeof TextField> = {
                         value: value,
                         onChange: handleChange,
                         maxLength: maxLength,
+                        placeholder: "Введите текст...",
                     }}
                     label="Название поля"
                 />
@@ -475,9 +530,9 @@ export const Sizes: StoryObj<typeof TextField> = {
                         inputProps={{
                             value: valueSM,
                             onChange: handleChangeSM,
-                            placeholder: "Введите текст...",
+                            placeholder: "Type to proceed",
                         }}
-                        label="Маленькое поле"
+                        label="Label"
                     />
                 </div>
 
@@ -490,9 +545,9 @@ export const Sizes: StoryObj<typeof TextField> = {
                         inputProps={{
                             value: valueMD,
                             onChange: handleChangeMD,
-                            placeholder: "Введите текст...",
+                            placeholder: "Type to proceed",
                         }}
-                        label="Среднее поле"
+                        label="Label"
                     />
                 </div>
 
@@ -505,9 +560,9 @@ export const Sizes: StoryObj<typeof TextField> = {
                         inputProps={{
                             value: valueLG,
                             onChange: handleChangeLG,
-                            placeholder: "Введите текст...",
+                            placeholder: "Type to proceed",
                         }}
-                        label="Большое поле"
+                        label="Label"
                     />
                 </div>
             </div>
@@ -546,15 +601,15 @@ export const States: StoryObj<typeof TextField> = {
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
                     inputProps={{
                         value: value,
                         onChange: handleChange,
-                        placeholder: "Введите текст...",
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
 
                 <Gap size={24} />
@@ -563,14 +618,15 @@ export const States: StoryObj<typeof TextField> = {
                     status={EFormFieldStatus.ERROR}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                            Текст ошибки
+                            Error text
                         </Text>
                     }
                     inputProps={{
                         value: valueError,
                         onChange: handleChangeError,
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
 
                 <Gap size={24} />
@@ -579,29 +635,28 @@ export const States: StoryObj<typeof TextField> = {
                     status={EFormFieldStatus.WARNING}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
-                            Текст предупреждения
+                            Warning text
                         </Text>
                     }
                     inputProps={{
                         value: valueWarning,
                         onChange: handleChangeWarning,
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
 
                 <Gap size={24} />
 
                 <TextField
                     status={EFormFieldStatus.DISABLED}
-                    inputProps={{
-                        value: "Value disabled",
-                    }}
+                    inputProps={{}}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
-                    label="Название поля"
+                    label="Label"
                 />
             </div>
         );
@@ -610,6 +665,66 @@ export const States: StoryObj<typeof TextField> = {
         docs: {
             description: {
                 story: "Различные состояния TextField: обычное, с ошибкой, отключенное.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const Examples: StoryObj<typeof TextField> = {
+    render: () => {
+        const [value, setValue] = useState("");
+        const maxLength = 201;
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const newValue = e.target.value;
+            if (newValue.length <= maxLength) {
+                setValue(newValue);
+            }
+        };
+
+        const currentLength = value.length;
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <TextField
+                    description={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
+                        </Text>
+                    }
+                    counter={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            {currentLength}/{maxLength}
+                        </Text>
+                    }
+                    prefix={<DefaulticonStrokePrdIcon24 paletteIndex={5} />}
+                    postfix={
+                        <>
+                            <FormFieldClear onClick={() => setValue("")} />
+                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        </>
+                    }
+                    inputProps={{
+                        value: value,
+                        onChange: handleChange,
+                        placeholder: "Type to proceed",
+                    }}
+                    label="Label"
+                />
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Базовый пример использования TextField с лейблом и описанием.",
             },
         },
         controls: { disable: true },

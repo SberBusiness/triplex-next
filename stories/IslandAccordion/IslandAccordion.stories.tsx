@@ -6,7 +6,7 @@ import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EIslandType } from "../../src/components/Island";
 import { EStepStatus } from "../../src/components/Step";
-import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title as DocsTitle, Description, Controls, Stories, Primary, ArgTypes } from "@storybook/addon-docs/blocks";
 import { EFontType, ETitleSize, Title } from "../../src/components/Typography";
 import "./IslandAccordion.less";
 
@@ -23,19 +23,21 @@ export default {
 ## Особенности
 
 - Позволяет использовать **статусы** success, wait, error, disabled, warning, с возможностью добавления подсказок при наведении курсора
-
-## Состав
-
-- Title — заголовок контента
-- Content — основной контент
-- Footer — нижняя часть
 `,
             },
+            codePanel: true,
             page: () => (
                 <>
                     <DocsTitle />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <h3>IslandAccordion</h3>
+                    <ArgTypes of={IslandAccordion} />
+                    <h3>IslandAccordion.Item</h3>
+                    <ArgTypes of={IslandAccordion.Item} />
+                    <h2>Playground</h2>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -59,6 +61,7 @@ const sizeToTitleSizeMap = {
 
 export const Playground: StoryObj<IIslandAccordionStoryType> = {
     name: "Playground",
+    tags: ["!autodocs"],
     args: {
         size: EComponentSize.SM,
         type: EIslandType.TYPE_1,
@@ -102,6 +105,12 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
     parameters: {
         controls: {
             include: ["size", "type", "status", "removable", "disabled", "title"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => {

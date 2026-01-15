@@ -100,11 +100,11 @@ export default {
         },
         size: {
             control: { type: "select" },
-            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер поля ввода",
             table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.LG" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         className: {

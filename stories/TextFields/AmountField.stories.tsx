@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { AmountField } from "../../src/components/AmountField/AmountField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
-import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { ETooltipSize } from "../../src/components/Tooltip/enums";
 import { ETooltipPreferPlace } from "../../src/components/Tooltip/enums";
 import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 
 export default {
     title: "Components/TextFields/AmountField",
@@ -107,11 +108,11 @@ export const Playground: StoryObj<IAmountFieldWithControlsProps> = {
         },
         size: {
             control: { type: "select" },
-            options: Object.values(EFormFieldSize),
+            options: Object.values(EComponentSize),
             description: "Размер поля",
             table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.LG" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         labelText: {
@@ -152,7 +153,7 @@ export const Playground: StoryObj<IAmountFieldWithControlsProps> = {
     },
     args: {
         status: EFormFieldStatus.DEFAULT,
-        size: EFormFieldSize.LG,
+        size: EComponentSize.LG,
         labelText: "Сумма",
         descriptionText: "Описание поля",
         placeholder: "0,00",
@@ -308,7 +309,7 @@ export const Sizes: StoryObj<typeof AmountField> = {
                         Размер SM (маленький)
                     </Title>
                     <AmountField
-                        size={EFormFieldSize.SM}
+                        size={EComponentSize.SM}
                         inputProps={{ value: valueSM, onChange: setValueSM, placeholder: "0,00" }}
                         label="SM"
                     />
@@ -319,7 +320,7 @@ export const Sizes: StoryObj<typeof AmountField> = {
                         Размер MD (средний)
                     </Title>
                     <AmountField
-                        size={EFormFieldSize.MD}
+                        size={EComponentSize.MD}
                         inputProps={{ value: valueMD, onChange: setValueMD, placeholder: "0,00" }}
                         label="MD"
                     />
@@ -330,7 +331,7 @@ export const Sizes: StoryObj<typeof AmountField> = {
                         Размер LG (большой)
                     </Title>
                     <AmountField
-                        size={EFormFieldSize.LG}
+                        size={EComponentSize.LG}
                         inputProps={{ value: valueLG, onChange: setValueLG, placeholder: "0,00" }}
                         label="LG"
                     />

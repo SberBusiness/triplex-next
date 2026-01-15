@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { TextField } from "../../src/components/TextField";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
-import { EFormFieldSize, EFormFieldStatus } from "../../src/components/FormField/enums";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
 import { Gap } from "../../src/components/Gap";
 import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
 import { FormFieldClear } from "../../src/components/FormField/components/FormFieldClear";
@@ -10,6 +10,7 @@ import { HelpBox } from "../../src/components/HelpBox/HelpBox";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Link } from "../../src/components/Link";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 
 export default {
     title: "Components/TextFields/TextField",
@@ -99,11 +100,11 @@ export default {
         },
         size: {
             control: { type: "select" },
-            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер поля ввода",
             table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.LG" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         className: {
@@ -244,11 +245,11 @@ export const Playground: StoryObj<IPlaygroundProps> = {
         },
         size: {
             control: { type: "select" },
-            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер поля ввода",
             table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.LG" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         className: {
@@ -261,7 +262,7 @@ export const Playground: StoryObj<IPlaygroundProps> = {
     },
     args: {
         status: EFormFieldStatus.DEFAULT,
-        size: EFormFieldSize.LG,
+        size: EComponentSize.LG,
         labelText: "Label",
         showLabel: true,
         placeholder: "Type to proceed",
@@ -526,7 +527,7 @@ export const Sizes: StoryObj<typeof TextField> = {
                         Размер SM (маленький)
                     </Title>
                     <TextField
-                        size={EFormFieldSize.SM}
+                        size={EComponentSize.SM}
                         inputProps={{
                             value: valueSM,
                             onChange: handleChangeSM,
@@ -541,7 +542,7 @@ export const Sizes: StoryObj<typeof TextField> = {
                         Размер MD (средний)
                     </Title>
                     <TextField
-                        size={EFormFieldSize.MD}
+                        size={EComponentSize.MD}
                         inputProps={{
                             value: valueMD,
                             onChange: handleChangeMD,
@@ -556,7 +557,7 @@ export const Sizes: StoryObj<typeof TextField> = {
                         Размер LG (большой) - по умолчанию
                     </Title>
                     <TextField
-                        size={EFormFieldSize.LG}
+                        size={EComponentSize.LG}
                         inputProps={{
                             value: valueLG,
                             onChange: handleChangeLG,

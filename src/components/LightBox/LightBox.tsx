@@ -11,6 +11,8 @@ import { MobileView } from "../MobileView/MobileView";
 import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
+import { LightBoxLeftSidebar } from "./LightBoxSidebars/LightBoxLeftSidebar";
+import { LightBoxRightSidebar } from "./LightBoxSidebars/LightBoxRightSidebar";
 import styles from "./styles/LightBox.module.less";
 import scrollStyles from "./styles/LightBoxScroll.module.less";
 
@@ -44,6 +46,8 @@ interface ILightBoxFC extends React.FC<ILightBoxProps> {
     SideOverlay: typeof LightBoxSideOverlay;
     TopOverlay: typeof TopOverlay;
     Controls: typeof LightBoxControls;
+    LeftSidebar: typeof LightBoxLeftSidebar;
+    RightSidebar: typeof LightBoxRightSidebar;
 }
 
 const bodyClassNamesIsLightBoxOpen = [styles.bodyOverflowHidden];
@@ -200,5 +204,6 @@ LightBox.Content = LightBoxContent;
 LightBox.SideOverlay = LightBoxSideOverlay;
 LightBox.TopOverlay = TopOverlay;
 LightBox.Controls = LightBoxControls;
-
+LightBox.LeftSidebar = LightBoxLeftSidebar;
+LightBox.RightSidebar = LightBoxRightSidebar;
 LightBox.displayName = "LightBox";

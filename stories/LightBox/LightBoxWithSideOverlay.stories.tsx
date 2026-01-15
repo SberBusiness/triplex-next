@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Description, Stories, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -19,7 +19,7 @@ import { MobileView } from "../../src/components/MobileView/MobileView";
 import "./styles.less";
 
 const STORY_META_DESCRIPTION = `
-Компонент **LightBoxWithSideOverlay** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
+Пример **LightBoxWithSideOverlay** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
 `;
 
 const meta = {
@@ -34,10 +34,7 @@ const meta = {
             page: () => (
                 <>
                     <SBTitle />
-                    <Subtitle />
                     <Description />
-                    <Primary />
-                    <Controls of={LightBoxWithSideOverlay} />
                     <Stories />
                 </>
             ),

@@ -41,18 +41,9 @@ export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     isTopOverlayOpened?: boolean;
 }
 
-interface ILightBoxFC extends React.FC<ILightBoxProps> {
-    Content: typeof LightBoxContent;
-    SideOverlay: typeof LightBoxSideOverlay;
-    TopOverlay: typeof TopOverlay;
-    Controls: typeof LightBoxControls;
-    LeftSidebar: typeof LightBoxLeftSidebar;
-    RightSidebar: typeof LightBoxRightSidebar;
-}
-
 const bodyClassNamesIsLightBoxOpen = [styles.bodyOverflowHidden];
 
-export const LightBox: ILightBoxFC = ({
+const LightBoxBase: React.FC<ILightBoxProps> = ({
     children,
     className,
     focusTrapProps,
@@ -200,10 +191,13 @@ export const LightBox: ILightBoxFC = ({
     );
 };
 
-LightBox.Content = LightBoxContent;
-LightBox.SideOverlay = LightBoxSideOverlay;
-LightBox.TopOverlay = TopOverlay;
-LightBox.Controls = LightBoxControls;
-LightBox.LeftSidebar = LightBoxLeftSidebar;
-LightBox.RightSidebar = LightBoxRightSidebar;
-LightBox.displayName = "LightBox";
+LightBoxBase.displayName = "LightBoxBase";
+
+export const LightBox = Object.assign(LightBoxBase, {
+    Content: LightBoxContent,
+    SideOverlay: LightBoxSideOverlay,
+    TopOverlay,
+    Controls: LightBoxControls,
+    LeftSidebar: LightBoxLeftSidebar,
+    RightSidebar: LightBoxRightSidebar,
+});

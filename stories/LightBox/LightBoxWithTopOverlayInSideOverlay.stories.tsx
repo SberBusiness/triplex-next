@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as DocsTitle } from "@storybook/addon-docs/blocks";
+import { Description, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -20,7 +20,7 @@ import { Confirm } from "../../src/components/Confirm/Confirm";
 import { EConfirmParentComponent } from "../../src/components/Confirm/enums";
 
 const STORY_META_DESCRIPTION = `
-Компонент **LightBoxWithSideOverlay** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
+Пример **LightBoxWithTopOverlayInSideOverlay** отображает крупный контент контент поверх страницы с уведомлением при закрытии SideOverlay.
 `;
 
 const meta = {
@@ -35,10 +35,7 @@ const meta = {
             page: () => (
                 <>
                     <DocsTitle />
-                    <Subtitle />
                     <Description />
-                    <Primary />
-                    <Controls of={LightBoxWithTopOverlayInSideOverlay} />
                     <Stories />
                 </>
             ),

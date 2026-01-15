@@ -18,7 +18,7 @@ import { MobileView } from "../../src/components/MobileView/MobileView";
 import "./styles.less";
 
 const STORY_META_DESCRIPTION = `
-Компонент **LightBoxWithSidebars** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные боковые панели.
+Пример **LightBoxWithSidebars** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные боковые панели.
 `;
 
 const meta = {

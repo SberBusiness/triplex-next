@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as DocsTitle } from "@storybook/addon-docs/blocks";
+import { Description, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -17,7 +17,7 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Confirm } from "../../src/components/Confirm";
 
 const STORY_META_DESCRIPTION = `
-Компонент **LightBoxWithTopOverlay** отображает крупный контент поверх страницы.
+Пример **LightBoxWithTopOverlay** отображает контент поверх страницы с уведомлением при закрытии.
 `;
 
 const meta = {
@@ -32,10 +32,7 @@ const meta = {
             page: () => (
                 <>
                     <DocsTitle />
-                    <Subtitle />
                     <Description />
-                    <Primary />
-                    <Controls of={LightBoxWithTopOverlay} />
                     <Stories />
                 </>
             ),

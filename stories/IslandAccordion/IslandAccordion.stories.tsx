@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { IslandAccordion, IslandAccordionItem } from "../../src/components/IslandAccordion";
+import { IslandAccordion } from "../../src/components/IslandAccordion";
 import { StoryObj } from "@storybook/react";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EIslandType } from "../../src/components/Island";
 import { EStepStatus } from "../../src/components/Step";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { EFontType, ETitleSize, Title } from "../../src/components/Typography";
 import "./IslandAccordion.less";
 
 export default {
@@ -32,7 +33,7 @@ export default {
             },
             page: () => (
                 <>
-                    <Title />
+                    <DocsTitle />
                     <Description />
                     <Controls of={Default} />
                     <Stories />
@@ -50,6 +51,12 @@ type IIslandAccordionStoryType = React.ComponentProps<typeof IslandAccordion> & 
     status: EStepStatus;
 };
 
+const sizeToTitleSizeMap = {
+    [EComponentSize.SM]: ETitleSize.H3,
+    [EComponentSize.MD]: ETitleSize.H2,
+    [EComponentSize.LG]: ETitleSize.H2,
+};
+
 export const Playground: StoryObj<IIslandAccordionStoryType> = {
     name: "Playground",
     args: {
@@ -58,8 +65,14 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
         removable: true,
         disabled: false,
         status: EStepStatus.DEFAULT,
+        title: "Title",
     },
     argTypes: {
+        title: {
+            control: { type: "text" },
+            description: "Текст заголовка",
+            table: { type: { summary: "string" }, defaultValue: { summary: "Title" } },
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
@@ -73,7 +86,8 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
             table: { type: { summary: "EIslandType" }, defaultValue: { summary: EIslandType.TYPE_1 } },
         },
         status: {
-            control: { type: "select" },
+            control: "select",
+            if: { arg: "disabled", truthy: false },
             options: Object.values(EStepStatus),
             description: "Статус компонента",
             table: { type: { summary: "EStepStatus" }, defaultValue: { summary: EStepStatus.DEFAULT } },
@@ -87,11 +101,16 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
     },
     parameters: {
         controls: {
-            include: ["size", "type", "status", "removable", "disabled"],
+            include: ["size", "type", "status", "removable", "disabled", "title"],
         },
     },
     render: (args) => {
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const titleType = args.disabled ? EFontType.DISABLED : EFontType.PRIMARY;
+        const title = (
+            <Title size={sizeToTitleSizeMap[args.size]} type={titleType}>
+                {args.title}
+            </Title>
+        );
 
         const handleRemove = (id: string) => document!.getElementById(id)!.remove();
 
@@ -104,7 +123,7 @@ export const Playground: StoryObj<IIslandAccordionStoryType> = {
                         title={title}
                         disabled={args.disabled}
                         onRemove={args.removable ? handleRemove : undefined}
-                        status={args.status}
+                        status={args.disabled ? EStepStatus.DISABLED : args.status}
                     >
                         <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
                         <IslandAccordion.Item.Footer>
@@ -131,7 +150,11 @@ export const Default: StoryObj<IIslandAccordionStoryType> = {
         controls: { disable: true },
     },
     render: () => {
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const title = (
+            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>
+                Title
+            </Title>
+        );
 
         return (
             <div className="island-accordion-example">
@@ -162,7 +185,11 @@ export const Disabled: StoryObj<IIslandAccordionStoryType> = {
         controls: { disable: true },
     },
     render: () => {
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const title = (
+            <Title size={ETitleSize.H2} type={EFontType.DISABLED}>
+                Title
+            </Title>
+        );
 
         return (
             <div className="island-accordion-example">
@@ -187,7 +214,11 @@ export const Removable: StoryObj<IIslandAccordionStoryType> = {
         controls: { disable: true },
     },
     render: () => {
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const title = (
+            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>
+                Title
+            </Title>
+        );
 
         const handleRemove = (id: string) => document!.getElementById(id)!.remove();
 
@@ -225,7 +256,11 @@ export const WithStatus: StoryObj<IIslandAccordionStoryType> = {
         controls: { disable: true },
     },
     render: () => {
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const title = (
+            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>
+                Title
+            </Title>
+        );
 
         const items = [
             {
@@ -285,7 +320,11 @@ export const WithStepHint: StoryObj<IIslandAccordionStoryType> = {
         controls: { disable: true },
     },
     render: () => {
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const title = (
+            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>
+                Title
+            </Title>
+        );
 
         return (
             <div className="island-accordion-example">
@@ -343,7 +382,11 @@ export const OnlyOneOpenAtATime: StoryObj<IIslandAccordionStoryType> = {
 
         const handleToggle = (open, id) => setOpenItemId(open ? id : undefined);
 
-        const title = <IslandAccordionItem.Title>Title</IslandAccordionItem.Title>;
+        const title = (
+            <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>
+                Title
+            </Title>
+        );
 
         const renderIslandAccordionItem = ({ id, status }, index: number) => (
             <IslandAccordion.Item

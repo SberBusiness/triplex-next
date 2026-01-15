@@ -5,7 +5,6 @@ import { Island } from "../../Island/Island";
 import { uniqueId } from "lodash-es";
 import { ExpandAnimation, IExpandAnimationProps } from "../../ExpandAnimation/ExpandAnimation";
 import styles from "../styles/IslandAccordion.module.less";
-import { IslandAccordionTitle } from "./IslandAccordionTitle";
 import { IslandAccordionContent } from "./IslandAccordionContent";
 import { IslandAccordionFooter } from "./IslandAccordionFooter";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
@@ -13,7 +12,6 @@ import { ButtonIcon } from "../../Button";
 import { EIslandType } from "../../Island";
 import { Step, EStepStatus, EStepPosition } from "../../Step";
 import { IslandAccordionContext } from "../IslandAccordionContext";
-
 export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
     /** Нода с названием заголовка. */
     title: React.ReactNode;
@@ -37,7 +35,7 @@ export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTM
     transitionProps?: IExpandAnimationProps["transitionProps"];
 }
 
-const typeToClassNameMap: Record<EIslandType, string> = {
+const typeToClassNameMap = {
     [EIslandType.TYPE_1]: styles.type1,
     [EIslandType.TYPE_2]: styles.type2,
     [EIslandType.TYPE_3]: styles.type3,
@@ -112,7 +110,9 @@ export const IslandAccordionItem = Object.assign(
                                 aria-controls={bodyInstanceId}
                                 aria-expanded={isOpen}
                                 type="button"
-                                className={styles.header}
+                                className={clsx(styles.header, {
+                                    hoverable: !isOpen,
+                                })}
                                 onClick={handleHeaderClick}
                                 disabled={disabled}
                                 data-tx={process.env.npm_package_version}
@@ -127,11 +127,7 @@ export const IslandAccordionItem = Object.assign(
 
                                 <div className={styles.titleWrapper}> {title}</div>
 
-                                <span
-                                    className={clsx(styles.caretWrapper, "hoverable", {
-                                        active: isOpen,
-                                    })}
-                                >
+                                <span className={clsx(styles.caretWrapper)}>
                                     <CaretdownStrokeSrvIcon24
                                         className={styles.caretIcon}
                                         aria-hidden="true"
@@ -140,14 +136,6 @@ export const IslandAccordionItem = Object.assign(
                                 </span>
                             </button>
                         </Island.Header>
-
-                        {onRemove && (
-                            <div className={styles.remove}>
-                                <ButtonIcon onClick={handleRemoveClick} title="Удалить">
-                                    <CrossStrokeSrvIcon24 paletteIndex={5} />
-                                </ButtonIcon>
-                            </div>
-                        )}
 
                         <ExpandAnimation
                             expanded={isOpen && !disabled}
@@ -159,12 +147,19 @@ export const IslandAccordionItem = Object.assign(
                             {children}
                         </ExpandAnimation>
                     </Island>
+
+                    {onRemove && (
+                        <div className={clsx(styles.remove, "hoverable", { disabled: disabled })}>
+                            <ButtonIcon onClick={handleRemoveClick} title="Удалить">
+                                <CrossStrokeSrvIcon24 paletteIndex={5} />
+                            </ButtonIcon>
+                        </div>
+                    )}
                 </li>
             );
         },
     ),
     {
-        Title: IslandAccordionTitle,
         Content: IslandAccordionContent,
         Footer: IslandAccordionFooter,
     },

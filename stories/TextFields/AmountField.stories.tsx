@@ -1,109 +1,73 @@
 import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { AmountField } from "../../src/components/AmountField/AmountField";
-import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
+import { Text, ETextSize, EFontType } from "../../src/components/Typography";
 import { EFormFieldStatus } from "../../src/components/FormField/enums";
-import { Gap } from "../../src/components/Gap";
 import { HelpBox } from "../../src/components/HelpBox/HelpBox";
+import { Link } from "../../src/components/Link";
 import { ETooltipSize } from "../../src/components/Tooltip/enums";
-import { ETooltipPreferPlace } from "../../src/components/Tooltip/enums";
-import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 
-export default {
+const meta = {
     title: "Components/TextFields/AmountField",
     component: AmountField,
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент AmountField — поле ввода денежных сумм на базе FormField/FormGroup с форматированием и управлением кареткой.
-
-## Возможности
-
-- Форматирование значений с учётом дробной части
-- Валюта (отображается справа)
-- Префикс/Постфикс
-- Состояния и размеры из FormField
-                `,
-            },
             page: () => (
                 <>
-                    <DocsTitle />
+                    <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Title>Props</Title>
+                    <Controls of={Basic} />
+                    <Title>Playground</Title>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
     tags: ["autodocs"],
+} satisfies Meta<typeof AmountField>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+const useAmountFieldLogic = (defaultValue = "") => {
+    const [value, setValue] = useState(defaultValue);
+
+    const handleChange = (value: string) => setValue(value);
+
+    const handleClear = () => setValue("");
+
+    return {
+        value,
+        onChange: handleChange,
+        onClear: handleClear,
+    };
 };
 
-type AmountFieldProps = React.ComponentProps<typeof AmountField>;
-
-interface IAmountFieldWithControlsProps
-    extends Omit<AmountFieldProps, "label" | "description" | "postfix" | "currency" | "inputProps"> {
-    labelText?: string;
-    descriptionText?: string;
-    placeholder?: string;
-    postfixText?: string;
-    currency?: string;
-    maxIntegerDigits?: number;
-    fractionDigits?: number;
-}
-
-export const Playground: StoryObj<IAmountFieldWithControlsProps> = {
-    render: (args) => {
-        const [value, setValue] = useState("");
-
-        const {
-            labelText,
-            descriptionText,
-            placeholder,
-            postfixText,
-            currency,
-            maxIntegerDigits,
-            fractionDigits,
-            ...formFieldProps
-        } = args;
-
-        const handleChange = (nextValue: string) => setValue(nextValue);
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <AmountField
-                    {...formFieldProps}
-                    label={labelText || "Сумма"}
-                    description={
-                        descriptionText ? (
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                {descriptionText}
-                            </Text>
-                        ) : undefined
-                    }
-                    postfix={postfixText || ""}
-                    currency={currency}
-                    maxIntegerDigits={maxIntegerDigits}
-                    fractionDigits={fractionDigits}
-                    inputProps={{
-                        value,
-                        onChange: handleChange,
-                        placeholder: placeholder || "0,00",
-                    }}
-                />
-            </div>
-        );
+export const Playground: Story = {
+    parameters: {
+        docs: {
+            description: { story: "Интерактивная демонстрация." },
+            canvas: { sourceState: "none" },
+        },
     },
+    tags: ["!autodocs"],
     argTypes: {
+        inputProps: {
+            description: "Свойства поля ввода",
+            table: { type: { summary: "object" } },
+        },
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
             description: "Состояние поля",
             table: {
                 type: { summary: "EFormFieldStatus" },
-                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
+                defaultValue: { summary: "DEFAULT" },
             },
         },
         size: {
@@ -115,30 +79,30 @@ export const Playground: StoryObj<IAmountFieldWithControlsProps> = {
                 defaultValue: { summary: "EComponentSize.LG" },
             },
         },
-        labelText: {
+        label: {
             control: { type: "text" },
             description: "Текст лейбла",
-            table: { type: { summary: "string" }, defaultValue: { summary: "Сумма" } },
+            table: { type: { summary: "string" } },
         },
-        descriptionText: {
+        description: {
             control: { type: "text" },
             description: "Текст описания",
-            table: { type: { summary: "string" }, defaultValue: { summary: "Описание поля" } },
-        },
-        placeholder: {
-            control: { type: "text" },
-            description: "Плейсхолдер",
-            table: { type: { summary: "string" }, defaultValue: { summary: "0,00" } },
-        },
-        postfixText: {
-            control: { type: "text" },
-            description: "Текст постфикса",
             table: { type: { summary: "string" } },
         },
         currency: {
             control: { type: "text" },
             description: "Валюта",
-            table: { type: { summary: "string" }, defaultValue: { summary: "RUB" } },
+            table: { type: { summary: "string" } },
+        },
+        prefix: {
+            control: { type: "text" },
+            description: "Текст постфикса",
+            table: { type: { summary: "string" } },
+        },
+        postfix: {
+            control: { type: "text" },
+            description: "Текст постфикса",
+            table: { type: { summary: "string" } },
         },
         maxIntegerDigits: {
             control: { type: "number" },
@@ -152,264 +116,172 @@ export const Playground: StoryObj<IAmountFieldWithControlsProps> = {
         },
     },
     args: {
+        inputProps: { placeholder: "0,00" },
         status: EFormFieldStatus.DEFAULT,
         size: EComponentSize.LG,
-        labelText: "Сумма",
-        descriptionText: "Описание поля",
-        placeholder: "0,00",
-        postfixText: "",
+        label: "Label",
         currency: "RUB",
+        prefix: "",
+        postfix: "",
+        description: "",
         maxIntegerDigits: 16,
         fractionDigits: 2,
     },
+    render: (args) => {
+        const { value, onChange } = useAmountFieldLogic();
+        const { inputProps, ...restArgs } = args;
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <AmountField
+                    {...restArgs}
+                    inputProps={{
+                        value,
+                        onChange,
+                        ...inputProps,
+                    }}
+                />
+            </div>
+        );
+    },
+};
+
+export const Basic: Story = {
     parameters: {
         docs: {
-            description: {
-                story: "Интерактивная демонстрация AmountField с управлением лейблом, плейсхолдером, валютой и точностью.",
-            },
-        },
-        controls: {
-            include: [
-                "status",
-                "size",
-                "labelText",
-                "descriptionText",
-                "placeholder",
-                "postfixText",
-                "currency",
-                "maxIntegerDigits",
-                "fractionDigits",
-            ],
+            description: { story: "Базовый пример." },
+            controls: { disable: true },
         },
     },
-};
-
-export const Default: StoryObj<typeof AmountField> = {
     render: () => {
-        const [value, setValue] = useState("");
+        const { value, onChange } = useAmountFieldLogic();
 
         return (
             <div style={{ maxWidth: "304px" }}>
                 <AmountField
-                    currency="RUB"
                     inputProps={{
                         value,
-                        onChange: setValue,
+                        onChange,
                         placeholder: "0,00",
                     }}
-                    label="Сумма"
-                />
-            </div>
-        );
-    },
-    parameters: {
-        controls: { disable: true },
-    },
-};
-
-export const Basic: StoryObj<typeof AmountField> = {
-    render: () => {
-        const [value, setValue] = useState("");
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <AmountField
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
-                        </Text>
-                    }
+                    status={EFormFieldStatus.DEFAULT}
+                    size={EComponentSize.LG}
+                    label="Label"
                     currency="RUB"
-                    inputProps={{
-                        value,
-                        onChange: setValue,
-                        placeholder: "0,00",
-                    }}
-                    label="Сумма"
+                    maxIntegerDigits={18}
+                    fractionDigits={2}
                 />
             </div>
         );
     },
+};
+
+export const Sizes: Story = {
     parameters: {
-        docs: { description: { story: "Базовый пример AmountField с лейблом и описанием." } },
+        docs: { description: { story: "Размеры" } },
         controls: { disable: true },
+    },
+    render: () => {
+        const sizes = Object.values(EComponentSize);
+
+        return (
+            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                {sizes.map((size) => {
+                    const { value, onChange } = useAmountFieldLogic();
+
+                    return (
+                        <AmountField
+                            key={size}
+                            inputProps={{ value, onChange, placeholder: "0,00" }}
+                            size={size}
+                            label="Label"
+                        />
+                    );
+                })}
+            </div>
+        );
     },
 };
 
-export const WithCurrencyAndPostfix: StoryObj<typeof AmountField> = {
+export const Statuses: Story = {
+    parameters: {
+        docs: { description: { story: "Статусы." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const statuses = Object.values(EFormFieldStatus);
+
+        return (
+            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                {statuses.map((status) => {
+                    const { value, onChange } = useAmountFieldLogic();
+
+                    return (
+                        <AmountField
+                            key={status}
+                            inputProps={{ value, onChange, placeholder: "0,00" }}
+                            status={status}
+                            label="Label"
+                        />
+                    );
+                })}
+            </div>
+        );
+    },
+};
+
+export const WithClearButton: Story = {
+    name: "With clear button",
+    parameters: {
+        docs: { description: { story: "С кнопкой очистки." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const { value, onChange, onClear } = useAmountFieldLogic("123.45");
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <AmountField
+                    inputProps={{
+                        value,
+                        onChange,
+                    }}
+                    label="Label"
+                    onClear={onClear}
+                />
+            </div>
+        );
+    },
+};
+
+export const Example: Story = {
+    parameters: {
+        docs: { description: { story: "В сочетании с другими компонентами." } },
+        controls: { disable: true },
+    },
     render: () => {
         const [value, setValue] = useState("");
 
         return (
             <div style={{ maxWidth: "304px" }}>
                 <AmountField
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
-                        </Text>
-                    }
+                    inputProps={{
+                        value,
+                        onChange: setValue,
+                    }}
+                    label="Label"
                     currency="RUB"
-                    postfix={
-                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
-                            Text
-                        </HelpBox>
-                    }
-                    inputProps={{
-                        value,
-                        onChange: setValue,
-                    }}
-                    label="Сумма"
-                />
-            </div>
-        );
-    },
-    parameters: {
-        docs: { description: { story: "AmountField с валютой и постфиксом." } },
-        controls: { disable: true },
-    },
-};
-
-export const WithClearButton: StoryObj<typeof AmountField> = {
-    render: () => {
-        const [value, setValue] = useState("123456");
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <AmountField
+                    postfix={<HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>}
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
                         </Text>
                     }
-                    inputProps={{
-                        value,
-                        onChange: setValue,
-                    }}
-                    label="Сумма"
                 />
             </div>
         );
-    },
-    parameters: {
-        docs: { description: { story: "Кнопка очистки встроена в AmountField по умолчанию." } },
-        controls: { disable: true },
-    },
-};
-
-export const Sizes: StoryObj<typeof AmountField> = {
-    render: () => {
-        const [valueSM, setValueSM] = useState("");
-        const [valueMD, setValueMD] = useState("");
-        const [valueLG, setValueLG] = useState("");
-
-        return (
-            <div style={{ maxWidth: "400px" }}>
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер SM (маленький)
-                    </Title>
-                    <AmountField
-                        size={EComponentSize.SM}
-                        inputProps={{ value: valueSM, onChange: setValueSM, placeholder: "0,00" }}
-                        label="SM"
-                    />
-                </div>
-
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер MD (средний)
-                    </Title>
-                    <AmountField
-                        size={EComponentSize.MD}
-                        inputProps={{ value: valueMD, onChange: setValueMD, placeholder: "0,00" }}
-                        label="MD"
-                    />
-                </div>
-
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер LG (большой)
-                    </Title>
-                    <AmountField
-                        size={EComponentSize.LG}
-                        inputProps={{ value: valueLG, onChange: setValueLG, placeholder: "0,00" }}
-                        label="LG"
-                    />
-                </div>
-            </div>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация размеров AmountField: SM, MD, LG. Размер влияет на высоту поля и отступы, как и в TextField.",
-            },
-        },
-        controls: { disable: true },
-    },
-};
-
-export const States: StoryObj<typeof AmountField> = {
-    render: () => {
-        const [value, setValue] = useState("");
-        const [valueError, setValueError] = useState("");
-        const [valueWarning, setValueWarning] = useState("");
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <AmountField
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
-                        </Text>
-                    }
-                    inputProps={{ value, onChange: setValue, placeholder: "0,00" }}
-                    label="Обычное"
-                />
-
-                <Gap size={24} />
-
-                <AmountField
-                    status={EFormFieldStatus.ERROR}
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                            Текст ошибки
-                        </Text>
-                    }
-                    inputProps={{ value: valueError, onChange: setValueError }}
-                    label="Ошибка"
-                />
-
-                <Gap size={24} />
-
-                <AmountField
-                    status={EFormFieldStatus.WARNING}
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
-                            Текст предупреждения
-                        </Text>
-                    }
-                    inputProps={{ value: valueWarning, onChange: setValueWarning }}
-                    label="Предупреждение"
-                />
-
-                <Gap size={24} />
-
-                <AmountField
-                    status={EFormFieldStatus.DISABLED}
-                    inputProps={{ value: "100 000,00", onChange: () => {} }}
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
-                        </Text>
-                    }
-                    label="Отключено"
-                />
-            </div>
-        );
-    },
-    parameters: {
-        docs: { description: { story: "Состояния AmountField: обычное, ошибка, предупреждение, отключено." } },
-        controls: { disable: true },
     },
 };

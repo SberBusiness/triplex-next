@@ -1,20 +1,15 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { FormGroup } from "@sberbusiness/triplex-next/components/FormGroup/FormGroup";
-import { FormField, IFormFieldProps } from "@sberbusiness/triplex-next/components/FormField/FormField";
-import { FormFieldDescription } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldDescription";
-import { FormFieldLabel } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldLabel";
-import { FormFieldPostfix } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldPostfix";
-import { FormFieldClear } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldClear";
-import {
-    FormFieldInput,
-    IFormFieldInputProps,
-} from "@sberbusiness/triplex-next/components/FormField/components/FormFieldInput";
-import styles from "./styles/AmountField.module.less";
+import clsx from "clsx";
+import { TextFieldBase, ITextFieldBaseProps } from "../TextField/TextFieldBase";
+import { EFormFieldStatus } from "../FormField/enums";
+import { FormFieldInput, IFormFieldInputProps } from "../FormField/components/FormFieldInput";
+import { FormFieldClear } from "../FormField/components/FormFieldClear";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
-import { setCaretPosition } from "@sberbusiness/triplex-next/utils/inputUtils";
+import { setCaretPosition } from "../../utils/inputUtils";
 import { createPlaceholder, setFallbackCaret } from "./utils";
+import styles from "./styles/AmountField.module.less";
 
-export interface IAmountFieldProps extends IFormFieldProps {
+export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
     inputProps: Omit<IFormFieldInputProps, "type" | "maxLength" | "onChange" | "inputMode" | "autoComplete"> & {
         /** Значение. */
@@ -22,36 +17,19 @@ export interface IAmountFieldProps extends IFormFieldProps {
         /** Обработчик изменения значения. */
         onChange: (value: string) => void;
     };
-    /** Валюта. */
+    /** Наименование валюты. */
     currency?: string;
-    /** Лейбл поля ввода. */
-    label?: React.ReactNode;
     /** Максимальное количество знаков перед запятой. */
     maxIntegerDigits?: number;
     /** Количество знаков после запятой. */
     fractionDigits?: number;
-    /** Постфикс поля ввода. */
-    postfix?: React.ReactNode;
-    /** Описание поля ввода. */
-    description?: React.ReactNode;
-    "data-test-id"?: string;
+    /** Обработчик очищения значения. */
+    onClear?: () => void;
 }
 
 export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>(
-    (
-        {
-            label,
-            description,
-            currency,
-            postfix,
-            inputProps,
-            maxIntegerDigits = 16,
-            fractionDigits = 2,
-            ...formFieldProps
-        },
-        ref,
-    ) => {
-        const dataTestId = formFieldProps["data-test-id"];
+    ({ inputProps, currency, postfix, maxIntegerDigits = 16, fractionDigits = 2, onClear, ...restProps }, ref) => {
+        const dataTestId = restProps["data-test-id"];
         const placeholder = inputProps.placeholder || createPlaceholder(fractionDigits);
 
         const refInput = useRef<HTMLInputElement | null>(null);
@@ -116,17 +94,6 @@ export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>
             inputProps.onSelect?.(event);
         };
 
-        /** Обработчик очистки текста */
-        const handleClear = () => {
-            if (!core.current || !refInput.current) return;
-
-            core.current.apply("", 0);
-
-            setFallbackCaret(refInput.current, core.current, fractionDigits);
-
-            inputProps.onChange(core.current.value);
-        };
-
         /** Функция для хранения ссылки. */
         const setRef = (instance: HTMLInputElement | null) => {
             refInput.current = instance;
@@ -139,34 +106,39 @@ export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>
         };
 
         return (
-            <FormGroup>
-                <FormField {...formFieldProps}>
-                    {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
-                    <FormFieldInput
-                        {...inputProps}
-                        ref={setRef}
-                        // eslint-disable-next-line react-hooks/refs
-                        value={getFormattedValue()}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        onSelect={handleSelect}
-                        autoComplete="off"
-                        inputMode="decimal"
-                        data-test-id={dataTestId && `${dataTestId}__input`}
-                        placeholder={placeholder}
-                    />
-                    <FormFieldPostfix>
-                        <FormFieldClear onClick={handleClear} />
-                        {currency ? (
-                            <span className={styles.currency} data-test-id={dataTestId && `${dataTestId}__unit`}>
+            <TextFieldBase
+                postfix={
+                    <React.Fragment>
+                        {onClear !== undefined && <FormFieldClear onClick={onClear} />}
+                        {currency !== undefined && (
+                            <span
+                                className={clsx(styles.currency, {
+                                    [styles.disabled]: restProps.status === EFormFieldStatus.DISABLED,
+                                })}
+                                data-test-id={dataTestId && `${dataTestId}__unit`}
+                            >
                                 {currency}
                             </span>
-                        ) : null}
-                        {postfix ? postfix : null}
-                    </FormFieldPostfix>
-                </FormField>
-                {description ? <FormFieldDescription>{description}</FormFieldDescription> : null}
-            </FormGroup>
+                        )}
+                        {postfix !== undefined && postfix}
+                    </React.Fragment>
+                }
+                {...restProps}
+            >
+                <FormFieldInput
+                    {...inputProps}
+                    // eslint-disable-next-line react-hooks/refs
+                    value={getFormattedValue()}
+                    placeholder={placeholder}
+                    autoComplete="off"
+                    inputMode="decimal"
+                    data-test-id={dataTestId && `${dataTestId}__input`}
+                    onKeyDown={handleKeyDown}
+                    onSelect={handleSelect}
+                    onChange={handleChange}
+                    ref={setRef}
+                />
+            </TextFieldBase>
         );
     },
 );

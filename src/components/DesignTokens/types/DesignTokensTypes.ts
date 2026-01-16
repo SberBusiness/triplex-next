@@ -2,6 +2,7 @@ import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
+    TDesignTokensComponentsAmountField,
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCalendar,
     TDesignTokensComponentsCard,
@@ -18,6 +19,7 @@ import {
     TDesignTokensComponentsIsland,
     TDesignTokensComponentsIslandAccordion,
     TDesignTokensComponentsIslandWidget,
+    TDesignTokensComponentsLightBox,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsListItem,
     TDesignTokensComponentsListItemControlsButton,
@@ -26,14 +28,18 @@ import {
     TDesignTokensComponentsLoaderScreen,
     TDesignTokensComponentsMarker,
     TDesignTokensComponentsMarkerStatus,
+    TDesignTokensComponentsModalWindow,
     TDesignTokensComponentsMultiselectField,
+    TDesignTokensComponentsNotification,
     TDesignTokensComponentsOverlay,
     TDesignTokensComponentsPagination,
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
     TDesignTokensComponentsSegmentedControlSegment,
     TDesignTokensComponentsSkeleton,
+    TDesignTokensComponentsSmallInput,
     TDesignTokensComponentsSMSInput,
+    TDesignTokensComponentsStatusTracker,
     TDesignTokensComponentsStep,
     TDesignTokensComponentsStepper,
     TDesignTokensComponentsTableBasic,
@@ -42,14 +48,9 @@ import {
     TDesignTokensComponentsTagColor,
     TDesignTokensComponentsTabsLine,
     TDesignTokensComponentsTooltip,
+    TDesignTokensComponentsTopOverlay,
     TDesignTokensComponentsTypography,
     TDesignTokensComponentsUploadZone,
-    TDesignTokensComponentsLightBox,
-    TDesignTokensComponentsNotification,
-    TDesignTokensComponentsStatusTracker,
-    TDesignTokensComponentsModalWindow,
-    TDesignTokensComponentsTopOverlay,
-    TDesignTokensComponentsSmallInput,
 } from "../components";
 import { TDesignTokensComponentsSlider } from "@sberbusiness/triplex-next/components/DesignTokens/components/Slider";
 
@@ -287,6 +288,7 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBrand &
 export type TDesignTokensComponents =
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
+    | TDesignTokensComponentsAmountField
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsCalendar
     | TDesignTokensComponentsCard
@@ -303,6 +305,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsIsland
     | TDesignTokensComponentsIslandAccordion
     | TDesignTokensComponentsIslandWidget
+    | TDesignTokensComponentsLightBox
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsListItem
     | TDesignTokensComponentsListItemControlsButton
@@ -311,13 +314,16 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsLoaderScreen
     | TDesignTokensComponentsMarker
     | TDesignTokensComponentsMarkerStatus
+    | TDesignTokensComponentsModalWindow
     | TDesignTokensComponentsMultiselectField
+    | TDesignTokensComponentsNotification
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment
     | TDesignTokensComponentsSkeleton
+    | TDesignTokensComponentsSmallInput
     | TDesignTokensComponentsSMSInput
     | TDesignTokensComponentsSlider
     | TDesignTokensComponentsStep
@@ -328,16 +334,12 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTagColor
     | TDesignTokensComponentsTabsLine
     | TDesignTokensComponentsTooltip
+    | TDesignTokensComponentsTopOverlay
     | TDesignTokensComponentsTypography
     | TDesignTokensComponentsUploadZone
-    | TDesignTokensComponentsLightBox
-    | TDesignTokensComponentsModalWindow
     | TDesignTokensComponentsNotification
     | TDesignTokensComponentsStatusTracker
-    | TDesignTokensComponentsUploadZone
-    | TDesignTokensComponentsNotification
-    | TDesignTokensComponentsTopOverlay
-    | TDesignTokensComponentsSmallInput;
+    | TDesignTokensComponentsUploadZone;
 
 // Тип токенов, включающий core токены и токены компонентов.
 export type TDesignTokens = TDesignTokensCore & TDesignTokensComponents;

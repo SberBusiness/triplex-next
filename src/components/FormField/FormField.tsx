@@ -1,13 +1,14 @@
 import React, { useState } from "react";
+import clsx from "clsx";
 import { FormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
-import clsx from "clsx";
-import styles from "./styles/FormField.module.less";
 import { EFormFieldStatus } from "./enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EComponentSize } from "../../enums/EComponentSize";
+import { DataAttributes } from "../../types/CoreTypes";
+import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
-export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, DataAttributes {
     status?: EFormFieldStatus;
     size?: EComponentSize;
 }

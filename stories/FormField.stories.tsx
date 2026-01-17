@@ -12,7 +12,7 @@ import {
     FormFieldMaskedInput,
     FormFieldCounter,
 } from "../src/components/FormField";
-import { EFormFieldSize, EFormFieldStatus } from "../src/components/FormField/enums";
+import { EFormFieldStatus } from "../src/components/FormField/enums";
 import { FormGroup } from "../src/components/FormGroup";
 import { Gap } from "../src/components/Gap";
 import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
@@ -21,6 +21,7 @@ import { ETooltipSize } from "../src/components/Tooltip/enums";
 import { ETooltipPreferPlace } from "../src/components/Tooltip/enums";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { EComponentSize } from "../src/enums/EComponentSize";
 
 export default {
     title: "Components/FormField",
@@ -165,11 +166,11 @@ export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
         },
         size: {
             control: { type: "select" },
-            options: [EFormFieldSize.SM, EFormFieldSize.MD, EFormFieldSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер поля ввода",
             table: {
-                type: { summary: "EFormFieldSize" },
-                defaultValue: { summary: "EFormFieldSize.MD" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.MD" },
             },
         },
         className: {
@@ -182,7 +183,7 @@ export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
     },
     args: {
         status: EFormFieldStatus.DEFAULT,
-        size: EFormFieldSize.MD,
+        size: EComponentSize.MD,
         labelText: "Название поля",
         placeholder: "Введите текст...",
         showClear: false,
@@ -522,7 +523,7 @@ export const Sizes: StoryObj<typeof FormField> = {
                         Размер SM (маленький)
                     </Title>
                     <FormGroup>
-                        <FormField size={EFormFieldSize.SM}>
+                        <FormField size={EComponentSize.SM}>
                             <FormFieldLabel>Маленькое поле</FormFieldLabel>
                             <FormFieldInput value={valueSM} onChange={handleChangeSM} placeholder="Введите текст..." />
                         </FormField>
@@ -534,7 +535,7 @@ export const Sizes: StoryObj<typeof FormField> = {
                         Размер MD (средний) - по умолчанию
                     </Title>
                     <FormGroup>
-                        <FormField size={EFormFieldSize.MD}>
+                        <FormField size={EComponentSize.MD}>
                             <FormFieldLabel>Среднее поле</FormFieldLabel>
                             <FormFieldInput value={valueMD} onChange={handleChangeMD} placeholder="Введите текст..." />
                         </FormField>
@@ -546,7 +547,7 @@ export const Sizes: StoryObj<typeof FormField> = {
                         Размер LG (большой)
                     </Title>
                     <FormGroup>
-                        <FormField size={EFormFieldSize.LG}>
+                        <FormField size={EComponentSize.LG}>
                             <FormFieldLabel>Большое поле</FormFieldLabel>
                             <FormFieldInput value={valueLG} onChange={handleChangeLG} placeholder="Введите текст..." />
                         </FormField>

@@ -10,6 +10,11 @@
             // Переопределяет opacity: 0 в FormFieldInput.less.
             opacity: 1;
         }
+
+        // Скрываем маску в состоянии disabled, иначе получается темный шрифт value т.к. он с альфа-каналом.
+        &:disabled {
+            visibility: hidden;
+        }
     }
 
 

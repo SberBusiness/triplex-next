@@ -43,7 +43,7 @@ export * from "./LightBox";
 export * from "./Tag";
 export * from "./TagColor";
 export * from "./Notification";
-export * from "./SMSInput";
+export * from "./SMSField";
 export * from "./StatusTracker";
 export * from "./Step";
 export * from "./ModalWindow";

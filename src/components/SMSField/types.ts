@@ -2,8 +2,8 @@ import React from "react";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { TestProps } from "@sberbusiness/triplex-next/types/CoreTypes";
 
-/** Свойства компонента SMSInput. */
-export interface ISMSInputProps extends React.HTMLAttributes<HTMLDivElement>, TestProps {
+/** Свойства компонента SMSField. */
+export interface ISMSFieldProps extends React.HTMLAttributes<HTMLDivElement>, TestProps {
     /** Значение кода. */
     code: string;
     /** Признак блокировки компонента. */

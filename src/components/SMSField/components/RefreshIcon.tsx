@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import styles from "@sberbusiness/triplex-next/components/SMSInput/styles/SMSInput.module.less";
+import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 const iconPath =

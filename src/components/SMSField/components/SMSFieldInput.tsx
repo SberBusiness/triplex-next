@@ -8,12 +8,12 @@ import {
     FormFieldInput,
 } from "@sberbusiness/triplex-next/components/FormField";
 import { FormGroup } from "@sberbusiness/triplex-next/components/FormGroup";
-import { SMSInputContext } from "@sberbusiness/triplex-next/components/SMSInput/SMSInputContext";
-import styles from "@sberbusiness/triplex-next/components/SMSInput/styles/SMSInput.module.less";
+import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
+import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 
-/** Свойства SMSInput.Input. */
-export interface ISMSInputInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+/** Свойства SMSField.Input. */
+export interface ISMSFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /** Счётчик символов */
     counter?: React.ReactNode;
     /** Описание поля ввода */
@@ -22,7 +22,7 @@ export interface ISMSInputInputProps extends React.InputHTMLAttributes<HTMLInput
 
 const regExp = new RegExp(/^[0-9]*$/);
 
-export const SMSInputInput = React.forwardRef<HTMLInputElement, ISMSInputInputProps>(
+export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputProps>(
     (
         { className, counter, description, disabled, maxLength = 8, onChange, onKeyDown, placeholder, ...restProps },
         ref,
@@ -36,7 +36,7 @@ export const SMSInputInput = React.forwardRef<HTMLInputElement, ISMSInputInputPr
             onSubmitCode,
             size,
             sizeClassName,
-        } = useContext(SMSInputContext);
+        } = useContext(SMSFieldContext);
 
         const inputDisabled = allDisabled || disabled;
         const inputClassName = clsx(styles.input, sizeClassName, className);
@@ -96,4 +96,4 @@ export const SMSInputInput = React.forwardRef<HTMLInputElement, ISMSInputInputPr
     },
 );
 
-SMSInputInput.displayName = "SMSInputInput";
+SMSFieldInput.displayName = "SMSFieldInput";

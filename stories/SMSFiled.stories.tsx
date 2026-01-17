@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { EComponentSize } from "../src";
-import { SMSInput } from "../src/components/SMSInput";
+import { SMSField } from "../src/components/SMSField";
 import { EFontType, ETextSize, Text } from "../src/components/Typography";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SMSField",
-    component: SMSInput,
+    component: SMSField,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -38,12 +38,12 @@ export default {
             </div>
         ),
     ],
-} satisfies Meta<typeof SMSInput>;
+} satisfies Meta<typeof SMSField>;
 
-type ISMSInputProps = Partial<React.ComponentProps<typeof SMSInput>>;
+type ISMSFieldProps = Partial<React.ComponentProps<typeof SMSField>>;
 
 // Базовая логика для переиспользования.
-const useSMSInputLogic = () => {
+const useSMSFieldLogic = () => {
     const [code, setCode] = useState("");
     const [timeLeft, setTimeLeft] = useState(0);
     const targetRef = useRef<HTMLElement | null>(null);
@@ -77,7 +77,7 @@ const useSMSInputLogic = () => {
     };
 };
 
-export const Playground: StoryObj<ISMSInputProps> = {
+export const Playground: StoryObj<ISMSFieldProps> = {
     name: "Playground",
     args: {
         description: "Перейдите по",
@@ -115,16 +115,16 @@ export const Playground: StoryObj<ISMSInputProps> = {
         },
         docs: {
             description: {
-                story: "Интерактивная демонстрация SMSInput. Позволяет настраивать основные свойства компонента.",
+                story: "Интерактивная демонстрация SMSField. Позволяет настраивать основные свойства компонента.",
             },
         },
     },
-    render: (args: ISMSInputProps) => {
+    render: (args: ISMSFieldProps) => {
         const { disabled, maxLength, placeholder, size } = args;
-        const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSInputLogic();
+        const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic();
 
         return (
-            <SMSInput
+            <SMSField
                 code={code}
                 disabled={disabled}
                 maxLength={maxLength}
@@ -132,28 +132,28 @@ export const Playground: StoryObj<ISMSInputProps> = {
                 onSubmitCode={onSubmit}
                 size={size}
             >
-                <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
-                    <SMSInput.Refresh
+                <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
+                    <SMSField.Refresh
                         countdownTime={10}
                         countdownTimeLeft={timeLeft}
                         onRefresh={onRefresh}
                         ref={(el: HTMLButtonElement) => (targetRef.current = el)}
                     />
-                </SMSInput.Tooltip>
-                <SMSInput.Input placeholder={placeholder} />
-                <SMSInput.Submit />
-            </SMSInput>
+                </SMSField.Tooltip>
+                <SMSField.Input placeholder={placeholder} />
+                <SMSField.Submit />
+            </SMSField>
         );
     },
 };
 
-export const Error: StoryObj<ISMSInputProps> = {
+export const Error: StoryObj<ISMSFieldProps> = {
     name: "Error",
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
-                story: "SMSInput в состоянии error.",
+                story: "SMSField в состоянии error.",
             },
         },
     },
@@ -163,10 +163,10 @@ export const Error: StoryObj<ISMSInputProps> = {
         return (
             <>
                 {sizes.map((size) => {
-                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSInputLogic();
+                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic();
 
                     return (
-                        <SMSInput
+                        <SMSField
                             key={size}
                             code={code}
                             error={true}
@@ -175,15 +175,15 @@ export const Error: StoryObj<ISMSInputProps> = {
                             onSubmitCode={onSubmit}
                             size={size}
                         >
-                            <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
-                                <SMSInput.Refresh
+                            <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
+                                <SMSField.Refresh
                                     countdownTime={10}
                                     countdownTimeLeft={timeLeft}
                                     onRefresh={onRefresh}
                                     ref={(el: HTMLButtonElement) => (targetRef.current = el)}
                                 />
-                            </SMSInput.Tooltip>
-                            <SMSInput.Input
+                            </SMSField.Tooltip>
+                            <SMSField.Input
                                 description={
                                     <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
                                         Текст ошибки
@@ -191,8 +191,8 @@ export const Error: StoryObj<ISMSInputProps> = {
                                 }
                                 placeholder="Введите код"
                             />
-                            <SMSInput.Submit />
-                        </SMSInput>
+                            <SMSField.Submit />
+                        </SMSField>
                     );
                 })}
             </>
@@ -200,13 +200,13 @@ export const Error: StoryObj<ISMSInputProps> = {
     },
 };
 
-export const Disabled: StoryObj<ISMSInputProps> = {
+export const Disabled: StoryObj<ISMSFieldProps> = {
     name: "Disabled",
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
-                story: "SMSInput в состоянии disabled с введённым кодом и без.",
+                story: "SMSField в состоянии disabled с введённым кодом и без.",
             },
         },
     },
@@ -222,55 +222,55 @@ export const Disabled: StoryObj<ISMSInputProps> = {
 
         return (
             <>
-                <SMSInput
+                <SMSField
                     code="12345678"
                     disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
                     size={EComponentSize.MD}
                 >
-                    <SMSInput.Tooltip targetRef={targetRefFull} message="Текст подсказки">
-                        <SMSInput.Refresh
+                    <SMSField.Tooltip targetRef={targetRefFull} message="Текст подсказки">
+                        <SMSField.Refresh
                             countdownTime={5}
                             countdownTimeLeft={2}
                             onRefresh={handleRefresh}
                             ref={(el: HTMLButtonElement) => (targetRefFull.current = el)}
                         />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input placeholder="Введите код" />
-                    <SMSInput.Submit />
-                </SMSInput>
+                    </SMSField.Tooltip>
+                    <SMSField.Input placeholder="Введите код" />
+                    <SMSField.Submit />
+                </SMSField>
 
-                <SMSInput
+                <SMSField
                     code=""
                     disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
                     size={EComponentSize.MD}
                 >
-                    <SMSInput.Tooltip targetRef={targetRefEmpty} message="Текст подсказки">
-                        <SMSInput.Refresh
+                    <SMSField.Tooltip targetRef={targetRefEmpty} message="Текст подсказки">
+                        <SMSField.Refresh
                             countdownTime={5}
                             countdownTimeLeft={2}
                             onRefresh={handleRefresh}
                             ref={(el: HTMLButtonElement) => (targetRefEmpty.current = el)}
                         />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input placeholder="Введите код" />
-                    <SMSInput.Submit />
-                </SMSInput>
+                    </SMSField.Tooltip>
+                    <SMSField.Input placeholder="Введите код" />
+                    <SMSField.Submit />
+                </SMSField>
             </>
         );
     },
 };
 
-export const Sizes: StoryObj<ISMSInputProps> = {
+export const Sizes: StoryObj<ISMSFieldProps> = {
     name: "Sizes",
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Демонстрация различных размеров SMSInput: SM (маленький), MD (средний), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
+                story: "Демонстрация различных размеров SMSField: SM (маленький), MD (средний), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
             },
         },
     },
@@ -280,21 +280,21 @@ export const Sizes: StoryObj<ISMSInputProps> = {
         return (
             <>
                 {sizes.map((size) => {
-                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSInputLogic();
+                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic();
 
                     return (
-                        <SMSInput key={size} code={code} onChangeCode={onChange} onSubmitCode={onSubmit} size={size}>
-                            <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
-                                <SMSInput.Refresh
+                        <SMSField key={size} code={code} onChangeCode={onChange} onSubmitCode={onSubmit} size={size}>
+                            <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
+                                <SMSField.Refresh
                                     countdownTime={10}
                                     countdownTimeLeft={timeLeft}
                                     onRefresh={onRefresh}
                                     ref={(el: HTMLButtonElement) => (targetRef.current = el)}
                                 />
-                            </SMSInput.Tooltip>
-                            <SMSInput.Input placeholder="Введите код" />
-                            <SMSInput.Submit />
-                        </SMSInput>
+                            </SMSField.Tooltip>
+                            <SMSField.Input placeholder="Введите код" />
+                            <SMSField.Submit />
+                        </SMSField>
                     );
                 })}
             </>

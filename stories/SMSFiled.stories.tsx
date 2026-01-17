@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { EComponentSize } from "../src";
-import { Gap } from "../src/components/Gap";
 import { SMSInput } from "../src/components/SMSInput";
 import { EFontType, ETextSize, Text } from "../src/components/Typography";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
@@ -32,7 +31,14 @@ export default {
             ),
         },
     },
-};
+    decorators: [
+        (Story) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "300px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+} satisfies Meta<typeof SMSInput>;
 
 type ISMSInputProps = Partial<React.ComponentProps<typeof SMSInput>>;
 
@@ -118,27 +124,25 @@ export const Playground: StoryObj<ISMSInputProps> = {
         const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSInputLogic();
 
         return (
-            <div style={{ width: "300px" }}>
-                <SMSInput
-                    code={code}
-                    disabled={disabled}
-                    maxLength={maxLength}
-                    onChangeCode={onChange}
-                    onSubmitCode={onSubmit}
-                    size={size}
-                >
-                    <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeft}
-                            onRefresh={onRefresh}
-                            ref={(el: HTMLButtonElement) => (targetRef.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input placeholder={placeholder} />
-                    <SMSInput.Submit />
-                </SMSInput>
-            </div>
+            <SMSInput
+                code={code}
+                disabled={disabled}
+                maxLength={maxLength}
+                onChangeCode={onChange}
+                onSubmitCode={onSubmit}
+                size={size}
+            >
+                <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
+                    <SMSInput.Refresh
+                        countdownTime={10}
+                        countdownTimeLeft={timeLeft}
+                        onRefresh={onRefresh}
+                        ref={(el: HTMLButtonElement) => (targetRef.current = el)}
+                    />
+                </SMSInput.Tooltip>
+                <SMSInput.Input placeholder={placeholder} />
+                <SMSInput.Submit />
+            </SMSInput>
         );
     },
 };
@@ -154,120 +158,44 @@ export const Error: StoryObj<ISMSInputProps> = {
         },
     },
     render: () => {
-        const {
-            code: codeSM,
-            timeLeft: timeLeftSM,
-            targetRef: targetRefSM,
-            onChange: handleChangeSM,
-            onSubmit: handleSubmitSM,
-            onRefresh: handleRefreshSM,
-        } = useSMSInputLogic();
-
-        const {
-            code: codeMD,
-            timeLeft: timeLeftMD,
-            targetRef: targetRefMD,
-            onChange: handleChangeMD,
-            onSubmit: handleSubmitMD,
-            onRefresh: handleRefreshMD,
-        } = useSMSInputLogic();
-
-        const {
-            code: codeLG,
-            timeLeft: timeLeftLG,
-            targetRef: targetRefLG,
-            onChange: handleChangeLG,
-            onSubmit: handleSubmitLG,
-            onRefresh: handleRefreshLG,
-        } = useSMSInputLogic();
+        const sizes = Object.values(EComponentSize);
 
         return (
-            <div style={{ width: "300px" }}>
-                <SMSInput
-                    code={codeSM}
-                    error={true}
-                    maxLength={8}
-                    onChangeCode={handleChangeSM}
-                    onSubmitCode={handleSubmitSM}
-                    size={EComponentSize.SM}
-                >
-                    <SMSInput.Tooltip targetRef={targetRefSM} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeftSM}
-                            onRefresh={handleRefreshSM}
-                            ref={(el: HTMLButtonElement) => (targetRefSM.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input
-                        description={
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        }
-                        placeholder="Введите код"
-                    />
-                    <SMSInput.Submit />
-                </SMSInput>
+            <>
+                {sizes.map((size) => {
+                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSInputLogic();
 
-                <Gap size={24} />
-
-                <SMSInput
-                    code={codeMD}
-                    error={true}
-                    maxLength={8}
-                    onChangeCode={handleChangeMD}
-                    onSubmitCode={handleSubmitMD}
-                    size={EComponentSize.MD}
-                >
-                    <SMSInput.Tooltip targetRef={targetRefMD} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeftMD}
-                            onRefresh={handleRefreshMD}
-                            ref={(el: HTMLButtonElement) => (targetRefMD.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input
-                        description={
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        }
-                        placeholder="Введите код"
-                    />
-                    <SMSInput.Submit />
-                </SMSInput>
-
-                <Gap size={24} />
-
-                <SMSInput
-                    code={codeLG}
-                    error={true}
-                    maxLength={8}
-                    onChangeCode={handleChangeLG}
-                    onSubmitCode={handleSubmitLG}
-                    size={EComponentSize.LG}
-                >
-                    <SMSInput.Tooltip targetRef={targetRefLG} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeftLG}
-                            onRefresh={handleRefreshLG}
-                            ref={(el: HTMLButtonElement) => (targetRefLG.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input
-                        description={
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                                Текст ошибки
-                            </Text>
-                        }
-                        placeholder="Введите код"
-                    />
-                    <SMSInput.Submit />
-                </SMSInput>
-            </div>
+                    return (
+                        <SMSInput
+                            key={size}
+                            code={code}
+                            error={true}
+                            maxLength={8}
+                            onChangeCode={onChange}
+                            onSubmitCode={onSubmit}
+                            size={size}
+                        >
+                            <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
+                                <SMSInput.Refresh
+                                    countdownTime={10}
+                                    countdownTimeLeft={timeLeft}
+                                    onRefresh={onRefresh}
+                                    ref={(el: HTMLButtonElement) => (targetRef.current = el)}
+                                />
+                            </SMSInput.Tooltip>
+                            <SMSInput.Input
+                                description={
+                                    <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                                        Текст ошибки
+                                    </Text>
+                                }
+                                placeholder="Введите код"
+                            />
+                            <SMSInput.Submit />
+                        </SMSInput>
+                    );
+                })}
+            </>
         );
     },
 };
@@ -293,7 +221,7 @@ export const Disabled: StoryObj<ISMSInputProps> = {
         const handleRefresh = () => {};
 
         return (
-            <div style={{ width: "300px" }}>
+            <>
                 <SMSInput
                     code="12345678"
                     disabled={true}
@@ -313,8 +241,6 @@ export const Disabled: StoryObj<ISMSInputProps> = {
                     <SMSInput.Submit />
                 </SMSInput>
 
-                <Gap size={24} />
-
                 <SMSInput
                     code=""
                     disabled={true}
@@ -333,7 +259,7 @@ export const Disabled: StoryObj<ISMSInputProps> = {
                     <SMSInput.Input placeholder="Введите код" />
                     <SMSInput.Submit />
                 </SMSInput>
-            </div>
+            </>
         );
     },
 };
@@ -349,93 +275,29 @@ export const Sizes: StoryObj<ISMSInputProps> = {
         },
     },
     render: () => {
-        const {
-            code: codeSM,
-            timeLeft: timeLeftSM,
-            targetRef: targetRefSM,
-            onChange: handleChangeSM,
-            onSubmit: handleSubmitSM,
-            onRefresh: handleRefreshSM,
-        } = useSMSInputLogic();
-
-        const {
-            code: codeMD,
-            timeLeft: timeLeftMD,
-            targetRef: targetRefMD,
-            onChange: handleChangeMD,
-            onSubmit: handleSubmitMD,
-            onRefresh: handleRefreshMD,
-        } = useSMSInputLogic();
-
-        const {
-            code: codeLG,
-            timeLeft: timeLeftLG,
-            targetRef: targetRefLG,
-            onChange: handleChangeLG,
-            onSubmit: handleSubmitLG,
-            onRefresh: handleRefreshLG,
-        } = useSMSInputLogic();
+        const sizes = Object.values(EComponentSize);
 
         return (
-            <div style={{ width: "300px" }}>
-                <SMSInput
-                    code={codeSM}
-                    onChangeCode={handleChangeSM}
-                    onSubmitCode={handleSubmitSM}
-                    size={EComponentSize.SM}
-                >
-                    <SMSInput.Tooltip targetRef={targetRefSM} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeftSM}
-                            onRefresh={handleRefreshSM}
-                            ref={(el: HTMLButtonElement) => (targetRefSM.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input placeholder="Введите код" />
-                    <SMSInput.Submit />
-                </SMSInput>
+            <>
+                {sizes.map((size) => {
+                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSInputLogic();
 
-                <Gap size={24} />
-
-                <SMSInput
-                    code={codeMD}
-                    onChangeCode={handleChangeMD}
-                    onSubmitCode={handleSubmitMD}
-                    size={EComponentSize.MD}
-                >
-                    <SMSInput.Tooltip targetRef={targetRefMD} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeftMD}
-                            onRefresh={handleRefreshMD}
-                            ref={(el: HTMLButtonElement) => (targetRefMD.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input placeholder="Введите код" />
-                    <SMSInput.Submit />
-                </SMSInput>
-
-                <Gap size={24} />
-
-                <SMSInput
-                    code={codeLG}
-                    onChangeCode={handleChangeLG}
-                    onSubmitCode={handleSubmitLG}
-                    size={EComponentSize.LG}
-                >
-                    <SMSInput.Tooltip targetRef={targetRefLG} message="Текст подсказки">
-                        <SMSInput.Refresh
-                            countdownTime={10}
-                            countdownTimeLeft={timeLeftLG}
-                            onRefresh={handleRefreshLG}
-                            ref={(el: HTMLButtonElement) => (targetRefLG.current = el)}
-                        />
-                    </SMSInput.Tooltip>
-                    <SMSInput.Input placeholder="Введите код" />
-                    <SMSInput.Submit />
-                </SMSInput>
-            </div>
+                    return (
+                        <SMSInput key={size} code={code} onChangeCode={onChange} onSubmitCode={onSubmit} size={size}>
+                            <SMSInput.Tooltip targetRef={targetRef} message="Текст подсказки">
+                                <SMSInput.Refresh
+                                    countdownTime={10}
+                                    countdownTimeLeft={timeLeft}
+                                    onRefresh={onRefresh}
+                                    ref={(el: HTMLButtonElement) => (targetRef.current = el)}
+                                />
+                            </SMSInput.Tooltip>
+                            <SMSInput.Input placeholder="Введите код" />
+                            <SMSInput.Submit />
+                        </SMSInput>
+                    );
+                })}
+            </>
         );
     },
 };

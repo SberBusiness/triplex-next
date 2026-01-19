@@ -13,12 +13,13 @@ export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInput
     /** Признак частичного типа выбора. */
     bulk?: boolean;
     /** Размер чекбокса. */
-    size?: EComponentSize.MD | EComponentSize.LG;
+    size?: EComponentSize;
 }
 
 const sizeToTextSizeMap = {
     [EComponentSize.LG]: ETextSize.B2,
     [EComponentSize.MD]: ETextSize.B3,
+    [EComponentSize.SM]: ETextSize.B4,
 };
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);

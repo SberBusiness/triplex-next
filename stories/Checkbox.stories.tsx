@@ -5,7 +5,7 @@ import { Gap } from "../src/components/Gap";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Stories, ArgTypes, Controls } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Checkbox",
@@ -19,55 +19,19 @@ export default {
 
 ## Особенности
 
-- **Размеры**: medium (MD), large (LG)
+- **Размеры**: small (SM), medium (MD), large (LG)
 - **Группировка**: по осям X (компонент CheckboxXGroup) и Y (компонент CheckboxYGroup)
-
-## Использование
-
-\`\`\`tsx
-import { Checkbox } from '../src/components/Checkbox/Checkbox';
-
-// Базовый чекбокс
-<Checkbox onChange={handleChange}>
-    Согласен с условиями
-</Checkbox>
-
-// Чекбокс в состоянии частичного выбора
-<Checkbox bulk checked onChange={handleChange}>
-    Выбрать все
-</Checkbox>
-
-// Отключенный чекбокс
-<Checkbox disabled>
-    Недоступная опция
-</Checkbox>
-
-// Группа чекбоксов с направлением по оси X
-<CheckboxXGroup>
-    {[1, 2, 3].map((value, index) => (
-        <Checkbox key={index} value={value}>
-            Вариант - {index + 1}
-        </Checkbox>
-    ))}
-</CheckboxXGroup>
-
-// Группа чекбоксов с направлением по оси Y
-<CheckboxYGroup>
-    {[1, 2, 3, 4].map((value, index) => (
-        <Checkbox key={index} value={value}>
-            Вариант - {index + 1}
-        </Checkbox>
-    ))}
-</CheckboxYGroup>
-\`\`\`
                 `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <ArgTypes of={Checkbox} />
+                    <h2>Playground</h2>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -77,6 +41,7 @@ import { Checkbox } from '../src/components/Checkbox/Checkbox';
 
 export const Playground: StoryObj<typeof Checkbox> = {
     name: "Playground",
+    tags: ["!autodocs"],
     args: {
         children: "Checkbox label",
         size: EComponentSize.MD,
@@ -114,10 +79,10 @@ export const Playground: StoryObj<typeof Checkbox> = {
         },
         size: {
             control: { type: "select" },
-            options: [EComponentSize.MD, EComponentSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер чекбокса",
             table: {
-                type: { summary: "ECheckboxSize" },
+                type: { summary: "EComponentSize" },
                 defaultValue: { summary: EComponentSize.MD },
             },
         },
@@ -125,6 +90,12 @@ export const Playground: StoryObj<typeof Checkbox> = {
     parameters: {
         controls: {
             include: ["children", "checked", "disabled", "bulk", "size"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => <Checkbox {...args} />,
@@ -141,6 +112,8 @@ export const Default: StoryObj<typeof Checkbox> = {
     },
     render: (args) => (
         <>
+            <Checkbox {...args} size={EComponentSize.SM} />
+            <Gap size={16} />
             <Checkbox {...args} />
             <Gap size={16} />
             <Checkbox {...args} size={EComponentSize.LG} />
@@ -160,6 +133,14 @@ export const XGroup: StoryObj<typeof Checkbox> = {
     },
     render: () => (
         <>
+            <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={16}>
+                {[1, 2, 3].map((value, index) => (
+                    <Checkbox key={index} name="checkbox-x-group" value={value} size={EComponentSize.SM}>
+                        Checkbox text
+                    </Checkbox>
+                ))}
+            </CheckboxXGroup>
+            <Gap size={16} />
             <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={16}>
                 {[1, 2, 3].map((value, index) => (
                     <Checkbox key={index} name="checkbox-x-group" value={value}>
@@ -191,6 +172,15 @@ export const YGroup: StoryObj<typeof Checkbox> = {
     },
     render: () => (
         <Row>
+            <Col size={3}>
+                <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
+                    {[1, 2, 3, 4].map((value, index) => (
+                        <Checkbox key={index} name="checkbox-y-group" value={value} size={EComponentSize.SM}>
+                            Checkbox text
+                        </Checkbox>
+                    ))}
+                </CheckboxYGroup>
+            </Col>
             <Col size={3}>
                 <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
                     {[1, 2, 3, 4].map((value, index) => (

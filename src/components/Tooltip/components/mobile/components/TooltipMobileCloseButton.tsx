@@ -4,7 +4,6 @@ import {
     IDropdownMobileCloseProps,
 } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileClose";
 import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
-import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipMobile.module.less";
 
 /** Свойства компонента TooltipMobileCloseButton. */
 export interface ITooltipMobileCloseButton extends IDropdownMobileCloseProps {}
@@ -19,5 +18,5 @@ export const TooltipMobileCloseButton: React.FC<ITooltipMobileCloseButton> = ({ 
         onClick?.(event);
     };
 
-    return <DropdownMobileClose className={styles.tooltipXButton} onClick={handleClick} {...rest} />;
+    return <DropdownMobileClose onClick={handleClick} {...rest} />;
 };

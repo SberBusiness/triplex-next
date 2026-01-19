@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { HelpBox } from "../../src/components/HelpBox/HelpBox";
-import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { HelpBox } from "../src/components/HelpBox/HelpBox";
+import { ETooltipPreferPlace, ETooltipSize } from "../src/components/Tooltip/enums";
+import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/HelpBox",
@@ -16,8 +16,11 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <ArgTypes of={HelpBox} />
+                    <h2>Playground</h2>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -32,6 +35,7 @@ interface IHelpBoxWithControlsProps extends React.ComponentProps<typeof HelpBox>
 }
 
 export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
+    tags: ["!autodocs"],
     render: (args) => {
         const { contentText, mobileHeaderText, ...helpBoxProps } = args;
 
@@ -94,6 +98,10 @@ export const Playground: StoryObj<IHelpBoxWithControlsProps> = {
             description: {
                 story: "Интерактивная демонстрация HelpBox с контролами размера, положения и текстов.",
             },
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
 };

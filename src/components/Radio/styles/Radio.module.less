@@ -4,6 +4,15 @@
     cursor: pointer;
     box-sizing: border-box;
 
+    &.sm {
+        min-width: 16px;
+        min-height: 16px;
+
+        &.nonempty {
+            padding-left: 24px;
+        }
+    }
+
     &.md {
         min-height: 24px;
         min-width: 24px;
@@ -49,6 +58,13 @@
     border-radius: 50%;
     transform: scale(0);
 
+    .sm & {
+        width: 8px;
+        height: 8px;
+        top: 4px;
+        left: 4px;
+    }
+
     .md & {
         width: 12px;
         height: 12px;
@@ -75,6 +91,12 @@
     left: 0;
     top: 0;
 
+    .sm & {
+        width: 16px;
+        height: 16px;
+        top: 2px;
+    }
+
     .md & {
         width: 24px;
         height: 24px;
@@ -91,44 +113,44 @@
 }
 
 .radio:checked {
-    + .radioIcon {
+    +.radioIcon {
         background: var(--triplex-next-Radio-Background_Checked_Default);
         box-shadow: var(--triplex-next-Radio-BorderColor_Checked_Default);
     }
 
-    + .radioIcon::after {
+    +.radioIcon::after {
         transform: scale(1);
         transition: transform 200ms ease-out;
     }
 }
 
-.radio:hover + .radioIcon {
+.radio:hover+.radioIcon {
     background-color: var(--triplex-next-Radio-Background_Hover);
     box-shadow: none;
 }
 
 .radio:disabled {
-    + .radioIcon {
+    +.radioIcon {
         background: var(--triplex-next-Radio-Background_Disabled);
         box-shadow: var(--triplex-next-Radio-BorderColor_Disabled);
     }
 
     &:checked {
-        + .radioIcon {
+        +.radioIcon {
             background: var(--triplex-next-Radio-Background_Checked_Disabled);
             box-shadow: var(--triplex-next-Radio-BorderColor_Checked_Disabled);
         }
     }
 
-    + .radioIcon::after {
+    +.radioIcon::after {
         background: var(--triplex-next-Radio-Dot_Disabled);
     }
 }
 
-.radio:focus-visible + .radioIcon {
+.radio:focus-visible+.radioIcon {
     box-shadow: var(--triplex-next-Radio-BorderColor_Focused);
 }
 
-.radio:checked:enabled:hover + .radioIcon {
+.radio:checked:enabled:hover+.radioIcon {
     background-color: var(--triplex-next-Radio-Background_Checked_Hover);
 }

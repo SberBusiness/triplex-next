@@ -1,13 +1,13 @@
 import { uniqueId } from "lodash-es";
 import React, { useEffect, useContext } from "react";
-import { SMSInputContext } from "@sberbusiness/triplex-next/components/SMSInput/SMSInputContext";
+import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
 import { ETooltipAlign, ETooltipSize } from "@sberbusiness/triplex-next/components/Tooltip/enums";
 import { Tooltip } from "@sberbusiness/triplex-next/components/Tooltip/Tooltip";
 import { ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 import { TestProps } from "@sberbusiness/triplex-next/types/CoreTypes";
 
-/** Свойства SMSInput.Tooltip. */
-export interface ISMSInputTooltipProps
+/** Свойства SMSField.Tooltip. */
+export interface ISMSFieldTooltipProps
     extends Partial<Omit<ITooltipProps, "children" | "targetRef">>,
         Pick<ITooltipProps, "targetRef">,
         TestProps {
@@ -16,14 +16,14 @@ export interface ISMSInputTooltipProps
     message: string;
 }
 
-export const SMSInputTooltip: React.FC<ISMSInputTooltipProps> = ({
+export const SMSFieldTooltip: React.FC<ISMSFieldTooltipProps> = ({
     children,
     id,
     message,
     targetRef,
     ...restProps
 }) => {
-    const { tooltipId, setTooltipId } = useContext(SMSInputContext);
+    const { tooltipId, setTooltipId } = useContext(SMSFieldContext);
 
     useEffect(() => {
         if (id === undefined) {
@@ -49,4 +49,4 @@ export const SMSInputTooltip: React.FC<ISMSInputTooltipProps> = ({
     );
 };
 
-SMSInputTooltip.displayName = "SMSInputTooltip";
+SMSFieldTooltip.displayName = "SMSFieldTooltip";

@@ -2,12 +2,12 @@ import clsx from "clsx";
 import React, { forwardRef, useContext, useMemo } from "react";
 import { EButtonIconShape } from "@sberbusiness/triplex-next/components/Button";
 import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
-import { SMSInputContext } from "@sberbusiness/triplex-next/components/SMSInput/SMSInputContext";
-import { RefreshIcon } from "@sberbusiness/triplex-next/components/SMSInput/components/RefreshIcon";
-import styles from "@sberbusiness/triplex-next/components/SMSInput/styles/SMSInput.module.less";
+import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
+import { RefreshIcon } from "@sberbusiness/triplex-next/components/SMSField/components/RefreshIcon";
+import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 
-/** Свойства SMSInput.Refresh. */
-export interface ISMSInputRefreshProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+/** Свойства SMSField.Refresh. */
+export interface ISMSFieldRefreshProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Число секунд обратного отсчета. */
     countdownTime: number;
     /** Число оставшихся секунд обратного отсчета. */
@@ -16,9 +16,9 @@ export interface ISMSInputRefreshProps extends React.ButtonHTMLAttributes<HTMLBu
     onRefresh: () => void;
 }
 
-export const SMSInputRefresh = forwardRef<HTMLButtonElement, ISMSInputRefreshProps>(
+export const SMSFieldRefresh = forwardRef<HTMLButtonElement, ISMSFieldRefreshProps>(
     ({ className, disabled, countdownTime, countdownTimeLeft, onClick, onRefresh, ...restProps }, ref) => {
-        const { disabled: allDisabled, error, size, sizeClassName, tooltipId } = useContext(SMSInputContext);
+        const { disabled: allDisabled, error, size, sizeClassName, tooltipId } = useContext(SMSFieldContext);
 
         const isSmsCountdownTicking = countdownTimeLeft > 0;
         const refreshDisabled = (allDisabled && !error) || disabled || isSmsCountdownTicking;
@@ -48,7 +48,7 @@ export const SMSInputRefresh = forwardRef<HTMLButtonElement, ISMSInputRefreshPro
                 disabled={refreshDisabled}
                 onClick={handleClick}
                 ref={ref}
-                shape={EButtonIconShape.CIRCLE}
+                shape={EButtonIconShape.SQUIRCLE}
                 {...restProps}
             >
                 <RefreshIcon percent={percent || 0} size={size} disabled={Boolean(allDisabled || disabled)} />
@@ -57,4 +57,4 @@ export const SMSInputRefresh = forwardRef<HTMLButtonElement, ISMSInputRefreshPro
     },
 );
 
-SMSInputRefresh.displayName = "SMSInputRefresh";
+SMSFieldRefresh.displayName = "SMSFieldRefresh";

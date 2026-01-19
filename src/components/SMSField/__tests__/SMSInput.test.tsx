@@ -1,37 +1,37 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { SMSInput } from "@sberbusiness/triplex-next/components/SMSInput";
-import { SMSInputContext } from "@sberbusiness/triplex-next/components/SMSInput/SMSInputContext";
-import { RefreshIcon } from "@sberbusiness/triplex-next/components/SMSInput/components/RefreshIcon";
-import { SubmitIcon } from "@sberbusiness/triplex-next/components/SMSInput/components/SubmitIcon";
-import smsInputStyles from "@sberbusiness/triplex-next/components/SMSInput/styles/SMSInput.module.less";
+import { SMSField } from "@sberbusiness/triplex-next/components/SMSField";
+import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
+import { RefreshIcon } from "@sberbusiness/triplex-next/components/SMSField/components/RefreshIcon";
+import { SubmitIcon } from "@sberbusiness/triplex-next/components/SMSField/components/SubmitIcon";
+import smsFieldStyles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
-const createDefaultSmsInputProps = () => ({
+const createDefaultSMSFieldProps = () => ({
     code: "",
     onChangeCode: vi.fn(),
     onSubmitCode: vi.fn(),
     size: EComponentSize.MD,
 });
 
-describe("SMSInput", () => {
+describe("SMSField", () => {
     afterEach(() => {
         vi.clearAllMocks();
     });
 
     it("renders root element with base class, custom class and children", () => {
-        const props = createDefaultSmsInputProps();
+        const props = createDefaultSMSFieldProps();
 
         render(
-            <SMSInput {...props} className="custom-root" data-testid="sms-input">
+            <SMSField {...props} className="custom-root" data-testid="sms-input">
                 <div data-testid="sms-input-child">Child</div>
-            </SMSInput>,
+            </SMSField>,
         );
 
         const root = screen.getByTestId("sms-input");
         expect(root).toBeInTheDocument();
-        expect(root).toHaveClass(smsInputStyles.smsInput);
+        expect(root).toHaveClass(smsFieldStyles.smsField);
         expect(root).toHaveClass("custom-root");
         expect(root).toHaveAttribute("data-tx", process.env.npm_package_version);
         expect(screen.getByTestId("sms-input-child")).toBeInTheDocument();
@@ -39,22 +39,22 @@ describe("SMSInput", () => {
 
     it("provides size class to nested submit button based on size prop", () => {
         const props = {
-            ...createDefaultSmsInputProps(),
+            ...createDefaultSMSFieldProps(),
             size: EComponentSize.SM,
         };
 
         render(
-            <SMSInput {...props}>
-                <SMSInput.Submit aria-label="Send code" />
-            </SMSInput>,
+            <SMSField {...props}>
+                <SMSField.Submit aria-label="Send code" />
+            </SMSField>,
         );
 
         const submitButton = screen.getByRole("button", { name: "Send code" });
-        expect(submitButton).toHaveClass(smsInputStyles.sm);
+        expect(submitButton).toHaveClass(smsFieldStyles.sm);
     });
 });
 
-describe("SMSInput.Input", () => {
+describe("SMSField.Input", () => {
     afterEach(() => {
         vi.clearAllMocks();
     });
@@ -64,7 +64,7 @@ describe("SMSInput.Input", () => {
         const handleSubmitCode = vi.fn();
         const handleOnChange = vi.fn();
 
-        const ControlledSmsInput: React.FC = () => {
+        const ControlledSMSField: React.FC = () => {
             const [code, setCode] = React.useState("");
 
             const handleCodeChange = (value: string) => {
@@ -73,24 +73,24 @@ describe("SMSInput.Input", () => {
             };
 
             return (
-                <SMSInput
+                <SMSField
                     code={code}
                     onChangeCode={handleCodeChange}
                     onSubmitCode={handleSubmitCode}
                     size={EComponentSize.MD}
                 >
-                    <SMSInput.Input
+                    <SMSField.Input
                         aria-label="SMS code"
                         counter={`${code.length}/8`}
                         placeholder="Введите код"
                         onChange={handleOnChange}
                     />
-                    <SMSInput.Submit aria-label="Отправить код" />
-                </SMSInput>
+                    <SMSField.Submit aria-label="Отправить код" />
+                </SMSField>
             );
         };
 
-        render(<ControlledSmsInput />);
+        render(<ControlledSMSField />);
 
         const input = screen.getByRole("textbox", { name: "SMS code" });
 
@@ -110,18 +110,18 @@ describe("SMSInput.Input", () => {
 
     it("renders description text and counter content", () => {
         const props = {
-            ...createDefaultSmsInputProps(),
+            ...createDefaultSMSFieldProps(),
             code: "1234",
         };
 
         render(
-            <SMSInput {...props}>
-                <SMSInput.Input
+            <SMSField {...props}>
+                <SMSField.Input
                     aria-label="SMS code"
                     counter={<span data-testid="sms-counter">4 / 8</span>}
                     description="Введите код, отправленный по SMS"
                 />
-            </SMSInput>,
+            </SMSField>,
         );
 
         expect(screen.getByText("Введите код, отправленный по SMS")).toBeInTheDocument();
@@ -129,40 +129,40 @@ describe("SMSInput.Input", () => {
     });
 });
 
-describe("SMSInput.Submit", () => {
+describe("SMSField.Submit", () => {
     afterEach(() => {
         vi.clearAllMocks();
     });
 
     it("disables submit button when code is empty", () => {
-        const props = createDefaultSmsInputProps();
+        const props = createDefaultSMSFieldProps();
 
         render(
-            <SMSInput {...props}>
-                <SMSInput.Submit aria-label="Отправить" />
-            </SMSInput>,
+            <SMSField {...props}>
+                <SMSField.Submit aria-label="Отправить" />
+            </SMSField>,
         );
 
         const submitButton = screen.getByRole("button", { name: "Отправить" });
         expect(submitButton).toBeDisabled();
-        expect(submitButton).not.toHaveClass(smsInputStyles.active);
+        expect(submitButton).not.toHaveClass(smsFieldStyles.active);
     });
 
     it("activates submit button and calls onSubmitCode when code is provided", () => {
         const props = {
-            ...createDefaultSmsInputProps(),
+            ...createDefaultSMSFieldProps(),
             code: "9876",
         };
 
         render(
-            <SMSInput {...props}>
-                <SMSInput.Submit aria-label="Подтвердить" />
-            </SMSInput>,
+            <SMSField {...props}>
+                <SMSField.Submit aria-label="Подтвердить" />
+            </SMSField>,
         );
 
         const submitButton = screen.getByRole("button", { name: "Подтвердить" });
         expect(submitButton).not.toBeDisabled();
-        expect(submitButton).toHaveClass(smsInputStyles.active);
+        expect(submitButton).toHaveClass(smsFieldStyles.active);
 
         fireEvent.click(submitButton);
         expect(props.onSubmitCode).toHaveBeenCalledWith("9876");
@@ -172,7 +172,7 @@ describe("SMSInput.Submit", () => {
         const disabledSubmitListener = vi.fn();
 
         const DisabledSubmitProbe: React.FC<{ listener: (value: boolean) => void }> = ({ listener }) => {
-            const { disabledSubmit } = React.useContext(SMSInputContext);
+            const { disabledSubmit } = React.useContext(SMSFieldContext);
 
             React.useEffect(() => {
                 listener(disabledSubmit);
@@ -184,7 +184,7 @@ describe("SMSInput.Submit", () => {
         const handleChangeCode = vi.fn();
         const handleSubmitCode = vi.fn();
 
-        const ControlledSmsInput: React.FC = () => {
+        const ControlledSMSField: React.FC = () => {
             const [code, setCode] = React.useState("");
 
             const handleCodeChange = (value: string) => {
@@ -193,20 +193,20 @@ describe("SMSInput.Submit", () => {
             };
 
             return (
-                <SMSInput
+                <SMSField
                     code={code}
                     onChangeCode={handleCodeChange}
                     onSubmitCode={handleSubmitCode}
                     size={EComponentSize.MD}
                 >
                     <DisabledSubmitProbe listener={disabledSubmitListener} />
-                    <SMSInput.Input aria-label="SMS code" counter={`${code.length}/8`} />
-                    <SMSInput.Submit aria-label="Отправить код" />
-                </SMSInput>
+                    <SMSField.Input aria-label="SMS code" counter={`${code.length}/8`} />
+                    <SMSField.Submit aria-label="Отправить код" />
+                </SMSField>
             );
         };
 
-        render(<ControlledSmsInput />);
+        render(<ControlledSMSField />);
 
         const input = screen.getByRole("textbox", { name: "SMS code" });
         expect(disabledSubmitListener).toHaveBeenLastCalledWith(true);
@@ -216,32 +216,32 @@ describe("SMSInput.Submit", () => {
     });
 });
 
-describe("SMSInput.Refresh", () => {
+describe("SMSField.Refresh", () => {
     afterEach(() => {
         vi.clearAllMocks();
     });
 
     it("disables refresh while countdown is active and shows progress", () => {
         const props = {
-            ...createDefaultSmsInputProps(),
+            ...createDefaultSMSFieldProps(),
             code: "",
         };
         const handleRefresh = vi.fn();
 
         render(
-            <SMSInput {...props}>
-                <SMSInput.Refresh
+            <SMSField {...props}>
+                <SMSField.Refresh
                     aria-label="Запросить новый код"
                     countdownTime={10}
                     countdownTimeLeft={5}
                     onRefresh={handleRefresh}
                 />
-            </SMSInput>,
+            </SMSField>,
         );
 
         const refreshButton = screen.getByRole("button", { name: "Запросить новый код" });
         expect(refreshButton).toBeDisabled();
-        expect(refreshButton).toHaveClass(smsInputStyles.disabled);
+        expect(refreshButton).toHaveClass(smsFieldStyles.disabled);
         fireEvent.click(refreshButton);
         expect(handleRefresh).not.toHaveBeenCalled();
 
@@ -250,20 +250,20 @@ describe("SMSInput.Refresh", () => {
     });
 
     it("invokes onRefresh and onClick when enabled", () => {
-        const props = createDefaultSmsInputProps();
+        const props = createDefaultSMSFieldProps();
         const handleRefresh = vi.fn();
         const handleClick = vi.fn();
 
         render(
-            <SMSInput {...props}>
-                <SMSInput.Refresh
+            <SMSField {...props}>
+                <SMSField.Refresh
                     aria-label="Получить код"
                     countdownTime={30}
                     countdownTimeLeft={0}
                     onRefresh={handleRefresh}
                     onClick={handleClick}
                 />
-            </SMSInput>,
+            </SMSField>,
         );
 
         const refreshButton = screen.getByRole("button", { name: "Получить код" });
@@ -278,18 +278,18 @@ describe("SMSInput.Refresh", () => {
     });
 });
 
-describe("SMSInput.Tooltip", () => {
+describe("SMSField.Tooltip", () => {
     afterEach(() => {
         vi.clearAllMocks();
     });
 
     it("generates tooltip id, wires it to refresh button and displays tooltip content", async () => {
-        const props = createDefaultSmsInputProps();
+        const props = createDefaultSMSFieldProps();
         const tooltipListener = vi.fn();
         const targetRef = React.createRef<HTMLButtonElement>();
 
         const TooltipIdProbe: React.FC<{ listener: (value?: string) => void }> = ({ listener }) => {
-            const { tooltipId } = React.useContext(SMSInputContext);
+            const { tooltipId } = React.useContext(SMSFieldContext);
 
             React.useEffect(() => {
                 listener(tooltipId);
@@ -299,18 +299,18 @@ describe("SMSInput.Tooltip", () => {
         };
 
         render(
-            <SMSInput {...props}>
+            <SMSField {...props}>
                 <TooltipIdProbe listener={tooltipListener} />
-                <SMSInput.Tooltip message="Код повторно отправлен" targetRef={targetRef} isOpen>
-                    <SMSInput.Refresh
+                <SMSField.Tooltip message="Код повторно отправлен" targetRef={targetRef} isOpen>
+                    <SMSField.Refresh
                         aria-label="Отправить снова"
                         countdownTime={10}
                         countdownTimeLeft={0}
                         onRefresh={vi.fn()}
                         ref={targetRef}
                     />
-                </SMSInput.Tooltip>
-            </SMSInput>,
+                </SMSField.Tooltip>
+            </SMSField>,
         );
 
         const refreshButton = screen.getByRole("button", { name: "Отправить снова" });
@@ -345,7 +345,7 @@ describe("RefreshIcon", () => {
         const clipPath = container.querySelector("clipPath");
         expect(clipPath).toHaveAttribute("id", "clipFront0.999");
 
-        const disabledPath = container.querySelector(`.${smsInputStyles.disabled}`);
+        const disabledPath = container.querySelector(`.${smsFieldStyles.disabled}`);
         expect(disabledPath).toBeInTheDocument();
     });
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
-export interface ISMSInputContext {
+export interface ISMSFieldContext {
     /** Значение кода. */
     code: string;
     /** Признак блокировки компонента. */
@@ -26,7 +26,7 @@ export interface ISMSInputContext {
     tooltipId?: string;
 }
 
-const contextInitial: ISMSInputContext = {
+const contextInitial: ISMSFieldContext = {
     code: "",
     disabled: false,
     disabledSubmit: true,
@@ -40,4 +40,4 @@ const contextInitial: ISMSInputContext = {
     tooltipId: undefined,
 };
 
-export const SMSInputContext = React.createContext(contextInitial);
+export const SMSFieldContext = React.createContext(contextInitial);

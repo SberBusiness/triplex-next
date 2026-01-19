@@ -5,18 +5,6 @@ import {
 } from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
 import { IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button";
 
-/** Значение SegmentedControl с множественным выбором. */
-export type TSegmentedControlMultipleValue = string[];
-
-/** Обработчик выбора SegmentedControl с множественным выбором. */
-export type TSegmentedControlMultipleOnSelect = (value: TSegmentedControlMultipleValue) => void;
-
-/** Значение SegmentedControl с одиночным выбором. */
-export type TSegmentedControlSingleValue = string;
-
-/** Обработчик выбора SegmentedControl с одиночным выбором. */
-export type TSegmentedControlSingleOnSelect = (value: TSegmentedControlSingleValue) => void;
-
 /** Общие свойства компонента SegmentedControl. */
 export interface ISegmentedControlCommonProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
     /** Визуальный стиль сегментов. */
@@ -29,17 +17,26 @@ export interface ISegmentedControlCommonProps extends Omit<React.HTMLAttributes<
 
 /** Свойства компонента SegmentedControl с множественным выбором. */
 export interface ISegmentedControlMultipleProps extends ISegmentedControlCommonProps {
-    value: TSegmentedControlMultipleValue;
+    /** Значение. */
+    value: string[];
+    /** Тип выбора элементов. */
     type: ESegmentedControlType.MULTIPLE;
-    onSelect: TSegmentedControlMultipleOnSelect;
+    /** Колбэк-функция выбора элемента. */
+    onSelect: (value: string[]) => void;
 }
 
 /** Свойства компонента SegmentedControl с одиночным выбором. */
 export interface ISegmentedControlSingleProps extends ISegmentedControlCommonProps {
-    value: TSegmentedControlSingleValue;
+    /** Значение. */
+    value: string;
+    /** Тип выбора элементов. */
     type: ESegmentedControlType.SINGLE;
-    onSelect: TSegmentedControlSingleOnSelect;
+    /** Колбэк-функция выбора элемента. */
+    onSelect: (value: string) => void;
 }
+
+/** Свойства компонента SegmentedControl. */
+export type TSegmentedControlProps = ISegmentedControlSingleProps | ISegmentedControlMultipleProps;
 
 /** Свойства компонента SegmentedControlSegment. */
 export interface ISegmentedControlSegmentProps extends IButtonBaseProps {

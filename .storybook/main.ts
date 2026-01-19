@@ -1,13 +1,20 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import { version } from "../package.json";
+import { withoutVitePlugins } from "@storybook/builder-vite";
 import generateScopedName from "../scripts/generate-scoped-name";
 
 const config: StorybookConfig = {
-    stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
     addons: ["@storybook/addon-docs", "@storybook/addon-themes"],
     framework: {
         name: "@storybook/react-vite",
         options: {},
+    },
+    stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
+    typescript: {
+        reactDocgen: "react-docgen-typescript",
+        reactDocgenTypescriptOptions: {
+            shouldExtractLiteralValuesFromEnum: false,
+        },
     },
     core: {
         disableTelemetry: true,
@@ -32,6 +39,8 @@ const config: StorybookConfig = {
             ...(viteConfig.define ?? {}),
             "process.env.npm_package_version": JSON.stringify(version),
         };
+
+        viteConfig.plugins = await withoutVitePlugins(viteConfig.plugins, ["vite:dts"]);
 
         return viteConfig;
     },

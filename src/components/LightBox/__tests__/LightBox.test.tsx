@@ -8,9 +8,9 @@ import { addClassNameWithScrollbarWidth } from "../../../utils/scroll/scrollbar"
 const focusTrapMock = vi.fn();
 
 vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: any) => {
+    default: (props: { children: React.ReactElement }) => {
         focusTrapMock(props);
-        return <div data-testid="focus-trap">{props.children}</div>;
+        return <>{props.children}</>;
     },
 }));
 

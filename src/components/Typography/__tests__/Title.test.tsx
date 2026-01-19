@@ -93,7 +93,7 @@ describe("Title", () => {
     it("forwards ref correctly for heading element", () => {
         const ref = React.createRef<HTMLHeadingElement>();
         render(
-            <Title size={ETitleSize.H2} ref={ref}>
+            <Title size={ETitleSize.H2} tag={"h2"} ref={ref}>
                 Ref Test Title
             </Title>,
         );

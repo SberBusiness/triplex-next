@@ -16,3 +16,13 @@ if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
         } as unknown as MediaQueryList;
     };
 }
+
+// ResizeObserver polyfill for jsdom environment used in unit tests.
+if (typeof window !== "undefined" && typeof window.ResizeObserver !== "function") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).ResizeObserver = class ResizeObserver {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    };
+}

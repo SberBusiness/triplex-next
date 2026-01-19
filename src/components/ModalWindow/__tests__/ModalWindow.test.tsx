@@ -7,6 +7,13 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 const focusTrapMock = vi.fn();
 const cssTransitionMock = vi.fn();
 
+vi.mock("focus-trap-react", () => ({
+    default: (props: { children: React.ReactElement }) => {
+        focusTrapMock(props);
+        return <div data-testid="focus-trap">{props.children}</div>;
+    },
+}));
+
 vi.mock("react-transition-group", () => ({
     CSSTransition: (props: any) => {
         cssTransitionMock(props);
@@ -19,13 +26,6 @@ vi.mock("react-transition-group", () => ({
             setTimeout(() => props.onExited(), 0);
         }
         return props.in ? <div data-testid="css-transition">{props.children}</div> : null;
-    },
-}));
-
-vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: any) => {
-        focusTrapMock(props);
-        return <div data-testid="focus-trap">{props.children}</div>;
     },
 }));
 

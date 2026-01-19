@@ -7,8 +7,8 @@ import { Island, IIslandFooterProps } from "../../Island";
 export interface IIslandAccordionFooterProps extends IIslandFooterProps {}
 
 /** Компонент подвала элемента акоордеона. */
-export const IslandAccordionFooter: React.FC<IIslandAccordionFooterProps> = ({ className, ...rest }) => (
-    <Island.Footer className={clsx(styles.footer, className)} {...rest} />
+export const IslandAccordionFooter = React.forwardRef<HTMLDivElement, IIslandAccordionFooterProps>(
+    ({ className, ...rest }, ref) => <Island.Footer className={clsx(styles.footer, className)} {...rest} ref={ref} />,
 );
 
 IslandAccordionFooter.displayName = "IslandAccordionFooter";

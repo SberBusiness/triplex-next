@@ -1,4 +1,5 @@
-import React, { useState, useId, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { uniqueId } from "lodash-es";
 import { ISuggestOption, ISuggestProps } from "./types";
 import { SuggestContext } from "./SuggestContext";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
@@ -27,7 +28,7 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
     const [activeDescendant, setActiveDescendant] = useState<string>();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const dropdownListId = useId();
+    const [dropdownListId] = useState<string>(uniqueId());
     const suggestRef = useRef<HTMLDivElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 

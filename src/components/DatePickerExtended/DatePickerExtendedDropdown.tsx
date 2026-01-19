@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { Dropdown, IDropdownProps } from "../Dropdown/Dropdown";
 import { DatePickerExtendedContext } from "./DatePickerExtendedContext";
 import { DropdownMobileHeader, DropdownMobileClose, DropdownMobileBody } from "../Dropdown/mobile";
@@ -12,7 +12,7 @@ export interface IDatePickerExtendedDropdownProps extends IDropdownProps {
     /** Рендер-функция целевого элемента в заголовке DropdownMobile. */
     renderHeaderTarget: () => React.ReactNode;
     /** Свойства компонента FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
 }
 
 /** Выпадающее меню компонента DatePickerExtended. */

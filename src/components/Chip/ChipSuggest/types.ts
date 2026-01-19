@@ -2,7 +2,7 @@
 import { ISuggestProps, ISuggestOption } from "../../Suggest/types";
 import { IChipProps } from "../Chip";
 import { IDropdownProps } from "../../Dropdown";
-import { FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 
 /** Свойства компонента ChipSuggest. */
 export interface IChipSuggestProps<T extends ISuggestOption = ISuggestOption>
@@ -27,5 +27,5 @@ export interface IChipSuggestTargetProps<T extends ISuggestOption> extends Omit<
 export interface IChipSuggestDropdownProps<T extends ISuggestOption>
     extends Omit<IDropdownProps, "opened" | "setOpened"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
 }

@@ -1,5 +1,6 @@
-import React, { useState, useRef, useId } from "react";
-import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import React, { useState, useRef } from "react";
+import { uniqueId } from "lodash-es";
+import FocusTrap from "focus-trap-react";
 import { QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { EButtonIconShape } from "../Button/enums";
@@ -18,7 +19,7 @@ export interface IHelpBoxProps
     extends React.HTMLAttributes<HTMLButtonElement>,
         Pick<ITooltipProps, "isOpen" | "preferPlace" | "onShow" | "toggle"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
     /** Aria-атрибуты Tooltip. */
     tooltipAriaAttributes?: TAriaHTMLAttributes;
     /** Data-атрибуты Tooltip. */
@@ -47,7 +48,7 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
     const ref = useRef<HTMLButtonElement>(null);
     const [openState, setOpenState] = useState(Boolean(openProp));
     const [focusTrapNode, setFocusTrapNode] = useState<HTMLDivElement | null>(null);
-    const tooltipId = useId();
+    const [tooltipId] = useState<string>(uniqueId());
     const open = openProp ?? openState;
 
     /** Обработчик закрытия/открытия Tooltip. */

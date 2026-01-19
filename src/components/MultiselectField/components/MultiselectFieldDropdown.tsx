@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { Dropdown, IDropdownProps } from "../../Dropdown/Dropdown";
 import { MultiselectFieldDropdownHeader } from "./MultiselectFieldDropdownHeader";
 import { MultiselectFieldDropdownContent } from "./MultiselectFieldDropdownContent";
@@ -10,7 +10,7 @@ import { MultiselectFieldContext } from "../MultiselectFieldContext";
 /** Свойства компонента MultiselectFieldDropdown. */
 export interface IMultiselectFieldDropdownProps extends IDropdownProps {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
 }
 
 /** Компонент выпадающего блока мильти-списка. */

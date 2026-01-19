@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { Portal } from "../Portal/Portal";
-import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { ModalWindowViewManager } from "./components/ModalWindowViewManager";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
@@ -17,7 +17,7 @@ export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> 
     /** ClassName контейнера модального окна. */
     containerClassName?: string;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
     /** Callback после анимации закрытия модального окна. */
     onExited?: () => void;
     /** Кнопка закрыть. */

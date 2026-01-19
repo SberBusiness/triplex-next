@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { FocusTrap, FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { LightBoxContent } from "./LightBoxContent";
 import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
 import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";
@@ -24,7 +24,7 @@ export const lightBoxViewManagerNodeIdDefault = "LightBox-next-view-manager-node
 export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactElement[];
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
     /** Ref на контейнер LightBox. */
     forwardRef?: React.MutableRefObject<HTMLElement | null>;
     /** DOM-нода в которую будет рендерится лайтбокс. */

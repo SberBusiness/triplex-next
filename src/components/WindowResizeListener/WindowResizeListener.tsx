@@ -26,7 +26,7 @@ export const WindowResizeListener: React.FC<IWindowResizeListenerProps> = ({
         };
     }, [onResize, throttleDelay]);
 
-    return children;
+    return <>{children}</>;
 };
 
 WindowResizeListener.displayName = "WindowResizeListener";

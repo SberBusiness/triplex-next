@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { FocusTrap } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { ISuggestOption } from "../../Suggest/types";
 import { IChipSuggestDropdownProps } from "./types";

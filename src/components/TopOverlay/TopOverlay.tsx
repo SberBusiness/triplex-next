@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
 import { Overlay, IOverlayProps } from "../Overlay/Overlay";
-import FocusTrap, { FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import clsx from "clsx";
 import styles from "./styles/TopOverlay.module.less";
 
@@ -9,7 +9,7 @@ import styles from "./styles/TopOverlay.module.less";
 export interface ITopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
     children?: React.ReactNode;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
 }
 
 export const TopOverlay: React.FC<ITopOverlayProps> = ({

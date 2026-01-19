@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
-import { FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { isKey } from "../../utils/keyboard";
 import { Calendar, ICalendarProps } from "../Calendar";
 import { EDropdownAlignment, IDropdownProps } from "../Dropdown";
@@ -22,7 +22,7 @@ export interface IDatePickerExtendedProps
     /** Callback на закрытие Dropdown. */
     onDropdownClose?: () => void;
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
 }
 
 /** База для компонента DatePicker. */

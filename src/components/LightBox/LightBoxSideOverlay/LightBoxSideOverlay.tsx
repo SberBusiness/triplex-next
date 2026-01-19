@@ -8,7 +8,7 @@ import {
 } from "../../Overlay/OverlayBase";
 import { OverlayMask } from "../../Overlay/OverlayMask";
 import { LightBoxSideOverlayLoader } from "./LightBoxSideOverlayLoader";
-import FocusTrap, { FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
 import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
@@ -20,7 +20,7 @@ export interface ILightBoxSideOverlayProps
     extends React.HTMLAttributes<HTMLDivElement>,
         Pick<IOverlayBaseProps, "opened" | "onClose" | "onOpen"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    focusTrapProps?: FocusTrap.Props;
     isLoading?: boolean;
     /** Текст под спиннером. */
     loadingTitle?: React.ReactNode;

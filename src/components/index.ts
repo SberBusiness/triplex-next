@@ -54,7 +54,7 @@ export * from "./UnorderedList";
 export * from "./SuggestField";
 export * from "./LightBox";
 export * from "./Tooltip";
-export * from "./SMSInput";
+export * from "./SMSField";
 export * from "./Spoiler";
 export * from "./StatusTracker";
 export * from "./SmallInput";

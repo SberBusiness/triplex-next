@@ -43,8 +43,10 @@ const meta = {
             page: () => (
                 <>
                     <SBTitle />
-                    <Subtitle />
                     <Description />
+                    <SBTitle>Props</SBTitle>
+                    <Controls of={Default} />
+                    <SBTitle>Playground</SBTitle>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -191,6 +193,7 @@ type Story = StoryObj<LightBoxStoryArgs>;
 
 export const Playground: Story = {
     render: Template,
+    tags: ["!autodocs"],
     args: {
         isLoading: false,
         showControls: true,
@@ -242,6 +245,9 @@ export const Playground: Story = {
         docs: {
             description: {
                 story: "Интерактивный пример LightBox. Управляйте состояниями и оверлеями через панель Storybook.",
+            },
+            canvas: {
+                sourceState: "none",
             },
         },
     },

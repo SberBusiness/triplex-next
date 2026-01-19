@@ -1,6 +1,6 @@
 @import "src/styles/style";
 
-.smsInput {
+.smsField {
     display: inline-block;
     position: relative;
     width: 100%;
@@ -56,28 +56,28 @@
         }
 
         .full {
-            fill: var(--triplex-next-SMSInput-Refresh_Fill_Full);
+            fill: var(--triplex-next-SMSField-Refresh_Fill_Full);
         }
 
         .empty {
-            fill: var(--triplex-next-SMSInput-Refresh_Fill_Empty);
+            fill: var(--triplex-next-SMSField-Refresh_Fill_Empty);
         }
 
         &:disabled {
             cursor: default;
-            fill: var(--triplex-next-SMSInput-Refresh_Disabled);
+            fill: var(--triplex-next-SMSField-Refresh_Disabled);
         }
     }
 
     .btnSubmit {
         position: absolute;
-        fill: var(--triplex-next-SMSInput-Submit_Background_Default);
+        fill: var(--triplex-next-SMSField-Submit_Background_Default);
 
         &.active:not(:disabled) {
-            fill: var(--triplex-next-SMSInput-Submit_Background_Active);
+            fill: var(--triplex-next-SMSField-Submit_Background_Active);
 
             &:hover {
-                fill: var(--triplex-next-SMSInput-Submit_Background_Hover);
+                fill: var(--triplex-next-SMSField-Submit_Background_Hover);
             }
         }
 

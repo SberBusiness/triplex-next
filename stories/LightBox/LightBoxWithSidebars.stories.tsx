@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
+import { Description, Stories, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -14,14 +14,15 @@ import { IslandBody } from "../../src/components/Island/components/IslandBody";
 import { EIslandType } from "../../src/components/Island/enums";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Confirm } from "../../src/components/Confirm";
+import { MobileView } from "../../src/components/MobileView/MobileView";
+import "./styles.less";
 
 const STORY_META_DESCRIPTION = `
-Пример **LightBoxWithTopOverlay** отображает контент поверх страницы с уведомлением при закрытии.
+Пример **LightBoxWithSidebars** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные боковые панели.
 `;
 
 const meta = {
-    title: "Components/LightBox/LightBoxWithTopOverlay",
+    title: "Components/LightBox/LightBoxWithSidebars",
     tags: ["autodocs"],
     parameters: {
         layout: "fullscreen",
@@ -31,7 +32,7 @@ const meta = {
             },
             page: () => (
                 <>
-                    <DocsTitle />
+                    <SBTitle />
                     <Description />
                     <Stories />
                 </>
@@ -72,23 +73,11 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const LightBoxWithTopOverlay: React.FC = () => {
+export const LightBoxWithSidebars: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [openedTopOverlay, setOpenedTopOverlay] = useState(false);
-    const [closeConfirmed, setCloseConfirmed] = useState(false);
-
-    const handleOpenTopOverlay = () => setOpenedTopOverlay(true);
-    const handleCloseTopOverlay = () => {
-        if (closeConfirmed) {
-            setIsOpen(false);
-            setCloseConfirmed(false);
-        } else {
-            setOpenedTopOverlay(false);
-        }
-    };
 
     const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setOpenedTopOverlay(true);
+    const handleClose = () => setIsOpen(false);
 
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
@@ -98,44 +87,6 @@ export const LightBoxWithTopOverlay: React.FC = () => {
         </LightBox.Controls>
     );
 
-    const renderTopOverlay = () => (
-        <LightBox.TopOverlay opened={openedTopOverlay} onClose={handleCloseTopOverlay} onOpen={handleOpenTopOverlay}>
-            <Confirm>
-                <Confirm.Content>
-                    <Confirm.Content.Title>Внимание</Confirm.Content.Title>
-                    <Confirm.Content.SubTitle>
-                        Несохранённые данные будут утеряны. Вы уверены, что хотите покинуть форму редактирования?
-                    </Confirm.Content.SubTitle>
-                </Confirm.Content>
-                <Confirm.Controls>
-                    <Button
-                        theme={EButtonTheme.SECONDARY}
-                        size={EComponentSize.MD}
-                        onClick={() => setOpenedTopOverlay(false)}
-                    >
-                        Отмена
-                    </Button>
-                    <Button
-                        theme={EButtonTheme.DANGER}
-                        size={EComponentSize.MD}
-                        onClick={() => {
-                            handleCloseTopOverlay();
-                            setCloseConfirmed(true);
-                        }}
-                    >
-                        Покинуть форму
-                    </Button>
-                </Confirm.Controls>
-                <Confirm.Close
-                    title="Закрыть"
-                    // Закрыть по Esc, если TopOverlay открыт.
-                    clickByEsc={openedTopOverlay}
-                    onClick={() => setOpenedTopOverlay(false)}
-                />
-            </Confirm>
-        </LightBox.TopOverlay>
-    );
-
     return (
         <div>
             <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
@@ -143,21 +94,30 @@ export const LightBoxWithTopOverlay: React.FC = () => {
             </Button>
 
             {isOpen ? (
-                <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={openedTopOverlay}>
+                <LightBox isLoading={false}>
                     <LightBox.Content key="content" isLoading={false}>
                         <Page>
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
                                 <Page.Header.Title>
                                     <Page.Header.Title.Content>
-                                        <Title
-                                            tag="h1"
-                                            size={ETitleSize.H1}
-                                            tabIndex={-1}
-                                            // Устанавливает фокус на первый элемент при открытии LightBox.
-                                            {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                        <MobileView
+                                            fallback={
+                                                <Title
+                                                    tag="h1"
+                                                    size={ETitleSize.H1}
+                                                    tabIndex={-1}
+                                                    // Устанавливает фокус на первый элемент при открытии LightBox.
+                                                    {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                                >
+                                                    Евгений Онегин
+                                                </Title>
+                                            }
                                         >
-                                            Евгений Онегин
-                                        </Title>
+                                            <Title tag="h2" size={ETitleSize.H2}>
+                                                Евгений Онегин
+                                            </Title>
+                                        </MobileView>
+
                                         <Gap size={8} />
                                         <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
                                             Русский поэт, драматург и прозаик, заложивший основы русского
@@ -166,13 +126,13 @@ export const LightBoxWithTopOverlay: React.FC = () => {
                                     </Page.Header.Title.Content>
                                     <Page.Header.Title.Controls>
                                         <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                            Button text
+                                            SideOverlay LG
                                         </Button>
                                     </Page.Header.Title.Controls>
                                 </Page.Header.Title>
                             </Page.Header>
 
-                                <Page.Body type={EBodyPageType.SECOND}>
+                            <Page.Body type={EBodyPageType.SECOND}>
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />
@@ -195,9 +155,19 @@ export const LightBoxWithTopOverlay: React.FC = () => {
                                 </Page.Footer.Description>
                             </Page.Footer>
                         </Page>
-
-                        {renderTopOverlay()}
                     </LightBox.Content>
+
+                    <LightBox.LeftSidebar key="left-sidebar">
+                        <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
+                            <IslandBody>Left Sidebar</IslandBody>
+                        </Island>
+                    </LightBox.LeftSidebar>
+
+                    <LightBox.RightSidebar key="right-sidebar">
+                        <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
+                            <IslandBody>Right Sidebar</IslandBody>
+                        </Island>
+                    </LightBox.RightSidebar>
 
                     {renderLightBoxControls()}
                 </LightBox>

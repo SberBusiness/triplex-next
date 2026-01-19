@@ -11,6 +11,8 @@ import { MobileView } from "../MobileView/MobileView";
 import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
+import { LightBoxLeftSidebar } from "./LightBoxSidebars/LightBoxLeftSidebar";
+import { LightBoxRightSidebar } from "./LightBoxSidebars/LightBoxRightSidebar";
 import styles from "./styles/LightBox.module.less";
 import scrollStyles from "./styles/LightBoxScroll.module.less";
 
@@ -39,16 +41,9 @@ export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     isTopOverlayOpened?: boolean;
 }
 
-interface ILightBoxFC extends React.FC<ILightBoxProps> {
-    Content: typeof LightBoxContent;
-    SideOverlay: typeof LightBoxSideOverlay;
-    TopOverlay: typeof TopOverlay;
-    Controls: typeof LightBoxControls;
-}
-
 const bodyClassNamesIsLightBoxOpen = [styles.bodyOverflowHidden];
 
-export const LightBox: ILightBoxFC = ({
+const LightBoxBase: React.FC<ILightBoxProps> = ({
     children,
     className,
     focusTrapProps,
@@ -196,9 +191,13 @@ export const LightBox: ILightBoxFC = ({
     );
 };
 
-LightBox.Content = LightBoxContent;
-LightBox.SideOverlay = LightBoxSideOverlay;
-LightBox.TopOverlay = TopOverlay;
-LightBox.Controls = LightBoxControls;
+LightBoxBase.displayName = "LightBoxBase";
 
-LightBox.displayName = "LightBox";
+export const LightBox = Object.assign(LightBoxBase, {
+    Content: LightBoxContent,
+    SideOverlay: LightBoxSideOverlay,
+    TopOverlay,
+    Controls: LightBoxControls,
+    LeftSidebar: LightBoxLeftSidebar,
+    RightSidebar: LightBoxRightSidebar,
+});

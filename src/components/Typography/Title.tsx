@@ -1,8 +1,9 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { clsx } from "clsx";
 import { EFontType, EFontWeightTitle, ETitleSize } from "./enums";
 import { ITypographyProps } from "./types";
 import { mapFontTypeToCssClass } from "./utils";
+import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/Title.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
@@ -21,23 +22,28 @@ export const mapFontWeightTitleToCssClass = {
     [EFontWeightTitle.BOLD]: styles.bold,
 };
 
-/** Свойства компонента Title. */
-export type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
+interface ITitleProps extends ITypographyProps {
     /** Размер текста. */
     size: ETitleSize;
     /** Толщина шрифта. */
     weight?: EFontWeightTitle;
-} & ITypographyProps &
-    JSX.IntrinsicElements[T];
+}
+
+/** Свойства компонента Text. */
+export type TTitleProps<T extends React.ElementType> = PolymorphicComponentPropsWithRef<T, ITitleProps>;
+
+type TitleComponent = (<T extends React.ElementType = "span">(props: TTitleProps<T>) => React.ReactElement | null) & {
+    displayName?: string;
+};
 
 /** Заголовок (типографика). */
-export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "h1">(
+export const Title: TitleComponent = React.forwardRef(
+    <T extends React.ElementType = `h1`>(
         {
             children,
             className,
             size,
-            tag = `${size}` as T,
+            tag,
             type = EFontType.PRIMARY,
             weight = EFontWeightTitle.SEMIBOLD,
             underline,
@@ -45,7 +51,7 @@ export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElem
             ...props
         }: TTitleProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): React.JSX.Element => {
+    ) => {
         const classes = clsx(
             typographyStyles.typography,
             styles.title,
@@ -60,7 +66,7 @@ export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElem
             className,
         );
 
-        const Tag = tag;
+        const Tag = tag || "h1";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

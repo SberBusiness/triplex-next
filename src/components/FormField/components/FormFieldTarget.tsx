@@ -6,7 +6,7 @@ import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormFiel
 import styles from "../styles/FormFieldTarget.module.less";
 
 /** Свойства компонента FormFieldTarget. */
-export interface IFormFieldTargetProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IFormFieldTargetProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "placeholder"> {
     /** Текст, или компонент отображающий выбранное placeholder. Отличие от children в том, что placeholder отображается только когда нет children и более бледным цветом. */
     placeholder?: React.ReactNode;
 }

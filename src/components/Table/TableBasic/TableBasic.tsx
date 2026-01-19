@@ -65,9 +65,7 @@ export const TableBasic = ({
         }
     };
 
-    const renderFooterEmptyData = (content: React.JSX.Element | React.JSX.Element[]) => (
-        <div className={styles.footerEmptyData}>{content}</div>
-    );
+    const renderFooterEmptyData = (content: React.ReactNode) => <div className={styles.footerEmptyData}>{content}</div>;
     const renderNoDataLoading = () => [
         <div className={styles.overlayCover} key="overlay" />,
         <LoaderMiddle key="spinner" />,

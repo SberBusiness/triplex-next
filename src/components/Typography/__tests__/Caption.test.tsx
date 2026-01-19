@@ -104,7 +104,7 @@ describe("Caption", () => {
     });
 
     it("forwards ref correctly for div element", () => {
-        const ref = React.createRef<HTMLElement>();
+        const ref = React.createRef<HTMLDivElement>();
         render(
             <Caption size={ECaptionSize.C1} tag="div" ref={ref}>
                 Div Ref Test Caption
@@ -117,7 +117,7 @@ describe("Caption", () => {
     });
 
     it("forwards ref correctly for p element", () => {
-        const ref = React.createRef<HTMLElement>();
+        const ref = React.createRef<HTMLParagraphElement>();
         render(
             <Caption size={ECaptionSize.C1} tag="p" ref={ref}>
                 P Ref Test Caption

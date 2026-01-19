@@ -1,8 +1,9 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { clsx } from "clsx";
 import { EFontType, EFontWeightText, ELineType, ETextSize } from "./enums";
 import { ITypographyProps } from "./types";
 import { mapFontTypeToCssClass } from "./utils";
+import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/Text.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
@@ -26,25 +27,29 @@ export const mapTextLineTypeToCssClass = {
     [ELineType.COMPACT]: typographyStyles.compact,
 };
 
-/** Свойства компонента Text. */
-export type TTextProps<T extends keyof JSX.IntrinsicElements> = {
+interface ITextProps extends ITypographyProps {
     /** Размер текста. */
     size: ETextSize;
     /** Высота блока строки. */
     line?: ELineType;
-    /** Толщина шрифта. */
     weight?: EFontWeightText;
-} & ITypographyProps &
-    JSX.IntrinsicElements[T];
+}
+
+/** Свойства компонента Text. */
+export type TTextProps<T extends React.ElementType> = PolymorphicComponentPropsWithRef<T, ITextProps>;
+
+type TextComponent = (<T extends React.ElementType = "span">(props: TTextProps<T>) => React.ReactElement | null) & {
+    displayName?: string;
+};
 
 /** Текст (типографика). */
-export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "span">(
+export const Text: TextComponent = React.forwardRef(
+    <T extends React.ElementType = "span">(
         {
             children,
             className,
             size,
-            tag = "span" as T,
+            tag,
             type = EFontType.PRIMARY,
             weight = EFontWeightText.REGULAR,
             line = ELineType.NORMAL,
@@ -53,7 +58,7 @@ export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElemen
             ...props
         }: TTextProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): React.JSX.Element => {
+    ) => {
         const classes = clsx(
             typographyStyles.typography,
             styles.text,
@@ -69,7 +74,7 @@ export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElemen
             className,
         );
 
-        const Tag = tag;
+        const Tag = tag || "span";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

@@ -27,7 +27,7 @@ export interface IAlertProcessProps extends React.HTMLAttributes<HTMLDivElement>
     renderIcon?: React.ReactNode;
 }
 
-const renderDefaultIcon = (type: EAlertType): React.JSX.Element => {
+const renderDefaultIcon = (type: EAlertType) => {
     switch (type) {
         case EAlertType.INFO:
             return <InfoStrokeStsIcon20 paletteIndex={3} />;

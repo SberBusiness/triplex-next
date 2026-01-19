@@ -8,7 +8,7 @@ import { DataAttributes } from "../../types/CoreTypes";
 import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
-export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, DataAttributes {
+export interface IFormFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "placeholder">, DataAttributes {
     status?: EFormFieldStatus;
     size?: EComponentSize;
 }

@@ -80,7 +80,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         const [isShowAdditionalFilterPanel, setIsShowAdditionalFilterPanel] = useState<boolean>(false);
         const [appliedFilters, setAppliedFilters] = useState(defaultTableFilters);
         const [tempFilters, setTempFilters] = useState(defaultTableFilters);
-        const [tagNodes, setTagNodes] = useState<React.JSX.Element[]>([]);
+        const [tagNodes, setTagNodes] = useState<React.ReactNode[]>([]);
 
         const isCheckedAllItems = checkedRows.length === dataSetForTest.length;
         const isSpoilerFilterChanged = !!appliedFilters.statusOption || !!appliedFilters.counterpartyOption;

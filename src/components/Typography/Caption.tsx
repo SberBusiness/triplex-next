@@ -1,9 +1,9 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { clsx } from "clsx";
 import { EFontType, EFontWeightText, ECaptionSize } from "./enums";
 import { ITypographyProps } from "./types";
 import { mapFontTypeToCssClass } from "./utils";
-
+import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/Caption.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
@@ -20,23 +20,28 @@ export const mapCaptionSizeToCssClass = {
     [ECaptionSize.D1]: styles.d1,
 };
 
-/** Свойства компонента Caption. */
-export type TCaptionProps<T extends keyof JSX.IntrinsicElements> = {
+interface ICaptionProps extends ITypographyProps {
     /** Размер текста. */
     size: ECaptionSize;
     /** Толщина шрифта. */
     weight?: EFontWeightText;
-} & ITypographyProps &
-    JSX.IntrinsicElements[T];
+}
 
-/** Подпись (типографика). */
-export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "span">(
+/** Свойства компонента Caption. */
+export type TCaptionProps<T extends React.ElementType> = PolymorphicComponentPropsWithRef<T, ICaptionProps>;
+
+type TitleComponent = (<T extends React.ElementType = "span">(props: TCaptionProps<T>) => React.ReactElement | null) & {
+    displayName?: string;
+};
+
+/** Заголовок (типографика). */
+export const Caption: TitleComponent = React.forwardRef(
+    <T extends React.ElementType = `h1`>(
         {
             children,
             className,
             size,
-            tag = "span" as T,
+            tag,
             type = EFontType.PRIMARY,
             weight = EFontWeightText.REGULAR,
             underline,
@@ -44,7 +49,7 @@ export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.Intrinsic
             ...props
         }: TCaptionProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): React.JSX.Element => {
+    ) => {
         const classes = clsx(
             typographyStyles.typography,
             styles.caption,
@@ -59,7 +64,7 @@ export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.Intrinsic
             className,
         );
 
-        const Tag = tag;
+        const Tag = tag || "span";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

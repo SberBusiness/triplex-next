@@ -16,7 +16,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 export interface ISelectFieldOption extends ISelectExtendedFieldDefaultOption {}
 
 export interface ISelectFieldProps
-    extends Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget">,
+    extends Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget" | "placeholder">,
         Pick<ISelectExtendedFieldTargetProps, "loading" | "status" | "placeholder"> {
     size: EComponentSize;
     children?: never;

@@ -6,7 +6,7 @@ import { Tooltip, ETooltipSize } from "../../../Tooltip";
 import { LoaderSmall, ELoaderSmallTheme } from "../../../Loader";
 import styles from "../../styles/ChipSuggest.module.less";
 
-export const ChipSuggestDesktopDropdownField: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const ChipSuggestDesktopDropdownField: React.FC = ({ children }) => {
     const {
         inputValue,
         placeholder,

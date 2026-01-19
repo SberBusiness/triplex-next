@@ -56,7 +56,7 @@ interface IIconItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     hoverable: boolean;
 }
 
-const IconItem: React.FC<React.PropsWithChildren<IIconItemProps>> = ({
+const IconItem: React.FC<IIconItemProps> = ({
     className,
     inverted,
     hoverable,
@@ -67,7 +67,7 @@ interface IIconDisplayProps extends IIconItemProps {
     name: string;
 }
 
-const IconDisplay: React.FC<React.PropsWithChildren<IIconDisplayProps>> = ({ name, ...restProps }) => (
+const IconDisplay: React.FC<IIconDisplayProps> = ({ name, ...restProps }) => (
     <div className="icon-display">
         <IconItem className="icon-display-target" {...restProps} />
         <div className="icon-display-name">{name}</div>

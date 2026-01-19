@@ -104,7 +104,7 @@ describe("Text", () => {
     });
 
     it("forwards ref correctly for div element", () => {
-        const ref = React.createRef<HTMLElement>();
+        const ref = React.createRef<HTMLDivElement>();
         render(
             <Text size={ETextSize.B2} tag="div" ref={ref}>
                 Div Ref Test Text
@@ -117,7 +117,7 @@ describe("Text", () => {
     });
 
     it("forwards ref correctly for p element", () => {
-        const ref = React.createRef<HTMLElement>();
+        const ref = React.createRef<HTMLParagraphElement>();
         render(
             <Text size={ETextSize.B2} tag="p" ref={ref}>
                 P Ref Test Text

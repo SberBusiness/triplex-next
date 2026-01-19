@@ -55,9 +55,9 @@ test.describe("Checkbox", () => {
         });
     });
 
-    test.describe("Default", () => {
+    test.describe("Sizex", () => {
         test.beforeEach(async ({ page }) => {
-            await page.goto("http://localhost:6006/iframe.html?id=components-checkbox--default");
+            await page.goto("http://localhost:6006/iframe.html?id=components-checkbox--sizes");
         });
 
         test("should allow independent selection of different sizes", async ({ page }) => {

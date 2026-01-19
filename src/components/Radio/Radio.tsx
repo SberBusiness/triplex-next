@@ -10,12 +10,13 @@ export interface IRadioProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
     /** Объект label-атрибутов. */
     labelAttributes?: React.LabelHTMLAttributes<HTMLLabelElement>;
     /** Размер радио-кнопки. */
-    size?: EComponentSize.MD | EComponentSize.LG;
+    size?: EComponentSize;
 }
 
 const sizeToTextSizeMap = {
     [EComponentSize.LG]: ETextSize.B2,
     [EComponentSize.MD]: ETextSize.B3,
+    [EComponentSize.SM]: ETextSize.B3,
 };
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);

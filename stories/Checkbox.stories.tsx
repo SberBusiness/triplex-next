@@ -105,6 +105,21 @@ export const Default: StoryObj<typeof Checkbox> = {
     name: "Default",
     args: {
         children: "Checkbox label",
+    },
+    parameters: {
+        controls: { disable: true },
+    },
+    render: (args) => (
+        <>
+            <Checkbox {...args} />
+        </>
+    ),
+};
+
+export const Sizes: StoryObj<typeof Checkbox> = {
+    name: "Sizes",
+    args: {
+        children: "Checkbox label",
         size: EComponentSize.MD,
     },
     parameters: {

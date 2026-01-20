@@ -38,7 +38,11 @@ jobs:
           echo "@sberbusiness:registry=https://registry.npmjs.org/" > .npmrc
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
           cd dist
-          npm publish --access public
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            npm publish --access public --tag latest
+          else
+            npm publish --access public --tag react17
+          fi
 
       # Упаковать dist.zip как release asset
       - name: Create dist.zip

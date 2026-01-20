@@ -5,7 +5,7 @@ import { IChipProps } from "../Chip";
 import { dateFormatYYYYMMDD, globalLimitRange } from "../../../consts/DateConst";
 import { DateFieldUtils } from "../../DateField/utils";
 import { DatePickerExtended } from "../../DatePickerExtended/DatePickerExtended";
-import { ChipDatePickerTarget } from "./components/ChipDatePickerTarget";
+import { ChipDatePickerTarget } from "./ChipDatePickerTarget";
 import { inputDateFormat } from "../../DateField/constants";
 import { DropdownMobileMaskedInput } from "../../Dropdown/mobile/DropdownMobileMaskedInput";
 import styles from "../styles/Chip.module.less";

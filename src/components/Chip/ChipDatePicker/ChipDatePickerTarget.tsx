@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { Chip, IChipProps } from "../../Chip";
-import { ChipDropdownArrow } from "../../ChipDropdownArrow";
-import { ChipClearButton } from "../../ChipClearButton";
-import { DatePickerExtendedContext } from "../../../DatePickerExtended/DatePickerExtendedContext";
-import { isKey } from "../../../../utils/keyboard";
+import { Chip, IChipProps } from "../Chip";
+import { ChipDropdownArrow } from "../ChipDropdownArrow";
+import { ChipClearButton } from "../ChipClearButton";
+import { DatePickerExtendedContext } from "../../DatePickerExtended/DatePickerExtendedContext";
+import { isKey } from "../../../utils/keyboard";
 
 export interface IChipDatePickerTargetProps extends IChipProps {
     onClear: () => void;

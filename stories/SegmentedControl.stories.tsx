@@ -1,136 +1,74 @@
 import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import {
     SegmentedControl,
     ESegmentedControlTheme,
     ESegmentedControlType,
     ESegmentedControlSize,
 } from "../src/components/SegmentedControl";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
-export default {
+const meta = {
     title: "Components/SegmentedControl",
     component: SegmentedControl,
     tags: ["autodocs"],
     globals: {
         backgrounds: { value: "gray" },
     },
-    argTypes: {
-        type: {
-            control: { type: "select" },
-            options: Object.values(ESegmentedControlType),
-            description: "Тип выбора элементов",
-            table: {
-                type: {
-                    summary: Object.values(ESegmentedControlType).join(" | "),
-                },
-            },
-        },
-        theme: {
-            control: { type: "select" },
-            options: Object.values(ESegmentedControlTheme),
-            description: "Визуальный стиль сегментов",
-            table: {
-                type: {
-                    summary: Object.values(ESegmentedControlTheme).join(" | "),
-                },
-            },
-        },
-        size: {
-            control: { type: "select" },
-            options: Object.values(ESegmentedControlSize),
-            description: "Размер сегментов",
-            table: {
-                type: {
-                    summary: Object.values(ESegmentedControlSize).join(" | "),
-                },
-            },
-        },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Неактивное состояние",
-            table: {
-                type: { summary: "boolean" },
-            },
-        },
-    },
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент SegmentedControl позволяет пользователю выбирать один или несколько вариантов из набора опций.
-
-## Особенности:
-- Поддерживает два типа выбора: \`SINGLE\` (одиночный) и \`MULTIPLE\` (множественный);
-- Имеет четыре визуальных стиля: \`GENERAL_1\`/\`GENERAL_2\` и \`SECONDARY_1\`/\`SECONDARY_2\`;
-- Имеет три размера: \`SM\`, \`MD\` и \`LG\`;
-- Поддерживает состояние \`disabled\`.
-
-## Использование
-
-### Одиночный выбор
-Для одиночного выбора используйте тип \`ESegmentedControlType.SINGLE\`. Значение должно быть строкой.
-
-### Множественный выбор
-Для множественного выбора используйте тип \`ESegmentedControlType.MULTIPLE\`. Значение должно быть массивом строк.
-
-## Пример использования
-\`\`\`tsx
-const [type, setType] = useState<ESegmentedControlType>(ESegmentedControlType.SINGLE);
-const [singleValue, setSingleValue] = useState("segment_3");
-const [multipleValue, setMultipleValue] = useState(["segment_3"]);
-
-const value = type === ESegmentedControlType.SINGLE ? singleValue : multipleValue;
-const handleSelect = type === ESegmentedControlType.SINGLE ? setSingleValue : setMultipleValue;
-
-return (
-    <SegmentedControl
-        type={type}
-        theme={ESegmentedControlTheme.GENERAL_1}
-        size={ESegmentedControlSize.MD}
-        value={value}
-        onSelect={handleSelect}
-    >
-        <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-        <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-        <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-        <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-        <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
-    </SegmentedControl>
-);
-\`\`\`
-`,
-            },
             page: () => (
                 <>
                     <Title />
                     <Description />
+                    <Title>Props</Title>
+                    <ArgTypes of={Basic} />
+                    <Title>Playground</Title>
+                    <Primary />
                     <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
-};
+} satisfies Meta<typeof SegmentedControl>;
 
-export const Playground: StoryObj<typeof SegmentedControl> = {
-    args: {
-        type: ESegmentedControlType.SINGLE,
-        theme: ESegmentedControlTheme.GENERAL_1,
-        size: ESegmentedControlSize.MD,
-        disabled: false,
-    },
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
     parameters: {
         controls: {
             include: ["type", "theme", "size", "disabled"],
         },
         docs: {
-            description: {
-                story: `
-Интерактивная площадка для экспериментов с компонентом SegmentedControl. Используйте панель Controls для изменения параметров компонента.
-                `,
-            },
+            description: { story: "Интерактивный пример." },
+            canvas: { sourceState: "none" },
         },
+    },
+    tags: ["!autodocs"],
+    argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(ESegmentedControlType),
+        },
+        theme: {
+            control: { type: "select" },
+            options: Object.values(ESegmentedControlTheme),
+        },
+        size: {
+            control: { type: "select" },
+            options: Object.values(ESegmentedControlSize),
+        },
+        disabled: {
+            control: { type: "boolean" },
+        },
+    },
+    args: {
+        type: ESegmentedControlType.SINGLE,
+        theme: ESegmentedControlTheme.GENERAL_1,
+        size: ESegmentedControlSize.LG,
+        disabled: false,
     },
     render: (args) => {
         const [singleValue, setSingleValue] = useState("segment_3");
@@ -151,54 +89,36 @@ export const Playground: StoryObj<typeof SegmentedControl> = {
     },
 };
 
-export const Types: StoryObj = {
+export const Basic: Story = {
     parameters: {
+        docs: { description: { story: "Базовый пример." } },
         controls: { disable: true },
-        docs: {
-            description: {
-                story: `
-Сравнение обоих типов выбора - одиночного и множественного.
+    },
+    render: () => {
+        const [value, setValue] = useState("segment_3");
 
-## Одиночный выбор (Single)
-Пользователь может выбрать только один сегмент. При выборе нового сегмента предыдущий снимается.
+        return (
+            <SegmentedControl
+                type={ESegmentedControlType.SINGLE}
+                theme={ESegmentedControlTheme.GENERAL_1}
+                size={ESegmentedControlSize.LG}
+                value={value}
+                onSelect={setValue}
+            >
+                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
+            </SegmentedControl>
+        );
+    },
+};
 
-## Множественный выбор (Multiple)
-Пользователь может выбрать несколько сегментов. Каждый сегмент переключается независимо.
-
-\`\`\`tsx
-// Single selection
-const [singleValue, setSingleValue] = useState("segment_2");
-
-// Multiple selection
-const [multipleValue, setMultipleValue] = useState(["segment_2", "segment_3"]);
-
-return (
-    <>
-        <SegmentedControl
-            type={ESegmentedControlType.SINGLE}
-            value={singleValue}
-            onSelect={setSingleValue}
-        >
-            <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-            <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-            <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-        </SegmentedControl>
-
-        <SegmentedControl
-            type={ESegmentedControlType.MULTIPLE}
-            value={multipleValue}
-            onSelect={setMultipleValue}
-        >
-            <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-            <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-            <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-        </SegmentedControl>
-    </>
-);
-\`\`\`
-                `,
-            },
-        },
+export const Types: Story = {
+    parameters: {
+        docs: { description: { story: "Демонстрация всех типов компонента." } },
+        controls: { disable: true },
     },
     render: () => {
         const [singleValue, setSingleValue] = useState("segment_2");
@@ -252,14 +172,10 @@ return (
     },
 };
 
-export const Themes: StoryObj = {
+export const Themes: Story = {
     parameters: {
+        docs: { description: { story: "Демонстрация всех доступных тем компонента." } },
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Демонстрация всех доступных тем компонента.",
-            },
-        },
     },
     render: () => {
         const [singleValue, setSingleValue] = useState("segment_2");
@@ -308,14 +224,10 @@ export const Themes: StoryObj = {
     },
 };
 
-export const Sizes: StoryObj = {
+export const Sizes: Story = {
     parameters: {
+        docs: { description: { story: "Демонстрация всех доступных размеров компонента." } },
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Демонстрация всех доступных размеров компонента.",
-            },
-        },
     },
     render: () => {
         const [value, setValue] = useState("segment_2");
@@ -343,14 +255,10 @@ export const Sizes: StoryObj = {
     },
 };
 
-export const Disabled: StoryObj = {
+export const Disabled: Story = {
     parameters: {
+        docs: { description: { story: "Пример заблокированного состояния компонента." } },
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Пример заблокированного состояния компонента.",
-            },
-        },
     },
     render: () => {
         const [singleValue, setSingleValue] = useState("segment_3");

@@ -1,10 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { SegmentedControlSegment } from "@sberbusiness/triplex-next/components/SegmentedControl/SegmentedControlSegment";
-import {
-    ISegmentedControlSingleProps,
-    ISegmentedControlMultipleProps,
-} from "@sberbusiness/triplex-next/components/SegmentedControl/types";
+import { TSegmentedControlProps } from "@sberbusiness/triplex-next/components/SegmentedControl/types";
 import {
     ESegmentedControlTheme,
     ESegmentedControlType,
@@ -28,7 +25,7 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Набор опций для выбора одного или нескольких вариантов. */
 export const SegmentedControl = Object.assign(
-    React.forwardRef<HTMLDivElement, ISegmentedControlSingleProps | ISegmentedControlMultipleProps>(
+    React.forwardRef<HTMLDivElement, TSegmentedControlProps>(
         ({ children, className, value, theme, type, size, disabled, onSelect, ...rest }, ref) => {
             const classNames = clsx(
                 styles.segmentedControl,

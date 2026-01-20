@@ -3,7 +3,7 @@ import { AlertContext } from "../../src/components/Alert/AlertContext/AlertConte
 import { StoryObj } from "@storybook/react";
 import { EAlertType } from "../../src/components/Alert/EAlertType";
 import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Alerts/AlertContext",
@@ -24,8 +24,11 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <ArgTypes of={AlertContext} />
+                    <h2>Playground</h2>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -35,6 +38,7 @@ export default {
 
 export const Playground: StoryObj<typeof AlertContext> = {
     name: "Playground",
+    tags: ["!autodocs"],
     args: {
         children: "This message provides context or highlights important information to note.",
         type: EAlertType.INFO,
@@ -59,6 +63,12 @@ export const Playground: StoryObj<typeof AlertContext> = {
     parameters: {
         controls: {
             include: ["type", "children"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
 };

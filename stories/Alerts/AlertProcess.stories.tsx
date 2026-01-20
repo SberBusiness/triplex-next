@@ -11,7 +11,7 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Link } from "../../src/components/Link";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Alerts/AlertProcess",
@@ -35,8 +35,11 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <ArgTypes of={AlertProcess} />
+                    <h2>Playground</h2>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -46,6 +49,7 @@ export default {
 
 export const Playground: StoryObj<typeof AlertProcess> = {
     name: "Playground",
+    tags: ["!autodocs"],
     args: {
         children: (
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
@@ -84,6 +88,12 @@ export const Playground: StoryObj<typeof AlertProcess> = {
     parameters: {
         controls: {
             include: ["type", "closable", "children"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => {

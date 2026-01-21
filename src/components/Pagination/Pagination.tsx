@@ -4,7 +4,9 @@ import { IPaginationSelectProps, PaginationSelect } from "./components/Paginatio
 import { IPaginationNavigationProps, PaginationNavigation } from "./components/PaginationNavigation";
 
 interface IPaginationProps extends IPaginationExtendedProps {
+    /** Свойства компонента PaginationSelect. */
     paginationSelectProps: IPaginationSelectProps;
+    /** Свойства компонента PaginationNavigation. */
     paginationNavigationProps: IPaginationNavigationProps;
 }
 

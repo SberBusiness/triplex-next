@@ -58,6 +58,7 @@ const preview: Preview = {
         },
         docs: {
             container: DocsContainer,
+            codePanel: true,
         },
         options: {
             storySort: (a, b) => a.title.localeCompare(b.title),
@@ -81,7 +82,7 @@ const preview: Preview = {
                         theme={isDark ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT}
                         scopeRef={scopeRef}
                     >
-                        {/* @ts-ignore */}
+                        {/* @ts-expect-error - Children error*/}
                         <ThemeProviderIcons theme={isDark ? EIconsTheme.DARK : EIconsTheme.LIGHT}>
                             <Story />
                         </ThemeProviderIcons>

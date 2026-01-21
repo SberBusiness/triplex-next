@@ -13,7 +13,6 @@
         list-style-type: none;
 
         &.disabled {
-            opacity: 0.48;
             cursor: default;
             pointer-events: none;
         }
@@ -42,16 +41,22 @@
             box-shadow: var(--triplex-next-IslandAccordion-Shadow_Focus);
         }
 
-        &.type1:not(.opened):hover .island {
-            background: var(--triplex-next-IslandAccordion-Type1_Header_Background_Hover);
+        &.type1:not(.opened) {
+            .header:hover {
+                background: var(--triplex-next-IslandAccordion-Type1_Header_Background_Hover);
+            }
         }
 
-        &.type2:not(.opened):hover .island {
-            background: var(--triplex-next-IslandAccordion-Type2_Header_Background_Hover);
+        &.type2:not(.opened) {
+            .header:hover {
+                background: var(--triplex-next-IslandAccordion-Type2_Header_Background_Hover);
+            }
         }
 
-        &.type3:not(.opened):hover .island {
-            background: var(--triplex-next-IslandAccordion-Type3_Header_Background_Hover);
+        &.type3:not(.opened) {
+            .header:hover {
+                background: var(--triplex-next-IslandAccordion-Type3_Header_Background_Hover);
+            }
         }
 
         .footer {
@@ -99,11 +104,11 @@
             }
 
             .caretWrapper {
-                right: 20px;
+                right: 12px;
             }
 
             .remove {
-                right: -40px;
+                right: -36px;
                 top: 20px;
             }
 
@@ -124,7 +129,7 @@
             }
 
             .caretWrapper {
-                right: 28px;
+                right: 20px;
             }
 
             .remove {
@@ -149,16 +154,16 @@
             }
 
             .caretWrapper {
-                right: 36px;
+                right: 28px;
             }
 
             .remove {
-                right: -48px;
-                top: 40px;
+                right: -40px;
+                top: 36px;
             }
 
             .step {
-                margin: 2px 16px 0 0;
+                margin: 0 16px 0 0;
             }
         }
 

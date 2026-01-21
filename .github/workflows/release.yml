@@ -38,10 +38,20 @@ jobs:
           echo "@sberbusiness:registry=https://registry.npmjs.org/" > .npmrc
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
           cd dist
-          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if [ "${PKG_VERSION}" != "${GITHUB_REF_NAME}" ]; then
+            echo "❌ dist/package.json version (${PKG_VERSION}) != release tag (${GITHUB_REF_NAME})"
+            exit 1
+          fi
+          if [[ "${GITHUB_REF_NAME}" == 1.* ]]; then
+            echo "Publishing React 18 as latest"
             npm publish --access public --tag latest
-          else
+          elif [[ "${GITHUB_REF_NAME}" == 0.* ]]; then
+            echo "Publishing React 17 as react17"
             npm publish --access public --tag react17
+          else
+            echo "❌ Unknown version prefix: ${GITHUB_REF_NAME}. Expected 0.* (react17) or 1.* (latest)."
+            exit 1
           fi
 
       # Упаковать dist.zip как release asset

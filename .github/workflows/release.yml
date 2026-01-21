@@ -45,8 +45,10 @@ jobs:
           fi
           if [[ "${GITHUB_REF_NAME}" == 1.* ]]; then
             echo "Publishing React 18 as latest"
+            npm publish --access public --tag latest
           elif [[ "${GITHUB_REF_NAME}" == 0.* ]]; then
             echo "Publishing React 17 as react17"
+            npm publish --access public --tag react17
           else
             echo "❌ Unknown version prefix: ${GITHUB_REF_NAME}. Expected 0.* (react17) or 1.* (latest)."
             exit 1

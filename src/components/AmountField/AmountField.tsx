@@ -1,13 +1,11 @@
 import React, { useLayoutEffect, useRef } from "react";
-import clsx from "clsx";
 import { TextFieldBase, ITextFieldBaseProps } from "../TextField/TextFieldBase";
-import { EFormFieldStatus } from "../FormField/enums";
-import { FormFieldInput, IFormFieldInputProps } from "../FormField/components/FormFieldInput";
+import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
+import { Text, ETextSize, EFontType } from "../Typography";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition } from "../../utils/inputUtils";
 import { createPlaceholder, setFallbackCaret } from "./utils";
-import styles from "./styles/AmountField.module.less";
 
 export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
@@ -29,7 +27,7 @@ export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children">
 
 export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>(
     ({ inputProps, currency, postfix, maxIntegerDigits = 16, fractionDigits = 2, onClear, ...restProps }, ref) => {
-        const dataTestId = restProps["data-test-id"];
+        const { status, "data-test-id": dataTestId } = restProps;
         const placeholder = inputProps.placeholder || createPlaceholder(fractionDigits);
 
         const refInput = useRef<HTMLInputElement | null>(null);
@@ -111,14 +109,13 @@ export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>
                     <React.Fragment>
                         {onClear !== undefined && <FormFieldClear onClick={onClear} />}
                         {currency !== undefined && (
-                            <span
-                                className={clsx(styles.currency, {
-                                    [styles.disabled]: restProps.status === EFormFieldStatus.DISABLED,
-                                })}
+                            <Text
+                                size={ETextSize.B2}
+                                type={status !== EFormFieldStatus.DISABLED ? EFontType.SECONDARY : EFontType.DISABLED}
                                 data-test-id={dataTestId && `${dataTestId}__unit`}
                             >
                                 {currency}
-                            </span>
+                            </Text>
                         )}
                         {postfix !== undefined && postfix}
                     </React.Fragment>

@@ -1,229 +1,271 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { NumberField, EComponentSize, EFormFieldStatus, Text, ETextSize, EFontType } from "../../src";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { NumberField } from "../../src/components/NumberField/NumberField";
+import { Text, ETextSize, EFontType } from "../../src/components/Typography";
+import { EFormFieldStatus } from "../../src/components/FormField/enums";
+import { FormFieldClear } from "../../src/components/FormField/components/FormFieldClear";
+import { HelpBox } from "../../src/components/HelpBox/HelpBox";
+import { Link } from "../../src/components/Link";
+import { ETooltipSize } from "../../src/components/Tooltip/enums";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 
-const meta: Meta<typeof NumberField> = {
+const meta = {
     title: "Components/TextFields/NumberField",
     component: NumberField,
     parameters: {
-        layout: "padded",
         docs: {
-            description: {
-                component: `
-NumberField - текстовое поле для ввода числовых значений.
-
-## Использование
-
-\`\`\`tsx
-import React, { useState } from "react";
-import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
-
-const [value, setValue] = useState("");
-
-const handleChange: React.ChangeEventHandler<HTMLTextareaElement> = (event) => {
-    setValue(event.target.value);
-};
-
-<NumberField
-    size={EComponentSize.LG}
-    status={EFormFieldStatus.DEFAULT}
-    inputProps={{ value, placeholder: "0", onChange: handleChange }}
-    label="Label"
-    prefix="Prefix"
-    postfix="Postfix"
-    description="Description"
-    counter="Counter"
-/>
-\`\`\`
-                `,
-            },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Title>Props</Title>
+                    <ArgTypes of={NumberField} />
+                    <Title>Playground</Title>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
     tags: ["autodocs"],
+} satisfies Meta<typeof NumberField>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
+    parameters: {
+        docs: {
+            description: { story: "Интерактивная демонстрация." },
+            canvas: { sourceState: "none" },
+        },
+    },
+    tags: ["!autodocs"],
     argTypes: {
+        inputProps: {
+            description: "Свойства поля ввода",
+            table: { type: { summary: "object" } },
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер компонента.",
+            description: "Размер поля",
             table: {
-                type: {
-                    summary: Object.values(EComponentSize).join(" | "),
-                },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
-            defaultValue: { summary: EComponentSize.LG },
         },
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
-            description: "Визуальное состояние компонента.",
+            description: "Состояние поля",
             table: {
-                type: {
-                    summary: Object.values(EFormFieldStatus).join(" | "),
-                },
-                defaultValue: { summary: EFormFieldStatus.DEFAULT },
+                type: { summary: "EFormFieldStatus" },
+                defaultValue: { summary: "DEFAULT" },
             },
+        },
+
+        label: {
+            control: { type: "text" },
+            description: "Текст лейбла",
+            table: { type: { summary: "string" } },
         },
         description: {
             control: { type: "text" },
             description: "Текст описания",
-            table: {
-                type: { summary: "string" },
-            },
+            table: { type: { summary: "string" } },
         },
-        counter: {
+        prefix: {
             control: { type: "text" },
-            description: "Текст счетчика символов",
-            table: {
-                type: { summary: "string" },
-            },
+            description: "Текст постфикса",
+            table: { type: { summary: "string" } },
+        },
+        postfix: {
+            control: { type: "text" },
+            description: "Текст постфикса",
+            table: { type: { summary: "string" } },
         },
     },
-    decorators: [
-        (Story) => (
+    args: {
+        inputProps: { placeholder: "0" },
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
+        label: "Label",
+        prefix: "",
+        postfix: "",
+        description: "",
+    },
+    render: (args) => {
+        const [value, setValue] = useState("");
+        const { inputProps, ...restArgs } = args;
+
+        return (
             <div style={{ maxWidth: "304px" }}>
-                <Story />
+                <NumberField
+                    {...restArgs}
+                    inputProps={{
+                        value,
+                        onChange: (event) => setValue(event.target.value),
+                        ...inputProps,
+                    }}
+                />
             </div>
-        ),
-    ],
-};
-
-export default meta;
-type Story = StoryObj<typeof NumberField>;
-
-const NumberFieldTemplate = (args) => {
-    const [value, setValue] = useState("");
-    const { inputProps, prefix, postfix, description, counter, ...restArgs } = args;
-    const targetTextType = args.status === EFormFieldStatus.DISABLED ? EFontType.DISABLED : EFontType.SECONDARY;
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
-    };
-
-    return (
-        <NumberField
-            inputProps={{ ...inputProps, value: value, onChange: handleChange }}
-            prefix={
-                prefix?.length !== 0 && (
-                    <Text tag="div" size={ETextSize.B2} type={targetTextType}>
-                        {prefix}
-                    </Text>
-                )
-            }
-            postfix={
-                postfix?.length !== 0 && (
-                    <Text tag="div" size={ETextSize.B2} type={targetTextType}>
-                        {postfix}
-                    </Text>
-                )
-            }
-            description={
-                description?.length !== 0 && (
-                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                        {description}
-                    </Text>
-                )
-            }
-            counter={
-                counter?.length !== 0 && (
-                    <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                        {counter}
-                    </Text>
-                )
-            }
-            {...restArgs}
-        />
-    );
-};
-
-export const Default: Story = {
-    args: {
-        size: EComponentSize.LG,
-        status: EFormFieldStatus.DEFAULT,
-        inputProps: { placeholder: "0" },
-        label: "Label",
-        prefix: "Prefix",
-        postfix: "Postfix",
-        description: "Description",
-        counter: "Counter",
+        );
     },
-    render: NumberFieldTemplate,
+};
+
+export const Basic: Story = {
     parameters: {
-        controls: { disable: true },
-    },
-};
-
-export const Playground: Story = {
-    args: {
-        size: EComponentSize.LG,
-        status: EFormFieldStatus.DEFAULT,
-        inputProps: { placeholder: "0" },
-        label: "Label",
-        prefix: "Prefix",
-        postfix: "Postfix",
-        description: "Description",
-        counter: "Counter",
-    },
-    render: NumberFieldTemplate,
-    parameters: {
-        controls: {
-            include: ["size", "status", "description", "counter"],
+        docs: {
+            description: { story: "Базовый пример." },
+            controls: { disable: true },
         },
     },
-};
+    render: () => {
+        const [value, setValue] = useState("");
 
-const sizeToLabelMap = {
-    [EComponentSize.SM]: "SM",
-    [EComponentSize.MD]: "MD",
-    [EComponentSize.LG]: "LG",
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <NumberField
+                    inputProps={{
+                        value,
+                        placeholder: "0",
+                        onChange: (event) => setValue(event.target.value),
+                    }}
+                    status={EFormFieldStatus.DEFAULT}
+                    size={EComponentSize.LG}
+                    label="Label"
+                />
+            </div>
+        );
+    },
 };
 
 export const Sizes: Story = {
-    args: {
-        status: EFormFieldStatus.DEFAULT,
-        inputProps: { placeholder: "0" },
-    },
-    render: (args) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {Object.values(EComponentSize).map((size) => (
-                <NumberFieldTemplate key={size} size={size} label={sizeToLabelMap[size]} {...args} />
-            ))}
-        </div>
-    ),
     parameters: {
+        docs: { description: { story: "Размеры" } },
         controls: { disable: true },
     },
-};
+    render: () => {
+        const sizes = Object.values(EComponentSize);
 
-const statusToLabelMap = {
-    [EFormFieldStatus.DEFAULT]: "Default",
-    [EFormFieldStatus.DISABLED]: "Disabled",
-    [EFormFieldStatus.ERROR]: "Error",
-    [EFormFieldStatus.WARNING]: "Warning",
+        return (
+            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                {sizes.map((size) => {
+                    const [value, setValue] = useState("");
+
+                    return (
+                        <NumberField
+                            key={size}
+                            inputProps={{
+                                value,
+                                placeholder: "0",
+                                onChange: (event) => setValue(event.target.value),
+                            }}
+                            size={size}
+                            label="Label"
+                        />
+                    );
+                })}
+            </div>
+        );
+    },
 };
 
 export const Statuses: Story = {
-    args: {
-        size: EComponentSize.LG,
-        inputProps: { placeholder: "0" },
-    },
-    render: (args) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {Object.values(EFormFieldStatus).map((status) => (
-                <NumberFieldTemplate key={status} status={status} label={statusToLabelMap[status]} {...args} />
-            ))}
-        </div>
-    ),
     parameters: {
+        docs: { description: { story: "Статусы." } },
         controls: { disable: true },
+    },
+    render: () => {
+        const statuses = Object.values(EFormFieldStatus);
+
+        return (
+            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                {statuses.map((status) => {
+                    const [value, setValue] = useState("");
+
+                    return (
+                        <NumberField
+                            key={status}
+                            inputProps={{
+                                value,
+                                placeholder: "0",
+                                onChange: (event) => setValue(event.target.value),
+                            }}
+                            status={status}
+                            label="Label"
+                        />
+                    );
+                })}
+            </div>
+        );
+    },
+};
+
+export const WithClearButton: Story = {
+    name: "With clear button",
+    parameters: {
+        docs: { description: { story: "С кнопкой очистки." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("8967");
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <NumberField
+                    inputProps={{
+                        value,
+                        placeholder: "0",
+                        onChange: (event) => setValue(event.target.value),
+                    }}
+                    label="Label"
+                    postfix={<FormFieldClear onClick={() => setValue("")} />}
+                />
+            </div>
+        );
+    },
+};
+
+export const Example: Story = {
+    parameters: {
+        docs: { description: { story: "В сочетании с другими компонентами." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <NumberField
+                    inputProps={{
+                        value,
+                        placeholder: "0",
+                        onChange: (event) => setValue(event.target.value),
+                    }}
+                    label="Label"
+                    postfix={
+                        <>
+                            <FormFieldClear onClick={() => setValue("")} />
+                            <Text size={ETextSize.B2} type={EFontType.SECONDARY}>
+                                мм
+                            </Text>
+                            <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
+                        </>
+                    }
+                    description={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
+                        </Text>
+                    }
+                />
+            </div>
+        );
     },
 };

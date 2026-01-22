@@ -134,12 +134,27 @@ describe("PaginationPageEllipsis", () => {
 
 describe("PaginationSelect", () => {
     it("Should render with label", () => {
-        render(<PaginationSelect paginationLabel="Items per page" />);
+        render(
+            <PaginationSelect
+                paginationLabel="Items per page"
+                onChange={() => {}}
+                options={[]}
+                targetProps={{ fieldLabel: "" }}
+            />,
+        );
         expect(screen.getByText("Items per page")).toBeInTheDocument();
     });
 
     it("Should not render when hidden", () => {
-        const { container } = render(<PaginationSelect paginationLabel="Hidden" hidden />);
+        const { container } = render(
+            <PaginationSelect
+                paginationLabel="Hidden"
+                hidden
+                onChange={() => {}}
+                options={[]}
+                targetProps={{ fieldLabel: "" }}
+            />,
+        );
         expect(container).toBeEmptyDOMElement();
     });
 });

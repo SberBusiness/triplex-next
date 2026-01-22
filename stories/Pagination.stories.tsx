@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
 import { Pagination, PaginationExtended, PaginationNavigation, PaginationSelect } from "../src/components/Pagination";
+import { ISelectExtendedFieldDefaultOption } from "../src/components/SelectExtendedField";
 
 export default {
     title: "Components/Pagination",
@@ -48,20 +49,26 @@ interface IPaginationPlaygroundProps {
 export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     tags: ["!autodocs"],
     render: (args) => {
+        const defaultPageSize = 10;
         const [page, setPage] = useState(args.currentPage ?? 1);
-        const [pageSize, setPageSize] = useState(10);
+        const [pageSize, setPageSize] = useState(defaultPageSize);
+
+        const totalItems = (args.totalPages && args.totalPages <= 200 ? args.totalPages : 200) * defaultPageSize;
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
         useEffect(() => {
             setPage(args.currentPage ?? 1);
         }, [args.currentPage]);
-
-        const totalPages = args.totalPages && args.totalPages <= 200 ? args.totalPages : 200;
 
         useEffect(() => {
             if (page > totalPages) {
                 setPage(1);
             }
         }, [page, totalPages]);
+
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPageSize(Number(option.value));
+        };
 
         return (
             <Pagination
@@ -78,7 +85,7 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
                     value: pageSize,
                     hidden: args.hidden,
                     options: [10, 20, 50, 100],
-                    onChange: setPageSize,
+                    onChange: handlePageSizeChange,
                 }}
             />
         );
@@ -171,6 +178,10 @@ export const WithSelectField: StoryObj<typeof Pagination> = {
         const totalItems = 300;
         const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPageSize(Number(option.value));
+        };
+
         return (
             <Pagination
                 paginationNavigationProps={{
@@ -184,7 +195,7 @@ export const WithSelectField: StoryObj<typeof Pagination> = {
                     paginationLabel: "Показать на странице:",
                     value: pageSize,
                     options: [10, 20, 50, 100],
-                    onChange: setPageSize,
+                    onChange: handlePageSizeChange,
                 }}
             />
         );
@@ -206,6 +217,10 @@ export const Extended: StoryObj<typeof Pagination> = {
         const totalItems = 300;
         const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPageSize(Number(option.value));
+        };
+
         return (
             <PaginationExtended>
                 <PaginationNavigation
@@ -219,7 +234,7 @@ export const Extended: StoryObj<typeof Pagination> = {
                     paginationLabel="Показать на странице:"
                     value={pageSize}
                     options={[10, 20, 50, 100]}
-                    onChange={setPageSize}
+                    onChange={handlePageSizeChange}
                 />
             </PaginationExtended>
         );

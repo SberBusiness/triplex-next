@@ -1,0 +1,105 @@
+import {
+  Meta,
+  Title,
+  Heading,
+  Description,
+  Subtitle
+} from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+<Title>Triplex Next Design System</Title>
+<Subtitle>@sberbusiness/triplex-next</Subtitle>
+
+<a
+  href="https://github.com/sberbusiness/triplex-next"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="https://img.shields.io/badge/GitHub-Triplex%20Next-black?logo=github"
+    alt="GitHub repository"
+  />
+</a>
+
+
+## Версии npm-пакета
+
+- **1.x.x** — React 18
+- **0.x.x** — React 17
+
+Начиная с версий 0.10.0 и 1.10.0 ожидается функциональное соответствие компонентов между версиями 1.x.x и 0.x.x с отличием только в поддерживаемой версии React. К примеру версия 0.11.0 соответствует версии 1.11.0 по функциональности компонентов.
+
+## Установка
+
+### React 18 (по умолчанию)
+```bash
+npm i @sberbusiness/triplex-next
+```
+
+### React 17
+```bash
+npm i @sberbusiness/triplex-next@react17
+```
+
+### Зависимости
+
+```bash
+npm i @sberbusiness/icons-next
+```
+
+### Импортировать стили
+```ts
+import '@sberbusiness/triplex-next/styles/triplex-next.css';
+import '@sberbusiness/icons-next/styles/icons.css';
+```
+
+
+### Шрифты
+
+Компоненты Typography используют шрифты SBSansDisplay и SBSansText. Для корректного отображения необходимо подключить шрифты в вашем проекте:
+
+```css
+@font-face {
+    font-family: 'SBSansDisplay';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplayMedium';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplaySemibold';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplayBold';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansText';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansTextSemibold';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+```
+

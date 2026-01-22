@@ -61,7 +61,9 @@ const preview: Preview = {
             codePanel: true,
         },
         options: {
-            storySort: (a, b) => a.title.localeCompare(b.title),
+            storySort: {
+                order: ["Introduction", "Components", "*"],
+            },
             showPanel: true,
         },
         viewport: {

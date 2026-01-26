@@ -6,7 +6,6 @@ import { GetTokensValueByTheme } from "./GetTokensValueByTheme";
 import {
     AlertContext_Tokens,
     AlertProcess_Tokens,
-    AmountField_Tokens,
     Button_Tokens,
     Calendar_Tokens,
     Card_Tokens,
@@ -57,7 +56,6 @@ import {
     UploadZone_Tokens,
     TDesignTokensComponentsAlertContextValue,
     TDesignTokensComponentsAlertProcessValue,
-    TDesignTokensComponentsAmountFieldValue,
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCalendarValue,
     TDesignTokensComponentsCardValue,
@@ -117,10 +115,6 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     AlertProcess: GetTokensValueByTheme<TDesignTokensComponentsAlertProcessValue>(
         ETriplexNextTheme.DARK,
         AlertProcess_Tokens,
-    ),
-    AmountField: GetTokensValueByTheme<TDesignTokensComponentsAmountFieldValue>(
-        ETriplexNextTheme.DARK,
-        AmountField_Tokens,
     ),
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.DARK, Button_Tokens),
     Calendar: GetTokensValueByTheme<TDesignTokensComponentsCalendarValue>(ETriplexNextTheme.DARK, Calendar_Tokens),

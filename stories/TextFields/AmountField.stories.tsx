@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { AmountField } from "../../src/components/AmountField/AmountField";
 import { Text, ETextSize, EFontType } from "../../src/components/Typography";
 import { EFormFieldStatus } from "../../src/components/FormField/enums";
@@ -19,7 +19,7 @@ const meta = {
                     <Title />
                     <Description />
                     <Title>Props</Title>
-                    <Controls of={Basic} />
+                    <ArgTypes of={AmountField} />
                     <Title>Playground</Title>
                     <Primary />
                     <Controls of={Playground} />
@@ -161,8 +161,8 @@ export const Basic: Story = {
                 <AmountField
                     inputProps={{
                         value,
-                        onChange,
                         placeholder: "0,00",
+                        onChange,
                     }}
                     status={EFormFieldStatus.DEFAULT}
                     size={EComponentSize.LG}
@@ -192,7 +192,11 @@ export const Sizes: Story = {
                     return (
                         <AmountField
                             key={size}
-                            inputProps={{ value, onChange, placeholder: "0,00" }}
+                            inputProps={{
+                                value,
+                                placeholder: "0,00",
+                                onChange,
+                            }}
                             size={size}
                             label="Label"
                         />
@@ -219,7 +223,11 @@ export const Statuses: Story = {
                     return (
                         <AmountField
                             key={status}
-                            inputProps={{ value, onChange, placeholder: "0,00" }}
+                            inputProps={{
+                                value,
+                                placeholder: "0,00",
+                                onChange,
+                            }}
                             status={status}
                             label="Label"
                         />
@@ -237,13 +245,14 @@ export const WithClearButton: Story = {
         controls: { disable: true },
     },
     render: () => {
-        const { value, onChange, onClear } = useAmountFieldLogic("123.45");
+        const { value, onChange, onClear } = useAmountFieldLogic("8967452.31");
 
         return (
             <div style={{ maxWidth: "304px" }}>
                 <AmountField
                     inputProps={{
                         value,
+                        placeholder: "0,00",
                         onChange,
                     }}
                     label="Label"
@@ -260,14 +269,15 @@ export const Example: Story = {
         controls: { disable: true },
     },
     render: () => {
-        const [value, setValue] = useState("");
+        const { value, onChange, onClear } = useAmountFieldLogic("");
 
         return (
             <div style={{ maxWidth: "304px" }}>
                 <AmountField
                     inputProps={{
                         value,
-                        onChange: setValue,
+                        placeholder: "0,00",
+                        onChange,
                     }}
                     label="Label"
                     currency="RUB"
@@ -280,6 +290,7 @@ export const Example: Story = {
                             </Link>
                         </Text>
                     }
+                    onClear={onClear}
                 />
             </div>
         );

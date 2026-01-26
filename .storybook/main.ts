@@ -44,6 +44,12 @@ const config: StorybookConfig = {
 
         return viteConfig;
     },
+    managerHead: (head) => `
+    ${head}
+    <script>
+      window.__TRIPLEX_VERSION__ = ${JSON.stringify(version)};
+    </script>
+  `,
 };
 
 export default config;

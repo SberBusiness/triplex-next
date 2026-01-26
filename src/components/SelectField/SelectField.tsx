@@ -20,17 +20,17 @@ export interface ISelectFieldProps
         Pick<ISelectExtendedFieldTargetProps, "loading" | "status" | "placeholder"> {
     size: EComponentSize;
     children?: never;
-    /* Текущее выбранное значение. */
+    /** Текущее выбранное значение. */
     value?: ISelectFieldOption;
-    /* Список опций. */
+    /** Список опций. */
     options: ISelectFieldOption[];
-    /* Обработчик изменения значения. */
+    /** Обработчик изменения значения. */
     onChange: (option: ISelectFieldOption) => void;
-    /* Свойства, передающиеся в SelectExtendedField.Target. */
+    /** Свойства, передающиеся в SelectExtendedField.Target. */
     targetProps: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
-    /* ClassName передающийся в DropdownListItem. */
+    /** ClassName передающийся в DropdownListItem. */
     dropdownListItemClassName?: string;
-    /* Название Select отображающееся в мобильном режиме. */
+    /** Название Select отображающееся в мобильном режиме. */
     mobileTitle?: React.ReactNode;
 }
 

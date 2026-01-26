@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import { StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
 import { Pagination, PaginationExtended, PaginationNavigation, PaginationSelect } from "../src/components/Pagination";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { ISelectExtendedFieldDefaultOption } from "../src/components/SelectExtendedField";
 
-const meta: Meta<typeof Pagination> = {
+export default {
     title: "Components/Pagination",
     component: Pagination,
     parameters: {
         docs: {
             description: {
-                component: "Компонент Pagination:",
+                component: `
+Компонент пагинации для отображения списка.
+`,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <h3>Pagination</h3>
+                    <ArgTypes of={Pagination} />
+                    <h3>PaginationNavigation</h3>
+                    <ArgTypes of={PaginationNavigation} />
+                    <h3>PaginationSelect</h3>
+                    <ArgTypes of={PaginationSelect} />
+                    <h2>Playground</h2>
+                    <Description of={Playground} />
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -24,10 +36,6 @@ const meta: Meta<typeof Pagination> = {
     },
     tags: ["autodocs"],
 };
-
-export default meta;
-
-type Story = StoryObj<typeof Pagination>;
 
 interface IPaginationPlaygroundProps {
     currentPage?: number;
@@ -40,6 +48,7 @@ interface IPaginationPlaygroundProps {
 }
 
 export const Playground: StoryObj<IPaginationPlaygroundProps> = {
+    tags: ["!autodocs"],
     render: (args) => {
         const [page, setPage] = useState(args.currentPage ?? 1);
         const [pageSize, setPageSize] = useState(10);
@@ -56,6 +65,10 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
             }
         }, [page, totalPages]);
 
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPageSize(Number(option.value));
+        };
+
         return (
             <Pagination
                 className={args.className}
@@ -71,7 +84,7 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
                     value: pageSize,
                     hidden: args.hidden,
                     options: [10, 20, 50, 100],
-                    onChange: setPageSize,
+                    onChange: handlePageSizeChange,
                 }}
             />
         );
@@ -125,8 +138,12 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     parameters: {
         docs: {
             description: {
-                story: "Интерактивная демонстрация Pagination с controls: текущая страница, общее количество страниц, boundary/sibling и отображение селекта.",
+                story: "Интерактивная демонстрация Pagination. В данном примере Pagination.Select не влияет на количество страниц, т.к. totalPages задается напрямую через панель controls.",
             },
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
         controls: {
             include: ["currentPage", "totalPages", "boundaryCount", "siblingCount", "hidden", "paginationLabel"],
@@ -134,8 +151,7 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     },
 };
 
-export const Default: Story = {
-    name: "Default",
+export const Default: StoryObj<typeof Pagination> = {
     parameters: {
         controls: { disable: true },
     },
@@ -147,94 +163,14 @@ export const Default: Story = {
                 paginationNavigationProps={{ currentPage: page, totalPages: 10, onCurrentPageChange: setPage }}
                 paginationSelectProps={{
                     paginationLabel: "Показать на странице:",
-                    value: 10,
-                    options: [10, 20, 50, 100],
-                    onChange: () => {},
+                    hidden: true,
                 }}
             />
         );
     },
 };
 
-export const WithBoundariesAndSiblings: Story = {
-    parameters: {
-        controls: { disable: true },
-    },
-    render: () => {
-        const [page, setPage] = useState(5);
-
-        return (
-            <Pagination
-                paginationNavigationProps={{
-                    currentPage: page,
-                    totalPages: 20,
-                    boundaryCount: 1,
-                    siblingCount: 2,
-                    onCurrentPageChange: setPage,
-                }}
-                paginationSelectProps={{
-                    paginationLabel: "Показать на странице:",
-                    value: 10,
-                    options: [10, 20, 50, 100],
-                    onChange: () => {},
-                }}
-            />
-        );
-    },
-};
-
-export const ManyPages: Story = {
-    parameters: {
-        controls: { disable: true },
-    },
-    render: () => {
-        const [page, setPage] = useState(50);
-
-        return (
-            <Pagination
-                paginationNavigationProps={{
-                    currentPage: page,
-                    totalPages: 100,
-                    boundaryCount: 2,
-                    siblingCount: 1,
-                    onCurrentPageChange: setPage,
-                }}
-                paginationSelectProps={{
-                    paginationLabel: "Показать на странице:",
-                    value: 10,
-                    options: [10, 20, 50, 100],
-                    onChange: () => {},
-                }}
-            />
-        );
-    },
-};
-
-export const WithSelect: Story = {
-    parameters: {
-        controls: { disable: true },
-    },
-    render: () => {
-        const [page, setPage] = useState(1);
-        const [pageSize, setPageSize] = useState(10);
-        const totalItems = 150;
-        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-
-        return (
-            <Pagination
-                paginationNavigationProps={{ currentPage: page, totalPages, onCurrentPageChange: setPage }}
-                paginationSelectProps={{
-                    paginationLabel: "Показать на странице:",
-                    value: pageSize,
-                    options: [10, 20, 50, 100],
-                    onChange: setPageSize,
-                }}
-            />
-        );
-    },
-};
-
-export const FullExample: Story = {
+export const WithSelectField: StoryObj<typeof Pagination> = {
     parameters: {
         controls: { disable: true },
     },
@@ -244,6 +180,10 @@ export const FullExample: Story = {
         const totalItems = 300;
         const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPageSize(Number(option.value));
+        };
+
         return (
             <Pagination
                 paginationNavigationProps={{
@@ -257,59 +197,46 @@ export const FullExample: Story = {
                     paginationLabel: "Показать на странице:",
                     value: pageSize,
                     options: [10, 20, 50, 100],
-                    onChange: setPageSize,
+                    onChange: handlePageSizeChange,
                 }}
             />
         );
     },
 };
 
-export const WithoutPaginationSelect: Story = {
-    name: "Without Pagination Select",
-    render: () => {
-        const [page, setPage] = useState(1);
-        const totalPages = 10;
-
-        return (
-            <Pagination
-                paginationNavigationProps={{
-                    currentPage: page,
-                    totalPages,
-                    onCurrentPageChange: setPage,
-                }}
-                paginationSelectProps={{
-                    paginationLabel: "Показать на странице:",
-                    hidden: true,
-                }}
-            />
-        );
-    },
+export const Extended: StoryObj<typeof Pagination> = {
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
-                story: "Пример использования Pagination без селекта количества элементов. Навигация работает, селект скрыт с помощью props hidden.",
+                story: "Для компоновки кастомной пагинации используется компонент PaginationExtended.",
             },
         },
-        controls: { disable: true },
-    },
-};
-
-export const Extended: Story = {
-    name: "Extended (container only)",
-    parameters: {
-        controls: { disable: true },
     },
     render: () => {
         const [page, setPage] = useState(1);
+        const [pageSize, setPageSize] = useState(10);
+        const totalItems = 300;
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPageSize(Number(option.value));
+        };
 
         return (
             <PaginationExtended>
-                <PaginationNavigation currentPage={page} totalPages={10} onCurrentPageChange={setPage} />
+                <PaginationNavigation
+                    currentPage={page}
+                    totalPages={totalPages}
+                    boundaryCount={1}
+                    siblingCount={1}
+                    onCurrentPageChange={setPage}
+                />
                 <PaginationSelect
                     paginationLabel="Показать на странице:"
-                    value={10}
+                    value={pageSize}
                     options={[10, 20, 50, 100]}
-                    onChange={() => {}}
+                    onChange={handlePageSizeChange}
                 />
             </PaginationExtended>
         );

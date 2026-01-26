@@ -9,19 +9,19 @@ import { PaginationNavigationExtendedItem } from "./PaginationNavigationExtended
 
 /* Свойства компонента PaginationNavigation. */
 export interface IPaginationNavigationProps extends React.HTMLAttributes<HTMLUListElement> {
-    /* Свойства кнопки "Следующая страница". */
+    /** Свойства кнопки "Следующая страница". */
     buttonNextProps?: Omit<IPaginationNavigationButtonProps, "direction" | "children">;
-    /* Свойства кнопки "Предыдущая страница". */
+    /** Свойства кнопки "Предыдущая страница". */
     buttonPrevProps?: Omit<IPaginationNavigationButtonProps, "direction" | "children">;
-    /* Номер текущей страницы. */
+    /** Номер текущей страницы. */
     currentPage: number;
-    /* Функция при смене страницы. */
+    /** Функция при смене страницы. */
     onCurrentPageChange: (currentPage: number) => void;
-    /* Общее число страниц. */
+    /** Общее число страниц. */
     totalPages: number;
-    /* Количество всегда видимых страниц в начале и в конце. */
+    /** Количество всегда видимых страниц в начале и в конце. */
     boundaryCount?: number;
-    /* Количество всегда видимых страниц по краям текущей страницы. */
+    /** Количество всегда видимых страниц по краям текущей страницы. */
     siblingCount?: number;
 }
 

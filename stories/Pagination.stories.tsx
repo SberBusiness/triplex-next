@@ -26,6 +26,7 @@ export default {
                     <h3>PaginationSelect</h3>
                     <ArgTypes of={PaginationSelect} />
                     <h2>Playground</h2>
+                    <Description of={Playground} />
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -49,16 +50,14 @@ interface IPaginationPlaygroundProps {
 export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     tags: ["!autodocs"],
     render: (args) => {
-        const defaultPageSize = 10;
         const [page, setPage] = useState(args.currentPage ?? 1);
-        const [pageSize, setPageSize] = useState(defaultPageSize);
-
-        const totalItems = (args.totalPages && args.totalPages <= 200 ? args.totalPages : 200) * defaultPageSize;
-        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+        const [pageSize, setPageSize] = useState(10);
 
         useEffect(() => {
             setPage(args.currentPage ?? 1);
         }, [args.currentPage]);
+
+        const totalPages = args.totalPages && args.totalPages <= 200 ? args.totalPages : 200;
 
         useEffect(() => {
             if (page > totalPages) {
@@ -138,6 +137,9 @@ export const Playground: StoryObj<IPaginationPlaygroundProps> = {
     },
     parameters: {
         docs: {
+            description: {
+                story: "Интерактивная демонстрация Pagination. В данном примере Pagination.Select не влияет на количество страниц, т.к. totalPages задается напрямую через панель controls.",
+            },
             canvas: {
                 sourceState: "none",
             },

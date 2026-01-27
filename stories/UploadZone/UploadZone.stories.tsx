@@ -18,6 +18,7 @@ import { EMarkerStatus } from "../../src/components/Marker";
 import { MarkerStatus } from "../../src/components/MarkerStatus";
 import { Button, EButtonTheme } from "../../src/components/Button";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { MobileView } from "../../src/components/MobileView/MobileView";
 import "./UploadZone.less";
 
 export default {
@@ -56,7 +57,7 @@ export const Default: StoryObj<typeof UploadZone> = {
                 <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
                 <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                    Положите файлы сюда
+                    Label text
                 </Text>
             </div>
         );
@@ -65,9 +66,11 @@ export const Default: StoryObj<typeof UploadZone> = {
             alert("Change handler called.");
         };
 
-        const renderUploadZoneContent = (openUploadDialog) => (
+        const renderUploadZoneInput = () => <UploadZone.Input multiple />;
+
+        const renderUploadZoneContentDesktop = (openUploadDialog) => (
             <div className="uploadZoneContent">
-                <UploadZone.Input multiple />
+                {renderUploadZoneInput()}
                 <Gap size={16} />
                 <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                 <Gap size={4} />
@@ -83,6 +86,21 @@ export const Default: StoryObj<typeof UploadZone> = {
                 <Gap size={16} />
             </div>
         );
+
+        const renderUploadZoneContentMobile = (openUploadDialog) => (
+            <div className="uploadZoneMobile">
+                {renderUploadZoneInput()}
+                <div className="uploadZoneMobileHeader">
+                    <Text size={ETextSize.B3}>Файлы для импорта</Text>
+                    <HelpBox tooltipSize={ETooltipSize.SM}>Helpbox text</HelpBox>
+                </div>
+
+                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={openUploadDialog}>
+                    Загрузить
+                </Button>
+            </div>
+        );
+
         return (
             <div ref={(node) => setContainer(node)} style={{ display: "flow-root", position: "relative" }}>
                 <UploadZone
@@ -90,7 +108,11 @@ export const Default: StoryObj<typeof UploadZone> = {
                     dropZoneContainer={container}
                     onChange={handleChange}
                 >
-                    {({ openUploadDialog }) => renderUploadZoneContent(openUploadDialog)}
+                    {({ openUploadDialog }) => (
+                        <MobileView fallback={renderUploadZoneContentDesktop(openUploadDialog)}>
+                            {renderUploadZoneContentMobile(openUploadDialog)}
+                        </MobileView>
+                    )}
                 </UploadZone>
             </div>
         );

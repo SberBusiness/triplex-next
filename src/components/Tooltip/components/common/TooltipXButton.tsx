@@ -11,6 +11,7 @@ export const TooltipXButton: React.FC<ITooltipXButtonProps> = ({ onClick, ...res
 
     /** Обработчик клика. */
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
         setTooltipOpen(false);
         onClick?.(event);
     };

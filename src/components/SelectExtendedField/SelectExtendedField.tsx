@@ -39,15 +39,15 @@ export interface ISelectExtendedFieldDropdownProvideProps {
 
 /* Свойства компонента SelectExtendedField. */
 export interface ISelectExtendedFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
-    /* Рендер-функция поля выбора. */
+    /** Рендер-функция поля выбора. */
     renderTarget: (props: ISelectExtendedFieldTargetProvideProps) => React.ReactNode;
-    /* Рендер-функция выпадающего блока. */
+    /** Рендер-функция выпадающего блока. */
     children: (props: ISelectExtendedFieldDropdownProvideProps) => React.ReactNode;
-    /* Функция, срабатывающая при закрытии выпадающего блока. */
+    /** Функция, срабатывающая при закрытии выпадающего блока. */
     onClose?: () => void;
-    /* Функция, срабатывающая при открытии выпадающего блока. */
+    /** Функция, срабатывающая при открытии выпадающего блока. */
     onOpen?: () => void;
-    /* Закрытие выпадающего блока при нажатии клавиши Tab. */
+    /** Закрытие выпадающего блока при нажатии клавиши Tab. */
     closeOnTab?: boolean;
 }
 

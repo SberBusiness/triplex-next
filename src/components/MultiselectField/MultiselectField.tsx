@@ -6,6 +6,7 @@ import { MultiselectFieldDropdown } from "./components/MultiselectFieldDropdown"
 import { EComponentSize } from "../../enums/EComponentSize";
 
 export interface IMultiselectFieldProps extends ISelectExtendedFieldProps {
+    /** Размер компонента. */
     size?: EComponentSize;
 }
 

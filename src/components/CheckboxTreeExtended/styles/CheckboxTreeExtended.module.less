@@ -3,6 +3,7 @@
 .checkboxTreeExtended {
     // Компенсация отступа последней ноды.
     margin-bottom: -12px;
+    padding: 12px;
 }
 
 .checkboxTreeExtendedNode {
@@ -15,7 +16,18 @@
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: 12px;
+
+    &.sm {
+        margin-bottom: 10px;
+    }
+
+    &.md {
+        margin-bottom: 12px;
+    }
+
+    &.lg {
+        margin-bottom: 12px;
+    }
 
     // В базовом компоненте чекбокс почему-то есть отступы, которые не убираются.
     .checkboxTreeCheckboxLabel {
@@ -41,5 +53,11 @@
         .caretIconWrapper {
             transform: rotate(180deg);
         }
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .checkboxTreeExtended {
+        padding: 12px 14px;
     }
 }

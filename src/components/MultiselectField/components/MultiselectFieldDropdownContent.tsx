@@ -3,15 +3,19 @@ import { MultiselectFieldContext } from "../MultiselectFieldContext";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import clsx from "clsx";
 import styles from "../styles/MultiselectFieldDropdownContent.module.less";
+import { LoaderScreen } from "../../../components/LoaderScreen";
 
 /** Свойства компонента MultiselectFieldDropdownContent. */
-export interface IMultiselectFieldDropdownContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IMultiselectFieldDropdownContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    isLoading?: boolean;
+}
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdownContentProps> = ({
     children,
     className,
+    isLoading = false,
     ...htmlDivAttributes
 }) => {
     const { size } = useContext(MultiselectFieldContext);
@@ -20,6 +24,7 @@ export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdown
         <div className={clsx(styles.multiselectFieldContentWrapper, className)} {...htmlDivAttributes}>
             <div tabIndex={-1} className={clsx(styles.multiselectFieldContent, sizeToClassNameMap[size])}>
                 {children}
+                {isLoading && <LoaderScreen type="small" />}
             </div>
         </div>
     );

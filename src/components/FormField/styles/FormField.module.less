@@ -3,8 +3,11 @@
 .formField {
     position: relative;
     flex-grow: 1;
-    background: var(--triplex-next-FormField-Background_Default);
-    box-shadow: var(--triplex-next-FormField-Shadow_Default);
+
+    &.default {
+        background: var(--triplex-next-FormField-Background_Default);
+        box-shadow: var(--triplex-next-FormField-Shadow_Default);
+    }
 
     // Применяем плавные переходы
     .smooth-transition();

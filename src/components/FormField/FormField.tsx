@@ -13,6 +13,13 @@ export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, D
     size?: EComponentSize;
 }
 
+export const statusToClassNameMap = {
+    [EFormFieldStatus.DEFAULT]: styles.default,
+    [EFormFieldStatus.DISABLED]: styles.disabled,
+    [EFormFieldStatus.ERROR]: styles.error,
+    [EFormFieldStatus.WARNING]: styles.warning,
+};
+
 /** Элемент, отображающий input/select/textarea + label. */
 export const FormField: React.FC<IFormFieldProps> = ({
     children,
@@ -63,11 +70,9 @@ export const FormField: React.FC<IFormFieldProps> = ({
                 className={clsx(
                     styles.formField,
                     styles[`size-${size}`],
+                    statusToClassNameMap[status],
                     {
                         [styles.active]: focused,
-                        [styles.disabled]: status === EFormFieldStatus.DISABLED,
-                        [styles.error]: status === EFormFieldStatus.ERROR,
-                        [styles.warning]: status === EFormFieldStatus.WARNING,
                     },
                     className,
                 )}

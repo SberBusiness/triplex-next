@@ -3,6 +3,7 @@ import { CheckboxTreeExtended, ICheckboxTreeExtendedProps } from "../CheckboxTre
 import { ICheckboxTreeExtendedCheckboxProvideProps } from "../CheckboxTreeExtended/components/CheckboxTreeExtendedNode";
 import { ICheckboxTreeCheckboxData } from "./types";
 import { checkChildrenCheckboxes, checkParentCheckboxes, traverseCheckboxes } from "./utils";
+import { EComponentSize } from "../../enums/EComponentSize";
 
 /** Свойства CheckboxTree. */
 export interface ICheckboxTreeProps extends Omit<ICheckboxTreeExtendedProps, "children" | "onChange"> {
@@ -17,7 +18,7 @@ export interface ICheckboxTreeProps extends Omit<ICheckboxTreeExtendedProps, "ch
  * Дерево чекбоксов.
  * Является оберткой над CheckboxTreeExtended.
  */
-export const CheckboxTree: React.FC<ICheckboxTreeProps> = ({ checkboxes, onChange }) => {
+export const CheckboxTree: React.FC<ICheckboxTreeProps> = ({ checkboxes, onChange, size = EComponentSize.MD }) => {
     const handleChange = (checkbox: ICheckboxTreeCheckboxData) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const { checked } = event.target;
 
@@ -61,7 +62,7 @@ export const CheckboxTree: React.FC<ICheckboxTreeProps> = ({ checkboxes, onChang
     );
 
     return (
-        <CheckboxTreeExtended>
+        <CheckboxTreeExtended size={size}>
             {checkboxes.map((checkbox, index) => renderNode(checkbox, checkboxes[index - 1], checkboxes[index + 1]))}
         </CheckboxTreeExtended>
     );

@@ -59,7 +59,11 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
             <input type="checkbox" className={classNames} disabled={disabled} {...inputAttributes} ref={ref} />
             <span className={styles.checkboxIcon} />
             {renderCheckmarkIcon()}
-            {children && <Text size={sizeToTextSizeMap[size]}>{children}</Text>}
+            {children && (
+                <Text size={sizeToTextSizeMap[size]} tag="div">
+                    {children}
+                </Text>
+            )}
         </label>
     );
 });

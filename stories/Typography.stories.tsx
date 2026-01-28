@@ -41,21 +41,21 @@ export default {
 @font-face {
     font-family: 'SBSansDisplayMedium';
     src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansDisplaySemibold';
     src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansDisplayBold';
     src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 700;
     font-style: normal;
 }
 
@@ -69,7 +69,7 @@ export default {
 @font-face {
     font-family: 'SBSansTextSemibold';
     src: url('node_modules/@sberbusiness/triplex-next/public/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 600;
     font-style: normal;
 }
 \`\`\`

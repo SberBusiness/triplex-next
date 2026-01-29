@@ -473,7 +473,7 @@ export const WithCounter: StoryObj<typeof TextField> = {
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Описание поля
+                            (21) Description
                         </Text>
                     }
                     counter={
@@ -485,9 +485,9 @@ export const WithCounter: StoryObj<typeof TextField> = {
                         value: value,
                         onChange: handleChange,
                         maxLength: maxLength,
-                        placeholder: "Введите текст...",
+                        placeholder: "Type to proceed",
                     }}
-                    label="Название поля"
+                    label="Label"
                 />
             </div>
         );

@@ -77,20 +77,20 @@ body {
 @font-face {
     font-family: 'SBSansTextSemibold';
     src: url('/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'SBSansDisplayBold';
     src: url('/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 700;
     font-style: normal;
 }
 @font-face {
     font-family: 'SBSansDisplayMedium';
     src: url('/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
 }
 @font-face {
@@ -102,6 +102,6 @@ body {
 @font-face {
     font-family: 'SBSansDisplaySemibold';
     src: url('/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 600;
     font-style: normal;
 }

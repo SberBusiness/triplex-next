@@ -40,7 +40,11 @@ export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
 
     /** Рендер кнопки закрытия. */
     const renderCloseButton = () => {
-        return <TooltipMobileCloseButton {...elements.closeButton?.props} />;
+        return (
+            <div className={styles.closeButton}>
+                <TooltipMobileCloseButton {...elements.closeButton?.props} />
+            </div>
+        );
     };
 
     return (

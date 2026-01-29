@@ -82,10 +82,6 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             className,
         );
 
-        const getTabIndex = (): number => {
-            return status === EFormFieldStatus.DISABLED || loading ? -1 : tabIndex || 0;
-        };
-
         /* Обработчик клика. */
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             if (loading && status === EFormFieldStatus.DISABLED) {
@@ -134,7 +130,6 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
         return (
             <FormField
                 onClick={handleClick}
-                tabIndex={getTabIndex()}
                 onKeyDown={handleKeyDown}
                 status={status}
                 size={size}

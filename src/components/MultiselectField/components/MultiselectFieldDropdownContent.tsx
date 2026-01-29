@@ -15,7 +15,7 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdownContentProps> = ({
     children,
     className,
-    loading = false,
+    loading,
     ...htmlDivAttributes
 }) => {
     const { size } = useContext(MultiselectFieldContext);

@@ -359,7 +359,7 @@ function createMultiselectFieldStoriesLogic(args) {
                     </FormField>
                 </MultiselectField.Dropdown.Header>
             )}
-            <MultiselectField.Dropdown.Content isLoading={args.isDropdownContentLoading}>
+            <MultiselectField.Dropdown.Content loading={args.isDropdownContentLoading}>
                 {renderDropdownContent()}
             </MultiselectField.Dropdown.Content>
             <MultiselectField.Dropdown.Footer>

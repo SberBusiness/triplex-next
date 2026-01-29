@@ -7,7 +7,7 @@ import { LoaderScreen } from "../../../components/LoaderScreen";
 
 /** Свойства компонента MultiselectFieldDropdownContent. */
 export interface IMultiselectFieldDropdownContentProps extends React.HTMLAttributes<HTMLDivElement> {
-    isLoading?: boolean;
+    loading?: boolean;
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -15,7 +15,7 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdownContentProps> = ({
     children,
     className,
-    isLoading = false,
+    loading = false,
     ...htmlDivAttributes
 }) => {
     const { size } = useContext(MultiselectFieldContext);
@@ -24,7 +24,7 @@ export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdown
         <div className={clsx(styles.multiselectFieldContentWrapper, className)} {...htmlDivAttributes}>
             <div tabIndex={-1} className={clsx(styles.multiselectFieldContent, sizeToClassNameMap[size])}>
                 {children}
-                {isLoading && <LoaderScreen type="small" />}
+                {loading && <LoaderScreen type="small" />}
             </div>
         </div>
     );

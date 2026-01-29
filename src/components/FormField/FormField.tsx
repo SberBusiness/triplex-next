@@ -5,6 +5,7 @@ import { TARGET_PADDING_X_DEFAULT } from "./consts";
 import { EFormFieldStatus } from "./enums";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { DataAttributes } from "../../types/CoreTypes";
+import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
@@ -19,6 +20,8 @@ export const statusToClassNameMap = {
     [EFormFieldStatus.ERROR]: styles.error,
     [EFormFieldStatus.WARNING]: styles.warning,
 };
+
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Элемент, отображающий input/select/textarea + label. */
 export const FormField: React.FC<IFormFieldProps> = ({
@@ -69,7 +72,7 @@ export const FormField: React.FC<IFormFieldProps> = ({
             <div
                 className={clsx(
                     styles.formField,
-                    styles[`size-${size}`],
+                    sizeToClassNameMap[size],
                     statusToClassNameMap[status],
                     {
                         [styles.active]: focused,

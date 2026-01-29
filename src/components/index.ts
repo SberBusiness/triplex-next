@@ -1,5 +1,6 @@
 export * from "./Alert";
 export * from "./Amount";
+export * from "./Avatar";
 export * from "./Button";
 export * from "./Calendar";
 export * from "./Chip";

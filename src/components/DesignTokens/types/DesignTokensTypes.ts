@@ -2,6 +2,7 @@ import { TDesignTokenValue } from "./DesignTokenTypes";
 import {
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
+    TDesignTokensComponentsAvatar,
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCalendar,
     TDesignTokensComponentsCard,
@@ -287,6 +288,7 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBrand &
 export type TDesignTokensComponents =
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
+    | TDesignTokensComponentsAvatar
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsCalendar
     | TDesignTokensComponentsCard

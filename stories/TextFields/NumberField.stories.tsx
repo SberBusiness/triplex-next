@@ -66,10 +66,19 @@ export const Playground: Story = {
                 defaultValue: { summary: "DEFAULT" },
             },
         },
-
         label: {
             control: { type: "text" },
             description: "Текст лейбла",
+            table: { type: { summary: "string" } },
+        },
+        prefix: {
+            control: { type: "text" },
+            description: "Текст префикса",
+            table: { type: { summary: "string" } },
+        },
+        postfix: {
+            control: { type: "text" },
+            description: "Текст постфикса",
             table: { type: { summary: "string" } },
         },
         description: {
@@ -77,14 +86,9 @@ export const Playground: Story = {
             description: "Текст описания",
             table: { type: { summary: "string" } },
         },
-        prefix: {
+        counter: {
             control: { type: "text" },
-            description: "Текст постфикса",
-            table: { type: { summary: "string" } },
-        },
-        postfix: {
-            control: { type: "text" },
-            description: "Текст постфикса",
+            description: "Текст счётчика",
             table: { type: { summary: "string" } },
         },
     },
@@ -96,6 +100,7 @@ export const Playground: Story = {
         prefix: "",
         postfix: "",
         description: "",
+        counter: "",
     },
     render: (args) => {
         const [value, setValue] = useState("");

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useEffect, useContext, useMemo } from "react";
 import { FormFieldContext } from "../FormFieldContext";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
@@ -28,21 +28,12 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
     const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
     const { render, ...renderProvideProps } = props;
     const { focused, status, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
+    const instanceId = useMemo(() => (id === undefined ? uniqueId("input_") : id), [id]);
     const classNames = clsx(styles.formFieldInput, sizeToClassNameMap[size], className);
 
-    const instanceId = useRef(id || uniqueId("input_"));
-
     useEffect(() => {
-        setId(instanceId.current);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (id) {
-            instanceId.current = id;
-            setId(instanceId.current);
-        }
-    }, [id, setId]);
+        setId(instanceId);
+    }, [instanceId, setId]);
 
     useEffect(() => {
         setValueExist(Boolean(value));
@@ -83,7 +74,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             {
                 ...renderProvideProps,
                 className: classNames,
-                id: instanceId.current,
+                id: instanceId,
                 onAnimationStart: handleAnimationStart,
                 onBlur: handleBlur,
                 onFocus: handleFocus,
@@ -100,7 +91,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
                 {...restProps}
                 className={classNames}
                 disabled={status === EFormFieldStatus.DISABLED}
-                id={instanceId.current}
+                id={instanceId}
                 onAnimationStart={handleAnimationStart}
                 onFocus={handleFocus}
                 onBlur={handleBlur}

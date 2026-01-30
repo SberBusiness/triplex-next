@@ -1,33 +1,27 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { FormFieldContext } from "../FormFieldContext";
+import React, { useMemo, useContext, useEffect } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import { FormFieldContext } from "../FormFieldContext";
+import { EFormFieldStatus } from "../enums";
 import styles from "../styles/FormFieldTextarea.module.less";
-import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
-import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField/enums";
 
 /** Свойства компонента FormFieldTextarea. */
 export interface IFormFieldTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
+// Соответствие размера имени класса.
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Компонент, отображающий textarea. */
 export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFieldTextareaProps>(
-    ({ className, id, onBlur, onFocus, placeholder, value, ...htmlTextareaHTMLAttributes }, ref) => {
-        const { size, status, focused, setFocused, setId, setValueExist } = useContext(FormFieldContext);
-        const instanceId = useRef(id === undefined ? uniqueId() : "");
+    ({ className, id, onBlur, onFocus, value, ...htmlTextareaHTMLAttributes }, ref) => {
+        const { size, status, setFocused, setId, setValueExist } = useContext(FormFieldContext);
+        const instanceId = useMemo(() => (id === undefined ? uniqueId("textarea_") : id), [id]);
         const classNames = clsx(styles.formFieldTextarea, sizeToClassNameMap[size], className);
 
         useEffect(() => {
-            setId(instanceId.current);
-        }, [setId]);
-
-        useEffect(() => {
-            if (id) {
-                instanceId.current = id;
-                setId(instanceId.current);
-            }
-        }, [id, setId]);
+            setId(instanceId);
+        }, [instanceId, setId]);
 
         useEffect(() => {
             setValueExist(Boolean(value));
@@ -46,13 +40,11 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
         return (
             <textarea
                 {...htmlTextareaHTMLAttributes}
-                id={instanceId.current}
+                id={instanceId}
                 className={classNames}
                 disabled={status === EFormFieldStatus.DISABLED}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                /* Когда элемент не в фокусе, вместо placeholder показывается Label. */
-                placeholder={focused ? placeholder : undefined}
                 value={value}
                 ref={ref}
             />

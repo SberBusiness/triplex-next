@@ -84,11 +84,6 @@ export const Playground: Story = {
             description: "Текст лейбла",
             table: { type: { summary: "string" } },
         },
-        description: {
-            control: { type: "text" },
-            description: "Текст описания",
-            table: { type: { summary: "string" } },
-        },
         currency: {
             control: { type: "text" },
             description: "Валюта",
@@ -96,12 +91,22 @@ export const Playground: Story = {
         },
         prefix: {
             control: { type: "text" },
-            description: "Текст постфикса",
+            description: "Текст префикса",
             table: { type: { summary: "string" } },
         },
         postfix: {
             control: { type: "text" },
             description: "Текст постфикса",
+            table: { type: { summary: "string" } },
+        },
+        description: {
+            control: { type: "text" },
+            description: "Текст описания",
+            table: { type: { summary: "string" } },
+        },
+        counter: {
+            control: { type: "text" },
+            description: "Текст счётчика",
             table: { type: { summary: "string" } },
         },
         maxIntegerDigits: {
@@ -124,6 +129,7 @@ export const Playground: Story = {
         prefix: "",
         postfix: "",
         description: "",
+        counter: "",
         maxIntegerDigits: 16,
         fractionDigits: 2,
     },

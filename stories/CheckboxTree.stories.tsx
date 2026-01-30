@@ -1,10 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import { CheckboxTree, ICheckboxTreeProps } from "../src/components/CheckboxTree/CheckboxTree";
 import { ICheckboxTreeCheckboxData } from "../src/components/CheckboxTree/types";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { EComponentSize } from "../src/enums/EComponentSize";
+import { Col } from "../src/components/Col/Col";
+import { Row } from "../src/components/Row/Row";
 
-const meta: Meta<typeof CheckboxTree> = {
+export default {
     title: "Components/CheckboxTree",
     component: CheckboxTree,
     tags: ["autodocs"],
@@ -15,55 +18,26 @@ const meta: Meta<typeof CheckboxTree> = {
                 component: `
 Дерево чекбоксов. Является оберткой над CheckboxTreeExtended.
 
-## Использование
+## Особенности
 
-\`\`\`tsx
-import { CheckboxTree } from "@sberbusiness/triplex-next";
-
-const checkboxes = [
-  {
-    id: "1",
-    label: "группа 1",
-    checked: false,
-    children: [
-      { id: "1-1", label: "Элемент 1-1", checked: false },
-      { id: "1-2", label: "Элемент 1-2", checked: false },
-    ],
-  },
-];
-
-<CheckboxTree
-  checkboxes={checkboxes}
-  onChange={(updated) => console.log(updated)}
-/>
-\`\`\`
+- **Размеры**: SM, MD, LG.
                 `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <ArgTypes of={CheckboxTree} />
+                    <h2>Playground</h2>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
-    argTypes: {
-        checkboxes: {
-            control: false,
-            description: "Array of checkbox data with hierarchical structure",
-        },
-        onChange: {
-            action: "onChange",
-            description: "Callback function called when checkbox state changes",
-        },
-    },
 };
-
-export default meta;
-type Story = StoryObj<typeof CheckboxTree>;
 
 // Sample data for CheckboxTree with "группа 1", "группа 2", "Значение 3"
 const sampleCheckboxes: ICheckboxTreeCheckboxData[] = [
@@ -137,33 +111,38 @@ const InteractiveCheckboxTree = (args: ICheckboxTreeProps) => {
     return <CheckboxTree {...args} checkboxes={checkboxes} onChange={handleChange} />;
 };
 
-/**
- * Дерево чекбоксов. Является оберткой над CheckboxTreeExtended.
- *
- * @example
- * ```tsx
- * import { CheckboxTree } from "@sberbusiness/triplex-next";
- *
- * const checkboxes = [
- *   {
- *     id: "1",
- *     label: "группа 1",
- *     checked: false,
- *     children: [
- *       { id: "1-1", label: "Элемент 1-1", checked: false },
- *       { id: "1-2", label: "Элемент 1-2", checked: false },
- *     ],
- *   },
- * ];
- *
- * <CheckboxTree
- *   checkboxes={checkboxes}
- *   onChange={(updated) => console.log(updated)}
- * />
- * ```
- */
-export const Default: Story = {
-    name: "Default",
+export const Playground: StoryObj<typeof CheckboxTree> = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: {
+            include: ["size"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+    args: {
+        checkboxes: sampleCheckboxes,
+        size: EComponentSize.MD,
+    },
+    argTypes: {
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+            description: "Размер компонента",
+            table: {
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: EComponentSize.MD },
+            },
+        },
+    },
+    render: (args) => <InteractiveCheckboxTree {...args} />,
+};
+
+export const Default: StoryObj<typeof CheckboxTree> = {
     parameters: {
         controls: { disable: true },
     },
@@ -171,4 +150,26 @@ export const Default: Story = {
     args: {
         checkboxes: sampleCheckboxes,
     },
+};
+
+export const DifferentSizes: StoryObj<typeof CheckboxTree> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    args: {
+        checkboxes: sampleCheckboxes,
+    },
+    render: (args) => (
+        <Row>
+            <Col size={4}>
+                <InteractiveCheckboxTree {...args} size={EComponentSize.SM} />
+            </Col>
+            <Col size={4}>
+                <InteractiveCheckboxTree {...args} />
+            </Col>
+            <Col size={4}>
+                <InteractiveCheckboxTree {...args} size={EComponentSize.LG} />
+            </Col>
+        </Row>
+    ),
 };

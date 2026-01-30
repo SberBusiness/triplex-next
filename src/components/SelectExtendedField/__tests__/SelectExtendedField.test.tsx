@@ -409,7 +409,6 @@ describe("SelectExtendedFieldTarget", () => {
 
         const formField = screen.getByTestId("target");
         expect(formField).toHaveClass("disabled");
-        expect(formField).toHaveAttribute("tabindex", "-1");
     });
 
     it("Should handle click events", () => {

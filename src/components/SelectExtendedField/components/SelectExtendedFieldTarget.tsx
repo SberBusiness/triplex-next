@@ -17,21 +17,21 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 
 /* Свойства SelectExtendedFieldTarget. */
 export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
-    /* Текст, или компонент отображающий выбранное значение. */
+    /**  Текст или компонент, отображающий выбранное значение. */
     label?: React.ReactNode;
-    /* Текст, или компонент отображающий выбранное значение для Target. */
+    /** Текст или компонент, отображающий выбранное значение для Target. */
     fieldLabel: React.ReactNode;
-    /* Состояние загрузки. */
+    /** Состояние загрузки. */
     loading?: boolean;
-    /* Состояние открытости выпадающего списка. */
+    /** Состояние открытости выпадающего списка. */
     opened: boolean;
-    /* Текст, или компонент отображающий выбранное placeholder. */
+    /** Текст или компонент, отображающий выбранное placeholder. */
     placeholder?: React.ReactNode;
     /** Префикс поля ввода. */
     prefix?: React.ReactNode;
     /** Постфикс поля ввода. */
     postfix?: React.ReactNode;
-    /* Функция открытия/закрытия выпадающего списка. */
+    /** Функция открытия/закрытия выпадающего списка. */
     setOpened: (opened: boolean) => void;
 }
 
@@ -82,10 +82,6 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             className,
         );
 
-        const getTabIndex = (): number => {
-            return status === EFormFieldStatus.DISABLED || loading ? -1 : tabIndex || 0;
-        };
-
         /* Обработчик клика. */
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             if (loading && status === EFormFieldStatus.DISABLED) {
@@ -134,7 +130,6 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
         return (
             <FormField
                 onClick={handleClick}
-                tabIndex={getTabIndex()}
                 onKeyDown={handleKeyDown}
                 status={status}
                 size={size}
@@ -144,7 +139,11 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 data-tx={process.env.npm_package_version}
                 {...rest}
             >
-                {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
+                {prefix ? (
+                    <FormFieldPrefix className={clsx("hoverable", { disabled: status === EFormFieldStatus.DISABLED })}>
+                        {prefix}
+                    </FormFieldPrefix>
+                ) : null}
 
                 <FormFieldLabel>{fieldLabel}</FormFieldLabel>
                 <FormFieldTarget
@@ -159,7 +158,14 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 </FormFieldTarget>
 
                 <FormFieldPostfix>
-                    {loading ? sizeToLoaderSizeMap[size] : sizeToCaretIconMap[size]}
+                    <div
+                        className={clsx(styles.caretWrapper, "hoverable", {
+                            active: opened,
+                            disabled: status === EFormFieldStatus.DISABLED,
+                        })}
+                    >
+                        {loading ? sizeToLoaderSizeMap[size] : sizeToCaretIconMap[size]}
+                    </div>
                     {postfix ? postfix : null}
                 </FormFieldPostfix>
             </FormField>

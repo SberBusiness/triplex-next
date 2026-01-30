@@ -4,12 +4,6 @@ import clsx from "clsx";
 import { UploadZoneInput } from "./components/UploadZoneInput";
 import { UploadZoneContext } from "./UploadZoneContext";
 import { UploadZoneOnChangeType } from "./types";
-import { MobileView } from "../MobileView";
-import { Button, EButtonTheme } from "../Button";
-import { EComponentSize } from "../../enums/EComponentSize";
-import { ETextSize, Text } from "../Typography";
-import { HelpBox } from "../HelpBox";
-import { ETooltipSize } from "../Tooltip";
 import styles from "./styles/UploadZone.module.less";
 
 export interface IUploadZoneChildrenProvideProps {
@@ -160,34 +154,6 @@ export const UploadZone = Object.assign(
             openUploadDialog();
         };
 
-        const renderUploadZoneDesktop = () => (
-            <div className={styles.uploadZoneDesktop} data-tx={process.env.npm_package_version} ref={ref}>
-                <div
-                    className={clsx(styles.uploadZoneDragArea, className)}
-                    onClick={handleAreaClick}
-                    {...restHtmlAttributes}
-                    key="uploadZoneDragArea"
-                    role="none"
-                />
-                {children({ openUploadDialog })}
-            </div>
-        );
-
-        const renderUploadZoneMobile = () => (
-            <div className={styles.uploadZoneMobile} data-tx={process.env.npm_package_version} ref={ref}>
-                <div className={styles.uploadZoneMobileHeader}>
-                    <Text size={ETextSize.B3}>Файлы для импорта</Text>
-                    <HelpBox tooltipSize={ETooltipSize.SM}>Helpbox text</HelpBox>
-                </div>
-
-                <div className={styles.uploadZoneInput}>{children({ openUploadDialog })}</div>
-
-                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={handleAreaClick}>
-                    Загрузить
-                </Button>
-            </div>
-        );
-
         return (
             <UploadZoneContext.Provider
                 value={{
@@ -197,7 +163,16 @@ export const UploadZone = Object.assign(
                     setInputNode,
                 }}
             >
-                <MobileView fallback={renderUploadZoneDesktop()}>{renderUploadZoneMobile()}</MobileView>
+                <div className={styles.uploadZone} data-tx={process.env.npm_package_version} ref={ref}>
+                    <div
+                        className={clsx(styles.uploadZoneDragArea, className)}
+                        onClick={handleAreaClick}
+                        {...restHtmlAttributes}
+                        key="uploadZoneDragArea"
+                        role="none"
+                    />
+                    {children({ openUploadDialog })}
+                </div>
             </UploadZoneContext.Provider>
         );
     }),

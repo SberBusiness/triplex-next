@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
     ICollapsableTreeNodeHeaderProvideProps,
     ICollapsableTreeNodeProps,
@@ -7,22 +7,21 @@ import { CollapsableTree } from "../../CollapsableTree/CollapsableTree";
 import { isStaticCheckboxTreeExtended } from "../isStaticCheckboxTreeExtended";
 import clsx from "clsx";
 import { CheckboxTreeExtendedArrow } from "./CheckboxTreeExtendedArrow";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "../styles/CheckboxTreeExtended.module.less";
+import { CheckboxTreeExtendedContext } from "../CheckboxTreeExtendedContext";
 
-/**
- * Свойства передаваемые CheckboxTreeExtendedNode в render-функцию чекбокса.
- *
- * @prop {boolean} [active] - Текущая нода является активной при перемещении с клавиатуры.
- * @prop {boolean} [opened] -  Текущая нода раскрыта.
- */
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
+/** Свойства передаваемые CheckboxTreeExtendedNode в render-функцию чекбокса. */
 export interface ICheckboxTreeExtendedCheckboxProvideProps {
+    // Текущая нода является активной при перемещении с клавиатуры.
     active?: boolean;
+    // Текущая нода раскрыта.
     opened?: boolean;
 }
 
-/**
- * Свойства CheckboxTreeExtendedNode.
- */
+/** Свойства CheckboxTreeExtendedNode. */
 interface ICheckboxTreeExtendedNodeProps
     extends Omit<ICollapsableTreeNodeProps, "children" | "renderBody" | "renderHeader"> {
     // Render-функция компонента чекбокс.
@@ -38,34 +37,26 @@ interface ICheckboxTreeExtendedNodeProps
  * Является оберткой CollapsableTree.Node.
  * Добавляет стили дерева чекбоксов.
  */
-export class CheckboxTreeExtendedNode extends React.Component<ICheckboxTreeExtendedNodeProps> {
-    public render(): JSX.Element {
-        const { children, checkbox, opened, ...collapsableTreeNodeProps } = this.props;
-        return (
-            <CollapsableTree.Node
-                className={styles.checkboxTreeExtendedNode}
-                opened={isStaticCheckboxTreeExtended ? true : opened}
-                renderHeader={this.renderHeader}
-                renderBody={this.renderBody}
-                {...collapsableTreeNodeProps}
-            />
-        );
-    }
+export const CheckboxTreeExtendedNode: React.FC<ICheckboxTreeExtendedNodeProps> = ({
+    children,
+    checkbox,
+    opened,
+    ...collapsableTreeNodeProps
+}) => {
+    const { size } = useContext(CheckboxTreeExtendedContext);
 
-    private handleHeaderMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    const handleHeaderMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
         // Прерывание всплытия при клике на сам контейнер. Чтобы checkbox не выделялся фокусом при клике сбоку от него.
         if (event.target === event.currentTarget) {
             event.preventDefault();
         }
     };
 
-    private renderHeader = ({ activeNode, opened, toggle }: ICollapsableTreeNodeHeaderProvideProps) => {
-        const { checkbox, children } = this.props;
-
+    const renderHeader = ({ activeNode, opened, toggle }: ICollapsableTreeNodeHeaderProvideProps) => {
         return (
             <div
-                className={clsx(styles.checkboxTreeExtendedNodeHeader, { opened: opened })}
-                onMouseDown={this.handleHeaderMouseDown}
+                className={clsx(styles.checkboxTreeExtendedNodeHeader, sizeToClassNameMap[size], { opened: opened })}
+                onMouseDown={handleHeaderMouseDown}
             >
                 {!isStaticCheckboxTreeExtended && children && (
                     <CheckboxTreeExtendedArrow active={activeNode} toggle={toggle} opened={opened} />
@@ -79,5 +70,15 @@ export class CheckboxTreeExtendedNode extends React.Component<ICheckboxTreeExten
         );
     };
 
-    private renderBody = () => this.props.children;
-}
+    const renderBody = () => children;
+
+    return (
+        <CollapsableTree.Node
+            className={styles.checkboxTreeExtendedNode}
+            opened={isStaticCheckboxTreeExtended ? true : opened}
+            renderHeader={renderHeader}
+            renderBody={renderBody}
+            {...collapsableTreeNodeProps}
+        />
+    );
+};

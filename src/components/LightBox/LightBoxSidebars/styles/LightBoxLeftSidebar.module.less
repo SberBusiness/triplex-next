@@ -10,7 +10,7 @@
     --left-position: calc(var(--lightBox-screen-left) + @lightBoxContentMarginX + @lightBoxControlsPrevButtonMarginLeft * 2 + @lightBoxControlsButtonWidth);
     // Дополнительная ширина, у Page левый отступ 32px, а должно быть 24px.
     --additional-width: 8px;
-    position: fixed;
+    position: absolute;
     left: var(--left-position);
     top: 40px;
     width: calc((var(--lightBox-width) - var(--page-width) - var(--left-position) * 2) / 2 + var(--additional-width));
@@ -18,6 +18,10 @@
     container-type: inline-size; 
     // Имя контейнера.
     container-name: left-sidebar-wrapper; 
+
+    &.fixed {
+        position: fixed;
+    }
 }
 
 // Скрытие левой боковой панели, если ее ширина меньше 100px.

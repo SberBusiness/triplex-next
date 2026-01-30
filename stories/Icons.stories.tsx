@@ -3,23 +3,6 @@ import clsx from "clsx";
 import { StoryObj } from "@storybook/react";
 import * as iconModule from "@sberbusiness/icons-next";
 
-const iconCategoryMap: Record<string, string[]> = Object.keys(iconModule)
-    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-    .reduce((map, key) => {
-        const results = key.match(/(Acc|Brd|Ill|Mrk|Mkr|Nav|Prd|Srv|Sts|Sys)Icon/);
-
-        if (results) {
-            const category = results[1];
-
-            if (category in map) {
-                map[category].push(key);
-            } else {
-                map[category] = [key];
-            }
-        }
-        return map;
-    }, {});
-
 const paletteIndexes = Array.from(Array(9).keys());
 
 export default {
@@ -51,17 +34,31 @@ import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
     },
 };
 
+const iconCategoryMap: Record<string, string[]> = Object.keys(iconModule)
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+    .reduce((map, key) => {
+        const results = key.match(/(Acc|Brd|Ill|Mrk|Mkr|Nav|Prd|Srv|Sts|Sys)Icon/);
+
+        if (results) {
+            const category = results[1];
+
+            if (category in map) {
+                map[category].push(key);
+            } else {
+                map[category] = [key];
+            }
+        }
+        return map;
+    }, {});
+
 interface IIconItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     inverted: boolean;
     hoverable: boolean;
 }
 
-const IconItem: React.FC<IIconItemProps> = ({
-    className,
-    inverted,
-    hoverable,
-    ...restProps
-}) => <button className={clsx("icon-item", className, { inverted, hoverable })} {...restProps} />;
+const IconItem: React.FC<IIconItemProps> = ({ className, inverted, hoverable, ...restProps }) => (
+    <button className={clsx("icon-item", className, { inverted, hoverable })} {...restProps} />
+);
 
 interface IIconDisplayProps extends IIconItemProps {
     name: string;
@@ -186,7 +183,8 @@ export const Palettes: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const BrandIcon: StoryObj<IIconStoryArgs> = {
+export const BrandIcons: StoryObj<IIconStoryArgs> = {
+    name: "Brand icons",
     args: {
         paletteIndex: 0,
         hoverable: true,
@@ -216,96 +214,8 @@ export const BrandIcon: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const ServiceIcons: StoryObj<IIconStoryArgs> = {
-    args: {
-        paletteIndex: 0,
-        hoverable: true,
-        disabled: false,
-    },
-    render: ({ paletteIndex, ...restArgs }) => (
-        <div className="icon-gallery">
-            {iconCategoryMap["Srv"].map((key) => {
-                const Icon = iconModule[key];
-                const inverted = paletteIndex === 6;
-
-                return (
-                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
-                        <Icon paletteIndex={paletteIndex} />
-                    </IconDisplay>
-                );
-            })}
-        </div>
-    ),
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
-};
-
-export const StatusIcons: StoryObj<IIconStoryArgs> = {
-    args: {
-        paletteIndex: 0,
-        hoverable: true,
-        disabled: false,
-    },
-    render: ({ paletteIndex, ...restArgs }) => (
-        <div className="icon-gallery">
-            {iconCategoryMap["Sts"].map((key) => {
-                const Icon = iconModule[key];
-                const inverted = paletteIndex === 6;
-
-                return (
-                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
-                        <Icon paletteIndex={paletteIndex} />
-                    </IconDisplay>
-                );
-            })}
-        </div>
-    ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
-};
-
-export const MarketingIcons: StoryObj<IIconStoryArgs> = {
-    args: {
-        paletteIndex: 0,
-        hoverable: true,
-        disabled: false,
-    },
-    render: ({ paletteIndex, ...restArgs }) => (
-        <div className="icon-gallery">
-            {iconCategoryMap["Mrk"].map((key) => {
-                const Icon = iconModule[key];
-                const inverted = paletteIndex === 6;
-
-                return (
-                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
-                        <Icon paletteIndex={paletteIndex} />
-                    </IconDisplay>
-                );
-            })}
-        </div>
-    ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
-};
-
 export const MarkerIcons: StoryObj<IIconStoryArgs> = {
+    name: "Marker icons",
     args: {
         paletteIndex: 0,
         hoverable: true,
@@ -335,7 +245,39 @@ export const MarkerIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
+export const MarketingIcons: StoryObj<IIconStoryArgs> = {
+    name: "Marketing icons",
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Mrk"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
 export const NavigationIcons: StoryObj<IIconStoryArgs> = {
+    name: "Navigation icons",
     args: {
         paletteIndex: 0,
         hoverable: true,
@@ -365,6 +307,7 @@ export const NavigationIcons: StoryObj<IIconStoryArgs> = {
 };
 
 export const ProductIcons: StoryObj<IIconStoryArgs> = {
+    name: "Product icons",
     args: {
         paletteIndex: 0,
         hoverable: true,
@@ -393,7 +336,69 @@ export const ProductIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
+export const ServiceIcons: StoryObj<IIconStoryArgs> = {
+    name: "Service icons",
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Srv"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
+export const StatusIcons: StoryObj<IIconStoryArgs> = {
+    name: "Status icons",
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Sts"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
 export const SystemIcons: StoryObj<IIconStoryArgs> = {
+    name: "System icons",
     args: {
         paletteIndex: 0,
         hoverable: true,

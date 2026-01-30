@@ -1,8 +1,12 @@
 .formFieldTarget {
+    display: flex;
+    align-items: center;
     padding: 0;
     width: 100%;
     box-sizing: border-box;
     color: var(--triplex-next-FormField-Target_Color_Default);
+    overflow: hidden;
+    white-space: nowrap;
 
     &.placeholder {
         color: var(--triplex-next-FormField-Target_PlaceholderColor_Default);
@@ -13,8 +17,6 @@
     }
 
     &.size-sm {
-        padding-top: 6px;
-        padding-bottom: 6px;
         font-size: 12px;
         height: 28px;
         line-height: 16px;
@@ -41,8 +43,10 @@
         transition: opacity .3s ease-out;
         pointer-events: none;
     }
-    
+
     &:focus {
+        outline: none;
+        
         & .placeholderWrapper {
             opacity: 1;
         }

@@ -76,12 +76,9 @@ const PoemBlock: React.FC = () => (
 export const LightBoxWithSidebars: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setIsOpen(false);
-
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
-            <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={handleClose} />
+            <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={() => setIsOpen(false)} />
             <LightBox.Controls.Prev title="Назад" clickByArrowLeft onClick={() => console.log("Prev clicked")} />
             <LightBox.Controls.Next title="Вперёд" clickByArrowRight onClick={() => console.log("Next clicked")} />
         </LightBox.Controls>
@@ -89,7 +86,7 @@ export const LightBoxWithSidebars: React.FC = () => {
 
     return (
         <div>
-            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={() => setIsOpen(true)}>
                 Открыть LightBox
             </Button>
 
@@ -179,12 +176,9 @@ export const LightBoxWithSidebars: React.FC = () => {
 export const LightBoxWithFixedSidebars: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setIsOpen(false);
-
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
-            <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={handleClose} />
+            <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={() => setIsOpen(false)} />
             <LightBox.Controls.Prev title="Назад" clickByArrowLeft onClick={() => console.log("Prev clicked")} />
             <LightBox.Controls.Next title="Вперёд" clickByArrowRight onClick={() => console.log("Next clicked")} />
         </LightBox.Controls>
@@ -192,7 +186,7 @@ export const LightBoxWithFixedSidebars: React.FC = () => {
 
     return (
         <div>
-            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={() => setIsOpen(true)}>
                 Открыть LightBox
             </Button>
 

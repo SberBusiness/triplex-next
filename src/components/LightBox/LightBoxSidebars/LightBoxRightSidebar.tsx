@@ -10,7 +10,7 @@ export interface ILightBoxRightSidebarProps extends React.HTMLAttributes<HTMLDiv
 export const LightBoxRightSidebar: React.FC<ILightBoxRightSidebarProps> = ({
     children,
     className,
-    fixed = false,
+    fixed,
     ...htmlDivAttributes
 }) => (
     <div className={clsx(className, styles.lightBoxRightSidebar, { [styles.fixed]: fixed })} {...htmlDivAttributes}>

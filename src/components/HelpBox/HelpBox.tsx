@@ -118,7 +118,7 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
                     </ButtonIcon>
                 </Tooltip.Target>
                 {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}
-                <Tooltip.Body className={styles.helpBoxTooltipBody}>{children}</Tooltip.Body>
+                <Tooltip.Body>{children}</Tooltip.Body>
                 <Tooltip.XButton aria-label="Закрыть" />
             </Tooltip>
             {open && focusTrapNode && renderFocusTrap(focusTrapNode)}

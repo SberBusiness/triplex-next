@@ -9,7 +9,13 @@ import replaceDesignTokenVersionPlugin from "./scripts/replaceDesignTokenVersion
 import writeCommonCssBundlesPlugin from "./scripts/writeCommonCssBundles";
 import { version } from "./package.json";
 
-const PEERS = [/^react(\/.*)?$/, /^react-dom(\/.*)?$/, /^react\/jsx-runtime$/, /^@sberbusiness\/icons-next(\/.*)?$/];
+const PEERS = [
+    /^react(\/.*)?$/,
+    /^react-dom(\/.*)?$/,
+    /^react\/jsx-runtime$/,
+    /^@sberbusiness\/icons-next(\/.*)?$/,
+    /^moment(\/.*)?$/,
+];
 
 export default defineConfig({
     plugins: [

@@ -93,8 +93,6 @@ export const LightBoxWithSideOverlay: React.FC = () => {
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
             <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={handleClose} />
-            <LightBox.Controls.Prev title="Назад" clickByArrowLeft onClick={() => console.log("Prev clicked")} />
-            <LightBox.Controls.Next title="Вперёд" clickByArrowRight onClick={() => console.log("Next clicked")} />
         </LightBox.Controls>
     );
 
@@ -411,8 +409,6 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
             <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={handleClose} />
-            <LightBox.Controls.Prev title="Назад" clickByArrowLeft onClick={() => console.log("Prev clicked")} />
-            <LightBox.Controls.Next title="Вперёд" clickByArrowRight onClick={() => console.log("Next clicked")} />
         </LightBox.Controls>
     );
 

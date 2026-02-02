@@ -42,10 +42,6 @@ reviews:
     - "!coverage/**"
     - "!public/**"
     - "!.husky/**"
-    - "!*.config.js"
-    - "!*.config.ts"
-    - "!.prettierrc"
-    - "!.madgerc"
   
   # Правила для конкретных путей
   path_instructions:

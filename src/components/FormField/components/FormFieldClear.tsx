@@ -14,12 +14,12 @@ export interface IFormFieldClearProps extends React.ButtonHTMLAttributes<HTMLBut
 /** Кнопка очищения введенного значения. */
 export const FormFieldClear = React.forwardRef<HTMLButtonElement, IFormFieldClearProps>(
     ({ className, onMouseDown, ...htmlClearAttributes }, ref) => {
-        const { status, valueExist } = useContext(FormFieldContext);
+        const { status, focused, hovered, valueExist } = useContext(FormFieldContext);
         const classNames = clsx(
             styles.formFieldClear,
             "hoverable",
             {
-                [styles.hidden]: !valueExist || status === EFormFieldStatus.DISABLED,
+                [styles.hidden]: !valueExist || status === EFormFieldStatus.DISABLED || !(focused || hovered),
             },
             className,
         );

@@ -16,7 +16,7 @@ export interface IRadioProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
 const sizeToTextSizeMap = {
     [EComponentSize.LG]: ETextSize.B2,
     [EComponentSize.MD]: ETextSize.B3,
-    [EComponentSize.SM]: ETextSize.B3,
+    [EComponentSize.SM]: ETextSize.B4,
 };
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -36,7 +36,11 @@ export const Radio = React.forwardRef<HTMLInputElement, IRadioProps>((props, ref
         <label {...labelAttributes} className={classNamesLabel} data-tx={process.env.npm_package_version}>
             <input type="radio" className={classNames} disabled={disabled} {...inputAttributes} ref={ref} />
             <span className={styles.radioIcon} />
-            {children && <Text size={sizeToTextSizeMap[size]}>{children}</Text>}
+            {children && (
+                <Text size={sizeToTextSizeMap[size]} tag="div">
+                    {children}
+                </Text>
+            )}
         </label>
     );
 });

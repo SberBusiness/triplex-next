@@ -66,7 +66,6 @@ export default {
 };
 
 export const Playground: StoryObj<typeof Link> = {
-    name: "Playground",
     tags: ["!autodocs"],
     args: {
         children: "Link text",
@@ -98,7 +97,6 @@ export const Playground: StoryObj<typeof Link> = {
 };
 
 export const Default: StoryObj<typeof Link> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -111,14 +109,13 @@ export const Default: StoryObj<typeof Link> = {
     ),
 };
 
-export const ExternalLink: StoryObj<typeof Link> = {
-    name: "External Link",
+export const Examples: StoryObj<typeof Link> = {
     parameters: {
         controls: { disable: true },
     },
     render: () => {
         const renderContentAfter = () => (
-            <div style={{ paddingTop: "4px" }}>
+            <div style={{ paddingTop: "6px" }}>
                 <LinkStrokeSrvIcon16 paletteIndex={0} />
             </div>
         );

@@ -20,7 +20,7 @@ reviews:
   request_changes_workflow: true
   high_level_summary: true
   poem: false
-  review_status: true
+  review_status: false
   collapse_walkthrough: false
   
   # Автоматическое ревью PR

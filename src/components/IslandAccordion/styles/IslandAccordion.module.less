@@ -88,6 +88,12 @@
             transition: transform 0.3s ease-in-out;
         }
 
+        .titleWrapper {
+            padding-right: 40px;
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+
         &.sm {
             .header {
                 padding: 16px;
@@ -187,6 +193,18 @@
 
                 > * {
                     margin-left: 0 !important;
+                }
+            }
+
+            &.md {
+                .header {
+                    border-radius: 16px;
+                }
+            }
+
+            &.lg {
+                .header {
+                    border-radius: 24px;
                 }
             }
         }

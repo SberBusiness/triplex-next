@@ -208,67 +208,63 @@ export const States: StoryObj<typeof Button> = {
 
 export const Sizes: StoryObj<typeof Button> = {
     render: () => (
-        <>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <Button size={EComponentSize.SM} theme={EButtonTheme.GENERAL}>
-                    SM
+                    Button text
                 </Button>
                 <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
-                    MD
+                    Button text
                 </Button>
                 <Button size={EComponentSize.LG} theme={EButtonTheme.GENERAL}>
-                    LG
+                    Button text
                 </Button>
             </div>
-            <Gap size={16} />
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <Button size={EComponentSize.SM} theme={EButtonTheme.SECONDARY}>
-                    SM
+                    Button text
                 </Button>
                 <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
-                    MD
+                    Button text
                 </Button>
                 <Button size={EComponentSize.LG} theme={EButtonTheme.SECONDARY}>
-                    LG
+                    Button text
                 </Button>
             </div>
-            <Gap size={16} />
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <Button size={EComponentSize.SM} theme={EButtonTheme.SECONDARY_LIGHT}>
-                    SM
+                    Button text
                 </Button>
                 <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY_LIGHT}>
-                    MD
+                    Button text
                 </Button>
                 <Button size={EComponentSize.LG} theme={EButtonTheme.SECONDARY_LIGHT}>
-                    LG
+                    Button text
                 </Button>
             </div>
-            <Gap size={16} />
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <Button size={EComponentSize.SM} theme={EButtonTheme.DANGER}>
-                    SM
+                    Button text
                 </Button>
                 <Button size={EComponentSize.MD} theme={EButtonTheme.DANGER}>
-                    MD
+                    Button text
                 </Button>
                 <Button size={EComponentSize.LG} theme={EButtonTheme.DANGER}>
-                    LG
+                    Button text
                 </Button>
             </div>
-            <Gap size={16} />
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 54, marginLeft: "12px" }}>
                 <Button size={EComponentSize.SM} theme={EButtonTheme.LINK}>
-                    SM
+                    Button text
                 </Button>
                 <Button size={EComponentSize.MD} theme={EButtonTheme.LINK}>
-                    MD
+                    Button text
                 </Button>
                 <Button size={EComponentSize.LG} theme={EButtonTheme.LINK}>
-                    LG
+                    Button text
                 </Button>
             </div>
-        </>
+        </div>
     ),
     parameters: {
         docs: {

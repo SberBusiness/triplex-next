@@ -1,10 +1,11 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
-import { EDropdownAlignment, EDropdownDirection } from "@sberbusiness/triplex-next/components/Dropdown/enums";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { useToken } from "@sberbusiness/triplex-next/components/ThemeProvider/useToken";
+import { EDropdownAlignment, EDropdownDirection } from "../enums";
+import { EComponentSize } from "../../../enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import { useToken } from "../../ThemeProvider/useToken";
+import { isKey } from "../../../utils/keyboard";
 import styles from "../styles/DropdownDesktop.module.less";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства компонента DropdownDesktop. */
 export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,6 +24,8 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
     /** Размер дропдауна. */
     size?: EComponentSize;
 }
+
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 const overflowHiddenClassName = styles.dropdownDesktopOverflowHidden;
 
@@ -46,7 +49,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     const [styleState, setStyleState] = useState<React.CSSProperties>({ opacity: 0 });
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const dropdownRes = useRef<{ width: number; height: number }>({ height: 0, width: 0 });
-    const classNames = clsx(styles.dropdownDesktop, scopeClassName, className, styles[`dropdownDesktop-${size}`]);
+    const classNames = clsx(styles.dropdownDesktop, sizeToClassNameMap[size], scopeClassName, className);
 
     /** Блокировка скролла вне дропдауна. */
     const wheelHandler = useCallback(

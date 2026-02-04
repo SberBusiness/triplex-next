@@ -45,7 +45,7 @@ export const DropdownMobile = React.forwardRef<HTMLDivElement, IDropdownMobilePr
                 )}
             </OverlayBase>
         );
-    }
+    },
 );
 
 DropdownMobile.displayName = "DropdownMobile";

@@ -11,7 +11,7 @@ export const DropdownMobileFooter = React.forwardRef<HTMLDivElement, IDropdownMo
         <div className={clsx(styles.dropdownMobileFooter, className)} ref={ref} {...htmlAttributes}>
             {children}
         </div>
-    )
+    ),
 );
 
 DropdownMobileFooter.displayName = "DropdownMobileFooter";

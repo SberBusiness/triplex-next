@@ -199,7 +199,7 @@ export const States: StoryObj<typeof Button> = {
     parameters: {
         docs: {
             description: {
-                story: "Кнопка в состоянии disabled",
+                story: "Кнопка в различных состояниях",
             },
         },
         controls: { disable: true },

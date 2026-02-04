@@ -265,9 +265,6 @@ export const Themes: StoryObj<typeof ButtonDropdown> = {
                     <ButtonDropdown theme={EButtonTheme.DANGER} size={EComponentSize.MD} options={options}>
                         Danger
                     </ButtonDropdown>
-                    <ButtonDropdown theme={EButtonTheme.LINK} size={EComponentSize.MD} options={options}>
-                        Link
-                    </ButtonDropdown>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                     <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY} size={EComponentSize.MD} options={options}>

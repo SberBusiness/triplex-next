@@ -10,7 +10,7 @@ export const DropdownMobileBody = React.forwardRef<HTMLDivElement, IDropdownMobi
         <div className={clsx(styles.dropdownMobileContent, className)} ref={ref} {...htmlAttributes}>
             {children}
         </div>
-    )
+    ),
 );
 
 DropdownMobileBody.displayName = "DropdownMobileBody";

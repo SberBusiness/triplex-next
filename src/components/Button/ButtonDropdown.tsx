@@ -105,6 +105,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             const classNames = clsx(styles.buttonDropdownTarget, "hoverable", {
                 [styles.active]: opened,
                 [styles.block]: !!block,
+                [styles.targetLg]: size === EComponentSize.LG,
             });
 
             return (

@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as SBTitle, ArgTypes } from "@storybook/addon-docs/blocks";
-import { LightBox } from "../../src/components/LightBox/LightBox";
-import { Page } from "../../src/components/Page/Page";
-import { Button } from "../../src/components/Button/Button";
-import { EButtonTheme } from "../../src/components/Button/enums";
+import { Description, Stories, Title as SBTitle, ArgTypes, Subtitle } from "@storybook/addon-docs/blocks";
+import { LightBox } from "../../src/components/LightBox";
+import { Button, EButtonTheme } from "../../src/components/Button";
 import { Gap } from "../../src/components/Gap";
-import { Title } from "../../src/components/Typography/Title";
-import { Text } from "../../src/components/Typography/Text";
-import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { EHeaderPageType, EFooterPageType, EBodyPageType } from "../../src/components/Page/components/enums";
-import { Island } from "../../src/components/Island/Island";
-import { IslandBody } from "../../src/components/Island/components/IslandBody";
-import { EIslandType } from "../../src/components/Island/enums";
+import { Title, Text, EFontType, ETextSize, ETitleSize } from "../../src/components/Typography";
+import { Page, EHeaderPageType, EFooterPageType, EBodyPageType } from "../../src/components/Page";
+import { Island, IslandBody, EIslandType } from "../../src/components/Island";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { MobileView } from "../../src/components/MobileView/MobileView";
+import { MobileView } from "../../src/components/MobileView";
 import "./styles.less";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
@@ -35,7 +29,7 @@ const meta = {
                 <>
                     <SBTitle />
                     <Description />
-                    <h2>Props</h2>
+                    <Subtitle>Props</Subtitle>
                     <ArgTypes of={LightBox.LeftSidebar} />
                     <Stories />
                 </>

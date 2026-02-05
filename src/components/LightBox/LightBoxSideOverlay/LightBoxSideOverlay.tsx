@@ -23,7 +23,7 @@ export interface ILightBoxSideOverlayProps
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrapProps;
     /** Состояние загрузки. */
-    loading?: boolean;
+    isLoading?: boolean;
     /** Текст под спиннером. */
     loadingTitle?: React.ReactNode;
     /** Открыт другой SideOverlay поверх текущего. */
@@ -49,7 +49,7 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
     children,
     className,
     focusTrapProps,
-    loading,
+    isLoading,
     loadingTitle,
     isTopLevelSideOverlayOpened,
     isTopOverlayOpened,
@@ -110,7 +110,7 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         >
             {children}
 
-            {loading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
+            {isLoading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
         </div>
     );
 
@@ -119,9 +119,9 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
     const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, sizeToClassNameMap[size], {
         [styles.closing]: closing,
         [styles.opened]: opened,
-        [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(loading),
+        [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
         [styles.overflowYHidden]:
-            Boolean(isTopLevelSideOverlayOpened) || Boolean(loading) || Boolean(isTopOverlayOpened),
+            Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
     });
 
     const renderOverlay = (provideProps: IOverlayChildrenProvideProps) => (

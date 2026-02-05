@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import {
     SegmentedControl,
     ESegmentedControlTheme,
@@ -79,11 +80,11 @@ export const Playground: Story = {
 
         return (
             <SegmentedControl {...args} value={value} onSelect={handleSelect}>
-                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
             </SegmentedControl>
         );
     },
@@ -105,11 +106,11 @@ export const Basic: Story = {
                 value={value}
                 onSelect={setValue}
             >
-                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
             </SegmentedControl>
         );
     },
@@ -121,50 +122,42 @@ export const Types: Story = {
         controls: { disable: true },
     },
     render: () => {
-        const [singleValue, setSingleValue] = useState("segment_2");
-        const [multipleValue, setMultipleValue] = useState(["segment_2", "segment_4"]);
+        const [singleValue, setSingleValue] = useState("segment_3");
+        const [multipleValue, setMultipleValue] = useState(["segment_3"]);
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                 <div>
-                    <div style={{ marginBottom: "12px", fontWeight: "bold" }}>Single Selection (одиночный выбор)</div>
-                    <div style={{ marginBottom: "8px", fontSize: "14px", color: "#666" }}>
-                        Выбрано: <strong>{singleValue}</strong>
-                    </div>
+                    <div style={{ marginBottom: "12px", fontWeight: "bold" }}>Single</div>
                     <SegmentedControl
                         type={ESegmentedControlType.SINGLE}
                         theme={ESegmentedControlTheme.GENERAL_1}
-                        size={ESegmentedControlSize.MD}
+                        size={ESegmentedControlSize.LG}
                         value={singleValue}
                         onSelect={setSingleValue}
                     >
-                        <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
                     </SegmentedControl>
                 </div>
 
                 <div>
-                    <div style={{ marginBottom: "12px", fontWeight: "bold" }}>
-                        Multiple Selection (множественный выбор)
-                    </div>
-                    <div style={{ marginBottom: "8px", fontSize: "14px", color: "#666" }}>
-                        Выбрано: <strong>{JSON.stringify(multipleValue)}</strong>
-                    </div>
+                    <div style={{ marginBottom: "12px", fontWeight: "bold" }}>Multiple</div>
                     <SegmentedControl
                         type={ESegmentedControlType.MULTIPLE}
                         value={multipleValue}
                         onSelect={setMultipleValue}
                         theme={ESegmentedControlTheme.GENERAL_1}
-                        size={ESegmentedControlSize.MD}
+                        size={ESegmentedControlSize.LG}
                     >
-                        <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-                        <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                        <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
                     </SegmentedControl>
                 </div>
             </div>
@@ -178,45 +171,35 @@ export const Themes: Story = {
         controls: { disable: true },
     },
     render: () => {
-        const [singleValue, setSingleValue] = useState("segment_2");
-        const [multipleValue, setMultipleValue] = useState(["segment_1", "segment_3"]);
+        const themes = Object.values(ESegmentedControlTheme);
+        const [values, setValues] = useState(() =>
+            themes.reduce(
+                (acc, theme) => {
+                    acc[theme] = "segment_3";
+                    return acc;
+                },
+                {} as Record<string, string>,
+            ),
+        );
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                {Object.values(ESegmentedControlTheme).map((theme) => (
+                {themes.map((theme) => (
                     <div key={theme}>
                         <h4>{theme}</h4>
-                        <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-                            <div>
-                                <div style={{ marginBottom: "8px", fontSize: "14px" }}>Single</div>
-                                <SegmentedControl
-                                    type={ESegmentedControlType.SINGLE}
-                                    value={singleValue}
-                                    onSelect={setSingleValue}
-                                    theme={theme}
-                                    size={ESegmentedControlSize.MD}
-                                >
-                                    <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                                    <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                                    <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                                </SegmentedControl>
-                            </div>
-
-                            <div>
-                                <div style={{ marginBottom: "8px", fontSize: "14px" }}>Multiple</div>
-                                <SegmentedControl
-                                    type={ESegmentedControlType.MULTIPLE}
-                                    value={multipleValue}
-                                    onSelect={setMultipleValue}
-                                    theme={theme}
-                                    size={ESegmentedControlSize.MD}
-                                >
-                                    <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                                    <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                                    <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                                </SegmentedControl>
-                            </div>
-                        </div>
+                        <SegmentedControl
+                            type={ESegmentedControlType.SINGLE}
+                            theme={theme}
+                            size={ESegmentedControlSize.LG}
+                            value={values[theme]}
+                            onSelect={(value: string) => setValues((prevValues) => ({ ...prevValues, [theme]: value }))}
+                        >
+                            <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
+                        </SegmentedControl>
                     </div>
                 ))}
             </div>
@@ -230,23 +213,34 @@ export const Sizes: Story = {
         controls: { disable: true },
     },
     render: () => {
-        const [value, setValue] = useState("segment_2");
+        const sizes = Object.values(ESegmentedControlSize);
+        const [values, setValues] = useState(() =>
+            sizes.reduce(
+                (acc, theme) => {
+                    acc[theme] = "segment_3";
+                    return acc;
+                },
+                {} as Record<string, string>,
+            ),
+        );
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                {Object.values(ESegmentedControlSize).map((size) => (
+                {sizes.map((size) => (
                     <div key={size}>
                         <h4>{size.toUpperCase()}</h4>
                         <SegmentedControl
                             type={ESegmentedControlType.SINGLE}
-                            value={value}
-                            onSelect={setValue}
                             theme={ESegmentedControlTheme.GENERAL_1}
                             size={size}
+                            value={values[size]}
+                            onSelect={(value: string) => setValues((prevValues) => ({ ...prevValues, [size]: value }))}
                         >
-                            <SegmentedControl.Segment value="segment_1">Small segment</SegmentedControl.Segment>
-                            <SegmentedControl.Segment value="segment_2">Medium segment</SegmentedControl.Segment>
-                            <SegmentedControl.Segment value="segment_3">Large segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                            <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
                         </SegmentedControl>
                     </div>
                 ))}
@@ -257,102 +251,69 @@ export const Sizes: Story = {
 
 export const Disabled: Story = {
     parameters: {
-        docs: { description: { story: "Пример заблокированного состояния компонента." } },
+        docs: { description: { story: "Демонстрация заблокированного состояния компонента." } },
         controls: { disable: true },
     },
     render: () => {
         const [singleValue, setSingleValue] = useState("segment_3");
-        const [multipleValue, setMultipleValue] = useState(["segment_3"]);
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-                <div>
-                    <h3>Single Selection</h3>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                        <div>
-                            <h4>Полностью заблокированный</h4>
-                            <SegmentedControl
-                                type={ESegmentedControlType.SINGLE}
-                                value={singleValue}
-                                onSelect={setSingleValue}
-                                theme={ESegmentedControlTheme.GENERAL_1}
-                                size={ESegmentedControlSize.MD}
-                                disabled
-                            >
-                                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
-                            </SegmentedControl>
-                        </div>
+                <SegmentedControl
+                    type={ESegmentedControlType.SINGLE}
+                    value={singleValue}
+                    onSelect={setSingleValue}
+                    theme={ESegmentedControlTheme.GENERAL_1}
+                    size={ESegmentedControlSize.LG}
+                    disabled
+                >
+                    <SegmentedControl.Segment value="segment_1">Segment</SegmentedControl.Segment>
+                    <SegmentedControl.Segment value="segment_2">Segment</SegmentedControl.Segment>
+                    <SegmentedControl.Segment value="segment_3">Segment</SegmentedControl.Segment>
+                    <SegmentedControl.Segment value="segment_4">Segment</SegmentedControl.Segment>
+                    <SegmentedControl.Segment value="segment_5">Segment</SegmentedControl.Segment>
+                </SegmentedControl>
+            </div>
+        );
+    },
+};
 
-                        <div>
-                            <h4>Частично заблокированный</h4>
-                            <SegmentedControl
-                                type={ESegmentedControlType.SINGLE}
-                                value={singleValue}
-                                onSelect={setSingleValue}
-                                theme={ESegmentedControlTheme.GENERAL_1}
-                                size={ESegmentedControlSize.MD}
-                            >
-                                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_2" disabled>
-                                    Segment 2
-                                </SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_4" disabled>
-                                    Segment 4
-                                </SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
-                            </SegmentedControl>
-                        </div>
-                    </div>
-                </div>
+export const Example: Story = {
+    parameters: {
+        docs: { description: { story: "В сочетании с иконками." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("segment_2");
 
-                <div>
-                    <h3>Multiple Selection</h3>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                        <div>
-                            <h4>Полностью заблокированный</h4>
-                            <SegmentedControl
-                                type={ESegmentedControlType.MULTIPLE}
-                                value={multipleValue}
-                                onSelect={setMultipleValue}
-                                theme={ESegmentedControlTheme.GENERAL_1}
-                                size={ESegmentedControlSize.MD}
-                                disabled
-                            >
-                                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_2">Segment 2</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_4">Segment 4</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
-                            </SegmentedControl>
-                        </div>
-
-                        <div>
-                            <h4>Частично заблокированный</h4>
-                            <SegmentedControl
-                                type={ESegmentedControlType.MULTIPLE}
-                                value={multipleValue}
-                                onSelect={setMultipleValue}
-                                theme={ESegmentedControlTheme.GENERAL_1}
-                                size={ESegmentedControlSize.MD}
-                            >
-                                <SegmentedControl.Segment value="segment_1">Segment 1</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_2" disabled>
-                                    Segment 2
-                                </SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_3">Segment 3</SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_4" disabled>
-                                    Segment 4
-                                </SegmentedControl.Segment>
-                                <SegmentedControl.Segment value="segment_5">Segment 5</SegmentedControl.Segment>
-                            </SegmentedControl>
-                        </div>
-                    </div>
-                </div>
+        return (
+            <div style={{ width: "144px" }}>
+                <SegmentedControl
+                    value={value}
+                    onSelect={setValue}
+                    type={ESegmentedControlType.SINGLE}
+                    theme={ESegmentedControlTheme.GENERAL_1}
+                    size={ESegmentedControlSize.LG}
+                >
+                    <SegmentedControl.Segment value="segment_1" aria-label="segment 1">
+                        <DefaulticonStrokePrdIcon20
+                            paletteIndex={value === "segment_1" ? 7 : 5}
+                            style={{ display: "block" }}
+                        />
+                    </SegmentedControl.Segment>
+                    <SegmentedControl.Segment value="segment_2" aria-label="segment 2">
+                        <DefaulticonStrokePrdIcon20
+                            paletteIndex={value === "segment_2" ? 7 : 5}
+                            style={{ display: "block" }}
+                        />
+                    </SegmentedControl.Segment>
+                    <SegmentedControl.Segment value="segment_3" aria-label="segment 3">
+                        <DefaulticonStrokePrdIcon20
+                            paletteIndex={value === "segment_3" ? 7 : 5}
+                            style={{ display: "block" }}
+                        />
+                    </SegmentedControl.Segment>
+                </SegmentedControl>
             </div>
         );
     },

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import styles from "./styles/LightBoxRightSidebar.module.less";
 
 export interface ILightBoxRightSidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Фиксация боковой панели. */
     fixed?: boolean;
 }
 

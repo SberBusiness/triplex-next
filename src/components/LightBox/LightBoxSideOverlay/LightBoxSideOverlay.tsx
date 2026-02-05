@@ -12,7 +12,8 @@ import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
 import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
-import { ELightBoxSideOverlaySize } from "./enums";
+import { EComponentSize } from "../../../enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "./styles/LightBoxSideOverlay.module.less";
 
 /** Свойства компонента LightBoxSideOverlay. */
@@ -21,20 +22,24 @@ export interface ILightBoxSideOverlayProps
         Pick<IOverlayBaseProps, "opened" | "onClose" | "onOpen"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrapProps;
-    isLoading?: boolean;
+    /** Состояние загрузки. */
+    loading?: boolean;
     /** Текст под спиннером. */
     loadingTitle?: React.ReactNode;
     /** Открыт другой SideOverlay поверх текущего. */
     isTopLevelSideOverlayOpened?: boolean;
-    /** Открыт TopOverlay в текущей SideOverlay. */
+    /** Открыт TopOverlay в текущем SideOverlay. */
     isTopOverlayOpened?: boolean;
-    size?: ELightBoxSideOverlaySize;
+    /** Размер компонента. */
+    size?: EComponentSize;
 }
 
 export interface ILightBoxSideOverlayFC extends React.FC<ILightBoxSideOverlayProps> {
     CloseDesktop: typeof LightBoxSideOverlayCloseDesktop;
     CloseMobile: typeof LightBoxSideOverlayCloseMobile;
 }
+
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /**
  * Боковая панель LightBox.
@@ -44,14 +49,14 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
     children,
     className,
     focusTrapProps,
-    isLoading,
+    loading,
     loadingTitle,
     isTopLevelSideOverlayOpened,
     isTopOverlayOpened,
     onClose,
     onOpen,
     opened,
-    size = ELightBoxSideOverlaySize.MD,
+    size = EComponentSize.MD,
     ...htmlDivAttributes
 }) => {
     // Флаг, в текущий момент оверлей закрывается.
@@ -64,6 +69,7 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
 
     useEffect(() => {
         if (prevOpened.current && !opened) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setOpening(false); // opened меняется в процессе анимации открытия.
             setClosing(true);
         } else if (!prevOpened.current && opened) {
@@ -104,21 +110,18 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         >
             {children}
 
-            {isLoading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
+            {loading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
         </div>
     );
 
     const setOpened = () => {};
 
-    const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, {
+    const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, sizeToClassNameMap[size], {
         [styles.closing]: closing,
         [styles.opened]: opened,
-        [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
+        [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(loading),
         [styles.overflowYHidden]:
-            Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
-        [styles.sizeSM]: size === ELightBoxSideOverlaySize.SM,
-        [styles.sizeMD]: size === ELightBoxSideOverlaySize.MD,
-        [styles.sizeLG]: size === ELightBoxSideOverlaySize.LG,
+            Boolean(isTopLevelSideOverlayOpened) || Boolean(loading) || Boolean(isTopOverlayOpened),
     });
 
     const renderOverlay = (provideProps: IOverlayChildrenProvideProps) => (

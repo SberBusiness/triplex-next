@@ -11,7 +11,7 @@ import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { DateField } from "../../src/components/DateField";
 import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
 import { EFormFieldStatus } from "../../src/components/FormField/enums";
-import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title as DocsTitle, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/IslandWidget",
@@ -26,19 +26,31 @@ export default {
                 component: `
 Визуально обособленный блок, предназначенный для представления сгруппированной информации, набора связанных действий или определенной функциональности.
 
+## Особенности
+
+- В адаптивном режиме можно отключить сворачивание контента с помощью свойства **disableAdaptiveCollapsing**. По умолчанию контент отображается в свернутом состоянии.
+
 ## Состав
 
 - Header — шапка контента
 - Body — основной контент
 - Footer — нижняя часть
+- ExtraFooter — дополнительная нижняя часть
 `,
             },
+            codePanel: true,
             page: () => (
                 <>
                     <DocsTitle />
                     <Description />
-                    <Controls of={Default} />
+                    <h2>Props</h2>
+                    <h3>IslandWidget</h3>
+                    <ArgTypes of={IslandWidget} />
+                    <h3>IslandWidget.ExtraFooter</h3>
+                    <ArgTypes of={IslandWidget.ExtraFooter} />
+                    <h2>Playground</h2>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -51,6 +63,88 @@ export default {
             </div>
         ),
     ],
+};
+
+export const Playground: StoryObj<typeof IslandWidget> = {
+    tags: ["!autodocs"],
+    args: {
+        disableAdaptiveCollapsing: false,
+    },
+    argTypes: {
+        disableAdaptiveCollapsing: {
+            control: { type: "boolean" },
+            defaultValue: false,
+            description: "Отключение возможности сворачивания контента в адаптиве",
+        },
+        renderBody: { table: { disable: true } },
+        renderFooter: { table: { disable: true } },
+        renderHeader: { table: { disable: true } },
+    },
+    parameters: {
+        controls: {
+            include: ["disableAdaptiveCollapsing"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+    render: (args) => {
+        const [value, setValue] = useState("");
+
+        const renderBody = (props) => <IslandWidget.Body {...props}>Content</IslandWidget.Body>;
+
+        const renderFooter = (props) => (
+            <IslandWidget.Footer {...props}>
+                <IslandWidget.Footer.Content>
+                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                        <Link>Link text</Link>
+                    </Text>
+                </IslandWidget.Footer.Content>
+                <IslandWidget.Footer.Controls>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
+                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM}>
+                        Button text
+                    </Button>
+                </IslandWidget.Footer.Controls>
+            </IslandWidget.Footer>
+        );
+
+        const renderHeader = (props) => (
+            <IslandWidget.Header {...props}>
+                <IslandWidget.Header.Content>
+                    <Title size={ETitleSize.H3}>Title</Title>
+                    <ButtonIcon>
+                        <SettingsStrokeSrvIcon20 paletteIndex={5} />
+                    </ButtonIcon>
+                    <DateField
+                        value={value}
+                        onChange={setValue}
+                        className="island-widget-date-field"
+                        placeholderMask="дд.мм.гггг"
+                        label="дд.мм.гггг"
+                        invalidDateHint="Указана недоступная для выбора дата."
+                        alignment={EDropdownAlignment.LEFT}
+                        size={EComponentSize.SM}
+                        status={EFormFieldStatus.DEFAULT}
+                    />
+                </IslandWidget.Header.Content>
+                <IslandWidget.Header.Description>
+                    <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        Description
+                    </Text>
+                </IslandWidget.Header.Description>
+            </IslandWidget.Header>
+        );
+
+        return (
+            <IslandWidget {...args} renderBody={renderBody} renderFooter={renderFooter} renderHeader={renderHeader} />
+        );
+    },
 };
 
 export const Default: StoryObj<typeof IslandWidget> = {

@@ -1,13 +1,15 @@
 import React from "react";
 
 export interface IIslandWidgetContext {
-    hasExtraFooter: boolean;
-    setHasExtraFooter: (has: boolean) => void;
+    adaptive: boolean;
+    disableAdaptiveCollapsing: boolean;
+    open: boolean;
 }
 
 const contextInitial: IIslandWidgetContext = {
-    hasExtraFooter: false,
-    setHasExtraFooter: () => {},
+    adaptive: false,
+    disableAdaptiveCollapsing: false,
+    open: false,
 };
 
 export const IslandWidgetContext = React.createContext(contextInitial);

@@ -1,31 +1,35 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 import {
     SuggestField,
+    Text,
+    HelpBox,
+    Link,
     ISuggestFieldOption,
     EComponentSize,
     EFormFieldStatus,
-    Text,
     ETextSize,
     EFontType,
-} from "../src";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+    ETooltipSize,
+} from "../../src";
 
 const meta = {
-    title: "Components/SuggestField",
+    title: "Components/TextFields/SuggestField",
     component: SuggestField,
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component:
-                    "Выпадающий список с возможностью поиска по введённому значению. Поддерживает кастомные опции, различные состояния и размеры.",
-            },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Title>Props</Title>
+                    <ArgTypes of={SuggestField} />
+                    <Title>Playground</Title>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -38,54 +42,6 @@ const meta = {
             </div>
         ),
     ],
-    argTypes: {
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            description: "Размер компонента.",
-            table: {
-                type: {
-                    summary: Object.values(EComponentSize).join(" | "),
-                },
-                defaultValue: { summary: EComponentSize.LG },
-            },
-        },
-        status: {
-            control: { type: "select" },
-            options: Object.values(EFormFieldStatus),
-            description: "Визуальное состояние компонента.",
-            table: {
-                type: {
-                    summary: Object.values(EFormFieldStatus).join(" | "),
-                },
-                defaultValue: { summary: EFormFieldStatus.DEFAULT },
-            },
-        },
-        label: {
-            control: { type: "text" },
-            description: "Текст лейбла, который отображается над полем ввода.",
-        },
-        placeholder: {
-            control: { type: "text" },
-            description: "Текст подсказки, которая отображается в поле ввода когда оно пустое и не в фокусе.",
-        },
-        tooltipHint: {
-            control: { type: "text" },
-            description: "Текст Tooltip.",
-        },
-        loading: {
-            control: { type: "boolean" },
-            description: "Флаг состояния загрузки.",
-        },
-        dropdownListLoading: {
-            control: { type: "boolean" },
-            description: "Флаг состояния загрузки DropdownList.",
-        },
-        clearInputOnFocus: {
-            control: { type: "boolean" },
-            description: "Определяет, нужно ли очищать поле ввода при получении фокуса.",
-        },
-    },
 } satisfies Meta<typeof SuggestField>;
 
 export default meta;
@@ -120,31 +76,30 @@ const fruits = [
     "Pea Pod",
 ];
 
-const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
+const basicOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
     id: `suggest-option-${index}`,
     label: fruit,
 }));
 
 // Базовая логика для переиспользования
-const useSuggestFieldLogic = (customInitialOptions?: ISuggestFieldOption[]) => {
-    const [value, setValue] = useState<ISuggestFieldOption>();
+const useSuggestFieldLogic = (defaultValue?: ISuggestFieldOption, initialOptions = basicOptions) => {
+    const [value, setValue] = useState<ISuggestFieldOption | undefined>(defaultValue);
     const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
     const [tooltipOpen, setTooltipOpen] = useState(false);
-    const initialOptionsRef = useRef<ISuggestFieldOption[]>(customInitialOptions || initialOptions);
 
-    const handleTargetInputFocus = () => {
-        setOptions(initialOptionsRef.current);
+    const handleInputFocus = () => {
+        setOptions(initialOptions);
         setTooltipOpen(false);
     };
 
     const handleFilter = (inputValue: string) => {
         if (inputValue.length === 0) {
-            setOptions(initialOptionsRef.current);
+            setOptions(initialOptions);
             setTooltipOpen(false);
             return;
         }
 
-        const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
+        const filteredOptions = initialOptions.filter(({ label }) =>
             label.toLowerCase().includes(inputValue.toLowerCase()),
         );
 
@@ -158,16 +113,59 @@ const useSuggestFieldLogic = (customInitialOptions?: ISuggestFieldOption[]) => {
 
     return {
         value,
+        setValue,
         options,
         tooltipOpen,
-        onTargetInputFocus: handleTargetInputFocus,
         onFilter: handleFilter,
         onSelect: handleSelect,
+        inputProps: {
+            onFocus: handleInputFocus,
+        },
     };
 };
 
 export const Playground: Story = {
     name: "Playground",
+    argTypes: {
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+            table: {
+                type: {
+                    summary: Object.values(EComponentSize).join(" | "),
+                },
+                defaultValue: { summary: EComponentSize.LG },
+            },
+        },
+        status: {
+            control: { type: "select" },
+            options: Object.values(EFormFieldStatus),
+            table: {
+                type: {
+                    summary: Object.values(EFormFieldStatus).join(" | "),
+                },
+                defaultValue: { summary: EFormFieldStatus.DEFAULT },
+            },
+        },
+        label: {
+            control: { type: "text" },
+        },
+        placeholder: {
+            control: { type: "text" },
+        },
+        tooltipHint: {
+            control: { type: "text" },
+        },
+        loading: {
+            control: { type: "boolean" },
+        },
+        dropdownListLoading: {
+            control: { type: "boolean" },
+        },
+        clearInputOnFocus: {
+            control: { type: "boolean" },
+        },
+    },
     args: {
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
@@ -193,16 +191,16 @@ export const Playground: Story = {
         },
     },
     render: (args) => {
-        const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
+        const { value, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic();
 
         return (
             <SuggestField
                 value={value}
                 options={options}
                 tooltipOpen={tooltipOpen}
-                onTargetInputFocus={onTargetInputFocus}
                 onFilter={onFilter}
                 onSelect={onSelect}
+                inputProps={inputProps}
                 {...args}
             />
         );
@@ -216,7 +214,7 @@ export const Default: Story = {
         },
     },
     render: () => {
-        const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } = useSuggestFieldLogic();
+        const { value, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic();
 
         return (
             <SuggestField
@@ -226,23 +224,17 @@ export const Default: Story = {
                 placeholder="Type to proceed"
                 tooltipHint="No matches found."
                 tooltipOpen={tooltipOpen}
-                onTargetInputFocus={onTargetInputFocus}
                 onFilter={onFilter}
                 onSelect={onSelect}
+                inputProps={inputProps}
             />
         );
     },
 };
 
-const sizeToLabelMap = {
-    [EComponentSize.SM]: "SM",
-    [EComponentSize.MD]: "MD",
-    [EComponentSize.LG]: "LG",
-};
-
-export const DifferentSizes: Story = {
-    name: "Different sizes",
+export const Sizes: Story = {
     parameters: {
+        docs: { description: { story: "Размеры" } },
         controls: { disable: true },
     },
     render: () => {
@@ -251,22 +243,21 @@ export const DifferentSizes: Story = {
         return (
             <>
                 {sizes.map((size) => {
-                    const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
-                        useSuggestFieldLogic();
+                    const { value, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic();
 
                     return (
                         <SuggestField
                             key={size}
                             size={size}
-                            label={sizeToLabelMap[size]}
                             value={value}
                             options={options}
+                            label="Label"
                             placeholder="Type to proceed"
                             tooltipHint="No matches found."
                             tooltipOpen={tooltipOpen}
-                            onTargetInputFocus={onTargetInputFocus}
                             onFilter={onFilter}
                             onSelect={onSelect}
+                            inputProps={inputProps}
                         />
                     );
                 })}
@@ -275,16 +266,9 @@ export const DifferentSizes: Story = {
     },
 };
 
-const statusToLabelMap = {
-    [EFormFieldStatus.DEFAULT]: "Default",
-    [EFormFieldStatus.DISABLED]: "Disabled",
-    [EFormFieldStatus.ERROR]: "Error",
-    [EFormFieldStatus.WARNING]: "Warning",
-};
-
-export const DifferentStates: Story = {
-    name: "Different States",
+export const Statuses: Story = {
     parameters: {
+        docs: { description: { story: "Статусы." } },
         controls: { disable: true },
     },
     render: () => {
@@ -293,8 +277,7 @@ export const DifferentStates: Story = {
         return (
             <>
                 {statuses.map((status) => {
-                    const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
-                        useSuggestFieldLogic();
+                    const { value, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic();
 
                     return (
                         <SuggestField
@@ -302,13 +285,13 @@ export const DifferentStates: Story = {
                             status={status}
                             value={value}
                             options={options}
-                            label={statusToLabelMap[status]}
+                            label="Label"
                             placeholder="Type to proceed"
                             tooltipHint="No matches found."
                             tooltipOpen={tooltipOpen}
-                            onTargetInputFocus={onTargetInputFocus}
                             onFilter={onFilter}
                             onSelect={onSelect}
+                            inputProps={inputProps}
                         />
                     );
                 })}
@@ -317,9 +300,9 @@ export const DifferentStates: Story = {
     },
 };
 
-export const WithLoadingStates: Story = {
-    name: "With Loading States",
+export const Loading: Story = {
     parameters: {
+        docs: { description: { story: "Состояние загрузки." } },
         controls: { disable: true },
     },
     render: () => {
@@ -328,8 +311,10 @@ export const WithLoadingStates: Story = {
         return (
             <>
                 {sizes.map((size) => {
-                    const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
-                        useSuggestFieldLogic(initialOptions.slice(0, 3));
+                    const { value, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic(
+                        undefined,
+                        basicOptions.slice(0, 3),
+                    );
 
                     return (
                         <SuggestField
@@ -343,13 +328,42 @@ export const WithLoadingStates: Story = {
                             tooltipOpen={tooltipOpen}
                             loading={true}
                             dropdownListLoading={true}
-                            onTargetInputFocus={onTargetInputFocus}
                             onFilter={onFilter}
                             onSelect={onSelect}
+                            inputProps={inputProps}
                         />
                     );
                 })}
             </>
+        );
+    },
+};
+
+export const WithClearButton: Story = {
+    name: "With clear button",
+    parameters: {
+        docs: { description: { story: "С кнопкой очистки." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const { value, setValue, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic(
+            basicOptions[0],
+        );
+
+        return (
+            <SuggestField
+                size={EComponentSize.LG}
+                value={value}
+                options={options}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
+                tooltipOpen={tooltipOpen}
+                onFilter={onFilter}
+                onSelect={onSelect}
+                onClear={() => setValue(undefined)}
+                inputProps={inputProps}
+            />
         );
     },
 };
@@ -384,12 +398,13 @@ const fruitToTupleMap: Record<string, [string, string]> = {
 };
 
 export const WithCustomOptions: Story = {
-    name: "With Custom Options",
+    name: "With custom options",
     parameters: {
+        docs: { description: { story: "С кастомным наполнением опции." } },
         controls: { disable: true },
     },
     render: () => {
-        const customInitialOptions: ISuggestFieldOption[] = initialOptions.map((option) => ({
+        const customInitialOptions: ISuggestFieldOption[] = basicOptions.map((option) => ({
             ...option,
             content: (
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -404,8 +419,10 @@ export const WithCustomOptions: Story = {
             ),
         }));
 
-        const { value, options, tooltipOpen, onTargetInputFocus, onFilter, onSelect } =
-            useSuggestFieldLogic(customInitialOptions);
+        const { value, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic(
+            undefined,
+            customInitialOptions,
+        );
 
         return (
             <SuggestField
@@ -416,10 +433,57 @@ export const WithCustomOptions: Story = {
                 placeholder="Type to proceed"
                 tooltipHint="No matches found."
                 tooltipOpen={tooltipOpen}
-                onTargetInputFocus={onTargetInputFocus}
                 onFilter={onFilter}
                 onSelect={onSelect}
+                inputProps={inputProps}
             />
+        );
+    },
+};
+
+export const Example: Story = {
+    parameters: {
+        docs: { description: { story: "В сочетании с другими компонентами." } },
+        controls: { disable: true },
+    },
+    render: () => {
+        const { value, setValue, options, tooltipOpen, onFilter, onSelect, inputProps } = useSuggestFieldLogic();
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <SuggestField
+                    size={EComponentSize.LG}
+                    value={value}
+                    options={options}
+                    label="Label"
+                    placeholder="Type to proceed"
+                    tooltipHint="No matches found."
+                    tooltipOpen={tooltipOpen}
+                    prefix={
+                        <React.Fragment>
+                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                        </React.Fragment>
+                    }
+                    postfix={
+                        <React.Fragment>
+                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                            <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
+                        </React.Fragment>
+                    }
+                    description={
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
+                        </Text>
+                    }
+                    onFilter={onFilter}
+                    onSelect={onSelect}
+                    onClear={() => setValue(undefined)}
+                    inputProps={inputProps}
+                />
+            </div>
         );
     },
 };

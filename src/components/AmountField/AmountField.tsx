@@ -117,7 +117,7 @@ export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>
                                 {currency}
                             </Text>
                         )}
-                        {postfix !== undefined && postfix}
+                        {postfix}
                     </React.Fragment>
                 }
                 {...restProps}

@@ -22,7 +22,7 @@ interface ISuggestContext<T extends ISuggestOption>
     activeDescendant: string | undefined;
     dropdownOpen: boolean;
     setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    closeDropdown: () => void;
+    closeDropdown: (newInputValue?: string) => void;
     dropdownListId: string;
     suggestRef: React.MutableRefObject<HTMLDivElement | null>;
     dropdownRef: React.MutableRefObject<HTMLDivElement | null>;

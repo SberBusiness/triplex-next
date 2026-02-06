@@ -38,6 +38,18 @@ describe("Typography Enums", () => {
             expect(EFontType.SUCCESS).toBe("success");
             expect(EFontType.WARNING).toBe("warning");
             expect(EFontType.ERROR).toBe("error");
+            expect(EFontType.SYSTEM).toBe("system");
+            expect(EFontType.PRIMARY_INVERT).toBe("primary-invert");
+            expect(EFontType.COMPLEMENTARY_INVERT).toBe("complementary-invert");
+            expect(EFontType.SECONDARY_INVERT).toBe("secondary-invert");
+            expect(EFontType.TERTIARY_INVERT).toBe("tertiary-invert");
+            expect(EFontType.DISABLED_INVERT).toBe("disabled-invert");
+            expect(EFontType.BRAND_INVERT).toBe("brand-invert");
+            expect(EFontType.INFO_INVERT).toBe("info-invert");
+            expect(EFontType.SUCCESS_INVERT).toBe("success-invert");
+            expect(EFontType.WARNING_INVERT).toBe("warning-invert");
+            expect(EFontType.ERROR_INVERT).toBe("error-invert");
+            expect(EFontType.SYSTEM_INVERT).toBe("system-invert");
         });
     });
 

@@ -125,7 +125,7 @@ export const IslandAccordionItem = Object.assign(
                                     </div>
                                 )}
 
-                                <div className={styles.titleWrapper}> {title}</div>
+                                <div className={styles.titleWrapper}>{title}</div>
 
                                 <span className={clsx(styles.caretWrapper)}>
                                     <CaretdownStrokeSrvIcon24

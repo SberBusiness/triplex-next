@@ -90,8 +90,13 @@
 
         .titleWrapper {
             padding-right: 40px;
-            min-width: 0;
-            overflow-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .titleWrapper > * {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         &.sm {

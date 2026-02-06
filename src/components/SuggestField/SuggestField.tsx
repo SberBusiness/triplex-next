@@ -1,11 +1,11 @@
 import React from "react";
-import { ISuggestFieldOption, ISuggestFieldProps } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { MobileView } from "@sberbusiness/triplex-next/components/MobileView/MobileView";
-import { SuggestFieldDesktop } from "@sberbusiness/triplex-next/components/SuggestField/desktop/SuggestFieldDesktop";
-import { SuggestFieldMobile } from "@sberbusiness/triplex-next/components/SuggestField/mobile/SuggestFieldMobile";
-import { SuggestFieldTarget } from "@sberbusiness/triplex-next/components/SuggestField/SuggestFieldTarget";
+import { ISuggestFieldOption, ISuggestFieldProps } from "./types";
+import { MobileView } from "../MobileView/MobileView";
+import { SuggestFieldDesktop } from "./desktop/SuggestFieldDesktop";
+import { SuggestFieldMobile } from "./mobile/SuggestFieldMobile";
+import { FormFieldInput } from "../FormField";
 
-// TODO: Переписать через Suggest.
+// TODO: Переписать через useSuggest.
 const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
     props: ISuggestFieldProps<T>,
 ): JSX.Element => {
@@ -24,13 +24,7 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
         onSelect,
         onFilter,
         onScrollEnd,
-        onTargetInputFocus,
-        onTargetInputBlur,
-        renderTarget,
-        renderTargetInput,
-        renderTargetLabel,
-        renderTargetPostfix,
-        renderTargetPrefix,
+        inputProps,
     } = props;
 
     return (
@@ -42,24 +36,18 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
                 options={options}
                 label={label}
                 placeholder={placeholder}
-                dropdownHint={tooltipOpen ? tooltipHint : ""}
+                tooltipHint={tooltipOpen ? tooltipHint : ""}
                 loading={loading}
                 dropdownListLoading={dropdownListLoading}
                 clearInputOnFocus={clearInputOnFocus}
                 onSelect={onSelect}
                 onFilter={onFilter}
                 onScrollEnd={onScrollEnd}
-                onTargetInputFocus={onTargetInputFocus}
-                onTargetInputBlur={onTargetInputBlur}
-                renderTarget={renderTarget}
-                renderTargetInput={renderTargetInput}
-                renderTargetLabel={renderTargetLabel}
-                renderTargetPrefix={renderTargetPrefix}
-                renderTargetPostfix={renderTargetPostfix}
+                inputProps={inputProps}
             />
         </MobileView>
     );
 };
 
 /** Выпадающий список с возможностью поиска по введённому значению. */
-export const SuggestField = Object.assign(SuggestFieldBase, { Target: SuggestFieldTarget });
+export const SuggestField = Object.assign(SuggestFieldBase, { Input: FormFieldInput });

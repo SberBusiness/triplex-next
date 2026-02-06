@@ -24,33 +24,27 @@ export interface ITextFieldBaseProps extends Omit<IFormFieldProps, "prefix" | "p
 }
 
 /** Компонент текстового ввода, на основе которого реализуются TextField и MaskedInputField. */
-export const TextFieldBase: React.FC<ITextFieldBaseProps> = ({
-    children,
-    description,
-    label,
-    prefix,
-    postfix,
-    counter,
-    ...formFieldProps
-}) => (
-    <FormGroup>
-        <FormField {...formFieldProps}>
-            {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
+export const TextFieldBase = React.forwardRef<HTMLDivElement, ITextFieldBaseProps>(
+    ({ children, description, label, prefix, postfix, counter, ...formFieldProps }, ref) => (
+        <FormGroup>
+            <FormField {...formFieldProps} ref={ref}>
+                {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
 
-            {children}
+                {children}
 
-            {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
+                {label ? <FormFieldLabel>{label}</FormFieldLabel> : null}
 
-            {postfix ? <FormFieldPostfix>{postfix}</FormFieldPostfix> : null}
-        </FormField>
+                {postfix ? <FormFieldPostfix>{postfix}</FormFieldPostfix> : null}
+            </FormField>
 
-        {description || counter ? (
-            <FormFieldDescription>
-                {description}
-                {counter ? <FormFieldCounter>{counter}</FormFieldCounter> : null}
-            </FormFieldDescription>
-        ) : null}
-    </FormGroup>
+            {description || counter ? (
+                <FormFieldDescription>
+                    {description}
+                    {counter ? <FormFieldCounter>{counter}</FormFieldCounter> : null}
+                </FormFieldDescription>
+            ) : null}
+        </FormGroup>
+    ),
 );
 
 TextFieldBase.displayName = "TextFieldBase";

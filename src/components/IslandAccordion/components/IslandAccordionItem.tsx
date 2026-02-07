@@ -4,7 +4,6 @@ import clsx from "clsx";
 import { Island } from "../../Island/Island";
 import { uniqueId } from "lodash-es";
 import { ExpandAnimation, IExpandAnimationProps } from "../../ExpandAnimation/ExpandAnimation";
-import styles from "../styles/IslandAccordion.module.less";
 import { IslandAccordionContent } from "./IslandAccordionContent";
 import { IslandAccordionFooter } from "./IslandAccordionFooter";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
@@ -12,6 +11,10 @@ import { ButtonIcon } from "../../Button";
 import { EIslandType } from "../../Island";
 import { Step, EStepStatus, EStepPosition } from "../../Step";
 import { IslandAccordionContext } from "../IslandAccordionContext";
+import { EComponentSize } from "../../../enums/EComponentSize";
+import { ETitleSize, Title, EFontType } from "../../Typography";
+import styles from "../styles/IslandAccordion.module.less";
+
 export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
     /** Нода с названием заголовка. */
     title: React.ReactNode;
@@ -39,6 +42,12 @@ const typeToClassNameMap = {
     [EIslandType.TYPE_1]: styles.type1,
     [EIslandType.TYPE_2]: styles.type2,
     [EIslandType.TYPE_3]: styles.type3,
+};
+
+const sizeToTitleSizeMap = {
+    [EComponentSize.SM]: ETitleSize.H3,
+    [EComponentSize.MD]: ETitleSize.H2,
+    [EComponentSize.LG]: ETitleSize.H2,
 };
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -125,7 +134,14 @@ export const IslandAccordionItem = Object.assign(
                                     </div>
                                 )}
 
-                                <div className={styles.titleWrapper}>{title}</div>
+                                <Title
+                                    className={styles.title}
+                                    size={sizeToTitleSizeMap[size]}
+                                    type={disabled ? EFontType.DISABLED : EFontType.PRIMARY}
+                                    tag="div"
+                                >
+                                    {title}
+                                </Title>
 
                                 <span className={clsx(styles.caretWrapper)}>
                                     <CaretdownStrokeSrvIcon24

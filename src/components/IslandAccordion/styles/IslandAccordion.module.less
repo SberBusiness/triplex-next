@@ -88,15 +88,11 @@
             transition: transform 0.3s ease-in-out;
         }
 
-        .titleWrapper {
+        .title {
             padding-right: 40px;
             overflow: hidden;
-        }
-
-        .titleWrapper > * {
-            text-overflow: ellipsis;
             white-space: nowrap;
-            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &.sm {
@@ -105,7 +101,7 @@
                 border-radius: 16px;
             }
 
-            .step + .titleWrapper {
+            .step + .title {
                 margin-top: 2px;
             }
 

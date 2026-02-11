@@ -33,6 +33,19 @@ export enum EFontType {
     WARNING = "warning",
     ERROR = "error",
     SYSTEM = "system",
+
+    // Инвертированные цвета
+    PRIMARY_INVERT = "primary-invert",
+    COMPLEMENTARY_INVERT = "complementary-invert",
+    SECONDARY_INVERT = "secondary-invert",
+    TERTIARY_INVERT = "tertiary-invert",
+    DISABLED_INVERT = "disabled-invert",
+    BRAND_INVERT = "brand-invert",
+    INFO_INVERT = "info-invert",
+    SUCCESS_INVERT = "success-invert",
+    WARNING_INVERT = "warning-invert",
+    ERROR_INVERT = "error-invert",
+    SYSTEM_INVERT = "system-invert",
 }
 
 /** Возможные начертания шрифта. */

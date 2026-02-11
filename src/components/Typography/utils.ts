@@ -14,4 +14,16 @@ export const mapFontTypeToCssClass = {
     [EFontType.ERROR]: styles.error,
     [EFontType.WARNING]: styles.warning,
     [EFontType.SYSTEM]: styles.system,
+
+    [EFontType.PRIMARY_INVERT]: styles.primaryInvert,
+    [EFontType.COMPLEMENTARY_INVERT]: styles.complementaryInvert,
+    [EFontType.SECONDARY_INVERT]: styles.secondaryInvert,
+    [EFontType.TERTIARY_INVERT]: styles.tertiaryInvert,
+    [EFontType.DISABLED_INVERT]: styles.disabledInvert,
+    [EFontType.BRAND_INVERT]: styles.brandInvert,
+    [EFontType.INFO_INVERT]: styles.infoInvert,
+    [EFontType.SUCCESS_INVERT]: styles.successInvert,
+    [EFontType.WARNING_INVERT]: styles.warningInvert,
+    [EFontType.ERROR_INVERT]: styles.errorInvert,
+    [EFontType.SYSTEM_INVERT]: styles.systemInvert,
 };

@@ -5,7 +5,15 @@ import { Gap } from "../../src/components/Gap";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon32, DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
-import { Title as DocsTitle, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import {
+    Title as DocsTitle,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    ArgTypes,
+    Heading,
+} from "@storybook/addon-docs/blocks";
 import { Title, ETitleSize, EFontType } from "../../src/components/Typography";
 
 export default {
@@ -31,9 +39,9 @@ export default {
                 <>
                     <DocsTitle />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Button} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

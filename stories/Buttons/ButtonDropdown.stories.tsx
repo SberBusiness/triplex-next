@@ -4,7 +4,7 @@ import { action } from "storybook/actions";
 import { ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
 import { EButtonTheme, EButtonDotsTheme } from "../../src/components/Button/enums";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import "./ButtonDropdown.less";
 import { Gap } from "../../src/components/Gap/Gap";
 
@@ -30,9 +30,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={ButtonDropdown} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

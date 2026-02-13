@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { ArgTypes, Controls, Description, Primary, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
+import {
+    ArgTypes,
+    Controls,
+    Description,
+    Primary,
+    Stories,
+    Title as DocsTitle,
+    Heading,
+} from "@storybook/addon-docs/blocks";
 import { Tabs } from "../../src/components/Tabs";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
@@ -33,9 +41,9 @@ export default {
                 <>
                     <DocsTitle />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Tabs} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

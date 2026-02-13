@@ -22,7 +22,7 @@ interface ISuggestContext<T extends ISuggestOption>
     activeDescendant: string | undefined;
     dropdownOpen: boolean;
     setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    closeDropdown: () => void;
+    closeDropdown: (newInputValue?: string) => void;
     dropdownListId: string;
     suggestRef: React.MutableRefObject<HTMLDivElement | null>;
     dropdownRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -45,9 +45,9 @@ export const SuggestContext = React.createContext<ISuggestContext<any>>({
     dropdownRef: { current: null },
 });
 
-/** [описание] */
-export function useSuggestContext<T extends ISuggestOption>() {
+/** Хук для получения контекста Suggest. */
+export const useSuggestContext = <T extends ISuggestOption>() => {
     const context = useContext(SuggestContext);
 
     return context as ISuggestContext<T>;
-}
+};

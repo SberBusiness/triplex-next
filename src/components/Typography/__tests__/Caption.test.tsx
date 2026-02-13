@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Caption } from "../Caption";
-import { ECaptionSize, EFontWeightText, EFontType } from "../enums";
+import { ECaptionSize, EFontWeightCaption, EFontType } from "../enums";
 
 describe("Caption", () => {
     it("renders with default props", () => {
@@ -133,7 +133,7 @@ describe("Caption", () => {
         render(
             <Caption
                 size={ECaptionSize.D1}
-                weight={EFontWeightText.SEMIBOLD}
+                weight={EFontWeightCaption.SEMIBOLD}
                 type={EFontType.BRAND}
                 className="custom-class"
             >

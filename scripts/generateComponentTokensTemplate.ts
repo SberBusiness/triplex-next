@@ -1,6 +1,6 @@
 /**
  * Генерирует шаблон файл с описанием токенов компонента.
- * Пример запуска скрипта npm run generateComponentTokensTemplate --component=Tooltip
+ * Пример запуска скрипта npm run generateComponentTokensTemplate --component=Input
  */
 
 import { existsSync, writeFileSync } from "fs";
@@ -11,7 +11,7 @@ const generateComponentTokensTemplate = () => {
     let componentName = process.env.npm_config_component;
 
     if (!componentName) {
-        console.log("Не указано имя компонента, например --component=Tooltip.");
+        console.log("Не указано имя компонента, например --component=Input.");
         return;
     }
 

@@ -1,4 +1,4 @@
-/** Возможные размеры текста. */
+/** Возможные размеры компонента Text. */
 export enum ETextSize {
     B1 = "B1", // В дизайне S1, B1
     B2 = "B2", // В дизайне S2, B2
@@ -6,14 +6,14 @@ export enum ETextSize {
     B4 = "B4", // В дизайне S4, B4
 }
 
-/** Возможные размеры Caption. */
+/** Возможные размеры компонента Caption. */
 export enum ECaptionSize {
     C1 = "C1", // В дизайне C1
     C2 = "C2", // В дизайне C2
     D1 = "D1", // В дизайне D1
 }
 
-/** Возможные размеры заголовка. */
+/** Возможные размеры компонента Title. */
 export enum ETitleSize {
     H1 = "h1", // В дизайне H1
     H2 = "h2", // В дизайне H2
@@ -48,13 +48,19 @@ export enum EFontType {
     SYSTEM_INVERT = "system-invert",
 }
 
-/** Возможные начертания шрифта. */
+/** Возможные начертания шрифта компонента Text. */
 export enum EFontWeightText {
     REGULAR = "regular",
     SEMIBOLD = "semibold",
 }
 
-/** Возможные начертания шрифта. */
+/** Возможные начертания шрифта компонента Caption. */
+export enum EFontWeightCaption {
+    REGULAR = "regular",
+    SEMIBOLD = "semibold",
+}
+
+/** Возможные начертания шрифта компонента Title. */
 export enum EFontWeightTitle {
     MEDIUM = "medium",
     REGULAR = "regular",
@@ -62,7 +68,7 @@ export enum EFontWeightTitle {
     BOLD = "bold",
 }
 
-/** Возможные типы интерлиньяжа. */
+/** Возможные типы интерлиньяжа компонентов типографики. */
 export enum ELineType {
     NORMAL = "normal",
     COMPACT = "compact",

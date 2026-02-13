@@ -1,12 +1,12 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { NewsmallFilledSrvIcon16, NewsmallFilledSrvIcon24 } from "@sberbusiness/icons-next";
 import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { Avatar, EAvatarSize } from "../src/components/Avatar";
-import { Title as TypographyTitle, ETitleSize, EFontType, EFontWeightTitle } from "../src/components/Typography";
+import { Badge, Text, EComponentSize, EFontType, ETextSize, EFontWeightText } from "../src";
 
 const meta = {
-    title: "Components/Avatar",
-    component: Avatar,
+    title: "Components/Badge",
+    component: Badge,
     parameters: {
         docs: {
             page: () => (
@@ -14,7 +14,7 @@ const meta = {
                     <Title />
                     <Description />
                     <Title>Props</Title>
-                    <ArgTypes of={Avatar} />
+                    <ArgTypes of={Badge} />
                     <Title>Playground</Title>
                     <Primary />
                     <Controls of={Playground} />
@@ -24,7 +24,7 @@ const meta = {
         },
     },
     tags: ["autodocs"],
-} satisfies Meta<typeof Avatar>;
+} satisfies Meta<typeof Badge>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -40,19 +40,20 @@ export const Playground: Story = {
     argTypes: {
         size: {
             control: { type: "select" },
-            options: Object.values(EAvatarSize),
+            options: Object.values(EComponentSize),
             table: {
-                type: { summary: "EAvatarSize" },
+                type: { summary: "EComponentSize" },
             },
         },
     },
     args: {
-        size: EAvatarSize.XXL,
+        size: EComponentSize.LG,
+        children: "",
     },
-    render: (args) => <Avatar {...args} />,
+    render: (args) => <Badge {...args} />,
 };
 
-export const Basic: Story = {
+export const Default: Story = {
     parameters: {
         docs: {
             description: { story: "Базовый пример." },
@@ -60,9 +61,9 @@ export const Basic: Story = {
         },
     },
     args: {
-        size: EAvatarSize.XXL,
+        size: EComponentSize.LG,
     },
-    render: (args) => <Avatar {...args} />,
+    render: (args) => <Badge {...args} />,
 };
 
 export const Sizes: Story = {
@@ -71,15 +72,15 @@ export const Sizes: Story = {
         controls: { disable: true },
     },
     args: {
-        size: EAvatarSize.XXL,
+        size: EComponentSize.LG,
     },
-    render: () => {
-        const sizes = Object.values(EAvatarSize);
+    render: (args) => {
+        const sizes = Object.values(EComponentSize);
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {sizes.map((size) => (
-                    <Avatar key={size} size={size} />
+                    <Badge key={size} {...args} size={size} />
                 ))}
             </div>
         );
@@ -92,16 +93,34 @@ export const Example: Story = {
         controls: { disable: true },
     },
     args: {
-        size: EAvatarSize.XXL,
+        size: EComponentSize.LG,
     },
-    render: (args) => (
+    render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <Avatar style={{ backgroundImage: "url(assets/images/avatar.png)", backgroundSize: "contain" }} {...args} />
-            <Avatar style={{ backgroundColor: "#339FF1" }} {...args}>
-                <TypographyTitle size={ETitleSize.H1} weight={EFontWeightTitle.REGULAR} type={EFontType.PRIMARY_INVERT}>
-                    AA
-                </TypographyTitle>
-            </Avatar>
+            <Badge size={EComponentSize.SM} style={{ backgroundColor: "#339FF1" }}>
+                <NewsmallFilledSrvIcon16 paletteIndex={7} />
+            </Badge>
+            <Badge size={EComponentSize.MD}>
+                <Text
+                    size={ETextSize.B3}
+                    weight={EFontWeightText.REGULAR}
+                    type={EFontType.PRIMARY_INVERT}
+                    style={{ padding: "0px 6px" }}
+                >
+                    Новое
+                </Text>
+            </Badge>
+            <Badge size={EComponentSize.LG} style={{ backgroundColor: "#339FF1" }}>
+                <NewsmallFilledSrvIcon24 paletteIndex={7} />
+                <Text
+                    size={ETextSize.B3}
+                    weight={EFontWeightText.REGULAR}
+                    type={EFontType.PRIMARY_INVERT}
+                    style={{ padding: "2px 8px 2px 0px" }}
+                >
+                    Новинка
+                </Text>
+            </Badge>
         </div>
     ),
 };

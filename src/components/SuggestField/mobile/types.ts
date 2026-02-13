@@ -1,16 +1,9 @@
-import {
-    ISuggestFieldOption,
-    ISuggestFieldProps,
-    ISuggestFieldTargetProps,
-} from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { IDropdownMobileProps } from "@sberbusiness/triplex-next/components/Dropdown";
+import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
+import { IDropdownMobileProps } from "../../Dropdown";
 
 /** Свойства компонента SuggestFieldMobile. */
 export interface ISuggestFieldMobileProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<ISuggestFieldProps<T>, "tooltipHint" | "tooltipOpen"> {
-    /** Текст подсказки. Например - "Ничего не найдено" или "Введите более 3 символов". Подсказка отображается на месте списка выбора. */
-    dropdownHint: string;
-}
+    extends Omit<ISuggestFieldProps<T>, "tooltipOpen"> {}
 
 /** Свойства компонента SuggestFieldMobileDropdown. */
 export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
@@ -20,7 +13,7 @@ export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption 
             | "value"
             | "options"
             | "placeholder"
-            | "dropdownHint"
+            | "tooltipHint"
             | "loading"
             | "dropdownListLoading"
             | "clearInputOnFocus"
@@ -33,6 +26,3 @@ export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption 
 export interface ISuggestFieldMobileDropdownHintProps {
     children?: React.ReactNode;
 }
-
-/** Свойства компонента SuggestFieldMobileTarget. */
-export interface ISuggestFieldMobileTargetProps extends ISuggestFieldTargetProps {}

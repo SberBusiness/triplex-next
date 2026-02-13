@@ -1,44 +1,41 @@
 import React, { useState, useEffect, useRef } from "react";
-import clsx from "clsx";
-import { ISuggestFieldMobileProps } from "@sberbusiness/triplex-next/components/SuggestField/mobile/types";
-import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { SuggestFieldMobileTarget } from "@sberbusiness/triplex-next/components/SuggestField/mobile/SuggestFieldMobileTarget";
-import { SuggestFieldMobileDropdown } from "@sberbusiness/triplex-next/components/SuggestField/mobile/SuggestFieldMobileDropdown";
-import styles from "../styles/SuggestFieldMobile.module.less";
+import { ISuggestFieldMobileProps } from "./types";
+import { ISuggestFieldOption } from "../types";
+import { EComponentSize } from "../../../enums";
+import { SuggestFieldMobileDropdown } from "./SuggestFieldMobileDropdown";
+import { TextFieldBase } from "../../TextField/TextFieldBase";
+import { DataTestId } from "../../../consts/DataTestId";
+import { FormFieldInput, FormFieldClear } from "../../FormField";
+import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 
 /**
  * Мобильный SuggestField.
  * Отображает поле ввода (target). При получении полем ввода фокуса - отображает мобильный Dropdown.
  */
-export function SuggestFieldMobile<T extends ISuggestFieldOption = ISuggestFieldOption>({
-    className,
+export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestFieldOption>({
     value,
     options,
-    size,
-    status,
-    label,
+    size = EComponentSize.LG,
     placeholder,
-    dropdownHint,
+    "data-test-id": dataTestId,
+    postfix,
+    tooltipHint,
     loading,
     dropdownListLoading,
     clearInputOnFocus,
     onFilter,
     onSelect,
+    onClear,
     onScrollEnd,
-    onTargetInputFocus,
-    onTargetInputBlur,
-    renderTarget,
-    renderTargetInput,
-    renderTargetLabel,
-    renderTargetPrefix,
-    renderTargetPostfix,
+    renderInput,
+    inputProps,
     ...restProps
-}: ISuggestFieldMobileProps<T>) {
+}: ISuggestFieldMobileProps<T>) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const ref = useRef<HTMLInputElement>(null);
     // Предыдущее состояние dropdownOpened.
     const prevDropdownOpen = useRef(false);
-    const Target = renderTarget === undefined ? SuggestFieldMobileTarget : renderTarget;
+    const Input = renderInput === undefined ? FormFieldInput : renderInput;
 
     useEffect(() => {
         // Дропдаун закрылся.
@@ -49,36 +46,40 @@ export function SuggestFieldMobile<T extends ISuggestFieldOption = ISuggestField
         prevDropdownOpen.current = dropdownOpen;
     }, [dropdownOpen]);
 
-    const handleClear = () => onSelect(undefined);
-
-    const handleTargetInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
         setDropdownOpen(true);
-        onTargetInputFocus?.(event);
+        inputProps.onFocus?.(event);
     };
 
     return (
-        <div className={clsx(styles.suggestFieldMobile, className)} {...restProps} ref={ref}>
-            <Target
-                size={size}
-                status={status}
-                inputValue={value ? value.label : ""}
-                label={label}
+        <TextFieldBase
+            data-test-id={dataTestId}
+            size={size}
+            postfix={
+                <React.Fragment>
+                    {onClear !== undefined && <FormFieldClear onClick={onClear} />}
+                    {loading && <LoaderSmall theme={ELoaderSmallTheme.BRAND} size={size} />}
+                    {postfix}
+                </React.Fragment>
+            }
+            {...restProps}
+            ref={ref}
+        >
+            <Input
+                value={value ? value.label : ""}
                 placeholder={placeholder}
-                loading={loading}
-                dropdownOpen={dropdownOpen}
-                onClear={handleClear}
-                onFocus={handleTargetInputFocus}
-                onBlur={onTargetInputBlur}
-                renderInput={renderTargetInput}
-                renderLabel={renderTargetLabel}
-                renderPrefix={renderTargetPrefix}
-                renderPostfix={renderTargetPostfix}
+                role="combobox"
+                aria-expanded={dropdownOpen}
+                data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.input}`}
+                {...inputProps}
+                readOnly={true}
+                onFocus={handleInputFocus}
             />
             <SuggestFieldMobileDropdown
                 value={value}
                 options={options}
                 placeholder={placeholder}
-                dropdownHint={dropdownHint}
+                tooltipHint={tooltipHint}
                 opened={dropdownOpen}
                 loading={loading}
                 dropdownListLoading={dropdownListLoading}
@@ -88,6 +89,6 @@ export function SuggestFieldMobile<T extends ISuggestFieldOption = ISuggestField
                 onSelect={onSelect}
                 onScrollEnd={onScrollEnd}
             />
-        </div>
+        </TextFieldBase>
     );
-}
+};

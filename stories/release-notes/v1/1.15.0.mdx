@@ -35,6 +35,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 – SegmentedControlSegment: убраны вертикальные отступы и добавлена фиксированная высота.
 
+**SuggestField**
+
+– Удалены свойства onTargetInputFocus и onTargetInputBlur, используйте inputProps;
+– Удалены свойства renderTargetLabel/renderTargetPrefix/renderTargetPostfix, используйте label/prefix/postfix;
+– Переименовано свойство renderTargetInput -> renderInput;
+– Добавлено свойство onClear.
+
 **TextField**
 
 - Исправлен баг с выравниванием counter по правому краю.

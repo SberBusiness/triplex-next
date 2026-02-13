@@ -2,12 +2,8 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SuggestField } from "@sberbusiness/triplex-next/components/SuggestField/SuggestField";
-import {
-    ISuggestFieldOption,
-    ISuggestFieldTargetProps,
-    ISuggestFieldInputProvideProps,
-} from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
+import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
+import { IFormFieldInputProps, EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 describe("SuggestField", () => {
@@ -28,6 +24,7 @@ describe("SuggestField", () => {
         placeholder: "Test placeholder",
         tooltipHint: "Test tooltip",
         tooltipOpen: false,
+        inputProps: {},
         onSelect: vi.fn(),
         onFilter: vi.fn(),
         "data-testid": "suggest-field",
@@ -68,25 +65,27 @@ describe("SuggestField", () => {
         expect(input).toBeDisabled();
     });
 
-    it("should call onTargetInputFocus and onTargetInputBlur", async () => {
-        const onTargetInputFocus = vi.fn();
-        const onTargetInputBlur = vi.fn();
+    it("should call onInputFocus and onInputBlur", async () => {
+        const onInputFocus = vi.fn();
+        const onInputBlur = vi.fn();
 
         render(
             <SuggestField
                 {...defaultProps}
-                onTargetInputFocus={onTargetInputFocus}
-                onTargetInputBlur={onTargetInputBlur}
+                inputProps={{
+                    onFocus: onInputFocus,
+                    onBlur: onInputBlur,
+                }}
             />,
         );
 
         const input = screen.getByRole("combobox");
 
         await user.click(input);
-        expect(onTargetInputFocus).toHaveBeenCalled();
+        expect(onInputFocus).toHaveBeenCalled();
 
         await user.tab();
-        expect(onTargetInputBlur).toHaveBeenCalled();
+        expect(onInputBlur).toHaveBeenCalled();
     });
 
     it("should handle clearInputOnFocus prop", async () => {
@@ -110,37 +109,19 @@ describe("SuggestField", () => {
         });
     });
 
-    it("should support custom renderTarget", () => {
-        const CustomTarget = (props: ISuggestFieldTargetProps) => (
-            <div data-testid="custom-target">
-                <input
-                    data-testid="custom-input"
-                    value={props.inputValue}
-                    onChange={props.onChange}
-                    placeholder={props.placeholder}
-                />
-            </div>
-        );
-
-        render(<SuggestField {...defaultProps} renderTarget={CustomTarget} />);
-
-        expect(screen.getByTestId("custom-target")).toBeInTheDocument();
-        expect(screen.getByTestId("custom-input")).toBeInTheDocument();
-    });
-
-    it("should support custom renderTargetInput", () => {
-        const CustomInput = (props: ISuggestFieldInputProvideProps) => (
+    it("should support custom renderInput", () => {
+        const CustomInput = (props: IFormFieldInputProps) => (
             <input
-                data-testid="custom-target-input"
+                data-testid="custom-input"
                 value={props.value}
                 onChange={props.onChange}
                 placeholder={props.placeholder}
             />
         );
 
-        render(<SuggestField {...defaultProps} renderTargetInput={CustomInput} />);
+        render(<SuggestField {...defaultProps} renderInput={CustomInput} />);
 
-        expect(screen.getByTestId("custom-target-input")).toBeInTheDocument();
+        expect(screen.getByTestId("custom-input")).toBeInTheDocument();
     });
 
     it("should show loading indicator when loading is true", () => {

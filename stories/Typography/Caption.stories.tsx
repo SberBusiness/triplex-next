@@ -1,8 +1,7 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Caption } from "../../src/components/Typography/Caption";
-import { EFontType, EFontWeightText, ECaptionSize } from "../../src/components/Typography/enums";
 import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Caption, ECaptionSize, EFontWeightCaption, EFontType } from "../../src";
 import "./Typography.less";
 
 export default {
@@ -45,11 +44,11 @@ export const Playground: StoryObj<typeof Caption> = {
         },
         weight: {
             control: { type: "select" },
-            options: [EFontWeightText.REGULAR, EFontWeightText.SEMIBOLD],
+            options: Object.values(EFontWeightCaption),
             description: "Толщина шрифта",
             table: {
-                type: { summary: "EFontWeightText" },
-                defaultValue: { summary: "EFontWeightText.REGULAR" },
+                type: { summary: "EFontWeightCaption" },
+                defaultValue: { summary: "EFontWeightCaption.REGULAR" },
             },
         },
         type: {
@@ -96,7 +95,7 @@ export const Playground: StoryObj<typeof Caption> = {
     },
     args: {
         size: ECaptionSize.C1,
-        weight: EFontWeightText.REGULAR,
+        weight: EFontWeightCaption.REGULAR,
         type: EFontType.PRIMARY,
         tag: "span",
         underline: false,
@@ -140,10 +139,10 @@ export const Sizes: StoryObj<typeof Caption> = {
 export const Weights: StoryObj<typeof Caption> = {
     render: () => (
         <div className="typography-example">
-            <Caption size={ECaptionSize.C1} weight={EFontWeightText.REGULAR}>
+            <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.REGULAR}>
                 Regular - Обычный вес подписи
             </Caption>
-            <Caption size={ECaptionSize.C1} weight={EFontWeightText.SEMIBOLD}>
+            <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.SEMIBOLD}>
                 Semibold - Полужирная подпись
             </Caption>
         </div>

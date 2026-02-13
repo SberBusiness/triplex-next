@@ -3,6 +3,7 @@ import {
     TDesignTokensComponentsAlertContext,
     TDesignTokensComponentsAlertProcess,
     TDesignTokensComponentsAvatar,
+    TDesignTokensComponentsBadge,
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCalendar,
     TDesignTokensComponentsCard,
@@ -289,6 +290,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsAlertContext
     | TDesignTokensComponentsAlertProcess
     | TDesignTokensComponentsAvatar
+    | TDesignTokensComponentsBadge
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsCalendar
     | TDesignTokensComponentsCard
@@ -336,8 +338,6 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsTooltip
     | TDesignTokensComponentsTopOverlay
     | TDesignTokensComponentsTypography
-    | TDesignTokensComponentsUploadZone
-    | TDesignTokensComponentsNotification
     | TDesignTokensComponentsStatusTracker
     | TDesignTokensComponentsUploadZone;
 

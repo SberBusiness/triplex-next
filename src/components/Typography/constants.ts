@@ -1,8 +1,8 @@
 import { EFontType } from "./enums";
 import styles from "./styles/Typography.module.less";
 
-/** Соответствие цвета шрифта стилевому классу. */
-export const mapFontTypeToCssClass = {
+/** Соответствие цвета шрифта имени класса. */
+export const FONT_TYPE_TO_CLASS_NAME_MAP: Record<EFontType, string> = {
     [EFontType.PRIMARY]: styles.primary,
     [EFontType.COMPLEMENTARY]: styles.complementary,
     [EFontType.SECONDARY]: styles.secondary,

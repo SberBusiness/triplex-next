@@ -1,8 +1,7 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Text } from "../../src/components/Typography/Text";
-import { EFontType, EFontWeightText, ELineType, ETextSize } from "../../src/components/Typography/enums";
 import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Text, ETextSize, ELineType, EFontWeightText, EFontType } from "../../src";
 import "./Typography.less";
 
 export default {

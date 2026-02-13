@@ -1,8 +1,7 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Title } from "../../src/components/Typography/Title";
-import { EFontType, EFontWeightTitle, ETitleSize } from "../../src/components/Typography/enums";
 import { Title as DocsTitle, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, ETitleSize, EFontWeightTitle, EFontType } from "../../src";
 import "./Typography.less";
 
 export default {

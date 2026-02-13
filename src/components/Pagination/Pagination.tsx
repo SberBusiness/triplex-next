@@ -5,7 +5,7 @@ import { IPaginationNavigationProps, PaginationNavigation } from "./components/P
 
 interface IPaginationProps extends IPaginationExtendedProps {
     /** Свойства компонента PaginationSelect. */
-    paginationSelectProps: IPaginationSelectProps;
+    paginationSelectProps?: IPaginationSelectProps;
     /** Свойства компонента PaginationNavigation. */
     paginationNavigationProps: IPaginationNavigationProps;
 }
@@ -14,7 +14,7 @@ export const Pagination = React.forwardRef<HTMLSpanElement, IPaginationProps>(
     ({ paginationNavigationProps, paginationSelectProps, ...rest }, ref) => {
         return (
             <PaginationExtended {...rest} ref={ref}>
-                <PaginationSelect {...paginationSelectProps} />
+                {paginationSelectProps && <PaginationSelect {...paginationSelectProps} />}
                 {paginationNavigationProps.totalPages > 1 && <PaginationNavigation {...paginationNavigationProps} />}
             </PaginationExtended>
         );

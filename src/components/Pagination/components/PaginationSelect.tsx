@@ -3,33 +3,23 @@ import { uniqueId } from "lodash-es";
 import clsx from "clsx";
 import styles from "../styles/PaginationSelect.module.less";
 import { ETextSize, Text } from "../../Typography";
-import { SelectField, ISelectFieldOption, ISelectFieldProps } from "../../SelectField";
+import { SelectField, ISelectFieldProps } from "../../SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
-/* Свойства компонента PaginationSelect. */
-export interface IPaginationSelectProps extends Omit<ISelectFieldProps, "size"> {
+/* Свойства видимого компонента PaginationSelect. */
+export interface IPaginationSelectProps
+    extends Omit<ISelectFieldProps, "size" | "value">,
+        Required<Pick<ISelectFieldProps, "value">> {
     /** Текст лейбла пагинации. */
     paginationLabel: React.ReactNode;
-    /** Компонент скрыт. */
-    hidden?: boolean;
 }
 
 /* Выбор количества элементов на странице. */
 export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSelectProps>(
-    ({ paginationLabel, className, hidden, options, value, onChange }, ref) => {
+    ({ paginationLabel, className, options, value, onChange }, ref) => {
         const [instanceId] = useState(() => `Pagination-${uniqueId()}`);
-        const optionsList = options && options.length > 0 ? options : [10, 20, 50, 100];
 
-        const selectOptions: ISelectFieldOption[] = optionsList.map((option) => ({
-            id: String(option),
-            value: String(option),
-            label: String(option),
-        }));
-
-        const selectedValue =
-            value !== undefined ? { id: String(value), value: String(value), label: String(value) } : undefined;
-
-        return hidden ? null : (
+        return (
             <div className={clsx(styles.paginationSelect, className)} ref={ref}>
                 <Text size={ETextSize.B3} id={instanceId}>
                     {paginationLabel}
@@ -37,9 +27,9 @@ export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSele
                 <div className={styles.paginationSelectControl}>
                     <SelectField
                         size={EComponentSize.SM}
-                        value={selectedValue}
+                        value={value}
                         mobileTitle={paginationLabel}
-                        options={selectOptions}
+                        options={options}
                         onChange={onChange}
                         targetProps={{
                             fieldLabel: "",

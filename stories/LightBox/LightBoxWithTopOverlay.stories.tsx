@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
+import { Description, Stories, Title as DocsTitle, ArgTypes } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -33,6 +33,8 @@ const meta = {
                 <>
                     <DocsTitle />
                     <Description />
+                    <h2>Props</h2>
+                    <ArgTypes of={LightBox.TopOverlay} />
                     <Stories />
                 </>
             ),
@@ -72,7 +74,7 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const LightBoxWithTopOverlay: React.FC = () => {
+export const Default: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [openedTopOverlay, setOpenedTopOverlay] = useState(false);
     const [closeConfirmed, setCloseConfirmed] = useState(false);
@@ -172,7 +174,7 @@ export const LightBoxWithTopOverlay: React.FC = () => {
                                 </Page.Header.Title>
                             </Page.Header>
 
-                                <Page.Body type={EBodyPageType.SECOND}>
+                            <Page.Body type={EBodyPageType.SECOND}>
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />

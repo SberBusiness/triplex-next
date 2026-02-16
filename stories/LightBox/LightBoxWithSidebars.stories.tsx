@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as SBTitle, ArgTypes, Subtitle } from "@storybook/addon-docs/blocks";
+import { Description, Stories, Title as SBTitle, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox";
 import { Button, EButtonTheme } from "../../src/components/Button";
 import { Gap } from "../../src/components/Gap";
@@ -29,7 +29,7 @@ const meta = {
                 <>
                     <SBTitle />
                     <Description />
-                    <Subtitle>Props</Subtitle>
+                    <Heading>Props</Heading>
                     <ArgTypes of={LightBox.LeftSidebar} />
                     <Stories />
                 </>

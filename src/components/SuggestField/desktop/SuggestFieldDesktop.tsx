@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import clsx from "clsx";
 import { uniqueId, debounce } from "lodash-es";
-import { ISuggestFieldDesktopProps } from "@sberbusiness/triplex-next/components/SuggestField/desktop/types";
-import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { Tooltip, ETooltipSize } from "@sberbusiness/triplex-next/components/Tooltip";
-import { SuggestFieldTarget } from "@sberbusiness/triplex-next/components/SuggestField/SuggestFieldTarget";
-import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
-import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown";
-import { DataTestId } from "@sberbusiness/triplex-next/consts/DataTestId";
-import { SuggestFieldDesktopDropdown } from "@sberbusiness/triplex-next/components/SuggestField/desktop/SuggestFieldDesktopDropdown";
-import styles from "../styles/SuggestFieldDesktop.module.less";
+import { ISuggestFieldDesktopProps } from "./types";
+import { ISuggestFieldOption } from "../types";
+import { EComponentSize } from "../../../enums";
+import { Tooltip, ETooltipSize } from "../../Tooltip";
+import { TextFieldBase } from "../../TextField/TextFieldBase";
+import { FormFieldInput, FormFieldClear, EFormFieldStatus } from "../../FormField";
+import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
+import { DropdownListContext } from "../../Dropdown";
+import { DataTestId } from "../../../consts/DataTestId";
+import { SuggestFieldDesktopDropdown } from "./SuggestFieldDesktopDropdown";
 
 /**
  * Выпадающий список с возможностью поиска по введённому значению, позволяет задать кастомные компоненты для отображения всех
@@ -18,13 +18,12 @@ import styles from "../styles/SuggestFieldDesktop.module.less";
  * @template T - тип опции, должен расширять ISuggestFieldOption
  */
 export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFieldOption>({
-    className,
     value,
     options,
-    size,
+    size = EComponentSize.LG,
     status,
-    label,
     placeholder,
+    "data-test-id": dataTestId,
     loading,
     dropdownListLoading,
     tooltipHint,
@@ -33,63 +32,56 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     onSelect,
     onFilter,
     onScrollEnd,
-    onTargetInputFocus,
-    onTargetInputBlur,
-    renderTarget,
-    renderTargetInput,
-    renderTargetLabel,
-    renderTargetPrefix,
-    renderTargetPostfix,
+    onClear,
+    prefix,
+    postfix,
+    renderInput,
     renderDropdown,
     renderDropdownList,
     renderDropdownListItem,
-    "data-test-id": dataTestId,
+    inputProps,
     ...restProps
 }: ISuggestFieldDesktopProps<T>) => {
     const [inputValue, setInputValue] = useState(value?.label || "");
     const [activeDescendant, setActiveDescendant] = useState<string>();
     const [inputFocused, setInputFocused] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [dropdownDisabled, setDropdownDisabled] = useState(false);
 
     const dropdownListId = useRef(uniqueId());
-    const suggestRef = useRef<HTMLInputElement>(null);
+    const suggestRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
 
     const onScrollEndRef = useRef(onScrollEnd);
     onScrollEndRef.current = onScrollEnd;
 
-    const handleSelect = useCallback(
-        (selectedValue: T | undefined) => {
+    const handleSelect = useCallback<typeof onSelect>(
+        (selectedValue) => {
             setInputValue(selectedValue?.label || "");
             setActiveDescendant(undefined);
             setDropdownOpen(false);
-            setDropdownDisabled(true);
             onSelect(selectedValue);
         },
         [onSelect],
     );
 
-    const handleTargetFocus = useCallback(
-        (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
+        (event) => {
             setInputFocused(true);
-            setDropdownOpen(true);
 
             if (clearInputOnFocus && inputValue.length !== 0) {
                 setInputValue("");
             }
 
-            onTargetInputFocus?.(event);
+            inputProps.onFocus?.(event);
         },
-        [clearInputOnFocus, inputValue, onTargetInputFocus],
+        [clearInputOnFocus, inputValue, inputProps],
     );
 
-    const handleTargetBlur = useCallback(
-        (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleInputBlur = useCallback<React.FocusEventHandler<HTMLInputElement>>(
+        (event) => {
             setActiveDescendant(undefined);
             setInputFocused(false);
             setDropdownOpen(false);
-            setDropdownDisabled(false);
 
             if (inputValue.length !== 0) {
                 setInputValue(value?.label || "");
@@ -97,44 +89,40 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                 onSelect(undefined);
             }
 
-            onTargetInputBlur?.(event);
+            inputProps.onBlur?.(event);
         },
-        [value?.label, inputValue, onSelect, onTargetInputBlur],
+        [value?.label, inputValue, onSelect, inputProps],
     );
 
-    const handleTargetClick = useCallback(() => {
+    const handleInputClick = useCallback<React.MouseEventHandler<HTMLInputElement>>(() => {
         if (inputFocused && !dropdownOpen) {
             setDropdownOpen(true);
-            setDropdownDisabled(false);
         }
     }, [inputFocused, dropdownOpen]);
 
-    const handleTargetChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+        (event) => {
             const newValue = event.target.value;
+
+            if (dropdownOpen === false && options.length > 0) {
+                setDropdownOpen(true);
+            }
+
             setInputValue(newValue);
-            setDropdownDisabled(false);
             onFilter(newValue);
         },
-        [onFilter],
+        [dropdownOpen, options.length, onFilter],
     );
 
-    const handleTargetClear = useCallback(() => {
-        if (inputFocused) {
-            setInputValue("");
-            onFilter("");
-        } else {
-            onSelect(undefined);
-        }
-    }, [inputFocused, onFilter, onSelect]);
-
-    const handleSetActiveDescendant = useCallback(
-        (id?: string) => {
-            if (activeDescendant !== id) {
-                setActiveDescendant(id);
+    const handleClear = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+        (event) => {
+            if (inputFocused) {
+                setInputValue("");
+                onFilter("");
             }
+            onClear?.(event);
         },
-        [activeDescendant],
+        [inputFocused, onFilter, onClear],
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,14 +160,10 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     }, [value]);
 
     useEffect(() => {
-        if (inputFocused) {
-            if (dropdownOpen && options.length === 0) {
-                setDropdownOpen(false);
-            } else if (!dropdownOpen && !dropdownDisabled && options.length !== 0) {
-                setDropdownOpen(true);
-            }
+        if (dropdownOpen && options.length === 0) {
+            setDropdownOpen(false);
         }
-    }, [inputFocused, dropdownOpen, dropdownDisabled, options.length]);
+    }, [dropdownOpen, options.length]);
 
     useEffect(() => {
         if (dropdownOpen) {
@@ -197,36 +181,41 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     }, [dropdownOpen, onScrollList]);
 
     const renderSuggestField = () => {
-        const classNames = clsx(styles.suggestFieldDesktop, "hoverable", className);
-        const Target = renderTarget === undefined ? SuggestFieldTarget : renderTarget;
+        const Input = renderInput === undefined ? FormFieldInput : renderInput;
         const Dropdown = renderDropdown === undefined ? SuggestFieldDesktopDropdown : renderDropdown;
 
         return (
-            <div className={classNames} data-test-id={dataTestId} {...restProps} ref={suggestRef}>
-                <DropdownListContext.Provider
-                    value={{ activeDescendant, setActiveDescendant: handleSetActiveDescendant }}
-                >
-                    <Target
-                        size={size}
-                        status={status}
-                        inputValue={inputValue}
-                        label={label}
-                        placeholder={placeholder}
-                        aria-controls={dropdownListId.current}
-                        aria-activedescendant={activeDescendant}
-                        loading={loading}
-                        dropdownOpen={dropdownOpen}
-                        onFocus={handleTargetFocus}
-                        onBlur={handleTargetBlur}
-                        onClick={handleTargetClick}
-                        onChange={handleTargetChange}
-                        onClear={handleTargetClear}
-                        renderInput={renderTargetInput}
-                        renderLabel={renderTargetLabel}
-                        renderPrefix={renderTargetPrefix}
-                        renderPostfix={renderTargetPostfix}
-                        dataTestId={dataTestId}
-                    />
+            <TextFieldBase
+                data-test-id={dataTestId}
+                status={status}
+                size={size}
+                prefix={prefix}
+                postfix={
+                    <React.Fragment>
+                        {onClear !== undefined && <FormFieldClear onClick={handleClear} />}
+                        {loading && <LoaderSmall theme={ELoaderSmallTheme.BRAND} size={size} />}
+                        {postfix}
+                    </React.Fragment>
+                }
+                {...restProps}
+                ref={suggestRef}
+            >
+                <Input
+                    value={inputValue}
+                    placeholder={placeholder}
+                    data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.input}`}
+                    {...inputProps}
+                    role="combobox"
+                    aria-controls={dropdownListId.current}
+                    aria-activedescendant={activeDescendant}
+                    aria-expanded={dropdownOpen}
+                    disabled={status === EFormFieldStatus.DISABLED}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    onClick={handleInputClick}
+                    onChange={handleInputChange}
+                />
+                <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                     <Dropdown
                         value={value}
                         options={options}
@@ -243,7 +232,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                         dataTestId={dataTestId}
                     />
                 </DropdownListContext.Provider>
-            </div>
+            </TextFieldBase>
         );
     };
 
@@ -262,5 +251,3 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         </Tooltip>
     );
 };
-
-SuggestFieldDesktop.displayName = "SuggestFieldDesktop";

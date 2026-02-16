@@ -21,7 +21,7 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
             setOpening,
             ...htmlAttributes
         },
-        ref
+        ref,
     ) => {
         // OpeningState после рендера становится равен openingProps. Чтобы появилась анимация открытия, сначала нужно отрендерить элемент в закрытом виде.
         const [openingState, setOpeningState] = useState(false);
@@ -75,7 +75,6 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
 
         return (
             <div className={classNamesWrapper}>
-                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <div
                     className={classNamesBackDrop}
                     onTransitionEnd={handleTransitionEnd}
@@ -87,7 +86,7 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
                 </div>
             </div>
         );
-    }
+    },
 );
 
 DropdownMobileInner.displayName = "DropdownMobileInner";

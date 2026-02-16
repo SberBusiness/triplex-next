@@ -88,13 +88,20 @@
             transition: transform 0.3s ease-in-out;
         }
 
+        .title {
+            padding-right: 40px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
         &.sm {
             .header {
                 padding: 16px;
                 border-radius: 16px;
             }
 
-            .step + .titleWrapper {
+            .step + .title {
                 margin-top: 2px;
             }
 
@@ -187,6 +194,18 @@
 
                 > * {
                     margin-left: 0 !important;
+                }
+            }
+
+            &.md {
+                .header {
+                    border-radius: 16px;
+                }
+            }
+
+            &.lg {
+                .header {
+                    border-radius: 24px;
                 }
             }
         }

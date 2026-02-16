@@ -1,6 +1,7 @@
 export * from "./AlertContext";
 export * from "./AlertProcess";
 export * from "./Avatar";
+export * from "./Badge";
 export * from "./Button";
 export * from "./Calendar";
 export * from "./Card";

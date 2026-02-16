@@ -98,13 +98,7 @@ export const Example: Story = {
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <Avatar style={{ backgroundImage: "url(assets/images/avatar.png)", backgroundSize: "contain" }} {...args} />
             <Avatar style={{ backgroundColor: "#339FF1" }} {...args}>
-                <TypographyTitle
-                    // TODO: Заменить на новый тип, когда его добавят
-                    type={EFontType.PRIMARY}
-                    size={ETitleSize.H1}
-                    weight={EFontWeightTitle.REGULAR}
-                    style={{ color: "#FFFFFF" }}
-                >
+                <TypographyTitle size={ETitleSize.H1} weight={EFontWeightTitle.REGULAR} type={EFontType.PRIMARY_INVERT}>
                     AA
                 </TypographyTitle>
             </Avatar>

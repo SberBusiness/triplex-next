@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { StoryObj } from "@storybook/react";
 import * as iconModule from "@sberbusiness/icons-next";
 
-const paletteIndexes = Array.from(Array(9).keys());
+const paletteIndexes = Array.from(Array(10).keys());
 
 export default {
     title: "Icons/Icons",

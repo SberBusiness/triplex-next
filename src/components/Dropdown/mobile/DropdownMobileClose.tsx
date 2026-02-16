@@ -15,7 +15,7 @@ export const DropdownMobileClose = React.forwardRef<HTMLButtonElement, IDropdown
         <ButtonIcon className={clsx(styles.dropdownMobileClose, className)} ref={ref} {...buttonIconProps}>
             <CrossStrokeSrvIcon16 paletteIndex={5} />
         </ButtonIcon>
-    )
+    ),
 );
 
 DropdownMobileClose.displayName = "DropdownMobileClose";

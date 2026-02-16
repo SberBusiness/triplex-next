@@ -1,16 +1,11 @@
 import React from "react";
-import {
-    IFormFieldProps,
-    IFormFieldInputProps,
-    IFormFieldLabelProps,
-    IFormFieldPostfixProps,
-} from "@sberbusiness/triplex-next/components/FormField";
+import { IFormFieldInputProps } from "../FormField";
+import { ITextFieldProps } from "../TextField";
 import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 
 /** Свойства компонента SuggestField. */
 export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect">,
-        Required<Pick<IFormFieldProps, "size" | "status">>,
+    extends Omit<ITextFieldProps, "onSelect">,
         DataAttributes {
     /** Выбранное значение. */
     value: T | undefined;
@@ -36,20 +31,10 @@ export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFiel
     onFilter: (value: string) => void;
     /** Обработчик окончания скролла списка (доступные в данный момент элементы закончились). */
     onScrollEnd?: () => void;
-    /** Обработчик получения фокуса TargetInput. */
-    onTargetInputFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-    /** Обработчик потери фокуса TargetInput. */
-    onTargetInputBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-    /** Рендер-функция Target. */
-    renderTarget?: (props: ISuggestFieldTargetProps) => JSX.Element;
-    /** Рендер-функция TargetInput. */
-    renderTargetInput?: (props: ISuggestFieldInputProvideProps) => JSX.Element;
-    /** Рендер-функция TargetLabel. */
-    renderTargetLabel?: (props: ISuggestFieldLabelProvideProps) => JSX.Element;
-    /** Рендер-функция TargetPrefix. */
-    renderTargetPrefix?: () => JSX.Element;
-    /** Рендер-функция TargetPostfix. */
-    renderTargetPostfix?: (props: ISuggestFieldTargetPostfixProvideProps) => JSX.Element;
+    /** Обработчик отчиски поля. */
+    onClear?: React.MouseEventHandler<HTMLButtonElement>;
+    /** Рендер-функция поля ввода. */
+    renderInput?: (props: IFormFieldInputProps) => JSX.Element;
 }
 
 /** Опция выпадающего списка SuggestField. */
@@ -61,46 +46,3 @@ export interface ISuggestFieldOption {
     /** Кастомное содержимое опции в списке. */
     content?: React.ReactNode;
 }
-
-/** Свойство компонента SuggestFieldTarget. */
-export interface ISuggestFieldTargetProps
-    extends React.HTMLAttributes<HTMLElement>,
-        Pick<ISuggestFieldProps, "size" | "status" | "label" | "placeholder" | "loading">,
-        Pick<ISuggestFieldTargetPostfixProps, "onClear"> {
-    /** Значение поля ввода. */
-    inputValue: string;
-    /** Идентификатор для тестирования. */
-    dataTestId?: string;
-    /** Dropdown открыт. */
-    dropdownOpen: boolean;
-    /** Рендер поля ввода. */
-    renderInput?: (props: ISuggestFieldInputProvideProps) => JSX.Element;
-    /** Рендер лейбла. */
-    renderLabel?: (props: ISuggestFieldLabelProvideProps) => JSX.Element;
-    /** Рендер префикса. */
-    renderPrefix?: () => JSX.Element;
-    /** Рендер постфикса. */
-    renderPostfix?: (props: ISuggestFieldTargetPostfixProvideProps) => JSX.Element;
-}
-
-/** Свойства, передаваемые в рендер-функцию TargetInput. */
-export interface ISuggestFieldInputProvideProps
-    extends Pick<
-        IFormFieldInputProps,
-        "value" | "placeholder" | "aria-controls" | "aria-activedescendant" | "disabled" | "onChange"
-    > {}
-
-/** Свойства, передаваемые в рендер-функцию TargetLabel. */
-export interface ISuggestFieldLabelProvideProps extends Pick<IFormFieldLabelProps, "children"> {}
-
-/** Свойства компонента SuggestFieldPostfix. */
-export interface ISuggestFieldTargetPostfixProps
-    extends IFormFieldPostfixProps,
-        Pick<ISuggestFieldProps, "size" | "loading"> {
-    /** Обработчик очищения значения. */
-    onClear?: () => void;
-}
-
-/** Свойства, передаваемые в рендер-функцию TargetPostfix. */
-export interface ISuggestFieldTargetPostfixProvideProps
-    extends Pick<ISuggestFieldTargetPostfixProps, "size" | "loading" | "onClear"> {}

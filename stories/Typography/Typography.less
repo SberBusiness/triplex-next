@@ -1,0 +1,21 @@
+.typography-examples-wrapper {
+    display: flex;
+    gap: 16px;
+}
+
+.typography-example,
+.typography-invert-example {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.typography-invert-example {
+    .theme-light & {
+        background-color: #1f1f22;
+    }
+
+    .theme-dark & {
+        background-color: #ffffff;
+    }
+}

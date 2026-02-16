@@ -17,5 +17,5 @@ export type TDesignTokensComponentsDropdown = { Dropdown: TDesignTokensComponent
 // Токены компонента Dropdown в светлой и темной темах.
 export const Dropdown_Tokens: TDesignTokensComponentsDropdownValues = {
     Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Dropdown-Background)
-    Shadow: [{ value: "0px 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "none" }], // var(--triplex-next-Dropdown-Shadow)
+    Shadow: [{ value: "0px 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "0px 2px 7px rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-Dropdown-Shadow)
 };

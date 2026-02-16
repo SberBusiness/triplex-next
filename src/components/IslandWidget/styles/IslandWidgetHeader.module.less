@@ -4,7 +4,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 16px;
 
     .islandWidgetHeaderContent {
         display: flex;
@@ -15,6 +14,20 @@
 
     .islandWidgetHeaderDescription {
         display: flex;
+    }
+
+    .caretWrapper {
+        position: absolute;
+        top: 20px;
+        right: 16px;
+    }
+
+    .caretIcon {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    &.open .caretWrapper .caretIcon {
+        transform: rotate(-180deg);
     }
 }
 

@@ -1,3 +1,5 @@
+@import "src/styles/style";
+
 .islandWidget {
     flex: 1 1 auto;
     position: relative;
@@ -20,5 +22,12 @@
         height: 32px;
         border-radius: 0 0 24px 24px;
         box-shadow: var(--triplex-next-IslandWidget-ExtraFooter_Shadow) !important;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .islandWidgetHeaderWrapperAdaptive {
+        margin: -16px -16px 0 -16px;
+        padding: 16px 16px 0 16px;
     }
 }

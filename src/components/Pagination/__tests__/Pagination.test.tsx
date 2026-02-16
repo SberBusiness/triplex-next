@@ -1,39 +1,85 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { PaginationExtended } from "../components/PaginationExtended";
 import { PaginationNavigation } from "../components/PaginationNavigation";
 import { PaginationNavigationButton } from "../components/PaginationNavigationButton";
 import { PaginationPageButton } from "../components/PaginationPageButton";
 import { PaginationPageEllipsis } from "../components/PaginationPageEllipsis";
 import { PaginationSelect } from "../components/PaginationSelect";
 import { EPaginationNavigationIconDirection } from "../enums";
+import { Pagination } from "../Pagination";
 
-describe("PaginationExtended", () => {
-    const getPagination = () => screen.getByTestId("pagination-extended");
+describe("Pagination", () => {
+    const getPagination = () => screen.getByTestId("pagination");
 
-    it("Should render with default props", () => {
-        render(<PaginationExtended data-testid="pagination-extended">Content</PaginationExtended>);
-        const nav = getPagination();
-        expect(nav).toBeInTheDocument();
-        expect(nav.tagName).toBe("NAV");
+    it("Should render with PaginationNavigation and PaginationSelect", () => {
+        render(
+            <Pagination
+                paginationNavigationProps={{ totalPages: 10, currentPage: 1, onCurrentPageChange: () => {} }}
+                paginationSelectProps={{
+                    paginationLabel: "Items per page",
+                    onChange: () => {},
+                    options: [],
+                    targetProps: { fieldLabel: "" },
+                    value: { id: "0", value: "10", label: "10" },
+                }}
+                data-testid="pagination"
+            />,
+        );
+        const pagination = getPagination();
+        expect(pagination).toBeInTheDocument();
     });
 
-    it("Should merge custom className", () => {
+    it("Should not render PaginationNavigation when totalPages is 1", () => {
         render(
-            <PaginationExtended className="custom" data-testid="pagination-extended">
-                Content
-            </PaginationExtended>,
+            <Pagination
+                paginationNavigationProps={{ totalPages: 1, currentPage: 1, onCurrentPageChange: () => {} }}
+                paginationSelectProps={{
+                    paginationLabel: "Items per page",
+                    onChange: () => {},
+                    options: [],
+                    targetProps: { fieldLabel: "" },
+                    value: { id: "0", value: "10", label: "10" },
+                }}
+                data-testid="pagination"
+            />,
         );
-        expect(getPagination()).toHaveClass("custom");
+        const pagination = getPagination();
+        expect(pagination).toBeInTheDocument();
+
+        const paginationNavigation = pagination.querySelector("PaginationNavigationExtended");
+        expect(paginationNavigation).not.toBeInTheDocument();
+    });
+
+    it("Should not render PaginationSelect when paginationSelectProps is not provided", () => {
+        render(
+            <Pagination
+                paginationNavigationProps={{ totalPages: 10, currentPage: 1, onCurrentPageChange: () => {} }}
+                data-testid="pagination"
+            />,
+        );
+        const pagination = getPagination();
+        expect(pagination).toBeInTheDocument();
+
+        const paginationSelect = pagination.querySelector("PaginationSelect");
+        expect(paginationSelect).not.toBeInTheDocument();
     });
 
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLElement>();
         render(
-            <PaginationExtended ref={ref} data-testid="pagination-extended">
-                Content
-            </PaginationExtended>,
+            <Pagination
+                ref={ref}
+                paginationNavigationProps={{ totalPages: 10, currentPage: 1, onCurrentPageChange: () => {} }}
+                paginationSelectProps={{
+                    paginationLabel: "Items per page",
+                    onChange: () => {},
+                    options: [],
+                    targetProps: { fieldLabel: "" },
+                    value: { id: "0", value: "10", label: "10" },
+                }}
+                data-testid="pagination"
+            />,
         );
         expect(ref.current).toBeInstanceOf(HTMLElement);
     });
@@ -140,21 +186,9 @@ describe("PaginationSelect", () => {
                 onChange={() => {}}
                 options={[]}
                 targetProps={{ fieldLabel: "" }}
+                value={{ id: "0", value: "10", label: "10" }}
             />,
         );
         expect(screen.getByText("Items per page")).toBeInTheDocument();
-    });
-
-    it("Should not render when hidden", () => {
-        const { container } = render(
-            <PaginationSelect
-                paginationLabel="Hidden"
-                hidden
-                onChange={() => {}}
-                options={[]}
-                targetProps={{ fieldLabel: "" }}
-            />,
-        );
-        expect(container).toBeEmptyDOMElement();
     });
 });

@@ -1,11 +1,13 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import { uniqueId } from "lodash-es";
+import React, { useRef, useCallback, useEffect } from "react";
 import { ISuggestOption, ISuggestProps } from "./types";
 import { SuggestContext } from "./SuggestContext";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import { useSuggest } from "./useSuggest";
 
 const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
-    {
+    props: ISuggestProps<T>,
+    ref: React.ForwardedRef<HTMLDivElement>,
+) => {
+    const {
         children,
         value,
         options,
@@ -16,111 +18,49 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
         dropdownListLoading,
         tooltipOpen,
         clearInputOnFocus,
-        onKeyDown,
+        onKeyDown: onKeyDownProp,
         onSelect,
         onFilter,
         onScrollEnd,
         ...restProps
-    }: ISuggestProps<T>,
-    ref: React.ForwardedRef<HTMLDivElement>,
-) => {
-    const [inputValue, setInputValue] = useState(value?.label || "");
-    const [activeDescendant, setActiveDescendant] = useState<string>();
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-
-    const [dropdownListId] = useState<string>(uniqueId());
+    } = props;
+    const suggest = useSuggest(props);
+    const { dropdownOpen, closeDropdown, onKeyDown } = suggest;
     const suggestRef = useRef<HTMLDivElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-    const updateInputValueRef = useRef<typeof updateInputValue>(() => {});
-    const closeDropdownRef = useRef<typeof closeDropdown>(() => {});
-
-    const updateInputValue = useCallback(
-        (newInputValue: string) => {
-            if (inputValue !== newInputValue) {
-                setInputValue(newInputValue);
-            }
-        },
-        [inputValue],
-    );
-
-    updateInputValueRef.current = updateInputValue;
-
     useEffect(() => {
-        updateInputValueRef.current(value?.label || "");
-    }, [value]);
+        if (!dropdownOpen) {
+            return;
+        }
 
-    const closeDropdown = useCallback(
-        (newInputValue: string = value?.label || "") => {
-            updateInputValueRef.current(newInputValue);
-            setActiveDescendant(undefined);
-            setDropdownOpen(false);
-        },
-        [value],
-    );
-
-    closeDropdownRef.current = closeDropdown;
-
-    useEffect(() => {
-        /** Обработчик нажатия мыши вне компонента. */
         const handleOutsideMouseDown = (event: MouseEvent) => {
-            if (
-                !suggestRef.current?.contains(event.target as Node) &&
-                !dropdownRef.current?.contains(event.target as Node)
-            ) {
-                closeDropdownRef.current();
+            const target = event.target as Node;
+
+            if (!suggestRef.current?.contains(target) && !dropdownRef.current?.contains(target)) {
+                closeDropdown();
             }
         };
 
-        if (dropdownOpen) {
-            document.addEventListener("mousedown", handleOutsideMouseDown);
+        document.addEventListener("mousedown", handleOutsideMouseDown);
+        return () => document.removeEventListener("mousedown", handleOutsideMouseDown);
+    }, [dropdownOpen, closeDropdown]);
 
-            return () => {
-                document.removeEventListener("mousedown", handleOutsideMouseDown);
-            };
-        }
-    }, [dropdownOpen]);
+    const setRef = useCallback(
+        (instance: HTMLDivElement | null) => {
+            suggestRef.current = instance;
 
-    const handleKeyDown = useCallback(
-        (event: React.KeyboardEvent<HTMLDivElement>) => {
-            if (dropdownOpen === true) {
-                if (isKey(event.code, "ESCAPE")) {
-                    closeDropdownRef.current();
-                }
+            if (typeof ref === "function") {
+                ref(instance);
+            } else if (ref) {
+                ref.current = instance;
             }
-            onKeyDown?.(event);
         },
-        [dropdownOpen, onKeyDown],
+        [ref],
     );
-
-    const handleSelect = useCallback(
-        (selectedValue: T | undefined) => {
-            closeDropdownRef.current(selectedValue?.label || "");
-            onSelect(selectedValue);
-        },
-        [onSelect],
-    );
-
-    const handleFilter = useCallback(
-        (newInputValue: string) => {
-            setInputValue(newInputValue);
-            onFilter(newInputValue);
-        },
-        [onFilter],
-    );
-
-    const setRef = (instance: HTMLDivElement | null) => {
-        suggestRef.current = instance;
-
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
 
     return (
-        <div onKeyDown={handleKeyDown} {...restProps} ref={setRef}>
+        <div {...restProps} onKeyDown={onKeyDown} ref={setRef}>
             <SuggestContext.Provider
                 value={{
                     value,
@@ -131,18 +71,10 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
                     dropdownListLoading,
                     tooltipOpen,
                     clearInputOnFocus,
-                    onSelect: handleSelect,
-                    onFilter: handleFilter,
                     onScrollEnd,
-                    inputValue,
-                    setInputValue,
-                    activeDescendant,
-                    dropdownOpen,
-                    setDropdownOpen,
-                    closeDropdown,
-                    dropdownListId,
                     suggestRef,
                     dropdownRef,
+                    ...suggest,
                 }}
             >
                 {children}

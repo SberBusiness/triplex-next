@@ -1,30 +1,30 @@
 import React from "react";
 import { clsx } from "clsx";
-import { EFontType, EFontWeightText, ECaptionSize } from "./enums";
+import { EFontWeightCaption, ECaptionSize, EFontType } from "./enums";
 import { ITypographyProps } from "./types";
-import { mapFontTypeToCssClass } from "./utils";
 import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
+import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
 import styles from "./styles/Caption.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
-/** Соответствие цвета шрифта стилевому классу. */
-export const mapFontWeightTextToCssClass = {
-    [EFontWeightText.REGULAR]: styles.regular,
-    [EFontWeightText.SEMIBOLD]: styles.semibold,
-};
-
-/** Соответствие размера подписи стилевому классу. */
-export const mapCaptionSizeToCssClass = {
+// Соответствие размера имени класса.
+const SIZE_TO_CLASS_NAME_MAP: Record<ECaptionSize, string> = {
     [ECaptionSize.C1]: styles.c1,
     [ECaptionSize.C2]: styles.c2,
     [ECaptionSize.D1]: styles.d1,
+};
+
+// Соответствие веса шрифта имени класса.
+const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightCaption, string> = {
+    [EFontWeightCaption.REGULAR]: styles.regular,
+    [EFontWeightCaption.SEMIBOLD]: styles.semibold,
 };
 
 interface ICaptionProps extends ITypographyProps {
     /** Размер текста. */
     size: ECaptionSize;
     /** Толщина шрифта. */
-    weight?: EFontWeightText;
+    weight?: EFontWeightCaption;
 }
 
 /** Свойства компонента Caption. */
@@ -42,8 +42,8 @@ export const Caption: TitleComponent = React.forwardRef(
             className,
             size,
             tag,
+            weight = EFontWeightCaption.REGULAR,
             type = EFontType.PRIMARY,
-            weight = EFontWeightText.REGULAR,
             underline,
             strikethrough,
             ...props
@@ -53,9 +53,9 @@ export const Caption: TitleComponent = React.forwardRef(
         const classes = clsx(
             typographyStyles.typography,
             styles.caption,
-            mapCaptionSizeToCssClass[size],
-            mapFontTypeToCssClass[type],
-            mapFontWeightTextToCssClass[weight],
+            SIZE_TO_CLASS_NAME_MAP[size],
+            FONT_WEIGHT_TO_CLASS_NAME_MAP[weight],
+            FONT_TYPE_TO_CLASS_NAME_MAP[type],
             {
                 [typographyStyles.strikethrough]: !!strikethrough && !underline,
                 [typographyStyles.underline]: !!underline && !strikethrough,

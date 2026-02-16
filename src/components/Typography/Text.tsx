@@ -2,29 +2,29 @@ import React from "react";
 import { clsx } from "clsx";
 import { EFontType, EFontWeightText, ELineType, ETextSize } from "./enums";
 import { ITypographyProps } from "./types";
-import { mapFontTypeToCssClass } from "./utils";
+import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
 import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/Text.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
-/** Соответствие размера текста стилевому классу. */
-export const mapTextSizeToCssClass = {
+// Соответствие размера имени класса.
+const SIZE_TO_CLASS_NAME_MAP: Record<ETextSize, string> = {
     [ETextSize.B1]: styles.b1,
     [ETextSize.B2]: styles.b2,
     [ETextSize.B3]: styles.b3,
     [ETextSize.B4]: styles.b4,
 };
 
-/** Соответствие цвета шрифта стилевому классу. */
-export const mapFontWeightTextToCssClass = {
+// Соответствие веса шрифта имени класса.
+const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightText, string> = {
     [EFontWeightText.REGULAR]: styles.regular,
     [EFontWeightText.SEMIBOLD]: styles.semibold,
 };
 
-/** Соответствие типа высоты блока строки стилевому классу. */
-export const mapTextLineTypeToCssClass = {
+// Соответствие типа высоты строки имени класса.
+const LINE_TYPE_TO_CLASS_NAME_MAP: Record<ELineType, string> = {
     [ELineType.NORMAL]: "",
-    [ELineType.COMPACT]: typographyStyles.compact,
+    [ELineType.COMPACT]: styles.compact,
 };
 
 interface ITextProps extends ITypographyProps {
@@ -62,10 +62,10 @@ export const Text: TextComponent = React.forwardRef(
         const classes = clsx(
             typographyStyles.typography,
             styles.text,
-            mapTextSizeToCssClass[size],
-            mapFontTypeToCssClass[type],
-            mapFontWeightTextToCssClass[weight],
-            mapTextLineTypeToCssClass[line],
+            SIZE_TO_CLASS_NAME_MAP[size],
+            FONT_WEIGHT_TO_CLASS_NAME_MAP[weight],
+            LINE_TYPE_TO_CLASS_NAME_MAP[line],
+            FONT_TYPE_TO_CLASS_NAME_MAP[type],
             {
                 [typographyStyles.strikethrough]: !!strikethrough && !underline,
                 [typographyStyles.underline]: !!underline && !strikethrough,

@@ -2,10 +2,11 @@ import React, { useContext, useEffect } from "react";
 import clsx from "clsx";
 import styles from "../styles/IslandWidgetExtraFooter.module.less";
 import { ExpandAnimation } from "../../ExpandAnimation/ExpandAnimation";
-import { IslandWidgetContext } from "../IslandWidgetContext";
+import { IslandWidgetLayoutContext } from "../IslandWidgetLayoutContext";
 
 /** Свойства компонента IslandWidgetExtraFooter. */
 export interface IIslandWidgetExtraFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Контролируемое состояние открытости. */
     open?: boolean;
 }
 
@@ -15,7 +16,7 @@ export const IslandWidgetExtraFooter: React.FC<IIslandWidgetExtraFooterProps> = 
     open = false,
     ...htmlDivAttributes
 }) => {
-    const { setHasExtraFooter } = useContext(IslandWidgetContext);
+    const { setHasExtraFooter } = useContext(IslandWidgetLayoutContext);
 
     useEffect(() => {
         setHasExtraFooter(open);

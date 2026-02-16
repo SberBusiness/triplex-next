@@ -83,3 +83,4 @@ export * from "./HelpBox";
 export * from "./NotificationIcon";
 export * from "./CarouselExtended";
 export * from "./DateRange";
+export * from "./ExpandAnimation";

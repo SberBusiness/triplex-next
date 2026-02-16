@@ -5,7 +5,7 @@ import { StoryObj } from "@storybook/react";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { EComponentSize } from "../src/enums/EComponentSize";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Radio",
@@ -27,9 +27,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Radio} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

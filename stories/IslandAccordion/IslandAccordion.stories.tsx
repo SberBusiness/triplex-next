@@ -6,7 +6,16 @@ import { Button } from "../../src/components/Button";
 import { EButtonTheme } from "../../src/components/Button/enums";
 import { EIslandType } from "../../src/components/Island";
 import { EStepStatus } from "../../src/components/Step";
-import { Title, Description, Controls, Stories, Primary, ArgTypes } from "@storybook/addon-docs/blocks";
+import {
+    Title,
+    Description,
+    Controls,
+    Stories,
+    Primary,
+    ArgTypes,
+    Heading,
+    Subheading,
+} from "@storybook/addon-docs/blocks";
 import "./IslandAccordion.less";
 
 export default {
@@ -29,12 +38,12 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
-                    <h3>IslandAccordion</h3>
+                    <Heading>Props</Heading>
+                    <Subheading>IslandAccordion</Subheading>
                     <ArgTypes of={IslandAccordion} />
-                    <h3>IslandAccordion.Item</h3>
+                    <Subheading>IslandAccordion.Item</Subheading>
                     <ArgTypes of={IslandAccordion.Item} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

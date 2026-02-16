@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import {
+    Title,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    ArgTypes,
+    Heading,
+    Subheading,
+} from "@storybook/addon-docs/blocks";
 import { Pagination, PaginationExtended, PaginationNavigation, PaginationSelect } from "../src/components/Pagination";
 import { ISelectExtendedFieldDefaultOption } from "../src/components/SelectExtendedField";
 
@@ -18,14 +27,14 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
-                    <h3>Pagination</h3>
+                    <Heading>Props</Heading>
+                    <Subheading>Pagination</Subheading>
                     <ArgTypes of={Pagination} />
-                    <h3>PaginationNavigation</h3>
+                    <Subheading>PaginationNavigation</Subheading>
                     <ArgTypes of={PaginationNavigation} />
-                    <h3>PaginationSelect</h3>
+                    <Subheading>PaginationSelect</Subheading>
                     <ArgTypes of={PaginationSelect} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Description of={Playground} />
                     <Primary />
                     <Controls of={Playground} />

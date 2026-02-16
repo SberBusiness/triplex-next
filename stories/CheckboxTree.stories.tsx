@@ -2,7 +2,7 @@ import type { StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import { CheckboxTree, ICheckboxTreeProps } from "../src/components/CheckboxTree/CheckboxTree";
 import { ICheckboxTreeCheckboxData } from "../src/components/CheckboxTree/types";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { EComponentSize } from "../src/enums/EComponentSize";
 import { Col } from "../src/components/Col/Col";
 import { Row } from "../src/components/Row/Row";
@@ -27,9 +27,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={CheckboxTree} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

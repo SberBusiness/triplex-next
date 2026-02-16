@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { HelpBox } from "../src/components/HelpBox/HelpBox";
 import { ETooltipPreferPlace, ETooltipSize } from "../src/components/Tooltip/enums";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/HelpBox",
@@ -16,9 +16,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={HelpBox} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

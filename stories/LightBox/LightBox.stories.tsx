@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Primary, Stories, Heading, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -44,9 +44,9 @@ const meta = {
                 <>
                     <SBTitle />
                     <Description />
-                    <SBTitle>Props</SBTitle>
+                    <Heading>Props</Heading>
                     <Controls of={Default} />
-                    <SBTitle>Playground</SBTitle>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

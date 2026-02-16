@@ -231,3 +231,19 @@ export const Controlled: StoryObj<typeof HelpBox> = {
         );
     },
 };
+
+export const ChangeIconProps: StoryObj<typeof HelpBox> = {
+    render: () => (
+        <div style={{ padding: 50 }}>
+            <HelpBox tooltipSize={ETooltipSize.SM} iconProps={{ paletteIndex: 0 }}>
+                Подсказка по элементу интерфейса
+            </HelpBox>
+        </div>
+    ),
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: { story: "Изменение свойства iconProps для изменения цвета иконки." },
+        },
+    },
+};

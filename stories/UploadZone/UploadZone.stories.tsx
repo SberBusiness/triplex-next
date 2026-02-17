@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArgTypes, Description, Stories, Title } from "@storybook/addon-docs/blocks";
+import { ArgTypes, Description, Stories, Title, Heading } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { Gap } from "../../src/components/Gap";
 import { EFontType, ETextSize, Text } from "../../src/components/Typography";
@@ -36,7 +36,7 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={UploadZone} />
                     <Stories />
                 </>

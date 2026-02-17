@@ -7,7 +7,7 @@ import { EFontType } from "../src/components/Typography/enums";
 import { Col } from "../src/components/Col";
 import { Gap } from "../src/components/Gap";
 import { LinkStrokeSrvIcon16 } from "@sberbusiness/icons-next";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Link",
@@ -30,9 +30,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Link} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

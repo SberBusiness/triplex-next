@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { NewsmallFilledSrvIcon16, NewsmallFilledSrvIcon24 } from "@sberbusiness/icons-next";
-import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
 import { Badge, Text, EComponentSize, EFontType, ETextSize, EFontWeightText } from "../src";
 
 const meta = {
@@ -13,9 +13,9 @@ const meta = {
                 <>
                     <Title />
                     <Description />
-                    <Title>Props</Title>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Badge} />
-                    <Title>Playground</Title>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

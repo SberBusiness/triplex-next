@@ -11,7 +11,16 @@ import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { DateField } from "../../src/components/DateField";
 import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
 import { EFormFieldStatus } from "../../src/components/FormField/enums";
-import { Title as DocsTitle, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import {
+    Title as DocsTitle,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    ArgTypes,
+    Heading,
+    Subheading,
+} from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/IslandWidget",
@@ -43,12 +52,12 @@ export default {
                 <>
                     <DocsTitle />
                     <Description />
-                    <h2>Props</h2>
-                    <h3>IslandWidget</h3>
+                    <Heading>Props</Heading>
+                    <Subheading>IslandWidget</Subheading>
                     <ArgTypes of={IslandWidget} />
-                    <h3>IslandWidget.ExtraFooter</h3>
+                    <Subheading>IslandWidget.ExtraFooter</Subheading>
                     <ArgTypes of={IslandWidget.ExtraFooter} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

@@ -6,7 +6,7 @@ import {
     PercentsmallStrokeSrvIcon24,
     NewsmallFilledSrvIcon20,
 } from "@sberbusiness/icons-next";
-import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Stories, Heading } from "@storybook/addon-docs/blocks";
 import {
     Badge,
     Text,
@@ -31,9 +31,6 @@ const meta = {
                     <Description />
                     <Heading>Props</Heading>
                     <ArgTypes of={Badge} />
-                    <Heading>Playground</Heading>
-                    <Primary />
-                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -43,31 +40,6 @@ const meta = {
 } satisfies Meta<typeof Badge>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Playground: Story = {
-    parameters: {
-        docs: {
-            description: { story: "Интерактивная демонстрация." },
-            canvas: { sourceState: "none" },
-        },
-    },
-    tags: ["!autodocs"],
-    argTypes: {
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            table: {
-                type: { summary: "EComponentSize" },
-            },
-        },
-    },
-    args: {
-        size: EComponentSize.LG,
-        children: "",
-    },
-    render: (args) => <Badge {...args} />,
-};
 
 export const Default: StoryObj<typeof Badge> = {
     parameters: {

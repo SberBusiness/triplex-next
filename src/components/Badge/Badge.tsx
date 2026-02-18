@@ -10,7 +10,11 @@ import styles from "./styles/Badge.module.less";
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Индикатор статуса или уведомления. */
+/**
+ * Индикатор статуса или уведомления.
+ * Может содержать префикс, контент и постфикс.
+ * Для отображения точки используется компонент BadgeDot.
+ * */
 export const Badge = Object.assign(
     React.forwardRef<HTMLSpanElement, IBadgeProps>(
         ({ children, className, size, prefix, postfix, ...restProps }, ref) => (

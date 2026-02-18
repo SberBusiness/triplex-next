@@ -12,6 +12,7 @@ import { SelectExtendedFieldDropdownDefault } from "../../components/SelectExten
 import { ISelectExtendedFieldDefaultOption } from "../../components/SelectExtendedField";
 import clsx from "clsx";
 import styles from "./styles/Chip.module.less";
+import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 
 export interface IChipSortProps extends Omit<IChipSelectProps, "targetProps" | "clearSelected" | "defaultValue"> {
     /** Дефолтное значение, если текущее значение равно дефолтному, элемент не будет подсвечен как измененный. */
@@ -25,22 +26,33 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
     ({ className, defaultValue, disabled, label, onChange, options, value, size, ...rest }, ref) => {
         const selected = Boolean(value) && !isEqual(defaultValue, value);
 
-        const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => (
-            <ChipIcon
-                className={clsx("hoverable", {
-                    active: Boolean(opened),
-                })}
-                ref={ref}
-                disabled={disabled}
-                selected={selected}
-                onClick={() => setOpened(true)}
-                size={size}
-                role="combobox"
-                aria-expanded={opened}
-            >
-                {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
-            </ChipIcon>
-        );
+        const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => {
+            const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+                if (!opened && (isKey(event.code, "ENTER") || isKey(event.code, "SPACE"))) {
+                    event.preventDefault();
+                    setOpened(true);
+                }
+            };
+
+            return (
+                <ChipIcon
+                    className={clsx("hoverable", {
+                        active: Boolean(opened),
+                    })}
+                    ref={ref}
+                    disabled={disabled}
+                    selected={selected}
+                    onClick={() => setOpened(!opened)}
+                    onKeyDown={handleKeyDown}
+                    size={size}
+                    role="combobox"
+                    aria-expanded={opened}
+                    aria-controls={value?.id}
+                >
+                    {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
+                </ChipIcon>
+            );
+        };
 
         const renderDropdown = (props: ISelectExtendedFieldDropdownProvideProps) => (
             <SelectExtendedFieldDropdownDefault

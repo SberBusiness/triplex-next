@@ -50,7 +50,7 @@
     "devDependencies": {
         "@eslint/js": "9.39.2",
         "@playwright/test": "1.58.2",
-        "@sberbusiness/icons-next": "1.13.0",
+        "@sberbusiness/icons-next": "1.14.0",
         "@storybook/addon-docs": "9.1.15",
         "@storybook/addon-themes": "9.1.15",
         "@storybook/react-vite": "9.1.15",

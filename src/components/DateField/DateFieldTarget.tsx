@@ -76,6 +76,7 @@ export const DateFieldTarget: React.FC<IMaskedFieldProps> = ({
             <ButtonIcon active={dropdownOpen} disabled={disabled} onClick={handleButtonClick}>
                 {sizeToCalendarIconMap[size]}
             </ButtonIcon>
+            {postfix}
         </React.Fragment>
     );
 
@@ -90,7 +91,7 @@ export const DateFieldTarget: React.FC<IMaskedFieldProps> = ({
                 onKeyDown: handleInputKeyDown,
                 ...restInputProps,
             }}
-            postfix={postfix !== undefined ? postfix : renderPostfixContent()}
+            postfix={renderPostfixContent()}
             {...restProps}
         />
     );

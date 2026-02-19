@@ -19,8 +19,7 @@ export const BadgeContent: React.FC<IBadgeContentProps> = ({
         className={clsx(
             styles.badgeContent,
             SIZE_TO_CLASS_NAME_MAP[size],
-            { [styles.noPaddingLeft]: noPaddingLeft },
-            { [styles.noPaddingRight]: noPaddingRight },
+            { [styles.noPaddingLeft]: noPaddingLeft, [styles.noPaddingRight]: noPaddingRight },
             className,
         )}
         {...restProps}

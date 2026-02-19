@@ -131,7 +131,7 @@ export const States: StoryObj<typeof Button> = {
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY}>
-                Состояние Extended
+                Состояние Expanded
             </Title>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded>

@@ -3,10 +3,20 @@ import { Meta, StoryObj } from "@storybook/react";
 import { DateField } from "../src/components/DateField";
 import { EComponentSize } from "../src/enums";
 import { EFormFieldStatus } from "../src/components/FormField";
-import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import {
+    Title as DocsTitle,
+    Description,
+    Controls,
+    Stories,
+    ArgTypes,
+    Primary,
+    Heading,
+} from "@storybook/addon-docs/blocks";
 import { dateFormatYYYYMMDD, globalLimitRange } from "../src/consts/DateConst";
 import { EFontType, ETitleSize, Title } from "../src/components/Typography";
 import { Gap } from "../src/components/Gap";
+import { HelpBox } from "../src/components/HelpBox/HelpBox";
+import { ETooltipPreferPlace, ETooltipSize } from "../src/components/Tooltip/enums";
 
 export default {
     title: "Components/DateField",
@@ -25,7 +35,11 @@ export default {
                 <>
                     <DocsTitle />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Default} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -116,6 +130,7 @@ export default {
 type Story = StoryObj<typeof DateField>;
 
 export const Playground: Story = {
+    tags: ["!autodocs"],
     args: {
         size: EComponentSize.MD,
         status: EFormFieldStatus.DEFAULT,
@@ -159,6 +174,31 @@ export const Default: Story = {
         const [value, setValue] = useState("");
 
         return <DateField value={value} onChange={setValue} label="Label" placeholderMask="дд.мм.гггг" />;
+    },
+};
+
+export const WithPostfix: Story = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <DateField
+                value={value}
+                onChange={setValue}
+                label="Label"
+                placeholderMask="дд.мм.гггг"
+                targetProps={{
+                    postfix: (
+                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                            Text
+                        </HelpBox>
+                    ),
+                }}
+            />
+        );
     },
 };
 

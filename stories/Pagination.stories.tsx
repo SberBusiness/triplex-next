@@ -10,7 +10,17 @@ import {
     Heading,
     Subheading,
 } from "@storybook/addon-docs/blocks";
-import { Pagination, PaginationExtended, PaginationNavigation, PaginationSelect } from "../src/components/Pagination";
+import {
+    EPaginationNavigationIconDirection,
+    Pagination,
+    PaginationExtended,
+    PaginationNavigation,
+    PaginationNavigationButton,
+    PaginationNavigationExtended,
+    PaginationNavigationExtendedItem,
+    PaginationPageButton,
+    PaginationSelect,
+} from "../src/components/Pagination";
 import { ISelectExtendedFieldDefaultOption } from "../src/components/SelectExtendedField";
 
 export default {
@@ -251,6 +261,8 @@ export const Extended: StoryObj<typeof Pagination> = {
         const totalItems = 300;
         const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
+        console.log("totalPages - ", totalPages);
+
         const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
             setPageSize(Number(option.value));
         };
@@ -268,13 +280,29 @@ export const Extended: StoryObj<typeof Pagination> = {
         return (
             <PaginationExtended>
                 {totalPages > 1 && (
-                    <PaginationNavigation
-                        currentPage={page}
-                        totalPages={totalPages}
-                        boundaryCount={1}
-                        siblingCount={1}
-                        onCurrentPageChange={setPage}
-                    />
+                    <PaginationNavigationExtended>
+                        <PaginationNavigationExtendedItem>
+                            <PaginationNavigationButton
+                                direction={EPaginationNavigationIconDirection.BACK}
+                                onClick={() => setPage(page - 1)}
+                                disabled={page === 1}
+                            />
+                        </PaginationNavigationExtendedItem>
+
+                        <PaginationNavigationExtendedItem key="current-page">
+                            <PaginationPageButton isCurrent onClick={() => {}}>
+                                {page}
+                            </PaginationPageButton>
+                        </PaginationNavigationExtendedItem>
+
+                        <PaginationNavigationExtendedItem>
+                            <PaginationNavigationButton
+                                direction={EPaginationNavigationIconDirection.NEXT}
+                                onClick={() => setPage(page + 1)}
+                                disabled={page === totalPages}
+                            />
+                        </PaginationNavigationExtendedItem>
+                    </PaginationNavigationExtended>
                 )}
                 <PaginationSelect
                     paginationLabel="Показать на странице:"

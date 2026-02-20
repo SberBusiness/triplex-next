@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { isEqual } from "lodash";
 import { ChipIcon } from "./ChipIcon";
 import { IChipSelectProps } from "./ChipSelect/ChipSelect";
@@ -10,6 +10,7 @@ import {
 } from "../../components/SelectExtendedField";
 import { SelectExtendedFieldDropdownDefault } from "../../components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
 import { ISelectExtendedFieldDefaultOption } from "../../components/SelectExtendedField";
+import { uniqueId } from "lodash-es";
 import clsx from "clsx";
 import styles from "./styles/Chip.module.less";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
@@ -24,6 +25,7 @@ export interface IChipSortProps extends Omit<IChipSelectProps, "targetProps" | "
  */
 export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
     ({ className, defaultValue, disabled, label, onChange, options, value, size, ...rest }, ref) => {
+        const instanceId = useRef(uniqueId());
         const selected = Boolean(value) && !isEqual(defaultValue, value);
 
         const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => {
@@ -47,7 +49,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
                     size={size}
                     role="combobox"
                     aria-expanded={opened}
-                    aria-controls={value?.id}
+                    aria-controls={instanceId.current}
                 >
                     {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
                 </ChipIcon>
@@ -63,6 +65,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
                 options={options}
                 value={value}
                 fixedWidth={false}
+                listId={instanceId.current}
             />
         );
 

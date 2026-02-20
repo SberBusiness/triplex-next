@@ -18,6 +18,7 @@ export interface ISelectFieldOption extends ISelectExtendedFieldDefaultOption {}
 export interface ISelectFieldProps
     extends Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget" | "placeholder">,
         Pick<ISelectExtendedFieldTargetProps, "loading" | "status" | "placeholder"> {
+    /** Размер компонента. */
     size: EComponentSize;
     children?: never;
     /** Текущее выбранное значение. */

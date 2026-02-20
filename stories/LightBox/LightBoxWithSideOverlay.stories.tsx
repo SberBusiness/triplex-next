@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as SBTitle } from "@storybook/addon-docs/blocks";
+import { ArgTypes, Description, Stories, Title as SBTitle } from "@storybook/addon-docs/blocks";
 import { LightBox } from "../../src/components/LightBox/LightBox";
 import { Page } from "../../src/components/Page/Page";
 import { Button } from "../../src/components/Button/Button";
@@ -14,7 +14,6 @@ import { IslandBody } from "../../src/components/Island/components/IslandBody";
 import { EIslandType } from "../../src/components/Island/enums";
 import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { ELightBoxSideOverlaySize } from "../../src/components/LightBox/LightBoxSideOverlay/enums";
 import { MobileView } from "../../src/components/MobileView/MobileView";
 import "./styles.less";
 
@@ -35,6 +34,8 @@ const meta = {
                 <>
                     <SBTitle />
                     <Description />
+                    <h2>Props</h2>
+                    <ArgTypes of={LightBox.SideOverlay} />
                     <Stories />
                 </>
             ),
@@ -74,7 +75,7 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const LightBoxWithSideOverlay: React.FC = () => {
+export const Default: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [openedSideOverlayLG, setOpenedSideOverlayLG] = useState(false);
     const [openedSideOverlayMD, setOpenedSideOverlayMD] = useState(false);
@@ -100,7 +101,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
         <LightBox.SideOverlay
             key="sideOverlayLG"
             opened={openedSideOverlayLG}
-            size={ELightBoxSideOverlaySize.LG}
+            size={EComponentSize.LG}
             isTopLevelSideOverlayOpened={openedSideOverlayMD || openedSideOverlaySM}
         >
             <Page>
@@ -173,7 +174,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
         <LightBox.SideOverlay
             key="sideOverlayMD"
             opened={openedSideOverlayMD}
-            size={ELightBoxSideOverlaySize.MD}
+            size={EComponentSize.MD}
             isTopLevelSideOverlayOpened={openedSideOverlaySM}
         >
             <Page>
@@ -241,7 +242,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
     );
 
     const renderLightBoxSideOverlaySM = () => (
-        <LightBox.SideOverlay key="sideOverlaySM" opened={openedSideOverlaySM} size={ELightBoxSideOverlaySize.SM}>
+        <LightBox.SideOverlay key="sideOverlaySM" opened={openedSideOverlaySM} size={EComponentSize.SM}>
             <Page>
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
                     <Page.Header.Title>
@@ -392,7 +393,7 @@ export const LightBoxWithSideOverlay: React.FC = () => {
     );
 };
 
-export const LightBoxWithSideOverlayLoading: React.FC = () => {
+export const Loading: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [openedSideOverlayLG, setOpenedSideOverlayLG] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -416,7 +417,7 @@ export const LightBoxWithSideOverlayLoading: React.FC = () => {
         <LightBox.SideOverlay
             key="sideOverlayLG"
             opened={openedSideOverlayLG}
-            size={ELightBoxSideOverlaySize.LG}
+            size={EComponentSize.LG}
             isTopLevelSideOverlayOpened={false}
             isLoading={isLoading}
         >

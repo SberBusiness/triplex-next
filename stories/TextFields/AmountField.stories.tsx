@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
 import { AmountField } from "../../src/components/AmountField/AmountField";
 import { Text, ETextSize, EFontType } from "../../src/components/Typography";
 import { EFormFieldStatus } from "../../src/components/FormField/enums";
@@ -18,9 +18,9 @@ const meta = {
                 <>
                     <Title />
                     <Description />
-                    <Title>Props</Title>
+                    <Heading>Props</Heading>
                     <ArgTypes of={AmountField} />
-                    <Title>Playground</Title>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

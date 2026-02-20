@@ -1,6 +1,14 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
-import { Title as DocsTitle, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import {
+    Title as DocsTitle,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    ArgTypes,
+    Heading,
+} from "@storybook/addon-docs/blocks";
 import { Title, ETitleSize, EFontWeightTitle, EFontType } from "../../src";
 import "./Typography.less";
 
@@ -12,9 +20,9 @@ export default {
                 <>
                     <DocsTitle />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Title} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

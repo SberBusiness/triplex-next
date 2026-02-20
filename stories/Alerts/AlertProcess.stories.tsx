@@ -11,7 +11,7 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Link } from "../../src/components/Link";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Alerts/AlertProcess",
@@ -35,9 +35,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={AlertProcess} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

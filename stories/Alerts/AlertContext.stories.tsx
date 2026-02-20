@@ -3,7 +3,7 @@ import { AlertContext } from "../../src/components/Alert/AlertContext/AlertConte
 import { StoryObj } from "@storybook/react";
 import { EAlertType } from "../../src/components/Alert/EAlertType";
 import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
-import { Title, Description, Primary, Controls, Stories, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Alerts/AlertContext",
@@ -24,9 +24,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={AlertContext} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

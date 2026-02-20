@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, ArgTypes, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
 import { Avatar, EAvatarSize } from "../src/components/Avatar";
 import { Title as TypographyTitle, ETitleSize, EFontType, EFontWeightTitle } from "../src/components/Typography";
 
@@ -13,9 +13,9 @@ const meta = {
                 <>
                     <Title />
                     <Description />
-                    <Title>Props</Title>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Avatar} />
-                    <Title>Playground</Title>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

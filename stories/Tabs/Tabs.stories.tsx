@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Controls, Description, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import {
+    ArgTypes,
+    Controls,
+    Description,
+    Primary,
+    Stories,
+    Title as DocsTitle,
+    Heading,
+} from "@storybook/addon-docs/blocks";
 import { Tabs } from "../../src/components/Tabs";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
 import { ETabsExtendedType } from "../../src/components/TabsExtended";
 import "./Tabs.less";
+import { EFontType, ETitleSize, Title } from "../../src/components/Typography";
 
 export default {
     title: "Components/Tabs",
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     component: Tabs,
     tags: ["autodocs"],
     parameters: {
@@ -21,15 +33,18 @@ export default {
 ## Особенности
 
 - **Типы**: type1, type2
-- **Размеры**: small (SM), medium (MD), large (LG)
+- **Размеры**: SM, MD, LG
 
                 `,
             },
             page: () => (
                 <>
-                    <Title />
-                    <Subtitle />
+                    <DocsTitle />
                     <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Tabs} />
+                    <Heading>Playground</Heading>
+                    <Primary />
                     <Controls of={Playground} />
                     <Stories />
                 </>
@@ -39,7 +54,7 @@ export default {
 };
 
 export const Playground: StoryObj<typeof Tabs> = {
-    name: "Playground",
+    tags: ["!autodocs"],
     args: {
         size: EComponentSize.MD,
         type: ETabsExtendedType.TYPE_1,
@@ -65,6 +80,12 @@ export const Playground: StoryObj<typeof Tabs> = {
     parameters: {
         controls: {
             include: ["size", "type"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => {
@@ -95,13 +116,17 @@ export const Playground: StoryObj<typeof Tabs> = {
     },
 };
 
-export const Type1: StoryObj<typeof Tabs> = {
-    name: "Type 1",
+export const Types: StoryObj<typeof Tabs> = {
     parameters: {
         controls: { disable: true },
     },
     render: () => {
-        const [selectedTabId, setSelectedTabId] = useState("tabs-tab-0");
+        const [selectedTabIdType1SM, setSelectedTabIdType1SM] = useState("tabs-tab-0-0");
+        const [selectedTabIdType1MD, setSelectedTabIdType1MD] = useState("tabs-tab-1-0");
+        const [selectedTabIdType1LG, setSelectedTabIdType1LG] = useState("tabs-tab-2-0");
+        const [selectedTabIdType2SM, setSelectedTabIdType2SM] = useState("tabs-tab-0-0");
+        const [selectedTabIdType2MD, setSelectedTabIdType2MD] = useState("tabs-tab-1-0");
+        const [selectedTabIdType2LG, setSelectedTabIdType2LG] = useState("tabs-tab-2-0");
 
         const tabs_0 = [
             { id: "tabs-tab-0-0", label: "Tab Name" },
@@ -143,110 +168,66 @@ export const Type1: StoryObj<typeof Tabs> = {
         ];
 
         return (
-            <div className="tabs-type1-example">
-                <Tabs
-                    tabs={tabs_0}
-                    selectedId={selectedTabId}
-                    onSelectTab={(id) => setSelectedTabId(id)}
-                    size={EComponentSize.SM}
-                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                />
-                <Gap size={16} />
-                <Tabs
-                    tabs={tabs_1}
-                    selectedId={selectedTabId}
-                    onSelectTab={(id) => setSelectedTabId(id)}
-                    size={EComponentSize.MD}
-                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                />
-                <Gap size={16} />
-                <Tabs
-                    tabs={tabs_2}
-                    selectedId={selectedTabId}
-                    onSelectTab={(id) => setSelectedTabId(id)}
-                    size={EComponentSize.LG}
-                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                />
-            </div>
-        );
-    },
-};
-
-export const Type2: StoryObj<typeof Tabs> = {
-    name: "Type 2",
-    parameters: {
-        controls: { disable: true },
-    },
-    render: () => {
-        const [selectedTabId, setSelectedTabId] = useState("tabs-tab-0");
-
-        const tabs_0 = [
-            { id: "tabs-tab-0-0", label: "Tab Name" },
-            { id: "tabs-tab-0-1", label: "Tab Name" },
-            { id: "tabs-tab-0-2", label: "Tab Name" },
-            { id: "tabs-tab-0-3", label: "Tab Name" },
-            { id: "tabs-tab-0-4", label: "Tab Name" },
-            { id: "tabs-tab-0-5", label: "Tab Name" },
-            { id: "tabs-tab-0-6", label: "Tab Name" },
-            { id: "tabs-tab-0-7", label: "Tab Name" },
-            { id: "tabs-tab-0-8", label: "Tab Name" },
-            { id: "tabs-tab-0-9", label: "Tab Name" },
-        ];
-
-        const tabs_1 = [
-            { id: "tabs-tab-1-0", label: "Tab Name" },
-            { id: "tabs-tab-1-1", label: "Tab Name" },
-            { id: "tabs-tab-1-2", label: "Tab Name" },
-            { id: "tabs-tab-1-3", label: "Tab Name" },
-            { id: "tabs-tab-1-4", label: "Tab Name" },
-            { id: "tabs-tab-1-5", label: "Tab Name" },
-            { id: "tabs-tab-1-6", label: "Tab Name" },
-            { id: "tabs-tab-1-7", label: "Tab Name" },
-            { id: "tabs-tab-1-8", label: "Tab Name" },
-            { id: "tabs-tab-1-9", label: "Tab Name" },
-        ];
-
-        const tabs_2 = [
-            { id: "tabs-tab-2-0", label: "Tab Name" },
-            { id: "tabs-tab-2-1", label: "Tab Name" },
-            { id: "tabs-tab-2-2", label: "Tab Name" },
-            { id: "tabs-tab-2-3", label: "Tab Name" },
-            { id: "tabs-tab-2-4", label: "Tab Name" },
-            { id: "tabs-tab-2-5", label: "Tab Name" },
-            { id: "tabs-tab-2-6", label: "Tab Name" },
-            { id: "tabs-tab-2-7", label: "Tab Name" },
-            { id: "tabs-tab-2-8", label: "Tab Name" },
-            { id: "tabs-tab-2-9", label: "Tab Name" },
-        ];
-
-        return (
-            <div className="tabs-type2-example">
-                <Tabs
-                    tabs={tabs_0}
-                    selectedId={selectedTabId}
-                    onSelectTab={(id) => setSelectedTabId(id)}
-                    type={ETabsExtendedType.TYPE_2}
-                    size={EComponentSize.SM}
-                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                />
-                <Gap size={16} />
-                <Tabs
-                    tabs={tabs_1}
-                    selectedId={selectedTabId}
-                    onSelectTab={(id) => setSelectedTabId(id)}
-                    type={ETabsExtendedType.TYPE_2}
-                    size={EComponentSize.MD}
-                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                />
-                <Gap size={16} />
-                <Tabs
-                    tabs={tabs_2}
-                    selectedId={selectedTabId}
-                    onSelectTab={(id) => setSelectedTabId(id)}
-                    type={ETabsExtendedType.TYPE_2}
-                    size={EComponentSize.LG}
-                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                />
+            <div style={{ display: "flex", gap: 16 }}>
+                <div className="tabs-type1-example">
+                    <Title size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Type 1
+                    </Title>
+                    <Tabs
+                        tabs={tabs_0}
+                        selectedId={selectedTabIdType1SM}
+                        onSelectTab={(id) => setSelectedTabIdType1SM(id)}
+                        size={EComponentSize.SM}
+                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                    />
+                    <Gap size={16} />
+                    <Tabs
+                        tabs={tabs_1}
+                        selectedId={selectedTabIdType1MD}
+                        onSelectTab={(id) => setSelectedTabIdType1MD(id)}
+                        size={EComponentSize.MD}
+                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                    />
+                    <Gap size={16} />
+                    <Tabs
+                        tabs={tabs_2}
+                        selectedId={selectedTabIdType1LG}
+                        onSelectTab={(id) => setSelectedTabIdType1LG(id)}
+                        size={EComponentSize.LG}
+                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                    />
+                </div>
+                <div className="tabs-type2-example">
+                    <Title size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
+                        Type 2
+                    </Title>
+                    <Tabs
+                        tabs={tabs_0}
+                        selectedId={selectedTabIdType2SM}
+                        onSelectTab={(id) => setSelectedTabIdType2SM(id)}
+                        type={ETabsExtendedType.TYPE_2}
+                        size={EComponentSize.SM}
+                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                    />
+                    <Gap size={16} />
+                    <Tabs
+                        tabs={tabs_1}
+                        selectedId={selectedTabIdType2MD}
+                        onSelectTab={(id) => setSelectedTabIdType2MD(id)}
+                        type={ETabsExtendedType.TYPE_2}
+                        size={EComponentSize.MD}
+                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                    />
+                    <Gap size={16} />
+                    <Tabs
+                        tabs={tabs_2}
+                        selectedId={selectedTabIdType2LG}
+                        onSelectTab={(id) => setSelectedTabIdType2LG(id)}
+                        type={ETabsExtendedType.TYPE_2}
+                        size={EComponentSize.LG}
+                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                    />
+                </div>
             </div>
         );
     },

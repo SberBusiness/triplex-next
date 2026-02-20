@@ -1,5 +1,14 @@
 import React, { useRef, useState } from "react";
-import { ArgTypes, Controls, Description, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
+import {
+    ArgTypes,
+    Controls,
+    Description,
+    Heading,
+    Primary,
+    Stories,
+    Subheading,
+    Title,
+} from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { MultiselectField } from "../../src/components/MultiselectField";
 import {
@@ -65,14 +74,14 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
-                    <h3>MultiselectField</h3>
+                    <Heading>Props</Heading>
+                    <Subheading>MultiselectField</Subheading>
                     <ArgTypes of={MultiselectField} />
-                    <h3>MultiselectField.Target</h3>
+                    <Subheading>MultiselectField.Target</Subheading>
                     <ArgTypes of={MultiselectField.Target} />
-                    <h3>MultiselectField.Dropdown</h3>
+                    <Subheading>MultiselectField.Dropdown</Subheading>
                     <ArgTypes of={MultiselectField.Dropdown} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

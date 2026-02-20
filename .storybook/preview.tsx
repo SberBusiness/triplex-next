@@ -62,7 +62,7 @@ const preview: Preview = {
         },
         options: {
             storySort: {
-                order: ["Introduction", "Components", "*"],
+                order: ["Introduction", "release-notes", "Components", "*"],
             },
             showPanel: true,
         },

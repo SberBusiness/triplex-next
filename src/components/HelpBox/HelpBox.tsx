@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { uniqueId } from "lodash-es";
 import FocusTrap from "focus-trap-react";
-import { QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { ISingleColorIconProps, QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { EButtonIconShape } from "../Button/enums";
 import { Tooltip } from "../Tooltip/Tooltip";
@@ -28,6 +28,8 @@ export interface IHelpBoxProps
     tooltipSize: ETooltipSize;
     /** Контент заголовка TooltipMobile. */
     mobileHeaderContent?: React.ReactNode;
+    /** Свойства иконки. */
+    iconProps?: ISingleColorIconProps;
 }
 
 /** Иконка "?" со всплывающей подсказкой выбранного размера. */
@@ -43,6 +45,7 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
     toggle,
     tooltipAriaAttributes,
     tooltipDataAttributes,
+    iconProps,
     ...targetHtmlAttrs
 }) => {
     const ref = useRef<HTMLButtonElement>(null);
@@ -115,7 +118,7 @@ export const HelpBox: React.FC<IHelpBoxProps> = ({
                         ref={ref}
                         {...targetHtmlAttrs}
                     >
-                        <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
+                        <QuestioncircleFilledSrvIcon16 paletteIndex={5} {...iconProps} />
                     </ButtonIcon>
                 </Tooltip.Target>
                 {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}

@@ -5,7 +5,7 @@ import { Gap } from "../src/components/Gap";
 import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Stories, ArgTypes, Controls } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Stories, ArgTypes, Controls, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Checkbox",
@@ -27,9 +27,9 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <h2>Props</h2>
+                    <Heading>Props</Heading>
                     <ArgTypes of={Checkbox} />
-                    <h2>Playground</h2>
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />

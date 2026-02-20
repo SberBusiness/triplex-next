@@ -98,7 +98,7 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
                 ),
             }}
         >
-            <SelectExtendedField.Dropdown.List id={listId} dropdownOpened={opened}>
+            <SelectExtendedField.Dropdown.List id={listId} dropdownOpened={opened} size={size}>
                 {options.map((option) => {
                     const { label, ...restOption } = option;
 

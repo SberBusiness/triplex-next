@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { ChipSort } from "../../src/components/Chip/ChipSort";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipSort",
@@ -16,16 +16,19 @@ ChipSelect с иконкой выбора сортировки.
 
 ## Особенности
 
-- **Размеры**: SM, MD, LG.
-- Элемент отображается как selected, если выбранное значение (value) отличается от свойства defaultValue.
+- **Размеры**: SM, MD, LG
+- Элемент отображается как **selected**, если выбранное значение (value) отличается от свойства defaultValue
                 `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ChipSort} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -40,7 +43,7 @@ const options = [
 ];
 
 export const Playground: StoryObj<typeof ChipSort> = {
-    name: "Playground",
+    tags: ["!autodocs"],
     args: {
         size: EComponentSize.MD,
         disabled: false,
@@ -50,8 +53,6 @@ export const Playground: StoryObj<typeof ChipSort> = {
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер компонента",
-            table: { type: { summary: "EComponentSize" }, defaultValue: { summary: EComponentSize.SM } },
         },
         disabled: { control: { type: "boolean" } },
         defaultValue: {
@@ -63,6 +64,12 @@ export const Playground: StoryObj<typeof ChipSort> = {
     parameters: {
         controls: {
             include: ["size", "disabled", "defaultValue"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => {
@@ -76,7 +83,6 @@ export const Playground: StoryObj<typeof ChipSort> = {
 };
 
 export const Default: StoryObj<typeof ChipSort> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -87,8 +93,7 @@ export const Default: StoryObj<typeof ChipSort> = {
     },
 };
 
-export const DifferentSizes: StoryObj<typeof ChipSort> = {
-    name: "Different Sizes",
+export const Sizes: StoryObj<typeof ChipSort> = {
     parameters: {
         controls: { disable: true },
     },

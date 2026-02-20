@@ -59,4 +59,82 @@ describe("Badge", () => {
 
         expect(screen.getByTestId("inner-content")).toBeInTheDocument();
     });
+
+    it("should render with prefix", () => {
+        render(
+            <Badge size={EComponentSize.MD} prefix={<span data-testid="prefix-icon">Icon</span>} data-testid="badge">
+                Badge text
+            </Badge>,
+        );
+
+        expect(screen.getByTestId("prefix-icon")).toBeInTheDocument();
+        expect(screen.getByText("Badge text")).toBeInTheDocument();
+    });
+
+    it("should render with postfix", () => {
+        render(
+            <Badge size={EComponentSize.MD} postfix={<span data-testid="postfix-icon">Icon</span>} data-testid="badge">
+                Badge text
+            </Badge>,
+        );
+
+        expect(screen.getByTestId("postfix-icon")).toBeInTheDocument();
+        expect(screen.getByText("Badge text")).toBeInTheDocument();
+    });
+
+    it("should render with both prefix and postfix", () => {
+        render(
+            <Badge
+                size={EComponentSize.MD}
+                prefix={<span data-testid="prefix-icon">Prefix</span>}
+                postfix={<span data-testid="postfix-icon">Postfix</span>}
+                data-testid="badge"
+            >
+                Badge text
+            </Badge>,
+        );
+
+        expect(screen.getByTestId("prefix-icon")).toBeInTheDocument();
+        expect(screen.getByText("Badge text")).toBeInTheDocument();
+        expect(screen.getByTestId("postfix-icon")).toBeInTheDocument();
+    });
+
+    it("should render only prefix without content", () => {
+        render(<Badge size={EComponentSize.MD} prefix={<span data-testid="prefix-icon">Icon</span>} />);
+
+        expect(screen.getByTestId("prefix-icon")).toBeInTheDocument();
+        expect(screen.queryByText("Badge text")).not.toBeInTheDocument();
+    });
+
+    it("should render only postfix without content", () => {
+        render(<Badge size={EComponentSize.MD} postfix={<span data-testid="postfix-icon">Icon</span>} />);
+
+        expect(screen.getByTestId("postfix-icon")).toBeInTheDocument();
+        expect(screen.queryByText("Badge text")).not.toBeInTheDocument();
+    });
+
+    it("should not render prefix when not provided", () => {
+        const { container } = render(<Badge size={EComponentSize.MD}>Badge text</Badge>);
+
+        expect(container.querySelector("[class*='badgePrefix']")).not.toBeInTheDocument();
+    });
+
+    it("should not render postfix when not provided", () => {
+        const { container } = render(<Badge size={EComponentSize.MD}>Badge text</Badge>);
+
+        expect(container.querySelector("[class*='badgePostfix']")).not.toBeInTheDocument();
+    });
+
+    it("should not render content when children is not provided", () => {
+        const { container } = render(<Badge size={EComponentSize.MD} />);
+
+        expect(container.querySelector("[class*='badgeContent']")).not.toBeInTheDocument();
+    });
+
+    it("should render Badge.Dot correctly", () => {
+        render(<Badge.Dot size={EComponentSize.MD} data-testid="badge-dot" />);
+        const badgeDot = screen.getByTestId("badge-dot");
+
+        expect(badgeDot).toBeInTheDocument();
+    });
 });

@@ -1,9 +1,10 @@
 @import "src/styles/style";
 
 .button {
+    display: flex;
+    align-items: center;
     position: relative;
     margin: 0; // Фиксим отступ в Safari.
-    vertical-align: top;
     outline: none;
     font-family: inherit;
     background-clip: padding-box;
@@ -28,14 +29,14 @@
         &.danger {
             height: 28px;
             min-width: 58px;
-            padding: 6px 16px;
+            padding: 0 16px;
             border-radius: 6px;
         }
 
         &.icon {
             min-height: 28px;
             min-width: 28px;
-            padding: 4px;
+            padding: 0 4px;
         }
     }
 
@@ -49,14 +50,14 @@
         &.danger {
             height: 40px;
             min-width: 72px;
-            padding: 10px 20px;
+            padding: 0 20px;
             border-radius: 8px;
         }
 
         &.icon {
             min-height: 40px;
             min-width: 40px;
-            padding: 10px;
+            padding: 0 10px;
         }
     }
 
@@ -70,14 +71,14 @@
         &.danger {
             height: 56px;
             min-width: 84px;
-            padding: 18px 24px;
+            padding: 0 24px;
             border-radius: 10px;
         }
 
         &.icon {
             min-height: 56px;
             min-width: 56px;
-            padding: 12px;
+            padding: 0 12px;
         }
     }
 

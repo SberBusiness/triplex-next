@@ -1,8 +1,6 @@
-// noinspection ES6PreferShortImport
-
 import React, { useEffect, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
 import { MasterTable } from "../../src/components/Table/MasterTable";
 import { Amount } from "../../src/components/Amount/Amount";
 import { ColumnSettings } from "../../src/components/Table/TableBasicSettings/components/ColumnSettings";
@@ -37,8 +35,18 @@ import { Tag } from "../../src/components/Tag/Tag";
 import { TagGroup } from "../../src/components/TagGroup/TagGroup";
 import { Link } from "../../src/components/Link/Link";
 import { ITableFilters } from "./types";
+import { ISelectExtendedFieldDefaultOption } from "../../src/components/SelectExtendedField";
+import {
+    EPaginationNavigationIconDirection,
+    Pagination,
+    PaginationExtended,
+    PaginationNavigationButton,
+    PaginationNavigationExtended,
+    PaginationNavigationExtendedItem,
+    PaginationPageButton,
+    PaginationSelect,
+} from "../../src/components/Pagination";
 
-// noinspection JSUnusedGlobalSymbols
 export default {
     title: "Components/TableBasic",
     component: MasterTable,
@@ -51,8 +59,12 @@ export default {
             page: () => (
                 <>
                     <Title />
-                    <Subtitle />
                     <Description />
+                    <Heading>Props MasterTable</Heading>
+                    <ArgTypes of={MasterTable} />
+                    <Heading>Props MasterTable.TableBasic</Heading>
+                    <ArgTypes of={MasterTable.TableBasic} />
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -606,9 +618,9 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             },
         },
     },
+    tags: ["!autodocs"],
 };
 
-// noinspection JSUnusedGlobalSymbols
 export const TableSpan: StoryObj = {
     render: () => {
         const backendData = [
@@ -670,7 +682,7 @@ export const TableSpan: StoryObj = {
         ];
 
         return (
-            <div style={{ width: "600px" }}>
+            <div style={{ maxWidth: "600px" }}>
                 <MasterTable>
                     <MasterTable.TableBasic columns={columns} data={backendData} />
                 </MasterTable>
@@ -685,7 +697,6 @@ export const TableSpan: StoryObj = {
     },
 };
 
-// noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumn: StoryObj = {
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
@@ -814,7 +825,6 @@ export const TableSettingsColumn: StoryObj = {
     },
 };
 
-// noinspection JSUnusedGlobalSymbols
 export const TableSettingsColumnExtended: StoryObj = {
     render: () => {
         const defaultColumns: ITableBasicColumn[] = [
@@ -918,8 +928,6 @@ export const TableSettingsColumnExtended: StoryObj = {
                                     checked={Boolean(value)}
                                     onChange={(event) => handleChildCheckboxChange(event, key)}
                                 >
-                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                    {/*@ts-expect-error*/}
                                     {mapValueColumnOptionKeyToName[key]}
                                 </Checkbox>
                             </ColumnSettings.StaticList.Item>
@@ -1074,6 +1082,216 @@ export const TableSettingsColumnExtended: StoryObj = {
         docs: {
             description: {
                 story: "Расширенная настройка колонок. Позволяет скрывать/показывать не только колонки, но и элементы внутри колонок. Отображение колонки зависит от свойства hidden в объекте, описывающем column. Логика отображения элементов внутри колонок всегда кастомная, это только один из возможных вариантов.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const TableWithPagination: StoryObj = {
+    render: () => {
+        const columns: ITableBasicColumn[] = [
+            {
+                fieldKey: "number",
+                label: "Номер",
+            },
+            {
+                fieldKey: "value",
+                label: "Получатель",
+            },
+            {
+                fieldKey: "sum",
+                horizontalAlign: EHorizontalAlign.RIGHT,
+                label: "Сумма",
+                renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
+            },
+            {
+                fieldKey: "status",
+                label: "Статус",
+            },
+        ];
+
+        const data = Array.from({ length: 300 }, (_, index) => ({
+            rowData: {
+                number: 1000 + index,
+                status: "Исполнено",
+                sum: "1220000000",
+                value: renderCounterpartyDetails(
+                    "Платежное поручение ООО Ромашка",
+                    "40702 810 2 0527 5000000",
+                    "В том числе НДС 20%",
+                ),
+            },
+            rowKey: `table-basic-row-${index}`,
+        }));
+
+        const [page, setPage] = useState(1);
+        const [pageSize, setPageSize] = useState(10);
+        const totalItems = data.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPage(1);
+            setPageSize(Number(option.value));
+        };
+
+        const options: ISelectExtendedFieldDefaultOption[] = [
+            { id: "0", value: "10", label: "10" },
+            { id: "1", value: "20", label: "20" },
+            { id: "2", value: "50", label: "50" },
+            { id: "3", value: "100", label: "100" },
+        ];
+
+        const selectedOption = options.find((option) => option.value === String(pageSize));
+
+        const getPaginatedData = () => {
+            return data.slice((page - 1) * pageSize, page * pageSize);
+        };
+
+        return (
+            <MasterTable>
+                <MasterTable.TableBasic columns={columns} data={getPaginatedData()} />
+                <MasterTable.PaginationPanel>
+                    <Pagination
+                        paginationNavigationProps={{
+                            currentPage: page,
+                            totalPages,
+                            boundaryCount: 1,
+                            siblingCount: 1,
+                            onCurrentPageChange: setPage,
+                        }}
+                        paginationSelectProps={{
+                            paginationLabel: "Показать на странице:",
+                            options,
+                            value: selectedOption || options[0],
+                            onChange: handlePageSizeChange,
+                            targetProps: {
+                                fieldLabel: "",
+                            },
+                        }}
+                    />
+                </MasterTable.PaginationPanel>
+            </MasterTable>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Таблица с пагинацией, когда известно количество данных, в текущей реализации это 300 строк. Реализуется через компоненты PaginationPanel и Pagination.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const TableWithPaginationExtended: StoryObj = {
+    render: () => {
+        const columns: ITableBasicColumn[] = [
+            {
+                fieldKey: "number",
+                label: "Номер",
+            },
+            {
+                fieldKey: "value",
+                label: "Получатель",
+            },
+            {
+                fieldKey: "sum",
+                horizontalAlign: EHorizontalAlign.RIGHT,
+                label: "Сумма",
+                renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
+            },
+            {
+                fieldKey: "status",
+                label: "Статус",
+            },
+        ];
+
+        const data = Array.from({ length: 300 }, (_, index) => ({
+            rowData: {
+                number: 1000 + index,
+                status: "Исполнено",
+                sum: "1220000000",
+                value: renderCounterpartyDetails(
+                    "Платежное поручение ООО Ромашка",
+                    "40702 810 2 0527 5000000",
+                    "В том числе НДС 20%",
+                ),
+            },
+            rowKey: `table-basic-row-${index}`,
+        }));
+
+        const [page, setPage] = useState(1);
+        const [pageSize, setPageSize] = useState(10);
+        const totalItems = data.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+            setPage(1);
+            setPageSize(Number(option.value));
+        };
+
+        const options: ISelectExtendedFieldDefaultOption[] = [
+            { id: "0", value: "10", label: "10" },
+            { id: "1", value: "20", label: "20" },
+            { id: "2", value: "50", label: "50" },
+            { id: "3", value: "100", label: "100" },
+        ];
+
+        const selectedOption = options.find((option) => option.value === String(pageSize));
+
+        const getPaginatedData = () => {
+            return data.slice((page - 1) * pageSize, page * pageSize);
+        };
+
+        return (
+            <MasterTable>
+                <MasterTable.TableBasic columns={columns} data={getPaginatedData()} />
+                <MasterTable.PaginationPanel>
+                    <PaginationExtended>
+                        {totalPages > 1 && (
+                            <PaginationNavigationExtended>
+                                <PaginationNavigationExtendedItem>
+                                    <PaginationNavigationButton
+                                        direction={EPaginationNavigationIconDirection.BACK}
+                                        onClick={() => setPage(page - 1)}
+                                        disabled={page === 1}
+                                    />
+                                </PaginationNavigationExtendedItem>
+
+                                <PaginationNavigationExtendedItem key="current-page">
+                                    <PaginationPageButton isCurrent onClick={() => {}}>
+                                        {page}
+                                    </PaginationPageButton>
+                                </PaginationNavigationExtendedItem>
+
+                                <PaginationNavigationExtendedItem>
+                                    <PaginationNavigationButton
+                                        direction={EPaginationNavigationIconDirection.NEXT}
+                                        onClick={() => setPage(page + 1)}
+                                        disabled={page === totalPages}
+                                    />
+                                </PaginationNavigationExtendedItem>
+                            </PaginationNavigationExtended>
+                        )}
+                        <PaginationSelect
+                            paginationLabel="Показать на странице:"
+                            value={selectedOption || options[0]}
+                            options={options}
+                            onChange={handlePageSizeChange}
+                            targetProps={{
+                                fieldLabel: "",
+                            }}
+                        />
+                    </PaginationExtended>
+                </MasterTable.PaginationPanel>
+            </MasterTable>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Таблица с PaginationExtended, можно использовать, когда заранее неизвестно количество данных.",
             },
         },
         controls: { disable: true },

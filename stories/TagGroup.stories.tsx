@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
 import { Tag, TagGroup } from "../src";
 import { EComponentSize } from "../src/enums";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
 const meta = {
     title: "Components/TagGroup",
@@ -15,8 +15,11 @@ const meta = {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Basic} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={TagGroup} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -30,7 +33,6 @@ const meta = {
 } satisfies Meta<typeof TagGroup>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 const tags = [
     { children: "Selected value", id: "tag-1" },
@@ -38,7 +40,29 @@ const tags = [
     { children: "Selected value", id: "tag-3" },
 ];
 
-export const Basic: Story = {
+export const Playground: StoryObj<typeof meta> = {
+    tags: ["!autodocs"],
+    args: {
+        size: EComponentSize.MD,
+    },
+    render: (args) => (
+        <TagGroup {...args}>
+            {tags.map((tag) => (
+                <Tag key={tag.id} size={args.size} {...tag} />
+            ))}
+        </TagGroup>
+    ),
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+};
+
+export const Basic: StoryObj<typeof meta> = {
     args: {
         size: EComponentSize.LG,
         onRemove: action("removed"),
@@ -62,7 +86,7 @@ export const Basic: Story = {
     },
 };
 
-export const Edit: Story = {
+export const Edit: StoryObj<typeof meta> = {
     args: {
         size: EComponentSize.LG,
         onEdit: action("edited"),
@@ -93,8 +117,7 @@ const sizeToLabelMap = {
     [EComponentSize.LG]: "LG",
 };
 
-export const BasicSizes: Story = {
-    name: "Basic sizes",
+export const BasicSizes: StoryObj<typeof meta> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -122,8 +145,7 @@ export const BasicSizes: Story = {
     ),
 };
 
-export const EditSizes: Story = {
-    name: "Edit sizes",
+export const EditSizes: StoryObj<typeof meta> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -152,8 +174,7 @@ export const EditSizes: Story = {
     ),
 };
 
-export const WithOverflow: Story = {
-    name: "With overflow",
+export const WithOverflow: StoryObj<typeof meta> = {
     parameters: {
         controls: { disable: true },
         docs: {

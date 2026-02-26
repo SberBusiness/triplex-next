@@ -14,10 +14,11 @@ export interface IFormFieldTargetProps extends React.HTMLAttributes<HTMLDivEleme
 /** Компонент, отображающий нередактируемое значение. */
 export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTargetProps>((props, ref) => {
     const { className, id, onBlur, onFocus, placeholder, children, ...restProps } = props;
-    const { status, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
+    const { status, setFocused, setId, setValueExist, size, active } = useContext(FormFieldContext);
     const classNames = clsx(styles.formFieldTarget, className, styles[`size-${size}`], {
         [styles.disabled]: status === EFormFieldStatus.DISABLED,
         [styles.placeholder]: !!placeholder && !children && status !== EFormFieldStatus.DISABLED,
+        [styles.active]: active,
     });
 
     const instanceId = useRef(id || uniqueId("formFieldTarget_"));

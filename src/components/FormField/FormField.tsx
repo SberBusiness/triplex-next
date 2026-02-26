@@ -14,6 +14,8 @@ export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, D
     status?: EFormFieldStatus;
     /** Размер. */
     size?: EComponentSize;
+    /** Активное состояние. */
+    active?: boolean;
 }
 
 export const statusToClassNameMap = {
@@ -36,6 +38,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
             onMouseLeave,
             style,
             size = EComponentSize.LG,
+            active = false,
             ...htmlDivAttributes
         },
         ref,
@@ -73,6 +76,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                     setValueExist,
                     valueExist,
                     size,
+                    active: active || focused,
                 }}
             >
                 <div
@@ -81,7 +85,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                         sizeToClassNameMap[size],
                         statusToClassNameMap[status],
                         {
-                            [styles.active]: focused,
+                            [styles.active]: active || focused,
                         },
                         className,
                     )}

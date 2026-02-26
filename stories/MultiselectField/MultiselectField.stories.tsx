@@ -36,15 +36,12 @@ import {
     FormFieldInput,
     FormFieldLabel,
     FormField,
+    FormFieldPostfix,
 } from "../../src/components/FormField";
 import { Text, ETextSize, EFontType } from "../../src/components/Typography";
 import { FormGroup } from "../../src/components/FormGroup";
 import { Link } from "../../src/components/Link";
-import {
-    DefaulticonStrokePrdIcon16,
-    DefaulticonStrokePrdIcon20,
-    DefaulticonStrokePrdIcon24,
-} from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 import { isKey } from "../../src/utils/keyboard";
 import "./MultiselectField.less";
 import { HelpBox } from "../../src/components/HelpBox";
@@ -95,7 +92,7 @@ interface IMultiselectFieldPlaygroundProps extends React.ComponentProps<typeof M
     size?: EComponentSize;
     status?: EFormFieldStatus;
     descriptionText?: string;
-    errorText?: string;
+    postfix?: React.ReactNode;
 }
 
 const checkboxesInitial = [
@@ -278,12 +275,6 @@ function createMultiselectFieldStoriesLogic(args) {
         );
     };
 
-    const sizeToPrefixIconMap = {
-        [EComponentSize.SM]: <DefaulticonStrokePrdIcon16 paletteIndex={5} />,
-        [EComponentSize.MD]: <DefaulticonStrokePrdIcon20 paletteIndex={5} />,
-        [EComponentSize.LG]: <DefaulticonStrokePrdIcon24 paletteIndex={5} />,
-    };
-
     const renderTarget = (props) => (
         <MultiselectField.Target
             label={renderTags()}
@@ -292,17 +283,22 @@ function createMultiselectFieldStoriesLogic(args) {
             size={args.size}
             status={args.status}
             loading={args.loading}
+            onClear={args.withClearButton ? unselectAll : undefined}
             {...props}
             ref={targetRef}
-            prefix={sizeToPrefixIconMap[args.size]}
-            postfix={<HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>}
+            prefix={args.prefix}
+            postfix={args.postfix}
         />
     );
 
-    const handleClickClearFilter = () => {
+    const handleClearFilter = () => {
         setFilter("");
         setFilteredCheckboxesId([]);
         unselectAll();
+    };
+
+    const handleClearInput = () => {
+        setFilter("");
     };
 
     const handleFilterChange = (event) => {
@@ -352,7 +348,7 @@ function createMultiselectFieldStoriesLogic(args) {
                             <Button theme={EButtonTheme.SECONDARY} onClick={() => setOpened(false)}>
                                 Button text
                             </Button>
-                            <Button theme={EButtonTheme.LINK} onClick={handleClickClearFilter}>
+                            <Button theme={EButtonTheme.LINK} onClick={handleClearFilter}>
                                 Button link text
                             </Button>
                         </DropdownMobileFooter>
@@ -362,20 +358,31 @@ function createMultiselectFieldStoriesLogic(args) {
         >
             {!args.withoutInput && (
                 <MultiselectField.Dropdown.Header>
-                    <FormField size={EComponentSize.SM}>
+                    <FormField size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}>
                         <FormFieldLabel>Type to proceed</FormFieldLabel>
                         <FormFieldInput value={filter} onChange={handleFilterChange} />
+                        <FormFieldPostfix>
+                            <FormFieldClear onClick={handleClearInput} />
+                        </FormFieldPostfix>
                     </FormField>
                 </MultiselectField.Dropdown.Header>
             )}
-            <MultiselectField.Dropdown.Content loading={args.isDropdownContentLoading}>
+            <MultiselectField.Dropdown.Content loading={args.dropdownContentLoading}>
                 {renderDropdownContent()}
             </MultiselectField.Dropdown.Content>
             <MultiselectField.Dropdown.Footer>
-                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={() => setOpened(false)}>
+                <Button
+                    theme={EButtonTheme.SECONDARY}
+                    size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+                    onClick={() => setOpened(false)}
+                >
                     Button text
                 </Button>
-                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
+                <Button
+                    theme={EButtonTheme.LINK}
+                    size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+                    onClick={handleClearFilter}
+                >
                     Button link text
                 </Button>
             </MultiselectField.Dropdown.Footer>
@@ -393,9 +400,26 @@ export const Playground: StoryObj<IMultiselectFieldPlaygroundProps> = {
     args: {
         size: EComponentSize.MD,
         status: EFormFieldStatus.DEFAULT,
-        descriptionText: "(21) Description ",
+        prefix: "",
+        postfix: "",
+        descriptionText: "",
     },
     argTypes: {
+        prefix: {
+            control: { type: "text" },
+            description: "Текст префикса",
+            table: { type: { summary: "string" } },
+        },
+        postfix: {
+            control: { type: "text" },
+            description: "Текст постфикса",
+            table: { type: { summary: "string" } },
+        },
+        descriptionText: {
+            control: { type: "text" },
+            description: "Текст описания",
+            table: { type: { summary: "string" } },
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
@@ -417,7 +441,7 @@ export const Playground: StoryObj<IMultiselectFieldPlaygroundProps> = {
     },
     parameters: {
         controls: {
-            include: ["size", "status", "descriptionText"],
+            include: ["size", "status", "descriptionText", "prefix", "postfix"],
         },
         docs: {
             canvas: {
@@ -429,41 +453,33 @@ export const Playground: StoryObj<IMultiselectFieldPlaygroundProps> = {
     render: (args) => {
         const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
 
-        const statusToTextTypeMap = {
+        const STATUS_TO_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
             [EFormFieldStatus.DISABLED]: EFontType.SECONDARY,
+            [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
             [EFormFieldStatus.ERROR]: EFontType.ERROR,
             [EFormFieldStatus.WARNING]: EFontType.WARNING,
-            [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
-        };
-
-        const statusToTextMap = {
-            [EFormFieldStatus.DISABLED]: "(21) Description ",
-            [EFormFieldStatus.ERROR]: "Error text ",
-            [EFormFieldStatus.WARNING]: "Warning text ",
-            [EFormFieldStatus.DEFAULT]: args.descriptionText || "(21) Description ",
         };
 
         return (
-            <FormGroup>
-                <MultiselectField renderTarget={renderTarget} size={args.size} data-test-id="multiselect">
-                    {(dropdownProps) => renderDropdown(dropdownProps)}
-                </MultiselectField>
+            <div style={{ maxWidth: "304px" }}>
+                <FormGroup>
+                    <MultiselectField renderTarget={renderTarget} size={args.size} data-test-id="multiselect">
+                        {(dropdownProps) => renderDropdown(dropdownProps)}
+                    </MultiselectField>
 
-                {(args.descriptionText || args.errorText) && (
-                    <FormFieldDescription>
-                        <Text
-                            tag="div"
-                            size={ETextSize.B4}
-                            type={statusToTextTypeMap[args.status || EFormFieldStatus.DEFAULT]}
-                        >
-                            {statusToTextMap[args.status || EFormFieldStatus.DEFAULT]}
-                            <Link href="#" onClick={(event) => event.preventDefault()}>
-                                Link text
-                            </Link>
-                        </Text>
-                    </FormFieldDescription>
-                )}
-            </FormGroup>
+                    {args.descriptionText && (
+                        <FormFieldDescription>
+                            <Text
+                                tag="div"
+                                size={ETextSize.B4}
+                                type={STATUS_TO_FONT_TYPE_MAP[args.status ?? EFormFieldStatus.DEFAULT]}
+                            >
+                                {args.descriptionText}
+                            </Text>
+                        </FormFieldDescription>
+                    )}
+                </FormGroup>
+            </div>
         );
     },
 };
@@ -471,6 +487,11 @@ export const Playground: StoryObj<IMultiselectFieldPlaygroundProps> = {
 export const Default: StoryObj<IMultiselectFieldPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: `Базовый пример использования MultiselectField.`,
+            },
+        },
     },
     render: () => {
         const args = {
@@ -481,16 +502,23 @@ export const Default: StoryObj<IMultiselectFieldPlaygroundProps> = {
         const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
 
         return (
-            <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
-                {(dropdownProps) => renderDropdown(dropdownProps)}
-            </MultiselectField>
+            <div style={{ maxWidth: "304px" }}>
+                <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
+                    {(dropdownProps) => renderDropdown(dropdownProps)}
+                </MultiselectField>
+            </div>
         );
     },
 };
 
-export const DifferentSizes = {
+export const Sizes: StoryObj<IMultiselectFieldPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField в трех размерах: small, medium и large.`,
+            },
+        },
     },
     render: () => {
         const sm = createMultiselectFieldStoriesLogic({ size: EComponentSize.SM, status: EFormFieldStatus.DEFAULT });
@@ -498,110 +526,92 @@ export const DifferentSizes = {
         const lg = createMultiselectFieldStoriesLogic({ size: EComponentSize.LG, status: EFormFieldStatus.DEFAULT });
 
         return (
-            <FormGroup>
-                <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                    <FormGroup>
-                        <MultiselectField renderTarget={sm.renderTarget}>
-                            {(props) => sm.renderDropdown(props)}
-                        </MultiselectField>
+            <div style={{ maxWidth: "304px" }}>
+                <FormGroup>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                        <FormGroup>
+                            <MultiselectField renderTarget={sm.renderTarget} size={EComponentSize.SM}>
+                                {(props) => sm.renderDropdown(props)}
+                            </MultiselectField>
+                        </FormGroup>
 
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                (21) Description{" "}
-                                <Link href="#" onClick={(event) => event.preventDefault()}>
-                                    Link text
-                                </Link>
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
+                        <FormGroup>
+                            <MultiselectField renderTarget={md.renderTarget}>
+                                {(props) => md.renderDropdown(props)}
+                            </MultiselectField>
+                        </FormGroup>
 
-                    <FormGroup>
-                        <MultiselectField renderTarget={md.renderTarget}>
-                            {(props) => md.renderDropdown(props)}
-                        </MultiselectField>
-
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                (21) Description{" "}
-                                <Link href="#" onClick={(event) => event.preventDefault()}>
-                                    Link text
-                                </Link>
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
-
-                    <FormGroup>
-                        <MultiselectField renderTarget={lg.renderTarget}>
-                            {(props) => lg.renderDropdown(props)}
-                        </MultiselectField>
-
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                (21) Description{" "}
-                                <Link href="#" onClick={(event) => event.preventDefault()}>
-                                    Link text
-                                </Link>
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
-                </div>
-            </FormGroup>
+                        <FormGroup>
+                            <MultiselectField renderTarget={lg.renderTarget} size={EComponentSize.LG}>
+                                {(props) => lg.renderDropdown(props)}
+                            </MultiselectField>
+                        </FormGroup>
+                    </div>
+                </FormGroup>
+            </div>
         );
     },
 };
 
-export const DifferentStatuses = {
+export const Statuses: StoryObj<IMultiselectFieldPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField в состояниях: disabled, error и warning, с соответствующими FormFieldDescription.`,
+            },
+        },
     },
     render: () => {
         const disabled = createMultiselectFieldStoriesLogic({ status: EFormFieldStatus.DISABLED });
-        const error = createMultiselectFieldStoriesLogic({ status: EFormFieldStatus.ERROR });
-        const warning = createMultiselectFieldStoriesLogic({ status: EFormFieldStatus.WARNING });
+        const error = createMultiselectFieldStoriesLogic({ size: EComponentSize.MD, status: EFormFieldStatus.ERROR });
+        const warning = createMultiselectFieldStoriesLogic({
+            size: EComponentSize.MD,
+            status: EFormFieldStatus.WARNING,
+        });
 
         return (
-            <FormGroup>
-                <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                    <FormGroup>
-                        <MultiselectField renderTarget={disabled.renderTarget}>
-                            {(props) => disabled.renderDropdown(props)}
-                        </MultiselectField>
+            <div style={{ maxWidth: "304px" }}>
+                <FormGroup>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                        <FormGroup>
+                            <MultiselectField renderTarget={disabled.renderTarget}>
+                                {(props) => disabled.renderDropdown(props)}
+                            </MultiselectField>
 
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                (21) Description{" "}
-                                <Link href="#" onClick={(event) => event.preventDefault()}>
-                                    Link text
-                                </Link>
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
+                            <FormFieldDescription>
+                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                    Disabled text
+                                </Text>
+                            </FormFieldDescription>
+                        </FormGroup>
 
-                    <FormGroup>
-                        <MultiselectField renderTarget={error.renderTarget}>
-                            {(props) => error.renderDropdown(props)}
-                        </MultiselectField>
+                        <FormGroup>
+                            <MultiselectField renderTarget={error.renderTarget}>
+                                {(props) => error.renderDropdown(props)}
+                            </MultiselectField>
 
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                                Error text
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
+                            <FormFieldDescription>
+                                <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                                    Error text
+                                </Text>
+                            </FormFieldDescription>
+                        </FormGroup>
 
-                    <FormGroup>
-                        <MultiselectField renderTarget={warning.renderTarget}>
-                            {(props) => warning.renderDropdown(props)}
-                        </MultiselectField>
+                        <FormGroup>
+                            <MultiselectField renderTarget={warning.renderTarget}>
+                                {(props) => warning.renderDropdown(props)}
+                            </MultiselectField>
 
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
-                                Warning text
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
-                </div>
-            </FormGroup>
+                            <FormFieldDescription>
+                                <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
+                                    Warning text
+                                </Text>
+                            </FormFieldDescription>
+                        </FormGroup>
+                    </div>
+                </FormGroup>
+            </div>
         );
     },
 };
@@ -609,6 +619,11 @@ export const DifferentStatuses = {
 export const Loading: StoryObj<IMultiselectFieldPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField в состояниях loading: загрузка в MultiselectField.Target и в MultiselectField.Dropdown.Content.`,
+            },
+        },
     },
     render: () => {
         const targetLoading = createMultiselectFieldStoriesLogic({
@@ -618,43 +633,23 @@ export const Loading: StoryObj<IMultiselectFieldPlaygroundProps> = {
 
         const dropdownLoading = createMultiselectFieldStoriesLogic({
             size: EComponentSize.MD,
-            isDropdownContentLoading: true,
+            dropdownContentLoading: true,
         });
 
         return (
-            <FormGroup>
-                <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                    <FormGroup>
+            <div style={{ maxWidth: "304px" }}>
+                <FormGroup>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                         <MultiselectField renderTarget={targetLoading.renderTarget}>
                             {(props) => targetLoading.renderDropdown(props)}
                         </MultiselectField>
 
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                (21) Description{" "}
-                                <Link href="#" onClick={(event) => event.preventDefault()}>
-                                    Link text
-                                </Link>
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
-
-                    <FormGroup>
                         <MultiselectField renderTarget={dropdownLoading.renderTarget}>
                             {(props) => dropdownLoading.renderDropdown(props)}
                         </MultiselectField>
-
-                        <FormFieldDescription>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                (21) Description{" "}
-                                <Link href="#" onClick={(event) => event.preventDefault()}>
-                                    Link text
-                                </Link>
-                            </Text>
-                        </FormFieldDescription>
-                    </FormGroup>
-                </div>
-            </FormGroup>
+                    </div>
+                </FormGroup>
+            </div>
         );
     },
 };
@@ -662,6 +657,11 @@ export const Loading: StoryObj<IMultiselectFieldPlaygroundProps> = {
 export const DropdownWithoutInput: StoryObj<IMultiselectFieldPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField без MultiselectField.Dropdown.Header.`,
+            },
+        },
     },
     render: () => {
         const args = {
@@ -673,9 +673,11 @@ export const DropdownWithoutInput: StoryObj<IMultiselectFieldPlaygroundProps> = 
         const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
 
         return (
-            <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
-                {(dropdownProps) => renderDropdown(dropdownProps)}
-            </MultiselectField>
+            <div style={{ maxWidth: "304px" }}>
+                <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
+                    {(dropdownProps) => renderDropdown(dropdownProps)}
+                </MultiselectField>
+            </div>
         );
     },
 };
@@ -683,21 +685,101 @@ export const DropdownWithoutInput: StoryObj<IMultiselectFieldPlaygroundProps> = 
 export const WithClearButton: StoryObj<IMultiselectFieldPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField с переданным onClear.`,
+            },
+        },
     },
     render: () => {
         const args = {
             size: EComponentSize.MD,
             status: EFormFieldStatus.DEFAULT,
             loading: false,
-            postfix: <FormFieldClear onClick={() => setValue("")} />,
             prefix: <DefaulticonStrokePrdIcon24 paletteIndex={5} />,
+            withClearButton: true,
         };
+
         const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
 
         return (
-            <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
-                {(dropdownProps) => renderDropdown(dropdownProps)}
-            </MultiselectField>
+            <div style={{ maxWidth: "304px" }}>
+                <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
+                    {(dropdownProps) => renderDropdown(dropdownProps)}
+                </MultiselectField>
+            </div>
+        );
+    },
+};
+
+export const WithPrefixAndPostfix: StoryObj<IMultiselectFieldPlaygroundProps> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField с иконкой и HelpBox, переданными в качестве prefix и postfix.`,
+            },
+        },
+    },
+    render: () => {
+        const args = {
+            size: EComponentSize.MD,
+            status: EFormFieldStatus.DEFAULT,
+            loading: false,
+            prefix: <DefaulticonStrokePrdIcon24 paletteIndex={5} />,
+            postfix: <HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>,
+        };
+
+        const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
+                    {(dropdownProps) => renderDropdown(dropdownProps)}
+                </MultiselectField>
+            </div>
+        );
+    },
+};
+
+export const Example: StoryObj<IMultiselectFieldPlaygroundProps> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: `MultiselectField с prefix, postfix, clear button, FormFieldDescription и Link.`,
+            },
+        },
+    },
+    render: () => {
+        const args = {
+            size: EComponentSize.MD,
+            status: EFormFieldStatus.DEFAULT,
+            loading: false,
+            prefix: <DefaulticonStrokePrdIcon24 paletteIndex={5} />,
+            postfix: <HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>,
+            withClearButton: true,
+        };
+
+        const { renderTarget, renderDropdown } = createMultiselectFieldStoriesLogic(args);
+
+        return (
+            <div style={{ maxWidth: "304px" }}>
+                <FormGroup>
+                    <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
+                        {(dropdownProps) => renderDropdown(dropdownProps)}
+                    </MultiselectField>
+
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
+                        </Text>
+                    </FormFieldDescription>
+                </FormGroup>
+            </div>
         );
     },
 };

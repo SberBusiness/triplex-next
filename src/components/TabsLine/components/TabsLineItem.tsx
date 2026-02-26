@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { TestProps } from "../../../types/CoreTypes";
 import clsx from "clsx";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
-import { NotificationIcon } from "../../NotificationIcon/NotificationIcon";
-import styles from "../styles/TabsLine.module.less";
+import { Badge } from "../../Badge/Badge";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import { Text } from "../../Typography/Text";
 import { tabsLineSizeToTextSizeMap } from "../utils";
 import { EFontType } from "../../Typography/enums";
+import styles from "../styles/TabsLine.module.less";
 
 /** Свойства TabsLineItem. */
 export interface ITabsLineItemProps extends React.HTMLAttributes<HTMLButtonElement>, TestProps {
@@ -75,7 +75,7 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
                 >
                     {label}
                 </Text>
-                {showNotificationIcon && <NotificationIcon className={styles.notificationIcon} />}
+                {showNotificationIcon && <Badge.Dot size={EComponentSize.MD} className={styles.notificationIcon} />}
             </button>
         );
     },

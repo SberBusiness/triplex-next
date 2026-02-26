@@ -2,8 +2,9 @@ import React from "react";
 import clsx from "clsx";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import { Badge } from "../../Badge/Badge";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import styles from "../styles/DropdownMobile.module.less";
-import { NotificationIcon } from "../../NotificationIcon/NotificationIcon";
 
 /** Свойства компонента DropdownMobileListItem. */
 export interface IDropdownMobileListItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,7 +36,7 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
                 {...htmlAttributes}
             >
                 {children}
-                {showNotificationIcon && <NotificationIcon className={styles.notificationIcon} />}
+                {showNotificationIcon && <Badge.Dot size={EComponentSize.MD} className={styles.notificationIcon} />}
             </Text>
         );
     },

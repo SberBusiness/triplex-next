@@ -1254,7 +1254,7 @@ export const TableWithPaginationExtended: StoryObj = {
                                 <PaginationNavigationExtendedItem>
                                     <PaginationNavigationButton
                                         direction={EPaginationNavigationIconDirection.BACK}
-                                        onClick={() => setPage(page - 1)}
+                                        onClick={() => setPage((prevPage) => Math.max(1, prevPage - 1))}
                                         disabled={page === 1}
                                     />
                                 </PaginationNavigationExtendedItem>
@@ -1268,7 +1268,7 @@ export const TableWithPaginationExtended: StoryObj = {
                                 <PaginationNavigationExtendedItem>
                                     <PaginationNavigationButton
                                         direction={EPaginationNavigationIconDirection.NEXT}
-                                        onClick={() => setPage(page + 1)}
+                                        onClick={() => setPage((prevPage) => Math.min(totalPages, prevPage + 1))}
                                         disabled={page === totalPages}
                                     />
                                 </PaginationNavigationExtendedItem>

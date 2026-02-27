@@ -11,7 +11,6 @@ const lessVariablesFileName = "colors.less";
  * Генерирует файл с less-переменными на основе дизайн-токенов.
  */
 const generateLessFromDesignTokens = () => {
-    // eslint-disable @typescript-eslint/no-unsafe-member-access
     const lightThemeCssVariables = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, {});
 
     if (!existsSync(generatedDirName)) {

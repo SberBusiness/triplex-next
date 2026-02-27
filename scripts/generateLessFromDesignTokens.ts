@@ -14,7 +14,7 @@ const generateLessFromDesignTokens = () => {
     const lightThemeCssVariables = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, {});
 
     if (!existsSync(generatedDirName)) {
-        mkdirSync(generatedDirName);
+        mkdirSync(generatedDirName, { recursive: true });
     }
 
     const lessVariables = lightThemeCssVariables

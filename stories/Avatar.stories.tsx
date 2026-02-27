@@ -3,12 +3,22 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
 import { Avatar, EAvatarSize } from "../src/components/Avatar";
 import { Title as TypographyTitle, ETitleSize, EFontType, EFontWeightTitle } from "../src/components/Typography";
+import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
 
 const meta = {
     title: "Components/Avatar",
     component: Avatar,
     parameters: {
         docs: {
+            description: {
+                component: `
+Компонент предназначен для отображения изображений профиля пользователя, инициалов или иконок.
+
+## Особенности
+
+- **Размеры**: XXS, XS, SM, MD, LG, XL, XXL
+                `,
+            },
             page: () => (
                 <>
                     <Title />
@@ -34,6 +44,7 @@ export const Playground: Story = {
         docs: {
             description: { story: "Интерактивная демонстрация." },
             canvas: { sourceState: "none" },
+            codePanel: false,
         },
     },
     tags: ["!autodocs"],
@@ -55,7 +66,6 @@ export const Playground: Story = {
 export const Basic: Story = {
     parameters: {
         docs: {
-            description: { story: "Базовый пример." },
             controls: { disable: true },
         },
     },
@@ -67,7 +77,6 @@ export const Basic: Story = {
 
 export const Sizes: Story = {
     parameters: {
-        docs: { description: { story: "Размеры" } },
         controls: { disable: true },
     },
     args: {
@@ -86,7 +95,7 @@ export const Sizes: Story = {
     },
 };
 
-export const Example: Story = {
+export const Examples: Story = {
     parameters: {
         docs: { description: { story: "В сочетании с другими компонентами." } },
         controls: { disable: true },
@@ -101,6 +110,9 @@ export const Example: Story = {
                 <TypographyTitle size={ETitleSize.H1} weight={EFontWeightTitle.REGULAR} type={EFontType.PRIMARY_INVERT}>
                     AA
                 </TypographyTitle>
+            </Avatar>
+            <Avatar style={{ backgroundColor: "#339FF1" }} {...args}>
+                <DefaulticonStrokePrdIcon32 paletteIndex={7} />
             </Avatar>
         </div>
     ),

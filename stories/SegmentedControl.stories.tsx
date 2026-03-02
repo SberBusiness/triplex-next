@@ -297,19 +297,19 @@ export const Example: Story = {
                 >
                     <SegmentedControl.Segment value="segment_1" aria-label="segment 1">
                         <DefaulticonStrokePrdIcon20
-                            paletteIndex={value === "segment_1" ? 7 : 5}
+                            paletteIndex={value !== "segment_1" ? 5 : 10}
                             style={{ display: "block" }}
                         />
                     </SegmentedControl.Segment>
                     <SegmentedControl.Segment value="segment_2" aria-label="segment 2">
                         <DefaulticonStrokePrdIcon20
-                            paletteIndex={value === "segment_2" ? 7 : 5}
+                            paletteIndex={value !== "segment_2" ? 5 : 10}
                             style={{ display: "block" }}
                         />
                     </SegmentedControl.Segment>
                     <SegmentedControl.Segment value="segment_3" aria-label="segment 3">
                         <DefaulticonStrokePrdIcon20
-                            paletteIndex={value === "segment_3" ? 7 : 5}
+                            paletteIndex={value !== "segment_3" ? 5 : 10}
                             style={{ display: "block" }}
                         />
                     </SegmentedControl.Segment>

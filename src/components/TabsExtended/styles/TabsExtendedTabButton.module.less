@@ -14,6 +14,10 @@
         font-weight: 400;
     }
 
+    .notificationIcon {
+        position: absolute;
+    }
+
     &.lg {
         border-radius: 6px;
         padding: 9px 16px;
@@ -21,6 +25,11 @@
         & .tabButtonText {
             font-size: 16px;
             line-height: 20px;
+        }
+
+        .notificationIcon {
+            right: 6px;
+            top: 6px;
         }
     }
 
@@ -32,6 +41,11 @@
             font-size: 14px;
             line-height: 20px;
         }
+
+        .notificationIcon {
+            right: 4px;
+            top: 4px;
+        }
     }
 
     &.sm {
@@ -41,6 +55,11 @@
         & .tabButtonText {
             font-size: 12px;
             line-height: 16px;
+        }
+
+        .notificationIcon {
+            right: 3px;
+            top: 3px;
         }
     }
 
@@ -102,8 +121,3 @@
     }
 }
 
-.notificationIcon {
-    position: absolute;
-    right: 4px;
-    top: 4px;
-}

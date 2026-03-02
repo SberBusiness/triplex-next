@@ -188,6 +188,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
                 setActiveListItemIndex(undefined);
                 child.props.onMouseOut?.(event);
             },
+            size: size,
             ref: (node: HTMLDivElement | null) => {
                 listItemsRef.current[index] = node;
             },

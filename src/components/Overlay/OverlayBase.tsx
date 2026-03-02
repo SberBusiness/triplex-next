@@ -1,11 +1,11 @@
-import React from 'react';
-import {useState, useEffect, useRef, useLayoutEffect} from 'react';
+import React from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 
 export enum EOverlayDirection {
-    BOTTOM = 'bottom',
-    LEFT = 'left',
-    RIGHT = 'right',
-    TOP = 'top',
+    BOTTOM = "bottom",
+    LEFT = "left",
+    RIGHT = "right",
+    TOP = "top",
 }
 
 export interface IOverlayBaseProps {
@@ -43,7 +43,7 @@ export interface IOverlayBaseProps {
 /**
  * Свойства, передаваемые в render-фцнкцию панели оверлея.
  */
-export interface IOverlayChildrenProvideProps extends Pick<IOverlayBaseProps, 'direction' | 'opened' | 'setOpened'> {
+export interface IOverlayChildrenProvideProps extends Pick<IOverlayBaseProps, "direction" | "opened" | "setOpened"> {
     /**
      * Оверлей закрывается в текущий момент.
      */
@@ -127,5 +127,5 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
         }
     }, [opening]);
 
-    return children({closing, direction, opened, opening, setClosing, setOpened, setOpening});
+    return children({ closing, direction, opened, opening, setClosing, setOpened, setOpening });
 };

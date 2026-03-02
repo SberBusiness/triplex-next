@@ -7,6 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const sourceDir = path.resolve(__dirname, "../src/helpers/less");
 const distDir = path.resolve(__dirname, "../dist/helpers/less");
+const generatedLessVariablesFile = path.resolve(__dirname, "../src/generated/colors.less");
 
 const copyLessHelpers = (): void => {
     if (!existsSync(distDir)) {
@@ -21,6 +22,11 @@ const copyLessHelpers = (): void => {
 
         copyFileSync(sourcePath, destinationPath);
     });
+
+    if (existsSync(generatedLessVariablesFile)) {
+        const destinationPath = path.join(distDir, path.basename(generatedLessVariablesFile));
+        copyFileSync(generatedLessVariablesFile, destinationPath);
+    }
 };
 
 copyLessHelpers();

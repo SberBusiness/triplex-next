@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { StoryObj } from "@storybook/react";
 import * as iconModule from "@sberbusiness/icons-next";
 
-const paletteIndexes = Array.from(Array(10).keys());
+const paletteIndexes = Array.from(Array(11).keys());
 
 export default {
     title: "Icons/Icons",
@@ -117,60 +117,14 @@ export const Palettes: StoryObj<IIconStoryArgs> = {
 
         return (
             <div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>0</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={0} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>1</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={1} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>2</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={2} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>3</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={3} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>4</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={4} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>5</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>6</div>
-                    <IconItem inverted={true} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={6} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>7</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={7} />
-                    </IconItem>
-                </div>
-                <div style={{ display: "inline-block" }}>
-                    <div style={{ textAlign: "center" }}>8</div>
-                    <IconItem inverted={false} {...args}>
-                        <DefaulticonStrokePrdIcon32 paletteIndex={8} />
-                    </IconItem>
-                </div>
+                {paletteIndexes.map((paletteIndex) => (
+                    <div key={paletteIndex} style={{ display: "inline-block" }}>
+                        <div style={{ textAlign: "center" }}>{paletteIndex}</div>
+                        <IconItem inverted={paletteIndex === 6} {...args}>
+                            <DefaulticonStrokePrdIcon32 paletteIndex={paletteIndex} />
+                        </IconItem>
+                    </div>
+                ))}
             </div>
         );
     },

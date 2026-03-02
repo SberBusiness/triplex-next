@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { TextareaField } from "../../src/components/TextareaField";
-import { Text, ETextSize, EFontType } from "../../src/components/Typography";
-import { EFormFieldStatus } from "../../src/components/FormField/enums";
-import { FormFieldClear } from "../../src/components/FormField/components/FormFieldClear";
-import { HelpBox } from "../../src/components/HelpBox/HelpBox";
-import { Link } from "../../src/components/Link";
-import { ETooltipSize } from "../../src/components/Tooltip/enums";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+import {
+    TextareaField,
+    FormFieldClear,
+    HelpBox,
+    Text,
+    Link,
+    EComponentSize,
+    EFormFieldStatus,
+    ETooltipSize,
+    ETextSize,
+    EFontType,
+} from "../../../src";
+import { getTextareaPostfixInnerStyles, getTextareaDescriptionTextProps } from "./utils";
 
 const meta = {
     title: "Components/TextFields/TextareaField",
@@ -35,78 +40,125 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
+interface IPlaygroundStoryArgs {
+    withClearButton: boolean;
+}
+
+type PlaygroundStory = StoryObj<React.ComponentProps<typeof TextareaField> & IPlaygroundStoryArgs>;
+
+export const Playground: PlaygroundStory = {
     parameters: {
         docs: {
-            description: { story: "Интерактивная демонстрация." },
             canvas: { sourceState: "none" },
+            codePanel: false,
         },
     },
     tags: ["!autodocs"],
     argTypes: {
-        textareaProps: {
-            description: "Свойства компонента FormFieldTextarea.",
-            table: { type: { summary: "object" } },
-        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер поля",
             table: {
-                type: { summary: "EComponentSize" },
                 defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
-            description: "Состояние поля",
             table: {
-                type: { summary: "EFormFieldStatus" },
-                defaultValue: { summary: "DEFAULT" },
+                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
             },
         },
         label: {
             control: { type: "text" },
-            description: "Текст лейбла",
-            table: { type: { summary: "string" } },
         },
         prefix: {
             control: { type: "text" },
-            description: "Текст постфикса",
-            table: { type: { summary: "string" } },
         },
         postfix: {
             control: { type: "text" },
-            description: "Текст префикса",
-            table: { type: { summary: "string" } },
         },
         description: {
             control: { type: "text" },
-            description: "Текст описания",
-            table: { type: { summary: "string" } },
         },
         counter: {
             control: { type: "text" },
-            description: "Текст счётчика",
-            table: { type: { summary: "string" } },
+        },
+        withClearButton: {
+            control: "boolean",
+            description: "С кнопкой очистки.",
+            table: {
+                category: "Playground Only",
+            },
         },
     },
     args: {
-        textareaProps: { placeholder: "Type to proceed" },
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
+        textareaProps: { placeholder: "Type to proceed" },
         label: "Label",
         prefix: "",
         postfix: "",
         description: "",
         counter: "",
+        // Playground
+        withClearButton: false,
+    },
+    render: ({ textareaProps, postfix, description, counter, withClearButton, ...restArgs }) => {
+        const [value, setValue] = useState("");
+
+        return (
+            <div style={{ maxWidth: "300px" }}>
+                <TextareaField
+                    {...restArgs}
+                    textareaProps={{
+                        value,
+                        onChange: (event) => setValue(event.target.value),
+                        ...textareaProps,
+                    }}
+                    postfix={
+                        (postfix || withClearButton) && (
+                            <div style={getTextareaPostfixInnerStyles(restArgs.size)}>
+                                {withClearButton && (
+                                    <FormFieldClear onClick={() => setValue("")} aria-label="Clear value" />
+                                )}
+                                {postfix}
+                            </div>
+                        )
+                    }
+                    description={
+                        description && <Text {...getTextareaDescriptionTextProps(restArgs.status)}>{description}</Text>
+                    }
+                    counter={
+                        counter && (
+                            <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                {counter}
+                            </Text>
+                        )
+                    }
+                />
+            </div>
+        );
+    },
+};
+
+export const Basic: Story = {
+    parameters: {
+        docs: {
+            controls: { disable: true },
+        },
+    },
+    args: {
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
+        textareaProps: { placeholder: "Type to proceed" },
+        label: "Label",
     },
     render: ({ textareaProps, ...restArgs }) => {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextareaField
                     {...restArgs}
                     textareaProps={{
@@ -120,45 +172,17 @@ export const Playground: Story = {
     },
 };
 
-export const Basic: Story = {
-    parameters: {
-        docs: {
-            description: { story: "Базовый пример." },
-            controls: { disable: true },
-        },
-    },
-    args: {
-        textareaProps: { placeholder: "Type to proceed" },
-    },
-    render: ({ textareaProps }) => {
-        const [value, setValue] = useState("");
-
-        return (
-            <div style={{ maxWidth: "304px" }}>
-                <TextareaField
-                    textareaProps={{
-                        value,
-                        onChange: (event) => setValue(event.target.value),
-                        ...textareaProps,
-                    }}
-                    status={EFormFieldStatus.DEFAULT}
-                    size={EComponentSize.LG}
-                    label="Label"
-                />
-            </div>
-        );
-    },
-};
-
 export const Sizes: Story = {
     parameters: {
-        docs: { description: { story: "Размеры" } },
         controls: { disable: true },
     },
     args: {
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "Type to proceed" },
+        label: "Label",
     },
-    render: ({ textareaProps }) => {
+    render: ({ textareaProps, ...restArgs }) => {
         const sizes = Object.values(EComponentSize);
         const [values, setValues] = useState(() =>
             sizes.reduce(
@@ -171,18 +195,18 @@ export const Sizes: Story = {
         );
 
         return (
-            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
                 {sizes.map((size) => (
                     <TextareaField
                         key={size}
+                        {...restArgs}
+                        size={size}
                         textareaProps={{
                             value: values[size],
                             onChange: (event) =>
                                 setValues((prevValues) => ({ ...prevValues, [size]: event.target.value })),
                             ...textareaProps,
                         }}
-                        size={size}
-                        label="Label"
                     />
                 ))}
             </div>
@@ -192,13 +216,15 @@ export const Sizes: Story = {
 
 export const Statuses: Story = {
     parameters: {
-        docs: { description: { story: "Статусы." } },
         controls: { disable: true },
     },
     args: {
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "Type to proceed" },
+        label: "Label",
     },
-    render: ({ textareaProps }) => {
+    render: ({ textareaProps, ...restArgs }) => {
         const statuses = Object.values(EFormFieldStatus);
         const [values, setValues] = useState(() =>
             statuses.reduce(
@@ -211,18 +237,18 @@ export const Statuses: Story = {
         );
 
         return (
-            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
                 {statuses.map((status) => (
                     <TextareaField
                         key={status}
+                        {...restArgs}
+                        status={status}
                         textareaProps={{
                             value: values[status],
                             onChange: (event) =>
                                 setValues((prevValues) => ({ ...prevValues, [status]: event.target.value })),
                             ...textareaProps,
                         }}
-                        status={status}
-                        label="Label"
                     />
                 ))}
             </div>
@@ -233,25 +259,31 @@ export const Statuses: Story = {
 export const WithClearButton: Story = {
     name: "With clear button",
     parameters: {
-        docs: { description: { story: "С кнопкой очистки." } },
         controls: { disable: true },
     },
     args: {
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "Type to proceed" },
+        label: "Label",
     },
-    render: ({ textareaProps }) => {
+    render: ({ textareaProps, ...restArgs }) => {
         const [value, setValue] = useState("8967");
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextareaField
+                    {...restArgs}
                     textareaProps={{
                         value,
                         onChange: (event) => setValue(event.target.value),
                         ...textareaProps,
                     }}
-                    label="Label"
-                    postfix={<FormFieldClear onClick={() => setValue("")} />}
+                    postfix={
+                        <div style={getTextareaPostfixInnerStyles(restArgs.size)}>
+                            <FormFieldClear onClick={() => setValue("")} aria-label="Clear value" />
+                        </div>
+                    }
                 />
             </div>
         );
@@ -260,40 +292,34 @@ export const WithClearButton: Story = {
 
 export const Example: Story = {
     parameters: {
-        docs: { description: { story: "В сочетании с другими компонентами." } },
         controls: { disable: true },
     },
     args: {
+        size: EComponentSize.LG,
+        status: EFormFieldStatus.DEFAULT,
         textareaProps: { placeholder: "Type to proceed" },
+        label: "Label",
     },
-    render: ({ textareaProps }) => {
+    render: ({ textareaProps, ...restArgs }) => {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextareaField
+                    {...restArgs}
                     textareaProps={{
                         value,
                         onChange: (event) => setValue(event.target.value),
                         ...textareaProps,
                     }}
-                    label="Label"
                     postfix={
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: "8px",
-                                alignSelf: "flex-start",
-                                alignItems: "center",
-                                height: "18px",
-                            }}
-                        >
-                            <FormFieldClear onClick={() => setValue("")} />
+                        <div style={getTextareaPostfixInnerStyles(restArgs.size)}>
+                            <FormFieldClear onClick={() => setValue("")} aria-label="Clear value" />
                             <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
                         </div>
                     }
                     description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text {...getTextareaDescriptionTextProps(restArgs.status)}>
                             (21) Description{" "}
                             <Link href="#" onClick={(event) => event.preventDefault()}>
                                 Link text

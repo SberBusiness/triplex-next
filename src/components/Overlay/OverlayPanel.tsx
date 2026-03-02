@@ -1,10 +1,10 @@
-import React from 'react';
-import clsx from 'clsx';
-import {EOverlayDirection, IOverlayChildrenProvideProps} from './OverlayBase';
-import styles from './styles/Overlay.module.less';
+import React from "react";
+import clsx from "clsx";
+import { EOverlayDirection, IOverlayChildrenProvideProps } from "./OverlayBase";
+import styles from "./styles/Overlay.module.less";
 
 /** Свойства компонента OverlayPanel. */
-interface IOverlayPanelProps extends React.HTMLAttributes<HTMLDivElement>, IOverlayChildrenProvideProps {}
+export interface IOverlayPanelProps extends React.HTMLAttributes<HTMLDivElement>, IOverlayChildrenProvideProps {}
 
 /** Выезжающая с контентом панель оверлея. */
 export const OverlayPanel = React.forwardRef<HTMLDivElement, IOverlayPanelProps>(
@@ -22,10 +22,10 @@ export const OverlayPanel = React.forwardRef<HTMLDivElement, IOverlayPanelProps>
             setOpening,
             ...htmlDivAttributes
         },
-        ref
+        ref,
     ) => {
         const handleTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
-            const {target, currentTarget} = event;
+            const { target, currentTarget } = event;
 
             if (target === currentTarget) {
                 setClosing(false);
@@ -51,7 +51,7 @@ export const OverlayPanel = React.forwardRef<HTMLDivElement, IOverlayPanelProps>
                 <div className={styles.overlayContent}>{children}</div>
             </div>
         );
-    }
+    },
 );
 
-OverlayPanel.displayName = 'OverlayPanel';
+OverlayPanel.displayName = "OverlayPanel";

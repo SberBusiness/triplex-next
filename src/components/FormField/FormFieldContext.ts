@@ -29,6 +29,8 @@ export interface IFormFieldContext {
     valueExist: boolean;
     // Размер поля.
     size: EComponentSize;
+    // Активное состояние поля.
+    active: boolean;
 }
 
 export const initialFormFieldContext: IFormFieldContext = {
@@ -45,6 +47,7 @@ export const initialFormFieldContext: IFormFieldContext = {
     setValueExist: () => {},
     valueExist: false,
     size: EComponentSize.MD,
+    active: false,
 };
 
 /**

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, forwardRef } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, Root } from "react-dom/client";
 import clsx from "clsx";
 import { UploadZoneInput } from "./components/UploadZoneInput";
 import { UploadZoneContext } from "./UploadZoneContext";
@@ -46,6 +46,8 @@ export const UploadZone = Object.assign(
 
         /** Элемент-обёртка для дроп-зоны. */
         const dropZoneWrapperDivRef = useRef<HTMLDivElement | null>(null);
+        /** Root для контента, отрисованного поверх контейнера. */
+        const dropZoneRootRef = useRef<Root | null>(null);
 
         const handleDragEnter = useCallback(() => {
             counterRef.current += 1;
@@ -108,7 +110,8 @@ export const UploadZone = Object.assign(
         const createDropZoneDiv = useCallback((): HTMLDivElement => {
             const wrapperDiv = document.createElement("div");
 
-            createRoot(wrapperDiv).render(
+            dropZoneRootRef.current = createRoot(wrapperDiv);
+            dropZoneRootRef.current.render(
                 <div
                     className={clsx(styles.uploadZoneContainerDragArea, className)}
                     onDragOver={handlePreventDefault}
@@ -124,6 +127,20 @@ export const UploadZone = Object.assign(
             return wrapperDiv;
         }, [className, handlePreventDefault, fileDrop, renderContainerContent, restHtmlAttributes]);
 
+        const cleanupDropZone = useCallback(() => {
+            if (dropZoneRootRef.current) {
+                dropZoneRootRef.current.unmount();
+                dropZoneRootRef.current = null;
+            }
+
+            const dropZoneWrapperDiv = dropZoneWrapperDivRef.current;
+            if (dropZoneWrapperDiv?.parentNode) {
+                dropZoneWrapperDiv.parentNode.removeChild(dropZoneWrapperDiv);
+            }
+
+            dropZoneWrapperDivRef.current = null;
+        }, []);
+
         useEffect(() => {
             addListeners(dropZoneContainer);
             return () => {
@@ -137,12 +154,26 @@ export const UploadZone = Object.assign(
             }
 
             if (hoverOnDrag) {
-                dropZoneWrapperDivRef.current = createDropZoneDiv();
-                dropZoneContainer.appendChild(dropZoneWrapperDivRef.current);
-            } else if (dropZoneWrapperDivRef.current) {
-                dropZoneContainer.removeChild(dropZoneWrapperDivRef.current);
+                const isDropZoneMounted =
+                    dropZoneWrapperDivRef.current && dropZoneContainer.contains(dropZoneWrapperDivRef.current);
+
+                if (!isDropZoneMounted) {
+                    cleanupDropZone();
+                    dropZoneWrapperDivRef.current = createDropZoneDiv();
+                    dropZoneContainer.appendChild(dropZoneWrapperDivRef.current);
+                }
+            } else {
+                cleanupDropZone();
             }
-        }, [hoverOnDrag, dropZoneContainer, createDropZoneDiv]);
+        }, [hoverOnDrag, dropZoneContainer, createDropZoneDiv, cleanupDropZone]);
+
+        useEffect(
+            () => () => {
+                cleanupDropZone();
+                counterRef.current = 0;
+            },
+            [cleanupDropZone],
+        );
 
         const openUploadDialog = () => {
             inputNode?.click();

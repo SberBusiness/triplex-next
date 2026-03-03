@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { tabsExtendedTypeToClassNameMap, tabsExtendedSizeToTextSizeMap } from "../utils";
 import { TabsExtendedContext } from "../TabsExtendedContext";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
-import { NotificationIcon } from "../../NotificationIcon/NotificationIcon";
+import { Badge } from "../../Badge/Badge";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import styles from "../styles/TabsExtendedTabButton.module.less";
 
 /** Свойства компонента TabsExtendedTabButton. */
@@ -38,7 +38,7 @@ export const TabsExtendedTabButton = React.forwardRef<HTMLButtonElement, ITabsEx
                 <Text size={tabsExtendedSizeToTextSizeMap[size]} className={styles.tabButtonText}>
                     {children}
                 </Text>
-                {showNotificationIcon && <NotificationIcon className={styles.notificationIcon} />}
+                {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}
             </button>
         );
     },

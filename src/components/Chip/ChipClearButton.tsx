@@ -10,7 +10,7 @@ export interface IChipClearButtonProps extends Omit<IButtonIconProps, "children"
     size?: EComponentSize;
 }
 
-const sizeToCrossIconMap = {
+const SIZE_TO_CROSS_ICON_MAP: Record<EComponentSize, React.ReactNode> = {
     [EComponentSize.SM]: <CrossStrokeSrvIcon16 paletteIndex={6} />,
     [EComponentSize.MD]: <CrossStrokeSrvIcon20 paletteIndex={6} />,
     [EComponentSize.LG]: <CrossStrokeSrvIcon24 paletteIndex={6} />,
@@ -20,7 +20,7 @@ const sizeToCrossIconMap = {
 export const ChipClearButton = React.forwardRef<HTMLButtonElement, IChipClearButtonProps>(
     ({ className, size = EComponentSize.MD, ...restProps }, ref) => (
         <ButtonIcon className={clsx(styles.chipClearButton, className)} {...restProps} ref={ref}>
-            {sizeToCrossIconMap[size]}
+            {SIZE_TO_CROSS_ICON_MAP[size]}
         </ButtonIcon>
     ),
 );

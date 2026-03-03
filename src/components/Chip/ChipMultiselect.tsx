@@ -57,9 +57,13 @@ export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselect
                     onKeyDown={handleKeyDown}
                     postfix={
                         selected ? (
-                            <ChipClearButton onKeyDown={handleKeyDownClearButton} onClick={handleClickClearButton} />
+                            <ChipClearButton
+                                size={size}
+                                onKeyDown={handleKeyDownClearButton}
+                                onClick={handleClickClearButton}
+                            />
                         ) : (
-                            <ChipDropdownArrow rotated={opened} />
+                            <ChipDropdownArrow size={size} rotated={opened} />
                         )
                     }
                     ref={ref}

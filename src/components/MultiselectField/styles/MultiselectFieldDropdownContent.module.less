@@ -6,16 +6,20 @@
         overflow-y: auto;
         outline: none;
 
+        &:has(.loaderScreen) {
+            overflow: hidden;
+        }
+
         &.sm {
-            height: 204px;
+            max-height: 208px;
         }
 
         &.md {
-            height: 245px;
+            max-height: 266px;
         }
 
         &.lg {
-            height: 324px;
+            max-height: 296px;
         }
     }
 }

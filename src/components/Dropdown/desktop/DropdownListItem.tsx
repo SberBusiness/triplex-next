@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import clsx from "clsx";
-import { NotificationIcon } from "../../NotificationIcon/NotificationIcon";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { Badge } from "../../Badge/Badge";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownListItem. */
@@ -18,6 +19,8 @@ export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElem
     keyCodesForSelection?: number[];
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
+    /** Размер списка. */
+    size?: EComponentSize;
 }
 
 const KEY_CODES_FOR_SELECTION_DEFAULT = [EVENT_KEY_CODES.SPACE, EVENT_KEY_CODES.ENTER];
@@ -34,6 +37,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
             onSelect,
             selected,
             showNotificationIcon,
+            size = EComponentSize.MD,
             ...htmlDivAttributes
         },
         ref,
@@ -81,7 +85,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
                 ref={ref}
             >
                 {children}
-                {showNotificationIcon && <NotificationIcon className={styles.notificationIcon} />}
+                {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}
             </div>
         );
     },

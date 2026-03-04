@@ -131,39 +131,39 @@ export const Types: StoryObj<typeof Tabs> = {
         const tabs_0 = [
             { id: "tabs-tab-0-0", label: "Tab Name" },
             { id: "tabs-tab-0-1", label: "Tab Name" },
-            { id: "tabs-tab-0-2", label: "Tab Name" },
+            { id: "tabs-tab-0-2", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-0-3", label: "Tab Name" },
             { id: "tabs-tab-0-4", label: "Tab Name" },
             { id: "tabs-tab-0-5", label: "Tab Name" },
             { id: "tabs-tab-0-6", label: "Tab Name" },
             { id: "tabs-tab-0-7", label: "Tab Name" },
-            { id: "tabs-tab-0-8", label: "Tab Name" },
+            { id: "tabs-tab-0-8", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-0-9", label: "Tab Name" },
         ];
 
         const tabs_1 = [
             { id: "tabs-tab-1-0", label: "Tab Name" },
             { id: "tabs-tab-1-1", label: "Tab Name" },
-            { id: "tabs-tab-1-2", label: "Tab Name" },
+            { id: "tabs-tab-1-2", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-1-3", label: "Tab Name" },
             { id: "tabs-tab-1-4", label: "Tab Name" },
             { id: "tabs-tab-1-5", label: "Tab Name" },
             { id: "tabs-tab-1-6", label: "Tab Name" },
             { id: "tabs-tab-1-7", label: "Tab Name" },
-            { id: "tabs-tab-1-8", label: "Tab Name" },
+            { id: "tabs-tab-1-8", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-1-9", label: "Tab Name" },
         ];
 
         const tabs_2 = [
             { id: "tabs-tab-2-0", label: "Tab Name" },
             { id: "tabs-tab-2-1", label: "Tab Name" },
-            { id: "tabs-tab-2-2", label: "Tab Name" },
+            { id: "tabs-tab-2-2", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-2-3", label: "Tab Name" },
             { id: "tabs-tab-2-4", label: "Tab Name" },
             { id: "tabs-tab-2-5", label: "Tab Name" },
             { id: "tabs-tab-2-6", label: "Tab Name" },
             { id: "tabs-tab-2-7", label: "Tab Name" },
-            { id: "tabs-tab-2-8", label: "Tab Name" },
+            { id: "tabs-tab-2-8", label: "Tab Name", showNotificationIcon: true },
             { id: "tabs-tab-2-9", label: "Tab Name" },
         ];
 

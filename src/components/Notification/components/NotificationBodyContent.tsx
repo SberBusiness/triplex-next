@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "../styles/Notification.module.less";
+import { Text } from "../../Typography/Text";
+import { ETextSize, EFontType } from "../../Typography/enums";
 
 /** Свойства компонента NotificationBodyContent. */
 interface INotificationBodyContentProps {
@@ -8,7 +9,9 @@ interface INotificationBodyContentProps {
 
 /** Основное сообщение нотификации. */
 export const NotificationBodyContent: React.FC<INotificationBodyContentProps> = ({ children }) => (
-    <div className={styles.notificationBodyContent}>{children}</div>
+    <Text tag="div" size={ETextSize.B3} type={EFontType.PRIMARY}>
+        {children}
+    </Text>
 );
 
 NotificationBodyContent.displayName = "NotificationBodyContent";

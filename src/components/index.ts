@@ -80,7 +80,6 @@ export * from "./SwipeableArea";
 export * from "./TopOverlay";
 export * from "./UploadZone";
 export * from "./HelpBox";
-export * from "./NotificationIcon";
 export * from "./CarouselExtended";
 export * from "./DateRange";
 export * from "./ExpandAnimation";

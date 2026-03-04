@@ -46,9 +46,6 @@ export const UploadZone = Object.assign(
 
         /** Элемент-обёртка для дроп-зоны. */
         const dropZoneWrapperDivRef = useRef<HTMLDivElement | null>(null);
-        /** Root для контента, отрисованного поверх контейнера. */
-        const dropZoneRootRef = useRef<Root | null>(null);
-
         const handleDragEnter = useCallback(() => {
             counterRef.current += 1;
             if (counterRef.current === 1) {
@@ -128,13 +125,14 @@ export const UploadZone = Object.assign(
         }, [className, handlePreventDefault, fileDrop, renderContainerContent, restHtmlAttributes]);
 
         const cleanupDropZone = useCallback(() => {
-            if (dropZoneRootRef.current) {
-                dropZoneRootRef.current.unmount();
-                dropZoneRootRef.current = null;
+            const dropZoneWrapperDiv = dropZoneWrapperDivRef.current;
+            if (!dropZoneWrapperDiv) {
+                return;
             }
 
-            const dropZoneWrapperDiv = dropZoneWrapperDivRef.current;
-            if (dropZoneWrapperDiv?.parentNode) {
+            ReactDOM.unmountComponentAtNode(dropZoneWrapperDiv);
+
+            if (dropZoneWrapperDiv.parentNode) {
                 dropZoneWrapperDiv.parentNode.removeChild(dropZoneWrapperDiv);
             }
 

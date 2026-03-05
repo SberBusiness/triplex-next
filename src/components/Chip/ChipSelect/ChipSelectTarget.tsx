@@ -11,7 +11,7 @@ export interface IChipSelectTargetProps extends IChipProps {
 }
 
 export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTargetProps>((props, ref) => {
-    const { children, selected, onKeyDown, onClick, onClear, opened, setOpened, ...rest } = props;
+    const { children, selected, onKeyDown, onClick, onClear, opened, setOpened, size, ...rest } = props;
 
     const handleKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLSpanElement>) => {
@@ -51,11 +51,13 @@ export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTar
 
     const renderTargetPostfix = useCallback(() => {
         if (selected) {
-            return <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />;
+            return (
+                <ChipClearButton size={size} onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />
+            );
         } else {
-            return <ChipDropdownArrow rotated={opened} />;
+            return <ChipDropdownArrow size={size} rotated={opened} />;
         }
-    }, [selected, opened, handleClearButtonClick, handleClearButtonKeyDown]);
+    }, [selected, opened, handleClearButtonClick, handleClearButtonKeyDown, size]);
 
     return (
         <Chip
@@ -64,6 +66,7 @@ export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTar
             aria-expanded={opened}
             onKeyDown={handleKeyDown}
             onClick={handleClick}
+            size={size}
             {...rest}
             ref={ref}
         >

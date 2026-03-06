@@ -88,68 +88,6 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-const LightBoxPageContent: React.FC<{ stickyHeader: boolean; stickyFooter: boolean }> = ({
-    stickyHeader,
-    stickyFooter,
-}) => (
-    <Page>
-        <Page.Header type={EHeaderPageType.FIRST} sticky={stickyHeader}>
-            <Page.Header.Title>
-                <Page.Header.Title.Content>
-                    <Title
-                        tag="h1"
-                        size={ETitleSize.H1}
-                        tabIndex={-1}
-                        // Устанавливает фокус на первый элемент при открытии LightBox.
-                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
-                    >
-                        Евгений Онегин
-                    </Title>
-                    <Gap size={8} />
-                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                        Русский поэт, драматург и прозаик, заложивший основы русского реалистического направления.
-                    </Text>
-                </Page.Header.Title.Content>
-                <Page.Header.Title.Controls>
-                    <Button
-                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                        theme={EButtonTheme.SECONDARY}
-                        size={EComponentSize.MD}
-                    />
-                    <Button
-                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                        theme={EButtonTheme.SECONDARY}
-                        size={EComponentSize.MD}
-                    />
-                </Page.Header.Title.Controls>
-            </Page.Header.Title>
-        </Page.Header>
-
-        <Page.Body type={EBodyPageType.SECOND}>
-            {[0, 1, 2].map((index) => (
-                <React.Fragment key={index}>
-                    <PoemBlock />
-                    {index < 2 && <Gap size={24} />}
-                </React.Fragment>
-            ))}
-        </Page.Body>
-
-        <Page.Footer type={EFooterPageType.FIRST} sticky={stickyFooter}>
-            <Page.Footer.Description>
-                <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
-                <Page.Footer.Description.Controls>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                </Page.Footer.Description.Controls>
-            </Page.Footer.Description>
-        </Page.Footer>
-    </Page>
-);
-
 const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ isLoading, showControls, stickyHeader, stickyFooter }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -158,7 +96,63 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ isLoading, showContro
 
     const lightBoxChildren: React.ReactElement[] = [
         <LightBox.Content key="content" isLoading={isLoading}>
-            <LightBoxPageContent stickyHeader={stickyHeader} stickyFooter={stickyFooter} />
+            <Page>
+                <Page.Header type={EHeaderPageType.FIRST} sticky={stickyHeader}>
+                    <Page.Header.Title>
+                        <Page.Header.Title.Content>
+                            <Title
+                                tag="h1"
+                                size={ETitleSize.H1}
+                                tabIndex={-1}
+                                // Устанавливает фокус на первый элемент при открытии LightBox.
+                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                            >
+                                Евгений Онегин
+                            </Title>
+                            <Gap size={8} />
+                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                                Русский поэт, драматург и прозаик, заложивший основы русского реалистического
+                                направления.
+                            </Text>
+                        </Page.Header.Title.Content>
+                        <Page.Header.Title.Controls>
+                            <Button
+                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                theme={EButtonTheme.SECONDARY}
+                                size={EComponentSize.MD}
+                            />
+                            <Button
+                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                theme={EButtonTheme.SECONDARY}
+                                size={EComponentSize.MD}
+                            />
+                        </Page.Header.Title.Controls>
+                    </Page.Header.Title>
+                </Page.Header>
+
+                <Page.Body type={EBodyPageType.SECOND}>
+                    {[0, 1, 2].map((index) => (
+                        <React.Fragment key={index}>
+                            <PoemBlock />
+                            {index < 2 && <Gap size={24} />}
+                        </React.Fragment>
+                    ))}
+                </Page.Body>
+
+                <Page.Footer type={EFooterPageType.FIRST} sticky={stickyFooter}>
+                    <Page.Footer.Description>
+                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                        <Page.Footer.Description.Controls>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                        </Page.Footer.Description.Controls>
+                    </Page.Footer.Description>
+                </Page.Footer>
+            </Page>
         </LightBox.Content>,
     ];
 
@@ -269,7 +263,63 @@ export const Default: Story = {
                 {isOpen ? (
                     <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
                         <LightBox.Content key="content" isLoading={false}>
-                            <LightBoxPageContent stickyHeader stickyFooter />
+                            <Page>
+                                <Page.Header type={EHeaderPageType.FIRST} sticky>
+                                    <Page.Header.Title>
+                                        <Page.Header.Title.Content>
+                                            <Title
+                                                tag="h1"
+                                                size={ETitleSize.H1}
+                                                tabIndex={-1}
+                                                // Устанавливает фокус на первый элемент при открытии LightBox.
+                                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                            >
+                                                Евгений Онегин
+                                            </Title>
+                                            <Gap size={8} />
+                                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                                                Русский поэт, драматург и прозаик, заложивший основы русского
+                                                реалистического направления.
+                                            </Text>
+                                        </Page.Header.Title.Content>
+                                        <Page.Header.Title.Controls>
+                                            <Button
+                                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                                theme={EButtonTheme.SECONDARY}
+                                                size={EComponentSize.MD}
+                                            />
+                                            <Button
+                                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                                theme={EButtonTheme.SECONDARY}
+                                                size={EComponentSize.MD}
+                                            />
+                                        </Page.Header.Title.Controls>
+                                    </Page.Header.Title>
+                                </Page.Header>
+
+                                <Page.Body type={EBodyPageType.SECOND}>
+                                    {[0, 1, 2].map((index) => (
+                                        <React.Fragment key={index}>
+                                            <PoemBlock />
+                                            {index < 2 && <Gap size={24} />}
+                                        </React.Fragment>
+                                    ))}
+                                </Page.Body>
+
+                                <Page.Footer type={EFooterPageType.FIRST}>
+                                    <Page.Footer.Description>
+                                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                                        <Page.Footer.Description.Controls>
+                                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                                Button text
+                                            </Button>
+                                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                                Button text
+                                            </Button>
+                                        </Page.Footer.Description.Controls>
+                                    </Page.Footer.Description>
+                                </Page.Footer>
+                            </Page>
                         </LightBox.Content>
 
                         <LightBox.Controls>
@@ -299,6 +349,113 @@ export const Default: Story = {
         docs: {
             description: {
                 story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
+            },
+        },
+    },
+};
+
+export const LightBoxWithWidePage: Story = {
+    render: () => {
+        const [isOpen, setIsOpen] = useState(false);
+
+        const handleOpen = () => setIsOpen(true);
+        const handleClose = () => setIsOpen(false);
+
+        return (
+            <div>
+                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
+                    Открыть LightBox
+                </Button>
+
+                {isOpen ? (
+                    <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
+                        <LightBox.Content key="content" isLoading={false}>
+                            <Page style={{ maxWidth: "1064px" }}>
+                                <Page.Header type={EHeaderPageType.FIRST} sticky>
+                                    <Page.Header.Title>
+                                        <Page.Header.Title.Content>
+                                            <Title
+                                                tag="h1"
+                                                size={ETitleSize.H1}
+                                                tabIndex={-1}
+                                                // Устанавливает фокус на первый элемент при открытии LightBox.
+                                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                            >
+                                                Евгений Онегин
+                                            </Title>
+                                            <Gap size={8} />
+                                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                                                Русский поэт, драматург и прозаик, заложивший основы русского
+                                                реалистического направления.
+                                            </Text>
+                                        </Page.Header.Title.Content>
+                                        <Page.Header.Title.Controls>
+                                            <Button
+                                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                                theme={EButtonTheme.SECONDARY}
+                                                size={EComponentSize.MD}
+                                            />
+                                            <Button
+                                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                                theme={EButtonTheme.SECONDARY}
+                                                size={EComponentSize.MD}
+                                            />
+                                        </Page.Header.Title.Controls>
+                                    </Page.Header.Title>
+                                </Page.Header>
+
+                                <Page.Body type={EBodyPageType.SECOND}>
+                                    {[0, 1, 2].map((index) => (
+                                        <React.Fragment key={index}>
+                                            <PoemBlock />
+                                            {index < 2 && <Gap size={24} />}
+                                        </React.Fragment>
+                                    ))}
+                                </Page.Body>
+
+                                <Page.Footer type={EFooterPageType.FIRST} sticky>
+                                    <Page.Footer.Description>
+                                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                                        <Page.Footer.Description.Controls>
+                                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                                Button text
+                                            </Button>
+                                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                                Button text
+                                            </Button>
+                                        </Page.Footer.Description.Controls>
+                                    </Page.Footer.Description>
+                                </Page.Footer>
+                            </Page>
+                        </LightBox.Content>
+
+                        <LightBox.Controls>
+                            <LightBox.Controls.Close
+                                title="Закрыть"
+                                data-test-id="lightbox-close"
+                                onClick={handleClose}
+                            />
+                            <LightBox.Controls.Prev
+                                title="Назад"
+                                clickByArrowLeft
+                                onClick={() => console.log("Prev clicked")}
+                            />
+                            <LightBox.Controls.Next
+                                title="Вперёд"
+                                clickByArrowRight
+                                onClick={() => console.log("Next clicked")}
+                            />
+                        </LightBox.Controls>
+                    </LightBox>
+                ) : null}
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Конфигурация LightBox с Page шириной более 864px. Для этого нужно передать style={{ maxWidth: '1064px' }} в Page.",
             },
         },
     },
@@ -430,7 +587,63 @@ export const SplitMode: Story = {
                         lightBoxViewManagerNodeId="LightBox-next-view-manager-node-example"
                     >
                         <LightBox.Content key="content" isLoading={false}>
-                            <LightBoxPageContent stickyHeader stickyFooter />
+                            <Page>
+                                <Page.Header type={EHeaderPageType.FIRST} sticky>
+                                    <Page.Header.Title>
+                                        <Page.Header.Title.Content>
+                                            <Title
+                                                tag="h1"
+                                                size={ETitleSize.H1}
+                                                tabIndex={-1}
+                                                // Устанавливает фокус на первый элемент при открытии LightBox.
+                                                {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                            >
+                                                Евгений Онегин
+                                            </Title>
+                                            <Gap size={8} />
+                                            <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                                                Русский поэт, драматург и прозаик, заложивший основы русского
+                                                реалистического направления.
+                                            </Text>
+                                        </Page.Header.Title.Content>
+                                        <Page.Header.Title.Controls>
+                                            <Button
+                                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                                theme={EButtonTheme.SECONDARY}
+                                                size={EComponentSize.MD}
+                                            />
+                                            <Button
+                                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
+                                                theme={EButtonTheme.SECONDARY}
+                                                size={EComponentSize.MD}
+                                            />
+                                        </Page.Header.Title.Controls>
+                                    </Page.Header.Title>
+                                </Page.Header>
+
+                                <Page.Body type={EBodyPageType.SECOND}>
+                                    {[0, 1, 2].map((index) => (
+                                        <React.Fragment key={index}>
+                                            <PoemBlock />
+                                            {index < 2 && <Gap size={24} />}
+                                        </React.Fragment>
+                                    ))}
+                                </Page.Body>
+
+                                <Page.Footer type={EFooterPageType.FIRST} sticky>
+                                    <Page.Footer.Description>
+                                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                                        <Page.Footer.Description.Controls>
+                                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                                Button text
+                                            </Button>
+                                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                                Button text
+                                            </Button>
+                                        </Page.Footer.Description.Controls>
+                                    </Page.Footer.Description>
+                                </Page.Footer>
+                            </Page>
                         </LightBox.Content>
 
                         <LightBox.Controls>

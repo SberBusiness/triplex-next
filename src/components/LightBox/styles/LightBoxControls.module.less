@@ -82,7 +82,7 @@
 */
 .global-LB-more-media-point-0 {
     .lightBoxControls {
-        position: static;
+                position: static;
     }
 
     .lightBoxControlsDesktop {
@@ -95,7 +95,7 @@
 
     .lightBoxClose {
         position: fixed;
-        left: calc(var(--lightBox-screen-width) + var(--lightBox-screen-left) - @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight);
+        left: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0) + var(--lightBox-screen-left) - @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight);
         top: calc(40px + var(--lightBox-screen-top));
     }
     
@@ -112,6 +112,6 @@
     }
     
     .lightBoxNext {
-        left: calc(var(--lightBox-screen-width) + var(--lightBox-screen-left) - @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight);
+        left: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0) + var(--lightBox-screen-left) - @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight);
     }
 }

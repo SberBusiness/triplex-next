@@ -10,10 +10,6 @@
     position: relative;
     overflow: visible;
 
-    & .tabButtonText {
-        font-weight: 400;
-    }
-
     .notificationIcon {
         position: absolute;
     }
@@ -21,11 +17,6 @@
     &.lg {
         border-radius: 6px;
         padding: 9px 16px;
-
-        & .tabButtonText {
-            font-size: 16px;
-            line-height: 20px;
-        }
 
         .notificationIcon {
             right: 6px;
@@ -37,11 +28,6 @@
         border-radius: 4px;
         padding: 5px 16px;
 
-        & .tabButtonText {
-            font-size: 14px;
-            line-height: 20px;
-        }
-
         .notificationIcon {
             right: 4px;
             top: 4px;
@@ -52,14 +38,28 @@
         border-radius: 4px;
         padding: 1px 16px;
 
-        & .tabButtonText {
-            font-size: 12px;
-            line-height: 16px;
-        }
-
         .notificationIcon {
             right: 3px;
             top: 3px;
+        }
+    }
+
+    .tabsExtendedTabButtonTextDefault {
+        display: block;
+    }
+
+    .tabsExtendedTabButtonTextHover {
+        display: none;
+    }
+
+    &:hover,
+    &.selected {
+        .tabsExtendedTabButtonTextDefault {
+            display: none;
+        }
+
+        .tabsExtendedTabButtonTextHover {
+            display: block;
         }
     }
 
@@ -80,44 +80,22 @@
 
         &.selected {
             background: var(--triplex-next-Tabs-Type1_Tab_Background_Selected);
-
-            & .tabButtonText {
-                color: var(--triplex-next-Tabs-Type1_Tab_Color_Selected);
-            }
         }
 
         &:hover {
             background: var(--triplex-next-Tabs-Type1_Tab_Background_Hover);
-
-            & .tabButtonText {
-                color: var(--triplex-next-Tabs-Type1_Tab_Color_Hover);
-            }
-        }
-
-        .tabButtonText {
-            color: var(--triplex-next-Tabs-Type1_Tab_Color_Default);
         }
     }
 
     &.type2 {
         background: var(--triplex-next-Tabs-Type2_Tab_Background_Default);
-        color: var(--triplex-next-Tabs-Type2_Tab_Color_Default);
 
         &.selected {
             background: var(--triplex-next-Tabs-Type2_Tab_Background_Selected);
-
-            & .tabButtonText {
-                color: var(--triplex-next-Tabs-Type2_Tab_Color_Selected);
-            }
         }
 
         &:hover {
             background: var(--triplex-next-Tabs-Type2_Tab_Background_Hover);
-
-            & .tabButtonText {
-                color: var(--triplex-next-Tabs-Type2_Tab_Color_Hover);
-            }
         }
     }
 }
-

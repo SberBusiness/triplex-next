@@ -165,32 +165,30 @@ export const Type1: StoryObj<typeof Tabs> = {
         ];
 
         return (
-            <div style={{ display: "flex", gap: 16 }}>
-                <div className="tabs-type1-example">
-                    <Tabs
-                        tabs={tabs_0}
-                        selectedId={selectedTabIdType1SM}
-                        onSelectTab={(id) => setSelectedTabIdType1SM(id)}
-                        size={EComponentSize.SM}
-                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                    />
-                    <Gap size={16} />
-                    <Tabs
-                        tabs={tabs_1}
-                        selectedId={selectedTabIdType1MD}
-                        onSelectTab={(id) => setSelectedTabIdType1MD(id)}
-                        size={EComponentSize.MD}
-                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                    />
-                    <Gap size={16} />
-                    <Tabs
-                        tabs={tabs_2}
-                        selectedId={selectedTabIdType1LG}
-                        onSelectTab={(id) => setSelectedTabIdType1LG(id)}
-                        size={EComponentSize.LG}
-                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                    />
-                </div>
+            <div className="tabs-type1-example">
+                <Tabs
+                    tabs={tabs_0}
+                    selectedId={selectedTabIdType1SM}
+                    onSelectTab={(id) => setSelectedTabIdType1SM(id)}
+                    size={EComponentSize.SM}
+                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                />
+                <Gap size={16} />
+                <Tabs
+                    tabs={tabs_1}
+                    selectedId={selectedTabIdType1MD}
+                    onSelectTab={(id) => setSelectedTabIdType1MD(id)}
+                    size={EComponentSize.MD}
+                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                />
+                <Gap size={16} />
+                <Tabs
+                    tabs={tabs_2}
+                    selectedId={selectedTabIdType1LG}
+                    onSelectTab={(id) => setSelectedTabIdType1LG(id)}
+                    size={EComponentSize.LG}
+                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                />
             </div>
         );
     },
@@ -245,35 +243,33 @@ export const Type2: StoryObj<typeof Tabs> = {
         ];
 
         return (
-            <div style={{ display: "flex", gap: 16 }}>
-                <div className="tabs-type2-example">
-                    <Tabs
-                        tabs={tabs_0}
-                        selectedId={selectedTabIdType2SM}
-                        onSelectTab={(id) => setSelectedTabIdType2SM(id)}
-                        type={ETabsExtendedType.TYPE_2}
-                        size={EComponentSize.SM}
-                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                    />
-                    <Gap size={16} />
-                    <Tabs
-                        tabs={tabs_1}
-                        selectedId={selectedTabIdType2MD}
-                        onSelectTab={(id) => setSelectedTabIdType2MD(id)}
-                        type={ETabsExtendedType.TYPE_2}
-                        size={EComponentSize.MD}
-                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                    />
-                    <Gap size={16} />
-                    <Tabs
-                        tabs={tabs_2}
-                        selectedId={selectedTabIdType2LG}
-                        onSelectTab={(id) => setSelectedTabIdType2LG(id)}
-                        type={ETabsExtendedType.TYPE_2}
-                        size={EComponentSize.LG}
-                        buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
-                    />
-                </div>
+            <div className="tabs-type2-example">
+                <Tabs
+                    tabs={tabs_0}
+                    selectedId={selectedTabIdType2SM}
+                    onSelectTab={(id) => setSelectedTabIdType2SM(id)}
+                    type={ETabsExtendedType.TYPE_2}
+                    size={EComponentSize.SM}
+                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                />
+                <Gap size={16} />
+                <Tabs
+                    tabs={tabs_1}
+                    selectedId={selectedTabIdType2MD}
+                    onSelectTab={(id) => setSelectedTabIdType2MD(id)}
+                    type={ETabsExtendedType.TYPE_2}
+                    size={EComponentSize.MD}
+                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                />
+                <Gap size={16} />
+                <Tabs
+                    tabs={tabs_2}
+                    selectedId={selectedTabIdType2LG}
+                    onSelectTab={(id) => setSelectedTabIdType2LG(id)}
+                    type={ETabsExtendedType.TYPE_2}
+                    size={EComponentSize.LG}
+                    buttonDropdownAttributes={{ "aria-label": "Другие вкладки" }}
+                />
             </div>
         );
     },

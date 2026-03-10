@@ -55,7 +55,7 @@
 - Минимальное покрытие: 80% (рекомендуется 90%)
 - Тестируй accessibility (toBeAccessible)
 - E2E тесты через Playwright для критичных флоу
-- Visual regression тесты через Chromatic
+- Visual regression тесты через Storybook test-runner + jest-image-snapshot
 
 ## Breaking Changes
 

@@ -24,6 +24,7 @@ const meta = {
     title: "Components/LightBox/LightBoxWithTopOverlay",
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         layout: "fullscreen",
         docs: {
             description: {

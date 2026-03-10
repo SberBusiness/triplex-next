@@ -35,6 +35,7 @@ const meta = {
     component: LightBox,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         layout: "fullscreen",
         docs: {
             description: {

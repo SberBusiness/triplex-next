@@ -45,3 +45,6 @@ build-storybook.log
 .env.local
 
 .madge/
+
+# Visual regression testing (auto-generated, not committed)
+__screenshots__/__diff__/

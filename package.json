@@ -51,7 +51,7 @@
     "devDependencies": {
         "@eslint/js": "9.39.2",
         "@playwright/test": "1.58.2",
-        "@sberbusiness/icons-next": "1.16.0",
+        "@sberbusiness/icons-next": "1.17.0",
         "@storybook/addon-docs": "9.1.15",
         "@storybook/addon-themes": "9.1.15",
         "@storybook/react-vite": "9.1.15",
@@ -91,7 +91,7 @@
         "react-dom": "18.3.1",
         "rollup-plugin-postcss": "4.0.2",
         "start-server-and-test": "2.1.5",
-        "storybook": "9.1.17",
+        "storybook": "9.1.20",
         "tsx": "4.20.6",
         "typescript": "5.8.3",
         "typescript-eslint": "8.54.0",

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { ChipIcon } from "../../src/components/Chip/ChipIcon";
+import { ChipIcon } from "../../src/components/Chip";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipIcon",
@@ -12,16 +12,18 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: `Chip с иконкой.
-
-## Особенности:
-- **Размеры**: sm, md, lg
-                    `,
+                component: `
+Chip с иконкой.
+                `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ChipIcon} />
+                    <Heading>Playground</Heading>
+                    <Primary />
                     <Controls of={Playground} />
                     <Stories />
                 </>
@@ -31,6 +33,7 @@ export default {
 };
 
 export const Playground: StoryObj<typeof ChipIcon> = {
+    tags: ["!autodocs"],
     render: (args) => {
         const [selected, setSelected] = useState(false);
         return (
@@ -44,12 +47,18 @@ export const Playground: StoryObj<typeof ChipIcon> = {
         disabled: false,
     },
     argTypes: {
-        size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
+        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
     },
     parameters: {
         controls: {
             include: ["size", "disabled"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
 };

@@ -1,12 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button/ButtonDropdown";
-import { EButtonTheme, EButtonDotsTheme } from "../../src/components/Button/enums";
+import { EButtonTheme, EButtonDotsTheme, ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import "./ButtonDropdown.less";
 import { Gap } from "../../src/components/Gap/Gap";
+import { Text, ETextSize } from "../../src/components/Typography";
 
 export default {
     title: "Components/Buttons/ButtonDropdown",
@@ -16,14 +15,12 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент кнопки с выпадающим списком действий.
+Компонент-кнопка с выпадающим списком действий.
 
 ## Особенности
 
-- **Темы**: General, Secondary, SecondaryLight, Danger
-- **Размеры**: small (SM), medium (MD), large (LG)
-- **Состояния**: disabled, block
-- **Доступность**: ARIA-атрибуты, поддержка клавиатурной навигации
+- Можно использовать в строчном или блочном (свойство block) режиме.
+- Можно использовать как обычную кнопку (**EButtonTheme**) либо как кнопку-dots (**EButtonDotsTheme**).
                 `,
             },
             page: () => (
@@ -42,37 +39,32 @@ export default {
     },
 };
 
-const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
-    {
-        id: "opt-1",
-        label: "Действие 1",
-        onSelect: () => {
-            action("select")("opt-1");
-            onItemSelect?.("opt-1");
-        },
-    },
-    {
-        id: "opt-2",
-        label: "Действие 2",
-        onSelect: () => {
-            action("select")("opt-2");
-            onItemSelect?.("opt-2");
-        },
-    },
-    {
-        id: "opt-3",
-        label: "Действие 3",
-        onSelect: () => {
-            action("select")("opt-3");
-            onItemSelect?.("opt-3");
-        },
-    },
-];
-
 export const Playground: StoryObj<typeof ButtonDropdown> = {
     tags: ["!autodocs"],
     render: (args) => {
-        const options = useMemo(() => createOptions(), []);
+        const options = [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                },
+            },
+        ];
         const { children, ...rest } = args;
         return (
             <div style={{ width: 280 }}>
@@ -85,7 +77,7 @@ export const Playground: StoryObj<typeof ButtonDropdown> = {
     argTypes: {
         children: {
             control: { type: "text" },
-            description: "Название кнопки",
+            description: "Контент кнопки",
             table: {
                 type: { summary: "React.ReactNode" },
             },
@@ -121,9 +113,6 @@ export const Playground: StoryObj<typeof ButtonDropdown> = {
     },
     parameters: {
         docs: {
-            description: {
-                story: "Интерактивная демонстрация ButtonDropdown с контролами.",
-            },
             canvas: {
                 sourceState: "none",
             },
@@ -137,7 +126,30 @@ export const Playground: StoryObj<typeof ButtonDropdown> = {
 
 export const Default: StoryObj<typeof ButtonDropdown> = {
     render: () => {
-        const options = useMemo(() => createOptions(), []);
+        const options = [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                },
+            },
+        ];
+
         return (
             <div style={{ width: 280 }}>
                 <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
@@ -153,103 +165,160 @@ export const Default: StoryObj<typeof ButtonDropdown> = {
 
 export const Sizes: StoryObj<typeof ButtonDropdown> = {
     render: () => {
-        const options = useMemo(() => createOptions(), []);
+        const options = [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                },
+            },
+        ];
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.GENERAL} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.GENERAL} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.GENERAL} options={options}>
-                        Button text
-                    </ButtonDropdown>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>EComponentSize.SM</Text>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.GENERAL} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.SECONDARY} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.DANGER} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown
+                            size={EComponentSize.SM}
+                            theme={EButtonDotsTheme.DOTS_SECONDARY}
+                            options={options}
+                        >
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown
+                            size={EComponentSize.SM}
+                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
+                            options={options}
+                        >
+                            Button text
+                        </ButtonDropdown>
+                    </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.SECONDARY} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.SECONDARY} options={options}>
-                        Button text
-                    </ButtonDropdown>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>EComponentSize.MD</Text>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.GENERAL} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.DANGER} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown
+                            size={EComponentSize.MD}
+                            theme={EButtonDotsTheme.DOTS_SECONDARY}
+                            options={options}
+                        >
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown
+                            size={EComponentSize.MD}
+                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
+                            options={options}
+                        >
+                            Button text
+                        </ButtonDropdown>
+                    </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.DANGER} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.DANGER} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.DANGER} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 54 }}>
-                    <ButtonDropdown size={EComponentSize.SM} theme={EButtonDotsTheme.DOTS_SECONDARY} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.MD} theme={EButtonDotsTheme.DOTS_SECONDARY} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown size={EComponentSize.LG} theme={EButtonDotsTheme.DOTS_SECONDARY} options={options}>
-                        Button text
-                    </ButtonDropdown>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 54 }}>
-                    <ButtonDropdown
-                        size={EComponentSize.SM}
-                        theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                        options={options}
-                    >
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown
-                        size={EComponentSize.MD}
-                        theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                        options={options}
-                    >
-                        Button text
-                    </ButtonDropdown>
-                    <ButtonDropdown
-                        size={EComponentSize.LG}
-                        theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                        options={options}
-                    >
-                        Button text
-                    </ButtonDropdown>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>EComponentSize.LG</Text>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.GENERAL} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.SECONDARY} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.DANGER} options={options}>
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown
+                            size={EComponentSize.LG}
+                            theme={EButtonDotsTheme.DOTS_SECONDARY}
+                            options={options}
+                        >
+                            Button text
+                        </ButtonDropdown>
+                        <ButtonDropdown
+                            size={EComponentSize.LG}
+                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
+                            options={options}
+                        >
+                            Button text
+                        </ButtonDropdown>
+                    </div>
                 </div>
             </div>
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Доступные размеры кнопок",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const Themes: StoryObj<typeof ButtonDropdown> = {
     render: () => {
-        const options = useMemo(() => createOptions(), []);
+        const options = [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                },
+            },
+        ];
+
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -266,36 +335,66 @@ export const Themes: StoryObj<typeof ButtonDropdown> = {
                         Danger
                     </ButtonDropdown>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY} size={EComponentSize.MD} options={options}>
-                        Dots Secondary
-                    </ButtonDropdown>
-                    <ButtonDropdown
-                        theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                        size={EComponentSize.MD}
-                        options={options}
-                    >
-                        Dots Secondary Light
-                    </ButtonDropdown>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <Text size={ETextSize.B3}>EButtonDotsTheme.DOTS_SECONDARY</Text>
+                        <ButtonDropdown
+                            theme={EButtonDotsTheme.DOTS_SECONDARY}
+                            size={EComponentSize.MD}
+                            options={options}
+                        >
+                            Dots Secondary
+                        </ButtonDropdown>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <Text size={ETextSize.B3}>EButtonDotsTheme.DOTS_SECONDARY_LIGHT</Text>
+                        <ButtonDropdown
+                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
+                            size={EComponentSize.MD}
+                            options={options}
+                        >
+                            Dots Secondary Light
+                        </ButtonDropdown>
+                    </div>
                 </div>
             </div>
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Доступные темы кнопок",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const BlockMode: StoryObj<typeof ButtonDropdown> = {
     render: () => {
-        const options = useMemo(() => createOptions(), []);
+        const options = [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                },
+            },
+        ];
+
         return (
-            <>
+            <div style={{ maxWidth: 280 }}>
                 <ButtonDropdown block theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
@@ -311,12 +410,12 @@ export const BlockMode: StoryObj<typeof ButtonDropdown> = {
                 <ButtonDropdown block theme={EButtonTheme.DANGER} size={EComponentSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
-            </>
+            </div>
         );
     },
     parameters: {
         docs: {
-            description: { story: "Кнопка занимает всю доступную ширину контейнера" },
+            description: { story: "Кнопка в блочном режиме (свойство block)." },
         },
         controls: { disable: true },
     },
@@ -324,7 +423,30 @@ export const BlockMode: StoryObj<typeof ButtonDropdown> = {
 
 export const Disabled: StoryObj<typeof ButtonDropdown> = {
     render: () => {
-        const options = useMemo(() => createOptions(), []);
+        const options = [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                },
+            },
+        ];
+
         return (
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <ButtonDropdown disabled theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
@@ -364,9 +486,6 @@ export const Disabled: StoryObj<typeof ButtonDropdown> = {
         );
     },
     parameters: {
-        docs: {
-            description: { story: "Примеры в состоянии disabled" },
-        },
         controls: { disable: true },
     },
 };
@@ -374,6 +493,34 @@ export const Disabled: StoryObj<typeof ButtonDropdown> = {
 export const WithSelectedOption: StoryObj<typeof ButtonDropdown> = {
     render: () => {
         const [selectedId, setSelectedId] = useState<string | undefined>("opt-2");
+
+        const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                    onItemSelect?.("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                    onItemSelect?.("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                    onItemSelect?.("opt-3");
+                },
+            },
+        ];
+
         const options = useMemo(() => createOptions(setSelectedId), []);
         const selected = options.find((o) => o.id === selectedId);
 
@@ -392,7 +539,7 @@ export const WithSelectedOption: StoryObj<typeof ButtonDropdown> = {
     },
     parameters: {
         docs: {
-            description: { story: "Кнопка с заранее выбранным в выпадающем списке значением" },
+            description: { story: "Кнопка с заранее выбранным в выпадающем списке значением." },
         },
         controls: { disable: true },
     },

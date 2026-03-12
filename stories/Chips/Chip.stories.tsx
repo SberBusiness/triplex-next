@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { Chip } from "../../src/components/Chip/Chip";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories, ArgTypes, Heading, Primary } from "@storybook/addon-docs/blocks";
 import { SortStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
 export default {
@@ -13,19 +13,22 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент предоставляет возможность произвести действие по нажатию, также отображает выбранное состояние.
+Компонент предоставляет возможность произвести действие по нажатию, а также отображает выбранное состояние.
 
 ## Особенности:
-- **Размеры**: SM (маленький), MD (средний), LG (большой - по умолчанию)
-- **Состояния**: selected (выбранное), disabled (отключено)
-- Возможно передать префикс и постфикс
+
+- prefix и postfix можно передать через одноименные свойства.
                 `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Chip} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -34,12 +37,13 @@ export default {
 };
 
 export const Playground: StoryObj<typeof Chip> = {
+    tags: ["!autodocs"],
     render: (args) => {
         const [selected, setSelected] = useState(false);
         const handleClick = () => setSelected((s) => !s);
         return (
             <Chip {...args} selected={selected} onClick={handleClick}>
-                Chip text
+                Value
             </Chip>
         );
     },
@@ -48,12 +52,18 @@ export const Playground: StoryObj<typeof Chip> = {
         disabled: false,
     },
     argTypes: {
-        size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
+        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
     },
     parameters: {
         controls: {
             include: ["size", "disabled"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
 };
@@ -66,7 +76,7 @@ export const Default: StoryObj<typeof Chip> = {
         const [selected, setSelected] = useState(false);
         return (
             <Chip selected={selected} onClick={() => setSelected((s) => !s)}>
-                Chip text
+                Value
             </Chip>
         );
     },
@@ -106,23 +116,19 @@ export const States: StoryObj<typeof Chip> = {
     },
     render: () => (
         <div style={{ display: "flex", gap: 12 }}>
-            <Chip>Default</Chip>
             <Chip selected>Selected</Chip>
             <Chip disabled>Disabled</Chip>
         </div>
     ),
 };
 
-export const WithPrefixIcon: StoryObj<typeof Chip> = {
+export const WithPrefixAndPostfix: StoryObj<typeof Chip> = {
     parameters: {
         controls: { disable: true },
     },
-    render: () => <Chip prefix={<SortStrokeSrvIcon20 paletteIndex={5} />}>Prefix</Chip>,
-};
-
-export const WithPostfixIcon: StoryObj<typeof Chip> = {
-    parameters: {
-        controls: { disable: true },
-    },
-    render: () => <Chip postfix={<SortStrokeSrvIcon20 paletteIndex={5} />}>Postfix</Chip>,
+    render: () => (
+        <Chip prefix={<SortStrokeSrvIcon20 paletteIndex={5} />} postfix={<SortStrokeSrvIcon20 paletteIndex={5} />}>
+            Value
+        </Chip>
+    ),
 };

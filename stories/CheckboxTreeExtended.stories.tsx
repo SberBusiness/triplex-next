@@ -22,10 +22,8 @@ const meta: Meta<typeof CheckboxTreeExtended> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof CheckboxTreeExtended>;
 
-export const Default: Story = {
-    name: "Default",
+export const Default: StoryObj<typeof CheckboxTreeExtended> = {
     parameters: {
         controls: { disable: true },
     },
@@ -110,8 +108,13 @@ export const Default: Story = {
             let bulkChildrenCount = 0;
 
             checkbox.children.forEach((child) => {
-                child.checked ? checkedChildrenCount++ : "";
-                child.bulk ? bulkChildrenCount++ : "";
+                if (child.checked) {
+                    checkedChildrenCount++;
+                }
+
+                if (child.bulk) {
+                    bulkChildrenCount++;
+                }
             });
 
             // Все дочерние чекбоксы выбраны.

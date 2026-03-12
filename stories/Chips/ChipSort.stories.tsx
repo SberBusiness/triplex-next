@@ -13,11 +13,6 @@ export default {
             description: {
                 component: `
 ChipSelect с иконкой выбора сортировки.
-
-## Особенности
-
-- **Размеры**: SM, MD, LG
-- Элемент отображается как **selected**, если выбранное значение (value) отличается от свойства defaultValue
                 `,
             },
             page: () => (
@@ -35,12 +30,6 @@ ChipSelect с иконкой выбора сортировки.
         },
     },
 };
-
-const options = [
-    { id: "chip-sort-1", label: "По дате", value: "i1" },
-    { id: "chip-sort-2", label: "По времени", value: "i2" },
-    { id: "chip-sort-3", label: "По названию", value: "i3" },
-];
 
 export const Playground: StoryObj<typeof ChipSort> = {
     tags: ["!autodocs"],
@@ -73,6 +62,12 @@ export const Playground: StoryObj<typeof ChipSort> = {
         },
     },
     render: (args) => {
+        const options = [
+            { id: "chip-sort-1", label: "По дате", value: "i1" },
+            { id: "chip-sort-2", label: "По времени", value: "i2" },
+            { id: "chip-sort-3", label: "По названию", value: "i3" },
+        ];
+
         const [value, setValue] = useState(options[0]);
 
         const defaultValue =
@@ -87,6 +82,12 @@ export const Default: StoryObj<typeof ChipSort> = {
         controls: { disable: true },
     },
     render: () => {
+        const options = [
+            { id: "chip-sort-1", label: "По дате", value: "i1" },
+            { id: "chip-sort-2", label: "По времени", value: "i2" },
+            { id: "chip-sort-3", label: "По названию", value: "i3" },
+        ];
+
         const [value, setValue] = useState(options[0]);
 
         return <ChipSort defaultValue={options[0]} value={value} options={options} onChange={setValue} />;
@@ -98,6 +99,12 @@ export const Sizes: StoryObj<typeof ChipSort> = {
         controls: { disable: true },
     },
     render: () => {
+        const options = [
+            { id: "chip-sort-1", label: "По дате", value: "i1" },
+            { id: "chip-sort-2", label: "По времени", value: "i2" },
+            { id: "chip-sort-3", label: "По названию", value: "i3" },
+        ];
+
         const [valueSM, setValueSM] = useState(options[0]);
         const [valueMD, setValueMD] = useState(options[0]);
         const [valueLG, setValueLG] = useState(options[0]);

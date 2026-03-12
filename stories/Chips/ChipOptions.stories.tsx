@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { ChipOptions } from "../../src/components/Chip/ChipOptions";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipOptions",
@@ -19,7 +19,11 @@ Chip с иконкой выбора опций.
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ChipOptions} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -28,6 +32,7 @@ Chip с иконкой выбора опций.
 };
 
 export const Playground: StoryObj<typeof ChipOptions> = {
+    tags: ["!autodocs"],
     render: (args) => {
         const [count, setCount] = useState(0);
 
@@ -47,12 +52,18 @@ export const Playground: StoryObj<typeof ChipOptions> = {
         disabled: false,
     },
     argTypes: {
-        size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
+        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
     },
     parameters: {
         controls: {
             include: ["size", "disabled"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
 };

@@ -9,7 +9,7 @@ import {
     DefaulticonStrokePrdIcon24,
     DefaulticonStrokePrdIcon32,
 } from "@sberbusiness/icons-next";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Buttons/ButtonIcon",
@@ -19,46 +19,22 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент кнопки-иконки с различными формами и состояниями.
+Компонент кнопка-иконка.
 
 ## Особенности
 
-- **Формы**: squircle, circle
-- **Состояния**: active, disabled
-
-## Использование
-
-\`\`\`tsx
-import { ButtonIcon, EButtonIconShape } from '@sberbusiness/triplex-next';
-
-// Кнопка-иконка формы squircle (по умолчанию)
-<ButtonIcon onClick={handleClick}>
-    <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-</ButtonIcon>
-
-// Круглая кнопка-иконка
-<ButtonIcon shape={EButtonIconShape.CIRCLE} onClick={handleClick}>
-    <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-</ButtonIcon>
-
-// Кнопка-иконка в состоянии active
-<ButtonIcon active onClick={handleClick}>
-    <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-</ButtonIcon>
-
-// Кнопка-иконка в состоянии disabled
-<ButtonIcon disabled onClick={handleClick}>
-    <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-</ButtonIcon>
-\`\`\`
+- Размер кнопки определяется размером переданной в нее иконки.
                 `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ButtonIcon} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -68,7 +44,7 @@ import { ButtonIcon, EButtonIconShape } from '@sberbusiness/triplex-next';
         shape: {
             control: { type: "select" },
             options: [EButtonIconShape.CIRCLE, EButtonIconShape.SQUIRCLE],
-            description: "Форма границы кнопки",
+            description: "Форма кнопки",
             table: {
                 type: { summary: "EButtonIconShape" },
                 defaultValue: { summary: EButtonIconShape.SQUIRCLE },
@@ -97,6 +73,7 @@ import { ButtonIcon, EButtonIconShape } from '@sberbusiness/triplex-next';
 };
 
 export const Playground: StoryObj<typeof ButtonIcon> = {
+    tags: ["!autodocs"],
     args: {
         active: false,
         disabled: false,
@@ -113,6 +90,12 @@ export const Playground: StoryObj<typeof ButtonIcon> = {
     parameters: {
         controls: {
             include: ["shape", "active", "disabled"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => (
@@ -133,7 +116,7 @@ export const Default: StoryObj<typeof ButtonIcon> = {
     },
 };
 
-export const DifferentSizes: StoryObj<typeof ButtonIcon> = {
+export const Sizes: StoryObj<typeof ButtonIcon> = {
     parameters: {
         docs: {
             description: {
@@ -162,11 +145,6 @@ export const DifferentSizes: StoryObj<typeof ButtonIcon> = {
 
 export const Disabled: StoryObj<typeof ButtonIcon> = {
     parameters: {
-        docs: {
-            description: {
-                story: "Кнопка-иконка в состоянии disabled",
-            },
-        },
         controls: { disable: true },
     },
     render: () => (

@@ -19,8 +19,7 @@ export default {
 
 ## Особенности
 
-- **Размеры**: small (SM), medium (MD), large (LG)
-- **Группировка**: по осям X (компонент CheckboxXGroup) и Y (компонент CheckboxYGroup)
+- Возможна группировка по осям X (компонент **CheckboxXGroup**) и Y (компонент **CheckboxYGroup**)
                 `,
             },
             page: () => (
@@ -40,7 +39,6 @@ export default {
 };
 
 export const Playground: StoryObj<typeof Checkbox> = {
-    name: "Playground",
     tags: ["!autodocs"],
     args: {
         children: "Checkbox label",
@@ -102,7 +100,6 @@ export const Playground: StoryObj<typeof Checkbox> = {
 };
 
 export const Default: StoryObj<typeof Checkbox> = {
-    name: "Default",
     args: {
         children: "Checkbox label",
     },
@@ -117,9 +114,7 @@ export const Default: StoryObj<typeof Checkbox> = {
 };
 
 export const Sizes: StoryObj<typeof Checkbox> = {
-    name: "Sizes",
     args: {
-        children: "Checkbox label",
         size: EComponentSize.MD,
     },
     parameters: {
@@ -127,17 +122,20 @@ export const Sizes: StoryObj<typeof Checkbox> = {
     },
     render: (args) => (
         <>
-            <Checkbox {...args} size={EComponentSize.SM} />
+            <Checkbox {...args} size={EComponentSize.SM}>
+                SM
+            </Checkbox>
             <Gap size={16} />
-            <Checkbox {...args} />
+            <Checkbox {...args}>MD</Checkbox>
             <Gap size={16} />
-            <Checkbox {...args} size={EComponentSize.LG} />
+            <Checkbox {...args} size={EComponentSize.LG}>
+                LG
+            </Checkbox>
         </>
     ),
 };
 
 export const XGroup: StoryObj<typeof Checkbox> = {
-    name: "X Group",
     parameters: {
         docs: {
             description: {
@@ -176,7 +174,6 @@ export const XGroup: StoryObj<typeof Checkbox> = {
 };
 
 export const YGroup: StoryObj<typeof Checkbox> = {
-    name: "Y Group",
     parameters: {
         docs: {
             description: {

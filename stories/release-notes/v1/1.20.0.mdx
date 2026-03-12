@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**ChipSuggest, MonthYearField, SuggestField**
+
+- Исправлена ширина поля ввода в адаптивном режиме.
+
 **IslandAccordion**
 
 - Исправлен размер Title в размере MD.
@@ -25,3 +29,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **ModalWindow**
 
 - В `ModalWindowClose` исключены пропсы `size`, `theme` и `icon`.
+
+**SuggestField**
+
+- Исправлено поведение выпадающего списка при асинхронном поиске.
+- Исправлена ширина поля ввода в адаптивном режиме.
+- Исправлен баг, когда `Dropdown` закрывался при клике на его отступ.
+- Исправлено расположение спиннера в DropdownMobileList.
+- Исправлен баг, когда не срабатывал `onScrollEnd`.
+- Теперь `aria-expanded` и состояние открытия `Dropdown` синхронизированы.

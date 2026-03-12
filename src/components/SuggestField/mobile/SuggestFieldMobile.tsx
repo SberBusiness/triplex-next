@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ISuggestFieldMobileProps } from "./types";
 import { ISuggestFieldOption } from "../types";
 import { EComponentSize } from "../../../enums";
@@ -46,10 +46,13 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
         prevDropdownOpen.current = dropdownOpen;
     }, [dropdownOpen]);
 
-    const handleInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-        setDropdownOpen(true);
-        inputProps.onFocus?.(event);
-    };
+    const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
+        (event) => {
+            setDropdownOpen(true);
+            inputProps.onFocus?.(event);
+        },
+        [inputProps],
+    );
 
     return (
         <TextFieldBase
@@ -69,6 +72,7 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
                 value={value ? value.label : ""}
                 placeholder={placeholder}
                 role="combobox"
+                aria-autocomplete="list"
                 aria-expanded={dropdownOpen}
                 data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.input}`}
                 {...inputProps}

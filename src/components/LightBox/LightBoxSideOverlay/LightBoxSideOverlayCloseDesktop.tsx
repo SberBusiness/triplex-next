@@ -39,14 +39,18 @@ export const LightBoxSideOverlayCloseDesktop: React.FC<ILightBoxSideOverlayClose
         />
     );
 
-    if (clickByEsc) {
-        return (
-            <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={ref}>
-                {renderButton()}
-            </TriggerClickOnKeyDownEvent>
-        );
-    }
-    return renderButton();
+    const renderContent = () => {
+        if (clickByEsc) {
+            return (
+                <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={ref}>
+                    {renderButton()}
+                </TriggerClickOnKeyDownEvent>
+            );
+        }
+        return renderButton();
+    };
+
+    return <div className={styles.lightBoxSideOverlayCloseDesktopContainer}>{renderContent()}</div>;
 };
 
 LightBoxSideOverlayCloseDesktop.displayName = "LightBoxSideOverlayCloseDesktop";

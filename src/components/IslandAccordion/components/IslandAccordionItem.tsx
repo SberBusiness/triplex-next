@@ -3,7 +3,7 @@ import { CaretdownStrokeSrvIcon24, CrossStrokeSrvIcon24 } from "@sberbusiness/ic
 import clsx from "clsx";
 import { Island } from "../../Island/Island";
 import { uniqueId } from "lodash-es";
-import { ExpandAnimation, IExpandAnimationProps } from "../../ExpandAnimation/ExpandAnimation";
+import { ExpandAnimation, IExpandAnimationProps } from "../../ExpandAnimation";
 import { IslandAccordionContent } from "./IslandAccordionContent";
 import { IslandAccordionFooter } from "./IslandAccordionFooter";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
@@ -38,19 +38,19 @@ export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTM
     transitionProps?: IExpandAnimationProps["transitionProps"];
 }
 
-const typeToClassNameMap = {
+const TYPE_TO_CLASS_NAME_MAP: Record<EIslandType, string> = {
     [EIslandType.TYPE_1]: styles.type1,
     [EIslandType.TYPE_2]: styles.type2,
     [EIslandType.TYPE_3]: styles.type3,
 };
 
-const sizeToTitleSizeMap = {
+const SIZE_TO_TITLE_SIZE_MAP: Record<EComponentSize, ETitleSize> = {
     [EComponentSize.SM]: ETitleSize.H3,
-    [EComponentSize.MD]: ETitleSize.H2,
+    [EComponentSize.MD]: ETitleSize.H3,
     [EComponentSize.LG]: ETitleSize.H2,
 };
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 export const IslandAccordionItem = Object.assign(
     React.forwardRef<HTMLLIElement, IIslandAccordionItemProps>(
@@ -105,10 +105,16 @@ export const IslandAccordionItem = Object.assign(
                 onRemove?.(id);
             };
 
-            const classNames = clsx(className, styles.item, sizeToClassNameMap[size], typeToClassNameMap[type], {
-                [styles.disabled]: !!disabled,
-                [styles.opened]: isOpen,
-            });
+            const classNames = clsx(
+                className,
+                styles.item,
+                SIZE_TO_CLASS_NAME_MAP[size],
+                TYPE_TO_CLASS_NAME_MAP[type],
+                {
+                    [styles.disabled]: !!disabled,
+                    [styles.opened]: isOpen,
+                },
+            );
 
             return (
                 <li {...rest} className={classNames} id={id} ref={ref}>
@@ -136,7 +142,7 @@ export const IslandAccordionItem = Object.assign(
 
                                 <Title
                                     className={styles.title}
-                                    size={sizeToTitleSizeMap[size]}
+                                    size={SIZE_TO_TITLE_SIZE_MAP[size]}
                                     type={disabled ? EFontType.DISABLED : EFontType.PRIMARY}
                                     tag="div"
                                 >

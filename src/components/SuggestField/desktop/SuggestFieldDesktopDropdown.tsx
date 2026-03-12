@@ -1,9 +1,10 @@
-import React from "react";
-import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { ISuggestFieldDesktopDropdownProps } from "@sberbusiness/triplex-next/components/SuggestField/desktop/types";
-import { Dropdown, DropdownList, DropdownListItem } from "@sberbusiness/triplex-next/components/Dropdown";
-import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
-import { DataTestId } from "@sberbusiness/triplex-next/consts/DataTestId";
+import React, { useCallback } from "react";
+import { ISuggestFieldOption } from "../types";
+import { ISuggestFieldDesktopDropdownProps } from "./types";
+import { Portal } from "../../Portal/Portal";
+import { DropdownDesktop, DropdownList, DropdownListItem } from "../../Dropdown";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
+import { DataTestId } from "../../../consts/DataTestId";
 
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
@@ -16,51 +17,69 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
     dataTestId,
     opened,
     listLoading,
-    listRef,
+    onMouseDown,
+    onSelect,
+    onScrollEnd,
     renderList,
     renderListItem,
-    onSelect,
-    setOpened,
     ...restProps
 }: ISuggestFieldDesktopDropdownProps<T>) => {
     const List = renderList === undefined ? DropdownList : renderList;
     const ListItem = renderListItem === undefined ? DropdownListItem : renderListItem;
 
+    const handleMouseDown = useCallback<React.MouseEventHandler<HTMLDivElement>>(
+        (event) => {
+            // Предотвращаем получение фокуса.
+            event.preventDefault();
+            onMouseDown?.(event);
+        },
+        [onMouseDown],
+    );
+
+    const handleListScroll = useCallback<React.UIEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (onScrollEnd === undefined || listLoading) {
+                return;
+            }
+
+            const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
+
+            if (scrollHeight - scrollTop - clientHeight < 1) {
+                onScrollEnd();
+            }
+        },
+        [onScrollEnd, listLoading],
+    );
+
     return (
-        <Dropdown
-            size={size}
-            targetRef={targetRef}
-            data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.dropdown}`}
-            opened={opened}
-            fixedWidth={true}
-            setOpened={setOpened}
-            {...restProps}
-        >
-            <List
-                id={listId}
+        <Portal container={document.body}>
+            <DropdownDesktop
                 size={size}
-                dropdownOpened={opened}
-                loading={listLoading}
-                // Предотвращаем получение фокуса.
-                onMouseDown={(event) => event.preventDefault()}
+                targetRef={targetRef}
+                data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.dropdown}`}
+                opened={opened}
+                {...restProps}
+                fixedWidth={true}
+                onMouseDown={handleMouseDown}
             >
-                {options?.map((option) => (
-                    <ListItem
-                        key={option.id}
-                        id={option.id}
-                        keyCodesForSelection={KEY_CODES_SELECTABLE}
-                        data-test-id={
-                            dataTestId && `${dataTestId}${DataTestId.Suggest.dropdown}${DataTestId.Dropdown.listItem}`
-                        }
-                        selected={option.id === value?.id}
-                        // Предотвращаем получение фокуса.
-                        onMouseDown={(event) => event.preventDefault()}
-                        onSelect={() => onSelect(option)}
-                    >
-                        {option.content || option.label}
-                    </ListItem>
-                ))}
-            </List>
-        </Dropdown>
+                <List id={listId} size={size} dropdownOpened={opened} loading={listLoading} onScroll={handleListScroll}>
+                    {options?.map((option) => (
+                        <ListItem
+                            key={option.id}
+                            id={option.id}
+                            keyCodesForSelection={KEY_CODES_SELECTABLE}
+                            data-test-id={
+                                dataTestId &&
+                                `${dataTestId}${DataTestId.Suggest.dropdown}${DataTestId.Dropdown.listItem}`
+                            }
+                            selected={option.id === value?.id}
+                            onSelect={() => onSelect(option)}
+                        >
+                            {option.content || option.label}
+                        </ListItem>
+                    ))}
+                </List>
+            </DropdownDesktop>
+        </Portal>
     );
 };

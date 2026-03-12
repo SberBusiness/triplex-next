@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import clsx from "clsx";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { TestProps } from "../../../types/CoreTypes";
+import { EComponentSize } from "../../../enums";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { Badge } from "../../Badge/Badge";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownListItem. */
-export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElement>, TestProps {
     /** Флаг активного элемента при навигации с клавиатуры. Свойство передается из DropdownList. */
     active?: boolean;
     /** Идентификатор элемента. */

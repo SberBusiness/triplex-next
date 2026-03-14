@@ -23,10 +23,12 @@ export const CheckboxTreeExtendedCheckbox: React.FC<ICheckboxTreeExtendedCheckbo
     active,
     className,
     opened,
+    labelAttributes,
     ...checkboxProps
 }) => {
     const checkboxNode = useRef<HTMLInputElement | null>(null);
     const { size } = useContext(CheckboxTreeExtendedContext);
+    const classNamesLabel = clsx(styles.checkboxTreeCheckboxLabel, labelAttributes?.className);
 
     // Триггер фокуса на чекбоксе при изменении флага активности при перемещении по дереву с клавиатуры. Если нода имеет дочерние ноды, то фокус получает не чекбокс, а CheckboxTreeExtendedArrow.
     useEffect(() => {
@@ -36,10 +38,11 @@ export const CheckboxTreeExtendedCheckbox: React.FC<ICheckboxTreeExtendedCheckbo
         }
     }, [active]);
 
-    const handleFocus = (event: React.FocusEvent<HTMLLabelElement>) => {
+    const handleLabelFocus = (event: React.FocusEvent<HTMLLabelElement>) => {
         // Предотвращает всплытие до ноды дерева.
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         !isStaticCheckboxTreeExtended && event.stopPropagation();
+        labelAttributes?.onFocus?.(event);
     };
 
     const setCheckboxNode = (DOMNode: HTMLInputElement) => {
@@ -50,7 +53,11 @@ export const CheckboxTreeExtendedCheckbox: React.FC<ICheckboxTreeExtendedCheckbo
         <Checkbox
             className={clsx(styles.checkboxTreeCheckbox, className)}
             ref={setCheckboxNode}
-            labelAttributes={{ className: styles.checkboxTreeCheckboxLabel, onFocus: handleFocus }}
+            labelAttributes={{
+                ...labelAttributes,
+                className: classNamesLabel,
+                onFocus: handleLabelFocus,
+            }}
             size={size}
             {...checkboxProps}
         />

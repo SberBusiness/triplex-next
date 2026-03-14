@@ -37,7 +37,7 @@ import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
 const iconCategoryMap: Record<string, string[]> = Object.keys(iconModule)
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
     .reduce((map, key) => {
-        const results = key.match(/(Acc|Brd|Ill|Mrk|Mkr|Nav|Prd|Srv|Sts|Sys)Icon/);
+        const results = key.match(/(Brd|Map|Mrk|Mkr|Nav|Prd|Srv|Sts|Sys)Icon/);
 
         if (results) {
             const category = results[1];
@@ -147,6 +147,37 @@ export const BrandIcons: StoryObj<IIconStoryArgs> = {
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
             {iconCategoryMap["Brd"].map((key) => {
+                const Icon = iconModule[key];
+                const inverted = paletteIndex === 6;
+
+                return (
+                    <IconDisplay key={key} name={key} inverted={inverted} {...restArgs}>
+                        <Icon paletteIndex={paletteIndex} />
+                    </IconDisplay>
+                );
+            })}
+        </div>
+    ),
+
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
+};
+
+export const MapIcons: StoryObj<IIconStoryArgs> = {
+    name: "Map icons",
+    args: {
+        paletteIndex: 0,
+        hoverable: true,
+        disabled: false,
+    },
+    render: ({ paletteIndex, ...restArgs }) => (
+        <div className="icon-gallery">
+            {iconCategoryMap["Map"].map((key) => {
                 const Icon = iconModule[key];
                 const inverted = paletteIndex === 6;
 

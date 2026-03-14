@@ -14,7 +14,7 @@ import styles from "./styles/AlertContext.module.less";
 
 /** Свойства компонента AlertContext. */
 export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement> {
-    /** Тип предупреждения (info/warning/error/system). */
+    /** Тип предупреждения. */
     type: Exclude<EAlertType, EAlertType.FEATURE>;
     /** Отображаемая иконка. */
     renderIcon?: React.ReactNode;

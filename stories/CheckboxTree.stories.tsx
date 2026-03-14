@@ -1,6 +1,6 @@
 import type { StoryObj } from "@storybook/react";
 import React, { useState } from "react";
-import { CheckboxTree, ICheckboxTreeProps } from "../src/components/CheckboxTree/CheckboxTree";
+import { CheckboxTree } from "../src/components/CheckboxTree/CheckboxTree";
 import { ICheckboxTreeCheckboxData } from "../src/components/CheckboxTree/types";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { EComponentSize } from "../src/enums/EComponentSize";
@@ -17,10 +17,6 @@ export default {
             description: {
                 component: `
 Дерево чекбоксов. Является оберткой над CheckboxTreeExtended.
-
-## Особенности
-
-- **Размеры**: SM, MD, LG.
                 `,
             },
             page: () => (
@@ -39,78 +35,6 @@ export default {
     },
 };
 
-// Sample data for CheckboxTree with "группа 1", "группа 2", "Значение 3"
-const sampleCheckboxes: ICheckboxTreeCheckboxData[] = [
-    {
-        id: "1",
-        label: "Группа 1",
-        checked: false,
-        children: [
-            {
-                id: "1-1",
-                label: "Значение 1-1",
-                checked: false,
-                children: [
-                    {
-                        id: "1-1-1",
-                        label: "Значение 1-1-1",
-                        checked: false,
-                    },
-                    {
-                        id: "1-1-2",
-                        label: "Значение 1-1-2",
-                        checked: false,
-                    },
-                    {
-                        id: "1-1-3",
-                        label: "Значение 1-1-3",
-                        checked: false,
-                    },
-                ],
-            },
-            {
-                id: "1-2",
-                label: "Значение 1-2",
-                checked: false,
-            },
-        ],
-    },
-    {
-        id: "2",
-        label: "Группа 2",
-        checked: false,
-        children: [
-            {
-                id: "2-1",
-                label: "Значение 2-1",
-                checked: false,
-            },
-            {
-                id: "2-2",
-                label: "Значение 2-2",
-                checked: false,
-            },
-        ],
-    },
-    {
-        id: "3",
-        label: "Значение 3",
-        checked: false,
-    },
-];
-
-// Interactive wrapper component
-const InteractiveCheckboxTree = (args: ICheckboxTreeProps) => {
-    const [checkboxes, setCheckboxes] = useState<ICheckboxTreeCheckboxData[]>(args.checkboxes);
-
-    const handleChange = (updatedCheckboxes: ICheckboxTreeCheckboxData[]) => {
-        setCheckboxes(updatedCheckboxes);
-        args.onChange?.(updatedCheckboxes);
-    };
-
-    return <CheckboxTree {...args} checkboxes={checkboxes} onChange={handleChange} />;
-};
-
 export const Playground: StoryObj<typeof CheckboxTree> = {
     tags: ["!autodocs"],
     parameters: {
@@ -125,7 +49,6 @@ export const Playground: StoryObj<typeof CheckboxTree> = {
         },
     },
     args: {
-        checkboxes: sampleCheckboxes,
         size: EComponentSize.MD,
     },
     argTypes: {
@@ -139,37 +62,241 @@ export const Playground: StoryObj<typeof CheckboxTree> = {
             },
         },
     },
-    render: (args) => <InteractiveCheckboxTree {...args} />,
+    render: (args) => {
+        const sampleCheckboxes: ICheckboxTreeCheckboxData[] = [
+            {
+                id: "1",
+                label: "Группа 1",
+                checked: false,
+                children: [
+                    {
+                        id: "1-1",
+                        label: "Значение 1-1",
+                        checked: false,
+                        children: [
+                            {
+                                id: "1-1-1",
+                                label: "Значение 1-1-1",
+                                checked: false,
+                            },
+                            {
+                                id: "1-1-2",
+                                label: "Значение 1-1-2",
+                                checked: false,
+                            },
+                            {
+                                id: "1-1-3",
+                                label: "Значение 1-1-3",
+                                checked: false,
+                            },
+                        ],
+                    },
+                    {
+                        id: "1-2",
+                        label: "Значение 1-2",
+                        checked: false,
+                    },
+                ],
+            },
+            {
+                id: "2",
+                label: "Группа 2",
+                checked: false,
+                children: [
+                    {
+                        id: "2-1",
+                        label: "Значение 2-1",
+                        checked: false,
+                    },
+                    {
+                        id: "2-2",
+                        label: "Значение 2-2",
+                        checked: false,
+                    },
+                ],
+            },
+            {
+                id: "3",
+                label: "Значение 3",
+                checked: false,
+            },
+        ];
+
+        const [checkboxes, setCheckboxes] = useState<ICheckboxTreeCheckboxData[]>(sampleCheckboxes);
+
+        const handleChange = (updatedCheckboxes: ICheckboxTreeCheckboxData[]) => {
+            setCheckboxes(updatedCheckboxes);
+        };
+
+        return <CheckboxTree {...args} checkboxes={checkboxes} onChange={handleChange} />;
+    },
 };
 
 export const Default: StoryObj<typeof CheckboxTree> = {
     parameters: {
         controls: { disable: true },
     },
-    render: (args) => <InteractiveCheckboxTree {...args} />,
-    args: {
-        checkboxes: sampleCheckboxes,
+    render: () => {
+        const sampleCheckboxes: ICheckboxTreeCheckboxData[] = [
+            {
+                id: "1",
+                label: "Группа 1",
+                checked: false,
+                children: [
+                    {
+                        id: "1-1",
+                        label: "Значение 1-1",
+                        checked: false,
+                        children: [
+                            {
+                                id: "1-1-1",
+                                label: "Значение 1-1-1",
+                                checked: false,
+                            },
+                            {
+                                id: "1-1-2",
+                                label: "Значение 1-1-2",
+                                checked: false,
+                            },
+                            {
+                                id: "1-1-3",
+                                label: "Значение 1-1-3",
+                                checked: false,
+                            },
+                        ],
+                    },
+                    {
+                        id: "1-2",
+                        label: "Значение 1-2",
+                        checked: false,
+                    },
+                ],
+            },
+            {
+                id: "2",
+                label: "Группа 2",
+                checked: false,
+                children: [
+                    {
+                        id: "2-1",
+                        label: "Значение 2-1",
+                        checked: false,
+                    },
+                    {
+                        id: "2-2",
+                        label: "Значение 2-2",
+                        checked: false,
+                    },
+                ],
+            },
+            {
+                id: "3",
+                label: "Значение 3",
+                checked: false,
+            },
+        ];
+
+        const [checkboxes, setCheckboxes] = useState<ICheckboxTreeCheckboxData[]>(sampleCheckboxes);
+
+        const handleChange = (updatedCheckboxes: ICheckboxTreeCheckboxData[]) => {
+            setCheckboxes(updatedCheckboxes);
+        };
+
+        return <CheckboxTree checkboxes={checkboxes} onChange={handleChange} />;
     },
 };
 
-export const DifferentSizes: StoryObj<typeof CheckboxTree> = {
+export const Sizes: StoryObj<typeof CheckboxTree> = {
     parameters: {
         controls: { disable: true },
     },
-    args: {
-        checkboxes: sampleCheckboxes,
+    render: () => {
+        const createSampleCheckboxes = (): ICheckboxTreeCheckboxData[] => [
+            {
+                id: "1",
+                label: "Группа 1",
+                checked: false,
+                children: [
+                    {
+                        id: "1-1",
+                        label: "Значение 1-1",
+                        checked: false,
+                        children: [
+                            {
+                                id: "1-1-1",
+                                label: "Значение 1-1-1",
+                                checked: false,
+                            },
+                            {
+                                id: "1-1-2",
+                                label: "Значение 1-1-2",
+                                checked: false,
+                            },
+                            {
+                                id: "1-1-3",
+                                label: "Значение 1-1-3",
+                                checked: false,
+                            },
+                        ],
+                    },
+                    {
+                        id: "1-2",
+                        label: "Значение 1-2",
+                        checked: false,
+                    },
+                ],
+            },
+            {
+                id: "2",
+                label: "Группа 2",
+                checked: false,
+                children: [
+                    {
+                        id: "2-1",
+                        label: "Значение 2-1",
+                        checked: false,
+                    },
+                    {
+                        id: "2-2",
+                        label: "Значение 2-2",
+                        checked: false,
+                    },
+                ],
+            },
+            {
+                id: "3",
+                label: "Значение 3",
+                checked: false,
+            },
+        ];
+
+        const [checkboxesMD, setCheckboxesMD] = useState<ICheckboxTreeCheckboxData[]>(createSampleCheckboxes());
+        const [checkboxesSM, setCheckboxesSM] = useState<ICheckboxTreeCheckboxData[]>(createSampleCheckboxes());
+        const [checkboxesLG, setCheckboxesLG] = useState<ICheckboxTreeCheckboxData[]>(createSampleCheckboxes());
+
+        const handleChangeSM = (updatedCheckboxes: ICheckboxTreeCheckboxData[]) => {
+            setCheckboxesSM(updatedCheckboxes);
+        };
+
+        const handleChangeMD = (updatedCheckboxes: ICheckboxTreeCheckboxData[]) => {
+            setCheckboxesMD(updatedCheckboxes);
+        };
+
+        const handleChangeLG = (updatedCheckboxes: ICheckboxTreeCheckboxData[]) => {
+            setCheckboxesLG(updatedCheckboxes);
+        };
+        return (
+            <Row>
+                <Col size={4}>
+                    <CheckboxTree checkboxes={checkboxesSM} onChange={handleChangeSM} size={EComponentSize.SM} />
+                </Col>
+                <Col size={4}>
+                    <CheckboxTree checkboxes={checkboxesMD} onChange={handleChangeMD} />
+                </Col>
+                <Col size={4}>
+                    <CheckboxTree checkboxes={checkboxesLG} onChange={handleChangeLG} size={EComponentSize.LG} />
+                </Col>
+            </Row>
+        );
     },
-    render: (args) => (
-        <Row>
-            <Col size={4}>
-                <InteractiveCheckboxTree {...args} size={EComponentSize.SM} />
-            </Col>
-            <Col size={4}>
-                <InteractiveCheckboxTree {...args} />
-            </Col>
-            <Col size={4}>
-                <InteractiveCheckboxTree {...args} size={EComponentSize.LG} />
-            </Col>
-        </Row>
-    ),
 };

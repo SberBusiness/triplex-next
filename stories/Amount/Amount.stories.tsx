@@ -4,7 +4,7 @@ import { Row } from "../../src/components/Row";
 import { Col } from "../../src/components/Col";
 import { StoryObj } from "@storybook/react";
 import { EFontType, EFontWeightText, ETextSize, Text } from "../../src/components/Typography";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Amount",
@@ -21,8 +21,11 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Amount} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -36,7 +39,7 @@ interface IAmountStoriesProps extends IAmountProps {
 }
 
 export const Playground: StoryObj<IAmountStoriesProps> = {
-    name: "Playground",
+    tags: ["!autodocs"],
     argTypes: {
         value: {
             control: { type: "text" },
@@ -71,6 +74,12 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
         controls: {
             include: ["value", "fractionLength", "currency", "currencyTitle", "adaptive"],
         },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
     },
     render: (args) => {
         return (
@@ -82,7 +91,6 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
 };
 
 export const Default: StoryObj<IAmountStoriesProps> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },

@@ -11,7 +11,16 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Gap } from "../../src/components/Gap";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Link } from "../../src/components/Link";
-import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
+import {
+    Title,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    ArgTypes,
+    Heading,
+    Subheading,
+} from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Alerts/AlertProcess",
@@ -25,10 +34,9 @@ export default {
 
 ## Особенности
 
-- **Типы**: Info, Warning, Error, System, Feature
-- Передавать контент для спойлера возможно через компонент **AlertProcess.Spoiler**. Состояние спойлера задается через свойство **open**, а обработчик изменения состояния - через свойство **onOpen**
-- Обработчик нажатия на иконку закрытия передается снаружи через свойство **onClose**
-- Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography
+- Компонент не задает размеры или цвет текста. Контент передается с нужными компонентами Typography.
+- Передать контент для спойлера можно через компонент **AlertProcess.Spoiler**.
+- Передать кастомную иконку можно через свойство **renderIcon**.
                 `,
             },
             page: () => (
@@ -36,7 +44,10 @@ export default {
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
+                    <Subheading>AlertProcess</Subheading>
                     <ArgTypes of={AlertProcess} />
+                    <Subheading>AlertProcess.Spoiler</Subheading>
+                    <ArgTypes of={AlertProcess.Spoiler} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -48,14 +59,9 @@ export default {
 };
 
 export const Playground: StoryObj<typeof AlertProcess> = {
-    name: "Playground",
     tags: ["!autodocs"],
     args: {
-        children: (
-            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                This message provides context or highlights important information to note.
-            </Text>
-        ),
+        children: "This message provides context or highlights important information to note.",
         type: EAlertType.INFO,
         closable: false,
         onClose: action("onClose"),
@@ -99,14 +105,17 @@ export const Playground: StoryObj<typeof AlertProcess> = {
     render: (args) => {
         return (
             <div style={{ maxWidth: "750px" }}>
-                <AlertProcess {...args} />
+                <AlertProcess {...args}>
+                    <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                        {args.children}
+                    </Text>
+                </AlertProcess>
             </div>
         );
     },
 };
 
 export const Default: StoryObj<typeof AlertProcess> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -142,9 +151,13 @@ export const Default: StoryObj<typeof AlertProcess> = {
 };
 
 export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
-    name: "With Custom Icon",
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: "Компонент с иконкой, переданной через свойство renderIcon.",
+            },
+        },
     },
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
@@ -158,7 +171,6 @@ export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
 };
 
 export const Closable: StoryObj<typeof AlertProcess> = {
-    name: "Closable",
     parameters: {
         controls: { disable: true },
     },
@@ -170,20 +182,8 @@ export const Closable: StoryObj<typeof AlertProcess> = {
         );
 
         return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
+            <div style={{ maxWidth: "750px" }}>
                 <AlertProcess type={EAlertType.INFO} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.WARNING} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.ERROR} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.SYSTEM} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.FEATURE} closable onClose={action("onClose")}>
                     {children}
                 </AlertProcess>
             </div>
@@ -191,8 +191,7 @@ export const Closable: StoryObj<typeof AlertProcess> = {
     },
 };
 
-export const WithButton: StoryObj<typeof AlertProcess> = {
-    name: "With Button",
+export const WithButtonLink: StoryObj<typeof AlertProcess> = {
     parameters: {
         controls: { disable: true },
     },
@@ -210,29 +209,14 @@ export const WithButton: StoryObj<typeof AlertProcess> = {
         );
 
         return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
-                <AlertProcess type={EAlertType.INFO} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.WARNING} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.ERROR} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.SYSTEM} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.FEATURE} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
+            <div style={{ maxWidth: "750px" }}>
+                <AlertProcess type={EAlertType.INFO}>{children}</AlertProcess>
             </div>
         );
     },
 };
 
 export const WithLink: StoryObj<typeof AlertProcess> = {
-    name: "With Link",
     parameters: {
         controls: { disable: true },
     },
@@ -252,29 +236,14 @@ export const WithLink: StoryObj<typeof AlertProcess> = {
         );
 
         return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
-                <AlertProcess type={EAlertType.INFO} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.WARNING} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.ERROR} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.SYSTEM} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-                <AlertProcess type={EAlertType.FEATURE} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
+            <div style={{ maxWidth: "750px" }}>
+                <AlertProcess type={EAlertType.INFO}>{children}</AlertProcess>
             </div>
         );
     },
 };
 
-export const Spoiler: StoryObj<typeof AlertProcess> = {
-    name: "Spoiler",
+export const WithSpoiler: StoryObj<typeof AlertProcess> = {
     parameters: {
         controls: { disable: true },
     },

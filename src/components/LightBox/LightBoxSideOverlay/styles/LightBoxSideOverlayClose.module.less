@@ -1,9 +1,17 @@
 @import 'src/styles/style';
 
-.lightBoxSideOverlayCloseDesktop {
+.lightBoxSideOverlayCloseDesktopContainer {
     position: absolute;
     top: 24px;
     right: 24px;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.lightBoxSideOverlayCloseDesktop {
+    position: sticky;
+    top: 24px;
+    pointer-events: auto;
 }
 
 .lightBoxSideOverlayCloseMobile {
@@ -15,7 +23,7 @@
 
 /** Breakpoint для экранов менее 1024px. */
 .global-LB-less-or-equal-media-point-0 {
-    .lightBoxSideOverlayCloseDesktop {
+    .lightBoxSideOverlayCloseDesktopContainer {
         display: none;
     }
 
@@ -33,7 +41,7 @@
 
 /** Breakpoint для экранов шире 1024px. */
 .global-LB-more-media-point-0 {
-    .lightBoxSideOverlayCloseDesktop {
+    .lightBoxSideOverlayCloseDesktopContainer {
         display: block;
     }
     

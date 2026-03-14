@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
 import { ChipDatePicker } from "../../src/components/Chip/ChipDatePicker/ChipDatePicker";
 import { EComponentSize } from "../../src/enums/EComponentSize";
@@ -16,7 +16,11 @@ export default {
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ChipDatePicker} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -34,9 +38,22 @@ const useChipDatePickerLogic = () => {
 };
 
 export const Playground: StoryObj<typeof ChipDatePicker> = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: {
+            include: ["size", "label", "displayedValue", "disabled"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
     args: {
         size: EComponentSize.MD,
         label: "Date label",
+        disabled: false,
     },
     argTypes: {
         size: {
@@ -56,6 +73,10 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
             control: { type: "text" },
             description: "Лейбл, который отображается вместо выбранного значения",
         },
+        disabled: {
+            control: { type: "boolean" },
+            description: "Состояние disabled",
+        },
     },
     render: (args) => {
         const { value, onChange } = useChipDatePickerLogic();
@@ -69,6 +90,7 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
                 alignment={EDropdownAlignment.LEFT}
                 size={args.size}
                 status="default"
+                disabled={args.disabled}
             />
         );
     },
@@ -97,6 +119,11 @@ export const Default: StoryObj<typeof ChipDatePicker> = {
 export const WithCustomDisplayedValue: StoryObj<typeof ChipDatePicker> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            description: {
+                story: "ChipDatePicker с переданным displayedValue.",
+            },
+        },
     },
     render: () => {
         const { value, onChange } = useChipDatePickerLogic();
@@ -115,7 +142,7 @@ export const WithCustomDisplayedValue: StoryObj<typeof ChipDatePicker> = {
     },
 };
 
-export const DifferentSizes: StoryObj<typeof ChipDatePicker> = {
+export const Sizes: StoryObj<typeof ChipDatePicker> = {
     parameters: {
         controls: { disable: true },
     },
@@ -131,7 +158,7 @@ export const DifferentSizes: StoryObj<typeof ChipDatePicker> = {
                         <ChipDatePicker
                             key={size}
                             value={value}
-                            label="Date label"
+                            label={size.toUpperCase()}
                             onChange={onChange}
                             alignment={EDropdownAlignment.LEFT}
                             size={size}

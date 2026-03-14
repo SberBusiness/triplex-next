@@ -37,7 +37,7 @@ export default {
         docs: {
             description: {
                 component: `
-Компонент выбора нескольких значений из списка.
+Компонент выбора нескольких значений из списка в виде компонента Chip.
                 `,
             },
             page: () => (
@@ -799,7 +799,7 @@ export const Sizes: StoryObj<typeof ChipMultiselect> = {
                     size={EComponentSize.SM}
                     clearSelected={sm.unselectAll}
                     selected={Boolean(sm.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label="Multiselect label"
+                    label="SM"
                 >
                     {(dropdownProps) => sm.renderDropdown(dropdownProps)}
                 </ChipMultiselect>
@@ -807,7 +807,7 @@ export const Sizes: StoryObj<typeof ChipMultiselect> = {
                     size={EComponentSize.MD}
                     clearSelected={md.unselectAll}
                     selected={Boolean(md.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label="Multiselect label"
+                    label="MD"
                 >
                     {(dropdownProps) => md.renderDropdown(dropdownProps)}
                 </ChipMultiselect>
@@ -815,7 +815,7 @@ export const Sizes: StoryObj<typeof ChipMultiselect> = {
                     size={EComponentSize.LG}
                     clearSelected={lg.unselectAll}
                     selected={Boolean(lg.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label="Multiselect label"
+                    label="LG"
                 >
                     {(dropdownProps) => lg.renderDropdown(dropdownProps)}
                 </ChipMultiselect>

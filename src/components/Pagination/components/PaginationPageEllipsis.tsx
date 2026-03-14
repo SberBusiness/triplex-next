@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { Text, ETextSize } from "../../Typography";
 import styles from "../styles/PaginationPageEllipsis.module.less";
 
 /* Свойства компонента PaginationPageEllipsis. */
@@ -9,9 +10,9 @@ interface IPaginationPageEllipsis extends React.HTMLAttributes<HTMLSpanElement> 
 export const PaginationPageEllipsis = React.forwardRef<HTMLSpanElement, IPaginationPageEllipsis>(
     ({ children, className, ...rest }, ref) => {
         return (
-            <span className={clsx(styles.pageEllipsis, className)} {...rest} ref={ref}>
+            <Text size={ETextSize.B3} className={clsx(styles.paginationPageEllipsis, className)} {...rest} ref={ref}>
                 {children}
-            </span>
+            </Text>
         );
     },
 );

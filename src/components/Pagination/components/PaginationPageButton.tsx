@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { Text, ETextSize } from "../../Typography";
+import { ButtonBase } from "../../Button";
 import styles from "../styles/PaginationPageButton.module.less";
 
 /* Свойства компонента PaginationPageButton. */
@@ -14,8 +16,7 @@ type TPaginationPageButtonProps = {
 export const PaginationPageButton = React.forwardRef<HTMLButtonElement, TPaginationPageButtonProps>(
     ({ isCurrent = false, children, className, ...rest }, ref) => {
         return (
-            <button
-                type="button"
+            <ButtonBase
                 className={clsx(
                     styles.paginationPageButton,
                     {
@@ -27,8 +28,8 @@ export const PaginationPageButton = React.forwardRef<HTMLButtonElement, TPaginat
                 {...rest}
                 ref={ref}
             >
-                {children}
-            </button>
+                <Text size={ETextSize.B3}>{children}</Text>
+            </ButtonBase>
         );
     },
 );

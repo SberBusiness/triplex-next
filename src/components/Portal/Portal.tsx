@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 /** Свойства компонента Portal. */
 export interface IPortalProps {
     children: React.ReactNode;
-    container: Element | DocumentFragment;
+    container: Element;
 }
 
 /** Компонент портал, для рендера элемента во внешний DOM узел. */

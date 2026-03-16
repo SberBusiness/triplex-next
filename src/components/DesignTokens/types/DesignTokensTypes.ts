@@ -58,6 +58,7 @@ import { TDesignTokensComponentsSlider } from "@sberbusiness/triplex-next/compon
 // Название токенов группы ColorBrand.
 export const designTokensCoreGroupColorBrandKeys = [
     "100",
+    "95",
     "90",
     "80",
     "70",
@@ -170,6 +171,7 @@ export const designTokensCoreGroupColorSuccessKeys = [
 // Название токенов группы ColorSystem.
 export const designTokensCoreGroupColorSystemKeys = [
     "100",
+    "95",
     "90",
     "80",
     "70",

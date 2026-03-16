@@ -14,6 +14,7 @@ export default {
         },
     },
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

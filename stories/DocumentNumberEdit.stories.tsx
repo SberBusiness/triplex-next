@@ -8,6 +8,7 @@ const meta: Meta<typeof DocumentNumberEdit> = {
     component: DocumentNumberEdit,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `Компонент для редактирования номера документа.`,

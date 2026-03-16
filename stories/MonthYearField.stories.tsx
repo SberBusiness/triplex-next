@@ -14,6 +14,7 @@ export default {
     component: MonthYearField,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

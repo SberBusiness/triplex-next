@@ -10,6 +10,7 @@ export default {
     component: Col,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

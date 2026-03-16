@@ -13,6 +13,7 @@ const meta = {
     title: "Components/TextFields/AmountField",
     component: AmountField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

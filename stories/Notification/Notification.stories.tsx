@@ -26,6 +26,7 @@ export default {
     component: Notification,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component:

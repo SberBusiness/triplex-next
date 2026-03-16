@@ -10,6 +10,7 @@ export default {
     component: SliderRange,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

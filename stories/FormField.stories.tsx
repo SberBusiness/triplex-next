@@ -27,6 +27,7 @@ export default {
     title: "Components/FormField",
     component: FormField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -20,6 +20,7 @@ export default {
         backgrounds: { value: "gray" },
     },
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

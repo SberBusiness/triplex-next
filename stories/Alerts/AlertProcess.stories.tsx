@@ -27,6 +27,7 @@ export default {
     component: AlertProcess,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

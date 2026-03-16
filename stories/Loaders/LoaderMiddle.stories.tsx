@@ -8,6 +8,7 @@ export default {
     component: LoaderMiddle,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

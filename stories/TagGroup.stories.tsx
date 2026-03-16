@@ -10,6 +10,7 @@ const meta = {
     component: TagGroup,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

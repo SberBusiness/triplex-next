@@ -40,6 +40,9 @@ jobs:
         run: npm run test-visual:update
       - name: Commit updated snapshots
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+        env:
+          # Local pre-commit blocks __screenshots__ commits by design; disable Husky only in CI snapshot update.
+          HUSKY: 0
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

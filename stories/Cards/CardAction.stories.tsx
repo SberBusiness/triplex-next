@@ -9,7 +9,6 @@ import {
     ECardTheme,
     ECardRoundingSize,
     ECardContentPaddingSize,
-    Checkbox,
     Title,
     ETitleSize,
     EFontWeightTitle,
@@ -21,8 +20,15 @@ import {
 } from "../../src/components";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
-import { Title as DocsTitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import "./Cards.less";
+import {
+    Title as DocsTitle,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    Heading,
+    ArgTypes,
+} from "@storybook/addon-docs/blocks";
 
 /** Высота блока Media */
 const MEDIA_HEIGHT = "129px";
@@ -42,54 +48,18 @@ const meta = {
         docs: {
             description: {
                 component: `
-Интерактивная карточка с возможностью выбора. Поддерживает скругления и контролируемое состояние.
-
-## Особенности
-
-- **Темы**: General, Secondary
-- **Размеры внутреннего отступа**: small (SM), medium (MD)
-- **Размеры скругления карточки**: small (SM), medium (MD)
-- **Состояния**: selected
-
-## Использование
-
-\`\`\`tsx
-import { CardAction, ECardTheme, ECardRoundingSize, ECardContentPaddingSize } from '@sberbusiness/triplex-next';
-
-const [selected, setSelected] = React.useState(false);
-
-const handleChangeSelect = () => setSelected((prev) => !prev);
-
-<CardAction
-    selected={selected}
-    toggle={setSelected}
-    onToggle={action("onToggle")}
-    roundingSize={ECardRoundingSize.MD}
-    theme={ECardTheme.GENERAL}
-    style={{ width: "232px" }}
->
-    <CardAction.Media style={{ backgroundImage: "url(example.png)", height: "129px" }} />
-    <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
-        <CardAction.Content.Header>
-            Title text
-        </CardAction.Content.Header>
-        <CardAction.Content.Body>
-            Body content
-        </CardAction.Content.Body>
-        <CardAction.Content.Footer>
-            Footer content
-        </CardAction.Content.Footer>
-    </CardAction.Content>
-</CardAction>
-\`\`\`
+Интерактивная карточка с возможностью выбора.
                 `,
             },
             page: () => (
                 <>
                     <DocsTitle />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={CardAction} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -122,18 +92,17 @@ const handleChangeSelect = () => setSelected((prev) => !prev);
 
 export default meta;
 
-type Story = StoryObj<TCardActionPlaygroundProps>;
-
-export const Playground: Story = {
-    name: "Playground",
+export const Playground: StoryObj<TCardActionPlaygroundProps> = {
+    tags: ["!autodocs"],
     parameters: {
-        docs: {
-            description: {
-                story: "Интерактивная демонстрация Card Action. Позволяет настраивать все основные свойства компонента.",
-            },
-        },
         controls: {
             include: ["paddingSize", "roundingSize", "theme"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     args: {
@@ -142,7 +111,7 @@ export const Playground: Story = {
         theme: ECardTheme.GENERAL,
         selected: false,
     },
-    render: function Render(args) {
+    render: (args) => {
         const { paddingSize, theme, ...cardArgs } = args;
 
         const [isSelected, setIsSelected] = useState(args?.selected ?? false);
@@ -159,7 +128,7 @@ export const Playground: Story = {
         const isGeneralTheme = theme === ECardTheme.GENERAL;
 
         return (
-            <div className="card-playground-preview">
+            <div style={{ width: "250px" }}>
                 <CardAction {...cardArgs} theme={theme} selected={isSelected} toggle={handleToggle}>
                     <CardAction.Media
                         style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
@@ -212,8 +181,7 @@ export const Playground: Story = {
     },
 };
 
-export const Default: Story = {
-    name: "Default",
+export const Default: StoryObj<TCardActionPlaygroundProps> = {
     parameters: {
         controls: { disable: true },
     },
@@ -223,12 +191,12 @@ export const Default: Story = {
         theme: ECardTheme.GENERAL,
         selected: false,
     },
-    render: function Render(args) {
+    render: (args) => {
         const { paddingSize, ...cardArgs } = args;
         const [isSelected, setIsSelected] = useState(false);
 
         return (
-            <div className="card-playground-preview">
+            <div style={{ width: "250px" }}>
                 <CardAction {...cardArgs} selected={isSelected} toggle={setIsSelected}>
                     <CardAction.Content paddingSize={paddingSize}>
                         <CardAction.Content.Header>
@@ -248,424 +216,367 @@ export const Default: Story = {
     },
 };
 
-export const General: Story = {
-    name: "General",
+export const Themes: StoryObj<TCardActionPlaygroundProps> = {
     parameters: {
-        docs: {
-            description: {
-                story: "Пример использования Card Action General. Скругление карточки: MD, размер внутреннего отступа контента карточки: MD.",
-            },
-        },
         controls: { disable: true },
     },
-    args: {
-        paddingSize: ECardContentPaddingSize.MD,
-        roundingSize: ECardRoundingSize.MD,
-        theme: ECardTheme.GENERAL,
-        selected: false,
-    },
-    render: function Render(args) {
-        const { paddingSize, ...cardArgs } = args;
+    render: () => {
+        const [isSelectedGeneral, setIsSelectedGeneral] = useState(false);
+        const [isSelectedSecondary, setIsSelectedSecondary] = useState(false);
 
-        const [isSelected, setIsSelected] = useState(args?.selected ?? false);
-
-        const handleToggle = (selected: boolean) => {
-            setIsSelected(selected);
-            args.onToggle?.(selected);
-            args.toggle?.(selected);
-            action("onToggle")(selected);
-            action("toggle")(selected);
+        const handleToggleGeneral = (selected: boolean) => {
+            setIsSelectedGeneral(selected);
         };
 
-        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
+        const handleToggleSecondary = (selected: boolean) => {
+            setIsSelectedSecondary(selected);
+        };
 
         return (
-            <div className="card-playground-preview">
-                <CardAction {...cardArgs} selected={isSelected} toggle={handleToggle}>
-                    <CardAction.Media
-                        style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
-                    />
-                    <CardAction.Content paddingSize={paddingSize}>
-                        <CardAction.Content.Header>
-                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                                Title text
-                            </Title>
-                        </CardAction.Content.Header>
-                        <CardAction.Content.Body>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>ECardTheme.GENERAL</Text>
+                    <CardAction
+                        roundingSize={ECardRoundingSize.MD}
+                        theme={ECardTheme.GENERAL}
+                        selected={isSelectedGeneral}
+                        toggle={handleToggleGeneral}
+                    >
+                        <CardAction.Media
+                            style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                        />
+                        <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                            <CardAction.Content.Header>
+                                <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                    Title text
+                                </Title>
+                            </CardAction.Content.Header>
+                            <CardAction.Content.Body>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                                    This message provides additional context or highlights important information to
+                                    note.
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                    <Link onClick={() => {}}>Link text</Link>
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                            </CardAction.Content.Body>
+                        </CardAction.Content>
+                    </CardAction>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>ECardTheme.SECONDARY</Text>
+                    <CardAction
+                        roundingSize={ECardRoundingSize.MD}
+                        theme={ECardTheme.SECONDARY}
+                        selected={isSelectedSecondary}
+                        toggle={handleToggleSecondary}
+                    >
+                        <CardAction.Media
+                            style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                        />
+                        <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                            <CardAction.Content.Header>
+                                <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                    Title text
+                                </Title>
+                            </CardAction.Content.Header>
+                            <CardAction.Content.Body>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                                    This message provides additional context or highlights important information to
+                                    note.
                                 </Text>
-                            </div>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                This message provides additional context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </CardAction.Content.Body>
-                        <CardAction.Content.Footer>
-                            <Button theme={buttomTheme} size={EComponentSize.SM}>
-                                Button text
-                            </Button>
-                        </CardAction.Content.Footer>
-                    </CardAction.Content>
-                </CardAction>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                    <Link onClick={() => {}}>Link text</Link>
+                                </Text>
+                            </CardAction.Content.Body>
+                        </CardAction.Content>
+                    </CardAction>
+                </div>
             </div>
         );
     },
 };
 
-export const Secondary: Story = {
-    name: "Secondary",
+export const PaddingSizes: StoryObj<TCardActionPlaygroundProps> = {
     parameters: {
-        docs: {
-            description: {
-                story: "Пример использования Card Action Secondary. Скругление карточки: MD, размер внутреннего отступа контента карточки: MD.",
-            },
-        },
         controls: { disable: true },
     },
-    args: {
-        paddingSize: ECardContentPaddingSize.MD,
-        roundingSize: ECardRoundingSize.MD,
-        theme: ECardTheme.SECONDARY,
-        selected: false,
-    },
-    render: function Render(args) {
-        const { paddingSize, ...cardArgs } = args;
+    render: () => {
+        const [isSelectedMD, setIsSelectedMD] = useState(false);
+        const [isSelectedSM, setIsSelectedSM] = useState(false);
 
-        const [isSelected, setIsSelected] = useState(args?.selected ?? false);
+        const handleToggleMD = (selected: boolean) => {
+            setIsSelectedMD(selected);
+        };
 
-        const handleToggle = (selected: boolean) => {
-            setIsSelected(selected);
-            args.onToggle?.(selected);
-            args.toggle?.(selected);
-            action("onToggle")(selected);
-            action("toggle")(selected);
+        const handleToggleSM = (selected: boolean) => {
+            setIsSelectedSM(selected);
         };
 
         return (
-            <div className="card-playground-preview">
-                <CardAction {...cardArgs} selected={isSelected} toggle={handleToggle}>
-                    <CardAction.Media
-                        style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
-                    />
-                    <CardAction.Content paddingSize={paddingSize}>
-                        <CardAction.Content.Header>
-                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                                Title text
-                            </Title>
-                        </CardAction.Content.Header>
-                        <CardAction.Content.Body>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>ECardContentPaddingSize.SM</Text>
+                    <CardAction
+                        roundingSize={ECardRoundingSize.MD}
+                        theme={ECardTheme.GENERAL}
+                        selected={isSelectedSM}
+                        toggle={handleToggleSM}
+                    >
+                        <CardAction.Media
+                            style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                        />
+                        <CardAction.Content paddingSize={ECardContentPaddingSize.SM}>
+                            <CardAction.Content.Header>
+                                <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                    Title text
+                                </Title>
+                            </CardAction.Content.Header>
+                            <CardAction.Content.Body>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                                    This message provides additional context or highlights important information to
+                                    note.
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                    <Link onClick={() => {}}>Link text</Link>
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                            </CardAction.Content.Body>
+                        </CardAction.Content>
+                    </CardAction>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>ECardContentPaddingSize.MD</Text>
+                    <CardAction
+                        roundingSize={ECardRoundingSize.MD}
+                        theme={ECardTheme.GENERAL}
+                        selected={isSelectedMD}
+                        toggle={handleToggleMD}
+                    >
+                        <CardAction.Media
+                            style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                        />
+                        <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                            <CardAction.Content.Header>
+                                <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                    Title text
+                                </Title>
+                            </CardAction.Content.Header>
+                            <CardAction.Content.Body>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                                    This message provides additional context or highlights important information to
+                                    note.
                                 </Text>
-                            </div>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                This message provides additional context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </CardAction.Content.Body>
-                    </CardAction.Content>
-                </CardAction>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                    <Link onClick={() => {}}>Link text</Link>
+                                </Text>
+                            </CardAction.Content.Body>
+                        </CardAction.Content>
+                    </CardAction>
+                </div>
             </div>
         );
     },
 };
 
-export const SmallPaddingSize: Story = {
-    name: "Small padding size",
+export const RoundingSizes: StoryObj<TCardActionPlaygroundProps> = {
     parameters: {
-        docs: {
-            description: {
-                story: "Пример использования Card Action. Размер внутреннего отступа контента карточки: SM.",
-            },
-        },
         controls: { disable: true },
     },
-    args: {
-        paddingSize: ECardContentPaddingSize.SM,
-        roundingSize: ECardRoundingSize.MD,
-        theme: ECardTheme.GENERAL,
-        selected: false,
-    },
-    render: function Render(args) {
-        const { paddingSize, theme, ...cardArgs } = args;
+    render: () => {
+        const [isSelectedSM, setIsSelectedSM] = useState(false);
+        const [isSelectedMD, setIsSelectedMD] = useState(false);
 
-        const [isSelected, setIsSelected] = useState(args?.selected ?? false);
-
-        const handleToggle = (selected: boolean) => {
-            setIsSelected(selected);
-            args.onToggle?.(selected);
-            args.toggle?.(selected);
-            action("onToggle")(selected);
-            action("toggle")(selected);
+        const handleToggleSM = (selected: boolean) => {
+            setIsSelectedSM(selected);
         };
 
-        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
-        const isGeneralTheme = theme === ECardTheme.GENERAL;
-
-        return (
-            <div className="card-playground-preview">
-                <CardAction {...cardArgs} theme={theme} selected={isSelected} toggle={handleToggle}>
-                    <CardAction.Media
-                        style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
-                    />
-                    <CardAction.Content paddingSize={paddingSize}>
-                        <CardAction.Content.Header>
-                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                                Title text
-                            </Title>
-                        </CardAction.Content.Header>
-                        <CardAction.Content.Body>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
-                                </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
-                                </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
-                                </Text>
-                            </div>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                This message provides additional context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </CardAction.Content.Body>
-                        {isGeneralTheme && (
-                            <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                            </CardAction.Content.Footer>
-                        )}
-                    </CardAction.Content>
-                </CardAction>
-            </div>
-        );
-    },
-};
-
-export const SmallRoundingSize: Story = {
-    name: "Small rounding size",
-    parameters: {
-        docs: {
-            description: {
-                story: "Пример использования Card Action. Скругление карточки: SM.",
-            },
-        },
-        controls: { disable: true },
-    },
-    args: {
-        paddingSize: ECardContentPaddingSize.SM,
-        roundingSize: ECardRoundingSize.SM,
-        theme: ECardTheme.GENERAL,
-        selected: false,
-    },
-    render: function Render(args) {
-        const { paddingSize, theme, ...cardArgs } = args;
-
-        const [isSelected, setIsSelected] = useState(args?.selected ?? false);
-
-        const handleToggle = (selected: boolean) => {
-            setIsSelected(selected);
-            args.onToggle?.(selected);
-            args.toggle?.(selected);
-            action("onToggle")(selected);
-            action("toggle")(selected);
+        const handleToggleMD = (selected: boolean) => {
+            setIsSelectedMD(selected);
         };
 
-        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
-        const isGeneralTheme = theme === ECardTheme.GENERAL;
-
         return (
-            <div className="card-playground-preview">
-                <CardAction {...cardArgs} theme={theme} selected={isSelected} toggle={handleToggle}>
-                    <CardAction.Media
-                        style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
-                    />
-                    <CardAction.Content paddingSize={paddingSize}>
-                        <CardAction.Content.Header>
-                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                                Title text
-                            </Title>
-                        </CardAction.Content.Header>
-                        <CardAction.Content.Body>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>ECardRoundingSize.SM</Text>
+                    <CardAction
+                        roundingSize={ECardRoundingSize.SM}
+                        theme={ECardTheme.GENERAL}
+                        selected={isSelectedSM}
+                        toggle={handleToggleSM}
+                    >
+                        <CardAction.Media
+                            style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                        />
+                        <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                            <CardAction.Content.Header>
+                                <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                    Title text
+                                </Title>
+                            </CardAction.Content.Header>
+                            <CardAction.Content.Body>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                                    This message provides additional context or highlights important information to
+                                    note.
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                    <Link onClick={() => {}}>Link text</Link>
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                            </CardAction.Content.Body>
+                        </CardAction.Content>
+                    </CardAction>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Text size={ETextSize.B3}>ECardRoundingSize.MD</Text>
+                    <CardAction
+                        roundingSize={ECardRoundingSize.MD}
+                        theme={ECardTheme.GENERAL}
+                        selected={isSelectedMD}
+                        toggle={handleToggleMD}
+                    >
+                        <CardAction.Media
+                            style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                        />
+                        <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                            <CardAction.Content.Header>
+                                <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                    Title text
+                                </Title>
+                            </CardAction.Content.Header>
+                            <CardAction.Content.Body>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
+                                    <DefaulticonStrokePrdIcon20 paletteIndex={5} />
+                                    <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
+                                        List item text
+                                    </Text>
+                                </div>
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
+                                    This message provides additional context or highlights important information to
+                                    note.
                                 </Text>
-                            </div>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                This message provides additional context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </CardAction.Content.Body>
-                        {isGeneralTheme && (
-                            <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                            </CardAction.Content.Footer>
-                        )}
-                    </CardAction.Content>
-                </CardAction>
-            </div>
-        );
-    },
-};
-
-export const Controlled: Story = {
-    name: "Controlled",
-    parameters: {
-        docs: {
-            description: {
-                story: "Пример использования Card Action. Позволяет переключаться в состояние Selected и обратно",
-            },
-        },
-        controls: { disable: true },
-    },
-    args: {
-        paddingSize: ECardContentPaddingSize.MD,
-        roundingSize: ECardRoundingSize.MD,
-        theme: ECardTheme.GENERAL,
-        selected: false,
-    },
-    render: function Render(args) {
-        const { paddingSize, theme, ...cardArgs } = args;
-
-        const [isSelected, setIsSelected] = useState<boolean>(args?.selected ?? false);
-
-        const handleChangeSelect = () => setIsSelected((prev) => !prev);
-
-        const handleToggle = (selected: boolean) => {
-            setIsSelected(selected);
-            args.onToggle?.(selected);
-            args.toggle?.(selected);
-            action("onToggle")(selected);
-            action("toggle")(selected);
-        };
-
-        const buttomTheme = isSelected ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY;
-        const isGeneralTheme = theme === ECardTheme.GENERAL;
-
-        return (
-            <div className="card-playground-preview">
-                <Checkbox size={EComponentSize.MD} checked={isSelected} onChange={handleChangeSelect}>
-                    Selected
-                </Checkbox>
-                <Gap size={16} />
-                <CardAction {...cardArgs} theme={theme} selected={isSelected} toggle={handleToggle}>
-                    <CardAction.Media
-                        style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
-                    />
-                    <CardAction.Content paddingSize={paddingSize}>
-                        <CardAction.Content.Header>
-                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                                Title text
-                            </Title>
-                        </CardAction.Content.Header>
-                        <CardAction.Content.Body>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
+                                <Gap size={8} />
+                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
+                                    <Link onClick={() => {}}>Link text</Link>
                                 </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
-                                </Text>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-                                <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                                    List item text
-                                </Text>
-                            </div>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                This message provides additional context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B3}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </CardAction.Content.Body>
-                        {isGeneralTheme && (
-                            <CardAction.Content.Footer>
-                                <Button theme={buttomTheme} size={EComponentSize.SM}>
-                                    Button text
-                                </Button>
-                            </CardAction.Content.Footer>
-                        )}
-                    </CardAction.Content>
-                </CardAction>
+                            </CardAction.Content.Body>
+                        </CardAction.Content>
+                    </CardAction>
+                </div>
             </div>
         );
     },

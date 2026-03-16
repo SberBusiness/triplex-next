@@ -1,13 +1,13 @@
-import moment from "moment/dist/moment";
-import ru from "moment/dist/locale/ru";
+import moment from "moment";
+import "moment/locale/ru";
 import React, { useState } from "react";
 import { Calendar, ECalendarPickType, ECalendarDateMarkType } from "../src/components/Calendar";
 import { dateFormatYYYYMMDD } from "../src/consts/DateConst";
 import { StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 
 // Устанавливаем российскую локаль.
-moment.locale("ru", ru);
+moment.locale("ru");
 
 export default {
     title: "Components/Calendar",
@@ -18,20 +18,21 @@ export default {
             description: {
                 component: `
 Компонент календаря.
-## Использование
-\`\`\`tsx
-import { Calendar } from '@sberbusiness/triplex-next';
 
-<Calendar pickedDate={pickedDate} onDateChange={setPickedDate} />
-\`\`\`
+## Особенности
+
+- Возможен выбор даты (**ECalendarPickType.datePick**) или выбор месяца и года (**ECalendarPickType.monthYearPick**)
                 `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Calendar} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -40,10 +41,11 @@ import { Calendar } from '@sberbusiness/triplex-next';
 };
 
 export const Playground: StoryObj<typeof Calendar> = {
-    name: "Playground",
+    tags: ["!autodocs"],
     args: {
         defaultViewDate: moment(),
         reversedPick: false,
+        pickType: ECalendarPickType.datePick,
     },
     argTypes: {
         defaultViewDate: {
@@ -62,11 +64,10 @@ export const Playground: StoryObj<typeof Calendar> = {
         },
         pickType: {
             control: { type: "select" },
-            options: Object.values(ECalendarPickType),
+            options: Object.values(ECalendarPickType).filter((v) => typeof v === "number"),
             description: "Вариант выбора даты",
             table: {
                 type: { summary: "ECalendarPickType" },
-                defaultValue: undefined,
             },
         },
         reversedPick: {
@@ -80,6 +81,12 @@ export const Playground: StoryObj<typeof Calendar> = {
     parameters: {
         controls: {
             include: ["defaultViewDate", "format", "pickType", "reversedPick"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
     render: (args) => {
@@ -124,7 +131,6 @@ export const Playground: StoryObj<typeof Calendar> = {
 };
 
 export const Default: StoryObj<typeof Calendar> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },

@@ -1,5 +1,5 @@
 import React from "react";
-import { AlertContext } from "../../src/components/Alert/AlertContext/AlertContext";
+import { AlertContext } from "../../src/components/Alert";
 import { StoryObj } from "@storybook/react";
 import { EAlertType } from "../../src/components/Alert/EAlertType";
 import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
@@ -17,7 +17,7 @@ export default {
 
 ## Особенности
 
-- **Типы**: Info, Warning, Error, System
+- Передать кастомную иконку можно через свойство **renderIcon**.
                 `,
             },
             page: () => (
@@ -37,7 +37,6 @@ export default {
 };
 
 export const Playground: StoryObj<typeof AlertContext> = {
-    name: "Playground",
     tags: ["!autodocs"],
     args: {
         children: "This message provides context or highlights important information to note.",
@@ -74,25 +73,8 @@ export const Playground: StoryObj<typeof AlertContext> = {
 };
 
 export const Default: StoryObj<typeof AlertContext> = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
-    },
-    args: {
-        children: "This message provides context or highlights important information to note.",
-        type: EAlertType.INFO,
-    },
-};
-
-export const DifferentTypes: StoryObj<typeof AlertContext> = {
-    name: "Different Types",
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "Компонент разных типов.",
-            },
-        },
     },
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -113,7 +95,6 @@ export const DifferentTypes: StoryObj<typeof AlertContext> = {
 };
 
 export const WithCustomIcon: StoryObj<typeof AlertContext> = {
-    name: "With Custom Icon",
     parameters: {
         controls: { disable: true },
         docs: {

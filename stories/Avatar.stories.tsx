@@ -2,7 +2,14 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
 import { Avatar, EAvatarSize } from "../src/components/Avatar";
-import { Title as TypographyTitle, ETitleSize, EFontType, EFontWeightTitle } from "../src/components/Typography";
+import {
+    Title as TypographyTitle,
+    Text,
+    ETitleSize,
+    EFontType,
+    EFontWeightTitle,
+    ETextSize,
+} from "../src/components/Typography";
 import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
 
 const meta = {
@@ -42,7 +49,6 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
     parameters: {
         docs: {
-            description: { story: "Интерактивная демонстрация." },
             canvas: { sourceState: "none" },
             codePanel: false,
         },
@@ -63,7 +69,7 @@ export const Playground: Story = {
     render: (args) => <Avatar {...args} />,
 };
 
-export const Basic: Story = {
+export const Default: Story = {
     parameters: {
         docs: {
             controls: { disable: true },
@@ -88,7 +94,10 @@ export const Sizes: Story = {
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {sizes.map((size) => (
-                    <Avatar key={size} size={size} />
+                    <div key={size} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <Text size={ETextSize.B3}>EAvatarSize.{size.toUpperCase()}</Text>
+                        <Avatar size={size} />
+                    </div>
                 ))}
             </div>
         );

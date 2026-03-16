@@ -5,8 +5,7 @@ import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 
 /** Свойства компонента SuggestField. */
 export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<ITextFieldProps, "onSelect">,
-        DataAttributes {
+    extends Omit<ITextFieldProps, "onSelect">, DataAttributes {
     /** Выбранное значение. */
     value: T | undefined;
     /** Список значений. */

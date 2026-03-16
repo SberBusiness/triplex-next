@@ -30,15 +30,15 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
     } = useSuggestContext<T>();
     const listRef = useRef(null);
 
-    const handleDropdownScroll = useCallback(
-        (event: React.UIEvent<HTMLDivElement> & { target: HTMLDivElement & EventTarget }) => {
+    const handleDropdownScroll = useCallback<React.UIEventHandler<HTMLDivElement>>(
+        (event) => {
             if (onScrollEnd === undefined) {
                 return;
             }
 
-            const { clientHeight, scrollHeight, scrollTop } = event.target;
+            const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
 
-            if (scrollHeight - scrollTop === clientHeight) {
+            if (scrollHeight - scrollTop - clientHeight < 1) {
                 onScrollEnd();
             }
         },
@@ -109,3 +109,5 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
         </>
     );
 };
+
+SuggestMobileDropdownContent.displayName = "SuggestMobileDropdownContent";

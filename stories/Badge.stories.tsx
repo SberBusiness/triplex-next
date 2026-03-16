@@ -6,7 +6,7 @@ import {
     PercentsmallStrokeSrvIcon24,
     NewsmallFilledSrvIcon20,
 } from "@sberbusiness/icons-next";
-import { Title, Description, ArgTypes, Stories, Heading } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Stories, Heading, Controls, Primary } from "@storybook/addon-docs/blocks";
 import {
     Badge,
     Text,
@@ -25,12 +25,25 @@ const meta = {
     component: Badge,
     parameters: {
         docs: {
+            description: {
+                component: `
+Компонент-индикатор статуса или уведомления.
+
+## Особенности
+
+- prefix и postfix можно передать через одноименные свойства.
+- Для отображения индикатора-точки используется компонент **Badge.Dot**.
+                `,
+            },
             page: () => (
                 <>
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
                     <ArgTypes of={Badge} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -41,12 +54,38 @@ const meta = {
 
 export default meta;
 
+export const Playground: StoryObj<typeof Badge> = {
+    tags: ["!autodocs"],
+    parameters: {
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    args: {
+        size: EComponentSize.MD,
+    },
+    argTypes: {
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+            table: {
+                type: { summary: "EComponentSize" },
+            },
+        },
+    },
+    render: (args) => (
+        <Badge size={args.size}>
+            <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
+                Badge text
+            </Text>
+        </Badge>
+    ),
+};
+
 export const Default: StoryObj<typeof Badge> = {
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: { story: "Базовый пример." },
-        },
     },
     render: () => (
         <Badge size={EComponentSize.MD}>
@@ -57,28 +96,37 @@ export const Default: StoryObj<typeof Badge> = {
     ),
 };
 
-export const SizesBadge: StoryObj<typeof Badge> = {
+export const BadgeSizes: StoryObj<typeof Badge> = {
     parameters: {
         controls: { disable: true },
-        docs: { description: { story: "Размеры" } },
+        docs: { description: { story: "Размеры компонента Badge." } },
     },
     render: () => (
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <Badge size={EComponentSize.SM}>
-                <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.REGULAR} type={EFontType.PRIMARY_INVERT}>
-                    Badge text SM
-                </Caption>
-            </Badge>
-            <Badge size={EComponentSize.MD}>
-                <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
-                    Badge text MD
-                </Text>
-            </Badge>
-            <Badge size={EComponentSize.LG}>
-                <Text size={ETextSize.B3} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
-                    Badge text LG
-                </Text>
-            </Badge>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "150px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <Text size={ETextSize.B3}>EComponentSize.SM</Text>
+                <Badge size={EComponentSize.SM}>
+                    <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.REGULAR} type={EFontType.PRIMARY_INVERT}>
+                        Badge text SM
+                    </Caption>
+                </Badge>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <Text size={ETextSize.B3}>EComponentSize.MD</Text>
+                <Badge size={EComponentSize.MD}>
+                    <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
+                        Badge text MD
+                    </Text>
+                </Badge>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <Text size={ETextSize.B3}>EComponentSize.LG</Text>
+                <Badge size={EComponentSize.LG}>
+                    <Text size={ETextSize.B3} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
+                        Badge text LG
+                    </Text>
+                </Badge>
+            </div>
         </div>
     ),
 };
@@ -86,9 +134,6 @@ export const SizesBadge: StoryObj<typeof Badge> = {
 export const WithPrefixAndPostfix: StoryObj<typeof Badge> = {
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: { story: "С префиксом и постфиксом." },
-        },
     },
     render: () => (
         <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
@@ -125,25 +170,28 @@ export const WithPrefixAndPostfix: StoryObj<typeof Badge> = {
     ),
 };
 
-export const SizesBadgeDot: StoryObj<typeof BadgeDot> = {
+export const BadgeDotSizes: StoryObj<typeof BadgeDot> = {
     parameters: {
         controls: { disable: true },
-        docs: { description: { story: "Размеры" } },
+        docs: { description: { story: "Размеры компонента BadgeDot." } },
     },
     render: () => {
         const sizes = Object.values(EComponentSize);
 
         return (
-            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {sizes.map((size) => (
-                    <Badge.Dot key={size} size={size} />
+                    <div key={size} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <Text size={ETextSize.B3}>EComponentSize.{size.toUpperCase()}</Text>
+                        <Badge.Dot size={size} />
+                    </div>
                 ))}
             </div>
         );
     },
 };
 
-export const Example: StoryObj<typeof Badge> = {
+export const Examples: StoryObj<typeof Badge> = {
     render: () => (
         <div style={{ display: "flex", gap: "16px" }}>
             <Badge size={EComponentSize.MD} prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={7} />} />
@@ -197,6 +245,5 @@ export const Example: StoryObj<typeof Badge> = {
     ),
     parameters: {
         controls: { disable: true },
-        docs: { description: { story: "Примеры использования" } },
     },
 };

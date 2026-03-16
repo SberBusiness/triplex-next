@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
 import { ISuggestFieldMobileDropdownProps } from "@sberbusiness/triplex-next/components/SuggestField/mobile/types";
 import {
@@ -10,6 +10,7 @@ import {
     DropdownMobileBody,
     DropdownMobileList,
     DropdownMobileListItem,
+    IDropdownProps,
 } from "@sberbusiness/triplex-next/components/Dropdown";
 import { SuggestFieldMobileDropdownHint } from "@sberbusiness/triplex-next/components/SuggestField/mobile/SuggestFieldMobileDropdownHint";
 import styles from "../styles/SuggestFieldMobile.module.less";
@@ -33,58 +34,72 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
     ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
     const [inputValue, setInputValue] = useState(value?.label || "");
+
+    const [prevValue, setPrevValue] = useState(value);
+    if (value?.id !== prevValue?.id) {
+        setPrevValue(value);
+        setInputValue(value?.label || "");
+    }
+
+    // Флаг для предотвращения сброса значения, когда закрытие вызвано выбором конкретной опции из списка.
+    const closedBySelectionRef = useRef(false);
+
     const listRef = useRef<HTMLDivElement>(null);
     // Не используется в мобильном Dropdown, нужен как обязательное свойство Dropdown.
     const targetRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setInputValue(value?.label || "");
-    }, [value]);
-
-    const handleInputFocus = () => {
-        if (clearInputOnFocus === false) {
+    const handleInputFocus = useCallback(() => {
+        if (!clearInputOnFocus) {
             setInputValue(value?.label || "");
         } else {
             setInputValue("");
         }
-    };
+    }, [clearInputOnFocus, value?.label]);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
+    const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+        (event) => {
+            setInputValue(event.target.value);
+            onFilter(event.target.value);
+        },
+        [onFilter],
+    );
 
-        setInputValue(value);
-        onFilter(value);
-    };
-
-    const handleCloseClick = () => {
+    const handleCloseClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(() => {
         setOpened(false);
-        onSelect(value);
-    };
+    }, [setOpened]);
 
-    const handleScrollList = (event: React.UIEvent<HTMLDivElement> & { target: HTMLDivElement & EventTarget }) => {
-        if (!onScrollEnd) {
+    const handleDropdownClose = useCallback<NonNullable<IDropdownProps["onClose"]>>(() => {
+        if (closedBySelectionRef.current) {
+            closedBySelectionRef.current = false;
             return;
         }
-        const { clientHeight, scrollHeight, scrollTop } = event.target;
 
-        if (scrollHeight - scrollTop === clientHeight) {
-            onScrollEnd();
+        if (inputValue.length === 0 && value !== undefined) {
+            onSelect(undefined);
         }
-    };
+    }, [inputValue.length, onSelect, value]);
 
-    const handleDropdownOpened = (opened: boolean) => {
-        setOpened(opened);
-        if (!opened) {
-            onSelect(value);
-        }
-    };
+    const handleListScroll = useCallback<React.UIEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (onScrollEnd === undefined || dropdownListLoading) {
+                return;
+            }
+
+            const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
+
+            if (scrollHeight - scrollTop - clientHeight < 1) {
+                onScrollEnd();
+            }
+        },
+        [onScrollEnd, dropdownListLoading],
+    );
 
     return (
         <Dropdown
-            setOpened={handleDropdownOpened}
             opened={opened}
+            setOpened={setOpened}
             targetRef={targetRef}
-            ref={ref}
+            onClose={handleDropdownClose}
             mobileViewProps={{
                 children: (
                     <>
@@ -105,7 +120,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                             />
                         </DropdownMobileHeader>
 
-                        <DropdownMobileBody className={styles.suggestFieldMobileBody} onScroll={handleScrollList}>
+                        <DropdownMobileBody className={styles.suggestFieldMobileBody} onScroll={handleListScroll}>
                             {tooltipHint ? (
                                 <SuggestFieldMobileDropdownHint>{tooltipHint}</SuggestFieldMobileDropdownHint>
                             ) : (
@@ -116,6 +131,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                                             id={option.id}
                                             selected={option.id === value?.id}
                                             onSelect={() => {
+                                                closedBySelectionRef.current = true;
                                                 onSelect(option);
                                                 setOpened(false);
                                             }}
@@ -129,6 +145,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                     </>
                 ),
             }}
+            ref={ref}
         />
     );
 };

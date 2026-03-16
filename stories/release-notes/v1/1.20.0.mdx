@@ -6,6 +6,43 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**Title**
+**ChipSuggest, MonthYearField, SuggestField**
 
-- Description.
+- Исправлена ширина поля ввода в адаптивном режиме.
+
+**IslandAccordion**
+
+- Исправлен размер Title в размере MD.
+
+**LightBox.SideOverlay**
+
+- Кнопка закрытия SideOverlay теперь фиксирована при скролле.
+
+**CheckboxTree**
+
+- Добавлен экспорт `ICheckboxTreeCheckboxData`.
+
+**CheckboxTreeExtended**
+
+- Исправлен баг, когда className и onFocus при передаче в составе labelAttributes некорректно обрабатывались в CheckboxTreeExtendedCheckbox.
+
+**MaskedField**
+
+- Добавлен экспорт `TFormFieldMaskedInputMask`.
+
+**ModalWindow**
+
+- В `ModalWindowClose` исключены пропсы `size`, `theme` и `icon`.
+
+**SuggestField**
+
+- Исправлено поведение выпадающего списка при асинхронном поиске.
+- Исправлена ширина поля ввода в адаптивном режиме.
+- Исправлен баг, когда `Dropdown` закрывался при клике на его отступ.
+- Исправлено расположение спиннера в DropdownMobileList.
+- Исправлен баг, когда не срабатывал `onScrollEnd`.
+- Теперь `aria-expanded` и состояние открытия `Dropdown` синхронизированы.
+
+**TabsLine**
+
+- Добавлена зависимость размера Dropdown от размера TabsLine.

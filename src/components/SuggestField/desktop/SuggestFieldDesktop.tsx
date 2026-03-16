@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { uniqueId, debounce } from "lodash-es";
+import React, { useState, useRef, useLayoutEffect, useEffect, useCallback } from "react";
+import { uniqueId } from "lodash-es";
 import { ISuggestFieldDesktopProps } from "./types";
 import { ISuggestFieldOption } from "../types";
 import { EComponentSize } from "../../../enums";
@@ -10,6 +10,7 @@ import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import { DropdownListContext } from "../../Dropdown";
 import { DataTestId } from "../../../consts/DataTestId";
 import { SuggestFieldDesktopDropdown } from "./SuggestFieldDesktopDropdown";
+import { isKey } from "@sberbusiness/triplex-next/utils";
 
 /**
  * Выпадающий список с возможностью поиска по введённому значению, позволяет задать кастомные компоненты для отображения всех
@@ -29,10 +30,10 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     tooltipHint,
     tooltipOpen,
     clearInputOnFocus,
-    onSelect,
     onFilter,
-    onScrollEnd,
     onClear,
+    onSelect,
+    onScrollEnd,
     prefix,
     postfix,
     renderInput,
@@ -43,26 +44,25 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     ...restProps
 }: ISuggestFieldDesktopProps<T>) => {
     const [inputValue, setInputValue] = useState(value?.label || "");
-    const [activeDescendant, setActiveDescendant] = useState<string>();
     const [inputFocused, setInputFocused] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    // Флаг для предотвращения автоматического открытия Dropdown сразу после выбора значения.
+    const [ignoreAutoOpen, setIgnoreAutoOpen] = useState(false);
+    const [dropdownListId] = useState(() => uniqueId());
+    const [activeDescendant, setActiveDescendant] = useState<string>();
 
-    const dropdownListId = useRef(uniqueId());
+    const [prevValue, setPrevValue] = useState(value);
+    if (value?.id !== prevValue?.id) {
+        setPrevValue(value);
+        setInputValue(value?.label || "");
+    }
+
     const suggestRef = useRef<HTMLDivElement>(null);
-    const listRef = useRef<HTMLDivElement>(null);
 
     const onScrollEndRef = useRef(onScrollEnd);
-    onScrollEndRef.current = onScrollEnd;
-
-    const handleSelect = useCallback<typeof onSelect>(
-        (selectedValue) => {
-            setInputValue(selectedValue?.label || "");
-            setActiveDescendant(undefined);
-            setDropdownOpen(false);
-            onSelect(selectedValue);
-        },
-        [onSelect],
-    );
+    useLayoutEffect(() => {
+        onScrollEndRef.current = onScrollEnd;
+    }, [onScrollEnd]);
 
     const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
         (event) => {
@@ -70,48 +70,71 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
 
             if (clearInputOnFocus && inputValue.length !== 0) {
                 setInputValue("");
+                onFilter("");
             }
 
             inputProps.onFocus?.(event);
         },
-        [clearInputOnFocus, inputValue, inputProps],
+        [clearInputOnFocus, inputValue, onFilter, inputProps],
     );
+
+    const closeDropdown = useCallback((nextIgnoreAutoOpen: boolean) => {
+        setIgnoreAutoOpen(nextIgnoreAutoOpen);
+        setActiveDescendant(undefined);
+        setDropdownOpen(false);
+    }, []);
 
     const handleInputBlur = useCallback<React.FocusEventHandler<HTMLInputElement>>(
         (event) => {
-            setActiveDescendant(undefined);
             setInputFocused(false);
-            setDropdownOpen(false);
+            closeDropdown(false);
 
             if (inputValue.length !== 0) {
                 setInputValue(value?.label || "");
-            } else {
+            } else if (value !== undefined) {
                 onSelect(undefined);
             }
 
             inputProps.onBlur?.(event);
         },
-        [value?.label, inputValue, onSelect, inputProps],
+        [closeDropdown, inputValue, value, onSelect, inputProps],
     );
 
-    const handleInputClick = useCallback<React.MouseEventHandler<HTMLInputElement>>(() => {
-        if (inputFocused && !dropdownOpen) {
-            setDropdownOpen(true);
-        }
-    }, [inputFocused, dropdownOpen]);
-
-    const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    const handleInputKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
         (event) => {
-            const newValue = event.target.value;
+            if (isKey(event.key, "ESCAPE")) {
+                if (dropdownOpen) {
+                    event.stopPropagation();
+                    closeDropdown(true);
+                }
+            }
 
-            if (dropdownOpen === false && options.length > 0) {
+            inputProps.onKeyDown?.(event);
+        },
+        [dropdownOpen, closeDropdown, inputProps],
+    );
+
+    const handleInputMouseDown = useCallback<React.MouseEventHandler<HTMLInputElement>>(
+        (event) => {
+            if (!dropdownOpen) {
+                setIgnoreAutoOpen(false);
                 setDropdownOpen(true);
             }
 
-            setInputValue(newValue);
-            onFilter(newValue);
+            inputProps.onMouseDown?.(event);
         },
-        [dropdownOpen, options.length, onFilter],
+        [dropdownOpen, inputProps],
+    );
+
+    const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+        (event) => {
+            setIgnoreAutoOpen(false);
+            setActiveDescendant(undefined);
+            setInputValue(event.target.value);
+            onFilter(event.target.value);
+            inputProps.onChange?.(event);
+        },
+        [onFilter, inputProps],
     );
 
     const handleClear = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
@@ -125,64 +148,45 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [inputFocused, onFilter, onClear],
     );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onScrollList = useCallback(
-        debounce((event: Event) => {
-            // Бессмысленно собирать данные об окончании скрола, если не передан обработчик.
-            if (onScrollEndRef.current === undefined) {
-                return;
+    const handleDropdownOpen = useCallback<typeof setDropdownOpen>(
+        (nextDropdownOpen) => {
+            if (nextDropdownOpen) {
+                setDropdownOpen(nextDropdownOpen);
+            } else {
+                closeDropdown(false);
             }
+        },
+        [closeDropdown],
+    );
 
-            const list = event.target as HTMLDivElement;
-            const listParent = list.parentElement;
-
-            if (listParent === null) {
-                return;
-            }
-
-            const listHeight = list.scrollHeight;
-            const scrolled = list.scrollTop;
-            const parentFullHeight = listParent.scrollHeight;
-            const styles = window.getComputedStyle(listParent);
-            const parentPaddingTop = styles.getPropertyValue("padding-top");
-            const parentPaddingBottom = styles.getPropertyValue("padding-bottom");
-            const parentPaddings = Number.parseInt(parentPaddingBottom) + Number.parseInt(parentPaddingTop);
-
-            if (Math.abs(scrolled + parentFullHeight - parentPaddings - listHeight) <= 1) {
-                onScrollEndRef.current();
-            }
-        }, 100),
-        [],
+    const handleSelect = useCallback<typeof onSelect>(
+        (nextValue) => {
+            closeDropdown(true);
+            setInputValue(nextValue?.label || "");
+            onSelect(nextValue);
+        },
+        [closeDropdown, onSelect],
     );
 
     useEffect(() => {
-        setInputValue(value?.label || "");
-    }, [value]);
-
-    useEffect(() => {
-        if (dropdownOpen && options.length === 0) {
-            setDropdownOpen(false);
-        }
-    }, [dropdownOpen, options.length]);
-
-    useEffect(() => {
-        if (dropdownOpen) {
-            const listElement = listRef.current;
-            if (listElement) {
-                listElement.addEventListener("scroll", onScrollList);
-            }
-
-            return () => {
-                if (listElement) {
-                    listElement.removeEventListener("scroll", onScrollList);
+        if (inputFocused) {
+            if (dropdownOpen) {
+                if (options.length === 0) {
+                    closeDropdown(false);
                 }
-            };
+            } else {
+                if (options.length !== 0 && !ignoreAutoOpen) {
+                    setDropdownOpen(true);
+                }
+            }
         }
-    }, [dropdownOpen, onScrollList]);
+    }, [inputFocused, dropdownOpen, options.length, closeDropdown, ignoreAutoOpen]);
 
     const renderSuggestField = () => {
         const Input = renderInput === undefined ? FormFieldInput : renderInput;
         const Dropdown = renderDropdown === undefined ? SuggestFieldDesktopDropdown : renderDropdown;
+        // Фактическое состояние открытия выпадающего списка.
+        const dropdownActuallyOpen = dropdownOpen && options.length !== 0;
 
         return (
             <TextFieldBase
@@ -206,13 +210,15 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                     data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.input}`}
                     {...inputProps}
                     role="combobox"
-                    aria-controls={dropdownListId.current}
+                    aria-autocomplete="list"
+                    aria-controls={dropdownListId}
                     aria-activedescendant={activeDescendant}
-                    aria-expanded={dropdownOpen}
+                    aria-expanded={dropdownActuallyOpen}
                     disabled={status === EFormFieldStatus.DISABLED}
                     onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
-                    onClick={handleInputClick}
+                    onKeyDown={handleInputKeyDown}
+                    onMouseDown={handleInputMouseDown}
                     onChange={handleInputChange}
                 />
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
@@ -220,16 +226,16 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                         value={value}
                         options={options}
                         size={size}
-                        listId={dropdownListId.current}
-                        opened={dropdownOpen && options.length > 0}
+                        dataTestId={dataTestId}
+                        listId={dropdownListId}
+                        opened={dropdownActuallyOpen}
                         listLoading={dropdownListLoading}
-                        listRef={listRef}
+                        targetRef={suggestRef}
+                        setOpened={handleDropdownOpen}
                         onSelect={handleSelect}
+                        onScrollEnd={onScrollEnd}
                         renderList={renderDropdownList}
                         renderListItem={renderDropdownListItem}
-                        setOpened={setDropdownOpen}
-                        targetRef={suggestRef}
-                        dataTestId={dataTestId}
                     />
                 </DropdownListContext.Provider>
             </TextFieldBase>

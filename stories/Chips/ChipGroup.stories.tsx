@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StoryObj } from "@storybook/react";
-import { Chip } from "../../src/components/Chip/Chip";
-import { ChipGroup } from "../../src/components/ChipGroup/ChipGroup";
+import { Chip } from "../../src/components/Chip";
+import { ChipGroup } from "../../src/components/ChipGroup";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Title, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/Chips/ChipGroup",
@@ -15,15 +15,19 @@ export default {
                 component: `Контейнер для группировки нескольких компонентов Chip.
 
 ## Особенности:
-- **Режим отображения**: oneLine (однострочный с горизонтальным скроллом), multiLine (перенос по строкам)
-- **Размеры**: sm, md, lg
+
+- Для отображения чипов в одну строку используется свойство **oneLine**.
                     `,
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ChipGroup} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
@@ -32,6 +36,7 @@ export default {
 };
 
 export const Playground: StoryObj<typeof ChipGroup> = {
+    tags: ["!autodocs"],
     render: (args) => {
         const [selected, setSelected] = useState<number | null>(null);
         const chips = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta"];
@@ -49,11 +54,17 @@ export const Playground: StoryObj<typeof ChipGroup> = {
     args: { oneLine: false, size: EComponentSize.MD },
     argTypes: {
         oneLine: { control: { type: "boolean" } },
-        size: { control: { type: "inline-radio" }, options: Object.values(EComponentSize) },
+        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
     },
     parameters: {
         controls: {
             include: ["oneLine", "size"],
+        },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
         },
     },
 };
@@ -90,7 +101,7 @@ export const Sizes: StoryObj<typeof ChipGroup> = {
         const chips = ["Alpha", "Beta", "Gamma", "Delta"];
 
         return (
-            <div style={{ display: "flex", gap: 12, flexDirection: "column" }}>
+            <div style={{ display: "flex", gap: 16, flexDirection: "column" }}>
                 <ChipGroup size={EComponentSize.SM} style={{ maxWidth: 360 }}>
                     {chips.map((label, index) => (
                         <Chip
@@ -132,7 +143,7 @@ export const Sizes: StoryObj<typeof ChipGroup> = {
     },
 };
 
-export const OneLineScrollable: StoryObj<typeof ChipGroup> = {
+export const OneLine: StoryObj<typeof ChipGroup> = {
     parameters: {
         controls: { disable: true },
     },

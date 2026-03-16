@@ -11,7 +11,7 @@ import styles from "../styles/ModalWindowClose.module.less";
 /**
  * Свойства компонента кнопки закрытия модального окна.
  */
-interface IModalWindowCloseProps extends IButtonSecondaryProps {}
+export interface IModalWindowCloseProps extends Omit<IButtonSecondaryProps, "size" | "theme" | "icon"> {}
 
 /**
  * Компонент кнопки закрытия модального окна.

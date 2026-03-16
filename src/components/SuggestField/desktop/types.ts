@@ -1,13 +1,14 @@
 import { ISuggestFieldOption, ISuggestFieldProps } from "@sberbusiness/triplex-next/components/SuggestField/types";
 import {
-    IDropdownProps,
+    IDropdownDesktopProps,
     IDropdownListProps,
     IDropdownListItemProps,
 } from "@sberbusiness/triplex-next/components/Dropdown";
 
 /** Свойства компонента SuggestFieldDesktop */
-export interface ISuggestFieldDesktopProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends ISuggestFieldProps<T> {
+export interface ISuggestFieldDesktopProps<
+    T extends ISuggestFieldOption = ISuggestFieldOption,
+> extends ISuggestFieldProps<T> {
     /** Рендер-функция компонента Dropdown. */
     renderDropdown?: (props: ISuggestFieldDesktopDropdownProps<T>) => JSX.Element;
     /** Рендер-функция компонента DropdownList. */
@@ -18,9 +19,9 @@ export interface ISuggestFieldDesktopProps<T extends ISuggestFieldOption = ISugg
 
 /** Свойства компонента SuggestFieldDesktopDropdown. */
 export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
-    extends Omit<IDropdownProps, "onSelect">,
-        Pick<ISuggestFieldDesktopProps<T>, "value" | "options" | "onSelect">,
-        Pick<IDropdownListProps, "listRef"> {
+    extends
+        Omit<IDropdownDesktopProps, "onSelect">,
+        Pick<ISuggestFieldDesktopProps<T>, "value" | "options" | "onSelect" | "onScrollEnd"> {
     /** Идентификатор DropdownList. */
     listId: string;
     /** Идентификатор для тестирования. */
@@ -34,12 +35,13 @@ export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption
 }
 
 /** Свойства, передаваемые в рендер-функцию DropdownList. */
-export interface ISuggestFieldDesktopDropdownListProvideProps
-    extends Pick<IDropdownListProps, "children" | "id" | "size" | "dropdownOpened" | "loading" | "onMouseDown"> {}
+export interface ISuggestFieldDesktopDropdownListProvideProps extends Pick<
+    IDropdownListProps,
+    "children" | "id" | "size" | "dropdownOpened" | "loading" | "onMouseDown" | "onScroll"
+> {}
 
 /** Свойства, передаваемые в рендер-функцию DropdownListItem. */
-export interface ISuggestFieldDesktopDropdownListItemProvideProps
-    extends Pick<
-        IDropdownListItemProps,
-        "children" | "id" | "keyCodesForSelection" | "selected" | "onMouseDown" | "onSelect"
-    > {}
+export interface ISuggestFieldDesktopDropdownListItemProvideProps extends Pick<
+    IDropdownListItemProps,
+    "children" | "id" | "data-test-id" | "keyCodesForSelection" | "selected" | "onMouseDown" | "onSelect"
+> {}

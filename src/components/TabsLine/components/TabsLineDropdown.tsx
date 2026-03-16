@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { TestProps } from "../../../types/CoreTypes";
-import { Dropdown } from "../../Dropdown";
-import { DropdownList } from "../../Dropdown/desktop/DropdownList";
+import { Dropdown, DropdownList, DropdownListContext } from "../../Dropdown";
 import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { isKey } from "../../../utils/keyboard";
-import { DropdownListContext } from "../../Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { ITabsLineItemProps } from "./TabsLineItem";
 import styles from "../styles/TabsLine.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
-import { Text } from "../../Typography/Text";
+import { Text, EFontType } from "../../Typography";
 import { tabsLineSizeToTextSizeMap } from "../utils";
-import { EFontType } from "../../Typography/enums";
 
 /** Свойства компонента TabsLineDropdown. */
 interface ITabsLineDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,91 +30,100 @@ interface ITabsLineDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
     targetHtmlAttributes?: React.HTMLAttributes<HTMLButtonElement> & TestProps;
 }
 
-/** Состояние компонента TabsLineDropdown. */
-interface ITabsLineDropdownState {
-    /** Текущий активный элемент (его идентификатор). */
-    activeDescendant?: string;
-    /** Состояние открытости дропдауна. */
-    opened: boolean;
-    /** Состояние фокуса кнопки дропдауна. */
-    focused: boolean;
-    /** Состояние ховера над кнопкой дропдауна. */
-    hovered: boolean;
-}
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+export const TabsLineDropdown: React.FC<ITabsLineDropdownProps> = ({
+    tabs,
+    active,
+    label,
+    onClickTab,
+    selected,
+    size = EComponentSize.MD,
+    targetHtmlAttributes,
+    ...rest
+}) => {
+    const [activeDescendant, setActiveDescendant] = useState<string | undefined>(undefined);
+    const [opened, setOpened] = useState(false);
+    const [focused, setFocused] = useState(false);
+    const [hovered, setHovered] = useState(false);
 
-/** Компонент TabsLineDropdown. */
-export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps, ITabsLineDropdownState> {
-    state = {
-        activeDescendant: undefined,
-        opened: false,
-        focused: false,
-        hovered: false,
+    const targetRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const instanceId = useRef(uniqueId());
+
+    useEffect(() => {
+        if (!opened) {
+            return;
+        }
+
+        const handleClickOutside = (event: Event) => {
+            if (
+                !targetRef.current?.contains(event.target as Node) &&
+                !dropdownRef.current?.contains(event.target as Node)
+            ) {
+                setOpened(false);
+            }
+        };
+
+        document.addEventListener("mouseup", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mouseup", handleClickOutside);
+        };
+    }, [opened]);
+
+    const handleTargetClick = () => {
+        setOpened(!opened);
     };
 
-    private readonly targetRef: React.RefObject<HTMLDivElement>;
-    private readonly dropdownRef: React.RefObject<HTMLDivElement>;
-    private instanceId = uniqueId();
+    const handleTargetKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (!opened) {
+            // При нажатии Enter, Space, ArrowUp или ArrowDown открывается выпадающий список.
+            if (isKey(event.code, "ARROW_UP") || isKey(event.code, "ARROW_DOWN")) {
+                event.preventDefault();
+                setOpened(true);
+            }
+        }
 
-    constructor(props: ITabsLineDropdownProps) {
-        super(props);
-
-        this.targetRef = React.createRef();
-        this.dropdownRef = React.createRef();
-    }
-
-    public componentDidMount(): void {
-        document.addEventListener("mouseup", this.handleClickOutside);
-    }
-
-    public componentWillUnmount(): void {
-        document.removeEventListener("mouseup", this.handleClickOutside);
-    }
-
-    public render(): JSX.Element {
-        return (
-            <div className={styles.tabsLineDropdown} ref={this.targetRef}>
-                {this.renderTarget()}
-                {this.renderDropdown()}
-            </div>
-        );
-    }
-
-    /** Установка значения activeDescendant. */
-    private setActiveDescendant = (activeDescendant?: string) => {
-        this.setState({ activeDescendant });
+        if (opened) {
+            // При нажатии Tab или Esc закрывается выпадающий список.
+            if (isKey(event.code, "TAB") || isKey(event.code, "ESCAPE")) {
+                setOpened(false);
+            }
+        }
     };
 
-    /** Рендер кнопки, раскрывающей список. */
-    private renderTarget = () => {
-        const { active, label, targetHtmlAttributes, size = EComponentSize.MD } = this.props;
-        const { activeDescendant, opened, focused, hovered } = this.state;
+    const handleClickTab = (tab: ITabsLineItemProps) => {
+        onClickTab(tab);
+        setOpened(!opened);
+    };
 
-        const buttonClassName = clsx(styles.tab, sizeToClassNameMap[size], styles.dropdownTarget, {
-            [styles.active]: active,
-        });
-        const caretClassName = clsx(styles.dropdownTargetCaret, { [styles.opened]: opened });
-
+    const renderTarget = () => {
         const { onFocus, onBlur, onMouseEnter, onMouseLeave, ...restTargetHtmlAttributes } = targetHtmlAttributes || {};
 
+        const buttonClassName = clsx(styles.tab, SIZE_TO_CLASS_NAME_MAP[size], styles.dropdownTarget, {
+            [styles.active]: active,
+        });
+
+        const caretClassName = clsx(styles.dropdownTargetCaret, { [styles.opened]: opened });
+
         const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
-            this.setState({ focused: true });
+            setFocused(true);
             onFocus?.(e);
         };
 
         const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
-            this.setState({ focused: false });
+            setFocused(false);
             onBlur?.(e);
         };
 
         const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-            this.setState({ hovered: true });
+            setHovered(true);
             onMouseEnter?.(e);
         };
 
         const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-            this.setState({ hovered: false });
+            setHovered(false);
             onMouseLeave?.(e);
         };
 
@@ -129,13 +135,13 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 className={buttonClassName}
-                onClick={this.handleTargetClick}
-                onKeyDown={this.handleTargetKeyDown}
+                onClick={handleTargetClick}
+                onKeyDown={handleTargetKeyDown}
                 type="button"
                 role="tab"
                 aria-haspopup="menu"
                 aria-expanded={opened}
-                aria-controls={this.instanceId}
+                aria-controls={instanceId.current}
                 aria-activedescendant={activeDescendant}
             >
                 <span className={styles.tabInner}>
@@ -153,23 +159,18 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
         );
     };
 
-    /** Рендер дропдаун списка. */
-    private renderDropdown = () => {
-        const { selected, tabs } = this.props;
-        const { activeDescendant, opened } = this.state;
-
+    const renderDropdown = () => {
         return (
             <Dropdown
                 className={styles.dropdown}
                 opened={opened}
-                setOpened={this.setOpenedDropdown}
-                targetRef={this.targetRef}
-                ref={this.dropdownRef}
+                setOpened={setOpened}
+                size={size}
+                targetRef={targetRef}
+                ref={dropdownRef}
             >
-                <DropdownListContext.Provider
-                    value={{ activeDescendant, setActiveDescendant: this.setActiveDescendant }}
-                >
-                    <DropdownList dropdownOpened={opened} id={this.instanceId}>
+                <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
+                    <DropdownList dropdownOpened={opened} id={instanceId.current}>
                         {tabs.map((tab) => {
                             const { id, label, showNotificationIcon, ...htmlDivAttributes } = tab;
                             const className = clsx(styles.dropdownItem);
@@ -178,15 +179,15 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
                                 <DropdownList.Item
                                     {...(htmlDivAttributes as React.HTMLAttributes<HTMLDivElement>)}
                                     className={className}
-                                    id={tab.id}
-                                    key={tab.id}
+                                    id={id}
+                                    key={id}
                                     onSelect={() => {
-                                        this.handleClickTab(tab);
+                                        handleClickTab(tab);
                                     }}
                                     selected={tab === selected}
-                                    showNotificationIcon={tab.showNotificationIcon}
+                                    showNotificationIcon={showNotificationIcon}
                                 >
-                                    <span className={styles.dropdownItemInner}>{tab.label}</span>
+                                    <span className={styles.dropdownItemInner}>{label}</span>
                                 </DropdownList.Item>
                             );
                         })}
@@ -196,57 +197,12 @@ export class TabsLineDropdown extends React.PureComponent<ITabsLineDropdownProps
         );
     };
 
-    /** Открывает/закрывает Dropdown. */
-    private setOpenedDropdown = (opened: boolean) => {
-        this.setState({ opened });
-    };
-
-    /** Обработчик кнопки, раскрывающей список. */
-    private handleTargetClick = () => {
-        const { opened } = this.state;
-        this.setState({ opened: !opened });
-    };
-
-    /** Обработчик клика по табу. */
-    private handleClickTab = (tab: ITabsLineItemProps) => {
-        const { onClickTab } = this.props;
-        const { opened } = this.state;
-
-        onClickTab(tab);
-        this.setState({ opened: !opened });
-    };
-
-    /** Обработчик нажатия клавиш по кнопке, раскрывающей список. */
-    private handleTargetKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        const { opened } = this.state;
-
-        if (!opened) {
-            // При нажатии Enter, Space, ArrowUp или ArrowDown открывается выпадающий список.
-            if (isKey(event.code, "ARROW_UP") || isKey(event.code, "ARROW_DOWN")) {
-                event.preventDefault();
-                this.setState({ opened: true });
-            }
-        }
-
-        if (opened) {
-            // При нажатии Tab или Esc закрывается выпадающий список.
-            if (isKey(event.code, "TAB") || isKey(event.code, "ESCAPE")) {
-                this.setState({ opened: false });
-            }
-        }
-    };
-
-    /** Обработчик клика вне дропдауна. */
-    private handleClickOutside = (event: Event) => {
-        const { opened } = this.state;
-
-        if (opened) {
-            if (
-                !this.targetRef.current?.contains(event.target as Node) &&
-                !this.dropdownRef.current?.contains(event.target as Node)
-            ) {
-                this.setState({ opened: false });
-            }
-        }
-    };
-}
+    return (
+        <div className={styles.tabsLineDropdown} ref={targetRef} {...rest}>
+            {/* eslint-disable-next-line react-hooks/refs */}
+            {renderTarget()}
+            {/* eslint-disable-next-line react-hooks/refs */}
+            {renderDropdown()}
+        </div>
+    );
+};

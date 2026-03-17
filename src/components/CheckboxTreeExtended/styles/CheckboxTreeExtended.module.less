@@ -7,7 +7,12 @@
 }
 
 .checkboxTreeExtendedNode {
-    .checkboxTreeExtendedNode {
+    .checkboxTreeExtendedNode:has(.sm) {
+        margin-left: 16px;
+    }
+
+    .checkboxTreeExtendedNode:has(.md),
+    .checkboxTreeExtendedNode:has(.lg) {
         margin-left: 24px;
     }
 }
@@ -18,7 +23,7 @@
     position: relative;
 
     &.sm {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     &.md {
@@ -58,6 +63,24 @@
 
 @media (max-width: @screen-sm-max) {
     .checkboxTreeExtended {
-        padding: 12px 14px;
+        padding: 0 16px;
+
+        // Увеличение области клика чекбокса.
+        .checkboxTreeExtendedNodeHeader {
+            margin-bottom: 0;
+
+            .checkboxTreeCheckboxLabel {
+                padding-top: 16px;
+                padding-bottom: 16px;
+
+                // .checkmarkIcon
+                & > span,
+                // .checkboxIcon
+                & > svg,
+                .checkboxTreeCheckbox {
+                    top: 14px;
+                }
+            }
+        }
     }
 }

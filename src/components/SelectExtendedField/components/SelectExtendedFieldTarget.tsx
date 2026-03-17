@@ -7,6 +7,7 @@ import styles from "../styles/SelectExtendedFieldTarget.module.less";
 import {
     EFormFieldStatus,
     FormField,
+    FormFieldClear,
     FormFieldLabel,
     FormFieldPostfix,
     FormFieldPrefix,
@@ -33,6 +34,8 @@ export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "
     postfix?: React.ReactNode;
     /** Функция открытия/закрытия выпадающего списка. */
     setOpened: (opened: boolean) => void;
+    /** Функция очистки значения. */
+    onClear?: () => void;
 }
 
 const sizeToCaretIconMap = {
@@ -60,6 +63,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             placeholder,
             onKeyDown,
             onClick,
+            onClear,
             opened,
             postfix,
             prefix,
@@ -81,10 +85,9 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             },
             className,
         );
-
         /* Обработчик клика. */
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-            if (loading && status === EFormFieldStatus.DISABLED) {
+            if (loading || status === EFormFieldStatus.DISABLED) {
                 return; // Не реагируем на клики в состоянии загрузки
             }
             setOpened(!opened);
@@ -137,6 +140,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 aria-expanded={opened}
                 aria-haspopup="listbox"
                 data-tx={process.env.npm_package_version}
+                active={opened}
                 {...rest}
             >
                 {prefix ? (
@@ -158,14 +162,19 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 </FormFieldTarget>
 
                 <FormFieldPostfix>
-                    <div
-                        className={clsx(styles.caretWrapper, "hoverable", {
-                            active: opened,
-                            disabled: status === EFormFieldStatus.DISABLED,
-                        })}
-                    >
-                        {loading ? sizeToLoaderSizeMap[size] : sizeToCaretIconMap[size]}
-                    </div>
+                    {onClear && <FormFieldClear onClick={onClear} />}
+                    {loading ? (
+                        sizeToLoaderSizeMap[size]
+                    ) : (
+                        <div
+                            className={clsx(styles.caretWrapper, "hoverable", {
+                                active: opened,
+                                disabled: status === EFormFieldStatus.DISABLED,
+                            })}
+                        >
+                            {sizeToCaretIconMap[size]}
+                        </div>
+                    )}
                     {postfix ? postfix : null}
                 </FormFieldPostfix>
             </FormField>

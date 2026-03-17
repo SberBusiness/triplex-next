@@ -179,4 +179,4 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     );
 });
 
-Button.displayName = "Button";
+Button.displayName = "ButtonComponent";

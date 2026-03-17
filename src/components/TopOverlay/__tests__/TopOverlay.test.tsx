@@ -170,7 +170,7 @@ describe("TopOverlay", () => {
     });
 
     describe("Focus Trap", () => {
-        it("should configure FocusTrap with clickOutsideDeactivates option", () => {
+        it("should configure FocusTrap with allowOutsideClick option", () => {
             render(
                 <TopOverlay opened={true}>
                     <TestContent />
@@ -179,7 +179,7 @@ describe("TopOverlay", () => {
 
             expect(focusTrapMock).toHaveBeenCalled();
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
         });
 
         it("should configure FocusTrap with preventScroll option", () => {
@@ -195,8 +195,8 @@ describe("TopOverlay", () => {
 
         it("should merge custom focusTrapProps with defaults", () => {
             const customFocusTrapOptions = {
-                escapeDeactivates: false,
-                returnFocusOnDeactivate: false,
+                clickOutsideDeactivates: true,
+                returnFocusOnDeactivate: true,
             };
 
             render(
@@ -206,10 +206,10 @@ describe("TopOverlay", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
-            expect(focusTrapProps.focusTrapOptions.escapeDeactivates).toBe(false);
-            expect(focusTrapProps.focusTrapOptions.returnFocusOnDeactivate).toBe(false);
+            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.returnFocusOnDeactivate).toBe(true);
         });
 
         it("should pass additional focusTrapProps", () => {

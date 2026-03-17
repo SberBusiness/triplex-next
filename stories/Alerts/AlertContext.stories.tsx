@@ -10,7 +10,6 @@ export default {
     component: AlertContext,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

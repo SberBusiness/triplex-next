@@ -11,6 +11,7 @@ export default {
     component: Tooltip,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

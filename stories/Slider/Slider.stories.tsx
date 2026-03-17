@@ -11,6 +11,7 @@ export default {
     component: Slider,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

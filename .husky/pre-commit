@@ -1,1 +1,8 @@
 npx lint-staged
+
+# Запрет коммита baseline-скриншотов локально — обновляются только через CI
+if git diff --cached --name-only | grep -q '^__screenshots__/'; then
+  echo "❌ Коммит скриншотов из __screenshots__/ запрещён локально."
+  echo "   Baseline-скриншоты обновляются только через GitHub Actions (visual-update.yml)."
+  exit 1
+fi

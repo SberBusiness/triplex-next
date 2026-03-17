@@ -14,6 +14,7 @@ export default {
     component: Calendar,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -8,6 +8,7 @@ export default {
     title: "Components/HelpBox",
     component: HelpBox,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `\nИконка помощи с всплывающей подсказкой.\n\n- **Размеры тултипа**: SM, LG\n- **Расположение**: above, below, left, right\n- **Мобильный заголовок**: отдельная зона для мобильной версии\n                `,

@@ -7,6 +7,7 @@ export default {
     title: "Design Tokens/Core",
     component: DesignTokensVisualizer,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

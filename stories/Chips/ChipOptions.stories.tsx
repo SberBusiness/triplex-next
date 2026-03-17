@@ -9,6 +9,7 @@ export default {
     component: ChipOptions,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

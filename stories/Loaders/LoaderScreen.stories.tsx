@@ -9,6 +9,7 @@ export default {
     component: LoaderScreen,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

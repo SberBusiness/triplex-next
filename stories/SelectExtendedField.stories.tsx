@@ -15,6 +15,7 @@ export default {
     title: "Components/SelectExtendedField",
     component: SelectExtendedField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

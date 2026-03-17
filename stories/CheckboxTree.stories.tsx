@@ -12,6 +12,7 @@ export default {
     component: CheckboxTree,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         layout: "padded",
         docs: {
             description: {

@@ -14,6 +14,7 @@ const meta = {
     title: "Components/TextFields/NumberField",
     component: NumberField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

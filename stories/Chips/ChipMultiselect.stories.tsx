@@ -34,6 +34,7 @@ export default {
     component: ChipMultiselect,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

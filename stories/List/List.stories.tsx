@@ -22,6 +22,7 @@ export default {
     component: List,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

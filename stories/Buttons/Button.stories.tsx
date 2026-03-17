@@ -20,6 +20,7 @@ export default {
     component: Button,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

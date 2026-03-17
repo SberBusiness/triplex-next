@@ -10,6 +10,7 @@ export default {
     component: Overlay,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

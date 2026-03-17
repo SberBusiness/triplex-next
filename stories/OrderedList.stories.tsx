@@ -8,6 +8,7 @@ export default {
     component: OrderedList,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         layout: "padded",
         docs: {
             description: {

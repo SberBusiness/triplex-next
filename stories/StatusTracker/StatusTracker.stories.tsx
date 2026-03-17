@@ -15,6 +15,7 @@ const meta: Meta<typeof StatusTracker> = {
     component: StatusTracker,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

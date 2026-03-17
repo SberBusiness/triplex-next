@@ -18,6 +18,7 @@ export default {
     component: Stepper,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

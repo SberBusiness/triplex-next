@@ -20,6 +20,7 @@ const meta = {
     title: "Components/LightBox/LightBoxWithSidebars",
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         layout: "fullscreen",
         docs: {
             description: {

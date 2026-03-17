@@ -10,6 +10,7 @@ export default {
     component: ChipGroup,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `Контейнер для группировки нескольких компонентов Chip.

@@ -33,6 +33,9 @@ export const DesignTokensCore: TDesignTokensCore = {
         90: {
             value: "#A8F5E9", //     var(--triplex-next-ColorBrand-90)
         },
+        95: {
+            value: "#C5FAF1", //     var(--triplex-next-ColorBrand-95)
+        },
         100: {
             value: "#E3FFFA", //     var(--triplex-next-ColorBrand-100)
         },
@@ -312,6 +315,9 @@ export const DesignTokensCore: TDesignTokensCore = {
         },
         90: {
             value: "#D6DEED", //     var(--triplex-next-ColorSystem-90)
+        },
+        95: {
+            value: "#E0E8F4", //     var(--triplex-next-ColorSystem-95)
         },
         100: {
             value: "#EEF3FC", //     var(--triplex-next-ColorSystem-100)

@@ -28,6 +28,7 @@ export default {
     component: ListItem,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

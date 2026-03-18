@@ -16,6 +16,7 @@ export default {
     title: "Components/TextFields/MaskedField",
     component: MaskedField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

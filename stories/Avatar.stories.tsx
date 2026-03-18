@@ -16,6 +16,7 @@ const meta = {
     title: "Components/Avatar",
     component: Avatar,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

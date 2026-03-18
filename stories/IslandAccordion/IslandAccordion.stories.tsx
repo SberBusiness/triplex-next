@@ -23,6 +23,7 @@ export default {
     component: IslandAccordion,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -193,7 +193,7 @@ describe("ModalWindow", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
         });
 
@@ -211,7 +211,7 @@ describe("ModalWindow", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
             expect(focusTrapProps.focusTrapOptions.escapeDeactivates).toBe(false);
         });

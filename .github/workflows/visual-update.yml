@@ -1,0 +1,50 @@
+name: Update Visual Snapshots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: Update baseline screenshots
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+      - name: Start Storybook
+        run: npm run storybook &
+      - name: Wait for Storybook
+        run: |
+          echo "Waiting for Storybook..."
+          timeout 180 bash -c 'until curl -sf http://localhost:6006/index.json > /dev/null; do sleep 3; done'
+      - name: Update snapshots
+        run: npm run test-visual:update
+      - name: Commit updated snapshots
+        env:
+          # Local pre-commit blocks __screenshots__ commits by design; disable Husky only in CI snapshot update.
+          HUSKY: 0
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add __screenshots__/
+          if git diff --staged --quiet; then
+            echo "No snapshot changes"
+          else
+            git commit -m "chore: update visual snapshots [skip ci]"
+            git push || (echo "❌ Push failed. Check branch protection rules or GITHUB_TOKEN permissions." && exit 1)
+          fi

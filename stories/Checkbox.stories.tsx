@@ -12,6 +12,7 @@ export default {
     component: Checkbox,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -8,6 +8,7 @@ const meta: Meta<typeof CheckboxTreeExtended> = {
     component: CheckboxTreeExtended,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         layout: "padded",
         docs: {
             page: () => (

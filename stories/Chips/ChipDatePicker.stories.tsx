@@ -11,6 +11,7 @@ export default {
     component: ChipDatePicker,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

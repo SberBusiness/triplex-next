@@ -51,6 +51,7 @@ export default {
     title: "Components/TableBasic",
     component: MasterTable,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component:

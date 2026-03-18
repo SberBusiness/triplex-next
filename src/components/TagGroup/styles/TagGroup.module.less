@@ -1,16 +1,20 @@
 .tagGroup {
-    display: flex;
-    flex-wrap: wrap;
-
     &.sm {
-        gap: 4px;
+        margin: -2px;
+        & > * {
+            margin: 2px;
+        }
     }
-
     &.md {
-        gap: 8px;
+        margin: -4px;
+        & > * {
+            margin: 4px;
+        }
     }
-
     &.lg {
-        gap: 12px;
+        margin: -6px;
+        & > * {
+            margin: 6px;
+        }
     }
 }

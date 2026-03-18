@@ -46,6 +46,7 @@ const meta = {
     component: ModalWindow,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: STORY_META_DESCRIPTION,

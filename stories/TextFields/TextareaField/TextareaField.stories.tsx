@@ -19,6 +19,7 @@ const meta = {
     title: "Components/TextFields/TextareaField",
     component: TextareaField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

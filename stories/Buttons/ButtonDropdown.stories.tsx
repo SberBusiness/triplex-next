@@ -12,7 +12,6 @@ export default {
     component: ButtonDropdown,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

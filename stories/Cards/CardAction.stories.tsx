@@ -45,7 +45,6 @@ const meta = {
     component: CardAction,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

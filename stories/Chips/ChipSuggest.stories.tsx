@@ -10,7 +10,6 @@ const meta = {
     component: ChipSuggest,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

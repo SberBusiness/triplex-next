@@ -11,6 +11,7 @@ import {
     ListItemControlsButtonDropdown,
     ListItemControlsButton,
     ListItemTable,
+    ListItemTailRight,
 } from "../../src/components/List";
 import { EFontType, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
 import {
@@ -26,6 +27,9 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 export default {
     title: "Components/List/ListItem",
     component: ListItem,
+    globals: {
+        backgrounds: { value: "gray" },
+    },
     tags: ["autodocs"],
     parameters: {
         testRunner: { skip: true },
@@ -164,6 +168,7 @@ export const Swipeable: StoryObj<typeof ListItem> = {
                                 </ListItemControls>
                             }
                         >
+                            <ListItemTailRight />
                             <ListItemContent>Свайп влево</ListItemContent>
                         </SwipeableArea>
                     </ListItem>

@@ -16,7 +16,6 @@ export default {
     title: "Components/DateRange",
     component: DateRange,
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

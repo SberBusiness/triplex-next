@@ -30,7 +30,6 @@ export default {
         ),
     ],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

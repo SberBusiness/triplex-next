@@ -9,7 +9,6 @@ export default {
     component: ChipSort,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

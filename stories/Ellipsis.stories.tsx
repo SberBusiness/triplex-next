@@ -8,7 +8,6 @@ export default {
     component: Ellipsis,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

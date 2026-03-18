@@ -8,14 +8,23 @@ import {
     ListSortable,
     ListSortableItem,
     ListSortableItemControls,
+    ListItemTable,
+    ListItemControlsButton,
+    ListItemControlsButtonDropdown,
 } from "../../src/components/List";
 import { Button, EButtonTheme } from "../../src/components/Button";
 import { EComponentSize } from "../../src/enums/EComponentSize";
-import { EFontWeightTitle, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
-import { EmptytableSysIcon96 } from "@sberbusiness/icons-next";
+import { EFontType, EFontWeightTitle, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
+import {
+    AttachmentStrokeSrvIcon20,
+    DotshorizontalStrokeSrvIcon20,
+    EmptytableSysIcon96,
+} from "@sberbusiness/icons-next";
 import { Gap } from "../../src/components/Gap";
 import { FixedSizeList } from "react-window";
 import { Checkbox } from "../../src/components/Checkbox";
+import { MarkerStatus } from "../../src/components/MarkerStatus";
+import { EMarkerStatus } from "../../src/components/Marker/enums";
 
 export default {
     title: "Components/List/List",
@@ -222,6 +231,97 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
         docs: {
             description: {
                 story: "Список с возможностью сортировки интерактивных элементов.",
+            },
+        },
+    },
+};
+
+export const Example: StoryObj<typeof List> = {
+    render: () => {
+        const options = [
+            {
+                id: "button-dropdown-card-with-selectable-option-1",
+                label: "Текст пункта меню 1",
+                onSelect: () => alert("Выбран пункт меню 1."),
+            },
+            {
+                id: "button-dropdown-card-with-selectable-option-2",
+                label: "Текст пункта меню 2",
+                onSelect: () => alert("Выбран пункт меню 2."),
+            },
+            {
+                id: "button-dropdown-card-with-selectable-option-3",
+                label: "Текст пункта меню 3",
+                onSelect: () => alert("Выбран пункт меню 3."),
+            },
+        ];
+
+        const items = Array.from({ length: 5 }, (_, index) => ({ id: `list-example-item-1-${index}` }));
+
+        const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
+
+        const toggleSelect = (id: string) => {
+            setSelectedIds((prevSelectedIds) =>
+                prevSelectedIds.includes(id) ? prevSelectedIds.filter((x) => x !== id) : [...prevSelectedIds, id],
+            );
+        };
+
+        return (
+            <div style={{ maxWidth: "400px" }}>
+                <List>
+                    {items.map(({ id }, index) => (
+                        <ListItemTable
+                            id={id}
+                            key={id}
+                            {...(index !== 0
+                                ? {
+                                      selected: selectedIds.includes(id),
+                                      onSelect: () => toggleSelect(id),
+                                  }
+                                : {})}
+                            onClickItem={() => console.log("Клик по карточке.")}
+                            controlButtons={
+                                <>
+                                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
+                                        Скачать
+                                    </ListItemControlsButton>
+                                    <ListItemControlsButtonDropdown
+                                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                                        options={options}
+                                    >
+                                        Действия
+                                    </ListItemControlsButtonDropdown>
+                                </>
+                            }
+                        >
+                            <Title size={ETitleSize.H2}>1 220 000 000 RUB</Title>
+
+                            <Text size={ETextSize.B3} tag="div">
+                                №1 ООО Голубая Роза Голубая
+                            </Text>
+                            <Text size={ETextSize.B3} tag="div">
+                                Длинное назначение платежа
+                            </Text>
+                            <Text size={ETextSize.B3} type={EFontType.SECONDARY} tag="div">
+                                НДС не облагается
+                            </Text>
+                            <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
+                                40702 810 2 0527 5000000 от 09.04.24
+                            </Text>
+                            <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
+                                Status text
+                            </MarkerStatus>
+                        </ListItemTable>
+                    ))}
+                </List>
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Список, состоящий из элементов для отображения табличных данных на мобильных устройствах, в том числе с возможностью выбора элемента.",
             },
         },
     },

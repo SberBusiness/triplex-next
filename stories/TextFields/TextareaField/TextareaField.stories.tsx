@@ -121,7 +121,7 @@ export const Playground: PlaygroundStory = {
                         (postfix || withClearButton) && (
                             <div style={getTextareaPostfixInnerStyles(restArgs.size)}>
                                 {withClearButton && (
-                                    <FormFieldClear onClick={() => setValue("")} aria-label="Clear value" />
+                                    <FormFieldClear aria-label="clear value" onClick={() => setValue("")} />
                                 )}
                                 {postfix}
                             </div>
@@ -282,7 +282,7 @@ export const WithClearButton: Story = {
                     }}
                     postfix={
                         <div style={getTextareaPostfixInnerStyles(restArgs.size)}>
-                            <FormFieldClear onClick={() => setValue("")} aria-label="Clear value" />
+                            <FormFieldClear aria-label="clear value" onClick={() => setValue("")} />
                         </div>
                     }
                 />
@@ -315,7 +315,7 @@ export const Example: Story = {
                     }}
                     postfix={
                         <div style={getTextareaPostfixInnerStyles(restArgs.size)}>
-                            <FormFieldClear onClick={() => setValue("")} aria-label="Clear value" />
+                            <FormFieldClear aria-label="clear value" onClick={() => setValue("")} />
                             <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
                         </div>
                     }

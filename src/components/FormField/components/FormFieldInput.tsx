@@ -23,6 +23,17 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
+// Проверяет наличие значения.
+const isValueExist = (value: IFormFieldInputProps["value"]) => {
+    if (value === undefined) {
+        return false;
+    } else if (typeof value === "number") {
+        return true;
+    } else {
+        return value.length !== 0;
+    }
+};
+
 /** Компонент, отображающий input. */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
     const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
@@ -36,7 +47,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
     }, [instanceId, setId]);
 
     useEffect(() => {
-        setValueExist(Boolean(value));
+        setValueExist(isValueExist(value));
     }, [setValueExist, value]);
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -61,7 +72,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             setValueExist(true);
         } else if (event.animationName.startsWith("autofill-cancelled-hook")) {
             // Необходимо проверить, что при отмене автозаполнения, в поле не находится значение.
-            if (!value) {
+            if (!isValueExist(value)) {
                 setValueExist(false);
             }
         }

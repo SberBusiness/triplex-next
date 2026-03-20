@@ -1,8 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "../styles/ListItemLoading.module.less";
-import { LoaderScreen } from "@sberbusiness/triplex-next/components/LoaderScreen/LoaderScreen";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { EComponentSize } from "../../../enums";
+import { ELoaderSmallTheme, LoaderSmall } from "../../Loader";
 
 /** Свойства компонента ListItemLoading. */
 export interface IListItemLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,7 +16,7 @@ export interface IListItemLoadingProps extends React.HTMLAttributes<HTMLDivEleme
 export const ListItemLoading = React.forwardRef<HTMLDivElement, IListItemLoadingProps>(
     ({ className, ...rest }, ref) => (
         <div className={clsx(styles.listItemLoading, className)} {...rest} ref={ref}>
-            <LoaderScreen type="small" size={EComponentSize.MD} />
+            <LoaderSmall theme={ELoaderSmallTheme.BRAND} size={EComponentSize.MD} />
         </div>
     ),
 );

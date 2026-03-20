@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ISwipeableAreaRef, SwipeableArea } from "@sberbusiness/triplex-next/components/SwipeableArea/SwipeableArea";
 import { IListItemProps, ListItem } from "@sberbusiness/triplex-next/components/List/components/ListItem";
 import { ListItemContent } from "@sberbusiness/triplex-next/components/List/components/ListItemContent";
@@ -28,10 +28,14 @@ interface IListItemTableProps extends Omit<IListItemProps, "onSelect"> {
     swipeableAreaRef?: React.Ref<ISwipeableAreaRef>;
 }
 
+/** Возможные направления свайпа. */
+type TSwipeSide = "none" | "left" | "right";
+
 /** Элемент списка, для отображения табличных данных. */
 export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps | IListItemTableSelectableProps>(
     ({ children, className, controlButtons, onClickItem, onSelect, selected, swipeableAreaRef, ...rest }, ref) => {
         const selectable = typeof onSelect !== "undefined" && typeof selected !== "undefined";
+        const [swipeSide, setSwipeSide] = useState<TSwipeSide>("none");
 
         const renderContent = () => <ListItemContent onClick={onClickItem}>{children}</ListItemContent>;
 
@@ -39,11 +43,12 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
             <ListItem className={clsx(styles.listItemTable, className)} {...rest} ref={ref}>
                 <SwipeableArea
                     ref={swipeableAreaRef}
+                    onSwipeableAreaChange={setSwipeSide}
                     rightSwipeableArea={
                         controlButtons ? <ListItemControls>{controlButtons}</ListItemControls> : undefined
                     }
                 >
-                    <ListItemTailRight />
+                    <ListItemTailRight visible={swipeSide === "right"} />
 
                     {selectable ? (
                         <ListItemSelectable selected={selected} onSelect={onSelect}>

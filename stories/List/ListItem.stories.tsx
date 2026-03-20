@@ -13,7 +13,7 @@ import {
     ListItemTable,
     ListItemTailRight,
 } from "../../src/components/List";
-import { EFontType, ETextSize, ETitleSize, Text, Title } from "../../src/components/Typography";
+import { EFontType, EFontWeightText, ETextSize, Text } from "../../src/components/Typography";
 import {
     AttachmentStrokeSrvIcon20,
     DotshorizontalStrokeSrvIcon20,
@@ -55,11 +55,13 @@ export default {
 
 export const Default: StoryObj<typeof ListItem> = {
     render: () => (
-        <List>
-            <ListItem>
-                <ListItemContent>Элемент списка</ListItemContent>
-            </ListItem>
-        </List>
+        <div style={{ maxWidth: "500px" }}>
+            <List>
+                <ListItem>
+                    <ListItemContent>Элемент списка</ListItemContent>
+                </ListItem>
+            </List>
+        </div>
     ),
     parameters: {
         docs: { description: { story: "Базовый элемент списка с контентом." } },
@@ -69,11 +71,13 @@ export const Default: StoryObj<typeof ListItem> = {
 
 export const Loading: StoryObj<typeof ListItem> = {
     render: () => (
-        <List>
-            <ListItem>
-                <ListItemLoading />
-            </ListItem>
-        </List>
+        <div style={{ maxWidth: "500px" }}>
+            <List>
+                <ListItem>
+                    <ListItemLoading />
+                </ListItem>
+            </List>
+        </div>
     ),
     parameters: {
         docs: {
@@ -89,7 +93,7 @@ export const Selectable: StoryObj<typeof ListItem> = {
     render: () => {
         const [selected, setSelected] = useState(false);
         return (
-            <div style={{ maxWidth: "400px" }}>
+            <div style={{ maxWidth: "500px" }}>
                 <List>
                     <ListItem>
                         <ListItemSelectable selected={selected} onSelect={setSelected}>
@@ -127,9 +131,11 @@ export const Swipeable: StoryObj<typeof ListItem> = {
         ];
 
         const ref = React.useRef<ISwipeableAreaRef>(null);
+        const [swipe, setSwipe] = useState<TSwipeSide>("none");
+        type TSwipeSide = "none" | "left" | "right";
 
         return (
-            <div style={{ maxWidth: "400px" }}>
+            <div style={{ maxWidth: "500px" }}>
                 <button
                     onClick={() => {
                         if (ref.current) {
@@ -167,8 +173,9 @@ export const Swipeable: StoryObj<typeof ListItem> = {
                                     </ListItemControlsButtonDropdown>
                                 </ListItemControls>
                             }
+                            onSwipeableAreaChange={setSwipe}
                         >
-                            <ListItemTailRight />
+                            <ListItemTailRight visible={swipe === "right"} />
                             <ListItemContent>Свайп влево</ListItemContent>
                         </SwipeableArea>
                     </ListItem>
@@ -203,7 +210,7 @@ export const ListItemForTable: StoryObj<typeof ListItem> = {
         ];
 
         return (
-            <div style={{ maxWidth: "400px" }}>
+            <div style={{ maxWidth: "500px" }}>
                 <List>
                     <ListItemTable
                         onClickItem={() => console.log("Клик по карточке.")}
@@ -221,7 +228,9 @@ export const ListItemForTable: StoryObj<typeof ListItem> = {
                             </>
                         }
                     >
-                        <Title size={ETitleSize.H2}>1 220 000 000 RUB</Title>
+                        <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1 220 000 000 RUB
+                        </Text>
 
                         <Text size={ETextSize.B3} tag="div">
                             №1 ООО Голубая Роза Голубая
@@ -272,7 +281,7 @@ export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
         const ref = React.useRef<ISwipeableAreaRef>(null);
 
         return (
-            <div style={{ maxWidth: "400px" }}>
+            <div style={{ maxWidth: "500px" }}>
                 <button
                     onClick={() => {
                         if (ref.current) {
@@ -311,7 +320,9 @@ export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
                             </>
                         }
                     >
-                        <Title size={ETitleSize.H2}>1 220 000 000 RUB</Title>
+                        <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1 220 000 000 RUB
+                        </Text>
 
                         <Text size={ETextSize.B3} tag="div">
                             №1 ООО Голубая Роза Голубая
@@ -366,7 +377,7 @@ export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
         const [selected, setSelected] = React.useState(false);
 
         return (
-            <div style={{ maxWidth: "400px" }}>
+            <div style={{ maxWidth: "500px" }}>
                 <List>
                     <ListItemTable
                         selected={selected}
@@ -386,7 +397,9 @@ export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
                             </>
                         }
                     >
-                        <Title size={ETitleSize.H2}>1 220 000 000 RUB</Title>
+                        <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
+                            1 220 000 000 RUB
+                        </Text>
 
                         <Text size={ETextSize.B3} tag="div">
                             №1 ООО Голубая Роза Голубая

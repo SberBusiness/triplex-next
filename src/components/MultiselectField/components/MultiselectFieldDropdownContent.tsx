@@ -21,11 +21,13 @@ export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdown
     const { size } = useContext(MultiselectFieldContext);
 
     return (
-        <div className={clsx(styles.multiselectFieldContentWrapper, className)} {...htmlDivAttributes}>
-            <div tabIndex={-1} className={clsx(styles.multiselectFieldContent, sizeToClassNameMap[size])}>
-                {children}
-                {loading && <LoaderScreen type="small" className={styles.loaderScreen} />}
-            </div>
+        <div
+            tabIndex={-1}
+            className={clsx(styles.multiselectFieldContent, sizeToClassNameMap[size], className)}
+            {...htmlDivAttributes}
+        >
+            {children}
+            {loading && <LoaderScreen type="small" className={styles.loaderScreen} />}
         </div>
     );
 };

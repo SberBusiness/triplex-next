@@ -4,6 +4,7 @@ import { uniqueId } from "lodash-es";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { FormFieldContext } from "../FormFieldContext";
 import { EFormFieldStatus } from "../enums";
+import { isFilled } from "./utils";
 import styles from "../styles/FormFieldTextarea.module.less";
 
 /** Свойства компонента FormFieldTextarea. */
@@ -15,17 +16,17 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 /** Компонент, отображающий textarea. */
 export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFieldTextareaProps>(
     ({ className, id, onBlur, onFocus, value, ...htmlTextareaHTMLAttributes }, ref) => {
-        const { size, status, setFocused, setId, setValueExist } = useContext(FormFieldContext);
+        const { size, status, setFocused, setTargetId, setFilled } = useContext(FormFieldContext);
         const instanceId = useMemo(() => (id === undefined ? uniqueId("textarea_") : id), [id]);
         const classNames = clsx(styles.formFieldTextarea, sizeToClassNameMap[size], className);
 
         useEffect(() => {
-            setId(instanceId);
-        }, [instanceId, setId]);
+            setTargetId(instanceId);
+        }, [instanceId, setTargetId]);
 
         useEffect(() => {
-            setValueExist(Boolean(value));
-        }, [setValueExist, value]);
+            setFilled(isFilled(value));
+        }, [setFilled, value]);
 
         const handleBlur: React.FocusEventHandler<HTMLTextAreaElement> = (event) => {
             setFocused(false);

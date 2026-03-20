@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { FormFieldContext } from "../FormFieldContext";
+import React, { useContext, useMemo, useEffect } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
+import { FormFieldContext } from "../FormFieldContext";
 import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField/enums";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "../styles/FormFieldTarget.module.less";
 
 /** Свойства компонента FormFieldTarget. */
@@ -11,32 +12,26 @@ export interface IFormFieldTargetProps extends React.HTMLAttributes<HTMLDivEleme
     placeholder?: React.ReactNode;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Компонент, отображающий нередактируемое значение. */
 export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTargetProps>((props, ref) => {
     const { className, id, onBlur, onFocus, placeholder, children, ...restProps } = props;
-    const { status, setFocused, setId, setValueExist, size, active } = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldTarget, className, styles[`size-${size}`], {
+    const { status, setFocused, setTargetId, setFilled, size, active } = useContext(FormFieldContext);
+    const instanceId = useMemo(() => (id === undefined ? uniqueId("target_") : id), [id]);
+    const classNames = clsx(styles.formFieldTarget, sizeToClassNameMap[size], className, {
         [styles.disabled]: status === EFormFieldStatus.DISABLED,
         [styles.placeholder]: !!placeholder && !children && status !== EFormFieldStatus.DISABLED,
         [styles.active]: active,
     });
 
-    const instanceId = useRef(id || uniqueId("formFieldTarget_"));
+    useEffect(() => {
+        setTargetId(instanceId);
+    }, [instanceId, setTargetId]);
 
     useEffect(() => {
-        setId(instanceId.current);
-    }, [setId]);
-
-    useEffect(() => {
-        if (id) {
-            instanceId.current = id;
-            setId(instanceId.current);
-        }
-    }, [id, setId]);
-
-    useEffect(() => {
-        setValueExist(!!children);
-    }, [setValueExist, children]);
+        setFilled(!!children);
+    }, [setFilled, children]);
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         setFocused(false);
@@ -53,8 +48,7 @@ export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTarget
             {...restProps}
             className={classNames}
             aria-disabled={status === EFormFieldStatus.DISABLED}
-            // eslint-disable-next-line react-hooks/refs
-            id={instanceId.current}
+            id={instanceId}
             onFocus={handleFocus}
             onBlur={handleBlur}
             tabIndex={status === EFormFieldStatus.DISABLED ? -1 : 0}

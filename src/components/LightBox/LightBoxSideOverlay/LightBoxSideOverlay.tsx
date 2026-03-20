@@ -18,8 +18,7 @@ import styles from "./styles/LightBoxSideOverlay.module.less";
 
 /** Свойства компонента LightBoxSideOverlay. */
 export interface ILightBoxSideOverlayProps
-    extends React.HTMLAttributes<HTMLDivElement>,
-        Pick<IOverlayBaseProps, "opened" | "onClose" | "onOpen"> {
+    extends React.HTMLAttributes<HTMLDivElement>, Pick<IOverlayBaseProps, "opened" | "onClose" | "onOpen"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrap.Props;
     /** Состояние загрузки. */
@@ -149,7 +148,7 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
             active={opened && !opening && !closing}
             {...focusTrapProps}
             focusTrapOptions={{
-                clickOutsideDeactivates: true,
+                allowOutsideClick: true,
                 initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(contentRef.current),
                 preventScroll: true,
                 ...focusTrapProps?.focusTrapOptions,

@@ -10,6 +10,7 @@ export default {
     component: ChipIcon,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

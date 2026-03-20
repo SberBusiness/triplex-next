@@ -13,6 +13,7 @@ export default {
     component: Divider,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

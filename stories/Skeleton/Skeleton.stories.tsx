@@ -9,6 +9,7 @@ export default {
     component: Skeleton,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

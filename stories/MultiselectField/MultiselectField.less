@@ -2,11 +2,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    
+    &.sm {
+        height: 196px;
+    }
+
+    &.md {
+        height: 254px;
+    }
+
+    &.lg {
+        height: 278px;
+    }
 }
 
 @media (max-width: 767px) {
     .not-found {
+        box-sizing: border-box;
         min-height: 104px;
         justify-content: left;
         align-items: flex-start;

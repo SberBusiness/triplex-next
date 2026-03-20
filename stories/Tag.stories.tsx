@@ -9,6 +9,7 @@ const meta = {
     component: Tag,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

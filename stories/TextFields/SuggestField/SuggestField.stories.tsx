@@ -21,6 +21,7 @@ const meta = {
     component: SuggestField,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

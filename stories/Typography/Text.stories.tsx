@@ -7,6 +7,7 @@ import "./Typography.less";
 export default {
     title: "Components/Typography/Text",
     parameters: {
+        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

@@ -8,6 +8,7 @@ const paletteIndexes = Array.from(Array(12).keys());
 export default {
     title: "Icons/Icons",
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

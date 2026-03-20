@@ -92,6 +92,9 @@ src/
 | `npm run build` | Сборка компонентов и `style.css` в `dist/` |
 | `npm run storybook` | Локальный просмотр компонентов |
 | `npm run storybook:build` | Сборка Storybook в `storybook-static/` |
+| `npm run test-visual` | Визуальные регрессионные тесты (Storybook должен быть запущен) |
+| `npm run test-visual:update` | Обновить baseline-скриншоты |
+| `npm run test-visual:ci` | Запустить Storybook + визуальные тесты (для CI) |
 
 ---
 
@@ -122,36 +125,71 @@ export * from './components/Alert';
 
 Проект использует [Vitest](https://vitest.dev/) для unit-тестирования и [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) для тестирования компонентов.
 
-Chromatic для визуального тестирования Storybook-компонентов.
+### Визуальное регрессионное тестирование
 
-🧪 Как работает
-	•	При каждом пуше в ветки main или release-*, Chromatic запускает визуальные тесты.
-	•	Chromatic делает скриншоты всех stories, сравнивает с предыдущими, и показывает отличия (если есть).
-	•	✅ Если изменений нет — билд считается успешным.
-	•	🔍 Если есть изменения — нужен review и approval в интерфейсе Chromatic.
+Для визуального тестирования используется [`@storybook/test-runner`](https://github.com/storybookjs/test-runner) + [`jest-image-snapshot`](https://github.com/americanexpress/jest-image-snapshot).
 
-⸻
+Скриншоты снимаются на двух viewport'ах: **XS** (575px) и **XL** (1200px). Baseline-скриншоты хранятся в папке `__screenshots__/` и коммитятся в git. Diff-изображения при падении сохраняются в `__screenshots__/__diff__/` и игнорируются git'ом.
 
-🔔 Уведомления
-	•	Chromatic отправляет нотификации в Telegram (через Webhook), если:
-	•	билд прошёл ✅
-	•	или есть изменения/ошибки ❗
+> **Важно:** baseline-скриншоты создаются и обновляются **только через CI** (Linux). Локальные скриншоты на macOS несовместимы из-за разного рендеринга шрифтов.
 
-⸻
+#### CI воркфлоу
 
-🚀 Как одобрить изменения
-	1.	Перейди в свой Chromatic проект
-	2.	Найди последний билд в списке.
-	3.	Нажми Review changes
-	4.	Просмотри отличия → Approve (если всё ок)
+| Воркфлоу | Триггер | Что делает |
+|---|---|---|
+| `visual-test.yml` | Каждый PR | Прогоняет тесты, загружает диффы как артефакты при падении |
+| `visual-update.yml` | Ручной запуск (`workflow_dispatch`) | Пересоздаёт baselines и коммитит их в ветку |
 
+#### Как обновить baseline-скриншоты
+
+1. Запушить ветку с изменениями
+2. В GitHub → Actions → **Update Visual Snapshots** → Run workflow → выбрать ветку
+3. Воркфлоу пересоздаст скриншоты и сделает коммит в ту же ветку
+
+#### Как отлаживать локально
+
+Для отладки конкретного компонента — временно сузить glob в `.storybook/main.ts`:
+
+```ts
+// Временно, только для отладки:
+stories: ["../stories/Badge/**/*.stories.@(ts|tsx|mdx)"],
+
+// Вернуть обратно после отладки:
+stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
+```
+
+Затем запустить:
+```bash
+npm run storybook         # в одном терминале
+npm run test-visual       # в другом
+```
+
+#### Как исключить story из тестирования
+
+```ts
+// Конкретную story
+export const MyStory: Story = {
+    parameters: {
+        testRunner: { skip: true },
+    },
+};
+
+// Все stories компонента (в default export / meta)
+const meta: Meta<typeof Button> = {
+    component: Button,
+    parameters: {
+        testRunner: { skip: true },
+    },
+};
+```
 
 ### Как запустить тесты локально
 
 ```bash
-npm run test-e2e         # Запуск e2e тестов
-npm run test-unit         # Запуск unit тестов
-npm run test-unit:watch   # Запуск unit тестов в режиме наблюдения
-npm run test-unit:coverage # Запуск unit тестов и генерация отчёта о покрытии
-npm run chromatic # Запуск скриншот тестов. В директории должен быть файл .env.local с ключем CHROMATIC_PROJECT_TOKEN=***
+npm run test-e2e              # Запуск e2e тестов
+npm run test-unit             # Запуск unit тестов
+npm run test-unit:watch       # Запуск unit тестов в режиме наблюдения
+npm run test-unit:coverage    # Запуск unit тестов с отчётом о покрытии
+npm run test-visual:update    # Создать/обновить baseline визуальных тестов
+npm run test-visual           # Запуск визуальных регрессионных тестов
 ```

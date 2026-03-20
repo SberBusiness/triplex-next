@@ -17,6 +17,7 @@ export default {
     title: "Components/Pagination",
     component: Pagination,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -123,7 +123,7 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
             active={activeFocusTrap}
             {...focusTrapProps}
             focusTrapOptions={{
-                clickOutsideDeactivates: true,
+                allowOutsideClick: true,
                 preventScroll: true,
                 ...focusTrapProps?.focusTrapOptions,
             }}

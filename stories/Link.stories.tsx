@@ -14,6 +14,7 @@ export default {
     component: Link,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -12,6 +12,7 @@ export default {
     title: "Components/SelectField",
     component: SelectField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

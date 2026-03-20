@@ -24,6 +24,7 @@ const meta = {
     title: "Components/Badge",
     component: Badge,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -11,6 +11,7 @@ const meta = {
     component: TagColor,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

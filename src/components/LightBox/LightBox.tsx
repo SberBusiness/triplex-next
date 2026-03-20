@@ -166,7 +166,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                             active={!isLoading}
                             {...focusTrapProps}
                             focusTrapOptions={{
-                                clickOutsideDeactivates: true,
+                                allowOutsideClick: true,
                                 initialFocus: () =>
                                     FocusTrapUtils.getFirstInteractionElementByDataAttr(containerRef.current),
                                 preventScroll: true,

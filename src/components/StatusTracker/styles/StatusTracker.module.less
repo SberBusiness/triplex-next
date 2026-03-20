@@ -14,9 +14,11 @@
     height: 100%;
 
     .statusTracker {
-        text-align: center;
+        width: 100%;
         padding: 16px 24px;
+        box-sizing: border-box;
         z-index: 1;
+        text-align: center;
 
         &.verticalAlignMiddle {
             align-self: center;
@@ -67,6 +69,10 @@
 
             .statusTrackerButton {
                 margin-bottom: 12px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
             }
         }
     }

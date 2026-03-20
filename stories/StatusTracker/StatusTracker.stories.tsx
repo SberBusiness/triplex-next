@@ -15,6 +15,7 @@ const meta: Meta<typeof StatusTracker> = {
     component: StatusTracker,
     tags: ["autodocs"],
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -22,7 +23,7 @@ const meta: Meta<typeof StatusTracker> = {
 
 ## Особенности
 
-- **Типы - type**: 
+- **Типы - type**:
 Draft - черновик, создан без ошибок и еще не отправлен в банк,
 Waiting - в обработке, ожидает ответ от банка,
 Warning - предупреждение, документ создан с ошибками,

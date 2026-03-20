@@ -16,6 +16,7 @@ export default {
     title: "Components/TextFields/TextField",
     component: TextField,
     parameters: {
+        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

@@ -19,7 +19,7 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 /** Лейбл поля ввода/селекта. Отображается по-середине поля ввода, когда инпут/селект имеет значение или фокус, перемещается в верхний левый угол. */
 export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabelProps>(
     ({ children, className, style, floating: floatingProp, ...htmlLabelAttributes }, ref) => {
-        const { status, active, id, prefixWidth, postfixWidth, size, valueExist } = useContext(FormFieldContext);
+        const { status, active, targetId, prefixWidth, postfixWidth, size, filled } = useContext(FormFieldContext);
         // Label отображается в уменьшенном виде над полем ввода/селектом.
         const [floating, setFloating] = useState(false);
 
@@ -28,9 +28,9 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
                 // eslint-disable-next-line react-hooks/set-state-in-effect
                 setFloating(floatingProp);
             } else if (floatingProp !== floating) {
-                setFloating(active || valueExist);
+                setFloating(active || filled);
             }
-        }, [active, valueExist, floatingProp, floating]);
+        }, [active, filled, floatingProp, floating]);
 
         const classNames = clsx(
             styles.formFieldLabel,
@@ -51,7 +51,7 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
         };
 
         return (
-            <label className={classNames} ref={ref} htmlFor={id} {...htmlLabelAttributes} style={stylesLabel}>
+            <label className={classNames} htmlFor={targetId} {...htmlLabelAttributes} style={stylesLabel} ref={ref}>
                 <span className={styles.formFieldLabelText}>{children}</span>
             </label>
         );

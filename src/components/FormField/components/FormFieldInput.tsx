@@ -2,11 +2,12 @@ import React, { useEffect, useContext, useMemo } from "react";
 import { FormFieldContext } from "../FormFieldContext";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
-import styles from "../styles/FormFieldInput.module.less";
 import { EFormFieldStatus } from "../enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
-import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
+import { EComponentSize } from "../../../enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import { DataAttributes } from "../../../types/CoreTypes";
+import { isFilled } from "./utils";
+import styles from "../styles/FormFieldInput.module.less";
 
 /** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
 export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
@@ -23,32 +24,21 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
-// Проверяет наличие значения.
-const isValueExist = (value: IFormFieldInputProps["value"]) => {
-    if (value === undefined) {
-        return false;
-    } else if (typeof value === "number") {
-        return true;
-    } else {
-        return value.length !== 0;
-    }
-};
-
 /** Компонент, отображающий input. */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
     const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
     const { render, ...renderProvideProps } = props;
-    const { focused, status, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
+    const { focused, status, setFocused, setTargetId, setFilled, size } = useContext(FormFieldContext);
     const instanceId = useMemo(() => (id === undefined ? uniqueId("input_") : id), [id]);
     const classNames = clsx(styles.formFieldInput, sizeToClassNameMap[size], className);
 
     useEffect(() => {
-        setId(instanceId);
-    }, [instanceId, setId]);
+        setTargetId(instanceId);
+    }, [instanceId, setTargetId]);
 
     useEffect(() => {
-        setValueExist(isValueExist(value));
-    }, [setValueExist, value]);
+        setFilled(isFilled(value));
+    }, [setFilled, value]);
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         setFocused(false);
@@ -69,11 +59,11 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
      */
     const handleAnimationStart = (event: React.AnimationEvent<HTMLInputElement>) => {
         if (event.animationName.startsWith("autofill-applied-hook")) {
-            setValueExist(true);
+            setFilled(true);
         } else if (event.animationName.startsWith("autofill-cancelled-hook")) {
             // Необходимо проверить, что при отмене автозаполнения, в поле не находится значение.
-            if (!isValueExist(value)) {
-                setValueExist(false);
+            if (!isFilled(value)) {
+                setFilled(false);
             }
         }
         onAnimationStart?.(event);

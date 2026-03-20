@@ -12,8 +12,7 @@ import { EFormFieldStatus } from "../enums";
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldMaskedInputProps
-    extends Omit<MaskedInputProps, "guide" | "mask" | "render">,
-        DataAttributes {
+    extends Omit<MaskedInputProps, "guide" | "mask" | "render">, DataAttributes {
     value: string;
     /** Состояние ошибки. */
     error?: boolean;
@@ -49,7 +48,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     // Значение инпута, отображающего часть введенного значения и оставшуюся маску.
     const [placeholderValue, setPlaceholderValue] = useState("");
     const pasted = useRef(false);
-    const { valueExist, focused, size, status } = useContext(FormFieldContext);
+    const { filled, focused, size, status } = useContext(FormFieldContext);
 
     useEffect(() => {
         /**
@@ -185,7 +184,7 @@ export const FormFieldMaskedInput: IFormFieldIMaskedInputFC = ({
     };
 
     const getPlaceholderValue = () => {
-        if ((!valueExist && !focused) || (!value && placeholder)) {
+        if ((!filled && !focused) || (!value && placeholder)) {
             return "";
         }
         return placeholderValue;

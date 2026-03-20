@@ -8,7 +8,7 @@ export const designTokensComponentsListItemKeys = [
     "Background",
     "Background_Dragging",
     "Background_Selected",
-    "Shadow",
+    "Shadow_Dragging",
 ] as const;
 // Тип, содержащий названия токенов компонента ListItem.
 export type TDesignTokensComponentsListItemKeys = (typeof designTokensComponentsListItemKeys)[number];
@@ -21,8 +21,8 @@ export type TDesignTokensComponentsListItem = { ListItem: TDesignTokensComponent
 
 // Токены компонента ListItem в светлой и темной темах.
 export const ListItem_Tokens: TDesignTokensComponentsListItemValues = {
-    Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-ListItem-Background)
+    Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.40" }], // var(--triplex-next-ListItem-Background)
     Background_Dragging: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-ListItem-Background_Dragging)
     Background_Selected: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.10" }], // var(--triplex-next-ListItem-Background_Selected)
-    Shadow: [{ value: "0 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "none" }], // var(--triplex-next-ListItem-Background_Shadow)
+    Shadow_Dragging: [{ value: "0 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "0 2px 7px rgba(0, 0, 0, 0.25)" }], // var(--triplex-next-ListItem-Shadow_Dragging)
 };

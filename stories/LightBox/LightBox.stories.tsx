@@ -307,7 +307,7 @@ export const Default: Story = {
                                     ))}
                                 </Page.Body>
 
-                                <Page.Footer type={EFooterPageType.FIRST}>
+                                <Page.Footer type={EFooterPageType.FIRST} sticky>
                                     <Page.Footer.Description>
                                         <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                                         <Page.Footer.Description.Controls>

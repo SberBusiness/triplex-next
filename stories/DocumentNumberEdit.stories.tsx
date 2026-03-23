@@ -30,7 +30,6 @@ export default meta;
 type Story = StoryObj<typeof DocumentNumberEdit>;
 
 export const Playground: Story = {
-    name: "Playground",
     args: {
         buttonLabel: "Изменить",
         emptyNumberButtonLabel: "Задать номер",
@@ -81,6 +80,7 @@ export const Playground: Story = {
         controls: {
             include: ["buttonLabel", "emptyNumberButtonLabel", "emptyNumberLabel", "numberLabel", "maxLength"],
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const [value, setValue] = useState("");
@@ -92,7 +92,6 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -109,6 +108,30 @@ export const Default: Story = {
                 emptyNumberLabel="Номер документа будет присвоен автоматически"
                 numberLabel="Документ №"
                 onChange={handleChange}
+            />
+        );
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [value, setValue] = useState("123456");
+
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
+
+        return (
+            <DocumentNumberEdit
+                value={value}
+                onChange={handleChange}
+                buttonLabel="Изменить"
+                emptyNumberButtonLabel="Задать номер"
+                emptyNumberLabel="Номер документа будет присвоен автоматически"
+                numberLabel="Документ №"
+                maxLength={6}
             />
         );
     },

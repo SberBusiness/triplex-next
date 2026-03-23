@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { LightBox } from "../../../src/components/LightBox/LightBox";
-import { Page } from "../../../src/components/Page/Page";
-import { Button } from "../../../src/components/Button/Button";
-import { EButtonTheme } from "../../../src/components/Button/enums";
-import { Gap } from "../../../src/components/Gap";
-import { Title } from "../../../src/components/Typography/Title";
-import { Text } from "../../../src/components/Typography/Text";
-import { EFontType, ETextSize, ETitleSize } from "../../../src/components/Typography/enums";
-import { EHeaderPageType, EFooterPageType, EBodyPageType } from "../../../src/components/Page/components/enums";
-import { Island } from "../../../src/components/Island/Island";
-import { IslandBody } from "../../../src/components/Island/components/IslandBody";
-import { EIslandType } from "../../../src/components/Island/enums";
-import { FocusTrapUtils } from "../../../src/utils/focus/FocusTrapUtils";
-import { EComponentSize } from "../../../src/enums/EComponentSize";
+import {
+    LightBox,
+    Page,
+    Button,
+    EButtonTheme,
+    Gap,
+    Title,
+    Text,
+    EFontType,
+    ETextSize,
+    ETitleSize,
+    EHeaderPageType,
+    EFooterPageType,
+    EBodyPageType,
+    Island,
+    IslandBody,
+    EIslandType,
+    FocusTrapUtils,
+    EComponentSize,
+} from "@sberbusiness/triplex-next";
 
 const POEM_LINES: string[] = [
     "Мой дядя самых честных правил,",

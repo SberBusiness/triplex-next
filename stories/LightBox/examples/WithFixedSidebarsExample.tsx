@@ -1,13 +1,25 @@
 import React, { useState } from "react";
-import { LightBox } from "../../../src/components/LightBox";
-import { Button, EButtonTheme } from "../../../src/components/Button";
-import { Gap } from "../../../src/components/Gap";
-import { Title, Text, EFontType, ETextSize, ETitleSize } from "../../../src/components/Typography";
-import { Page, EHeaderPageType, EFooterPageType, EBodyPageType } from "../../../src/components/Page";
-import { Island, IslandBody, EIslandType } from "../../../src/components/Island";
-import { FocusTrapUtils } from "../../../src/utils/focus/FocusTrapUtils";
-import { EComponentSize } from "../../../src/enums/EComponentSize";
-import { MobileView } from "../../../src/components/MobileView";
+import {
+    LightBox,
+    Page,
+    Button,
+    EButtonTheme,
+    Gap,
+    Title,
+    Text,
+    EFontType,
+    ETextSize,
+    ETitleSize,
+    EHeaderPageType,
+    EFooterPageType,
+    EBodyPageType,
+    Island,
+    IslandBody,
+    EIslandType,
+    FocusTrapUtils,
+    EComponentSize,
+    MobileView,
+} from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 const POEM_LINES: string[] = [

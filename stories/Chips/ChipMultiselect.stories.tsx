@@ -306,10 +306,18 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
                         {renderDropdownContent()}
                     </MultiselectField.Dropdown.Content>
                     <MultiselectField.Dropdown.Footer>
-                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM} onClick={() => setOpened(false)}>
+                        <Button
+                            theme={EButtonTheme.SECONDARY}
+                            size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+                            onClick={() => setOpened(false)}
+                        >
                             Button text
                         </Button>
-                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
+                        <Button
+                            theme={EButtonTheme.LINK}
+                            size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+                            onClick={handleClickClearFilter}
+                        >
                             Button link text
                         </Button>
                     </MultiselectField.Dropdown.Footer>
@@ -544,7 +552,7 @@ export const Default: StoryObj<typeof ChipMultiselect> = {
                 </MultiselectField.Dropdown.Header>
                 <MultiselectField.Dropdown.Content>{renderDropdownContent()}</MultiselectField.Dropdown.Content>
                 <MultiselectField.Dropdown.Footer>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM} onClick={() => setOpened(false)}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={() => setOpened(false)}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
@@ -772,10 +780,18 @@ export const Sizes: StoryObj<typeof ChipMultiselect> = {
                     </MultiselectField.Dropdown.Header>
                     <MultiselectField.Dropdown.Content>{renderDropdownContent()}</MultiselectField.Dropdown.Content>
                     <MultiselectField.Dropdown.Footer>
-                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM} onClick={() => setOpened(false)}>
+                        <Button
+                            theme={EButtonTheme.SECONDARY}
+                            size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+                            onClick={() => setOpened(false)}
+                        >
                             Button text
                         </Button>
-                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
+                        <Button
+                            theme={EButtonTheme.LINK}
+                            size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+                            onClick={handleClickClearFilter}
+                        >
                             Button link text
                         </Button>
                     </MultiselectField.Dropdown.Footer>
@@ -1031,7 +1047,7 @@ export const Loading: StoryObj<typeof ChipMultiselect> = {
                     {renderDropdownContent()}
                 </MultiselectField.Dropdown.Content>
                 <MultiselectField.Dropdown.Footer>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.SM} onClick={() => setOpened(false)}>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={() => setOpened(false)}>
                         Button text
                     </Button>
                     <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>

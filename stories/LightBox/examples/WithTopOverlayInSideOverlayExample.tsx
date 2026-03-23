@@ -1,49 +1,21 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
-import { LightBox } from "../../src/components/LightBox/LightBox";
-import { Page } from "../../src/components/Page/Page";
-import { Button } from "../../src/components/Button/Button";
-import { EButtonTheme } from "../../src/components/Button/enums";
-import { Gap } from "../../src/components/Gap";
-import { Title } from "../../src/components/Typography/Title";
-import { Text } from "../../src/components/Typography/Text";
-import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { EHeaderPageType, EFooterPageType, EBodyPageType } from "../../src/components/Page/components/enums";
-import { Island } from "../../src/components/Island/Island";
-import { IslandBody } from "../../src/components/Island/components/IslandBody";
-import { EIslandType } from "../../src/components/Island/enums";
-import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { MobileView } from "../../src/components/MobileView/MobileView";
-import { Confirm } from "../../src/components/Confirm/Confirm";
-import { EConfirmParentComponent } from "../../src/components/Confirm/enums";
-
-const STORY_META_DESCRIPTION = `
-Пример **LightBoxWithTopOverlayInSideOverlay** отображает крупный контент контент поверх страницы с уведомлением при закрытии SideOverlay.
-`;
-
-const meta = {
-    title: "Components/LightBox/LightBoxWithTopOverlayInSideOverlay",
-    tags: ["autodocs"],
-    parameters: {
-        testRunner: { skip: true },
-        layout: "fullscreen",
-        docs: {
-            description: {
-                component: STORY_META_DESCRIPTION,
-            },
-            page: () => (
-                <>
-                    <DocsTitle />
-                    <Description />
-                    <Stories />
-                </>
-            ),
-        },
-    },
-};
-
-export default meta;
+import { LightBox } from "../../../src/components/LightBox/LightBox";
+import { Page } from "../../../src/components/Page/Page";
+import { Button } from "../../../src/components/Button/Button";
+import { EButtonTheme } from "../../../src/components/Button/enums";
+import { Gap } from "../../../src/components/Gap";
+import { Title } from "../../../src/components/Typography/Title";
+import { Text } from "../../../src/components/Typography/Text";
+import { EFontType, ETextSize, ETitleSize } from "../../../src/components/Typography/enums";
+import { EHeaderPageType, EFooterPageType, EBodyPageType } from "../../../src/components/Page/components/enums";
+import { Island } from "../../../src/components/Island/Island";
+import { IslandBody } from "../../../src/components/Island/components/IslandBody";
+import { EIslandType } from "../../../src/components/Island/enums";
+import { FocusTrapUtils } from "../../../src/utils/focus/FocusTrapUtils";
+import { EComponentSize } from "../../../src/enums/EComponentSize";
+import { MobileView } from "../../../src/components/MobileView/MobileView";
+import { Confirm } from "../../../src/components/Confirm/Confirm";
+import { EConfirmParentComponent } from "../../../src/components/Confirm/enums";
 
 const POEM_LINES: string[] = [
     "Мой дядя самых честных правил,",
@@ -75,7 +47,7 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const Default: React.FC = () => {
+export const WithTopOverlayInSideOverlayExample = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [openedSideOverlayMD, setOpenedSideOverlayMD] = useState(false);
 

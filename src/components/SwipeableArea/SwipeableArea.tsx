@@ -9,8 +9,6 @@ export interface ISwipeableAreaProps extends React.HTMLAttributes<HTMLDivElement
     leftSwipeableArea?: React.ReactNode;
     /** Появляющийся контент при свайпе влево. */
     rightSwipeableArea?: React.ReactNode;
-    /** Изменение swipeable area. */
-    onSwipeableAreaChange?: (side: "left" | "right" | "none") => void;
 }
 
 // Минимальная ширина свайпа в px, при котором откроется боковая панель.
@@ -45,7 +43,7 @@ export interface ISwipeableAreaRef {
  * При свайпе вправо открывается leftSwipeableArea.
  */
 export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaProps>(
-    ({ children, className, leftSwipeableArea, rightSwipeableArea, onSwipeableAreaChange, ...rest }, ref) => {
+    ({ children, className, leftSwipeableArea, rightSwipeableArea, ...rest }, ref) => {
         // Происходит анимация завершения свайпа.
         const [animating, setAnimating] = useState(false);
         // Направление перемещения пальца, вертикальное - скролл, горизонтальное - свайп.
@@ -118,18 +116,6 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
 
             document.removeEventListener("touchend", handleDocumentTouchEnd);
         };
-
-        useEffect(() => {
-            if (onSwipeableAreaChange) {
-                if (contentTranslateX < 0) {
-                    onSwipeableAreaChange("right");
-                } else if (contentTranslateX > 0) {
-                    onSwipeableAreaChange("left");
-                } else if (contentTranslateX === 0) {
-                    onSwipeableAreaChange("none");
-                }
-            }
-        }, [contentTranslateX, onSwipeableAreaChange]);
 
         useEffect(() => {
             // contentTranslateX !== contentTranslateXOnStartRef.current - был свайп, а не скролл.

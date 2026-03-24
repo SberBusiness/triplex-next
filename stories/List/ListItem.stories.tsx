@@ -131,8 +131,6 @@ export const Swipeable: StoryObj<typeof ListItem> = {
         ];
 
         const ref = React.useRef<ISwipeableAreaRef>(null);
-        const [swipe, setSwipe] = useState<TSwipeSide>("none");
-        type TSwipeSide = "none" | "left" | "right";
 
         return (
             <div style={{ maxWidth: "500px" }}>
@@ -173,9 +171,8 @@ export const Swipeable: StoryObj<typeof ListItem> = {
                                     </ListItemControlsButtonDropdown>
                                 </ListItemControls>
                             }
-                            onSwipeableAreaChange={setSwipe}
                         >
-                            <ListItemTailRight visible={swipe === "right"} />
+                            <ListItemTailRight />
                             <ListItemContent>Свайп влево</ListItemContent>
                         </SwipeableArea>
                     </ListItem>

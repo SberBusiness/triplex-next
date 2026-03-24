@@ -672,9 +672,8 @@ export const Example: StoryObj<typeof List> = {
                                                 {statusOptions.map((opt) => {
                                                     const checked = multiselectStatusValues.includes(opt.value);
                                                     return (
-                                                        <CheckboxYGroup>
+                                                        <CheckboxYGroup key={opt.id}>
                                                             <Checkbox
-                                                                key={opt.id}
                                                                 checked={checked}
                                                                 onChange={(e) => {
                                                                     const nextChecked = e.target.checked;

@@ -6,7 +6,7 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { Gap } from "../../src/components/Gap/Gap";
 import { Text, ETextSize } from "../../src/components/Typography";
-import { useMatchMedia } from "../../src/components/MediaWidth/useMatchMedia";
+import { AdaptiveUtils } from "../utils/adaptiveUtils";
 import { EScreenWidth } from "../../src/helpers/breakpoints";
 
 export default {
@@ -585,11 +585,6 @@ export const VisualTests: StoryObj<typeof ButtonDropdown> = {
         const selectedMD = options.find((o) => o.id === selectedId);
         const selectedLG = options.find((o) => o.id === selectedId);
 
-        const adaptive = useMatchMedia(
-            `(max-width: ${EScreenWidth.SM_MAX})`,
-            window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-        );
-
         return (
             <div style={{ display: "flex", gap: 16 }}>
                 <ButtonDropdown
@@ -602,7 +597,7 @@ export const VisualTests: StoryObj<typeof ButtonDropdown> = {
                     Button text
                 </ButtonDropdown>
                 <ButtonDropdown
-                    opened={!adaptive}
+                    opened={!AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX)}
                     theme={EButtonTheme.GENERAL}
                     size={EComponentSize.MD}
                     options={options}
@@ -611,7 +606,7 @@ export const VisualTests: StoryObj<typeof ButtonDropdown> = {
                     Button text
                 </ButtonDropdown>
                 <ButtonDropdown
-                    opened={!adaptive}
+                    opened={!AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX)}
                     theme={EButtonTheme.GENERAL}
                     size={EComponentSize.LG}
                     options={options}

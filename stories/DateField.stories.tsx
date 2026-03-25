@@ -285,7 +285,7 @@ export const VisualTests: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ display: "flex", gap: 100 }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 50, flexWrap: "wrap" }}>
                 <DateField
                     value={value}
                     onChange={setValue}
@@ -301,6 +301,34 @@ export const VisualTests: Story = {
                 />
                 <DateField
                     value="20260322"
+                    size={EComponentSize.SM}
+                    onChange={() => {}}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+                <DateField
+                    value="20260322"
+                    onChange={() => {}}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+                <DateField
+                    value="20260322"
+                    size={EComponentSize.LG}
                     onChange={() => {}}
                     label="Label"
                     placeholderMask="дд.мм.гггг"

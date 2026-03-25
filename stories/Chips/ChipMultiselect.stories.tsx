@@ -27,8 +27,8 @@ import {
 import { ChipMultiselect } from "../../src/components/Chip";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { ETextSize, Text } from "../../src/components/Typography";
-import { useMatchMedia } from "../../src/components/MediaWidth/useMatchMedia";
 import { EScreenWidth } from "../../src/helpers/breakpoints";
+import { AdaptiveUtils } from "../utils/adaptiveUtils";
 import "./ChipMultiselect.less";
 
 export default {
@@ -1204,12 +1204,8 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                 setFilteredCheckboxesId(Array.from(filteredCheckboxesId));
             };
 
-            const adaptive = useMatchMedia(
-                `(max-width: ${EScreenWidth.SM_MAX})`,
-                window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-            );
-
-            const shouldBeOpened = args.size === EComponentSize.SM ? true : !adaptive;
+            const shouldBeOpened =
+                args.size === EComponentSize.SM ? true : !AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX);
 
             useLayoutEffect(() => {
                 const el = chipRef.current;

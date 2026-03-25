@@ -117,22 +117,44 @@ export const VisualTests: Story = {
     tags: ["!autodocs"],
     parameters: {
         controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
     },
     render: () => {
-        const [value, setValue] = useState("123456");
+        const [value, setValue] = useState("");
 
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
         return (
-            <DocumentNumberEdit
-                value={value}
-                onChange={handleChange}
-                buttonLabel="Изменить"
-                emptyNumberButtonLabel="Задать номер"
-                emptyNumberLabel="Номер документа будет присвоен автоматически"
-                numberLabel="Документ №"
-                maxLength={6}
-            />
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <DocumentNumberEdit
+                    value={value}
+                    onChange={handleChange}
+                    buttonLabel="Изменить"
+                    emptyNumberButtonLabel="Задать номер"
+                    emptyNumberLabel="Номер документа будет присвоен автоматически"
+                    numberLabel="Документ №"
+                    maxLength={6}
+                />
+                <DocumentNumberEdit
+                    value="123456"
+                    onChange={handleChange}
+                    buttonLabel="Изменить"
+                    emptyNumberButtonLabel="Задать номер"
+                    emptyNumberLabel="Номер документа будет присвоен автоматически"
+                    numberLabel="Документ №"
+                    maxLength={6}
+                />
+            </div>
         );
+    },
+    play: async ({ canvas, userEvent }) => {
+        const links = await canvas.findAllByRole("link");
+
+        await userEvent.click(links[0]);
     },
 };

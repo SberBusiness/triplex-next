@@ -7,9 +7,16 @@ const viewports = [
     { name: "xl", width: 1200 },
 ] as const;
 
+const selectedViewport = process.env.TEST_RUNNER_VIEWPORT ?? "xs";
+const viewport = viewports.find((v) => v.name === selectedViewport) ?? viewports[0];
+
 const config: TestRunnerConfig = {
     setup() {
         expect.extend({ toMatchImageSnapshot });
+    },
+
+    async preVisit(page) {
+        await page.setViewportSize({ width: viewport.width, height: 768 });
     },
 
     async postVisit(page, context) {
@@ -21,20 +28,15 @@ const config: TestRunnerConfig = {
 
         await waitForPageReady(page);
 
-        for (const viewport of viewports) {
-            await page.setViewportSize({ width: viewport.width, height: 768 });
-            await page.waitForTimeout(300);
+        const screenshot = await page.screenshot();
 
-            const screenshot = await page.screenshot();
-
-            expect(screenshot).toMatchImageSnapshot({
-                customSnapshotIdentifier: `${context.id}--${viewport.name}`,
-                customSnapshotsDir: "__screenshots__",
-                customDiffDir: "__screenshots__/__diff__",
-                failureThreshold: 10,
-                failureThresholdType: "pixel",
-            });
-        }
+        expect(screenshot).toMatchImageSnapshot({
+            customSnapshotIdentifier: `${context.id}--${viewport.name}`,
+            customSnapshotsDir: "__screenshots__",
+            customDiffDir: "__screenshots__/__diff__",
+            failureThreshold: 10,
+            failureThresholdType: "pixel",
+        });
     },
 };
 

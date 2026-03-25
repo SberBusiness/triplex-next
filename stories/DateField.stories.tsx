@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { DateField } from "../src/components/DateField";
 import { EComponentSize } from "../src/enums";
@@ -283,36 +283,22 @@ export const VisualTests: Story = {
     },
     render: () => {
         const [value, setValue] = useState("");
-        const rootRef = useRef<HTMLDivElement | null>(null);
-
-        useLayoutEffect(() => {
-            requestAnimationFrame(() => {
-                const input = rootRef.current?.querySelector<HTMLInputElement>('input:not([aria-hidden="true"])');
-
-                if (input) {
-                    input.focus();
-                    input.click();
-                }
-            });
-        }, []);
 
         return (
             <div style={{ display: "flex", gap: 100 }}>
-                <div ref={rootRef}>
-                    <DateField
-                        value={value}
-                        onChange={setValue}
-                        label="Label"
-                        placeholderMask="дд.мм.гггг"
-                        targetProps={{
-                            postfix: (
-                                <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
-                                    Text
-                                </HelpBox>
-                            ),
-                        }}
-                    />
-                </div>
+                <DateField
+                    value={value}
+                    onChange={setValue}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
                 <DateField
                     value="20260322"
                     onChange={() => {}}
@@ -328,5 +314,10 @@ export const VisualTests: Story = {
                 />
             </div>
         );
+    },
+    play: async ({ canvas, userEvent }) => {
+        const inputs = await canvas.findAllByRole("textbox");
+
+        await userEvent.click(inputs[0]);
     },
 };

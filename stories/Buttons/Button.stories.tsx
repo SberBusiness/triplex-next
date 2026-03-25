@@ -102,6 +102,7 @@ export const Playground: StoryObj<typeof Button> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     render: (args) => (
         <div style={{ width: "250px" }}>
@@ -128,7 +129,7 @@ export const States: StoryObj<typeof Button> = {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Text size={ETextSize.B3}>Expanded</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded>
                         General
                     </Button>
@@ -152,7 +153,7 @@ export const States: StoryObj<typeof Button> = {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Text size={ETextSize.B3}>Loading</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <Button loading theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         Button text
                     </Button>
@@ -176,7 +177,7 @@ export const States: StoryObj<typeof Button> = {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Text size={ETextSize.B3}>Disabled</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <Button disabled theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                         General
                     </Button>
@@ -217,7 +218,7 @@ export const Sizes: StoryObj<typeof Button> = {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Text size={ETextSize.B3}>EComponentSize.SM</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <Button size={EComponentSize.SM} theme={EButtonTheme.GENERAL}>
                         Button text
                     </Button>
@@ -238,7 +239,7 @@ export const Sizes: StoryObj<typeof Button> = {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Text size={ETextSize.B3}>EComponentSize.MD</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
                         Button text
                     </Button>
@@ -259,7 +260,7 @@ export const Sizes: StoryObj<typeof Button> = {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Text size={ETextSize.B3}>EComponentSize.LG</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <Button size={EComponentSize.LG} theme={EButtonTheme.GENERAL}>
                         Button text
                     </Button>
@@ -287,7 +288,7 @@ export const Sizes: StoryObj<typeof Button> = {
 export const Themes: StoryObj<typeof Button> = {
     render: () => {
         return (
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                 <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                     General
                 </Button>

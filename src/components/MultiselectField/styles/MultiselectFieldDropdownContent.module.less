@@ -1,25 +1,27 @@
-.multiselectFieldContentWrapper {
-    .multiselectFieldContent {
-        position: relative;
-        padding-bottom: 12px;
-        box-sizing: border-box;
-        overflow-y: auto;
-        outline: none;
+.multiselectFieldContent {
+    position: relative;
+    padding: 0 12px 12px 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    outline: none;
 
-        &:has(.loaderScreen) {
-            overflow: hidden;
-        }
+    &:first-child {
+        padding-top: 12px;
+    }
 
-        &.sm {
-            max-height: 208px;
-        }
+    &:has(.loaderScreen) {
+        overflow: hidden;
+    }
 
-        &.md {
-            max-height: 266px;
-        }
+    &.sm {
+        max-height: 208px;
+    }
 
-        &.lg {
-            max-height: 296px;
-        }
+    &.md {
+        max-height: 266px;
+    }
+
+    &.lg {
+        max-height: 296px;
     }
 }

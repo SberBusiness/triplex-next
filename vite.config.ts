@@ -25,6 +25,7 @@ export default defineConfig({
             outDir: "dist",
             rollupTypes: true,
             exclude: ["**/*.test.{ts,tsx}"],
+            tsconfigPath: "tsconfig.build.json",
         }),
         replaceDesignTokenVersionPlugin(),
     ],

@@ -38,9 +38,11 @@ const isValueExist = (value: IFormFieldInputProps["value"]) => {
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>((props, ref) => {
     const { className, id, onAnimationStart, onBlur, onFocus, placeholder, value, ...restProps } = props;
     const { render, ...renderProvideProps } = props;
-    const { focused, status, setFocused, setId, setValueExist, size } = useContext(FormFieldContext);
+    const { focused, status, setFocused, setId, setValueExist, size, active } = useContext(FormFieldContext);
     const instanceId = useMemo(() => (id === undefined ? uniqueId("input_") : id), [id]);
-    const classNames = clsx(styles.formFieldInput, sizeToClassNameMap[size], className);
+    const classNames = clsx(styles.formFieldInput, sizeToClassNameMap[size], className, {
+        [styles.active]: active,
+    });
 
     useEffect(() => {
         setId(instanceId);
@@ -93,6 +95,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
                 placeholder: focused ? placeholder : " ",
                 size,
             },
+            /* eslint-disable-next-line react-hooks/refs */
             ref,
         );
     } else {

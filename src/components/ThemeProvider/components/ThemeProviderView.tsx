@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { defaultsDeep } from "lodash-es";
 import { TDesignTokens, TDesignTokensPartial } from "../../DesignTokens/types/DesignTokensTypes";
 // Импорт не должен быть относительным.
@@ -36,29 +36,31 @@ export const ThemeProviderView: React.FC<IThemeProviderViewProps> = ({
     const prevScopeClassName = useRef("");
 
     useEffect(() => {
+        const scopeRefCurrent = scopeRef.current;
+
         if (scopeClassName) {
-            scopeRef.current?.classList.add(scopeClassName);
+            scopeRefCurrent?.classList.add(scopeClassName);
         }
         prevScopeClassName.current = scopeClassName;
 
         return () => {
             if (prevScopeClassName.current) {
-                scopeRef.current?.classList.remove(prevScopeClassName.current);
+                scopeRefCurrent?.classList.remove(prevScopeClassName.current);
             }
         };
-    }, [scopeClassName]);
+    }, [scopeClassName, scopeRef]);
 
-    // Не менять порядок, иначе токены темы будут переопределять пользовательские значения.
-    const tokens: TDesignTokens = defaultsDeep(
-        {},
-        tokensProps,
-        theme === ETriplexNextTheme.LIGHT ? DesignTokensCore : DesignTokensCoreThemeDark,
-        theme === ETriplexNextTheme.LIGHT ? DesignTokensComponents : DesignTokensComponentsThemeDark,
-    );
+    const value = useMemo(() => {
+        // Не менять порядок, иначе токены темы будут переопределять пользовательские значения.
+        const tokens: TDesignTokens = defaultsDeep(
+            {},
+            tokensProps,
+            theme === ETriplexNextTheme.LIGHT ? DesignTokensCore : DesignTokensCoreThemeDark,
+            theme === ETriplexNextTheme.LIGHT ? DesignTokensComponents : DesignTokensComponentsThemeDark,
+        );
 
-    return (
-        <ThemeProviderContext.Provider value={{ scopeClassName, theme, tokens }}>
-            {children}
-        </ThemeProviderContext.Provider>
-    );
+        return { scopeClassName, theme, tokens };
+    }, [scopeClassName, theme, tokensProps]);
+
+    return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>;
 };

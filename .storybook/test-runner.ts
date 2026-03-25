@@ -19,16 +19,17 @@ const config: TestRunnerConfig = {
             return;
         }
 
-        await waitForPageReady(page);
-
         for (const viewport of viewports) {
             await page.setViewportSize({ width: viewport.width, height: 768 });
-            await page.waitForTimeout(300);
+            await waitForPageReady(page);
 
             const screenshot = await page.screenshot();
 
+            // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
+            const snapshotId = context.id.replace(/^components-/, "");
+
             expect(screenshot).toMatchImageSnapshot({
-                customSnapshotIdentifier: `${context.id}--${viewport.name}`,
+                customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
                 customSnapshotsDir: "__screenshots__",
                 customDiffDir: "__screenshots__/__diff__",
                 failureThreshold: 10,

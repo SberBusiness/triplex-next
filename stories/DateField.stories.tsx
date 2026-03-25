@@ -22,13 +22,6 @@ export default {
     title: "Components/DateField",
     component: DateField,
     tags: ["autodocs"],
-    decorators: [
-        (Story) => (
-            <div style={{ maxWidth: "250px" }}>
-                <Story />
-            </div>
-        ),
-    ],
     parameters: {
         docs: {
             page: () => (
@@ -158,11 +151,22 @@ export const Playground: Story = {
         controls: {
             include: ["size", "status", "placeholderMask", "label", "invalidDateHint"],
         },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const [value, setValue] = useState("");
 
-        return <DateField value={value} onChange={setValue} {...args} />;
+        return (
+            <div style={{ maxWidth: "250px" }}>
+                <DateField value={value} onChange={setValue} {...args} />
+            </div>
+        );
     },
 };
 
@@ -170,10 +174,15 @@ export const Default: Story = {
     parameters: {
         controls: { disable: true },
     },
+
     render: () => {
         const [value, setValue] = useState("");
 
-        return <DateField value={value} onChange={setValue} label="Label" placeholderMask="дд.мм.гггг" />;
+        return (
+            <div style={{ maxWidth: "250px" }}>
+                <DateField value={value} onChange={setValue} label="Label" placeholderMask="дд.мм.гггг" />
+            </div>
+        );
     },
 };
 
@@ -185,19 +194,21 @@ export const WithPostfix: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <DateField
-                value={value}
-                onChange={setValue}
-                label="Label"
-                placeholderMask="дд.мм.гггг"
-                targetProps={{
-                    postfix: (
-                        <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
-                            Text
-                        </HelpBox>
-                    ),
-                }}
-            />
+            <div style={{ maxWidth: "250px" }}>
+                <DateField
+                    value={value}
+                    onChange={setValue}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+            </div>
         );
     },
 };
@@ -210,7 +221,7 @@ export const States: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ maxWidth: "250px", display: "flex", flexDirection: "column" }}>
                 <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
                     Обычное состояние
                 </Title>
@@ -256,5 +267,85 @@ export const States: Story = {
                 />
             </div>
         );
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 50, flexWrap: "wrap" }}>
+                <DateField
+                    value={value}
+                    onChange={setValue}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+                <DateField
+                    value="20260322"
+                    size={EComponentSize.SM}
+                    onChange={() => {}}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+                <DateField
+                    value="20260322"
+                    onChange={() => {}}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+                <DateField
+                    value="20260322"
+                    size={EComponentSize.LG}
+                    onChange={() => {}}
+                    label="Label"
+                    placeholderMask="дд.мм.гггг"
+                    targetProps={{
+                        postfix: (
+                            <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
+                                Text
+                            </HelpBox>
+                        ),
+                    }}
+                />
+            </div>
+        );
+    },
+    play: async ({ canvas, userEvent }) => {
+        const inputs = await canvas.findAllByRole("textbox");
+
+        await userEvent.click(inputs[0]);
     },
 };

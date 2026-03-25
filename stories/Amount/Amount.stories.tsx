@@ -80,6 +80,7 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         return (

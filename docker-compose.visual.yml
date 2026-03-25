@@ -12,7 +12,7 @@ services:
     environment:
       HUSKY: "0"
       CI: "true"
-    command: sh -c "npm ci && npm run test-visual:ci"
+    command: sh -c "npm ci && npx start-server-and-test storybook http://localhost:6006 test-visual"
 
   update:
     build:
@@ -25,7 +25,7 @@ services:
     environment:
       HUSKY: "0"
       CI: "true"
-    command: sh -c "npm ci && npm run test-visual:ci:update"
+    command: sh -c "npm ci && npx start-server-and-test storybook http://localhost:6006 test-visual:update"
 
 volumes:
   node_modules:

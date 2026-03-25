@@ -1,49 +1,25 @@
 import React, { useState } from "react";
-import { Description, Stories, Title as DocsTitle } from "@storybook/addon-docs/blocks";
-import { LightBox } from "../../src/components/LightBox/LightBox";
-import { Page } from "../../src/components/Page/Page";
-import { Button } from "../../src/components/Button/Button";
-import { EButtonTheme } from "../../src/components/Button/enums";
-import { Gap } from "../../src/components/Gap";
-import { Title } from "../../src/components/Typography/Title";
-import { Text } from "../../src/components/Typography/Text";
-import { EFontType, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { EHeaderPageType, EFooterPageType, EBodyPageType } from "../../src/components/Page/components/enums";
-import { Island } from "../../src/components/Island/Island";
-import { IslandBody } from "../../src/components/Island/components/IslandBody";
-import { EIslandType } from "../../src/components/Island/enums";
-import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { MobileView } from "../../src/components/MobileView/MobileView";
-import { Confirm } from "../../src/components/Confirm/Confirm";
-import { EConfirmParentComponent } from "../../src/components/Confirm/enums";
-
-const STORY_META_DESCRIPTION = `
-Пример **LightBoxWithTopOverlayInSideOverlay** отображает крупный контент контент поверх страницы с уведомлением при закрытии SideOverlay.
-`;
-
-const meta = {
-    title: "Components/LightBox/LightBoxWithTopOverlayInSideOverlay",
-    tags: ["autodocs"],
-    parameters: {
-        testRunner: { skip: true },
-        layout: "fullscreen",
-        docs: {
-            description: {
-                component: STORY_META_DESCRIPTION,
-            },
-            page: () => (
-                <>
-                    <DocsTitle />
-                    <Description />
-                    <Stories />
-                </>
-            ),
-        },
-    },
-};
-
-export default meta;
+import {
+    LightBox,
+    Page,
+    Button,
+    EButtonTheme,
+    Gap,
+    Title,
+    Text,
+    EFontType,
+    ETextSize,
+    ETitleSize,
+    EHeaderPageType,
+    EFooterPageType,
+    EBodyPageType,
+    Island,
+    IslandBody,
+    EIslandType,
+    FocusTrapUtils,
+    EComponentSize,
+    MobileView,
+} from "@sberbusiness/triplex-next";
 
 const POEM_LINES: string[] = [
     "Мой дядя самых честных правил,",
@@ -75,25 +51,18 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const Default: React.FC = () => {
+export const WithSideOverlayExample = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [openedSideOverlayLG, setOpenedSideOverlayLG] = useState(false);
     const [openedSideOverlayMD, setOpenedSideOverlayMD] = useState(false);
+    const [openedSideOverlaySM, setOpenedSideOverlaySM] = useState(false);
 
-    const [openedTopOverlay, setOpenedTopOverlay] = useState(false);
-    const [closeConfirmed, setCloseConfirmed] = useState(false);
-
-    const handleOpenTopOverlay = () => setOpenedTopOverlay(true);
-    const handleCloseTopOverlay = () => {
-        if (closeConfirmed) {
-            setOpenedSideOverlayMD(false);
-            setCloseConfirmed(false);
-        } else {
-            setOpenedTopOverlay(false);
-        }
-    };
-
+    const handleOpenSideOverlayLG = () => setOpenedSideOverlayLG(true);
+    const handleCloseSideOverlayLG = () => setOpenedSideOverlayLG(false);
     const handleOpenSideOverlayMD = () => setOpenedSideOverlayMD(true);
-    const handleCloseSideOverlayMD = () => setOpenedTopOverlay(true);
+    const handleCloseSideOverlayMD = () => setOpenedSideOverlayMD(false);
+    const handleOpenSideOverlaySM = () => setOpenedSideOverlaySM(true);
+    const handleCloseSideOverlaySM = () => setOpenedSideOverlaySM(false);
 
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
@@ -101,47 +70,80 @@ export const Default: React.FC = () => {
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
             <LightBox.Controls.Close title="Закрыть" data-test-id="lightbox-close" onClick={handleClose} />
-            <LightBox.Controls.Prev title="Назад" clickByArrowLeft onClick={() => console.log("Prev clicked")} />
-            <LightBox.Controls.Next title="Вперёд" clickByArrowRight onClick={() => console.log("Next clicked")} />
         </LightBox.Controls>
     );
 
-    const renderTopOverlay = () => (
-        <LightBox.TopOverlay opened={openedTopOverlay} onClose={handleCloseTopOverlay} onOpen={handleOpenTopOverlay}>
-            <Confirm parentComponent={EConfirmParentComponent.SIDE_OVERLAY_MD}>
-                <Confirm.Content>
-                    <Confirm.Content.Title>Внимание</Confirm.Content.Title>
-                    <Confirm.Content.SubTitle>
-                        Несохранённые данные будут утеряны. Вы уверены, что хотите покинуть форму редактирования?
-                    </Confirm.Content.SubTitle>
-                </Confirm.Content>
-                <Confirm.Controls>
-                    <Button
-                        theme={EButtonTheme.SECONDARY}
-                        size={EComponentSize.MD}
-                        onClick={() => setOpenedTopOverlay(false)}
-                    >
-                        Отмена
-                    </Button>
-                    <Button
-                        theme={EButtonTheme.DANGER}
-                        size={EComponentSize.MD}
-                        onClick={() => {
-                            handleCloseTopOverlay();
-                            setCloseConfirmed(true);
-                        }}
-                    >
-                        Покинуть форму
-                    </Button>
-                </Confirm.Controls>
-                <Confirm.Close
-                    title="Закрыть"
-                    // Закрыть по Esc, если TopOverlay открыт.
-                    clickByEsc={openedTopOverlay}
-                    onClick={() => setOpenedTopOverlay(false)}
-                />
-            </Confirm>
-        </LightBox.TopOverlay>
+    const renderLightBoxSideOverlayLG = () => (
+        <LightBox.SideOverlay
+            key="sideOverlayLG"
+            opened={openedSideOverlayLG}
+            size={EComponentSize.LG}
+            isTopLevelSideOverlayOpened={openedSideOverlayMD || openedSideOverlaySM}
+        >
+            <Page>
+                <Page.Header type={EHeaderPageType.FIRST} sticky>
+                    <Page.Header.Title>
+                        <Page.Header.Title.Content>
+                            <MobileView
+                                fallback={
+                                    <Title
+                                        tag="h1"
+                                        size={ETitleSize.H1}
+                                        tabIndex={-1}
+                                        // Устанавливает фокус на первый элемент при открытии LightBox.
+                                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                    >
+                                        Евгений Онегин
+                                    </Title>
+                                }
+                            >
+                                <Title tag="h2" size={ETitleSize.H2}>
+                                    Евгений Онегин
+                                </Title>
+                            </MobileView>
+                        </Page.Header.Title.Content>
+                        <Page.Header.Title.Controls>
+                            {/* Кнопка закрытия SideOverlay для мобильного устройства. Отображается только на мобильном устройстве, внутри заголовка SideOverlay. */}
+                            <LightBox.SideOverlay.CloseMobile
+                                data-test-id="lightbox-side-overlay-close"
+                                onClick={handleCloseSideOverlayLG}
+                            />
+                        </Page.Header.Title.Controls>
+                    </Page.Header.Title>
+                </Page.Header>
+
+                <Page.Body type={EBodyPageType.SECOND}>
+                    {[0, 1, 2].map((index) => (
+                        <React.Fragment key={index}>
+                            <PoemBlock />
+                            {index < 2 && <Gap size={24} />}
+                        </React.Fragment>
+                    ))}
+                </Page.Body>
+
+                <Page.Footer type={EFooterPageType.FIRST} sticky>
+                    <Page.Footer.Description>
+                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                        <Page.Footer.Description.Controls>
+                            <Button
+                                theme={EButtonTheme.GENERAL}
+                                size={EComponentSize.MD}
+                                onClick={handleOpenSideOverlayMD}
+                            >
+                                Открыть SideOverlay MD
+                            </Button>
+                        </Page.Footer.Description.Controls>
+                    </Page.Footer.Description>
+                </Page.Footer>
+            </Page>
+
+            {/* Кнопка закрытия SideOverlay для десктопа. Отображается только на десктопе, справа от заголовка SideOverlay. */}
+            <LightBox.SideOverlay.CloseDesktop
+                data-test-id="lightbox-side-overlay-close"
+                clickByEsc={!openedSideOverlayMD && !openedSideOverlaySM}
+                onClick={handleCloseSideOverlayLG}
+            />
+        </LightBox.SideOverlay>
     );
 
     const renderLightBoxSideOverlayMD = () => (
@@ -149,8 +151,7 @@ export const Default: React.FC = () => {
             key="sideOverlayMD"
             opened={openedSideOverlayMD}
             size={EComponentSize.MD}
-            isTopLevelSideOverlayOpened={false}
-            isTopOverlayOpened={openedTopOverlay}
+            isTopLevelSideOverlayOpened={openedSideOverlaySM}
         >
             <Page>
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
@@ -196,6 +197,71 @@ export const Default: React.FC = () => {
                     <Page.Footer.Description>
                         <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
                         <Page.Footer.Description.Controls>
+                            <Button
+                                theme={EButtonTheme.GENERAL}
+                                size={EComponentSize.MD}
+                                onClick={handleOpenSideOverlaySM}
+                            >
+                                Открыть SideOverlay SM
+                            </Button>
+                        </Page.Footer.Description.Controls>
+                    </Page.Footer.Description>
+                </Page.Footer>
+            </Page>
+
+            <LightBox.SideOverlay.CloseDesktop
+                data-test-id="lightbox-side-overlay-close"
+                clickByEsc={!openedSideOverlaySM}
+                onClick={handleCloseSideOverlayMD}
+            />
+        </LightBox.SideOverlay>
+    );
+
+    const renderLightBoxSideOverlaySM = () => (
+        <LightBox.SideOverlay key="sideOverlaySM" opened={openedSideOverlaySM} size={EComponentSize.SM}>
+            <Page>
+                <Page.Header type={EHeaderPageType.FIRST} sticky>
+                    <Page.Header.Title>
+                        <Page.Header.Title.Content>
+                            <MobileView
+                                fallback={
+                                    <Title
+                                        tag="h1"
+                                        size={ETitleSize.H1}
+                                        tabIndex={-1}
+                                        // Устанавливает фокус на первый элемент при открытии LightBox.
+                                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                    >
+                                        Евгений Онегин
+                                    </Title>
+                                }
+                            >
+                                <Title tag="h2" size={ETitleSize.H2}>
+                                    Евгений Онегин
+                                </Title>
+                            </MobileView>
+                        </Page.Header.Title.Content>
+                        <Page.Header.Title.Controls>
+                            <LightBox.SideOverlay.CloseMobile
+                                data-test-id="lightbox-side-overlay-close"
+                                onClick={handleCloseSideOverlaySM}
+                            />
+                        </Page.Header.Title.Controls>
+                    </Page.Header.Title>
+                </Page.Header>
+
+                <Page.Body type={EBodyPageType.FIRST}>
+                    Если контента мало, рекомендуется использовать Page.Body типа FIRST, чтобы не было пустого
+                    пространства.
+                </Page.Body>
+
+                <Page.Footer type={EFooterPageType.FIRST} sticky={openedSideOverlaySM}>
+                    <Page.Footer.Description>
+                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                        <Page.Footer.Description.Controls>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
                             <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
                                 Button text
                             </Button>
@@ -206,12 +272,18 @@ export const Default: React.FC = () => {
 
             <LightBox.SideOverlay.CloseDesktop
                 data-test-id="lightbox-side-overlay-close"
-                clickByEsc={!openedTopOverlay}
-                onClick={handleCloseSideOverlayMD}
+                clickByEsc
+                onClick={handleCloseSideOverlaySM}
             />
-
-            {renderTopOverlay()}
         </LightBox.SideOverlay>
+    );
+
+    const renderLightBoxSideOverlays = () => (
+        <>
+            {renderLightBoxSideOverlayLG()}
+            {renderLightBoxSideOverlayMD()}
+            {renderLightBoxSideOverlaySM()}
+        </>
     );
 
     return (
@@ -221,7 +293,7 @@ export const Default: React.FC = () => {
             </Button>
 
             {isOpen ? (
-                <LightBox isLoading={false} isSideOverlayOpened={openedSideOverlayMD} isTopOverlayOpened={false}>
+                <LightBox isLoading={false} isSideOverlayOpened={openedSideOverlayLG} isTopOverlayOpened={false}>
                     <LightBox.Content key="content" isLoading={false}>
                         <Page>
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
@@ -255,9 +327,9 @@ export const Default: React.FC = () => {
                                         <Button
                                             theme={EButtonTheme.GENERAL}
                                             size={EComponentSize.MD}
-                                            onClick={handleOpenSideOverlayMD}
+                                            onClick={handleOpenSideOverlayLG}
                                         >
-                                            SideOverlay MD
+                                            SideOverlay LG
                                         </Button>
                                     </Page.Header.Title.Controls>
                                 </Page.Header.Title>
@@ -290,7 +362,7 @@ export const Default: React.FC = () => {
 
                     {renderLightBoxControls()}
 
-                    {renderLightBoxSideOverlayMD()}
+                    {renderLightBoxSideOverlays()}
                 </LightBox>
             ) : null}
         </div>

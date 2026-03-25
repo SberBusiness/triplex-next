@@ -10,7 +10,7 @@ function getScrollParent(el: HTMLElement | null): HTMLElement | Window {
     while (node && node !== document.documentElement) {
         const style = getComputedStyle(node);
         const overflowY = style.overflowY;
-        if (/(auto|scroll|overlay)/.test(overflowY) && node.scrollHeight > node.clientHeight) return node;
+        if (/(auto|scroll|overlay)/.test(overflowY)) return node;
         node = node.parentElement;
     }
     return window;
@@ -41,6 +41,7 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
         let raf = 0;
         let scroller: HTMLElement | Window = window;
         let target: HTMLElement | Window | null = null;
+        let resizeObserver: ResizeObserver | null = null;
 
         const update = () => {
             raf = 0;
@@ -81,6 +82,17 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
             target.addEventListener("scroll", handleScrollOrResize, { passive: true });
             window.addEventListener("resize", handleScrollOrResize);
             window.addEventListener("transitionend", handleTransitionEnd);
+
+            // Отслеживаем изменение размеров элементов от sticky-элемента до скроллера.
+            // При раскрытии Spoiler высота контента меняется без scroll/resize,
+            // но размер одного из предков (Page, LightBoxContent) изменится.
+            resizeObserver = new ResizeObserver(handleScrollOrResize);
+            let ancestor: HTMLElement | null = el.parentElement;
+            while (ancestor) {
+                resizeObserver.observe(ancestor);
+                if (ancestor === scroller) break;
+                ancestor = ancestor.parentElement;
+            }
         };
 
         const handleTransitionEnd = (event: TransitionEvent) => {
@@ -106,6 +118,7 @@ export function useStickyCornerRadius(ref: React.RefObject<HTMLElement>, edge: "
             }
             window.removeEventListener("resize", handleScrollOrResize);
             window.removeEventListener("transitionend", handleTransitionEnd);
+            resizeObserver?.disconnect();
             if (raf) cancelAnimationFrame(raf);
         };
     }, [ref, edge, isEnabled]);

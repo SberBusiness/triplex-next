@@ -1,0 +1,5 @@
+# Образ с Playwright + Chromium на Ubuntu — совпадает с окружением CI (ubuntu-latest).
+# Используется только для локального запуска visual-тестов с macOS.
+FROM mcr.microsoft.com/playwright:v1.58.2-noble
+
+WORKDIR /app

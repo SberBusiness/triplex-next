@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StoryObj } from "@storybook/react";
 import { ChipSort } from "../../src/components/Chip/ChipSort";
 import { EComponentSize } from "../../src/enums/EComponentSize";
@@ -60,6 +60,7 @@ export const Playground: StoryObj<typeof ChipSort> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const options = [
@@ -111,6 +112,65 @@ export const Sizes: StoryObj<typeof ChipSort> = {
 
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
+                <ChipSort
+                    defaultValue={options[0]}
+                    size={EComponentSize.SM}
+                    value={valueSM}
+                    options={options}
+                    onChange={setValueSM}
+                />
+                <ChipSort
+                    defaultValue={options[0]}
+                    size={EComponentSize.MD}
+                    value={valueMD}
+                    options={options}
+                    onChange={setValueMD}
+                />
+                <ChipSort
+                    defaultValue={options[0]}
+                    size={EComponentSize.LG}
+                    value={valueLG}
+                    options={options}
+                    onChange={setValueLG}
+                />
+            </div>
+        );
+    },
+};
+
+export const VisualTests: StoryObj<typeof ChipSort> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+    render: () => {
+        const options = [
+            { id: "chip-sort-1", label: "По дате", value: "i1" },
+            { id: "chip-sort-2", label: "По времени", value: "i2" },
+            { id: "chip-sort-3", label: "По названию", value: "i3" },
+        ];
+
+        const [valueSM, setValueSM] = useState(options[0]);
+        const [valueMD, setValueMD] = useState(options[0]);
+        const [valueLG, setValueLG] = useState(options[0]);
+
+        const rootRef = useRef<HTMLDivElement>(null);
+
+        useEffect(() => {
+            const targets = rootRef.current?.querySelectorAll<HTMLElement>('[role="combobox"]');
+            targets?.forEach((el) => el.click());
+        }, []);
+
+        return (
+            <div
+                ref={rootRef}
+                style={{ display: "flex", maxWidth: 600, alignItems: "flex-start", justifyContent: "space-between" }}
+            >
                 <ChipSort
                     defaultValue={options[0]}
                     size={EComponentSize.SM}

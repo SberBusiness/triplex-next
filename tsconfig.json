@@ -1,26 +1,7 @@
 {
+    "extends": "./tsconfig.build.json",
     "compilerOptions": {
-        // Type Checking
-        "strict": true,
-        // Modules
-        "module": "ESNext",
-        "moduleResolution": "bundler",
-        "paths": {
-            "@sberbusiness/triplex-next": ["./src"],
-            "@sberbusiness/triplex-next/*": ["./src/*"]
-        },
-        "types": ["@testing-library/jest-dom/vitest", "vitest/globals"],
-        // Emit
-        "outDir": "dist",
-        // Language and Environment
-        "jsx": "react-jsx",
-        "target": "ESNext",
-        // Interop Constraints
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
-        // Completeness
-        "skipLibCheck": false
+        "types": ["@testing-library/jest-dom/vitest", "vitest/globals", "storybook/test"]
     },
-    "include": ["src"]
+    "include": ["src", "stories"]
 }

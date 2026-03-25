@@ -59,6 +59,7 @@ export const Playground: StoryObj<typeof Ellipsis> = {
         controls: {
             include: ["maxLines"],
         },
+        testRunner: { skip: true },
     },
     render: (args) => (
         <Ellipsis {...args}>

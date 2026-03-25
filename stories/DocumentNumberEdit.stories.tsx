@@ -30,7 +30,6 @@ export default meta;
 type Story = StoryObj<typeof DocumentNumberEdit>;
 
 export const Playground: Story = {
-    name: "Playground",
     args: {
         buttonLabel: "Изменить",
         emptyNumberButtonLabel: "Задать номер",
@@ -81,6 +80,7 @@ export const Playground: Story = {
         controls: {
             include: ["buttonLabel", "emptyNumberButtonLabel", "emptyNumberLabel", "numberLabel", "maxLength"],
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const [value, setValue] = useState("");
@@ -92,7 +92,6 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
-    name: "Default",
     parameters: {
         controls: { disable: true },
     },
@@ -111,5 +110,51 @@ export const Default: Story = {
                 onChange={handleChange}
             />
         );
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
+
+        return (
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <DocumentNumberEdit
+                    value={value}
+                    onChange={handleChange}
+                    buttonLabel="Изменить"
+                    emptyNumberButtonLabel="Задать номер"
+                    emptyNumberLabel="Номер документа будет присвоен автоматически"
+                    numberLabel="Документ №"
+                    maxLength={6}
+                />
+                <DocumentNumberEdit
+                    value="123456"
+                    onChange={handleChange}
+                    buttonLabel="Изменить"
+                    emptyNumberButtonLabel="Задать номер"
+                    emptyNumberLabel="Номер документа будет присвоен автоматически"
+                    numberLabel="Документ №"
+                    maxLength={6}
+                />
+            </div>
+        );
+    },
+    play: async ({ canvas, userEvent }) => {
+        const links = await canvas.findAllByRole("link");
+
+        await userEvent.click(links[0]);
     },
 };

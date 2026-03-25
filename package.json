@@ -17,7 +17,7 @@
     "types": "./dist/index.d.ts",
     "scripts": {
         "prepare": "husky",
-        "prebuild": "npm run generateTokensTypes && npm run generateThemeCssVariables && npm run generateColorsLessVariables && tsc --noEmit",
+        "prebuild": "npm run generateTokensTypes && npm run generateThemeCssVariables && npm run generateColorsLessVariables && tsc -p tsconfig.build.json --noEmit",
         "build": "vite build",
         "postbuild": "node scripts/generate-package-json.js && node scripts/copyReadmeToDist.js && npm run copyLessHelpers",
         "storybook": "storybook dev -p 6006",
@@ -33,6 +33,7 @@
         "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
         "copyLessHelpers": "tsx scripts/copyLessHelpers.ts",
         "test-visual": "test-storybook --url http://localhost:6006",
+        "test-visual:debug": "cross-env PWDEBUG=1 test-storybook --url http://localhost:6006",
         "test-visual:update": "test-storybook --url http://localhost:6006 --updateSnapshot",
         "test-visual:ci": "start-server-and-test storybook http://localhost:6006 test-visual",
         "deps:cycles": "madge src --circular"
@@ -71,6 +72,7 @@
         "@vitejs/plugin-react": "4.6.0",
         "@vitest/coverage-v8": "3.2.4",
         "autoprefixer": "10.4.27",
+        "cross-env": "10.1.0",
         "eslint": "9.39.2",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-prettier": "5.5.5",

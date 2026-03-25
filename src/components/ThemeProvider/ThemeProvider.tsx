@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useMemo } from "react";
 import canUseDom from "rc-util/es/Dom/canUseDom";
 import { removeCSS, updateCSS } from "rc-util/es/Dom/dynamicCSS";
 import { TDesignTokensPartial } from "../DesignTokens/types/DesignTokensTypes";
@@ -27,13 +27,9 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({
     tokens,
 }) => {
     // ClassName, добавляемый к HTML элементу, для определения области видимости CSS-переменных.
-    const [scopeCssClassName, setScopeCssClassName] = useState(scopeClassName || uniqueId("triplex-next-theme-"));
+    const scopeCssClassName = useMemo(() => scopeClassName || uniqueId("triplex-next-theme-"), [scopeClassName]);
 
-    useEffect(() => {
-        setScopeCssClassName(scopeClassName || uniqueId("triplex-next-theme-"));
-    }, [scopeClassName]);
-
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (canUseDom()) {
             const style = `.${scopeCssClassName} {${DesignTokenUtils.getStyle(theme, tokens || {})}}`;
             // Обновление мета тега со стилями темы. Обновляется тег с ключом triplex-next-dynamic-theme.
@@ -44,7 +40,7 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({
     }, [scopeCssClassName, theme, tokens]);
 
     // Удаляет стили при размонтировании компонента.
-    useEffect(() => () => removeCSS(`triplex-next-dynamic-tokens-${scopeCssClassName}`), [scopeCssClassName]);
+    useLayoutEffect(() => () => removeCSS(`triplex-next-dynamic-tokens-${scopeCssClassName}`), [scopeCssClassName]);
 
     return (
         <ThemeProviderView scopeClassName={scopeCssClassName} scopeRef={scopeRef} theme={theme} tokens={tokens}>

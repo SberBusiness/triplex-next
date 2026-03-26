@@ -29,7 +29,7 @@ jobs:
       - name: Build Storybook
         run: npm run storybook:build
       - name: Update snapshots
-        run: npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:update
+        run: npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:ci:update
       - name: Commit updated snapshots
         env:
           # Local pre-commit blocks __screenshots__ commits by design; disable Husky only in CI snapshot update.

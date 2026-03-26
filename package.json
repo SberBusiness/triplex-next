@@ -32,9 +32,9 @@
         "generateColorsLessVariables": "tsx scripts/generateLessFromDesignTokens.ts",
         "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
         "copyLessHelpers": "tsx scripts/copyLessHelpers.ts",
-        "test-visual": "test-storybook --url http://localhost:6006 --maxWorkers=1",
+        "test-visual:ci": "test-storybook --url http://localhost:6006 --maxWorkers=1",
         "test-visual:debug": "cross-env PWDEBUG=1 test-storybook --url http://localhost:6006 --maxWorkers=1",
-        "test-visual:update": "test-storybook --url http://localhost:6006 --maxWorkers=1 --updateSnapshot",
+        "test-visual:ci:update": "test-storybook --url http://localhost:6006 --maxWorkers=1 --updateSnapshot",
         "test-visual:docker": "docker compose -f docker-compose.visual.yml run --rm test",
         "test-visual:docker:update": "docker compose -f docker-compose.visual.yml run --rm update",
         "deps:cycles": "madge src --circular"

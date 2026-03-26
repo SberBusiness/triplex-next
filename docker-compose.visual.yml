@@ -15,11 +15,11 @@ x-common: &common
 services:
   test:
     <<: *common
-    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual"
+    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:ci"
 
   update:
     <<: *common
-    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:update"
+    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:ci:update"
 
 volumes:
   node_modules:

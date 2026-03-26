@@ -1,11 +1,13 @@
 .formFieldClear {
-    cursor: pointer;
-    height: 16px;
-    opacity: 1;
-    transition: opacity 0.3s;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility, opacity;
+    transition-duration: 0.3s;
+    pointer-events: none;
 
-    &.hidden {
-        opacity: 0;
-        pointer-events: none;
+    &:focus {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
     }
 }

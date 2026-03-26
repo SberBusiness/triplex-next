@@ -4,29 +4,41 @@
     position: relative;
     flex-grow: 1;
 
+    &.sm {
+        border-radius: 6px;
+    }
+
+    &.md {
+        border-radius: 8px;
+    }
+
+    &.lg {
+        border-radius: 10px;
+    }
+
     &.default {
         background: var(--triplex-next-FormField-Background_Default);
         box-shadow: var(--triplex-next-FormField-Shadow_Default);
     }
 
-    // Применяем плавные переходы
-    .smooth-transition();
-
     &:hover {
         background: var(--triplex-next-FormField-Background_Hover);
-    }
-
-    &.disabled {
-        background: var(--triplex-next-FormField-Background_Disabled);
     }
 
     &.active {
         background: var(--triplex-next-FormField-Background_Active);
         box-shadow: var(--triplex-next-FormField-Shadow_Active);
 
-        &::placeholder {
-            opacity: 1;
+        .formFieldInput,
+        .formFieldTextarea {
+            &::placeholder {
+                opacity: 1;
+            }
         }
+    }
+
+    &.disabled {
+        background: var(--triplex-next-FormField-Background_Disabled);
     }
 
     &.error {
@@ -55,16 +67,17 @@
         }
     }
 
-    &.sm {
-        border-radius: 6px;
+    &.filled:not(.disabled) {
+        &:hover,
+        &.active {
+            .formFieldClear {
+                visibility: visible;
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
     }
 
-    &.md {
-        border-radius: 8px;
-
-    }
-
-    &.lg {
-        border-radius: 10px;
-    }
+    // Применяем плавные переходы
+    .smooth-transition();
 }

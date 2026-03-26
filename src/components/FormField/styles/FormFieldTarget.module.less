@@ -8,21 +8,13 @@
     overflow: hidden;
     white-space: nowrap;
 
-    &.placeholder {
-        color: var(--triplex-next-FormField-Target_PlaceholderColor_Default);
-    }
-
-    &.disabled {
-        color: var(--triplex-next-FormField-Target_Color_Disabled);
-    }
-
-    &.size-sm {
+    &.sm {
         font-size: 12px;
         height: 28px;
         line-height: 16px;
     }
 
-    &.size-md {
+    &.md {
         padding-top: 10px;
         padding-bottom: 10px;
         font-size: 14px;
@@ -30,12 +22,20 @@
         line-height: 20px;
     }
 
-    &.size-lg {
+    &.lg {
         padding-top: 26px;
         padding-bottom: 10px;
         height: 56px;
         line-height: 20px;
         font-size: 16px;
+    }
+
+    &.placeholder {
+        color: var(--triplex-next-FormField-Target_PlaceholderColor_Default);
+    }
+
+    &.disabled {
+        color: var(--triplex-next-FormField-Target_Color_Disabled);
     }
 
     & .placeholderWrapper {
@@ -48,7 +48,7 @@
         outline: none;
     }
 
-    &:focus, 
+    &:focus,
     &.active {
         & .placeholderWrapper {
             opacity: 1;

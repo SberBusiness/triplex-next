@@ -1,8 +1,13 @@
 npx lint-staged
 
-# Запрет коммита baseline-скриншотов локально — обновляются только через CI
+# Проверка коммита baseline-скриншотов — допускаются только из Docker
 if git diff --cached --name-only | grep -q '^__screenshots__/'; then
-  echo "❌ Коммит скриншотов из __screenshots__/ запрещён локально."
-  echo "   Baseline-скриншоты обновляются только через GitHub Actions (visual-update.yml)."
-  exit 1
+  echo "⚠️  Вы коммитите скриншоты из __screenshots__/."
+  echo "   Скриншоты должны быть сделаны через Docker (npm run test-visual:docker:update)."
+  printf "   Скриншоты сделаны через Docker? (y/n) "
+  read -r answer < /dev/tty
+  if [ "$answer" != "y" ] && [ "$answer" != "Y" ]; then
+    echo "❌ Коммит отменён. Обновите скриншоты через Docker или GitHub Actions."
+    exit 1
+  fi
 fi

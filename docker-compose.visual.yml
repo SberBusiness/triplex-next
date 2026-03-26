@@ -1,31 +1,25 @@
 name: triplex-visual
 
+x-common: &common
+  build:
+    context: .
+    dockerfile: Dockerfile.visual
+  volumes:
+    - .:/app
+    - node_modules:/app/node_modules
+    - npm_cache:/home/pwuser/.npm
+  environment:
+    HUSKY: "0"
+    CI: "true"
+
 services:
   test:
-    build:
-      context: .
-      dockerfile: Dockerfile.visual
-    volumes:
-      - .:/app
-      - node_modules:/app/node_modules
-      - npm_cache:/root/.npm
-    environment:
-      HUSKY: "0"
-      CI: "true"
-    command: sh -c "npm ci && npx start-server-and-test storybook http://localhost:6006 test-visual"
+    <<: *common
+    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual"
 
   update:
-    build:
-      context: .
-      dockerfile: Dockerfile.visual
-    volumes:
-      - .:/app
-      - node_modules:/app/node_modules
-      - npm_cache:/root/.npm
-    environment:
-      HUSKY: "0"
-      CI: "true"
-    command: sh -c "npm ci && npx start-server-and-test storybook http://localhost:6006 test-visual:update"
+    <<: *common
+    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:update"
 
 volumes:
   node_modules:

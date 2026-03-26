@@ -26,14 +26,10 @@ jobs:
         run: npm ci
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
-      - name: Start Storybook
-        run: npm run storybook &
-      - name: Wait for Storybook
-        run: |
-          echo "Waiting for Storybook..."
-          timeout 180 bash -c 'until curl -sf http://localhost:6006/index.json > /dev/null; do sleep 3; done'
+      - name: Build Storybook
+        run: npm run storybook:build
       - name: Update snapshots
-        run: npm run test-visual:update
+        run: npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:update
       - name: Commit updated snapshots
         env:
           # Local pre-commit blocks __screenshots__ commits by design; disable Husky only in CI snapshot update.

@@ -13,12 +13,17 @@ const config: TestRunnerConfig = {
     },
 
     async postVisit(page, context) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await page.waitForFunction(() => typeof (globalThis as any).__getContext === "function", { timeout: 10000 });
         const storyContext = await getStoryContext(page, context);
 
         if (storyContext.parameters?.testRunner?.skip) {
             return;
         }
+
+        await page.addStyleTag({
+            content: "* { caret-color: transparent !important; }",
+        });
 
         for (const viewport of viewports) {
             await page.setViewportSize({ width: viewport.width, height: 768 });

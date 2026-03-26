@@ -25,16 +25,25 @@ const viewports = [
  * 1. Emit "forceRemount" → Storybook перемонтирует компонент
  * 2. Ждём "storyRendered" → компонент отрисован, play-функция начала выполнение
  * 3. MutationObserver ждёт 500ms тишины DOM → play-функция завершена, анимации отыграли
- * 4. Fallback 10s на случай если storyRendered не придёт
+ * 4. Fallback 10s — reject с ошибкой если storyRendered не придёт
  */
 const remountAndSettle = async (page: Page, storyId: string) => {
     await page.evaluate((id: string) => {
-        return new Promise<void>((resolve) => {
-            const fallback = setTimeout(resolve, 10000);
+        return new Promise<void>((resolve, reject) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const channel = (window as any).__STORYBOOK_ADDONS_CHANNEL__;
 
-            channel.once("storyRendered", () => {
+            if (!channel) {
+                reject(new Error("__STORYBOOK_ADDONS_CHANNEL__ is not available"));
+                return;
+            }
+
+            const fallback = setTimeout(() => {
+                channel.off("storyRendered", onRendered);
+                reject(new Error(`forceRemount: "storyRendered" not received within 10s for ${id}`));
+            }, 10000);
+
+            const onRendered = () => {
                 let settled: ReturnType<typeof setTimeout>;
 
                 const done = () => {
@@ -55,8 +64,9 @@ const remountAndSettle = async (page: Page, storyId: string) => {
                 });
 
                 settled = setTimeout(done, 500);
-            });
+            };
 
+            channel.once("storyRendered", onRendered);
             channel.emit("forceRemount", { storyId: id });
         });
     }, storyId);

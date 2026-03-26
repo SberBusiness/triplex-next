@@ -94,7 +94,8 @@ src/
 | `npm run storybook:build` | Сборка Storybook в `storybook-static/` |
 | `npm run test-visual` | Визуальные регрессионные тесты (Storybook должен быть запущен) |
 | `npm run test-visual:update` | Обновить baseline-скриншоты |
-| `npm run test-visual:ci` | Запустить Storybook + визуальные тесты (для CI) |
+| `npm run test-visual:docker` | Визуальные тесты в Docker-контейнере |
+| `npm run test-visual:docker:update` | Обновить baseline-скриншоты в Docker-контейнере |
 
 ---
 

@@ -13,6 +13,7 @@ const config: TestRunnerConfig = {
     },
 
     async postVisit(page, context) {
+        await page.waitForFunction(() => typeof (globalThis as any).__getContext === "function", { timeout: 10000 });
         const storyContext = await getStoryContext(page, context);
 
         if (storyContext.parameters?.testRunner?.skip) {

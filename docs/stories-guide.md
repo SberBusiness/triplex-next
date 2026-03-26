@@ -193,6 +193,113 @@ import { Button } from "../../../src/components/Button/Button";
 
 ---
 
+## Скриншот-тесты
+
+Каждая стори автоматически снимается test-runner'ом на двух viewport'ах — **xs** (575px) и **xl** (1200px). Скриншоты сохраняются в `__screenshots__/` с именем `{storyId}--{viewport}.png`.
+
+### Какие стори участвуют в скриншот-тестах
+
+По умолчанию **все** стори участвуют в скриншот-тестах. Исключения задаются параметром `testRunner: { skip: true }`.
+
+**Всегда исключаются:**
+
+- **Playground** — интерактивная песочница, состояние зависит от пользователя, скриншоты не имеют смысла.
+
+**Исключаются при необходимости:**
+
+- Стори, дублирующие отображение другой стори. Если две стори рендерят визуально одно и то же — для теста оставьте одну, вторую исключите через `testRunner: { skip: true }`. Не нужно генерировать идентичные скриншоты.
+
+### Когда создавать Visual tests
+
+Стори **Visual tests** создаётся, когда основных сторей недостаточно для покрытия всех визуальных состояний компонента. Типичные случаи:
+
+- Нужно проверить состояние, которого нет в документационных сторях (например, заполненное поле, фокус, комбинации props).
+- Компонент требует **взаимодействия перед скриншотом** — нужно открыть dropdown, навести курсор, кликнуть по элементу.
+- Нужно собрать несколько вариантов в одну стори, чтобы сократить количество скриншотов.
+
+### Параметры Visual tests
+
+Visual tests скрыта из документации и не показывает исходный код — она предназначена только для тестов:
+
+```tsx
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: () => {
+        // ...
+    },
+};
+```
+
+### Взаимодействие через play
+
+Если компонент должен изменить состояние перед скриншотом (открыть dropdown, показать tooltip и т.д.), реализуйте взаимодействие через `play`-функцию:
+
+```tsx
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: () => {
+        const [value, setValue] = useState("");
+
+        return (
+            <div style={{ display: "flex", gap: 50, flexWrap: "wrap" }}>
+                <DateField value={value} onChange={setValue} label="Label" placeholderMask="дд.мм.гггг" />
+                {/* ...другие варианты */}
+            </div>
+        );
+    },
+    play: async ({ canvas, userEvent }) => {
+        const inputs = await canvas.findAllByRole("textbox");
+
+        await userEvent.click(inputs[0]);
+    },
+};
+```
+
+Test-runner после выполнения `play` ждёт стабилизации DOM (500ms без мутаций) и только потом делает скриншот. Это гарантирует, что анимации завершились и dropdown полностью раскрылся.
+
+### Стабильность скриншотов
+
+Чтобы скриншоты не были «плавающими»:
+
+- **Фиксируйте данные.** Не используйте `new Date()`, `Math.random()` и т.д. Значения должны быть захардкожены.
+- **Избегайте анимаций** или дождитесь их завершения через `play`. Test-runner использует MutationObserver с таймаутом 500ms.
+- **Каретка скрывается автоматически** — test-runner инжектит `caret-color: transparent`.
+- **Задавайте фиксированные размеры контейнера**, чтобы layout не «плыл» между viewport'ами, где это не нужно.
+
+### Компоновка Visual tests
+
+Рендерите несколько вариантов компонента в одной Visual tests стори, а не создавайте отдельную стори на каждый кейс. Это сокращает количество скриншотов и время прогона тестов:
+
+```tsx
+render: () => (
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 50, flexWrap: "wrap" }}>
+        <Component size={EComponentSize.SM} value="filled" />
+        <Component size={EComponentSize.MD} value="filled" />
+        <Component size={EComponentSize.LG} value="filled" />
+        <Component status={EFormFieldStatus.ERROR} value="filled" />
+        {/* ...остальные комбинации */}
+    </div>
+),
+```
+
+Используйте `flexWrap: "wrap"` и `gap`, чтобы варианты не обрезались на узких viewport'ах.
+
+---
+
 ## Подписи вариантов
 
 В стори, показывающих варианты (Sizes, Statuses), каждый вариант должен быть подписан **рядом** с компонентом:
@@ -414,6 +521,8 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Чек-лист перед мержем
 
+### Документация и структура
+
 - [ ] Есть docs page с `Title`, `Description`, `ArgTypes`, `Playground`, `Stories`
 - [ ] Playground имеет Controls, не показывает код (`sourceState: "none"`)
 - [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`)
@@ -427,6 +536,17 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 - [ ] Импорты в примерах из корня пакета (`@sberbusiness/triplex-next`), а не по относительным путям
 - [ ] Порядок: imports → meta → constants → Playground → Default → остальные
 - [ ] Именование сторей соответствует конвенции
+
+### Скриншот-тесты
+
+- [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`)
+- [ ] Нет дублирующих скриншотов — визуально идентичные стори исключены через `testRunner: { skip: true }`
+- [ ] Все ключевые визуальные состояния покрыты (размеры, статусы, заполненные поля, фокус)
+- [ ] Если основных сторей недостаточно — создана Visual tests с недостающими состояниями
+- [ ] Visual tests скрыта из autodocs (`tags: ["!autodocs"]`) и не показывает код
+- [ ] Если компонент требует взаимодействия (dropdown, tooltip) — реализован `play` в Visual tests
+- [ ] Данные в Visual tests захардкожены (нет `new Date()`, `Math.random()`)
+- [ ] Контейнеры имеют фиксированные размеры для стабильного layout'а
 
 ---
 

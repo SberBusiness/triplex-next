@@ -17,7 +17,8 @@ import { EDropdownWidth } from "../Dropdown";
 export interface ISelectFieldOption extends ISelectExtendedFieldDefaultOption {}
 
 export interface ISelectFieldProps
-    extends Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget">,
+    extends
+        Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget">,
         Pick<ISelectExtendedFieldTargetProps, "loading" | "status" | "placeholder"> {
     /** Размер компонента. */
     size: EComponentSize;
@@ -29,7 +30,7 @@ export interface ISelectFieldProps
     /** Обработчик изменения значения. */
     onChange: (option: ISelectFieldOption) => void;
     /** Свойства, передающиеся в SelectExtendedField.Target. */
-    targetProps: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
+    targetProps?: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
     /** ClassName передающийся в DropdownListItem. */
     dropdownListItemClassName?: string;
     /** Название Select отображающееся в мобильном режиме. */
@@ -80,6 +81,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
             aria-labelledby={ariaLabelledby}
             ref={setRef}
             size={size}
+            fieldLabel={undefined}
             {...targetProps}
             {...props}
         />

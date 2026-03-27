@@ -12,7 +12,8 @@ import styles from "../styles/Chip.module.less";
 import clsx from "clsx";
 
 export interface IChipSelectProps
-    extends Pick<IChipProps, "disabled" | "className">,
+    extends
+        Pick<IChipProps, "disabled" | "className">,
         Omit<
             ISelectFieldProps,
             | "children"
@@ -45,7 +46,6 @@ export const ChipSelect = React.forwardRef<HTMLDivElement, IChipSelectProps>(
                 onChange={onChange}
                 options={options}
                 value={value}
-                fixedWidth={false}
             />
         );
 

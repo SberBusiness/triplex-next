@@ -163,7 +163,7 @@ export const Playground: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ maxWidth: "250px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <DateField value={value} onChange={setValue} {...args} />
             </div>
         );
@@ -179,7 +179,7 @@ export const Default: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ maxWidth: "250px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <DateField value={value} onChange={setValue} label="Label" placeholderMask="дд.мм.гггг" />
             </div>
         );
@@ -194,7 +194,7 @@ export const WithPostfix: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ maxWidth: "250px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <DateField
                     value={value}
                     onChange={setValue}
@@ -221,7 +221,7 @@ export const States: Story = {
         const [value, setValue] = useState("");
 
         return (
-            <div style={{ maxWidth: "250px", display: "flex", flexDirection: "column" }}>
+            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column" }}>
                 <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
                     Обычное состояние
                 </Title>

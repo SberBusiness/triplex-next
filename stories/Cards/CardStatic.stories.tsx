@@ -34,7 +34,7 @@ const meta = {
         docs: {
             description: {
                 component: `
-Статичная карточка. 
+Статичная карточка.
                 `,
             },
             page: () => (
@@ -95,7 +95,7 @@ export const Playground: StoryObj<typeof CardStatic> = {
     },
     render: (args) => {
         return (
-            <div style={{ width: "250px" }}>
+            <div style={{ width: "216px" }}>
                 <CardStatic roundingSize={args.roundingSize} theme={args.theme}>
                     <CardStatic.Content paddingSize={args.paddingSize}>
                         <CardStatic.Content.Header>
@@ -148,7 +148,7 @@ export const Default: StoryObj<typeof CardStatic> = {
     },
     render: () => {
         return (
-            <div style={{ width: "250px" }}>
+            <div style={{ width: "216px" }}>
                 <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
                     <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
                         <CardStatic.Content.Header>
@@ -172,7 +172,7 @@ export const Themes: StoryObj<typeof CardStatic> = {
     },
     render: () => {
         return (
-            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>ECardTheme.GENERAL</Text>
                     <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
@@ -275,7 +275,7 @@ export const PaddingSizes: StoryObj<typeof CardStatic> = {
     },
     render: () => {
         return (
-            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>ECardContentPaddingSize.SM</Text>
                     <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
@@ -378,7 +378,7 @@ export const RoundingSizes: StoryObj<typeof CardStatic> = {
     },
     render: () => {
         return (
-            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>ECardRoundingSize.SM</Text>
                     <CardStatic roundingSize={ECardRoundingSize.SM} theme={ECardTheme.GENERAL}>

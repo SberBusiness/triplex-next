@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { ISuggestFieldOption } from "../types";
 import { ISuggestFieldDesktopDropdownProps } from "./types";
 import { Portal } from "../../Portal/Portal";
-import { DropdownDesktop, DropdownList, DropdownListItem } from "../../Dropdown";
+import { DropdownDesktop, DropdownList, DropdownListItem, EDropdownWidth } from "../../Dropdown";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { DataTestId } from "../../../consts/DataTestId";
 
@@ -59,7 +59,7 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
                 data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.dropdown}`}
                 opened={opened}
                 {...restProps}
-                fixedWidth={true}
+                width={EDropdownWidth.TARGET}
                 onMouseDown={handleMouseDown}
             >
                 <List id={listId} size={size} dropdownOpened={opened} loading={listLoading} onScroll={handleListScroll}>

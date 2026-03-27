@@ -64,7 +64,6 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
                 onChange={onChange}
                 options={options}
                 value={value}
-                fixedWidth={false}
                 listId={instanceId.current}
             />
         );

@@ -86,7 +86,6 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
             size={size}
             targetRef={targetRef}
             opened={dropdownOpen}
-            fixedWidth={false}
             setOpened={handleDropdownOpen}
             mobileViewProps={{
                 children: <SuggestMobileDropdownContent />,

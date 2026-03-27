@@ -155,7 +155,7 @@ export const Playground: StoryObj<IPlaygroundProps> = {
         } = args;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     {...textFieldProps}
                     description={
@@ -305,7 +305,7 @@ export const Default: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -348,7 +348,7 @@ export const PassRefToInput: StoryObj<typeof TextField> = {
         }, []);
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -385,7 +385,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -427,7 +427,7 @@ export const WithClearButton: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -470,7 +470,7 @@ export const WithCounter: StoryObj<typeof TextField> = {
         const currentLength = value.length;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -599,7 +599,7 @@ export const States: StoryObj<typeof TextField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -688,7 +688,7 @@ export const Examples: StoryObj<typeof TextField> = {
         const currentLength = value.length;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <TextField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>

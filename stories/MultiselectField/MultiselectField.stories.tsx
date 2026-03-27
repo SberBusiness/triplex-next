@@ -464,7 +464,7 @@ export const Playground: StoryObj<IMultiselectFieldStoriesProps> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <MultiselectField renderTarget={renderTarget} size={args.size} data-test-id="multiselect">
                         {(dropdownProps) => renderDropdown(dropdownProps)}
@@ -774,7 +774,7 @@ export const Default: StoryObj<IMultiselectFieldStoriesProps> = {
         );
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
                     {(dropdownProps) => renderDropdown(dropdownProps)}
                 </MultiselectField>
@@ -1090,7 +1090,7 @@ export const Sizes: StoryObj<IMultiselectFieldStoriesProps> = {
         const lg = createMultiselectFieldStoriesLogic({ size: EComponentSize.LG });
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                         <FormGroup>
@@ -1421,7 +1421,7 @@ export const Statuses: StoryObj<IMultiselectFieldStoriesProps> = {
         const warning = createMultiselectFieldStoriesLogic({ status: EFormFieldStatus.WARNING });
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                         <FormGroup>
@@ -1775,7 +1775,7 @@ export const Loading: StoryObj<IMultiselectFieldStoriesProps> = {
         });
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                         <MultiselectField renderTarget={targetLoading.renderTarget}>
@@ -2061,7 +2061,7 @@ export const DropdownWithoutInput: StoryObj<IMultiselectFieldStoriesProps> = {
         );
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
                     {(dropdownProps) => renderDropdown(dropdownProps)}
                 </MultiselectField>
@@ -2363,7 +2363,7 @@ export const WithClearButton: StoryObj<IMultiselectFieldStoriesProps> = {
         );
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
                     {(dropdownProps) => renderDropdown(dropdownProps)}
                 </MultiselectField>
@@ -2661,7 +2661,7 @@ export const WithPrefixAndPostfix: StoryObj<IMultiselectFieldStoriesProps> = {
         );
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
                     {(dropdownProps) => renderDropdown(dropdownProps)}
                 </MultiselectField>
@@ -2965,7 +2965,7 @@ export const Example: StoryObj<IMultiselectFieldStoriesProps> = {
         );
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <MultiselectField renderTarget={renderTarget} data-test-id="multiselect">
                         {(dropdownProps) => renderDropdown(dropdownProps)}

@@ -1,12 +1,6 @@
 import React, { useRef, useState } from "react";
 import clsx from "clsx";
-import {
-    ButtonDropdownExtended,
-    IButtonDropdownExtendedButtonProvideProps,
-    IButtonDropdownExtendedDropdownProvideProps,
-} from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
-import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
-import { EButtonDotsTheme, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { uniqueId } from "lodash-es";
 import {
     CaretdownStrokeSrvIcon24,
     CaretdownStrokeSrvIcon20,
@@ -14,27 +8,34 @@ import {
     DotshorizontalStrokeSrvIcon32,
     DotshorizontalStrokeSrvIcon20,
 } from "@sberbusiness/icons-next";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
-import { uniqueId } from "lodash-es";
-import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
-import { DropdownMobileBody } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileBody";
-import { DropdownMobileList } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileList";
-import { DropdownMobileListItem } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileListItem";
-import { DropdownMobileClose } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileClose";
-import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
-import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
-import { IDropdownListItemProps } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownListItem";
+import {
+    ButtonDropdownExtended,
+    IButtonDropdownExtendedButtonProvideProps,
+    IButtonDropdownExtendedDropdownProvideProps,
+} from "./ButtonDropdownExtended";
+import { Button } from "./Button";
+import { EButtonDotsTheme, EButtonTheme } from "./enums";
+import { isKey } from "../../utils/keyboard";
+import {
+    DropdownList,
+    DropdownListContext,
+    DropdownMobileHeader,
+    DropdownMobileClose,
+    DropdownMobileBody,
+    DropdownMobileList,
+    DropdownMobileListItem,
+    IDropdownListItemProps,
+    EDropdownWidth,
+} from "../Dropdown";
+import { Text, ETextSize } from "../Typography";
+import { EComponentSize } from "../../enums/EComponentSize";
 import styles from "./styles/ButtonDropdown.module.less";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства опции в выпадающем списке действий. */
-export interface IButtonDropdownOption
-    extends Omit<
-        IDropdownListItemProps,
-        "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
-    > {
+export interface IButtonDropdownOption extends Omit<
+    IDropdownListItemProps,
+    "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
+> {
     /** Уникальное имя опции. */
     id: string;
     /** Название опции. */
@@ -201,6 +202,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                         opened={opened}
                         setOpened={setOpened}
                         targetRef={buttonRef}
+                        width={EDropdownWidth.MIN_TARGET}
                         ref={dropdownRef}
                         mobileViewProps={{
                             children: (

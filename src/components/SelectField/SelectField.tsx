@@ -11,6 +11,7 @@ import { SelectExtendedFieldDropdownDefault } from "@sberbusiness/triplex-next/c
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EDropdownWidth } from "../Dropdown";
 
 /* Свойства опции списка. */
 export interface ISelectFieldOption extends ISelectExtendedFieldDefaultOption {}
@@ -89,6 +90,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
             <SelectExtendedFieldDropdownDefault
                 {...props}
                 size={size}
+                width={EDropdownWidth.TARGET}
                 loading={loading}
                 listId={instanceId.current}
                 mobileTitle={mobileTitle}

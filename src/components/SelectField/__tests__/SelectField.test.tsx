@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SelectField, ISelectFieldOption } from "../SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { EFormFieldStatus } from "../../FormField/enums";
+import { EDropdownWidth } from "../../Dropdown";
 
 // Mock для KeyDownListener
 vi.mock("../../KeyDownListener", () => ({
@@ -70,6 +71,7 @@ vi.mock("../../Dropdown", () => ({
     DropdownListContext: {
         Provider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
     },
+    EDropdownWidth: { CONTENT: "content", TARGET: "target", MIN_TARGET: "min_target" },
 }));
 
 // Mock для FormField

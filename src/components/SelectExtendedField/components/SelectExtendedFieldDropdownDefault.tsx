@@ -10,16 +10,12 @@ import {
     DropdownMobileHeader,
     DropdownMobileList,
     DropdownMobileListItem,
-} from "../../Dropdown/mobile";
-import { Text } from "../../Typography/Text";
-import { ETextSize } from "../../Typography/enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+    IDropdownProps,
+} from "../../Dropdown";
+import { Text, ETextSize } from "../../Typography";
 
-export interface ISelectExtendedFieldDropdownDefaultProps extends ISelectExtendedFieldDropdownProvideProps {
-    /* Размер поля. */
-    size: EComponentSize;
-    /* Фиксированная ширина по управляющему элементу. */
-    fixedWidth?: boolean;
+export interface ISelectExtendedFieldDropdownDefaultProps
+    extends ISelectExtendedFieldDropdownProvideProps, Pick<IDropdownProps, "size" | "width"> {
     /* ClassName для модификации SelectExtendedField.Dropdown.List.Item. */
     dropdownListItemClassName?: string;
     /* Состояние загрузки. В этот момент Dropdown закрыт, Target отображает loader. */
@@ -43,7 +39,7 @@ export interface ISelectExtendedFieldDropdownDefaultProps extends ISelectExtende
 export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDropdownDefaultProps> = ({
     dropdownRef,
     dropdownListItemClassName,
-    fixedWidth,
+    width,
     loading,
     listId,
     mobileTitle,
@@ -59,7 +55,7 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
         <SelectExtendedField.Dropdown
             opened={opened && !loading}
             forwardedRef={dropdownRef}
-            fixedWidth={typeof fixedWidth === "undefined" ? true : fixedWidth}
+            width={width}
             setOpened={setOpened}
             targetRef={targetRef}
             size={size}

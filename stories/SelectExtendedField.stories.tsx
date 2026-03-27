@@ -89,7 +89,7 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
         const { fieldLabel, placeholder, loading, status, descriptionText, errorText } = args;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
@@ -253,7 +253,7 @@ export const Basic: StoryObj<typeof SelectExtendedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <SelectExtendedField
                     renderTarget={({ opened, setOpened }) => (
                         <SelectExtendedFieldTarget
@@ -309,7 +309,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <TypographyTitle
                         tag="h3"

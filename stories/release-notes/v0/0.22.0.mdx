@@ -4,8 +4,72 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v0.22.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**Dropdown**
+
+- Удалено свойство `fixedWidth`.
+
 <Heading>Изменения</Heading>
 
-**ComponentTitle**
+- Пакет `react-window` убран из зависимостей.
 
-- Description.
+**CheckboxTree**
+
+- Добавлен экспорт utils.
+
+**CheckboxTreeExtended**
+
+- Удалены отступы.
+
+**DateField**
+
+- Исправлена высота `DropdownMobileHeader`.
+
+**Dropdown**
+
+- Добавлено свойство `width` для определения логики расчёта ширины.
+- Позиция теперь обновляется через `ResizeObserver`.
+
+**FormFieldClear**
+
+- Исправлена логика отображения.
+
+**FormFieldInput, FormFieldTextarea**
+
+- Добавлена поддержка неконтролируемого режима.
+
+**FormFieldTextarea**
+
+- Исправлено отображение значения в виде числа.
+
+**LightBox**
+
+- Исправлен баг, когда хедер и футер не прилипали в случае изменения высоты контента в LightBox.
+
+**MultiselectField**
+
+- Для `MultiselectFieldDropdownContent` добавлены горизонтальные отступы, а также верхний отступ (если не используется `MultiselectFieldDropdownHeader`);
+- Для `MultiselectFieldDropdownHeader` добавлен нижний отступ.
+
+**SelectField**
+
+- targetProps стал необязательным props в ISelectFieldProps.
+
+**Tabs**
+
+- Исправлен баг с выравниванием иконки внутри TabsExtendedDropdown;
+- Исправлен отступ TabsExtendedDropdown от остальных Tabs;
+- Исправлен цвет текста неактивного TabButton Type 2.
+
+**TableFooterSummary**
+
+- Исправлена TS ошибка с доступом к дочерним компонентам TableFooterSummary.SelectedCount, TableFooterSummary.SelectAllButton, TableFooterSummary.Amount.
+
+**Typography**
+
+- Добавлены альтернативные шрифты, в случае отсутствия основного.
+
+**UploadZone**
+
+- Добавлен экспорт types.

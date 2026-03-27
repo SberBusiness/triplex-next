@@ -166,7 +166,7 @@ stories: ["../stories/Link/**/*.stories.@(ts|tsx|mdx)"],
 stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
 ```
 
-Затем запустить тесты как обычно:
+Затем запустить тесты, как обычно:
 
 ```bash
 npm run test-visual:docker           # через Docker

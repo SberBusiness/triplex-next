@@ -85,6 +85,44 @@ const meta = {
 
 export default meta;
 
+const PlaygroundAccordion = (args: IIslandAccordionPlaygroundProps) => {
+    const [isVisible, setIsVisible] = React.useState(true);
+
+    React.useEffect(() => {
+        setIsVisible(true);
+    }, [args.disabled, args.removable, args.size, args.status, args.title, args.type]);
+
+    const handleRemove = () => setIsVisible(false);
+
+    return (
+        <IslandAccordion size={args.size} type={args.type}>
+            {isVisible && (
+                <IslandAccordion.Item
+                    id="island-accordion-item-playground"
+                    num={1}
+                    title={args.title}
+                    disabled={args.disabled}
+                    onRemove={args.removable ? handleRemove : undefined}
+                    status={args.disabled ? EStepStatus.DISABLED : args.status}
+                >
+                    <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
+                    <IslandAccordion.Item.Footer>
+                        <Button theme={EButtonTheme.LINK} size={EComponentSize.MD}>
+                            Button link text
+                        </Button>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </IslandAccordion.Item.Footer>
+                </IslandAccordion.Item>
+            )}
+        </IslandAccordion>
+    );
+};
+
 export const Playground: StoryObj<IIslandAccordionPlaygroundProps> = {
     tags: ["!autodocs"],
     args: {
@@ -148,35 +186,7 @@ export const Playground: StoryObj<IIslandAccordionPlaygroundProps> = {
             codePanel: false,
         },
     },
-    render: (args) => {
-        const handleRemove = (id: string) => document.getElementById(id)?.remove();
-
-        return (
-            <IslandAccordion size={args.size} type={args.type}>
-                <IslandAccordion.Item
-                    id="island-accordion-item-playground"
-                    num={1}
-                    title={args.title}
-                    disabled={args.disabled}
-                    onRemove={args.removable ? handleRemove : undefined}
-                    status={args.disabled ? EStepStatus.DISABLED : args.status}
-                >
-                    <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
-                    <IslandAccordion.Item.Footer>
-                        <Button theme={EButtonTheme.LINK} size={EComponentSize.MD}>
-                            Button link text
-                        </Button>
-                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                            Button text
-                        </Button>
-                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                            Button text
-                        </Button>
-                    </IslandAccordion.Item.Footer>
-                </IslandAccordion.Item>
-            </IslandAccordion>
-        );
-    },
+    render: (args) => <PlaygroundAccordion {...args} />,
 };
 
 export const Default: StoryObj<typeof IslandAccordion> = {
@@ -279,6 +289,48 @@ export const OnlyOneOpenAtATime: StoryObj<typeof IslandAccordion> = {
     },
 };
 
+const VisualTestsAccordion = () => {
+    const [visibleIds, setVisibleIds] = React.useState(["island-accordion-vt-open", "island-accordion-vt-closed"]);
+
+    const handleRemove = (id: string) => {
+        setVisibleIds((prevIds) => prevIds.filter((itemId) => itemId !== id));
+    };
+
+    return (
+        <IslandAccordion>
+            {visibleIds.includes("island-accordion-vt-open") && (
+                <IslandAccordion.Item
+                    id="island-accordion-vt-open"
+                    num={1}
+                    title="Title"
+                    opened
+                    onRemove={handleRemove}
+                >
+                    <IslandAccordion.Item.Content>
+                        Раскрытое содержимое аккордеона с контентом и кнопками в футере.
+                    </IslandAccordion.Item.Content>
+                    <IslandAccordion.Item.Footer>
+                        <Button theme={EButtonTheme.LINK} size={EComponentSize.MD}>
+                            Button link text
+                        </Button>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </IslandAccordion.Item.Footer>
+                </IslandAccordion.Item>
+            )}
+            {visibleIds.includes("island-accordion-vt-closed") && (
+                <IslandAccordion.Item id="island-accordion-vt-closed" num={2} title="Title (collapsed)">
+                    <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
+                </IslandAccordion.Item>
+            )}
+        </IslandAccordion>
+    );
+};
+
 export const VisualTests: StoryObj<typeof IslandAccordion> = {
     tags: ["!autodocs"],
     parameters: {
@@ -288,33 +340,5 @@ export const VisualTests: StoryObj<typeof IslandAccordion> = {
             codePanel: false,
         },
     },
-    render: () => (
-        <IslandAccordion>
-            <IslandAccordion.Item
-                id="island-accordion-vt-open"
-                num={1}
-                title="Title"
-                opened
-                onRemove={(id: string) => document.getElementById(id)?.remove()}
-            >
-                <IslandAccordion.Item.Content>
-                    Раскрытое содержимое аккордеона с контентом и кнопками в футере.
-                </IslandAccordion.Item.Content>
-                <IslandAccordion.Item.Footer>
-                    <Button theme={EButtonTheme.LINK} size={EComponentSize.MD}>
-                        Button link text
-                    </Button>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                </IslandAccordion.Item.Footer>
-            </IslandAccordion.Item>
-            <IslandAccordion.Item id="island-accordion-vt-closed" num={2} title="Title (collapsed)">
-                <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
-            </IslandAccordion.Item>
-        </IslandAccordion>
-    ),
+    render: () => <VisualTestsAccordion />,
 };

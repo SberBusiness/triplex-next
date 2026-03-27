@@ -68,13 +68,20 @@ export const Playground: Story = {
             codePanel: false,
         },
     },
-    render: (args) => (
-        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-            <Link {...args} onClick={(event) => event.preventDefault()}>
-                {args.children}
-            </Link>
-        </Text>
-    ),
+    render: (args) => {
+        const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+            args.onClick?.(event);
+            event.preventDefault();
+        };
+
+        return (
+            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                <Link {...args} onClick={handleClick}>
+                    {args.children}
+                </Link>
+            </Text>
+        );
+    },
 };
 
 export const Default: StoryObj<typeof Link> = {

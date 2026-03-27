@@ -52,7 +52,7 @@ export const WithFooterAndExtraFooterExample = () => {
                         <IslandWidget.Footer {...props}>
                             <IslandWidget.Footer.Content>
                                 <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                                    <Link>Link text</Link>
+                                    <Link href="#">Link text</Link>
                                 </Text>
                             </IslandWidget.Footer.Content>
                             <IslandWidget.Footer.Controls>

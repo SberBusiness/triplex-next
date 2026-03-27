@@ -46,9 +46,9 @@ Playground и Visual tests остаются inline в файле stories, пот
 | **Sizes / Themes / Statuses** | Стори на ключевые props — отрендеренные варианты с подписями | Нет | Да |
 | **Edge cases** | Опционально, на усмотрение разработчика. Каждый кейс — отдельная стори | Нет | Да |
 | **Examples** | Композиции компонентов, production-like примеры | Нет | Да |
-| **Visual tests** | Дополнительные примеры для скриншот-тестов (если недостаточно основных) | Нет | Да |
+| **Visual tests** | Дополнительные примеры для скриншот-тестов (если недостаточно основных); исходный код в docs не показывается, `?raw`-экспорт не нужен | Нет | Нет |
 
-> **Правило:** только Playground имеет Controls. Все остальные стори Controls не имеют, но всегда показывают пример кода.
+> **Правило:** только Playground имеет Controls. Документационные стори (`Default`, `Sizes / Themes / Statuses`, `Edge cases`, `Examples`) не имеют Controls и показывают пример кода. `Visual tests` не имеют Controls и не показывают код.
 
 ---
 
@@ -334,7 +334,7 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Подключение примеров к стори
 
-Каждая стори (кроме Playground) подключает пример и его исходный код:
+Каждая документационная стори (кроме Playground и Visual tests) подключает пример и его исходный код через `?raw`:
 
 ```tsx
 export const Default: StoryObj<typeof Component> = {
@@ -531,8 +531,8 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 - [ ] Playground имеет Controls, не показывает код (`sourceState: "none"`)
 - [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`)
 - [ ] Playground скрыт из autodocs (`tags: ["!autodocs"]`)
-- [ ] Все остальные стори **не** имеют Controls (`controls: { disable: true }`)
-- [ ] Все остальные стори показывают пример кода через `source.code`
+- [ ] Все документационные стори, кроме Playground, **не** имеют Controls (`controls: { disable: true }`)
+- [ ] Все документационные стори, кроме Playground, показывают пример кода через `source.code`
 - [ ] Все примеры вынесены в `examples/` и реэкспортированы через `index.ts`
 - [ ] Default — минимальный пример с параметрами по умолчанию
 - [ ] Стори с вариантами (Sizes, Statuses) — каждый вариант подписан рядом с компонентом

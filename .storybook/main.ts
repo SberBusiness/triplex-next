@@ -10,6 +10,8 @@ const config: StorybookConfig = {
         options: {},
     },
     stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
+    // для отладки конкретного компонента
+    // stories: ["../stories/Link/Link.stories.tsx"],
     typescript: {
         reactDocgen: "react-docgen-typescript",
         reactDocgenTypescriptOptions: {

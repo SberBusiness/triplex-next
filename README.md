@@ -154,6 +154,27 @@ npm run test-visual:docker           # Проверка через Docker
 npm run test-visual:docker:update    # Обновление baseline через Docker
 ```
 
+#### Как запустить тесты только для одного компонента
+
+`test-storybook` не поддерживает фильтрацию по имени стори. Единственный способ — временно сузить glob в `.storybook/main.ts`:
+
+```ts
+// Временно, только для одного компонента:
+stories: ["../stories/Link/**/*.stories.@(ts|tsx|mdx)"],
+
+// Вернуть обратно после:
+stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
+```
+
+Затем запустить тесты, как обычно:
+
+```bash
+npm run test-visual:docker           # через Docker
+npm run test-visual:debug            # локально (Storybook должен быть запущен)
+```
+
+> **Не забудьте вернуть glob обратно** перед коммитом.
+
 #### CI воркфлоу
 
 Визуальные тесты в CI работают на собранной (build) версии Storybook, а не на dev-сервере — это исключает race conditions при загрузке модулей.
@@ -165,21 +186,12 @@ npm run test-visual:docker:update    # Обновление baseline через 
 
 #### Как отлаживать локально
 
-Для отладки конкретного компонента — временно сузить glob в `.storybook/main.ts`:
-
-```ts
-// Временно, только для отладки:
-stories: ["../stories/Badge/**/*.stories.@(ts|tsx|mdx)"],
-
-// Вернуть обратно после отладки:
-stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
-```
-
-Затем запустить:
 ```bash
 npm run storybook             # в одном терминале
 npm run test-visual:debug     # в другом (с PWDEBUG=1)
 ```
+
+Для отладки одного компонента — сузить glob как описано выше.
 
 #### Как исключить story из тестирования
 

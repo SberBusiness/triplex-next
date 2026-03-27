@@ -19,7 +19,7 @@ export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInpu
     /** Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
      *  Через аргументы props инпуту передастся нужная стилизация.
      * */
-    render?: (props: IFormFieldInputProvideProps, ref?: React.Ref<HTMLInputElement>) => React.ReactNode;
+    render?: (props: IFormFieldInputProvideProps, ref?: React.Ref<HTMLInputElement>) => React.ReactElement | null;
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);

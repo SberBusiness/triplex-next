@@ -11,7 +11,7 @@ const config: StorybookConfig = {
     },
     // stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
     // для отладки конкретного компонента
-    stories: ["../stories/Loaders/LoaderSmall/LoaderSmall.stories.tsx"],
+    stories: ["../stories/Skeleton/Skeleton.stories.tsx"],
     typescript: {
         reactDocgen: "react-docgen-typescript",
         reactDocgenTypescriptOptions: {

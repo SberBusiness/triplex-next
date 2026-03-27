@@ -1,46 +1,24 @@
 import React from "react";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import { Skeleton, ESkeletonType } from "../../src/components/Skeleton";
-import { StoryObj } from "@storybook/react";
-import "./Skeleton.less";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Skeleton, ESkeletonType } from "@sberbusiness/triplex-next";
+import { DefaultExample, DefaultExampleSource, TypesExample, TypesExampleSource } from "./examples";
 
-export default {
+const meta = {
     title: "Components/Loaders/Skeleton",
     component: Skeleton,
-    tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
-                component: `
-Элемент для визуализации содержимого, которое еще не загрузилось.
-
-## Особенности
-
-- **Типы**: Dark, Light
-- Размер скелетона определяет родительский контейнер или переданный className
-
-## Использование
-
-\`\`\`tsx
-import { Skeleton, ESkeletonType } from '@sberbusiness/triplex-next';
-
-// Базовый скелетон
-<Skeleton />
-
-// Светлый скелетон
-<Skeleton type={ESkeletonType.LIGHT} />
-
-// Скелетон с переданным CSS классом
-<Skeleton className="custom-skeleton" />
-\`\`\`
-                `,
+                component: "Элемент для визуализации содержимого, которое ещё не загрузилось.",
             },
             page: () => (
                 <>
                     <Title />
-                    <Subtitle />
                     <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Skeleton} />
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -48,10 +26,15 @@ import { Skeleton, ESkeletonType } from '@sberbusiness/triplex-next';
             ),
         },
     },
-};
+    tags: ["autodocs"],
+} satisfies Meta<typeof Skeleton>;
 
-export const Playground: StoryObj<typeof Skeleton> = {
-    name: "Playground",
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
+    tags: ["!autodocs"],
     args: {
         type: ESkeletonType.DARK,
     },
@@ -61,102 +44,121 @@ export const Playground: StoryObj<typeof Skeleton> = {
             options: Object.values(ESkeletonType),
             description: "Тип скелетона",
             table: {
-                defaultValue: { summary: ESkeletonType.DARK },
                 type: { summary: "ESkeletonType" },
+                defaultValue: { summary: "ESkeletonType.DARK" },
             },
         },
     },
-    parameters: {
-        controls: {
-            include: ["type"],
-        },
-    },
     render: (args) => (
-        <div className="skeleton-example">
-            <div className="skeleton-example-left">
-                <ul className="skeleton-example-list">
-                    <li>
-                        <span>
-                            <Skeleton {...args} />
-                        </span>
-                        <Skeleton {...args} />
-                    </li>
-                    <li>
-                        <span>
-                            <Skeleton {...args} />
-                        </span>
-                        <Skeleton {...args} />
-                    </li>
-                    <li>
-                        <span>
-                            <Skeleton {...args} />
-                        </span>
-                        <Skeleton {...args} />
-                    </li>
-                    <li>
-                        <span>
-                            <Skeleton {...args} />
-                        </span>
-                        <Skeleton {...args} />
-                    </li>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ width: "30%", marginRight: "36px" }}>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                    {[0, 1, 2, 3].map((i) => (
+                        <li key={i} style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
+                            <span style={{ width: "32px", height: "32px", display: "flex" }}>
+                                <Skeleton {...args} />
+                            </span>
+                            <div style={{ flexGrow: 1, marginLeft: "16px", height: "32px", display: "flex" }}>
+                                <Skeleton {...args} />
+                            </div>
+                        </li>
+                    ))}
                 </ul>
             </div>
-            <div className="skeleton-example-right">
-                <div className="skeleton-example-grid">
-                    <Skeleton {...args} />
-                    <Skeleton {...args} />
-                    <Skeleton {...args} />
-                    <Skeleton {...args} />
+            <div style={{ flexGrow: 1 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
+                    <Skeleton {...args} style={{ height: "80px", width: "calc(50% - 12px)" }} />
+                    <Skeleton {...args} style={{ height: "80px", width: "calc(50% - 12px)" }} />
+                    <Skeleton {...args} style={{ height: "80px", width: "calc(50% - 12px)" }} />
+                    <Skeleton {...args} style={{ height: "80px", width: "calc(50% - 12px)" }} />
                 </div>
             </div>
         </div>
     ),
+    parameters: {
+        testRunner: { skip: true },
+        docs: {
+            canvas: { sourceState: "none" },
+        },
+    },
 };
 
-export const Default: StoryObj<typeof Skeleton> = {
+export const Default: Story = {
     name: "Default",
-    argTypes: {
-        type: {
-            table: {
-                disable: true,
+    render: DefaultExample,
+    parameters: {
+        testRunner: { skip: true },
+        docs: {
+            controls: { disable: true },
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
             },
         },
     },
-    parameters: {
-        controls: { disable: true },
-    },
-    render: () => (
-        <div className="skeleton-example-default">
-            <div className="skeleton-example-grid">
-                <Skeleton />
-                <Skeleton />
-                <Skeleton />
-                <Skeleton />
-            </div>
-        </div>
-    ),
 };
 
-export const LightBackground: StoryObj<typeof Skeleton> = {
-    name: "Light Background",
-    argTypes: {
-        type: {
-            table: {
-                disable: true,
+export const Types: Story = {
+    name: "Types",
+    render: TypesExample,
+    parameters: {
+        testRunner: { skip: true },
+        docs: {
+            controls: { disable: true },
+            source: {
+                code: TypesExampleSource,
+                language: "tsx",
             },
         },
     },
-    parameters: {
-        controls: { disable: true },
-    },
-    render: (args) => (
-        <div className="skeleton-example-gray">
-            <div className="skeleton-example-grid">
-                <Skeleton {...args} />
-                <Skeleton {...args} />
-                <Skeleton {...args} />
-                <Skeleton {...args} />
+};
+
+export const VisualTests: Story = {
+    name: "Visual tests",
+    tags: ["!autodocs"],
+    decorators: [
+        (Story) => (
+            <>
+                <style>{`* { animation: none !important; }`}</style>
+                <Story />
+            </>
+        ),
+    ],
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            <div>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>DARK</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px" }}>
+                    <Skeleton
+                        type={ESkeletonType.DARK}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "rgba(31, 31, 34, 0.10)" }}
+                    />
+                    <Skeleton
+                        type={ESkeletonType.DARK}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "rgba(31, 31, 34, 0.10)" }}
+                    />
+                </div>
+            </div>
+            <div>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LIGHT</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px", background: "#EEF0F4" }}>
+                    <Skeleton
+                        type={ESkeletonType.LIGHT}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "#F2F4F7" }}
+                    />
+                    <Skeleton
+                        type={ESkeletonType.LIGHT}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "#F2F4F7" }}
+                    />
+                </div>
             </div>
         </div>
     ),
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
 };

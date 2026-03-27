@@ -1,9 +1,10 @@
-import React, { useMemo, useContext, useEffect } from "react";
+import React, { useContext, useMemo, useCallback, useLayoutEffect } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { FormFieldContext } from "../FormFieldContext";
 import { EFormFieldStatus } from "../enums";
+import { isFilled } from "./utils";
 import styles from "../styles/FormFieldTextarea.module.less";
 
 /** Свойства компонента FormFieldTextarea. */
@@ -14,38 +15,94 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Компонент, отображающий textarea. */
 export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFieldTextareaProps>(
-    ({ className, id, onBlur, onFocus, value, ...htmlTextareaHTMLAttributes }, ref) => {
-        const { size, status, setFocused, setId, setValueExist } = useContext(FormFieldContext);
-        const instanceId = useMemo(() => (id === undefined ? uniqueId("textarea_") : id), [id]);
+    (
+        { id: idProp, className, value, defaultValue, onFocus, onBlur, onAnimationStart, onChange, ...restProps },
+        ref,
+    ) => {
+        const { size, status, setFocused, setTargetId, setFilled } = useContext(FormFieldContext);
+        const id = useMemo(() => (idProp === undefined ? uniqueId("textarea_") : idProp), [idProp]);
         const classNames = clsx(styles.formFieldTextarea, sizeToClassNameMap[size], className);
 
-        useEffect(() => {
-            setId(instanceId);
-        }, [instanceId, setId]);
+        const syncFilled = useCallback(
+            (nextValue: IFormFieldTextareaProps["value"]) => {
+                setFilled(isFilled(nextValue));
+            },
+            [setFilled],
+        );
 
-        useEffect(() => {
-            setValueExist(Boolean(value));
-        }, [setValueExist, value]);
+        useLayoutEffect(() => {
+            setTargetId(id);
+        }, [id, setTargetId]);
 
-        const handleBlur: React.FocusEventHandler<HTMLTextAreaElement> = (event) => {
-            setFocused(false);
-            onBlur?.(event);
-        };
+        useLayoutEffect(() => {
+            syncFilled(value ?? defaultValue);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []);
 
-        const handleFocus: React.FocusEventHandler<HTMLTextAreaElement> = (event) => {
-            setFocused(true);
-            onFocus?.(event);
-        };
+        useLayoutEffect(() => {
+            if (value !== undefined) {
+                syncFilled(value);
+            }
+        }, [value, syncFilled]);
+
+        const handleFocus = useCallback<React.FocusEventHandler<HTMLTextAreaElement>>(
+            (event) => {
+                syncFilled(event.currentTarget.value);
+                setFocused(true);
+                onFocus?.(event);
+            },
+            [syncFilled, setFocused, onFocus],
+        );
+
+        const handleBlur = useCallback<React.FocusEventHandler<HTMLTextAreaElement>>(
+            (event) => {
+                syncFilled(event.currentTarget.value);
+                setFocused(false);
+                onBlur?.(event);
+            },
+            [syncFilled, setFocused, onBlur],
+        );
+
+        /**
+         * Обработчик начала анимации.
+         *
+         * Текущая реализация необходима для кейсов с автозаполнением:
+         * - Браузер устанавливает значение в поле при загрузке страницы;
+         * - Браузер устанавливает значение в поле при навигации пользователем по сохранённым опциям заполнения.
+         */
+        const handleAnimationStart = useCallback<React.AnimationEventHandler<HTMLTextAreaElement>>(
+            (event) => {
+                if (event.animationName.startsWith("autofill-applied-hook")) {
+                    setFilled(true);
+                } else if (event.animationName.startsWith("autofill-cancelled-hook")) {
+                    // Необходимо проверить, что при отмене автозаполнения, в поле не находится значение.
+                    syncFilled(event.currentTarget.value);
+                }
+                onAnimationStart?.(event);
+            },
+            [setFilled, syncFilled, onAnimationStart],
+        );
+
+        const handleChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
+            (event) => {
+                syncFilled(event.currentTarget.value);
+                onChange?.(event);
+            },
+            [onChange, syncFilled],
+        );
 
         return (
             <textarea
-                {...htmlTextareaHTMLAttributes}
-                id={instanceId}
+                {...restProps}
+                id={id}
                 className={classNames}
+                value={value}
+                defaultValue={defaultValue}
                 disabled={status === EFormFieldStatus.DISABLED}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                value={value}
+                onAnimationStart={handleAnimationStart}
+                onChange={handleChange}
                 ref={ref}
             />
         );

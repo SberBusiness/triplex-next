@@ -1,53 +1,56 @@
 import React from "react";
+import { EComponentSize } from "../../enums/EComponentSize";
 import { EFormFieldStatus } from "./enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 export interface IFormFieldContext {
-    // Поле в состоянии disabled.
-    status: EFormFieldStatus;
-    // Поле в фокусе.
-    focused: boolean;
-    // Поле в состоянии hover.
-    hovered: boolean;
-    // ID поля ввода.
-    id: string;
-    // Ширина элемента FormFieldPostfix.
-    postfixWidth: number;
-    // Ширина элемента FormFieldPrefix.
-    prefixWidth: number;
-    // Установка значения focused.
-    setFocused: (focused: boolean) => void;
-    // Установка значения id.
-    setId: (id: string) => void;
-    // Установка значения postfixWidth.
-    setPostfixWidth: (postfixWidth: number) => void;
-    // Установка значения prefixWidth.
-    setPrefixWidth: (prefixWidth: number) => void;
-    // Установка значения valueExist.
-    setValueExist: (valueExist: boolean) => void;
-    // Поле имеет значение, в этом случае label перемещается вверх над значением.
-    valueExist: boolean;
-    // Размер поля.
+    /** Размер поля. */
     size: EComponentSize;
-    // Активное состояние поля.
+    /** Статус поля. */
+    status: EFormFieldStatus;
+    /** Идентификатор элемента ввода. */
+    targetId: string | undefined;
+    /** Идентификатор лейбла. */
+    labelId: string | undefined;
+    /** Ширина элемента FormFieldPrefix. */
+    prefixWidth: number;
+    /** Ширина элемента FormFieldPostfix. */
+    postfixWidth: number;
+    /** Поле заполнено. */
+    filled: boolean;
+    /** Поле в фокусе. */
+    focused: boolean;
+    /** Поле активно. */
     active: boolean;
+    /** Установка значения targetId. */
+    setTargetId: (targetId: string | undefined) => void;
+    /** Установка значения labelId. */
+    setLabelId: (labelId: string | undefined) => void;
+    /** Установка значения postfixWidth. */
+    setPostfixWidth: (postfixWidth: number) => void;
+    /** Установка значения prefixWidth. */
+    setPrefixWidth: (prefixWidth: number) => void;
+    /** Установка значения filled. */
+    setFilled: (filled: boolean) => void;
+    /** Установка значения focused. */
+    setFocused: (focused: boolean) => void;
 }
 
 export const initialFormFieldContext: IFormFieldContext = {
+    size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,
-    focused: false,
-    hovered: false,
-    id: "",
+    targetId: undefined,
+    labelId: undefined,
     postfixWidth: 0,
     prefixWidth: 0,
-    setFocused: () => {},
-    setId: () => {},
+    filled: false,
+    focused: false,
+    active: false,
+    setTargetId: () => {},
+    setLabelId: () => {},
     setPostfixWidth: () => {},
     setPrefixWidth: () => {},
-    setValueExist: () => {},
-    valueExist: false,
-    size: EComponentSize.MD,
-    active: false,
+    setFilled: () => {},
+    setFocused: () => {},
 };
 
 /**

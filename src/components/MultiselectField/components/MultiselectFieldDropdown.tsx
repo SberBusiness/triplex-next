@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import FocusTrap from "focus-trap-react";
-import { Dropdown, IDropdownProps } from "../../Dropdown/Dropdown";
+import { Dropdown, IDropdownProps, EDropdownWidth } from "../../Dropdown";
 import { MultiselectFieldDropdownHeader } from "./MultiselectFieldDropdownHeader";
 import { MultiselectFieldDropdownContent } from "./MultiselectFieldDropdownContent";
 import { MultiselectFieldDropdownFooter } from "./MultiselectFieldDropdownFooter";
@@ -28,7 +28,7 @@ export const MultiselectFieldDropdown = Object.assign(
 
             const renderDropdown = () => (
                 <Dropdown
-                    fixedWidth={false}
+                    width={EDropdownWidth.MIN_TARGET}
                     mobileViewProps={{
                         ...mobileViewProps,
                         className: mobileViewProps?.className,

@@ -11,12 +11,14 @@ import { SelectExtendedFieldDropdownDefault } from "@sberbusiness/triplex-next/c
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EDropdownWidth } from "../Dropdown";
 
 /* Свойства опции списка. */
 export interface ISelectFieldOption extends ISelectExtendedFieldDefaultOption {}
 
 export interface ISelectFieldProps
-    extends Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget" | "placeholder">,
+    extends
+        Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget" | "placeholder">,
         Pick<ISelectExtendedFieldTargetProps, "loading" | "status" | "placeholder"> {
     /** Размер компонента. */
     size: EComponentSize;
@@ -28,7 +30,7 @@ export interface ISelectFieldProps
     /** Обработчик изменения значения. */
     onChange: (option: ISelectFieldOption) => void;
     /** Свойства, передающиеся в SelectExtendedField.Target. */
-    targetProps: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
+    targetProps?: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
     /** ClassName передающийся в DropdownListItem. */
     dropdownListItemClassName?: string;
     /** Название Select отображающееся в мобильном режиме. */
@@ -79,6 +81,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
             aria-labelledby={ariaLabelledby}
             ref={setRef}
             size={size}
+            fieldLabel={undefined}
             {...targetProps}
             {...props}
         />
@@ -89,6 +92,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
             <SelectExtendedFieldDropdownDefault
                 {...props}
                 size={size}
+                width={EDropdownWidth.TARGET}
                 loading={loading}
                 listId={instanceId.current}
                 mobileTitle={mobileTitle}

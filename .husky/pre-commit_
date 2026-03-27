@@ -1,0 +1,13 @@
+npx lint-staged
+
+# Проверка коммита baseline-скриншотов — допускаются только из Docker
+if git diff --cached --name-only | grep -q '^__screenshots__/'; then
+  echo "⚠️  Вы коммитите скриншоты из __screenshots__/."
+  echo "   Скриншоты должны быть сделаны через Docker (npm run test-visual:docker:update)."
+  printf "   Скриншоты сделаны через Docker? (y/n) "
+  read -r answer < /dev/tty
+  if [ "$answer" != "y" ] && [ "$answer" != "Y" ]; then
+    echo "❌ Коммит отменён. Обновите скриншоты через Docker или GitHub Actions."
+    exit 1
+  fi
+fi

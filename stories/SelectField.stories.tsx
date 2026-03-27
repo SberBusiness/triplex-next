@@ -75,7 +75,7 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
         const { fieldLabel, placeholder, loading, status, descriptionText, errorText, size } = args;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <SelectField
                         size={size || EComponentSize.LG}
@@ -228,7 +228,7 @@ export const Default: StoryObj<typeof SelectField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <SelectField
                     size={EComponentSize.MD}
                     value={selectedValue}
@@ -254,7 +254,7 @@ export const States: StoryObj<typeof SelectField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
                         Обычное состояние
@@ -471,7 +471,7 @@ export const WithDescription: StoryObj<typeof SelectField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <SelectField
                         size={EComponentSize.LG}

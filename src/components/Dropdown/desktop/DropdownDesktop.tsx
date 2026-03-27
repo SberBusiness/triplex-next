@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
-import { EDropdownAlignment, EDropdownDirection } from "../enums";
+import { EDropdownAlignment, EDropdownDirection, EDropdownWidth } from "./enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { useToken } from "../../ThemeProvider/useToken";
@@ -15,14 +15,14 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
     setOpened: (opened: boolean) => void;
     /** Ссылка на управляющий элемент. */
     targetRef: React.RefObject<HTMLElement>;
+    /** Размер дропдауна. */
+    size?: EComponentSize;
     /** Направление выпадающего меню. */
     direction?: EDropdownDirection;
     /** Выравнивание списка относительно управляющего элемента. */
     alignment?: EDropdownAlignment;
-    /** Фиксированная ширина по управляющему элементу. */
-    fixedWidth?: boolean;
-    /** Размер дропдауна. */
-    size?: EComponentSize;
+    /** Вариант расчёта ширины выпадающего списка. */
+    width?: EDropdownWidth;
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -32,16 +32,16 @@ const overflowHiddenClassName = styles.dropdownDesktopOverflowHidden;
 /** Выпадающее меню. */
 export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktopProps>((props, ref) => {
     const {
-        alignment = EDropdownAlignment.AUTO,
         children,
-        fixedWidth,
         className,
-        direction = EDropdownDirection.AUTO,
-        opened,
-        setOpened,
         style: styleProp,
-        targetRef,
         size = EComponentSize.MD,
+        direction = EDropdownDirection.AUTO,
+        alignment = EDropdownAlignment.AUTO,
+        width = EDropdownWidth.CONTENT,
+        opened,
+        targetRef,
+        setOpened,
         ...rest
     } = props;
     const { scopeClassName } = useToken();
@@ -99,26 +99,32 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     /** Расчёт положения по горизонтали. */
     const calculatePositionHorizontal = useCallback(
         (css: React.CSSProperties, dropdownRect: DOMRect, targetRect: DOMRect) => {
-            const width = fixedWidth ? targetRect.width : Math.max(targetRect.width, dropdownRect.width);
+            let expectedWidth = dropdownRect.width;
+
+            if (width === EDropdownWidth.TARGET) {
+                expectedWidth = targetRect.width;
+            } else if (width === EDropdownWidth.MIN_TARGET) {
+                expectedWidth = Math.max(targetRect.width, dropdownRect.width);
+            }
 
             if (alignment === EDropdownAlignment.AUTO) {
-                if (targetRect.right - width > 0) {
+                if (targetRect.right - expectedWidth > 0) {
                     // Если влезает слева.
-                    css.left = targetRect.right - width;
-                } else if (targetRect.left + width < document.documentElement.clientWidth) {
+                    css.left = targetRect.right - expectedWidth;
+                } else if (targetRect.left + expectedWidth < document.documentElement.clientWidth) {
                     // Если влезает справа.
                     css.left = targetRect.left;
                 } else {
                     // Если не влезает слева и справа.
-                    css.left = targetRect.right - width;
+                    css.left = targetRect.right - expectedWidth;
                 }
             } else if (alignment === EDropdownAlignment.RIGHT) {
-                css.left = targetRect.right - width;
+                css.left = targetRect.right - expectedWidth;
             } else if (alignment === EDropdownAlignment.LEFT) {
                 css.left = targetRect.left;
             }
         },
-        [alignment, fixedWidth],
+        [width, alignment],
     );
 
     /** Расчёт положения по вертикали. */
@@ -149,27 +155,24 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
 
     /** Установка положения меню. */
     const setPosition = useCallback(() => {
-        const { current: dropdown } = dropdownRef;
-        const { current: target } = targetRef;
+        if (dropdownRef.current === null || targetRef.current === null) return;
 
-        if (dropdown && target) {
-            const dropdownRect = dropdown.getBoundingClientRect();
-            const targetRect = target.getBoundingClientRect();
-            const css: React.CSSProperties = {};
+        const dropdownRect = dropdownRef.current.getBoundingClientRect();
+        const targetRect = targetRef.current.getBoundingClientRect();
+        const css: React.CSSProperties = {};
 
-            if (fixedWidth) {
-                css.width = targetRect.width;
-            } else {
-                css.minWidth = targetRect.width;
-            }
-
-            calculatePositionVertical(css, dropdownRect, targetRect);
-            calculatePositionHorizontal(css, dropdownRect, targetRect);
-
-            dropdownRes.current = { height: dropdownRect.height, width: dropdownRect.width };
-            setStyleState(css);
+        if (width === EDropdownWidth.TARGET) {
+            css.width = targetRect.width;
+        } else if (width === EDropdownWidth.MIN_TARGET) {
+            css.minWidth = targetRect.width;
         }
-    }, [targetRef, fixedWidth, calculatePositionVertical, calculatePositionHorizontal]);
+
+        calculatePositionVertical(css, dropdownRect, targetRect);
+        calculatePositionHorizontal(css, dropdownRect, targetRect);
+
+        dropdownRes.current = { height: dropdownRect.height, width: dropdownRect.width };
+        setStyleState(css);
+    }, [targetRef, width, calculatePositionVertical, calculatePositionHorizontal]);
 
     useEffect(() => {
         if (opened) {
@@ -181,40 +184,37 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         }
     }, [opened, setPosition]);
 
-    // При любом изменении контента внутри Dropdown.
     useEffect(() => {
-        if (dropdownRef.current) {
-            const { width, height } = dropdownRef.current.getBoundingClientRect();
+        if (!opened || dropdownRef.current === null || targetRef.current === null) return;
 
-            // Если разрешение не изменилось, позицию не пересчитываем.
-            if (width != dropdownRes.current.width || height != dropdownRes.current.height) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect
-                setPosition();
-            }
-        }
-    }, [children, setPosition]);
+        const observer = new ResizeObserver(setPosition);
 
-    /** Обработчик изменения положения меню. */
-    const handleReposition = useCallback(() => {
+        observer.observe(dropdownRef.current);
+        observer.observe(targetRef.current);
+        return () => observer.disconnect();
+    }, [opened, targetRef, setPosition]);
+
+    /** Планирует перерасчет позиции дропдауна в следующем кадре. */
+    const updatePosition = useCallback(() => {
         setTimeout(setPosition);
     }, [setPosition]);
 
     useEffect(() => {
         if (opened) {
-            document.addEventListener("scroll", handleReposition, true);
-            window.addEventListener("resize", handleReposition);
+            document.addEventListener("scroll", updatePosition, true);
+            window.addEventListener("resize", updatePosition);
             toggleScrollEventListener(true);
             document.body.classList.add(overflowHiddenClassName);
-            handleReposition();
+            updatePosition();
 
             return () => {
-                document.removeEventListener("scroll", handleReposition, true);
-                window.removeEventListener("resize", handleReposition);
+                document.removeEventListener("scroll", updatePosition, true);
+                window.removeEventListener("resize", updatePosition);
                 toggleScrollEventListener(false);
                 document.body.classList.remove(overflowHiddenClassName);
             };
         }
-    }, [opened, handleReposition, toggleScrollEventListener]);
+    }, [opened, updatePosition, toggleScrollEventListener]);
 
     /** Функция для хранения ссылки. */
     const setRef = (instance: HTMLDivElement | null) => {

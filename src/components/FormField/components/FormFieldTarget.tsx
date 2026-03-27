@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { FormFieldContext } from "../FormFieldContext";
+import React, { useContext, useMemo, useLayoutEffect, useCallback } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
+import { FormFieldContext } from "../FormFieldContext";
 import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField/enums";
+import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "../styles/FormFieldTarget.module.less";
 
 /** Свойства компонента FormFieldTarget. */
@@ -11,58 +12,60 @@ export interface IFormFieldTargetProps extends Omit<React.HTMLAttributes<HTMLDiv
     placeholder?: React.ReactNode;
 }
 
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
+
 /** Компонент, отображающий нередактируемое значение. */
-export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTargetProps>((props, ref) => {
-    const { className, id, onBlur, onFocus, placeholder, children, ...restProps } = props;
-    const { status, setFocused, setId, setValueExist, size, active } = useContext(FormFieldContext);
-    const classNames = clsx(styles.formFieldTarget, className, styles[`size-${size}`], {
-        [styles.disabled]: status === EFormFieldStatus.DISABLED,
-        [styles.placeholder]: !!placeholder && !children && status !== EFormFieldStatus.DISABLED,
-        [styles.active]: active,
-    });
+export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTargetProps>(
+    ({ children, id: idProp, className, placeholder, onFocus, onBlur, ...restProps }, ref) => {
+        const { size, status, active, labelId, setFilled, setFocused, setTargetId } = useContext(FormFieldContext);
+        const id = useMemo(() => (idProp === undefined ? uniqueId("target_") : idProp), [idProp]);
+        const childrenExist = useMemo(() => React.Children.toArray(children).length !== 0, [children]);
+        const classNames = clsx(styles.formFieldTarget, sizeToClassNameMap[size], className, {
+            [styles.disabled]: status === EFormFieldStatus.DISABLED,
+            [styles.placeholder]: !!placeholder && !childrenExist && status !== EFormFieldStatus.DISABLED,
+            [styles.active]: active,
+        });
 
-    const instanceId = useRef(id || uniqueId("formFieldTarget_"));
+        useLayoutEffect(() => {
+            setTargetId(id);
+        }, [id, setTargetId]);
 
-    useEffect(() => {
-        setId(instanceId.current);
-    }, [setId]);
+        useLayoutEffect(() => {
+            setFilled(childrenExist);
+        }, [childrenExist, setFilled]);
 
-    useEffect(() => {
-        if (id) {
-            instanceId.current = id;
-            setId(instanceId.current);
-        }
-    }, [id, setId]);
+        const handleFocus = useCallback<React.FocusEventHandler<HTMLDivElement>>(
+            (event) => {
+                setFocused(true);
+                onFocus?.(event);
+            },
+            [onFocus, setFocused],
+        );
 
-    useEffect(() => {
-        setValueExist(!!children);
-    }, [setValueExist, children]);
+        const handleBlur = useCallback<React.FocusEventHandler<HTMLDivElement>>(
+            (event) => {
+                setFocused(false);
+                onBlur?.(event);
+            },
+            [onBlur, setFocused],
+        );
 
-    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        setFocused(false);
-        onBlur?.(event);
-    };
-
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-        setFocused(true);
-        onFocus?.(event);
-    };
-
-    return (
-        <div
-            {...restProps}
-            className={classNames}
-            aria-disabled={status === EFormFieldStatus.DISABLED}
-            // eslint-disable-next-line react-hooks/refs
-            id={instanceId.current}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            tabIndex={status === EFormFieldStatus.DISABLED ? -1 : 0}
-            ref={ref}
-        >
-            {children || <span className={styles.placeholderWrapper}>{placeholder}</span>}
-        </div>
-    );
-});
+        return (
+            <div
+                {...restProps}
+                id={id}
+                className={classNames}
+                tabIndex={status === EFormFieldStatus.DISABLED ? -1 : 0}
+                aria-labelledby={labelId}
+                aria-disabled={status === EFormFieldStatus.DISABLED}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
+                ref={ref}
+            >
+                {childrenExist ? children : <span className={styles.placeholderWrapper}>{placeholder}</span>}
+            </div>
+        );
+    },
+);
 
 FormFieldTarget.displayName = "FormFieldTarget";

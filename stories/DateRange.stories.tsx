@@ -121,6 +121,7 @@ export const Playground: StoryObj<IDateRangeWithControlsProps> = {
         controls: {
             include: ["shiftAmount", "shiftUnit", "hideNavigation"],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -199,6 +200,45 @@ export const WithoutNavigation: StoryObj<typeof DateRange> = {
         docs: {
             description: {
                 story: "DateRange без кнопок навигации - только поля выбора дат.",
+            },
+        },
+        controls: { disable: true },
+    },
+};
+
+export const VisualTests: StoryObj<typeof DateRange> = {
+    tags: ["!autodocs"],
+    render: () => {
+        const renderPicker = (props: IDateRangePickerProvideProps) => (
+            <DateField
+                label="Label"
+                placeholderMask={presets.placeholderMasks.date}
+                invalidDateHint="Указана недоступная для выбора дата."
+                {...props}
+            />
+        );
+
+        const renderButton = (props: IDateRangeButtonProvideProps) => <ButtonIcon {...props} />;
+
+        return (
+            <div style={{ maxWidth: "400px" }}>
+                <DateRange
+                    value={["20260322", "20260322"]}
+                    onChange={() => {}}
+                    shiftAmount={1}
+                    shiftUnit={EDateRangeShiftUnit.MONTH}
+                    renderPickerFrom={renderPicker}
+                    renderPickerTo={renderPicker}
+                    renderButtonBack={renderButton}
+                    renderButtonForward={renderButton}
+                />
+            </div>
+        );
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: "Базовый пример использования DateRange с стандартными настройками.",
             },
         },
         controls: { disable: true },

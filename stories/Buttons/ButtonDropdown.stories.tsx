@@ -6,6 +6,8 @@ import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { Gap } from "../../src/components/Gap/Gap";
 import { Text, ETextSize } from "../../src/components/Typography";
+import { AdaptiveUtils } from "../utils/adaptiveUtils";
+import { EScreenWidth } from "../../src/helpers/breakpoints";
 
 export default {
     title: "Components/Buttons/ButtonDropdown",
@@ -121,6 +123,7 @@ export const Playground: StoryObj<typeof ButtonDropdown> = {
         controls: {
             include: ["children", "theme", "size", "block", "disabled"],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -192,7 +195,7 @@ export const Sizes: StoryObj<typeof ButtonDropdown> = {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>EComponentSize.SM</Text>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                         <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.GENERAL} options={options}>
                             Button text
                         </ButtonDropdown>
@@ -224,7 +227,7 @@ export const Sizes: StoryObj<typeof ButtonDropdown> = {
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>EComponentSize.MD</Text>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                         <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.GENERAL} options={options}>
                             Button text
                         </ButtonDropdown>
@@ -256,7 +259,7 @@ export const Sizes: StoryObj<typeof ButtonDropdown> = {
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>EComponentSize.LG</Text>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                         <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.GENERAL} options={options}>
                             Button text
                         </ButtonDropdown>
@@ -321,7 +324,7 @@ export const Themes: StoryObj<typeof ButtonDropdown> = {
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                     <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
                         General
                     </ButtonDropdown>
@@ -448,7 +451,7 @@ export const Disabled: StoryObj<typeof ButtonDropdown> = {
         ];
 
         return (
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
                 <ButtonDropdown disabled theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
                     Button text
                 </ButtonDropdown>
@@ -542,5 +545,85 @@ export const WithSelectedOption: StoryObj<typeof ButtonDropdown> = {
             description: { story: "Кнопка с заранее выбранным в выпадающем списке значением." },
         },
         controls: { disable: true },
+    },
+};
+
+export const VisualTests: StoryObj<typeof ButtonDropdown> = {
+    tags: ["!autodocs"],
+    render: () => {
+        const [selectedId, setSelectedId] = useState<string | undefined>("opt-2");
+
+        const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
+            {
+                id: "opt-1",
+                label: "Действие 1",
+                onSelect: () => {
+                    action("select")("opt-1");
+                    onItemSelect?.("opt-1");
+                },
+            },
+            {
+                id: "opt-2",
+                label: "Действие 2",
+                onSelect: () => {
+                    action("select")("opt-2");
+                    onItemSelect?.("opt-2");
+                },
+            },
+            {
+                id: "opt-3",
+                label: "Действие 3",
+                onSelect: () => {
+                    action("select")("opt-3");
+                    onItemSelect?.("opt-3");
+                },
+            },
+        ];
+
+        const options = useMemo(() => createOptions(setSelectedId), []);
+        const selectedSM = options.find((o) => o.id === selectedId);
+        const selectedMD = options.find((o) => o.id === selectedId);
+        const selectedLG = options.find((o) => o.id === selectedId);
+
+        return (
+            <div style={{ display: "flex", gap: 16 }}>
+                <ButtonDropdown
+                    opened={true}
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.SM}
+                    options={options}
+                    selected={selectedSM}
+                >
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown
+                    opened={!AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX)}
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.MD}
+                    options={options}
+                    selected={selectedMD}
+                >
+                    Button text
+                </ButtonDropdown>
+                <ButtonDropdown
+                    opened={!AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX)}
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.LG}
+                    options={options}
+                    selected={selectedLG}
+                >
+                    Button text
+                </ButtonDropdown>
+            </div>
+        );
+    },
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
     },
 };

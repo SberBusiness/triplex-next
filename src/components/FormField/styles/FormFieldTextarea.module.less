@@ -47,4 +47,31 @@
     &:disabled {
         color: var(--triplex-next-FormField-Input_Color_Disabled);
     }
+
+    // Создаём хук для отслеживания применения автозаполнения.
+    &:-webkit-autofill {
+        animation-name: autofill-applied-hook;
+        animation-duration: 1ms;
+
+        // https://stackoverflow.com/questions/2781549/
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    // Создаём хук для отслеживания отмены автозаполнения.
+    &:not(:-webkit-autofill) {
+        animation-name: autofill-cancelled-hook;
+        animation-duration: 1ms;
+    }
+}
+
+@keyframes autofill-applied-hook {
+    0% {
+        transform: none;
+    }
+}
+
+@keyframes autofill-cancelled-hook {
+    0% {
+        transform: none;
+    }
 }

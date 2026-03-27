@@ -92,9 +92,11 @@ src/
 | `npm run build` | Сборка компонентов и `style.css` в `dist/` |
 | `npm run storybook` | Локальный просмотр компонентов |
 | `npm run storybook:build` | Сборка Storybook в `storybook-static/` |
-| `npm run test-visual` | Визуальные регрессионные тесты (Storybook должен быть запущен) |
-| `npm run test-visual:update` | Обновить baseline-скриншоты |
-| `npm run test-visual:ci` | Запустить Storybook + визуальные тесты (для CI) |
+| `npm run test-visual:docker` | Визуальные тесты в Docker-контейнере (сборка + запуск) |
+| `npm run test-visual:docker:update` | Обновить baseline-скриншоты в Docker-контейнере |
+| `npm run test-visual:debug` | Отладка визуальных тестов локально (Storybook должен быть запущен) |
+| `npm run test-visual:ci` | Визуальные тесты — используется в CI и Docker |
+| `npm run test-visual:ci:update` | Обновление baseline — используется в CI и Docker |
 
 ---
 
@@ -131,38 +133,65 @@ export * from './components/Alert';
 
 Скриншоты снимаются на двух viewport'ах: **XS** (575px) и **XL** (1200px). Baseline-скриншоты хранятся в папке `__screenshots__/` и коммитятся в git. Diff-изображения при падении сохраняются в `__screenshots__/__diff__/` и игнорируются git'ом.
 
-> **Важно:** baseline-скриншоты создаются и обновляются **только через CI** (Linux). Локальные скриншоты на macOS несовместимы из-за разного рендеринга шрифтов.
+> **Важно:** baseline-скриншоты создаются и обновляются **только через Docker или CI** (Linux). Локальные скриншоты на macOS несовместимы из-за разного рендеринга шрифтов.
+
+#### Как обновить baseline-скриншоты
+
+**Через Docker (рекомендуется):**
+```bash
+npm run test-visual:docker:update
+```
+
+**Через CI:**
+1. Запушить ветку с изменениями
+2. В GitHub → Actions → **Update Visual Snapshots** → Run workflow → выбрать ветку
+3. Воркфлоу пересоздаст скриншоты и сделает коммит в ту же ветку
+
+#### Как запустить визуальные тесты
+
+```bash
+npm run test-visual:docker           # Проверка через Docker
+npm run test-visual:docker:update    # Обновление baseline через Docker
+```
+
+#### Как запустить тесты только для одного компонента
+
+`test-storybook` не поддерживает фильтрацию по имени стори. Единственный способ — временно сузить glob в `.storybook/main.ts`:
+
+```ts
+// Временно, только для одного компонента:
+stories: ["../stories/Link/**/*.stories.@(ts|tsx|mdx)"],
+
+// Вернуть обратно после:
+stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
+```
+
+Затем запустить тесты, как обычно:
+
+```bash
+npm run test-visual:docker           # через Docker
+npm run test-visual:debug            # локально (Storybook должен быть запущен)
+```
+
+> **Не забудьте вернуть glob обратно** перед коммитом.
 
 #### CI воркфлоу
+
+Визуальные тесты в CI работают на собранной (build) версии Storybook, а не на dev-сервере — это исключает race conditions при загрузке модулей.
 
 | Воркфлоу | Триггер | Что делает |
 |---|---|---|
 | `visual-test.yml` | Каждый PR | Прогоняет тесты, загружает диффы как артефакты при падении |
 | `visual-update.yml` | Ручной запуск (`workflow_dispatch`) | Пересоздаёт baselines и коммитит их в ветку |
 
-#### Как обновить baseline-скриншоты
-
-1. Запушить ветку с изменениями
-2. В GitHub → Actions → **Update Visual Snapshots** → Run workflow → выбрать ветку
-3. Воркфлоу пересоздаст скриншоты и сделает коммит в ту же ветку
-
 #### Как отлаживать локально
 
-Для отладки конкретного компонента — временно сузить glob в `.storybook/main.ts`:
-
-```ts
-// Временно, только для отладки:
-stories: ["../stories/Badge/**/*.stories.@(ts|tsx|mdx)"],
-
-// Вернуть обратно после отладки:
-stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
-```
-
-Затем запустить:
 ```bash
-npm run storybook         # в одном терминале
-npm run test-visual       # в другом
+npm run storybook             # в одном терминале
+npm run test-visual:debug     # в другом (с PWDEBUG=1)
 ```
+
+Для отладки одного компонента — сузить glob как описано выше.
 
 #### Как исключить story из тестирования
 
@@ -186,10 +215,10 @@ const meta: Meta<typeof Button> = {
 ### Как запустить тесты локально
 
 ```bash
-npm run test-e2e              # Запуск e2e тестов
-npm run test-unit             # Запуск unit тестов
-npm run test-unit:watch       # Запуск unit тестов в режиме наблюдения
-npm run test-unit:coverage    # Запуск unit тестов с отчётом о покрытии
-npm run test-visual:update    # Создать/обновить baseline визуальных тестов
-npm run test-visual           # Запуск визуальных регрессионных тестов
+npm run test-e2e                     # Запуск e2e тестов
+npm run test-unit                    # Запуск unit тестов
+npm run test-unit:watch              # Запуск unit тестов в режиме наблюдения
+npm run test-unit:coverage           # Запуск unit тестов с отчётом о покрытии
+npm run test-visual:docker           # Визуальные регрессионные тесты (Docker)
+npm run test-visual:docker:update    # Обновить baseline-скриншоты (Docker)
 ```

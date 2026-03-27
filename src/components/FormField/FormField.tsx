@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import clsx from "clsx";
 import { FormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
@@ -33,64 +33,55 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
         {
             children,
             className,
-            status = EFormFieldStatus.DEFAULT,
-            onMouseEnter,
-            onMouseLeave,
             style,
             size = EComponentSize.LG,
+            status = EFormFieldStatus.DEFAULT,
             active = false,
             ...htmlDivAttributes
         },
         ref,
     ) => {
-        const [focused, setFocused] = useState(false);
-        const [hovered, setHovered] = useState(false);
-        const [id, setId] = useState("");
+        const [targetId, setTargetId] = useState<string>();
+        const [labelId, setLabelId] = useState<string>();
         const [postfixWidth, setPostfixWidth] = useState(TARGET_PADDING_X_DEFAULT);
         const [prefixWidth, setPrefixWidth] = useState(TARGET_PADDING_X_DEFAULT);
-        const [valueExist, setValueExist] = useState(false);
+        const [filled, setFilled] = useState(false);
+        const [focused, setFocused] = useState(false);
 
-        const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-            setHovered(true);
-            onMouseEnter?.(event);
-        };
-
-        const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
-            setHovered(false);
-            onMouseLeave?.(event);
-        };
+        const contextValue = useMemo(
+            () => ({
+                size,
+                status,
+                targetId,
+                labelId,
+                postfixWidth,
+                prefixWidth,
+                filled,
+                focused,
+                active: active || focused,
+                setTargetId,
+                setLabelId,
+                setPostfixWidth,
+                setPrefixWidth,
+                setFilled,
+                setFocused,
+            }),
+            [size, status, targetId, labelId, postfixWidth, prefixWidth, filled, focused, active],
+        );
 
         return (
-            <FormFieldContext.Provider
-                value={{
-                    status,
-                    focused,
-                    hovered,
-                    id,
-                    postfixWidth,
-                    prefixWidth,
-                    setFocused,
-                    setId,
-                    setPostfixWidth,
-                    setPrefixWidth,
-                    setValueExist,
-                    valueExist,
-                    size,
-                    active: active || focused,
-                }}
-            >
+            <FormFieldContext.Provider value={contextValue}>
                 <div
                     className={clsx(
                         styles.formField,
                         sizeToClassNameMap[size],
                         statusToClassNameMap[status],
                         {
+                            [styles.filled]: filled,
                             [styles.active]: active || focused,
                         },
                         className,
                     )}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
                     data-tx={process.env.npm_package_version}
                     style={{ paddingLeft: prefixWidth, paddingRight: postfixWidth, ...style }}
                     {...htmlDivAttributes}

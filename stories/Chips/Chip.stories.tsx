@@ -65,6 +65,7 @@ export const Playground: StoryObj<typeof Chip> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
 };
 

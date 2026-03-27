@@ -81,7 +81,7 @@ export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
         const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField {...formFieldProps}>
                         <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
@@ -216,7 +216,7 @@ export const Default: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} placeholder="Введите текст..." />
@@ -235,7 +235,7 @@ export const Basic: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Имя пользователя</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} placeholder="Введите имя..." />
@@ -262,7 +262,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldPrefix>
                         <DefaulticonStrokePrdIcon20 paletteIndex={5} />
@@ -301,7 +301,7 @@ export const WithClearButton: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} />
@@ -321,6 +321,7 @@ export const WithClearButton: StoryObj<typeof FormField> = {
                 story: "FormField с префиксами и постфиксами. Префиксы отображаются слева от поля, постфиксы - справа.",
             },
         },
+        testRunner: { skip: true },
         controls: { disable: true },
     },
 };
@@ -340,7 +341,7 @@ export const WithCounter: StoryObj<typeof FormField> = {
         const currentLength = value.length;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} />
@@ -387,7 +388,7 @@ export const States: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Название поля</FormFieldLabel>
@@ -468,7 +469,7 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Название поля</FormFieldLabel>
@@ -580,7 +581,7 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Номер телефона</FormFieldLabel>
@@ -625,6 +626,78 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
                 story: "FormField с маскированным вводом. Поддерживает различные предустановленные маски для телефонных номеров, номеров карт, дат и других форматов данных.",
             },
         },
+        controls: { disable: true },
+    },
+};
+
+export const VisualTests: StoryObj<typeof FormFieldMaskedInput> = {
+    tags: ["!autodocs"],
+    render: function Render() {
+        return (
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <div style={{ display: "flex", gap: 24 }}>
+                    <FormGroup>
+                        <FormField size={EComponentSize.SM}>
+                            <FormFieldLabel>Label</FormFieldLabel>
+                            <FormFieldMaskedInput
+                                value="1234 5678 9012 3456"
+                                onChange={() => {}}
+                                mask={FormFieldMaskedInput.presets.masks.cardNumber}
+                                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
+                            />
+                        </FormField>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <FormField size={EComponentSize.MD}>
+                            <FormFieldLabel>Label</FormFieldLabel>
+                            <FormFieldMaskedInput
+                                value="1234 5678 9012 3456"
+                                onChange={() => {}}
+                                mask={FormFieldMaskedInput.presets.masks.cardNumber}
+                                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
+                            />
+                        </FormField>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <FormField size={EComponentSize.LG}>
+                            <FormFieldLabel>Label</FormFieldLabel>
+                            <FormFieldMaskedInput
+                                value="1234 5678 9012 3456"
+                                onChange={() => {}}
+                                mask={FormFieldMaskedInput.presets.masks.cardNumber}
+                                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.cardNumber}
+                            />
+                        </FormField>
+                    </FormGroup>
+                </div>
+                <div style={{ display: "flex", gap: 24 }}>
+                    <FormGroup>
+                        <FormField size={EComponentSize.SM} active>
+                            <FormFieldLabel>Label</FormFieldLabel>
+                            <FormFieldInput value="" onChange={() => {}} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <FormField size={EComponentSize.MD} active>
+                            <FormFieldLabel>Label</FormFieldLabel>
+                            <FormFieldInput value="" onChange={() => {}} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <FormField size={EComponentSize.LG} active>
+                            <FormFieldLabel>Label</FormFieldLabel>
+                            <FormFieldInput value="" onChange={() => {}} placeholder="Введите текст..." />
+                        </FormField>
+                    </FormGroup>
+                </div>
+            </div>
+        );
+    },
+    parameters: {
         controls: { disable: true },
     },
 };

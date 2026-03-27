@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 
-// Basic matchMedia polyfill for jsdom environment used in unit tests.
+// Polyfill matchMedia for jsdom environment.
 if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).matchMedia = (query: string) => {
@@ -17,10 +17,9 @@ if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
     };
 }
 
-// ResizeObserver polyfill for jsdom environment used in unit tests.
+// Polyfill ResizeObserver for jsdom environment.
 if (typeof window !== "undefined" && typeof window.ResizeObserver !== "function") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).ResizeObserver = class ResizeObserver {
+    window.ResizeObserver = class ResizeObserver {
         observe() {}
         unobserve() {}
         disconnect() {}

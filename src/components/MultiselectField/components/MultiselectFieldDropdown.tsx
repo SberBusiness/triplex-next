@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
 import { Dropdown, IDropdownProps, EDropdownWidth } from "../../Dropdown";
 import { MultiselectFieldDropdownHeader } from "./MultiselectFieldDropdownHeader";
 import { MultiselectFieldDropdownContent } from "./MultiselectFieldDropdownContent";
 import { MultiselectFieldDropdownFooter } from "./MultiselectFieldDropdownFooter";
-import { MobileView } from "../../MobileView/MobileView";
 import { MultiselectFieldContext } from "../MultiselectFieldContext";
 
 /** Свойства компонента MultiselectFieldDropdown. */
@@ -17,16 +16,9 @@ export interface IMultiselectFieldDropdownProps extends IDropdownProps {
 export const MultiselectFieldDropdown = Object.assign(
     React.forwardRef<HTMLDivElement, IMultiselectFieldDropdownProps>(
         ({ children, focusTrapProps, opened, targetRef, mobileViewProps, ...rest }, ref) => {
-            const [trapActive, setTrapActive] = useState(false);
-
             const { size } = useContext(MultiselectFieldContext);
 
-            useEffect(() => {
-                const timeoutId = window.setTimeout(() => setTrapActive(opened));
-                return () => window.clearTimeout(timeoutId);
-            }, [opened]);
-
-            const renderDropdown = () => (
+            return (
                 <Dropdown
                     width={EDropdownWidth.MIN_TARGET}
                     mobileViewProps={{
@@ -39,30 +31,17 @@ export const MultiselectFieldDropdown = Object.assign(
                     {...rest}
                     ref={ref}
                 >
-                    {children}
+                    <FocusTrap
+                        {...focusTrapProps}
+                        focusTrapOptions={{
+                            clickOutsideDeactivates: true,
+                            preventScroll: true,
+                            ...focusTrapProps?.focusTrapOptions,
+                        }}
+                    >
+                        <div role="presentation">{children}</div>
+                    </FocusTrap>
                 </Dropdown>
-            );
-
-            return (
-                <MobileView
-                    fallback={
-                        !opened ? null : (
-                            <FocusTrap
-                                active={trapActive}
-                                {...focusTrapProps}
-                                focusTrapOptions={{
-                                    clickOutsideDeactivates: true,
-                                    preventScroll: true,
-                                    ...focusTrapProps?.focusTrapOptions,
-                                }}
-                            >
-                                {renderDropdown()}
-                            </FocusTrap>
-                        )
-                    }
-                >
-                    {renderDropdown()}
-                </MobileView>
             );
         },
     ),

@@ -108,13 +108,13 @@ export const DifferentSizes: StoryObj<typeof Radio> = {
         controls: { disable: true },
     },
     render: () => (
-        <div style={{ width: "250px" }}>
+        <>
             <Radio size={EComponentSize.SM}>Radio text</Radio>
             <Gap size={16} />
             <Radio>Radio text</Radio>
             <Gap size={16} />
             <Radio size={EComponentSize.LG}>Radio text</Radio>
-        </div>
+        </>
     ),
 };
 

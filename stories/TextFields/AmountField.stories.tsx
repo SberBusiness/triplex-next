@@ -139,7 +139,7 @@ export const Playground: Story = {
         const { inputProps, ...restArgs } = args;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <AmountField
                     {...restArgs}
                     inputProps={{
@@ -164,7 +164,7 @@ export const Basic: Story = {
         const { value, onChange } = useAmountFieldLogic();
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <AmountField
                     inputProps={{
                         value,
@@ -192,7 +192,7 @@ export const Sizes: Story = {
         const sizes = Object.values(EComponentSize);
 
         return (
-            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
                 {sizes.map((size) => {
                     const { value, onChange } = useAmountFieldLogic();
 
@@ -223,7 +223,7 @@ export const Statuses: Story = {
         const statuses = Object.values(EFormFieldStatus);
 
         return (
-            <div style={{ maxWidth: "304px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
                 {statuses.map((status) => {
                     const { value, onChange } = useAmountFieldLogic();
 
@@ -255,7 +255,7 @@ export const WithClearButton: Story = {
         const { value, onChange, onClear } = useAmountFieldLogic("8967452.31");
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <AmountField
                     inputProps={{
                         value,
@@ -279,7 +279,7 @@ export const Example: Story = {
         const { value, onChange, onClear } = useAmountFieldLogic("");
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <AmountField
                     inputProps={{
                         value,

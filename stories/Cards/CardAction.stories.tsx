@@ -128,7 +128,7 @@ export const Playground: StoryObj<TCardActionPlaygroundProps> = {
         const isGeneralTheme = theme === ECardTheme.GENERAL;
 
         return (
-            <div style={{ width: "250px" }}>
+            <div style={{ width: "216px" }}>
                 <CardAction {...cardArgs} theme={theme} selected={isSelected} toggle={handleToggle}>
                     <CardAction.Media
                         style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
@@ -196,7 +196,7 @@ export const Default: StoryObj<TCardActionPlaygroundProps> = {
         const [isSelected, setIsSelected] = useState(false);
 
         return (
-            <div style={{ width: "250px" }}>
+            <div style={{ width: "216px" }}>
                 <CardAction {...cardArgs} selected={isSelected} toggle={setIsSelected}>
                     <CardAction.Content paddingSize={paddingSize}>
                         <CardAction.Content.Header>
@@ -233,7 +233,7 @@ export const Themes: StoryObj<TCardActionPlaygroundProps> = {
         };
 
         return (
-            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>ECardTheme.GENERAL</Text>
                     <CardAction
@@ -355,7 +355,7 @@ export const PaddingSizes: StoryObj<TCardActionPlaygroundProps> = {
         };
 
         return (
-            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>ECardContentPaddingSize.SM</Text>
                     <CardAction
@@ -477,7 +477,7 @@ export const RoundingSizes: StoryObj<TCardActionPlaygroundProps> = {
         };
 
         return (
-            <div style={{ width: "500px", display: "flex", gap: "16px" }}>
+            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <Text size={ETextSize.B3}>ECardRoundingSize.SM</Text>
                     <CardAction

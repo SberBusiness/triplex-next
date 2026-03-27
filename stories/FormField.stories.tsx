@@ -81,7 +81,7 @@ export const Playground: StoryObj<IFormFieldPlaygroundProps> = {
         const { labelText, placeholder, showClear, descriptionText, counter, ...formFieldProps } = args;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField {...formFieldProps}>
                         <FormFieldLabel>{labelText || "Название поля"}</FormFieldLabel>
@@ -216,7 +216,7 @@ export const Default: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} placeholder="Введите текст..." />
@@ -235,7 +235,7 @@ export const Basic: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Имя пользователя</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} placeholder="Введите имя..." />
@@ -262,7 +262,7 @@ export const WithPrefixAndPostfix: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldPrefix>
                         <DefaulticonStrokePrdIcon20 paletteIndex={5} />
@@ -301,7 +301,7 @@ export const WithClearButton: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} />
@@ -341,7 +341,7 @@ export const WithCounter: StoryObj<typeof FormField> = {
         const currentLength = value.length;
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormField>
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput value={value} onChange={handleChange} />
@@ -388,7 +388,7 @@ export const States: StoryObj<typeof FormField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Название поля</FormFieldLabel>
@@ -469,7 +469,7 @@ export const Textarea: StoryObj<typeof FormFieldTextarea> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Название поля</FormFieldLabel>
@@ -581,7 +581,7 @@ export const MaskedInput: StoryObj<typeof FormFieldMaskedInput> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <FormGroup>
                     <FormField>
                         <FormFieldLabel>Номер телефона</FormFieldLabel>

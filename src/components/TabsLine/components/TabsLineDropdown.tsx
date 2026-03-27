@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { TestProps } from "../../../types/CoreTypes";
-import { Dropdown, DropdownList, DropdownListContext } from "../../Dropdown";
+import { Dropdown, DropdownList, DropdownListContext, EDropdownWidth } from "../../Dropdown";
 import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { isKey } from "../../../utils/keyboard";
 import { uniqueId } from "lodash-es";
@@ -166,6 +166,7 @@ export const TabsLineDropdown: React.FC<ITabsLineDropdownProps> = ({
                 opened={opened}
                 setOpened={setOpened}
                 size={size}
+                width={EDropdownWidth.MIN_TARGET}
                 targetRef={targetRef}
                 ref={dropdownRef}
             >

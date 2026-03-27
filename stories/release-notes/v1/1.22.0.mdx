@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.22.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**Dropdown**
+
+- Удалено свойство `fixedWidth`.
+
 <Heading>Изменения</Heading>
 
 - Пакет `react-window` убран из зависимостей.
@@ -15,6 +21,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **DateField**
 
 - Исправлена высота `DropdownMobileHeader`.
+
+**Dropdown**
+
+- Добавлено свойство `width` для определения логики расчёта ширины.
+- Позиция теперь обновляется через `ResizeObserver`.
 
 **FormFieldClear**
 

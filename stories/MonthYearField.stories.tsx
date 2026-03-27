@@ -28,7 +28,7 @@ export default {
     },
     decorators: [
         (Story) => (
-            <div style={{ maxWidth: "250px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <Story />
             </div>
         ),

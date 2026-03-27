@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
-import { ChipDatePicker } from "../../src/components/Chip/ChipDatePicker/ChipDatePicker";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { EDropdownAlignment } from "../../src/components/Dropdown/enums";
-import { EFormFieldStatus } from "../../src";
+import { ChipDatePicker, EComponentSize, EFormFieldStatus, EDropdownAlignment } from "../../src";
 
 export default {
     title: "Components/Chips/ChipDatePicker",

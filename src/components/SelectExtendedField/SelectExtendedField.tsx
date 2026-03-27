@@ -8,11 +8,10 @@ import { SelectExtendedFieldDropdown } from "./components/SelectExtendedFieldDro
 import { IDropdownListItemProps } from "../Dropdown";
 
 /* Свойства опции списка. */
-export interface ISelectExtendedFieldDefaultOption
-    extends Omit<
-        IDropdownListItemProps,
-        "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
-    > {
+export interface ISelectExtendedFieldDefaultOption extends Omit<
+    IDropdownListItemProps,
+    "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
+> {
     /* Значение опции. */
     value: string;
     /* Название опции. */

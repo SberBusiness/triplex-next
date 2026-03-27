@@ -232,7 +232,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
         const maskConfig = getMaskConfig();
 
         return (
-            <div style={{ width: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MaskedField
                     {...maskedFieldProps}
                     description={
@@ -371,7 +371,7 @@ export const Default: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -416,7 +416,7 @@ export const States: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -831,7 +831,7 @@ export const Examples: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "304px" }}>
+            <div style={{ maxWidth: "300px" }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>

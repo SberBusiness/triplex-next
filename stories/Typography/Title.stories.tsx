@@ -15,7 +15,6 @@ import "./Typography.less";
 export default {
     title: "Components/Typography/Title",
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

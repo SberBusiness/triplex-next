@@ -8,7 +8,6 @@ export default {
     component: UnorderedList,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         layout: "padded",
         docs: {
             description: {

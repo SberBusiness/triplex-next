@@ -11,7 +11,6 @@ const meta = {
     component: TagColor,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -25,7 +24,7 @@ const meta = {
 ## Использование
 
 \`\`\`tsx
-import { TagColor } from '@sberbusiness/triplex-next';   
+import { TagColor } from '@sberbusiness/triplex-next';
 
 <TagColor size={EComponentSize.LG} status={ETagColorStatus.SUCCESS}>Tag text</TagColor>
 \`\`\`

@@ -1,0 +1,28 @@
+---
+description: Triplex-Next design system component conventions and AI workflow
+alwaysApply: true
+---
+
+## Triplex-Next Design System
+
+Before modifying any component, read:
+- `docs/ai/CONTEXT.md` — full context: stack, conventions, design tokens, workflow
+- `src/components/{ComponentName}/{ComponentName}-AI.md` — component-specific docs
+
+## Component workflow (adding a prop)
+
+1. Update TypeScript interface in `{Component}.tsx`
+2. Handle prop in render logic (use `clsx` for className merging)
+3. Add LESS class in `styles/{Component}.module.less` or theme-specific file
+4. Update story in `stories/{Category}/{Component}.stories.tsx`
+5. Update tests in `src/components/{Component}/__tests__/{Component}.test.tsx`
+6. Update "История изменений" in `{Component}-AI.md`
+
+## Non-negotiable rules
+
+- `forwardRef` is mandatory on all components
+- Never rename public enum values or prop names (breaking change)
+- All items in `index.ts` barrel exports must remain exported
+- LESS class names are accessed as `styles.className` (CSS Modules)
+- Use `clsx` for conditional classNames, not string concatenation
+- Design tokens follow pattern: `--triplex-next-{Component}-{Variant}_{Property}_{State}`

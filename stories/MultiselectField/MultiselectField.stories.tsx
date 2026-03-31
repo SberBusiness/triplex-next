@@ -178,6 +178,7 @@ export const Default: Story = {
     name: "Default",
     render: DefaultExample,
     parameters: {
+        testRunner: { skip: true },
         controls: { disable: true },
         docs: {
             source: {
@@ -248,6 +249,7 @@ export const WithClearButton: Story = {
     name: "WithClearButton",
     render: WithClearButtonExample,
     parameters: {
+        testRunner: { skip: true },
         controls: { disable: true },
         docs: {
             source: {
@@ -262,6 +264,7 @@ export const WithPrefixAndPostfix: Story = {
     name: "WithPrefixAndPostfix",
     render: WithPrefixAndPostfixExample,
     parameters: {
+        testRunner: { skip: true },
         controls: { disable: true },
         docs: {
             source: {
@@ -284,6 +287,24 @@ export const Example: Story = {
             },
         },
     },
+};
+
+export const VisualTests: Story = {
+    name: "Visual tests",
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: () => (
+        <div style={{ maxWidth: "320px", display: "flex", flexDirection: "column", gap: "24px" }}>
+            <BaseMultiselectExample initialSelectedIds={["multiselect-option-2-1"]} />
+            <BaseMultiselectExample forceOpened />
+        </div>
+    ),
 };
 /*
 import React from "react";

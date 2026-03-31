@@ -48,7 +48,7 @@ export const LoadingExample = () => {
 
             <div>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: 700 }}>Loading in dropdown</div>
-                <LoadingMultiselect dropdownContentLoading forceOpened />
+                <LoadingMultiselect dropdownContentLoading />
             </div>
         </div>
     );

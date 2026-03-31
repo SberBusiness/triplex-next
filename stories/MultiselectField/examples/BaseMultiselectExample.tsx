@@ -28,6 +28,8 @@ interface IBaseMultiselectExampleProps {
     size?: EComponentSize;
     status?: EFormFieldStatus;
     loading?: boolean;
+    forceOpened?: boolean;
+    initialSelectedIds?: string[];
     withInput?: boolean;
     withClearButton?: boolean;
     prefix?: React.ReactNode;
@@ -74,6 +76,8 @@ export const BaseMultiselectExample = ({
     size = EComponentSize.MD,
     status = EFormFieldStatus.DEFAULT,
     loading = false,
+    forceOpened = false,
+    initialSelectedIds = [],
     withInput = true,
     withClearButton = false,
     prefix,
@@ -81,7 +85,7 @@ export const BaseMultiselectExample = ({
 }: IBaseMultiselectExampleProps) => {
     const targetRef = useRef<HTMLDivElement>(null);
     const nodes = useMemo(() => createNodes(), []);
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [selectedIds, setSelectedIds] = useState<string[]>(initialSelectedIds);
     const [filter, setFilter] = useState("");
 
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -232,7 +236,7 @@ export const BaseMultiselectExample = ({
             <MultiselectField renderTarget={renderTarget}>
                 {({ opened, setOpened, targetRef: dropdownTargetRef, dropdownRef }) => (
                     <MultiselectField.Dropdown
-                        opened={opened}
+                        opened={forceOpened ? true : opened}
                         setOpened={setOpened}
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}

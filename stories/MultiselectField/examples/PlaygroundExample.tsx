@@ -24,7 +24,7 @@ interface INode {
     children?: INode[];
 }
 
-interface IBaseMultiselectExampleProps {
+interface IPlaygroundExampleProps {
     size?: EComponentSize;
     status?: EFormFieldStatus;
     loading?: boolean;
@@ -72,7 +72,7 @@ const getLeafIds = (node: INode): string[] => {
 
 const getButtonSize = (size: EComponentSize) => (size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM);
 
-export const BaseMultiselectExample = ({
+export const PlaygroundExample = ({
     size = EComponentSize.MD,
     status = EFormFieldStatus.DEFAULT,
     loading = false,
@@ -82,7 +82,7 @@ export const BaseMultiselectExample = ({
     withClearButton = false,
     prefix,
     postfix,
-}: IBaseMultiselectExampleProps) => {
+}: IPlaygroundExampleProps) => {
     const targetRef = useRef<HTMLDivElement>(null);
     const nodes = useMemo(() => createNodes(), []);
     const [selectedIds, setSelectedIds] = useState<string[]>(initialSelectedIds);

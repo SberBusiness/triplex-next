@@ -69,6 +69,20 @@ const SizeItem = ({ size }: ISizeItemProps) => {
     const [filter, setFilter] = useState("");
     /** Set для быстрых проверок выбранности по id. */
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+    /** Карта id -> label для отображения человекочитаемых тегов. */
+    const labelsById = useMemo(() => {
+        const map = new Map<string, string>();
+
+        const collectLabels = (items: INode[]) => {
+            items.forEach((item) => {
+                map.set(item.id, item.label);
+                if (item.children) collectLabels(item.children);
+            });
+        };
+
+        collectLabels(nodes);
+        return map;
+    }, [nodes]);
 
     /** Переключение выбранности ноды вместе с ее leaf-потомками. */
     const handleToggle = (node: INode, checked: boolean) => {
@@ -143,7 +157,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                         onKeyDown={handleTagKeyDown}
                         onRemove={() => setSelectedIds((prev) => prev.filter((item) => item !== id))}
                     >
-                        {id}
+                        {labelsById.get(id) ?? id}
                     </Tag>
                 ))}
             </TagGroup>

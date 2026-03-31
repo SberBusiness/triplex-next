@@ -73,6 +73,20 @@ const LoadingMultiselect = ({
     const [filter, setFilter] = useState("");
     /** Быстрый поиск выбранного элемента по id. */
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+    /** Карта id -> label для отображения человекочитаемых тегов. */
+    const labelsById = useMemo(() => {
+        const map = new Map<string, string>();
+
+        const collectLabels = (items: INode[]) => {
+            items.forEach((item) => {
+                map.set(item.id, item.label);
+                if (item.children) collectLabels(item.children);
+            });
+        };
+
+        collectLabels(nodes);
+        return map;
+    }, []);
 
     /** Переключение выбранности узла через выбор/снятие всех leaf-потомков. */
     const handleToggle = (node: INode, checked: boolean) => {
@@ -147,7 +161,7 @@ const LoadingMultiselect = ({
                         onKeyDown={handleTagKeyDown}
                         onRemove={() => setSelectedIds((prev) => prev.filter((item) => item !== id))}
                     >
-                        {id}
+                        {labelsById.get(id) ?? id}
                     </Tag>
                 ))}
             </TagGroup>

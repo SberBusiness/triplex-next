@@ -18,7 +18,6 @@ export default {
     component: Stepper,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -581,6 +580,7 @@ export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);

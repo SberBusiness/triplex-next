@@ -9,7 +9,6 @@ const meta = {
     component: Tag,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -70,6 +69,7 @@ export const Playground: Story = {
         controls: {
             include: ["children", "size", "disabled"],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -182,6 +182,7 @@ export const WithCustomButtonProps: Story = {
             },
         },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 

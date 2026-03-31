@@ -17,7 +17,6 @@ const meta = {
         backgrounds: { value: "gray" },
     },
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -47,6 +46,7 @@ export const Playground: Story = {
             description: { story: "Интерактивный пример." },
             canvas: { sourceState: "none" },
         },
+        testRunner: { skip: true },
     },
     tags: ["!autodocs"],
     argTypes: {
@@ -283,6 +283,7 @@ export const Example: Story = {
     parameters: {
         docs: { description: { story: "В сочетании с иконками." } },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const [value, setValue] = useState("segment_2");

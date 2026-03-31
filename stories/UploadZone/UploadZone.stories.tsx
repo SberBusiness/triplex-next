@@ -26,7 +26,6 @@ export default {
     component: UploadZone,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -123,6 +122,7 @@ export const Default: StoryObj<typeof UploadZone> = {
 export const Examples: StoryObj<typeof UploadZone> = {
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const [container, setContainer] = useState<HTMLDivElement | null>(null);

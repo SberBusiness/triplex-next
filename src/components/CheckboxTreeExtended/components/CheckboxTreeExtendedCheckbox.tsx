@@ -32,6 +32,10 @@ export const CheckboxTreeExtendedCheckbox: React.FC<ICheckboxTreeExtendedCheckbo
 
     // Триггер фокуса на чекбоксе при изменении флага активности при перемещении по дереву с клавиатуры. Если нода имеет дочерние ноды, то фокус получает не чекбокс, а CheckboxTreeExtendedArrow.
     useEffect(() => {
+        if (!active) {
+            return;
+        }
+
         // При взаимодействии мышью триггер фокуса не нужен.
         if (!document.activeElement?.contains(checkboxNode.current as Node)) {
             checkboxNode.current?.focus();

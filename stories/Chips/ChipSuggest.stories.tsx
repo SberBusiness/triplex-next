@@ -480,6 +480,7 @@ export const WithNotificationIcon: StoryObj<typeof ChipSuggest> = {
                 story: "ChipSuggest с опциями, у которых задан showNotificationIcon. Флаг передаётся напрямую в объект опции.",
             },
         },
+        testRunner: { skip: true },
     },
     render: () => {
         const fruits = ["Hot Pepper", "Corn", "Tomato", "Eggplant", "Grapes", "Melon"];

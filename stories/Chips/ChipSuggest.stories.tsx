@@ -472,6 +472,67 @@ export const States: StoryObj<typeof ChipSuggest> = {
     },
 };
 
+export const WithNotificationIcon: StoryObj<typeof ChipSuggest> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "ChipSuggest с опциями, у которых задан showNotificationIcon. Флаг передаётся напрямую в объект опции.",
+            },
+        },
+    },
+    render: () => {
+        const fruits = ["Hot Pepper", "Corn", "Tomato", "Eggplant", "Grapes", "Melon"];
+
+        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
+            id: `suggest-option-${index}`,
+            label: fruit,
+            showNotificationIcon: index === 2,
+        }));
+
+        const [value, setValue] = useState<ISuggestFieldOption>();
+        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
+        const [tooltipOpen, setTooltipOpen] = useState(false);
+        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
+
+        const handleDropdownOpen = () => {
+            setOptions(initialOptionsRef.current);
+            setTooltipOpen(false);
+        };
+
+        const handleFilter = (inputValue: string) => {
+            if (inputValue.length === 0) {
+                setOptions(initialOptionsRef.current);
+                setTooltipOpen(false);
+                return;
+            }
+
+            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
+                label.toLowerCase().includes(inputValue.toLowerCase()),
+            );
+
+            setOptions(filteredOptions);
+            setTooltipOpen(filteredOptions.length === 0);
+        };
+
+        return (
+            <ChipSuggest
+                value={value}
+                options={options}
+                tooltipOpen={tooltipOpen}
+                onSelect={setValue}
+                onFilter={handleFilter}
+                targetProps={{ clearSelected: () => setValue(undefined) }}
+                dropdownProps={{ onOpen: handleDropdownOpen }}
+                label="Suggest label"
+                placeholder="Type to proceed"
+                noOptionsText="No matches found."
+                size={EComponentSize.MD}
+            />
+        );
+    },
+};
+
 export const VisualTests: StoryObj<typeof ChipSuggest> = {
     parameters: {
         controls: { disable: true },

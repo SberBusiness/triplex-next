@@ -71,6 +71,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
                             id={option.id}
                             keyCodesForSelection={KEY_CODES_SELECTABLE}
                             selected={option.id === value?.id}
+                            showNotificationIcon={option.showNotificationIcon}
                             onSelect={() => onSelect(option)}
                         >
                             {option.content || option.label}

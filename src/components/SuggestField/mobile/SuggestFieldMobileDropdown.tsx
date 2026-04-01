@@ -130,6 +130,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                                             key={option.id}
                                             id={option.id}
                                             selected={option.id === value?.id}
+                                            showNotificationIcon={option.showNotificationIcon}
                                             onSelect={() => {
                                                 closedBySelectionRef.current = true;
                                                 onSelect(option);

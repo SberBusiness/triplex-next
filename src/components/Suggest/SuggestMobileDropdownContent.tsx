@@ -96,6 +96,7 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
                                 key={option.id}
                                 id={option.id}
                                 selected={option.id === value?.id}
+                                showNotificationIcon={option.showNotificationIcon}
                                 onSelect={() => {
                                     onSelect(option);
                                 }}

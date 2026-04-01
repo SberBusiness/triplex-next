@@ -13,7 +13,7 @@ export interface IListProps extends React.HTMLAttributes<HTMLUListElement> {
 export const List = React.forwardRef<HTMLUListElement, IListProps>(({ children, className, loading, ...rest }, ref) => (
     <ul className={clsx(styles.list, className)} {...rest} data-tx={process.env.npm_package_version} ref={ref}>
         {children}
-        {loading ? <LoaderScreen type="small" /> : null}
+        {loading ? <LoaderScreen type="middle" /> : null}
     </ul>
 ));
 

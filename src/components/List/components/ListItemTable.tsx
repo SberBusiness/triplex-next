@@ -38,6 +38,7 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
         return (
             <ListItem className={clsx(styles.listItemTable, className)} {...rest} ref={ref}>
                 <SwipeableArea
+                    className={styles.swipeableArea}
                     ref={swipeableAreaRef}
                     rightSwipeableArea={
                         controlButtons ? <ListItemControls>{controlButtons}</ListItemControls> : undefined

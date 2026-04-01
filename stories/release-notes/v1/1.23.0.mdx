@@ -6,8 +6,29 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**List**
+
+- В состоянии loading размер используемого Loader изменен на middle.
+
+**ListItem**
+
+- Исправлен цвет фона в темной теме;
+- В темной теме добавлена тень для ListSortableItem в состоянии dragging;
+- Вес текста изменен на semibold и зафиксирована ширина кнопки ListItemControlsButton;
+- В состоянии loading тип используемого Loader изменен на brand;
+- Изменен отступ между контентом и иконкой перетаскивания в ListSortableItem.
+
+**ListMaster**
+
+- Добавлены тени для ListMasterHeader и ListMasterFooter;
+- Компонент ListMasterChipGroup переписан с использованием ChipGroup.
+
 **MultiselectField**
 
 - Для `MultiselectFieldDropdownHeader` добавлен нижний отступ;
-- Исправлен баг, когда не вызывались onOpen и onClose, переданные в `MultiselectFieldDropdown`.
+- Исправлен баг, когда не вызывались onOpen и onClose, переданные в `MultiselectFieldDropdown`;
 - Исправлен баг, когда не кликался чекбокс при длинном списке чекбоксов.
+
+**SwipeableArea**
+
+- Добавлен border radius при нахождении компонента в ListItemTable.

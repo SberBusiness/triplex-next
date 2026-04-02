@@ -48,13 +48,11 @@ reviews:
     - path: "src/components/**/*.tsx"
       instructions: |
         Проверь по docs/ai/codestyle.md и docs/ai/CODING_GUIDELINES.md:
-        - forwardRef обязателен на всех UI-компонентах
         - className и ...rest пробрасываются в корневой элемент
         - clsx для className — никакой конкатенации строк
         - Нет any, нет non-null assertions без комментария
         - Интерфейс props экспортируется
         - Нет inline styles (допустимо только для лейаута в stories)
-        - Нет displayName — не нужен (компоненты именованные)
 
     - path: "src/components/**/styles/*.module.less"
       instructions: |

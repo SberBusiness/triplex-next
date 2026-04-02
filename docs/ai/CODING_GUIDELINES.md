@@ -40,7 +40,6 @@
 ## Accessibility
 
 - Семантические HTML-элементы (`button` вместо `div` с `onClick`).
-- ARIA-атрибуты для интерактивных элементов без видимого текста.
 - Keyboard navigation: Tab, Enter, Escape, стрелки — где уместно.
 
 ## Тестирование

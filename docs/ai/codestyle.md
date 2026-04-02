@@ -26,13 +26,18 @@
 - **Запрещено:** `as Type` без крайней необходимости. Предпочитать `satisfies`.
 
 ```typescript
-// ❌
+// ❌ as без проверки — скрывает потенциальную проблему
 const value = someMap[key] as string;
 
-// ✅
-const value = someMap[key];
-if (typeof value !== "string") throw new Error("...");
+// ✅ Типизируй map правильно, чтобы проблемы не было в принципе
+const someMap: Record<string, string> = { ... };
+const value = someMap[key]; // string | undefined — TypeScript укажет на неиспользованный undefined
+
+// ✅ Если неопределённость неизбежна — используй fallback
+const value = typeof someMap[key] === "string" ? someMap[key] : "";
 ```
+
+В компонентной библиотеке нельзя бросать исключения в рантайме — они упадут у конечного пользователя приложения. Всегда предпочитай правильную типизацию или fallback-значение.
 
 ### Именование
 
@@ -49,7 +54,6 @@ if (typeof value !== "string") throw new Error("...");
 ### Интерфейсы компонента
 
 - Экспортируй интерфейс props — он часть публичного API.
-- Не используй `React.FC<Props>` — мешает forwardRef и defaultProps.
 - Явно указывай тип children если компонент его принимает (`React.ReactNode`).
 
 ```typescript
@@ -90,7 +94,7 @@ export type TButtonProps = IButtonGeneralProps | IButtonLinkProps;
 
 ### Обязательные паттерны
 
-- **`forwardRef`** — обязателен на всех UI-компонентах. Без исключений.
+- **`forwardRef`** — желателен на всех UI-компонентах.
 - **Функциональные компоненты** — только. Классовые компоненты не используются.
 - **`clsx`** — для объединения className. Никогда не конкатенировать строки.
 
@@ -132,6 +136,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 2. Сторонние библиотеки
 3. Внутренние (`@sberbusiness/triplex-next/...`)
 4. Относительные импорты
+5. Стили
 
 ---
 

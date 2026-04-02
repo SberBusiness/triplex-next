@@ -94,7 +94,7 @@ export type TButtonProps = IButtonGeneralProps | IButtonLinkProps;
 
 ### Обязательные паттерны
 
-- **`forwardRef`** — желателен на всех UI-компонентах.
+- **`forwardRef`** — обязателен на всех UI-компонентах.
 - **Функциональные компоненты** — только. Классовые компоненты не используются.
 - **`clsx`** — для объединения className. Никогда не конкатенировать строки.
 
@@ -108,6 +108,15 @@ className={clsx(styles.button, styles[size], { [styles.loading]: loading }, clas
 
 - Всегда принимай `className` в пропах и прокидывай его в корневой элемент (через spread или явно).
 - Всегда прокидывай `...rest` на семантический элемент.
+- Не меняй корневой DOM-элемент и `ref` target без явной необходимости: для дизайн-системы это часть публичного контракта.
+
+### Проектирование публичного API
+
+- Для взаимоисключающих вариантов предпочитай discriminated union, а не несколько boolean-props.
+- Не добавляй prop "на всякий случай". Новый prop должен отражать реальное требование из дизайна или API-задачи.
+- Если prop имеет смысл только для одной темы или режима, описывай его только в соответствующей ветке union type.
+- Controlled/uncontrolled API добавляй только если компонент действительно владеет состоянием. Если поддерживаются оба режима, поведение должно быть явно задокументировано и протестировано.
+- Deprecated API помечай через JSDoc `@deprecated` и указывай альтернативу.
 
 ### `React.memo`
 
@@ -121,15 +130,23 @@ className={clsx(styles.button, styles[size], { [styles.loading]: loading }, clas
 
 ### Импорты
 
-В примерах и тестах импортируй из корня пакета, не по относительным путям:
+В stories/examples и тестах правила разные:
 
 ```typescript
-// ✅ В stories/examples и e2e
+// ✅ В stories/examples, предназначенных для копирования
 import { Button, EButtonTheme } from "@sberbusiness/triplex-next";
 
 // ✅ Внутри src/components
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+
+// ✅ В unit-тестах можно импортировать локально, следуя паттерну файла
+import { Button } from "../Button";
 ```
+
+Правила:
+- В новых stories/examples, которые показывают копируемый код, импортируй публичный API из `@sberbusiness/triplex-next` или публичных subentry.
+- В unit-тестах и внутреннем коде следуй локальному паттерну файла и предпочитай ближайшие импорты для тестируемого модуля и внутренних зависимостей.
+- Не делай отдельный рефакторинг import-style в legacy stories/tests без задачи на миграцию.
 
 Порядок импортов (prettier-plugin-organize-imports не используется, но придерживайся):
 1. React
@@ -217,6 +234,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 - Не добавляй docstring/комментарии к коду, который не изменял.
 - Не рефакторь окружающий код без задачи.
 - Не добавляй обработку ошибок для сценариев, которые не могут произойти.
+- Не мигрируй legacy stories/tests на новый шаблон "по пути", если это не часть текущей задачи.
 
 ---
 

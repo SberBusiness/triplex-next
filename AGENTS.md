@@ -1,5 +1,8 @@
 # Triplex-Next — AI Agent Instructions
 
+This file is an entry point. Canonical non-negotiable rules live in
+`docs/ai/CODING_GUIDELINES.md` and the linked detailed guides.
+
 ## Read before working with components
 
 **Main context file:** `docs/ai/CONTEXT.md`
@@ -8,6 +11,12 @@ prop addition workflow, invariants.
 
 **Component-specific docs:** `src/components/{ComponentName}/{ComponentName}-AI.md`
 Example: `src/components/Button/Button-AI.md`
+
+If `{ComponentName}-AI.md` does not exist yet:
+- use `docs/ai/CONTEXT.md` + `docs/ai/CODING_GUIDELINES.md`
+- inspect the component source, stories, and tests
+- follow the local pattern of that component
+- do not create a new `*-AI.md` file unless the task explicitly asks for it
 
 **Template for new components:** `docs/ai/template-AI.md`
 
@@ -29,10 +38,11 @@ Example: `src/components/Button/Button-AI.md`
 ## Typical task: add a prop to an existing component
 
 1. Read `docs/ai/CONTEXT.md`
-2. Read `src/components/{ComponentName}/{ComponentName}-AI.md`
-3. Read the component source code
-4. Make changes: TSX → LESS → story → tests
-5. Update the "История изменений" section in `{ComponentName}-AI.md`
+2. Read `docs/ai/CODING_GUIDELINES.md` and the guide for the area you touch
+3. If present, read `src/components/{ComponentName}/{ComponentName}-AI.md`
+4. Read the component source code, stories, and tests
+5. Make changes: TSX → LESS → story → tests
+6. If `{ComponentName}-AI.md` exists, update the "История изменений" section
 
 ## Tech stack
 
@@ -45,3 +55,5 @@ React 18 + TypeScript strict + LESS Modules + Vite + Storybook 9
 - All barrel exports in `index.ts` must remain
 - Use `clsx` for className merging, never string concatenation
 - No hardcoded colors/sizes — use CSS variables from design tokens
+- New or fully rewritten stories should follow `docs/ai/stories-guide.md` modern pattern
+- Small changes in legacy stories/tests should preserve the local file pattern unless migration is part of the task

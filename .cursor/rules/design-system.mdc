@@ -7,7 +7,13 @@ alwaysApply: true
 
 Before modifying any component, read:
 - `docs/ai/CONTEXT.md` — full context: stack, conventions, design tokens, workflow
-- `src/components/{ComponentName}/{ComponentName}-AI.md` — component-specific docs
+- `docs/ai/CODING_GUIDELINES.md` — canonical non-negotiable rules
+- `src/components/{ComponentName}/{ComponentName}-AI.md` — component-specific docs if present
+
+If `{ComponentName}-AI.md` does not exist yet:
+- inspect the component source, stories, and tests
+- follow the local pattern of that component
+- do not create a new `*-AI.md` file unless the task explicitly asks for it
 
 ## Development conventions
 
@@ -21,10 +27,10 @@ Before modifying any component, read:
 1. Update TypeScript interface in `{Component}.tsx`
 2. Handle prop in render logic (use `clsx` for className merging)
 3. Add LESS class in `styles/{Component}.module.less` or theme-specific file
-4. Update Playground story in `stories/{Category}/{Component}.stories.tsx` (args + argTypes)
+4. Update the existing story file. For new or rewritten stories use the modern `examples/` pattern from `docs/ai/stories-guide.md`
 5. Add named story if prop has visual variants (Sizes, Themes, etc.)
 6. Add/update unit test in `src/components/{Component}/__tests__/{Component}.test.tsx`
-7. Update "История изменений" in `{Component}-AI.md`
+7. If present, update "История изменений" in `{Component}-AI.md`
 
 ## Non-negotiable rules
 
@@ -35,6 +41,7 @@ Before modifying any component, read:
 - Use `clsx` for conditional classNames, not string concatenation
 - No hardcoded colors or sizes — use CSS variables from design tokens
 - Design tokens follow pattern: `--triplex-next-{Component}-{Variant}_{Property}_{State}`
+- New or fully rewritten stories should use the modern stories pattern; small changes in legacy stories should stay consistent with the local file
 
 ## Commit format
 

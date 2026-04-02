@@ -65,20 +65,29 @@ reviews:
     - path: "**/*.stories.tsx"
       instructions: |
         Проверь по docs/ai/stories-guide.md:
+        - Для новых и существенно переписанных story-файлов: modern pattern с examples/, ?raw, копируемыми examples и публичными импортами из @sberbusiness/triplex-next
         - Playground: tags ["!autodocs"], testRunner skip, sourceState none
-        - Все документационные стори: controls disable, source.code через ?raw
-        - Примеры вынесены в examples/ и реэкспортированы через index.ts
-        - Импорты в примерах из @sberbusiness/triplex-next (не по относительным путям)
-        - Порядок: meta → Playground → Default → остальные
+        - Все документационные стори в modern pattern: controls disable, source.code через ?raw
+        - Для legacy stories не требуй отдельный рефакторинг структуры/import-style без задачи на миграцию
+        - Сохраняй существующие story ids/export names, если нет явной причины менять их
+        - Порядок в modern pattern: meta → Playground → Default → остальные
+
+    - path: "stories/**/examples/*.tsx"
+      instructions: |
+        Проверь по docs/ai/stories-guide.md:
+        - Пример самодостаточен и копируем целиком
+        - Для modern examples импорты идут из @sberbusiness/triplex-next или публичных subentry, а не из src/...
+        - Не требуй отдельную миграцию legacy examples без задачи на миграцию
 
     - path: "src/components/**/__tests__/*.test.tsx"
       instructions: |
         Проверь по docs/ai/tests.md:
         - Используется vitest (не jest): describe/it/expect/vi.fn()
         - Приоритет запросов: getByRole > getByLabelText > getByText > getByTestId
-        - forwardRef покрыт тестом
-        - Все prop-варианты протестированы
-        - Нет тестов на детали реализации (CSS-классы — только если они представляют состояние)
+        - forwardRef покрыт тестом для новых компонентов и случаев, где менялся root/ref contract
+        - Новый функционал и затронутые prop-варианты протестированы
+        - Нет тестов на детали реализации; CSS-классы допустимы только если представляют публичный вариант или состояние
+        - Не требуй отдельной миграции import-style в существующих тестах без задачи на cleanup
 
     - path: "src/components/**/index.ts"
       instructions: |
@@ -94,9 +103,10 @@ reviews:
     - path: "e2e/**/*.spec.ts"
       instructions: |
         Проверь по docs/ai/tests.md:
-        - Нет фиксированных таймаутов (page.waitForTimeout) — только waitFor/toBeVisible
+        - Нет фиксированных таймаутов как основной синхронизации; короткий waitForTimeout(100-300ms) допустим только для CSS-анимации и должен быть обоснован
         - Тесты независимы друг от друга
         - URL — iframe конкретной Storybook story
+        - Не ломай существующие story ids, на которые ссылаются e2e
 
     - path: "docs/ai/**/*.md"
       instructions: |

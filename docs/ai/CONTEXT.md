@@ -8,8 +8,9 @@
 ## Что такое Triplex-Next
 
 React-библиотека компонентов дизайн-системы.
-Пакет: `@sberbusiness/triplex-next` (v1.x, React 18 + TypeScript strict).
-Пакет: `@sberbusiness/triplex-next` (v0.x, React 17 + TypeScript strict).
+Пакет: `@sberbusiness/triplex-next`.
+Основная линия разработки: `main` → v1.x на React 18 + TypeScript strict.
+Поддерживаемая legacy-линия: `release-0` → v0.x на React 17, синхронизируется мейнтейнерами.
 
 **Основной сценарий работы агента:** добавить новый prop или вариант к существующему компоненту по описанию и/или макету из Figma.
 
@@ -40,16 +41,19 @@ src/components/Button/
 ├── ButtonIcon.tsx             # Субкомпонент (опционально)
 ├── enums.ts                   # Enum'ы, специфичные для компонента
 ├── index.ts                   # Barrel export — ОБЯЗАТЕЛЕН
-├── types.ts                   # Barrel export — ОБЯЗАТЕЛЕН
+├── types.ts                   # Часто есть, если типы вынесены отдельно
 ├── styles/
 │   ├── Button.module.less     # Базовые стили
 │   └── ButtonGeneral.module.less  # Стили по теме/варианту
 ├── __tests__/
 │   └── Button.test.tsx        # Unit-тесты
-└── Button-AI.md               # Документация для AI-агентов
+└── Button-AI.md               # Документация для AI-агентов (если компонент уже задокументирован)
 ```
 
-Истории (stories) хранятся отдельно: `stories/{Category}/{ComponentName}.stories.tsx`.
+Истории (stories) хранятся отдельно. В репозитории встречаются как flat-path файлы
+(`stories/Badge.stories.tsx`), так и сгруппированные (`stories/Buttons/Button.stories.tsx`).
+Для новых или существенно переписанных stories используй modern pattern из
+`docs/ai/stories-guide.md`.
 
 ---
 
@@ -100,6 +104,10 @@ src/components/Button/
 | Stories (структура, примеры, чек-лист) | `docs/ai/stories-guide.md` |
 | Коммиты, ветки, PR-воркфлоу | `docs/ai/commits.md` |
 
+`docs/ai/CODING_GUIDELINES.md` — краткий канонический список обязательных правил.
+Если формулировки в entrypoint-файлах расходятся, ориентируйся на него и на
+профильный подробный гайд.
+
 ---
 
 ## Как добавить новый prop к существующему компоненту
@@ -148,9 +156,11 @@ const { theme, size, newProp, className, ...rest } = props;
 
 ### 5. Обнови Storybook story
 
-В `stories/{Category}/{ComponentName}.stories.tsx`:
+В существующем story-файле компонента:
 - Добавь prop в `args` и `argTypes` Playground-стори
 - Если prop имеет визуальные варианты — добавь named story (`Sizes`, `Themes` и т.д.)
+- Если story уже использует `examples/` + `?raw`, сохрани этот modern pattern
+- Если story legacy, не рефакторь весь файл только ради миграции структуры без отдельной задачи
 - Подробно: `docs/ai/stories-guide.md` → раздел "Что обновлять при добавлении нового prop"
 
 ### 6. Обнови тесты
@@ -169,6 +179,8 @@ const { theme, size, newProp, className, ...rest } = props;
 3. **`index.ts` barrel exports** — всё, что было экспортировано, должно остаться экспортированным.
 4. **CSS-переменные токенов** — переименование ломает темизацию у потребителей библиотеки.
 5. **Имена LESS-классов**, которые могут использоваться снаружи — согласуй перед изменением.
+6. **Корневой DOM-элемент, ref-target и accessibility-контракт** публичного компонента — не менять без причины и проверки.
+7. **Story ids**, на которые опираются e2e/visual тесты, не переименовывать без синхронного обновления тестов.
 
 ---
 
@@ -185,6 +197,11 @@ className={clsx(styles.button, styles.general, { [styles.loading]: loading })}
 **Утилиты:**
 - `clsx` — объединение className с условиями
 - `lodash-es/uniqueId` — уникальные ID для aria-атрибутов
+
+**Паттерн миграции:**
+- В репозитории сосуществуют legacy и modern stories/tests.
+- Для небольших правок следуй локальному паттерну файла.
+- Для новых компонентов и больших переписок используй modern conventions из `stories-guide.md` и `tests.md`.
 
 **Стандартные зависимости компонентов:**
 - `src/enums/EComponentSize` — размеры SM | MD | LG (общий для всех компонентов)
@@ -207,7 +224,8 @@ className={clsx(styles.button, styles.general, { [styles.loading]: loading })}
 
 ## Навигация по документации компонентов
 
-Документация каждого компонента: `src/components/{ComponentName}/{ComponentName}-AI.md`
+Если компонент уже задокументирован, его AI-документация лежит в:
+`src/components/{ComponentName}/{ComponentName}-AI.md`
 
 Пример: `src/components/Button/Button-AI.md`
 

@@ -66,3 +66,13 @@
 ## Стек
 
 React 18 + TypeScript strict + LESS Modules + Vite + Storybook 9
+
+## Ключевые ограничения
+
+- `forwardRef` обязателен на всех компонентах — никогда не убирай
+- Публичный API (имена props, типы, значения enum) — это breaking change
+- Все barrel-экспорты в `index.ts` должны сохраняться
+- Используй `clsx` для className — никогда не конкатенировать строки
+- Нет hardcoded цветов/размеров — только CSS-переменные из дизайн-токенов
+- Новые или полностью переписанные stories следуют modern pattern из `docs/ai/stories-guide.md`
+- Небольшие правки в legacy stories/тестах сохраняют локальный паттерн файла, если миграция не часть задачи

@@ -421,7 +421,6 @@ const meta = {
     title: "Components/Group/ComponentName",
     component: ComponentName,
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>

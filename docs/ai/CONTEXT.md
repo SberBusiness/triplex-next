@@ -26,7 +26,8 @@ React-библиотека компонентов дизайн-системы.
 | Сборка | Vite, ES-модули only |
 | Документация | Storybook 9 |
 | Unit-тесты | Vitest + Testing Library |
-| E2E / visual | Playwright + jest-image-snapshot |
+| Visual regression | Storybook test-runner + jest-image-snapshot |
+| E2E | Playwright |
 
 ---
 
@@ -212,7 +213,8 @@ className={clsx(styles.button, styles.general, { [styles.loading]: loading })}
 
 **Утилиты:**
 - `clsx` — объединение className с условиями
-- `lodash-es/uniqueId` — уникальные ID для aria-атрибутов
+- `React.useId()` — уникальные ID для aria-атрибутов (предпочтительно в React 18, корректно работает с SSR)
+- `lodash-es/uniqueId` — генерация уникальных ID вне компонентного контекста (когда `useId` недоступен)
 
 **Паттерн миграции:**
 - В репозитории сосуществуют legacy и modern stories/tests.

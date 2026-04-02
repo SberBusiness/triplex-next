@@ -79,7 +79,7 @@ describe("ComponentName", () => {
 
     it("renders without errors", () => {
         renderComponent();
-        expect(screen.getByTestId("component-name")).toBeInTheDocument();
+        expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
     it("applies correct class for size prop", () => {

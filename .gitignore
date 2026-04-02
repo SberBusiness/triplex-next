@@ -49,5 +49,8 @@ build-storybook.log
 # Visual regression testing (auto-generated, not committed)
 __screenshots__/__diff__/
 
-# Claude Code worktrees (temporary isolated repo copies used by agents)
-.claude/worktrees/
+# Claude Code (личная память и локальные настройки)
+.claude/
+
+# Figma MCP config (personal token — каждый разработчик создаёт локально из .mcp.json.example)
+.mcp.json

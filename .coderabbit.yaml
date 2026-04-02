@@ -12,12 +12,15 @@ knowledge_base:
   code_guidelines:
     enabled: true
     filePatterns:
+      - "AGENTS.md"
+      - "CLAUDE.md"
       - "docs/ai/CODING_GUIDELINES.md"
       - "docs/ai/codestyle.md"
       - "docs/ai/tests.md"
       - "docs/ai/stories-guide.md"
       - "docs/ai/commits.md"
       - "docs/ai/CONTEXT.md"
+      - "docs/ai/template-AI.md"
 
 reviews:
   request_changes_workflow: true
@@ -80,7 +83,7 @@ reviews:
         - Для modern examples импорты идут из @sberbusiness/triplex-next или публичных subentry, а не из src/...
         - Не требуй отдельную миграцию legacy examples без задачи на миграцию
 
-    - path: "src/components/**/__tests__/*.test.tsx"
+    - path: "src/components/**/*test.tsx"
       instructions: |
         Проверь по docs/ai/tests.md:
         - Используется vitest (не jest): describe/it/expect/vi.fn()
@@ -88,6 +91,7 @@ reviews:
         - forwardRef покрыт тестом для новых компонентов и случаев, где менялся root/ref contract
         - Новый функционал и затронутые prop-варианты протестированы
         - Нет тестов на детали реализации; CSS-классы допустимы только если представляют публичный вариант или состояние
+        - Учитывай локальный паттерн папки тестов (`__tests__`, `__test__`, `tests/`) и не требуй отдельной миграции структуры без задачи
         - Не требуй отдельной миграции import-style в существующих тестах без задачи на cleanup
 
     - path: "src/components/**/index.ts"
@@ -114,12 +118,25 @@ reviews:
         - Документация на русском языке (исключение: AGENTS.md — намеренно на английском для совместимости с Codex и другими агентами)
         - Примеры кода должны соответствовать реальному коду в репозитории
         - Структура: чёткие заголовки, примеры кода, чек-листы где уместно
+        - Не обещай наличие `{ComponentName}-AI.md` или Figma metadata для каждого компонента, если rollout ещё не завершён
 
     - path: "AGENTS.md"
       instructions: |
         - Документ на английском языке — это точка входа для OpenAI Codex и других агентов
         - Содержимое должно быть синхронизировано с CLAUDE.md: те же правила, тот же список файлов
         - Проверь, что ключевые ограничения (forwardRef, barrel exports, clsx, токены) перечислены в секции "Key constraints"
+
+    - path: "CLAUDE.md"
+      instructions: |
+        - Документ на русском языке — это точка входа для Claude Code
+        - Содержимое должно быть синхронизировано с AGENTS.md по смыслу: те же правила, тот же список файлов, тот же порядок действий
+
+    - path: "src/components/**/*-AI.md"
+      instructions: |
+        - Frontmatter должен быть консистентным: `component`, `category`, `figma-node`, `figma-file`, `related`, `tokens`, `stories`, `version`
+        - `figma-node` хранит raw-значение `node-id` из URL Figma (например, `1-328`), `figma-file` хранит URL файла / design-ссылку
+        - Не дублируй TypeScript-типы целиком; описывай намерения, инварианты, accessibility-контракт и реальные ограничения компонента
+        - Секция "История изменений" должна оставаться краткой и фактической
 
 chat:
   auto_reply: true

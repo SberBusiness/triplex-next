@@ -12,8 +12,9 @@ prop addition workflow, invariants.
 **Component-specific docs:** `src/components/{ComponentName}/{ComponentName}-AI.md`
 Example: `src/components/Button/Button-AI.md`
 
+Always use `docs/ai/CONTEXT.md` + `docs/ai/CODING_GUIDELINES.md`.
+
 If `{ComponentName}-AI.md` does not exist yet:
-- use `docs/ai/CONTEXT.md` + `docs/ai/CODING_GUIDELINES.md`
 - inspect the component source, stories, and tests
 - follow the local pattern of that component
 - do not create a new `*-AI.md` file unless the task explicitly asks for it
@@ -43,6 +44,15 @@ If `{ComponentName}-AI.md` does not exist yet:
 4. Read the component source code, stories, and tests
 5. Make changes: TSX → LESS → story → tests
 6. If `{ComponentName}-AI.md` exists, update the "История изменений" section
+
+## Verification before finishing
+
+- Do not finish after code edits without at least one verification step.
+- For docs/config-only changes: self-check links, examples, commands and cross-file consistency.
+- For component or logic changes: run lints/diagnostics for edited files and a focused unit test when the change affects public behavior.
+- For story changes with visible UI impact: make sure the changed state is covered by an existing story or a new story/Visual tests story.
+- For accessibility, focus-management, keyboard or overlay behavior changes: prefer adding or updating a focused automated test.
+- If you could not run a relevant check, say so explicitly in the final response.
 
 ## Tech stack
 

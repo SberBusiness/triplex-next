@@ -53,6 +53,7 @@
     },
     "devDependencies": {
         "@eslint/js": "9.39.4",
+        "@lottiefiles/react-lottie-player": "3.6.0",
         "@playwright/test": "1.58.2",
         "@sberbusiness/icons-next": "1.19.0",
         "@storybook/addon-docs": "9.1.15",

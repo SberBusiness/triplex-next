@@ -358,7 +358,7 @@ const titleId = useId();
 
 **Установка для Claude Code:**
 ```bash
-claude mcp add --transport http context7 https://mcp.context7.com/mcp
+npx ctx7 setup --claude
 ```
 
 После установки агент сможет делать `use context7` для получения актуальной документации библиотек.

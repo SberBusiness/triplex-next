@@ -142,8 +142,8 @@ const iconOnly = Boolean(icon) && !children;
 ```
 
 ### Состояние загрузки
-- `loading` скрывает контент через `visibility: hidden` (не `display: none`) — сохраняет размеры
-- Устанавливает `tabIndex={-1}` — кнопка недоступна с клавиатуры
+- `loading` скрывает контент через `visibility: hidden` (не `display: none`) — сохраняет размеры,
+- устанавливает `tabIndex={-1}` — кнопка недоступна с клавиатуры
 - Тема лоадера: `SECONDARY` и `SECONDARY_LIGHT` → `ELoaderSmallTheme.BRAND`, остальные → `ELoaderSmallTheme.NEUTRAL`
 
 ### `aria-expanded` управляет визуалом
@@ -158,6 +158,16 @@ const iconOnly = Boolean(icon) && !children;
 - `background: transparent`
 - `padding` по вертикали отличается от других тем (меньше)
 - `block`, `loading`, `icon` — тип `never` в интерфейсе, TypeScript запрещает передачу
+
+---
+
+## Accessibility
+
+- Нативный `<button>` — полная поддержка клавиатуры (Tab, Enter, Space) без дополнительных атрибутов.
+- **`ButtonIcon`**: иконочная кнопка без видимого текста — потребитель **обязан** передать `aria-label` через `...rest`. Библиотека мультиязычная, текст не хардкодится.
+- **`loading`**: устанавливает `tabIndex={-1}` — кнопка исключается из tab-порядка. Если нужна доступность состояния загрузки для скринридеров, потребитель добавляет `aria-busy="true"` через props.
+- **`aria-expanded`**: управляет визуальным состоянием "раскрыто" (добавляет CSS-классы `.expanded`, `.active`). Передаётся потребителем при использовании кнопки как триггера dropdown.
+- Фокус-стиль через `:focus-visible` — виден только при клавиатурной навигации.
 
 ---
 

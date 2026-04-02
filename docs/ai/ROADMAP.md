@@ -28,41 +28,11 @@
 - `figma-file` хранит URL файла / design-ссылку
 - Если инструменту нужен `file key`, агент получает его из `figma-file`
 
-#### Figma MCP Setup (инструкция)
+#### Figma MCP Setup
 
-**Claude Code (рекомендуемый способ — через плагин):**
+Установи Figma MCP самостоятельно согласно официальной документации: https://developers.figma.com/docs/figma-mcp-server/
 
-```bash
-claude plugin install figma@claude-plugins-official
-```
-
-После установки:
-1. Перезапусти Claude Code
-2. Введи `/plugin` → вкладка Installed → выбери Figma → аутентификация через браузер
-3. Плагин сам настраивает MCP — ни `.mcp.json`, ни токены вручную не нужны
-
-Использование: в Figma правой кнопкой на компоненте → "Copy link to selection" → вставь URL в Claude Code.
-
-**Cursor:**
-Settings → MCP → Add server, формат:
-```json
-{
-  "figma": {
-    "url": "https://mcp.figma.com/sse",
-    "type": "sse"
-  }
-}
-```
-Аутентификация при первом подключении через браузер.
-
-**Codex / другие агенты:**
-Используй Figma REST API с Personal Access Token как альтернативу MCP.
-
-**Проверка работы в Claude Code:**
-```
-/mcp
-```
-Figma должен отображаться в статусе connected.
+Пример `.mcp.json` для подключения: `.mcp.json.example` в корне репозитория.
 
 ### Фаза 2: Пилот — Button
 - [x] Создать `src/components/Button/Button-AI.md` (Figma node: `1-328`)

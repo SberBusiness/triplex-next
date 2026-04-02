@@ -509,7 +509,7 @@ import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
 export const DefaultExample = () => {
     const [value, setValue] = useState<string>("");
 
-    const handleChange = (event) => setValue(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
     return (
         <div style={{ maxWidth: "300px" }}>
@@ -536,7 +536,7 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState<string>("");
 
-    const handleChange = (event) => setValue(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
     return (
         <div>

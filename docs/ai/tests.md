@@ -32,10 +32,26 @@ src/components/{ComponentName}/__tests__/{ComponentName}.test.tsx
 
 ```typescript
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { ComponentName } from "../ComponentName";
 // Следуй локальному паттерну файла: для unit-тестов обычно используются локальные импорты
+```
+
+**`userEvent` vs `fireEvent`:**
+- Предпочитай `userEvent` — он точнее симулирует реальные события браузера (pointer events, keyboard, focus/blur цепочки).
+- `fireEvent` допустим для простых случаев (триггер события без цепочки браузерных эффектов) или когда следуешь паттерну существующего файла теста.
+
+```typescript
+// ✅ Предпочтительно для пользовательского взаимодействия
+const user = userEvent.setup();
+await user.click(screen.getByRole("button"));
+await user.type(screen.getByRole("textbox"), "hello");
+await user.keyboard("{Enter}");
+
+// ✅ Допустимо для простых низкоуровневых событий
+fireEvent.change(input, { target: { value: "hello" } });
 ```
 
 Правило:
@@ -88,6 +104,21 @@ describe("ComponentName", () => {
 2. `getByLabelText` — для полей с подписями
 3. `getByText` — для текстового содержимого
 4. `getByTestId` — только если нет семантической альтернативы
+
+**Async-варианты:** используй `findBy*` или `waitFor` для элементов, которые появляются после асинхронной операции:
+
+```typescript
+// ✅ findBy* — сокращение для waitFor + getBy*
+const successMessage = await screen.findByRole("alert");
+
+// ✅ waitFor — для проверки условия, которое станет истинным со временем
+await waitFor(() => {
+    expect(screen.getByRole("button")).toBeEnabled();
+});
+
+// ❌ не используй фиксированные таймауты
+await new Promise((r) => setTimeout(r, 500));
+```
 
 ```typescript
 // ✅ Предпочтительно

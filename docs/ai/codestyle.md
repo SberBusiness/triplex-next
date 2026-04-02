@@ -122,10 +122,43 @@ className={clsx(styles.button, styles[size], { [styles.loading]: loading }, clas
 
 Использовать только если профилирование показало конкретную проблему производительности. Не добавлять "на всякий случай".
 
+### Составные компоненты (Compound Components)
+
+Для сложных компонентов с несколькими взаимосвязанными частями (Select + Option, Tabs + Tab + TabPanel) используй паттерн составных компонентов:
+
+```typescript
+// Статические субкомпоненты через Object.assign
+export const Select = Object.assign(
+    React.forwardRef<HTMLDivElement, ISelectProps>((props, ref) => {
+        // ...
+    }),
+    { Option: SelectOption, Group: SelectGroup }
+);
+
+// Использование:
+<Select value={value} onChange={onChange}>
+    <Select.Option value="a">Option A</Select.Option>
+</Select>
+```
+
+- Контекст между частями пробрасывается через `React.createContext` + хук `useSelectContext`.
+- Субкомпоненты экспортируются и как самостоятельные именованные экспорты (`SelectOption`), и через составной API (`Select.Option`).
+- Контекст — внутренний (`not exported`), если он не нужен потребителям.
+
+### Полиморфный `as` prop
+
+В дизайн-системе **не используем** полиморфный `as` prop — он усложняет типизацию и нарушает контракт `forwardRef`. Вместо этого:
+
+- Для кнопки-ссылки — отдельный компонент (`ButtonLink`) или discriminated union через `href` prop.
+- Для элемента списка — компонент принимает `children` и не диктует семантику снаружи.
+
+Если задача требует `as` prop, согласуй с командой перед реализацией.
+
 ### Хуки
 
 - Не используй `useEffect` для синхронной логики — только для side-effects.
 - Зависимости `useEffect` должны быть исчерпывающими (ESLint-правило `exhaustive-deps` включено).
+- `useLayoutEffect` — только для синхронных DOM-измерений (размеры, позиция). Во всех остальных случаях — `useEffect`.
 - Предпочитай `useCallback` / `useMemo` только там, где это действительно нужно.
 
 ### Импорты
@@ -164,28 +197,47 @@ import { Button } from "../Button";
 - Только `.module.less` файлы — никаких глобальных стилей.
 - Имена классов — **camelCase**: `styles.secondaryLight`, `styles.iconOnly`.
 - Никаких **inline styles** в компонентах (в stories допустимо для лейаута примеров).
-- Никаких **hardcoded** цветов, размеров — только CSS-переменные из токенов.
+- **Цвета** — только через CSS-переменные токенов (`var(--triplex-next-...)`). Никаких hex/rgb.
+- **Переиспользуемые размерные константы** (z-index, отступы страницы, ширины оверлеев) — через LESS-переменные из `src/styles/components/` (`@page-padding-desktop-x`, `@sideOverlayLGWidth` и т.д.). Компонент-специфичные значения (высота кнопки, радиус скругления) можно задавать литералом.
 - `!important` — только в крайнем случае, с комментарием почему.
 
-### Применение токенов
+### Применение токенов (цвета)
 
 ```less
-// ❌
+// ❌ hardcoded цвет
 .button {
     background: #1a73e8;
     color: white;
 }
 
-// ✅
+// ✅ CSS-переменная из токенов
 .button {
     background: var(--triplex-next-Button-General_Background_Default);
     color: var(--triplex-next-Button-General_Color_Default);
-    
+
     &:hover {
         background: var(--triplex-next-Button-General_Background_Hover);
     }
 }
 ```
+
+### Применение LESS-переменных (общие размерные константы)
+
+```less
+// ❌ дублируем магическую константу
+.panel {
+    max-width: 864px;
+}
+
+// ✅ берём из src/styles/components/lightbox.less
+@import (reference) "../../styles/components/lightbox";
+
+.panel {
+    max-width: @lightBox-content-max-width;
+}
+```
+
+Если нужной константы в `src/styles/components/` нет, а значение используется более чем в одном компоненте — добавь переменную в подходящий файл.
 
 ### Структура
 
@@ -199,12 +251,74 @@ import { Button } from "../Button";
 
     // состояния
     &:hover { ... }
-    &:focus-visible { ... }
+    &:focus-visible { ... }  // не :focus — виден только при клавиатурной навигации
     &:disabled, &.disabled { ... }
 
     // вложенные элементы
     .icon { ... }
     .loader { ... }
+}
+```
+
+---
+
+## Accessibility
+
+### Мультиязычность: не хардкодь aria-текст
+
+Дизайн-система используется в мультиязычных продуктах. **Никогда не пиши строки на конкретном языке внутри компонента** — ни в `aria-label`, ни в `title`, ни в любом другом атрибуте.
+
+```typescript
+// ❌ Хардкод языка внутри компонента
+<button aria-label="Закрыть" onClick={onClose}>
+    <CloseIcon />
+</button>
+
+// ✅ Текст передаётся снаружи через ...rest или явный prop
+export interface IModalCloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    // aria-label пробрасывается через ...rest — потребитель передаёт его на своём языке
+}
+
+export const ModalCloseButton = React.forwardRef<HTMLButtonElement, IModalCloseButtonProps>(
+    (props, ref) => {
+        const { className, ...rest } = props;
+        return (
+            <button ref={ref} className={clsx(styles.closeButton, className)} {...rest} />
+        );
+    }
+);
+```
+
+В stories добавляй пример значения для демонстрации — это не хардкод, а иллюстрация:
+
+```typescript
+// В stories/examples/DefaultExample.tsx — пример для документации
+<ModalCloseButton aria-label="Закрыть" />
+```
+
+Если компоненту нужен внутренний текст для связи элементов (например, `aria-labelledby` на диалоге, ссылающийся на заголовок), используй ID-связку, а не текстовый литерал:
+
+```typescript
+// ✅ Связь через ID — не зависит от языка
+const titleId = useId();
+
+<dialog aria-labelledby={titleId} {...rest}>
+    <h2 id={titleId}>{title}</h2>
+    {children}
+</dialog>
+```
+
+### :focus-visible вместо :focus
+
+```less
+// ❌ Показывает outline и при клике мышью
+.button:focus {
+    outline: 2px solid var(--triplex-next-Button-General_Shadow_Focus);
+}
+
+// ✅ Только при клавиатурной навигации
+.button:focus-visible {
+    outline: 2px solid var(--triplex-next-Button-General_Shadow_Focus);
 }
 ```
 

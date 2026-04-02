@@ -5,25 +5,27 @@ language: "ru"
 
 early_access: true
 
-# Настройки тона (макс. 250 символов)
 tone_instructions: "Будь конструктивным и помогающим. Объясняй причины предложений. Предлагай альтернативы. Фокусируйся на важных проблемах. Отмечай хорошо сделанное."
 
-# База знаний
+# База знаний — документация из docs/ai/
 knowledge_base:
   code_guidelines:
     enabled: true
     filePatterns:
-      - ".github/CODING_GUIDELINES.md"
+      - "docs/ai/CODING_GUIDELINES.md"
+      - "docs/ai/codestyle.md"
+      - "docs/ai/tests.md"
+      - "docs/ai/stories-guide.md"
+      - "docs/ai/commits.md"
+      - "docs/ai/CONTEXT.md"
 
 reviews:
-  # Базовые настройки ревью
   request_changes_workflow: true
   high_level_summary: true
   poem: false
   review_status: true
   collapse_walkthrough: false
 
-  # Автоматическое ревью PR
   auto_review:
     enabled: true
     drafts: false
@@ -31,78 +33,78 @@ reviews:
       - main
       - release-0
 
-  # Фильтры путей (игнорирование файлов)
   path_filters:
     - "!*.lock"
     - "!*.log"
     - "!node_modules/**"
     - "!dist/**"
     - "!storybook-static/**"
-    - "!.loki/**"
     - "!coverage/**"
     - "!public/**"
     - "!.husky/**"
+    - "!__screenshots__/**"
 
-  # Правила для конкретных путей
   path_instructions:
     - path: "src/components/**/*.tsx"
       instructions: |
-        - Все props должны иметь TypeScript типы и JSDoc
-        - Не должно быть hardcoded цветов (используй токены)
-        - Проверь наличие displayName для отладки
-        - Compound components должны быть связаны через namespace (Component.Item)
+        Проверь по docs/ai/codestyle.md и docs/ai/CODING_GUIDELINES.md:
+        - forwardRef обязателен на всех UI-компонентах
+        - className и ...rest пробрасываются в корневой элемент
+        - clsx для className — никакой конкатенации строк
+        - Нет any, нет non-null assertions без комментария
+        - Интерфейс props экспортируется
+        - Нет inline styles (допустимо только для лейаута в stories)
+        - Нет displayName — не нужен (компоненты именованные)
 
     - path: "src/components/**/styles/*.module.less"
       instructions: |
-        - Все цветовые значения должны использовать CSS переменные или design tokens
-        - Не использовать !important без крайней необходимости
-        - Классы должны быть в camelCase
-        - Поддержка responsive design где уместно
-        - Используй CSS переменные для темизации
+        Проверь по docs/ai/codestyle.md:
+        - Все цветовые значения через CSS-переменные токенов (--triplex-next-*)
+        - Нет !important без комментария с объяснением
+        - Классы в camelCase
+        - Нет hardcoded hex/rgb значений
 
     - path: "**/*.stories.tsx"
       instructions: |
-        - Должны быть минимум 2 stories: default, playground
-        - Все props должны быть представлены в Controls (args)
-        - Используй Template pattern для переиспользования
-        - Добавь MDX документацию для сложных компонентов
-        - Stories должны демонстрировать все состояния компонента
+        Проверь по docs/ai/stories-guide.md:
+        - Playground: tags ["!autodocs"], testRunner skip, sourceState none
+        - Все документационные стори: controls disable, source.code через ?raw
+        - Примеры вынесены в examples/ и реэкспортированы через index.ts
+        - Импорты в примерах из @sberbusiness/triplex-next (не по относительным путям)
+        - Порядок: meta → Playground → Default → остальные
 
     - path: "src/components/**/__tests__/*.test.tsx"
       instructions: |
-        - Используй describe/it структуру
-        - Тестируй все возможные props комбинации
-        - Проверяй accessibility (screen reader, keyboard nav)
-        - Используй @testing-library/react best practices
-        - Покрытие должно быть >80%
+        Проверь по docs/ai/tests.md:
+        - Используется vitest (не jest): describe/it/expect/vi.fn()
+        - Приоритет запросов: getByRole > getByLabelText > getByText > getByTestId
+        - forwardRef покрыт тестом
+        - Все prop-варианты протестированы
+        - Нет тестов на детали реализации (CSS-классы — только если они представляют состояние)
 
     - path: "src/components/**/index.ts"
       instructions: |
-        - Должен экспортировать только публичное API
-        - Экспортируй типы и интерфейсы
-        - Не должно быть логики, только exports
-        - Named exports предпочтительнее default
+        - Только экспорты, никакой логики
+        - Всё, что было экспортировано ранее, должно оставаться (удаление = breaking change)
+        - Named exports, не default
 
     - path: "src/index.ts"
       instructions: |
-        - Все новые компоненты должны быть экспортированы
-        - Группировка exports по категориям (UI, Form, Layout и т.д.)
-        - Экспортируй типы вместе с компонентами
+        - Все новые компоненты, интерфейсы и enum'ы должны быть экспортированы
+        - Группировка по категориям
 
     - path: "e2e/**/*.spec.ts"
       instructions: |
-        - Используй Page Object pattern для переиспользования
-        - Тесты должны быть независимыми
-        - Ждать элементы через waitFor вместо фиксированных таймаутов
-        - Используй test.describe для группировки
+        Проверь по docs/ai/tests.md:
+        - Нет фиксированных таймаутов (page.waitForTimeout) — только waitFor/toBeVisible
+        - Тесты независимы друг от друга
+        - URL — iframe конкретной Storybook story
 
-    - path: "**/*.md"
+    - path: "docs/ai/**/*.md"
       instructions: |
         - Документация на русском языке
-        - Примеры кода должны быть рабочими
-        - Ссылки на Storybook где уместно
-        - Четкая структура: Overview, API, Examples, Accessibility
+        - Примеры кода должны соответствовать реальному коду в репозитории
+        - Структура: чёткие заголовки, примеры кода, чек-листы где уместно
 
-# Автоматические ревьюверы
 chat:
   auto_reply: true

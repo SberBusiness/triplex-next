@@ -15,6 +15,17 @@
 
 ---
 
+## Конвенции разработки
+
+| Тема | Файл |
+|---|---|
+| Codestyle (TS, React, LESS, принципы) | `docs/ai/codestyle.md` |
+| Тестирование (unit, visual, e2e) | `docs/ai/tests.md` |
+| Stories (структура, примеры, чек-лист) | `docs/ai/stories-guide.md` |
+| Коммиты, ветки, PR-воркфлоу | `docs/ai/commits.md` |
+
+---
+
 ## Типичный запрос
 
 Когда тебя просят изменить компонент:

@@ -7,10 +7,11 @@
 
 ## Что такое Triplex-Next
 
-React-библиотека компонентов дизайн-системы SberBusiness.
+React-библиотека компонентов дизайн-системы.
 Пакет: `@sberbusiness/triplex-next` (v1.x, React 18 + TypeScript strict).
+Пакет: `@sberbusiness/triplex-next` (v0.x, React 17 + TypeScript strict).
 
-**Основной сценарий работы агента:** добавить новый prop или вариант к существующему компоненту по макету из Figma.
+**Основной сценарий работы агента:** добавить новый prop или вариант к существующему компоненту по описанию и/или макету из Figma.
 
 ---
 
@@ -18,7 +19,7 @@ React-библиотека компонентов дизайн-системы Sb
 
 | Слой | Технология |
 |---|---|
-| Компоненты | React 18, TypeScript 5 (strict) |
+| Компоненты | React 18/17, TypeScript 5 (strict) |
 | Стили | LESS CSS Modules (`.module.less`) |
 | Дизайн-токены | CSS-переменные, генерируются в `src/generated/` |
 | Сборка | Vite, ES-модули only |
@@ -39,6 +40,7 @@ src/components/Button/
 ├── ButtonIcon.tsx             # Субкомпонент (опционально)
 ├── enums.ts                   # Enum'ы, специфичные для компонента
 ├── index.ts                   # Barrel export — ОБЯЗАТЕЛЕН
+├── types.ts                   # Barrel export — ОБЯЗАТЕЛЕН
 ├── styles/
 │   ├── Button.module.less     # Базовые стили
 │   └── ButtonGeneral.module.less  # Стили по теме/варианту
@@ -84,6 +86,19 @@ src/components/Button/
 Токены генерируются в `src/generated/themesCssVariables.css`. Не редактируй этот файл вручную.
 
 Если добавляешь новое визуальное состояние — нужен новый токен. Имя токена согласуй с дизайнером в Figma.
+
+---
+
+## Документация конвенций
+
+Детальные правила вынесены в отдельные файлы:
+
+| Тема | Файл |
+|---|---|
+| Codestyle (TypeScript, React, LESS, принципы) | `docs/ai/codestyle.md` |
+| Тестирование (unit, visual, e2e) | `docs/ai/tests.md` |
+| Stories (структура, примеры, чек-лист) | `docs/ai/stories-guide.md` |
+| Коммиты, ветки, PR-воркфлоу | `docs/ai/commits.md` |
 
 ---
 
@@ -134,9 +149,9 @@ const { theme, size, newProp, className, ...rest } = props;
 ### 5. Обнови Storybook story
 
 В `stories/{Category}/{ComponentName}.stories.tsx`:
-- Добавь prop в `args` playground-стори
-- Добавь `argTypes` для управления prop через UI
-- При необходимости добавь отдельную story для нового варианта
+- Добавь prop в `args` и `argTypes` Playground-стори
+- Если prop имеет визуальные варианты — добавь named story (`Sizes`, `Themes` и т.д.)
+- Подробно: `docs/ai/stories-guide.md` → раздел "Что обновлять при добавлении нового prop"
 
 ### 6. Обнови тесты
 

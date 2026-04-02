@@ -22,7 +22,7 @@
 
 ### Расположение
 
-```
+```text
 src/components/{ComponentName}/__tests__/{ComponentName}.test.tsx
 ```
 
@@ -223,7 +223,7 @@ afterEach(() => {
 
 ### Обновление baseline
 
-```
+```text
 GitHub → Actions → "Update Visual Snapshots" → Run workflow → выбери ветку
 ```
 
@@ -254,7 +254,7 @@ npm run test-visual:docker:update # обновление baseline через Doc
 
 ### Расположение
 
-```
+```text
 e2e/tests/{componentName}.spec.ts
 ```
 

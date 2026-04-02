@@ -66,7 +66,7 @@ version: "1.0"
 
 ## Файловая структура
 
-```
+```text
 src/components/Button/
 ├── Button.tsx                     # Основной компонент, union type TButtonProps
 ├── ButtonBase.tsx                 # Базовый <button>, extends HTML attrs

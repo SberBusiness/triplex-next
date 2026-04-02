@@ -10,7 +10,7 @@
 **Prettier** (`.prettierrc`):
 - `printWidth: 120`
 - `tabWidth: 4`
-- Остальное — prettier defaults (одинарные кавычки в JSX, trailing comma es5)
+- Остальное — prettier defaults (двойные кавычки в JSX, trailing comma es5)
 
 Не нужно форматировать вручную — `lint-staged` запустит `prettier --write` при `git commit`.
 

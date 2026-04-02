@@ -9,7 +9,7 @@
 - Строчные буквы, слова через дефис.
 - Всегда начинается с номера тикета.
 
-```
+```text
 TRIPLEX-844-ai-ready-design-system
 TRIPLEX-901-add-badge-component
 TRIPLEX-912-fix-button-focus-style
@@ -36,7 +36,7 @@ TRIPLEX-912-fix-button-focus-style
 
 **Формат:** `TRIPLEX-XXX Краткое описание`
 
-```
+```text
 TRIPLEX-844 Добавить AI-Ready документацию для компонентов
 TRIPLEX-901 Добавить компонент Badge с темами и размерами
 TRIPLEX-912 Исправить стиль фокуса для Button в теме Link
@@ -44,7 +44,7 @@ TRIPLEX-912 Исправить стиль фокуса для Button в теме
 
 Если нужно уточнение — добавляй через двоеточие:
 
-```
+```text
 TRIPLEX-844 AI-Ready Design System: фундамент и пилот Button
 TRIPLEX-901 Badge: добавить тему DANGER и размер SM
 ```

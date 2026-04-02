@@ -43,5 +43,12 @@ export interface ISuggestFieldDesktopDropdownListProvideProps extends Pick<
 /** Свойства, передаваемые в рендер-функцию DropdownListItem. */
 export interface ISuggestFieldDesktopDropdownListItemProvideProps extends Pick<
     IDropdownListItemProps,
-    "children" | "id" | "data-test-id" | "keyCodesForSelection" | "selected" | "onMouseDown" | "onSelect"
+    | "children"
+    | "id"
+    | "data-test-id"
+    | "keyCodesForSelection"
+    | "selected"
+    | "onMouseDown"
+    | "onSelect"
+    | "showNotificationIcon"
 > {}

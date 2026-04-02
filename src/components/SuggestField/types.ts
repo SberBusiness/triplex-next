@@ -44,4 +44,6 @@ export interface ISuggestFieldOption {
     label: string;
     /** Кастомное содержимое опции в списке. */
     content?: React.ReactNode;
+    /** Флаг отображения значка новых уведомлений. */
+    showNotificationIcon?: boolean;
 }

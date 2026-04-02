@@ -50,14 +50,16 @@ export const Playground: StoryObj<typeof Chip> = {
     args: {
         size: EComponentSize.MD,
         disabled: false,
+        showNotificationIcon: false,
     },
     argTypes: {
         size: { control: { type: "select" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
+        showNotificationIcon: { control: { type: "boolean" } },
     },
     parameters: {
         controls: {
-            include: ["size", "disabled"],
+            include: ["size", "disabled", "showNotificationIcon"],
         },
         docs: {
             canvas: {
@@ -131,5 +133,24 @@ export const WithPrefixAndPostfix: StoryObj<typeof Chip> = {
         <Chip prefix={<SortStrokeSrvIcon20 paletteIndex={5} />} postfix={<SortStrokeSrvIcon20 paletteIndex={5} />}>
             Value
         </Chip>
+    ),
+};
+
+export const WithNotificationIcon: StoryObj<typeof Chip> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => (
+        <div style={{ display: "flex", gap: 12 }}>
+            <Chip size={EComponentSize.SM} showNotificationIcon>
+                SM
+            </Chip>
+            <Chip size={EComponentSize.MD} showNotificationIcon>
+                MD
+            </Chip>
+            <Chip size={EComponentSize.LG} showNotificationIcon>
+                LG
+            </Chip>
+        </div>
     ),
 };

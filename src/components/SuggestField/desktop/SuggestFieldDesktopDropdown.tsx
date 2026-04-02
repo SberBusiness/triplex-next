@@ -73,6 +73,7 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
                                 `${dataTestId}${DataTestId.Suggest.dropdown}${DataTestId.Dropdown.listItem}`
                             }
                             selected={option.id === value?.id}
+                            showNotificationIcon={option.showNotificationIcon}
                             onSelect={() => onSelect(option)}
                         >
                             {option.content || option.label}

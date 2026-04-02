@@ -272,6 +272,38 @@ export const States: StoryObj = {
     },
 };
 
+export const WithNotificationIcon: StoryObj = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "ChipSelect с опциями, у которых задан showNotificationIcon. Флаг передаётся напрямую в объект опции.",
+            },
+        },
+    },
+    render: () => {
+        const options: ISelectFieldOption[] = [
+            { id: "1", value: "option1", label: "Первая опция" },
+            { id: "2", value: "option2", label: "Вторая опция", showNotificationIcon: true },
+            { id: "3", value: "option3", label: "Третья опция" },
+            { id: "4", value: "option4", label: "Четвертая опция" },
+        ];
+
+        const [selected, setSelected] = useState<ISelectFieldOption | undefined>();
+
+        return (
+            <ChipSelect
+                size={EComponentSize.MD}
+                label="Select label"
+                options={options}
+                value={selected}
+                onChange={setSelected}
+                clearSelected={() => setSelected(undefined)}
+            />
+        );
+    },
+};
+
 export const WithCustomDisplayedValue: StoryObj = {
     parameters: {
         controls: { disable: true },

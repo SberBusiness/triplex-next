@@ -1,0 +1,28 @@
+---
+description: Triplex-Next design system component conventions and AI workflow
+alwaysApply: true
+---
+
+## Triplex-Next Design System
+
+Treat `docs/ai/*` as the source of truth for project conventions.
+
+Before modifying components:
+- Read `docs/ai/CONTEXT.md`
+- Read `docs/ai/CODING_GUIDELINES.md`
+- If present, read `src/components/{ComponentName}/{ComponentName}-AI.md`
+
+Then follow the detailed guide for the area you touch:
+- `docs/ai/codestyle.md`
+- `docs/ai/tests.md`
+- `docs/ai/stories-guide.md`
+- `docs/ai/commits.md`
+
+Use `docs/ai/CONTEXT.md` for source priority, Figma metadata rules, and verification expectations.
+
+If `{ComponentName}-AI.md` does not exist:
+- inspect the component source, stories, and tests
+- follow the local file pattern
+- do not create a new `*-AI.md` file unless the task explicitly asks for it
+
+Keep this Cursor rule as a thin entrypoint. Do not duplicate detailed rules here if they already live in `docs/ai/*`.

@@ -291,8 +291,8 @@ export const Default: StoryObj<typeof LightBox> = {
     name: "Default",
     render: DefaultExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             description: {
                 story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
             },
@@ -308,8 +308,8 @@ export const LightBoxWithWidePage: StoryObj<typeof LightBox> = {
     name: "WithWidePage",
     render: WithWidePageExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             description: {
                 story: "Конфигурация LightBox с Page шириной более 864px. Для этого нужно передать style={{ maxWidth: '1064px' }} в Page.",
             },
@@ -325,8 +325,8 @@ export const SmallContent: StoryObj<typeof LightBox> = {
     name: "SmallContent",
     render: SmallContentExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             description: {
                 story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
             },
@@ -342,8 +342,8 @@ export const SplitMode: StoryObj<typeof LightBox> = {
     name: "SplitMode",
     render: SplitModeExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             description: {
                 story: "Конфигурация LightBox в режиме split-mode. LightBox занимает 90% ширины экрана и располагается по центру. DOM-элемент с идентификатором LightBox-next-view-manager-node-example используется для позиционирования LightBox. Граница этого элемента равна границам LightBox.",
             },
@@ -359,8 +359,8 @@ export const WithSidebars: StoryObj<typeof LightBox> = {
     name: "WithSidebars",
     render: WithSidebarsExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithSidebarsExampleSource,
                 language: "tsx",
@@ -373,8 +373,8 @@ export const WithFixedSidebars: StoryObj<typeof LightBox> = {
     name: "WithFixedSidebars",
     render: WithFixedSidebarsExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithFixedSidebarsExampleSource,
                 language: "tsx",
@@ -387,8 +387,8 @@ export const WithOneSidebar: StoryObj<typeof LightBox> = {
     name: "WithOneSidebar",
     render: WithOneSidebarExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithOneSidebarExampleSource,
                 language: "tsx",
@@ -401,8 +401,8 @@ export const WithSideOverlay: StoryObj<typeof LightBox> = {
     name: "WithSideOverlay",
     render: WithSideOverlayExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithSideOverlayExampleSource,
                 language: "tsx",
@@ -415,8 +415,8 @@ export const WithSideOverlayLoading: StoryObj<typeof LightBox> = {
     name: "WithSideOverlay: Loading",
     render: WithSideOverlayLoadingExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithSideOverlayLoadingExampleSource,
                 language: "tsx",
@@ -429,8 +429,8 @@ export const WithTopOverlay: StoryObj<typeof LightBox> = {
     name: "WithTopOverlay",
     render: WithTopOverlayExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithTopOverlayExampleSource,
                 language: "tsx",
@@ -443,8 +443,8 @@ export const WithTopOverlayInSideOverlay: StoryObj<typeof LightBox> = {
     name: "WithTopOverlayInSideOverlay",
     render: WithTopOverlayInSideOverlayExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithTopOverlayInSideOverlayExampleSource,
                 language: "tsx",

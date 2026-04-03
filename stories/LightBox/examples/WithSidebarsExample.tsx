@@ -54,6 +54,8 @@ const PoemBlock: React.FC = () => (
 
 export const WithSidebarsExample = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLeftSidebarVisible, setIsLeftSidebarVisible] = useState(true);
+    const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(true);
 
     const renderLightBoxControls = () => (
         <LightBox.Controls key="controls">
@@ -116,6 +118,14 @@ export const WithSidebarsExample = () => {
                             </Page.Header>
 
                             <Page.Body type={EBodyPageType.SECOND}>
+                                <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
+                                    <IslandBody>
+                                        Left sidebar: {isLeftSidebarVisible ? "visible" : "hidden"}
+                                        <br />
+                                        Right sidebar: {isRightSidebarVisible ? "visible" : "hidden"}
+                                    </IslandBody>
+                                </Island>
+                                <Gap size={24} />
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />
@@ -140,13 +150,22 @@ export const WithSidebarsExample = () => {
                         </Page>
                     </LightBox.Content>
 
-                    <LightBox.LeftSidebar key="left-sidebar">
+                    <LightBox.LeftSidebar
+                        key="left-sidebar"
+                        minVisibleWidth={140}
+                        onShow={() => setIsLeftSidebarVisible(true)}
+                        onHide={() => setIsLeftSidebarVisible(false)}
+                    >
                         <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
                             <IslandBody>Left Sidebar</IslandBody>
                         </Island>
                     </LightBox.LeftSidebar>
 
-                    <LightBox.RightSidebar key="right-sidebar">
+                    <LightBox.RightSidebar
+                        key="right-sidebar"
+                        onShow={() => setIsRightSidebarVisible(true)}
+                        onHide={() => setIsRightSidebarVisible(false)}
+                    >
                         <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
                             <IslandBody>Right Sidebar</IslandBody>
                         </Island>

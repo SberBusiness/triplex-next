@@ -60,6 +60,7 @@
 
 ## Тестирование
 
+- После изменений компонентов и логики запускай `npx tsc --noEmit` для проверки типов.
 - Unit-тесты: Vitest + Testing Library. Покрывай новый функционал.
 - Новый компонент: полное покрытие (все props, forwardRef, события).
 - Visual regression: автоматически из stories. Baseline только из CI/Docker.

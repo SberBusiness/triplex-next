@@ -106,4 +106,16 @@ describe("LightBoxRightSidebar", () => {
         triggerResize(150); // change: hidden (150 <= 200)
         expect(onHide).toHaveBeenCalledTimes(1);
     });
+
+    it("treats width equal to minVisibleWidth as hidden", () => {
+        const onHide = vi.fn();
+        render(
+            <LightBoxRightSidebar minVisibleWidth={100} onHide={onHide}>
+                Content
+            </LightBoxRightSidebar>,
+        );
+        triggerResize(150); // initial: visible
+        triggerResize(100); // change: hidden (100 is not > 100)
+        expect(onHide).toHaveBeenCalledTimes(1);
+    });
 });

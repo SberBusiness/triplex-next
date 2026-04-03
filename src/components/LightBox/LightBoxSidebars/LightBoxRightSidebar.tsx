@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles/LightBoxRightSidebar.module.less";
 
@@ -14,59 +14,59 @@ export interface ILightBoxRightSidebarProps extends React.HTMLAttributes<HTMLDiv
 }
 
 /** Контейнер правой боковой панели. */
-export const LightBoxRightSidebar: React.FC<ILightBoxRightSidebarProps> = ({
-    children,
-    className,
-    fixed,
-    minVisibleWidth = 100,
-    onShow,
-    onHide,
-    ...htmlDivAttributes
-}) => {
-    const outerRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(true);
-    const onShowRef = useRef(onShow);
-    const onHideRef = useRef(onHide);
+export const LightBoxRightSidebar = forwardRef<HTMLDivElement, ILightBoxRightSidebarProps>(
+    ({ children, className, fixed, minVisibleWidth = 100, onShow, onHide, ...htmlDivAttributes }, ref) => {
+        const outerRef = useRef<HTMLDivElement>(null);
+        const [isVisible, setIsVisible] = useState(true);
+        const onShowRef = useRef(onShow);
+        const onHideRef = useRef(onHide);
 
-    useEffect(() => {
-        onShowRef.current = onShow;
-        onHideRef.current = onHide;
-    }, [onShow, onHide]);
+        useEffect(() => {
+            onShowRef.current = onShow;
+            onHideRef.current = onHide;
+        }, [onShow, onHide]);
 
-    useEffect(() => {
-        const element = outerRef.current;
-        if (!element) return;
+        useEffect(() => {
+            const element = outerRef.current;
+            if (!element) return;
 
-        const observer = new ResizeObserver((entries) => {
-            for (const entry of entries) {
-                const shouldBeVisible = entry.contentRect.width > minVisibleWidth;
+            const observer = new ResizeObserver((entries) => {
+                for (const entry of entries) {
+                    const shouldBeVisible = entry.contentRect.width > minVisibleWidth;
 
-                setIsVisible((prev) => {
-                    if (shouldBeVisible !== prev) {
-                        if (shouldBeVisible) {
-                            onShowRef.current?.();
-                        } else {
-                            onHideRef.current?.();
+                    setIsVisible((prev) => {
+                        if (shouldBeVisible !== prev) {
+                            if (shouldBeVisible) {
+                                onShowRef.current?.();
+                            } else {
+                                onHideRef.current?.();
+                            }
                         }
-                    }
-                    return shouldBeVisible;
-                });
-            }
-        });
+                        return shouldBeVisible;
+                    });
+                }
+            });
 
-        observer.observe(element);
-        return () => observer.disconnect();
-    }, [minVisibleWidth]);
+            observer.observe(element);
+            return () => observer.disconnect();
+        }, [minVisibleWidth]);
 
-    return (
-        <div
-            ref={outerRef}
-            className={clsx(className, styles.lightBoxRightSidebar, { [styles.fixed]: fixed })}
-            {...htmlDivAttributes}
-        >
-            <div className={clsx(styles.lightBoxRightSidebarInner, { [styles.hidden]: !isVisible })}>{children}</div>
-        </div>
-    );
-};
+        return (
+            <div
+                ref={(node) => {
+                    (outerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+                    if (typeof ref === "function") ref(node);
+                    else if (ref) ref.current = node;
+                }}
+                className={clsx(className, styles.lightBoxRightSidebar, { [styles.fixed]: fixed })}
+                {...htmlDivAttributes}
+            >
+                <div className={clsx(styles.lightBoxRightSidebarInner, { [styles.hidden]: !isVisible })}>
+                    {children}
+                </div>
+            </div>
+        );
+    },
+);
 
 LightBoxRightSidebar.displayName = "LightBoxRightSidebar";

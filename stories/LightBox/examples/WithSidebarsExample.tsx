@@ -152,6 +152,7 @@ export const WithSidebarsExample = () => {
 
                     <LightBox.LeftSidebar
                         key="left-sidebar"
+                        minVisibleWidth={140}
                         onShow={() => setIsLeftSidebarVisible(true)}
                         onHide={() => setIsLeftSidebarVisible(false)}
                     >

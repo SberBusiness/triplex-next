@@ -1,7 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
     Button,
-    CheckboxTreeExtended,
+    Checkbox,
+    CheckboxYGroup,
     EButtonTheme,
     EComponentSize,
     FormField,
@@ -14,113 +15,89 @@ import {
     TagGroup,
     Text,
     ETextSize,
+    DropdownMobileFooter,
+    DropdownMobileBody,
+    DropdownMobileHeader,
+    DropdownMobileInput,
+    DropdownMobileClose,
 } from "@sberbusiness/triplex-next";
+import "../MultiselectField.less";
 
-interface INode {
+interface IOption {
     id: string;
     label: string;
-    children?: INode[];
 }
 
-/** Генерация исходного дерева чекбоксов для примера. */
-const createNodes = (): INode[] => [
-    {
-        id: "multiselect-option-0",
-        label: "Все",
-        children: [
-            {
-                id: "multiselect-option-1",
-                label: "Группа 1",
-                children: [...Array(40).keys()].map((item) => ({
-                    id: `multiselect-option-1-${item}`,
-                    label: `Значение 1-${item}`,
-                })),
-            },
-            {
-                id: "multiselect-option-2",
-                label: "Группа 2",
-                children: [
-                    { id: "multiselect-option-2-1", label: "Значение 2-1" },
-                    { id: "multiselect-option-2-2", label: "Значение 2-2" },
-                ],
-            },
-            { id: "multiselect-option-3", label: "Значение 3" },
-        ],
-    },
-];
+/** Плоский список опций для примера (раньше задавался как дерево). */
+const createOptions = (): IOption[] => {
+    const group1 = [...Array(40).keys()].map((item) => ({
+        id: `multiselect-option-1-${item}`,
+        label: `Значение 1-${item}`,
+    }));
+    const group2: IOption[] = [
+        { id: "multiselect-option-2-1", label: "Значение 2-1" },
+        { id: "multiselect-option-2-2", label: "Значение 2-2" },
+    ];
 
-/** Получение всех leaf-id для ноды и ее потомков. */
-const getLeafIds = (node: INode): string[] => (node.children ? node.children.flatMap(getLeafIds) : [node.id]);
+    return [...group1, ...group2, { id: "multiselect-option-3", label: "Значение 3" }];
+};
 
 export const DefaultExample = () => {
     /** Ref на target, который нужен для корректного позиционирования dropdown. */
     const targetRef = useRef<HTMLDivElement>(null);
-    /** Мемоизированные исходные ноды дерева, чтобы не пересоздавать их на каждый рендер. */
-    const nodes = useMemo(() => createNodes(), []);
+    /** Мемоизированные опции, чтобы не пересоздавать их на каждый рендер. */
+    const options = useMemo(() => createOptions(), []);
     /** Массив id выбранных leaf-чекбоксов. */
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     /** Текущее значение фильтра в поле поиска dropdown. */
     const [filter, setFilter] = useState("");
     /** Set для быстрых O(1) проверок выбранности чекбокса по id. */
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+    const visibleOptions = useMemo(() => {
+        const lower = filter.trim().toLowerCase();
+        if (!lower.length) {
+            return options;
+        }
 
-    /** Переключение состояния ноды: выбирает/снимает все leaf-потомки. */
-    const handleToggle = (node: INode, checked: boolean) => {
-        const leafIds = getLeafIds(node);
-        const leafSet = new Set(leafIds);
+        return options.filter((opt) => opt.label.toLowerCase().includes(lower));
+    }, [filter, options]);
 
+    const selectedOptions = useMemo(() => options.filter((opt) => selectedSet.has(opt.id)), [options, selectedSet]);
+
+    const handleToggle = (option: IOption, checked: boolean) => {
         setSelectedIds((prev) => {
             if (checked) {
-                return Array.from(new Set([...prev, ...leafIds]));
+                if (prev.includes(option.id)) {
+                    return prev;
+                }
+
+                return [...prev, option.id];
             }
 
-            return prev.filter((id) => !leafSet.has(id));
+            return prev.filter((id) => id !== option.id);
         });
     };
 
-    /** Проверка, подходит ли нода под фильтр сама или через дочерние элементы. */
-    const doesNodeMatchFilter = (node: INode): boolean => {
-        const lowerFilter = filter.trim().toLowerCase();
-        if (!lowerFilter.length) return true;
-        if (node.label.toLowerCase().includes(lowerFilter)) return true;
-        return Boolean(node.children?.some(doesNodeMatchFilter));
+    const handleClearAll = () => {
+        setSelectedIds([]);
+        setFilter("");
     };
 
-    /** Рекурсивный рендер ноды дерева с вычислением checked/bulk состояния. */
-    const renderNode = (node: INode): React.ReactNode => {
-        if (!doesNodeMatchFilter(node)) return null;
-
-        const leafIds = getLeafIds(node);
-        const checkedCount = leafIds.filter((id) => selectedSet.has(id)).length;
-        const checked = checkedCount > 0;
-        const bulk = checked && checkedCount < leafIds.length;
-
-        return (
-            <CheckboxTreeExtended.Node
-                key={node.id}
-                id={node.id}
-                opened={Boolean(node.children)}
-                checkbox={(props) => (
-                    <CheckboxTreeExtended.Checkbox
-                        {...props}
-                        checked={checked}
-                        bulk={bulk}
-                        onChange={(event) => handleToggle(node, event.target.checked)}
-                    >
-                        {node.label}
-                    </CheckboxTreeExtended.Checkbox>
-                )}
-            >
-                {node.children?.map(renderNode)}
-            </CheckboxTreeExtended.Node>
-        );
-    };
-
-    /** Плоский список выбранных leaf-нод для рендера тегов в target. */
-    const selectedLeafNodes = nodes
-        .flatMap(getLeafIds)
-        .filter((id) => selectedSet.has(id))
-        .map((id) => ({ id, label: id.replace("multiselect-option-", "Значение ") }));
+    const renderCheckboxList = () => (
+        <CheckboxYGroup aria-label="Options">
+            {visibleOptions.map((opt) => (
+                <Checkbox
+                    key={opt.id}
+                    id={opt.id}
+                    size={EComponentSize.MD}
+                    checked={selectedSet.has(opt.id)}
+                    onChange={(event) => handleToggle(opt, event.target.checked)}
+                >
+                    {opt.label}
+                </Checkbox>
+            ))}
+        </CheckboxYGroup>
+    );
 
     /** Рендер тегов выбранных значений или счетчика, если выбранных значений много. */
     const renderTags = () => {
@@ -133,8 +110,8 @@ export const DefaultExample = () => {
             }
         };
 
-        if (!selectedLeafNodes.length) return null;
-        if (selectedLeafNodes.length > 3) {
+        if (!selectedOptions.length) return null;
+        if (selectedOptions.length > 3) {
             return (
                 <Tag
                     id="many"
@@ -143,26 +120,27 @@ export const DefaultExample = () => {
                     onBlur={handleTagBlur}
                     onClick={handleTagClick}
                     onKeyDown={handleTagKeyDown}
+                    onRemove={handleClearAll}
                 >
-                    {`Выбрано ${selectedLeafNodes.length} значения`}
+                    {`Выбрано ${selectedOptions.length} значения`}
                 </Tag>
             );
         }
 
         return (
             <TagGroup size={EComponentSize.SM}>
-                {selectedLeafNodes.map((node) => (
+                {selectedOptions.map((opt) => (
                     <Tag
-                        key={node.id}
-                        id={node.id}
+                        key={opt.id}
+                        id={opt.id}
                         size={EComponentSize.SM}
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
                         onKeyDown={handleTagKeyDown}
-                        onRemove={() => setSelectedIds((prev) => prev.filter((id) => id !== node.id))}
+                        onRemove={() => handleToggle(opt, false)}
                     >
-                        {node.label}
+                        {opt.label}
                     </Tag>
                 ))}
             </TagGroup>
@@ -190,6 +168,45 @@ export const DefaultExample = () => {
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
+                        mobileViewProps={{
+                            children: (
+                                <>
+                                    <DropdownMobileHeader
+                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
+                                    >
+                                        <DropdownMobileInput
+                                            placeholder="Type to proceed"
+                                            value={filter}
+                                            onChange={(event) => setFilter(event.target.value)}
+                                        />
+                                    </DropdownMobileHeader>
+                                    <DropdownMobileBody>
+                                        {renderCheckboxList()}
+                                        {!!filter.trim().length && !visibleOptions.length && (
+                                            <Text size={ETextSize.B3} className="not-found">
+                                                Nothing was found.
+                                            </Text>
+                                        )}
+                                    </DropdownMobileBody>
+                                    <DropdownMobileFooter>
+                                        <Button
+                                            theme={EButtonTheme.SECONDARY}
+                                            size={EComponentSize.MD}
+                                            onClick={() => setOpened(false)}
+                                        >
+                                            Button text
+                                        </Button>
+                                        <Button
+                                            theme={EButtonTheme.LINK}
+                                            size={EComponentSize.MD}
+                                            onClick={handleClearAll}
+                                        >
+                                            Button link text
+                                        </Button>
+                                    </DropdownMobileFooter>
+                                </>
+                            ),
+                        }}
                     >
                         <MultiselectField.Dropdown.Header>
                             <FormField size={EComponentSize.SM}>
@@ -201,9 +218,11 @@ export const DefaultExample = () => {
                             </FormField>
                         </MultiselectField.Dropdown.Header>
                         <MultiselectField.Dropdown.Content>
-                            <CheckboxTreeExtended>{nodes.map(renderNode)}</CheckboxTreeExtended>
-                            {!!filter.length && !nodes.some(doesNodeMatchFilter) && (
-                                <Text size={ETextSize.B3}>Nothing was found.</Text>
+                            {renderCheckboxList()}
+                            {!!filter.trim().length && !visibleOptions.length && (
+                                <div className="not-found md">
+                                    <Text size={ETextSize.B3}>Nothing was found.</Text>
+                                </div>
                             )}
                         </MultiselectField.Dropdown.Content>
                         <MultiselectField.Dropdown.Footer>
@@ -214,11 +233,7 @@ export const DefaultExample = () => {
                             >
                                 Button text
                             </Button>
-                            <Button
-                                theme={EButtonTheme.LINK}
-                                size={EComponentSize.SM}
-                                onClick={() => setSelectedIds([])}
-                            >
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClearAll}>
                                 Button link text
                             </Button>
                         </MultiselectField.Dropdown.Footer>

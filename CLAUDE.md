@@ -44,7 +44,8 @@
 3. Если файл существует, прочитай `src/components/{ComponentName}/{ComponentName}-AI.md`
 4. Изучи исходный код компонента, stories и тесты
 5. Внеси изменения: TSX → LESS → story → тесты
-6. Если `{ComponentName}-AI.md` существует, обнови раздел "История изменений"
+6. Если изменился публичный API — обнови release notes (`stories/release-notes/v1/<версия>.mdx`)
+7. Если `{ComponentName}-AI.md` существует, обнови раздел "История изменений"
 
 ## Figma MCP
 

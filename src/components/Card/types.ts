@@ -4,7 +4,7 @@ export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Возможные размеры скругления карточки. */
     roundingSize?: ECardRoundingSize;
     /** Возможные темы оформления карточки. */
-    theme: ECardTheme;
+    theme?: ECardTheme;
 }
 
 /** Свойства интерактивной карточки. */

@@ -34,6 +34,13 @@ describe("LightBoxRightSidebar", () => {
         expect(getByText("Sidebar content")).toBeInTheDocument();
     });
 
+    it("forwards ref to the root DOM element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(<LightBoxRightSidebar ref={ref}>Content</LightBoxRightSidebar>);
+        expect(ref.current).not.toBeNull();
+        expect(ref.current?.tagName).toBe("DIV");
+    });
+
     it("hides inner content on initial observation below minVisibleWidth", () => {
         const { container } = render(<LightBoxRightSidebar>Content</LightBoxRightSidebar>);
         triggerResize(50);

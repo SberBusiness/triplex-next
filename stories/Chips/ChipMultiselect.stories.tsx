@@ -7,7 +7,6 @@ import {
     DropdownMobileClose,
     DropdownMobileBody,
     DropdownMobileFooter,
-    EDropdownAlignment,
 } from "../../src/components/Dropdown";
 import { Button, EButtonTheme } from "../../src/components/Button";
 import { EComponentSize } from "../../src/enums/EComponentSize";
@@ -259,7 +258,6 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
                     setOpened={setOpened}
                     targetRef={targetRef}
                     ref={dropdownRef}
-                    alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{
                         focusTrapOptions: { initialFocus: false },
                     }}
@@ -507,7 +505,6 @@ export const Default: StoryObj<typeof ChipMultiselect> = {
                 setOpened={setOpened}
                 targetRef={targetRef}
                 ref={dropdownRef}
-                alignment={EDropdownAlignment.LEFT}
                 focusTrapProps={{
                     focusTrapOptions: { initialFocus: false },
                 }}
@@ -735,7 +732,6 @@ export const Sizes: StoryObj<typeof ChipMultiselect> = {
                     setOpened={setOpened}
                     targetRef={targetRef}
                     ref={dropdownRef}
-                    alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{
                         focusTrapOptions: { initialFocus: false },
                     }}
@@ -1000,7 +996,6 @@ export const Loading: StoryObj<typeof ChipMultiselect> = {
                 setOpened={setOpened}
                 targetRef={targetRef}
                 ref={dropdownRef}
-                alignment={EDropdownAlignment.LEFT}
                 focusTrapProps={{
                     focusTrapOptions: { initialFocus: false },
                 }}
@@ -1244,7 +1239,6 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                     opened={shouldBeOpened}
                     targetRef={targetRef}
                     ref={dropdownRef}
-                    alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{
                         focusTrapOptions: { initialFocus: false },
                     }}

@@ -7,7 +7,6 @@ import { Title as TitleDoc, Description, Controls, Stories } from "@storybook/ad
 import { dateFormatYYYYMMDD, globalLimitRange } from "../src/consts/DateConst";
 import { Title, ETitleSize, EFontType } from "../src/components/Typography";
 import { Gap } from "../src/components/Gap";
-import { EDropdownAlignment } from "../src/components/Dropdown";
 
 export default {
     title: "Components/MonthYearField",
@@ -144,7 +143,6 @@ export const States: Story = {
                     label="Label"
                     status={EFormFieldStatus.DEFAULT}
                     size={EComponentSize.MD}
-                    alignment={EDropdownAlignment.LEFT}
                 />
                 <Gap size={24} />
                 <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
@@ -157,7 +155,6 @@ export const States: Story = {
                     label="Label"
                     status={EFormFieldStatus.ERROR}
                     size={EComponentSize.MD}
-                    alignment={EDropdownAlignment.LEFT}
                 />
                 <Gap size={24} />
                 <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
@@ -170,7 +167,6 @@ export const States: Story = {
                     label="Label"
                     status={EFormFieldStatus.WARNING}
                     size={EComponentSize.MD}
-                    alignment={EDropdownAlignment.LEFT}
                 />
                 <Gap size={24} />
                 <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
@@ -183,7 +179,6 @@ export const States: Story = {
                     label="Label"
                     status={EFormFieldStatus.DISABLED}
                     size={EComponentSize.MD}
-                    alignment={EDropdownAlignment.LEFT}
                 />
             </div>
         );

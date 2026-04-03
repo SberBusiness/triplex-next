@@ -12,7 +12,6 @@ import {
     Title,
     EFontType,
     DateField,
-    EDropdownAlignment,
     EFormFieldStatus,
 } from "@sberbusiness/triplex-next";
 import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
@@ -54,7 +53,6 @@ export const DefaultExample = () => {
                             placeholderMask="дд.мм.гггг"
                             label="дд.мм.гггг"
                             invalidDateHint="Указана недоступная для выбора дата."
-                            alignment={EDropdownAlignment.LEFT}
                             size={EComponentSize.SM}
                             status={EFormFieldStatus.DEFAULT}
                         />

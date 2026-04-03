@@ -1,16 +1,30 @@
+@import "src/styles/style";
+
 .checkboxYGroup {
     display: inline-flex;
     flex-flow: column wrap;
 
-    .label.sm+.label.sm {
+    .label.sm + .label.sm {
         margin-top: 8px;
     }
 
-    .label.lg+.label.lg {
+    .label.lg + .label.lg {
         margin-top: 20px;
     }
 
     .label.md + .label.md {
         margin-top: 16px;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .checkboxYGroup {
+        margin: 14px 16px;
+
+        .label.sm + .label.sm,
+        .label.md + .label.md,
+        .label.lg + .label.lg {
+            margin-top: 28px;
+        }
     }
 }

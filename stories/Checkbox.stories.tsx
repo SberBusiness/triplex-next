@@ -6,6 +6,7 @@ import { Row } from "../src/components/Row";
 import { Col } from "../src/components/Col";
 import { StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Stories, ArgTypes, Controls, Heading } from "@storybook/addon-docs/blocks";
+import { MobileView } from "../src/components/MobileView";
 
 export default {
     title: "Components/Checkbox",
@@ -184,34 +185,46 @@ export const YGroup: StoryObj<typeof Checkbox> = {
         controls: { disable: true },
     },
     render: () => (
-        <Row>
-            <Col size={3}>
-                <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
-                    {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox key={index} name="checkbox-y-group" value={value} size={EComponentSize.SM}>
-                            Checkbox text
-                        </Checkbox>
-                    ))}
-                </CheckboxYGroup>
-            </Col>
-            <Col size={3}>
-                <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
-                    {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox key={index} name="checkbox-y-group" value={value}>
-                            Checkbox text
-                        </Checkbox>
-                    ))}
-                </CheckboxYGroup>
-            </Col>
-            <Col size={3}>
-                <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
-                    {[1, 2, 3, 4].map((value, index) => (
-                        <Checkbox key={index} name="checkbox-y-group" value={value} size={EComponentSize.LG}>
-                            Checkbox text
-                        </Checkbox>
-                    ))}
-                </CheckboxYGroup>
-            </Col>
-        </Row>
+        <MobileView
+            fallback={
+                <Row>
+                    <Col size={3}>
+                        <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
+                            {[1, 2, 3, 4].map((value, index) => (
+                                <Checkbox key={index} name="checkbox-y-group" value={value} size={EComponentSize.SM}>
+                                    Checkbox text
+                                </Checkbox>
+                            ))}
+                        </CheckboxYGroup>
+                    </Col>
+                    <Col size={3}>
+                        <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
+                            {[1, 2, 3, 4].map((value, index) => (
+                                <Checkbox key={index} name="checkbox-y-group" value={value}>
+                                    Checkbox text
+                                </Checkbox>
+                            ))}
+                        </CheckboxYGroup>
+                    </Col>
+                    <Col size={3}>
+                        <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
+                            {[1, 2, 3, 4].map((value, index) => (
+                                <Checkbox key={index} name="checkbox-y-group" value={value} size={EComponentSize.LG}>
+                                    Checkbox text
+                                </Checkbox>
+                            ))}
+                        </CheckboxYGroup>
+                    </Col>
+                </Row>
+            }
+        >
+            <CheckboxYGroup aria-labelledby="checkbox-y-group-label">
+                {[1, 2, 3, 4].map((value, index) => (
+                    <Checkbox key={index} name="checkbox-y-group" value={value}>
+                        Checkbox text
+                    </Checkbox>
+                ))}
+            </CheckboxYGroup>
+        </MobileView>
     ),
 };

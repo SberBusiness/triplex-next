@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles/LightBoxRightSidebar.module.less";
 
@@ -17,6 +17,7 @@ export interface ILightBoxRightSidebarProps extends React.HTMLAttributes<HTMLDiv
 export const LightBoxRightSidebar = forwardRef<HTMLDivElement, ILightBoxRightSidebarProps>(
     ({ children, className, fixed, minVisibleWidth = 100, onShow, onHide, ...htmlDivAttributes }, ref) => {
         const outerRef = useRef<HTMLDivElement>(null);
+        useImperativeHandle(ref, () => outerRef.current!);
         const [isVisible, setIsVisible] = useState(true);
         const onShowRef = useRef(onShow);
         const onHideRef = useRef(onHide);
@@ -53,11 +54,7 @@ export const LightBoxRightSidebar = forwardRef<HTMLDivElement, ILightBoxRightSid
 
         return (
             <div
-                ref={(node) => {
-                    (outerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-                    if (typeof ref === "function") ref(node);
-                    else if (ref) ref.current = node;
-                }}
+                ref={outerRef}
                 className={clsx(className, styles.lightBoxRightSidebar, { [styles.fixed]: fixed })}
                 {...htmlDivAttributes}
             >

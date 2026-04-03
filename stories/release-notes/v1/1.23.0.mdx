@@ -6,6 +6,45 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**Title**
+**CardStatic/CardAction**
 
-- Description.
+- Props theme теперь опциональный.
+
+**Chip/ChipSelect/ChipSuggest**
+
+- Добавлено свойство showNotificationIcon для отображения признака новинки.
+
+**HeaderPage**
+
+- Исправлен баг с переносом controls button в адаптиве.
+
+**List**
+
+- В состоянии loading размер используемого Loader изменен на middle.
+
+**ListItem**
+
+- Исправлен цвет фона в темной теме;
+- В темной теме добавлена тень для ListSortableItem в состоянии dragging;
+- Вес текста изменен на semibold и зафиксирована ширина кнопки ListItemControlsButton;
+- В состоянии loading тип используемого Loader изменен на brand;
+- Изменен отступ между контентом и иконкой перетаскивания в ListSortableItem.
+
+**ListMaster**
+
+- Добавлены тени для ListMasterHeader и ListMasterFooter;
+- Компонент ListMasterChipGroup переписан с использованием ChipGroup.
+
+**LightBox**
+
+- В `LightBox.LeftSidebar` и `LightBox.RightSidebar` добавлены свойства `minVisibleWidth` (минимальная ширина в пикселях, при которой отображается содержимое панели; по умолчанию 100), `onShow` и `onHide` (callbacks на отображение и скрытие содержимого панели).
+
+**MultiselectField**
+
+- Для `MultiselectFieldDropdownHeader` добавлен нижний отступ;
+- Исправлен баг, когда не вызывались onOpen и onClose, переданные в `MultiselectFieldDropdown`;
+- Исправлен баг, когда не кликался чекбокс при длинном списке чекбоксов.
+
+**SwipeableArea**
+
+- Добавлен border radius при нахождении компонента в ListItemTable.

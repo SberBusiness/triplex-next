@@ -1,6 +1,6 @@
 .listItemTail {
     position: absolute;
-    width: 16px;
+    width: 18px;
     top: 0;
     bottom: 0;
     overflow: hidden;
@@ -15,6 +15,14 @@
     bottom: 0;
 }
 
+.listItemTailLeft {
+    left: -8px;
+}
+
+.listItemTailRight {
+    right: -10px;
+}
+
 .listItemTailTop {
     position: absolute;
     top: 0;
@@ -22,7 +30,7 @@
     right: 0;
 
     &::after {
-        content: '';
+        content: "";
         width: 8px;
         height: 8px;
         position: absolute;
@@ -33,7 +41,7 @@
     }
 
     &::before {
-        content: '';
+        content: "";
         width: 8px;
         height: 8px;
         position: absolute;
@@ -51,7 +59,7 @@
     right: 0;
 
     &::after {
-        content: '';
+        content: "";
         width: 8px;
         height: 8px;
         position: absolute;
@@ -62,21 +70,13 @@
     }
 
     &::before {
-        content: '';
+        content: "";
         width: 8px;
         height: 8px;
         position: absolute;
         bottom: 0;
         left: 0;
         border-bottom-right-radius: 8px;
-        box-shadow: 2px 2px 0 2px var(--triplex-next-ListItem-Tail_Background);
+        box-shadow: 2px 2px 0 2px var(--triplex-next-ListMaster-Background);
     }
-}
-
-.listItemTailRight {
-    right: -8px;
-}
-
-.listItemTailLeft {
-    left: -8px;
 }

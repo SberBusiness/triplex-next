@@ -3,8 +3,10 @@ import { IDropdownProps } from "../Dropdown/Dropdown";
 import { EComponentSize } from "../../enums";
 
 /** Свойства компонента Suggest. */
-export interface ISuggestProps<T extends ISuggestOption = ISuggestOption>
-    extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
+export interface ISuggestProps<T extends ISuggestOption = ISuggestOption> extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    "onSelect"
+> {
     /** Выбранное значение. */
     value: T | undefined;
     /** Список значений. */
@@ -33,7 +35,8 @@ export interface ISuggestProps<T extends ISuggestOption = ISuggestOption>
 
 /** Свойства компонента SuggestTarget. */
 export interface ISuggestTargetProps<T extends ISuggestOption = ISuggestOption>
-    extends Pick<ISuggestProps<T>, "value" | "options" | "clearInputOnFocus" | "onSelect" | "onFilter">,
+    extends
+        Pick<ISuggestProps<T>, "value" | "options" | "clearInputOnFocus" | "onSelect" | "onFilter">,
         Pick<React.HTMLAttributes<HTMLElement>, "aria-controls" | "aria-activedescendant"> {
     /** Значение поля ввода. */
     inputValue: string;
@@ -57,7 +60,8 @@ export interface ISuggestMobileTargetProps<T extends ISuggestOption = ISuggestOp
 
 /** Свойства, передаваемые в рендер-функцию SuggestTarget. */
 export interface ISuggestTargetProvidedProps
-    extends Pick<
+    extends
+        Pick<
             React.HTMLAttributes<HTMLElement>,
             "aria-controls" | "aria-activedescendant" | "onFocus" | "onBlur" | "onClick"
         >,
@@ -70,7 +74,8 @@ export interface ISuggestTargetProvidedProps
 
 /** Свойства компонента SuggestDropdown. */
 export interface ISuggestDropdownProps<T extends ISuggestOption = ISuggestOption>
-    extends Omit<IDropdownProps, "onSelect">,
+    extends
+        Omit<IDropdownProps, "onSelect">,
         Pick<
             ISuggestProps<T>,
             | "value"
@@ -97,4 +102,6 @@ export interface ISuggestOption {
     label: string;
     /** Кастомное содержимое опции в списке. */
     content?: React.ReactNode;
+    /** Флаг отображения значка новых уведомлений. */
+    showNotificationIcon?: boolean;
 }

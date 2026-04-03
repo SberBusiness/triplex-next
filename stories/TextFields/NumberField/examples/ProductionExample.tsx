@@ -4,6 +4,7 @@ import {
     FormFieldClear,
     Text,
     HelpBox,
+    Link,
     EComponentSize,
     EFormFieldStatus,
     ETextSize,
@@ -36,6 +37,16 @@ export const ProductionExample = () => {
                             мм
                         </Text>
                         <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
+                    </>
+                }
+                description={
+                    <>
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                                Link text
+                            </Link>
+                        </Text>
                     </>
                 }
             />

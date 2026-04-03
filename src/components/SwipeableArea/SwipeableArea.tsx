@@ -11,7 +11,7 @@ export interface ISwipeableAreaProps extends React.HTMLAttributes<HTMLDivElement
     rightSwipeableArea?: React.ReactNode;
 }
 
-// Минимальная ширина свайпа в px, при коротом откроется боковая панель.
+// Минимальная ширина свайпа в px, при котором откроется боковая панель.
 const SWIPE_MIN_DISTANCE = 24;
 // Css-класс, задающий завершение анимации движения свайпа и изменение opacity leftSwipeableArea и rightSwipeableArea.
 const SWIPE_ANIMATION_CLASSNAME = styles.swipeAnimationFinish;
@@ -70,7 +70,7 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
 
             // Свайп отктырия левой или правой области.
             if (contentTranslateXOnStartRef.current === 0) {
-                // Свайп влеао.
+                // Свайп влево.
                 if (deltaContentTranslateX > 0) {
                     // Если сдвиг слишком короткий - возврат на прежнее положение, или открытие левого контента.
                     setContentTranslateX(

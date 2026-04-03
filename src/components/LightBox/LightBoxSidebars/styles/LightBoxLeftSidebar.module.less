@@ -14,19 +14,12 @@
     left: var(--left-position);
     top: 40px;
     width: calc((var(--lightBox-width) - var(--page-width) - var(--left-position) * 2) / 2 + var(--additional-width));
-    // Этот div становится контейнером.
-    container-type: inline-size; 
-    // Имя контейнера.
-    container-name: left-sidebar-wrapper; 
 
     &.fixed {
         position: fixed;
     }
 }
 
-// Скрытие левой боковой панели, если ее ширина меньше 100px.
-@container left-sidebar-wrapper (max-width: 100px) {
-    .lightBoxLeftSidebarInner {
-      display: none;
-    }
-  }
+.hidden {
+    display: none;
+}

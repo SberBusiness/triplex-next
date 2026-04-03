@@ -13,7 +13,64 @@ Stories выполняют несколько функций (в порядке 
 
 ---
 
+## Статус миграции
+
+В репозитории сейчас сосуществуют два паттерна stories:
+
+- **Modern pattern** — grouped folders, `examples/`, `?raw`, копируемые examples, публичные импорты из `@sberbusiness/triplex-next`.
+- **Legacy pattern** — flat story files, inline render-функции, локальные импорты из `src/...`.
+
+Правило использования:
+
+- Для **новых компонентов** и **существенно переписанных story-файлов** используй modern pattern.
+- Если задача маленькая и story-файл уже legacy, **не рефактори весь файл только ради миграции**. Сохраняй локальный паттерн и обновляй только нужный участок.
+- Не переименовывай существующие story ids/export names без явной необходимости: на них могут опираться e2e и visual tests.
+
+---
+
+## Что обновлять при добавлении нового prop
+
+### Всегда
+
+- **Playground** — добавить новый prop в `args` (дефолтное значение) и в `argTypes` (описание и контрол).
+- **`ArgTypes`** в docs page автоматически покажет новый prop, если он типизирован в интерфейсе.
+
+### Если prop имеет несколько визуальных вариантов (enum, размер, тема)
+
+- Добавить новую named story: `Sizes`, `Themes`, `Statuses` — в зависимости от типа prop.
+- Создать файл `examples/{PropName}Example.tsx` и реэкспортировать через `examples/index.ts`.
+
+### Если prop — boolean-состояние с видимым эффектом
+
+- Добавить отдельную story: `Disabled`, `Loading`, `ReadOnly` — по паттерну именования (название prop как есть).
+- Если prop меняет только незначительную деталь и хорошо виден в существующих стори — достаточно обновить Playground.
+
+### Если prop — нестандартный вариант наполнения
+
+- Добавить story `With{Variant}`: `WithIcon`, `WithClearButton` и т.д.
+
+### Если prop — callback или поведенческий параметр (не меняет внешний вид)
+
+- Отдельную named story не создавай.
+- Обнови Playground или соответствующий `examples/`-файл: добавь callback или параметр, чтобы в копируемом коде было видно, как его использовать.
+
+### Если props добавляются к субкомпоненту составного компонента
+
+Составной компонент — это когда публичный API строится через статические свойства: `LightBox.RightSidebar`, `Select.Option`, `Page.Header` и т.д.
+
+- У субкомпонентов, как правило, нет собственного Playground, поэтому правило "обновить Playground" к ним неприменимо.
+- Вместо этого обнови `examples/`-файл, где субкомпонент используется, — добавь новый prop в JSX примера. Это гарантирует, что копируемый код в документации отражает актуальный API.
+
+### Visual regression
+
+- Если новый prop меняет внешний вид — проверить, покрыт ли он существующими скриншотами.
+- Если нет — добавить вариант в `VisualTests` story (или создать её).
+
+---
+
 ## Структура файлов
+
+Ниже описан **modern pattern** для новых и мигрируемых story-файлов:
 
 ```
 stories/
@@ -29,7 +86,7 @@ stories/
         ...
 ```
 
-Все стори, кроме **Playground** и **Visual tests**, выносятся в подпапку `examples/` и импортируются в основной файл.
+В modern pattern все стори, кроме **Playground** и **Visual tests**, выносятся в подпапку `examples/` и импортируются в основной файл.
 
 Playground и Visual tests остаются inline в файле stories, потому что:
 - **Playground** — интерактивная песочница, не предназначена для копирования.
@@ -125,7 +182,7 @@ argTypes: {
 
 ### Параметры Playground
 
-Playground не показывает пример кода и исключён из скриншот-тестов:
+В modern pattern Playground не показывает пример кода и исключён из скриншот-тестов:
 
 ```tsx
 parameters: {
@@ -136,7 +193,7 @@ parameters: {
 },
 ```
 
-Playground не отображается в docs как отдельная стори:
+В modern pattern Playground не отображается в docs как отдельная стори:
 
 ```tsx
 tags: ["!autodocs"],
@@ -177,7 +234,7 @@ tags: ["!autodocs"],
 
 ### Импорты в примерах
 
-Компоненты и утилиты библиотеки импортируются **из корня пакета**, а не по относительным путям к исходникам:
+Для **modern examples** компоненты и утилиты библиотеки импортируются **из корня пакета**, а не по относительным путям к исходникам:
 
 ```tsx
 // Правильно
@@ -194,6 +251,8 @@ import { Button } from "../../../src/components/Button/Button";
 - **Актуальность** — при перемещении файлов внутри библиотеки примеры не ломаются.
 
 > Иконки импортируются из `@sberbusiness/icons-next`.
+
+Для legacy story-файлов не нужно устраивать отдельную миграцию импортов без задачи.
 
 ---
 
@@ -321,7 +380,7 @@ render: () => (
 
 ## Файл `examples/index.ts`
 
-Для каждого примера экспортируются два значения — сам компонент и его исходный код:
+В modern pattern для каждого примера экспортируются два значения — сам компонент и его исходный код:
 
 ```ts
 export * from "./DefaultExample";
@@ -334,7 +393,7 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Подключение примеров к стори
 
-Каждая документационная стори (кроме Playground и Visual tests) подключает пример и его исходный код через `?raw`:
+В modern pattern каждая документационная стори (кроме Playground и Visual tests) подключает пример и его исходный код через `?raw`:
 
 ```tsx
 export const Default: StoryObj<typeof Component> = {
@@ -374,7 +433,6 @@ const meta = {
     title: "Components/Group/ComponentName",
     component: ComponentName,
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -462,7 +520,7 @@ import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
 export const DefaultExample = () => {
     const [value, setValue] = useState<string>("");
 
-    const handleChange = (event) => setValue(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
     return (
         <div style={{ maxWidth: "300px" }}>
@@ -489,7 +547,7 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState<string>("");
 
-    const handleChange = (event) => setValue(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
     return (
         <div>
@@ -525,6 +583,8 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Чек-лист перед мержем
 
+### Для новых и мигрируемых story-файлов
+
 ### Документация и структура
 
 - [ ] Есть docs page с `Title`, `Description`, `ArgTypes`, `Playground`, `Stories`
@@ -551,6 +611,13 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 - [ ] Если компонент требует взаимодействия (dropdown, tooltip) — реализован `play` в Visual tests
 - [ ] Данные в Visual tests захардкожены (нет `new Date()`, `Math.random()`)
 - [ ] Контейнеры имеют фиксированные размеры для стабильного layout'а
+
+### Для небольших изменений в legacy stories
+
+- [ ] Изменения согласованы с локальным паттерном файла
+- [ ] Playground/Docs/testRunner поведение не сломано
+- [ ] Не изменены story ids/export names без необходимости
+- [ ] Не добавлен большой структурный рефакторинг без отдельной задачи
 
 ---
 

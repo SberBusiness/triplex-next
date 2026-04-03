@@ -10,7 +10,6 @@ export default {
     component: SMSField,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `

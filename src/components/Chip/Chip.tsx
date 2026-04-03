@@ -5,6 +5,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 import { isKey } from "../../utils/keyboard";
+import { Badge } from "../Badge/Badge";
 
 /** Свойства компонента Chip. */
 export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "prefix">, DataAttributes {
@@ -16,6 +17,8 @@ export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
     prefix?: React.ReactNode;
     /** Контент, следующий за основным контентом, например иконка справа. */
     postfix?: React.ReactNode;
+    /** Флаг отображения значка новых уведомлений. */
+    showNotificationIcon?: boolean;
     /** Размер Chip. */
     size?: EComponentSize;
 }
@@ -28,7 +31,18 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
  */
 export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
     (
-        { children, className, disabled, postfix, prefix, selected, size = EComponentSize.MD, onKeyDown, ...rest },
+        {
+            children,
+            className,
+            disabled,
+            postfix,
+            prefix,
+            selected,
+            showNotificationIcon,
+            size = EComponentSize.MD,
+            onKeyDown,
+            ...rest
+        },
         ref,
     ) => {
         const handleKeyDown = useCallback(
@@ -91,6 +105,8 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                         {postfix}
                     </span>
                 ) : null}
+
+                {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}
             </span>
         );
     },

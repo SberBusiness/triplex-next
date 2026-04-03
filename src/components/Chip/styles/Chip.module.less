@@ -15,6 +15,7 @@
     align-items: center;
     cursor: pointer;
     outline: none;
+    position: relative;
     // Без этого свойства, чипсы с иконкой прыгают вверх.
     vertical-align: middle;
 
@@ -32,6 +33,11 @@
         .postfix {
             padding-right: 12px;
         }
+
+        .notificationIcon {
+            right: 6px;
+            top: 6px;
+        }
     }
 
     &.md {
@@ -48,6 +54,11 @@
         .postfix {
             padding-right: 8px;
         }
+
+        .notificationIcon {
+            right: 4px;
+            top: 4px;
+        }
     }
 
     &.sm {
@@ -63,6 +74,11 @@
 
         .postfix {
             padding-right: 8px;
+        }
+
+        .notificationIcon {
+            right: 3px;
+            top: 3px;
         }
     }
 
@@ -131,5 +147,9 @@
 
     .postfix {
         display: flex;
+    }
+
+    .notificationIcon {
+        position: absolute;
     }
 }

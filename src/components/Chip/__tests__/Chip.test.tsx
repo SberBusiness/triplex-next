@@ -26,4 +26,14 @@ describe("Chip", () => {
         expect(screen.getByTestId("prefix")).toBeInTheDocument();
         expect(screen.getByTestId("postfix")).toBeInTheDocument();
     });
+
+    test("renders notification icon when showNotificationIcon is true", () => {
+        const { container } = render(<Chip showNotificationIcon>Label</Chip>);
+        expect(container.querySelector(".badgeDot")).toBeInTheDocument();
+    });
+
+    test("does not render notification icon by default", () => {
+        const { container } = render(<Chip>Label</Chip>);
+        expect(container.querySelector(".badgeDot")).not.toBeInTheDocument();
+    });
 });

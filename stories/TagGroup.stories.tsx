@@ -10,7 +10,6 @@ const meta = {
     component: TagGroup,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -60,6 +59,7 @@ export const Playground: StoryObj<typeof meta> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -109,6 +109,7 @@ export const Edit: StoryObj<typeof meta> = {
                 story: "Группа тегов с возможностью редактирования.",
             },
         },
+        testRunner: { skip: true },
     },
 };
 

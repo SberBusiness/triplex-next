@@ -5,10 +5,13 @@ import {
     NumberField,
     FormFieldClear,
     Text,
+    HelpBox,
+    Link,
     EComponentSize,
     EFormFieldStatus,
     ETextSize,
     EFontType,
+    ETooltipSize,
 } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
@@ -21,7 +24,7 @@ import {
     ProductionExampleSource,
 } from "./examples";
 
-const meta = {
+export default {
     title: "Components/TextFields/NumberField",
     component: NumberField,
     parameters: {
@@ -44,30 +47,43 @@ const meta = {
     tags: ["autodocs"],
 } satisfies Meta<typeof NumberField>;
 
-export default meta;
+type PlaygroundArgs = React.ComponentProps<typeof NumberField> & {
+    /** С постфиксом. */
+    withPostfix: boolean;
+    /** С кнопкой очистки. */
+    withClearButton: boolean;
+    /** С описанием. */
+    withDescription: boolean;
+};
 
-const STATUS_TO_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
+const STATUS_TO_POSTFIX_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
+    [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
+    [EFormFieldStatus.DISABLED]: EFontType.DISABLED,
+    [EFormFieldStatus.ERROR]: EFontType.SECONDARY,
+    [EFormFieldStatus.WARNING]: EFontType.SECONDARY,
+};
+
+const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
     [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
     [EFormFieldStatus.DISABLED]: EFontType.SECONDARY,
     [EFormFieldStatus.ERROR]: EFontType.ERROR,
     [EFormFieldStatus.WARNING]: EFontType.WARNING,
 };
 
-export const Playground: StoryObj<typeof meta> = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
     args: {
         inputProps: { placeholder: "0" },
         size: EComponentSize.LG,
         status: EFormFieldStatus.DEFAULT,
         label: "Label",
-        prefix: "",
-        postfix: "",
-        description: "",
-        counter: "",
+        active: false,
         // Settings
+        withPostfix: false,
         withClearButton: false,
+        withDescription: false,
     },
-    render: ({ inputProps, status, postfix, description, counter, withClearButton, ...restArgs }) => {
+    render: ({ inputProps, status, withPostfix, withClearButton, withDescription, ...restArgs }) => {
         const [value, setValue] = useState("");
 
         const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
@@ -76,35 +92,31 @@ export const Playground: StoryObj<typeof meta> = {
         );
 
         const renderPostfixInner = useCallback(() => {
-            if (postfix.length !== 0) {
+            if (withPostfix) {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         {withClearButton && <FormFieldClear aria-label="clear value" onClick={() => setValue("")} />}
-                        {postfix}
+                        <Text size={ETextSize.B2} type={STATUS_TO_POSTFIX_FONT_TYPE_MAP[status!]}>
+                            мм
+                        </Text>
+                        <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
                     </div>
                 );
             }
-        }, [postfix, withClearButton]);
+        }, [withPostfix, withClearButton, status]);
 
         const renderDescriptionInner = useCallback(() => {
-            if (description.length !== 0) {
+            if (withDescription) {
                 return (
-                    <Text size={ETextSize.B4} type={STATUS_TO_FONT_TYPE_MAP[status]}>
-                        {description}
+                    <Text size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status!]}>
+                        (21) Description{" "}
+                        <Link href="#" onClick={(event) => event.preventDefault()}>
+                            Link text
+                        </Link>
                     </Text>
                 );
             }
-        }, [status, description]);
-
-        const renderCounterInner = useCallback(() => {
-            if (counter.length !== 0) {
-                return (
-                    <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                        {counter}
-                    </Text>
-                );
-            }
-        }, [counter]);
+        }, [withDescription, status]);
 
         return (
             <div style={{ maxWidth: "300px" }}>
@@ -118,65 +130,58 @@ export const Playground: StoryObj<typeof meta> = {
                     }}
                     postfix={renderPostfixInner()}
                     description={renderDescriptionInner()}
-                    counter={renderCounterInner()}
                 />
             </div>
         );
     },
     argTypes: {
-        inputProps: {
-            description: "Свойства поля ввода",
-            table: { type: { summary: "object" } },
-        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер поля",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.LG" },
-            },
         },
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
-            description: "Состояние поля",
-            table: {
-                type: { summary: "EFormFieldStatus" },
-                defaultValue: { summary: "DEFAULT" },
-            },
+        },
+        active: {
+            control: "boolean",
         },
         label: {
             control: { type: "text" },
-            description: "Текст лейбла",
-            table: { type: { summary: "string" } },
         },
         prefix: {
-            control: { type: "text" },
-            description: "Текст префикса",
-            table: { type: { summary: "string" } },
+            table: { disable: true },
         },
         postfix: {
-            control: { type: "text" },
-            description: "Текст постфикса",
-            table: { type: { summary: "string" } },
+            table: { disable: true },
         },
         description: {
-            control: { type: "text" },
-            description: "Текст описания",
-            table: { type: { summary: "string" } },
+            table: { disable: true },
         },
         counter: {
-            control: { type: "text" },
-            description: "Текст счётчика",
-            table: { type: { summary: "string" } },
+            table: { disable: true },
         },
         // Settings
-        withClearButton: {
+        withPostfix: {
             control: "boolean",
-            description: "С кнопкой очистки.",
             table: {
                 category: "Settings",
+                defaultValue: { summary: "false" },
+            },
+        },
+        withClearButton: {
+            control: "boolean",
+            if: { arg: "withPostfix", eq: true },
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
+        },
+        withDescription: {
+            control: "boolean",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
             },
         },
     },

@@ -144,7 +144,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 {...rest}
             >
                 {prefix ? (
-                    <FormFieldPrefix className={clsx("hoverable", { disabled: status === EFormFieldStatus.DISABLED })}>
+                    <FormFieldPrefix className={clsx({ disabled: status === EFormFieldStatus.DISABLED })}>
                         {prefix}
                     </FormFieldPrefix>
                 ) : null}

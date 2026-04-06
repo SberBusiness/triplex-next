@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
 import { isKey, EVENT_KEY_CODES } from "../../utils/keyboard";
 import { KeyDownListener } from "../KeyDownListener";
 import clsx from "clsx";
@@ -59,6 +59,19 @@ export const SelectExtendedField = Object.assign(
         const [opened, setOpened] = useState(false);
         const targetRef = useRef<HTMLDivElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
+        // Stable event handler pattern: колбэки хранятся в рефах, чтобы эффект
+        // не перезапускался при смене ссылок на функции между рендерами.
+        const onOpenRef = useRef(onOpen);
+        const onCloseRef = useRef(onClose);
+        // Флаг для пропуска первого срабатывания эффекта при маунте.
+        const isMountedRef = useRef(false);
+
+        // useLayoutEffect без зависимостей синхронизирует рефы после каждого коммита,
+        // гарантируя актуальность колбэков до запуска useEffect.
+        useLayoutEffect(() => {
+            onOpenRef.current = onOpen;
+            onCloseRef.current = onClose;
+        });
 
         const setRef = (instance: HTMLDivElement | null) => {
             targetRef.current = instance;
@@ -113,13 +126,20 @@ export const SelectExtendedField = Object.assign(
             };
         }, [listenMouseDown]);
 
+        // Вызываем onOpen/onClose только при реальных переходах opened,
+        // пропуская первое срабатывание при маунте (opened = false по умолчанию).
         useEffect(() => {
-            if (opened) {
-                onOpen?.();
-            } else {
-                onClose?.();
+            if (!isMountedRef.current) {
+                isMountedRef.current = true;
+                return;
             }
-        }, [opened, onOpen, onClose]);
+
+            if (opened) {
+                onOpenRef.current?.();
+            } else {
+                onCloseRef.current?.();
+            }
+        }, [opened]);
 
         return (
             <KeyDownListener onMatch={closeDropdown} eventKeyCode={EVENT_KEY_CODES.ESCAPE}>

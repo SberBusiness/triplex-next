@@ -1,25 +1,27 @@
 import React, { useMemo, useState } from "react";
-import { EComponentSize } from "../../../../src/enums/EComponentSize";
-import { MultiselectField } from "../../../../src/components/MultiselectField";
 import {
+    EComponentSize,
+    MultiselectField,
+    FormField,
+    FormFieldLabel,
+    FormFieldInput,
+    FormFieldPostfix,
+    FormFieldClear,
+    Checkbox,
+    CheckboxYGroup,
+    ChipMultiselect,
+    ETextSize,
+    Text,
     DropdownMobileHeader,
     DropdownMobileInput,
     DropdownMobileClose,
     DropdownMobileBody,
     DropdownMobileFooter,
     EDropdownAlignment,
-} from "../../../../src/components/Dropdown";
-import { Button, EButtonTheme } from "../../../../src/components/Button";
-import {
-    FormField,
-    FormFieldLabel,
-    FormFieldInput,
-    FormFieldPostfix,
-    FormFieldClear,
-} from "../../../../src/components/FormField";
-import { Checkbox, CheckboxYGroup } from "../../../../src/components/Checkbox";
-import { ChipMultiselect } from "../../../../src/components/Chip";
-import { ETextSize, Text } from "../../../../src/components/Typography";
+    Button,
+    EButtonTheme,
+    DropdownMobileLoader,
+} from "@sberbusiness/triplex-next";
 
 const CHIP_MULTISELECT_OPTIONS = [
     { id: "multiselect-option-1-1", label: "Значение 1-1" },
@@ -122,7 +124,12 @@ export const ChipMultiselectLoadingExample = () => {
                         children: (
                             <>
                                 <DropdownMobileHeader
-                                    controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
+                                    controlButtons={
+                                        <>
+                                            <DropdownMobileLoader />
+                                            <DropdownMobileClose onClick={() => setOpened(false)} />
+                                        </>
+                                    }
                                 >
                                     <DropdownMobileInput
                                         placeholder="Type to proceed"

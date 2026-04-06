@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { MultiselectField } from "../../../../src/components/MultiselectField";
+import { MultiselectField } from "@sberbusiness/triplex-next";
 import {
     DropdownMobileHeader,
     DropdownMobileInput,
@@ -7,19 +7,20 @@ import {
     DropdownMobileBody,
     DropdownMobileFooter,
     EDropdownAlignment,
-} from "../../../../src/components/Dropdown";
-import { Button, EButtonTheme } from "../../../../src/components/Button";
-import { EComponentSize } from "../../../../src/enums/EComponentSize";
-import {
+    Button,
+    EButtonTheme,
+    EComponentSize,
     FormField,
     FormFieldLabel,
     FormFieldInput,
     FormFieldPostfix,
     FormFieldClear,
-} from "../../../../src/components/FormField";
-import { Checkbox, CheckboxYGroup } from "../../../../src/components/Checkbox";
-import { ChipMultiselect } from "../../../../src/components/Chip";
-import { ETextSize, Text } from "../../../../src/components/Typography";
+    Checkbox,
+    CheckboxYGroup,
+    ChipMultiselect,
+    ETextSize,
+    Text,
+} from "@sberbusiness/triplex-next";
 
 const CHIP_MULTISELECT_OPTIONS = [
     { id: "multiselect-option-1-1", label: "Значение 1-1" },

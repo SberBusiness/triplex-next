@@ -78,7 +78,7 @@ export const PlaygroundExample = ({
 
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
     const visibleOptions = useMemo(() => {
-        const lower = filter.toLowerCase();
+        const lower = filter.trim().toLowerCase();
         if (!lower.length) {
             return options;
         }
@@ -205,11 +205,13 @@ export const PlaygroundExample = ({
                                     <DropdownMobileHeader
                                         controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
                                     >
-                                        <DropdownMobileInput
-                                            placeholder="Type to proceed"
-                                            value={filter}
-                                            onChange={(event) => setFilter(event.target.value)}
-                                        />
+                                        {withInput && (
+                                            <DropdownMobileInput
+                                                placeholder="Type to proceed"
+                                                value={filter}
+                                                onChange={(event) => setFilter(event.target.value)}
+                                            />
+                                        )}
                                     </DropdownMobileHeader>
                                     <DropdownMobileBody>
                                         {renderCheckboxList()}

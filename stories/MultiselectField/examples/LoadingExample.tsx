@@ -20,6 +20,7 @@ import {
     DropdownMobileInput,
     DropdownMobileBody,
     DropdownMobileFooter,
+    DropdownMobileLoader,
 } from "@sberbusiness/triplex-next";
 import "../MultiselectField.less";
 
@@ -174,7 +175,12 @@ const LoadingMultiselect = ({
                         children: (
                             <>
                                 <DropdownMobileHeader
-                                    controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
+                                    controlButtons={
+                                        <>
+                                            <DropdownMobileLoader />
+                                            <DropdownMobileClose onClick={() => setOpened(false)} />
+                                        </>
+                                    }
                                 >
                                     <DropdownMobileInput
                                         placeholder="Type to proceed"

@@ -10,8 +10,9 @@ import {
     Subheading,
     Title,
 } from "@storybook/addon-docs/blocks";
-import { EComponentSize, EFormFieldStatus, MultiselectField } from "@sberbusiness/triplex-next";
+import { EComponentSize, EFormFieldStatus, MultiselectField, MobileView } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
     DropdownWithoutInputExample,
@@ -29,8 +30,6 @@ import {
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
 } from "./examples";
-import { MobileView } from "../../src/components/MobileView/MobileView";
-import { PlaygroundExample } from "./examples/PlaygroundExample";
 import "./MultiselectField.less";
 
 const meta = {

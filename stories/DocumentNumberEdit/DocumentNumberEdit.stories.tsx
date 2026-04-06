@@ -1,35 +1,39 @@
 import React, { useState } from "react";
-import { StoryObj, Meta } from "@storybook/react";
-import { DocumentNumberEdit } from "../src/components/DocumentNumberEdit/DocumentNumberEdit";
-import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Meta, StoryObj } from "@storybook/react";
+import { DocumentNumberEdit } from "../../src/components/DocumentNumberEdit/DocumentNumberEdit";
+import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
+import { DefaultExample, DefaultExampleSource } from "./examples/index";
 
-const meta: Meta<typeof DocumentNumberEdit> = {
+const meta = {
     title: "Components/DocumentNumberEdit",
     component: DocumentNumberEdit,
     tags: ["autodocs"],
     parameters: {
         docs: {
             description: {
-                component: `Компонент для редактирования номера документа.`,
+                component: "Компонент для редактирования номера документа.",
             },
             page: () => (
                 <>
                     <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={DocumentNumberEdit} />
+                    <Heading>Playground</Heading>
                     <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
-};
+} satisfies Meta<typeof DocumentNumberEdit>;
 
 export default meta;
-
 type Story = StoryObj<typeof DocumentNumberEdit>;
 
 export const Playground: Story = {
+    tags: ["!autodocs"],
     args: {
         buttonLabel: "Изменить",
         emptyNumberButtonLabel: "Задать номер",
@@ -38,78 +42,35 @@ export const Playground: Story = {
         maxLength: 6,
     },
     argTypes: {
-        buttonLabel: {
-            control: { type: "text" },
-            description: "Текст кнопки редактирования",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-        emptyNumberButtonLabel: {
-            control: { type: "text" },
-            description: "Текст кнопки при отсутствии номера",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-        emptyNumberLabel: {
-            control: { type: "text" },
-            description: "Текст при отсутствии номера",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-        numberLabel: {
-            control: { type: "text" },
-            description: "Текст перед номером документа",
-            table: {
-                type: { summary: "string" },
-            },
-        },
+        buttonLabel: { control: { type: "text" }, description: "Текст кнопки редактирования" },
+        emptyNumberButtonLabel: { control: { type: "text" }, description: "Текст кнопки при отсутствии номера" },
+        emptyNumberLabel: { control: { type: "text" }, description: "Текст при отсутствии номера" },
+        numberLabel: { control: { type: "text" }, description: "Текст перед номером документа" },
         maxLength: {
             control: { type: "select" },
             options: [0, 1, 2, 3, 4, 5, 6],
             description: "Максимальная длина поля ввода",
-            table: {
-                type: { summary: "0 | 1 | 2 | 3 | 4 | 5 | 6" },
-                defaultValue: { summary: "6" },
-            },
         },
     },
     parameters: {
         controls: {
             include: ["buttonLabel", "emptyNumberButtonLabel", "emptyNumberLabel", "numberLabel", "maxLength"],
         },
+        docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
     render: (args) => {
         const [value, setValue] = useState("");
-
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
-
         return <DocumentNumberEdit {...args} value={value} onChange={handleChange} />;
     },
 };
 
 export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [value, setValue] = useState("");
-
-        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
-
-        return (
-            <DocumentNumberEdit
-                value={value}
-                buttonLabel="Изменить"
-                emptyNumberButtonLabel="Задать номер"
-                emptyNumberLabel="Номер документа будет присвоен автоматически"
-                numberLabel="Документ №"
-                onChange={handleChange}
-            />
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
@@ -117,16 +78,10 @@ export const VisualTests: Story = {
     tags: ["!autodocs"],
     parameters: {
         controls: { disable: true },
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-            codePanel: false,
-        },
+        docs: { canvas: { sourceState: "none" }, codePanel: false },
     },
     render: () => {
         const [value, setValue] = useState("");
-
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
         return (
@@ -154,7 +109,6 @@ export const VisualTests: Story = {
     },
     play: async ({ canvas, userEvent }) => {
         const links = await canvas.findAllByRole("link");
-
         await userEvent.click(links[0]);
     },
 };

@@ -14,6 +14,7 @@ import {
 } from "../../src/components/List";
 import { Button, ButtonDropdown, EButtonDotsTheme, EButtonTheme } from "../../src/components/Button";
 import { EComponentSize } from "../../src/enums/EComponentSize";
+import { EFormFieldStatus } from "../../src/components/FormField";
 import {
     EFontType,
     EFontWeightTitle,
@@ -38,7 +39,6 @@ import { TabsLine } from "../../src/components/TabsLine";
 import { ChipDatePicker, ChipMultiselect, ChipOptions, ChipSort, ChipSuggest } from "../../src/components/Chip";
 import { MultiselectField } from "../../src/components/MultiselectField";
 import { ISuggestFieldOption } from "../../src/components/SuggestField";
-import { EDropdownAlignment } from "../../src/components/Dropdown";
 import { LightBox } from "../../src/components/LightBox";
 import { EHeaderPageType, EBodyPageType, Page, EFooterPageType } from "../../src/components/Page";
 import { ChipGroup } from "../../src/components/ChipGroup";
@@ -658,7 +658,6 @@ export const Example: StoryObj<typeof List> = {
                                         setOpened={setOpened}
                                         targetRef={targetRef}
                                         ref={dropdownRef}
-                                        alignment={EDropdownAlignment.LEFT}
                                     >
                                         <MultiselectField.Dropdown.Content>
                                             <div
@@ -701,18 +700,16 @@ export const Example: StoryObj<typeof List> = {
                                 value={dateFrom}
                                 label="Дата с"
                                 onChange={setDateFrom}
-                                alignment={EDropdownAlignment.LEFT}
                                 size={EComponentSize.MD}
-                                status="default"
+                                status={EFormFieldStatus.DEFAULT}
                             />
 
                             <ChipDatePicker
                                 value={dateTo}
                                 label="Дата по"
                                 onChange={setDateTo}
-                                alignment={EDropdownAlignment.LEFT}
                                 size={EComponentSize.MD}
-                                status="default"
+                                status={EFormFieldStatus.DEFAULT}
                             />
                         </ListMaster.ChipGroup>
 
@@ -908,7 +905,6 @@ export const Example: StoryObj<typeof List> = {
                                                 setOpened={setOpened}
                                                 targetRef={targetRef}
                                                 ref={dropdownRef}
-                                                alignment={EDropdownAlignment.LEFT}
                                             >
                                                 <MultiselectField.Dropdown.Content>
                                                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -951,18 +947,16 @@ export const Example: StoryObj<typeof List> = {
                                             value={dateFrom}
                                             label="Дата с"
                                             onChange={setDateFrom}
-                                            alignment={EDropdownAlignment.LEFT}
                                             size={EComponentSize.MD}
-                                            status="default"
+                                            status={EFormFieldStatus.DEFAULT}
                                         />
 
                                         <ChipDatePicker
                                             value={dateTo}
                                             label="Дата по"
                                             onChange={setDateTo}
-                                            alignment={EDropdownAlignment.LEFT}
                                             size={EComponentSize.MD}
-                                            status="default"
+                                            status={EFormFieldStatus.DEFAULT}
                                         />
                                     </ChipGroup>
                                 </Page.Body>

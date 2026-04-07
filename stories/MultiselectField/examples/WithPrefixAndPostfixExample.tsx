@@ -16,6 +16,7 @@ import {
     ETextSize,
     Tag,
     TagGroup,
+    IconWrapper,
 } from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 interface INode {
@@ -155,7 +156,11 @@ export const WithPrefixAndPostfixExample = () => {
                         fieldLabel="Label"
                         placeholder="Select to proceed"
                         label={renderTags()}
-                        prefix={<DefaulticonStrokePrdIcon24 paletteIndex={5} />}
+                        prefix={
+                            <IconWrapper disablePointerEvents>
+                                <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                            </IconWrapper>
+                        }
                         postfix={<HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>}
                     />
                 )}

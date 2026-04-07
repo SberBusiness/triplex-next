@@ -1,7 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
     Button,
-    CheckboxTreeExtended,
+    Checkbox,
+    CheckboxYGroup,
     EButtonTheme,
     EComponentSize,
     EFormFieldStatus,
@@ -16,6 +17,7 @@ import {
     Tag,
     TagGroup,
 } from "@sberbusiness/triplex-next";
+import "../MultiselectField.less";
 
 /** Набор статусов для демонстрации состояний поля. */
 const STATUS_ITEMS = [
@@ -36,10 +38,9 @@ export const StatusesExample = () => (
     </div>
 );
 
-interface INode {
+interface IOption {
     id: string;
     label: string;
-    children?: INode[];
 }
 
 interface IStatusItemProps {
@@ -47,94 +48,69 @@ interface IStatusItemProps {
     status: EFormFieldStatus;
 }
 
-/** Создание дерева нод с уникальным префиксом для каждого статуса. */
-const createNodes = (prefix: string): INode[] => [
-    {
-        id: `${prefix}-option-0`,
-        label: "Все",
-        children: [
-            { id: `${prefix}-option-1`, label: "Значение 1" },
-            { id: `${prefix}-option-2`, label: "Значение 2" },
-            { id: `${prefix}-option-3`, label: "Значение 3" },
-        ],
-    },
+/** Плоский список опций с уникальным префиксом id для каждого статуса. */
+const createOptions = (prefix: string): IOption[] => [
+    { id: `${prefix}-option-1`, label: "Значение 1" },
+    { id: `${prefix}-option-2`, label: "Значение 2" },
+    { id: `${prefix}-option-3`, label: "Значение 3" },
 ];
-
-/** Получение всех leaf-id для ноды и ее потомков. */
-const getLeafIds = (node: INode): string[] => (node.children ? node.children.flatMap(getLeafIds) : [node.id]);
 
 const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
     /** Ref на target для корректной привязки dropdown. */
     const targetRef = useRef<HTMLDivElement>(null);
-    /** Дерево нод для текущего статуса. */
-    const nodes = useMemo(() => createNodes(idPrefix), [idPrefix]);
-    /** Id выбранных leaf-чекбоксов. */
+    /** Опции для текущего статуса. */
+    const options = useMemo(() => createOptions(idPrefix), [idPrefix]);
+    /** Id выбранных чекбоксов. */
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     /** Значение фильтра в input dropdown. */
     const [filter, setFilter] = useState("");
     /** Set для быстрых проверок выбранности. */
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-    /** Карта id -> label для отображения человекочитаемых тегов. */
-    const labelsById = useMemo(() => {
-        const map = new Map<string, string>();
+    const visibleOptions = useMemo(() => {
+        const lower = filter.trim().toLowerCase();
+        if (!lower.length) {
+            return options;
+        }
 
-        const collectLabels = (items: INode[]) => {
-            items.forEach((item) => {
-                map.set(item.id, item.label);
-                if (item.children) collectLabels(item.children);
-            });
-        };
+        return options.filter((opt) => opt.label.toLowerCase().includes(lower));
+    }, [filter, options]);
 
-        collectLabels(nodes);
-        return map;
-    }, [nodes]);
+    const selectedOptions = useMemo(() => options.filter((opt) => selectedSet.has(opt.id)), [options, selectedSet]);
 
-    /** Переключение выбранности ноды вместе с ее leaf-потомками. */
-    const handleToggle = (node: INode, checked: boolean) => {
-        const leafIds = getLeafIds(node);
-        const leafSet = new Set(leafIds);
-
+    const handleToggle = (option: IOption, checked: boolean) => {
         setSelectedIds((prev) => {
-            if (checked) return Array.from(new Set([...prev, ...leafIds]));
-            return prev.filter((id) => !leafSet.has(id));
+            if (checked) {
+                if (prev.includes(option.id)) {
+                    return prev;
+                }
+
+                return [...prev, option.id];
+            }
+
+            return prev.filter((id) => id !== option.id);
         });
     };
 
-    /** Проверка, подходит ли нода под фильтр сама или через дочерние элементы. */
-    const doesNodeMatchFilter = (node: INode): boolean => {
-        const lowerFilter = filter.trim().toLowerCase();
-        if (!lowerFilter.length) return true;
-        if (node.label.toLowerCase().includes(lowerFilter)) return true;
-        return Boolean(node.children?.some(doesNodeMatchFilter));
+    const handleClearAll = () => {
+        setSelectedIds([]);
+        setFilter("");
     };
 
-    /** Рекурсивный рендер нод дерева с вычислением checked/bulk. */
-    const renderNode = (node: INode): React.ReactNode => {
-        if (!doesNodeMatchFilter(node)) return null;
-
-        const leafIds = getLeafIds(node);
-        const checkedCount = leafIds.filter((id) => selectedSet.has(id)).length;
-
-        return (
-            <CheckboxTreeExtended.Node
-                key={node.id}
-                id={node.id}
-                opened={Boolean(node.children)}
-                checkbox={(props) => (
-                    <CheckboxTreeExtended.Checkbox
-                        {...props}
-                        checked={checkedCount > 0}
-                        bulk={checkedCount > 0 && checkedCount < leafIds.length}
-                        onChange={(event) => handleToggle(node, event.target.checked)}
-                    >
-                        {node.label}
-                    </CheckboxTreeExtended.Checkbox>
-                )}
-            >
-                {node.children?.map(renderNode)}
-            </CheckboxTreeExtended.Node>
-        );
-    };
+    const renderCheckboxList = () => (
+        <CheckboxYGroup aria-label="Options">
+            {visibleOptions.map((opt) => (
+                <Checkbox
+                    key={opt.id}
+                    id={opt.id}
+                    size={EComponentSize.MD}
+                    checked={selectedSet.has(opt.id)}
+                    onChange={(event) => handleToggle(opt, event.target.checked)}
+                >
+                    {opt.label}
+                </Checkbox>
+            ))}
+        </CheckboxYGroup>
+    );
 
     /** Рендер тегов выбранных значений в target. */
     const renderTags = () => {
@@ -147,22 +123,22 @@ const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
             }
         };
 
-        if (!selectedIds.length) return null;
+        if (!selectedOptions.length) return null;
 
         return (
             <TagGroup size={EComponentSize.SM}>
-                {selectedIds.map((id) => (
+                {selectedOptions.map((opt) => (
                     <Tag
-                        key={id}
-                        id={id}
+                        key={opt.id}
+                        id={opt.id}
                         size={EComponentSize.SM}
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
                         onKeyDown={handleTagKeyDown}
-                        onRemove={() => setSelectedIds((prev) => prev.filter((item) => item !== id))}
+                        onRemove={() => handleToggle(opt, false)}
                     >
-                        {labelsById.get(id) ?? id}
+                        {opt.label}
                     </Tag>
                 ))}
             </TagGroup>
@@ -201,9 +177,11 @@ const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
                         </FormField>
                     </MultiselectField.Dropdown.Header>
                     <MultiselectField.Dropdown.Content>
-                        <CheckboxTreeExtended>{nodes.map(renderNode)}</CheckboxTreeExtended>
-                        {!!filter.length && !nodes.some(doesNodeMatchFilter) && (
-                            <Text size={ETextSize.B3}>Nothing was found.</Text>
+                        {renderCheckboxList()}
+                        {!!filter.trim().length && !visibleOptions.length && (
+                            <div className="not-found md">
+                                <Text size={ETextSize.B3}>Nothing was found.</Text>
+                            </div>
                         )}
                     </MultiselectField.Dropdown.Content>
                     <MultiselectField.Dropdown.Footer>
@@ -214,7 +192,7 @@ const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
                         >
                             Button text
                         </Button>
-                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={() => setSelectedIds([])}>
+                        <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClearAll}>
                             Button link text
                         </Button>
                     </MultiselectField.Dropdown.Footer>

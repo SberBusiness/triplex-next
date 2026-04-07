@@ -21,3 +21,6 @@ export { default as WithPrefixAndPostfixExampleSource } from "./WithPrefixAndPos
 
 export * from "./ProductionExample";
 export { default as ProductionExampleSource } from "./ProductionExample?raw";
+
+export * from "./PlaygroundExample";
+export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";

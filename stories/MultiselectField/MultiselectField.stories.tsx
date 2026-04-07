@@ -10,8 +10,9 @@ import {
     Subheading,
     Title,
 } from "@storybook/addon-docs/blocks";
-import { EComponentSize, EFormFieldStatus, MultiselectField } from "@sberbusiness/triplex-next";
+import { EComponentSize, EFormFieldStatus, MultiselectField, MobileView } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
     DropdownWithoutInputExample,
@@ -29,7 +30,6 @@ import {
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
 } from "./examples";
-import { PlaygroundExample } from "./examples/PlaygroundExample";
 import "./MultiselectField.less";
 
 const meta = {
@@ -302,5 +302,30 @@ export const VisualTests: StoryObj<typeof PlaygroundExample> = {
             <PlaygroundExample initialSelectedIds={["multiselect-option-2-1"]} />
             <PlaygroundExample forceOpened />
         </div>
+    ),
+};
+
+export const VisualTestsNotFound: StoryObj<typeof PlaygroundExample> = {
+    name: "Visual tests: Not Found",
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: () => (
+        <MobileView
+            fallback={
+                <div style={{ maxWidth: "900px", display: "flex", justifyContent: "space-between" }}>
+                    <PlaygroundExample forceOpened initialFilter="no-match" size={EComponentSize.SM} />
+                    <PlaygroundExample forceOpened initialFilter="no-match" size={EComponentSize.MD} />
+                    <PlaygroundExample forceOpened initialFilter="no-match" size={EComponentSize.LG} />
+                </div>
+            }
+        >
+            <PlaygroundExample forceOpened initialFilter="no-match" size={EComponentSize.MD} />
+        </MobileView>
     ),
 };

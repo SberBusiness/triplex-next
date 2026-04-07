@@ -7,7 +7,6 @@ export enum EDropdownDirection {
 
 /** Варианты выравнивания Dropdown. */
 export enum EDropdownAlignment {
-    AUTO = "auto",
     LEFT = "left",
     RIGHT = "right",
 }

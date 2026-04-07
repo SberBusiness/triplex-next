@@ -37,18 +37,17 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         style: styleProp,
         size = EComponentSize.MD,
         direction = EDropdownDirection.AUTO,
-        alignment = EDropdownAlignment.AUTO,
+        alignment = EDropdownAlignment.LEFT,
         width = EDropdownWidth.CONTENT,
         opened,
         targetRef,
         setOpened,
         ...rest
     } = props;
-    const { scopeClassName } = useToken();
-
     const [styleState, setStyleState] = useState<React.CSSProperties>({ opacity: 0 });
     const dropdownRef = useRef<HTMLDivElement | null>(null);
-    const dropdownRes = useRef<{ width: number; height: number }>({ height: 0, width: 0 });
+
+    const { scopeClassName } = useToken();
     const classNames = clsx(styles.dropdownDesktop, sizeToClassNameMap[size], scopeClassName, className);
 
     /** Блокировка скролла вне дропдауна. */
@@ -98,33 +97,21 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
 
     /** Расчёт положения по горизонтали. */
     const calculatePositionHorizontal = useCallback(
-        (css: React.CSSProperties, dropdownRect: DOMRect, targetRect: DOMRect) => {
-            let expectedWidth = dropdownRect.width;
+        (css: React.CSSProperties, targetRect: DOMRect, expectedWidth: number) => {
+            const clientWidth = document.documentElement.clientWidth;
 
-            if (width === EDropdownWidth.TARGET) {
-                expectedWidth = targetRect.width;
-            } else if (width === EDropdownWidth.MIN_TARGET) {
-                expectedWidth = Math.max(targetRect.width, dropdownRect.width);
-            }
+            const leftPos = targetRect.left;
+            const rightPos = targetRect.right - expectedWidth;
 
-            if (alignment === EDropdownAlignment.AUTO) {
-                if (targetRect.right - expectedWidth > 0) {
-                    // Если влезает слева.
-                    css.left = targetRect.right - expectedWidth;
-                } else if (targetRect.left + expectedWidth < document.documentElement.clientWidth) {
-                    // Если влезает справа.
-                    css.left = targetRect.left;
-                } else {
-                    // Если не влезает слева и справа.
-                    css.left = targetRect.right - expectedWidth;
-                }
-            } else if (alignment === EDropdownAlignment.RIGHT) {
-                css.left = targetRect.right - expectedWidth;
-            } else if (alignment === EDropdownAlignment.LEFT) {
-                css.left = targetRect.left;
+            if (alignment === EDropdownAlignment.LEFT) {
+                const fitsRightSide = leftPos + expectedWidth <= clientWidth;
+                css.left = fitsRightSide ? leftPos : Math.max(0, rightPos);
+            } else {
+                const fitsLeftSide = rightPos >= 0;
+                css.left = fitsLeftSide ? rightPos : Math.max(0, Math.min(leftPos, clientWidth - expectedWidth));
             }
         },
-        [width, alignment],
+        [alignment],
     );
 
     /** Расчёт положения по вертикали. */
@@ -160,17 +147,19 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         const dropdownRect = dropdownRef.current.getBoundingClientRect();
         const targetRect = targetRef.current.getBoundingClientRect();
         const css: React.CSSProperties = {};
+        let expectedWidth = dropdownRect.width;
 
         if (width === EDropdownWidth.TARGET) {
+            expectedWidth = targetRect.width;
             css.width = targetRect.width;
         } else if (width === EDropdownWidth.MIN_TARGET) {
+            expectedWidth = Math.max(dropdownRect.width, targetRect.width);
             css.minWidth = targetRect.width;
         }
 
         calculatePositionVertical(css, dropdownRect, targetRect);
-        calculatePositionHorizontal(css, dropdownRect, targetRect);
+        calculatePositionHorizontal(css, targetRect, expectedWidth);
 
-        dropdownRes.current = { height: dropdownRect.height, width: dropdownRect.width };
         setStyleState(css);
     }, [targetRef, width, calculatePositionVertical, calculatePositionHorizontal]);
 
@@ -179,7 +168,6 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setPosition();
         } else {
-            dropdownRes.current = { height: 0, width: 0 };
             setStyleState({ opacity: 0 });
         }
     }, [opened, setPosition]);

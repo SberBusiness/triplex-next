@@ -26,6 +26,7 @@ import {
     DropdownMobileListItem,
     IDropdownListItemProps,
     EDropdownWidth,
+    EDropdownAlignment,
 } from "../Dropdown";
 import { Text, ETextSize } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
@@ -80,7 +81,7 @@ const sizeToDotsIconMap = {
     [EComponentSize.LG]: <DotshorizontalStrokeSrvIcon32 paletteIndex={0} />,
 };
 
-const sizeToCaretIconMap = (size: EComponentSize, paletteIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8) => {
+const sizeToCaretIconMap = (size: EComponentSize, paletteIndex: 0 | 7) => {
     if (size === EComponentSize.SM) {
         return <CaretdownStrokeSrvIcon16 paletteIndex={paletteIndex} className={styles.caretIcon} />;
     } else if (size === EComponentSize.MD) {
@@ -197,12 +198,13 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                     <ButtonDropdownExtended.Dropdown
-                        size={size}
                         className={classNames}
+                        size={size}
+                        width={EDropdownWidth.MIN_TARGET}
+                        alignment={EDropdownAlignment.RIGHT}
                         opened={opened}
                         setOpened={setOpened}
                         targetRef={buttonRef}
-                        width={EDropdownWidth.MIN_TARGET}
                         ref={dropdownRef}
                         mobileViewProps={{
                             children: (
@@ -270,9 +272,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             <ButtonDropdownExtended
                 className={classNames}
                 renderButton={
-                    [EButtonDotsTheme.DOTS_SECONDARY, EButtonDotsTheme.DOTS_SECONDARY_LIGHT].includes(
-                        theme as EButtonDotsTheme,
-                    )
+                    theme === EButtonDotsTheme.DOTS_SECONDARY || theme === EButtonDotsTheme.DOTS_SECONDARY_LIGHT
                         ? renderButtonDots
                         : renderButton
                 }

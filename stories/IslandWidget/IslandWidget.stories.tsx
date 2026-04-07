@@ -23,7 +23,6 @@ import {
     Title,
     EFontType,
     DateField,
-    EDropdownAlignment,
     EFormFieldStatus,
     IIslandWidgetBodyProps,
     IIslandWidgetFooterProps,
@@ -164,7 +163,6 @@ export const Playground: Story = {
                         placeholderMask="дд.мм.гггг"
                         label="дд.мм.гггг"
                         invalidDateHint="Указана недоступная для выбора дата."
-                        alignment={EDropdownAlignment.LEFT}
                         size={EComponentSize.SM}
                         status={EFormFieldStatus.DEFAULT}
                     />

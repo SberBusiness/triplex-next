@@ -10,6 +10,8 @@ export interface IIconWrapperProps extends React.HTMLAttributes<HTMLSpanElement>
     disabled?: boolean;
     /** Отключить pointer events. */
     disablePointerEvents?: boolean;
+    /** Применить display: contents (обёртка не участвует в layout). */
+    displayContents?: boolean;
 }
 
 /**
@@ -17,12 +19,16 @@ export interface IIconWrapperProps extends React.HTMLAttributes<HTMLSpanElement>
  * Добавляет классы hoverable/active/disabled, которые управляют цветом иконки при взаимодействии.
  */
 export const IconWrapper = React.forwardRef<HTMLSpanElement, IIconWrapperProps>(
-    ({ className, active, disabled, disablePointerEvents, ...rest }, ref) => (
+    ({ className, active, disabled, disablePointerEvents, displayContents, ...rest }, ref) => (
         <span
             className={clsx(
-                styles.iconWrapper,
                 "hoverable",
-                { active: !!active, disabled: !!disabled, [styles.disablePointerEvents]: !!disablePointerEvents },
+                {
+                    active: !!active,
+                    disabled: !!disabled,
+                    [styles.disablePointerEvents]: !!disablePointerEvents,
+                    [styles.displayContents]: !!displayContents,
+                },
                 className,
             )}
             ref={ref}

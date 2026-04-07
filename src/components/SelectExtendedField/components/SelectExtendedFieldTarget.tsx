@@ -3,7 +3,6 @@ import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvI
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import clsx from "clsx";
-import styles from "../styles/SelectExtendedFieldTarget.module.less";
 import {
     EFormFieldStatus,
     FormField,
@@ -15,6 +14,8 @@ import {
 } from "../../FormField";
 import { FormFieldTarget } from "../../FormField/components/FormFieldTarget";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { IconWrapper } from "../../IconWrapper";
+import styles from "../styles/SelectExtendedFieldTarget.module.less";
 
 /* Свойства SelectExtendedFieldTarget. */
 export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
@@ -143,11 +144,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 active={opened}
                 {...rest}
             >
-                {prefix ? (
-                    <FormFieldPrefix className={clsx({ disabled: status === EFormFieldStatus.DISABLED })}>
-                        {prefix}
-                    </FormFieldPrefix>
-                ) : null}
+                {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
 
                 <FormFieldLabel>{fieldLabel}</FormFieldLabel>
                 <FormFieldTarget
@@ -166,14 +163,13 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                     {loading ? (
                         sizeToLoaderSizeMap[size]
                     ) : (
-                        <div
-                            className={clsx(styles.caretWrapper, "hoverable", {
-                                active: opened,
-                                disabled: status === EFormFieldStatus.DISABLED,
-                            })}
+                        <IconWrapper
+                            className={styles.caretWrapper}
+                            active={opened}
+                            disabled={status === EFormFieldStatus.DISABLED}
                         >
                             {sizeToCaretIconMap[size]}
-                        </div>
+                        </IconWrapper>
                     )}
                     {postfix ? postfix : null}
                 </FormFieldPostfix>

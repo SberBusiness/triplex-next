@@ -6,14 +6,27 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**FormField**
-
-- Исправлен баг: убрано `pointer-events: none` с `FormFieldPrefix` — элементы внутри префикса теперь интерактивны.
-
 **IconWrapper**
 
 - Добавлен компонент-обёртка для иконок из `@sberbusiness/icons-next`. Применяет классы `hoverable`, `active`, `disabled`, управляющие цветом иконки при взаимодействии.
 
+**Chip**
+
+- Иконки в `prefix` и `postfix` теперь обёрнуты в `IconWrapper`.
+
+**FormField**
+
+- Исправлен баг: убрано `pointer-events: none` с `FormFieldPrefix` — элементы внутри префикса теперь интерактивны.
+
+**IslandAccordion**
+
+- Кнопка удаления элемента теперь обёрнута в `IconWrapper`.
+
 **SelectExtendedField**
 
+- Иконка каретки теперь обёрнута в `IconWrapper`.
 - Убран лишний класс `hoverable` с `FormFieldPrefix` внутри target.
+
+**Stepper**
+
+- Иконка шага теперь обёрнута в `IconWrapper`.

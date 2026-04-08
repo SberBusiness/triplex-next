@@ -2,10 +2,9 @@ import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
 import { IDropdownMobileProps } from "../../Dropdown";
 
 /** Свойства компонента SuggestFieldMobile. */
-export interface ISuggestFieldMobileProps<T extends ISuggestFieldOption = ISuggestFieldOption> extends Omit<
-    ISuggestFieldProps<T>,
-    "tooltipOpen"
-> {}
+export interface ISuggestFieldMobileProps<
+    T extends ISuggestFieldOption = ISuggestFieldOption,
+> extends ISuggestFieldProps<T> {}
 
 /** Свойства компонента SuggestFieldMobileDropdown. */
 export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
@@ -17,6 +16,7 @@ export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption 
             | "options"
             | "placeholder"
             | "tooltipHint"
+            | "tooltipOpen"
             | "loading"
             | "dropdownListLoading"
             | "clearInputOnFocus"

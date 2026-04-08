@@ -1,5 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { IconWrapper } from "../IconWrapper";
 
@@ -78,10 +79,11 @@ describe("IconWrapper", () => {
         expect(screen.getByTestId("icon-wrapper")).toHaveAttribute("aria-label", "settings icon");
     });
 
-    it("calls onClick when clicked", () => {
+    it("calls onClick when clicked", async () => {
+        const user = userEvent.setup();
         const onClick = vi.fn();
         renderComponent({ onClick });
-        fireEvent.click(screen.getByTestId("icon-wrapper"));
+        await user.click(screen.getByTestId("icon-wrapper"));
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 });

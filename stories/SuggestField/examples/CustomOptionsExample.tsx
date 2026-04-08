@@ -34,7 +34,7 @@ const FOOD_OPTIONS: ISuggestFieldOption[] = FOOD_DATA.map((item, index) => ({
     id: `suggest-field-option-${index}`,
     label: item.label,
     content: (
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span>{item.icon}</span>
             <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
                 {item.label}
@@ -110,9 +110,9 @@ export const CustomOptionsExample = () => {
                 options={options}
                 size={EComponentSize.LG}
                 status={EFormFieldStatus.DEFAULT}
-                label={"Label"}
-                placeholder={"Type to proceed"}
-                tooltipHint={"No matches found."}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
                 tooltipOpen={tooltipOpen}
                 onFilter={handleFilter}
                 onSelect={handleSelect}

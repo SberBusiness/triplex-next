@@ -8,11 +8,13 @@ interface IStatusItemProps {
 const StatusItem = ({ status }: IStatusItemProps) => {
     const [value, setValue] = useState<string>("");
 
-    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => setValue(event.target.value);
+    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setValue(event.target.value);
+    };
 
     return (
         <div>
-            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{status.toUpperCase()}</div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{status.toUpperCase()}</div>
             <NumberField
                 size={EComponentSize.LG}
                 status={status}
@@ -21,7 +23,7 @@ const StatusItem = ({ status }: IStatusItemProps) => {
                     placeholder: "0",
                     onChange: handleInputChange,
                 }}
-                label={"Label"}
+                label="Label"
             />
         </div>
     );
@@ -30,7 +32,7 @@ const StatusItem = ({ status }: IStatusItemProps) => {
 const STATUSES = Object.values(EFormFieldStatus);
 
 export const StatusesExample = () => (
-    <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
         {STATUSES.map((status) => (
             <StatusItem key={status} status={status} />
         ))}

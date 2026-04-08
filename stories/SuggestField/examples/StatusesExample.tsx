@@ -99,9 +99,9 @@ const StatusItem = ({ status }: IStatusItemProps) => {
             options={options}
             size={EComponentSize.LG}
             status={status}
-            label={"Label"}
-            placeholder={"Type to proceed"}
-            tooltipHint={"No matches found."}
+            label="Label"
+            placeholder="Type to proceed"
+            tooltipHint="No matches found."
             tooltipOpen={tooltipOpen}
             onFilter={handleFilter}
             onSelect={handleSelect}
@@ -116,7 +116,7 @@ const StatusItem = ({ status }: IStatusItemProps) => {
 const STATUSES = Object.values(EFormFieldStatus);
 
 export const StatusesExample = () => (
-    <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
         {STATUSES.map((status) => (
             <StatusItem key={status} status={status} />
         ))}

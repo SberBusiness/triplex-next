@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
     NumberField,
     FormFieldClear,
@@ -14,13 +14,23 @@ import {
 
 export const ProductionExample = () => {
     const [value, setValue] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => setValue(event.target.value);
+    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setValue(event.target.value);
+    };
 
-    const handleClearClick = () => setValue("");
+    const handleClearButtonClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+        setValue("");
+        inputRef.current?.focus();
+    };
+
+    const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+        event.preventDefault();
+    };
 
     return (
-        <div style={{ maxWidth: "300px" }}>
+        <div style={{ maxWidth: 300 }}>
             <NumberField
                 size={EComponentSize.LG}
                 status={EFormFieldStatus.DEFAULT}
@@ -28,11 +38,12 @@ export const ProductionExample = () => {
                     value,
                     placeholder: "0",
                     onChange: handleInputChange,
+                    ref: inputRef,
                 }}
                 label="Label"
                 postfix={
                     <>
-                        <FormFieldClear aria-label="clear value" onClick={handleClearClick} />
+                        <FormFieldClear aria-label="clear value" onClick={handleClearButtonClick} />
                         <Text size={ETextSize.B2} type={EFontType.SECONDARY}>
                             мм
                         </Text>
@@ -43,7 +54,7 @@ export const ProductionExample = () => {
                     <>
                         <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
                             (21) Description{" "}
-                            <Link href="#" onClick={(event) => event.preventDefault()}>
+                            <Link href="#" onClick={handleLinkClick}>
                                 Link text
                             </Link>
                         </Text>

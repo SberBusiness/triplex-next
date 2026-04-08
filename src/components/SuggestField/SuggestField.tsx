@@ -13,11 +13,11 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
         status,
         size,
         value,
-        label,
-        loading,
         options,
+        label,
         placeholder,
         tooltipHint,
+        loading,
         tooltipOpen,
         dropdownListLoading,
         clearInputOnFocus,
@@ -36,8 +36,9 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
                 options={options}
                 label={label}
                 placeholder={placeholder}
-                tooltipHint={tooltipOpen ? tooltipHint : ""}
+                tooltipHint={tooltipHint}
                 loading={loading}
+                tooltipOpen={tooltipOpen}
                 dropdownListLoading={dropdownListLoading}
                 clearInputOnFocus={clearInputOnFocus}
                 onSelect={onSelect}

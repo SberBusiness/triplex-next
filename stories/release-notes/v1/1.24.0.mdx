@@ -20,6 +20,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Для значений `LEFT`/`RIGHT` из `EDropdownAlignment` внедрено адаптивное позиционирование.
 
+**HelpBox**
+
+- Добавлен `forwardRef` — ref пробрасывается на кнопку-триггер.
+- Добавлено свойство `tooltipXButtonProps` для передачи атрибутов на кнопку закрытия Tooltip.
+- Убраны захардкоженные `aria-label` — потребитель передаёт `aria-label` через rest-props и `tooltipXButtonProps`.
+
 **SelectExtendedField**
 
 - Исправлен баг: `onClose` и `onOpen` больше не вызываются при ре-рендере родительского компонента.

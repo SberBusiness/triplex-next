@@ -16,10 +16,10 @@ export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFiel
     placeholder?: string;
     /** Текст Tooltip. */
     tooltipHint: string;
-    /** Флаг управления видимостью Tooltip. */
-    tooltipOpen: boolean;
     /** Флаг состояния загрузки. */
     loading?: boolean;
+    /** Флаг управления видимостью Tooltip. */
+    tooltipOpen: boolean;
     /** Флаг состояния загрузки DropdownList. */
     dropdownListLoading?: boolean;
     /** Определяет, нужно ли очищать поле ввода при получении фокуса. */

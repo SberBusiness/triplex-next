@@ -1,7 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
     Button,
-    CheckboxTreeExtended,
+    Checkbox,
+    CheckboxYGroup,
     EButtonTheme,
     EComponentSize,
     ETooltipSize,
@@ -16,101 +17,82 @@ import {
     ETextSize,
     Tag,
     TagGroup,
+    DropdownMobileHeader,
+    DropdownMobileClose,
+    DropdownMobileInput,
+    DropdownMobileBody,
+    DropdownMobileFooter,
     IconWrapper,
 } from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-interface INode {
+import "../MultiselectField.less";
+
+interface IOption {
     id: string;
     label: string;
-    children?: INode[];
 }
 
-/** Фиксированный набор нод для демонстрации prefix/postfix. */
-const nodes: INode[] = [
-    {
-        id: "prefix-postfix-option-0",
-        label: "Все",
-        children: [
-            { id: "prefix-postfix-option-1", label: "Значение 1" },
-            { id: "prefix-postfix-option-2", label: "Значение 2" },
-            { id: "prefix-postfix-option-3", label: "Значение 3" },
-        ],
-    },
+/** Фиксированный список опций для демонстрации prefix/postfix. */
+const OPTIONS: IOption[] = [
+    { id: "prefix-postfix-option-1", label: "Значение 1" },
+    { id: "prefix-postfix-option-2", label: "Значение 2" },
+    { id: "prefix-postfix-option-3", label: "Значение 3" },
 ];
-
-/** Получение всех leaf-id для ноды и ее потомков. */
-const getLeafIds = (node: INode): string[] => (node.children ? node.children.flatMap(getLeafIds) : [node.id]);
 
 export const WithPrefixAndPostfixExample = () => {
     /** Ref на target для корректной привязки dropdown. */
     const targetRef = useRef<HTMLDivElement>(null);
-    /** Id выбранных leaf-чекбоксов. */
+    /** Id выбранных чекбоксов. */
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     /** Значение фильтра в input dropdown. */
     const [filter, setFilter] = useState("");
     /** Set для быстрых проверок выбранности. */
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-    /** Карта id -> label для отображения человекочитаемых тегов. */
-    const labelsById = useMemo(() => {
-        const map = new Map<string, string>();
+    const visibleOptions = useMemo(() => {
+        const lower = filter.trim().toLowerCase();
+        if (!lower.length) {
+            return OPTIONS;
+        }
 
-        const collectLabels = (items: INode[]) => {
-            items.forEach((item) => {
-                map.set(item.id, item.label);
-                if (item.children) collectLabels(item.children);
-            });
-        };
+        return OPTIONS.filter((opt) => opt.label.toLowerCase().includes(lower));
+    }, [filter]);
 
-        collectLabels(nodes);
-        return map;
-    }, []);
+    const selectedOptions = useMemo(() => OPTIONS.filter((opt) => selectedSet.has(opt.id)), [selectedSet]);
 
-    /** Переключение выбранности ноды вместе с ее leaf-потомками. */
-    const handleToggle = (node: INode, checked: boolean) => {
-        const leafIds = getLeafIds(node);
-        const leafSet = new Set(leafIds);
-
+    const handleToggle = (option: IOption, checked: boolean) => {
         setSelectedIds((prev) => {
-            if (checked) return Array.from(new Set([...prev, ...leafIds]));
-            return prev.filter((id) => !leafSet.has(id));
+            if (checked) {
+                if (prev.includes(option.id)) {
+                    return prev;
+                }
+
+                return [...prev, option.id];
+            }
+
+            return prev.filter((id) => id !== option.id);
         });
     };
 
-    /** Проверка, подходит ли нода под фильтр сама или через дочерние элементы. */
-    const doesNodeMatchFilter = (node: INode): boolean => {
-        const lowerFilter = filter.trim().toLowerCase();
-        if (!lowerFilter.length) return true;
-        if (node.label.toLowerCase().includes(lowerFilter)) return true;
-        return Boolean(node.children?.some(doesNodeMatchFilter));
+    const handleClearAll = () => {
+        setSelectedIds([]);
+        setFilter("");
     };
 
-    /** Рекурсивный рендер нод дерева с вычислением checked/bulk. */
-    const renderNode = (node: INode): React.ReactNode => {
-        if (!doesNodeMatchFilter(node)) return null;
-
-        const leafIds = getLeafIds(node);
-        const checkedCount = leafIds.filter((id) => selectedSet.has(id)).length;
-
-        return (
-            <CheckboxTreeExtended.Node
-                key={node.id}
-                id={node.id}
-                opened={Boolean(node.children)}
-                checkbox={(props) => (
-                    <CheckboxTreeExtended.Checkbox
-                        {...props}
-                        checked={checkedCount > 0}
-                        bulk={checkedCount > 0 && checkedCount < leafIds.length}
-                        onChange={(event) => handleToggle(node, event.target.checked)}
-                    >
-                        {node.label}
-                    </CheckboxTreeExtended.Checkbox>
-                )}
-            >
-                {node.children?.map(renderNode)}
-            </CheckboxTreeExtended.Node>
-        );
-    };
+    const renderCheckboxList = () => (
+        <CheckboxYGroup aria-label="Options">
+            {visibleOptions.map((opt) => (
+                <Checkbox
+                    key={opt.id}
+                    id={opt.id}
+                    size={EComponentSize.MD}
+                    checked={selectedSet.has(opt.id)}
+                    onChange={(event) => handleToggle(opt, event.target.checked)}
+                >
+                    {opt.label}
+                </Checkbox>
+            ))}
+        </CheckboxYGroup>
+    );
 
     /** Рендер тегов выбранных значений в target. */
     const renderTags = () => {
@@ -123,22 +105,22 @@ export const WithPrefixAndPostfixExample = () => {
             }
         };
 
-        if (!selectedIds.length) return null;
+        if (!selectedOptions.length) return null;
 
         return (
             <TagGroup size={EComponentSize.SM}>
-                {selectedIds.map((id) => (
+                {selectedOptions.map((opt) => (
                     <Tag
-                        key={id}
-                        id={id}
+                        key={opt.id}
+                        id={opt.id}
                         size={EComponentSize.SM}
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
                         onKeyDown={handleTagKeyDown}
-                        onRemove={() => setSelectedIds((prev) => prev.filter((item) => item !== id))}
+                        onRemove={() => handleToggle(opt, false)}
                     >
-                        {labelsById.get(id) ?? id}
+                        {opt.label}
                     </Tag>
                 ))}
             </TagGroup>
@@ -172,6 +154,45 @@ export const WithPrefixAndPostfixExample = () => {
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
+                        mobileViewProps={{
+                            children: (
+                                <>
+                                    <DropdownMobileHeader
+                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
+                                    >
+                                        <DropdownMobileInput
+                                            placeholder="Type to proceed"
+                                            value={filter}
+                                            onChange={(event) => setFilter(event.target.value)}
+                                        />
+                                    </DropdownMobileHeader>
+                                    <DropdownMobileBody>
+                                        {renderCheckboxList()}
+                                        {!!filter.trim().length && !visibleOptions.length && (
+                                            <Text size={ETextSize.B3} className="not-found">
+                                                Nothing was found.
+                                            </Text>
+                                        )}
+                                    </DropdownMobileBody>
+                                    <DropdownMobileFooter>
+                                        <Button
+                                            theme={EButtonTheme.SECONDARY}
+                                            size={EComponentSize.MD}
+                                            onClick={() => setOpened(false)}
+                                        >
+                                            Button text
+                                        </Button>
+                                        <Button
+                                            theme={EButtonTheme.LINK}
+                                            size={EComponentSize.MD}
+                                            onClick={handleClearAll}
+                                        >
+                                            Button link text
+                                        </Button>
+                                    </DropdownMobileFooter>
+                                </>
+                            ),
+                        }}
                     >
                         <MultiselectField.Dropdown.Header>
                             <FormField size={EComponentSize.SM}>
@@ -183,9 +204,11 @@ export const WithPrefixAndPostfixExample = () => {
                             </FormField>
                         </MultiselectField.Dropdown.Header>
                         <MultiselectField.Dropdown.Content>
-                            <CheckboxTreeExtended>{nodes.map(renderNode)}</CheckboxTreeExtended>
-                            {!!filter.length && !nodes.some(doesNodeMatchFilter) && (
-                                <Text size={ETextSize.B3}>Nothing was found.</Text>
+                            {renderCheckboxList()}
+                            {!!filter.trim().length && !visibleOptions.length && (
+                                <div className="not-found md">
+                                    <Text size={ETextSize.B3}>Nothing was found.</Text>
+                                </div>
                             )}
                         </MultiselectField.Dropdown.Content>
                         <MultiselectField.Dropdown.Footer>
@@ -196,11 +219,7 @@ export const WithPrefixAndPostfixExample = () => {
                             >
                                 Button text
                             </Button>
-                            <Button
-                                theme={EButtonTheme.LINK}
-                                size={EComponentSize.SM}
-                                onClick={() => setSelectedIds([])}
-                            >
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClearAll}>
                                 Button link text
                             </Button>
                         </MultiselectField.Dropdown.Footer>

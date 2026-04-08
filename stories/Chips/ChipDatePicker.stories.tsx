@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { StoryObj } from "@storybook/react";
-import { ChipDatePicker, EComponentSize, EFormFieldStatus, EDropdownAlignment } from "../../src";
+import { ChipDatePicker, EComponentSize, EFormFieldStatus } from "../../src";
 
 export default {
     title: "Components/Chips/ChipDatePicker",
@@ -85,9 +85,8 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
                 label={args.label}
                 onChange={onChange}
                 displayedValue={args.displayedValue || null}
-                alignment={EDropdownAlignment.LEFT}
                 size={args.size}
-                status="default"
+                status={EFormFieldStatus.DEFAULT}
                 disabled={args.disabled}
             />
         );
@@ -106,9 +105,8 @@ export const Default: StoryObj<typeof ChipDatePicker> = {
                 value={value}
                 label="Date label"
                 onChange={onChange}
-                alignment={EDropdownAlignment.LEFT}
                 size={EComponentSize.MD}
-                status="default"
+                status={EFormFieldStatus.DEFAULT}
             />
         );
     },
@@ -131,9 +129,8 @@ export const WithCustomDisplayedValue: StoryObj<typeof ChipDatePicker> = {
                 value={value}
                 label="Date label"
                 onChange={onChange}
-                alignment={EDropdownAlignment.LEFT}
                 size={EComponentSize.MD}
-                status="default"
+                status={EFormFieldStatus.DEFAULT}
                 displayedValue="Date value"
             />
         );
@@ -158,7 +155,6 @@ export const Sizes: StoryObj<typeof ChipDatePicker> = {
                             value={value}
                             label={size.toUpperCase()}
                             onChange={onChange}
-                            alignment={EDropdownAlignment.LEFT}
                             size={size}
                             status={EFormFieldStatus.DEFAULT}
                         />

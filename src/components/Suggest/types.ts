@@ -17,10 +17,10 @@ export interface ISuggestProps<T extends ISuggestOption = ISuggestOption> extend
     placeholder?: string;
     /** Текст, отображаемый при отсутствии опций. */
     noOptionsText?: string;
-    /** Флаг управления видимостью Tooltip. */
-    tooltipOpen?: boolean;
     /** Флаг состояния загрузки. */
     loading?: boolean;
+    /** Флаг управления видимостью Tooltip. */
+    tooltipOpen?: boolean;
     /** Флаг состояния загрукзи DropdownList. */
     dropdownListLoading?: boolean;
     /** Определяет, нужно ли очищать поле ввода при получении фокуса. */

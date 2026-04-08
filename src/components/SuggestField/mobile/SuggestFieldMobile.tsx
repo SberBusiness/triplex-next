@@ -21,6 +21,7 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
     postfix,
     tooltipHint,
     loading,
+    tooltipOpen,
     dropdownListLoading,
     clearInputOnFocus,
     onFilter,
@@ -86,6 +87,7 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
                 tooltipHint={tooltipHint}
                 opened={dropdownOpen}
                 loading={loading}
+                tooltipOpen={tooltipOpen}
                 dropdownListLoading={dropdownListLoading}
                 clearInputOnFocus={clearInputOnFocus}
                 setOpened={setDropdownOpen}

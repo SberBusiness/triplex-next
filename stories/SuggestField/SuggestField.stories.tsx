@@ -44,8 +44,6 @@ export default {
 } satisfies Meta<typeof SuggestField>;
 
 export type PlaygroundArgs = React.ComponentProps<typeof SuggestField> & {
-    /** С кнопкой очистки. */
-    withClearButton: boolean;
     /** С префиксом. */
     withPrefix: boolean;
     /** С постфиксом. */
@@ -68,8 +66,8 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         loading: false,
         dropdownListLoading: false,
         clearInputOnFocus: false,
+        inputProps: {},
         // Settings
-        withClearButton: false,
         withPrefix: false,
         withPostfix: false,
         withDescription: false,
@@ -114,11 +112,11 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             control: { type: "boolean" },
             table: { category: "Props" },
         },
-        // Settings
-        withClearButton: {
-            control: { type: "boolean" },
-            table: { category: "Settings" },
+        inputProps: {
+            control: "object",
+            table: { category: "Props" },
         },
+        // Settings
         withPrefix: {
             control: { type: "boolean" },
             table: { category: "Settings" },
@@ -143,6 +141,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         controls: {
             include: [
                 // Props
+                "inputProps",
                 "size",
                 "status",
                 "label",
@@ -153,7 +152,6 @@ export const Playground: StoryObj<PlaygroundArgs> = {
                 "dropdownListLoading",
                 "clearInputOnFocus",
                 // Settings
-                "withClearButton",
                 "withPrefix",
                 "withPostfix",
                 "withDescription",

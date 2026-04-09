@@ -393,7 +393,7 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Подключение примеров к стори
 
-В modern pattern каждая документационная стори (кроме Playground и Visual tests) подключает пример и его исходный код через `?raw`:
+В modern pattern каждая документационная стори (кроме Visual tests) подключает пример и его исходный код через `?raw`:
 
 ```tsx
 export const Default: StoryObj<typeof Component> = {
@@ -623,4 +623,4 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Эталонный пример
 
-Референсная реализация: `stories/TextFields/NumberField/NumberField.stories.tsx`
+Референсная реализация: `stories/NumberField/NumberField.stories.tsx`

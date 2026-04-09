@@ -9,9 +9,9 @@ export const LoadingExample = () => {
                 options={[]}
                 size={EComponentSize.LG}
                 status={EFormFieldStatus.DEFAULT}
-                label={"Label"}
-                placeholder={"Type to proceed"}
-                tooltipHint={"No matches found."}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
                 tooltipOpen={false}
                 loading={true}
                 onFilter={() => {}}

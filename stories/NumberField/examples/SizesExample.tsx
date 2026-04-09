@@ -8,11 +8,13 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState<string>("");
 
-    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => setValue(event.target.value);
+    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setValue(event.target.value);
+    };
 
     return (
         <div>
-            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{size.toUpperCase()}</div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
             <NumberField
                 size={size}
                 status={EFormFieldStatus.DEFAULT}
@@ -21,7 +23,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                     placeholder: "0",
                     onChange: handleInputChange,
                 }}
-                label={"Label"}
+                label="Label"
             />
         </div>
     );
@@ -30,7 +32,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 const SIZES = Object.values(EComponentSize);
 
 export const SizesExample = () => (
-    <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
         ))}

@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { Calendar, ECalendarPickType } from "@sberbusiness/triplex-next";
 
 export const PickTypesExample = () => {
-    const [pickedDateDatePick, setPickedDateDatePick] = useState(moment());
-    const [pickedDateMonthYearPick, setPickedDateMonthYearPick] = useState(moment());
+    const initialDate = moment("2024-01-15");
+    const [pickedDateDatePick, setPickedDateDatePick] = useState(initialDate);
+    const [pickedDateMonthYearPick, setPickedDateMonthYearPick] = useState(initialDate);
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>

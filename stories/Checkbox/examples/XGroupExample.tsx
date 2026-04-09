@@ -3,7 +3,7 @@ import { Checkbox, CheckboxXGroup, EComponentSize, Gap } from "@sberbusiness/tri
 
 export const XGroupExample = () => (
     <>
-        <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={16}>
+        <CheckboxXGroup indent={16}>
             {[1, 2, 3].map((value) => (
                 <Checkbox key={value} name="checkbox-x-group" value={value} size={EComponentSize.SM}>
                     Checkbox text
@@ -11,7 +11,7 @@ export const XGroupExample = () => (
             ))}
         </CheckboxXGroup>
         <Gap size={16} />
-        <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={16}>
+        <CheckboxXGroup indent={16}>
             {[1, 2, 3].map((value) => (
                 <Checkbox key={value} name="checkbox-x-group" value={value}>
                     Checkbox text
@@ -19,7 +19,7 @@ export const XGroupExample = () => (
             ))}
         </CheckboxXGroup>
         <Gap size={16} />
-        <CheckboxXGroup aria-labelledby="checkbox-x-group-label" indent={20}>
+        <CheckboxXGroup indent={20}>
             {[1, 2, 3].map((value) => (
                 <Checkbox key={value} name="checkbox-x-group" value={value} size={EComponentSize.LG}>
                     Checkbox text

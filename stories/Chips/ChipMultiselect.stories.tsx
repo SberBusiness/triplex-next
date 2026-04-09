@@ -140,6 +140,7 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
 
                 return CHIP_MULTISELECT_OPTIONS.filter((opt) => opt.label.toLowerCase().includes(lower));
             }, [filter]);
+
             const handleToggle = (optionId: string, checked: boolean) => {
                 setSelectedIds((prev) => {
                     if (checked) {
@@ -169,6 +170,7 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
                     ))}
                 </CheckboxYGroup>
             );
+
             const renderDropdownContent = () => {
                 const renderCheckboxes = !filter.trim() || visibleOptions.length > 0;
                 return renderCheckboxes ? (
@@ -196,6 +198,7 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
             const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                 setFilter(event.target.value);
             };
+
             const renderDropdown = ({ opened, setOpened, targetRef, dropdownRef }) => (
                 <MultiselectField.Dropdown
                     opened={opened}

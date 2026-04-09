@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
-import { ChipIcon, EComponentSize } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples/ChipIcon";
+import { StoryObj } from "@storybook/react";
+import { ChipIcon } from "../../src/components/Chip";
+import { EComponentSize } from "../../src/enums/EComponentSize";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 
-const meta = {
+export default {
     title: "Components/Chips/ChipIcon",
     component: ChipIcon,
     tags: ["autodocs"],
@@ -31,12 +31,9 @@ Chip с иконкой.
             ),
         },
     },
-} satisfies Meta<typeof ChipIcon>;
+};
 
-export default meta;
-type Story = StoryObj<typeof ChipIcon>;
-
-export const Playground: Story = {
+export const Playground: StoryObj<typeof ChipIcon> = {
     tags: ["!autodocs"],
     render: (args) => {
         const [selected, setSelected] = useState(false);
@@ -64,22 +61,44 @@ export const Playground: Story = {
             },
             codePanel: false,
         },
-        testRunner: { skip: true },
     },
 };
 
-export const Default: Story = {
-    render: DefaultExample,
+export const Default: StoryObj<typeof ChipIcon> = {
     parameters: {
         controls: { disable: true },
-        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
+    },
+    render: () => {
+        const [selected, setSelected] = useState(false);
+        return (
+            <ChipIcon selected={selected} onClick={() => setSelected((s) => !s)}>
+                <DefaulticonStrokePrdIcon24 paletteIndex={selected ? 6 : 5} />
+            </ChipIcon>
+        );
     },
 };
 
-export const Sizes: Story = {
-    render: SizesExample,
+export const Sizes: StoryObj<typeof ChipIcon> = {
     parameters: {
         controls: { disable: true },
-        docs: { source: { code: SizesExampleSource, language: "tsx" } },
+    },
+    render: () => {
+        const [selectedSM, setSelectedSM] = useState(0);
+        const [selectedMD, setSelectedMD] = useState(0);
+        const [selectedLG, setSelectedLG] = useState(0);
+
+        return (
+            <div style={{ display: "flex", gap: 12 }}>
+                <ChipIcon size={EComponentSize.SM} selected={selectedSM} onClick={() => setSelectedSM((s) => !s)}>
+                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedSM ? 6 : 5} />
+                </ChipIcon>
+                <ChipIcon size={EComponentSize.MD} selected={selectedMD} onClick={() => setSelectedMD((s) => !s)}>
+                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedMD ? 6 : 5} />
+                </ChipIcon>
+                <ChipIcon size={EComponentSize.LG} selected={selectedLG} onClick={() => setSelectedLG((s) => !s)}>
+                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedLG ? 6 : 5} />
+                </ChipIcon>
+            </div>
+        );
     },
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Chip, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const ChipSizesExample = () => {
+export const SizesExample = () => {
     const [sm, setSm] = useState(false);
     const [md, setMd] = useState(false);
     const [lg, setLg] = useState(false);

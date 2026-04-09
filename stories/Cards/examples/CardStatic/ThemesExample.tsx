@@ -35,7 +35,7 @@ const Body = () => (
     </CardStatic.Content.Body>
 );
 
-export const CardStaticThemesExample = () => (
+export const ThemesExample = () => (
     <div style={{ width: "448px", display: "flex", gap: "16px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>GENERAL</div>

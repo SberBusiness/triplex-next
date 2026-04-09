@@ -11,6 +11,7 @@ import {
     XGroupExampleSource,
     YGroupExample,
     YGroupExampleSource,
+    PlaygroundExample,
 } from "./examples";
 
 const meta = {
@@ -88,7 +89,7 @@ export const Playground: Story = {
         testRunner: { skip: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
     },
-    render: (args) => <Checkbox {...args} />,
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { ChipIcon, EComponentSize } from "@sberbusiness/triplex-next";
 import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples/ChipIcon";
+import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 
 const meta = {
     title: "Components/Chips/ChipIcon",

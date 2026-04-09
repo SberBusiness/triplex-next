@@ -11,7 +11,7 @@ import {
     Title,
 } from "@sberbusiness/triplex-next";
 
-export const CardActionDefaultExample = () => {
+export const DefaultExample = () => {
     const [isSelected, setIsSelected] = useState(false);
 
     return (

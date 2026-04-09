@@ -8,7 +8,7 @@ import {
     Text,
 } from "@sberbusiness/triplex-next";
 
-export const CardStaticDefaultExample = () => (
+export const DefaultExample = () => (
     <div style={{ width: "216px" }}>
         <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
             <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>

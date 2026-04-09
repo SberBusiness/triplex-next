@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChipDatePicker, EComponentSize, EDropdownAlignment } from "@sberbusiness/triplex-next";
 
-export const ChipDatePickerDefaultExample = () => {
+export const WithCustomDisplayedValueExample = () => {
     const [value, setValue] = useState("");
     return (
         <ChipDatePicker
@@ -11,6 +11,7 @@ export const ChipDatePickerDefaultExample = () => {
             alignment={EDropdownAlignment.LEFT}
             size={EComponentSize.MD}
             status="default"
+            displayedValue="Date value"
         />
     );
 };

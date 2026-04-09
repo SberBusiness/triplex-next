@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
-import { Chip, ChipGroup, EComponentSize } from "@sberbusiness/triplex-next";
+import { ChipGroup, EComponentSize } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
@@ -9,6 +9,7 @@ import {
     OneLineExampleSource,
     SizesExample,
     SizesExampleSource,
+    PlaygroundExample,
 } from "./examples/ChipGroup";
 
 const meta = {
@@ -46,20 +47,7 @@ type Story = StoryObj<typeof ChipGroup>;
 
 export const Playground: Story = {
     tags: ["!autodocs"],
-    render: (args) => {
-        const [selected, setSelected] = useState<number | null>(null);
-        const chips = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta"];
-
-        return (
-            <ChipGroup {...args} style={{ maxWidth: 360 }}>
-                {chips.map((label, index) => (
-                    <Chip key={label} size={args.size} selected={selected === index} onClick={() => setSelected(index)}>
-                        {label}
-                    </Chip>
-                ))}
-            </ChipGroup>
-        );
-    },
+    render: PlaygroundExample,
     args: { oneLine: false, size: EComponentSize.MD },
     argTypes: {
         oneLine: { control: { type: "boolean" } },

@@ -8,7 +8,7 @@ import {
     Text,
 } from "@sberbusiness/triplex-next";
 
-export const CardStaticPaddingSizesExample = () => (
+export const PaddingSizesExample = () => (
     <div style={{ width: "448px", display: "flex", gap: "16px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>

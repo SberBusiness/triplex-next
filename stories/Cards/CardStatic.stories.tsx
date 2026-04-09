@@ -1,17 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-    CardStatic,
-    ECardTheme,
-    ECardRoundingSize,
-    ECardContentPaddingSize,
-    Text,
-    EFontType,
-    ETextSize,
-    EFontWeightText,
-    Link,
-    Gap,
-} from "@sberbusiness/triplex-next";
+import { CardStatic, ECardTheme, ECardRoundingSize, ECardContentPaddingSize } from "@sberbusiness/triplex-next";
 import {
     Title as DocsTitle,
     Description,
@@ -22,14 +11,15 @@ import {
     ArgTypes,
 } from "@storybook/addon-docs/blocks";
 import {
-    CardStaticDefaultExample,
-    CardStaticDefaultExampleSource,
-    CardStaticPaddingSizesExample,
-    CardStaticPaddingSizesExampleSource,
-    CardStaticRoundingSizesExample,
-    CardStaticRoundingSizesExampleSource,
-    CardStaticThemesExample,
-    CardStaticThemesExampleSource,
+    DefaultExample,
+    DefaultExampleSource,
+    PaddingSizesExample,
+    PaddingSizesExampleSource,
+    PlaygroundExample,
+    RoundingSizesExample,
+    RoundingSizesExampleSource,
+    ThemesExample,
+    ThemesExampleSource,
 } from "./examples/CardStatic";
 
 const meta = {
@@ -103,53 +93,7 @@ export const Playground: StoryObj<typeof CardStatic> = {
         roundingSize: ECardRoundingSize.MD,
         theme: ECardTheme.GENERAL,
     },
-    render: (args) => {
-        return (
-            <div style={{ width: "216px" }}>
-                <CardStatic roundingSize={args.roundingSize} theme={args.theme}>
-                    <CardStatic.Content paddingSize={args.paddingSize}>
-                        <CardStatic.Content.Header>
-                            <Text size={ETextSize.B3}>Subtitle text</Text>
-                        </CardStatic.Content.Header>
-                        <CardStatic.Content.Body>
-                            <Text tag="div" size={ETextSize.B3}>
-                                This message provides context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                This message provides additional context or highlights important information to note.
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Текст пояснения
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                Текст пояснения
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                1234567,00
-                            </Text>
-                            <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                Текст пояснения
-                            </Text>
-                            <Gap size={8} />
-                            <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                <Link onClick={() => {}}>Link text</Link>
-                            </Text>
-                        </CardStatic.Content.Body>
-                    </CardStatic.Content>
-                </CardStatic>
-            </div>
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: StoryObj<typeof CardStatic> = {
@@ -157,12 +101,12 @@ export const Default: StoryObj<typeof CardStatic> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: CardStaticDefaultExampleSource,
+                code: DefaultExampleSource,
                 language: "tsx",
             },
         },
     },
-    render: CardStaticDefaultExample,
+    render: DefaultExample,
 };
 
 export const Themes: StoryObj<typeof CardStatic> = {
@@ -170,12 +114,12 @@ export const Themes: StoryObj<typeof CardStatic> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: CardStaticThemesExampleSource,
+                code: ThemesExampleSource,
                 language: "tsx",
             },
         },
     },
-    render: CardStaticThemesExample,
+    render: ThemesExample,
 };
 
 export const PaddingSizes: StoryObj<typeof CardStatic> = {
@@ -183,12 +127,12 @@ export const PaddingSizes: StoryObj<typeof CardStatic> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: CardStaticPaddingSizesExampleSource,
+                code: PaddingSizesExampleSource,
                 language: "tsx",
             },
         },
     },
-    render: CardStaticPaddingSizesExample,
+    render: PaddingSizesExample,
 };
 
 export const RoundingSizes: StoryObj<typeof CardStatic> = {
@@ -196,10 +140,10 @@ export const RoundingSizes: StoryObj<typeof CardStatic> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: CardStaticRoundingSizesExampleSource,
+                code: RoundingSizesExampleSource,
                 language: "tsx",
             },
         },
     },
-    render: CardStaticRoundingSizesExample,
+    render: RoundingSizesExample,
 };

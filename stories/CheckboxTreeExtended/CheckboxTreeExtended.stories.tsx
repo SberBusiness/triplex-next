@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { CheckboxTreeExtended, EComponentSize } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples";
+import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource, PlaygroundExample } from "./examples";
 
 const meta = {
     title: "Components/CheckboxTreeExtended",
@@ -42,7 +42,7 @@ export const Playground: Story = {
         testRunner: { skip: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
     },
-    render: (args) => <DefaultExample size={args.size} />,
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

@@ -6,3 +6,5 @@ export * from "./XGroupExample";
 export { default as XGroupExampleSource } from "./XGroupExample?raw";
 export * from "./YGroupExample";
 export { default as YGroupExampleSource } from "./YGroupExample?raw";
+export * from "./PlaygroundExample";
+export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";

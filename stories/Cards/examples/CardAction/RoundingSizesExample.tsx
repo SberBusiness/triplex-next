@@ -36,7 +36,7 @@ const CardBody = () => (
     </CardAction.Content.Body>
 );
 
-export const CardActionRoundingSizesExample = () => {
+export const RoundingSizesExample = () => {
     const [isSelectedSM, setIsSelectedSM] = useState(false);
     const [isSelectedMD, setIsSelectedMD] = useState(false);
 

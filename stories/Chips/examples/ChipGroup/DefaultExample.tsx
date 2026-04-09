@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Chip, ChipGroup } from "@sberbusiness/triplex-next";
 
-export const ChipGroupDefaultExample = () => {
+export const DefaultExample = () => {
     const [selected, setSelected] = useState<number | null>(null);
     const chips = ["Alpha", "Beta", "Gamma", "Delta"];
     return (

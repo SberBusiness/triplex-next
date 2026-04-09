@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { Meta, StoryObj } from "@storybook/react";
-import { ChipDatePicker, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { ChipDatePicker, EComponentSize } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
@@ -9,6 +9,7 @@ import {
     SizesExampleSource,
     WithCustomDisplayedValueExample,
     WithCustomDisplayedValueExampleSource,
+    PlaygroundExample,
 } from "./examples/ChipDatePicker";
 
 const meta = {
@@ -35,15 +36,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof ChipDatePicker>;
-
-const useChipDatePickerLogic = () => {
-    const [value, setValue] = useState("");
-
-    return {
-        value,
-        onChange: setValue,
-    };
-};
 
 export const Playground: Story = {
     tags: ["!autodocs"],
@@ -87,21 +79,7 @@ export const Playground: Story = {
             description: "Состояние disabled",
         },
     },
-    render: (args) => {
-        const { value, onChange } = useChipDatePickerLogic();
-
-        return (
-            <ChipDatePicker
-                value={value}
-                label={args.label}
-                onChange={onChange}
-                displayedValue={args.displayedValue || null}
-                size={args.size}
-                status={EFormFieldStatus.DEFAULT}
-                disabled={args.disabled}
-            />
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

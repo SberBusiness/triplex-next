@@ -1,30 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import React, { useState } from "react";
+import React from "react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { CheckboxTree, EComponentSize, ICheckboxTreeCheckboxData } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples";
-
-const SAMPLE_CHECKBOXES: ICheckboxTreeCheckboxData[] = [
-    {
-        id: "1",
-        label: "Группа 1",
-        checked: false,
-        children: [
-            { id: "1-1", label: "Значение 1-1", checked: false },
-            { id: "1-2", label: "Значение 1-2", checked: false },
-        ],
-    },
-    {
-        id: "2",
-        label: "Группа 2",
-        checked: false,
-        children: [
-            { id: "2-1", label: "Значение 2-1", checked: false },
-            { id: "2-2", label: "Значение 2-2", checked: false },
-        ],
-    },
-    { id: "3", label: "Значение 3", checked: false },
-];
+import { CheckboxTree, EComponentSize } from "@sberbusiness/triplex-next";
+import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource, PlaygroundExample } from "./examples";
 
 const meta = {
     title: "Components/CheckboxTree",
@@ -69,10 +47,7 @@ export const Playground: Story = {
             table: { type: { summary: "EComponentSize" }, defaultValue: { summary: EComponentSize.MD } },
         },
     },
-    render: (args) => {
-        const [checkboxes, setCheckboxes] = useState<ICheckboxTreeCheckboxData[]>(SAMPLE_CHECKBOXES);
-        return <CheckboxTree {...args} checkboxes={checkboxes} onChange={setCheckboxes} />;
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

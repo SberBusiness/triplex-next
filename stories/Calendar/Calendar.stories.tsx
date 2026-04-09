@@ -1,10 +1,16 @@
 import moment from "moment";
 import "moment/locale/ru";
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Calendar, ECalendarDateMarkType, ECalendarPickType } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, PickTypesExample, PickTypesExampleSource } from "./examples/index";
+import { Calendar, ECalendarPickType } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    PickTypesExample,
+    PickTypesExampleSource,
+    PlaygroundExample,
+} from "./examples/index";
 
 moment.locale("ru");
 
@@ -93,42 +99,7 @@ export const Playground: Story = {
             codePanel: false,
         },
     },
-    render: (args) => {
-        const [pickedDate, setPickedDate] = useState(moment());
-
-        const markedDays = {
-            [moment().subtract(1, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.BASIC,
-            [moment().subtract(2, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.STANDARD,
-            [moment().add(1, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.ATTENTION,
-            [moment().add(2, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.CRITICAL,
-        };
-
-        const disabledDays = [
-            moment().subtract(3, "days").format("YYYY-MM-DD"),
-            moment().subtract(4, "days").format("YYYY-MM-DD"),
-            moment().add(3, "days").format("YYYY-MM-DD"),
-            moment().add(4, "days").format("YYYY-MM-DD"),
-        ];
-
-        return (
-            <Calendar
-                {...args}
-                pickedDate={pickedDate}
-                onDateChange={setPickedDate}
-                markedDays={markedDays}
-                disabledDays={disabledDays}
-                yesterdayButtonProps={{
-                    children: "Вчера",
-                }}
-                todayButtonProps={({ currentPeriodSelected }) => ({
-                    children: currentPeriodSelected ? "Сегодня" : "К текущей дате",
-                })}
-                tomorrowButtonProps={{
-                    children: "Завтра",
-                }}
-            />
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

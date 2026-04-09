@@ -72,13 +72,13 @@ export const Playground: PlaygroundStory = {
         testRunner: { skip: true },
     },
     render: (args) => {
-        const options: ISelectFieldOption[] = [
+        const options = [
             { id: "chip-sort-1", label: "По дате", value: "i1" },
             { id: "chip-sort-2", label: "По времени", value: "i2" },
             { id: "chip-sort-3", label: "По названию", value: "i3" },
         ];
 
-        const [value, setValue] = useState<ISelectFieldOption>(options[0]);
+        const [value, setValue] = useState(options[0]);
 
         const defaultValue =
             args.defaultValue !== undefined && args.defaultValue !== null ? options[args.defaultValue] : undefined;

@@ -139,7 +139,6 @@ export const Playground: StoryObj<typeof ChipSuggest> = {
             "Olive",
             "Pea Pod",
         ];
-
         const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
             id: `suggest-option-${index}`,
             label: fruit,
@@ -169,7 +168,6 @@ export const Playground: StoryObj<typeof ChipSuggest> = {
             setOptions(filteredOptions);
             setTooltipOpen(filteredOptions.length === 0);
         };
-
         return (
             <ChipSuggest
                 {...args}

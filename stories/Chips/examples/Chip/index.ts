@@ -1,8 +1,10 @@
-export { ChipDefaultExample as DefaultExample } from "./ChipDefaultExample";
-export { default as DefaultExampleSource } from "./ChipDefaultExample?raw";
-export { ChipSizesExample as SizesExample } from "./ChipSizesExample";
-export { default as SizesExampleSource } from "./ChipSizesExample?raw";
-export { ChipStatesExample as StatesExample } from "./ChipStatesExample";
-export { default as StatesExampleSource } from "./ChipStatesExample?raw";
-export { ChipWithPrefixAndPostfixExample as WithPrefixAndPostfixExample } from "./ChipWithPrefixAndPostfixExample";
-export { default as WithPrefixAndPostfixExampleSource } from "./ChipWithPrefixAndPostfixExample?raw";
+export { DefaultExample } from "./DefaultExample";
+export { default as DefaultExampleSource } from "./DefaultExample?raw";
+export { SizesExample } from "./SizesExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";
+export { StatesExample } from "./StatesExample";
+export { default as StatesExampleSource } from "./StatesExample?raw";
+export { WithPrefixAndPostfixExample } from "./WithPrefixAndPostfixExample";
+export { default as WithPrefixAndPostfixExampleSource } from "./WithPrefixAndPostfixExample?raw";
+export { PlaygroundExample } from "./PlaygroundExample";
+export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";

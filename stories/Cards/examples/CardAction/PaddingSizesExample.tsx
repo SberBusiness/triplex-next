@@ -5,13 +5,10 @@ import {
     ECardContentPaddingSize,
     ECardRoundingSize,
     ECardTheme,
-    EComponentSize,
     EFontType,
     EFontWeightTitle,
     ETextSize,
     ETitleSize,
-    Button,
-    EButtonTheme,
     Gap,
     Link,
     Text,
@@ -28,18 +25,6 @@ const CardBody = () => (
                 List item text
             </Text>
         </div>
-        <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-            <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-            <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                List item text
-            </Text>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
-            <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-            <Text size={ETextSize.B3} style={{ marginLeft: "8px" }}>
-                List item text
-            </Text>
-        </div>
         <Gap size={8} />
         <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
             This message provides additional context or highlights important information to note.
@@ -51,48 +36,40 @@ const CardBody = () => (
     </CardAction.Content.Body>
 );
 
-export const CardActionThemesExample = () => {
-    const [isSelectedGeneral, setIsSelectedGeneral] = useState(false);
-    const [isSelectedSecondary, setIsSelectedSecondary] = useState(false);
+export const PaddingSizesExample = () => {
+    const [isSelectedSM, setIsSelectedSM] = useState(false);
+    const [isSelectedMD, setIsSelectedMD] = useState(false);
 
     return (
         <div style={{ width: "448px", display: "flex", gap: "16px" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>GENERAL</div>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>
                 <CardAction
                     roundingSize={ECardRoundingSize.MD}
                     theme={ECardTheme.GENERAL}
-                    selected={isSelectedGeneral}
-                    toggle={setIsSelectedGeneral}
+                    selected={isSelectedSM}
+                    toggle={setIsSelectedSM}
                 >
                     <CardAction.Media
                         style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
                     />
-                    <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                    <CardAction.Content paddingSize={ECardContentPaddingSize.SM}>
                         <CardAction.Content.Header>
                             <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
                                 Title text
                             </Title>
                         </CardAction.Content.Header>
                         <CardBody />
-                        <CardAction.Content.Footer>
-                            <Button
-                                theme={isSelectedGeneral ? EButtonTheme.SECONDARY_LIGHT : EButtonTheme.SECONDARY}
-                                size={EComponentSize.SM}
-                            >
-                                Button text
-                            </Button>
-                        </CardAction.Content.Footer>
                     </CardAction.Content>
                 </CardAction>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SECONDARY</div>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>MD</div>
                 <CardAction
                     roundingSize={ECardRoundingSize.MD}
-                    theme={ECardTheme.SECONDARY}
-                    selected={isSelectedSecondary}
-                    toggle={setIsSelectedSecondary}
+                    theme={ECardTheme.GENERAL}
+                    selected={isSelectedMD}
+                    toggle={setIsSelectedMD}
                 >
                     <CardAction.Media
                         style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}

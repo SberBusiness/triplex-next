@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, ArgTypes, Heading, Primary } from "@storybook/addon-docs/blocks";
 import { Chip, EComponentSize } from "@sberbusiness/triplex-next";
@@ -11,6 +11,7 @@ import {
     StatesExampleSource,
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
+    PlaygroundExample,
 } from "./examples/Chip";
 
 const meta = {
@@ -49,15 +50,7 @@ type Story = StoryObj<typeof Chip>;
 
 export const Playground: Story = {
     tags: ["!autodocs"],
-    render: (args) => {
-        const [selected, setSelected] = useState(false);
-        const handleClick = () => setSelected((s) => !s);
-        return (
-            <Chip {...args} selected={selected} onClick={handleClick}>
-                Value
-            </Chip>
-        );
-    },
+    render: PlaygroundExample,
     args: {
         size: EComponentSize.MD,
         disabled: false,

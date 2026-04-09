@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Chip, ChipGroup, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const ChipGroupOneLineExample = () => {
+export const OneLineExample = () => {
     const [selected, setSelected] = useState<number | null>(null);
     const chips = Array.from({ length: 20 }, (_, i) => `Item ${i + 1}`);
     return (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChipDatePicker, EComponentSize, EDropdownAlignment } from "@sberbusiness/triplex-next";
 
-export const ChipDatePickerSizesExample = () => {
+export const SizesExample = () => {
     const [sm, setSm] = useState("");
     const [md, setMd] = useState("");
     const [lg, setLg] = useState("");

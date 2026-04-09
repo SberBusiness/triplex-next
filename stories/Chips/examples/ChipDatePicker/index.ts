@@ -1,6 +1,8 @@
-export { ChipDatePickerDefaultExample as DefaultExample } from "./ChipDatePickerDefaultExample";
-export { default as DefaultExampleSource } from "./ChipDatePickerDefaultExample?raw";
-export { ChipDatePickerWithCustomDisplayedValueExample as WithCustomDisplayedValueExample } from "./ChipDatePickerWithCustomDisplayedValueExample";
-export { default as WithCustomDisplayedValueExampleSource } from "./ChipDatePickerWithCustomDisplayedValueExample?raw";
-export { ChipDatePickerSizesExample as SizesExample } from "./ChipDatePickerSizesExample";
-export { default as SizesExampleSource } from "./ChipDatePickerSizesExample?raw";
+export { DefaultExample } from "./DefaultExample";
+export { default as DefaultExampleSource } from "./DefaultExample?raw";
+export { WithCustomDisplayedValueExample } from "./WithCustomDisplayedValueExample";
+export { default as WithCustomDisplayedValueExampleSource } from "./WithCustomDisplayedValueExample?raw";
+export { SizesExample } from "./SizesExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";
+export { PlaygroundExample } from "./PlaygroundExample";
+export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";

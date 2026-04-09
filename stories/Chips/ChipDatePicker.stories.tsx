@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
-import { StoryObj } from "@storybook/react";
-import { ChipDatePicker, EComponentSize, EFormFieldStatus } from "../../src";
+import { Meta, StoryObj } from "@storybook/react";
+import { ChipDatePicker, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    WithCustomDisplayedValueExample,
+    WithCustomDisplayedValueExampleSource,
+} from "./examples/ChipDatePicker";
 
-export default {
+const meta = {
     title: "Components/Chips/ChipDatePicker",
     component: ChipDatePicker,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -24,7 +31,10 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof ChipDatePicker>;
+
+export default meta;
+type Story = StoryObj<typeof ChipDatePicker>;
 
 const useChipDatePickerLogic = () => {
     const [value, setValue] = useState("");
@@ -35,7 +45,7 @@ const useChipDatePickerLogic = () => {
     };
 };
 
-export const Playground: StoryObj<typeof ChipDatePicker> = {
+export const Playground: Story = {
     tags: ["!autodocs"],
     parameters: {
         controls: {
@@ -47,6 +57,7 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     args: {
         size: EComponentSize.MD,
@@ -93,74 +104,31 @@ export const Playground: StoryObj<typeof ChipDatePicker> = {
     },
 };
 
-export const Default: StoryObj<typeof ChipDatePicker> = {
+export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const { value, onChange } = useChipDatePickerLogic();
-
-        return (
-            <ChipDatePicker
-                value={value}
-                label="Date label"
-                onChange={onChange}
-                size={EComponentSize.MD}
-                status={EFormFieldStatus.DEFAULT}
-            />
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
-export const WithCustomDisplayedValue: StoryObj<typeof ChipDatePicker> = {
+export const WithCustomDisplayedValue: Story = {
+    render: WithCustomDisplayedValueExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "ChipDatePicker с переданным displayedValue.",
             },
+            source: { code: WithCustomDisplayedValueExampleSource, language: "tsx" },
         },
-    },
-    render: () => {
-        const { value, onChange } = useChipDatePickerLogic();
-
-        return (
-            <ChipDatePicker
-                value={value}
-                label="Date label"
-                onChange={onChange}
-                size={EComponentSize.MD}
-                status={EFormFieldStatus.DEFAULT}
-                displayedValue="Date value"
-            />
-        );
     },
 };
 
-export const Sizes: StoryObj<typeof ChipDatePicker> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const sizes = Object.values(EComponentSize);
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-                {sizes.map((size) => {
-                    const { value, onChange } = useChipDatePickerLogic();
-
-                    return (
-                        <ChipDatePicker
-                            key={size}
-                            value={value}
-                            label={size.toUpperCase()}
-                            onChange={onChange}
-                            size={size}
-                            status={EFormFieldStatus.DEFAULT}
-                        />
-                    );
-                })}
-            </div>
-        );
+        docs: { source: { code: SizesExampleSource, language: "tsx" } },
     },
 };

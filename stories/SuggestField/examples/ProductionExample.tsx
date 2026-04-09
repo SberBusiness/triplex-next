@@ -97,9 +97,13 @@ export const ProductionExample = () => {
         }
     };
 
-    const handleClear = () => {
+    const handleClear: React.MouseEventHandler<HTMLButtonElement> = () => {
         handleFilter("");
         inputRef.current?.focus();
+    };
+
+    const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+        event.preventDefault();
     };
 
     return (
@@ -109,9 +113,9 @@ export const ProductionExample = () => {
                 options={options}
                 size={EComponentSize.LG}
                 status={EFormFieldStatus.DEFAULT}
-                label={"Label"}
-                placeholder={"Type to proceed"}
-                tooltipHint={"No matches found."}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
                 tooltipOpen={tooltipOpen}
                 onFilter={handleFilter}
                 onSelect={handleSelect}
@@ -131,7 +135,7 @@ export const ProductionExample = () => {
                 description={
                     <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                         (21) Description{" "}
-                        <Link href="#" onClick={(event) => event.preventDefault()}>
+                        <Link href="#" onClick={handleLinkClick}>
                             Link text
                         </Link>
                     </Text>

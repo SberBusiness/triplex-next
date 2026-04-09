@@ -11,7 +11,7 @@ import {
     EFontWeightText,
     Link,
     Gap,
-} from "../../src/components";
+} from "@sberbusiness/triplex-next";
 import {
     Title as DocsTitle,
     Description,
@@ -21,6 +21,16 @@ import {
     Heading,
     ArgTypes,
 } from "@storybook/addon-docs/blocks";
+import {
+    CardStaticDefaultExample,
+    CardStaticDefaultExampleSource,
+    CardStaticPaddingSizesExample,
+    CardStaticPaddingSizesExampleSource,
+    CardStaticRoundingSizesExample,
+    CardStaticRoundingSizesExampleSource,
+    CardStaticThemesExample,
+    CardStaticThemesExampleSource,
+} from "./examples/CardStatic";
 
 const meta = {
     title: "Components/Cards/CardStatic",
@@ -30,7 +40,6 @@ const meta = {
     },
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -67,6 +76,7 @@ export const Playground: StoryObj<typeof CardStatic> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     argTypes: {
         paddingSize: {
@@ -145,332 +155,51 @@ export const Playground: StoryObj<typeof CardStatic> = {
 export const Default: StoryObj<typeof CardStatic> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: CardStaticDefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => {
-        return (
-            <div style={{ width: "216px" }}>
-                <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
-                    <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
-                        <CardStatic.Content.Header>
-                            <Text size={ETextSize.B3}>Subtitle text</Text>
-                        </CardStatic.Content.Header>
-                        <CardStatic.Content.Body>
-                            <Text tag="div" size={ETextSize.B3}>
-                                This message provides context or highlights important information to note.
-                            </Text>
-                        </CardStatic.Content.Body>
-                    </CardStatic.Content>
-                </CardStatic>
-            </div>
-        );
-    },
+    render: CardStaticDefaultExample,
 };
 
 export const Themes: StoryObj<typeof CardStatic> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: CardStaticThemesExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => {
-        return (
-            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>ECardTheme.GENERAL</Text>
-                    <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
-                        <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
-                            <CardStatic.Content.Header>
-                                <Text size={ETextSize.B3}>Subtitle text</Text>
-                            </CardStatic.Content.Header>
-                            <CardStatic.Content.Body>
-                                <Text tag="div" size={ETextSize.B3}>
-                                    This message provides context or highlights important information to note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    This message provides additional context or highlights important information to
-                                    note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </CardStatic.Content.Body>
-                        </CardStatic.Content>
-                    </CardStatic>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>ECardTheme.SECONDARY</Text>
-                    <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.SECONDARY}>
-                        <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
-                            <CardStatic.Content.Header>
-                                <Text size={ETextSize.B3}>Subtitle text</Text>
-                            </CardStatic.Content.Header>
-                            <CardStatic.Content.Body>
-                                <Text tag="div" size={ETextSize.B3}>
-                                    This message provides context or highlights important information to note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    This message provides additional context or highlights important information to
-                                    note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </CardStatic.Content.Body>
-                        </CardStatic.Content>
-                    </CardStatic>
-                </div>
-            </div>
-        );
-    },
+    render: CardStaticThemesExample,
 };
 
 export const PaddingSizes: StoryObj<typeof CardStatic> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: CardStaticPaddingSizesExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => {
-        return (
-            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>ECardContentPaddingSize.SM</Text>
-                    <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
-                        <CardStatic.Content paddingSize={ECardContentPaddingSize.SM}>
-                            <CardStatic.Content.Header>
-                                <Text size={ETextSize.B3}>Subtitle text</Text>
-                            </CardStatic.Content.Header>
-                            <CardStatic.Content.Body>
-                                <Text tag="div" size={ETextSize.B3}>
-                                    This message provides context or highlights important information to note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    This message provides additional context or highlights important information to
-                                    note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </CardStatic.Content.Body>
-                        </CardStatic.Content>
-                    </CardStatic>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>ECardContentPaddingSize.MD</Text>
-                    <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
-                        <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
-                            <CardStatic.Content.Header>
-                                <Text size={ETextSize.B3}>Subtitle text</Text>
-                            </CardStatic.Content.Header>
-                            <CardStatic.Content.Body>
-                                <Text tag="div" size={ETextSize.B3}>
-                                    This message provides context or highlights important information to note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    This message provides additional context or highlights important information to
-                                    note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </CardStatic.Content.Body>
-                        </CardStatic.Content>
-                    </CardStatic>
-                </div>
-            </div>
-        );
-    },
+    render: CardStaticPaddingSizesExample,
 };
 
 export const RoundingSizes: StoryObj<typeof CardStatic> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: CardStaticRoundingSizesExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => {
-        return (
-            <div style={{ width: "448px", display: "flex", gap: "16px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>ECardRoundingSize.SM</Text>
-                    <CardStatic roundingSize={ECardRoundingSize.SM} theme={ECardTheme.GENERAL}>
-                        <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
-                            <CardStatic.Content.Header>
-                                <Text size={ETextSize.B3}>Subtitle text</Text>
-                            </CardStatic.Content.Header>
-                            <CardStatic.Content.Body>
-                                <Text tag="div" size={ETextSize.B3}>
-                                    This message provides context or highlights important information to note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    This message provides additional context or highlights important information to
-                                    note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </CardStatic.Content.Body>
-                        </CardStatic.Content>
-                    </CardStatic>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>ECardRoundingSize.MD</Text>
-                    <CardStatic roundingSize={ECardRoundingSize.MD} theme={ECardTheme.GENERAL}>
-                        <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
-                            <CardStatic.Content.Header>
-                                <Text size={ETextSize.B3}>Subtitle text</Text>
-                            </CardStatic.Content.Header>
-                            <CardStatic.Content.Body>
-                                <Text tag="div" size={ETextSize.B3}>
-                                    This message provides context or highlights important information to note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    This message provides additional context or highlights important information to
-                                    note.
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                                    1234567,00
-                                </Text>
-                                <Text tag="div" type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    Текст пояснения
-                                </Text>
-                                <Gap size={8} />
-                                <Text tag="div" type={EFontType.PRIMARY} size={ETextSize.B4}>
-                                    <Link onClick={() => {}}>Link text</Link>
-                                </Text>
-                            </CardStatic.Content.Body>
-                        </CardStatic.Content>
-                    </CardStatic>
-                </div>
-            </div>
-        );
-    },
+    render: CardStaticRoundingSizesExample,
 };

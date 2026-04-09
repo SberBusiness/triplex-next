@@ -1,16 +1,7 @@
-import React, { useState } from "react";
-import { AlertProcess } from "../../src/components/Alert/AlertProcess/AlertProcess";
-import { StoryObj } from "@storybook/react";
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { EAlertType } from "../../src/components/Alert/EAlertType";
-import { Text } from "../../src/components/Typography/Text";
-import { EFontType, ETextSize } from "../../src/components/Typography/enums";
-import { Button } from "../../src/components/Button";
-import { EButtonTheme } from "../../src/components/Button";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Gap } from "../../src/components/Gap";
-import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
-import { Link } from "../../src/components/Link";
+import { AlertProcess, EAlertType, EFontType, ETextSize, Text } from "@sberbusiness/triplex-next";
 import {
     Title,
     Description,
@@ -21,8 +12,24 @@ import {
     Heading,
     Subheading,
 } from "@storybook/addon-docs/blocks";
+import {
+    ClosableExample,
+    ClosableExampleSource,
+    DefaultExample,
+    DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
+    WithButtonLinkExample,
+    WithButtonLinkExampleSource,
+    WithCustomIconExample,
+    WithCustomIconExampleSource,
+    WithLinkExample,
+    WithLinkExampleSource,
+    WithSpoilerExample,
+    WithSpoilerExampleSource,
+} from "./examples/AlertProcess";
 
-export default {
+const meta = {
     title: "Components/Alerts/AlertProcess",
     component: AlertProcess,
     tags: ["autodocs"],
@@ -56,9 +63,13 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof AlertProcess>;
 
-export const Playground: StoryObj<typeof AlertProcess> = {
+export default meta;
+
+type Story = StoryObj<typeof AlertProcess>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
         children: "This message provides context or highlights important information to note.",
@@ -101,6 +112,7 @@ export const Playground: StoryObj<typeof AlertProcess> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         return (
@@ -115,157 +127,131 @@ export const Playground: StoryObj<typeof AlertProcess> = {
     },
 };
 
-export const Default: StoryObj<typeof AlertProcess> = {
+export const Default: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+    },
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
-            <AlertProcess type={EAlertType.INFO}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-            </AlertProcess>
-            <AlertProcess type={EAlertType.WARNING}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-            </AlertProcess>
-            <AlertProcess type={EAlertType.ERROR}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-            </AlertProcess>
-            <AlertProcess type={EAlertType.SYSTEM}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-            </AlertProcess>
-            <AlertProcess type={EAlertType.FEATURE}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-            </AlertProcess>
-        </div>
-    ),
 };
 
-export const WithCustomIcon: StoryObj<typeof AlertProcess> = {
+export const Types: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+    },
+    render: TypesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithCustomIcon: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+    },
+    render: WithCustomIconExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "Компонент с иконкой, переданной через свойство renderIcon.",
             },
+            source: {
+                code: WithCustomIconExampleSource,
+                language: "tsx",
+            },
         },
     },
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
-            <AlertProcess type={EAlertType.INFO} renderIcon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-            </AlertProcess>
-        </div>
-    ),
 };
 
-export const Closable: StoryObj<typeof AlertProcess> = {
+export const Closable: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: true,
+    },
+    render: ClosableExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const children = (
-            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                This message provides context or highlights important information to note.
-            </Text>
-        );
-
-        return (
-            <div style={{ maxWidth: "750px" }}>
-                <AlertProcess type={EAlertType.INFO} closable onClose={action("onClose")}>
-                    {children}
-                </AlertProcess>
-            </div>
-        );
+        docs: {
+            source: {
+                code: ClosableExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const WithButtonLink: StoryObj<typeof AlertProcess> = {
+export const WithButtonLink: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+    },
+    render: WithButtonLinkExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const children = (
-            <>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-                <Gap size={8} />
-                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                    Button link text
-                </Button>
-            </>
-        );
-
-        return (
-            <div style={{ maxWidth: "750px" }}>
-                <AlertProcess type={EAlertType.INFO}>{children}</AlertProcess>
-            </div>
-        );
+        docs: {
+            source: {
+                code: WithButtonLinkExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const WithLink: StoryObj<typeof AlertProcess> = {
+export const WithLink: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+    },
+    render: WithLinkExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const children = (
-            <>
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    This message provides context or highlights important information to note.
-                </Text>
-                <Gap size={8} />
-                <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                    <Link href="#" onClick={(event) => event.preventDefault()}>
-                        Link text
-                    </Link>
-                </Text>
-            </>
-        );
-
-        return (
-            <div style={{ maxWidth: "750px" }}>
-                <AlertProcess type={EAlertType.INFO}>{children}</AlertProcess>
-            </div>
-        );
+        docs: {
+            source: {
+                code: WithLinkExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const WithSpoiler: StoryObj<typeof AlertProcess> = {
+export const WithSpoiler: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+    },
+    render: WithSpoilerExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: function Render() {
-        const [expanded, setExpanded] = useState(false);
-
-        return (
-            <div style={{ maxWidth: "750px" }}>
-                <AlertProcess type={EAlertType.INFO}>
-                    <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                        По вопросам финмониторинга обращайтесь в рабочие дни с 03:00 до 21:00 МСК с мобильного телефона
-                        по номеру 0321, доб. 6. Звонки по России бесплатные.
-                    </Text>
-                    <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
-                        <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                            У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать
-                            заявления, а также заверять документы, имеет право генеральный директор на основании устава,
-                            владалец ИП на основании доверенности.
-                        </Text>
-                    </AlertProcess.Spoiler>
-                </AlertProcess>
-            </div>
-        );
+        docs: {
+            source: {
+                code: WithSpoilerExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };

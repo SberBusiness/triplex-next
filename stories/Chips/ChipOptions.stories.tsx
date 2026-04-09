@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { ChipOptions } from "../../src/components/Chip/ChipOptions";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { ChipOptions, EComponentSize } from "@sberbusiness/triplex-next";
+import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples/ChipOptions";
 
-export default {
+const meta = {
     title: "Components/Chips/ChipOptions",
     component: ChipOptions,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -30,9 +29,12 @@ Chip с иконкой выбора опций.
             ),
         },
     },
-};
+} satisfies Meta<typeof ChipOptions>;
 
-export const Playground: StoryObj<typeof ChipOptions> = {
+export default meta;
+type Story = StoryObj<typeof ChipOptions>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     render: (args) => {
         const [count, setCount] = useState(0);
@@ -66,60 +68,22 @@ export const Playground: StoryObj<typeof ChipOptions> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
 };
 
-export const Default: StoryObj<typeof ChipOptions> = {
+export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [count, setCount] = useState(0);
-
-        return (
-            <ChipOptions selected={count > 0} onClick={() => setCount((c) => c + 1)} clearSelected={() => setCount(0)}>
-                {count > 0 ? count : undefined}
-            </ChipOptions>
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
-export const Sizes: StoryObj<typeof ChipOptions> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [countSM, setCountSM] = useState(0);
-        const [countMD, setCountMD] = useState(0);
-        const [countLG, setCountLG] = useState(0);
-
-        return (
-            <div style={{ display: "flex", gap: 12 }}>
-                <ChipOptions
-                    size={EComponentSize.SM}
-                    selected={countSM > 0}
-                    onClick={() => setCountSM((c) => c + 1)}
-                    clearSelected={() => setCountSM(0)}
-                >
-                    {countSM > 0 ? countSM : undefined}
-                </ChipOptions>
-                <ChipOptions
-                    size={EComponentSize.MD}
-                    selected={countMD > 0}
-                    onClick={() => setCountMD((c) => c + 1)}
-                    clearSelected={() => setCountMD(0)}
-                >
-                    {countMD > 0 ? countMD : undefined}
-                </ChipOptions>
-                <ChipOptions
-                    size={EComponentSize.LG}
-                    selected={countLG > 0}
-                    onClick={() => setCountLG((c) => c + 1)}
-                    clearSelected={() => setCountLG(0)}
-                >
-                    {countLG > 0 ? countLG : undefined}
-                </ChipOptions>
-            </div>
-        );
+        docs: { source: { code: SizesExampleSource, language: "tsx" } },
     },
 };

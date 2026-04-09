@@ -1,11 +1,17 @@
 import React from "react";
-import { AlertContext } from "../../src/components/Alert";
-import { StoryObj } from "@storybook/react";
-import { EAlertType } from "../../src/components/Alert/EAlertType";
-import { WaitStrokeStsIcon16 } from "@sberbusiness/icons-next";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
+import { AlertContext, EAlertType } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
+    WithCustomIconExample,
+    WithCustomIconExampleSource,
+} from "./examples/AlertContext";
 
-export default {
+const meta = {
     title: "Components/Alerts/AlertContext",
     component: AlertContext,
     tags: ["autodocs"],
@@ -34,9 +40,13 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof AlertContext>;
 
-export const Playground: StoryObj<typeof AlertContext> = {
+export default meta;
+
+type Story = StoryObj<typeof AlertContext>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
         children: "This message provides context or highlights important information to note.",
@@ -63,6 +73,7 @@ export const Playground: StoryObj<typeof AlertContext> = {
         controls: {
             include: ["type", "children"],
         },
+        testRunner: { skip: true },
         docs: {
             canvas: {
                 sourceState: "none",
@@ -72,42 +83,56 @@ export const Playground: StoryObj<typeof AlertContext> = {
     },
 };
 
-export const Default: StoryObj<typeof AlertContext> = {
+export const Default: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+    },
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <AlertContext type={EAlertType.INFO}>
-                This message provides context or highlights important information to note.
-            </AlertContext>
-            <AlertContext type={EAlertType.WARNING}>
-                This message provides context or highlights important information to note.
-            </AlertContext>
-            <AlertContext type={EAlertType.ERROR}>
-                This message provides context or highlights important information to note.
-            </AlertContext>
-            <AlertContext type={EAlertType.SYSTEM}>
-                This message provides context or highlights important information to note.
-            </AlertContext>
-        </div>
-    ),
 };
 
-export const WithCustomIcon: StoryObj<typeof AlertContext> = {
+export const Types: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+    },
+    render: TypesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithCustomIcon: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+    },
+    render: WithCustomIconExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "Компонент с иконкой, переданной через свойство renderIcon.",
             },
+            source: {
+                code: WithCustomIconExampleSource,
+                language: "tsx",
+            },
         },
     },
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <AlertContext type={EAlertType.INFO} renderIcon={<WaitStrokeStsIcon16 paletteIndex={4} />}>
-                This message provides context or highlights important information to note.
-            </AlertContext>
-        </div>
-    ),
 };

@@ -7,14 +7,13 @@ import {
     useMatchMedia,
     ISuggestFieldOption,
     EScreenWidth,
-    EComponentSize,
     EFormFieldStatus,
     ETooltipSize,
     ETextSize,
     EFontType,
 } from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-import { PlaygroundArgs } from "../SuggestField.stories";
+import type { PlaygroundArgs } from "../SuggestField.stories";
 
 const FOOD_NAMES = [
     "Mushroom",
@@ -40,6 +39,13 @@ const FOOD_OPTIONS: ISuggestFieldOption[] = FOOD_NAMES.map((item, index) => ({
     label: item,
 }));
 
+const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
+    [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
+    [EFormFieldStatus.DISABLED]: EFontType.SECONDARY,
+    [EFormFieldStatus.ERROR]: EFontType.ERROR,
+    [EFormFieldStatus.WARNING]: EFontType.WARNING,
+};
+
 const useAdaptive = () =>
     useMatchMedia(`(max-width: ${EScreenWidth.SM_MAX})`, window.innerWidth <= parseInt(EScreenWidth.SM_MAX));
 
@@ -47,7 +53,8 @@ const getFilteredOptions = (query: string): ISuggestFieldOption[] =>
     FOOD_OPTIONS.filter(({ label }) => label.toLowerCase().includes(query.toLowerCase()));
 
 export const PlaygroundExample = ({
-    withClearButton,
+    status,
+    inputProps,
     withPrefix,
     withPostfix,
     withDescription,
@@ -132,18 +139,22 @@ export const PlaygroundExample = ({
         }
     }, [withPostfix]);
 
+    const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
+        event.preventDefault();
+    }, []);
+
     const renderDescriptionInner = useCallback(() => {
         if (withDescription) {
             return (
-                <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status!]}>
                     (21) Description{" "}
-                    <Link href="#" onClick={(event) => event.preventDefault()}>
+                    <Link href="#" onClick={handleLinkClick}>
                         Link text
                     </Link>
                 </Text>
             );
         }
-    }, [withDescription]);
+    }, [withDescription, status, handleLinkClick]);
 
     return (
         <div style={{ maxWidth: 300 }}>
@@ -151,11 +162,13 @@ export const PlaygroundExample = ({
                 {...restArgs}
                 value={value}
                 options={options}
+                status={status}
                 tooltipOpen={tooltipOpen}
                 onFilter={handleFilter}
                 onSelect={handleSelect}
-                onClear={withClearButton ? handleClear : undefined}
+                onClear={withPostfix ? handleClear : undefined}
                 inputProps={{
+                    ...inputProps,
                     onBlur: handleInputBlur,
                     onMouseDown: handleInputMouseDown,
                     ref: inputRef,

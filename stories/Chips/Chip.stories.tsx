@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { Chip } from "../../src/components/Chip/Chip";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, ArgTypes, Heading, Primary } from "@storybook/addon-docs/blocks";
-import { SortStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { Chip, EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    StatesExample,
+    StatesExampleSource,
+    WithPrefixAndPostfixExample,
+    WithPrefixAndPostfixExampleSource,
+} from "./examples/Chip";
 
-export default {
+const meta = {
     title: "Components/Chips/Chip",
     component: Chip,
     tags: ["autodocs"],
@@ -34,9 +42,12 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof Chip>;
 
-export const Playground: StoryObj<typeof Chip> = {
+export default meta;
+type Story = StoryObj<typeof Chip>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     render: (args) => {
         const [selected, setSelected] = useState(false);
@@ -72,68 +83,35 @@ export const Playground: StoryObj<typeof Chip> = {
 };
 
 export const Default: StoryObj<typeof Chip> = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selected, setSelected] = useState(false);
-        return (
-            <Chip selected={selected} onClick={() => setSelected((s) => !s)}>
-                Value
-            </Chip>
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
-export const Sizes: StoryObj<typeof Chip> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selectedSM, setSelectedSM] = useState(false);
-        const [selectedMD, setSelectedMD] = useState(false);
-        const [selectedLG, setSelectedLG] = useState(false);
-        const handleClickSM = () => setSelectedSM((s) => !s);
-        const handleClickMD = () => setSelectedMD((s) => !s);
-        const handleClickLG = () => setSelectedLG((s) => !s);
-
-        return (
-            <div style={{ display: "flex", gap: 12 }}>
-                <Chip size={EComponentSize.SM} selected={selectedSM} onClick={handleClickSM}>
-                    SM
-                </Chip>
-                <Chip size={EComponentSize.MD} selected={selectedMD} onClick={handleClickMD}>
-                    MD
-                </Chip>
-                <Chip size={EComponentSize.LG} selected={selectedLG} onClick={handleClickLG}>
-                    LG
-                </Chip>
-            </div>
-        );
+        docs: { source: { code: SizesExampleSource, language: "tsx" } },
     },
 };
 
-export const States: StoryObj<typeof Chip> = {
+export const States: Story = {
+    render: StatesExample,
     parameters: {
         controls: { disable: true },
+        docs: { source: { code: StatesExampleSource, language: "tsx" } },
     },
-    render: () => (
-        <div style={{ display: "flex", gap: 12 }}>
-            <Chip selected>Selected</Chip>
-            <Chip disabled>Disabled</Chip>
-        </div>
-    ),
 };
 
-export const WithPrefixAndPostfix: StoryObj<typeof Chip> = {
+export const WithPrefixAndPostfix: Story = {
+    render: WithPrefixAndPostfixExample,
     parameters: {
         controls: { disable: true },
+        docs: { source: { code: WithPrefixAndPostfixExampleSource, language: "tsx" } },
     },
-    render: () => (
-        <Chip prefix={<SortStrokeSrvIcon20 paletteIndex={5} />} postfix={<SortStrokeSrvIcon20 paletteIndex={5} />}>
-            Value
-        </Chip>
-    ),
 };
 
 export const WithNotificationIcon: StoryObj<typeof Chip> = {

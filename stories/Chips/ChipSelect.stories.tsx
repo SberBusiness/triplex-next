@@ -1,17 +1,25 @@
 import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { ChipSelect, IChipSelectProps } from "../../src/components/Chip/";
 import { ISelectFieldOption } from "../../src/components/SelectField/SelectField";
-import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Title, Description, Controls, Stories, Heading, ArgTypes, Primary } from "@storybook/addon-docs/blocks";
-import { Text, ETextSize } from "../../src/components/Typography";
+import { EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    StatesExample,
+    StatesExampleSource,
+    WithCustomDisplayedValueExample,
+    WithCustomDisplayedValueExampleSource,
+} from "./examples/ChipSelect";
 
-export default {
+const meta = {
     title: "Components/Chips/ChipSelect",
     component: ChipSelect,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -32,7 +40,9 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof ChipSelect>;
+
+export default meta;
 
 const demoOptions: ISelectFieldOption[] = [
     { id: "1", value: "option1", label: "Первая опция" },
@@ -140,135 +150,36 @@ export const Playground: StoryObj<IChipSelectPlaygroundProps> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
 };
 
 export const Default: StoryObj = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selected, setSelected] = useState<ISelectFieldOption | undefined>();
-
-        const demoOptions: ISelectFieldOption[] = [
-            { id: "1", value: "option1", label: "Первая опция" },
-            { id: "2", value: "option2", label: "Вторая опция" },
-            { id: "3", value: "option3", label: "Третья опция" },
-            { id: "4", value: "option4", label: "Четвертая опция" },
-            { id: "5", value: "option5", label: "Пятая опция" },
-            { id: "6", value: "option6", label: "Шестая опция" },
-        ];
-
-        return (
-            <ChipSelect
-                label="Select label"
-                options={demoOptions}
-                value={selected}
-                onChange={setSelected}
-                clearSelected={() => setSelected(undefined)}
-            />
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
 export const Sizes: StoryObj = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selectedSM, setSelectedSM] = useState<ISelectFieldOption | undefined>();
-        const [selectedMD, setSelectedMD] = useState<ISelectFieldOption | undefined>();
-        const [selectedLG, setSelectedLG] = useState<ISelectFieldOption | undefined>();
-
-        const demoOptions: ISelectFieldOption[] = [
-            { id: "1", value: "option1", label: "Первая опция" },
-            { id: "2", value: "option2", label: "Вторая опция" },
-            { id: "3", value: "option3", label: "Третья опция" },
-            { id: "4", value: "option4", label: "Четвертая опция" },
-            { id: "5", value: "option5", label: "Пятая опция" },
-            { id: "6", value: "option6", label: "Шестая опция" },
-        ];
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                <ChipSelect
-                    label="SM"
-                    options={demoOptions}
-                    value={selectedSM}
-                    onChange={setSelectedSM}
-                    clearSelected={() => setSelectedSM(undefined)}
-                    size={EComponentSize.SM}
-                />
-                <ChipSelect
-                    label="MD"
-                    options={demoOptions}
-                    value={selectedMD}
-                    onChange={setSelectedMD}
-                    clearSelected={() => setSelectedMD(undefined)}
-                    size={EComponentSize.MD}
-                />
-                <ChipSelect
-                    label="LG"
-                    options={demoOptions}
-                    value={selectedLG}
-                    onChange={setSelectedLG}
-                    clearSelected={() => setSelectedLG(undefined)}
-                    size={EComponentSize.LG}
-                />
-            </div>
-        );
+        docs: { source: { code: SizesExampleSource, language: "tsx" } },
     },
 };
 
 export const States: StoryObj = {
+    render: StatesExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "ChipSelect в состояниях selected, disabled.",
             },
+            source: { code: StatesExampleSource, language: "tsx" },
         },
-    },
-    render: () => {
-        const demoOptions: ISelectFieldOption[] = [
-            { id: "1", value: "option1", label: "Первая опция" },
-            { id: "2", value: "option2", label: "Вторая опция" },
-            { id: "3", value: "option3", label: "Третья опция" },
-            { id: "4", value: "option4", label: "Четвертая опция" },
-            { id: "5", value: "option5", label: "Пятая опция" },
-            { id: "6", value: "option6", label: "Шестая опция" },
-        ];
-
-        const [selectedWithValue, setSelectedWithValue] = useState<ISelectFieldOption | undefined>(demoOptions[0]);
-        const [selectedDisabled, setSelectedDisabled] = useState<ISelectFieldOption | undefined>(demoOptions[1]);
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>Selected</Text>
-                    <ChipSelect
-                        label="Select label"
-                        options={demoOptions}
-                        value={selectedWithValue}
-                        onChange={setSelectedWithValue}
-                        clearSelected={() => setSelectedWithValue(undefined)}
-                        size={EComponentSize.MD}
-                    />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>Disabled</Text>
-                    <ChipSelect
-                        label="Select label"
-                        options={demoOptions}
-                        value={selectedDisabled}
-                        onChange={setSelectedDisabled}
-                        clearSelected={() => setSelectedDisabled(undefined)}
-                        disabled
-                        size={EComponentSize.MD}
-                    />
-                </div>
-            </div>
-        );
     },
 };
 
@@ -305,36 +216,14 @@ export const WithNotificationIcon: StoryObj = {
 };
 
 export const WithCustomDisplayedValue: StoryObj = {
+    render: WithCustomDisplayedValueExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "ChipSelect с переданным displayedValue.",
             },
+            source: { code: WithCustomDisplayedValueExampleSource, language: "tsx" },
         },
-    },
-    render: () => {
-        const demoOptions: ISelectFieldOption[] = [
-            { id: "1", value: "option1", label: "Первая опция" },
-            { id: "2", value: "option2", label: "Вторая опция" },
-            { id: "3", value: "option3", label: "Третья опция" },
-            { id: "4", value: "option4", label: "Четвертая опция" },
-            { id: "5", value: "option5", label: "Пятая опция" },
-            { id: "6", value: "option6", label: "Шестая опция" },
-        ];
-
-        const [selected, setSelected] = useState<ISelectFieldOption | undefined>(demoOptions[0]);
-
-        return (
-            <ChipSelect
-                label="Select label"
-                options={demoOptions}
-                value={selected}
-                onChange={setSelected}
-                clearSelected={() => setSelected(undefined)}
-                displayedValue="Displayed value"
-                size={EComponentSize.MD}
-            />
-        );
     },
 };

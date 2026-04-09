@@ -1,9 +1,5 @@
 import React from "react";
-import { Button, EButtonTheme } from "../../src/components/Button";
-import { StoryObj } from "@storybook/react";
-import { Gap } from "../../src/components/Gap";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { DefaulticonStrokePrdIcon32, DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
+import { Meta, StoryObj } from "@storybook/react";
 import {
     Title as DocsTitle,
     Description,
@@ -13,9 +9,25 @@ import {
     ArgTypes,
     Heading,
 } from "@storybook/addon-docs/blocks";
-import { Text, ETextSize } from "../../src/components/Typography";
+import { Button, EButtonTheme, EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    BlockModeExample,
+    BlockModeExampleSource,
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    StatesExample,
+    StatesExampleSource,
+    TextWithIconExample,
+    TextWithIconExampleSource,
+    ThemesExample,
+    ThemesExampleSource,
+    WithIconExample,
+    WithIconExampleSource,
+} from "./examples/Button";
 
-export default {
+const meta = {
     title: "Components/Buttons/Button",
     component: Button,
     tags: ["autodocs"],
@@ -45,9 +57,13 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof Button>;
 
-export const Playground: StoryObj<typeof Button> = {
+export default meta;
+
+type Story = StoryObj<typeof Button>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
         children: "Button text",
@@ -112,291 +128,136 @@ export const Playground: StoryObj<typeof Button> = {
 };
 
 export const Default: StoryObj<typeof Button> = {
+    args: {
+        children: "Button text",
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+    },
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => (
-        <div style={{ maxWidth: "250px" }}>
-            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                Button text
-            </Button>
-        </div>
-    ),
-};
-
-export const States: StoryObj<typeof Button> = {
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Text size={ETextSize.B3}>Expanded</Text>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded>
-                        General
-                    </Button>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} aria-expanded>
-                        Secondary
-                    </Button>
-                    <Button theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD} aria-expanded>
-                        Secondary Light
-                    </Button>
-                    <Button theme={EButtonTheme.DANGER} size={EComponentSize.MD} aria-expanded>
-                        Danger
-                    </Button>
-                    <Button
-                        theme={EButtonTheme.GENERAL}
-                        size={EComponentSize.MD}
-                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={7} />}
-                        aria-expanded
-                    />
-                </div>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Text size={ETextSize.B3}>Loading</Text>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <Button loading theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                    <Button loading theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                    <Button loading theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                    <Button loading theme={EButtonTheme.DANGER} size={EComponentSize.MD}>
-                        Button text
-                    </Button>
-                    <Button
-                        loading
-                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                        size={EComponentSize.MD}
-                        theme={EButtonTheme.GENERAL}
-                    />
-                </div>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Text size={ETextSize.B3}>Disabled</Text>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <Button disabled theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                        General
-                    </Button>
-                    <Button disabled theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                        Secondary
-                    </Button>
-                    <Button disabled theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD}>
-                        Secondary Light
-                    </Button>
-                    <Button disabled theme={EButtonTheme.DANGER} size={EComponentSize.MD}>
-                        Danger
-                    </Button>
-                    <Button disabled theme={EButtonTheme.LINK} size={EComponentSize.MD}>
-                        Link
-                    </Button>
-                    <Button
-                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={7} />}
-                        size={EComponentSize.MD}
-                        theme={EButtonTheme.GENERAL}
-                        disabled
-                    />
-                </div>
-            </div>
-        </div>
-    ),
-    parameters: {
         docs: {
-            description: {
-                story: "Кнопка в состояниях expanded, loading, disabled.",
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
             },
         },
-        controls: { disable: true },
     },
 };
 
-export const Sizes: StoryObj<typeof Button> = {
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Text size={ETextSize.B3}>EComponentSize.SM</Text>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <Button size={EComponentSize.SM} theme={EButtonTheme.GENERAL}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.SM} theme={EButtonTheme.SECONDARY}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.SM} theme={EButtonTheme.SECONDARY_LIGHT}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.SM} theme={EButtonTheme.DANGER}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.SM} theme={EButtonTheme.LINK}>
-                        Button text
-                    </Button>
-                </div>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Text size={ETextSize.B3}>EComponentSize.MD</Text>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.GENERAL}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.SECONDARY_LIGHT}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.DANGER}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.MD} theme={EButtonTheme.LINK}>
-                        Button text
-                    </Button>
-                </div>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <Text size={ETextSize.B3}>EComponentSize.LG</Text>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <Button size={EComponentSize.LG} theme={EButtonTheme.GENERAL}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.LG} theme={EButtonTheme.SECONDARY}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.LG} theme={EButtonTheme.SECONDARY_LIGHT}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.LG} theme={EButtonTheme.DANGER}>
-                        Button text
-                    </Button>
-                    <Button size={EComponentSize.LG} theme={EButtonTheme.LINK}>
-                        Button text
-                    </Button>
-                </div>
-            </div>
-        </div>
-    ),
+export const States: Story = {
+    args: {
+        children: "Button text",
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+    },
+    render: StatesExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: StatesExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const Themes: StoryObj<typeof Button> = {
-    render: () => {
-        return (
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                    General
-                </Button>
-                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                    Secondary
-                </Button>
-                <Button theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD}>
-                    Secondary Light
-                </Button>
-                <Button theme={EButtonTheme.DANGER} size={EComponentSize.MD}>
-                    Danger
-                </Button>
-                <Button theme={EButtonTheme.LINK} size={EComponentSize.MD}>
-                    Link
-                </Button>
-            </div>
-        );
+export const Sizes: Story = {
+    args: {
+        children: "Button text",
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
     },
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const WithIcon: StoryObj<typeof Button> = {
-    render: () => (
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Button
-                icon={<DefaulticonStrokePrdIcon20 paletteIndex={7} />}
-                size={EComponentSize.SM}
-                theme={EButtonTheme.GENERAL}
-            />
-            <Button
-                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                size={EComponentSize.MD}
-                theme={EButtonTheme.SECONDARY}
-            />
-            <Button
-                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                size={EComponentSize.MD}
-                theme={EButtonTheme.SECONDARY_LIGHT}
-            />
-            <Button
-                icon={<DefaulticonStrokePrdIcon32 paletteIndex={7} />}
-                size={EComponentSize.LG}
-                theme={EButtonTheme.DANGER}
-            />
-        </div>
-    ),
+export const Themes: Story = {
+    args: {
+        children: "Button text",
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+    },
+    render: ThemesExample,
     parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ThemesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithIcon: Story = {
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+    },
+    render: WithIconExample,
+    parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Кнопка с иконкой, переданной через свойство icon.",
             },
+            source: {
+                code: WithIconExampleSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
-export const BlockMode: StoryObj<typeof Button> = {
-    render: () => (
-        <div style={{ maxWidth: 280 }}>
-            <Button block theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                General
-            </Button>
-            <Gap size={16} />
-            <Button block theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                Secondary
-            </Button>
-            <Gap size={16} />
-            <Button block theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD}>
-                Secondary Light
-            </Button>
-            <Gap size={16} />
-            <Button
-                block
-                size={EComponentSize.MD}
-                theme={EButtonTheme.DANGER}
-                icon={<DefaulticonStrokePrdIcon20 paletteIndex={7} />}
-            />
-        </div>
-    ),
+export const BlockMode: Story = {
+    args: {
+        children: "General",
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        block: true,
+    },
+    render: BlockModeExample,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Кнопка в блочном режиме (свойство block).",
             },
+            source: {
+                code: BlockModeExampleSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
-export const TextWithIcon: StoryObj<typeof Button> = {
+export const TextWithIcon: Story = {
     args: {
-        icon: <DefaulticonStrokePrdIcon20 paletteIndex={5} />,
+        children: "Button text",
         theme: EButtonTheme.LINK,
         size: EComponentSize.MD,
     },
+    render: TextWithIconExample,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Контент кнопки состоит из текста и иконки (свойство icon).",
             },
+            source: {
+                code: TextWithIconExampleSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
-    render: (args) => (
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Button {...args}>&nbsp;Button text</Button>
-        </div>
-    ),
 };

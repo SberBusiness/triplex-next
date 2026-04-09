@@ -96,9 +96,9 @@ export const DefaultExample = () => {
                 options={options}
                 size={EComponentSize.LG}
                 status={EFormFieldStatus.DEFAULT}
-                label={"Label"}
-                placeholder={"Type to proceed"}
-                tooltipHint={"No matches found."}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
                 tooltipOpen={tooltipOpen}
                 onFilter={handleFilter}
                 onSelect={handleSelect}

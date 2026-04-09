@@ -1,12 +1,10 @@
 import React from "react";
-import { Amount, IAmountProps } from "../../src/components/Amount";
-import { Row } from "../../src/components/Row";
-import { Col } from "../../src/components/Col";
-import { StoryObj } from "@storybook/react";
-import { EFontType, EFontWeightText, ETextSize, Text } from "../../src/components/Typography";
+import { Meta, StoryObj } from "@storybook/react";
+import { Amount, EFontType, ETextSize, Text } from "@sberbusiness/triplex-next";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { DefaultExample, DefaultExampleSource, ShowcaseExample, ShowcaseExampleSource } from "./examples";
 
-export default {
+const meta = {
     title: "Components/Amount",
     component: Amount,
     tags: ["autodocs"],
@@ -31,14 +29,13 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof Amount>;
 
-interface IAmountStoriesProps extends IAmountProps {
-    size: ETextSize;
-    type: EFontType;
-}
+export default meta;
 
-export const Playground: StoryObj<IAmountStoriesProps> = {
+type Story = StoryObj<typeof Amount>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     argTypes: {
         value: {
@@ -91,115 +88,42 @@ export const Playground: StoryObj<IAmountStoriesProps> = {
     },
 };
 
-export const Default: StoryObj<IAmountStoriesProps> = {
+export const Default: Story = {
+    args: {
+        value: "8967452.31",
+        currency: "RUB",
+        currencyTitle: "Российские рубли",
+        fractionLength: 2,
+        adaptive: false,
+    },
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => {
-        const commonProps = { currency: "RUB", currencyTitle: "Российские рубли" };
+};
 
-        const data = [
-            {
-                title: "Обычный",
-                element: (
-                    <Text size={ETextSize.B2}>
-                        <Amount value="8967452.3145" {...commonProps} />
-                    </Text>
-                ),
+export const Example: Story = {
+    args: {
+        value: "8967452.31",
+        currency: "RUB",
+        currencyTitle: "Российские рубли",
+        fractionLength: 2,
+        adaptive: false,
+    },
+    render: ShowcaseExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ShowcaseExampleSource,
+                language: "tsx",
             },
-            {
-                title: "Без копеек",
-                element: (
-                    <Text size={ETextSize.B2}>
-                        <Amount value="8967452.31" fractionLength={0} {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "С 4 знаками после разделителя",
-                element: (
-                    <Text size={ETextSize.B2}>
-                        <Amount key="2" value="8967452.31" fractionLength={4} {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "Положительный",
-                element: (
-                    <Text size={ETextSize.B3}>
-                        <Amount value="+8967452.31" {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "Положительный (цвет)",
-                element: (
-                    <Text size={ETextSize.B3} type={EFontType.BRAND}>
-                        <Amount value="+8967452.31" {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "Отрицательный",
-                element: (
-                    <Text size={ETextSize.B3}>
-                        <Amount value="-8967452.31" {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "Отрицательный (цвет)",
-                element: (
-                    <Text size={ETextSize.B3} type={EFontType.ERROR}>
-                        <Amount value="-8967452.31" {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "Без валюты",
-                element: (
-                    <Text size={ETextSize.B2}>
-                        <Amount value="8967452.31" />
-                    </Text>
-                ),
-            },
-            {
-                title: "Большая сумма (50 миллиардов)",
-                element: (
-                    <Text size={ETextSize.B2}>
-                        <Amount value="50000000000.31" {...commonProps} />
-                    </Text>
-                ),
-            },
-            {
-                title: "Адаптивная большая сумма (50 миллиардов)",
-                element: (
-                    <Text size={ETextSize.B2}>
-                        <Amount value="50000000000.31" {...commonProps} adaptive />
-                    </Text>
-                ),
-            },
-            {
-                title: "Акцент",
-                element: (
-                    <Text size={ETextSize.B3} weight={EFontWeightText.SEMIBOLD}>
-                        <Amount value="8967452.31" {...commonProps} />
-                    </Text>
-                ),
-            },
-        ];
-
-        return (
-            <>
-                {data.map(({ title, element }, index) => (
-                    <Row key={index}>
-                        <Col size={4}>
-                            <Text size={ETextSize.B2}>{title}</Text>
-                        </Col>
-                        <Col size={4}>{element}</Col>
-                    </Row>
-                ))}
-            </>
-        );
+        },
     },
 };

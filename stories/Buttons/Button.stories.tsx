@@ -26,6 +26,8 @@ import {
     ThemesExampleSource,
     WithIconExample,
     WithIconExampleSource,
+    WithNotificationIconExample,
+    WithNotificationIconExampleSource,
 } from "./examples/Button";
 
 const meta = {
@@ -216,6 +218,23 @@ export const WithIcon: Story = {
     },
 };
 
+export const WithNotificationIcon: Story = {
+    args: {
+        theme: EButtonTheme.SECONDARY,
+        size: EComponentSize.MD,
+    },
+    render: WithNotificationIconExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Кнопка с иконкой и Badge.Dot.",
+            },
+            source: { code: WithNotificationIconExampleSource, language: "tsx" },
+        },
+    },
+};
+
 export const BlockMode: Story = {
     args: {
         children: "General",
@@ -242,7 +261,6 @@ export const TextWithIcon: Story = {
     args: {
         children: "Button text",
         theme: EButtonTheme.LINK,
-        size: EComponentSize.MD,
     },
     render: TextWithIconExample,
     parameters: {

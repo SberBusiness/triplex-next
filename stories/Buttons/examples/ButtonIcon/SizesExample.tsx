@@ -7,7 +7,7 @@ import {
 } from "@sberbusiness/icons-next";
 import { ButtonIcon, EButtonIconShape } from "@sberbusiness/triplex-next";
 
-export const ButtonIconSizesExample = () => (
+export const SizesExample = () => (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <ButtonIcon shape={EButtonIconShape.SQUIRCLE}>
             <DefaulticonStrokePrdIcon16 paletteIndex={5} />

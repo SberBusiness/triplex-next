@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, EButtonTheme, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const ButtonThemesExample = () => (
+export const ThemesExample = () => (
     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
         <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
             General

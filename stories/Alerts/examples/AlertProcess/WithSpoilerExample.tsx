@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AlertProcess, EAlertType, EFontType, ETextSize, Text } from "@sberbusiness/triplex-next";
 
-export const AlertProcessWithSpoilerExample = () => {
+export const WithSpoilerExample = () => {
     const [expanded, setExpanded] = useState(false);
 
     return (

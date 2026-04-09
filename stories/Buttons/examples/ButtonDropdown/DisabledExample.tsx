@@ -13,7 +13,7 @@ const OPTIONS: IButtonDropdownOption[] = [
     { id: "opt-3", label: "Действие 3", onSelect: () => undefined },
 ];
 
-export const ButtonDropdownDisabledExample = () => (
+export const DisabledExample = () => (
     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
         <ButtonDropdown disabled theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={OPTIONS}>
             Button text

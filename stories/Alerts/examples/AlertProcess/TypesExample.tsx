@@ -3,7 +3,7 @@ import { AlertProcess, EAlertType, EFontType, ETextSize, Text } from "@sberbusin
 
 const TYPES = Object.values(EAlertType);
 
-export const AlertProcessTypesExample = () => (
+export const TypesExample = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
         {TYPES.map((type) => (
             <div key={type}>

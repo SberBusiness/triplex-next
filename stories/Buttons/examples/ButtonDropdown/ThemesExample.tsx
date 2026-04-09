@@ -13,7 +13,7 @@ const OPTIONS: IButtonDropdownOption[] = [
     { id: "opt-3", label: "Действие 3", onSelect: () => undefined },
 ];
 
-export const ButtonDropdownThemesExample = () => (
+export const ThemesExample = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
             <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={OPTIONS}>

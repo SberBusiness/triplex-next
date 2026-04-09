@@ -15,6 +15,7 @@ import {
     BlockModeExampleSource,
     DefaultExample,
     DefaultExampleSource,
+    PlaygroundExample,
     DisabledExample,
     DisabledExampleSource,
     SizesExample,
@@ -91,17 +92,7 @@ type Story = StoryObj<typeof ButtonDropdown>;
 
 export const Playground: Story = {
     tags: ["!autodocs"],
-    render: (args) => {
-        const options = createOptions();
-        const { children, ...rest } = args;
-        return (
-            <div style={{ width: 280 }}>
-                <ButtonDropdown {...rest} options={options}>
-                    {children}
-                </ButtonDropdown>
-            </div>
-        );
-    },
+    render: PlaygroundExample,
     argTypes: {
         children: {
             control: { type: "text" },

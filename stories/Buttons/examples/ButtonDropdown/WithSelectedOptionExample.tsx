@@ -7,7 +7,7 @@ const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOpti
     { id: "opt-3", label: "Действие 3", onSelect: () => onItemSelect?.("opt-3") },
 ];
 
-export const ButtonDropdownWithSelectedOptionExample = () => {
+export const WithSelectedOptionExample = () => {
     const [selectedId, setSelectedId] = useState<string | undefined>("opt-2");
     const options = useMemo(() => createOptions(setSelectedId), []);
     const selected = options.find((o) => o.id === selectedId);

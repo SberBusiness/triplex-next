@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertProcess, EAlertType, EFontType, ETextSize, Gap, Link, Text } from "@sberbusiness/triplex-next";
 
-export const AlertProcessWithLinkExample = () => (
+export const WithLinkExample = () => (
     <div style={{ maxWidth: "750px" }}>
         <AlertProcess type={EAlertType.INFO}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>

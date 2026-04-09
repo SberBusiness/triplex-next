@@ -5,6 +5,7 @@ import { AlertContext, EAlertType } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
+    PlaygroundExample,
     TypesExample,
     TypesExampleSource,
     WithCustomIconExample,
@@ -81,6 +82,7 @@ export const Playground: Story = {
             codePanel: false,
         },
     },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

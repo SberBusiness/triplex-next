@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertProcess, EAlertType, EFontType, ETextSize, Text } from "@sberbusiness/triplex-next";
 
-export const AlertProcessClosableExample = () => (
+export const ClosableExample = () => (
     <div style={{ maxWidth: "750px" }}>
         <AlertProcess type={EAlertType.INFO} closable onClose={() => undefined}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>

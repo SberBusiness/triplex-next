@@ -1,8 +1,14 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Amount, EFontType, ETextSize, Text } from "@sberbusiness/triplex-next";
+import { Amount } from "@sberbusiness/triplex-next";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
-import { DefaultExample, DefaultExampleSource, ShowcaseExample, ShowcaseExampleSource } from "./examples";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    PlaygroundExample,
+    ShowcaseExample,
+    ShowcaseExampleSource,
+} from "./examples";
 
 const meta = {
     title: "Components/Amount",
@@ -79,13 +85,7 @@ export const Playground: Story = {
         },
         testRunner: { skip: true },
     },
-    render: (args) => {
-        return (
-            <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
-                <Amount {...args} />
-            </Text>
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

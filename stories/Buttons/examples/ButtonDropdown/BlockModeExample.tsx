@@ -7,7 +7,7 @@ const OPTIONS: IButtonDropdownOption[] = [
     { id: "opt-3", label: "Действие 3", onSelect: () => undefined },
 ];
 
-export const ButtonDropdownBlockModeExample = () => (
+export const BlockModeExample = () => (
     <div style={{ maxWidth: 280 }}>
         <ButtonDropdown block theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={OPTIONS}>
             Button text

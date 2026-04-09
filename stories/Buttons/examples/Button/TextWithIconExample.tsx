@@ -2,7 +2,7 @@ import React from "react";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Button, EButtonTheme, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const ButtonTextWithIconExample = () => (
+export const TextWithIconExample = () => (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <Button
             icon={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}

@@ -2,7 +2,7 @@ import React from "react";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import { Button, EButtonTheme, EComponentSize, Gap } from "@sberbusiness/triplex-next";
 
-export const ButtonBlockModeExample = () => (
+export const BlockModeExample = () => (
     <div style={{ maxWidth: 280 }}>
         <Button block theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
             General

@@ -1,12 +1,12 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { ButtonIcon, EButtonIconShape } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
+    PlaygroundExample,
     DisabledExample,
     DisabledExampleSource,
     SizesExample,
@@ -103,11 +103,7 @@ export const Playground: Story = {
             codePanel: false,
         },
     },
-    render: (args) => (
-        <ButtonIcon {...args}>
-            <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-        </ButtonIcon>
-    ),
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

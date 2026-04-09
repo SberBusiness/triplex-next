@@ -15,6 +15,7 @@ import {
     BlockModeExampleSource,
     DefaultExample,
     DefaultExampleSource,
+    PlaygroundExample,
     SizesExample,
     SizesExampleSource,
     StatesExample,
@@ -120,11 +121,7 @@ export const Playground: Story = {
         },
         testRunner: { skip: true },
     },
-    render: (args) => (
-        <div style={{ width: "250px" }}>
-            <Button {...args} />
-        </div>
-    ),
+    render: PlaygroundExample,
 };
 
 export const Default: StoryObj<typeof Button> = {

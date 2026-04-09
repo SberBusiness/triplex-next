@@ -1,13 +1,13 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Stories, Heading, Controls, Primary } from "@storybook/addon-docs/blocks";
-import { Badge, EComponentSize, EFontType, EFontWeightText, ETextSize, Text } from "@sberbusiness/triplex-next";
-import { BadgeDot } from "../../src/components/Badge/BadgeDot";
+import { Badge, EComponentSize } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
     DotSizesExample,
     DotSizesExampleSource,
+    PlaygroundExample,
     ProductionExample,
     ProductionExampleSource,
     SizesExample,
@@ -76,13 +76,7 @@ export const Playground: Story = {
             },
         },
     },
-    render: (args) => (
-        <Badge size={args.size}>
-            <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
-                Badge text
-            </Text>
-        </Badge>
-    ),
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {
@@ -134,7 +128,7 @@ export const WithPrefixAndPostfix: Story = {
     },
 };
 
-export const DotSizes: StoryObj<typeof BadgeDot> = {
+export const DotSizes: StoryObj<typeof Badge.Dot> = {
     parameters: {
         controls: { disable: true },
         docs: {

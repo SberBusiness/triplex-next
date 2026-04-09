@@ -7,6 +7,7 @@ import {
     DefaultExampleSource,
     ExampleUsage,
     ExampleUsageSource,
+    PlaygroundExample,
     SizesExample,
     SizesExampleSource,
 } from "./examples";
@@ -69,7 +70,7 @@ export const Playground: Story = {
     args: {
         size: EAvatarSize.XXL,
     },
-    render: (args) => <Avatar {...args} />,
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

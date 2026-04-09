@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { AlertProcess, EAlertType, EFontType, ETextSize, Text } from "@sberbusiness/triplex-next";
+import { AlertProcess, EAlertType } from "@sberbusiness/triplex-next";
 import {
     Title,
     Description,
@@ -17,6 +17,7 @@ import {
     ClosableExampleSource,
     DefaultExample,
     DefaultExampleSource,
+    PlaygroundExample,
     TypesExample,
     TypesExampleSource,
     WithButtonLinkExample,
@@ -114,17 +115,7 @@ export const Playground: Story = {
         },
         testRunner: { skip: true },
     },
-    render: (args) => {
-        return (
-            <div style={{ maxWidth: "750px" }}>
-                <AlertProcess {...args}>
-                    <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
-                        {args.children}
-                    </Text>
-                </AlertProcess>
-            </div>
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

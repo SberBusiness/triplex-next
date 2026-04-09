@@ -1,9 +1,9 @@
 import React from "react";
 import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
-import { ButtonIcon, EButtonIconShape } from "@sberbusiness/triplex-next";
+import { ButtonIcon } from "@sberbusiness/triplex-next";
 
-export const ButtonIconDefaultExample = () => (
-    <ButtonIcon shape={EButtonIconShape.SQUIRCLE}>
+export const PlaygroundExample = (args: React.ComponentProps<typeof ButtonIcon>) => (
+    <ButtonIcon {...args}>
         <DefaulticonStrokePrdIcon32 paletteIndex={5} />
     </ButtonIcon>
 );

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, EButtonTheme, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const ButtonSizesExample = () => (
+export const SizesExample = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>

@@ -13,7 +13,7 @@ const OPTIONS: IButtonDropdownOption[] = [
     { id: "opt-3", label: "Действие 3", onSelect: () => undefined },
 ];
 
-export const ButtonDropdownSizesExample = () => (
+export const SizesExample = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>

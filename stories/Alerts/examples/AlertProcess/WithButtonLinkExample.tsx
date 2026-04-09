@@ -11,7 +11,7 @@ import {
     Text,
 } from "@sberbusiness/triplex-next";
 
-export const AlertProcessWithButtonLinkExample = () => (
+export const WithButtonLinkExample = () => (
     <div style={{ maxWidth: "750px" }}>
         <AlertProcess type={EAlertType.INFO}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>

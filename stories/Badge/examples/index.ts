@@ -8,3 +8,6 @@ export * from "./DotSizesExample";
 export { default as DotSizesExampleSource } from "./DotSizesExample?raw";
 export * from "./ProductionExample";
 export { default as ProductionExampleSource } from "./ProductionExample?raw";
+
+export * from "./PlaygroundExample";
+export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";

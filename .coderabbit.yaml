@@ -14,7 +14,6 @@ knowledge_base:
     filePatterns:
       - "AGENTS.md"
       - "CLAUDE.md"
-      - "docs/ai/CODING_GUIDELINES.md"
       - "docs/ai/codestyle.md"
       - "docs/ai/tests.md"
       - "docs/ai/stories-guide.md"
@@ -50,7 +49,7 @@ reviews:
   path_instructions:
     - path: "src/components/**/*.tsx"
       instructions: |
-        Проверь по docs/ai/codestyle.md и docs/ai/CODING_GUIDELINES.md:
+        Проверь по docs/ai/codestyle.md:
         - className и ...rest пробрасываются в корневой элемент
         - clsx для className — никакой конкатенации строк
         - Нет any, нет non-null assertions без комментария

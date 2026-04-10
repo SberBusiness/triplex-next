@@ -6,3 +6,4 @@ export * from "./WithoutTitleExample";
 export { default as WithoutTitleExampleSource } from "./WithoutTitleExample?raw";
 export * from "./WithButtonsExample";
 export { default as WithButtonsExampleSource } from "./WithButtonsExample?raw";
+export * from "./PlaygroundExample";

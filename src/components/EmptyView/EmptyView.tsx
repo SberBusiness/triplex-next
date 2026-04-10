@@ -5,7 +5,7 @@ import { EEmptyViewSize } from "./enums";
 import { Title } from "../Typography/Title";
 import { EFontType, EFontWeightText, EFontWeightTitle, ETextSize, ETitleSize } from "../Typography/enums";
 import { Text } from "../Typography/Text";
-import { Gap } from "../Gap/Gap";
+import { Gap, TGapSize } from "../Gap/Gap";
 import styles from "./styles/EmptyView.module.less";
 
 const SIZE_CLASS_MAP: Record<EEmptyViewSize, string> = {
@@ -13,40 +13,25 @@ const SIZE_CLASS_MAP: Record<EEmptyViewSize, string> = {
     [EEmptyViewSize.MD]: styles.md,
 };
 
+const TITLE_CONFIG: Record<EEmptyViewSize, { size: ETitleSize; weight: EFontWeightTitle }> = {
+    [EEmptyViewSize.SM]: { size: ETitleSize.H3, weight: EFontWeightTitle.MEDIUM },
+    [EEmptyViewSize.MD]: { size: ETitleSize.H2, weight: EFontWeightTitle.SEMIBOLD },
+};
+
+const TEXT_SIZE_MAP: Record<EEmptyViewSize, ETextSize> = {
+    [EEmptyViewSize.SM]: ETextSize.B3,
+    [EEmptyViewSize.MD]: ETextSize.B2,
+};
+
+const BUTTONS_GAP_MAP: Record<EEmptyViewSize, TGapSize> = {
+    [EEmptyViewSize.SM]: 16,
+    [EEmptyViewSize.MD]: 24,
+};
+
 /** Заглушка для пустых состояний. */
 export const EmptyView = React.forwardRef<HTMLDivElement, IEmptyViewProps>(
     ({ className, size, icon, title, description, caption, buttons, ...rest }, ref) => {
-        const renderTitle = () => {
-            if (size === EEmptyViewSize.SM) {
-                return (
-                    <Title size={ETitleSize.H3} weight={EFontWeightTitle.MEDIUM}>
-                        {title}
-                    </Title>
-                );
-            }
-
-            return (
-                <Title size={ETitleSize.H2} weight={EFontWeightTitle.SEMIBOLD}>
-                    {title}
-                </Title>
-            );
-        };
-
-        const renderDescriptionAndCaption = (text: React.ReactNode) => {
-            if (size === EEmptyViewSize.SM) {
-                return (
-                    <Text size={ETextSize.B3} weight={EFontWeightText.REGULAR} type={EFontType.SECONDARY}>
-                        {text}
-                    </Text>
-                );
-            }
-
-            return (
-                <Text size={ETextSize.B2} weight={EFontWeightText.REGULAR} type={EFontType.SECONDARY}>
-                    {text}
-                </Text>
-            );
-        };
+        const hasDescription = !!(description || caption);
 
         return (
             <div
@@ -58,24 +43,44 @@ export const EmptyView = React.forwardRef<HTMLDivElement, IEmptyViewProps>(
                     {icon && <div className={styles.icon}>{icon}</div>}
                     {icon && size === EEmptyViewSize.SM && <Gap size={8} />}
 
-                    {(title || description || caption) && (
+                    {(title || hasDescription) && (
                         <div className={styles.textBlock}>
-                            {title && renderTitle()}
-                            {title && <Gap size={12} />}
+                            {title && <Title {...TITLE_CONFIG[size]}>{title}</Title>}
+                            {title && hasDescription && <Gap size={12} />}
 
-                            {(description || caption) && (
+                            {hasDescription && (
                                 <div className={styles.descriptionBlock}>
-                                    {description && renderDescriptionAndCaption(description)}
-                                    {caption && description && <Gap size={8} />}
-                                    {caption && renderDescriptionAndCaption(caption)}
+                                    {description && (
+                                        <Text
+                                            size={TEXT_SIZE_MAP[size]}
+                                            weight={EFontWeightText.REGULAR}
+                                            type={title ? EFontType.SECONDARY : EFontType.PRIMARY}
+                                        >
+                                            {description}
+                                        </Text>
+                                    )}
+                                    {description && caption && <Gap size={8} />}
+                                    {caption && (
+                                        <Text
+                                            size={TEXT_SIZE_MAP[size]}
+                                            weight={EFontWeightText.REGULAR}
+                                            type={EFontType.SECONDARY}
+                                        >
+                                            {caption}
+                                        </Text>
+                                    )}
                                 </div>
                             )}
                         </div>
                     )}
                 </div>
 
-                <Gap size={size === EEmptyViewSize.SM ? 16 : 24} />
-                {buttons && <div className={styles.buttons}>{buttons}</div>}
+                {buttons && (
+                    <>
+                        <Gap size={BUTTONS_GAP_MAP[size]} />
+                        <div className={styles.buttons}>{buttons}</div>
+                    </>
+                )}
             </div>
         );
     },

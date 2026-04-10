@@ -1,15 +1,60 @@
 import React, { useMemo, useState } from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { EButtonTheme, EButtonDotsTheme, ButtonDropdown, IButtonDropdownOption } from "../../src/components/Button";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+import {
+    ButtonDropdown,
+    EButtonDotsTheme,
+    EButtonTheme,
+    EComponentSize,
+    EScreenWidth,
+    IButtonDropdownOption,
+} from "@sberbusiness/triplex-next";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Gap } from "../../src/components/Gap/Gap";
-import { Text, ETextSize } from "../../src/components/Typography";
+import {
+    BlockModeExample,
+    BlockModeExampleSource,
+    DefaultExample,
+    DefaultExampleSource,
+    PlaygroundExample,
+    DisabledExample,
+    DisabledExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    ThemesExample,
+    ThemesExampleSource,
+    WithSelectedOptionExample,
+    WithSelectedOptionExampleSource,
+} from "./examples/ButtonDropdown/index";
 import { AdaptiveUtils } from "../utils/adaptiveUtils";
-import { EScreenWidth } from "../../src/helpers/breakpoints";
 
-export default {
+const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
+    {
+        id: "opt-1",
+        label: "Действие 1",
+        onSelect: () => {
+            action("select")("opt-1");
+            onItemSelect?.("opt-1");
+        },
+    },
+    {
+        id: "opt-2",
+        label: "Действие 2",
+        onSelect: () => {
+            action("select")("opt-2");
+            onItemSelect?.("opt-2");
+        },
+    },
+    {
+        id: "opt-3",
+        label: "Действие 3",
+        onSelect: () => {
+            action("select")("opt-3");
+            onItemSelect?.("opt-3");
+        },
+    },
+];
+
+const meta = {
     title: "Components/Buttons/ButtonDropdown",
     component: ButtonDropdown,
     tags: ["autodocs"],
@@ -39,43 +84,15 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof ButtonDropdown>;
 
-export const Playground: StoryObj<typeof ButtonDropdown> = {
+export default meta;
+
+type Story = StoryObj<typeof ButtonDropdown>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
-    render: (args) => {
-        const options = [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                },
-            },
-        ];
-        const { children, ...rest } = args;
-        return (
-            <div style={{ width: 280 }}>
-                <ButtonDropdown {...rest} options={options}>
-                    {children}
-                </ButtonDropdown>
-            </div>
-        );
-    },
+    render: PlaygroundExample,
     argTypes: {
         children: {
             control: { type: "text" },
@@ -128,458 +145,121 @@ export const Playground: StoryObj<typeof ButtonDropdown> = {
 };
 
 export const Default: StoryObj<typeof ButtonDropdown> = {
-    render: () => {
-        const options = [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                },
-            },
-        ];
-
-        return (
-            <div style={{ width: 280 }}>
-                <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-            </div>
-        );
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        children: "Button text",
     },
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const Sizes: StoryObj<typeof ButtonDropdown> = {
-    render: () => {
-        const options = [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                },
-            },
-        ];
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>EComponentSize.SM</Text>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.GENERAL} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.SECONDARY} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.SM} theme={EButtonTheme.DANGER} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                            size={EComponentSize.SM}
-                            theme={EButtonDotsTheme.DOTS_SECONDARY}
-                            options={options}
-                        >
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                            size={EComponentSize.SM}
-                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                            options={options}
-                        >
-                            Button text
-                        </ButtonDropdown>
-                    </div>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>EComponentSize.MD</Text>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.GENERAL} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.SECONDARY} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.MD} theme={EButtonTheme.DANGER} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                            size={EComponentSize.MD}
-                            theme={EButtonDotsTheme.DOTS_SECONDARY}
-                            options={options}
-                        >
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                            size={EComponentSize.MD}
-                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                            options={options}
-                        >
-                            Button text
-                        </ButtonDropdown>
-                    </div>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <Text size={ETextSize.B3}>EComponentSize.LG</Text>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.GENERAL} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.SECONDARY} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.SECONDARY_LIGHT} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown size={EComponentSize.LG} theme={EButtonTheme.DANGER} options={options}>
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                            size={EComponentSize.LG}
-                            theme={EButtonDotsTheme.DOTS_SECONDARY}
-                            options={options}
-                        >
-                            Button text
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                            size={EComponentSize.LG}
-                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                            options={options}
-                        >
-                            Button text
-                        </ButtonDropdown>
-                    </div>
-                </div>
-            </div>
-        );
+export const Sizes: Story = {
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        children: "Button text",
     },
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const Themes: StoryObj<typeof ButtonDropdown> = {
-    render: () => {
-        const options = [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                },
-            },
-        ];
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                    <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
-                        General
-                    </ButtonDropdown>
-                    <ButtonDropdown theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} options={options}>
-                        Secondary
-                    </ButtonDropdown>
-                    <ButtonDropdown theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD} options={options}>
-                        Secondary Light
-                    </ButtonDropdown>
-                    <ButtonDropdown theme={EButtonTheme.DANGER} size={EComponentSize.MD} options={options}>
-                        Danger
-                    </ButtonDropdown>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                        <Text size={ETextSize.B3}>EButtonDotsTheme.DOTS_SECONDARY</Text>
-                        <ButtonDropdown
-                            theme={EButtonDotsTheme.DOTS_SECONDARY}
-                            size={EComponentSize.MD}
-                            options={options}
-                        >
-                            Dots Secondary
-                        </ButtonDropdown>
-                    </div>
-
-                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                        <Text size={ETextSize.B3}>EButtonDotsTheme.DOTS_SECONDARY_LIGHT</Text>
-                        <ButtonDropdown
-                            theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                            size={EComponentSize.MD}
-                            options={options}
-                        >
-                            Dots Secondary Light
-                        </ButtonDropdown>
-                    </div>
-                </div>
-            </div>
-        );
+export const Themes: Story = {
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        children: "Button text",
     },
+    render: ThemesExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: ThemesExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const BlockMode: StoryObj<typeof ButtonDropdown> = {
-    render: () => {
-        const options = [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                },
-            },
-        ];
-
-        return (
-            <div style={{ maxWidth: 280 }}>
-                <ButtonDropdown block theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-                <Gap size={16} />
-                <ButtonDropdown block theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-                <Gap size={16} />
-                <ButtonDropdown block theme={EButtonTheme.SECONDARY_LIGHT} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-                <Gap size={16} />
-                <ButtonDropdown block theme={EButtonTheme.DANGER} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-            </div>
-        );
+export const BlockMode: Story = {
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        children: "Button text",
+        block: true,
     },
+    render: BlockModeExample,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: { story: "Кнопка в блочном режиме (свойство block)." },
+            source: {
+                code: BlockModeExampleSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
-export const Disabled: StoryObj<typeof ButtonDropdown> = {
-    render: () => {
-        const options = [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                },
-            },
-        ];
-
-        return (
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16 }}>
-                <ButtonDropdown disabled theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-                <ButtonDropdown disabled theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-                <ButtonDropdown
-                    disabled
-                    theme={EButtonTheme.SECONDARY_LIGHT}
-                    size={EComponentSize.MD}
-                    options={options}
-                >
-                    Button text
-                </ButtonDropdown>
-                <ButtonDropdown disabled theme={EButtonTheme.DANGER} size={EComponentSize.MD} options={options}>
-                    Button text
-                </ButtonDropdown>
-                <ButtonDropdown
-                    disabled
-                    theme={EButtonDotsTheme.DOTS_SECONDARY}
-                    size={EComponentSize.MD}
-                    options={options}
-                >
-                    Button text
-                </ButtonDropdown>
-                <ButtonDropdown
-                    disabled
-                    theme={EButtonDotsTheme.DOTS_SECONDARY_LIGHT}
-                    size={EComponentSize.MD}
-                    options={options}
-                >
-                    Button text
-                </ButtonDropdown>
-            </div>
-        );
+export const Disabled: Story = {
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        children: "Button text",
+        disabled: true,
     },
+    render: DisabledExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DisabledExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const WithSelectedOption: StoryObj<typeof ButtonDropdown> = {
-    render: () => {
-        const [selectedId, setSelectedId] = useState<string | undefined>("opt-2");
-
-        const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                    onItemSelect?.("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                    onItemSelect?.("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                    onItemSelect?.("opt-3");
-                },
-            },
-        ];
-
-        const options = useMemo(() => createOptions(setSelectedId), []);
-        const selected = options.find((o) => o.id === selectedId);
-
-        return (
-            <div style={{ maxWidth: 280 }}>
-                <ButtonDropdown
-                    theme={EButtonTheme.GENERAL}
-                    size={EComponentSize.MD}
-                    options={options}
-                    selected={selected}
-                >
-                    Button text
-                </ButtonDropdown>
-            </div>
-        );
+export const WithSelectedOption: Story = {
+    args: {
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+        children: "Button text",
     },
+    render: WithSelectedOptionExample,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: { story: "Кнопка с заранее выбранным в выпадающем списке значением." },
+            source: {
+                code: WithSelectedOptionExampleSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
-export const VisualTests: StoryObj<typeof ButtonDropdown> = {
+export const VisualTests: Story = {
     tags: ["!autodocs"],
     render: () => {
         const [selectedId, setSelectedId] = useState<string | undefined>("opt-2");
-
-        const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
-            {
-                id: "opt-1",
-                label: "Действие 1",
-                onSelect: () => {
-                    action("select")("opt-1");
-                    onItemSelect?.("opt-1");
-                },
-            },
-            {
-                id: "opt-2",
-                label: "Действие 2",
-                onSelect: () => {
-                    action("select")("opt-2");
-                    onItemSelect?.("opt-2");
-                },
-            },
-            {
-                id: "opt-3",
-                label: "Действие 3",
-                onSelect: () => {
-                    action("select")("opt-3");
-                    onItemSelect?.("opt-3");
-                },
-            },
-        ];
-
         const options = useMemo(() => createOptions(setSelectedId), []);
         const selectedSM = options.find((o) => o.id === selectedId);
         const selectedMD = options.find((o) => o.id === selectedId);

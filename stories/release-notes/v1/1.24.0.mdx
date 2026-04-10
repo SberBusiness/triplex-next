@@ -4,8 +4,44 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.24.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**Dropdown**
+
+- Удалено значение `AUTO` из `EDropdownAlignment`, используйте `LEFT` или `RIGHT`.
+
 <Heading>Изменения</Heading>
 
-**Title**
+**Checkbox**
 
-- Description.
+- Исправлен адаптивный вид `CheckboxYGroup`.
+
+**ChipSelect, ChipSort**
+
+- Исправлено позиционирование `Dropdown`: теперь выравнивается по левому краю таргета.
+
+**Col**
+
+- Уменьшен горизонтальный отступ между колонками: `@grid-horizontal-gap` изменён с `12px` на `8px`.
+
+**Dropdown**
+
+- Для значений `LEFT`/`RIGHT` из `EDropdownAlignment` внедрено адаптивное позиционирование.
+- Исправлен перенос текста в пунктах списка: удалён `white-space: nowrap` у элемента `DropdownDesktopList`.
+
+**Island**
+
+- Исправлено применение `className` в `IslandBody`: теперь пользовательский класс передается корректно.
+
+**LightBox**
+
+- Исправлено выравнивание ButtonDropdown в Page.Header.Title.Controls на мобильном устройстве.
+
+**SelectExtendedField**
+
+- Исправлен баг: `onClose` и `onOpen` больше не вызываются при ре-рендере родительского компонента.
+- Исправлен баг: `onClose` больше не вызывается при первоначальном монтировании компонента.
+
+**Typography**
+
+- Добавлен компонент `CodeText` для отображения моноширинного текста (шрифт SBSansTextMono, 14px / 20px).

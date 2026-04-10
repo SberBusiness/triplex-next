@@ -2,7 +2,7 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Stories } from "@storybook/addon-docs/blocks";
 import { LoaderMiddle } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource } from "./examples";
+import { DefaultExample, DefaultExampleSource, WithAnimationExample, WithAnimationExampleSource } from "./examples";
 
 const meta = {
     title: "Components/Loaders/LoaderMiddle",
@@ -37,6 +37,20 @@ export const Default: Story = {
             controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithAnimation: Story = {
+    render: WithAnimationExample,
+    parameters: {
+        testRunner: { skip: true },
+        docs: {
+            controls: { disable: true },
+            source: {
+                code: WithAnimationExampleSource,
                 language: "tsx",
             },
         },

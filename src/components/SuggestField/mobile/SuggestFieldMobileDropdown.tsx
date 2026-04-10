@@ -24,6 +24,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
         tooltipHint,
         opened,
         loading,
+        tooltipOpen,
         dropdownListLoading,
         clearInputOnFocus,
         setOpened,
@@ -121,7 +122,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                         </DropdownMobileHeader>
 
                         <DropdownMobileBody className={styles.suggestFieldMobileBody} onScroll={handleListScroll}>
-                            {tooltipHint ? (
+                            {tooltipOpen ? (
                                 <SuggestFieldMobileDropdownHint>{tooltipHint}</SuggestFieldMobileDropdownHint>
                             ) : (
                                 <DropdownMobileList loading={dropdownListLoading} ref={listRef}>

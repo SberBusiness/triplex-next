@@ -4,10 +4,12 @@ import styles from "../styles/IslandBody.module.less";
 
 export interface IIslandBodyProps extends React.HTMLProps<HTMLDivElement> {}
 
-export const IslandBody = React.forwardRef<HTMLDivElement, IIslandBodyProps>(({ children, ...rest }, ref) => {
-    return (
-        <div className={clsx(styles.islandBody)} ref={ref} {...rest}>
-            {children}
-        </div>
-    );
-});
+export const IslandBody = React.forwardRef<HTMLDivElement, IIslandBodyProps>(
+    ({ children, className, ...rest }, ref) => {
+        return (
+            <div className={clsx(styles.islandBody, className)} ref={ref} {...rest}>
+                {children}
+            </div>
+        );
+    },
+);

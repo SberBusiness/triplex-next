@@ -20,7 +20,7 @@ import '@sberbusiness/icons-next/styles/icons.css';
 
 ## 🔤 Шрифты
 
-Компоненты Typography используют шрифты SBSansDisplay и SBSansText. Для корректного отображения необходимо подключить шрифты в вашем проекте:
+Компоненты Typography используют шрифты SBSansDisplay, SBSansText и SBSansTextMono. Для корректного отображения необходимо подключить шрифты в вашем проекте:
 
 ```css
 @font-face {
@@ -62,6 +62,13 @@ import '@sberbusiness/icons-next/styles/icons.css';
     font-family: 'SBSansTextSemibold';
     src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
     font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SBSansTextMono';
+    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansTextMono-Regular.woff2') format('woff2');
+    font-weight: normal;
     font-style: normal;
 }
 ```

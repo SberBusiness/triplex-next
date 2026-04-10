@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { MultiselectField } from "../../src/components/MultiselectField";
 import { StoryObj } from "@storybook/react";
 import {
@@ -7,7 +7,6 @@ import {
     DropdownMobileClose,
     DropdownMobileBody,
     DropdownMobileFooter,
-    EDropdownAlignment,
 } from "../../src/components/Dropdown";
 import { Button, EButtonTheme } from "../../src/components/Button";
 import { EComponentSize } from "../../src/enums/EComponentSize";
@@ -18,18 +17,41 @@ import {
     FormFieldPostfix,
     FormFieldClear,
 } from "../../src/components/FormField";
-import { CheckboxTreeExtended } from "../../src/components/CheckboxTreeExtended";
-import {
-    checkChildrenCheckboxes,
-    checkParentCheckboxes,
-    traverseCheckboxes,
-} from "../../src/components/CheckboxTree/utils";
-import { ChipMultiselect } from "../../src/components/Chip";
+import { Checkbox, CheckboxYGroup } from "../../src/components/Checkbox";
+import { ChipMultiselect, IChipMultiselectProps } from "../../src/components/Chip";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { ETextSize, Text } from "../../src/components/Typography";
 import { EScreenWidth } from "../../src/helpers/breakpoints";
 import { AdaptiveUtils } from "../utils/adaptiveUtils";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    LoadingExample,
+    LoadingExampleSource,
+} from "./examples/ChipMultiselect";
 import "./ChipMultiselect.less";
+
+interface IChipMultiselectOption {
+    id: string;
+    label: string;
+}
+
+const CHIP_MULTISELECT_OPTIONS: IChipMultiselectOption[] = [
+    { id: "multiselect-option-1-1", label: "Значение 1-1" },
+    { id: "multiselect-option-1-2", label: "Значение 1-2" },
+    { id: "multiselect-option-1-3", label: "Значение 1-3" },
+    { id: "multiselect-option-2-1", label: "Значение 2-1" },
+    { id: "multiselect-option-2-2", label: "Значение 2-2" },
+    { id: "multiselect-option-3", label: "Значение 3" },
+];
+
+const CHIP_MULTISELECT_VISUAL_TEST_OPTIONS: IChipMultiselectOption[] = [
+    { id: "multiselect-option-1-1", label: "Значение 1-1" },
+    { id: "multiselect-option-2-1", label: "Значение 2-1" },
+    { id: "multiselect-option-3", label: "Значение 3" },
+];
 
 export default {
     title: "Components/Chips/ChipMultiselect",
@@ -106,104 +128,53 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
         testRunner: { skip: true },
     },
     render: (args) => {
-        const checkboxesInitial = [
-            {
-                bulk: false,
-                checked: false,
-                children: [
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-1",
-                                label: "Значение 1-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-2",
-                                label: "Значение 1-2",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-3",
-                                label: "Значение 1-3",
-                            },
-                        ],
-                        id: "multiselect-option-1",
-                        label: "Группа 1",
-                    },
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-1",
-                                label: "Значение 2-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-2",
-                                label: "Значение 2-2",
-                            },
-                        ],
-                        id: "multiselect-option-2",
-                        label: "Группа 2",
-                    },
-                    {
-                        checked: false,
-                        id: "multiselect-option-3",
-                        label: "Значение 3",
-                    },
-                ],
-                id: "multiselect-option-0",
-                label: "Все",
-            },
-        ];
-
-        function createMultiselectFieldStoriesLogic(args) {
-            const [checkboxes, setCheckboxes] = useState(() => structuredClone(checkboxesInitial));
+        function createMultiselectFieldStoriesLogic(args: IChipMultiselectProps) {
+            const [selectedIds, setSelectedIds] = useState<string[]>([]);
             const [filter, setFilter] = useState("");
-            const [filteredCheckboxesId, setFilteredCheckboxesId] = useState<string[]>([]);
+            const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+            const visibleOptions = useMemo(() => {
+                const lower = filter.trim().toLowerCase();
+                if (!lower.length) {
+                    return CHIP_MULTISELECT_OPTIONS;
+                }
 
-            const handleChange = (checkbox) => (event) => {
-                checkbox.checked = checkbox.bulk ? true : event.target.checked;
-                checkChildrenCheckboxes(checkbox);
-                traverseCheckboxes(checkboxes, checkParentCheckboxes);
-                setCheckboxes([...checkboxes]);
+                return CHIP_MULTISELECT_OPTIONS.filter((opt) => opt.label.toLowerCase().includes(lower));
+            }, [filter]);
+
+            const handleToggle = (optionId: string, checked: boolean) => {
+                setSelectedIds((prev) => {
+                    if (checked) {
+                        if (prev.includes(optionId)) {
+                            return prev;
+                        }
+
+                        return [...prev, optionId];
+                    }
+
+                    return prev.filter((id) => id !== optionId);
+                });
             };
 
-            const renderCheckboxNode = (checkbox) => {
-                if (filter && !filteredCheckboxesId.includes(checkbox.id)) return null;
-
-                return (
-                    <CheckboxTreeExtended.Node
-                        key={checkbox.id}
-                        id={checkbox.id}
-                        checkbox={(props) => (
-                            <CheckboxTreeExtended.Checkbox
-                                {...props}
-                                bulk={checkbox.bulk}
-                                checked={checkbox.checked}
-                                onChange={handleChange(checkbox)}
-                            >
-                                {checkbox.label}
-                            </CheckboxTreeExtended.Checkbox>
-                        )}
-                    >
-                        {checkbox.children && checkbox.children.map((child) => renderCheckboxNode(child))}
-                    </CheckboxTreeExtended.Node>
-                );
-            };
+            const renderCheckboxList = () => (
+                <CheckboxYGroup aria-label="Options">
+                    {visibleOptions.map((opt) => (
+                        <Checkbox
+                            key={opt.id}
+                            id={opt.id}
+                            size={args.size}
+                            checked={selectedSet.has(opt.id)}
+                            onChange={(event) => handleToggle(opt.id, event.target.checked)}
+                        >
+                            {opt.label}
+                        </Checkbox>
+                    ))}
+                </CheckboxYGroup>
+            );
 
             const renderDropdownContent = () => {
-                const renderCheckboxes = !filter || (filteredCheckboxesId.length && filter);
+                const renderCheckboxes = !filter.trim() || visibleOptions.length > 0;
                 return renderCheckboxes ? (
-                    <CheckboxTreeExtended size={args.size}>
-                        {checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}
-                    </CheckboxTreeExtended>
+                    renderCheckboxList()
                 ) : (
                     <div className={`not-found ${args.size}`}>
                         <Text size={ETextSize.B3}>Nothing was found</Text>
@@ -212,17 +183,11 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
             };
 
             const unselectAll = () => {
-                const nextCheckboxes = [...checkboxes];
-                traverseCheckboxes(nextCheckboxes, (checkbox) => {
-                    checkbox.checked = false;
-                    checkbox.bulk = false;
-                });
-                setCheckboxes(nextCheckboxes);
+                setSelectedIds([]);
+                setFilter("");
             };
 
             const handleClickClearFilter = () => {
-                setFilter("");
-                setFilteredCheckboxesId([]);
                 unselectAll();
             };
 
@@ -230,27 +195,8 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
                 setFilter("");
             };
 
-            const handleFilterChange = (event) => {
-                const { value } = event.target;
-                const filteredCheckboxes = [...checkboxes];
-                const filteredCheckboxesId = new Set<string>();
-
-                const setFilteredValue = (checkbox) => {
-                    if (checkbox.label.toLowerCase().includes(value.toLowerCase())) {
-                        filteredCheckboxesId.add(checkbox.id);
-                    } else if (checkbox.children) {
-                        const intersection = checkbox.children
-                            .map((item) => item.id)
-                            .filter((id) => Array.from(filteredCheckboxesId).includes(id));
-
-                        if (intersection.length) filteredCheckboxesId.add(checkbox.id);
-                    }
-                };
-
-                traverseCheckboxes(filteredCheckboxes, setFilteredValue);
-
-                setFilter(value);
-                setFilteredCheckboxesId(Array.from(filteredCheckboxesId));
+            const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                setFilter(event.target.value);
             };
 
             const renderDropdown = ({ opened, setOpened, targetRef, dropdownRef }) => (
@@ -259,7 +205,6 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
                     setOpened={setOpened}
                     targetRef={targetRef}
                     ref={dropdownRef}
-                    alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{
                         focusTrapOptions: { initialFocus: false },
                     }}
@@ -330,17 +275,17 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
             return {
                 unselectAll,
                 renderDropdown,
-                checkboxes,
+                selectedIds,
             };
         }
 
-        const { renderDropdown, unselectAll, checkboxes } = createMultiselectFieldStoriesLogic(args);
+        const { renderDropdown, unselectAll, selectedIds } = createMultiselectFieldStoriesLogic(args);
 
         return (
             <ChipMultiselect
                 {...args}
                 clearSelected={unselectAll}
-                selected={Boolean(checkboxes.filter((checkbox) => checkbox.checked).length)}
+                selected={selectedIds.length > 0}
                 label={args.label}
                 displayedValue={args.displayedValue}
             >
@@ -351,724 +296,26 @@ export const Playground: StoryObj<typeof ChipMultiselect> = {
 };
 
 export const Default: StoryObj<typeof ChipMultiselect> = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const checkboxesInitial = [
-            {
-                bulk: false,
-                checked: false,
-                children: [
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-1",
-                                label: "Значение 1-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-2",
-                                label: "Значение 1-2",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-3",
-                                label: "Значение 1-3",
-                            },
-                        ],
-                        id: "multiselect-option-1",
-                        label: "Группа 1",
-                    },
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-1",
-                                label: "Значение 2-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-2",
-                                label: "Значение 2-2",
-                            },
-                        ],
-                        id: "multiselect-option-2",
-                        label: "Группа 2",
-                    },
-                    {
-                        checked: false,
-                        id: "multiselect-option-3",
-                        label: "Значение 3",
-                    },
-                ],
-                id: "multiselect-option-0",
-                label: "Все",
-            },
-        ];
-
-        const [checkboxes, setCheckboxes] = useState(() => structuredClone(checkboxesInitial));
-        const [filter, setFilter] = useState("");
-        const [filteredCheckboxesId, setFilteredCheckboxesId] = useState<string[]>([]);
-
-        const handleChange = (checkbox) => (event) => {
-            checkbox.checked = checkbox.bulk ? true : event.target.checked;
-            checkChildrenCheckboxes(checkbox);
-            traverseCheckboxes(checkboxes, checkParentCheckboxes);
-            setCheckboxes([...checkboxes]);
-        };
-
-        const renderCheckboxNode = (checkbox) => {
-            if (filter && !filteredCheckboxesId.includes(checkbox.id)) return null;
-
-            return (
-                <CheckboxTreeExtended.Node
-                    key={checkbox.id}
-                    id={checkbox.id}
-                    checkbox={(props) => (
-                        <CheckboxTreeExtended.Checkbox
-                            {...props}
-                            bulk={checkbox.bulk}
-                            checked={checkbox.checked}
-                            onChange={handleChange(checkbox)}
-                        >
-                            {checkbox.label}
-                        </CheckboxTreeExtended.Checkbox>
-                    )}
-                >
-                    {checkbox.children && checkbox.children.map((child) => renderCheckboxNode(child))}
-                </CheckboxTreeExtended.Node>
-            );
-        };
-
-        const renderDropdownContent = () => {
-            const renderCheckboxes = !filter || (filteredCheckboxesId.length && filter);
-            return renderCheckboxes ? (
-                <CheckboxTreeExtended>
-                    {checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}
-                </CheckboxTreeExtended>
-            ) : (
-                <div className="not-found md">
-                    <Text size={ETextSize.B3}>Nothing was found</Text>
-                </div>
-            );
-        };
-
-        const unselectAll = () => {
-            const nextCheckboxes = [...checkboxes];
-            traverseCheckboxes(nextCheckboxes, (checkbox) => {
-                checkbox.checked = false;
-                checkbox.bulk = false;
-            });
-            setCheckboxes(nextCheckboxes);
-        };
-
-        const handleClickClearFilter = () => {
-            setFilter("");
-            setFilteredCheckboxesId([]);
-            unselectAll();
-        };
-
-        const handleClearInput = () => {
-            setFilter("");
-        };
-
-        const handleFilterChange = (event) => {
-            const { value } = event.target;
-            const filteredCheckboxes = [...checkboxes];
-            const filteredCheckboxesId = new Set<string>();
-
-            const setFilteredValue = (checkbox) => {
-                if (checkbox.label.toLowerCase().includes(value.toLowerCase())) {
-                    filteredCheckboxesId.add(checkbox.id);
-                } else if (checkbox.children) {
-                    const intersection = checkbox.children
-                        .map((item) => item.id)
-                        .filter((id) => Array.from(filteredCheckboxesId).includes(id));
-
-                    if (intersection.length) filteredCheckboxesId.add(checkbox.id);
-                }
-            };
-
-            traverseCheckboxes(filteredCheckboxes, setFilteredValue);
-
-            setFilter(value);
-            setFilteredCheckboxesId(Array.from(filteredCheckboxesId));
-        };
-
-        const renderDropdown = ({ opened, setOpened, targetRef, dropdownRef }) => (
-            <MultiselectField.Dropdown
-                opened={opened}
-                setOpened={setOpened}
-                targetRef={targetRef}
-                ref={dropdownRef}
-                alignment={EDropdownAlignment.LEFT}
-                focusTrapProps={{
-                    focusTrapOptions: { initialFocus: false },
-                }}
-                mobileViewProps={{
-                    children: (
-                        <>
-                            <DropdownMobileHeader
-                                controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                            >
-                                <DropdownMobileInput
-                                    placeholder="Type to proceed"
-                                    value={filter}
-                                    onChange={handleFilterChange}
-                                />
-                            </DropdownMobileHeader>
-                            <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                            <DropdownMobileFooter>
-                                <Button
-                                    theme={EButtonTheme.GENERAL}
-                                    size={EComponentSize.SM}
-                                    onClick={() => setOpened(false)}
-                                >
-                                    Button text
-                                </Button>
-                                <Button
-                                    theme={EButtonTheme.LINK}
-                                    size={EComponentSize.SM}
-                                    onClick={handleClickClearFilter}
-                                >
-                                    Button link text
-                                </Button>
-                            </DropdownMobileFooter>
-                        </>
-                    ),
-                }}
-            >
-                <MultiselectField.Dropdown.Header>
-                    <FormField size={EComponentSize.SM}>
-                        <FormFieldLabel>Type to proceed</FormFieldLabel>
-                        <FormFieldInput value={filter} onChange={handleFilterChange} />
-                        <FormFieldPostfix>
-                            <FormFieldClear onClick={handleClearInput} />
-                        </FormFieldPostfix>
-                    </FormField>
-                </MultiselectField.Dropdown.Header>
-                <MultiselectField.Dropdown.Content>{renderDropdownContent()}</MultiselectField.Dropdown.Content>
-                <MultiselectField.Dropdown.Footer>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={() => setOpened(false)}>
-                        Button text
-                    </Button>
-                    <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
-                        Button link text
-                    </Button>
-                </MultiselectField.Dropdown.Footer>
-            </MultiselectField.Dropdown>
-        );
-
-        return (
-            <ChipMultiselect
-                clearSelected={unselectAll}
-                selected={Boolean(checkboxes.filter((checkbox) => checkbox.checked).length)}
-                label="Multiselect label"
-            >
-                {(dropdownProps) => renderDropdown(dropdownProps)}
-            </ChipMultiselect>
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
 export const Sizes: StoryObj<typeof ChipMultiselect> = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const checkboxesInitial = [
-            {
-                bulk: false,
-                checked: false,
-                children: [
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-1",
-                                label: "Значение 1-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-2",
-                                label: "Значение 1-2",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-3",
-                                label: "Значение 1-3",
-                            },
-                        ],
-                        id: "multiselect-option-1",
-                        label: "Группа 1",
-                    },
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-1",
-                                label: "Значение 2-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-2",
-                                label: "Значение 2-2",
-                            },
-                        ],
-                        id: "multiselect-option-2",
-                        label: "Группа 2",
-                    },
-                    {
-                        checked: false,
-                        id: "multiselect-option-3",
-                        label: "Значение 3",
-                    },
-                ],
-                id: "multiselect-option-0",
-                label: "Все",
-            },
-        ];
-
-        function createMultiselectFieldStoriesLogic(args) {
-            const [checkboxes, setCheckboxes] = useState(() => structuredClone(checkboxesInitial));
-            const [filter, setFilter] = useState("");
-            const [filteredCheckboxesId, setFilteredCheckboxesId] = useState<string[]>([]);
-
-            const handleChange = (checkbox) => (event) => {
-                checkbox.checked = checkbox.bulk ? true : event.target.checked;
-                checkChildrenCheckboxes(checkbox);
-                traverseCheckboxes(checkboxes, checkParentCheckboxes);
-                setCheckboxes([...checkboxes]);
-            };
-
-            const renderCheckboxNode = (checkbox) => {
-                if (filter && !filteredCheckboxesId.includes(checkbox.id)) return null;
-
-                return (
-                    <CheckboxTreeExtended.Node
-                        key={checkbox.id}
-                        id={checkbox.id}
-                        checkbox={(props) => (
-                            <CheckboxTreeExtended.Checkbox
-                                {...props}
-                                bulk={checkbox.bulk}
-                                checked={checkbox.checked}
-                                onChange={handleChange(checkbox)}
-                            >
-                                {checkbox.label}
-                            </CheckboxTreeExtended.Checkbox>
-                        )}
-                    >
-                        {checkbox.children && checkbox.children.map((child) => renderCheckboxNode(child))}
-                    </CheckboxTreeExtended.Node>
-                );
-            };
-
-            const renderDropdownContent = () => {
-                const renderCheckboxes = !filter || (filteredCheckboxesId.length && filter);
-                return renderCheckboxes ? (
-                    <CheckboxTreeExtended size={args.size}>
-                        {checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}
-                    </CheckboxTreeExtended>
-                ) : (
-                    <div className={`not-found ${args.size}`}>
-                        <Text size={ETextSize.B3}>Nothing was found</Text>
-                    </div>
-                );
-            };
-
-            const unselectAll = () => {
-                const nextCheckboxes = [...checkboxes];
-                traverseCheckboxes(nextCheckboxes, (checkbox) => {
-                    checkbox.checked = false;
-                    checkbox.bulk = false;
-                });
-                setCheckboxes(nextCheckboxes);
-            };
-
-            const handleClickClearFilter = () => {
-                setFilter("");
-                setFilteredCheckboxesId([]);
-                unselectAll();
-            };
-
-            const handleClearInput = () => {
-                setFilter("");
-            };
-
-            const handleFilterChange = (event) => {
-                const { value } = event.target;
-                const filteredCheckboxes = [...checkboxes];
-                const filteredCheckboxesId = new Set<string>();
-
-                const setFilteredValue = (checkbox) => {
-                    if (checkbox.label.toLowerCase().includes(value.toLowerCase())) {
-                        filteredCheckboxesId.add(checkbox.id);
-                    } else if (checkbox.children) {
-                        const intersection = checkbox.children
-                            .map((item) => item.id)
-                            .filter((id) => Array.from(filteredCheckboxesId).includes(id));
-
-                        if (intersection.length) filteredCheckboxesId.add(checkbox.id);
-                    }
-                };
-
-                traverseCheckboxes(filteredCheckboxes, setFilteredValue);
-
-                setFilter(value);
-                setFilteredCheckboxesId(Array.from(filteredCheckboxesId));
-            };
-
-            const renderDropdown = ({ opened, setOpened, targetRef, dropdownRef }) => (
-                <MultiselectField.Dropdown
-                    opened={opened}
-                    setOpened={setOpened}
-                    targetRef={targetRef}
-                    ref={dropdownRef}
-                    alignment={EDropdownAlignment.LEFT}
-                    focusTrapProps={{
-                        focusTrapOptions: { initialFocus: false },
-                    }}
-                    mobileViewProps={{
-                        children: (
-                            <>
-                                <DropdownMobileHeader
-                                    controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                >
-                                    <DropdownMobileInput
-                                        placeholder="Type to proceed"
-                                        value={filter}
-                                        onChange={handleFilterChange}
-                                    />
-                                </DropdownMobileHeader>
-                                <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                                <DropdownMobileFooter>
-                                    <Button
-                                        theme={EButtonTheme.GENERAL}
-                                        size={EComponentSize.SM}
-                                        onClick={() => setOpened(false)}
-                                    >
-                                        Button text
-                                    </Button>
-                                    <Button
-                                        theme={EButtonTheme.LINK}
-                                        size={EComponentSize.SM}
-                                        onClick={handleClickClearFilter}
-                                    >
-                                        Button link text
-                                    </Button>
-                                </DropdownMobileFooter>
-                            </>
-                        ),
-                    }}
-                >
-                    <MultiselectField.Dropdown.Header>
-                        <FormField size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}>
-                            <FormFieldLabel>Type to proceed</FormFieldLabel>
-                            <FormFieldInput value={filter} onChange={handleFilterChange} />
-                            <FormFieldPostfix>
-                                <FormFieldClear onClick={handleClearInput} />
-                            </FormFieldPostfix>
-                        </FormField>
-                    </MultiselectField.Dropdown.Header>
-                    <MultiselectField.Dropdown.Content>{renderDropdownContent()}</MultiselectField.Dropdown.Content>
-                    <MultiselectField.Dropdown.Footer>
-                        <Button
-                            theme={EButtonTheme.SECONDARY}
-                            size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
-                            onClick={() => setOpened(false)}
-                        >
-                            Button text
-                        </Button>
-                        <Button
-                            theme={EButtonTheme.LINK}
-                            size={args.size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
-                            onClick={handleClickClearFilter}
-                        >
-                            Button link text
-                        </Button>
-                    </MultiselectField.Dropdown.Footer>
-                </MultiselectField.Dropdown>
-            );
-
-            return {
-                unselectAll,
-                renderDropdown,
-                checkboxes,
-            };
-        }
-
-        const sm = createMultiselectFieldStoriesLogic({ size: EComponentSize.SM });
-        const md = createMultiselectFieldStoriesLogic({ size: EComponentSize.MD });
-        const lg = createMultiselectFieldStoriesLogic({ size: EComponentSize.LG });
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-                <ChipMultiselect
-                    size={EComponentSize.SM}
-                    clearSelected={sm.unselectAll}
-                    selected={Boolean(sm.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label="SM"
-                >
-                    {(dropdownProps) => sm.renderDropdown(dropdownProps)}
-                </ChipMultiselect>
-                <ChipMultiselect
-                    size={EComponentSize.MD}
-                    clearSelected={md.unselectAll}
-                    selected={Boolean(md.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label="MD"
-                >
-                    {(dropdownProps) => md.renderDropdown(dropdownProps)}
-                </ChipMultiselect>
-                <ChipMultiselect
-                    size={EComponentSize.LG}
-                    clearSelected={lg.unselectAll}
-                    selected={Boolean(lg.checkboxes.filter((checkbox) => checkbox.checked).length)}
-                    label="LG"
-                >
-                    {(dropdownProps) => lg.renderDropdown(dropdownProps)}
-                </ChipMultiselect>
-            </div>
-        );
+        docs: { source: { code: SizesExampleSource, language: "tsx" } },
     },
 };
 
 export const Loading: StoryObj<typeof ChipMultiselect> = {
+    render: LoadingExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const checkboxesInitial = [
-            {
-                bulk: false,
-                checked: false,
-                children: [
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-1",
-                                label: "Значение 1-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-2",
-                                label: "Значение 1-2",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-3",
-                                label: "Значение 1-3",
-                            },
-                        ],
-                        id: "multiselect-option-1",
-                        label: "Группа 1",
-                    },
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-1",
-                                label: "Значение 2-1",
-                            },
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-2",
-                                label: "Значение 2-2",
-                            },
-                        ],
-                        id: "multiselect-option-2",
-                        label: "Группа 2",
-                    },
-                    {
-                        checked: false,
-                        id: "multiselect-option-3",
-                        label: "Значение 3",
-                    },
-                ],
-                id: "multiselect-option-0",
-                label: "Все",
-            },
-        ];
-
-        const [checkboxes, setCheckboxes] = useState(() => structuredClone(checkboxesInitial));
-        const [filter, setFilter] = useState("");
-        const [filteredCheckboxesId, setFilteredCheckboxesId] = useState<string[]>([]);
-
-        const handleChange = (checkbox) => (event) => {
-            checkbox.checked = checkbox.bulk ? true : event.target.checked;
-            checkChildrenCheckboxes(checkbox);
-            traverseCheckboxes(checkboxes, checkParentCheckboxes);
-            setCheckboxes([...checkboxes]);
-        };
-
-        const renderCheckboxNode = (checkbox) => {
-            if (filter && !filteredCheckboxesId.includes(checkbox.id)) return null;
-
-            return (
-                <CheckboxTreeExtended.Node
-                    key={checkbox.id}
-                    id={checkbox.id}
-                    checkbox={(props) => (
-                        <CheckboxTreeExtended.Checkbox
-                            {...props}
-                            bulk={checkbox.bulk}
-                            checked={checkbox.checked}
-                            onChange={handleChange(checkbox)}
-                        >
-                            {checkbox.label}
-                        </CheckboxTreeExtended.Checkbox>
-                    )}
-                >
-                    {checkbox.children && checkbox.children.map((child) => renderCheckboxNode(child))}
-                </CheckboxTreeExtended.Node>
-            );
-        };
-
-        const renderDropdownContent = () => {
-            const renderCheckboxes = !filter || (filteredCheckboxesId.length && filter);
-            return renderCheckboxes ? (
-                <CheckboxTreeExtended>
-                    {checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}
-                </CheckboxTreeExtended>
-            ) : (
-                <div className="not-found md">
-                    <Text size={ETextSize.B3}>Nothing was found</Text>
-                </div>
-            );
-        };
-
-        const unselectAll = () => {
-            const nextCheckboxes = [...checkboxes];
-            traverseCheckboxes(nextCheckboxes, (checkbox) => {
-                checkbox.checked = false;
-                checkbox.bulk = false;
-            });
-            setCheckboxes(nextCheckboxes);
-        };
-
-        const handleClickClearFilter = () => {
-            setFilter("");
-            setFilteredCheckboxesId([]);
-            unselectAll();
-        };
-
-        const handleClearInput = () => {
-            setFilter("");
-        };
-
-        const handleFilterChange = (event) => {
-            const { value } = event.target;
-            const filteredCheckboxes = [...checkboxes];
-            const filteredCheckboxesId = new Set<string>();
-
-            const setFilteredValue = (checkbox) => {
-                if (checkbox.label.toLowerCase().includes(value.toLowerCase())) {
-                    filteredCheckboxesId.add(checkbox.id);
-                } else if (checkbox.children) {
-                    const intersection = checkbox.children
-                        .map((item) => item.id)
-                        .filter((id) => Array.from(filteredCheckboxesId).includes(id));
-
-                    if (intersection.length) filteredCheckboxesId.add(checkbox.id);
-                }
-            };
-
-            traverseCheckboxes(filteredCheckboxes, setFilteredValue);
-
-            setFilter(value);
-            setFilteredCheckboxesId(Array.from(filteredCheckboxesId));
-        };
-
-        const renderDropdown = ({ opened, setOpened, targetRef, dropdownRef }) => (
-            <MultiselectField.Dropdown
-                opened={opened}
-                setOpened={setOpened}
-                targetRef={targetRef}
-                ref={dropdownRef}
-                alignment={EDropdownAlignment.LEFT}
-                focusTrapProps={{
-                    focusTrapOptions: { initialFocus: false },
-                }}
-                mobileViewProps={{
-                    children: (
-                        <>
-                            <DropdownMobileHeader
-                                controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                            >
-                                <DropdownMobileInput
-                                    placeholder="Type to proceed"
-                                    value={filter}
-                                    onChange={handleFilterChange}
-                                />
-                            </DropdownMobileHeader>
-                            <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                            <DropdownMobileFooter>
-                                <Button
-                                    theme={EButtonTheme.GENERAL}
-                                    size={EComponentSize.SM}
-                                    onClick={() => setOpened(false)}
-                                >
-                                    Button text
-                                </Button>
-                                <Button
-                                    theme={EButtonTheme.LINK}
-                                    size={EComponentSize.SM}
-                                    onClick={handleClickClearFilter}
-                                >
-                                    Button link text
-                                </Button>
-                            </DropdownMobileFooter>
-                        </>
-                    ),
-                }}
-            >
-                <MultiselectField.Dropdown.Header>
-                    <FormField size={EComponentSize.SM}>
-                        <FormFieldLabel>Type to proceed</FormFieldLabel>
-                        <FormFieldInput value={filter} onChange={handleFilterChange} />
-                        <FormFieldPostfix>
-                            <FormFieldClear onClick={handleClearInput} />
-                        </FormFieldPostfix>
-                    </FormField>
-                </MultiselectField.Dropdown.Header>
-                <MultiselectField.Dropdown.Content loading={true}>
-                    {renderDropdownContent()}
-                </MultiselectField.Dropdown.Content>
-                <MultiselectField.Dropdown.Footer>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={() => setOpened(false)}>
-                        Button text
-                    </Button>
-                    <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
-                        Button link text
-                    </Button>
-                </MultiselectField.Dropdown.Footer>
-            </MultiselectField.Dropdown>
-        );
-
-        return (
-            <ChipMultiselect
-                clearSelected={unselectAll}
-                selected={Boolean(checkboxes.filter((checkbox) => checkbox.checked).length)}
-                label="Multiselect label"
-            >
-                {(dropdownProps) => renderDropdown(dropdownProps)}
-            </ChipMultiselect>
-        );
+        docs: { source: { code: LoadingExampleSource, language: "tsx" } },
     },
 };
 
@@ -1084,93 +331,60 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
         },
     },
     render: () => {
-        const checkboxesInitial = [
-            {
-                bulk: false,
-                checked: false,
-                children: [
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-1-1",
-                                label: "Значение 1-1",
-                            },
-                        ],
-                        id: "multiselect-option-1",
-                        label: "Группа 1",
-                    },
-                    {
-                        bulk: false,
-                        checked: false,
-                        children: [
-                            {
-                                checked: false,
-                                id: "multiselect-option-2-1",
-                                label: "Значение 2-1",
-                            },
-                        ],
-                        id: "multiselect-option-2",
-                        label: "Группа 2",
-                    },
-                    {
-                        checked: false,
-                        id: "multiselect-option-3",
-                        label: "Значение 3",
-                    },
-                ],
-                id: "multiselect-option-0",
-                label: "Все",
-            },
-        ];
-
         const smChipRef = useRef<HTMLDivElement | null>(null);
         const mdChipRef = useRef<HTMLDivElement | null>(null);
         const lgChipRef = useRef<HTMLDivElement | null>(null);
 
-        function createMultiselectFieldStoriesLogic(args, chipRef) {
-            const [checkboxes, setCheckboxes] = useState(() => structuredClone(checkboxesInitial));
+        function createMultiselectFieldStoriesLogic(
+            args: { size: EComponentSize },
+            chipRef: React.RefObject<HTMLDivElement | null>,
+        ) {
+            const [selectedIds, setSelectedIds] = useState<string[]>([]);
             const [filter, setFilter] = useState("");
-            const [filteredCheckboxesId, setFilteredCheckboxesId] = useState<string[]>([]);
+            const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+            const visibleOptions = useMemo(() => {
+                const lower = filter.trim().toLowerCase();
+                if (!lower.length) {
+                    return CHIP_MULTISELECT_VISUAL_TEST_OPTIONS;
+                }
 
-            const handleChange = (checkbox) => (event) => {
-                checkbox.checked = checkbox.bulk ? true : event.target.checked;
-                checkChildrenCheckboxes(checkbox);
-                traverseCheckboxes(checkboxes, checkParentCheckboxes);
-                setCheckboxes([...checkboxes]);
+                return CHIP_MULTISELECT_VISUAL_TEST_OPTIONS.filter((opt) => opt.label.toLowerCase().includes(lower));
+            }, [filter]);
+
+            const handleToggle = (optionId: string, checked: boolean) => {
+                setSelectedIds((prev) => {
+                    if (checked) {
+                        if (prev.includes(optionId)) {
+                            return prev;
+                        }
+
+                        return [...prev, optionId];
+                    }
+
+                    return prev.filter((id) => id !== optionId);
+                });
             };
 
-            const renderCheckboxNode = (checkbox) => {
-                if (filter && !filteredCheckboxesId.includes(checkbox.id)) return null;
-
-                return (
-                    <CheckboxTreeExtended.Node
-                        key={checkbox.id}
-                        id={checkbox.id}
-                        checkbox={(props) => (
-                            <CheckboxTreeExtended.Checkbox
-                                {...props}
-                                bulk={checkbox.bulk}
-                                checked={checkbox.checked}
-                                onChange={handleChange(checkbox)}
-                            >
-                                {checkbox.label}
-                            </CheckboxTreeExtended.Checkbox>
-                        )}
-                    >
-                        {checkbox.children && checkbox.children.map((child) => renderCheckboxNode(child))}
-                    </CheckboxTreeExtended.Node>
-                );
-            };
+            const renderCheckboxList = () => (
+                <CheckboxYGroup aria-label="Options">
+                    {visibleOptions.map((opt) => (
+                        <Checkbox
+                            key={opt.id}
+                            id={opt.id}
+                            size={args.size}
+                            checked={selectedSet.has(opt.id)}
+                            onChange={(event) => handleToggle(opt.id, event.target.checked)}
+                        >
+                            {opt.label}
+                        </Checkbox>
+                    ))}
+                </CheckboxYGroup>
+            );
 
             const renderDropdownContent = () => {
-                const renderCheckboxes = !filter || (filteredCheckboxesId.length && filter);
+                const renderCheckboxes = !filter.trim() || visibleOptions.length > 0;
                 return renderCheckboxes ? (
-                    <CheckboxTreeExtended size={args.size}>
-                        {checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}
-                    </CheckboxTreeExtended>
+                    renderCheckboxList()
                 ) : (
                     <div className={`not-found ${args.size}`}>
                         <Text size={ETextSize.B3}>Nothing was found</Text>
@@ -1179,17 +393,11 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
             };
 
             const unselectAll = () => {
-                const nextCheckboxes = [...checkboxes];
-                traverseCheckboxes(nextCheckboxes, (checkbox) => {
-                    checkbox.checked = false;
-                    checkbox.bulk = false;
-                });
-                setCheckboxes(nextCheckboxes);
+                setSelectedIds([]);
+                setFilter("");
             };
 
             const handleClickClearFilter = () => {
-                setFilter("");
-                setFilteredCheckboxesId([]);
                 unselectAll();
             };
 
@@ -1197,27 +405,8 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                 setFilter("");
             };
 
-            const handleFilterChange = (event) => {
-                const { value } = event.target;
-                const filteredCheckboxes = [...checkboxes];
-                const filteredCheckboxesId = new Set<string>();
-
-                const setFilteredValue = (checkbox) => {
-                    if (checkbox.label.toLowerCase().includes(value.toLowerCase())) {
-                        filteredCheckboxesId.add(checkbox.id);
-                    } else if (checkbox.children) {
-                        const intersection = checkbox.children
-                            .map((item) => item.id)
-                            .filter((id) => Array.from(filteredCheckboxesId).includes(id));
-
-                        if (intersection.length) filteredCheckboxesId.add(checkbox.id);
-                    }
-                };
-
-                traverseCheckboxes(filteredCheckboxes, setFilteredValue);
-
-                setFilter(value);
-                setFilteredCheckboxesId(Array.from(filteredCheckboxesId));
+            const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                setFilter(event.target.value);
             };
 
             const shouldBeOpened =
@@ -1239,12 +428,18 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                 }
             }, [shouldBeOpened, chipRef]);
 
-            const renderDropdown = ({ targetRef, dropdownRef }) => (
+            const renderDropdown = ({
+                targetRef,
+                dropdownRef,
+            }: {
+                targetRef: React.RefObject<HTMLElement>;
+                dropdownRef: React.RefObject<HTMLDivElement>;
+            }) => (
                 <MultiselectField.Dropdown
                     opened={shouldBeOpened}
+                    setOpened={() => {}}
                     targetRef={targetRef}
                     ref={dropdownRef}
-                    alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{
                         focusTrapOptions: { initialFocus: false },
                     }}
@@ -1299,7 +494,7 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
             return {
                 unselectAll,
                 renderDropdown,
-                checkboxes,
+                selectedIds,
             };
         }
 
@@ -1313,7 +508,7 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                     ref={smChipRef}
                     size={EComponentSize.SM}
                     clearSelected={sm.unselectAll}
-                    selected={Boolean(sm.checkboxes.filter((checkbox) => checkbox.checked).length)}
+                    selected={sm.selectedIds.length > 0}
                     label="SM"
                 >
                     {(dropdownProps) => sm.renderDropdown(dropdownProps)}
@@ -1322,7 +517,7 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                     ref={mdChipRef}
                     size={EComponentSize.MD}
                     clearSelected={md.unselectAll}
-                    selected={Boolean(md.checkboxes.filter((checkbox) => checkbox.checked).length)}
+                    selected={md.selectedIds.length > 0}
                     label="MD"
                 >
                     {(dropdownProps) => md.renderDropdown(dropdownProps)}
@@ -1331,7 +526,7 @@ export const VisualTests: StoryObj<typeof ChipMultiselect> = {
                     ref={lgChipRef}
                     size={EComponentSize.LG}
                     clearSelected={lg.unselectAll}
-                    selected={Boolean(lg.checkboxes.filter((checkbox) => checkbox.checked).length)}
+                    selected={lg.selectedIds.length > 0}
                     label="LG"
                 >
                     {(dropdownProps) => lg.renderDropdown(dropdownProps)}

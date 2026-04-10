@@ -1,28 +1,27 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { clsx } from "clsx";
 import { EFontType } from "./enums";
 import { ITypographyProps } from "./types";
 import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
+import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/CodeText.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
 /** Свойства компонента CodeText. */
-export type TCodeTextProps<T extends keyof JSX.IntrinsicElements> = ITypographyProps & JSX.IntrinsicElements[T];
+export type TCodeTextProps<T extends React.ElementType> = PolymorphicComponentPropsWithRef<T, ITypographyProps>;
+
+type CodeTextComponent = (<T extends React.ElementType = "span">(
+    props: TCodeTextProps<T>,
+) => React.ReactElement | null) & {
+    displayName?: string;
+};
 
 /** Моноширинный текст (типографика). */
-export const CodeText = forwardRef<HTMLElement, TCodeTextProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "span">(
-        {
-            children,
-            className,
-            type = EFontType.PRIMARY,
-            underline,
-            strikethrough,
-            tag = "span" as T,
-            ...props
-        }: TCodeTextProps<T>,
+export const CodeText: CodeTextComponent = React.forwardRef(
+    <T extends React.ElementType = "span">(
+        { children, className, type = EFontType.PRIMARY, underline, strikethrough, tag, ...props }: TCodeTextProps<T>,
         ref: React.ForwardedRef<HTMLElement>,
-    ): React.JSX.Element => {
+    ) => {
         const classes = clsx(
             typographyStyles.typography,
             styles.codeText,
@@ -35,7 +34,7 @@ export const CodeText = forwardRef<HTMLElement, TCodeTextProps<keyof JSX.Intrins
             className,
         );
 
-        const Tag = tag;
+        const Tag = tag || "span";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

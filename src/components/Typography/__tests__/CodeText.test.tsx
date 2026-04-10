@@ -110,7 +110,7 @@ describe("CodeText", () => {
     });
 
     it("forwards ref correctly for div element", () => {
-        const ref = React.createRef<HTMLElement>();
+        const ref = React.createRef<HTMLDivElement>();
         render(
             <CodeText tag="div" ref={ref}>
                 Div Ref Test

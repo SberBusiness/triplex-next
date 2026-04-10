@@ -12,3 +12,4 @@ export { WithSelectedOptionExample } from "./WithSelectedOptionExample";
 export { default as WithSelectedOptionExampleSource } from "./WithSelectedOptionExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";

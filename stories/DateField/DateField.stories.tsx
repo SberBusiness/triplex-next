@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { DateField } from "../../src/components/DateField";
-import { EComponentSize } from "../../src/enums";
 import { EFormFieldStatus } from "../../src/components/FormField";
-import { HelpBox } from "../../src/components/HelpBox/HelpBox";
+import { EComponentSize } from "../../src/enums";
 import {
     Title as DocsTitle,
     Description,
@@ -14,14 +13,15 @@ import {
     Heading,
 } from "@storybook/addon-docs/blocks";
 import { dateFormatYYYYMMDD } from "../../src/consts/DateConst";
-import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
     StatesExample,
     StatesExampleSource,
     WithPostfixExample,
     WithPostfixExampleSource,
+    VisualTestsExample,
 } from "./examples";
 
 const meta = {
@@ -104,14 +104,7 @@ export const Playground: Story = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
-    render: (args) => {
-        const [value, setValue] = useState("");
-        return (
-            <div style={{ maxWidth: "300px" }}>
-                <DateField {...args} value={value} onChange={setValue} />
-            </div>
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {
@@ -135,59 +128,7 @@ export const VisualTests: Story = {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
     },
-    render: () => {
-        const [value, setValue] = useState("");
-        return (
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 5, flexWrap: "wrap" }}>
-                <div style={{ maxWidth: "250px" }}>
-                    <DateField
-                        value={value}
-                        defaultViewDate={"19700101"}
-                        onChange={setValue}
-                        label="Label"
-                        placeholderMask="дд.мм.гггг"
-                        invalidDateHint="Указана недоступная для выбора дата."
-                        targetProps={{
-                            postfix: (
-                                <HelpBox tooltipSize={ETooltipSize.SM} preferPlace={ETooltipPreferPlace.ABOVE}>
-                                    Text
-                                </HelpBox>
-                            ),
-                        }}
-                    />
-                </div>
-                <div style={{ maxWidth: "250px" }}>
-                    <DateField
-                        value="20260322"
-                        size={EComponentSize.SM}
-                        onChange={() => {}}
-                        label="Label"
-                        placeholderMask="дд.мм.гггг"
-                        invalidDateHint="Указана недоступная для выбора дата."
-                    />
-                </div>
-                <div style={{ maxWidth: "250px" }}>
-                    <DateField
-                        value="20260322"
-                        onChange={() => {}}
-                        label="Label"
-                        placeholderMask="дд.мм.гггг"
-                        invalidDateHint="Указана недоступная для выбора дата."
-                    />
-                </div>
-                <div style={{ maxWidth: "250px" }}>
-                    <DateField
-                        value="20260322"
-                        size={EComponentSize.LG}
-                        onChange={() => {}}
-                        label="Label"
-                        placeholderMask="дд.мм.гггг"
-                        invalidDateHint="Указана недоступная для выбора дата."
-                    />
-                </div>
-            </div>
-        );
-    },
+    render: VisualTestsExample,
     play: async ({ canvas, userEvent }) => {
         const inputs = await canvas.findAllByRole("textbox");
         await userEvent.click(inputs[0]);

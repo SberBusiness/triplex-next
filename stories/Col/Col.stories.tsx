@@ -1,8 +1,9 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
-import { Col, Row } from "@sberbusiness/triplex-next";
+import { Col } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
     DifferentSizesExample,
@@ -78,15 +79,7 @@ export const Playground: Story = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
-    render: (args) => (
-        <Row style={{ width: "600px" }}>
-            <Col {...args}>
-                <div style={{ padding: "16px", textAlign: "center", backgroundColor: "rgb(255, 217, 160)" }}>
-                    {args.children}
-                </div>
-            </Col>
-        </Row>
-    ),
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

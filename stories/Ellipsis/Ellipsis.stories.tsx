@@ -2,7 +2,7 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import { Ellipsis } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource } from "./examples/index";
+import { PlaygroundExample, DefaultExample, DefaultExampleSource } from "./examples/index";
 
 const meta = {
     title: "Components/Ellipsis",
@@ -48,15 +48,7 @@ export const Playground: Story = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
-    render: (args) => (
-        <Ellipsis {...args}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
-        </Ellipsis>
-    ),
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {

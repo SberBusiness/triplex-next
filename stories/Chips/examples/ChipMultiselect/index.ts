@@ -6,3 +6,4 @@ export { LoadingExample } from "./LoadingExample";
 export { default as LoadingExampleSource } from "./LoadingExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";

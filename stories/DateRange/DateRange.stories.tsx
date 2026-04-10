@@ -1,21 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import {
-    ButtonIcon,
-    DateField,
-    DateRange,
-    EDateRangeShiftUnit,
-    IDateRangeButtonProvideProps,
-    IDateRangePickerProvideProps,
-    TDateRangeValue,
-    FormFieldMaskedInput,
-} from "@sberbusiness/triplex-next";
+import { DateRange, EDateRangeShiftUnit } from "@sberbusiness/triplex-next";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
     WithoutNavigationExample,
     WithoutNavigationExampleSource,
+    VisualTestsExample,
 } from "./examples";
 
 const meta = {
@@ -73,32 +66,7 @@ export const Playground: DateRangePlaygroundStory = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
-    render: (args) => {
-        const [value, setValue] = useState<TDateRangeValue>(["", ""]);
-        const renderPicker = (props: IDateRangePickerProvideProps) => (
-            <DateField
-                label="Label"
-                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.date}
-                invalidDateHint="Указана недоступная для выбора дата."
-                {...props}
-            />
-        );
-        const renderButton = (props: IDateRangeButtonProvideProps) => <ButtonIcon {...props} />;
-
-        return (
-            <div style={{ maxWidth: "400px" }}>
-                <DateRange
-                    {...args}
-                    value={value}
-                    onChange={setValue}
-                    renderPickerFrom={renderPicker}
-                    renderPickerTo={renderPicker}
-                    renderButtonBack={renderButton}
-                    renderButtonForward={renderButton}
-                />
-            </div>
-        );
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {
@@ -128,30 +96,5 @@ export const VisualTests: Story = {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
     },
-    render: () => {
-        const renderPicker = (props: IDateRangePickerProvideProps) => (
-            <DateField
-                label="Label"
-                placeholderMask={FormFieldMaskedInput.presets.placeholderMasks.date}
-                invalidDateHint="Указана недоступная для выбора дата."
-                {...props}
-            />
-        );
-        const renderButton = (props: IDateRangeButtonProvideProps) => <ButtonIcon {...props} />;
-
-        return (
-            <div style={{ maxWidth: "400px" }}>
-                <DateRange
-                    value={["20260322", "20260322"]}
-                    onChange={() => {}}
-                    shiftAmount={1}
-                    shiftUnit={EDateRangeShiftUnit.MONTH}
-                    renderPickerFrom={renderPicker}
-                    renderPickerTo={renderPicker}
-                    renderButtonBack={renderButton}
-                    renderButtonForward={renderButton}
-                />
-            </div>
-        );
-    },
+    render: VisualTestsExample,
 };

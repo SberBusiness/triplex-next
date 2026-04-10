@@ -38,8 +38,14 @@ export const PlaygroundExample = (args: React.ComponentProps<typeof ChipSuggest>
             tooltipOpen={tooltipOpen}
             onSelect={setValue}
             onFilter={handleFilter}
-            targetProps={{ clearSelected: () => setValue(undefined), ...args.targetProps }}
-            dropdownProps={{ onOpen: handleDropdownOpen }}
+            targetProps={{
+                ...args.targetProps,
+                clearSelected: () => {
+                    setValue(undefined);
+                    args.targetProps?.clearSelected?.();
+                },
+            }}
+            dropdownProps={{ ...args.dropdownProps, onOpen: handleDropdownOpen }}
         />
     );
 };

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { DocumentNumberEdit } from "../../src/components/DocumentNumberEdit/DocumentNumberEdit";
 import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
-import { DefaultExample, DefaultExampleSource } from "./examples/index";
+import { PlaygroundExample, DefaultExample, DefaultExampleSource, VisualTestsExample } from "./examples/index";
 
 const meta = {
     title: "Components/DocumentNumberEdit",
@@ -59,11 +59,7 @@ export const Playground: Story = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
-    render: (args) => {
-        const [value, setValue] = useState("");
-        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
-        return <DocumentNumberEdit {...args} value={value} onChange={handleChange} />;
-    },
+    render: PlaygroundExample,
 };
 
 export const Default: Story = {
@@ -80,33 +76,7 @@ export const VisualTests: Story = {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
     },
-    render: () => {
-        const [value, setValue] = useState("");
-        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                <DocumentNumberEdit
-                    value={value}
-                    onChange={handleChange}
-                    buttonLabel="Изменить"
-                    emptyNumberButtonLabel="Задать номер"
-                    emptyNumberLabel="Номер документа будет присвоен автоматически"
-                    numberLabel="Документ №"
-                    maxLength={6}
-                />
-                <DocumentNumberEdit
-                    value="123456"
-                    onChange={handleChange}
-                    buttonLabel="Изменить"
-                    emptyNumberButtonLabel="Задать номер"
-                    emptyNumberLabel="Номер документа будет присвоен автоматически"
-                    numberLabel="Документ №"
-                    maxLength={6}
-                />
-            </div>
-        );
-    },
+    render: VisualTestsExample,
     play: async ({ canvas, userEvent }) => {
         const links = await canvas.findAllByRole("link");
         await userEvent.click(links[0]);

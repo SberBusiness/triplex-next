@@ -32,7 +32,7 @@ const CHIP_MULTISELECT_OPTIONS = [
     { id: "multiselect-option-3", label: "Значение 3" },
 ];
 
-export const ChipMultiselectLoadingExample = () => {
+export const LoadingExample = () => {
     const chipSize = EComponentSize.MD;
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);

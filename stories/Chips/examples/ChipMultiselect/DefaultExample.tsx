@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { MultiselectField } from "@sberbusiness/triplex-next";
 import {
+    MultiselectField,
     DropdownMobileHeader,
     DropdownMobileInput,
     DropdownMobileClose,
@@ -31,7 +31,7 @@ const CHIP_MULTISELECT_OPTIONS = [
     { id: "multiselect-option-3", label: "Значение 3" },
 ];
 
-export const ChipMultiselectDefaultExample = () => {
+export const DefaultExample = () => {
     const chipSize = EComponentSize.MD;
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);

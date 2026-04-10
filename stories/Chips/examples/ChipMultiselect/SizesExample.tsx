@@ -24,7 +24,7 @@ import {
 
 type SizeItemProps = { size: EComponentSize; title: string };
 
-const getChipMultiselectOptions = (title: string) => [
+const getDemoOptions = (title: string) => [
     { id: `${title}-multiselect-option-1-1`, label: "Значение 1-1" },
     { id: `${title}-multiselect-option-1-2`, label: "Значение 1-2" },
     { id: `${title}-multiselect-option-1-3`, label: "Значение 1-3" },
@@ -34,7 +34,7 @@ const getChipMultiselectOptions = (title: string) => [
 ];
 
 const SizeItem = ({ size, title }: SizeItemProps) => {
-    const options = useMemo(() => getChipMultiselectOptions(title), [title]);
+    const options = useMemo(() => getDemoOptions(title), [title]);
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [filter, setFilter] = useState("");
@@ -190,7 +190,7 @@ const SizeItem = ({ size, title }: SizeItemProps) => {
     );
 };
 
-export const ChipMultiselectSizesExample = () => (
+export const SizesExample = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
         <SizeItem size={EComponentSize.SM} title="SM" />
         <SizeItem size={EComponentSize.MD} title="MD" />

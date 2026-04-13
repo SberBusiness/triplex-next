@@ -14,3 +14,5 @@ export { TextWithIconExample } from "./TextWithIconExample";
 export { default as TextWithIconExampleSource } from "./TextWithIconExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { WithNotificationIconExample } from "./WithNotificationIconExample";
+export { default as WithNotificationIconExampleSource } from "./WithNotificationIconExample?raw";

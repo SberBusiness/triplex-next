@@ -1,27 +1,27 @@
 import React, { useState } from "react";
-import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { TextareaField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 
 interface ISizeItemProps {
     size: EComponentSize;
 }
 
 const SizeItem = ({ size }: ISizeItemProps) => {
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState("");
 
-    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const handleTextareaChange: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
         setValue(event.target.value);
     };
 
     return (
         <div style={{ maxWidth: 300 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
-            <NumberField
+            <TextareaField
                 size={size}
                 status={EFormFieldStatus.DEFAULT}
-                inputProps={{
+                textareaProps={{
                     value,
-                    placeholder: "0",
-                    onChange: handleInputChange,
+                    placeholder: "Type to proceed",
+                    onChange: handleTextareaChange,
                 }}
                 label="Label"
             />

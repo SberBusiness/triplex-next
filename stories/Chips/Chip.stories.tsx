@@ -12,6 +12,7 @@ import {
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
     PlaygroundExample,
+    WithNotificationIconExample,
 } from "./examples/Chip";
 
 const meta = {
@@ -111,17 +112,5 @@ export const WithNotificationIcon: StoryObj<typeof Chip> = {
     parameters: {
         controls: { disable: true },
     },
-    render: () => (
-        <div style={{ display: "flex", gap: 12 }}>
-            <Chip size={EComponentSize.SM} showNotificationIcon>
-                SM
-            </Chip>
-            <Chip size={EComponentSize.MD} showNotificationIcon>
-                MD
-            </Chip>
-            <Chip size={EComponentSize.LG} showNotificationIcon>
-                LG
-            </Chip>
-        </div>
-    ),
+    render: WithNotificationIconExample,
 };

@@ -3,11 +3,11 @@
 .confirm {
     flex-grow: 1;
     margin: 0 auto;
-    max-width: calc(@lightBox-content-max-width - @page-padding-desktop-x * 2);
+    max-width: calc(var(--lightBox-content-max-width, @lightBox-content-max-width-fallback) - @page-padding-desktop-x * 2);
     box-sizing: border-box;
 
     &.isInLightBox {
-        max-width: calc(@lightBox-content-max-width - @page-padding-desktop-x * 2);
+        max-width: calc(var(--lightBox-content-max-width, @lightBox-content-max-width-fallback) - @page-padding-desktop-x * 2);
     }
 
     &.isInSideOverlaySM {

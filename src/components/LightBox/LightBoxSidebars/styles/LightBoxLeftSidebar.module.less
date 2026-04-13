@@ -4,7 +4,7 @@
     // Ширина LightBox.
     --lightBox-width: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0));
     // Ширина Page внутри LightBox.
-    --page-width: @lightBox-content-max-width;
+    --page-width: var(--lightBox-content-max-width, @lightBox-content-max-width-fallback);
     // Положение левой боковой панели относительно левого края экрана.
     // Учитывает отступы от края экрана и ширину кнопки в LightBoxControls.
     --left-position: calc(var(--lightBox-screen-left) + @lightBoxContentMarginX + @lightBoxControlsPrevButtonMarginLeft * 2 + @lightBoxControlsButtonWidth);

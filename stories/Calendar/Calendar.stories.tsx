@@ -7,6 +7,8 @@ import { Calendar, ECalendarPickType } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
     PickTypesExample,
     PickTypesExampleSource,
     PlaygroundExample,
@@ -106,6 +108,7 @@ export const Default: Story = {
     render: DefaultExample,
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
         docs: {
             source: {
                 code: DefaultExampleSource,
@@ -122,6 +125,24 @@ export const PickTypes: Story = {
         docs: {
             source: {
                 code: PickTypesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+            source: {
+                code: VisualTestsExampleSource,
                 language: "tsx",
             },
         },

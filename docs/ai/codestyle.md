@@ -233,7 +233,7 @@ import { Button } from "../Button";
 @import (reference) "../../styles/components/lightbox";
 
 .panel {
-    max-width: @lightBox-content-max-width;
+    max-width: @lightBox-content-max-width-md;
 }
 ```
 

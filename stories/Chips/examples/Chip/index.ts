@@ -8,3 +8,5 @@ export { WithPrefixAndPostfixExample } from "./WithPrefixAndPostfixExample";
 export { default as WithPrefixAndPostfixExampleSource } from "./WithPrefixAndPostfixExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { WithNotificationIconExample } from "./WithNotificationIconExample";
+export { default as WithNotificationIconExampleSource } from "./WithNotificationIconExample?raw";

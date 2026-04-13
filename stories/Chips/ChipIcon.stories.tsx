@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { ChipIcon } from "../../src/components/Chip";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { ChipIcon, EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    PlaygroundExample,
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+} from "./examples/ChipIcon";
 
-export default {
+const meta = {
     title: "Components/Chips/ChipIcon",
     component: ChipIcon,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -31,18 +35,14 @@ Chip с иконкой.
             ),
         },
     },
-};
+} satisfies Meta<typeof ChipIcon>;
 
-export const Playground: StoryObj<typeof ChipIcon> = {
+export default meta;
+
+type Story = StoryObj<typeof ChipIcon>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
-    render: (args) => {
-        const [selected, setSelected] = useState(false);
-        return (
-            <ChipIcon {...args} selected={selected} onClick={() => setSelected((s) => !s)}>
-                <DefaulticonStrokePrdIcon24 paletteIndex={selected ? 6 : 5} />
-            </ChipIcon>
-        );
-    },
     args: {
         size: EComponentSize.MD,
         disabled: false,
@@ -51,7 +51,9 @@ export const Playground: StoryObj<typeof ChipIcon> = {
         size: { control: { type: "select" }, options: Object.values(EComponentSize) },
         disabled: { control: { type: "boolean" } },
     },
+    render: PlaygroundExample,
     parameters: {
+        testRunner: { skip: true },
         controls: {
             include: ["size", "disabled"],
         },
@@ -64,41 +66,28 @@ export const Playground: StoryObj<typeof ChipIcon> = {
     },
 };
 
-export const Default: StoryObj<typeof ChipIcon> = {
+export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selected, setSelected] = useState(false);
-        return (
-            <ChipIcon selected={selected} onClick={() => setSelected((s) => !s)}>
-                <DefaulticonStrokePrdIcon24 paletteIndex={selected ? 6 : 5} />
-            </ChipIcon>
-        );
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const Sizes: StoryObj<typeof ChipIcon> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selectedSM, setSelectedSM] = useState(0);
-        const [selectedMD, setSelectedMD] = useState(0);
-        const [selectedLG, setSelectedLG] = useState(0);
-
-        return (
-            <div style={{ display: "flex", gap: 12 }}>
-                <ChipIcon size={EComponentSize.SM} selected={selectedSM} onClick={() => setSelectedSM((s) => !s)}>
-                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedSM ? 6 : 5} />
-                </ChipIcon>
-                <ChipIcon size={EComponentSize.MD} selected={selectedMD} onClick={() => setSelectedMD((s) => !s)}>
-                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedMD ? 6 : 5} />
-                </ChipIcon>
-                <ChipIcon size={EComponentSize.LG} selected={selectedLG} onClick={() => setSelectedLG((s) => !s)}>
-                    <DefaulticonStrokePrdIcon24 paletteIndex={selectedLG ? 6 : 5} />
-                </ChipIcon>
-            </div>
-        );
+        docs: {
+            source: {
+                code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };

@@ -1,9 +1,19 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { ChipSuggest } from "../../src/components/Chip/ChipSuggest/ChipSuggest";
-import { ISuggestFieldOption } from "../../src/components/SuggestField/types";
-import { EComponentSize } from "../../src/enums";
-import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { ChipSuggest, EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    PlaygroundExample,
+    DefaultExample,
+    DefaultExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    StatesExample,
+    StatesExampleSource,
+    WithNotificationIconExample,
+    WithNotificationIconExampleSource,
+    VisualTestsExample,
+} from "./examples/ChipSuggest";
 
 const meta = {
     title: "Components/Chips/ChipSuggest",
@@ -70,7 +80,9 @@ const meta = {
 
 export default meta;
 
-export const Playground: StoryObj<typeof ChipSuggest> = {
+type Story = StoryObj<typeof ChipSuggest>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
         size: EComponentSize.LG,
@@ -102,439 +114,70 @@ export const Playground: StoryObj<typeof ChipSuggest> = {
         },
         testRunner: { skip: true },
     },
-    render: (args) => {
-        const fruits = [
-            "Hot Pepper",
-            "Corn",
-            "Tomato",
-            "Eggplant",
-            "Grapes",
-            "Melon",
-            "Watermelon",
-            "Tangerine",
-            "Lemon",
-            "Banana",
-            "Pineapple",
-            "Red Apple",
-            "Green Apple",
-            "Pear",
-            "Peach",
-            "Cherries",
-            "Strawberry",
-            "Avocado",
-            "Cucumber",
-            "Kiwi",
-            "Coconut",
-            "Mango",
-            "Blueberries",
-            "Bell Pepper",
-            "Olive",
-            "Pea Pod",
-        ];
-
-        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
-            id: `suggest-option-${index}`,
-            label: fruit,
-        }));
-
-        const [value, setValue] = useState<ISuggestFieldOption>();
-        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
-        const [tooltipOpen, setTooltipOpen] = useState(false);
-        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
-
-        const handleDropdownOpen = () => {
-            setOptions(initialOptionsRef.current);
-            setTooltipOpen(false);
-        };
-
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(initialOptionsRef.current);
-                setTooltipOpen(false);
-                return;
-            }
-
-            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-
-            setOptions(filteredOptions);
-            setTooltipOpen(filteredOptions.length === 0);
-        };
-
-        return (
-            <ChipSuggest
-                {...args}
-                value={value}
-                options={options}
-                tooltipOpen={tooltipOpen}
-                onSelect={setValue}
-                onFilter={handleFilter}
-                targetProps={{ clearSelected: () => setValue(undefined), ...args.targetProps }}
-                dropdownProps={{ onOpen: handleDropdownOpen }}
-            />
-        );
-    },
+    render: PlaygroundExample,
 };
 
-export const Default: StoryObj<typeof ChipSuggest> = {
+export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const fruits = [
-            "Hot Pepper",
-            "Corn",
-            "Tomato",
-            "Eggplant",
-            "Grapes",
-            "Melon",
-            "Watermelon",
-            "Tangerine",
-            "Lemon",
-            "Banana",
-            "Pineapple",
-            "Red Apple",
-            "Green Apple",
-            "Pear",
-            "Peach",
-            "Cherries",
-            "Strawberry",
-            "Avocado",
-            "Cucumber",
-            "Kiwi",
-            "Coconut",
-            "Mango",
-            "Blueberries",
-            "Bell Pepper",
-            "Olive",
-            "Pea Pod",
-        ];
-
-        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
-            id: `suggest-option-${index}`,
-            label: fruit,
-        }));
-
-        const [value, setValue] = useState<ISuggestFieldOption>();
-        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
-        const [tooltipOpen, setTooltipOpen] = useState(false);
-        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
-
-        const handleDropdownOpen = () => {
-            setOptions(initialOptionsRef.current);
-            setTooltipOpen(false);
-        };
-
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(initialOptionsRef.current);
-                setTooltipOpen(false);
-                return;
-            }
-
-            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-
-            setOptions(filteredOptions);
-            setTooltipOpen(filteredOptions.length === 0);
-        };
-
-        return (
-            <ChipSuggest
-                value={value}
-                options={options}
-                tooltipOpen={tooltipOpen}
-                onSelect={setValue}
-                onFilter={handleFilter}
-                targetProps={{ clearSelected: () => setValue(undefined) }}
-                dropdownProps={{ onOpen: handleDropdownOpen }}
-                label="Suggest label"
-                placeholder="Type to proceed"
-                noOptionsText="No matches found."
-                size={EComponentSize.MD}
-            />
-        );
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const Sizes: StoryObj<typeof ChipSuggest> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const sizes = Object.values(EComponentSize);
-
-        const fruits = [
-            "Hot Pepper",
-            "Corn",
-            "Tomato",
-            "Eggplant",
-            "Grapes",
-            "Melon",
-            "Watermelon",
-            "Tangerine",
-            "Lemon",
-            "Banana",
-            "Pineapple",
-            "Red Apple",
-            "Green Apple",
-            "Pear",
-            "Peach",
-            "Cherries",
-            "Strawberry",
-            "Avocado",
-            "Cucumber",
-            "Kiwi",
-            "Coconut",
-            "Mango",
-            "Blueberries",
-            "Bell Pepper",
-            "Olive",
-            "Pea Pod",
-        ];
-
-        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
-            id: `suggest-option-${index}`,
-            label: fruit,
-        }));
-
-        const [valueSM, setValueSM] = useState<ISuggestFieldOption>();
-        const [valueMD, setValueMD] = useState<ISuggestFieldOption>();
-        const [valueLG, setValueLG] = useState<ISuggestFieldOption>();
-
-        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
-        const [tooltipOpen, setTooltipOpen] = useState(false);
-        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
-
-        const handleDropdownOpen = () => {
-            setOptions(initialOptionsRef.current);
-            setTooltipOpen(false);
-        };
-
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(initialOptionsRef.current);
-                setTooltipOpen(false);
-                return;
-            }
-
-            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-
-            setOptions(filteredOptions);
-            setTooltipOpen(filteredOptions.length === 0);
-        };
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-                {sizes.map((size) => {
-                    return (
-                        <ChipSuggest
-                            key={size}
-                            size={size}
-                            label={size.toUpperCase()}
-                            placeholder="Type to proceed"
-                            noOptionsText="No matches found."
-                            value={
-                                size === EComponentSize.SM ? valueSM : size === EComponentSize.MD ? valueMD : valueLG
-                            }
-                            options={options}
-                            tooltipOpen={tooltipOpen}
-                            onSelect={
-                                size === EComponentSize.SM
-                                    ? setValueSM
-                                    : size === EComponentSize.MD
-                                      ? setValueMD
-                                      : setValueLG
-                            }
-                            onFilter={handleFilter}
-                            targetProps={{
-                                clearSelected: () =>
-                                    size === EComponentSize.SM
-                                        ? setValueSM(undefined)
-                                        : size === EComponentSize.MD
-                                          ? setValueMD(undefined)
-                                          : setValueLG(undefined),
-                            }}
-                            dropdownProps={{ onOpen: handleDropdownOpen }}
-                        />
-                    );
-                })}
-            </div>
-        );
+        docs: {
+            source: {
+                code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const States: StoryObj<typeof ChipSuggest> = {
+export const States: Story = {
+    render: StatesExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "ChipSuggest в состояниях selected, disabled.",
             },
+            source: {
+                code: StatesExampleSource,
+                language: "tsx",
+            },
         },
-    },
-    render: () => {
-        const fruits = [
-            "Hot Pepper",
-            "Corn",
-            "Tomato",
-            "Eggplant",
-            "Grapes",
-            "Melon",
-            "Watermelon",
-            "Tangerine",
-            "Lemon",
-            "Banana",
-            "Pineapple",
-            "Red Apple",
-            "Green Apple",
-            "Pear",
-            "Peach",
-            "Cherries",
-            "Strawberry",
-            "Avocado",
-            "Cucumber",
-            "Kiwi",
-            "Coconut",
-            "Mango",
-            "Blueberries",
-            "Bell Pepper",
-            "Olive",
-            "Pea Pod",
-        ];
-
-        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
-            id: `suggest-option-${index}`,
-            label: fruit,
-        }));
-
-        const [valueSelected, setValueSelected] = useState<ISuggestFieldOption>();
-        const [valueDisabled, setValueDisabled] = useState<ISuggestFieldOption>();
-        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
-        const [tooltipOpen, setTooltipOpen] = useState(false);
-        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
-
-        const handleDropdownOpen = () => {
-            setOptions(initialOptionsRef.current);
-            setTooltipOpen(false);
-        };
-
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(initialOptionsRef.current);
-                setTooltipOpen(false);
-                return;
-            }
-
-            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-
-            setOptions(filteredOptions);
-            setTooltipOpen(filteredOptions.length === 0);
-        };
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-                {[
-                    { label: "Suggest label", targetProps: { selected: true } },
-                    { label: "Suggest label", targetProps: { disabled: true } },
-                ].map((state) => {
-                    return (
-                        <ChipSuggest
-                            key={state.label}
-                            label={state.targetProps.selected ? "Selected" : "Disabled"}
-                            size={EComponentSize.MD}
-                            placeholder="Type to proceed"
-                            noOptionsText="No matches found."
-                            value={state.targetProps.selected ? valueSelected : valueDisabled}
-                            options={options}
-                            tooltipOpen={tooltipOpen}
-                            onSelect={state.targetProps.selected ? setValueSelected : setValueDisabled}
-                            onFilter={handleFilter}
-                            targetProps={{
-                                clearSelected: () =>
-                                    state.targetProps.selected
-                                        ? setValueSelected(undefined)
-                                        : setValueDisabled(undefined),
-                                ...state.targetProps,
-                            }}
-                            dropdownProps={{ onOpen: handleDropdownOpen }}
-                        />
-                    );
-                })}
-            </div>
-        );
     },
 };
 
-export const WithNotificationIcon: StoryObj<typeof ChipSuggest> = {
+export const WithNotificationIcon: Story = {
+    render: WithNotificationIconExample,
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
         docs: {
             description: {
                 story: "ChipSuggest с опциями, у которых задан showNotificationIcon. Флаг передаётся напрямую в объект опции.",
             },
+            source: {
+                code: WithNotificationIconExampleSource,
+                language: "tsx",
+            },
         },
-        testRunner: { skip: true },
-    },
-    render: () => {
-        const fruits = ["Hot Pepper", "Corn", "Tomato", "Eggplant", "Grapes", "Melon"];
-
-        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
-            id: `suggest-option-${index}`,
-            label: fruit,
-            showNotificationIcon: index === 2,
-        }));
-
-        const [value, setValue] = useState<ISuggestFieldOption>();
-        const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
-        const [tooltipOpen, setTooltipOpen] = useState(false);
-        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
-
-        const handleDropdownOpen = () => {
-            setOptions(initialOptionsRef.current);
-            setTooltipOpen(false);
-        };
-
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(initialOptionsRef.current);
-                setTooltipOpen(false);
-                return;
-            }
-
-            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-
-            setOptions(filteredOptions);
-            setTooltipOpen(filteredOptions.length === 0);
-        };
-
-        return (
-            <ChipSuggest
-                value={value}
-                options={options}
-                tooltipOpen={tooltipOpen}
-                onSelect={setValue}
-                onFilter={handleFilter}
-                targetProps={{ clearSelected: () => setValue(undefined) }}
-                dropdownProps={{ onOpen: handleDropdownOpen }}
-                label="Suggest label"
-                placeholder="Type to proceed"
-                noOptionsText="No matches found."
-                size={EComponentSize.MD}
-            />
-        );
     },
 };
 
-export const VisualTests: StoryObj<typeof ChipSuggest> = {
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -544,110 +187,5 @@ export const VisualTests: StoryObj<typeof ChipSuggest> = {
             codePanel: false,
         },
     },
-    render: () => {
-        const sizes = Object.values(EComponentSize);
-
-        const fruits = [
-            "Hot Pepper",
-            "Corn",
-            "Tomato",
-            "Eggplant",
-            "Grapes",
-            "Melon",
-            "Watermelon",
-            "Tangerine",
-            "Lemon",
-            "Banana",
-            "Pineapple",
-            "Red Apple",
-            "Green Apple",
-            "Pear",
-            "Peach",
-            "Cherries",
-            "Strawberry",
-            "Avocado",
-            "Cucumber",
-            "Kiwi",
-            "Coconut",
-            "Mango",
-            "Blueberries",
-            "Bell Pepper",
-            "Olive",
-            "Pea Pod",
-        ];
-
-        const initialOptions: ISuggestFieldOption[] = fruits.map((fruit, index) => ({
-            id: `suggest-option-${index}`,
-            label: fruit,
-        }));
-
-        const [valueSM, setValueSM] = useState<ISuggestFieldOption>();
-        const [valueMD, setValueMD] = useState<ISuggestFieldOption>();
-        const [valueLG, setValueLG] = useState<ISuggestFieldOption>();
-
-        const [options, setOptions] = useState<ISuggestFieldOption[]>(initialOptions);
-        const [tooltipOpen, setTooltipOpen] = useState(false);
-        const initialOptionsRef = useRef<ISuggestFieldOption[]>(initialOptions);
-        const rootRef = useRef<HTMLDivElement>(null);
-
-        useLayoutEffect(() => {
-            const targets = rootRef.current?.querySelectorAll<HTMLElement>('[role="button"]');
-            targets?.forEach((el) => el.click());
-        }, []);
-
-        const handleFilter = (inputValue: string) => {
-            if (inputValue.length === 0) {
-                setOptions(initialOptionsRef.current);
-                setTooltipOpen(false);
-                return;
-            }
-
-            const filteredOptions = initialOptionsRef.current.filter(({ label }) =>
-                label.toLowerCase().includes(inputValue.toLowerCase()),
-            );
-
-            setOptions(filteredOptions);
-            setTooltipOpen(filteredOptions.length === 0);
-        };
-
-        return (
-            <div
-                ref={rootRef}
-                style={{ display: "flex", maxWidth: 900, alignItems: "flex-start", justifyContent: "space-between" }}
-            >
-                {sizes.map((size) => {
-                    return (
-                        <ChipSuggest
-                            key={size}
-                            size={size}
-                            label={size.toUpperCase()}
-                            placeholder="Type to proceed"
-                            noOptionsText="No matches found."
-                            value={
-                                size === EComponentSize.SM ? valueSM : size === EComponentSize.MD ? valueMD : valueLG
-                            }
-                            options={options}
-                            tooltipOpen={tooltipOpen}
-                            onSelect={
-                                size === EComponentSize.SM
-                                    ? setValueSM
-                                    : size === EComponentSize.MD
-                                      ? setValueMD
-                                      : setValueLG
-                            }
-                            onFilter={handleFilter}
-                            targetProps={{
-                                clearSelected: () =>
-                                    size === EComponentSize.SM
-                                        ? setValueSM(undefined)
-                                        : size === EComponentSize.MD
-                                          ? setValueMD(undefined)
-                                          : setValueLG(undefined),
-                            }}
-                        />
-                    );
-                })}
-            </div>
-        );
-    },
+    render: VisualTestsExample,
 };

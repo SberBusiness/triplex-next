@@ -37,6 +37,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлено выравнивание ButtonDropdown в Page.Header.Title.Controls на мобильном устройстве.
 
+**HelpBox**
+
+- Добавлен `forwardRef` — ref пробрасывается на кнопку-триггер.
+- Добавлено свойство `tooltipXButtonProps` для передачи атрибутов на кнопку закрытия Tooltip.
+- Убраны захардкоженные `aria-label` — потребитель передаёт `aria-label` через rest-props и `tooltipXButtonProps`.
+
 **SelectExtendedField**
 
 - Исправлен баг: `onClose` и `onOpen` больше не вызываются при ре-рендере родительского компонента.

@@ -1,4 +1,5 @@
-import { test, expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
+import { test, expect } from "../fixtures";
 
 async function getButtons(page: Page, url: string) {
     await page.goto(url);

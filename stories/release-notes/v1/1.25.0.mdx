@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.25.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**IconWrapper**
+
+- Добавлен компонент-обёртка для иконок из `@sberbusiness/icons-next`. Применяет классы `hoverable`, `active`, `disabled`, управляющие цветом иконки при взаимодействии.
+
 <Heading>Изменения</Heading>
 
 **AlertProcess**
@@ -11,9 +17,22 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлено свойство `borderRadius` для управления скруглением визуальной формы.
 - Изменен цвет фона в светлой теме для типа `System`.
 
+**IslandAccordion**
+
+- Кнопка удаления элемента теперь обёрнута в `IconWrapper`.
+
 **LightBox**
 
 - Добавлен prop `size` (`ELightBoxSize`) для управления шириной контента. Размер контента автоматически применяется к `LightBox.Content`, `LightBox.SideOverlay`, `LightBox.LeftSidebar` и `LightBox.RightSidebar`.
+
+**SelectExtendedField**
+
+- Иконка каретки теперь обёрнута в `IconWrapper`.
+- Убран лишний класс `hoverable` с `FormFieldPrefix` внутри target.
+
+**Stepper**
+
+- Иконка шага теперь обёрнута в `IconWrapper`.
 
 **TabsLine**
 

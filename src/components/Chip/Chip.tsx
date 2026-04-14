@@ -77,17 +77,17 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 ref={ref}
             >
                 {prefix ? (
-                    <IconWrapper className={styles.prefix} disabled={Boolean(disabled)}>
-                        {prefix}
-                    </IconWrapper>
+                    <span className={styles.prefix}>
+                        <IconWrapper disabled={Boolean(disabled)}>{prefix}</IconWrapper>
+                    </span>
                 ) : null}
 
                 <span className={styles.content}>{children}</span>
 
                 {postfix ? (
-                    <IconWrapper className={styles.postfix} disabled={Boolean(disabled)}>
-                        {postfix}
-                    </IconWrapper>
+                    <span className={styles.postfix}>
+                        <IconWrapper disabled={Boolean(disabled)}>{postfix}</IconWrapper>
+                    </span>
                 ) : null}
 
                 {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}

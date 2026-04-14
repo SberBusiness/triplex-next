@@ -139,7 +139,7 @@ export const WithPrefixAndPostfixExample = () => {
                         placeholder="Select to proceed"
                         label={renderTags()}
                         prefix={
-                            <IconWrapper disablePointerEvents>
+                            <IconWrapper disableInteraction>
                                 <DefaulticonStrokePrdIcon24 paletteIndex={5} />
                             </IconWrapper>
                         }

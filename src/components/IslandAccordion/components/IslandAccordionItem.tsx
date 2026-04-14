@@ -13,7 +13,6 @@ import { Step, EStepStatus, EStepPosition } from "../../Step";
 import { IslandAccordionContext } from "../IslandAccordionContext";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { ETitleSize, Title, EFontType } from "../../Typography";
-import { IconWrapper } from "../../IconWrapper";
 import styles from "../styles/IslandAccordion.module.less";
 
 export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
@@ -172,11 +171,11 @@ export const IslandAccordionItem = Object.assign(
                     </Island>
 
                     {onRemove && (
-                        <IconWrapper className={styles.remove} disabled={disabled}>
-                            <ButtonIcon onClick={handleRemoveClick} title="Удалить">
+                        <span className={styles.remove}>
+                            <ButtonIcon onClick={handleRemoveClick} disabled={disabled} title="Удалить">
                                 <CrossStrokeSrvIcon24 paletteIndex={5} />
                             </ButtonIcon>
-                        </IconWrapper>
+                        </span>
                     )}
                 </li>
             );

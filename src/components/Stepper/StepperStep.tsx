@@ -129,9 +129,9 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
     };
 
     const renderIcon = () => (
-        <IconWrapper className={styles.icon} disabled={!!disabled}>
-            {icon}
-        </IconWrapper>
+        <span className={styles.icon}>
+            <IconWrapper disabled={!!disabled}>{icon}</IconWrapper>
+        </span>
     );
 
     const renderContent = () => (

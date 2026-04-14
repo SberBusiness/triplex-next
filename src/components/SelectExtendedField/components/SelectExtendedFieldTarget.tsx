@@ -163,13 +163,11 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                     {loading ? (
                         sizeToLoaderSizeMap[size]
                     ) : (
-                        <IconWrapper
-                            className={styles.caretWrapper}
-                            active={opened}
-                            disabled={status === EFormFieldStatus.DISABLED}
-                        >
-                            {sizeToCaretIconMap[size]}
-                        </IconWrapper>
+                        <span className={styles.caretWrapper}>
+                            <IconWrapper active={opened} disabled={status === EFormFieldStatus.DISABLED}>
+                                {sizeToCaretIconMap[size]}
+                            </IconWrapper>
+                        </span>
                     )}
                     {postfix ? postfix : null}
                 </FormFieldPostfix>

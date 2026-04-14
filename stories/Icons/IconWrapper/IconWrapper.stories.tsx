@@ -36,8 +36,7 @@ export const Playground: Story = {
     args: {
         active: false,
         disabled: false,
-        disablePointerEvents: false,
-        displayContents: false,
+        disableInteraction: false,
         children: <SettingsStrokeSrvIcon20 paletteIndex={5} />,
     },
     argTypes: {
@@ -49,13 +48,9 @@ export const Playground: Story = {
             control: "boolean",
             description: "Отключённое состояние иконки.",
         },
-        disablePointerEvents: {
+        disableInteraction: {
             control: "boolean",
-            description: "Отключить pointer events.",
-        },
-        displayContents: {
-            control: "boolean",
-            description: "Применить display: contents (обёртка не участвует в layout).",
+            description: "Отключить взаимодействие с иконкой.",
         },
         children: {
             table: { disable: true },

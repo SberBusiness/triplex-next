@@ -1,20 +1,21 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { IconWrapper } from "../IconWrapper";
 
 describe("IconWrapper", () => {
     const renderComponent = (props: Partial<React.ComponentProps<typeof IconWrapper>> = {}) =>
         render(
-            <IconWrapper data-testid="icon-wrapper" {...props}>
+            <IconWrapper {...props}>
                 <svg data-testid="icon" />
             </IconWrapper>,
         );
 
+    const getWrapper = () => screen.getByTestId("icon").parentElement as HTMLSpanElement;
+
     it("renders without errors", () => {
         renderComponent();
-        expect(screen.getByTestId("icon-wrapper")).toBeInTheDocument();
+        expect(getWrapper()).toBeInTheDocument();
     });
 
     it("renders children", () => {
@@ -34,56 +35,31 @@ describe("IconWrapper", () => {
 
     it("applies hoverable class by default", () => {
         renderComponent();
-        expect(screen.getByTestId("icon-wrapper")).toHaveClass("hoverable");
+        expect(getWrapper()).toHaveClass("hoverable");
     });
 
     it("applies active class when active prop is set", () => {
         renderComponent({ active: true });
-        expect(screen.getByTestId("icon-wrapper")).toHaveClass("active");
+        expect(getWrapper()).toHaveClass("active");
     });
 
     it("does not apply active class when active is false", () => {
         renderComponent({ active: false });
-        expect(screen.getByTestId("icon-wrapper")).not.toHaveClass("active");
+        expect(getWrapper()).not.toHaveClass("active");
     });
 
     it("applies disabled class when disabled prop is set", () => {
         renderComponent({ disabled: true });
-        expect(screen.getByTestId("icon-wrapper")).toHaveClass("disabled");
+        expect(getWrapper()).toHaveClass("disabled");
     });
 
     it("does not apply disabled class when disabled is false", () => {
         renderComponent({ disabled: false });
-        expect(screen.getByTestId("icon-wrapper")).not.toHaveClass("disabled");
+        expect(getWrapper()).not.toHaveClass("disabled");
     });
 
-    it("applies disablePointerEvents style", () => {
-        renderComponent({ disablePointerEvents: true });
-        const el = screen.getByTestId("icon-wrapper");
-        expect(el.className).toMatch(/disablePointerEvents/);
-    });
-
-    it("applies displayContents style", () => {
-        renderComponent({ displayContents: true });
-        const el = screen.getByTestId("icon-wrapper");
-        expect(el.className).toMatch(/displayContents/);
-    });
-
-    it("passes className to root element", () => {
-        renderComponent({ className: "custom-class" });
-        expect(screen.getByTestId("icon-wrapper")).toHaveClass("custom-class");
-    });
-
-    it("spreads rest props to root element", () => {
-        renderComponent({ "aria-label": "settings icon" } as React.HTMLAttributes<HTMLSpanElement>);
-        expect(screen.getByTestId("icon-wrapper")).toHaveAttribute("aria-label", "settings icon");
-    });
-
-    it("calls onClick when clicked", async () => {
-        const user = userEvent.setup();
-        const onClick = vi.fn();
-        renderComponent({ onClick });
-        await user.click(screen.getByTestId("icon-wrapper"));
-        expect(onClick).toHaveBeenCalledTimes(1);
+    it("applies disableInteraction style", () => {
+        renderComponent({ disableInteraction: true });
+        expect(getWrapper().className).toMatch(/disableInteraction/);
     });
 });

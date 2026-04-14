@@ -2,7 +2,13 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
 import { Divider } from "@sberbusiness/triplex-next";
-import { PlaygroundExample, DefaultExample, DefaultExampleSource } from "./examples/index";
+import {
+    PlaygroundExample,
+    DefaultExample,
+    DefaultExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
+} from "./examples/index";
 
 const meta = {
     title: "Components/Divider",
@@ -62,5 +68,18 @@ export const Default: Story = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: DefaultExampleSource, language: "tsx" } },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: VisualTestsExampleSource, language: "tsx" },
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
     },
 };

@@ -16,3 +16,5 @@ export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
 export { BorderRadiusExample } from "./BorderRadiusExample";
 export { default as BorderRadiusExampleSource } from "./BorderRadiusExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";
+export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";

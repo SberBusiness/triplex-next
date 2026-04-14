@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 import { EButtonIconShape } from "@sberbusiness/triplex-next/components/Button/enums";
-import { IconWrapper } from "@sberbusiness/triplex-next";
+import { IconWrapper } from "@sberbusiness/triplex-next/components/IconWrapper";
 import styles from "./styles/ButtonIcon.module.less";
 
 const iconShapeToClassNameMap = {

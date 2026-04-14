@@ -16,36 +16,37 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен адаптивный вид `CheckboxYGroup`.
 
-**Chip**
+**ChipSelect, ChipSort**
 
-- Иконки в `prefix` и `postfix` теперь обёрнуты в `IconWrapper`.
+- Исправлено позиционирование `Dropdown`: теперь выравнивается по левому краю таргета.
+
+**Col**
+
+- Уменьшен горизонтальный отступ между колонками: `@grid-horizontal-gap` изменён с `12px` на `8px`.
 
 **Dropdown**
 
 - Для значений `LEFT`/`RIGHT` из `EDropdownAlignment` внедрено адаптивное позиционирование.
+- Исправлен перенос текста в пунктах списка: удалён `white-space: nowrap` у элемента `DropdownDesktopList`.
 
-**FormField**
+**Island**
 
-- Исправлен баг: убрано `pointer-events: none` с `FormFieldPrefix` — элементы внутри префикса теперь интерактивны.
+- Исправлено применение `className` в `IslandBody`: теперь пользовательский класс передается корректно.
 
-**IconWrapper**
+**LightBox**
 
-- Добавлен компонент-обёртка для иконок из `@sberbusiness/icons-next`. Применяет классы `hoverable`, `active`, `disabled`, управляющие цветом иконки при взаимодействии.
+- Исправлено выравнивание ButtonDropdown в Page.Header.Title.Controls на мобильном устройстве.
 
-**IslandAccordion**
+**HelpBox**
 
-- Кнопка удаления элемента теперь обёрнута в `IconWrapper`.
+- Добавлен `forwardRef` — ref пробрасывается на кнопку-триггер.
+- Добавлено свойство `tooltipXButtonProps` для передачи атрибутов на кнопку закрытия Tooltip.
+- Убраны захардкоженные `aria-label` — потребитель передаёт `aria-label` через rest-props и `tooltipXButtonProps`.
 
 **SelectExtendedField**
 
-- Иконка каретки теперь обёрнута в `IconWrapper`.
-- Убран лишний класс `hoverable` с `FormFieldPrefix` внутри target.
 - Исправлен баг: `onClose` и `onOpen` больше не вызываются при ре-рендере родительского компонента.
 - Исправлен баг: `onClose` больше не вызывается при первоначальном монтировании компонента.
-
-**Stepper**
-
-- Иконка шага теперь обёрнута в `IconWrapper`.
 
 **Typography**
 

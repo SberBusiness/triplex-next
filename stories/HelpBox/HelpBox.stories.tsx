@@ -111,7 +111,12 @@ export const Playground: StoryObj<IHelpBoxPlaygroundProps> = {
 
         return (
             <div style={{ display: "flex", justifyContent: "center", padding: 50 }}>
-                <HelpBox {...helpBoxProps} mobileHeaderContent={mobileHeaderText || undefined}>
+                <HelpBox
+                    {...helpBoxProps}
+                    mobileHeaderContent={mobileHeaderText || undefined}
+                    aria-label="Подсказка"
+                    tooltipXButtonProps={{ "aria-label": "Закрыть" }}
+                >
                     {contentText || "Текст подсказки"}
                 </HelpBox>
             </div>
@@ -223,6 +228,8 @@ export const VisualTests: StoryObj<typeof HelpBox> = {
                 preferPlace={ETooltipPreferPlace.BELOW}
                 mobileHeaderContent="Заголовок подсказки"
                 isOpen
+                aria-label="Подсказка"
+                tooltipXButtonProps={{ "aria-label": "Закрыть" }}
             >
                 Тултип размера LG с длинным содержимым для демонстрации разницы
             </HelpBox>

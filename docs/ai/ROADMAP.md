@@ -56,6 +56,7 @@
 | Компонент | AI.md | Figma Node | Статус |
 |---|---|---|---|
 | Button | ✅ | ✅ | Пилот |
+| HelpBox | ✅ | ⬜ | AI-Ready |
 | Alert | ⬜ | ⬜ | — |
 | Badge | ⬜ | ⬜ | — |
 | Card | ⬜ | ⬜ | — |

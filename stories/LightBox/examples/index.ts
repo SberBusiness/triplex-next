@@ -1,7 +1,7 @@
 export * from "./DefaultExample";
 export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export * from "./WithWidePageExample";
-export { default as WithWidePageExampleSource } from "./WithWidePageExample?raw";
+export * from "./SizesExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";
 export * from "./SmallContentExample";
 export { default as SmallContentExampleSource } from "./SmallContentExample?raw";
 export * from "./SplitModeExample";

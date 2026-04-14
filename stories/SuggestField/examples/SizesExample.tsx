@@ -99,9 +99,9 @@ const SizeItem = ({ size }: ISizeItemProps) => {
             options={options}
             size={size}
             status={EFormFieldStatus.DEFAULT}
-            label={"Label"}
-            placeholder={"Type to proceed"}
-            tooltipHint={"No matches found."}
+            label="Label"
+            placeholder="Type to proceed"
+            tooltipHint="No matches found."
             tooltipOpen={tooltipOpen}
             onFilter={handleFilter}
             onSelect={handleSelect}
@@ -116,7 +116,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 const SIZES = Object.values(EComponentSize);
 
 export const SizesExample = () => (
-    <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
         ))}

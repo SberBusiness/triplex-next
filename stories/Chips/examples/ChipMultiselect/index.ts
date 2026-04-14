@@ -1,6 +1,9 @@
-export { ChipMultiselectDefaultExample as DefaultExample } from "./ChipMultiselectDefaultExample";
-export { default as DefaultExampleSource } from "./ChipMultiselectDefaultExample?raw";
-export { ChipMultiselectSizesExample as SizesExample } from "./ChipMultiselectSizesExample";
-export { default as SizesExampleSource } from "./ChipMultiselectSizesExample?raw";
-export { ChipMultiselectLoadingExample as LoadingExample } from "./ChipMultiselectLoadingExample";
-export { default as LoadingExampleSource } from "./ChipMultiselectLoadingExample?raw";
+export { DefaultExample } from "./DefaultExample";
+export { default as DefaultExampleSource } from "./DefaultExample?raw";
+export { SizesExample } from "./SizesExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";
+export { LoadingExample } from "./LoadingExample";
+export { default as LoadingExampleSource } from "./LoadingExample?raw";
+export { PlaygroundExample } from "./PlaygroundExample";
+export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";

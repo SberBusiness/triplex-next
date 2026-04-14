@@ -86,24 +86,22 @@ stories/
         ...
 ```
 
-В modern pattern все стори, кроме **Playground** и **Visual tests**, выносятся в подпапку `examples/` и импортируются в основной файл.
+Если файл сторей компонента находится в папке `stories`, необходимо создать одноименную папку и перенести файл сторей туда.
 
-Playground и Visual tests остаются inline в файле stories, потому что:
-- **Playground** — интерактивная песочница, не предназначена для копирования.
-- **Visual tests** — тестовый код (захардкоженные данные, `isOpen`, `play`-функции), не предназначен для копирования. Не показывает исходный код в docs, поэтому `?raw`-экспорт не нужен.
+Все стори выносятся в подпапку `examples/` и импортируются в основной файл. Если в основной папке находятся несколько файлов с расширением `.stories.tsx`, внутри подпапки `examples` необходимо создать подпапки по названию компонентов из файлов с расширением `.stories.tsx`. Также необходимо в каждой такой подпапке создать отдельный файл `index.ts`.
 
 ---
 
 ## Обязательные стори
 
-| Стори | Описание | Controls | Код |
-|---|---|---|---|
-| **Playground** | Интерактивная песочница с Controls | Да | Нет |
-| **Default** | Минимальное состояние компонента с параметрами по умолчанию | Нет | Да |
-| **Sizes / Themes / Statuses** | Стори на ключевые props — отрендеренные варианты с подписями | Нет | Да |
-| **Edge cases** | Опционально, на усмотрение разработчика. Каждый кейс — отдельная стори | Нет | Да |
-| **Examples** | Композиции компонентов, production-like примеры | Нет | Да |
-| **Visual tests** | Дополнительные примеры для скриншот-тестов (если недостаточно основных); исходный код в docs не показывается, `?raw`-экспорт не нужен | Нет | Нет |
+| Стори                         | Описание                                                                                                     | Controls | Код |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------ | -------- | --- |
+| **Playground**                | Интерактивная песочница с Controls                                                                           | Да       | Нет |
+| **Default**                   | Минимальное состояние компонента с параметрами по умолчанию                                                  | Нет      | Да  |
+| **Sizes / Themes / Statuses** | Стори на ключевые props — отрендеренные варианты с подписями                                                 | Нет      | Да  |
+| **Edge cases**                | Опционально, на усмотрение разработчика. Каждый кейс — отдельная стори                                       | Нет      | Да  |
+| **Examples**                  | Композиции компонентов, production-like примеры                                                              | Нет      | Да  |
+| **Visual tests**              | Дополнительные примеры для скриншот-тестов (если недостаточно основных); исходный код в docs не показывается | Нет      | Нет |
 
 > **Правило:** только Playground имеет Controls. Документационные стори (`Default`, `Sizes / Themes / Statuses`, `Edge cases`, `Examples`) не имеют Controls и показывают пример кода. `Visual tests` не имеют Controls и не показывают код.
 
@@ -203,14 +201,14 @@ tags: ["!autodocs"],
 
 ## Именование сторей
 
-| Ситуация | Название | Пример |
-|---|---|---|
-| Базовая стори | `Default` | `Default` |
-| Варианты props без дефолтного значения | Название props во **множественном** числе | `size` → `Sizes` |
-| Заполнение необязательного props | Название props **как есть** | `disabled` → `Disabled` |
-| Нестандартные варианты наполнения | `With` + вариант | `WithTextAndIcon` |
-| Композиции / production примеры | `Example: описание` | `Example: production` |
-| Скриншот-тесты | `Visual tests` | `Visual tests` |
+| Ситуация                               | Название                                  | Пример                  |
+| -------------------------------------- | ----------------------------------------- | ----------------------- |
+| Базовая стори                          | `Default`                                 | `Default`               |
+| Варианты props без дефолтного значения | Название props во **множественном** числе | `size` → `Sizes`        |
+| Заполнение необязательного props       | Название props **как есть**               | `disabled` → `Disabled` |
+| Нестандартные варианты наполнения      | `With` + вариант                          | `WithTextAndIcon`       |
+| Композиции / production примеры        | `Example`                                 | `Example`               |
+| Скриншот-тесты                         | `Visual tests`                            | `Visual tests`          |
 
 ---
 
@@ -246,6 +244,7 @@ import { Button } from "../../../src/components/Button/Button";
 ```
 
 Это обеспечивает:
+
 - **Копируемость** — пользователь может скопировать пример и использовать его в своём проекте без изменения импортов.
 - **Читаемость** — один импорт вместо множества относительных путей.
 - **Актуальность** — при перемещении файлов внутри библиотеки примеры не ломаются.
@@ -376,6 +375,8 @@ render: () => (
 </div>
 ```
 
+Если в примере уже есть подписи, необходимо проверить, чтобы они были консистентны подписям в других компонентах, при необходимости поменять обертку.
+
 ---
 
 ## Файл `examples/index.ts`
@@ -393,7 +394,7 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Подключение примеров к стори
 
-В modern pattern каждая документационная стори (кроме Playground и Visual tests) подключает пример и его исходный код через `?raw`:
+В modern pattern каждая документационная стори подключает пример и его исходный код через `?raw`:
 
 ```tsx
 export const Default: StoryObj<typeof Component> = {
@@ -422,12 +423,7 @@ import React, { useState, useCallback } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
-import {
-    DefaultExample,
-    DefaultExampleSource,
-    SizesExample,
-    SizesExampleSource,
-} from "./examples";
+import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples";
 
 const meta = {
     title: "Components/Group/ComponentName",
@@ -486,8 +482,8 @@ export const Default: StoryObj<typeof ComponentName> = {
     name: "Default",
     render: DefaultExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
@@ -500,8 +496,8 @@ export const Sizes: StoryObj<typeof ComponentName> = {
     name: "Sizes",
     render: SizesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: SizesExampleSource,
                 language: "tsx",
@@ -524,11 +520,7 @@ export const DefaultExample = () => {
 
     return (
         <div style={{ maxWidth: "300px" }}>
-            <ComponentName
-                size={EComponentSize.LG}
-                value={value}
-                onChange={handleChange}
-            />
+            <ComponentName size={EComponentSize.LG} value={value} onChange={handleChange} />
         </div>
     );
 };
@@ -551,9 +543,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 
     return (
         <div>
-            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>
-                {size.toUpperCase()}
-            </div>
+            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{size.toUpperCase()}</div>
             <ComponentName size={size} value={value} onChange={handleChange} />
         </div>
     );
@@ -623,4 +613,4 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ## Эталонный пример
 
-Референсная реализация: `stories/TextFields/NumberField/NumberField.stories.tsx`
+Референсная реализация: `stories/NumberField/NumberField.stories.tsx`

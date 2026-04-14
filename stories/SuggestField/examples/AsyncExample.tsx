@@ -161,9 +161,9 @@ export const AsyncExample = () => {
                 options={options}
                 size={EComponentSize.LG}
                 status={EFormFieldStatus.DEFAULT}
-                label={"Label"}
-                placeholder={"Type to proceed"}
-                tooltipHint={"No matches found."}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
                 loading={loading}
                 tooltipOpen={tooltipOpen}
                 onFilter={handleFilter}

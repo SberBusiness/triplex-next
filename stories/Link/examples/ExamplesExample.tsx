@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Text, Col, Gap, ETextSize, EFontType } from "@sberbusiness/triplex-next";
+import { Link, Text, Gap, ETextSize, EFontType } from "@sberbusiness/triplex-next";
 import { LinkStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 
 export const ExamplesExample = () => {
@@ -16,7 +16,7 @@ export const ExamplesExample = () => {
     );
 
     return (
-        <Col size={6}>
+        <div>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 <Link href="#" contentAfter={renderContentAfter} onClick={(event) => event.preventDefault()}>
                     External link with content after
@@ -39,6 +39,6 @@ export const ExamplesExample = () => {
                     External link with content before and after
                 </Link>
             </Text>
-        </Col>
+        </div>
     );
 };

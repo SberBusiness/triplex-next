@@ -23,9 +23,9 @@ vi.mock("@sberbusiness/icons-next", () => ({
 }));
 
 describe("HelpBox", () => {
-    it("renders target button with aria-label", () => {
+    it("renders target button with aria-label passed via rest props", () => {
         render(
-            <HelpBox tooltipSize={ETooltipSize.LG} preferPlace={ETooltipPreferPlace.BELOW}>
+            <HelpBox tooltipSize={ETooltipSize.LG} preferPlace={ETooltipPreferPlace.BELOW} aria-label="Подсказка">
                 Текст подсказки
             </HelpBox>,
         );
@@ -65,7 +65,12 @@ describe("HelpBox", () => {
     it("calls toggle(false) when close button is pressed in controlled mode", () => {
         const handleToggle = vi.fn();
         render(
-            <HelpBox tooltipSize={ETooltipSize.LG} isOpen toggle={handleToggle}>
+            <HelpBox
+                tooltipSize={ETooltipSize.LG}
+                isOpen
+                toggle={handleToggle}
+                tooltipXButtonProps={{ "aria-label": "Закрыть" }}
+            >
                 Контент
             </HelpBox>,
         );
@@ -73,5 +78,38 @@ describe("HelpBox", () => {
         const close = screen.getByRole("button", { name: "Закрыть" });
         fireEvent.click(close);
         expect(handleToggle).toHaveBeenCalledWith(false);
+    });
+
+    it("passes tooltipXButtonProps to close button", () => {
+        render(
+            <HelpBox tooltipSize={ETooltipSize.LG} isOpen tooltipXButtonProps={{ "aria-label": "Close" }}>
+                Контент
+            </HelpBox>,
+        );
+
+        expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
+    });
+
+    it("forwards ref to button element", () => {
+        const ref = React.createRef<HTMLButtonElement>();
+        render(
+            <HelpBox tooltipSize={ETooltipSize.LG} ref={ref} aria-label="Подсказка">
+                Контент
+            </HelpBox>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+        expect(ref.current).toBe(screen.getByRole("button", { name: "Подсказка" }));
+    });
+
+    it("passes className to target button", () => {
+        render(
+            <HelpBox tooltipSize={ETooltipSize.LG} className="custom-class" aria-label="Подсказка">
+                Контент
+            </HelpBox>,
+        );
+
+        const button = screen.getByRole("button", { name: "Подсказка" });
+        expect(button).toHaveClass("custom-class");
     });
 });

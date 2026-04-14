@@ -1,6 +1,6 @@
 import React from "react";
 import { EAlertType } from "../EAlertType";
-import { alertTypeToClassNameMap } from "../AlertTypeUtils";
+import { ALERT_TYPE_TO_CLASS_NAME_MAP } from "../AlertTypeUtils";
 import { Text } from "../../Typography/Text";
 import { EFontType, ETextSize } from "../../Typography/enums";
 import {
@@ -47,7 +47,7 @@ export const AlertContext = React.forwardRef<HTMLSpanElement, IAlertContextProps
         return (
             <span
                 role="alert"
-                className={clsx(styles.alertContext, alertTypeToClassNameMap[type](styles), className)}
+                className={clsx(styles.alertContext, ALERT_TYPE_TO_CLASS_NAME_MAP[type](styles), className)}
                 {...rest}
                 data-tx={process.env.npm_package_version}
                 ref={ref}

@@ -1,22 +1,23 @@
 import React from "react";
-import { ButtonIcon } from "../../src/components/Button/ButtonIcon";
-import { EButtonIconShape } from "../../src/components/Button/enums";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import {
-    DefaulticonStrokePrdIcon16,
-    DefaulticonStrokePrdIcon20,
-    DefaulticonStrokePrdIcon24,
-    DefaulticonStrokePrdIcon32,
-} from "@sberbusiness/icons-next";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { ButtonIcon, EButtonIconShape } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    PlaygroundExample,
+    DisabledExample,
+    DisabledExampleSource,
+    SizesExample,
+    SizesExampleSource,
+} from "./examples/ButtonIcon/index";
 
-export default {
+const meta = {
     title: "Components/Buttons/ButtonIcon",
     component: ButtonIcon,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -40,6 +41,20 @@ export default {
                 </>
             ),
         },
+    },
+} satisfies Meta<typeof ButtonIcon>;
+
+export default meta;
+
+type Story = StoryObj<typeof ButtonIcon>;
+
+export const Playground: Story = {
+    tags: ["!autodocs"],
+    args: {
+        active: false,
+        disabled: false,
+        shape: EButtonIconShape.SQUIRCLE,
+        onClick: action("On Click"),
     },
     argTypes: {
         shape: {
@@ -70,18 +85,6 @@ export default {
                 disable: true,
             },
         },
-    },
-};
-
-export const Playground: StoryObj<typeof ButtonIcon> = {
-    tags: ["!autodocs"],
-    args: {
-        active: false,
-        disabled: false,
-        shape: EButtonIconShape.SQUIRCLE,
-        onClick: action("On Click"),
-    },
-    argTypes: {
         onClick: {
             table: {
                 disable: true,
@@ -92,6 +95,7 @@ export const Playground: StoryObj<typeof ButtonIcon> = {
         controls: {
             include: ["shape", "active", "disabled"],
         },
+        testRunner: { skip: true },
         docs: {
             canvas: {
                 sourceState: "none",
@@ -99,58 +103,47 @@ export const Playground: StoryObj<typeof ButtonIcon> = {
             codePanel: false,
         },
     },
-    render: (args) => (
-        <ButtonIcon {...args}>
-            <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-        </ButtonIcon>
-    ),
+    render: PlaygroundExample,
 };
 
-export const Default: StoryObj<typeof ButtonIcon> = {
-    render: () => (
-        <ButtonIcon>
-            <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-        </ButtonIcon>
-    ),
+export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
-export const Sizes: StoryObj<typeof ButtonIcon> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Кнопка-иконка разных размеров (16, 20, 24, 32)",
             },
+            source: {
+                code: SizesExampleSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
-    render: () => (
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <ButtonIcon>
-                <DefaulticonStrokePrdIcon16 paletteIndex={5} />
-            </ButtonIcon>
-            <ButtonIcon>
-                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
-            </ButtonIcon>
-            <ButtonIcon>
-                <DefaulticonStrokePrdIcon24 paletteIndex={5} />
-            </ButtonIcon>
-            <ButtonIcon>
-                <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-            </ButtonIcon>
-        </div>
-    ),
 };
 
-export const Disabled: StoryObj<typeof ButtonIcon> = {
+export const Disabled: Story = {
+    render: DisabledExample,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DisabledExampleSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => (
-        <ButtonIcon disabled>
-            <DefaulticonStrokePrdIcon32 paletteIndex={5} />
-        </ButtonIcon>
-    ),
 };

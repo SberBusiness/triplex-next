@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Button, EButtonTheme, EComponentSize, LoaderMiddle } from "@sberbusiness/triplex-next";
+import "./WithAnimationExample.less";
 
 const successSignAnimation = new URL("../lottie_animations/successSign.json", import.meta.url).href;
 const failSignAnimation = new URL("../lottie_animations/failSign.json", import.meta.url).href;
@@ -60,7 +61,9 @@ export const WithAnimationExample = () => {
                 }}
             >
                 {!lottieStarted ? (
-                    <LoaderMiddle />
+                    <div className="withAnimationExample">
+                        <LoaderMiddle />
+                    </div>
                 ) : (
                     <div
                         style={{

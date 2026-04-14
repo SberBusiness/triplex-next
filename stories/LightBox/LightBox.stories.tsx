@@ -28,13 +28,12 @@ import {
     EIslandType,
     FocusTrapUtils,
     EComponentSize,
+    ELightBoxSize,
 } from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import {
     DefaultExample,
     DefaultExampleSource,
-    WithWidePageExample,
-    WithWidePageExampleSource,
     SmallContentExample,
     SmallContentExampleSource,
     SplitModeExample,
@@ -53,10 +52,13 @@ import {
     WithTopOverlayExampleSource,
     WithTopOverlayInSideOverlayExample,
     WithTopOverlayInSideOverlayExampleSource,
+    SizesExample,
+    SizesExampleSource,
 } from "./examples";
 import "./styles.less";
 
 type LightBoxStoryArgs = {
+    size: ELightBoxSize;
     isLoading: boolean;
     showControls: boolean;
     stickyHeader: boolean;
@@ -127,7 +129,7 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ isLoading, showControls, stickyHeader, stickyFooter }) => {
+const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ size, isLoading, showControls, stickyHeader, stickyFooter }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
@@ -212,7 +214,7 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ isLoading, showContro
             </Button>
 
             {isOpen ? (
-                <LightBox isLoading={isLoading} isSideOverlayOpened={false} isTopOverlayOpened={false}>
+                <LightBox size={size} isLoading={isLoading} isSideOverlayOpened={false} isTopOverlayOpened={false}>
                     {lightBoxChildren}
                 </LightBox>
             ) : null}
@@ -228,12 +230,22 @@ export const Playground: Story = {
     render: Template,
     tags: ["!autodocs"],
     args: {
+        size: ELightBoxSize.MD,
         isLoading: false,
         showControls: true,
         stickyHeader: true,
         stickyFooter: true,
     },
     argTypes: {
+        size: {
+            control: { type: "select" },
+            options: Object.values(ELightBoxSize),
+            description: "Размер контента LightBox.",
+            table: {
+                type: { summary: "ELightBoxSize" },
+                defaultValue: { summary: "ELightBoxSize.MD" },
+            },
+        },
         isLoading: {
             control: { type: "boolean" },
             description: "Показать состояние загрузки LightBox.",
@@ -274,7 +286,7 @@ export const Playground: Story = {
     parameters: {
         testRunner: { skip: true },
         controls: {
-            include: ["isLoading", "showControls", "stickyHeader", "stickyFooter"],
+            include: ["size", "isLoading", "showControls", "stickyHeader", "stickyFooter"],
         },
         docs: {
             description: {
@@ -304,17 +316,17 @@ export const Default: StoryObj<typeof LightBox> = {
     },
 };
 
-export const LightBoxWithWidePage: StoryObj<typeof LightBox> = {
-    name: "WithWidePage",
-    render: WithWidePageExample,
+export const Sizes: StoryObj<typeof LightBox> = {
+    name: "Sizes",
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Конфигурация LightBox с Page шириной более 864px. Для этого нужно передать style={{ maxWidth: '1064px' }} в Page.",
+                story: "LightBox поддерживает 4 размера контента: SM (664px), MD (864px), LG (1064px), XL (1264px).",
             },
             source: {
-                code: WithWidePageExampleSource,
+                code: SizesExampleSource,
                 language: "tsx",
             },
         },

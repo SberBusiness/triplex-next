@@ -13,6 +13,7 @@ import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
 import { LightBoxLeftSidebar } from "./LightBoxSidebars/LightBoxLeftSidebar";
 import { LightBoxRightSidebar } from "./LightBoxSidebars/LightBoxRightSidebar";
+import { ELightBoxSize } from "./enums";
 import styles from "./styles/LightBox.module.less";
 import scrollStyles from "./styles/LightBoxScroll.module.less";
 
@@ -39,6 +40,8 @@ export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     isSideOverlayOpened?: boolean;
     /** Флаг открытия верхней панели. */
     isTopOverlayOpened?: boolean;
+    /** Размер контента LightBox. */
+    size?: ELightBoxSize;
 }
 
 const bodyClassNamesIsLightBoxOpen = [styles.bodyOverflowHidden];
@@ -53,6 +56,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
     isLoading,
     isSideOverlayOpened,
     isTopOverlayOpened,
+    size = ELightBoxSize.MD,
     ...htmlDivAttributes
 }) => {
     // Скрытый элемент для вызова ререндера при закрытии оверлея, фикс бага в Safari - DCBSWT-2866.
@@ -137,6 +141,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
     const classNameLightBox = clsx(
         scopeClassName,
         styles.lightBox,
+        styles[size],
         {
             [styles.isLoading]: Boolean(isLoading),
             [styles.lightBoxSideOverlayActive]: Boolean(isSideOverlayOpened),

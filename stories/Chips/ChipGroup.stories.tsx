@@ -1,16 +1,22 @@
-import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { Chip } from "../../src/components/Chip";
-import { ChipGroup } from "../../src/components/ChipGroup";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
+import { ChipGroup, EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    OneLineExample,
+    OneLineExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    PlaygroundExample,
+} from "./examples/ChipGroup";
 
-export default {
+const meta = {
     title: "Components/Chips/ChipGroup",
     component: ChipGroup,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `Контейнер для группировки нескольких компонентов Chip.
@@ -34,24 +40,14 @@ export default {
             ),
         },
     },
-};
+} satisfies Meta<typeof ChipGroup>;
 
-export const Playground: StoryObj<typeof ChipGroup> = {
+export default meta;
+type Story = StoryObj<typeof ChipGroup>;
+
+export const Playground: Story = {
     tags: ["!autodocs"],
-    render: (args) => {
-        const [selected, setSelected] = useState<number | null>(null);
-        const chips = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta"];
-
-        return (
-            <ChipGroup {...args} style={{ maxWidth: 360 }}>
-                {chips.map((label, index) => (
-                    <Chip key={label} size={args.size} selected={selected === index} onClick={() => setSelected(index)}>
-                        {label}
-                    </Chip>
-                ))}
-            </ChipGroup>
-        );
-    },
+    render: PlaygroundExample,
     args: { oneLine: false, size: EComponentSize.MD },
     argTypes: {
         oneLine: { control: { type: "boolean" } },
@@ -67,103 +63,30 @@ export const Playground: StoryObj<typeof ChipGroup> = {
             },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
 };
 
-export const Default: StoryObj<typeof ChipGroup> = {
+export const Default: Story = {
+    render: DefaultExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selected, setSelected] = useState<number | null>(null);
-        const chips = ["Alpha", "Beta", "Gamma", "Delta"];
-
-        return (
-            <ChipGroup style={{ maxWidth: 360 }}>
-                {chips.map((label, index) => (
-                    <Chip key={label} selected={selected === index} onClick={() => setSelected(index)}>
-                        {label}
-                    </Chip>
-                ))}
-            </ChipGroup>
-        );
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
     },
 };
 
-export const Sizes: StoryObj<typeof ChipGroup> = {
+export const Sizes: Story = {
+    render: SizesExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selectedSM, setSelectedSM] = useState<number | null>(null);
-        const [selectedMD, setSelectedMD] = useState<number | null>(null);
-        const [selectedLG, setSelectedLG] = useState<number | null>(null);
-
-        const chips = ["Alpha", "Beta", "Gamma", "Delta"];
-
-        return (
-            <div style={{ display: "flex", gap: 16, flexDirection: "column" }}>
-                <ChipGroup size={EComponentSize.SM} style={{ maxWidth: 360 }}>
-                    {chips.map((label, index) => (
-                        <Chip
-                            key={label}
-                            size={EComponentSize.SM}
-                            selected={selectedSM === index}
-                            onClick={() => setSelectedSM(index)}
-                        >
-                            {label}
-                        </Chip>
-                    ))}
-                </ChipGroup>
-                <ChipGroup size={EComponentSize.MD} style={{ maxWidth: 360 }}>
-                    {chips.map((label, index) => (
-                        <Chip
-                            key={label}
-                            size={EComponentSize.MD}
-                            selected={selectedMD === index}
-                            onClick={() => setSelectedMD(index)}
-                        >
-                            {label}
-                        </Chip>
-                    ))}
-                </ChipGroup>
-                <ChipGroup size={EComponentSize.LG} style={{ maxWidth: 360 }}>
-                    {chips.map((label, index) => (
-                        <Chip
-                            key={label}
-                            size={EComponentSize.LG}
-                            selected={selectedLG === index}
-                            onClick={() => setSelectedLG(index)}
-                        >
-                            {label}
-                        </Chip>
-                    ))}
-                </ChipGroup>
-            </div>
-        );
+        docs: { source: { code: SizesExampleSource, language: "tsx" } },
     },
 };
 
-export const OneLine: StoryObj<typeof ChipGroup> = {
+export const OneLine: Story = {
+    render: OneLineExample,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selected, setSelected] = useState<number | null>(null);
-        const chips = Array.from({ length: 20 }, (_, i) => `Item ${i + 1}`);
-        return (
-            <ChipGroup oneLine style={{ maxWidth: 360, whiteSpace: "nowrap", overflowX: "auto" }}>
-                {chips.map((label, index) => (
-                    <Chip
-                        key={label}
-                        size={EComponentSize.MD}
-                        selected={selected === index}
-                        onClick={() => setSelected(index)}
-                    >
-                        {label}
-                    </Chip>
-                ))}
-            </ChipGroup>
-        );
+        docs: { source: { code: OneLineExampleSource, language: "tsx" } },
     },
 };

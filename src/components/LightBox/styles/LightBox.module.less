@@ -1,6 +1,8 @@
 @import 'src/styles/style';
 
 .lightBox {
+    --lightBox-content-max-width: @lightBox-content-max-width-md;
+
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -11,6 +13,22 @@
     bottom: 0;
     min-width: 0;
     overflow-y: scroll;
+
+    &.sm {
+        --lightBox-content-max-width: @lightBox-content-max-width-sm;
+    }
+
+    &.md {
+        --lightBox-content-max-width: @lightBox-content-max-width-md;
+    }
+
+    &.lg {
+        --lightBox-content-max-width: @lightBox-content-max-width-lg;
+    }
+
+    &.xl {
+        --lightBox-content-max-width: @lightBox-content-max-width-xl;
+    }
 
     .lightBoxBackdrop {
         content: '';
@@ -46,7 +64,7 @@
 
         & > .global-page {
             width: 100%;
-            max-width: @lightBox-content-max-width;
+            max-width: var(--lightBox-content-max-width);
             padding-top: 24px; // Переопределение отступов Page.module.less
             padding-bottom: 24px; // Переопределение отступов Page.module.less
 

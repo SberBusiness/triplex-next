@@ -10,8 +10,13 @@
 // Ширина SideOverlaySM.
 @sideOverlaySMWidth: 520px + @page-padding-desktop-x * 2;
 
-// Максимальная ширина контента LightBox. 
-@lightBox-content-max-width: 864px;
+// Fallback максимальной ширины контента LightBox для использования вне контекста LightBox.
+@lightBox-content-max-width-fallback: 864px;
+// Ширина контента LightBox в зависимости от размера.
+@lightBox-content-max-width-sm: 664px;
+@lightBox-content-max-width-md: 864px;
+@lightBox-content-max-width-lg: 1064px;
+@lightBox-content-max-width-xl: 1264px;
 
 // Ширина кнопки в LightBoxControls для экранов шире 1024px.
 @lightBoxControlsButtonWidth: 56px;

@@ -104,9 +104,9 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         const instanceId = useRef(uniqueId());
 
         const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = clsx(styles.buttonDropdownTarget, "hoverable", {
-                [styles.active]: opened,
+            const classNames = clsx(styles.buttonDropdownTarget, {
                 [styles.block]: !!block,
+                [styles.active]: opened,
             });
 
             return (
@@ -131,8 +131,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         };
 
         const renderButtonDots = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = clsx(styles.buttonDropdownTarget, "hoverable", {
-                [styles.active]: opened,
+            const classNames = clsx(styles.buttonDropdownTarget, {
                 [styles.block]: !!block,
             });
 

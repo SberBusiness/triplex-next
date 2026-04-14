@@ -1,15 +1,16 @@
 import React from "react";
 import clsx from "clsx";
-import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "../Loader";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
 import styles from "./styles/Button.module.less";
-import { ButtonBase, IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
-import { EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { ButtonBase, IButtonBaseProps } from "./ButtonBase";
+import { EButtonTheme } from "./enums";
+import { EComponentSize } from "../../enums/EComponentSize";
+import { IconWrapper } from "../IconWrapper";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {
@@ -158,21 +159,16 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
         getButtonSizeCssClass(size),
         { [styles.block]: !!block, [styles.loading]: !!loading },
         { [styles.icon]: !!icon && !children },
-        // Классы для иконок, начало.
-        "hoverable",
-        {
-            active: !!expanded,
-            disabled: !!disabled,
-        },
-        // Классы для иконок, конец.
         className,
     );
 
     return (
         <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
             <span className={styles.content}>
-                {icon}
-                {children}
+                <IconWrapper disabled={disabled} active={!!expanded}>
+                    {icon}
+                    {children}
+                </IconWrapper>
             </span>
             <div className={clsx(styles.loader, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
         </ButtonBase>

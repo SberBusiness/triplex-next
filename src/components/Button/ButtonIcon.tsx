@@ -21,10 +21,7 @@ export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonE
 /** Кнопка-иконка. */
 export const ButtonIcon = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ className, disabled, shape = EButtonIconShape.SQUIRCLE, active, ...rest }, ref) => {
-        const classNames = clsx(styles.buttonIcon, iconShapeToClassNameMap[shape], className, {
-            active: !!active,
-            disabled: !!disabled,
-        });
+        const classNames = clsx(styles.buttonIcon, iconShapeToClassNameMap[shape], className);
 
         return (
             <IconWrapper disabled={disabled} active={active}>

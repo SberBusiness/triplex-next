@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { IconWrapper } from "../IconWrapper";
 import styles from "./styles/Link.module.less";
 
 /** Общие свойства компонента Link. */
@@ -103,13 +104,13 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
             <a
                 role="link"
                 {...rest}
-                className={clsx(className, styles.link, "hoverable")}
+                className={clsx(className, styles.link)}
                 onBlur={onBlur}
                 onMouseDown={onMouseDown}
                 data-tx={process.env.npm_package_version}
                 ref={ref}
             >
-                {content}
+                <IconWrapper>{content}</IconWrapper>
             </a>
         );
     },

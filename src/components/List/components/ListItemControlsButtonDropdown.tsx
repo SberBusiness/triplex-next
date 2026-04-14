@@ -26,8 +26,7 @@ import {
 import styles from "../styles/ListItemControlsButton.module.less";
 
 interface IListItemControlsButtonDropdownProps
-    extends Omit<IButtonDropdownProps, "size">,
-        Pick<IListItemControlsButtonProps, "icon"> {}
+    extends Omit<IButtonDropdownProps, "size">, Pick<IListItemControlsButtonProps, "icon"> {}
 
 /** Кнопка-дропдаун listItem для области под свайпом. */
 export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement, IListItemControlsButtonDropdownProps>(
@@ -41,7 +40,6 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
         const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
             return (
                 <ListItemControlsButton
-                    className="hoverable"
                     onKeyDown={handleKeyDown({ opened, setOpened })}
                     onClick={handleClick({ opened, setOpened })}
                     disabled={disabled}

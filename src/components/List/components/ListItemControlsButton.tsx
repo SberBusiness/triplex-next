@@ -1,8 +1,9 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "../styles/ListItemControlsButton.module.less";
-import { EFontWeightText, ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
+import { EFontWeightText, ETextSize } from "../../Typography/enums";
+import { Text } from "../../Typography/Text";
+import { IconWrapper } from "../../IconWrapper";
 
 export interface IListItemControlsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: React.ReactNode;
@@ -15,7 +16,6 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
             type="button"
             className={clsx(
                 styles.listItemControlsButton,
-                "hoverable",
                 {
                     [styles.withIcon]: typeof icon !== "undefined",
                     [styles.withText]: typeof children !== "undefined",
@@ -25,18 +25,20 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
             {...rest}
             ref={ref}
         >
-            <span className={styles.listItemControlsButtonInner}>
-                {icon ? <span className={styles.listItemControlsButtonIcon}>{icon}</span> : null}
-                {children ? (
-                    <Text
-                        className={styles.listItemControlsButtonLabel}
-                        size={ETextSize.B4}
-                        weight={EFontWeightText.SEMIBOLD}
-                    >
-                        {children}
-                    </Text>
-                ) : null}
-            </span>
+            <IconWrapper disabled={!!rest.disabled} active={!!rest["aria-expanded"]}>
+                <span className={styles.listItemControlsButtonInner}>
+                    {icon ? <span className={styles.listItemControlsButtonIcon}>{icon}</span> : null}
+                    {children ? (
+                        <Text
+                            className={styles.listItemControlsButtonLabel}
+                            size={ETextSize.B4}
+                            weight={EFontWeightText.SEMIBOLD}
+                        >
+                            {children}
+                        </Text>
+                    ) : null}
+                </span>
+            </IconWrapper>
         </button>
     ),
 );

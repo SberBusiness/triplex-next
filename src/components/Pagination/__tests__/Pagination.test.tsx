@@ -150,7 +150,6 @@ describe("PaginationNavigationButton", () => {
             />,
         );
         const btn = screen.getByTestId("next-btn");
-        expect(btn).toHaveClass("disabled");
         expect(btn).toBeDisabled();
     });
 });

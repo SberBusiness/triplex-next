@@ -8,7 +8,7 @@ import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
 import styles from "./styles/Button.module.less";
 import { ButtonBase, IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
-import { EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
+import { EButtonTheme, EButtonSize } from "@sberbusiness/triplex-next/components/Button/enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства кнопки типа General. */
@@ -16,7 +16,7 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.GENERAL;
     /** Размер кнопки. */
-    size: EComponentSize;
+    size: EButtonSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */

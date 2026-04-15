@@ -43,14 +43,25 @@ export default {
     },
 } satisfies Meta<typeof SuggestField>;
 
-export type PlaygroundArgs = React.ComponentProps<typeof SuggestField> & {
+type PlaygroundControlledProps =
+    | "value"
+    | "options"
+    | "tooltipOpen"
+    | "onFilter"
+    | "onSelect"
+    | "onClear"
+    | "prefix"
+    | "postfix"
+    | "description";
+
+export interface PlaygroundArgs extends Omit<React.ComponentProps<typeof SuggestField>, PlaygroundControlledProps> {
     /** С префиксом. */
     withPrefix: boolean;
     /** С постфиксом. */
     withPostfix: boolean;
     /** С описанием. */
     withDescription: boolean;
-};
+}
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     name: "Playground",
@@ -118,16 +129,28 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         },
         // Settings
         withPrefix: {
+            description: "С префиксом.",
             control: { type: "boolean" },
-            table: { category: "Settings" },
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
         },
         withPostfix: {
+            description: "С постфиксом.",
             control: { type: "boolean" },
-            table: { category: "Settings" },
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
         },
         withDescription: {
+            description: "С описанием.",
             control: { type: "boolean" },
-            table: { category: "Settings" },
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
         },
     },
     render: PlaygroundExample,
@@ -141,7 +164,6 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         controls: {
             include: [
                 // Props
-                "inputProps",
                 "size",
                 "status",
                 "label",
@@ -151,6 +173,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
                 "loading",
                 "dropdownListLoading",
                 "clearInputOnFocus",
+                "inputProps",
                 // Settings
                 "withPrefix",
                 "withPostfix",
@@ -161,7 +184,6 @@ export const Playground: StoryObj<PlaygroundArgs> = {
 };
 
 export const Default: StoryObj<typeof SuggestField> = {
-    name: "Default",
     render: DefaultExample,
     parameters: {
         docs: {
@@ -177,7 +199,6 @@ export const Default: StoryObj<typeof SuggestField> = {
 };
 
 export const Sizes: StoryObj<typeof SuggestField> = {
-    name: "Sizes",
     render: SizesExample,
     parameters: {
         docs: {
@@ -193,7 +214,6 @@ export const Sizes: StoryObj<typeof SuggestField> = {
 };
 
 export const Statuses: StoryObj<typeof SuggestField> = {
-    name: "Statuses",
     render: StatusesExample,
     parameters: {
         docs: {
@@ -209,7 +229,6 @@ export const Statuses: StoryObj<typeof SuggestField> = {
 };
 
 export const Loading: StoryObj<typeof SuggestField> = {
-    name: "Loading",
     render: LoadingExample,
     parameters: {
         docs: {

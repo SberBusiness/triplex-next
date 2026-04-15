@@ -1,23 +1,17 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import {
-    NumberField,
+    TextareaField,
     FormFieldClear,
     Text,
     HelpBox,
     Link,
+    EComponentSize,
     EFormFieldStatus,
     ETextSize,
     EFontType,
     ETooltipSize,
 } from "@sberbusiness/triplex-next";
-import type { PlaygroundArgs } from "../NumberField.stories";
-
-const STATUS_TO_POSTFIX_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
-    [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
-    [EFormFieldStatus.DISABLED]: EFontType.DISABLED,
-    [EFormFieldStatus.ERROR]: EFontType.SECONDARY,
-    [EFormFieldStatus.WARNING]: EFontType.SECONDARY,
-};
+import type { PlaygroundArgs } from "../TextareaField.stories";
 
 const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
     [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
@@ -26,51 +20,73 @@ const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> =
     [EFormFieldStatus.WARNING]: EFontType.WARNING,
 };
 
+const SIZE_TO_POSTFIX_MARGIN_TOP_MAP: Record<EComponentSize, number> = {
+    [EComponentSize.SM]: -13, // 6px from top
+    [EComponentSize.MD]: -8, // 12px from top
+    [EComponentSize.LG]: -4, // 20px from top
+};
+
+const getPostfixStyles = (size: EComponentSize): React.CSSProperties => ({
+    alignSelf: "flex-start",
+    marginTop: SIZE_TO_POSTFIX_MARGIN_TOP_MAP[size],
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+});
+
 export const PlaygroundExample = ({
+    size = EComponentSize.LG,
     status = EFormFieldStatus.DEFAULT,
-    inputProps,
     placeholder,
+    maxLength,
+    textareaProps,
     withPostfix,
     withDescription,
+    withCounter,
     ...restArgs
 }: PlaygroundArgs) => {
     const [value, setValue] = useState("");
-    const inputRef = useRef<HTMLInputElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((event) => {
+    const handleTextareaChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>((event) => {
         setValue(event.target.value);
     }, []);
 
     const handleClearButtonClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(() => {
         setValue("");
-        inputRef.current?.focus();
+        textareaRef.current?.focus();
     }, []);
 
     const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
         event.preventDefault();
     }, []);
 
+    const postfixStyles = useMemo(() => {
+        if (withPostfix) {
+            return getPostfixStyles(size);
+        }
+    }, [withPostfix, size]);
+
     return (
         <div style={{ maxWidth: 300 }}>
-            <NumberField
+            <TextareaField
                 {...restArgs}
+                size={size}
                 status={status}
-                inputProps={{
-                    ...inputProps,
+                textareaProps={{
+                    ...textareaProps,
                     value,
                     placeholder,
-                    onChange: handleInputChange,
-                    ref: inputRef,
+                    maxLength,
+                    onChange: handleTextareaChange,
+                    ref: textareaRef,
                 }}
                 postfix={
                     withPostfix && (
-                        <>
+                        <div style={postfixStyles}>
                             <FormFieldClear aria-label="clear value" onClick={handleClearButtonClick} />
-                            <Text size={ETextSize.B2} type={STATUS_TO_POSTFIX_FONT_TYPE_MAP[status]}>
-                                мм
-                            </Text>
                             <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
-                        </>
+                        </div>
                     )
                 }
                 description={
@@ -80,6 +96,13 @@ export const PlaygroundExample = ({
                             <Link href="#" onClick={handleLinkClick}>
                                 Link text
                             </Link>
+                        </Text>
+                    )
+                }
+                counter={
+                    withCounter && (
+                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            {value.length}/{maxLength}
                         </Text>
                     )
                 }

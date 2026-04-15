@@ -4,7 +4,7 @@ import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 import { EButtonIconShape } from "@sberbusiness/triplex-next/components/Button/enums";
 import styles from "./styles/ButtonIcon.module.less";
 
-const iconShapeToClassNameMap = {
+const SHAPE_TO_CLASS_NAME_MAP: Record<EButtonIconShape, string> = {
     [EButtonIconShape.SQUIRCLE]: styles.squircle,
     [EButtonIconShape.CIRCLE]: styles.circle,
 };
@@ -20,10 +20,16 @@ export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonE
 /** Кнопка-иконка. */
 export const ButtonIcon = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ className, disabled, shape = EButtonIconShape.SQUIRCLE, active, ...rest }, ref) => {
-        const classNames = clsx(styles.buttonIcon, iconShapeToClassNameMap[shape], "hoverable", className, {
-            active: !!active,
-            disabled: !!disabled,
-        });
+        const classNames = clsx(
+            styles.buttonIcon,
+            SHAPE_TO_CLASS_NAME_MAP[shape],
+            "hoverable",
+            {
+                active: !!active,
+                disabled: !!disabled,
+            },
+            className,
+        );
 
         return <button type="button" className={classNames} disabled={disabled} {...rest} ref={ref} />;
     },

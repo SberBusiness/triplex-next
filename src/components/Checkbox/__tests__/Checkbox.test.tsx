@@ -27,6 +27,15 @@ describe("Checkbox", () => {
         expect(label).toHaveClass("lg");
     });
 
+    it("Should pass className to root label", () => {
+        render(<Checkbox className="customClassName" />);
+        const label = getLabel();
+        const checkbox = getCheckbox();
+
+        expect(label).toHaveClass("customClassName");
+        expect(checkbox).not.toHaveClass("customClassName");
+    });
+
     it("Should apply checked state", () => {
         render(<Checkbox checked />);
         const checkbox = getCheckbox();
@@ -54,6 +63,9 @@ describe("Checkbox", () => {
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLInputElement>();
         render(<Checkbox ref={ref} />);
+        const checkbox = getCheckbox();
+
         expect(ref.current).toBeInstanceOf(HTMLInputElement);
+        expect(ref.current).toBe(checkbox);
     });
 });

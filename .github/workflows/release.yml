@@ -58,10 +58,17 @@ jobs:
       - name: Create dist.zip
         run: zip -r "dist-${{ github.event.release.tag_name }}.zip" dist
 
+      # Собрать MCP-бандл (docs/ai/*.md + src/components/**/*-AI.md + release notes)
+      # для @sberbusiness/triplex-next-mcp-server. Подробнее: docs/ai/ROADMAP.md (Фаза 4).
+      - name: Generate MCP bundle
+        run: npm run generateMcpData -- --out mcp-data.json
+
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist-${{ github.event.release.tag_name }}.zip
+          files: |
+            dist-${{ github.event.release.tag_name }}.zip
+            mcp-data.json
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook

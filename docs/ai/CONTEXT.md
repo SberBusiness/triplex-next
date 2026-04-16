@@ -105,7 +105,7 @@ src/components/Button/
 | Stories (структура, примеры, чек-лист) | `docs/ai/stories-guide.md` |
 | Коммиты, ветки, PR-воркфлоу | `docs/ai/commits.md` |
 
-`docs/ai/CODING_GUIDELINES.md` — краткий канонический список обязательных правил.
+`docs/ai/codestyle.md` — краткий канонический список обязательных правил.
 Если формулировки в entrypoint-файлах расходятся, ориентируйся на него и на
 профильный подробный гайд.
 
@@ -116,7 +116,7 @@ src/components/Button/
 Если инструкции расходятся, ориентируйся на них в таком порядке:
 
 1. `src/components/{ComponentName}/{ComponentName}-AI.md` для конкретного компонента, если файл существует
-2. `docs/ai/CODING_GUIDELINES.md`
+2. `docs/ai/codestyle.md`
 3. Профильный подробный гайд по зоне изменений (`codestyle.md`, `tests.md`, `stories-guide.md`, `commits.md`)
 4. Этот файл (`docs/ai/CONTEXT.md`)
 5. Локальный паттерн исходников компонента, stories и тестов

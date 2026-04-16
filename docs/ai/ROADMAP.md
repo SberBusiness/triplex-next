@@ -57,6 +57,7 @@
 |---|---|---|---|
 | Button | ✅ | ✅ | Пилот |
 | HelpBox | ✅ | ⬜ | AI-Ready |
+| Checkbox | ✅ | ⬜ | AI-Ready |
 | Alert | ⬜ | ⬜ | — |
 | Badge | ⬜ | ⬜ | — |
 | Card | ⬜ | ⬜ | — |

@@ -18,6 +18,15 @@ describe("Checkbox", () => {
         expect(label).toHaveClass("nonempty");
     });
 
+    it("Should pass className to root label", () => {
+        render(<Checkbox className="custom" />);
+        const checkbox = getCheckbox();
+        const label = getLabel();
+
+        expect(label).toHaveClass("custom");
+        expect(checkbox).toHaveClass("custom");
+    });
+
     it("Should apply size classes", () => {
         const { rerender } = render(<Checkbox size={EComponentSize.MD} />);
         const label = getLabel();

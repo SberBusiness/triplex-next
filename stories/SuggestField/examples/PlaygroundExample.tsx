@@ -53,7 +53,7 @@ const getFilteredOptions = (query: string): ISuggestFieldOption[] =>
     FOOD_OPTIONS.filter(({ label }) => label.toLowerCase().includes(query.toLowerCase()));
 
 export const PlaygroundExample = ({
-    status,
+    status = EFormFieldStatus.DEFAULT,
     inputProps,
     withPrefix,
     withPostfix,
@@ -122,39 +122,9 @@ export const PlaygroundExample = ({
         inputRef.current?.focus();
     }, [handleFilter]);
 
-    const renderPrefixInner = useCallback(() => {
-        if (withPrefix) {
-            return <DefaulticonStrokePrdIcon24 paletteIndex={5} />;
-        }
-    }, [withPrefix]);
-
-    const renderPostfixInner = useCallback(() => {
-        if (withPostfix) {
-            return (
-                <React.Fragment>
-                    <DefaulticonStrokePrdIcon24 paletteIndex={5} />
-                    <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
-                </React.Fragment>
-            );
-        }
-    }, [withPostfix]);
-
     const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
         event.preventDefault();
     }, []);
-
-    const renderDescriptionInner = useCallback(() => {
-        if (withDescription) {
-            return (
-                <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status!]}>
-                    (21) Description{" "}
-                    <Link href="#" onClick={handleLinkClick}>
-                        Link text
-                    </Link>
-                </Text>
-            );
-        }
-    }, [withDescription, status, handleLinkClick]);
 
     return (
         <div style={{ maxWidth: 300 }}>
@@ -173,9 +143,25 @@ export const PlaygroundExample = ({
                     onMouseDown: handleInputMouseDown,
                     ref: inputRef,
                 }}
-                prefix={renderPrefixInner()}
-                postfix={renderPostfixInner()}
-                description={renderDescriptionInner()}
+                prefix={withPrefix && <DefaulticonStrokePrdIcon24 paletteIndex={5} />}
+                postfix={
+                    withPostfix && (
+                        <>
+                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                            <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
+                        </>
+                    )
+                }
+                description={
+                    withDescription && (
+                        <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={handleLinkClick}>
+                                Link text
+                            </Link>
+                        </Text>
+                    )
+                }
             />
         </div>
     );

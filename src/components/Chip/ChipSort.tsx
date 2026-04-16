@@ -12,8 +12,9 @@ import { SelectExtendedFieldDropdownDefault } from "../../components/SelectExten
 import { ISelectExtendedFieldDefaultOption } from "../../components/SelectExtendedField";
 import { uniqueId } from "lodash-es";
 import clsx from "clsx";
-import styles from "./styles/Chip.module.less";
 import { isKey } from "../../utils/keyboard";
+import { IconWrapper } from "../../components/IconWrapper/IconWrapper";
+import styles from "./styles/Chip.module.less";
 
 export interface IChipSortProps extends Omit<IChipSelectProps, "targetProps" | "clearSelected" | "defaultValue"> {
     /** Дефолтное значение, если текущее значение равно дефолтному, элемент не будет подсвечен как измененный. */
@@ -48,7 +49,9 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
                     aria-expanded={opened}
                     aria-controls={instanceId.current}
                 >
-                    {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
+                    <IconWrapper active={opened} disabled={disabled} displayContents>
+                        {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
+                    </IconWrapper>
                 </ChipIcon>
             );
         };

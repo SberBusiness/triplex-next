@@ -1,7 +1,9 @@
 .orderedList {
+    --start-index-tx: 0;
+
     position: relative;
     margin: 0;
     padding-left: 25px;
     list-style: none;
-    counter-reset: list-item-tx var(--start-index-tx, 0);
+    counter-reset: list-item-tx var(--start-index-tx);
 }

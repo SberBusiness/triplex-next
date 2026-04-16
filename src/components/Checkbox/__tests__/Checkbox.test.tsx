@@ -18,15 +18,6 @@ describe("Checkbox", () => {
         expect(label).toHaveClass("nonempty");
     });
 
-    it("Should pass className to root label", () => {
-        render(<Checkbox className="custom" />);
-        const checkbox = getCheckbox();
-        const label = getLabel();
-
-        expect(label).toHaveClass("custom");
-        expect(checkbox).toHaveClass("custom");
-    });
-
     it("Should apply size classes", () => {
         const { rerender } = render(<Checkbox size={EComponentSize.MD} />);
         const label = getLabel();
@@ -34,6 +25,15 @@ describe("Checkbox", () => {
 
         rerender(<Checkbox size={EComponentSize.LG} />);
         expect(label).toHaveClass("lg");
+    });
+
+    it("Should pass className to root label", () => {
+        render(<Checkbox className="customClassName" />);
+        const label = getLabel();
+        const checkbox = getCheckbox();
+
+        expect(label).toHaveClass("customClassName");
+        expect(checkbox).not.toHaveClass("customClassName");
     });
 
     it("Should apply checked state", () => {
@@ -63,6 +63,9 @@ describe("Checkbox", () => {
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLInputElement>();
         render(<Checkbox ref={ref} />);
+        const checkbox = getCheckbox();
+
         expect(ref.current).toBeInstanceOf(HTMLInputElement);
+        expect(ref.current).toBe(checkbox);
     });
 });

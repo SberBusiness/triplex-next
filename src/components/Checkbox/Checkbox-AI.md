@@ -42,7 +42,7 @@ version: "1.0"
 | `disabled` | `boolean` | `false` | Блокирует взаимодействие и меняет визуальное состояние. |
 | `bulk` | `boolean` | `false` | Влияет на отображаемую иконку (используется bulk-иконка), при этом видимость checkmark всё равно определяется состоянием `checked`. |
 | `size` | `EComponentSize` | `EComponentSize.MD` | Размер: `SM` / `MD` / `LG`. |
-| `children` | `React.ReactNode` | — | Контент лейбла рядом с чекбоксом. Если `children` нет — добавляется класс `.nonempty` не применяется. |
+| `children` | `React.ReactNode` | — | Контент лейбла рядом с чекбоксом. Если `children` нет — класс `.nonempty` не применяется. |
 | `labelAttributes` | `React.LabelHTMLAttributes<HTMLLabelElement>` | — | Дополнительные HTML-атрибуты для корневого `<label>` (например, `className`, `onFocus`). |
 | `...inputAttributes` | `Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size">` | — | Все стандартные атрибуты `<input type="checkbox">` (включая `name`, `onChange`, `aria-label` и т.д.). |
 

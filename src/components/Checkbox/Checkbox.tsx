@@ -37,11 +37,12 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
         size = EComponentSize.MD,
         ...inputAttributes
     } = props;
-    const classNames = clsx(styles.checkbox, className, SIZE_TO_CLASS_NAME_MAP[size]);
+    const classNames = clsx(styles.checkbox, SIZE_TO_CLASS_NAME_MAP[size]);
     const classNamesLabel = clsx(
         styles.label,
         SIZE_TO_CLASS_NAME_MAP[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
+        className,
         labelAttributes?.className,
     );
 

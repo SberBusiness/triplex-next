@@ -164,12 +164,10 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
 
     return (
         <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
-            <span className={styles.content}>
-                <IconWrapper disabled={disabled} active={!!expanded}>
-                    {icon}
-                    {children}
-                </IconWrapper>
-            </span>
+            <IconWrapper className={styles.content} disabled={disabled} active={!!expanded}>
+                {icon}
+                {children}
+            </IconWrapper>
             <div className={clsx(styles.loader, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
         </ButtonBase>
     );

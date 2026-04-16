@@ -14,7 +14,6 @@ import { uniqueId } from "lodash-es";
 import clsx from "clsx";
 import styles from "./styles/Chip.module.less";
 import { isKey } from "../../utils/keyboard";
-import { IconWrapper } from "../IconWrapper";
 
 export interface IChipSortProps extends Omit<IChipSelectProps, "targetProps" | "clearSelected" | "defaultValue"> {
     /** Дефолтное значение, если текущее значение равно дефолтному, элемент не будет подсвечен как измененный. */
@@ -49,9 +48,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
                     aria-expanded={opened}
                     aria-controls={instanceId.current}
                 >
-                    <IconWrapper disabled={disabled} active={opened}>
-                        {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
-                    </IconWrapper>
+                    {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
                 </ChipIcon>
             );
         };

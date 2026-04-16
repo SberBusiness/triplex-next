@@ -60,7 +60,7 @@ export const SegmentedControlSegment: React.FC<ISegmentedControlSegmentProps> = 
     };
 
     return (
-        <IconWrapper disabled={disabled || disabledFromContext} active={selected}>
+        <IconWrapper displayContents disabled={disabled || disabledFromContext} active={selected}>
             <ButtonBase
                 className={classNames}
                 title={getTitle()}

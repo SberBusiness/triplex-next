@@ -25,19 +25,21 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
             {...rest}
             ref={ref}
         >
-            <IconWrapper disabled={!!rest.disabled} active={!!rest["aria-expanded"]}>
-                <span className={styles.listItemControlsButtonInner}>
-                    {icon ? <span className={styles.listItemControlsButtonIcon}>{icon}</span> : null}
-                    {children ? (
-                        <Text
-                            className={styles.listItemControlsButtonLabel}
-                            size={ETextSize.B4}
-                            weight={EFontWeightText.SEMIBOLD}
-                        >
-                            {children}
-                        </Text>
-                    ) : null}
-                </span>
+            <IconWrapper
+                className={styles.listItemControlsButtonInner}
+                disabled={!!rest.disabled}
+                active={!!rest["aria-expanded"]}
+            >
+                {icon ? <span className={styles.listItemControlsButtonIcon}>{icon}</span> : null}
+                {children ? (
+                    <Text
+                        className={styles.listItemControlsButtonLabel}
+                        size={ETextSize.B4}
+                        weight={EFontWeightText.SEMIBOLD}
+                    >
+                        {children}
+                    </Text>
+                ) : null}
             </IconWrapper>
         </button>
     ),

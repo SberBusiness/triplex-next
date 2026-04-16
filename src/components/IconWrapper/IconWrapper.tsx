@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "./styles/IconWrapper.module.less";
 
 /** Свойства компонента IconWrapper. */
-export interface IIconWrapperProps {
+export interface IIconWrapperProps extends React.HTMLAttributes<HTMLSpanElement> {
     children: React.ReactNode;
     /** Активное состояние иконки. */
     active?: boolean;
@@ -11,6 +11,8 @@ export interface IIconWrapperProps {
     disabled?: boolean;
     /** Отключить взаимодействие с иконкой. Например, чтобы иконка могла быть тусклой в состоянии disabled и не реагировать на hover, если по клику на нее не должно быть действий. */
     disableInteraction?: boolean;
+    /** Отобразить элемент со свойством display: contents. */
+    displayContents?: boolean;
 }
 
 /**
@@ -18,14 +20,16 @@ export interface IIconWrapperProps {
  * Добавляет классы hoverable/active/disabled, которые управляют цветом иконки при взаимодействии.
  */
 export const IconWrapper = React.forwardRef<HTMLSpanElement, IIconWrapperProps>(
-    ({ children, active, disabled, disableInteraction }, ref) => (
+    ({ children, className, active, disabled, disableInteraction, displayContents, ...props }, ref) => (
         <span
             ref={ref}
-            className={clsx("hoverable", styles.iconWrapper, {
+            className={clsx("hoverable", className, {
                 active: !!active,
                 disabled: !!disabled,
                 [styles.disableInteraction]: !!disableInteraction,
+                [styles.displayContents]: !!displayContents,
             })}
+            {...props}
         >
             {children}
         </span>

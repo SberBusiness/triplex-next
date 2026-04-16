@@ -24,7 +24,7 @@ export const ButtonIcon = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
         const classNames = clsx(styles.buttonIcon, iconShapeToClassNameMap[shape], className);
 
         return (
-            <IconWrapper disabled={disabled} active={active}>
+            <IconWrapper displayContents disabled={disabled} active={active}>
                 <button type="button" className={classNames} disabled={disabled} {...rest} ref={ref} />
             </IconWrapper>
         );

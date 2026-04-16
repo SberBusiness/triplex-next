@@ -110,7 +110,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
                 data-tx={process.env.npm_package_version}
                 ref={ref}
             >
-                <IconWrapper>{content}</IconWrapper>
+                <IconWrapper displayContents>{content}</IconWrapper>
             </a>
         );
     },

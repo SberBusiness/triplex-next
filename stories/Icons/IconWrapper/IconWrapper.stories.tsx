@@ -37,6 +37,7 @@ export const Playground: Story = {
         active: false,
         disabled: false,
         disableInteraction: false,
+        displayContents: false,
         children: <SettingsStrokeSrvIcon20 paletteIndex={5} />,
     },
     argTypes: {
@@ -51,6 +52,10 @@ export const Playground: Story = {
         disableInteraction: {
             control: "boolean",
             description: "Отключить взаимодействие с иконкой.",
+        },
+        displayContents: {
+            control: "boolean",
+            description: "Отобразить элемент со свойством display: contents.",
         },
         children: {
             table: { disable: true },

@@ -75,20 +75,22 @@ interface IButtonDotsProps extends IButtonDropdownProps {
     block?: never;
 }
 
-const sizeToDotsIconMap = {
+const SIZE_TO_DOTS_ICON_MAP: Record<EComponentSize, React.ReactElement> = {
     [EComponentSize.SM]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
     [EComponentSize.MD]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
     [EComponentSize.LG]: <DotshorizontalStrokeSrvIcon32 paletteIndex={0} />,
 };
 
-const sizeToCaretIconMap = (size: EComponentSize, paletteIndex: 0 | 7) => {
-    if (size === EComponentSize.SM) {
-        return <CaretdownStrokeSrvIcon16 paletteIndex={paletteIndex} className={styles.caretIcon} />;
-    } else if (size === EComponentSize.MD) {
-        return <CaretdownStrokeSrvIcon20 paletteIndex={paletteIndex} className={styles.caretIcon} />;
-    } else {
-        return <CaretdownStrokeSrvIcon24 paletteIndex={paletteIndex} className={styles.caretIcon} />;
-    }
+const SIZE_TO_CARET_ICON_MAP: Record<EComponentSize, (paletteIndex: 0 | 7) => React.ReactElement> = {
+    [EComponentSize.SM]: (paletteIndex) => (
+        <CaretdownStrokeSrvIcon16 paletteIndex={paletteIndex} className={styles.caretIcon} />
+    ),
+    [EComponentSize.MD]: (paletteIndex) => (
+        <CaretdownStrokeSrvIcon20 paletteIndex={paletteIndex} className={styles.caretIcon} />
+    ),
+    [EComponentSize.LG]: (paletteIndex) => (
+        <CaretdownStrokeSrvIcon24 paletteIndex={paletteIndex} className={styles.caretIcon} />
+    ),
 };
 
 /** Кнопка с выпадающим списком действий. */
@@ -154,7 +156,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                     aria-activedescendant={activeDescendant}
                     {...buttonAttributes}
                     ref={setRef}
-                    icon={sizeToDotsIconMap[size]}
+                    icon={SIZE_TO_DOTS_ICON_MAP[size]}
                 />
             );
         };
@@ -181,12 +183,10 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             switch (theme) {
                 case EButtonTheme.GENERAL:
                 case EButtonTheme.DANGER:
-                case EButtonDotsTheme.DOTS_SECONDARY:
-                case EButtonDotsTheme.DOTS_SECONDARY_LIGHT:
-                    return sizeToCaretIconMap(size, 7);
+                    return SIZE_TO_CARET_ICON_MAP[size](7);
                 case EButtonTheme.SECONDARY:
                 case EButtonTheme.SECONDARY_LIGHT:
-                    return sizeToCaretIconMap(size, 0);
+                    return SIZE_TO_CARET_ICON_MAP[size](0);
                 default:
                     return null;
             }

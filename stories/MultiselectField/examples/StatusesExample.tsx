@@ -16,7 +16,10 @@ import {
     ETextSize,
     Tag,
     TagGroup,
+    IconWrapper,
 } from "@sberbusiness/triplex-next";
+import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+
 import "../MultiselectField.less";
 
 /** Набор статусов для демонстрации состояний поля. */
@@ -156,6 +159,11 @@ const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
                     fieldLabel="Label"
                     placeholder="Select to proceed"
                     label={renderTags()}
+                    prefix={
+                        <IconWrapper disableInteraction disabled={status === EFormFieldStatus.DISABLED}>
+                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                        </IconWrapper>
+                    }
                 />
             )}
         >

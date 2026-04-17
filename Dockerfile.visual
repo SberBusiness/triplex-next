@@ -1,6 +1,6 @@
 # Образ с Playwright + Chromium на Ubuntu 24.04 (Noble) — совпадает с окружением CI (ubuntu-24.04).
 # Используется только для локального запуска visual-тестов с macOS.
-FROM mcr.microsoft.com/playwright:v1.58.2-noble
+FROM mcr.microsoft.com/playwright:v1.59.1-noble
 
 WORKDIR /app
 RUN mkdir -p /app/node_modules /home/pwuser/.npm \

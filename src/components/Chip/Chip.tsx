@@ -6,6 +6,7 @@ import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/class
 import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 import { isKey } from "../../utils/keyboard";
 import { Badge } from "../Badge/Badge";
+import { IconWrapper } from "../IconWrapper";
 
 /** Свойства компонента Chip. */
 export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "prefix">, DataAttributes {
@@ -76,34 +77,17 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 ref={ref}
             >
                 {prefix ? (
-                    <span
-                        className={clsx(
-                            styles.prefix,
-                            "hoverable", // Для иконок.
-
-                            {
-                                disabled: Boolean(disabled), // Для иконок.
-                            },
-                        )}
-                    >
+                    <IconWrapper className={styles.prefix} disabled={Boolean(disabled)}>
                         {prefix}
-                    </span>
+                    </IconWrapper>
                 ) : null}
 
                 <span className={styles.content}>{children}</span>
 
                 {postfix ? (
-                    <span
-                        className={clsx(
-                            styles.postfix,
-                            "hoverable", // Для иконок.
-                            {
-                                disabled: Boolean(disabled), // Для иконок.
-                            },
-                        )}
-                    >
+                    <IconWrapper className={styles.postfix} disabled={Boolean(disabled)}>
                         {postfix}
-                    </span>
+                    </IconWrapper>
                 ) : null}
 
                 {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}

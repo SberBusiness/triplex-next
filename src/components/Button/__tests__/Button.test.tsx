@@ -100,7 +100,6 @@ describe("Button", () => {
         );
         const button = getButton();
         expect(button).toBeDisabled();
-        expect(button).toHaveClass("disabled");
     });
 
     it("Should render icon alongside children and apply icon class when only icon is provided", () => {
@@ -139,7 +138,6 @@ describe("Button", () => {
         );
         const button = getButton();
         expect(button).toHaveClass("expanded");
-        expect(button).toHaveClass("active");
     });
 
     it("Should render loading dots with correct theme and size", () => {

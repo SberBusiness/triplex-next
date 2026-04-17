@@ -84,7 +84,7 @@
 1. На релиз triplex-next workflow генерирует `mcp-data.json` (плоский JSON со всеми `*-AI.md`,
    `docs/ai/*.md`, release notes в поле `raw`) и прикладывает к GitHub Release.
 2. `fetch-bundle.ts` в mcp-server скачивает asset и раскладывает в дерево
-   `data/{components,guides,release-notes}/` + `data/manifest.json`.
+   `bundle/{components,guides,release-notes}/` + `bundle/manifest.json`.
 3. MCP-сервер на старте читает manifest и парсит нужные файлы через gray-matter.
 
 **Заметка:** Все `{Component}-AI.md` файлы содержат YAML frontmatter с machine-readable метаданными —

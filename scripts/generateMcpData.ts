@@ -5,7 +5,7 @@
  * Вызывается в релиз-workflow (.github/workflows/release.yml): результат
  * прикладывается к GitHub Release как asset, оттуда его скачивает
  * `scripts/fetch-bundle.ts` в mcp-server и раскладывает в дерево
- * `data/{components,guides,release-notes}/` + `data/manifest.json`.
+ * `bundle/{components,guides,release-notes}/` + `bundle/manifest.json`.
  *
  * Bundle — transport-формат, не хранится в mcp-server. Поэтому схема простая:
  * плоский JSON с полным markdown в поле `raw`. Парсинг frontmatter и секций

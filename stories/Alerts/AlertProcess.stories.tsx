@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { AlertProcess, EAlertType } from "@sberbusiness/triplex-next";
+import { AlertProcess, EAlertProcessBorderRadius, EAlertType } from "@sberbusiness/triplex-next";
 import {
     Title,
     Description,
@@ -28,6 +28,8 @@ import {
     WithLinkExampleSource,
     WithSpoilerExample,
     WithSpoilerExampleSource,
+    BorderRadiusExample,
+    BorderRadiusExampleSource,
 } from "./examples/AlertProcess";
 
 const meta = {
@@ -77,6 +79,7 @@ export const Playground: Story = {
         type: EAlertType.INFO,
         closable: false,
         onClose: action("onClose"),
+        borderRadius: EAlertProcessBorderRadius.MD,
     },
     argTypes: {
         type: {
@@ -102,10 +105,19 @@ export const Playground: Story = {
                 type: { summary: "React.ReactNode" },
             },
         },
+        borderRadius: {
+            control: { type: "select" },
+            options: Object.values(EAlertProcessBorderRadius),
+            description: "Вариант скругления визуальной формы",
+            table: {
+                type: { summary: "EAlertProcessBorderRadius" },
+                defaultValue: { summary: EAlertProcessBorderRadius.MD },
+            },
+        },
     },
     parameters: {
         controls: {
-            include: ["type", "closable", "children"],
+            include: ["type", "closable", "children", "borderRadius"],
         },
         docs: {
             canvas: {
@@ -148,6 +160,25 @@ export const Types: Story = {
         docs: {
             source: {
                 code: TypesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const BorderRadius: Story = {
+    args: {
+        children: "This message provides context or highlights important information to note.",
+        type: EAlertType.INFO,
+        closable: false,
+        borderRadius: EAlertProcessBorderRadius.MD,
+    },
+    render: BorderRadiusExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: BorderRadiusExampleSource,
                 language: "tsx",
             },
         },

@@ -171,11 +171,11 @@ export const IslandAccordionItem = Object.assign(
                     </Island>
 
                     {onRemove && (
-                        <div className={clsx(styles.remove, "hoverable", { disabled: disabled })}>
-                            <ButtonIcon onClick={handleRemoveClick} title="Удалить">
+                        <span className={styles.remove}>
+                            <ButtonIcon onClick={handleRemoveClick} disabled={disabled} title="Удалить">
                                 <CrossStrokeSrvIcon24 paletteIndex={5} />
                             </ButtonIcon>
-                        </div>
+                        </span>
                     )}
                 </li>
             );

@@ -37,12 +37,16 @@ export default {
     tags: ["autodocs"],
 } satisfies Meta<typeof NumberField>;
 
-export type PlaygroundArgs = React.ComponentProps<typeof NumberField> & {
+type PlaygroundControlledProps = "postfix" | "description";
+
+export interface PlaygroundArgs extends Omit<React.ComponentProps<typeof NumberField>, PlaygroundControlledProps> {
+    /** Текст-заполнитель в поле ввода. */
+    placeholder: string;
     /** С постфиксом. */
     withPostfix: boolean;
     /** С описанием. */
     withDescription: boolean;
-};
+}
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
@@ -52,8 +56,9 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         status: EFormFieldStatus.DEFAULT,
         label: "Label",
         active: false,
-        inputProps: { placeholder: "0" },
+        inputProps: {},
         // Settings
+        placeholder: "0",
         withPostfix: false,
         withDescription: false,
     },
@@ -80,13 +85,29 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             table: { category: "Props" },
         },
         // Settings
+        placeholder: {
+            description: "Текст-заполнитель в поле ввода.",
+            control: "text",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "0" },
+            },
+        },
         withPostfix: {
+            description: "С постфиксом.",
             control: "boolean",
-            table: { category: "Settings" },
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
         },
         withDescription: {
+            description: "С описанием.",
             control: "boolean",
-            table: { category: "Settings" },
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
         },
     },
     render: PlaygroundExample,
@@ -103,6 +124,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
                 "active",
                 "inputProps",
                 // Settings
+                "placeholder",
                 "withPostfix",
                 "withDescription",
             ],
@@ -111,7 +133,6 @@ export const Playground: StoryObj<PlaygroundArgs> = {
 };
 
 export const Default: StoryObj<typeof NumberField> = {
-    name: "Default",
     render: DefaultExample,
     parameters: {
         docs: {
@@ -125,7 +146,6 @@ export const Default: StoryObj<typeof NumberField> = {
 };
 
 export const Sizes: StoryObj<typeof NumberField> = {
-    name: "Sizes",
     render: SizesExample,
     parameters: {
         docs: {
@@ -139,7 +159,6 @@ export const Sizes: StoryObj<typeof NumberField> = {
 };
 
 export const Statuses: StoryObj<typeof NumberField> = {
-    name: "Statuses",
     render: StatusesExample,
     parameters: {
         docs: {

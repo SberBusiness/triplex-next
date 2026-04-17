@@ -94,29 +94,32 @@ const StatusItem = ({ status }: IStatusItemProps) => {
     };
 
     return (
-        <SuggestField
-            value={value}
-            options={options}
-            size={EComponentSize.LG}
-            status={status}
-            label="Label"
-            placeholder="Type to proceed"
-            tooltipHint="No matches found."
-            tooltipOpen={tooltipOpen}
-            onFilter={handleFilter}
-            onSelect={handleSelect}
-            inputProps={{
-                onBlur: handleInputBlur,
-                onMouseDown: handleInputMouseDown,
-            }}
-        />
+        <div style={{ maxWidth: 300 }}>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{status.toUpperCase()}</div>
+            <SuggestField
+                value={value}
+                options={options}
+                size={EComponentSize.LG}
+                status={status}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
+                tooltipOpen={tooltipOpen}
+                onFilter={handleFilter}
+                onSelect={handleSelect}
+                inputProps={{
+                    onBlur: handleInputBlur,
+                    onMouseDown: handleInputMouseDown,
+                }}
+            />
+        </div>
     );
 };
 
 const STATUSES = Object.values(EFormFieldStatus);
 
 export const StatusesExample = () => (
-    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {STATUSES.map((status) => (
             <StatusItem key={status} status={status} />
         ))}

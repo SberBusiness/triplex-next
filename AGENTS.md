@@ -1,7 +1,7 @@
 # Triplex-Next — AI Agent Instructions
 
 This file is an entry point. Canonical non-negotiable rules live in
-`docs/ai/CODING_GUIDELINES.md` and the linked detailed guides.
+`docs/ai/codestyle.md` and the linked detailed guides.
 
 ## Read before working with components
 
@@ -12,7 +12,7 @@ prop addition workflow, invariants.
 **Component-specific docs:** `src/components/{ComponentName}/{ComponentName}-AI.md`
 Example: `src/components/Button/Button-AI.md`
 
-Always use `docs/ai/CONTEXT.md` + `docs/ai/CODING_GUIDELINES.md`.
+Always use `docs/ai/CONTEXT.md` + `docs/ai/codestyle.md`.
 
 If `{ComponentName}-AI.md` does not exist yet:
 - inspect the component source, stories, and tests
@@ -39,7 +39,7 @@ If `{ComponentName}-AI.md` does not exist yet:
 ## Typical task: add a prop to an existing component
 
 1. Read `docs/ai/CONTEXT.md`
-2. Read `docs/ai/CODING_GUIDELINES.md` and the guide for the area you touch
+2. Read `docs/ai/codestyle.md` and the guide for the area you touch
 3. If present, read `src/components/{ComponentName}/{ComponentName}-AI.md`
 4. Read the component source code, stories, and tests
 5. Make changes: TSX → LESS → story → tests

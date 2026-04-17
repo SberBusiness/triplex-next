@@ -27,8 +27,9 @@ const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> =
 };
 
 export const PlaygroundExample = ({
-    status,
+    status = EFormFieldStatus.DEFAULT,
     inputProps,
+    placeholder,
     withPostfix,
     withDescription,
     ...restArgs
@@ -45,36 +46,9 @@ export const PlaygroundExample = ({
         inputRef.current?.focus();
     }, []);
 
-    const renderPostfixInner = useCallback(() => {
-        if (withPostfix) {
-            return (
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <FormFieldClear aria-label="clear value" onClick={handleClearButtonClick} />
-                    <Text size={ETextSize.B2} type={STATUS_TO_POSTFIX_FONT_TYPE_MAP[status!]}>
-                        мм
-                    </Text>
-                    <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
-                </div>
-            );
-        }
-    }, [withPostfix, status, handleClearButtonClick]);
-
     const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
         event.preventDefault();
     }, []);
-
-    const renderDescriptionInner = useCallback(() => {
-        if (withDescription) {
-            return (
-                <Text size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status!]}>
-                    (21) Description{" "}
-                    <Link href="#" onClick={handleLinkClick}>
-                        Link text
-                    </Link>
-                </Text>
-            );
-        }
-    }, [withDescription, status, handleLinkClick]);
 
     return (
         <div style={{ maxWidth: 300 }}>
@@ -84,11 +58,31 @@ export const PlaygroundExample = ({
                 inputProps={{
                     ...inputProps,
                     value,
+                    placeholder,
                     onChange: handleInputChange,
                     ref: inputRef,
                 }}
-                postfix={renderPostfixInner()}
-                description={renderDescriptionInner()}
+                postfix={
+                    withPostfix && (
+                        <>
+                            <FormFieldClear aria-label="clear value" onClick={handleClearButtonClick} />
+                            <Text size={ETextSize.B2} type={STATUS_TO_POSTFIX_FONT_TYPE_MAP[status]}>
+                                мм
+                            </Text>
+                            <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
+                        </>
+                    )
+                }
+                description={
+                    withDescription && (
+                        <Text size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
+                            (21) Description{" "}
+                            <Link href="#" onClick={handleLinkClick}>
+                                Link text
+                            </Link>
+                        </Text>
+                    )
+                }
             />
         </div>
     );

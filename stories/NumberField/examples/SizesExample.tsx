@@ -13,7 +13,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
     };
 
     return (
-        <div>
+        <div style={{ maxWidth: 300 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
             <NumberField
                 size={size}
@@ -32,7 +32,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 const SIZES = Object.values(EComponentSize);
 
 export const SizesExample = () => (
-    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
         ))}

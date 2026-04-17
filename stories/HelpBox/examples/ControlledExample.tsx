@@ -21,6 +21,8 @@ export const ControlledExample = () => {
                 preferPlace={ETooltipPreferPlace.RIGHT}
                 isOpen={open}
                 toggle={handleToggle}
+                aria-label="Подсказка"
+                tooltipXButtonProps={{ "aria-label": "Закрыть" }}
             >
                 Управляемое состояние тултипа
             </HelpBox>

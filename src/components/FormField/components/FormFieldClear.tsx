@@ -22,7 +22,7 @@ export const FormFieldClear = React.forwardRef<HTMLButtonElement, IFormFieldClea
         return (
             <ButtonIcon
                 {...restProps}
-                className={clsx(styles.formFieldClear, "hoverable", className)}
+                className={clsx(styles.formFieldClear, className)}
                 onMouseDown={handleMouseDown}
                 ref={ref}
             >

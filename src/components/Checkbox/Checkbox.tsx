@@ -1,9 +1,9 @@
 import React from "react";
+import clsx from "clsx";
 import { CheckboxbulkStrokeSrvIcon24, CheckboxtickStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ETextSize, Text } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../utils/classNameMaps";
-import clsx from "clsx";
 import styles from "./styles/Checkbox.module.less";
 
 /** Свойства компонента Checkbox. */
@@ -14,15 +14,17 @@ export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInput
     bulk?: boolean;
     /** Размер чекбокса. */
     size?: EComponentSize;
+    /** Контент лейбла чекбокса. */
+    children?: React.ReactNode;
 }
 
-const sizeToTextSizeMap = {
+const SIZE_TO_TEXT_SIZE_MAP: Record<EComponentSize, ETextSize> = {
     [EComponentSize.LG]: ETextSize.B2,
     [EComponentSize.MD]: ETextSize.B3,
     [EComponentSize.SM]: ETextSize.B4,
 };
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /** Чекбокс с описанием. */
 export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
@@ -35,11 +37,12 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
         size = EComponentSize.MD,
         ...inputAttributes
     } = props;
-    const classNames = clsx(styles.checkbox, className, sizeToClassNameMap[size]);
+    const classNames = clsx(styles.checkbox, SIZE_TO_CLASS_NAME_MAP[size]);
     const classNamesLabel = clsx(
         styles.label,
-        sizeToClassNameMap[size],
+        SIZE_TO_CLASS_NAME_MAP[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
+        className,
         labelAttributes?.className,
     );
 
@@ -60,7 +63,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
             <span className={styles.checkboxIcon} />
             {renderCheckmarkIcon()}
             {children && (
-                <Text size={sizeToTextSizeMap[size]} tag="div">
+                <Text size={SIZE_TO_TEXT_SIZE_MAP[size]} tag="div">
                     {children}
                 </Text>
             )}

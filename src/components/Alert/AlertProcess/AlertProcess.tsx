@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { EAlertType } from "../EAlertType";
-import { alertTypeToClassNameMap } from "../AlertTypeUtils";
+import { ALERT_TYPE_TO_CLASS_NAME_MAP } from "../AlertTypeUtils";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { AlertProcessSpoiler } from "./components/AlertProcessSpoiler";
 import { AlertProcessContext } from "./AlertProcessContext";
+import { EAlertProcessBorderRadius } from "./enums";
 import styles from "./styles/AlertProcess.module.less";
 import {
     InfoStrokeStsIcon20,
@@ -25,27 +26,36 @@ export interface IAlertProcessProps extends React.HTMLAttributes<HTMLDivElement>
     onClose?: () => void;
     /** Отображаемая иконка. */
     renderIcon?: React.ReactNode;
+    /** Вариант скругления визуальной формы. */
+    borderRadius?: EAlertProcessBorderRadius;
 }
 
-const renderDefaultIcon = (type: EAlertType) => {
-    switch (type) {
-        case EAlertType.INFO:
-            return <InfoStrokeStsIcon20 paletteIndex={3} />;
-        case EAlertType.WARNING:
-            return <WarningStrokeStsIcon20 paletteIndex={2} />;
-        case EAlertType.ERROR:
-            return <ErrorStrokeStsIcon20 paletteIndex={1} />;
-        case EAlertType.SYSTEM:
-            return <SystemStrokeStsIcon20 paletteIndex={4} />;
-        case EAlertType.FEATURE:
-            return <DefaulticonStrokePrdIcon20 paletteIndex={0} />;
-    }
+const TYPE_TO_DEFAULT_ICON_MAP: Record<EAlertType, React.ReactNode> = {
+    [EAlertType.INFO]: <InfoStrokeStsIcon20 paletteIndex={3} />,
+    [EAlertType.WARNING]: <WarningStrokeStsIcon20 paletteIndex={2} />,
+    [EAlertType.ERROR]: <ErrorStrokeStsIcon20 paletteIndex={1} />,
+    [EAlertType.SYSTEM]: <SystemStrokeStsIcon20 paletteIndex={4} />,
+    [EAlertType.FEATURE]: <DefaulticonStrokePrdIcon20 paletteIndex={0} />,
+};
+
+const BORDER_RADIUS_TO_CLASS_NAME_MAP: Record<EAlertProcessBorderRadius, string> = {
+    [EAlertProcessBorderRadius.MD]: styles.md,
+    [EAlertProcessBorderRadius.LG]: styles.lg,
 };
 
 /** Компонент процессного предупреждения. */
 export const AlertProcess = Object.assign(
     React.forwardRef<HTMLDivElement, IAlertProcessProps>(function AlertProcess(
-        { children, className, type, renderIcon, closable = false, onClose, ...rest },
+        {
+            children,
+            className,
+            type,
+            renderIcon,
+            closable = false,
+            onClose,
+            borderRadius = EAlertProcessBorderRadius.MD,
+            ...rest
+        },
         ref,
     ) {
         const [closed, setClosed] = useState(false);
@@ -65,7 +75,8 @@ export const AlertProcess = Object.assign(
                 <div
                     className={clsx(
                         styles.alertProcess,
-                        alertTypeToClassNameMap[type](styles),
+                        BORDER_RADIUS_TO_CLASS_NAME_MAP[borderRadius],
+                        ALERT_TYPE_TO_CLASS_NAME_MAP[type](styles),
                         { [styles.withSpoiler]: hasSpoiler },
                         className,
                     )}
@@ -73,7 +84,7 @@ export const AlertProcess = Object.assign(
                     data-tx={process.env.npm_package_version}
                     ref={ref}
                 >
-                    <div className={styles.themeIcon}>{renderIcon ? renderIcon : renderDefaultIcon(type)}</div>
+                    <div className={styles.themeIcon}>{renderIcon ? renderIcon : TYPE_TO_DEFAULT_ICON_MAP[type]}</div>
 
                     <div className={styles.alertProcessContentBlock}>{children}</div>
 

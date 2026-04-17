@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.24.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**EmptyView**
+
+- Компонент для отображения пустых состояний.
+
 <Heading>Ломающие изменения</Heading>
 
 **Dropdown**
@@ -36,6 +42,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **LightBox**
 
 - Исправлено выравнивание ButtonDropdown в Page.Header.Title.Controls на мобильном устройстве.
+
+**HelpBox**
+
+- Добавлен `forwardRef` — ref пробрасывается на кнопку-триггер.
+- Добавлено свойство `tooltipXButtonProps` для передачи атрибутов на кнопку закрытия Tooltip.
+- Убраны захардкоженные `aria-label` — потребитель передаёт `aria-label` через rest-props и `tooltipXButtonProps`.
 
 **SelectExtendedField**
 

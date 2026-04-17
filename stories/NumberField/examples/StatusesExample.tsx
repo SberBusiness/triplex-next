@@ -13,7 +13,7 @@ const StatusItem = ({ status }: IStatusItemProps) => {
     };
 
     return (
-        <div>
+        <div style={{ maxWidth: 300 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{status.toUpperCase()}</div>
             <NumberField
                 size={EComponentSize.LG}
@@ -32,7 +32,7 @@ const StatusItem = ({ status }: IStatusItemProps) => {
 const STATUSES = Object.values(EFormFieldStatus);
 
 export const StatusesExample = () => (
-    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {STATUSES.map((status) => (
             <StatusItem key={status} status={status} />
         ))}

@@ -14,3 +14,5 @@ export { WithSpoilerExample } from "./WithSpoilerExample";
 export { default as WithSpoilerExampleSource } from "./WithSpoilerExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { BorderRadiusExample } from "./BorderRadiusExample";
+export { default as BorderRadiusExampleSource } from "./BorderRadiusExample?raw";

@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
-import { ButtonBase } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
-import { ISegmentedControlSegmentProps } from "@sberbusiness/triplex-next/components/SegmentedControl/types";
-import { ESegmentedControlType } from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
+import { ButtonBase } from "../Button/ButtonBase";
+import { ISegmentedControlSegmentProps } from "./types";
+import { ESegmentedControlType } from "./enums";
+import { SegmentedControlContext } from "./SegmentedControlContext";
+import { IconWrapper } from "../IconWrapper";
 import styles from "./styles/SegmentedControlSegment.module.less";
-import { SegmentedControlContext } from "@sberbusiness/triplex-next/components/SegmentedControl/SegmentedControlContext";
 
 /** Элемент SegmentedControl, представляет собой опцию для выбора. */
 export const SegmentedControlSegment: React.FC<ISegmentedControlSegmentProps> = ({
@@ -33,13 +34,7 @@ export const SegmentedControlSegment: React.FC<ISegmentedControlSegmentProps> = 
     };
 
     const selected = isSelected();
-    const classNames = clsx(
-        styles.segmentedControlSegment,
-        { [styles.selected]: selected },
-        "hoverable",
-        { active: selected },
-        className,
-    );
+    const classNames = clsx(styles.segmentedControlSegment, { [styles.selected]: selected }, className);
 
     const getTitle = () => {
         if (title) {
@@ -65,16 +60,18 @@ export const SegmentedControlSegment: React.FC<ISegmentedControlSegmentProps> = 
     };
 
     return (
-        <ButtonBase
-            className={classNames}
-            title={getTitle()}
-            disabled={disabled || disabledFromContext}
-            aria-pressed={selected}
-            onClick={handleClick}
-            {...rest}
-        >
-            <span className={styles.content}>{children}</span>
-        </ButtonBase>
+        <IconWrapper displayContents disabled={disabled || disabledFromContext} active={selected}>
+            <ButtonBase
+                className={classNames}
+                title={getTitle()}
+                disabled={disabled || disabledFromContext}
+                aria-pressed={selected}
+                onClick={handleClick}
+                {...rest}
+            >
+                <span className={styles.content}>{children}</span>
+            </ButtonBase>
+        </IconWrapper>
     );
 };
 

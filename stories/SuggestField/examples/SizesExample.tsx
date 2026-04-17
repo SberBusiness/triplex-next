@@ -94,29 +94,32 @@ const SizeItem = ({ size }: ISizeItemProps) => {
     };
 
     return (
-        <SuggestField
-            value={value}
-            options={options}
-            size={size}
-            status={EFormFieldStatus.DEFAULT}
-            label="Label"
-            placeholder="Type to proceed"
-            tooltipHint="No matches found."
-            tooltipOpen={tooltipOpen}
-            onFilter={handleFilter}
-            onSelect={handleSelect}
-            inputProps={{
-                onBlur: handleInputBlur,
-                onMouseDown: handleInputMouseDown,
-            }}
-        />
+        <div style={{ maxWidth: 300 }}>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
+            <SuggestField
+                value={value}
+                options={options}
+                size={size}
+                status={EFormFieldStatus.DEFAULT}
+                label="Label"
+                placeholder="Type to proceed"
+                tooltipHint="No matches found."
+                tooltipOpen={tooltipOpen}
+                onFilter={handleFilter}
+                onSelect={handleSelect}
+                inputProps={{
+                    onBlur: handleInputBlur,
+                    onMouseDown: handleInputMouseDown,
+                }}
+            />
+        </div>
     );
 };
 
 const SIZES = Object.values(EComponentSize);
 
 export const SizesExample = () => (
-    <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
         ))}

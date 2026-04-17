@@ -171,7 +171,7 @@ export const TabsLineDropdown: React.FC<ITabsLineDropdownProps> = ({
                 ref={dropdownRef}
             >
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
-                    <DropdownList dropdownOpened={opened} id={instanceId.current}>
+                    <DropdownList dropdownOpened={opened} id={instanceId.current} size={size}>
                         {tabs.map((tab) => {
                             const { id, label, showNotificationIcon, ...htmlDivAttributes } = tab;
                             const className = clsx(styles.dropdownItem);

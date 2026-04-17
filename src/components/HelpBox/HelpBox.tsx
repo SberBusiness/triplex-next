@@ -5,7 +5,7 @@ import { ISingleColorIconProps, QuestioncircleFilledSrvIcon16 } from "@sberbusin
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { EButtonIconShape } from "../Button/enums";
 import { Tooltip } from "../Tooltip/Tooltip";
-import { ITooltipProps } from "../Tooltip/types";
+import { ITooltipProps, ITooltipXButtonProps } from "../Tooltip/types";
 import { ETooltipSize } from "../Tooltip/enums";
 import { TooltipMobileHeader } from "../Tooltip/components/mobile/components/TooltipMobileHeader";
 import { MobileView } from "../MobileView/MobileView";
@@ -16,7 +16,8 @@ import clsx from "clsx";
 
 /** Свойства компонента HelpBox. */
 export interface IHelpBoxProps
-    extends React.HTMLAttributes<HTMLButtonElement>,
+    extends
+        React.HTMLAttributes<HTMLButtonElement>,
         Pick<ITooltipProps, "isOpen" | "preferPlace" | "onShow" | "toggle"> {
     /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrap.Props;
@@ -30,104 +31,121 @@ export interface IHelpBoxProps
     mobileHeaderContent?: React.ReactNode;
     /** Свойства иконки. */
     iconProps?: ISingleColorIconProps;
+    /** Свойства кнопки закрытия Tooltip. */
+    tooltipXButtonProps?: ITooltipXButtonProps;
 }
 
 /** Иконка "?" со всплывающей подсказкой выбранного размера. */
-export const HelpBox: React.FC<IHelpBoxProps> = ({
-    children,
-    className,
-    focusTrapProps,
-    mobileHeaderContent,
-    isOpen: openProp,
-    onShow,
-    tooltipSize,
-    preferPlace,
-    toggle,
-    tooltipAriaAttributes,
-    tooltipDataAttributes,
-    iconProps,
-    ...targetHtmlAttrs
-}) => {
-    const ref = useRef<HTMLButtonElement>(null);
-    const [openState, setOpenState] = useState(Boolean(openProp));
-    const [focusTrapNode, setFocusTrapNode] = useState<HTMLDivElement | null>(null);
-    const [tooltipId] = useState<string>(uniqueId());
-    const open = openProp ?? openState;
+export const HelpBox = React.forwardRef<HTMLButtonElement, IHelpBoxProps>(
+    (
+        {
+            children,
+            className,
+            focusTrapProps,
+            mobileHeaderContent,
+            isOpen: openProp,
+            onShow,
+            tooltipSize,
+            preferPlace,
+            toggle,
+            tooltipAriaAttributes,
+            tooltipDataAttributes,
+            iconProps,
+            tooltipXButtonProps,
+            ...targetHtmlAttrs
+        },
+        ref,
+    ) => {
+        const buttonRef = useRef<HTMLButtonElement | null>(null);
+        const [openState, setOpenState] = useState(Boolean(openProp));
+        const [focusTrapNode, setFocusTrapNode] = useState<HTMLDivElement | null>(null);
+        const [tooltipId] = useState<string>(uniqueId());
+        const open = openProp ?? openState;
 
-    /** Обработчик закрытия/открытия Tooltip. */
-    const handleTooltipToggle = (open: boolean) => {
-        if (openProp === undefined) {
-            setOpenState(open);
-        }
-
-        if (!open) {
-            setFocusTrapNode(null);
-        }
-
-        toggle?.(open);
-    };
-
-    /** Обработчик появления Tooltip. */
-    const handleTooltipShow = (node: HTMLDivElement) => {
-        setFocusTrapNode(node);
-        onShow?.(node);
-    };
-
-    /** Рендер ловушки фокуса. */
-    const renderFocusTrap = (node: HTMLDivElement) => (
-        <MobileView
-            fallback={
-                <FocusTrap
-                    active={open}
-                    {...focusTrapProps}
-                    focusTrapOptions={{
-                        clickOutsideDeactivates: true,
-                        initialFocus: `[id='${tooltipId}']`,
-                        preventScroll: true,
-                        ...focusTrapProps?.focusTrapOptions,
-                    }}
-                    containerElements={[node]}
-                />
+        /** Функция для хранения ссылки. */
+        const setRef = (instance: HTMLButtonElement | null) => {
+            buttonRef.current = instance;
+            if (typeof ref === "function") {
+                ref(instance);
+            } else if (ref) {
+                (ref as React.MutableRefObject<HTMLButtonElement | null>).current = instance;
             }
-        >
-            {null}
-        </MobileView>
-    );
+        };
 
-    return (
-        <>
-            <Tooltip
-                id={tooltipId}
-                tabIndex={-1}
-                role="dialog"
-                toggleType="hover"
-                size={tooltipSize}
-                preferPlace={preferPlace}
-                isOpen={open}
-                toggle={handleTooltipToggle}
-                onShow={handleTooltipShow}
-                targetRef={ref}
-                {...(Boolean(tooltipAriaAttributes) && getAriaHTMLAttributes(tooltipAriaAttributes!))}
-                {...(Boolean(tooltipDataAttributes) && getDataHTMLAttributes(tooltipDataAttributes!))}
+        /** Обработчик закрытия/открытия Tooltip. */
+        const handleTooltipToggle = (open: boolean) => {
+            if (openProp === undefined) {
+                setOpenState(open);
+            }
+
+            if (!open) {
+                setFocusTrapNode(null);
+            }
+
+            toggle?.(open);
+        };
+
+        /** Обработчик появления Tooltip. */
+        const handleTooltipShow = (node: HTMLDivElement) => {
+            setFocusTrapNode(node);
+            onShow?.(node);
+        };
+
+        /** Рендер ловушки фокуса. */
+        const renderFocusTrap = (node: HTMLDivElement) => (
+            <MobileView
+                fallback={
+                    <FocusTrap
+                        active={open}
+                        {...focusTrapProps}
+                        focusTrapOptions={{
+                            clickOutsideDeactivates: true,
+                            initialFocus: `[id='${tooltipId}']`,
+                            preventScroll: true,
+                            ...focusTrapProps?.focusTrapOptions,
+                        }}
+                        containerElements={[node]}
+                    />
+                }
             >
-                <Tooltip.Target>
-                    <ButtonIcon
-                        className={clsx(styles.helpBoxButton, className)}
-                        aria-label="Подсказка"
-                        shape={EButtonIconShape.CIRCLE}
-                        ref={ref}
-                        {...targetHtmlAttrs}
-                    >
-                        <QuestioncircleFilledSrvIcon16 paletteIndex={5} {...iconProps} />
-                    </ButtonIcon>
-                </Tooltip.Target>
-                {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}
-                <Tooltip.Body>{children}</Tooltip.Body>
-                <Tooltip.XButton aria-label="Закрыть" />
-            </Tooltip>
-            {open && focusTrapNode && renderFocusTrap(focusTrapNode)}
-        </>
-    );
-};
+                {null}
+            </MobileView>
+        );
+
+        return (
+            <>
+                <Tooltip
+                    id={tooltipId}
+                    tabIndex={-1}
+                    role="dialog"
+                    toggleType="hover"
+                    size={tooltipSize}
+                    preferPlace={preferPlace}
+                    isOpen={open}
+                    toggle={handleTooltipToggle}
+                    onShow={handleTooltipShow}
+                    targetRef={buttonRef}
+                    {...(Boolean(tooltipAriaAttributes) && getAriaHTMLAttributes(tooltipAriaAttributes!))}
+                    {...(Boolean(tooltipDataAttributes) && getDataHTMLAttributes(tooltipDataAttributes!))}
+                >
+                    <Tooltip.Target>
+                        <ButtonIcon
+                            className={clsx(styles.helpBoxButton, className)}
+                            shape={EButtonIconShape.CIRCLE}
+                            ref={setRef}
+                            {...targetHtmlAttrs}
+                        >
+                            <QuestioncircleFilledSrvIcon16 paletteIndex={5} {...iconProps} />
+                        </ButtonIcon>
+                    </Tooltip.Target>
+                    {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}
+                    <Tooltip.Body>{children}</Tooltip.Body>
+                    <Tooltip.XButton {...tooltipXButtonProps} />
+                </Tooltip>
+                {open && focusTrapNode && renderFocusTrap(focusTrapNode)}
+            </>
+        );
+    },
+);
 
 HelpBox.displayName = "HelpBox";

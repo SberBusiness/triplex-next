@@ -40,7 +40,7 @@
     }
 
     .global-page {
-        max-width: @lightBox-content-max-width;
+        max-width: var(--lightBox-content-max-width, @lightBox-content-max-width-fallback);
         padding-top: 24px; // Переопределение отступов Page.module.less
         padding-bottom: 24px; // Переопределение отступов Page.module.less
 

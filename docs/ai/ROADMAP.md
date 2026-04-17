@@ -56,6 +56,10 @@
 | Компонент | AI.md | Figma Node | Статус |
 |---|---|---|---|
 | Button | ✅ | ✅ | Пилот |
+| HelpBox | ✅ | ⬜ | AI-Ready |
+| Checkbox | ✅ | ⬜ | AI-Ready |
+| CheckboxXGroup | ✅ | ⬜ | AI-Ready |
+| CheckboxYGroup | ✅ | ⬜ | AI-Ready |
 | Alert | ⬜ | ⬜ | — |
 | Badge | ⬜ | ⬜ | — |
 | Card | ⬜ | ⬜ | — |

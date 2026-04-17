@@ -70,13 +70,6 @@
                 box-sizing: border-box;
                 color: var(--triplex-next-TableBasic-Color);
 
-                // Фикс бага движка IE11. Иначе по бокам от колонки появляется белая линия.
-                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-                    box-shadow:
-                        inset -1px 0 0 var(--triplex-next-TableBasic-Header_Background),
-                        inset 1px 0 0 var(--triplex-next-TableBasic-Header_Background);
-                }
-
                 &:first-child {
                     border-top-left-radius: 8px;
                     border-bottom-left-radius: 8px;
@@ -157,13 +150,6 @@
 
                 &.selected > td {
                     background-color: var(--triplex-next-TableBasic-Background_Selected);
-
-                    // Фикс бага движка IE11. Иначе по бокам от колонки появляется белая линия.
-                    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-                        box-shadow:
-                            inset -1px 0 0 var(--triplex-next-TableBasic-Background_Selected),
-                            inset 1px 0 0 var(--triplex-next-TableBasic-Background_Selected);
-                    }
                 }
             }
 
@@ -173,13 +159,6 @@
 
             &.hoverable > tr:hover > td {
                 background-color: var(--triplex-next-TableBasic-Background_Hover);
-
-                // Фикс бага движка IE11. Иначе по бокам от колонки появляется белая линия.
-                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-                    box-shadow:
-                        inset -1px 0 0 var(--triplex-next-TableBasic-Background_Hover),
-                        inset 1px 0 0 var(--triplex-next-TableBasic-Background_Hover);
-                }
             }
         }
     }

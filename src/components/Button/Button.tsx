@@ -1,15 +1,17 @@
 import React from "react";
 import clsx from "clsx";
-import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
+import { LoaderSmall, ELoaderSmallTheme } from "../Loader";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
 import secondaryLightStyles from "./styles/ButtonSecondaryLight.module.less";
 import dangerStyles from "./styles/ButtonDanger.module.less";
 import linkStyles from "./styles/ButtonLink.module.less";
 import styles from "./styles/Button.module.less";
-import { ButtonBase, IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
-import { EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { ButtonBase, IButtonBaseProps } from "./ButtonBase";
+import { EButtonTheme } from "./enums";
+import { EComponentSize } from "../../enums/EComponentSize";
+import { IconWrapper } from "../IconWrapper";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {
@@ -98,45 +100,23 @@ export type TButtonProps =
     | IButtonDangerProps
     | IButtonLinkProps;
 
-/** Возвращает CSS класс темы кнопки. */
-const getButtonThemeCssClass = (theme: EButtonTheme, expanded?: boolean) => {
-    switch (theme) {
-        case EButtonTheme.GENERAL:
-            return { [generalStyles.general]: true, [generalStyles.expanded]: expanded };
-        case EButtonTheme.SECONDARY:
-            return {
-                [secondaryStyles.secondary]: true,
-                [secondaryStyles.expanded]: expanded,
-            };
-        case EButtonTheme.SECONDARY_LIGHT:
-            return {
-                [secondaryLightStyles.secondaryLight]: true,
-                [secondaryLightStyles.expanded]: expanded,
-            };
-        case EButtonTheme.DANGER:
-            return {
-                [dangerStyles.danger]: true,
-                [dangerStyles.expanded]: expanded,
-            };
-        case EButtonTheme.LINK:
-            return {
-                [linkStyles.link]: true,
-                [linkStyles.expanded]: expanded,
-            };
-    }
+const THEME_TO_CLASS_NAME_MAP: Record<EButtonTheme, string> = {
+    [EButtonTheme.GENERAL]: generalStyles.general,
+    [EButtonTheme.SECONDARY]: secondaryStyles.secondary,
+    [EButtonTheme.SECONDARY_LIGHT]: secondaryLightStyles.secondaryLight,
+    [EButtonTheme.DANGER]: dangerStyles.danger,
+    [EButtonTheme.LINK]: linkStyles.link,
 };
 
-/** Возвращает CSS класс размера кнопки. */
-const getButtonSizeCssClass = (size?: EComponentSize) => {
-    switch (size) {
-        case EComponentSize.LG:
-            return styles.lg;
-        case EComponentSize.MD:
-            return styles.md;
-        case EComponentSize.SM:
-            return styles.sm;
-    }
+const THEME_TO_EXPANDED_CLASS_NAME_MAP: Record<EButtonTheme, string> = {
+    [EButtonTheme.GENERAL]: generalStyles.expanded,
+    [EButtonTheme.SECONDARY]: secondaryStyles.expanded,
+    [EButtonTheme.SECONDARY_LIGHT]: secondaryLightStyles.expanded,
+    [EButtonTheme.DANGER]: dangerStyles.expanded,
+    [EButtonTheme.LINK]: linkStyles.expanded,
 };
+
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
@@ -154,26 +134,23 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,
-        getButtonThemeCssClass(theme, !!expanded),
-        getButtonSizeCssClass(size),
-        { [styles.block]: !!block, [styles.loading]: !!loading },
-        { [styles.icon]: !!icon && !children },
-        // Классы для иконок, начало.
-        "hoverable",
+        THEME_TO_CLASS_NAME_MAP[theme],
+        SIZE_TO_CLASS_NAME_MAP[size],
         {
-            active: !!expanded,
-            disabled: !!disabled,
+            [styles.block]: !!block,
+            [styles.loading]: !!loading,
+            [styles.icon]: !!icon && !children,
+            [THEME_TO_EXPANDED_CLASS_NAME_MAP[theme]]: !!expanded,
         },
-        // Классы для иконок, конец.
         className,
     );
 
     return (
         <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
-            <span className={styles.content}>
+            <IconWrapper className={styles.content} disabled={disabled} active={!!expanded}>
                 {icon}
                 {children}
-            </span>
+            </IconWrapper>
             <div className={clsx(styles.loader, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
         </ButtonBase>
     );

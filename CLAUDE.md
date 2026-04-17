@@ -1,7 +1,7 @@
 # Triplex-Next — Инструкции для Claude Code
 
 Этот файл — entry point. Канонические обязательные правила находятся в
-`docs/ai/CODING_GUIDELINES.md` и в связанных подробных гайдах.
+`docs/ai/codestyle.md` и в связанных подробных гайдах.
 
 ## Обязательно прочитай перед работой с компонентами
 
@@ -12,7 +12,7 @@
 **Документация конкретного компонента:** `src/components/{ComponentName}/{ComponentName}-AI.md`
 Пример: `src/components/Button/Button-AI.md`
 
-Всегда используй `docs/ai/CONTEXT.md` + `docs/ai/CODING_GUIDELINES.md`.
+Всегда используй `docs/ai/CONTEXT.md` + `docs/ai/codestyle.md`.
 
 Если `{ComponentName}-AI.md` ещё нет:
 - изучи исходники компонента, stories и тесты
@@ -40,7 +40,7 @@
 
 Когда тебя просят изменить компонент:
 1. Прочитай `docs/ai/CONTEXT.md`
-2. Прочитай `docs/ai/CODING_GUIDELINES.md` и нужный тематический гайд
+2. Прочитай `docs/ai/codestyle.md` и нужный тематический гайд
 3. Если файл существует, прочитай `src/components/{ComponentName}/{ComponentName}-AI.md`
 4. Изучи исходный код компонента, stories и тесты
 5. Внеси изменения: TSX → LESS → story → тесты

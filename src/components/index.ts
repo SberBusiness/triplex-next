@@ -22,6 +22,7 @@ export * from "./Divider";
 export * from "./DocumentNumberEdit";
 export * from "./Dropdown";
 export * from "./Ellipsis";
+export * from "./EmptyView";
 export * from "./ExpandAnimation";
 export * from "./Footer";
 export * from "./FormField";

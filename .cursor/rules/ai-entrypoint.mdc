@@ -9,7 +9,7 @@ Treat `docs/ai/*` as the source of truth for project conventions.
 
 Before modifying components:
 - Read `docs/ai/CONTEXT.md`
-- Read `docs/ai/CODING_GUIDELINES.md`
+- Read `docs/ai/codestyle.md`
 - If present, read `src/components/{ComponentName}/{ComponentName}-AI.md`
 
 Then follow the detailed guide for the area you touch:

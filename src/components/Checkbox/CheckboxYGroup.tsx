@@ -3,18 +3,20 @@ import clsx from "clsx";
 import styles from "./styles/CheckboxYGroup.module.less";
 
 /** Свойства компонента CheckboxYGroup. */
-export interface ICheckboxYGroupProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ICheckboxYGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "role"> {
+    children?: React.ReactNode;
+}
 
 /** Группа чекбоксов с направлением по оси Y. */
-export const CheckboxYGroup: React.FC<ICheckboxYGroupProps> = (props) => {
+export const CheckboxYGroup = React.forwardRef<HTMLDivElement, ICheckboxYGroupProps>((props, ref) => {
     const { children, className, ...rest } = props;
     const classNames = clsx(styles.checkboxYGroup, className);
 
     return (
-        <div className={classNames} role="group" {...rest}>
+        <div className={classNames} {...rest} role="group" ref={ref}>
             {children}
         </div>
     );
-};
+});
 
 CheckboxYGroup.displayName = "CheckboxYGroup";

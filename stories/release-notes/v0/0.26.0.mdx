@@ -1,0 +1,52 @@
+import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+<Meta title="release-notes/v0/0.26.0" />
+
+<Title>v0.26.0</Title>
+
+<Heading>Новые компоненты</Heading>
+
+**IconWrapper**
+
+- Добавлен компонент-обёртка для иконок из `@sberbusiness/icons-next`. Применяет классы `hoverable`, `active`, `disabled`, управляющие цветом иконки при взаимодействии.
+
+<Heading>Изменения</Heading>
+
+**AlertProcess**
+
+- Добавлено свойство `borderRadius` для управления скруглением визуальной формы.
+- Изменен цвет фона в светлой теме для типа `System`.
+
+**Checkbox**
+
+- Добавлен `forwardRef` — ref пробрасывается на инпут.
+- `className` теперь пробрасывается в корневой элемент `<label>`.
+
+**IslandAccordion**
+
+- Кнопка удаления элемента теперь обёрнута в `IconWrapper`.
+
+**LightBox**
+
+- Добавлен prop `size` (`ELightBoxSize`) для управления шириной контента. Размер контента автоматически применяется к `LightBox.Content`, `LightBox.SideOverlay`, `LightBox.LeftSidebar` и `LightBox.RightSidebar`.
+
+**OrderedList**
+
+- Исправлена работа свойства `start`.
+
+**SelectExtendedField**
+
+- Иконка каретки теперь обёрнута в `IconWrapper`.
+- Убран лишний класс `hoverable` с `FormFieldPrefix` внутри target.
+
+**StatusTracker**
+
+- Увеличен верхний отступ с `24px` до `40px`.
+
+**Stepper**
+
+- Иконка шага теперь обёрнута в `IconWrapper`.
+
+**TabsLine**
+
+- Добавлена зависимость размера `DropdownList` в `TabsLineDropdown` от размера `TabsLine`.

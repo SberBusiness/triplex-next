@@ -4,6 +4,12 @@ export enum EButtonDotsTheme {
     DOTS_SECONDARY_LIGHT = "dots_secondary_light",
 }
 
+export const EButtonSize = {
+    SM: "sm",
+    MD: "md",
+    LG: "lg",
+};
+
 /** Темы кнопки. */
 export enum EButtonTheme {
     GENERAL = "general",

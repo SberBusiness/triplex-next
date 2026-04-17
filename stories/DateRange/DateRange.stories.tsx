@@ -9,6 +9,8 @@ import {
     WithoutNavigationExample,
     WithoutNavigationExampleSource,
     VisualTestsExample,
+    SizesExample,
+    SizesExampleSource,
 } from "./examples";
 
 const meta = {
@@ -75,6 +77,16 @@ export const Default: Story = {
         controls: { disable: true },
         docs: {
             source: { code: DefaultExampleSource, language: "tsx" },
+        },
+    },
+};
+
+export const Sizes: Story = {
+    render: SizesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: SizesExampleSource, language: "tsx" },
         },
     },
 };

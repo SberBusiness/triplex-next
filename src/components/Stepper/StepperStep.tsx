@@ -4,9 +4,10 @@ import { isKey } from "../../utils/keyboard";
 import { StepperExtendedContext } from "./StepperExtendedContext";
 import { EFocusSource } from "../../enums/EFocusSource";
 import clsx from "clsx";
-import styles from "./styles/StepperStep.module.less";
 import { EStepperSize, EStepperStepType } from "./enums";
 import { RightBorderArrow } from "./RightBorderArrow";
+import { IconWrapper } from "../IconWrapper";
+import styles from "./styles/StepperStep.module.less";
 
 /** Внутренние составляющие StepperStep. */
 interface IStepperStepComposition {
@@ -127,11 +128,11 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
         }
     };
 
-    const renderIcon = () => {
-        const classNames = clsx(styles.icon, "hoverable", { disabled: !!disabled });
-
-        return <span className={classNames}>{icon}</span>;
-    };
+    const renderIcon = () => (
+        <IconWrapper className={styles.icon} disabled={!!disabled}>
+            {icon}
+        </IconWrapper>
+    );
 
     const renderContent = () => (
         <div className={styles.content} data-tx={process.env.npm_package_version}>

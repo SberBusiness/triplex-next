@@ -30,6 +30,7 @@ export * from "./FormGroup";
 export * from "./Gap";
 export * from "./Header";
 export * from "./HelpBox";
+export * from "./IconWrapper";
 export * from "./Island";
 export * from "./IslandAccordion";
 export * from "./IslandWidget";

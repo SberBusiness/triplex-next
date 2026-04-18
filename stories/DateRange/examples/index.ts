@@ -4,3 +4,5 @@ export { default as DefaultExampleSource } from "./DefaultExample?raw";
 export { WithoutNavigationExample } from "./WithoutNavigationExample";
 export { default as WithoutNavigationExampleSource } from "./WithoutNavigationExample?raw";
 export { VisualTestsExample } from "./VisualTestsExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";
+export { SizesExample } from "./SizesExample";

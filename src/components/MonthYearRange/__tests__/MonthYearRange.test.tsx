@@ -1,8 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps, TDateRangeValue } from "../DateRange";
-import { EDateRangeShiftUnit } from "../enums";
+import {
+    MonthYearRange,
+    IMonthYearRangeButtonProvideProps,
+    IMonthYearRangePickerProvideProps,
+    TMonthYearRangeValue,
+} from "../MonthYearRange";
+import { EMonthYearRangeShiftUnit } from "../enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({
     RangeStrokeSrvIcon16: () => <span data-testid="range-icon" />,
@@ -10,10 +15,10 @@ vi.mock("@sberbusiness/icons-next", () => ({
     CaretrightStrokeSrvIcon20: () => <span data-testid="caret-right-icon" />,
 }));
 
-describe("DateRange", () => {
+describe("MonthYearRange", () => {
     const mockOnChange = vi.fn();
 
-    const renderPicker = (props: IDateRangePickerProvideProps) => (
+    const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
         <input
             data-testid={`picker-${props.value || "empty"}`}
             value={props.value}
@@ -21,7 +26,7 @@ describe("DateRange", () => {
         />
     );
 
-    const renderButton = (props: IDateRangeButtonProvideProps) => (
+    const renderButton = (props: IMonthYearRangeButtonProvideProps) => (
         <button
             data-testid={props.className.includes("disabled") ? "button-disabled" : "button"}
             onClick={props.onClick}
@@ -32,7 +37,7 @@ describe("DateRange", () => {
     );
 
     const defaultProps = {
-        value: ["20240101", "20240131"] as TDateRangeValue,
+        value: ["20240101", "20240301"] as TMonthYearRangeValue,
         onChange: mockOnChange,
         renderPickerFrom: renderPicker,
         renderPickerTo: renderPicker,
@@ -45,135 +50,101 @@ describe("DateRange", () => {
     });
 
     it("renders with default props", () => {
-        render(<DateRange {...defaultProps} />);
+        render(<MonthYearRange {...defaultProps} />);
 
         expect(screen.getByTestId("picker-20240101")).toBeInTheDocument();
-        expect(screen.getByTestId("picker-20240131")).toBeInTheDocument();
+        expect(screen.getByTestId("picker-20240301")).toBeInTheDocument();
+        expect(screen.getByTestId("caret-left-icon")).toBeInTheDocument();
+        expect(screen.getByTestId("caret-right-icon")).toBeInTheDocument();
         expect(screen.getByTestId("range-icon")).toBeInTheDocument();
     });
 
-    it("renders navigation buttons when hideNavigation is false", () => {
-        render(<DateRange {...defaultProps} />);
-
-        expect(screen.getByTestId("caret-left-icon")).toBeInTheDocument();
-        expect(screen.getByTestId("caret-right-icon")).toBeInTheDocument();
-    });
-
     it("hides navigation buttons when hideNavigation is true", () => {
-        render(<DateRange {...defaultProps} hideNavigation />);
+        render(<MonthYearRange {...defaultProps} hideNavigation />);
 
         expect(screen.queryByTestId("caret-left-icon")).not.toBeInTheDocument();
         expect(screen.queryByTestId("caret-right-icon")).not.toBeInTheDocument();
     });
 
     it("calls onChange when picker 'from' value changes with valid date", () => {
-        render(<DateRange {...defaultProps} />);
+        render(<MonthYearRange {...defaultProps} />);
 
         const pickerFrom = screen.getByTestId("picker-20240101");
-        fireEvent.change(pickerFrom, { target: { value: "20240115" } });
+        fireEvent.change(pickerFrom, { target: { value: "20240201" } });
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20240115", "20240131"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20240201", "20240301"]);
     });
 
     it("clears 'to' date when 'from' date is greater than 'to' date", () => {
-        render(<DateRange {...defaultProps} />);
+        render(<MonthYearRange {...defaultProps} />);
 
         const pickerFrom = screen.getByTestId("picker-20240101");
-        fireEvent.change(pickerFrom, { target: { value: "20240215" } });
+        fireEvent.change(pickerFrom, { target: { value: "20240401" } });
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20240215", ""]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20240401", ""]);
     });
 
     it("calls onChange when picker 'to' value changes with valid date", () => {
-        render(<DateRange {...defaultProps} />);
+        render(<MonthYearRange {...defaultProps} />);
 
-        const pickerTo = screen.getByTestId("picker-20240131");
-        fireEvent.change(pickerTo, { target: { value: "20240215" } });
+        const pickerTo = screen.getByTestId("picker-20240301");
+        fireEvent.change(pickerTo, { target: { value: "20240401" } });
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20240101", "20240215"]);
-    });
-
-    it("clears 'from' date when 'to' date is less than 'from' date", () => {
-        render(<DateRange {...defaultProps} />);
-
-        const pickerTo = screen.getByTestId("picker-20240131");
-        fireEvent.change(pickerTo, { target: { value: "20231215" } });
-
-        expect(mockOnChange).toHaveBeenCalledWith(["", "20231215"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20240101", "20240401"]);
     });
 
     it("shifts range back by one month by default", () => {
-        render(<DateRange {...defaultProps} />);
+        render(<MonthYearRange {...defaultProps} />);
 
         const buttons = screen.getAllByRole("button");
         const backButton = buttons[0];
         fireEvent.click(backButton);
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20231201", "20231231"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20231201", "20240201"]);
     });
 
     it("shifts range forward by one month by default", () => {
-        render(<DateRange {...defaultProps} />);
+        render(<MonthYearRange {...defaultProps} />);
 
         const buttons = screen.getAllByRole("button");
         const forwardButton = buttons[1];
         fireEvent.click(forwardButton);
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20240201", "20240229"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20240201", "20240401"]);
     });
 
     it("shifts range by custom shiftAmount", () => {
-        render(<DateRange {...defaultProps} shiftAmount={3} />);
+        render(<MonthYearRange {...defaultProps} shiftAmount={3} />);
 
         const buttons = screen.getAllByRole("button");
         const forwardButton = buttons[1];
         fireEvent.click(forwardButton);
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240430"]);
-    });
-
-    it("shifts range by days when shiftUnit is DAY", () => {
-        render(<DateRange {...defaultProps} shiftUnit={EDateRangeShiftUnit.DAY} />);
-
-        const buttons = screen.getAllByRole("button");
-        const forwardButton = buttons[1];
-        fireEvent.click(forwardButton);
-
-        expect(mockOnChange).toHaveBeenCalledWith(["20240102", "20240201"]);
-    });
-
-    it("shifts range by weeks when shiftUnit is WEEK", () => {
-        render(<DateRange {...defaultProps} shiftUnit={EDateRangeShiftUnit.WEEK} />);
-
-        const buttons = screen.getAllByRole("button");
-        const forwardButton = buttons[1];
-        fireEvent.click(forwardButton);
-
-        expect(mockOnChange).toHaveBeenCalledWith(["20240108", "20240207"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240601"]);
     });
 
     it("shifts range by quarters when shiftUnit is QUARTER", () => {
-        render(<DateRange {...defaultProps} shiftUnit={EDateRangeShiftUnit.QUARTER} />);
+        render(<MonthYearRange {...defaultProps} shiftUnit={EMonthYearRangeShiftUnit.QUARTER} />);
 
         const buttons = screen.getAllByRole("button");
         const forwardButton = buttons[1];
         fireEvent.click(forwardButton);
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240430"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240601"]);
     });
 
     it("shifts range by years when shiftUnit is YEAR", () => {
-        render(<DateRange {...defaultProps} shiftUnit={EDateRangeShiftUnit.YEAR} />);
+        render(<MonthYearRange {...defaultProps} shiftUnit={EMonthYearRangeShiftUnit.YEAR} />);
 
         const buttons = screen.getAllByRole("button");
         const forwardButton = buttons[1];
         fireEvent.click(forwardButton);
 
-        expect(mockOnChange).toHaveBeenCalledWith(["20250101", "20250131"]);
+        expect(mockOnChange).toHaveBeenCalledWith(["20250101", "20250301"]);
     });
 
     it("does not shift range when start date is empty", () => {
-        render(<DateRange {...defaultProps} value={["", "20240131"]} />);
+        render(<MonthYearRange {...defaultProps} value={["", "20240301"]} />);
 
         const buttons = screen.getAllByRole("button");
         const forwardButton = buttons[1];
@@ -183,7 +154,7 @@ describe("DateRange", () => {
     });
 
     it("does not shift range when end date is empty", () => {
-        render(<DateRange {...defaultProps} value={["20240101", ""]} />);
+        render(<MonthYearRange {...defaultProps} value={["20240101", ""]} />);
 
         const buttons = screen.getAllByRole("button");
         const backButton = buttons[0];
@@ -193,7 +164,7 @@ describe("DateRange", () => {
     });
 
     it("disables navigation buttons when dates are empty", () => {
-        const renderButtonWithDisabledTest = (props: IDateRangeButtonProvideProps) => (
+        const renderButtonWithDisabledTest = (props: IMonthYearRangeButtonProvideProps) => (
             <button
                 data-testid={props.disabled ? "button-disabled" : "button-enabled"}
                 onClick={props.onClick}
@@ -204,7 +175,7 @@ describe("DateRange", () => {
         );
 
         render(
-            <DateRange
+            <MonthYearRange
                 {...defaultProps}
                 value={["", ""]}
                 renderButtonBack={renderButtonWithDisabledTest}
@@ -217,7 +188,7 @@ describe("DateRange", () => {
     });
 
     it("enables navigation buttons when both dates are filled", () => {
-        const renderButtonWithDisabledTest = (props: IDateRangeButtonProvideProps) => (
+        const renderButtonWithDisabledTest = (props: IMonthYearRangeButtonProvideProps) => (
             <button
                 data-testid={props.disabled ? "button-disabled" : "button-enabled"}
                 onClick={props.onClick}
@@ -228,7 +199,7 @@ describe("DateRange", () => {
         );
 
         render(
-            <DateRange
+            <MonthYearRange
                 {...defaultProps}
                 renderButtonBack={renderButtonWithDisabledTest}
                 renderButtonForward={renderButtonWithDisabledTest}
@@ -240,15 +211,15 @@ describe("DateRange", () => {
     });
 
     it("applies custom className", () => {
-        const { container } = render(<DateRange {...defaultProps} className="custom-class" />);
+        const { container } = render(<MonthYearRange {...defaultProps} className="custom-class" />);
 
         expect(container.firstChild).toHaveClass("custom-class");
     });
 
     it("passes additional HTML attributes to root element", () => {
-        render(<DateRange {...defaultProps} data-testid="date-range-root" aria-label="Date range" />);
+        render(<MonthYearRange {...defaultProps} data-testid="month-year-range-root" aria-label="Month year range" />);
 
-        const root = screen.getByTestId("date-range-root");
-        expect(root).toHaveAttribute("aria-label", "Date range");
+        const root = screen.getByTestId("month-year-range-root");
+        expect(root).toHaveAttribute("aria-label", "Month year range");
     });
 });

@@ -3,9 +3,9 @@ import {
     ButtonIcon,
     MonthYearField,
     MonthYearRange,
-    type IMonthYearRangeButtonProvideProps,
-    type IMonthYearRangePickerProvideProps,
-    type TMonthYearRangeValue,
+    IMonthYearRangeButtonProvideProps,
+    IMonthYearRangePickerProvideProps,
+    TMonthYearRangeValue,
 } from "@sberbusiness/triplex-next";
 
 export const PlaygroundExample = (args: React.ComponentProps<typeof MonthYearRange>) => {

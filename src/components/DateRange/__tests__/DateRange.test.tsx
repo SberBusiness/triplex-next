@@ -5,7 +5,7 @@ import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps, 
 import { EDateRangeShiftUnit } from "../enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({
-    MinusStrokeSrvIcon20: () => <span data-testid="minus-icon" />,
+    RangeStrokeSrvIcon16: () => <span data-testid="range-icon" />,
     CaretleftStrokeSrvIcon20: () => <span data-testid="caret-left-icon" />,
     CaretrightStrokeSrvIcon20: () => <span data-testid="caret-right-icon" />,
 }));
@@ -49,7 +49,7 @@ describe("DateRange", () => {
 
         expect(screen.getByTestId("picker-20240101")).toBeInTheDocument();
         expect(screen.getByTestId("picker-20240131")).toBeInTheDocument();
-        expect(screen.getByTestId("minus-icon")).toBeInTheDocument();
+        expect(screen.getByTestId("range-icon")).toBeInTheDocument();
     });
 
     it("renders navigation buttons when hideNavigation is false", () => {

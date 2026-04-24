@@ -57,7 +57,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
             }}
         >
             <div role="presentation">
-                <ChipSuggestDesktopDropdownField>{children}</ChipSuggestDesktopDropdownField>
+                <ChipSuggestDesktopDropdownField size={size}>{children}</ChipSuggestDesktopDropdownField>
                 <DropdownList
                     id={dropdownListId}
                     size={size}

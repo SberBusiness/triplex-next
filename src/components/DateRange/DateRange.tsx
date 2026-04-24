@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { MinusStrokeSrvIcon20, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { RangeStrokeSrvIcon16, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { dateFormatYYYYMMDD } from "../../consts/DateConst";
 import { EDateRangeShiftUnit } from "./enums";
 import clsx from "clsx";
@@ -124,7 +124,7 @@ export const DateRange: React.FC<IDateRangeProps> = ({
                 onChange: handleChangePickerFrom,
                 value: start,
             })}
-            <MinusStrokeSrvIcon20 className={styles.separator} paletteIndex={5} />
+            <RangeStrokeSrvIcon16 className={styles.separator} paletteIndex={5} />
             {renderPickerTo({
                 onChange: handleChangePickerTo,
                 value: end,

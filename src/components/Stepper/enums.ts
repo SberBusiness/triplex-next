@@ -1,10 +1,3 @@
-/** Возможные размеры шагов Step. */
-export enum EStepperSize {
-    SM = "sm",
-    MD = "md",
-    LG = "lg",
-}
-
 /** Возможные типы шагов Step. */
 export enum EStepperStepType {
     NEUTRAL = "neutral",

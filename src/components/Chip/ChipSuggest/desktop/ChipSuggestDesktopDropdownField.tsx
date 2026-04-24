@@ -6,7 +6,15 @@ import { Tooltip, ETooltipSize } from "../../../Tooltip";
 import { LoaderSmall, ELoaderSmallTheme } from "../../../Loader";
 import styles from "../../styles/ChipSuggest.module.less";
 
-export const ChipSuggestDesktopDropdownField: React.FC = ({ children }) => {
+interface IChipSuggestDesktopDropdownFieldProps {
+    children?: React.ReactNode;
+    size?: EComponentSize;
+}
+
+export const ChipSuggestDesktopDropdownField: React.FC<IChipSuggestDesktopDropdownFieldProps> = ({
+    children,
+    size,
+}) => {
     const {
         inputValue,
         placeholder,
@@ -40,7 +48,10 @@ export const ChipSuggestDesktopDropdownField: React.FC = ({ children }) => {
     const handleInputBlur = useCallback(() => setInputFocused(false), []);
 
     return (
-        <FormField className={styles.chipSuggestInputWrapper} size={EComponentSize.SM}>
+        <FormField
+            className={styles.chipSuggestInputWrapper}
+            size={size === EComponentSize.LG ? EComponentSize.MD : EComponentSize.SM}
+        >
             <FormFieldLabel>{children}</FormFieldLabel>
             <Tooltip
                 size={ETooltipSize.SM}

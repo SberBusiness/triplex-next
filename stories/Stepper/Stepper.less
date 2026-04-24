@@ -1,57 +1,54 @@
 @import "src/styles/style";
 
-.stepperExtended {
-    padding-left: 28px;
-    padding-right: 28px;
-}
-
-.stepperExtendedCarousel {
-    padding-left: 5px;
-    padding-right: 5px;
+.stepper-carousel {
     position: relative;
 
-    .buttonPrev,
-    .buttonNext {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        z-index: 1;
-
-        &.sm {
-            height: 28px;
-            width: 28px;
-        }
-
-        &.md {
-            height: 40px;
-            width: 40px;
-        }
-
-        &.lg {
-            height: 56px;
-            width: 56px;
+    &:hover {
+        .stepper-button-wrapper {
+            opacity: 1;
+            pointer-events: auto;
         }
     }
+}
 
-    .buttonPrev {
-        left: 1px;
-        background: var(--triplex-next-Stepper-ButtonPrev_Background);
+.stepper-button-wrapper {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+
+    &.prev {
+        left: 0;
+        background: var(--triplex-next-Stepper-ButtonWrapper_Background_Prev);
     }
 
-    .buttonNext {
-        right: 1px;
-        background: var(--triplex-next-Stepper-ButtonNext_Background);
+    &.next {
+        right: 0;
+        background: var(--triplex-next-Stepper-ButtonWrapper_Background_Next);
+    }
+}
+
+.stepper-button {
+    &.sm {
+        height: 28px;
+        width: 28px;
+    }
+
+    &.md {
+        height: 40px;
+        width: 40px;
+    }
+
+    &.lg {
+        height: 56px;
+        width: 56px;
     }
 }
 
 @media (max-width: @screen-sm-max) {
-    .stepperExtended {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .buttonPrev,
-    .buttonNext {
+    .stepper-button-wrapper {
         display: none;
     }
 }

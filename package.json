@@ -1,6 +1,6 @@
 {
     "name": "@sberbusiness/triplex-next",
-    "version": "0.25.0",
+    "version": "0.26.0",
     "description": "Библиотека компонентов дизайн-системы Triplex.",
     "author": "СберБизнес",
     "license": "Sber Public License at-nc-sa v.2",
@@ -107,7 +107,7 @@
         "vitest": "3.2.4"
     },
     "peerDependencies": {
-        "@sberbusiness/icons-next": "^1.8.0",
+        "@sberbusiness/icons-next": "^1.21.0",
         "moment": "^2.30.1",
         "react": "^16.8.0 || ^17.0.0",
         "react-dom": "^16.8.0 || ^17.0.0"

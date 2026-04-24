@@ -1,10 +1,10 @@
 import React from "react";
-import { EStepperSize } from "./enums";
+import { EComponentSize } from "../../enums";
 
 /** Контекст компонента StepperExtended. */
 export interface IStepperExtendedContext {
     /** Размер Stepper. */
-    size: EStepperSize;
+    size: EComponentSize;
     /** Уникальный идентификатор выбранного шага. */
     selectedId?: string;
     /** Обработчик выбора шага. */
@@ -13,7 +13,7 @@ export interface IStepperExtendedContext {
 
 /** Контекст в StepperExtended. */
 export const StepperExtendedContext = React.createContext<IStepperExtendedContext>({
-    size: EStepperSize.SM,
-    onSelectStep: () => {},
+    size: EComponentSize.LG,
     selectedId: undefined,
+    onSelectStep: () => {},
 });

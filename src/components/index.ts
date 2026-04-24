@@ -47,6 +47,7 @@ export * from "./MediaWidth";
 export * from "./MobileView";
 export * from "./ModalWindow";
 export * from "./MonthYearField";
+export * from "./MonthYearRange";
 export * from "./MultiselectField";
 export * from "./Notification";
 export * from "./NumberField";

@@ -1,34 +1,21 @@
-import React from "react";
-import { EStepperSize } from "./enums";
-import { StepperExtendedContext } from "./StepperExtendedContext";
-import { StepperWrapper } from "./StepperWrapper";
-import { StepperStep } from "./StepperStep";
+import React, { useMemo } from "react";
 import clsx from "clsx";
+import { StepperStep } from "./StepperStep";
+import { StepperExtendedContext } from "./StepperExtendedContext";
+import { IStepperExtendedProps } from "./types";
+import { EComponentSize } from "../../enums";
 import styles from "./styles/StepperExtended.module.less";
 
 /** Внутренние составляющие StepperExtended. */
 interface IStepperExtendedComposition {
     Step: typeof StepperStep;
-    Wrapper: typeof StepperWrapper;
-}
-
-/** Свойства компонента StepperExtended. */
-export interface IStepperExtendedProps extends React.HTMLAttributes<HTMLOListElement> {
-    /** Размер Stepper. */
-    size?: EStepperSize;
-    /** Уникальный идентификатор выбранного шага. */
-    selectedStepId?: string;
-    /** Обработчик выбора шага. */
-    onSelectStep: (id: string) => void;
-    /** Ссылка на список шагов. */
-    forwardedRef?: React.Ref<HTMLOListElement>;
 }
 
 /** Компонент StepperExtended, расширенная версия Stepper. */
 export const StepperExtended: React.FC<IStepperExtendedProps> & IStepperExtendedComposition = ({
     children,
     className,
-    size = EStepperSize.SM,
+    size = EComponentSize.LG,
     onSelectStep,
     selectedStepId,
     forwardedRef,
@@ -36,10 +23,13 @@ export const StepperExtended: React.FC<IStepperExtendedProps> & IStepperExtended
 }) => {
     const classNames = clsx(styles.stepperExtended, className);
 
-    const handleSelect = (id: string) => onSelectStep(id);
+    const contextValue = useMemo(
+        () => ({ selectedId: selectedStepId, size, onSelectStep }),
+        [selectedStepId, size, onSelectStep],
+    );
 
     return (
-        <StepperExtendedContext.Provider value={{ onSelectStep: handleSelect, selectedId: selectedStepId, size }}>
+        <StepperExtendedContext.Provider value={contextValue}>
             <ol className={classNames} role="tablist" {...rest} ref={forwardedRef}>
                 {children}
             </ol>
@@ -48,4 +38,3 @@ export const StepperExtended: React.FC<IStepperExtendedProps> & IStepperExtended
 };
 
 StepperExtended.Step = StepperStep;
-StepperExtended.Wrapper = StepperWrapper;

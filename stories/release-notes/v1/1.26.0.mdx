@@ -16,7 +16,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Удалён компонент.
 
-+**Stepper / StepperExtended**
+**Stepper / StepperExtended**
 
 - Enum `EStepperSize` заменён на `EComponentSize` для свойства `size`.
 - Дефолтный размер изменён с `SM` на `LG`.
@@ -31,3 +31,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MonthYearField**
 
 - `postfix` в `MonthYearFieldTarget` теперь отображается после стандартных элементов управления.
+
+**SuggestField**
+
+- Исправлена работа кнопки очистки: теперь поле очищается, даже если оно не находится в фокусе.
+- Добавлен сброс выбранного значения при нажатии на кнопку очистки.

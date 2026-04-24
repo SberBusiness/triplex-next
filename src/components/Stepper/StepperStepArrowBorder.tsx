@@ -1,13 +1,14 @@
 import React from "react";
-import { IStepperProps } from "./types";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/StepperStep.module.less";
 
 /** Свойства компонента RightBorderArrow. */
-interface IRightBorderArrowProps extends Required<Pick<IStepperProps, "size">> {}
+interface IRightBorderArrowProps {
+    size: EComponentSize;
+}
 
 /** Соответствие размера иконке. */
-const SIZE_TO_ICON_MAP: Record<EComponentSize, React.ReactNode> = {
+const SIZE_TO_ICON_MAP: Record<EComponentSize, React.ReactElement> = {
     [EComponentSize.SM]: (
         <svg
             className={styles.arrow}
@@ -67,6 +68,6 @@ const SIZE_TO_ICON_MAP: Record<EComponentSize, React.ReactNode> = {
 };
 
 /** Граница-стрелка компонента StepperStep. */
-export const StepperStepArrowBorder = ({ size }: IRightBorderArrowProps) => {
+export const StepperStepArrowBorder = ({ size }: IRightBorderArrowProps): JSX.Element => {
     return SIZE_TO_ICON_MAP[size];
 };

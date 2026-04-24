@@ -98,7 +98,6 @@ export const ProductionExample = () => {
     };
 
     const handleClear: React.MouseEventHandler<HTMLButtonElement> = () => {
-        handleFilter("");
         inputRef.current?.focus();
     };
 

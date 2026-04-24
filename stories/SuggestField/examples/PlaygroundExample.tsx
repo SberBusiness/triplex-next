@@ -118,9 +118,8 @@ export const PlaygroundExample = ({
     );
 
     const handleClear = useCallback(() => {
-        handleFilter("");
         inputRef.current?.focus();
-    }, [handleFilter]);
+    }, []);
 
     const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
         event.preventDefault();

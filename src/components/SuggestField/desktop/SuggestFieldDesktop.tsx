@@ -139,13 +139,18 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
 
     const handleClear = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (event) => {
-            if (inputFocused) {
-                setInputValue("");
-                onFilter("");
+            if (value !== undefined) {
+                onSelect(undefined);
             }
+
+            if (inputValue.length !== 0) {
+                onFilter("");
+                setInputValue("");
+            }
+
             onClear?.(event);
         },
-        [inputFocused, onFilter, onClear],
+        [value, onSelect, inputValue.length, onFilter, onClear],
     );
 
     const handleDropdownOpen = useCallback<typeof setDropdownOpen>(

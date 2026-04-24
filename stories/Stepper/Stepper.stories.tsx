@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
+import clsx from "clsx";
 import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import { Stepper, StepperExtended } from "../../src/components/Stepper";
 import { StoryObj } from "@storybook/react";
 import { action } from "storybook/actions";
-import { EStepperSize, EStepperStepIconType, EStepperStepType } from "../../src/components/Stepper/enums";
-import { StepperStepIcon } from "../../src/components/Stepper/StepperStepIcon";
-import { ButtonIcon } from "../../src/components/Button/ButtonIcon";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import {
+    Stepper,
+    StepperExtended,
     CarouselExtended,
+    ButtonIcon,
     ICarouselExtendedButtonProvideProps,
-} from "../../src/components/CarouselExtended/CarouselExtended";
+    EComponentSize,
+    EStepperStepType,
+    EStepperStepIconType,
+} from "@sberbusiness/triplex-next";
+import { StepperStepIcon } from "../../src/components/Stepper/StepperStepIcon";
 import "./Stepper.less";
 
 export default {
@@ -80,7 +84,7 @@ export const Playground: StoryObj<typeof Stepper> = {
                 type: EStepperStepType.NEUTRAL,
             },
         ],
-        size: EStepperSize.MD,
+        size: EComponentSize.LG,
         selectedStepId: "step3",
         onSelectStep: action("On Select Step"),
     },
@@ -94,11 +98,11 @@ export const Playground: StoryObj<typeof Stepper> = {
         },
         size: {
             control: { type: "select" },
-            options: [EStepperSize.SM, EStepperSize.MD, EStepperSize.LG],
+            options: Object.values(EComponentSize),
             description: "Размер степпера",
             table: {
-                type: { summary: "EStepperSize" },
-                defaultValue: { summary: "EStepperSize.MD" },
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.LG" },
             },
         },
         selectedStepId: {
@@ -121,11 +125,7 @@ export const Playground: StoryObj<typeof Stepper> = {
         }, [args.selectedStepId]);
         const handleSelectStep = (id: string) => setSelectedStepId(id);
 
-        return (
-            <Stepper.Wrapper>
-                <Stepper {...args} selectedStepId={selectedStepId} onSelectStep={handleSelectStep} />
-            </Stepper.Wrapper>
-        );
+        return <Stepper {...args} selectedStepId={selectedStepId} onSelectStep={handleSelectStep} />;
     },
     parameters: {
         controls: {
@@ -196,38 +196,32 @@ export const Sizes: StoryObj<typeof Stepper> = {
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Small (SM)</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            steps={commonSteps}
-                            size={EStepperSize.SM}
-                            selectedStepId={selectedStepIdSM}
-                            onSelectStep={setSelectedStepIdSM}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        steps={commonSteps}
+                        size={EComponentSize.SM}
+                        selectedStepId={selectedStepIdSM}
+                        onSelectStep={setSelectedStepIdSM}
+                    />
                 </div>
 
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Medium (MD)</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            steps={commonSteps}
-                            size={EStepperSize.MD}
-                            selectedStepId={selectedStepIdMD}
-                            onSelectStep={setSelectedStepIdMD}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        steps={commonSteps}
+                        size={EComponentSize.MD}
+                        selectedStepId={selectedStepIdMD}
+                        onSelectStep={setSelectedStepIdMD}
+                    />
                 </div>
 
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Large (LG)</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            steps={commonSteps}
-                            size={EStepperSize.LG}
-                            selectedStepId={selectedStepIdLG}
-                            onSelectStep={setSelectedStepIdLG}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        steps={commonSteps}
+                        size={EComponentSize.LG}
+                        selectedStepId={selectedStepIdLG}
+                        onSelectStep={setSelectedStepIdLG}
+                    />
                 </div>
             </div>
         );
@@ -346,38 +340,32 @@ export const Types: StoryObj<typeof Stepper> = {
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Neutral</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            steps={neutralSteps}
-                            size={EStepperSize.MD}
-                            selectedStepId={selectedStepIdNeutral}
-                            onSelectStep={setSelectedStepIdNeutral}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        steps={neutralSteps}
+                        size={EComponentSize.MD}
+                        selectedStepId={selectedStepIdNeutral}
+                        onSelectStep={setSelectedStepIdNeutral}
+                    />
                 </div>
 
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Error</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            steps={errorSteps}
-                            size={EStepperSize.MD}
-                            selectedStepId={selectedStepIdError}
-                            onSelectStep={setSelectedStepIdError}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        steps={errorSteps}
+                        size={EComponentSize.MD}
+                        selectedStepId={selectedStepIdError}
+                        onSelectStep={setSelectedStepIdError}
+                    />
                 </div>
 
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Warning</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            steps={warningSteps}
-                            size={EStepperSize.MD}
-                            selectedStepId={selectedStepIdWarning}
-                            onSelectStep={setSelectedStepIdWarning}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        steps={warningSteps}
+                        size={EComponentSize.MD}
+                        selectedStepId={selectedStepIdWarning}
+                        onSelectStep={setSelectedStepIdWarning}
+                    />
                 </div>
             </div>
         );
@@ -516,38 +504,32 @@ export const ManySteps: StoryObj<typeof Stepper> = {
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Small (SM)</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            {...args}
-                            size={EStepperSize.SM}
-                            selectedStepId={selectedStepId}
-                            onSelectStep={setSelectedStepId}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        {...args}
+                        size={EComponentSize.SM}
+                        selectedStepId={selectedStepId}
+                        onSelectStep={setSelectedStepId}
+                    />
                 </div>
 
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Medium (MD)</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            {...args}
-                            size={EStepperSize.MD}
-                            selectedStepId={selectedStepId}
-                            onSelectStep={setSelectedStepId}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        {...args}
+                        size={EComponentSize.MD}
+                        selectedStepId={selectedStepId}
+                        onSelectStep={setSelectedStepId}
+                    />
                 </div>
 
                 <div>
                     <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Large (LG)</h3>
-                    <Stepper.Wrapper>
-                        <Stepper
-                            {...args}
-                            size={EStepperSize.LG}
-                            selectedStepId={selectedStepId}
-                            onSelectStep={setSelectedStepId}
-                        />
-                    </Stepper.Wrapper>
+                    <Stepper
+                        {...args}
+                        size={EComponentSize.LG}
+                        selectedStepId={selectedStepId}
+                        onSelectStep={setSelectedStepId}
+                    />
                 </div>
             </div>
         );
@@ -557,7 +539,7 @@ export const ManySteps: StoryObj<typeof Stepper> = {
 export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
     name: "StepperExtended",
     args: {
-        size: EStepperSize.SM,
+        size: EComponentSize.LG,
         selectedStepId: "stepper-extended-step-2",
         onSelectStep: action("On Select Step"),
     },
@@ -595,43 +577,48 @@ export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
             icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
         }));
 
-        const renderPrevButton = ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
+        const renderPrevButton = ({ hidden, ...restButtonProps }: ICarouselExtendedButtonProvideProps) =>
             hidden ? null : (
-                <ButtonIcon className={`buttonPrev ${args.size}`} {...rest} aria-label="Прокрутить назад">
-                    <CaretleftStrokeSrvIcon24 className="button-prev-icon" paletteIndex={5} />
-                </ButtonIcon>
+                <div className="stepper-button-wrapper prev">
+                    <ButtonIcon
+                        className={clsx("stepper-button", args.size)}
+                        {...restButtonProps}
+                        aria-label="Прокрутить назад"
+                    >
+                        <CaretleftStrokeSrvIcon24 paletteIndex={5} />
+                    </ButtonIcon>
+                </div>
             );
 
-        const renderNextButton = ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
+        const renderNextButton = ({ hidden, ...restButtonProps }: ICarouselExtendedButtonProvideProps) =>
             hidden ? null : (
-                <ButtonIcon className={`buttonNext ${args.size}`} {...rest} aria-label="Прокрутить вперёд">
-                    <CaretrightStrokeSrvIcon24 className="button-next-icon" paletteIndex={5} />
-                </ButtonIcon>
+                <div className="stepper-button-wrapper next">
+                    <ButtonIcon
+                        className={clsx("stepper-button", args.size)}
+                        {...restButtonProps}
+                        aria-label="Прокрутить вперёд"
+                    >
+                        <CaretrightStrokeSrvIcon24 paletteIndex={5} />
+                    </ButtonIcon>
+                </div>
             );
 
         return (
-            <StepperExtended.Wrapper>
-                <CarouselExtended
-                    className="stepperExtendedCarousel"
-                    buttonPrev={renderPrevButton}
-                    buttonNext={renderNextButton}
-                    stepPrev={stepPrev}
-                    stepNext={stepNext}
-                >
-                    <StepperExtended
-                        className="stepperExtended"
-                        size={args.size}
-                        selectedStepId={selectedStepId}
-                        onSelectStep={setSelectedStepId}
-                    >
-                        {steps.map(({ id, label, icon, type }) => (
-                            <StepperExtended.Step key={id} id={id} icon={icon} type={type}>
-                                {label}
-                            </StepperExtended.Step>
-                        ))}
-                    </StepperExtended>
-                </CarouselExtended>
-            </StepperExtended.Wrapper>
+            <CarouselExtended
+                className="stepper-carousel"
+                buttonPrev={renderPrevButton}
+                buttonNext={renderNextButton}
+                stepPrev={stepPrev}
+                stepNext={stepNext}
+            >
+                <StepperExtended size={args.size} selectedStepId={selectedStepId} onSelectStep={setSelectedStepId}>
+                    {steps.map(({ id, label, icon, type }) => (
+                        <StepperExtended.Step key={id} id={id} icon={icon} type={type}>
+                            {label}
+                        </StepperExtended.Step>
+                    ))}
+                </StepperExtended>
+            </CarouselExtended>
         );
     },
 };

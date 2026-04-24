@@ -2,10 +2,11 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Stepper, StepperExtended } from "@sberbusiness/triplex-next/components/Stepper";
-import { EStepperSize, EStepperStepType, EStepperStepIconType } from "../enums";
+import { EStepperStepType, EStepperStepIconType } from "../enums";
 import { StepperStepIcon } from "../StepperStepIcon";
+import { EComponentSize } from "../../../enums";
 
-describe("Stepper Component", () => {
+describe("Stepper", () => {
     const mockOnSelectStep = vi.fn();
     const mockSteps = [
         {
@@ -42,9 +43,14 @@ describe("Stepper Component", () => {
         expect(screen.getByText("Step 3")).toBeInTheDocument();
     });
 
-    it("renders with small size by default", () => {
+    it("renders with small size", () => {
         const { container } = render(
-            <Stepper steps={mockSteps} selectedStepId="step1" onSelectStep={mockOnSelectStep} />,
+            <Stepper
+                steps={mockSteps}
+                size={EComponentSize.SM}
+                selectedStepId="step1"
+                onSelectStep={mockOnSelectStep}
+            />,
         );
 
         const stepper = container.querySelector('[role="tablist"]');
@@ -53,7 +59,12 @@ describe("Stepper Component", () => {
 
     it("renders with medium size", () => {
         const { container } = render(
-            <Stepper steps={mockSteps} size={EStepperSize.MD} selectedStepId="step1" onSelectStep={mockOnSelectStep} />,
+            <Stepper
+                steps={mockSteps}
+                size={EComponentSize.MD}
+                selectedStepId="step1"
+                onSelectStep={mockOnSelectStep}
+            />,
         );
 
         const stepper = container.querySelector('[role="tablist"]');
@@ -62,7 +73,12 @@ describe("Stepper Component", () => {
 
     it("renders with large size", () => {
         const { container } = render(
-            <Stepper steps={mockSteps} size={EStepperSize.LG} selectedStepId="step1" onSelectStep={mockOnSelectStep} />,
+            <Stepper
+                steps={mockSteps}
+                size={EComponentSize.LG}
+                selectedStepId="step1"
+                onSelectStep={mockOnSelectStep}
+            />,
         );
 
         const stepper = container.querySelector('[role="tablist"]');
@@ -241,26 +257,16 @@ describe("Stepper Component", () => {
         expect(mockOnSelectStep).toHaveBeenCalledWith("step2");
         expect(mockOnSelectStep).toHaveBeenCalledWith("step3");
     });
-
-    it("renders with wrapper component", () => {
-        render(
-            <Stepper.Wrapper>
-                <Stepper steps={mockSteps} selectedStepId="step1" onSelectStep={mockOnSelectStep} />
-            </Stepper.Wrapper>,
-        );
-
-        expect(screen.getByText("Step 1")).toBeInTheDocument();
-    });
 });
 
-describe("StepperExtended Component", () => {
+describe("StepperExtended", () => {
     const mockOnSelectStep = vi.fn();
 
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
-    it("renders StepperExtended with children", () => {
+    it("renders with children", () => {
         render(
             <StepperExtended selectedStepId="step1" onSelectStep={mockOnSelectStep}>
                 <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
@@ -274,19 +280,6 @@ describe("StepperExtended Component", () => {
 
         expect(screen.getByText("Step 1")).toBeInTheDocument();
         expect(screen.getByText("Step 2")).toBeInTheDocument();
-    });
-
-    it("renders with default small size", () => {
-        const { container } = render(
-            <StepperExtended selectedStepId="step1" onSelectStep={mockOnSelectStep}>
-                <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
-                    Step 1
-                </StepperExtended.Step>
-            </StepperExtended>,
-        );
-
-        const stepper = container.querySelector('[role="tablist"]');
-        expect(stepper).toBeInTheDocument();
     });
 
     it("calls onSelectStep when a step is clicked", () => {
@@ -348,31 +341,5 @@ describe("StepperExtended Component", () => {
         const disabledStep = screen.getByText("Disabled Step").closest("li");
         expect(disabledStep).toHaveAttribute("aria-disabled", "true");
         expect(disabledStep).toHaveAttribute("tabindex", "-1");
-    });
-});
-
-describe("Stepper and StepperExtended Integration", () => {
-    it("Stepper.Wrapper wraps content correctly", () => {
-        const { container } = render(
-            <Stepper.Wrapper data-testid="wrapper">
-                <div>Content</div>
-            </Stepper.Wrapper>,
-        );
-
-        const wrapper = container.querySelector('[data-testid="wrapper"]');
-        expect(wrapper).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
-    });
-
-    it("StepperExtended.Wrapper wraps content correctly", () => {
-        const { container } = render(
-            <StepperExtended.Wrapper data-testid="wrapper">
-                <div>Content</div>
-            </StepperExtended.Wrapper>,
-        );
-
-        const wrapper = container.querySelector('[data-testid="wrapper"]');
-        expect(wrapper).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
     });
 });

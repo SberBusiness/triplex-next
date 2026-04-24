@@ -17,11 +17,8 @@ export const designTokensComponentsStepperKeys = [
     "Step_Color_Hover",
     "Step_Color_Disabled",
 
-    "Background",
-    "ButtonNext_Background",
-    "ButtonPrev_Background",
-    "Wrapper_Background",
-    "Wrapper_BoxShadow",
+    "ButtonWrapper_Background_Prev",
+    "ButtonWrapper_Background_Next",
 ] as const;
 // Тип, содержащий названия токенов компонента Stepper.
 export type TDesignTokensComponentsStepperKeys = (typeof designTokensComponentsStepperKeys)[number];
@@ -48,17 +45,12 @@ export const Stepper_Tokens: TDesignTokensComponentsStepperValues = {
     Step_Color_Default: [{ ref: "ColorDarkNeutralAlpha.40" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-Stepper-Step_Color_Default)
     Step_Color_Hover: [{ ref: "ColorDarkNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Stepper-Step_Color_Hover)
     Step_Color_Disabled: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-Stepper-Step_Color_Disabled)
-
-    ButtonNext_Background: [
-        { value: "linear-gradient(to left, #FFFFFF 39.06%, transparent)" },
-        { value: "linear-gradient(to left, #181819 39.06%, transparent)" },
-    ], // var(--triplex-next-Stepper-ButtonNext_Background)
-    ButtonPrev_Background: [
-        { value: "linear-gradient(to right, #FFFFFF 39.06%, transparent)" },
-        { value: "linear-gradient(to right, #181819 39.06%, transparent)" },
-    ], // var(--triplex-next-Stepper-ButtonPrev_Background)
-
-    Background: [{ value: "#FFFFFF" }, { value: "#181819" }], // var(--triplex-next-Stepper-Background)
-    Wrapper_Background: [{ value: "linear-gradient(#FFFFFF 64px, transparent 0)" }, { ref: "ColorNeutral.50" }], // var(--triplex-next-Stepper-Wrapper_Background)
-    Wrapper_BoxShadow: [{ value: "0 10px 15px 0 rgba(228, 232, 235, 0.5)" }, { value: "none" }], // var(--triplex-next-Stepper-Wrapper_BoxShadow)
+    ButtonWrapper_Background_Prev: [
+        { value: "linear-gradient(to right, rgba(255,255,255,1) 39.06%, rgba(255,255,255,0) 100%)" },
+        { value: "linear-gradient(to right, rgba(38,38,41,1) 39.06%, rgba(38,38,41,0) 100%)" },
+    ], // var(--triplex-next-Stepper-ButtonWrapper_Background_Prev)
+    ButtonWrapper_Background_Next: [
+        { value: "linear-gradient(to left, rgba(255,255,255,1) 39.06%, rgba(255,255,255,0) 100%)" },
+        { value: "linear-gradient(to left, rgba(38,38,41,1) 39.06%, rgba(38,38,41,0) 100%)" },
+    ], // var(--triplex-next-Stepper-ButtonWrapper_Background_Next)
 };

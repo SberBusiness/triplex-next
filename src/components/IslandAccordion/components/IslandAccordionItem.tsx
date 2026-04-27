@@ -134,7 +134,7 @@ export const IslandAccordionItem = Object.assign(
                             >
                                 {status && num && (
                                     <div className={styles.step}>
-                                        <Step step={num} status={status} position={EStepPosition.XFirst}>
+                                        <Step step={num} status={status} position={EStepPosition.XFirst} size={size}>
                                             {disabled ? undefined : stepHint}
                                         </Step>
                                     </div>

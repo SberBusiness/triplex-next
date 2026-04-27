@@ -5,9 +5,13 @@ import { Tooltip } from "../Tooltip/Tooltip";
 import { Text, ETextSize, EFontWeightText } from "../Typography";
 import clsx from "clsx";
 import styles from "./styles/Step.module.less";
+import { EComponentSize } from "../../enums/EComponentSize";
+import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 
 /** Свойства компонента Step. */
 export interface IStepProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Размер компонента. */
+    size?: EComponentSize;
     /** Номер шага для отображения в кружке. */
     step: number;
     /** Статус текущего шага. */
@@ -16,7 +20,7 @@ export interface IStepProps extends React.HTMLAttributes<HTMLDivElement> {
     position?: EStepPosition;
 }
 
-const statusToClassNameMap = {
+const STATUS_TO_CLASS_NAME_MAP: Record<EStepStatus, string> = {
     [EStepStatus.DEFAULT]: styles.default,
     [EStepStatus.ACTIVE]: styles.active,
     [EStepStatus.WARNING]: styles.warning,
@@ -25,11 +29,13 @@ const statusToClassNameMap = {
     [EStepStatus.DISABLED]: styles.disabled,
 };
 
-const stepPositionToTooltipAlignMap = {
+const STEP_POSITION_TO_TOOLTIP_ALIGN_MAP: Record<EStepPosition, ETooltipAlign> = {
     [EStepPosition.XFirst]: ETooltipAlign.START,
     [EStepPosition.Default]: ETooltipAlign.CENTER,
     [EStepPosition.XLast]: ETooltipAlign.END,
 };
+
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /** Вычисление позиции шага, относительно других. */
 export const calcPosition = (stepCount: number, i: number): EStepPosition => {
@@ -48,12 +54,13 @@ export const Step: React.FC<IStepProps> = ({
     step,
     status,
     position = EStepPosition.Default,
+    size = EComponentSize.MD,
     ...rest
 }) => {
     const ref = useRef<HTMLDivElement | null>(null);
-    const tooltipAlign = stepPositionToTooltipAlignMap[position];
+    const tooltipAlign = STEP_POSITION_TO_TOOLTIP_ALIGN_MAP[position];
 
-    const classNames = clsx(styles.step, statusToClassNameMap[status], className);
+    const classNames = clsx(styles.step, STATUS_TO_CLASS_NAME_MAP[status], SIZE_TO_CLASS_NAME_MAP[size], className);
 
     const renderContent = () => (
         <div ref={ref} className={classNames} {...rest}>

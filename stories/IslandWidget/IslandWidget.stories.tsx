@@ -40,6 +40,8 @@ import {
     WithoutFooterAndWithExtraFooterExampleSource,
     WithExtraFooterAndIslandWidgetHeightExample,
     WithExtraFooterAndIslandWidgetHeightExampleSource,
+    SizesExample,
+    SizesExampleSource,
 } from "./examples";
 import "./IslandWidget.less";
 
@@ -189,6 +191,20 @@ export const Default: StoryObj<typeof IslandWidget> = {
             controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Sizes: StoryObj<typeof IslandWidget> = {
+    name: "Sizes",
+    render: SizesExample,
+    parameters: {
+        docs: {
+            controls: { disable: true },
+            source: {
+                code: SizesExampleSource,
                 language: "tsx",
             },
         },

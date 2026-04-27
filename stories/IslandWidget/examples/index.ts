@@ -8,3 +8,5 @@ export * from "./WithoutFooterAndWithExtraFooterExample";
 export { default as WithoutFooterAndWithExtraFooterExampleSource } from "./WithoutFooterAndWithExtraFooterExample?raw";
 export * from "./WithExtraFooterAndIslandWidgetHeightExample";
 export { default as WithExtraFooterAndIslandWidgetHeightExampleSource } from "./WithExtraFooterAndIslandWidgetHeightExample?raw";
+export * from "./SizesExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";

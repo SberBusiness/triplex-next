@@ -1,14 +1,23 @@
+@import "../../../styles/style";
+
 .step {
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 32px;
-    height: 32px;
     user-select: none;
     cursor: default;
     border-radius: 50%;
 
+    &.sm, &.md {
+        width: 28px;
+        height: 28px;
+    }
+
+    &.lg {
+        width: 32px;
+        height: 32px;
+    }
     &.default {
         background-color: var(--triplex-next-Step-Background_Default);
 
@@ -55,5 +64,15 @@
         }
         
         background-color: var(--triplex-next-Step-Background_Disabled);
+    }
+}
+
+
+@media (max-width: @screen-sm-max) {
+    .step {
+        &.lg {
+            width: 28px;
+            height: 28px;
+        }
     }
 }

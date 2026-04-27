@@ -31,6 +31,7 @@
         "generateThemeCssVariables": "tsx scripts/generateCssFromDesignTokens.ts",
         "generateColorsLessVariables": "tsx scripts/generateLessFromDesignTokens.ts",
         "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
+        "generateMcpData": "tsx scripts/generateMcpData.ts",
         "copyLessHelpers": "tsx scripts/copyLessHelpers.ts",
         "test-visual:ci": "test-storybook --url http://localhost:6006 --maxWorkers=1",
         "test-visual:debug": "cross-env PWDEBUG=1 test-storybook --url http://localhost:6006 --maxWorkers=1",

@@ -64,42 +64,17 @@ version: "1.0"
 
 ---
 
-## Файловая структура
-
-```text
-src/components/Button/
-├── Button.tsx                     # Основной компонент, union type TButtonProps
-├── ButtonBase.tsx                 # Базовый <button>, extends HTML attrs
-├── ButtonIcon.tsx                 # Иконочная кнопка (squircle / circle)
-├── ButtonDropdown.tsx             # Кнопка с выпадающим меню
-├── ButtonDropdownExtended.tsx     # Контейнер с кастомным dropdown
-├── enums.ts                       # EButtonTheme, EButtonDotsTheme, EButtonIconShape
-├── index.ts                       # Barrel exports
-└── styles/
-    ├── Button.module.less         # Размеры, block, loading, base layout
-    ├── ButtonGeneral.module.less  # Тема GENERAL
-    ├── ButtonSecondary.module.less
-    ├── ButtonSecondaryLight.module.less
-    ├── ButtonDanger.module.less
-    ├── ButtonLink.module.less     # Тема LINK — нет min-width, нет bg
-    ├── ButtonIcon.module.less     # Стили ButtonIcon
-    ├── ButtonDropdown.module.less
-    └── ButtonDropdownExtended.module.less
-```
-
----
-
 ## Варианты и props
 
 ### Темы (`EButtonTheme`)
 
-| Значение | Описание | Поддерживает loading/icon/block |
-|---|---|---|
-| `GENERAL` | Основной стиль (primary) | Да |
-| `SECONDARY` | Вторичный | Да |
-| `SECONDARY_LIGHT` | Вторичный светлый (для тёмных фонов) | Да |
-| `DANGER` | Деструктивное действие | Да |
-| `LINK` | Текстовая ссылка | Нет — `loading`, `icon`, `block` запрещены через `never` |
+| Значение | Описание |
+|---|---|
+| `GENERAL` | Основной стиль (primary) |
+| `SECONDARY` | Вторичный |
+| `SECONDARY_LIGHT` | Вторичный светлый (для тёмных фонов) |
+| `DANGER` | Деструктивное действие |
+| `LINK` | Текстовая ссылка |
 
 ### Размеры (`EComponentSize`)
 
@@ -109,17 +84,22 @@ src/components/Button/
 | `MD` | 40px | 0 20px | 8px | 14px |
 | `LG` | 56px | 0 24px | 10px | 16px |
 
-### Props компонента `Button`
+### Обязательные props (`Button`)
 
-| Prop | Тип | Обязателен | Описание |
+| Prop | Тип | Описание |
+|---|---|---|
+| `theme` | `EButtonTheme` | Визуальный стиль |
+| `size` | `EComponentSize` | Размер |
+
+### Опциональные props (`Button`)
+
+| Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `theme` | `EButtonTheme` | Да | Визуальный стиль |
-| `size` | `EComponentSize` | Да | Размер |
-| `block` | `boolean` | Нет | Полноширинный режим (только не-LINK темы) |
-| `loading` | `boolean` | Нет | Состояние загрузки: скрывает контент, показывает спиннер (только не-LINK темы) |
-| `icon` | `React.ReactElement` | Нет | Иконка слева от текста; если без `children` — кнопка становится квадратной |
-| `children` | `React.ReactNode` | Нет | Текст кнопки |
-| `...HTMLButtonAttributes` | — | — | Все стандартные атрибуты `<button>` |
+| `block` | `boolean` | `false` | Полноширинный режим |
+| `loading` | `boolean` | `false` | Состояние загрузки: скрывает контент через `visibility: hidden`, показывает спиннер, ставит `tabIndex={-1}` |
+| `icon` | `React.ReactElement` | — | Иконка слева от текста; если без `children` — кнопка становится квадратной (icon-only) |
+| `children` | `React.ReactNode` | — | Текст кнопки |
+| `...HTMLButtonAttributes` | — | — | Все стандартные атрибуты `<button>`, включая `aria-expanded` (см. Accessibility) |
 
 ### Props компонента `ButtonIcon`
 
@@ -129,45 +109,11 @@ src/components/Button/
 | `active` | `boolean` | `false` | Визуальное активное состояние |
 | `...HTMLButtonAttributes` | — | — | Включая `disabled` |
 
----
+### Ограничения по темам
 
-## Ключевые особенности реализации
-
-### Иконка без текста
-Если передан `icon` без `children` — добавляется класс `.icon`, который делает кнопку квадратной:
-```tsx
-// Button.tsx — логика определения icon-only режима
-const iconOnly = Boolean(icon) && !children;
-<button className={clsx(styles.button, { [styles.icon]: iconOnly })}>
-```
-
-### Состояние загрузки
-- `loading` скрывает контент через `visibility: hidden` (не `display: none`) — сохраняет размеры,
-- устанавливает `tabIndex={-1}` — кнопка недоступна с клавиатуры
-- Тема лоадера: `SECONDARY` и `SECONDARY_LIGHT` → `ELoaderSmallTheme.BRAND`, остальные → `ELoaderSmallTheme.NEUTRAL`
-
-### `aria-expanded` управляет визуалом
-Состояние "раскрыто" (например, когда кнопка открывает dropdown) управляется через `aria-expanded`:
-```tsx
-<Button aria-expanded={true} ...> → добавляет CSS-классы .expanded и .active
-```
-Отдельного prop `expanded` нет — используй стандартный HTML-атрибут.
-
-### Тема LINK
-- Нет `min-width`
-- `background: transparent`
-- `padding` по вертикали отличается от других тем (меньше)
-- `block`, `loading`, `icon` — тип `never` в интерфейсе, TypeScript запрещает передачу
-
----
-
-## Accessibility
-
-- Нативный `<button>` — полная поддержка клавиатуры (Tab, Enter, Space) без дополнительных атрибутов.
-- **`ButtonIcon`**: иконочная кнопка без видимого текста — потребитель **обязан** передать `aria-label` через `...rest`. Библиотека мультиязычная, текст не хардкодится.
-- **`loading`**: устанавливает `tabIndex={-1}` — кнопка исключается из tab-порядка. Если нужна доступность состояния загрузки для скринридеров, потребитель добавляет `aria-busy="true"` через props.
-- **`aria-expanded`**: управляет визуальным состоянием "раскрыто" (добавляет CSS-классы `.expanded`, `.active`). Передаётся потребителем при использовании кнопки как триггера dropdown.
-- Фокус-стиль через `:focus-visible` — виден только при клавиатурной навигации.
+- `block`, `loading`, `icon` недоступны для темы `LINK` — тип `never` в интерфейсе, TypeScript запрещает передачу.
+- Тема `LINK` не имеет `min-width`, фона (`background: transparent`) и использует уменьшенный вертикальный `padding`.
+- Тема лоадера (`loading`) для `SECONDARY` и `SECONDARY_LIGHT` — `ELoaderSmallTheme.BRAND`, для остальных — `ELoaderSmallTheme.NEUTRAL`.
 
 ---
 
@@ -175,12 +121,12 @@ const iconOnly = Boolean(icon) && !children;
 
 Паттерн: `--triplex-next-Button-{Theme}_{Property}_{State}`
 
-Каждая тема (кроме LINK) имеет полный набор:
+Каждая тема (кроме `LINK`) имеет полный набор:
 - `_Background_Default/Hover/Active/Disabled`
 - `_Color_Default/Hover/Active/Disabled`
 - `_Shadow_Focus`
 
-Тема LINK — только `_Color_*` и `_Shadow_Focus` (нет фона).
+Тема `LINK` — только `_Color_*` и `_Shadow_Focus` (нет фона).
 
 При добавлении нового визуального состояния нужен новый токен в `src/generated/themesCssVariables.css`.
 
@@ -192,7 +138,17 @@ const iconOnly = Boolean(icon) && !children;
 - **`TButtonProps` union type** — должен включать все тематические интерфейсы. При добавлении новой темы — добавь интерфейс в union.
 - **`EButtonTheme` значения** — не переименовывать. Это публичное API.
 - **`EComponentSize`** — общий enum из `src/enums/EComponentSize`, не делай локальный аналог.
-- **Размеры (28px/40px/56px)** — не менять без согласования с дизайнером, другие компоненты ориентируются на эти размеры.
+- **Размеры (28px / 40px / 56px)** — не менять без согласования с дизайнером, другие компоненты ориентируются на эти размеры.
+
+---
+
+## Accessibility
+
+- Нативный `<button>` — полная поддержка клавиатуры (Tab, Enter, Space) без дополнительных атрибутов.
+- **`ButtonIcon`**: иконочная кнопка без видимого текста — потребитель **обязан** передать `aria-label` через `...rest`. Библиотека мультиязычная, текст не хардкодится.
+- **`loading`**: устанавливает `tabIndex={-1}` — кнопка исключается из tab-порядка. Если нужна доступность состояния загрузки для скринридеров, потребитель добавляет `aria-busy="true"` через props.
+- **`aria-expanded`**: управляет визуальным состоянием «раскрыто» (добавляет CSS-классы `.expanded`, `.active`). Передаётся потребителем при использовании кнопки как триггера dropdown. Отдельного prop `expanded` нет — используй стандартный HTML-атрибут.
+- Фокус-стиль через `:focus-visible` — виден только при клавиатурной навигации.
 
 ---
 
@@ -208,17 +164,20 @@ const iconOnly = Boolean(icon) && !children;
 
 ## Stories
 
-`stories/Buttons/Button.stories.tsx`
+Основные истории: `stories/Buttons/Button.stories.tsx`
+Файлы примеров: `stories/Buttons/examples/Button/`
 
-| Story | Что демонстрирует |
-|---|---|
-| `Playground` | Интерактивный контроль всех props |
-| `Default` | Базовое использование |
-| `States` | Expanded, loading, disabled |
-| `Sizes` | SM / MD / LG для всех тем |
-| `Themes` | Все пять тем |
-| `WithIcon` | Icon-only и text+icon |
-| `BlockMode` | Полноширинный режим |
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль всех props |
+| `Default` | `DefaultExample.tsx` | Базовое использование |
+| `States` | `StatesExample.tsx` | Expanded, loading, disabled |
+| `Sizes` | `SizesExample.tsx` | SM / MD / LG для всех тем |
+| `Themes` | `ThemesExample.tsx` | Все пять тем |
+| `WithIcon` | `WithIconExample.tsx` | Icon-only и text+icon |
+| `WithNotificationIcon` | `WithNotificationIconExample.tsx` | Иконка с индикатором уведомления |
+| `BlockMode` | `BlockModeExample.tsx` | Полноширинный режим |
+| `TextWithIcon` | `TextWithIconExample.tsx` | Текст вместе с иконкой |
 
 ---
 
@@ -227,3 +186,4 @@ const iconOnly = Boolean(icon) && !children;
 | Дата | Изменение |
 |---|---|
 | 2026-03-31 | Создан документ (пилот AI-Ready) |
+| 2026-04-27 | Приведён в соответствие с `docs/ai/template-AI.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», переструктурированы props, добавлена колонка `Example file` в таблице Stories |

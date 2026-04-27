@@ -3,6 +3,9 @@ dist/
 storybook-static/
 /src/generated/
 
+# 🤖 MCP bundle (генерируется скриптом generateMcpData, публикуется как release asset)
+/mcp-data.json
+
 # 📚 Кэш Storybook
 .cache/
 .storybook/out/

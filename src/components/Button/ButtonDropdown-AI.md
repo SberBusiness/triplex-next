@@ -13,25 +13,10 @@ version: "1.0"
 
 ## Назначение
 
-Кнопка-триггер с выпадающим списком действий.
-Поддерживает два визуальных режима: обычная кнопка (`EButtonTheme`) и dots-вариант (`EButtonDotsTheme`).
+Кнопка-триггер с выпадающим списком действий. Поддерживает два визуальных режима: обычная кнопка (`EButtonTheme`) и dots-вариант (`EButtonDotsTheme`).
 
 Используй когда: нужно сгруппировать несколько действий под один триггер и дать выбор опции из списка.
-Не используй когда: нужна одиночная кнопка без списка - используй `Button`.
-
----
-
-## Файловая структура
-
-```text
-src/components/Button/
-├── ButtonDropdown.tsx                  # Основной компонент (forwardRef, рендер button + dropdown)
-├── ButtonDropdownExtended.tsx          # Базовый контейнер с контролем opened/close и outside click
-├── styles/
-│   ├── ButtonDropdown.module.less      # Стили caret, active-состояния, block-режима
-│   └── ButtonDropdownExtended.module.less
-└── index.ts                            # Публичный экспорт ButtonDropdown
-```
+Не используй когда: нужна одиночная кнопка без списка — используй `Button`.
 
 ---
 
@@ -49,18 +34,13 @@ src/components/Button/
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `children` | `React.ReactNode` | `undefined` | Текст/контент кнопки (используется также в mobile header) |
-| `selected` | `IButtonDropdownOption` | `undefined` | Предвыбранная опция для подсветки в списке |
+| `children` | `React.ReactNode` | — | Текст/контент кнопки (используется также в mobile header) |
+| `selected` | `IButtonDropdownOption` | — | Предвыбранная опция для подсветки в списке |
 | `disabled` | `boolean` | `false` | Блокирует кнопку и открытие списка |
-| `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | `undefined` | Дополнительные HTML-атрибуты нативной кнопки |
-| `block` | `boolean` | `false` | Доступен только для non-dots тем |
+| `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | — | Дополнительные HTML-атрибуты нативной кнопки (включая `aria-label`) |
+| `block` | `boolean` | `false` | Полноширинный режим (только для non-dots тем) |
 | `className` | `string` | — | Дополнительный CSS-класс контейнера |
-| `...rest` | `React.HTMLAttributes<HTMLDivElement>` | — | Атрибуты корневого `div` компонента |
-
-### Ограничения по темам
-
-- Для `EButtonDotsTheme` prop `block` запрещен типизацией (`never`).
-- Dots-режим использует иконку `Dotshorizontal*` вместо текстового контента кнопки.
+| `...rest` | `React.HTMLAttributes<HTMLDivElement>` | — | Атрибуты корневого `<div>` компонента |
 
 ### Структура опции (`IButtonDropdownOption`)
 
@@ -69,50 +49,19 @@ src/components/Button/
 | `id` | `string` | Уникальный идентификатор опции |
 | `label` | `React.ReactNode` | Видимый контент пункта меню |
 | `onSelect` | `() => void` | Callback выбора опции |
-| `...rest` | `IDropdownListItemProps` (без ряда запрещенных полей) | Остальные настройки `DropdownList.Item` |
+| `...rest` | `IDropdownListItemProps` (без ряда запрещённых полей) | Остальные настройки `DropdownList.Item` |
 
----
+### Ограничения по темам
 
-## Ключевые особенности реализации
-
-### Композиция через `ButtonDropdownExtended`
-
-- `ButtonDropdown` делегирует управление opened-state и close-on-outside в `ButtonDropdownExtended`.
-- Передает две render-функции: `renderButton` и `renderDropdown`.
-
-### Desktop + mobile dropdown
-
-- Desktop: рендерится `DropdownList` с `DropdownList.Item`.
-- Mobile: через `mobileViewProps` рендерится `DropdownMobileHeader` + `DropdownMobileList`.
-- После выбора любого пункта вызывается `option.onSelect?.()` и dropdown закрывается.
-
-### Управление клавиатурой
-
-- На кнопке перехватываются `Space`, `ArrowUp`, `ArrowDown` с `preventDefault`.
-- `ArrowUp/ArrowDown` открывают dropdown, если он закрыт.
-- В `ButtonDropdownExtended` dropdown закрывается по `Escape` и (из-за `closeOnTab`) по `Tab`.
-
-### ARIA-связка trigger/list
-
-- Кнопка получает `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`.
-- `aria-controls` и `DropdownList` связываются через `instanceId` (`uniqueId()`).
-- `aria-activedescendant` синхронизируется через `DropdownListContext`.
-
----
-
-## Accessibility
-
-- Триггер строится на `Button` (нативный `button`), базовая keyboard-навигация сохраняется.
-- Компонент не хардкодит aria-тексты: при необходимости `aria-label` нужно передавать через `buttonAttributes`.
-- На mobile-заголовке dropdown отображается `children` триггера; если в продукте нужен локализованный отдельный заголовок, его нужно задавать на уровне композиции (через `ButtonDropdownExtended`).
-- Для корректной доступности меню потребитель должен передавать понятные `label` для `options`.
+- Для `EButtonDotsTheme` prop `block` запрещён типизацией (`never`).
+- Dots-режим использует иконку `Dotshorizontal*` вместо текстового контента кнопки.
+- Desktop рендерит `DropdownList` с `DropdownList.Item`; mobile через `mobileViewProps` рендерит `DropdownMobileHeader` + `DropdownMobileList`.
 
 ---
 
 ## Дизайн-токены
 
-`ButtonDropdown` не использует собственных CSS color-токенов в `ButtonDropdown.module.less`.
-Визуальные токены берутся из `Button` и `Dropdown`, которые рендерятся внутри.
+`ButtonDropdown` не использует собственных CSS color-токенов. Визуальные токены берутся из `Button` и `Dropdown`, которые рендерятся внутри.
 
 ---
 
@@ -126,28 +75,39 @@ src/components/Button/
 
 ---
 
+## Accessibility
+
+- Триггер строится на `Button` (нативный `<button>`), базовая keyboard-навигация сохраняется.
+- Кнопка получает `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`. Связка trigger/list осуществляется через `instanceId` (`uniqueId()`); `aria-activedescendant` синхронизируется через `DropdownListContext`.
+- На кнопке перехватываются `Space`, `ArrowUp`, `ArrowDown` с `preventDefault`. `ArrowUp` / `ArrowDown` открывают dropdown, если он закрыт. Dropdown закрывается по `Escape` и (из-за `closeOnTab`) по `Tab`.
+- Компонент **не хардкодит** aria-тексты: при необходимости `aria-label` нужно передавать через `buttonAttributes`. Для корректной доступности меню потребитель должен передавать понятные `label` для `options`.
+- На mobile-заголовке dropdown отображается `children` триггера; если в продукте нужен локализованный отдельный заголовок, его нужно задавать на уровне композиции (через `ButtonDropdownExtended`).
+
+---
+
 ## Связанные компоненты
 
-- `Button` (`src/components/Button/Button.tsx`) - базовый триггер, на котором построен `ButtonDropdown`.
-- `ButtonDropdownExtended` (`src/components/Button/ButtonDropdownExtended.tsx`) - управляет открытием/закрытием dropdown.
-- `Dropdown` (`src/components/Dropdown`) - контейнер и пункты списка для desktop/mobile представления.
+- `Button` (`src/components/Button/Button.tsx`) — базовый триггер, на котором построен `ButtonDropdown`.
+- `ButtonDropdownExtended` (`src/components/Button/ButtonDropdownExtended.tsx`) — управляет открытием/закрытием dropdown через render-функции `renderButton` и `renderDropdown`.
+- `Dropdown` (`src/components/Dropdown`) — контейнер и пункты списка для desktop/mobile представления.
 
 ---
 
 ## Stories
 
-`stories/Buttons/ButtonDropdown.stories.tsx`
+Основные истории: `stories/Buttons/ButtonDropdown.stories.tsx`
+Файлы примеров: `stories/Buttons/examples/ButtonDropdown/`
 
-| Story | Что демонстрирует |
-|---|---|
-| `Playground` | Интерактивный контроль `children`, `theme`, `size`, `block`, `disabled` |
-| `Default` | Базовый сценарий открытия и выбора опций |
-| `Sizes` | Размеры `SM` / `MD` / `LG` |
-| `Themes` | Разные темы (`EButtonTheme` + `EButtonDotsTheme`) |
-| `BlockMode` | Блочный режим non-dots кнопки |
-| `Disabled` | Неактивное состояние |
-| `WithSelectedOption` | Предвыбранная опция через `selected` |
-| `VisualTests` | Сценарий визуальной регрессии |
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `children`, `theme`, `size`, `block`, `disabled` |
+| `Default` | `DefaultExample.tsx` | Базовый сценарий открытия и выбора опций |
+| `Sizes` | `SizesExample.tsx` | Размеры `SM` / `MD` / `LG` |
+| `Themes` | `ThemesExample.tsx` | Разные темы (`EButtonTheme` + `EButtonDotsTheme`) |
+| `BlockMode` | `BlockModeExample.tsx` | Блочный режим non-dots кнопки |
+| `Disabled` | `DisabledExample.tsx` | Неактивное состояние |
+| `WithSelectedOption` | `WithSelectedOptionExample.tsx` | Предвыбранная опция через `selected` |
+| `VisualTests` | `VisualTestsExample.tsx` | Сценарий визуальной регрессии |
 
 ---
 
@@ -156,3 +116,4 @@ src/components/Button/
 | Дата | Изменение |
 |---|---|
 | 2026-04-15 | Создан документ AI-ready для `ButtonDropdown`. |
+| 2026-04-27 | Приведён в соответствие с `docs/ai/template-AI.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», их содержимое перенесено в `Ограничения по темам` и `Accessibility`, добавлена колонка `Example file`. |

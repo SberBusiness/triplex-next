@@ -60,15 +60,18 @@ jobs:
 
       # Собрать MCP-бандл (docs/ai/*.md + src/components/**/*-AI.md + release notes)
       # для @sberbusiness/triplex-next-mcp-server. Подробнее: docs/ai/ROADMAP.md (Фаза 4).
-      - name: Generate MCP bundle
-        run: npm run generateMcpData -- --out mcp-data.json
+      # Временно отключено: документация компонентов приводится к единому шаблону;
+      # вернуть шаг после стабилизации структуры -AI.md файлов.
+      # - name: Generate MCP bundle
+      #   run: npm run generateMcpData -- --out mcp-data.json
 
+      # mcp-data.json временно не прикладывается к релизу — см. закомментированный
+      # шаг "Generate MCP bundle" выше.
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist-${{ github.event.release.tag_name }}.zip
-            mcp-data.json
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook

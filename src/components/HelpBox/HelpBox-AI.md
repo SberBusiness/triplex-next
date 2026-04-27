@@ -13,25 +13,10 @@ version: "1.0"
 
 ## Назначение
 
-Иконка "?" (`QuestioncircleFilledSrvIcon16`) с всплывающей подсказкой (Tooltip).
-Объединяет ButtonIcon-триггер, Tooltip и FocusTrap в одном компоненте.
+Иконка «?» (`QuestioncircleFilledSrvIcon16`) с всплывающей подсказкой (`Tooltip`). Объединяет `ButtonIcon`-триггер, `Tooltip` и `FocusTrap` в одном компоненте.
 
 Используй когда: нужна контекстная подсказка рядом с элементом интерфейса.
-Не используй когда: нужен полноценный попап с формой или сложным контентом — используй Dropdown или Modal.
-
----
-
-## Файловая структура
-
-```text
-src/components/HelpBox/
-├── HelpBox.tsx                   # Основной компонент
-├── index.ts                      # Barrel export
-├── styles/
-│   └── HelpBox.module.less       # Минимальные стили (position, vertical-align)
-└── __tests__/
-    └── HelpBox.test.tsx          # Unit-тесты
-```
+Не используй когда: нужен полноценный попап с формой или сложным контентом — используй `Dropdown` или `Modal`.
 
 ---
 
@@ -48,7 +33,7 @@ src/components/HelpBox/
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `isOpen` | `boolean` | `undefined` | Управляемое состояние открытия тултипа |
+| `isOpen` | `boolean` | — | Управляемое состояние открытия тултипа |
 | `toggle` | `(open: boolean) => void` | — | Callback при открытии/закрытии |
 | `onShow` | `(node: HTMLDivElement) => void` | — | Callback при появлении тултипа в DOM |
 | `preferPlace` | `ETooltipPreferPlace` | — | Предпочтительное расположение: `ABOVE`, `BELOW`, `LEFT`, `RIGHT` |
@@ -61,46 +46,11 @@ src/components/HelpBox/
 | `className` | `string` | — | CSS-класс, пробрасывается на кнопку-триггер |
 | `...rest` | `React.HTMLAttributes<HTMLButtonElement>` | — | Все стандартные атрибуты `<button>`, включая `aria-label`, пробрасываются на кнопку-триггер |
 
-### Controlled / Uncontrolled
+### Ограничения использования
 
-- **Uncontrolled** (по умолчанию): `isOpen` не передан — компонент сам управляет `openState`.
-- **Controlled**: передай `isOpen` + `toggle` — компонент не меняет внутреннее состояние.
-
----
-
-## Ключевые особенности реализации
-
-### Композиция внутренних компонентов
-
-HelpBox — обёртка над несколькими внутренними компонентами:
-- `ButtonIcon` (shape=CIRCLE) — кнопка-триггер с иконкой `QuestioncircleFilledSrvIcon16`
-- `Tooltip` (toggleType="hover", role="dialog") — всплывающая подсказка
-- `FocusTrap` (только desktop, через `MobileView`) — ловушка фокуса при открытом тултипе
-- `TooltipMobileHeader` — заголовок мобильной версии (рендерится только при наличии `mobileHeaderContent`)
-
-### FocusTrap
-
-Ловушка фокуса активируется только на desktop (через `MobileView` fallback). При открытии:
-- `initialFocus` — элемент Tooltip (по ID)
-- `clickOutsideDeactivates: true` — клик за пределами закрывает
-- `preventScroll: true`
-
-Потребитель может расширить настройки через `focusTrapProps.focusTrapOptions`.
-
-### Ref forwarding
-
-`forwardRef` пробрасывает ref на внутренний `ButtonIcon` (кнопку-триггер). Внутренний `buttonRef` используется для позиционирования Tooltip через `targetRef`.
-
----
-
-## Accessibility
-
-- Кнопка-триггер — нативный `<button>` через `ButtonIcon`, shape `CIRCLE`.
-- **`aria-label` триггера** — не захардкожен. Потребитель **обязан** передать `aria-label` через `...rest` (например, `aria-label="Подсказка"`). Библиотека мультиязычная, текст не хардкодится.
-- **`aria-label` кнопки закрытия** — передаётся через `tooltipXButtonProps={{ "aria-label": "Закрыть" }}`. Потребитель **обязан** указать значение на своём языке.
-- Tooltip открывается с `role="dialog"`, `tabIndex={-1}`.
-- FocusTrap удерживает фокус внутри открытого тултипа на desktop.
-- `tooltipAriaAttributes` позволяет добавить aria-атрибуты к контейнеру Tooltip.
+- **Controlled / Uncontrolled**: если `isOpen` не передан — компонент сам управляет `openState`. При передаче `isOpen` обязательно передавать `toggle`, иначе компонент не сможет переключать состояние.
+- `forwardRef` пробрасывает `ref` на внутренний `ButtonIcon` (кнопку-триггер). Внутренний `buttonRef` используется для позиционирования Tooltip через `targetRef`.
+- HelpBox — обёртка над несколькими внутренними компонентами: `ButtonIcon` (`shape=CIRCLE`), `Tooltip` (`toggleType="hover"`, `role="dialog"`), `FocusTrap` (только desktop) и опциональный `TooltipMobileHeader` (рендерится только при наличии `mobileHeaderContent`).
 
 ---
 
@@ -120,29 +70,41 @@ HelpBox — обёртка над несколькими внутренними 
 
 ---
 
+## Accessibility
+
+- Кнопка-триггер — нативный `<button>` через `ButtonIcon`, `shape=CIRCLE`.
+- **`aria-label` триггера** — не захардкожен. Потребитель **обязан** передать `aria-label` через `...rest` (например, `aria-label="Подсказка"`). Библиотека мультиязычная, текст не хардкодится.
+- **`aria-label` кнопки закрытия** — передаётся через `tooltipXButtonProps={{ "aria-label": "Закрыть" }}`. Потребитель **обязан** указать значение на своём языке.
+- Tooltip открывается с `role="dialog"`, `tabIndex={-1}`.
+- FocusTrap удерживает фокус внутри открытого тултипа на desktop. При активации: `initialFocus` — элемент Tooltip (по ID), `clickOutsideDeactivates: true` — клик за пределами закрывает, `preventScroll: true`. Потребитель может расширить настройки через `focusTrapProps.focusTrapOptions`.
+- `tooltipAriaAttributes` позволяет добавить aria-атрибуты к контейнеру Tooltip.
+
+---
+
 ## Связанные компоненты
 
-- `Tooltip` (`src/components/Tooltip/`) — всплывающая подсказка, основной визуальный элемент
-- `ButtonIcon` (`src/components/Button/ButtonIcon.tsx`) — кнопка-триггер
-- `MobileView` (`src/components/MobileView/`) — переключение desktop/mobile поведения
-- `FocusTrap` (npm: `focus-trap-react`) — ловушка фокуса для desktop
+- `Tooltip` (`src/components/Tooltip/`) — всплывающая подсказка, основной визуальный элемент.
+- `ButtonIcon` (`src/components/Button/ButtonIcon.tsx`) — кнопка-триггер.
+- `MobileView` (`src/components/MobileView/`) — переключение desktop/mobile поведения.
+- `FocusTrap` (npm: `focus-trap-react`) — ловушка фокуса для desktop.
 
 ---
 
 ## Stories
 
-`stories/HelpBox/HelpBox.stories.tsx`
+Основные истории: `stories/HelpBox/HelpBox.stories.tsx`
+Файлы примеров: `stories/HelpBox/examples/`
 
-| Story | Что демонстрирует |
-|---|---|
-| `Playground` | Интерактивный контроль всех props |
-| `Default` | Минимальное использование |
-| `Sizes` | Размеры тултипа SM / LG |
-| `Placement` | Расположение: above, below, left, right |
-| `WithMobileHeader` | Мобильный заголовок |
-| `Controlled` | Управляемое состояние (isOpen + toggle) |
-| `ChangeIconProps` | Кастомизация иконки через iconProps |
-| `VisualTests` | Скриншот-тест с открытым тултипом |
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | — | Интерактивный контроль всех props |
+| `Default` | `DefaultExample.tsx` | Минимальное использование |
+| `Sizes` | `SizesExample.tsx` | Размеры тултипа `SM` / `LG` |
+| `Placement` | `PlacementExample.tsx` | Расположение: above, below, left, right |
+| `WithMobileHeader` | `WithMobileHeaderExample.tsx` | Мобильный заголовок |
+| `Controlled` | `ControlledExample.tsx` | Управляемое состояние (`isOpen` + `toggle`) |
+| `ChangeIconProps` | `ChangeIconPropsExample.tsx` | Кастомизация иконки через `iconProps` |
+| `VisualTests` | — | Скриншот-тест с открытым тултипом |
 
 ---
 
@@ -151,3 +113,4 @@ HelpBox — обёртка над несколькими внутренними 
 | Дата | Изменение |
 |---|---|
 | 2026-04-08 | Создан документ. Добавлен `forwardRef`. |
+| 2026-04-27 | Приведён в соответствие с `docs/ai/template-AI.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», их содержимое перенесено в `Ограничения использования` и `Accessibility`, переставлены секции, добавлена колонка `Example file`. |

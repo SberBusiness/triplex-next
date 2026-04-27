@@ -58,6 +58,7 @@ export const MonthYearFieldTarget: React.FC<ITextFieldProps> = ({
             >
                 {sizeToCalendarIconMap[size]}
             </ButtonIcon>
+            {postfix}
         </React.Fragment>
     );
 
@@ -71,7 +72,7 @@ export const MonthYearFieldTarget: React.FC<ITextFieldProps> = ({
                 onKeyDown: handleInputKeyDown,
                 ...restInputProps,
             }}
-            postfix={postfix !== undefined ? postfix : renderPostfixContent()}
+            postfix={renderPostfixContent()}
             {...restProps}
         />
     );

@@ -7,7 +7,7 @@ import { ChipDropdownArrow } from "../ChipDropdownArrow";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 
 const ChipSuggestTargetBase = <T extends ISuggestOption>(
-    { onKeyDown, onClick, clearSelected, ...restProps }: IChipSuggestTargetProps<T>,
+    { onKeyDown, onClick, clearSelected, size, ...restProps }: IChipSuggestTargetProps<T>,
     ref: React.ForwardedRef<HTMLSpanElement>,
 ) => {
     const { value, dropdownOpen, setDropdownOpen } = useSuggestContext<T>();
@@ -47,11 +47,11 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
 
     const renderTargetPostfix = useCallback(() => {
         if (value === undefined) {
-            return <ChipDropdownArrow rotated={dropdownOpen} />;
+            return <ChipDropdownArrow rotated={dropdownOpen} size={size} />;
         } else {
             return <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />;
         }
-    }, [value, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
+    }, [value, size, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
 
     return (
         <Chip
@@ -60,6 +60,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
             postfix={renderTargetPostfix()}
             onKeyDown={handleKeyDown}
             onClick={handleClick}
+            size={size}
             {...restProps}
             ref={ref}
         />

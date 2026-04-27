@@ -4,8 +4,39 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.26.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**MonthYearRange**
+
+- Компонент выбора диапазона месяцев.
+
+<Heading>Ломающие изменения</Heading>
+
+**StepperWrapper**
+
+- Удалён компонент.
+
+**Stepper / StepperExtended**
+
+- Enum `EStepperSize` заменён на `EComponentSize` для свойства `size`.
+- Дефолтный размер изменён с `SM` на `LG`.
+
 <Heading>Изменения</Heading>
 
-**Title**
+**ChipSuggest**
 
-- Description.
+- Добавлена зависимость размера `ChipDropdownArrow` в `ChipSuggestTarget` от размера `ChipSuggest`.
+- Исправлен размер `FormFieldInput` в размере LG.
+
+**IslandAccordion**
+
+- Исправлены отступы.
+
+**MonthYearField**
+
+- `postfix` в `MonthYearFieldTarget` теперь отображается после стандартных элементов управления.
+
+**SuggestField**
+
+- Исправлена работа кнопки очистки: теперь поле очищается, даже если оно не находится в фокусе.
+- Добавлен сброс выбранного значения при нажатии на кнопку очистки.

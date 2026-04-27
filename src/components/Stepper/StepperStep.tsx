@@ -1,12 +1,13 @@
 import React, { useState, useContext, useRef } from "react";
+import clsx from "clsx";
 import { StepperStepIcon } from "./StepperStepIcon";
-import { isKey } from "../../utils/keyboard";
+import { createSizeToClassNameMap, isKey } from "../../utils";
 import { StepperExtendedContext } from "./StepperExtendedContext";
 import { EFocusSource } from "../../enums/EFocusSource";
-import clsx from "clsx";
-import { EStepperSize, EStepperStepType } from "./enums";
-import { RightBorderArrow } from "./RightBorderArrow";
+import { EStepperStepType } from "./enums";
+import { StepperStepArrowBorder } from "./StepperStepArrowBorder";
 import { IconWrapper } from "../IconWrapper";
+import { IStepperStepProps } from "./types";
 import styles from "./styles/StepperStep.module.less";
 
 /** Внутренние составляющие StepperStep. */
@@ -14,19 +15,7 @@ interface IStepperStepComposition {
     Icon: typeof StepperStepIcon;
 }
 
-/** Свойства компонента StepperStep. */
-export interface IStepperStepProps extends React.LiHTMLAttributes<HTMLLIElement> {
-    id: string;
-    disabled?: boolean;
-    /** Иконка, отображающая статус шага. */
-    icon?: React.ReactNode;
-    /** Ссылка на шаг. */
-    forwardedRef?: React.Ref<HTMLLIElement>;
-    /** Флаг непройденного шага. */
-    isInActiveStep?: boolean;
-    /** Тип шага. */
-    type: EStepperStepType;
-}
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Компонент StepperStep, шаг в Stepper. */
 export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition = ({
@@ -52,6 +41,7 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
 
     const classNames = clsx(
         styles.stepperStep,
+        sizeToClassNameMap[size],
         {
             [styles.active]: progress,
             [styles.inactive]: isInActiveStep,
@@ -61,9 +51,6 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
             [styles.error]: !disabled && type === EStepperStepType.ERROR,
             [styles.warning]: !disabled && type === EStepperStepType.WARNING,
             [styles.focusVisible]: focusSource === EFocusSource.KEYBOARD,
-            [styles.sm]: size === EStepperSize.SM,
-            [styles.md]: size === EStepperSize.MD,
-            [styles.lg]: size === EStepperSize.LG,
         },
         className,
     );
@@ -157,7 +144,7 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
             ref={setRef}
         >
             {renderContent()}
-            <RightBorderArrow size={size} />
+            <StepperStepArrowBorder size={size} />
         </li>
     );
 };

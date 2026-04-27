@@ -14,6 +14,8 @@ import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
 import { useMatchMedia } from "../MediaWidth/useMatchMedia";
 
 export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Размер компонента. */
+    size?: EComponentSize;
     /** Рендер-функция Body. */
     renderBody: (props: IIslandWidgetBodyProps) => React.ReactNode;
     /** Рендер-функция Footer. */
@@ -26,7 +28,18 @@ export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement>
 
 export const IslandWidget = Object.assign(
     React.forwardRef<HTMLDivElement, IIslandWidgetProps>(
-        ({ className, renderBody, renderFooter, renderHeader, disableAdaptiveCollapsing = false, ...rest }, ref) => {
+        (
+            {
+                className,
+                size = EComponentSize.MD,
+                renderBody,
+                renderFooter,
+                renderHeader,
+                disableAdaptiveCollapsing = false,
+                ...rest
+            },
+            ref,
+        ) => {
             const { hasExtraFooter } = useContext(IslandWidgetLayoutContext);
             const [open, setOpen] = useState(disableAdaptiveCollapsing);
 
@@ -65,7 +78,7 @@ export const IslandWidget = Object.assign(
                         {...rest}
                         ref={ref}
                     >
-                        <Island type={EIslandType.TYPE_1} size={EComponentSize.MD}>
+                        <Island type={EIslandType.TYPE_1} size={size}>
                             <div
                                 className={clsx({
                                     [styles.islandWidgetHeaderWrapperAdaptive]: adaptive,

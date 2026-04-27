@@ -14,6 +14,8 @@ import { IslandAccordionContext } from "../IslandAccordionContext";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { ETitleSize, Title, EFontType } from "../../Typography";
 import styles from "../styles/IslandAccordion.module.less";
+import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
+import { useMatchMedia } from "../../MediaWidth/useMatchMedia";
 
 export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
     /** Нода с названием заголовка. */
@@ -80,6 +82,11 @@ export const IslandAccordionItem = Object.assign(
             const headerInstanceId = `${instanceId}header`;
             const bodyInstanceId = `${instanceId}body`;
 
+            const adaptive = useMatchMedia(
+                `(max-width: ${EScreenWidth.SM_MAX})`,
+                window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
+            );
+
             useEffect(() => {
                 if (opened !== undefined && isOpen !== opened) {
                     setIsOpen(opened);
@@ -104,6 +111,8 @@ export const IslandAccordionItem = Object.assign(
                 }
                 onRemove?.(id);
             };
+
+            const titleSize = adaptive ? ETitleSize.H3 : SIZE_TO_TITLE_SIZE_MAP[size];
 
             const classNames = clsx(
                 className,
@@ -142,7 +151,7 @@ export const IslandAccordionItem = Object.assign(
 
                                 <Title
                                     className={styles.title}
-                                    size={SIZE_TO_TITLE_SIZE_MAP[size]}
+                                    size={titleSize}
                                     type={disabled ? EFontType.DISABLED : EFontType.PRIMARY}
                                     tag="div"
                                 >

@@ -10,3 +10,5 @@ export { WithNotificationIconExample } from "./WithNotificationIconExample";
 export { default as WithNotificationIconExampleSource } from "./WithNotificationIconExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";
+export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";

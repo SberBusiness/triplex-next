@@ -12,6 +12,8 @@ import {
     YGroupExample,
     YGroupExampleSource,
     PlaygroundExample,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples";
 
 const meta = {
@@ -120,6 +122,22 @@ export const YGroup: StoryObj<typeof CheckboxYGroup> = {
         docs: {
             description: { story: "Группа чекбоксов с направлением по оси Y" },
             source: { code: YGroupExampleSource, language: "tsx" },
+        },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: VisualTestsExampleSource,
+                language: "tsx",
+            },
         },
     },
 };

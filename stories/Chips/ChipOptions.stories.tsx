@@ -8,6 +8,8 @@ import {
     DefaultExampleSource,
     SizesExample,
     SizesExampleSource,
+    StatesExample,
+    StatesExampleSource,
 } from "./examples/ChipOptions";
 
 const meta = {
@@ -86,6 +88,19 @@ export const Sizes: Story = {
         docs: {
             source: {
                 code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const States: Story = {
+    render: StatesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: StatesExampleSource,
                 language: "tsx",
             },
         },

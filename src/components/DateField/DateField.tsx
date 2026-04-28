@@ -213,4 +213,4 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
     );
 });
 
-DateField.displayName = "DatePicker";
+DateField.displayName = "DateField";

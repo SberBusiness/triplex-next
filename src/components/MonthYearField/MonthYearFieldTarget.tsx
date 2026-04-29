@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20, CalendarStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { TextField, ITextFieldProps } from "../TextField/TextField";
 import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExtendedContext";
 import { MonthYearFieldContext } from "./MonthYearFieldContext";
@@ -12,7 +12,7 @@ import { isKey } from "../../utils/keyboard";
 const sizeToCalendarIconMap = {
     [EComponentSize.SM]: <CalendarStrokeSrvIcon16 paletteIndex={5} />,
     [EComponentSize.MD]: <CalendarStrokeSrvIcon20 paletteIndex={5} />,
-    [EComponentSize.LG]: <CalendarStrokeSrvIcon20 paletteIndex={5} />,
+    [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
 export const MonthYearFieldTarget: React.FC<ITextFieldProps> = ({

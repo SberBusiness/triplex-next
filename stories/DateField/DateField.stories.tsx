@@ -1,46 +1,34 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { DateField } from "../../src/components/DateField";
-import { EFormFieldStatus } from "../../src/components/FormField";
-import { EComponentSize } from "../../src/enums";
-import {
-    Title as DocsTitle,
-    Description,
-    Controls,
-    Stories,
-    ArgTypes,
-    Primary,
-    Heading,
-} from "@storybook/addon-docs/blocks";
-import { dateFormatYYYYMMDD } from "../../src/consts/DateConst";
+import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
+import { EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
     PlaygroundExample,
+    PlaygroundExampleSource,
     DefaultExample,
     DefaultExampleSource,
-    StatesExample,
-    StatesExampleSource,
-    WithPostfixExample,
-    WithPostfixExampleSource,
+    SizesExample,
+    SizesExampleSource,
+    StatusesExample,
+    StatusesExampleSource,
+    ProductionExample,
+    ProductionExampleSource,
     VisualTestsExample,
 } from "./examples";
+import { DateField } from "../../src/components/DateField";
 
-const meta = {
+export default {
     title: "Components/DateField",
     component: DateField,
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент ввода и выбора даты.
-                `,
-            },
             page: () => (
                 <>
-                    <DocsTitle />
+                    <Title />
                     <Description />
                     <Heading>Props</Heading>
-                    <ArgTypes of={Default} />
+                    <ArgTypes of={DateField} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -49,84 +37,149 @@ const meta = {
             ),
         },
     },
-    argTypes: {
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            description: "Размер компонента.",
-        },
-        value: { table: { type: { summary: "string" } } },
-        status: {
-            control: { type: "select" },
-            options: Object.values(EFormFieldStatus),
-            description: "Состояние компонента.",
-        },
-        label: { table: { type: { summary: "string" } }, description: "Текст лейбла, отображаемый над полем ввода." },
-        placeholderMask: { table: { type: { summary: "string" } } },
-        format: {
-            table: { type: { summary: "string" }, defaultValue: { summary: dateFormatYYYYMMDD } },
-            description: "Формат даты.",
-        },
-        limitRange: { table: { type: { summary: "IDateLimitRange" } }, description: "Ограничение диапазона дат." },
-        disabledDays: { table: { type: { summary: "string[]" } }, description: "Массив дат, которые нельзя выбрать." },
-        invalidDateHint: { table: { type: { summary: "string" } } },
-        onChange: { table: { type: { summary: "() => void" } } },
-        onDropdownOpen: {
-            table: { type: { summary: "() => void" } },
-            description: "Функция, вызывающаяся при открытии Dropdown.",
-        },
-        onDropdownClose: {
-            table: { type: { summary: "() => void" } },
-            description: "Функция, вызывающаяся при закрытии Dropdown.",
-        },
-        targetProps: { table: { type: { summary: "object" } } },
-    },
 } satisfies Meta<typeof DateField>;
 
-export default meta;
-type Story = StoryObj<typeof DateField>;
+const PLAYGROUND_ARGS = {
+    // Props
+    size: EComponentSize.LG,
+    status: EFormFieldStatus.DEFAULT,
+    placeholderMask: "дд.мм.гггг",
+    label: "Label",
+    invalidDateHint: "Указана недоступная для выбора дата.",
+    // Settings
+    withPostfix: false,
+    withDescription: false,
+} as const;
 
-export const Playground: Story = {
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof DateField>,
+    Extract<keyof typeof PLAYGROUND_ARGS, keyof React.ComponentProps<typeof DateField>>
+> {
+    /** С постфиксом. */
+    withPostfix: boolean;
+    /** С описанием. */
+    withDescription: boolean;
+}
+
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    args: {
-        size: EComponentSize.MD,
-        status: EFormFieldStatus.DEFAULT,
-        placeholderMask: "дд.мм.гггг",
-        label: "Label",
-        invalidDateHint: "Указана недоступная для выбора дата.",
-    },
+    args: PLAYGROUND_ARGS,
     argTypes: {
-        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
-        status: { control: { type: "select" }, options: Object.values(EFormFieldStatus) },
+        // Props
+        size: {
+            options: Object.values(EComponentSize),
+            table: { category: "Props" },
+        },
+        status: {
+            options: Object.values(EFormFieldStatus),
+            table: { category: "Props" },
+        },
+        label: {
+            control: { type: "text" },
+            table: { category: "Props" },
+        },
+        placeholderMask: {
+            control: { type: "text" },
+            table: { category: "Props" },
+        },
+        invalidDateHint: {
+            control: { type: "text" },
+            table: { category: "Props" },
+        },
+        // Settings
+        withPostfix: {
+            description: "С постфиксом.",
+            control: "boolean",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
+        },
+        withDescription: {
+            description: "С описанием.",
+            control: "boolean",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
+        },
     },
     parameters: {
-        controls: { include: ["size", "status", "placeholderMask", "label", "invalidDateHint"] },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: PlaygroundExampleSource,
+                language: "tsx",
+            },
+        },
         testRunner: { skip: true },
     },
     render: PlaygroundExample,
 };
 
-export const Default: Story = {
-    render: DefaultExample,
-    parameters: { controls: { disable: true }, docs: { source: { code: DefaultExampleSource, language: "tsx" } } },
-};
-
-export const WithPostfix: Story = {
-    render: WithPostfixExample,
-    parameters: { controls: { disable: true }, docs: { source: { code: WithPostfixExampleSource, language: "tsx" } } },
-};
-
-export const States: Story = {
-    render: StatesExample,
-    parameters: { controls: { disable: true }, docs: { source: { code: StatesExampleSource, language: "tsx" } } },
-};
-
-export const VisualTests: Story = {
-    tags: ["!autodocs"],
+export const Default: StoryObj<typeof DateField> = {
     parameters: {
         controls: { disable: true },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: DefaultExample,
+};
+
+export const Sizes: StoryObj<typeof DateField> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: SizesExample,
+};
+
+export const Statuses: StoryObj<typeof DateField> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: StatusesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: StatusesExample,
+};
+
+export const Production: StoryObj<typeof DateField> = {
+    name: "Example: production",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ProductionExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: ProductionExample,
+};
+
+export const VisualTests: StoryObj<typeof DateField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
     },
     render: VisualTestsExample,
     play: async ({ canvas, userEvent }) => {

@@ -89,7 +89,6 @@
         }
 
         .title {
-            padding-right: 40px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -101,8 +100,8 @@
                 border-radius: 16px;
             }
 
-            .step + .title {
-                margin-top: 2px;
+            .title {
+                padding-right: 42px;
             }
 
             .body,
@@ -116,7 +115,7 @@
 
             .remove {
                 right: -36px;
-                top: 20px;
+                top: 18px;
             }
 
             .step {
@@ -130,6 +129,10 @@
                 border-radius: 24px;
             }
 
+            .title {
+                padding-right: 42px;
+            }
+
             .body,
             .footer {
                 padding: 0 24px 24px 24px;
@@ -141,7 +144,7 @@
 
             .remove {
                 right: -40px;
-                top: 28px;
+                top: 26px;
             }
 
             .step {
@@ -153,6 +156,10 @@
             .header {
                 padding: 32px;
                 border-radius: 32px;
+            }
+
+            .title {
+                padding-right: 44px;
             }
 
             .body,
@@ -187,6 +194,11 @@
 @media (max-width: @screen-sm-max) {
     .islandAccordion {
         .item {
+            .title {
+                white-space: normal;
+                overflow-wrap: anywhere;
+            }
+
             .footer {
                 display: flex;
                 flex-wrap: wrap;
@@ -197,10 +209,28 @@
                 }
             }
 
+            .caretWrapper {
+                transform: none;
+            }
+
+            &.sm {
+                .title {
+                    padding-right: 34px;
+                }
+
+                .caretWrapper {
+                    top: 18px;
+                }
+            }
+
             &.md {
                 .header {
                     padding: 16px;
                     border-radius: 16px;
+                }
+
+                .title {
+                    padding-right: 34px;
                 }
 
                 .body,
@@ -210,6 +240,11 @@
 
                 .caretWrapper {
                     right: 10px;
+                    top: 18px;
+                }
+
+                .remove {
+                    top: 18px;
                 }
             }
 
@@ -219,13 +254,22 @@
                     border-radius: 24px;
                 }
 
+                .title {
+                    padding-right: 34px;
+                }
+
                 .body,
                 .footer {
                     padding: 0 24px 24px 24px;
                 }
 
                 .caretWrapper {
+                    top: 26px;
                     right: 18px;
+                }
+
+                .remove {
+                    top: 26px;
                 }
             }
         }

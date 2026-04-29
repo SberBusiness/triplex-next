@@ -7,23 +7,67 @@
 
 ---
 
+## Что значит «AI-Ready»
+
+Triplex-Next считается AI-Ready, когда AI-агент (Claude Code, Cursor, Codex),
+работая В ЭТОМ репозитории, может:
+
+1. **Понять компонент по документации** без чтения исходников — `{ComponentName}-ai.md` содержит назначение, props, инварианты, токены, accessibility и stories.
+2. **Внести изменение** (добавить prop, исправить баг, провести рефакторинг) согласно `codestyle.md` и инвариантам, не ломая публичный API.
+3. **Написать тесты** на новое поведение по правилам `tests.md`.
+
+Готовность измеряется таблицей покрытия ниже: все компоненты с публичным API
+имеют `AI.md`, прошли AI-рефакторинг и покрыты Storybook-примерами.
+
+→ Достигается выполнением **Фаз 0–1**.
+
+---
+
+## Что значит «Agent-native»
+
+Следующий уровень зрелости — AI-агенты в **сторонних продуктовых проектах**
+используют дизайн-систему через MCP-сервер
+`@sberbusiness/triplex-next-mcp-server`, не клонируя репозиторий и не читая
+файлы напрямую.
+
+Agent-native требует AI-Ready как предусловие: MCP-сервер бесполезен, если
+`AI.md` не заполнены или несогласованы между собой. Метрика одна: пакет
+опубликован как stable npm-пакет, расширенные tools (`search_components`,
+`get_props`, `get_release_notes` и др.) реализованы.
+
+→ Достигается выполнением **Фазы 2**.
+
+---
+
 ## Этапы
 
 ### Фаза 0: Фундамент
 - [x] Анализ репозитория и выбор архитектуры
 - [x] Создать `docs/ai/CONTEXT.md` — главный контекстный файл
+- [x] Создать `docs/ai/codestyle.md` — обязательные правила TS / React / LESS
+- [x] Создать `docs/ai/tests.md` — правила unit / visual / e2e тестирования
+- [x] Создать `docs/ai/stories-guide.md` — правила Storybook stories
+- [x] Создать `docs/ai/commits.md` — конвенции коммитов и PR-воркфлоу
+- [x] Создать `docs/ai/ai-refactoring.md` — правила AI-рефакторинга компонентов
 - [x] Создать `docs/ai/template-ai.md` — шаблон документации компонента
 - [x] Создать `CLAUDE.md` — entry point для Claude Code
 - [x] Создать `AGENTS.md` — entry point для OpenAI Codex
 - [x] Создать `.cursor/rules/design-system.mdc` — entry point для Cursor
 
 ### Фаза 1: Rollout
-- [ ] Документировать оставшиеся компоненты (96 total)
+- [ ] Документировать оставшиеся компоненты (см. таблицу ниже)
 - [ ] Приоритет: часто изменяемые компоненты в первую очередь
 
-Правила для колонки **AI refactoring** — `docs/ai/ai-refactoring.md`.
-
 #### Статус покрытия компонентов
+
+**Что значат колонки (definition of done):**
+
+- **AI.md** — у компонента есть `{ComponentName}-ai.md`, заполненный по `docs/ai/template-ai.md`: frontmatter (component, category, related, tokens, stories, version), Назначение, Варианты и props, Инварианты, Связанные компоненты, Stories с колонкой `Example file`, История изменений. Accessibility — обязательно для интерактивных компонентов.
+- **Storybook examples** — есть `.stories.tsx` в modern pattern (`docs/ai/stories-guide.md`): директория `stories/{Category}/examples/{Component}/` с отдельным файлом примера на каждую story (кроме `Playground` / `VisualTests`).
+- **AI refactoring** — компонент проведён через `docs/ai/ai-refactoring.md`: codestyle-чистка, structural-упрощение, AI-friendliness (JSDoc на всех props), unit-тесты на ключевую логику.
+
+Какие компоненты заслуживают отдельного `*-ai.md` (а какие описываются в родителе)
+— см. `docs/ai/CONTEXT.md` → «Когда создавать `{ComponentName}-ai.md`».
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
 |---|---|---|---|
@@ -80,7 +124,9 @@
 | ListItemControlsButtonDropdown | ✅ | ✅ | ✅ |
 | ListItemSelectable | ✅ | ✅ | ✅ |
 | ListItemTable | ✅ | ✅ | ✅ |
-| ListMaster | ⬜ | ✅ | ⬜ |
+| ListMaster | ✅ | ✅ | ✅ |
+| ListMasterFooter | ✅ | ✅ | ✅ |
+| ListMasterHeader | ✅ | ✅ | ✅ |
 | ListSortable | ✅ | ✅ | ✅ |
 | ListSortableItem | ✅ | ✅ | ✅ |
 | Loader | ⬜ | ⬜ | ⬜ |
@@ -148,9 +194,9 @@
 - [x] Инструменты: `list_components()`, `get_component(name)`, `get_tokens(component)`
 - [x] Скрипт генерации `mcp-data.json` в triplex-next (`scripts/generateMcpData.ts`, npm: `generateMcpData`)
 - [x] Публикация bundle как GitHub Release asset (`.github/workflows/release.yml`)
-- [ ] Расширенные tools (Фаза 2–5 в ROADMAP mcp-server): `search_components`, `get_props`,
-      `get_invariants`, `get_release_notes`, MCP Prompts/Resources и др.
-- [ ] Публикация npm-пакета `@sberbusiness/triplex-next-mcp-server`
+- [x] Beta-публикация npm-пакета `@sberbusiness/triplex-next-mcp-server`
+- [ ] Stable-релиз npm-пакета (после стабилизации API tools)
+- [ ] Расширенные tools: `search_components`, `get_props`, `get_invariants`, `get_release_notes`, MCP Prompts/Resources и др. — отслеживается в собственном ROADMAP репозитория mcp-server
 
 **Как это работает:**
 1. На релиз triplex-next workflow генерирует `mcp-data.json` (плоский JSON со всеми `*-ai.md`,
@@ -162,21 +208,4 @@
 **Заметка:** Все `{Component}-ai.md` файлы содержат YAML frontmatter с machine-readable метаданными —
 mcp-server не требует изменений в формате, достаточно держать `docs/ai/template-ai.md` консистентным.
 
----
-
-## Как использовать AI-документацию
-
-### Сценарий: добавить prop к компоненту
-
-1. Открой `src/components/{ComponentName}/{ComponentName}-ai.md`
-2. Дай агенту контекст: `CONTEXT.md` + `{ComponentName}-ai.md` + текстовое описание или скриншот
-3. Опиши задачу: "добавь prop X согласно описанию"
-4. Агент вносит изменения в TSX, LESS, story, тесты
-5. После успешного изменения: попроси агента обновить `{ComponentName}-ai.md`
-
-### Минимальный контекст для агента
-
-```
-Прочитай docs/ai/CONTEXT.md и src/components/Button/Button-ai.md.
-Затем добавь prop [описание] к компоненту Button согласно [описанию/скриншоту].
-```
+Сценарии работы агента и минимальный контекст — см. `docs/ai/CONTEXT.md` и `CLAUDE.md`.

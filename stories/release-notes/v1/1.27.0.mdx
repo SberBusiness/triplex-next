@@ -25,5 +25,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **List**
 
-- **Breaking:** интерфейс `IListItemEmptyProps` переименован в `IListEmptyStateProps` (синхронизация с именем компонента `ListEmptyState`).
+- Интерфейс `IListItemEmptyProps` переименован в `IListEmptyStateProps` (синхронизация с именем компонента `ListEmptyState`).
 - Исправлен `displayName` компонента `ListEmptyState`.
+
+**ListMaster**
+
+- Добавлен `forwardRef` на `ListMaster`. TypeScript-тип компонента изменён с `React.FC<IListMasterProps>` на `ForwardRefExoticComponent<...>` со статическими свойствами (`Body`, `Header`, ...). Удалён интерфейс `IListMasterFC` — для типизации используй `typeof ListMaster`.
+- Исправлен `displayName` компонента `ListMasterChipGroup` (был `"ListMasterChips"`).
+- Экспортирован интерфейс `IListMasterChipGroupProps` (раньше props инлайнились).

@@ -10,29 +10,35 @@ import { ListMasterFooterDescription } from "@sberbusiness/triplex-next/componen
 /** Свойства компонента ListMaster. */
 export interface IListMasterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export interface IListMasterFC extends React.FC<IListMasterProps> {
-    Body: typeof ListMasterBody;
-    ChipGroup: typeof ListMasterChipGroup;
-    Footer: typeof ListMasterFooter;
-    FooterControls: typeof ListMasterFooterControls;
-    FooterDescription: typeof ListMasterFooterDescription;
-    Header: typeof ListMasterHeader;
-    SelectionControls: typeof SelectionControls;
-}
-
-/** Компонент, оборачивающий список и фильтры. */
-export const ListMaster: IListMasterFC = ({ children, className, ...rest }) => (
-    <div className={className} {...rest} data-tx={process.env.npm_package_version}>
-        {children}
-    </div>
+/**
+ * Compound-компонент, оборачивающий список и фильтры. Содержит набор
+ * статических подкомпонентов:
+ *
+ * - `ListMaster.Header` — sticky-шапка (обычно используется для selection controls)
+ * - `ListMaster.Body` — основная область со списком и фильтрами
+ * - `ListMaster.ChipGroup` — горизонтальная группа `Chip`-фильтров с одной строкой
+ * - `ListMaster.Footer` — sticky-футер (агрегаты + действия по выбранным элементам)
+ * - `ListMaster.FooterDescription` — текстовая часть футера (например, сумма выбранных)
+ * - `ListMaster.FooterControls` — кнопки в футере
+ * - `ListMaster.SelectionControls` — flex-контейнер
+ */
+export const ListMaster = Object.assign(
+    React.forwardRef<HTMLDivElement, IListMasterProps>(function ListMaster({ children, className, ...rest }, ref) {
+        return (
+            <div className={className} {...rest} data-tx={process.env.npm_package_version} ref={ref}>
+                {children}
+            </div>
+        );
+    }),
+    {
+        Body: ListMasterBody,
+        ChipGroup: ListMasterChipGroup,
+        Footer: ListMasterFooter,
+        FooterControls: ListMasterFooterControls,
+        FooterDescription: ListMasterFooterDescription,
+        Header: ListMasterHeader,
+        SelectionControls: SelectionControls,
+    },
 );
-
-ListMaster.Body = ListMasterBody;
-ListMaster.ChipGroup = ListMasterChipGroup;
-ListMaster.Footer = ListMasterFooter;
-ListMaster.FooterControls = ListMasterFooterControls;
-ListMaster.FooterDescription = ListMasterFooterDescription;
-ListMaster.Header = ListMasterHeader;
-ListMaster.SelectionControls = SelectionControls;
 
 ListMaster.displayName = "ListMaster";

@@ -4,7 +4,7 @@ import styles from "../styles/ListMasterFooter.module.less";
 
 /** Свойства компонента ListMasterFooter. */
 export interface IListMasterFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Элемент позиционируется как sticky. */
+    /** Sticky-позиционирование (`bottom: 0`). По умолчанию `true`. */
     sticky?: boolean;
 }
 
@@ -17,14 +17,14 @@ export const ListMasterFooter = React.forwardRef<HTMLDivElement, IListMasterFoot
                 {
                     [styles.sticky]: sticky,
                 },
-                className
+                className,
             )}
             {...rest}
             ref={ref}
         >
             {children}
         </div>
-    )
+    ),
 );
 
 ListMasterFooter.displayName = "ListMasterFooter";

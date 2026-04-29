@@ -3,20 +3,20 @@ import { Meta, StoryObj } from "@storybook/react";
 import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
 import { List } from "@sberbusiness/triplex-next";
 import {
-    DefaultExample,
-    DefaultExampleSource,
-    EmptyStateExample,
-    EmptyStateExampleSource,
-    LoadingExample,
-    LoadingExampleSource,
+    Default as DefaultRender,
+    DefaultSource,
+    EmptyState as EmptyStateRender,
+    EmptyStateSource,
+    Loading as LoadingRender,
+    LoadingSource,
+    Playground as PlaygroundRender,
     PlaygroundArgs,
-    PlaygroundExample,
-    SortableExample,
-    SortableExampleSource,
-    SortableWithInteractiveElementsExample,
-    SortableWithInteractiveElementsExampleSource,
-    VirtualizedExample,
-    VirtualizedExampleSource,
+    Sortable as SortableRender,
+    SortableSource,
+    SortableWithInteractiveElements as SortableWithInteractiveElementsRender,
+    SortableWithInteractiveElementsSource,
+    Virtualized as VirtualizedRender,
+    VirtualizedSource,
 } from "./examples/List";
 
 const meta = {
@@ -73,17 +73,17 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             codePanel: false,
         },
     },
-    render: PlaygroundExample,
+    render: PlaygroundRender,
 };
 
 export const Default: StoryObj<typeof List> = {
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: { story: "Базовый список." },
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
@@ -91,13 +91,13 @@ export const Default: StoryObj<typeof List> = {
 };
 
 export const Loading: StoryObj<typeof List> = {
-    render: LoadingExample,
+    render: LoadingRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: { story: "Список в состоянии загрузки." },
             source: {
-                code: LoadingExampleSource,
+                code: LoadingSource,
                 language: "tsx",
             },
         },
@@ -105,7 +105,7 @@ export const Loading: StoryObj<typeof List> = {
 };
 
 export const EmptyState: StoryObj<typeof List> = {
-    render: EmptyStateExample,
+    render: EmptyStateRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -113,7 +113,7 @@ export const EmptyState: StoryObj<typeof List> = {
                 story: "Используется, если нет данных для отображения хотя бы одного элемента списка.",
             },
             source: {
-                code: EmptyStateExampleSource,
+                code: EmptyStateSource,
                 language: "tsx",
             },
         },
@@ -121,7 +121,7 @@ export const EmptyState: StoryObj<typeof List> = {
 };
 
 export const Virtualized: StoryObj<typeof List> = {
-    render: VirtualizedExample,
+    render: VirtualizedRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -129,7 +129,7 @@ export const Virtualized: StoryObj<typeof List> = {
                 story: "Список с виртуализацией для работы с большими наборами данных. Рендерится только видимая область.",
             },
             source: {
-                code: VirtualizedExampleSource,
+                code: VirtualizedSource,
                 language: "tsx",
             },
         },
@@ -137,7 +137,7 @@ export const Virtualized: StoryObj<typeof List> = {
 };
 
 export const Sortable: StoryObj<typeof List> = {
-    render: SortableExample,
+    render: SortableRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -145,7 +145,7 @@ export const Sortable: StoryObj<typeof List> = {
                 story: "Список с возможностью сортировки элементов.",
             },
             source: {
-                code: SortableExampleSource,
+                code: SortableSource,
                 language: "tsx",
             },
         },
@@ -153,7 +153,7 @@ export const Sortable: StoryObj<typeof List> = {
 };
 
 export const SortableWithInteractiveElements: StoryObj<typeof List> = {
-    render: SortableWithInteractiveElementsExample,
+    render: SortableWithInteractiveElementsRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -161,7 +161,7 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
                 story: "Список с возможностью сортировки интерактивных элементов.",
             },
             source: {
-                code: SortableWithInteractiveElementsExampleSource,
+                code: SortableWithInteractiveElementsSource,
                 language: "tsx",
             },
         },

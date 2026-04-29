@@ -1,9 +1,12 @@
 import React from "react";
 import { List, ListItem } from "@sberbusiness/triplex-next";
 
-export const DefaultExample = () => (
-    <div style={{ width: "500px" }}>
-        <List>
+export const Loading = () => (
+    <div style={{ width: "150px" }}>
+        <List loading>
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
+            <ListItem>Элемент списка</ListItem>
             <ListItem>Элемент списка</ListItem>
             <ListItem>Элемент списка</ListItem>
             <ListItem>Элемент списка</ListItem>

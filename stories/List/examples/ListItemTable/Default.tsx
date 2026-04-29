@@ -14,7 +14,7 @@ import {
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
-export const ListItemForTableExample = () => {
+export const Default = () => {
     const options = [
         {
             id: "button-dropdown-card-option-1",

@@ -2,7 +2,7 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { ListItemControls } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource } from "./examples/ListItemControls";
+import { Default as DefaultRender, DefaultSource } from "./examples/ListItemControls";
 
 const meta = {
     title: "Components/List/ListItemControls",
@@ -29,12 +29,12 @@ const meta = {
 export default meta;
 
 export const Default: StoryObj<typeof ListItemControls> = {
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },

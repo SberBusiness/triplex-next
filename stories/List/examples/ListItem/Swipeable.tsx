@@ -12,7 +12,7 @@ import {
 } from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
-export const SwipeableExample = () => {
+export const Swipeable = () => {
     const options = [
         {
             id: "list-item-swipe-controls-dropdown-option-1",

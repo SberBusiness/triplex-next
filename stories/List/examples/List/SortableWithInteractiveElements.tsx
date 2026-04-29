@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Checkbox, ListSortable, ListSortableItem, ListSortableItemControls } from "@sberbusiness/triplex-next";
 
-export const SortableWithInteractiveElementsExample = () => {
+export const SortableWithInteractiveElements = () => {
     const [items, setItems] = useState(
         Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-1-${index}`, index })),
     );

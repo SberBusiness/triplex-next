@@ -38,7 +38,7 @@ Stories выполняют несколько функций (в порядке 
 ### Если prop имеет несколько визуальных вариантов (enum, размер, тема)
 
 - Добавить новую named story: `Sizes`, `Themes`, `Statuses` — в зависимости от типа prop.
-- Создать файл `examples/{PropName}Example.tsx` и реэкспортировать через `examples/index.ts`.
+- Создать файл `examples/{PropName}.tsx` и реэкспортировать через `examples/index.ts`.
 
 ### Если prop — boolean-состояние с видимым эффектом
 
@@ -79,10 +79,10 @@ stories/
       ComponentName.stories.tsx    # основной файл стори
       examples/
         index.ts                   # реэкспорт всех примеров
-        DefaultExample.tsx
-        SizesExample.tsx
-        StatusesExample.tsx
-        ProductionExample.tsx
+        Default.tsx
+        Sizes.tsx
+        Statuses.tsx
+        Production.tsx
         ...
 ```
 
@@ -419,11 +419,13 @@ render: () => (
 В modern pattern для каждого примера экспортируются два значения — сам компонент и его исходный код:
 
 ```ts
-export * from "./DefaultExample";
-export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export * from "./SizesExample";
-export { default as SizesExampleSource } from "./SizesExample?raw";
+export * from "./Default";
+export { default as DefaultSource } from "./Default?raw";
+export * from "./Sizes";
+export { default as SizesSource } from "./Sizes?raw";
 ```
+
+> **Имена.** Файл и экспорт-функция называются как story (`Default.tsx` экспортирует `Default`). Source-константа добавляет суффикс `Source` (`DefaultSource`). Из-за коллизии с именем story-экспорта в `*.stories.tsx` импорт компонента-примера делается через alias — см. ниже.
 
 ---
 
@@ -432,20 +434,23 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 В modern pattern каждая документационная стори подключает пример и его исходный код через `?raw`:
 
 ```tsx
+import { Default as DefaultRender, DefaultSource } from "./examples";
+
 export const Default: StoryObj<typeof Component> = {
-    name: "Default",
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
     },
 };
 ```
+
+> **Alias обязателен.** Имя экспорта-функции (`Default`) совпадает с именем story-экспорта (`Default: StoryObj`), поэтому в импорте используется `Default as DefaultRender`. Source-константа конфликта не вызывает (`DefaultSource`), её импортируем без alias. То же относится к Playground (`Playground as PlaygroundRender`).
 
 ---
 
@@ -458,7 +463,13 @@ import React, { useState, useCallback } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples";
+import {
+    Default as DefaultRender,
+    DefaultSource,
+    Playground as PlaygroundRender,
+    Sizes as SizesRender,
+    SizesSource,
+} from "./examples";
 
 const meta = {
     title: "Components/Group/ComponentName",
@@ -490,9 +501,7 @@ export const Playground: StoryObj<typeof meta> = {
         size: EComponentSize.LG,
         // ...остальные args
     },
-    render: ({ ...args }) => {
-        // ...render с useState и обработчиками
-    },
+    render: PlaygroundRender,
     argTypes: {
         size: {
             control: { type: "select" },
@@ -514,13 +523,12 @@ export const Playground: StoryObj<typeof meta> = {
 };
 
 export const Default: StoryObj<typeof ComponentName> = {
-    name: "Default",
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
@@ -528,13 +536,12 @@ export const Default: StoryObj<typeof ComponentName> = {
 };
 
 export const Sizes: StoryObj<typeof ComponentName> = {
-    name: "Sizes",
-    render: SizesExample,
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: SizesExampleSource,
+                code: SizesSource,
                 language: "tsx",
             },
         },
@@ -542,13 +549,13 @@ export const Sizes: StoryObj<typeof ComponentName> = {
 };
 ```
 
-### `examples/DefaultExample.tsx`
+### `examples/Default.tsx`
 
 ```tsx
 import React, { useState } from "react";
 import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const DefaultExample = () => {
+export const Default = () => {
     const [value, setValue] = useState<string>("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
@@ -561,7 +568,7 @@ export const DefaultExample = () => {
 };
 ```
 
-### `examples/SizesExample.tsx`
+### `examples/Sizes.tsx`
 
 ```tsx
 import React, { useState } from "react";
@@ -586,7 +593,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 
 const SIZES = Object.values(EComponentSize);
 
-export const SizesExample = () => (
+export const Sizes = () => (
     <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
@@ -598,10 +605,10 @@ export const SizesExample = () => (
 ### `examples/index.ts`
 
 ```ts
-export * from "./DefaultExample";
-export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export * from "./SizesExample";
-export { default as SizesExampleSource } from "./SizesExample?raw";
+export * from "./Default";
+export { default as DefaultSource } from "./Default?raw";
+export * from "./Sizes";
+export { default as SizesSource } from "./Sizes?raw";
 ```
 
 ---

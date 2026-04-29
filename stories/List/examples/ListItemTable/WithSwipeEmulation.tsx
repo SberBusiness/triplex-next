@@ -15,7 +15,7 @@ import {
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
-export const ListItemForTableWithSwipeEmulationExample = () => {
+export const WithSwipeEmulation = () => {
     const options = [
         {
             id: "button-dropdown-swipe-emulation-option-1",

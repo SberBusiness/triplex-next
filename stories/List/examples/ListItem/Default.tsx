@@ -1,7 +1,7 @@
 import React from "react";
 import { List, ListItem, ListItemContent } from "@sberbusiness/triplex-next";
 
-export const DefaultExample = () => (
+export const Default = () => (
     <div style={{ maxWidth: "500px" }}>
         <List>
             <ListItem>

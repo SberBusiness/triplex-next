@@ -2,7 +2,7 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { ListMaster } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource } from "./examples";
+import { Default as DefaultRender, DefaultSource } from "./examples";
 
 const meta = {
     title: "Components/List/ListMaster",
@@ -29,7 +29,7 @@ const meta = {
 export default meta;
 
 export const Default: StoryObj<typeof ListMaster> = {
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -37,7 +37,7 @@ export const Default: StoryObj<typeof ListMaster> = {
                 story: "Production-like пример: TabsLine, фильтры в ChipGroup, выбор элементов с шапкой и футером, виды действий, пустое состояние и LightBox с расширенными фильтрами.",
             },
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },

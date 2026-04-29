@@ -1,2 +1,2 @@
-export * from "./DefaultExample";
-export { default as DefaultExampleSource } from "./DefaultExample?raw";
+export * from "./Default";
+export { default as DefaultSource } from "./Default?raw";

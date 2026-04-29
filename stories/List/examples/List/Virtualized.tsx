@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { FixedSizeList } from "react-window";
 import { List, ListItem } from "@sberbusiness/triplex-next";
 
-export const VirtualizedExample = () => {
+export const Virtualized = () => {
     const itemData = useMemo(() => Array.from({ length: 100 }).map((_, index) => `List item ${index}`), []);
 
     return (

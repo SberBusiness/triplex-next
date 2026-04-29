@@ -187,7 +187,7 @@ const listItemsData: IListItemData[] = [
     },
 ];
 
-export const DefaultExample = () => {
+export const Default = () => {
     const [chipSortValue, setChipSortValue] = React.useState<ISelectFieldOption>(chipSortOptions[0]);
     const [selectedListItemIds, setSelectedListItemIds] = React.useState<string[]>([]);
     const [selectedTabLineId, setSelectedTabLineId] = React.useState<TTabId>("all");

@@ -2,7 +2,7 @@ import React from "react";
 import { ListItemControls, ListItemControlsButton, ListItemControlsButtonDropdown } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
-export const DefaultExample = () => {
+export const Default = () => {
     const options = [
         {
             id: "list-controls-dropdown-option-1",

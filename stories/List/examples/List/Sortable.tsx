@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ListSortable, ListSortableItem } from "@sberbusiness/triplex-next";
 
-export const SortableExample = () => {
+export const Sortable = () => {
     const [items, setItems] = useState(
         Array.from({ length: 10 }, (_, index) => ({ id: `list-sortable-item-0-${index}`, index })),
     );

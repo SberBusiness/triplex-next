@@ -13,7 +13,7 @@ import {
 } from "@sberbusiness/triplex-next";
 import { EmptytableSysIcon96 } from "@sberbusiness/icons-next";
 
-export const EmptyStateExample = () => (
+export const EmptyState = () => (
     <ListEmptyState>
         <div style={{ display: "flex", justifyContent: "center" }}>
             <EmptytableSysIcon96 />

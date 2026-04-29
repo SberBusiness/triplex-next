@@ -3,20 +3,14 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { ListItem } from "@sberbusiness/triplex-next";
 import {
-    DefaultExample,
-    DefaultExampleSource,
-    ListItemForTableExample,
-    ListItemForTableExampleSource,
-    ListItemForTableWithSelectableExample,
-    ListItemForTableWithSelectableExampleSource,
-    ListItemForTableWithSwipeEmulationExample,
-    ListItemForTableWithSwipeEmulationExampleSource,
-    LoadingExample,
-    LoadingExampleSource,
-    SelectableExample,
-    SelectableExampleSource,
-    SwipeableExample,
-    SwipeableExampleSource,
+    Default as DefaultRender,
+    DefaultSource,
+    Loading as LoadingRender,
+    LoadingSource,
+    Selectable as SelectableRender,
+    SelectableSource,
+    Swipeable as SwipeableRender,
+    SwipeableSource,
 } from "./examples/ListItem";
 
 const meta = {
@@ -47,13 +41,13 @@ const meta = {
 export default meta;
 
 export const Default: StoryObj<typeof ListItem> = {
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: { story: "Базовый элемент списка с контентом." },
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
@@ -61,7 +55,7 @@ export const Default: StoryObj<typeof ListItem> = {
 };
 
 export const Loading: StoryObj<typeof ListItem> = {
-    render: LoadingExample,
+    render: LoadingRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -69,7 +63,7 @@ export const Loading: StoryObj<typeof ListItem> = {
                 story: "Элемент списка, отображающий подгрузку данных. Отображается последним, при доскролле до него загружаются новые элементы.",
             },
             source: {
-                code: LoadingExampleSource,
+                code: LoadingSource,
                 language: "tsx",
             },
         },
@@ -77,13 +71,13 @@ export const Loading: StoryObj<typeof ListItem> = {
 };
 
 export const Selectable: StoryObj<typeof ListItem> = {
-    render: SelectableExample,
+    render: SelectableRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: { story: "Элемент списка с возможностью выбора." },
             source: {
-                code: SelectableExampleSource,
+                code: SelectableSource,
                 language: "tsx",
             },
         },
@@ -91,59 +85,13 @@ export const Selectable: StoryObj<typeof ListItem> = {
 };
 
 export const Swipeable: StoryObj<typeof ListItem> = {
-    render: SwipeableExample,
+    render: SwipeableRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: { story: "Эмуляция свайпа" },
             source: {
-                code: SwipeableExampleSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const ListItemForTable: StoryObj<typeof ListItem> = {
-    render: ListItemForTableExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: { story: "Элемент списка для отображения табличных данных на мобильных устройствах." },
-            source: {
-                code: ListItemForTableExampleSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
-    render: ListItemForTableWithSwipeEmulationExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "Элемент списка для отображения табличных данных на мобильных устройствах с эмуляцией свайпа.",
-            },
-            source: {
-                code: ListItemForTableWithSwipeEmulationExampleSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
-    render: ListItemForTableWithSelectableExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "Элемент списка для отображения табличных данных на мобильных устройствах с возможностью выбора элемента.",
-            },
-            source: {
-                code: ListItemForTableWithSelectableExampleSource,
+                code: SwipeableSource,
                 language: "tsx",
             },
         },

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { List, ListItem, ListItemContent, ListItemSelectable } from "@sberbusiness/triplex-next";
 
-export const SelectableExample = () => {
+export const Selectable = () => {
     const [selected, setSelected] = useState(false);
 
     return (

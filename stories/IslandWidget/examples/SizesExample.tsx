@@ -8,8 +8,6 @@ import {
     Link,
     Text,
     ETextSize,
-    ETitleSize,
-    Title,
     EFontType,
     DateField,
     EFormFieldStatus,
@@ -64,8 +62,8 @@ const SizeItem = ({ size }: ISizeItemProps) => {
             )}
             renderHeader={(props) => (
                 <IslandWidget.Header {...props}>
-                    <IslandWidget.Header.Content>
-                        <Title size={ETitleSize.H3}>Title</Title>
+                    <IslandWidget.Header.Title>Title</IslandWidget.Header.Title>
+                    <IslandWidget.Header.Controls>
                         <ButtonIcon>
                             <SettingsStrokeSrvIcon20 paletteIndex={5} />
                         </ButtonIcon>
@@ -79,12 +77,8 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                             size={EComponentSize.SM}
                             status={EFormFieldStatus.DEFAULT}
                         />
-                    </IslandWidget.Header.Content>
-                    <IslandWidget.Header.Description>
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Description
-                        </Text>
-                    </IslandWidget.Header.Description>
+                    </IslandWidget.Header.Controls>
+                    <IslandWidget.Header.Description>Description</IslandWidget.Header.Description>
                 </IslandWidget.Header>
             )}
         />

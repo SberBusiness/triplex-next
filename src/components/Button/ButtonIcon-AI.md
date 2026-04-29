@@ -17,19 +17,7 @@ version: "1.0"
 Кнопка только с иконкой без текстового контента. Используется как компактный trigger для локальных действий (например, открыть меню, удалить, закрыть).
 
 Используй когда: действие можно однозначно распознать по иконке и есть корректный `aria-label`.
-Не используй когда: нужен текстовый CTA или несколько визуальных тем с размерами как у `Button` - используй `Button`.
-
----
-
-## Файловая структура
-
-```text
-src/components/Button/
-├── ButtonIcon.tsx                     # Компонент (forwardRef, native button)
-├── enums.ts                           # EButtonIconShape (SQUIRCLE / CIRCLE)
-└── styles/
-    └── ButtonIcon.module.less         # Геометрия, focus-visible, базовые состояния
-```
+Не используй когда: нужен текстовый CTA или несколько визуальных тем с размерами как у `Button` — используй `Button`.
 
 ---
 
@@ -51,29 +39,8 @@ src/components/Button/
 ### Ограничения использования
 
 - Размер `ButtonIcon` задаётся размером переданной иконки; у компонента нет собственного prop `size`.
-- Корневой DOM-элемент всегда `button`, `type` по умолчанию принудительно установлен в `button`.
-
----
-
-## Ключевые особенности реализации
-
-### Маппинг формы через enum
-
-- `shape` маппится в CSS-класс через `Record<EButtonIconShape, string>`.
-- При расширении `EButtonIconShape` нужно добавить класс в маппинг и в `ButtonIcon.module.less`.
-
-### Визуальные состояния
-
-- `active` и `disabled` добавляются как глобальные CSS-классы (`active`, `disabled`) для совместимости с иконками.
-- Дополнительно всегда добавляется класс `hoverable`.
-
----
-
-## Accessibility
-
-- Компонент рендерит нативный `<button>`, поэтому базовая keyboard-навигация доступна из коробки.
-- Компонент **не хардкодит** `aria-label` (библиотека мультиязычная). Для иконки без текста потребитель обязан передать `aria-label` через `...rest`.
-- Фокусное состояние реализовано через `:focus-visible` и токен `--triplex-next-Button-Icon_Shadow_Focus`.
+- Корневой DOM-элемент всегда `<button>`, `type` по умолчанию принудительно установлен в `button`.
+- При расширении `EButtonIconShape` необходимо добавить класс в маппинг `Record<EButtonIconShape, string>` и в `ButtonIcon.module.less`.
 
 ---
 
@@ -94,23 +61,32 @@ src/components/Button/
 
 ---
 
+## Accessibility
+
+- Компонент рендерит нативный `<button>`, поэтому базовая keyboard-навигация доступна из коробки.
+- Компонент **не хардкодит** `aria-label` (библиотека мультиязычная). Для иконки без текста потребитель **обязан** передать `aria-label` через `...rest`.
+- Фокусное состояние реализовано через `:focus-visible` и токен `--triplex-next-Button-Icon_Shadow_Focus`.
+
+---
+
 ## Связанные компоненты
 
-- `Button` (`src/components/Button/Button.tsx`) - текстовая/универсальная кнопка, используемая вместо `ButtonIcon` когда нужен label.
-- `ButtonDropdown` (`src/components/Button/ButtonDropdown.tsx`) - использует иконочный паттерн для dots-варианта trigger.
+- `Button` (`src/components/Button/Button.tsx`) — текстовая/универсальная кнопка, используемая вместо `ButtonIcon` когда нужен label.
+- `ButtonDropdown` (`src/components/Button/ButtonDropdown.tsx`) — использует иконочный паттерн для dots-варианта trigger.
 
 ---
 
 ## Stories
 
-`stories/Buttons/ButtonIcon.stories.tsx`
+Основные истории: `stories/Buttons/ButtonIcon.stories.tsx`
+Файлы примеров: `stories/Buttons/examples/ButtonIcon/`
 
-| Story | Что демонстрирует |
-|---|---|
-| `Playground` | Интерактивный контроль `shape`, `active`, `disabled` |
-| `Default` | Базовый сценарий использования |
-| `Sizes` | Разные размеры через размер иконки (16/20/24/32) |
-| `Disabled` | Неактивное состояние |
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `shape`, `active`, `disabled` |
+| `Default` | `DefaultExample.tsx` | Базовый сценарий использования |
+| `Sizes` | `SizesExample.tsx` | Разные размеры через размер иконки (16/20/24/32) |
+| `Disabled` | `DisabledExample.tsx` | Неактивное состояние |
 
 ---
 
@@ -119,3 +95,4 @@ src/components/Button/
 | Дата | Изменение |
 |---|---|
 | 2026-04-15 | Создан документ AI-ready для `ButtonIcon`. |
+| 2026-04-27 | Приведён в соответствие с `docs/ai/template-AI.md`: убрана секция «Файловая структура», содержимое «Ключевых особенностей реализации» перенесено в `Ограничения использования`, добавлена колонка `Example file`. |

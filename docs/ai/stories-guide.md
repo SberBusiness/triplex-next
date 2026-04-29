@@ -105,6 +105,8 @@ stories/
 
 > **Правило:** только Playground имеет Controls. Документационные стори (`Default`, `Sizes / Themes / Statuses`, `Edge cases`, `Examples`) не имеют Controls и показывают пример кода. `Visual tests` не имеют Controls и не показывают код.
 
+> **MCP bundle:** `Playground` и `VisualTests` не попадают в `mcp-data.json` — у них нет кода для агента (Playground интерактивен, VisualTests — скриншот-регрессия). Фильтр реализован в `scripts/generateMcpData.ts` (`EXCLUDED_STORIES`). В остальном для MCP нужен файл примера в `examples/{Component}/` и ссылка на него из колонки `Example file` в `{Component}-AI.md`.
+
 ---
 
 ## Порядок внутри файла stories

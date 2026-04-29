@@ -53,28 +53,135 @@
 
 #### Статус покрытия компонентов
 
-| Компонент | AI.md | Figma Node | Статус |
+| Компонент | AI.md | Storybook examples | AI refactoring |
 |---|---|---|---|
-| Button | ✅ | ✅ | Пилот |
-| HelpBox | ✅ | ⬜ | AI-Ready |
-| Checkbox | ✅ | ⬜ | AI-Ready |
-| CheckboxXGroup | ✅ | ⬜ | AI-Ready |
-| CheckboxYGroup | ✅ | ⬜ | AI-Ready |
-| Alert | ⬜ | ⬜ | — |
-| Badge | ⬜ | ⬜ | — |
-| Card | ⬜ | ⬜ | — |
-| ... (96 total) | | | |
+| AbstractTree | ⬜ | ⬜ | ⬜ |
+| AccordionBase | ⬜ | ⬜ | ⬜ |
+| Alert | ⬜ | ⬜ | ⬜ |
+| Amount | ⬜ | ✅ | ⬜ |
+| AmountField | ⬜ | ⬜ | ⬜ |
+| Avatar | ⬜ | ✅ | ⬜ |
+| Badge | ⬜ | ✅ | ⬜ |
+| Body | ⬜ | ⬜ | ⬜ |
+| Button | ✅ | ✅ | ⬜ |
+| ButtonDropdown | ✅ | ✅ | ⬜ |
+| ButtonIcon | ✅ | ✅ | ⬜ |
+| Calendar | ⬜ | ✅ | ⬜ |
+| Card | ⬜ | ⬜ | ⬜ |
+| CarouselExtended | ⬜ | ⬜ | ⬜ |
+| Checkbox | ✅ | ✅ | ⬜ |
+| CheckboxTree | ⬜ | ✅ | ⬜ |
+| CheckboxTreeExtended | ⬜ | ✅ | ⬜ |
+| CheckboxXGroup | ✅ | ✅ | ⬜ |
+| CheckboxYGroup | ✅ | ✅ | ⬜ |
+| Chip | ⬜ | ✅ | ⬜ |
+| ChipGroup | ⬜ | ✅ | ⬜ |
+| Col | ⬜ | ✅ | ⬜ |
+| CollapsableTree | ⬜ | ⬜ | ⬜ |
+| Confirm | ⬜ | ⬜ | ⬜ |
+| DateField | ⬜ | ✅ | ⬜ |
+| DatePickerExtended | ⬜ | ⬜ | ⬜ |
+| DateRange | ⬜ | ✅ | ⬜ |
+| DesignTokens | ⬜ | ⬜ | ⬜ |
+| Divider | ⬜ | ✅ | ⬜ |
+| DocumentNumberEdit | ⬜ | ✅ | ⬜ |
+| Dropdown | ⬜ | ⬜ | ⬜ |
+| Ellipsis | ⬜ | ✅ | ⬜ |
+| EmptyView | ✅ | ✅ | ⬜ |
+| ExpandAnimation | ⬜ | ⬜ | ⬜ |
+| Footer | ⬜ | ⬜ | ⬜ |
+| FormField | ⬜ | ✅ | ⬜ |
+| FormGroup | ⬜ | ⬜ | ⬜ |
+| Gap | ⬜ | ✅ | ⬜ |
+| Header | ⬜ | ⬜ | ⬜ |
+| HelpBox | ✅ | ✅ | ⬜ |
+| IconWrapper | ⬜ | ✅ | ⬜ |
+| Island | ⬜ | ✅ | ⬜ |
+| IslandAccordion | ⬜ | ✅ | ⬜ |
+| IslandWidget | ⬜ | ✅ | ⬜ |
+| KeyDownListener | ⬜ | ⬜ | ⬜ |
+| LightBox | ⬜ | ✅ | ⬜ |
+| Link | ⬜ | ✅ | ⬜ |
+| List | ⬜ | ⬜ | ⬜ |
+| ListMaster | ⬜ | ⬜ | ⬜ |
+| Loader | ⬜ | ⬜ | ⬜ |
+| LoaderScreen | ⬜ | ✅ | ⬜ |
+| Marker | ⬜ | ⬜ | ⬜ |
+| MarkerStatus | ⬜ | ✅ | ⬜ |
+| MediaWidth | ⬜ | ✅ | ⬜ |
+| MobileView | ⬜ | ⬜ | ⬜ |
+| ModalWindow | ⬜ | ⬜ | ⬜ |
+| MonthYearField | ⬜ | ⬜ | ⬜ |
+| MonthYearRange | ⬜ | ✅ | ⬜ |
+| MultiselectField | ⬜ | ✅ | ⬜ |
+| Notification | ⬜ | ⬜ | ⬜ |
+| NumberField | ⬜ | ✅ | ⬜ |
+| OrderedList | ⬜ | ✅ | ⬜ |
+| Overlay | ⬜ | ⬜ | ⬜ |
+| Page | ⬜ | ⬜ | ⬜ |
+| Pagination | ⬜ | ⬜ | ⬜ |
+| Portal | ⬜ | ⬜ | ⬜ |
+| Radio | ⬜ | ⬜ | ⬜ |
+| Row | ⬜ | ⬜ | ⬜ |
+| SMSField | ⬜ | ⬜ | ⬜ |
+| SegmentedControl | ⬜ | ⬜ | ⬜ |
+| SelectExtendedField | ⬜ | ⬜ | ⬜ |
+| SelectField | ⬜ | ⬜ | ⬜ |
+| Skeleton | ⬜ | ✅ | ⬜ |
+| Slider | ⬜ | ⬜ | ⬜ |
+| SliderExtended | ⬜ | ⬜ | ⬜ |
+| SliderRange | ⬜ | ⬜ | ⬜ |
+| SmallInput | ⬜ | ⬜ | ⬜ |
+| Spoiler | ⬜ | ⬜ | ⬜ |
+| StatusTracker | ⬜ | ⬜ | ⬜ |
+| Step | ⬜ | ⬜ | ⬜ |
+| Stepper | ⬜ | ⬜ | ⬜ |
+| Suggest | ⬜ | ⬜ | ⬜ |
+| SuggestField | ⬜ | ✅ | ⬜ |
+| SwipeableArea | ⬜ | ⬜ | ⬜ |
+| Table | ⬜ | ⬜ | ⬜ |
+| Tabs | ⬜ | ⬜ | ⬜ |
+| TabsExtended | ⬜ | ⬜ | ⬜ |
+| TabsLine | ⬜ | ⬜ | ⬜ |
+| Tag | ⬜ | ⬜ | ⬜ |
+| TagColor | ⬜ | ⬜ | ⬜ |
+| TagGroup | ⬜ | ⬜ | ⬜ |
+| TextField | ⬜ | ⬜ | ⬜ |
+| TextareaField | ⬜ | ✅ | ⬜ |
+| ThemeProvider | ⬜ | ⬜ | ⬜ |
+| Tooltip | ⬜ | ⬜ | ⬜ |
+| TopOverlay | ⬜ | ⬜ | ⬜ |
+| TreeView | ⬜ | ⬜ | ⬜ |
+| Triggers | ⬜ | ⬜ | ⬜ |
+| Typography | ⬜ | ⬜ | ⬜ |
+| UnorderedList | ⬜ | ⬜ | ⬜ |
+| UploadZone | ⬜ | ⬜ | ⬜ |
+| WindowResizeListener | ⬜ | ⬜ | ⬜ |
 
-### Фаза 4: MCP-сервер для потребителей (будущее)
+### Фаза 4: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать
 документацию компонентов через MCP без чтения файлов репозитория.
 
-- [ ] Разработать MCP-сервер на основе `{Component}-AI.md` файлов
-- [ ] Инструменты: `list_components()`, `get_component(name)`, `get_tokens(component)`
-- [ ] Frontmatter в `.md` файлах уже структурирован под этот сценарий
+Репозиторий: [`@sberbusiness/triplex-next-mcp-server`](https://github.com/SberBusiness/triplex-next-mcp-server)
+(собственный ROADMAP в корне того репо).
 
-**Заметка:** Все `{Component}-AI.md` файлы содержат YAML frontmatter с machine-readable метаданными.
-MCP-сервер = файловый ридер + Markdown-парсер. Не нужно менять существующие документы.
+- [x] Разработать MCP-сервер на основе `{Component}-AI.md` файлов (каркас + базовые tools)
+- [x] Инструменты: `list_components()`, `get_component(name)`, `get_tokens(component)`
+- [x] Скрипт генерации `mcp-data.json` в triplex-next (`scripts/generateMcpData.ts`, npm: `generateMcpData`)
+- [x] Публикация bundle как GitHub Release asset (`.github/workflows/release.yml`)
+- [ ] Расширенные tools (Фаза 2–5 в ROADMAP mcp-server): `search_components`, `get_props`,
+      `get_invariants`, `get_release_notes`, MCP Prompts/Resources и др.
+- [ ] Публикация npm-пакета `@sberbusiness/triplex-next-mcp-server`
+
+**Как это работает:**
+1. На релиз triplex-next workflow генерирует `mcp-data.json` (плоский JSON со всеми `*-AI.md`,
+   `docs/ai/*.md`, release notes в поле `raw`) и прикладывает к GitHub Release.
+2. `fetch-bundle.ts` в mcp-server скачивает asset и раскладывает в дерево
+   `bundle/{components,guides,release-notes}/` + `bundle/manifest.json`.
+3. MCP-сервер на старте читает manifest и парсит нужные файлы через gray-matter.
+
+**Заметка:** Все `{Component}-AI.md` файлы содержат YAML frontmatter с machine-readable метаданными —
+mcp-server не требует изменений в формате, достаточно держать `docs/ai/template-AI.md` консистентным.
 
 ---
 

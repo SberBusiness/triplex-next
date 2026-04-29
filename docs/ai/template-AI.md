@@ -23,6 +23,9 @@ Frontmatter:
 - figma-file: URL файла / design-ссылка, из которой при необходимости можно получить file key
 - tokens: список CSS-переменных, которые компонент использует
 - related: список связанных компонентов (строки, имена)
+
+Таблица Stories: колонка `Example file` обязательна — её читает сборщик
+mcp-data.json, чтобы инлайнить код примера. См. раздел Stories ниже.
 -->
 
 # ComponentName
@@ -120,12 +123,25 @@ Frontmatter:
 ## Stories
 
 Основные истории: `stories/Category/ComponentName.stories.tsx`
+Файлы примеров: `stories/Category/examples/ComponentName/`
 
-| Story | Что демонстрирует |
-|---|---|
-| `Playground` | Интерактивный контроль всех props |
-| `Themes` | Все визуальные темы |
-| `Sizes` | Размеры SM / MD / LG |
+<!--
+Колонка `Example file` — имя файла внутри `stories/Category/examples/ComponentName/`.
+Именно этот файл бандлится в mcp-data.json как код примера, поэтому ссылка обязательна.
+Если у story нет отдельного example-файла (редкий случай) — поставь `—`.
+
+Стори `Playground` и `VisualTests` в bundle НЕ попадают (скрипт generateMcpData
+фильтрует их по имени): Playground — интерактивная песочница без показа кода,
+VisualTests — скриншот-регрессия. Но в таблице их всё равно оставляй —
+таблица описывает все stories компонента для человека, а не только то,
+что уходит в MCP.
+-->
+
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль всех props |
+| `Themes` | `ThemesExample.tsx` | Все визуальные темы |
+| `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG |
 
 ---
 

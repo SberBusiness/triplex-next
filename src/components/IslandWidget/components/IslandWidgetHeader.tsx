@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
 import styles from "../styles/IslandWidgetHeader.module.less";
-import { IslandWidgetHeaderContent } from "./IslandWidgetHeaderContent";
+import { IslandWidgetHeaderControls } from "./IslandWidgetHeaderControls";
 import { IslandWidgetHeaderDescription } from "./IslandWidgetHeaderDescription";
+import { IslandWidgetHeaderTitle } from "./IslandWidgetHeaderTitle";
 import { CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { IslandWidgetContext } from "../IslandWidgetContext";
 
@@ -10,7 +11,8 @@ import { IslandWidgetContext } from "../IslandWidgetContext";
 export interface IIslandWidgetHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export type TIslandWidgetHeader = React.FC<IIslandWidgetHeaderProps> & {
-    Content: typeof IslandWidgetHeaderContent;
+    Title: typeof IslandWidgetHeaderTitle;
+    Controls: typeof IslandWidgetHeaderControls;
     Description: typeof IslandWidgetHeaderDescription;
 };
 
@@ -34,6 +36,7 @@ export const IslandWidgetHeader: TIslandWidgetHeader = ({ children, className, .
     );
 };
 
-IslandWidgetHeader.Content = IslandWidgetHeaderContent;
+IslandWidgetHeader.Title = IslandWidgetHeaderTitle;
+IslandWidgetHeader.Controls = IslandWidgetHeaderControls;
 IslandWidgetHeader.Description = IslandWidgetHeaderDescription;
 IslandWidgetHeader.displayName = "IslandWidgetHeader";

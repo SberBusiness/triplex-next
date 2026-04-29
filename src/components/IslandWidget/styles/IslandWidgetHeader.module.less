@@ -2,23 +2,31 @@
 
 .islandWidgetHeader {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 8px;
 
-    .islandWidgetHeaderContent {
+    .islandWidgetHeaderTitle {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .islandWidgetHeaderControls {
         display: flex;
         align-items: center;
-        padding: 2px 0;
         gap: 8px;
     }
 
     .islandWidgetHeaderDescription {
         display: flex;
+        flex-grow: 1;
+        justify-content: flex-end;
     }
 
     .caretWrapper {
         position: absolute;
-        top: 20px;
+        top: 16px;
         right: 16px;
     }
 
@@ -33,8 +41,16 @@
 
 @media (max-width: @screen-sm-max) {
     .islandWidgetHeader {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
+        flex-wrap: wrap;
+        padding-right: 32px;
+
+        .islandWidgetHeaderTitle {
+            white-space: normal;
+        }
+
+        .islandWidgetHeaderDescription {
+            flex-basis: 100%;
+            justify-content: flex-start;
+        }
     }
 }

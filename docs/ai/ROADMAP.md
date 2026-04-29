@@ -103,7 +103,7 @@
 | LightBox | ⬜ | ✅ | ⬜ |
 | Link | ⬜ | ✅ | ⬜ |
 | List | ⬜ | ✅ | ⬜ |
-| ListMaster | ⬜ | ⬜ | ⬜ |
+| ListMaster | ⬜ | ✅ | ⬜ |
 | Loader | ⬜ | ⬜ | ⬜ |
 | LoaderScreen | ⬜ | ✅ | ⬜ |
 | Marker | ⬜ | ⬜ | ⬜ |

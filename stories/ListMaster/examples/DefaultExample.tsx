@@ -23,6 +23,7 @@ import {
     ETextSize,
     ETitleSize,
     Gap,
+    ISelectFieldOption,
     ISuggestFieldOption,
     LightBox,
     List,
@@ -55,12 +56,10 @@ const tabsLine: Array<{ id: TTabId; label: string; showNotificationIcon?: boolea
     { id: "rejected", label: "Отклоненные" },
 ];
 
-const chipSortOptions = [
+const chipSortOptions: ISelectFieldOption[] = [
     { id: "list-master-chip-sort-1", label: "По возрастанию суммы", value: "asc" },
     { id: "list-master-chip-sort-2", label: "По убыванию суммы", value: "desc" },
-] as const;
-
-type TChipSortOption = (typeof chipSortOptions)[number];
+];
 
 const allStatuses: TItemStatus[] = ["draft", "signed", "executed", "rejected"];
 
@@ -188,8 +187,8 @@ const listItemsData: IListItemData[] = [
     },
 ];
 
-export const ExampleExample = () => {
-    const [chipSortValue, setChipSortValue] = React.useState<TChipSortOption>(chipSortOptions[0]);
+export const DefaultExample = () => {
+    const [chipSortValue, setChipSortValue] = React.useState<ISelectFieldOption>(chipSortOptions[0]);
     const [selectedListItemIds, setSelectedListItemIds] = React.useState<string[]>([]);
     const [selectedTabLineId, setSelectedTabLineId] = React.useState<TTabId>("all");
 
@@ -332,7 +331,7 @@ export const ExampleExample = () => {
                     <TabsLine
                         tabs={tabsLine}
                         selectedId={selectedTabLineId}
-                        onChangeTab={setSelectedTabLineId}
+                        onChangeTab={(tabId) => setSelectedTabLineId(tabId as TTabId)}
                         paddingX={16}
                         withSeparator
                     />
@@ -344,7 +343,7 @@ export const ExampleExample = () => {
                             label="Сортировка"
                             defaultValue={chipSortOptions[0]}
                             value={chipSortValue}
-                            options={[...chipSortOptions]}
+                            options={chipSortOptions}
                             onChange={setChipSortValue}
                             size={EComponentSize.MD}
                         />

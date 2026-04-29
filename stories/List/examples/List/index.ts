@@ -12,5 +12,3 @@ export * from "./SortableExample";
 export { default as SortableExampleSource } from "./SortableExample?raw";
 export * from "./SortableWithInteractiveElementsExample";
 export { default as SortableWithInteractiveElementsExampleSource } from "./SortableWithInteractiveElementsExample?raw";
-export * from "./ExampleExample";
-export { default as ExampleExampleSource } from "./ExampleExample?raw";

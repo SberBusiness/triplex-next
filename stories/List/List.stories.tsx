@@ -7,8 +7,6 @@ import {
     DefaultExampleSource,
     EmptyStateExample,
     EmptyStateExampleSource,
-    ExampleExample,
-    ExampleExampleSource,
     LoadingExample,
     LoadingExampleSource,
     PlaygroundArgs,
@@ -164,19 +162,6 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
             },
             source: {
                 code: SortableWithInteractiveElementsExampleSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const Example: StoryObj<typeof List> = {
-    render: ExampleExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            source: {
-                code: ExampleExampleSource,
                 language: "tsx",
             },
         },

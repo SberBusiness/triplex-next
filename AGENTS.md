@@ -19,7 +19,7 @@ If `{ComponentName}-AI.md` does not exist yet:
 - follow the local pattern of that component
 - do not create a new `*-AI.md` file unless the task explicitly asks for it
 
-**Template for new components:** `docs/ai/template-AI.md`
+**Template for new components:** `docs/ai/template-ai.md`
 
 **AI-Ready progress tracker:** `docs/ai/ROADMAP.md`
 
@@ -33,6 +33,7 @@ If `{ComponentName}-AI.md` does not exist yet:
 | Testing (unit, visual, e2e) | `docs/ai/tests.md` |
 | Stories (structure, examples, checklist) | `docs/ai/stories-guide.md` |
 | Commits, branches, PR workflow | `docs/ai/commits.md` |
+| AI refactoring (rules for ROADMAP refactor column) | `docs/ai/ai-refactoring.md` |
 
 ---
 

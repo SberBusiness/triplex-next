@@ -17,6 +17,7 @@ Then follow the detailed guide for the area you touch:
 - `docs/ai/tests.md`
 - `docs/ai/stories-guide.md`
 - `docs/ai/commits.md`
+- `docs/ai/ai-refactoring.md` (rules for ROADMAP "AI refactoring" column)
 
 Use `docs/ai/CONTEXT.md` for source priority, Figma metadata rules, and verification expectations.
 

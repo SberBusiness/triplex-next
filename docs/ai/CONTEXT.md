@@ -266,7 +266,7 @@ className={clsx(styles.button, styles.general, { [styles.loading]: loading })}
 
 Пример: `src/components/Button/Button-AI.md`
 
-Шаблон для новых компонентов: `docs/ai/template-AI.md`
+Шаблон для новых компонентов: `docs/ai/template-ai.md`
 
 ---
 

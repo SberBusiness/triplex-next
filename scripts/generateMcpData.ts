@@ -69,7 +69,7 @@ const GUIDE_TOPICS: { topic: string; file: string }[] = [
     { topic: "tests", file: "tests.md" },
     { topic: "stories", file: "stories-guide.md" },
     { topic: "commits", file: "commits.md" },
-    { topic: "template", file: "template-AI.md" },
+    { topic: "template", file: "template-ai.md" },
 ];
 
 function parseArgs(): { out: string } {

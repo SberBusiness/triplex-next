@@ -19,7 +19,7 @@
 - следуй локальному паттерну компонента
 - не создавай новый `*-AI.md`, если это не часть задачи
 
-**Шаблон для новых компонентов:** `docs/ai/template-AI.md`
+**Шаблон для новых компонентов:** `docs/ai/template-ai.md`
 
 **Прогресс AI-Ready перехода:** `docs/ai/ROADMAP.md`
 
@@ -33,6 +33,7 @@
 | Тестирование (unit, visual, e2e) | `docs/ai/tests.md` |
 | Stories (структура, примеры, чек-лист) | `docs/ai/stories-guide.md` |
 | Коммиты, ветки, PR-воркфлоу | `docs/ai/commits.md` |
+| AI refactoring (правила рефакторинга по ROADMAP) | `docs/ai/ai-refactoring.md` |
 
 ---
 

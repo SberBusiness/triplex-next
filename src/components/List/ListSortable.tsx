@@ -13,10 +13,13 @@ import {
 import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { List, IListProps } from "./List";
+import { isDraggableTarget } from "./utils";
 
 /** Свойства компонента ListSortable. */
 export interface IListSortableProps<T extends { id: string }> extends IListProps {
+    /** Текущий упорядоченный список элементов. У каждого элемента должен быть уникальный `id`. */
     items: T[];
+    /** Вызывается с новым порядком после успешного drag-and-drop. */
     onItemsChange: (items: T[]) => void;
 }
 
@@ -25,17 +28,8 @@ export class AdvancedMouseSensor extends MouseSensor {
         {
             eventName: "onMouseDown" as const,
             handler: ({ nativeEvent: event }: React.MouseEvent, { onActivation }: MouseSensorOptions) => {
-                if (event.button === 2) {
+                if (event.button === 2 || !isDraggableTarget(event.target)) {
                     return false;
-                } else if (event.target instanceof HTMLElement) {
-                    let element: HTMLElement | null = event.target;
-
-                    while (element !== null) {
-                        if (element.dataset?.draggable === "false") {
-                            return false;
-                        }
-                        element = element.parentElement;
-                    }
                 }
 
                 onActivation?.({ event });
@@ -51,17 +45,8 @@ export class AdvancedTouchSensor extends TouchSensor {
         {
             eventName: "onTouchStart" as const,
             handler: ({ nativeEvent: event }: React.TouchEvent, { onActivation }: TouchSensorOptions) => {
-                if (event.touches.length > 1) {
+                if (event.touches.length > 1 || !isDraggableTarget(event.target)) {
                     return false;
-                } else if (event.target instanceof HTMLElement) {
-                    let element: HTMLElement | null = event.target;
-
-                    while (element !== null) {
-                        if (element.dataset?.draggable === "false") {
-                            return false;
-                        }
-                        element = element.parentElement;
-                    }
                 }
 
                 onActivation?.({ event });
@@ -74,7 +59,7 @@ export class AdvancedTouchSensor extends TouchSensor {
 
 function ListSortableInner<T extends { id: string }>(
     { items, onItemsChange, ...rest }: IListSortableProps<T>,
-    ref: React.ForwardedRef<HTMLUListElement>
+    ref: React.ForwardedRef<HTMLUListElement>,
 ) {
     const sensors = useSensors(useSensor(AdvancedMouseSensor), useSensor(AdvancedTouchSensor));
 
@@ -105,5 +90,5 @@ function ListSortableInner<T extends { id: string }>(
 
 /** Сортируемый список с поддержкой drag-and-drop. */
 export const ListSortable = React.forwardRef(ListSortableInner) as <T extends { id: string }>(
-    props: IListSortableProps<T> & { ref?: React.ForwardedRef<HTMLUListElement> }
+    props: IListSortableProps<T> & { ref?: React.ForwardedRef<HTMLUListElement> },
 ) => ReturnType<typeof ListSortableInner>;

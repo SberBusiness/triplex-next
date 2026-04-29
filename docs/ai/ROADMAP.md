@@ -12,7 +12,7 @@
 ### Фаза 0: Фундамент
 - [x] Анализ репозитория и выбор архитектуры
 - [x] Создать `docs/ai/CONTEXT.md` — главный контекстный файл
-- [x] Создать `docs/ai/template-AI.md` — шаблон документации компонента
+- [x] Создать `docs/ai/template-ai.md` — шаблон документации компонента
 - [x] Создать `CLAUDE.md` — entry point для Claude Code
 - [x] Создать `AGENTS.md` — entry point для OpenAI Codex
 - [x] Создать `.cursor/rules/design-system.mdc` — entry point для Cursor
@@ -38,7 +38,7 @@
 - [x] Создать `src/components/Button/Button-AI.md` (Figma node: `1-328`)
 - [ ] Тестовый прогон: дать агенту Figma-ссылку на конкретный вариант Button → агент вносит изменение в компонент
 - [ ] Оценить качество результата (код, тесты, story)
-- [ ] Скорректировать `template-AI.md` и `CONTEXT.md` по итогам
+- [ ] Скорректировать `template-ai.md` и `CONTEXT.md` по итогам
 
 **Как запустить пилот в новой сессии:**
 ```
@@ -50,6 +50,8 @@
 ### Фаза 3: Rollout
 - [ ] Документировать оставшиеся компоненты (96 total)
 - [ ] Приоритет: часто изменяемые компоненты в первую очередь
+
+Правила для колонки **AI refactoring** — `docs/ai/ai-refactoring.md`.
 
 #### Статус покрытия компонентов
 
@@ -102,7 +104,7 @@
 | KeyDownListener | ⬜ | ⬜ | ⬜ |
 | LightBox | ⬜ | ✅ | ⬜ |
 | Link | ⬜ | ✅ | ⬜ |
-| List | ⬜ | ✅ | ⬜ |
+| List | ⬜ | ✅ | ✅ |
 | ListMaster | ⬜ | ✅ | ⬜ |
 | Loader | ⬜ | ⬜ | ⬜ |
 | LoaderScreen | ⬜ | ✅ | ⬜ |
@@ -181,7 +183,7 @@
 3. MCP-сервер на старте читает manifest и парсит нужные файлы через gray-matter.
 
 **Заметка:** Все `{Component}-AI.md` файлы содержат YAML frontmatter с machine-readable метаданными —
-mcp-server не требует изменений в формате, достаточно держать `docs/ai/template-AI.md` консистентным.
+mcp-server не требует изменений в формате, достаточно держать `docs/ai/template-ai.md` консистентным.
 
 ---
 

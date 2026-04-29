@@ -139,9 +139,9 @@ VisualTests — скриншот-регрессия. Но в таблице их
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль всех props |
-| `Themes` | `ThemesExample.tsx` | Все визуальные темы |
-| `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG |
+| `Playground` | `Playground.tsx` | Интерактивный контроль всех props |
+| `Themes` | `Themes.tsx` | Все визуальные темы |
+| `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG |
 
 ---
 

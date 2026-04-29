@@ -1,7 +1,7 @@
 import React from "react";
 import { HelpBox, ETooltipSize, ETooltipPreferPlace } from "@sberbusiness/triplex-next";
 
-export const PlacementExample = () => (
+export const Placement = () => (
     <div style={{ padding: 50, display: "grid", gridTemplateColumns: "repeat(2, minmax(120px, 1fr))", gap: 32 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{ width: 150 }}>above</span>

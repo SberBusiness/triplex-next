@@ -90,6 +90,14 @@ stories/
 
 Все стори выносятся в подпапку `examples/` и импортируются в основной файл. Если в основной папке находятся несколько файлов с расширением `.stories.tsx`, внутри подпапки `examples` необходимо создать подпапки по названию компонентов из файлов с расширением `.stories.tsx`. Также необходимо в каждой такой подпапке создать отдельный файл `index.ts`.
 
+### Именование файлов примеров
+
+- Имя файла = имя story: `Default` → `Default.tsx`, `Sizes` → `Sizes.tsx`, `Playground` → `Playground.tsx`.
+- **Без постфикса `Example`** — не пиши `DefaultExample.tsx`, `SizesExample.tsx`. Если встретишь старые файлы с этим постфиксом, сохраняй локальный паттерн до миграции, но новые файлы создавай без него.
+- Имя экспорта-функции внутри файла совпадает с именем файла: `export const Default = () => ...`.
+- Source-константа: `{StoryName}Source` — `DefaultSource`, `SizesSource`, `PlaygroundSource`.
+- В story-файле импорт компонента-примера делается через alias, чтобы избежать коллизии со story-экспортом: `Default as DefaultRender`, `Playground as PlaygroundRender`. Source без alias.
+
 ---
 
 ## Обязательные стори

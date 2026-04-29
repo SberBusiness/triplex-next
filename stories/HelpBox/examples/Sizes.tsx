@@ -1,7 +1,7 @@
 import React from "react";
 import { HelpBox, ETooltipSize, ETooltipPreferPlace } from "@sberbusiness/triplex-next";
 
-export const SizesExample = () => (
+export const Sizes = () => (
     <div style={{ padding: 50, display: "flex", gap: 100 }}>
         <div>
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>

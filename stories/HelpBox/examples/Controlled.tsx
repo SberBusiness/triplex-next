@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HelpBox, ETooltipSize, ETooltipPreferPlace } from "@sberbusiness/triplex-next";
 
-export const ControlledExample = () => {
+export const Controlled = () => {
     const [open, setOpen] = useState(false);
 
     const handleToggle = (nextOpen: boolean) => setOpen(nextOpen);

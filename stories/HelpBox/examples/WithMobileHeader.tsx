@@ -1,7 +1,7 @@
 import React from "react";
 import { HelpBox, ETooltipSize } from "@sberbusiness/triplex-next";
 
-export const WithMobileHeaderExample = () => (
+export const WithMobileHeader = () => (
     <div style={{ padding: 50 }}>
         <HelpBox
             tooltipSize={ETooltipSize.SM}

@@ -102,7 +102,7 @@
 | KeyDownListener | ⬜ | ⬜ | ⬜ |
 | LightBox | ⬜ | ✅ | ⬜ |
 | Link | ⬜ | ✅ | ⬜ |
-| List | ⬜ | ⬜ | ⬜ |
+| List | ⬜ | ✅ | ⬜ |
 | ListMaster | ⬜ | ⬜ | ⬜ |
 | Loader | ⬜ | ⬜ | ⬜ |
 | LoaderScreen | ⬜ | ✅ | ⬜ |

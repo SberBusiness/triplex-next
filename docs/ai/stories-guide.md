@@ -105,6 +105,8 @@ stories/
 
 > **Правило:** только Playground имеет Controls. Документационные стори (`Default`, `Sizes / Themes / Statuses`, `Edge cases`, `Examples`) не имеют Controls и показывают пример кода. `Visual tests` не имеют Controls и не показывают код.
 
+> **Исключение для компонентов без props:** если у компонента нет настраиваемых props (например, контейнер-обёртка с одним только `children` и стандартными HTML-атрибутами), Playground не создаётся — интерактивность нечего показывать. Также убирается блок `Heading>Props` + `ArgTypes` — таблица будет пустой. В этом случае из docs page убираются `Heading>Props`, `ArgTypes`, `Heading>Playground`, `Primary` и `Controls of={Playground}` (см. раздел [Структура docs page](#структура-docs-page)).
+
 > **MCP bundle:** `Playground` и `VisualTests` не попадают в `mcp-data.json` — у них нет кода для агента (Playground интерактивен, VisualTests — скриншот-регрессия). Фильтр реализован в `scripts/generateMcpData.ts` (`EXCLUDED_STORIES`). В остальном для MCP нужен файл примера в `examples/{Component}/` и ссылка на него из колонки `Example file` в `{Component}-AI.md`.
 
 ---
@@ -144,6 +146,22 @@ parameters: {
 },
 ```
 
+Если у компонента нет настраиваемых props (см. [Когда не создавать Playground](#когда-не-создавать-playground)), блок Playground убирается, а вместе с ним и блок `Props` — `ArgTypes` без props покажет пустую таблицу:
+
+```tsx
+parameters: {
+    docs: {
+        page: () => (
+            <>
+                <Title />
+                <Description />
+                <Stories />
+            </>
+        ),
+    },
+},
+```
+
 ---
 
 ## Playground
@@ -151,6 +169,21 @@ parameters: {
 ### Назначение
 
 Playground показывает только те props, которые реально помогают исследовать компонент.
+
+### Когда не создавать Playground
+
+Если у компонента нет настраиваемых props (только `children` и стандартные HTML-атрибуты), Playground не создаётся — нечего класть в Controls. Типичный случай: контейнер-обёртка вроде `ListItem`, `ListItemControls`, `ChipGroup`.
+
+В этом случае:
+
+- В файле stories нет экспорта `Playground` и связанного с ним example-файла.
+- В docs page убираются:
+  - `Heading>Props` и `ArgTypes of={Component}` — без props таблица будет пустой.
+  - `Heading>Playground`, `Primary`, `Controls of={Playground}`.
+  - См. вариант без Playground в разделе [Структура docs page](#структура-docs-page).
+- Из импортов `@storybook/addon-docs/blocks` удаляются `ArgTypes`, `Heading`, `Primary`, `Controls` — остаются только `Title`, `Description`, `Stories`.
+
+Если props всего один-два, но они имеют визуальный эффект — Playground всё равно создаётся, и блок `Props` остаётся.
 
 ### Разделение Controls
 
@@ -210,7 +243,7 @@ tags: ["!autodocs"],
 | Заполнение необязательного props       | Название props **как есть**               | `disabled` → `Disabled` |
 | Нестандартные варианты наполнения      | `With` + вариант                          | `WithTextAndIcon`       |
 | Композиции / production примеры        | `Example`                                 | `Example`               |
-| Скриншот-тесты                         | `Visual tests`                            | `Visual tests`          |
+| Скриншот-тесты                         | `VisualTests`                             | `VisualTests`           |
 
 ---
 
@@ -579,10 +612,10 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ### Документация и структура
 
-- [ ] Есть docs page с `Title`, `Description`, `ArgTypes`, `Playground`, `Stories`
-- [ ] Playground имеет Controls, не показывает код (`sourceState: "none"`)
-- [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`)
-- [ ] Playground скрыт из autodocs (`tags: ["!autodocs"]`)
+- [ ] Есть docs page с `Title`, `Description`, `ArgTypes`, `Playground`, `Stories` (если у компонента нет настраиваемых props — блоки `Props`/`ArgTypes` и `Playground` пропускаются)
+- [ ] Playground имеет Controls, не показывает код (`sourceState: "none"`) — если есть
+- [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`) — если есть
+- [ ] Playground скрыт из autodocs (`tags: ["!autodocs"]`) — если есть
 - [ ] Все документационные стори, кроме Playground, **не** имеют Controls (`controls: { disable: true }`)
 - [ ] Все документационные стори, кроме Playground, показывают пример кода через `source.code`
 - [ ] Все примеры вынесены в `examples/` и реэкспортированы через `index.ts`

@@ -26,7 +26,7 @@ describe("IslandWidget", () => {
     );
     const defaultRenderHeader = (props: IIslandWidgetHeaderProps) => (
         <IslandWidget.Header {...props}>
-            <IslandWidget.Header.Content>Header content</IslandWidget.Header.Content>
+            <IslandWidget.Header.Title>Header content</IslandWidget.Header.Title>
             <IslandWidget.Header.Description>Header description</IslandWidget.Header.Description>
         </IslandWidget.Header>
     );

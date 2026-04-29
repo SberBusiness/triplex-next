@@ -1,8 +1,6 @@
 ---
 component: HelpBox
 category: HelpBox
-figma-node: ""
-figma-file: ""
 related: [Tooltip, ButtonIcon, MobileView, FocusTrap]
 tokens: []
 stories: stories/HelpBox/HelpBox.stories.tsx

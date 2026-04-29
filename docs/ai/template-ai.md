@@ -1,8 +1,6 @@
 ---
 component: ComponentName
 category: Category
-figma-node: "NODE_ID"
-figma-file: "https://www.figma.com/design/FILE_KEY/..."
 related: []
 tokens: []
 stories: stories/Category/ComponentName.stories.tsx
@@ -19,8 +17,6 @@ version: "1.0"
 Описывай намерения и ограничения, которые не видны из кода.
 
 Frontmatter:
-- figma-node: raw-значение параметра `node-id` из URL Figma, например `1-328`
-- figma-file: URL файла / design-ссылка, из которой при необходимости можно получить file key
 - tokens: список CSS-переменных, которые компонент использует
 - related: список связанных компонентов (строки, имена)
 

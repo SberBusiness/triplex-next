@@ -9,15 +9,15 @@ This file is an entry point. Canonical non-negotiable rules live in
 Contains: tech stack, component structure, naming conventions, design tokens,
 prop addition workflow, invariants.
 
-**Component-specific docs:** `src/components/{ComponentName}/{ComponentName}-AI.md`
-Example: `src/components/Button/Button-AI.md`
+**Component-specific docs:** `src/components/{ComponentName}/{ComponentName}-ai.md`
+Example: `src/components/Button/Button-ai.md`
 
 Always use `docs/ai/CONTEXT.md` + `docs/ai/codestyle.md`.
 
-If `{ComponentName}-AI.md` does not exist yet:
+If `{ComponentName}-ai.md` does not exist yet:
 - inspect the component source, stories, and tests
 - follow the local pattern of that component
-- do not create a new `*-AI.md` file unless the task explicitly asks for it
+- do not create a new `*-ai.md` file unless the task explicitly asks for it
 
 **Template for new components:** `docs/ai/template-ai.md`
 
@@ -41,10 +41,10 @@ If `{ComponentName}-AI.md` does not exist yet:
 
 1. Read `docs/ai/CONTEXT.md`
 2. Read `docs/ai/codestyle.md` and the guide for the area you touch
-3. If present, read `src/components/{ComponentName}/{ComponentName}-AI.md`
+3. If present, read `src/components/{ComponentName}/{ComponentName}-ai.md`
 4. Read the component source code, stories, and tests
 5. Make changes: TSX → LESS → story → tests
-6. If `{ComponentName}-AI.md` exists, update the "История изменений" section
+6. If `{ComponentName}-ai.md` exists, update the "История изменений" section
 
 ## Verification before finishing
 

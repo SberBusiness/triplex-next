@@ -86,7 +86,6 @@ npx prettier --write src/components/Button/Button.tsx
 | Файл/папка | Причина |
 |---|---|
 | `__screenshots__/` | Только из Docker/CI. Если нужно — подтвердить в pre-commit hook |
-| `.mcp.json` | Персональный токен Figma — в `.gitignore` |
 | `.env.local` | Секреты — в `.gitignore` |
 | `node_modules/`, `dist/`, `storybook-static/` | В `.gitignore` |
 

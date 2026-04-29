@@ -1,8 +1,6 @@
 ---
 component: EmptyView
 category: Feedback
-figma-node: "80-48"
-figma-file: "https://www.figma.com/design/lpkxmWZ512mG2OJyDvGtHD/-W--LIB-DSN-01-Components-DCB-Next-v.1.3.0"
 related: [Button]
 tokens:
   - --triplex-next-Typography-Primary_Color

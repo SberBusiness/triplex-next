@@ -1,8 +1,6 @@
 ---
 component: ButtonDropdown
 category: Buttons
-figma-node: ""
-figma-file: ""
 related: [Button, ButtonDropdownExtended, Dropdown]
 tokens: []
 stories: stories/Buttons/ButtonDropdown.stories.tsx

@@ -1,8 +1,6 @@
 ---
 component: Button
 category: Buttons
-figma-node: "1-328"
-figma-file: "https://www.figma.com/design/MeAqaaLV9acAgoBOkZC9C2/-W--LIB-DSN-01-Components-DCB-Next-v.1.3.0"
 related: [ButtonIcon, ButtonDropdown, ButtonDropdownExtended]
 tokens:
   - --triplex-next-Button-General_Background_Default

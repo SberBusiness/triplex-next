@@ -1,8 +1,6 @@
 ---
 component: Checkbox
 category: Inputs
-figma-node: ""
-figma-file: ""
 related: [CheckboxXGroup, CheckboxYGroup, CheckboxTree, CheckboxTreeExtended]
 tokens:
   - --triplex-next-Checkbox-Background_Default

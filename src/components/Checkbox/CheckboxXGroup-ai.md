@@ -1,8 +1,6 @@
 ---
 component: CheckboxXGroup
 category: Inputs
-figma-node: ""
-figma-file: ""
 related: [Checkbox]
 tokens: []
 stories: stories/Checkbox/Checkbox.stories.tsx

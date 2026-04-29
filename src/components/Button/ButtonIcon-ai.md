@@ -1,8 +1,6 @@
 ---
 component: ButtonIcon
 category: Buttons
-figma-node: ""
-figma-file: ""
 related: [Button]
 tokens:
   - --triplex-next-Button-Icon_Shadow_Focus

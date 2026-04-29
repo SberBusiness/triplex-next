@@ -115,7 +115,7 @@ stories/
 
 > **Исключение для компонентов без props:** если у компонента нет настраиваемых props (например, контейнер-обёртка с одним только `children` и стандартными HTML-атрибутами), Playground не создаётся — интерактивность нечего показывать. Также убирается блок `Heading>Props` + `ArgTypes` — таблица будет пустой. В этом случае из docs page убираются `Heading>Props`, `ArgTypes`, `Heading>Playground`, `Primary` и `Controls of={Playground}` (см. раздел [Структура docs page](#структура-docs-page)).
 
-> **MCP bundle:** `Playground` и `VisualTests` не попадают в `mcp-data.json` — у них нет кода для агента (Playground интерактивен, VisualTests — скриншот-регрессия). Фильтр реализован в `scripts/generateMcpData.ts` (`EXCLUDED_STORIES`). В остальном для MCP нужен файл примера в `examples/{Component}/` и ссылка на него из колонки `Example file` в `{Component}-AI.md`.
+> **MCP bundle:** `Playground` и `VisualTests` не попадают в `mcp-data.json` — у них нет кода для агента (Playground интерактивен, VisualTests — скриншот-регрессия). Фильтр реализован в `scripts/generateMcpData.ts` (`EXCLUDED_STORIES`). В остальном для MCP нужен файл примера в `examples/{Component}/` и ссылка на него из колонки `Example file` в `{Component}-ai.md`.
 
 ---
 

@@ -16,6 +16,8 @@ import {
     ResponsiveOffsetsExampleSource,
     HiddenColumnsExample,
     HiddenColumnsExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples";
 
 const meta = {
@@ -144,6 +146,19 @@ export const HiddenColumns: Story = {
         docs: {
             description: { story: "Колонки, скрытые на определенных размерах экрана" },
             source: { code: HiddenColumnsExampleSource, language: "tsx" },
+        },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: { code: VisualTestsExampleSource, language: "tsx" },
         },
     },
 };

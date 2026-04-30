@@ -14,6 +14,8 @@ import {
     WithCustomDisplayedValueExampleSource,
     WithNotificationIconExample,
     WithNotificationIconExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples/ChipSelect";
 
 const demoOptions: ISelectFieldOption[] = [
@@ -176,6 +178,7 @@ export const States: Story = {
 export const WithNotificationIcon: Story = {
     render: WithNotificationIconExample,
     parameters: {
+        testRunner: { skip: true },
         controls: { disable: true },
         docs: {
             description: {
@@ -202,5 +205,22 @@ export const WithCustomDisplayedValue: Story = {
                 language: "tsx",
             },
         },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: { code: VisualTestsExampleSource, language: "tsx" },
+        },
+    },
+    render: VisualTestsExample,
+    play: async ({ canvas, userEvent }) => {
+        const chip = await canvas.findByText("Select label");
+        await userEvent.click(chip);
     },
 };

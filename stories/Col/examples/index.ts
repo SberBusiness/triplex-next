@@ -11,3 +11,5 @@ export { ResponsiveOffsetsExample } from "./ResponsiveOffsetsExample";
 export { default as ResponsiveOffsetsExampleSource } from "./ResponsiveOffsetsExample?raw";
 export { HiddenColumnsExample } from "./HiddenColumnsExample";
 export { default as HiddenColumnsExampleSource } from "./HiddenColumnsExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";
+export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";

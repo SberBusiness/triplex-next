@@ -10,6 +10,8 @@ import {
     WithCustomDisplayedValueExample,
     WithCustomDisplayedValueExampleSource,
     PlaygroundExample,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples/ChipDatePicker";
 
 const meta = {
@@ -108,5 +110,22 @@ export const Sizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: SizesExampleSource, language: "tsx" } },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: { code: VisualTestsExampleSource, language: "tsx" },
+        },
+    },
+    render: VisualTestsExample,
+    play: async ({ canvas, userEvent }) => {
+        const chip = await canvas.findByText("Date label");
+        await userEvent.click(chip);
     },
 };

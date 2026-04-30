@@ -4,10 +4,8 @@ import { DeepPartial } from "../../types/CoreTypes";
 
 /** Свойства компонента DateField. */
 export interface IDateFieldProps
-    extends Omit<
-            IDatePickerExtendedProps,
-            "pickedDate" | "onDateChange" | "renderTarget" | "renderDropdownHeaderTarget"
-        >,
+    extends
+        Omit<IDatePickerExtendedProps, "pickedDate" | "onDateChange" | "renderTarget" | "renderDropdownHeaderTarget">,
         Pick<IMaskedFieldProps, "size" | "status" | "label"> {
     /** Значение даты. */
     value: string;
@@ -17,6 +15,11 @@ export interface IDateFieldProps
     invalidDateHint: React.ReactNode;
     /** Функция, вызывающаяся при изменении значения. */
     onChange: (value: string) => void;
+    /** Обработчик очищения значения. */
+    onClear?: React.MouseEventHandler<HTMLButtonElement>;
     /** Свойства MaskedField. */
     targetProps?: DeepPartial<IMaskedFieldProps>;
 }
+
+/** Свойства компонента DateFieldTarget. */
+export interface IDateFieldTargetProps extends IMaskedFieldProps, Pick<IDateFieldProps, "onClear"> {}

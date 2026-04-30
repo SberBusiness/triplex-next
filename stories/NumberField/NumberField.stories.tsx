@@ -37,7 +37,19 @@ export default {
     },
 } satisfies Meta<typeof NumberField>;
 
-const PLAYGROUND_ARGS = {
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof NumberField>,
+    "size" | "status" | "label" | "active" | "inputProps"
+> {
+    /** Текст-заполнитель в поле ввода. */
+    placeholder: string;
+    /** С постфиксом. */
+    withPostfix: boolean;
+    /** С описанием. */
+    withDescription: boolean;
+}
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
     size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,
@@ -48,19 +60,7 @@ const PLAYGROUND_ARGS = {
     placeholder: "0",
     withPostfix: false,
     withDescription: false,
-} as const;
-
-export interface PlaygroundArgs extends Pick<
-    React.ComponentProps<typeof NumberField>,
-    Extract<keyof typeof PLAYGROUND_ARGS, keyof React.ComponentProps<typeof NumberField>>
-> {
-    /** Текст-заполнитель в поле ввода. */
-    placeholder: string;
-    /** С постфиксом. */
-    withPostfix: boolean;
-    /** С описанием. */
-    withDescription: boolean;
-}
+};
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],

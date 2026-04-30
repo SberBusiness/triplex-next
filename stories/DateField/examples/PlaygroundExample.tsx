@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
     DateField,
     HelpBox,
@@ -25,9 +25,15 @@ export const PlaygroundExample = ({
     ...restArgs
 }: PlaygroundArgs) => {
     const [value, setValue] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
         event.preventDefault();
+    }, []);
+
+    const handleClear = useCallback<React.MouseEventHandler<HTMLButtonElement>>(() => {
+        setValue("");
+        inputRef.current?.focus();
     }, []);
 
     return (
@@ -37,7 +43,11 @@ export const PlaygroundExample = ({
                 value={value}
                 status={status}
                 onChange={setValue}
+                onClear={withPostfix ? handleClear : undefined}
                 targetProps={{
+                    maskedInputProps: {
+                        forwardedRef: inputRef,
+                    },
                     postfix: withPostfix && (
                         <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
                     ),

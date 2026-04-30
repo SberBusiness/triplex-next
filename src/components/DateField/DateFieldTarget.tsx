@@ -1,28 +1,31 @@
 import React, { useContext } from "react";
 import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20, CalendarStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { MaskedField, IMaskedFieldProps } from "../TextField/MaskedField";
 import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExtendedContext";
 import { DateFieldContext } from "./DateFieldContext";
-import { EFormFieldStatus } from "../FormField/enums";
+import { MaskedField } from "../TextField/MaskedField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
-import { EComponentSize } from "../../enums";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { isKey } from "../../utils/keyboard";
+import { EComponentSize } from "../../enums";
+import { EFormFieldStatus } from "../FormField/enums";
+import { IDateFieldTargetProps } from "./types";
 
+/** Соответствие размера иконке календаря. */
 const sizeToCalendarIconMap = {
     [EComponentSize.SM]: <CalendarStrokeSrvIcon16 paletteIndex={5} />,
     [EComponentSize.MD]: <CalendarStrokeSrvIcon20 paletteIndex={5} />,
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
-export const DateFieldTarget: React.FC<IMaskedFieldProps> = ({
+export const DateFieldTarget: React.FC<IDateFieldTargetProps> = ({
     size = EComponentSize.MD,
     postfix,
     maskedInputProps,
+    onClear,
     ...restProps
 }) => {
     const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
-    const { inputFocusedRef, onChange, triggerChangeFromInput } = useContext(DateFieldContext);
+    const { inputFocusedRef, triggerChangeFromInput } = useContext(DateFieldContext);
     const { status } = restProps;
     const {
         onFocus: onInputFocus,
@@ -68,16 +71,14 @@ export const DateFieldTarget: React.FC<IMaskedFieldProps> = ({
 
     const handleButtonClick = () => setDropdownOpen(!dropdownOpen);
 
-    const handleClearClick = () => onChange("");
-
     const renderPostfixContent = () => (
-        <React.Fragment>
-            <FormFieldClear onClick={handleClearClick} />
+        <>
+            {onClear && <FormFieldClear onClick={onClear} />}
             <ButtonIcon active={dropdownOpen} disabled={disabled} onClick={handleButtonClick}>
                 {sizeToCalendarIconMap[size]}
             </ButtonIcon>
             {postfix}
-        </React.Fragment>
+        </>
     );
 
     return (

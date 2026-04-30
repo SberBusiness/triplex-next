@@ -4,16 +4,18 @@ import styles from "../styles/ListMasterHeader.module.less";
 
 /** Свойства компонента ListMasterHeader. */
 export interface IListMasterHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Элемент позиционируется как sticky. */
+    /** Sticky-позиционирование (`top: 0`, `z-index: 1`). По умолчанию `true`. */
     sticky?: boolean;
 }
 
-/** Хедер ListMaster. */
+/**
+ * Хедер ListMaster. При монтировании компенсирует свою высоту через `window.scrollTo`,
+ * чтобы появление selection-controls не сдвигало содержимое визуально вниз. При
+ * размонтировании — откатывает скролл.
+ */
 export const ListMasterHeader = React.forwardRef<HTMLDivElement, IListMasterHeaderProps>(
     ({ children, className, sticky = true, ...rest }, ref) => {
-        // Ссылка на контейнер.
         const containerRef = useRef<HTMLDivElement | null>(null);
-        // Высота контейнера.
         const containerHeightRef = useRef(0);
 
         useEffect(() => {
@@ -23,9 +25,8 @@ export const ListMasterHeader = React.forwardRef<HTMLDivElement, IListMasterHead
 
             containerHeightRef.current = containerRef.current.getBoundingClientRect().height;
 
-            /** Компенсация высоты добавленного элемента ListMasterHeader.
-             *  Иначе при выборе чекбокса, он уезжает вниз на высоту ListMasterHeader.
-             */
+            // Компенсация высоты ListMasterHeader: иначе при появлении хедера
+            // содержимое сдвигается вниз на его высоту.
             window.scrollTo({ top: window.scrollY + containerHeightRef.current });
 
             return () => {
@@ -49,7 +50,7 @@ export const ListMasterHeader = React.forwardRef<HTMLDivElement, IListMasterHead
                     {
                         [styles.sticky]: sticky,
                     },
-                    className
+                    className,
                 )}
                 {...rest}
                 ref={setRef}
@@ -57,7 +58,7 @@ export const ListMasterHeader = React.forwardRef<HTMLDivElement, IListMasterHead
                 {children}
             </div>
         );
-    }
+    },
 );
 
 ListMasterHeader.displayName = "ListMasterHeader";

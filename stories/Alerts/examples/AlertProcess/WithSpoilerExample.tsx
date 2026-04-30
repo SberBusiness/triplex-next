@@ -14,7 +14,7 @@ export const WithSpoilerExample = () => {
                 <AlertProcess.Spoiler open={expanded} onOpen={setExpanded}>
                     <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                         У вас нет прав на подписание и отправку заявления в страховую компанию. Подписывать заявления, а
-                        также заверять документы, имеет право генеральный директор на основании устава, владалец ИП на
+                        также заверять документы, имеет право генеральный директор на основании устава, владелец ИП на
                         основании доверенности.
                     </Text>
                 </AlertProcess.Spoiler>

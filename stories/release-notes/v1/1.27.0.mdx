@@ -4,8 +4,40 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.27.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**DateField / MonthYearField**
+
+- Теперь кнопка очистки рендерится только при передаче `onClear`.
+
 <Heading>Изменения</Heading>
 
-**Title**
+**DateField**
 
-- Description.
+- Исправлен `displayName`.
+
+**DateField / MonthYearField**
+
+- Исправлен размер иконки календаря для размера `LG`.
+- Добавлено свойство `onClear` для обработки клика по кнопке очистки.
+
+**IslandAccordion**
+
+- Исправлены отступы.
+- В адаптиве размер `Title` изменен на `H3`.
+- Начертание шрифта `Title` изменено на `Medium`.
+
+**IslandWidget**
+
+- Добавлено свойство `size` (`EComponentSize`) для управления скруглением углов и отступами.
+
+**List**
+
+- Интерфейс `IListItemEmptyProps` переименован в `IListEmptyStateProps` (синхронизация с именем компонента `ListEmptyState`).
+- Исправлен `displayName` компонента `ListEmptyState`.
+
+**ListMaster**
+
+- Добавлен `forwardRef` на `ListMaster`. TypeScript-тип компонента изменён с `React.FC<IListMasterProps>` на `ForwardRefExoticComponent<...>` со статическими свойствами (`Body`, `Header`, ...). Удалён интерфейс `IListMasterFC` — для типизации используй `typeof ListMaster`.
+- Исправлен `displayName` компонента `ListMasterChipGroup` (был `"ListMasterChips"`).
+- Экспортирован интерфейс `IListMasterChipGroupProps` (раньше props инлайнились).

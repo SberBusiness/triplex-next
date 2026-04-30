@@ -38,7 +38,7 @@ Stories выполняют несколько функций (в порядке 
 ### Если prop имеет несколько визуальных вариантов (enum, размер, тема)
 
 - Добавить новую named story: `Sizes`, `Themes`, `Statuses` — в зависимости от типа prop.
-- Создать файл `examples/{PropName}Example.tsx` и реэкспортировать через `examples/index.ts`.
+- Создать файл `examples/{PropName}.tsx` и реэкспортировать через `examples/index.ts`.
 
 ### Если prop — boolean-состояние с видимым эффектом
 
@@ -79,16 +79,24 @@ stories/
       ComponentName.stories.tsx    # основной файл стори
       examples/
         index.ts                   # реэкспорт всех примеров
-        DefaultExample.tsx
-        SizesExample.tsx
-        StatusesExample.tsx
-        ProductionExample.tsx
+        Default.tsx
+        Sizes.tsx
+        Statuses.tsx
+        Production.tsx
         ...
 ```
 
 Если файл сторей компонента находится в папке `stories`, необходимо создать одноименную папку и перенести файл сторей туда.
 
 Все стори выносятся в подпапку `examples/` и импортируются в основной файл. Если в основной папке находятся несколько файлов с расширением `.stories.tsx`, внутри подпапки `examples` необходимо создать подпапки по названию компонентов из файлов с расширением `.stories.tsx`. Также необходимо в каждой такой подпапке создать отдельный файл `index.ts`.
+
+### Именование файлов примеров
+
+- Имя файла = имя story: `Default` → `Default.tsx`, `Sizes` → `Sizes.tsx`, `Playground` → `Playground.tsx`.
+- **Без постфикса `Example`** — не пиши `DefaultExample.tsx`, `SizesExample.tsx`. Если встретишь старые файлы с этим постфиксом, сохраняй локальный паттерн до миграции, но новые файлы создавай без него.
+- Имя экспорта-функции внутри файла совпадает с именем файла: `export const Default = () => ...`.
+- Source-константа: `{StoryName}Source` — `DefaultSource`, `SizesSource`, `PlaygroundSource`.
+- В story-файле импорт компонента-примера делается через alias, чтобы избежать коллизии со story-экспортом: `Default as DefaultRender`, `Playground as PlaygroundRender`. Source без alias.
 
 ---
 
@@ -104,6 +112,10 @@ stories/
 | **Visual tests**              | Дополнительные примеры для скриншот-тестов (если недостаточно основных); исходный код в docs не показывается | Нет      | Нет |
 
 > **Правило:** только Playground имеет Controls. Документационные стори (`Default`, `Sizes / Themes / Statuses`, `Edge cases`, `Examples`) не имеют Controls и показывают пример кода. `Visual tests` не имеют Controls и не показывают код.
+
+> **Исключение для компонентов без props:** если у компонента нет настраиваемых props (например, контейнер-обёртка с одним только `children` и стандартными HTML-атрибутами), Playground не создаётся — интерактивность нечего показывать. Также убирается блок `Heading>Props` + `ArgTypes` — таблица будет пустой. В этом случае из docs page убираются `Heading>Props`, `ArgTypes`, `Heading>Playground`, `Primary` и `Controls of={Playground}` (см. раздел [Структура docs page](#структура-docs-page)).
+
+> **MCP bundle:** `Playground` и `VisualTests` не попадают в `mcp-data.json` — у них нет кода для агента (Playground интерактивен, VisualTests — скриншот-регрессия). Фильтр реализован в `scripts/generateMcpData.ts` (`EXCLUDED_STORIES`). В остальном для MCP нужен файл примера в `examples/{Component}/` и ссылка на него из колонки `Example file` в `{Component}-ai.md`.
 
 ---
 
@@ -142,6 +154,22 @@ parameters: {
 },
 ```
 
+Если у компонента нет настраиваемых props (см. [Когда не создавать Playground](#когда-не-создавать-playground)), блок Playground убирается, а вместе с ним и блок `Props` — `ArgTypes` без props покажет пустую таблицу:
+
+```tsx
+parameters: {
+    docs: {
+        page: () => (
+            <>
+                <Title />
+                <Description />
+                <Stories />
+            </>
+        ),
+    },
+},
+```
+
 ---
 
 ## Playground
@@ -149,6 +177,21 @@ parameters: {
 ### Назначение
 
 Playground показывает только те props, которые реально помогают исследовать компонент.
+
+### Когда не создавать Playground
+
+Если у компонента нет настраиваемых props (только `children` и стандартные HTML-атрибуты), Playground не создаётся — нечего класть в Controls. Типичный случай: контейнер-обёртка вроде `ListItem`, `ListItemControls`, `ChipGroup`.
+
+В этом случае:
+
+- В файле stories нет экспорта `Playground` и связанного с ним example-файла.
+- В docs page убираются:
+  - `Heading>Props` и `ArgTypes of={Component}` — без props таблица будет пустой.
+  - `Heading>Playground`, `Primary`, `Controls of={Playground}`.
+  - См. вариант без Playground в разделе [Структура docs page](#структура-docs-page).
+- Из импортов `@storybook/addon-docs/blocks` удаляются `ArgTypes`, `Heading`, `Primary`, `Controls` — остаются только `Title`, `Description`, `Stories`.
+
+Если props всего один-два, но они имеют визуальный эффект — Playground всё равно создаётся, и блок `Props` остаётся.
 
 ### Разделение Controls
 
@@ -208,7 +251,7 @@ tags: ["!autodocs"],
 | Заполнение необязательного props       | Название props **как есть**               | `disabled` → `Disabled` |
 | Нестандартные варианты наполнения      | `With` + вариант                          | `WithTextAndIcon`       |
 | Композиции / production примеры        | `Example`                                 | `Example`               |
-| Скриншот-тесты                         | `Visual tests`                            | `Visual tests`          |
+| Скриншот-тесты                         | `VisualTests`                             | `VisualTests`           |
 
 ---
 
@@ -252,6 +295,25 @@ import { Button } from "../../../src/components/Button/Button";
 > Иконки импортируются из `@sberbusiness/icons-next`.
 
 Для legacy story-файлов не нужно устраивать отдельную миграцию импортов без задачи.
+
+### Колбэки в примерах
+
+| Файл | Что использовать | Почему |
+| --- | --- | --- |
+| `Playground.tsx`, `VisualTests`-рендеры | `action("eventName")` из `storybook/actions` | Код не показывается через `?raw`, поэтому storybook-импорт допустим. Помогает увидеть события во вкладке Actions при ручной проверке. |
+| Копируемые примеры (`Default`, `Sizes`, `Statuses`, `With*`, production-like `Example`) | Пустые функции `() => {}` | Код показывается через `?raw` и должен копироваться без правок. `alert()`, `console.log()` и `import { action } from "storybook/actions"` ломают копируемость и создают side effects. |
+
+```tsx
+// Playground.tsx
+import { action } from "storybook/actions";
+
+<Component onChange={action("onChange")} />;
+```
+
+```tsx
+// Default.tsx
+<Component onChange={() => {}} />;
+```
 
 ---
 
@@ -384,11 +446,13 @@ render: () => (
 В modern pattern для каждого примера экспортируются два значения — сам компонент и его исходный код:
 
 ```ts
-export * from "./DefaultExample";
-export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export * from "./SizesExample";
-export { default as SizesExampleSource } from "./SizesExample?raw";
+export * from "./Default";
+export { default as DefaultSource } from "./Default?raw";
+export * from "./Sizes";
+export { default as SizesSource } from "./Sizes?raw";
 ```
+
+> **Имена.** Файл и экспорт-функция называются как story (`Default.tsx` экспортирует `Default`). Source-константа добавляет суффикс `Source` (`DefaultSource`). Из-за коллизии с именем story-экспорта в `*.stories.tsx` импорт компонента-примера делается через alias — см. ниже.
 
 ---
 
@@ -397,20 +461,23 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 В modern pattern каждая документационная стори подключает пример и его исходный код через `?raw`:
 
 ```tsx
+import { Default as DefaultRender, DefaultSource } from "./examples";
+
 export const Default: StoryObj<typeof Component> = {
-    name: "Default",
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
     },
 };
 ```
+
+> **Alias обязателен.** Имя экспорта-функции (`Default`) совпадает с именем story-экспорта (`Default: StoryObj`), поэтому в импорте используется `Default as DefaultRender`. Source-константа конфликта не вызывает (`DefaultSource`), её импортируем без alias. То же относится к Playground (`Playground as PlaygroundRender`).
 
 ---
 
@@ -423,7 +490,13 @@ import React, { useState, useCallback } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, SizesExample, SizesExampleSource } from "./examples";
+import {
+    Default as DefaultRender,
+    DefaultSource,
+    Playground as PlaygroundRender,
+    Sizes as SizesRender,
+    SizesSource,
+} from "./examples";
 
 const meta = {
     title: "Components/Group/ComponentName",
@@ -455,9 +528,7 @@ export const Playground: StoryObj<typeof meta> = {
         size: EComponentSize.LG,
         // ...остальные args
     },
-    render: ({ ...args }) => {
-        // ...render с useState и обработчиками
-    },
+    render: PlaygroundRender,
     argTypes: {
         size: {
             control: { type: "select" },
@@ -479,13 +550,12 @@ export const Playground: StoryObj<typeof meta> = {
 };
 
 export const Default: StoryObj<typeof ComponentName> = {
-    name: "Default",
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
@@ -493,13 +563,12 @@ export const Default: StoryObj<typeof ComponentName> = {
 };
 
 export const Sizes: StoryObj<typeof ComponentName> = {
-    name: "Sizes",
-    render: SizesExample,
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: SizesExampleSource,
+                code: SizesSource,
                 language: "tsx",
             },
         },
@@ -507,13 +576,13 @@ export const Sizes: StoryObj<typeof ComponentName> = {
 };
 ```
 
-### `examples/DefaultExample.tsx`
+### `examples/Default.tsx`
 
 ```tsx
 import React, { useState } from "react";
 import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const DefaultExample = () => {
+export const Default = () => {
     const [value, setValue] = useState<string>("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
@@ -526,7 +595,7 @@ export const DefaultExample = () => {
 };
 ```
 
-### `examples/SizesExample.tsx`
+### `examples/Sizes.tsx`
 
 ```tsx
 import React, { useState } from "react";
@@ -551,7 +620,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 
 const SIZES = Object.values(EComponentSize);
 
-export const SizesExample = () => (
+export const Sizes = () => (
     <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
@@ -563,10 +632,10 @@ export const SizesExample = () => (
 ### `examples/index.ts`
 
 ```ts
-export * from "./DefaultExample";
-export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export * from "./SizesExample";
-export { default as SizesExampleSource } from "./SizesExample?raw";
+export * from "./Default";
+export { default as DefaultSource } from "./Default?raw";
+export * from "./Sizes";
+export { default as SizesSource } from "./Sizes?raw";
 ```
 
 ---
@@ -577,10 +646,10 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 
 ### Документация и структура
 
-- [ ] Есть docs page с `Title`, `Description`, `ArgTypes`, `Playground`, `Stories`
-- [ ] Playground имеет Controls, не показывает код (`sourceState: "none"`)
-- [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`)
-- [ ] Playground скрыт из autodocs (`tags: ["!autodocs"]`)
+- [ ] Есть docs page с `Title`, `Description`, `ArgTypes`, `Playground`, `Stories` (если у компонента нет настраиваемых props — блоки `Props`/`ArgTypes` и `Playground` пропускаются)
+- [ ] Playground имеет Controls, не показывает код (`sourceState: "none"`) — если есть
+- [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`) — если есть
+- [ ] Playground скрыт из autodocs (`tags: ["!autodocs"]`) — если есть
 - [ ] Все документационные стори, кроме Playground, **не** имеют Controls (`controls: { disable: true }`)
 - [ ] Все документационные стори, кроме Playground, показывают пример кода через `source.code`
 - [ ] Все примеры вынесены в `examples/` и реэкспортированы через `index.ts`

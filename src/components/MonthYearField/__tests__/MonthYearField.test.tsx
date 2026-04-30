@@ -9,6 +9,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 vi.mock("@sberbusiness/icons-next", () => ({
     CalendarStrokeSrvIcon16: () => <span data-testid="calendar-icon" />,
     CalendarStrokeSrvIcon20: () => <span data-testid="calendar-icon" />,
+    CalendarStrokeSrvIcon24: () => <span data-testid="calendar-icon" />,
     CrossStrokeSrvIcon16: () => <span data-testid="cross-icon" />,
     CaretleftStrokeSrvIcon24: () => <span data-testid="caret-left-icon-24" />,
     CaretrightStrokeSrvIcon24: () => <span data-testid="caret-right-icon-24" />,
@@ -41,16 +42,19 @@ describe("MonthYearField", () => {
         expect(input).toHaveValue("");
     });
 
-    it("calls onChange with empty string when clear button is clicked", async () => {
-        render(<MonthYearField {...defaultProps} />);
+    it("calls onClear when clear button is clicked", async () => {
+        const handleClear = vi.fn();
+        render(<MonthYearField {...defaultProps} onClear={handleClear} />);
 
         const crossIcon = screen.getByTestId("cross-icon");
         const clearButton = crossIcon.closest("button");
 
-        if (clearButton) {
-            fireEvent.click(clearButton);
-            expect(defaultProps.onChange).toHaveBeenCalledWith("");
+        if (clearButton === null) {
+            throw new Error("Clear button not found");
         }
+
+        fireEvent.click(clearButton);
+        expect(handleClear).toHaveBeenCalledTimes(1);
     });
 
     it("disables input when status is disabled", () => {

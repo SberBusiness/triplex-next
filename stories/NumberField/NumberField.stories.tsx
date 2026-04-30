@@ -15,8 +15,9 @@ import {
 } from "./examples";
 
 export default {
-    title: "Components/TextFields/NumberField",
+    title: "Components/NumberField",
     component: NumberField,
+    tags: ["autodocs"],
     parameters: {
         testRunner: { skip: true },
         docs: {
@@ -34,12 +35,12 @@ export default {
             ),
         },
     },
-    tags: ["autodocs"],
 } satisfies Meta<typeof NumberField>;
 
-type PlaygroundControlledProps = "postfix" | "description";
-
-export interface PlaygroundArgs extends Omit<React.ComponentProps<typeof NumberField>, PlaygroundControlledProps> {
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof NumberField>,
+    "size" | "status" | "label" | "active" | "inputProps"
+> {
     /** Текст-заполнитель в поле ввода. */
     placeholder: string;
     /** С постфиксом. */
@@ -48,20 +49,22 @@ export interface PlaygroundArgs extends Omit<React.ComponentProps<typeof NumberF
     withDescription: boolean;
 }
 
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    // Props
+    size: EComponentSize.LG,
+    status: EFormFieldStatus.DEFAULT,
+    label: "Label",
+    active: false,
+    inputProps: {},
+    // Settings
+    placeholder: "0",
+    withPostfix: false,
+    withDescription: false,
+};
+
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    args: {
-        // Props
-        size: EComponentSize.LG,
-        status: EFormFieldStatus.DEFAULT,
-        label: "Label",
-        active: false,
-        inputProps: {},
-        // Settings
-        placeholder: "0",
-        withPostfix: false,
-        withDescription: false,
-    },
+    args: PLAYGROUND_ARGS,
     argTypes: {
         // Props
         size: {
@@ -110,30 +113,17 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             },
         },
     },
-    render: PlaygroundExample,
     parameters: {
         docs: {
             canvas: { sourceState: "none" },
+            codePanel: false,
         },
-        controls: {
-            include: [
-                // Props
-                "size",
-                "status",
-                "label",
-                "active",
-                "inputProps",
-                // Settings
-                "placeholder",
-                "withPostfix",
-                "withDescription",
-            ],
-        },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
     },
+    render: PlaygroundExample,
 };
 
 export const Default: StoryObj<typeof NumberField> = {
-    render: DefaultExample,
     parameters: {
         docs: {
             controls: { disable: true },
@@ -143,10 +133,10 @@ export const Default: StoryObj<typeof NumberField> = {
             },
         },
     },
+    render: DefaultExample,
 };
 
 export const Sizes: StoryObj<typeof NumberField> = {
-    render: SizesExample,
     parameters: {
         docs: {
             controls: { disable: true },
@@ -156,10 +146,10 @@ export const Sizes: StoryObj<typeof NumberField> = {
             },
         },
     },
+    render: SizesExample,
 };
 
 export const Statuses: StoryObj<typeof NumberField> = {
-    render: StatusesExample,
     parameters: {
         docs: {
             controls: { disable: true },
@@ -169,11 +159,11 @@ export const Statuses: StoryObj<typeof NumberField> = {
             },
         },
     },
+    render: StatusesExample,
 };
 
 export const Production: StoryObj<typeof NumberField> = {
     name: "Example: production",
-    render: ProductionExample,
     parameters: {
         docs: {
             controls: { disable: true },
@@ -183,4 +173,5 @@ export const Production: StoryObj<typeof NumberField> = {
             },
         },
     },
+    render: ProductionExample,
 };

@@ -1,20 +1,20 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { HelpBox, ETooltipSize, ETooltipPreferPlace } from "@sberbusiness/triplex-next";
+import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
+import { ETooltipPreferPlace, ETooltipSize, HelpBox } from "@sberbusiness/triplex-next";
 import {
-    DefaultExample,
-    DefaultExampleSource,
-    SizesExample,
-    SizesExampleSource,
-    PlacementExample,
-    PlacementExampleSource,
-    WithMobileHeaderExample,
-    WithMobileHeaderExampleSource,
-    ControlledExample,
-    ControlledExampleSource,
-    ChangeIconPropsExample,
-    ChangeIconPropsExampleSource,
+    ChangeIconProps as ChangeIconPropsRender,
+    ChangeIconPropsSource,
+    Controlled as ControlledRender,
+    ControlledSource,
+    Default as DefaultRender,
+    DefaultSource,
+    Placement as PlacementRender,
+    PlacementSource,
+    Sizes as SizesRender,
+    SizesSource,
+    WithMobileHeader as WithMobileHeaderRender,
+    WithMobileHeaderSource,
 } from "./examples";
 
 interface IHelpBoxPlaygroundProps extends React.ComponentProps<typeof HelpBox> {
@@ -126,12 +126,12 @@ export const Playground: StoryObj<IHelpBoxPlaygroundProps> = {
 
 export const Default: StoryObj<typeof HelpBox> = {
     name: "Default",
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         docs: {
             controls: { disable: true },
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
@@ -140,13 +140,13 @@ export const Default: StoryObj<typeof HelpBox> = {
 
 export const Sizes: StoryObj<typeof HelpBox> = {
     name: "Sizes",
-    render: SizesExample,
+    render: SizesRender,
     parameters: {
         testRunner: { skip: true },
         docs: {
             controls: { disable: true },
             source: {
-                code: SizesExampleSource,
+                code: SizesSource,
                 language: "tsx",
             },
         },
@@ -155,13 +155,13 @@ export const Sizes: StoryObj<typeof HelpBox> = {
 
 export const Placement: StoryObj<typeof HelpBox> = {
     name: "Placement",
-    render: PlacementExample,
+    render: PlacementRender,
     parameters: {
         testRunner: { skip: true },
         docs: {
             controls: { disable: true },
             source: {
-                code: PlacementExampleSource,
+                code: PlacementSource,
                 language: "tsx",
             },
         },
@@ -170,13 +170,13 @@ export const Placement: StoryObj<typeof HelpBox> = {
 
 export const WithMobileHeader: StoryObj<typeof HelpBox> = {
     name: "With Mobile Header",
-    render: WithMobileHeaderExample,
+    render: WithMobileHeaderRender,
     parameters: {
         testRunner: { skip: true },
         docs: {
             controls: { disable: true },
             source: {
-                code: WithMobileHeaderExampleSource,
+                code: WithMobileHeaderSource,
                 language: "tsx",
             },
         },
@@ -185,13 +185,13 @@ export const WithMobileHeader: StoryObj<typeof HelpBox> = {
 
 export const Controlled: StoryObj<typeof HelpBox> = {
     name: "Controlled",
-    render: ControlledExample,
+    render: ControlledRender,
     parameters: {
         testRunner: { skip: true },
         docs: {
             controls: { disable: true },
             source: {
-                code: ControlledExampleSource,
+                code: ControlledSource,
                 language: "tsx",
             },
         },
@@ -200,12 +200,12 @@ export const Controlled: StoryObj<typeof HelpBox> = {
 
 export const ChangeIconProps: StoryObj<typeof HelpBox> = {
     name: "ChangeIconProps",
-    render: ChangeIconPropsExample,
+    render: ChangeIconPropsRender,
     parameters: {
         docs: {
             controls: { disable: true },
             source: {
-                code: ChangeIconPropsExampleSource,
+                code: ChangeIconPropsSource,
                 language: "tsx",
             },
         },

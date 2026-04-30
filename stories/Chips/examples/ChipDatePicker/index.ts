@@ -6,3 +6,5 @@ export { SizesExample } from "./SizesExample";
 export { default as SizesExampleSource } from "./SizesExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";
+export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";

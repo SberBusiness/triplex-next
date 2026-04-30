@@ -3,6 +3,9 @@ dist/
 storybook-static/
 /src/generated/
 
+# 🤖 MCP bundle (генерируется скриптом generateMcpData, публикуется как release asset)
+/mcp-data.json
+
 # 📚 Кэш Storybook
 .cache/
 .storybook/out/
@@ -51,6 +54,3 @@ __screenshots__/__diff__/
 
 # Claude Code (личная память и локальные настройки)
 .claude/
-
-# Figma MCP config (personal token — каждый разработчик создаёт локально из .mcp.json.example)
-.mcp.json

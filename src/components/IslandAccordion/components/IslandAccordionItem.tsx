@@ -12,7 +12,7 @@ import { EIslandType } from "../../Island";
 import { Step, EStepStatus, EStepPosition } from "../../Step";
 import { IslandAccordionContext } from "../IslandAccordionContext";
 import { EComponentSize } from "../../../enums/EComponentSize";
-import { ETitleSize, Title, EFontType } from "../../Typography";
+import { ETitleSize, Title, EFontType, EFontWeightTitle } from "../../Typography";
 import styles from "../styles/IslandAccordion.module.less";
 import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
 import { useMatchMedia } from "../../MediaWidth/useMatchMedia";
@@ -154,6 +154,7 @@ export const IslandAccordionItem = Object.assign(
                                     size={titleSize}
                                     type={disabled ? EFontType.DISABLED : EFontType.PRIMARY}
                                     tag="div"
+                                    weight={EFontWeightTitle.MEDIUM}
                                 >
                                     {title}
                                 </Title>

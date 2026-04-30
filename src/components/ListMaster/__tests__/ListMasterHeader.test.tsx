@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { ListMasterHeader } from "../components/ListMasterHeader";
 
 // jsdom не реализует window.scrollTo и валит ошибку при cleanup'е useEffect.
@@ -13,6 +13,12 @@ describe("ListMasterHeader", () => {
     beforeEach(() => {
         scrollToMock.mockClear();
         Object.defineProperty(window, "scrollY", { value: 0, writable: true, configurable: true });
+    });
+
+    afterEach(() => {
+        // гарантирует откат spyOn(HTMLElement.prototype, "getBoundingClientRect")
+        // даже если ассершен в тесте упал до ручного mockRestore()
+        vi.restoreAllMocks();
     });
 
     it("renders children inside a div", () => {
@@ -46,9 +52,8 @@ describe("ListMasterHeader", () => {
     it("compensates own height via window.scrollTo on mount and rolls back on unmount", () => {
         const HEIGHT = 60;
         // jsdom returns 0 from getBoundingClientRect — стабим значение
-        const getBoundingClientRectSpy = vi
-            .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-            .mockReturnValue({ height: HEIGHT } as DOMRect);
+        // Откат гарантируется afterEach → vi.restoreAllMocks().
+        vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ height: HEIGHT } as DOMRect);
 
         const { unmount } = render(<ListMasterHeader />);
 
@@ -61,15 +66,11 @@ describe("ListMasterHeader", () => {
 
         // последний вызов — откат скролла на величину высоты хедера
         expect(scrollToMock).toHaveBeenLastCalledWith({ top: 100 });
-
-        getBoundingClientRectSpy.mockRestore();
     });
 
     it("clamps rollback at 0 when scrollY is less than header height", () => {
         const HEIGHT = 60;
-        const getBoundingClientRectSpy = vi
-            .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-            .mockReturnValue({ height: HEIGHT } as DOMRect);
+        vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ height: HEIGHT } as DOMRect);
 
         const { unmount } = render(<ListMasterHeader />);
 
@@ -78,7 +79,5 @@ describe("ListMasterHeader", () => {
         unmount();
 
         expect(scrollToMock).toHaveBeenLastCalledWith({ top: 0 });
-
-        getBoundingClientRectSpy.mockRestore();
     });
 });

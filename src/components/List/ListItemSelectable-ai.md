@@ -43,7 +43,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
+```text
 --triplex-next-ListItem-Background          // фон по умолчанию
 --triplex-next-ListItem-Background_Selected // фон, когда selected=true
 ```

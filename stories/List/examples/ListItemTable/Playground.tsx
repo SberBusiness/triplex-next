@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     EComponentSize,
     EFontType,
@@ -14,6 +14,7 @@ import {
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { action } from "storybook/actions";
+import { useArgs } from "storybook/preview-api";
 
 export interface PlaygroundArgs {
     selected: boolean;
@@ -32,19 +33,17 @@ const dropdownOptions = [
     },
 ];
 
-export const Playground = ({ selected: initialSelected }: PlaygroundArgs) => {
-    const [selected, setSelected] = useState(initialSelected);
-
-    React.useEffect(() => {
-        setSelected(initialSelected);
-    }, [initialSelected]);
+export const Playground = ({ selected }: PlaygroundArgs) => {
+    // Привязка к Storybook controls: и Controls panel, и клик по чекбоксу
+    // обновляют один и тот же arg, поэтому состояние не дублируется в локальном useState.
+    const [, updateArgs] = useArgs<PlaygroundArgs>();
 
     return (
         <div style={{ maxWidth: "500px" }}>
             <List>
                 <ListItemTable
                     selected={selected}
-                    onSelect={setSelected}
+                    onSelect={(next) => updateArgs({ selected: next })}
                     onClickItem={action("onClickItem")}
                     controlButtons={
                         <>

@@ -57,7 +57,7 @@ drag-handle нужно вынести в отдельный элемент.
 Сам `ListSortableItem` не использует токены (только z-index при `dragging`).
 Токены применяются в `ListSortableItem.Target`:
 
-```
+```text
 --triplex-next-ListItem-Background           // фон по умолчанию
 --triplex-next-ListItem-Background_Selected  // фон при hover
 --triplex-next-ListItem-Background_Dragging  // фон во время drag

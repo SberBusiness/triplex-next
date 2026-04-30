@@ -116,7 +116,7 @@ CSS-модули в тестах не хешируются (`classNameStrategy: 
 - Все варианты enum-props → корректный класс или атрибут.
 - Каждый колбэк → проверка аргументов вызова (`toHaveBeenCalledWith(...)`, не просто `toHaveBeenCalled`).
 - `forwardRef` → `expect(ref.current).toBeInstanceOf(HTMLXxxElement)`.
-- `className` → проверка что кастомный класс есть на корневом элементе.
+- `className` → проверка, что кастомный класс есть на корневом элементе.
 - Нетривиальные ветки логики (keyboard-обработчики, контекст, conditional rendering).
 
 ---

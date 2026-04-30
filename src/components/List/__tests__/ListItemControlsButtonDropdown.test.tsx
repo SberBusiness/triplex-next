@@ -62,6 +62,9 @@ describe("ListItemControlsButtonDropdown", () => {
         const arrowDown = fireEvent.keyDown(button, { key: "ArrowDown" });
         // fireEvent returns false when an event handler called preventDefault
         expect(arrowDown).toBe(false);
+
+        const arrowUp = fireEvent.keyDown(button, { key: "ArrowUp" });
+        expect(arrowUp).toBe(false);
     });
 
     it("is disabled when disabled prop is set", () => {

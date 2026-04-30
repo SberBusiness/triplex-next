@@ -40,7 +40,7 @@ swipe-actions и selectable.
 Сами стили `ListItem.tsx` пустые — токены применяются в подкомпонентах
 (`ListItemContent`, `ListItemSelectable`):
 
-```
+```text
 --triplex-next-ListItem-Background          // фон по умолчанию
 --triplex-next-ListItem-Background_Selected // фон, когда selected=true
 ```

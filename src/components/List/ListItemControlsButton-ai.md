@@ -45,7 +45,7 @@ version: "1.0"
 
 Паттерн: `--triplex-next-ListItemControlsButton-{Property}_{State}`
 
-```
+```text
 --triplex-next-ListItemControlsButton-Background_Default
 --triplex-next-ListItemControlsButton-Background_Hover
 --triplex-next-ListItemControlsButton-Background_Active   // применяется при :active или классе .expanded (если выставлен снаружи)

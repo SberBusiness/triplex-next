@@ -50,7 +50,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
+```text
 --triplex-next-ListItem-Background          // фон строки
 --triplex-next-ListItem-Background_Selected // фон выбранной строки (через ListItemSelectable + ListItemContent)
 ```

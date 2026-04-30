@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest"; // или jest
 import { Avatar } from "../Avatar";
-import { EAvatarSize } from "../enums";
+import { EAvatarSize, TAvatarBorderRadius } from "../enums";
 
 describe("Avatar component", () => {
     it("should render with default props", () => {
@@ -27,6 +27,28 @@ describe("Avatar component", () => {
             const { unmount } = render(<Avatar size={size} data-testid={`avatar-${size}`} />);
 
             const avatar = screen.getByTestId(`avatar-${size}`);
+            expect(avatar).toHaveClass(expectedClass);
+            unmount();
+        });
+    });
+
+    it("should apply correct border radius classes", () => {
+        const borderRadiuses = [
+            { borderRadius: 10, expectedClass: "borderRadius10" },
+            { borderRadius: 12, expectedClass: "borderRadius12" },
+            { borderRadius: 14, expectedClass: "borderRadius14" },
+        ];
+
+        borderRadiuses.forEach(({ borderRadius, expectedClass }) => {
+            const { unmount } = render(
+                <Avatar
+                    size={EAvatarSize.MD}
+                    borderRadius={borderRadius as TAvatarBorderRadius}
+                    data-testid={`avatar-${borderRadius}`}
+                />,
+            );
+
+            const avatar = screen.getByTestId(`avatar-${borderRadius}`);
             expect(avatar).toHaveClass(expectedClass);
             unmount();
         });

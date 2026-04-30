@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20, CalendarStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { TextField, ITextFieldProps } from "../TextField/TextField";
 import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExtendedContext";
-import { MonthYearFieldContext } from "./MonthYearFieldContext";
-import { EFormFieldStatus } from "../FormField/enums";
+import { TextField } from "../TextField/TextField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
-import { EComponentSize } from "../../enums";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { isKey } from "../../utils/keyboard";
+import { EComponentSize } from "../../enums";
+import { EFormFieldStatus } from "../FormField/enums";
+import { IMonthYearFieldTargetProps } from "./types";
 
 const sizeToCalendarIconMap = {
     [EComponentSize.SM]: <CalendarStrokeSrvIcon16 paletteIndex={5} />,
@@ -15,14 +15,14 @@ const sizeToCalendarIconMap = {
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
-export const MonthYearFieldTarget: React.FC<ITextFieldProps> = ({
+export const MonthYearFieldTarget: React.FC<IMonthYearFieldTargetProps> = ({
     size = EComponentSize.MD,
     postfix,
+    onClear,
     inputProps,
     ...restProps
 }) => {
     const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
-    const { onChange } = useContext(MonthYearFieldContext);
     const { status } = restProps;
     const { onKeyDown: onInputKeyDown, onClick: onInputClick, ...restInputProps } = inputProps;
     const disabled = status === EFormFieldStatus.DISABLED;
@@ -44,11 +44,9 @@ export const MonthYearFieldTarget: React.FC<ITextFieldProps> = ({
 
     const handleButtonClick = () => setDropdownOpen(!dropdownOpen);
 
-    const handleClearClick = () => onChange("");
-
     const renderPostfixContent = () => (
-        <React.Fragment>
-            <FormFieldClear onClick={handleClearClick} />
+        <>
+            {onClear && <FormFieldClear onClick={onClear} />}
             <ButtonIcon
                 role="presentation"
                 tabIndex={-1}
@@ -59,7 +57,7 @@ export const MonthYearFieldTarget: React.FC<ITextFieldProps> = ({
                 {sizeToCalendarIconMap[size]}
             </ButtonIcon>
             {postfix}
-        </React.Fragment>
+        </>
     );
 
     return (

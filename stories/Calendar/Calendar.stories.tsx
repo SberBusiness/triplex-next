@@ -17,7 +17,7 @@ import {
 moment.locale("ru");
 
 const meta = {
-    title: "Components/Calendar",
+    title: "Components/Date components/Calendar",
     component: Calendar,
     tags: ["autodocs"],
     parameters: {

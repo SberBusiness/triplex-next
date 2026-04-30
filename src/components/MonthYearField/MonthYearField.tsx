@@ -20,6 +20,7 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
         format = dateFormatYYYYMMDD,
         limitRange = globalLimitRange,
         onChange,
+        onClear,
         targetProps,
         ...restProps
     } = props;
@@ -43,6 +44,7 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
                     size={size}
                     status={status}
                     label={label}
+                    onClear={onClear}
                     inputProps={{
                         value: pickerValues.inputString,
                         placeholder: placeholder,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
-import { DateField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { MonthYearField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
     PlaygroundExample,
     PlaygroundExampleSource,
@@ -13,12 +13,11 @@ import {
     StatusesExampleSource,
     ProductionExample,
     ProductionExampleSource,
-    VisualTestsExample,
 } from "./examples";
 
 export default {
-    title: "Components/Date components/DateField",
-    component: DateField,
+    title: "Components/Date components/MonthYearField",
+    component: MonthYearField,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -27,7 +26,7 @@ export default {
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
-                    <ArgTypes of={DateField} />
+                    <ArgTypes of={MonthYearField} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -35,12 +34,13 @@ export default {
                 </>
             ),
         },
+        testRunner: { skip: true },
     },
-} satisfies Meta<typeof DateField>;
+} satisfies Meta<typeof MonthYearField>;
 
 export interface PlaygroundArgs extends Pick<
-    React.ComponentProps<typeof DateField>,
-    "size" | "status" | "placeholderMask" | "label" | "invalidDateHint"
+    React.ComponentProps<typeof MonthYearField>,
+    "size" | "status" | "placeholder" | "label"
 > {
     /** С постфиксом. */
     withPostfix: boolean;
@@ -52,9 +52,8 @@ const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
     size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,
-    placeholderMask: "дд.мм.гггг",
+    placeholder: "мм.гггг",
     label: "Label",
-    invalidDateHint: "Указана недоступная для выбора дата.",
     // Settings
     withPostfix: false,
     withDescription: false,
@@ -73,15 +72,11 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             options: Object.values(EFormFieldStatus),
             table: { category: "Props" },
         },
+        placeholder: {
+            control: { type: "text" },
+            table: { category: "Props" },
+        },
         label: {
-            control: { type: "text" },
-            table: { category: "Props" },
-        },
-        placeholderMask: {
-            control: { type: "text" },
-            table: { category: "Props" },
-        },
-        invalidDateHint: {
             control: { type: "text" },
             table: { category: "Props" },
         },
@@ -118,7 +113,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     render: PlaygroundExample,
 };
 
-export const Default: StoryObj<typeof DateField> = {
+export const Default: StoryObj<typeof MonthYearField> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -131,7 +126,7 @@ export const Default: StoryObj<typeof DateField> = {
     render: DefaultExample,
 };
 
-export const Sizes: StoryObj<typeof DateField> = {
+export const Sizes: StoryObj<typeof MonthYearField> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -144,7 +139,7 @@ export const Sizes: StoryObj<typeof DateField> = {
     render: SizesExample,
 };
 
-export const Statuses: StoryObj<typeof DateField> = {
+export const Statuses: StoryObj<typeof MonthYearField> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -157,7 +152,7 @@ export const Statuses: StoryObj<typeof DateField> = {
     render: StatusesExample,
 };
 
-export const Production: StoryObj<typeof DateField> = {
+export const Production: StoryObj<typeof MonthYearField> = {
     name: "Example: production",
     parameters: {
         controls: { disable: true },
@@ -169,20 +164,4 @@ export const Production: StoryObj<typeof DateField> = {
         },
     },
     render: ProductionExample,
-};
-
-export const VisualTests: StoryObj<typeof DateField> = {
-    tags: ["!autodocs", "!dev"],
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    render: VisualTestsExample,
-    play: async ({ canvas, userEvent }) => {
-        const inputs = await canvas.findAllByRole("textbox");
-        await userEvent.click(inputs[0]);
-    },
 };

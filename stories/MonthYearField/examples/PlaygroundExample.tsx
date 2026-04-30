@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import {
-    DateField,
+    MonthYearField,
     HelpBox,
     Text,
     Link,
@@ -9,7 +9,7 @@ import {
     EFormFieldStatus,
     EFontType,
 } from "@sberbusiness/triplex-next";
-import type { PlaygroundArgs } from "../DateField.stories.tsx";
+import type { PlaygroundArgs } from "../MonthYearField.stories.tsx";
 
 const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
     [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
@@ -38,15 +38,15 @@ export const PlaygroundExample = ({
 
     return (
         <div style={{ maxWidth: 300 }}>
-            <DateField
+            <MonthYearField
                 {...restArgs}
                 value={value}
                 status={status}
                 onChange={setValue}
                 onClear={withPostfix ? handleClear : undefined}
                 targetProps={{
-                    maskedInputProps: {
-                        forwardedRef: inputRef,
+                    inputProps: {
+                        ref: inputRef,
                     },
                     postfix: withPostfix && (
                         <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>

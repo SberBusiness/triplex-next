@@ -5,7 +5,9 @@ import { ListItemContext } from "@sberbusiness/triplex-next/components/List/comp
 import styles from "../styles/ListItemSelectable.module.less";
 
 export interface IListItemSelectableProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
+    /** Вызывается при изменении состояния чекбокса. */
     onSelect: (selected: boolean) => void;
+    /** Флаг состояния «выбран». Управляется снаружи. */
     selected: boolean;
 }
 

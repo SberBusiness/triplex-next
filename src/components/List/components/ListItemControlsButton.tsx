@@ -6,6 +6,7 @@ import { Text } from "../../Typography/Text";
 import { IconWrapper } from "../../IconWrapper";
 
 export interface IListItemControlsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Иконка кнопки. Отображается над текстом, если переданы и иконка, и children. */
     icon?: React.ReactNode;
 }
 
@@ -17,8 +18,8 @@ export const ListItemControlsButton = React.forwardRef<HTMLButtonElement, IListI
             className={clsx(
                 styles.listItemControlsButton,
                 {
-                    [styles.withIcon]: typeof icon !== "undefined",
-                    [styles.withText]: typeof children !== "undefined",
+                    [styles.withIcon]: Boolean(icon),
+                    [styles.withText]: Boolean(children),
                 },
                 className,
             )}

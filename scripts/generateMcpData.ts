@@ -15,7 +15,7 @@
  * Для компонентов без AI.md пишем минимальную запись с `raw: null` + `fallback`
  * (имя + путь к stories) — mcp-server возвращает `ai_ready: false`.
  *
- * Подробности: docs/ai/ROADMAP.md, Фаза 4.
+ * Подробности: docs/ai/ROADMAP.md, Фаза 2.
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { basename, dirname, resolve } from "path";
@@ -69,7 +69,7 @@ const GUIDE_TOPICS: { topic: string; file: string }[] = [
     { topic: "tests", file: "tests.md" },
     { topic: "stories", file: "stories-guide.md" },
     { topic: "commits", file: "commits.md" },
-    { topic: "template", file: "template-AI.md" },
+    { topic: "template", file: "template-ai.md" },
 ];
 
 function parseArgs(): { out: string } {
@@ -105,7 +105,7 @@ const EXCLUDED_STORIES = new Set(["Playground", "VisualTests"]);
  *   | Story | Example file | ... |
  *   | `Name` | `NameExample.tsx` | ... |  — или `—` если inline в stories.tsx
  *
- * В multi-component документах (Alert-AI.md: AlertContext + AlertProcess) может
+ * В multi-component документах (Alert-ai.md: AlertContext + AlertProcess) может
  * быть несколько пар "Файлы примеров: + таблица". Активная директория обновляется
  * при каждом появлении строки `Файлы примеров:` и применяется к последующим строкам
  * таблицы до следующего обновления.
@@ -180,14 +180,14 @@ function collectComponents(): ComponentEntry[] {
     const entries: ComponentEntry[] = [];
     const covered = new Set<string>();
 
-    const aiMdPaths = glob.sync("src/components/*/*-AI.md", { cwd: ROOT }).sort();
+    const aiMdPaths = glob.sync("src/components/*/*-ai.md", { cwd: ROOT }).sort();
     for (const relPath of aiMdPaths) {
         const absPath = resolve(ROOT, relPath);
         const raw = readFileSync(absPath, "utf-8");
         const fileName = basename(relPath);
-        const name = fileName.replace(/-AI\.md$/, "");
+        const name = fileName.replace(/-ai\.md$/, "");
         const dirName = basename(dirname(relPath));
-        // Multi-component папки (Button/ButtonIcon-AI.md) — директория считается
+        // Multi-component папки (Button/ButtonIcon-ai.md) — директория считается
         // "покрытой" только если в ней есть AI.md с именем самой директории.
         covered.add(`${dirName}/${name}`);
         entries.push({ name, path: relPath, raw, examples: collectExamples(raw, name), fallback: null });

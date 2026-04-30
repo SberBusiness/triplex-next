@@ -5,6 +5,7 @@ import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { ListItem } from "@sberbusiness/triplex-next/components/List/components/ListItem";
 import clsx from "clsx";
 import styles from "../styles/ListSortableItem.module.less";
+import { setForwardedRef } from "../utils";
 import { ListSortableItemTarget } from "./ListSortableItemTarget";
 
 export interface IListSortableItemChildrenProvideProps {
@@ -35,7 +36,7 @@ export interface IListSortableItemProps extends Omit<React.LiHTMLAttributes<HTML
 export const ListSortableItem = Object.assign(
     React.forwardRef<HTMLLIElement, IListSortableItemProps>(function ListSortableItem(
         { children, className, style, disabled, ...rest },
-        ref
+        ref,
     ) {
         const { transform, transition, listeners, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
             disabled,
@@ -48,11 +49,7 @@ export const ListSortableItem = Object.assign(
 
         const setRef = (instance: HTMLLIElement | null) => {
             setNodeRef(instance);
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
+            setForwardedRef(ref, instance);
         };
 
         return (
@@ -70,7 +67,7 @@ export const ListSortableItem = Object.assign(
     }),
     {
         Target: ListSortableItemTarget,
-    }
+    },
 );
 
 ListSortableItem.displayName = "ListSortableItem";

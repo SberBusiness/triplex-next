@@ -12,7 +12,7 @@ React-библиотека компонентов дизайн-системы.
 Основная линия разработки: `main` → v1.x на React 18 + TypeScript strict.
 Поддерживаемая legacy-линия: `release-0` → v0.x на React 17, синхронизируется мейнтейнерами.
 
-**Основной сценарий работы агента:** добавить новый prop или вариант к существующему компоненту по описанию и/или макету из Figma.
+**Основной сценарий работы агента:** добавить новый prop или вариант к существующему компоненту по текстовому описанию или скриншоту.
 
 ---
 
@@ -48,7 +48,7 @@ src/components/Button/
 │   └── ButtonGeneral.module.less  # Стили по теме/варианту
 ├── __tests__/
 │   └── Button.test.tsx        # Unit-тесты
-└── Button-AI.md               # Документация для AI-агентов (если компонент уже задокументирован)
+└── Button-ai.md               # Документация для AI-агентов (если компонент уже задокументирован)
 ```
 
 Истории (stories) хранятся отдельно. В репозитории встречаются как flat-path файлы
@@ -90,7 +90,7 @@ src/components/Button/
 
 Токены генерируются в `src/generated/themesCssVariables.css`. Не редактируй этот файл вручную.
 
-Если добавляешь новое визуальное состояние — нужен новый токен. Имя токена согласуй с дизайнером в Figma.
+Если добавляешь новое визуальное состояние — нужен новый токен. Имя токена согласуй с дизайнером.
 
 ---
 
@@ -115,14 +115,14 @@ src/components/Button/
 
 Если инструкции расходятся, ориентируйся на них в таком порядке:
 
-1. `src/components/{ComponentName}/{ComponentName}-AI.md` для конкретного компонента, если файл существует
+1. `src/components/{ComponentName}/{ComponentName}-ai.md` для конкретного компонента, если файл существует
 2. `docs/ai/codestyle.md`
 3. Профильный подробный гайд по зоне изменений (`codestyle.md`, `tests.md`, `stories-guide.md`, `commits.md`)
 4. Этот файл (`docs/ai/CONTEXT.md`)
 5. Локальный паттерн исходников компонента, stories и тестов
 
 Не предполагай, что у каждого компонента уже есть AI-документация. Если файла
-`{ComponentName}-AI.md` нет, ориентируйся на код, stories, тесты и общие правила
+`{ComponentName}-ai.md` нет, ориентируйся на код, stories, тесты и общие правила
 репозитория.
 
 ---
@@ -227,28 +227,6 @@ className={clsx(styles.button, styles.general, { [styles.loading]: loading })}
 
 ---
 
-## Figma и MCP
-
-Не у каждого компонента уже есть `{ComponentName}-AI.md`. Если компонент
-задокументирован, Figma-метаданные лежат в frontmatter этого файла.
-
-Формат frontmatter:
-- `figma-node` — значение параметра `node-id` из URL Figma (например, `1-328`)
-- `figma-file` — URL файла / design-ссылка на Figma-файл
-
-Если в вашем окружении настроен Figma MCP или другой интеграционный инструмент:
-1. Возьми `figma-node` из frontmatter компонента
-2. Возьми `figma-file` из frontmatter компонента, если инструменту нужен file key или URL
-3. Используй их для получения дизайн-спецификации
-4. Сравни с текущим кодом и внеси нужные изменения
-
-Если Figma-метаданные для компонента отсутствуют, не выдумывай их: попроси
-ссылку у разработчика или работай по текстовому описанию/скриншоту.
-
-Настройка MCP: см. `docs/ai/ROADMAP.md` → секция "Figma MCP Setup".
-
----
-
 ## Минимальная проверка перед завершением задачи
 
 - Правки документации и конфигов: проверь ссылки, команды, примеры кода и согласованность между файлами.
@@ -262,11 +240,37 @@ className={clsx(styles.button, styles.general, { [styles.loading]: loading })}
 ## Навигация по документации компонентов
 
 Если компонент уже задокументирован, его AI-документация лежит в:
-`src/components/{ComponentName}/{ComponentName}-AI.md`
+`src/components/{ComponentName}/{ComponentName}-ai.md`
 
-Пример: `src/components/Button/Button-AI.md`
+Пример: `src/components/Button/Button-ai.md`
 
-Шаблон для новых компонентов: `docs/ai/template-AI.md`
+Шаблон для новых компонентов: `docs/ai/template-ai.md`
+
+### Когда создавать `{ComponentName}-ai.md`
+
+Не для каждого экспорта из barrel `index.ts` нужен отдельный AI.md — это
+раздуло бы `mcp-data.json` тривиальными wrapper'ами и снизило сигнал/шум для
+AI-агента.
+
+Создавай отдельный AI.md, когда выполняются **оба** условия:
+
+1. Компонент экспортируется из barrel `src/components/{Family}/index.ts`
+   (внутренние/приватные — нет).
+2. У компонента есть нетривиальный API или поведение: собственные props
+   сверх `className + ref + ...rest`, либо state, контекст, клавиатура,
+   callback'и, accessibility-контракт, render-prop, discriminated union.
+
+Тривиальные wrapper'ы (`className + spread + forwardRef` без своей логики)
+описывай разделом **«Связанные компоненты»** в AI.md родителя.
+
+**Пример из семейства List:**
+
+| Создаём AI.md | Описываем в родителе |
+|---|---|
+| `List`, `ListItem`, `ListItemTable`, `ListItemSelectable`, `ListItemControlsButton`, `ListItemControlsButtonDropdown`, `ListSortable`, `ListSortableItem` | `ListItemControls`, `ListItemContent`, `ListEmptyState`, `ListItemLoading`, `ListItemTailLeft`, `ListItemTailRight`, `ListSortableItemTarget`, `ListSortableItemControls` |
+
+В ROADMAP-таблице каждый AI.md-достойный компонент идёт отдельной строкой —
+так считается прогресс покрытия и видны субкомпоненты с собственным API.
 
 ---
 

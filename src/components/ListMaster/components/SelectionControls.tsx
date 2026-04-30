@@ -16,7 +16,7 @@ export const SelectionControls = React.forwardRef<HTMLDivElement, ISelectionCont
         >
             {children}
         </div>
-    )
+    ),
 );
 
 SelectionControls.displayName = "SelectionControls";

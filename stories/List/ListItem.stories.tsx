@@ -1,30 +1,19 @@
-import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as DocsTitle } from "@storybook/addon-docs/blocks";
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
+import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
+import { ListItem } from "@sberbusiness/triplex-next";
 import {
-    List,
-    ListItem,
-    ListItemContent,
-    ListItemControls,
-    ListItemSelectable,
-    ListItemLoading,
-    ListItemControlsButtonDropdown,
-    ListItemControlsButton,
-    ListItemTable,
-    ListItemTailRight,
-} from "../../src/components/List";
-import { EFontType, EFontWeightText, ETextSize, Text } from "../../src/components/Typography";
-import {
-    AttachmentStrokeSrvIcon20,
-    DotshorizontalStrokeSrvIcon20,
-    DefaulticonStrokePrdIcon20,
-} from "@sberbusiness/icons-next";
-import { SwipeableArea, ISwipeableAreaRef } from "../../src/components/SwipeableArea";
-import { MarkerStatus } from "../../src/components/MarkerStatus";
-import { EMarkerStatus } from "../../src/components/Marker/enums";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+    Default as DefaultRender,
+    DefaultSource,
+    Loading as LoadingRender,
+    LoadingSource,
+    Selectable as SelectableRender,
+    SelectableSource,
+    Swipeable as SwipeableRender,
+    SwipeableSource,
+} from "./examples/ListItem";
 
-export default {
+const meta = {
     title: "Components/List/ListItem",
     component: ListItem,
     globals: {
@@ -32,7 +21,6 @@ export default {
     },
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             description: {
                 component: `
@@ -41,389 +29,71 @@ export default {
             },
             page: () => (
                 <>
-                    <DocsTitle />
-                    <Subtitle />
+                    <Title />
                     <Description />
-                    <Primary />
-                    <Controls of={Default} />
                     <Stories />
                 </>
             ),
         },
     },
-} as const;
+} satisfies Meta<typeof ListItem>;
+
+export default meta;
 
 export const Default: StoryObj<typeof ListItem> = {
-    render: () => (
-        <div style={{ maxWidth: "500px" }}>
-            <List>
-                <ListItem>
-                    <ListItemContent>Элемент списка</ListItemContent>
-                </ListItem>
-            </List>
-        </div>
-    ),
+    render: DefaultRender,
     parameters: {
-        docs: { description: { story: "Базовый элемент списка с контентом." } },
         controls: { disable: true },
+        docs: {
+            description: { story: "Базовый элемент списка с контентом." },
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Loading: StoryObj<typeof ListItem> = {
-    render: () => (
-        <div style={{ maxWidth: "500px" }}>
-            <List>
-                <ListItem>
-                    <ListItemLoading />
-                </ListItem>
-            </List>
-        </div>
-    ),
+    render: LoadingRender,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Элемент списка, отображающий подгрузку данных. Отображается последним, при доскролле до него загружаются новые элементы.",
             },
+            source: {
+                code: LoadingSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
 export const Selectable: StoryObj<typeof ListItem> = {
-    render: () => {
-        const [selected, setSelected] = useState(false);
-        return (
-            <div style={{ maxWidth: "500px" }}>
-                <List>
-                    <ListItem>
-                        <ListItemSelectable selected={selected} onSelect={setSelected}>
-                            <ListItemContent>Элемент списка</ListItemContent>
-                        </ListItemSelectable>
-                    </ListItem>
-                </List>
-            </div>
-        );
-    },
+    render: SelectableRender,
     parameters: {
-        docs: { description: { story: "Элемент списка с возможностью выбора." } },
         controls: { disable: true },
+        docs: {
+            description: { story: "Элемент списка с возможностью выбора." },
+            source: {
+                code: SelectableSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Swipeable: StoryObj<typeof ListItem> = {
-    render: () => {
-        const options = [
-            {
-                id: "list-item-swipe-controls-dropdown-option-1",
-                label: "Текст пункта меню 1",
-                onSelect: () => alert("Выбран пункт меню 1."),
-            },
-            {
-                id: "list-item-swipe-controls-dropdown-option-2",
-                label: "Текст пункта меню 2",
-                onSelect: () => alert("Выбран пункт меню 2."),
-            },
-            {
-                id: "list-item-swipe-controls-dropdown-option-3",
-                label: "Текст пункта меню 3",
-                onSelect: () => alert("Выбран пункт меню 3."),
-            },
-        ];
-
-        const ref = React.useRef<ISwipeableAreaRef>(null);
-
-        return (
-            <div style={{ maxWidth: "500px" }}>
-                <button
-                    onClick={() => {
-                        if (ref.current) {
-                            ref.current.swipeLeft();
-                        }
-                    }}
-                >
-                    swipe
-                </button>
-                <button
-                    onClick={() => {
-                        if (ref.current) {
-                            ref.current.closeSwipe();
-                        }
-                    }}
-                >
-                    close
-                </button>
-                <br />
-
-                <List>
-                    <ListItem>
-                        <SwipeableArea
-                            ref={ref}
-                            rightSwipeableArea={
-                                <ListItemControls>
-                                    <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
-                                        Button name
-                                    </ListItemControlsButton>
-                                    <ListItemControlsButtonDropdown
-                                        icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                                        options={options}
-                                    >
-                                        Button name
-                                    </ListItemControlsButtonDropdown>
-                                </ListItemControls>
-                            }
-                        >
-                            <ListItemTailRight />
-                            <ListItemContent>Свайп влево</ListItemContent>
-                        </SwipeableArea>
-                    </ListItem>
-                </List>
-            </div>
-        );
-    },
+    render: SwipeableRender,
     parameters: {
-        docs: { description: { story: "Эмуляция свайпа" } },
         controls: { disable: true },
-    },
-};
-
-export const ListItemForTable: StoryObj<typeof ListItem> = {
-    render: () => {
-        const options = [
-            {
-                id: "button-dropdown-card-option-1",
-                label: "Текст пункта меню 1",
-                onSelect: () => alert("Выбран пункт меню 1."),
-            },
-            {
-                id: "button-dropdown-card-option-2",
-                label: "Текст пункта меню 2",
-                onSelect: () => alert("Выбран пункт меню 2."),
-            },
-            {
-                id: "button-dropdown-card-option-3",
-                label: "Текст пункта меню 3",
-                onSelect: () => alert("Выбран пункт меню 3."),
-            },
-        ];
-
-        return (
-            <div style={{ maxWidth: "500px" }}>
-                <List>
-                    <ListItemTable
-                        onClickItem={() => console.log("Клик по карточке.")}
-                        controlButtons={
-                            <>
-                                <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
-                                    Скачать
-                                </ListItemControlsButton>
-                                <ListItemControlsButtonDropdown
-                                    icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                    options={options}
-                                >
-                                    Действия
-                                </ListItemControlsButtonDropdown>
-                            </>
-                        }
-                    >
-                        <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1 220 000 000 RUB
-                        </Text>
-
-                        <Text size={ETextSize.B3} tag="div">
-                            №1 ООО Голубая Роза Голубая
-                        </Text>
-                        <Text size={ETextSize.B3} tag="div">
-                            Длинное назначение платежа
-                        </Text>
-                        <Text size={ETextSize.B3} type={EFontType.SECONDARY} tag="div">
-                            НДС не облагается
-                        </Text>
-                        <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
-                            40702 810 2 0527 5000000 от 09.04.24
-                        </Text>
-                        <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
-                            Status text
-                        </MarkerStatus>
-                    </ListItemTable>
-                </List>
-            </div>
-        );
-    },
-    parameters: {
-        docs: { description: { story: "Элемент списка для отображения табличных данных на мобильных устройствах." } },
-        controls: { disable: true },
-    },
-};
-
-export const ListItemForTableWithSwipeEmulation: StoryObj<typeof ListItem> = {
-    render: () => {
-        const options = [
-            {
-                id: "button-dropdown-swipe-emulation-option-1",
-                label: "Текст пункта меню 1",
-                onSelect: () => alert("Выбран пункт меню 1."),
-            },
-            {
-                id: "button-dropdown-swipe-emulation-card-option-2",
-                label: "Текст пункта меню 2",
-                onSelect: () => alert("Выбран пункт меню 2."),
-            },
-            {
-                id: "button-dropdown-swipe-emulation-card-option-3",
-                label: "Текст пункта меню 3",
-                onSelect: () => alert("Выбран пункт меню 3."),
-            },
-        ];
-
-        const ref = React.useRef<ISwipeableAreaRef>(null);
-
-        return (
-            <div style={{ maxWidth: "500px" }}>
-                <button
-                    onClick={() => {
-                        if (ref.current) {
-                            ref.current.swipeLeft();
-                        }
-                    }}
-                >
-                    swipe
-                </button>
-                <button
-                    onClick={() => {
-                        if (ref.current) {
-                            ref.current.closeSwipe();
-                        }
-                    }}
-                >
-                    close
-                </button>
-                <br />
-
-                <List>
-                    <ListItemTable
-                        swipeableAreaRef={ref}
-                        onClickItem={() => console.log("Клик по карточке.")}
-                        controlButtons={
-                            <>
-                                <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
-                                    Скачать
-                                </ListItemControlsButton>
-                                <ListItemControlsButtonDropdown
-                                    icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                    options={options}
-                                >
-                                    Действия
-                                </ListItemControlsButtonDropdown>
-                            </>
-                        }
-                    >
-                        <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1 220 000 000 RUB
-                        </Text>
-
-                        <Text size={ETextSize.B3} tag="div">
-                            №1 ООО Голубая Роза Голубая
-                        </Text>
-                        <Text size={ETextSize.B3} tag="div">
-                            Длинное назначение платежа
-                        </Text>
-                        <Text size={ETextSize.B3} type={EFontType.SECONDARY} tag="div">
-                            НДС не облагается
-                        </Text>
-                        <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
-                            40702 810 2 0527 5000000 от 09.04.24
-                        </Text>
-                        <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
-                            Status text
-                        </MarkerStatus>
-                    </ListItemTable>
-                </List>
-            </div>
-        );
-    },
-    parameters: {
         docs: {
-            description: {
-                story: "Элемент списка для отображения табличных данных на мобильных устройствах с эмуляцией свайпа.",
+            description: { story: "Эмуляция свайпа" },
+            source: {
+                code: SwipeableSource,
+                language: "tsx",
             },
         },
-        controls: { disable: true },
-    },
-};
-
-export const ListItemForTableWithSelectable: StoryObj<typeof ListItem> = {
-    render: () => {
-        const options = [
-            {
-                id: "button-dropdown-card-with-selectable-option-1",
-                label: "Текст пункта меню 1",
-                onSelect: () => alert("Выбран пункт меню 1."),
-            },
-            {
-                id: "button-dropdown-card-with-selectable-option-2",
-                label: "Текст пункта меню 2",
-                onSelect: () => alert("Выбран пункт меню 2."),
-            },
-            {
-                id: "button-dropdown-card-with-selectable-option-3",
-                label: "Текст пункта меню 3",
-                onSelect: () => alert("Выбран пункт меню 3."),
-            },
-        ];
-
-        const [selected, setSelected] = React.useState(false);
-
-        return (
-            <div style={{ maxWidth: "500px" }}>
-                <List>
-                    <ListItemTable
-                        selected={selected}
-                        onSelect={setSelected}
-                        onClickItem={() => console.log("Клик по карточке.")}
-                        controlButtons={
-                            <>
-                                <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
-                                    Скачать
-                                </ListItemControlsButton>
-                                <ListItemControlsButtonDropdown
-                                    icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                    options={options}
-                                >
-                                    Действия
-                                </ListItemControlsButtonDropdown>
-                            </>
-                        }
-                    >
-                        <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                            1 220 000 000 RUB
-                        </Text>
-
-                        <Text size={ETextSize.B3} tag="div">
-                            №1 ООО Голубая Роза Голубая
-                        </Text>
-                        <Text size={ETextSize.B3} tag="div">
-                            Длинное назначение платежа
-                        </Text>
-                        <Text size={ETextSize.B3} type={EFontType.SECONDARY} tag="div">
-                            НДС не облагается
-                        </Text>
-                        <Text size={ETextSize.B3} tag="div" type={EFontType.SECONDARY}>
-                            40702 810 2 0527 5000000 от 09.04.24
-                        </Text>
-                        <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
-                            Status text
-                        </MarkerStatus>
-                    </ListItemTable>
-                </List>
-            </div>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Элемент списка для отображения табличных данных на мобильных устройствах с возможностью выбора элемента.",
-            },
-        },
-        controls: { disable: true },
     },
 };

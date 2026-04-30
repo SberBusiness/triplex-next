@@ -16,7 +16,7 @@ import {
 } from "./examples";
 
 const meta = {
-    title: "Components/MonthYearRange",
+    title: "Components/Date components/MonthYearRange",
     component: MonthYearRange,
     tags: ["autodocs"],
     parameters: {

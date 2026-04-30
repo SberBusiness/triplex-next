@@ -3,10 +3,8 @@ import { ITextFieldProps } from "../TextField/TextField";
 
 /** Свойства компонента MonthYearField. */
 export interface IMonthYearFieldProps
-    extends Omit<
-            IDatePickerExtendedProps,
-            "pickedDate" | "onDateChange" | "renderTarget" | "renderDropdownHeaderTarget"
-        >,
+    extends
+        Omit<IDatePickerExtendedProps, "pickedDate" | "onDateChange" | "renderTarget" | "renderDropdownHeaderTarget">,
         Pick<ITextFieldProps, "size" | "status" | "label"> {
     /** Значение даты. */
     value: string;
@@ -14,6 +12,11 @@ export interface IMonthYearFieldProps
     placeholder?: string;
     /** Функция, вызывающаяся при изменении значения. */
     onChange: (value: string) => void;
+    /** Обработчик очищения значения. */
+    onClear?: React.MouseEventHandler<HTMLButtonElement>;
     /** Свойства TextField. */
     targetProps?: ITextFieldProps;
 }
+
+/** Свойства компонента MonthYearFieldTarget. */
+export interface IMonthYearFieldTargetProps extends ITextFieldProps, Pick<IMonthYearFieldProps, "onClear"> {}

@@ -296,6 +296,25 @@ import { Button } from "../../../src/components/Button/Button";
 
 Для legacy story-файлов не нужно устраивать отдельную миграцию импортов без задачи.
 
+### Колбэки в примерах
+
+| Файл | Что использовать | Почему |
+| --- | --- | --- |
+| `Playground.tsx`, `VisualTests`-рендеры | `action("eventName")` из `storybook/actions` | Код не показывается через `?raw`, поэтому storybook-импорт допустим. Помогает увидеть события во вкладке Actions при ручной проверке. |
+| Копируемые примеры (`Default`, `Sizes`, `Statuses`, `With*`, production-like `Example`) | Пустые функции `() => {}` | Код показывается через `?raw` и должен копироваться без правок. `alert()`, `console.log()` и `import { action } from "storybook/actions"` ломают копируемость и создают side effects. |
+
+```tsx
+// Playground.tsx
+import { action } from "storybook/actions";
+
+<Component onChange={action("onChange")} />;
+```
+
+```tsx
+// Default.tsx
+<Component onChange={() => {}} />;
+```
+
 ---
 
 ## Скриншот-тесты

@@ -13,6 +13,7 @@ import {
     Text,
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { action } from "storybook/actions";
 
 export interface PlaygroundArgs {
     selected: boolean;
@@ -22,12 +23,12 @@ const dropdownOptions = [
     {
         id: "playground-dropdown-option-1",
         label: "Текст пункта меню 1",
-        onSelect: () => alert("Выбран пункт меню 1."),
+        onSelect: action("onSelect: option 1"),
     },
     {
         id: "playground-dropdown-option-2",
         label: "Текст пункта меню 2",
-        onSelect: () => alert("Выбран пункт меню 2."),
+        onSelect: action("onSelect: option 2"),
     },
 ];
 
@@ -44,7 +45,7 @@ export const Playground = ({ selected: initialSelected }: PlaygroundArgs) => {
                 <ListItemTable
                     selected={selected}
                     onSelect={setSelected}
-                    onClickItem={() => console.log("Клик по карточке.")}
+                    onClickItem={action("onClickItem")}
                     controlButtons={
                         <>
                             <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>

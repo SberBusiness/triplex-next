@@ -19,17 +19,17 @@ export const Default = () => {
         {
             id: "button-dropdown-card-option-1",
             label: "Текст пункта меню 1",
-            onSelect: () => alert("Выбран пункт меню 1."),
+            onSelect: () => {},
         },
         {
             id: "button-dropdown-card-option-2",
             label: "Текст пункта меню 2",
-            onSelect: () => alert("Выбран пункт меню 2."),
+            onSelect: () => {},
         },
         {
             id: "button-dropdown-card-option-3",
             label: "Текст пункта меню 3",
-            onSelect: () => alert("Выбран пункт меню 3."),
+            onSelect: () => {},
         },
     ];
 
@@ -37,7 +37,7 @@ export const Default = () => {
         <div style={{ maxWidth: "500px" }}>
             <List>
                 <ListItemTable
-                    onClickItem={() => console.log("Клик по карточке.")}
+                    onClickItem={() => {}}
                     controlButtons={
                         <>
                             <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>

@@ -215,11 +215,8 @@ export const Default = () => {
         setMultiselectStatusValues(allStatuses);
         setDateFrom("");
         setDateTo("");
-    };
-
-    React.useEffect(() => {
         setSelectedListItemIds([]);
-    }, [selectedTabLineId, accountValue, counterpartyValue, multiselectStatusValues, dateFrom, dateTo]);
+    };
 
     const changedFiltersCount =
         (accountValue ? 1 : 0) +
@@ -331,7 +328,10 @@ export const Default = () => {
                     <TabsLine
                         tabs={tabsLine}
                         selectedId={selectedTabLineId}
-                        onChangeTab={(tabId) => setSelectedTabLineId(tabId as TTabId)}
+                        onChangeTab={(tabId) => {
+                            setSelectedTabLineId(tabId as TTabId);
+                            setSelectedListItemIds([]);
+                        }}
                         paddingX={16}
                         withSeparator
                     />
@@ -365,7 +365,10 @@ export const Default = () => {
                             value={accountValue}
                             options={accountOptions}
                             tooltipOpen={accountTooltipOpen}
-                            onSelect={setAccountValue}
+                            onSelect={(value) => {
+                                setAccountValue(value);
+                                setSelectedListItemIds([]);
+                            }}
                             onFilter={(input) => {
                                 if (!input) {
                                     const initial = accountInitialOptionsRef.current;
@@ -379,7 +382,12 @@ export const Default = () => {
                                 setAccountOptions(filtered);
                                 setAccountTooltipOpen(filtered.length === 0);
                             }}
-                            targetProps={{ clearSelected: () => setAccountValue(undefined) }}
+                            targetProps={{
+                                clearSelected: () => {
+                                    setAccountValue(undefined);
+                                    setSelectedListItemIds([]);
+                                },
+                            }}
                             dropdownProps={{
                                 onOpen: () => {
                                     setAccountOptions(accountInitialOptionsRef.current);
@@ -396,7 +404,10 @@ export const Default = () => {
                             value={counterpartyValue}
                             options={counterpartyOptions}
                             tooltipOpen={counterpartyTooltipOpen}
-                            onSelect={setCounterpartyValue}
+                            onSelect={(value) => {
+                                setCounterpartyValue(value);
+                                setSelectedListItemIds([]);
+                            }}
                             onFilter={(input) => {
                                 if (!input) {
                                     const initial = counterpartyInitialOptionsRef.current;
@@ -410,7 +421,12 @@ export const Default = () => {
                                 setCounterpartyOptions(filtered);
                                 setCounterpartyTooltipOpen(filtered.length === 0);
                             }}
-                            targetProps={{ clearSelected: () => setCounterpartyValue(undefined) }}
+                            targetProps={{
+                                clearSelected: () => {
+                                    setCounterpartyValue(undefined);
+                                    setSelectedListItemIds([]);
+                                },
+                            }}
                             dropdownProps={{
                                 onOpen: () => {
                                     setCounterpartyOptions(counterpartyInitialOptionsRef.current);
@@ -420,7 +436,10 @@ export const Default = () => {
                         />
 
                         <ChipMultiselect
-                            clearSelected={() => setMultiselectStatusValues(allStatuses)}
+                            clearSelected={() => {
+                                setMultiselectStatusValues(allStatuses);
+                                setSelectedListItemIds([]);
+                            }}
                             selected={multiselectStatusValues.length !== allStatuses.length}
                             label="Статус"
                             displayedValue={`${multiselectStatusValues.length}`}
@@ -457,6 +476,7 @@ export const Default = () => {
                                                                     }
                                                                     return prev.filter((v) => v !== opt.value);
                                                                 });
+                                                                setSelectedListItemIds([]);
                                                             }}
                                                         >
                                                             {opt.label}
@@ -473,7 +493,10 @@ export const Default = () => {
                         <ChipDatePicker
                             value={dateFrom}
                             label="Дата с"
-                            onChange={setDateFrom}
+                            onChange={(value) => {
+                                setDateFrom(value);
+                                setSelectedListItemIds([]);
+                            }}
                             size={EComponentSize.MD}
                             status={EFormFieldStatus.DEFAULT}
                         />
@@ -481,7 +504,10 @@ export const Default = () => {
                         <ChipDatePicker
                             value={dateTo}
                             label="Дата по"
-                            onChange={setDateTo}
+                            onChange={(value) => {
+                                setDateTo(value);
+                                setSelectedListItemIds([]);
+                            }}
                             size={EComponentSize.MD}
                             status={EFormFieldStatus.DEFAULT}
                         />
@@ -605,7 +631,10 @@ export const Default = () => {
                                         value={accountValue}
                                         options={accountOptions}
                                         tooltipOpen={accountTooltipOpen}
-                                        onSelect={setAccountValue}
+                                        onSelect={(value) => {
+                                            setAccountValue(value);
+                                            setSelectedListItemIds([]);
+                                        }}
                                         onFilter={(input) => {
                                             if (!input) {
                                                 const initial = accountInitialOptionsRef.current;
@@ -619,7 +648,12 @@ export const Default = () => {
                                             setAccountOptions(filtered);
                                             setAccountTooltipOpen(filtered.length === 0);
                                         }}
-                                        targetProps={{ clearSelected: () => setAccountValue(undefined) }}
+                                        targetProps={{
+                                            clearSelected: () => {
+                                                setAccountValue(undefined);
+                                                setSelectedListItemIds([]);
+                                            },
+                                        }}
                                         dropdownProps={{
                                             onOpen: () => {
                                                 setAccountOptions(accountInitialOptionsRef.current);
@@ -636,7 +670,10 @@ export const Default = () => {
                                         value={counterpartyValue}
                                         options={counterpartyOptions}
                                         tooltipOpen={counterpartyTooltipOpen}
-                                        onSelect={setCounterpartyValue}
+                                        onSelect={(value) => {
+                                            setCounterpartyValue(value);
+                                            setSelectedListItemIds([]);
+                                        }}
                                         onFilter={(input) => {
                                             if (!input) {
                                                 const initial = counterpartyInitialOptionsRef.current;
@@ -650,7 +687,12 @@ export const Default = () => {
                                             setCounterpartyOptions(filtered);
                                             setCounterpartyTooltipOpen(filtered.length === 0);
                                         }}
-                                        targetProps={{ clearSelected: () => setCounterpartyValue(undefined) }}
+                                        targetProps={{
+                                            clearSelected: () => {
+                                                setCounterpartyValue(undefined);
+                                                setSelectedListItemIds([]);
+                                            },
+                                        }}
                                         dropdownProps={{
                                             onOpen: () => {
                                                 setCounterpartyOptions(counterpartyInitialOptionsRef.current);
@@ -667,7 +709,10 @@ export const Default = () => {
                                 <Gap size={16} />
 
                                 <ChipMultiselect
-                                    clearSelected={() => setMultiselectStatusValues(allStatuses)}
+                                    clearSelected={() => {
+                                        setMultiselectStatusValues(allStatuses);
+                                        setSelectedListItemIds([]);
+                                    }}
                                     selected={multiselectStatusValues.length !== allStatuses.length}
                                     label="Статус"
                                     displayedValue={`${multiselectStatusValues.length}`}
@@ -697,6 +742,7 @@ export const Default = () => {
                                                                         }
                                                                         return prev.filter((v) => v !== opt.value);
                                                                     });
+                                                                    setSelectedListItemIds([]);
                                                                 }}
                                                             >
                                                                 {opt.label}

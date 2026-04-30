@@ -1,7 +1,7 @@
 ---
 component: List
 category: List
-related: [ListSortable, ListItem, ListEmptyState, ListItemLoading]
+related: [ListSortable, ListItem, ListEmptyState, ListItemLoading, LoaderScreen]
 tokens: []
 stories: stories/List/List.stories.tsx
 version: "1.0"

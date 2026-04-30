@@ -10,6 +10,8 @@ import {
     PlaygroundExample,
     SizesExample,
     SizesExampleSource,
+    BorderRadiusExample,
+    BorderRadiusExampleSource,
 } from "./examples";
 
 const meta = {
@@ -50,7 +52,7 @@ export const Playground: Story = {
     parameters: {
         testRunner: { skip: true },
         controls: {
-            include: ["size"],
+            include: ["size", "borderRadius"],
         },
         docs: {
             canvas: { sourceState: "none" },
@@ -66,9 +68,18 @@ export const Playground: Story = {
                 type: { summary: "EAvatarSize" },
             },
         },
+        borderRadius: {
+            control: { type: "select" },
+            options: [10, 12, 14],
+            table: {
+                type: { summary: "TAvatarBorderRadius" },
+                defaultValue: { summary: "12" },
+            },
+        },
     },
     args: {
         size: EAvatarSize.XXL,
+        borderRadius: 12,
     },
     render: PlaygroundExample,
 };
@@ -103,6 +114,23 @@ export const Sizes: Story = {
         size: EAvatarSize.XXL,
     },
     render: SizesExample,
+};
+
+export const BorderRadius: Story = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: BorderRadiusExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    args: {
+        size: EAvatarSize.XXL,
+        borderRadius: 10,
+    },
+    render: BorderRadiusExample,
 };
 
 export const Example: Story = {

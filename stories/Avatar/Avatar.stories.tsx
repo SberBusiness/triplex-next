@@ -70,7 +70,7 @@ export const Playground: Story = {
         },
         borderRadius: {
             control: { type: "select" },
-            options: [10, 12, 14],
+            options: [6, 8, 10, 12, 16],
             table: {
                 type: { summary: "TAvatarBorderRadius" },
                 defaultValue: { summary: "12" },

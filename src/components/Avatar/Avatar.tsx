@@ -16,9 +16,11 @@ const SIZE_TO_CLASS_NAME_MAP: Record<EAvatarSize, string> = {
 };
 
 const BORDER_RADIUS_TO_CLASS_NAME_MAP: Record<TAvatarBorderRadius, string> = {
+    6: styles.borderRadius6,
+    8: styles.borderRadius8,
     10: styles.borderRadius10,
     12: styles.borderRadius12,
-    14: styles.borderRadius14,
+    16: styles.borderRadius16,
 };
 
 /** Аватар, предназначен для отображения изображений профиля пользователя, инициалов или иконок. */

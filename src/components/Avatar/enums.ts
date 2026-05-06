@@ -9,4 +9,4 @@ export enum EAvatarSize {
     XXL = "xxl",
 }
 
-export type TAvatarBorderRadius = 10 | 12 | 14;
+export type TAvatarBorderRadius = 6 | 8 | 10 | 12 | 16;

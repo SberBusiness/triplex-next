@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, EAvatarSize, TAvatarBorderRadius } from "@sberbusiness/triplex-next";
 
-const BORDER_RADIUSES: TAvatarBorderRadius[] = [10, 12, 14];
+const BORDER_RADIUSES: TAvatarBorderRadius[] = [6, 8, 10, 12, 16];
 
 export const BorderRadiusExample = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>

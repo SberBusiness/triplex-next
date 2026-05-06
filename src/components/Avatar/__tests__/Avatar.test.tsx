@@ -34,9 +34,11 @@ describe("Avatar component", () => {
 
     it("should apply correct border radius classes", () => {
         const borderRadiuses = [
+            { borderRadius: 6, expectedClass: "borderRadius6" },
+            { borderRadius: 8, expectedClass: "borderRadius8" },
             { borderRadius: 10, expectedClass: "borderRadius10" },
             { borderRadius: 12, expectedClass: "borderRadius12" },
-            { borderRadius: 14, expectedClass: "borderRadius14" },
+            { borderRadius: 16, expectedClass: "borderRadius16" },
         ];
 
         borderRadiuses.forEach(({ borderRadius, expectedClass }) => {

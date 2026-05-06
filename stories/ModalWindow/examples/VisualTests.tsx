@@ -46,7 +46,11 @@ const VisualTestsModal = ({
                 {VISUAL_TESTS_TRIGGER_LABEL}
             </Button>
 
-            <ModalWindow isOpen={isOpen} size={size} closeButton={<ModalWindowClose onClick={handleClose} />}>
+            <ModalWindow
+                isOpen={isOpen}
+                size={size}
+                closeButton={<ModalWindowClose onClick={handleClose} title="Закрыть" />}
+            >
                 <ModalWindowContent isLoading={isLoading} loadingTitle={isLoading ? "Загрузка данных..." : undefined}>
                     <ModalWindowHeader>
                         <ModalWindowHeader.Title>

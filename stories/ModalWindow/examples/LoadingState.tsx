@@ -31,7 +31,7 @@ export const LoadingState = () => {
             <ModalWindow
                 isOpen={isOpen}
                 size={EComponentSize.MD}
-                closeButton={<ModalWindowClose onClick={handleClose} />}
+                closeButton={<ModalWindowClose onClick={handleClose} title="Закрыть" />}
             >
                 <ModalWindowContent isLoading loadingTitle="Загрузка данных...">
                     <ModalWindowHeader>

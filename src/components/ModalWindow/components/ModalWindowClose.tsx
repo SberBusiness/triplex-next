@@ -22,7 +22,6 @@ export const ModalWindowClose: React.FC<IModalWindowCloseProps> = (props) => {
         <div className={styles.modalWindowClose}>
             <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={ref}>
                 <Button
-                    title="Закрыть"
                     ref={ref}
                     icon={<CrossStrokeSrvIcon20 paletteIndex={0} />}
                     {...props}

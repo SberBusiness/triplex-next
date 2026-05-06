@@ -102,7 +102,7 @@ version: "1.0"
 - **`ModalWindowHeader`** — заголовок. Тривиальная обёртка над `HeaderPage` с фиксированным `type=FIRST` и доп. отступом справа под кнопку закрытия (через less). Экспонирует статическое поле `Title = HeaderPage.Title`. Тип `IModalWindowHeaderProps` (Omit `children`/`type` от `IHeaderPageTypeFirstProps`).
 - **`ModalWindowBody`** — тело. Тривиальная обёртка над `Island` с фиксированными `type=TYPE_1` и `size=MD`. Тип `IModalWindowBodyProps extends IIslandProps`.
 - **`ModalWindowFooter`** — футер. Тривиальная обёртка над `FooterPage` с фиксированным `type=FIRST`. Экспонирует статическое поле `Description = FooterPage.Description`.
-- **`ModalWindowClose`** — кнопка закрытия. Обёртка над `Button` (`theme=SECONDARY`, `size=MD`, иконка `CrossStrokeSrvIcon20`) внутри `TriggerClickOnKeyDownEvent` с `EVENT_KEY_CODES.ESCAPE`. По умолчанию `title="Закрыть"` — потребитель может переопределить через props. Тип `IModalWindowCloseProps` (Omit `size`/`theme`/`icon` от `IButtonSecondaryProps`).
+- **`ModalWindowClose`** — кнопка закрытия. Обёртка над `Button` (`theme=SECONDARY`, `size=MD`, иконка `CrossStrokeSrvIcon20`) внутри `TriggerClickOnKeyDownEvent` с `EVENT_KEY_CODES.ESCAPE`. **Текст `title` не имеет дефолта внутри компонента** — библиотека мультиязычная, локализованную подсказку (например, `title="Закрыть"`) передаёт потребитель через props. Тип `IModalWindowCloseProps` (Omit `size`/`theme`/`icon` от `IButtonSecondaryProps`).
 - **`ModalWindowViewManager`** — невидимый компонент-сенсор. Создаёт DOM-ноду `<div id="modalWindowViewManagerNodeId">` (если её нет в `body`) и рендерит туда через `Portal` resize-сенсор + `<style>`-инжект CSS-переменных `--modalWindow-screen-*` в `:root`. Подключается автоматически из `ModalWindow`; экспортируется отдельно для случая, когда лайаут хочет позиционировать ноду вручную (например, рисовать модалку только в области рабочей зоны без шапки).
 
 ---
@@ -129,3 +129,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-05-04 | Создан документ. AI-рефакторинг: добавлены JSDoc на компоненты и props, экспортирован `IModalWindowContentProps`, унифицированы импорты в `ModalWindowClose`, добавлен `displayName` субкомпонентам. Stories мигрированы в modern pattern (папка `examples/`, `?raw`, публичные импорты). Добавлены unit-тесты на `ModalWindowContent`, `ModalWindowClose`, `ModalWindowBody`, `ModalWindowHeader`, `ModalWindowFooter`. |
+| 2026-05-06 | Возвращён `forwardRef` в `ModalWindowContent` и `ModalWindowViewManager` (обязательный инвариант проекта). Удалён захардкоженный `title="Закрыть"` из `ModalWindowClose` — для мультиязычной библиотеки текст подсказки должен приходить от потребителя. **Breaking:** теперь `title` не подставляется автоматически. |

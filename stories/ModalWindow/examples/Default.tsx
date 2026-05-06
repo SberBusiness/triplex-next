@@ -31,7 +31,7 @@ export const Default = () => {
             <ModalWindow
                 isOpen={isOpen}
                 size={EComponentSize.MD}
-                closeButton={<ModalWindowClose onClick={handleClose} />}
+                closeButton={<ModalWindowClose onClick={handleClose} title="Закрыть" />}
                 onExited={() => {}}
             >
                 <ModalWindowContent>

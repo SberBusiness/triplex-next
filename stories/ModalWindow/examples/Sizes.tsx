@@ -34,7 +34,11 @@ const SizeItem = ({ size, label }: ISizeItemProps) => {
                 Открыть {label}
             </Button>
 
-            <ModalWindow isOpen={isOpen} size={size} closeButton={<ModalWindowClose onClick={handleClose} />}>
+            <ModalWindow
+                isOpen={isOpen}
+                size={size}
+                closeButton={<ModalWindowClose onClick={handleClose} title="Закрыть" />}
+            >
                 <ModalWindowContent>
                     <ModalWindowHeader>
                         <ModalWindowHeader.Title>

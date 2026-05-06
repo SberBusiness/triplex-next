@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.28.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**ModalWindowClose**
+
+- Удалён захардкоженный `title="Закрыть"`. Текст подсказки теперь не подставляется автоматически — потребителю нужно передавать локализованное значение через props (`<ModalWindowClose title="Закрыть" ... />`).
+
 <Heading>Изменения</Heading>
 
 **ModalWindow**

@@ -40,7 +40,7 @@ export const Playground = ({ isLoading, size }: IPlaygroundArgs) => {
             <ModalWindow
                 isOpen={isOpen}
                 size={size}
-                closeButton={<ModalWindowClose onClick={handleClose} />}
+                closeButton={<ModalWindowClose onClick={handleClose} title="Закрыть" />}
                 onExited={action("onExited")}
             >
                 <ModalWindowContent isLoading={isLoading} loadingTitle="Загрузка...">

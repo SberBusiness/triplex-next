@@ -8,3 +8,5 @@ export * from "./YGroupExample";
 export { default as YGroupExampleSource } from "./YGroupExample?raw";
 export * from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export * from "./VisualTestsExample";
+export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";

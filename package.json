@@ -1,6 +1,6 @@
 {
     "name": "@sberbusiness/triplex-next",
-    "version": "1.26.0",
+    "version": "1.27.0",
     "description": "Библиотека компонентов дизайн-системы Triplex.",
     "author": "СберБизнес",
     "license": "Sber Public License at-nc-sa v.2",
@@ -31,6 +31,7 @@
         "generateThemeCssVariables": "tsx scripts/generateCssFromDesignTokens.ts",
         "generateColorsLessVariables": "tsx scripts/generateLessFromDesignTokens.ts",
         "generateComponentTokensTemplate": "tsx scripts/generateComponentTokensTemplate.ts",
+        "generateMcpData": "tsx scripts/generateMcpData.ts",
         "copyLessHelpers": "tsx scripts/copyLessHelpers.ts",
         "test-visual:ci": "test-storybook --url http://localhost:6006 --maxWorkers=1",
         "test-visual:debug": "cross-env PWDEBUG=1 test-storybook --url http://localhost:6006 --maxWorkers=1",

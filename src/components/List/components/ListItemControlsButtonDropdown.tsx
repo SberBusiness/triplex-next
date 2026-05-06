@@ -23,6 +23,7 @@ import {
     IListItemControlsButtonProps,
     ListItemControlsButton,
 } from "@sberbusiness/triplex-next/components/List/components/ListItemControlsButton";
+import { setForwardedRef } from "@sberbusiness/triplex-next/components/List/utils";
 import styles from "../styles/ListItemControlsButton.module.less";
 
 interface IListItemControlsButtonDropdownProps
@@ -135,14 +136,9 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
             );
         };
 
-        /** Функция для хранения ссылки. */
         const setRef = (instance: HTMLButtonElement | null) => {
             buttonRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
+            setForwardedRef(ref, instance);
         };
 
         return (

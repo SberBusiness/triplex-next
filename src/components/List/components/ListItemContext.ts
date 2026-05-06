@@ -1,9 +1,9 @@
 import React from "react";
 
 export interface IListItemContext {
-    // Элемент списка выбран.
+    /** Элемент списка выбран. */
     selected: boolean;
-    // Устанавливает значение selected.
+    /** Устанавливает значение selected. */
     setSelected: (selected: boolean) => void;
 }
 

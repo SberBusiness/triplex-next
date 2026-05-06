@@ -7,8 +7,8 @@ import {
     DefaultExample,
     DefaultExampleSource,
     PlaygroundExample,
-    DisabledExample,
-    DisabledExampleSource,
+    StatesExample,
+    StatesExampleSource,
     SizesExample,
     SizesExampleSource,
 } from "./examples/ButtonIcon/index";
@@ -135,13 +135,13 @@ export const Sizes: Story = {
     },
 };
 
-export const Disabled: Story = {
-    render: DisabledExample,
+export const States: Story = {
+    render: StatesExample,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: DisabledExampleSource,
+                code: StatesExampleSource,
                 language: "tsx",
             },
         },

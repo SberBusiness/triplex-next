@@ -166,7 +166,7 @@ import { Button } from "../Button";
 В stories добавляй пример значения для демонстрации — это не хардкод, а иллюстрация:
 
 ```typescript
-// В stories/examples/DefaultExample.tsx — пример для документации
+// В stories/examples/Default.tsx — пример для документации
 <ModalCloseButton aria-label="Закрыть" />
 ```
 

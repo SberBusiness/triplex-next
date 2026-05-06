@@ -9,17 +9,17 @@
 Содержит: стек, структуру компонентов, naming conventions, дизайн-токены,
 воркфлоу добавления props, инварианты.
 
-**Документация конкретного компонента:** `src/components/{ComponentName}/{ComponentName}-AI.md`
-Пример: `src/components/Button/Button-AI.md`
+**Документация конкретного компонента:** `src/components/{ComponentName}/{ComponentName}-ai.md`
+Пример: `src/components/Button/Button-ai.md`
 
 Всегда используй `docs/ai/CONTEXT.md` + `docs/ai/codestyle.md`.
 
-Если `{ComponentName}-AI.md` ещё нет:
+Если `{ComponentName}-ai.md` ещё нет:
 - изучи исходники компонента, stories и тесты
 - следуй локальному паттерну компонента
-- не создавай новый `*-AI.md`, если это не часть задачи
+- не создавай новый `*-ai.md`, если это не часть задачи
 
-**Шаблон для новых компонентов:** `docs/ai/template-AI.md`
+**Шаблон для новых компонентов:** `docs/ai/template-ai.md`
 
 **Прогресс AI-Ready перехода:** `docs/ai/ROADMAP.md`
 
@@ -33,6 +33,7 @@
 | Тестирование (unit, visual, e2e) | `docs/ai/tests.md` |
 | Stories (структура, примеры, чек-лист) | `docs/ai/stories-guide.md` |
 | Коммиты, ветки, PR-воркфлоу | `docs/ai/commits.md` |
+| AI refactoring (правила рефакторинга по ROADMAP) | `docs/ai/ai-refactoring.md` |
 
 ---
 
@@ -41,19 +42,11 @@
 Когда тебя просят изменить компонент:
 1. Прочитай `docs/ai/CONTEXT.md`
 2. Прочитай `docs/ai/codestyle.md` и нужный тематический гайд
-3. Если файл существует, прочитай `src/components/{ComponentName}/{ComponentName}-AI.md`
+3. Если файл существует, прочитай `src/components/{ComponentName}/{ComponentName}-ai.md`
 4. Изучи исходный код компонента, stories и тесты
 5. Внеси изменения: TSX → LESS → story → тесты
 6. Если изменился публичный API — обнови release notes (`stories/release-notes/v1/<версия>.mdx`)
-7. Если `{ComponentName}-AI.md` существует, обнови раздел "История изменений"
-
-## Figma MCP
-
-Если у компонента есть `{ComponentName}-AI.md` и в frontmatter заполнены `figma-file`
-и `figma-node`, используй их для получения дизайн-спецификации.
-
-`figma-node` хранит значение параметра `node-id` из URL Figma (например, `1-328`).
-`figma-file` хранит URL файла или design-ссылку.
+7. Если `{ComponentName}-ai.md` существует, обнови раздел "История изменений"
 
 ## Проверка перед завершением задачи
 

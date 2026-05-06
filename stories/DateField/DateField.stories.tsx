@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
-import { EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { DateField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
     PlaygroundExample,
     PlaygroundExampleSource,
@@ -15,10 +15,9 @@ import {
     ProductionExampleSource,
     VisualTestsExample,
 } from "./examples";
-import { DateField } from "../../src/components/DateField";
 
 export default {
-    title: "Components/DateField",
+    title: "Components/Date components/DateField",
     component: DateField,
     tags: ["autodocs"],
     parameters: {
@@ -39,7 +38,17 @@ export default {
     },
 } satisfies Meta<typeof DateField>;
 
-const PLAYGROUND_ARGS = {
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof DateField>,
+    "size" | "status" | "placeholderMask" | "label" | "invalidDateHint"
+> {
+    /** С постфиксом. */
+    withPostfix: boolean;
+    /** С описанием. */
+    withDescription: boolean;
+}
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
     size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,
@@ -49,17 +58,7 @@ const PLAYGROUND_ARGS = {
     // Settings
     withPostfix: false,
     withDescription: false,
-} as const;
-
-export interface PlaygroundArgs extends Pick<
-    React.ComponentProps<typeof DateField>,
-    Extract<keyof typeof PLAYGROUND_ARGS, keyof React.ComponentProps<typeof DateField>>
-> {
-    /** С постфиксом. */
-    withPostfix: boolean;
-    /** С описанием. */
-    withDescription: boolean;
-}
+};
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],

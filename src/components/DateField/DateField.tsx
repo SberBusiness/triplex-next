@@ -27,6 +27,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         limitRange = globalLimitRange,
         disabledDays,
         onChange,
+        onClear,
         onDropdownOpen,
         onDropdownClose,
         invalidDateHint,
@@ -74,6 +75,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
                     size={size}
                     status={status}
                     label={label}
+                    onClear={onClear}
                     maskedInputProps={{
                         value: pickerValues.inputString,
                         mask: FormFieldMaskedInput.presets.masks.date,

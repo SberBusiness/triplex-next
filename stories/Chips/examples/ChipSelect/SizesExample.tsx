@@ -25,6 +25,7 @@ export const SizesExample = () => {
                     onChange={setSelectedSM}
                     clearSelected={() => setSelectedSM(undefined)}
                     size={EComponentSize.SM}
+                    label="Select label"
                 />
             </div>
             <div>
@@ -35,6 +36,7 @@ export const SizesExample = () => {
                     onChange={setSelectedMD}
                     clearSelected={() => setSelectedMD(undefined)}
                     size={EComponentSize.MD}
+                    label="Select label"
                 />
             </div>
             <div>
@@ -45,6 +47,7 @@ export const SizesExample = () => {
                     onChange={setSelectedLG}
                     clearSelected={() => setSelectedLG(undefined)}
                     size={EComponentSize.LG}
+                    label="Select label"
                 />
             </div>
         </div>

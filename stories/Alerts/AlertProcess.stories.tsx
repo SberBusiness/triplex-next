@@ -30,6 +30,8 @@ import {
     WithSpoilerExampleSource,
     BorderRadiusExample,
     BorderRadiusExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples/AlertProcess";
 
 const meta = {
@@ -276,4 +278,20 @@ export const WithSpoiler: Story = {
             },
         },
     },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: VisualTestsExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: VisualTestsExample,
 };

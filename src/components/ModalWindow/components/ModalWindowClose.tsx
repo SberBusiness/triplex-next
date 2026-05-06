@@ -1,11 +1,10 @@
-import { IButtonSecondaryProps } from "@sberbusiness/triplex-next/components/Button/Button";
-import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
-import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import React, { useRef } from "react";
-import { Button } from "../../Button/Button";
 import { CrossStrokeSrvIcon20 } from "@sberbusiness/icons-next";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { Button, IButtonSecondaryProps } from "../../Button/Button";
 import { EButtonTheme } from "../../Button/enums";
+import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
+import { EComponentSize } from "../../../enums/EComponentSize";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import styles from "../styles/ModalWindowClose.module.less";
 
 /**

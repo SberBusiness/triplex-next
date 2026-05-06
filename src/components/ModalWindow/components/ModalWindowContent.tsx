@@ -5,31 +5,35 @@ import styles from "../styles/ModalWindow.module.less";
 import { Page } from "../../Page/Page";
 
 /** Свойства компонента ModalWindowContent. */
-interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое — `ModalWindowHeader`, `ModalWindowBody`, `ModalWindowFooter`. */
     children?: React.ReactNode;
-    /** Состояние загрузки.*/
+    /** Если `true`, поверх контента показывается `LoaderScreen`. */
     isLoading?: boolean;
-    /** Текст под спиннером.*/
+    /** Текст под спиннером в режиме загрузки. */
     loadingTitle?: React.ReactNode;
 }
 
-/** Компонент контента модального окна. */
+/**
+ * Контент модального окна. Оборачивает дочерние секции в `Page` и при
+ * `isLoading` показывает `LoaderScreen` поверх контента.
+ */
 export const ModalWindowContent: React.FC<IModalWindowContentProps> = ({
     isLoading,
     className,
     loadingTitle,
     children,
     ...rest
-}) => {
-    return (
-        <div className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: !!isLoading })} {...rest}>
-            <Page className={styles.modalWindowContentPage}>{children}</Page>
+}) => (
+    <div className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: isLoading })} {...rest}>
+        <Page className={styles.modalWindowContentPage}>{children}</Page>
 
-            {isLoading && (
-                <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle">
-                    {loadingTitle}
-                </LoaderScreen>
-            )}
-        </div>
-    );
-};
+        {isLoading && (
+            <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle">
+                {loadingTitle}
+            </LoaderScreen>
+        )}
+    </div>
+);
+
+ModalWindowContent.displayName = "ModalWindowContent";

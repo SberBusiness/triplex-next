@@ -26,7 +26,10 @@ tools:
 2. **План.** Выпиши правки в формате `файл:строка → что → почему`. Раздели на категории. Явно перечисли, что НЕ трогаешь.
 3. **Согласование.** Верни план пользователю. **Не правь код до OK.**
 4. **Применение.** Мелкими шагами. Тесты — последним этапом.
-5. **Проверка.** `npx tsc --noEmit` (отфильтруй ошибки по путям компонента, posторонние pre-existing — игнорируй) + `npx vitest run src/components/{Name}`.
+5. **Проверка.** Три прогона, в этом порядке:
+   - `npx eslint src/components/{Name}` — 0 ошибок и 0 warnings. Особое внимание правилам `react-hooks/set-state-in-effect`, `react-hooks/refs`, `react-hooks/immutability`, `react-hooks/exhaustive-deps` — они ловят антипаттерны, которые `tsc` не видит. Чини на уровне архитектуры (lazy `useState` initializer, derived state, перестановка функций до useEffect, перенос side-effect в event handler), а не через `eslint-disable`. Подробнее — в `docs/ai/ai-refactoring.md` §«Воркфлоу», шаг 5.
+   - `npx tsc --noEmit` (отфильтруй ошибки по путям компонента, посторонние pre-existing — игнорируй).
+   - `npx vitest run src/components/{Name}`.
 6. **ROADMAP.** Поставь ✅ в колонке `AI refactoring` в `docs/ai/ROADMAP.md`.
 
 ## Жёсткие ограничения
@@ -53,7 +56,7 @@ tools:
 1. **Что менялось** — файл за файлом, кратко.
 2. **Что НЕ менялось и почему** — найденные проблемы публичного API, требующие подтверждения.
 3. **Какие тесты добавлены** — список новых файлов и счётчик кейсов.
-4. **Результаты проверок** — `tsc` и `vitest` (errors/passes).
+4. **Результаты проверок** — `eslint`, `tsc` и `vitest` (errors/warnings/passes).
 5. **Что осталось пользователю** — обновить `{Name}-ai.md`, написать release notes (если был breaking change), коммит.
 
 Не делай коммит сам.

@@ -63,6 +63,13 @@ tools:
 - [ ] Story ids/export names не переименованы без причины.
 - [ ] Если есть VisualTests — данные захардкожены, нет `new Date()`/`Math.random()`.
 
+### Скриншот-тесты (для UI-компонентов)
+
+- [ ] Все ключевые визуальные состояния (размеры, статусы, темы, focus, hover, disabled, loading) покрыты обычными stories или собраны в `VisualTests`.
+- [ ] Если компонент требует интеракции для показа состояния (открытый dropdown / modal / tooltip / hover / focus) — есть `VisualTests` story с `play`-функцией.
+- [ ] Для каждой новой/переименованной не-Playground story есть baseline-файл в `__screenshots__/{story-id}--xs.png` и `--xl.png`. Если baseline ещё нет — это блокер: запросить у пользователя прогон `GitHub Actions → Update Visual Snapshots`.
+- [ ] Все baseline-скриншоты в `__screenshots__/` сгенерированы CI/Docker (Linux). Никаких macOS-скриншотов в коммите.
+
 ### Документация
 
 - [ ] Если изменился публичный API — обновлены `stories/release-notes/v1/<версия>.mdx` и `src/components/{Name}/{Name}-ai.md`.
@@ -71,6 +78,7 @@ tools:
 
 ### Технические проверки
 
+- [ ] `npx eslint src/components/{Name}` — 0 ошибок и 0 warnings в файлах компонента. Особенно проверь правила `react-hooks/set-state-in-effect`, `react-hooks/refs`, `react-hooks/immutability`, `react-hooks/exhaustive-deps` — они часто всплывают после рефакторинга и должны быть исправлены архитектурно (lazy `useState`, derived state, event handler), а не подавлены `eslint-disable` без объяснения.
 - [ ] `npx tsc --noEmit` — 0 ошибок в затронутых файлах (отфильтруй pre-existing pos-tide ошибки по путям).
 - [ ] `npx vitest run src/components/{Name}` — зелёные.
 - [ ] Нет случайно добавленных файлов (`__screenshots__/` с macOS, `.env.local`, временные файлы).
@@ -94,6 +102,7 @@ tools:
 - file:line — описание проблемы — что нужно сделать
 
 ### Проверки
+- eslint: ✅/❌ (детали — особенно `react-hooks/*` правила)
 - tsc: ✅/❌ (детали)
 - vitest: ✅/❌ (детали)
 - ROADMAP обновлён: да/нет

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
 import isEqual from "lodash-es/isEqual";
 import pick from "lodash-es/pick";
@@ -8,10 +8,21 @@ import styles from "../styles/ModalWindow.module.less";
 // Id элемента, в визуальных границах (левая и правая координата) которого рендерится ModalWindow. Отступ ModalWindow от верхней границы экрана равен высоте этого элемента.
 export const modalWindowViewManagerNodeId = "modalWindowViewManagerNodeId";
 
+/** Создаёт DOM-ноду, в границах которой рендерится модальное окно. */
+const getOrCreateModalWindowViewManagerNode = (): HTMLDivElement => {
+    let node = document.querySelector<HTMLDivElement>(`#${modalWindowViewManagerNodeId}`);
+    if (!node) {
+        node = document.createElement("div");
+        node.setAttribute("id", modalWindowViewManagerNodeId);
+        document.body.appendChild(node);
+    }
+    return node;
+};
+
 /** Элемент, определяющий позиционирование ModalWindow. */
 export const ModalWindowViewManager: React.FC = () => {
     // DOM нода, в границах которой рендерится ModalWindow.
-    const [modalWindowViewManagerNode, setModalWindowViewManagerNode] = useState<HTMLDivElement>();
+    const [modalWindowViewManagerNode] = useState<HTMLDivElement>(getOrCreateModalWindowViewManagerNode);
     // Координаты DOM ноды, в границах которой рендерится ModalWindow.
     const [rectViewNode, setRectViewNode] = useState<DOMRect>();
     // DOM нода, в границах которой рендерится ModalWindow.
@@ -32,22 +43,6 @@ export const ModalWindowViewManager: React.FC = () => {
             }
         }
     };
-
-    /** Создает DOM-ноду, в границах которой рендерится модальное окно. */
-    const createModalWindowViewManagerNode = () => {
-        let modalWindowViewManagerNode = document.querySelector<HTMLDivElement>(`#${modalWindowViewManagerNodeId}`);
-        if (!modalWindowViewManagerNode) {
-            modalWindowViewManagerNode = document.createElement("div");
-            modalWindowViewManagerNode.setAttribute("id", modalWindowViewManagerNodeId);
-            document.body.appendChild(modalWindowViewManagerNode);
-        }
-
-        setModalWindowViewManagerNode(modalWindowViewManagerNode);
-    };
-
-    useEffect(() => {
-        createModalWindowViewManagerNode();
-    }, []);
 
     useLayoutEffect(() => {
         updateRect();

@@ -37,6 +37,29 @@
 
 ---
 
+## Кастомные агенты и skills
+
+Специализированные помощники, заточенные под конвенции этого репозитория.
+Используй их вместо ручного исполнения — они уже знают про forwardRef,
+React 17 совместимость, modern story pattern, формат коммитов и т.д.
+
+- Субагенты — `.claude/agents/` (Claude Code-специфичный формат).
+- Skills — `.agents/skills/` (runtime-нейтральные); в Claude Code доступны
+  через симлинки в `.claude/skills/` как `/`-команды.
+
+| Имя | Тип | Назначение |
+|---|---|---|
+| `ai-ready-builder` | агент | Оркестратор Phase 1 ROADMAP для одного компонента |
+| `component-refactorer` | агент | AI-рефакторинг + unit-тесты по `ai-refactoring.md` |
+| `story-writer` | агент | Storybook stories по `stories-guide.md` (modern pattern) |
+| `change-reviewer` | агент | Read-only ревью diff'а перед коммитом |
+| `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
+| `commit-component` | skill | Коммит по `commits.md` (только по явной просьбе) |
+
+**Подробности и сценарии вызова:** [`.claude/README.md`](./.claude/README.md).
+
+---
+
 ## Типичный запрос
 
 Когда тебя просят изменить компонент:

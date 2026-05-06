@@ -24,7 +24,7 @@ tools:
 
 Modern pattern (для новых и существенно переписанных stories):
 
-```
+```text
 stories/{Group}/{Component}/
 ├── {Component}.stories.tsx
 └── examples/

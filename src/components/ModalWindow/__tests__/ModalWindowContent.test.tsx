@@ -64,4 +64,16 @@ describe("ModalWindowContent", () => {
         expect(root).toHaveAttribute("id", "modal-content-1");
         expect(root).toHaveAttribute("aria-label", "Контент");
     });
+
+    it("forwards ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <ModalWindowContent ref={ref}>
+                <div>Hello</div>
+            </ModalWindowContent>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current?.classList.contains("modalWindowContent")).toBe(true);
+    });
 });

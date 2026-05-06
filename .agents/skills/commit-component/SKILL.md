@@ -54,17 +54,17 @@ git rev-parse --abbrev-ref HEAD   # текущая ветка
 
 ### 4. Формат сообщения
 
-```
+```text
 TRIPLEX-XXX Краткое описание (≤72 символа)
 ```
 
 Если нужно уточнение — двоеточие:
-```
+```text
 TRIPLEX-XXX Component: уточнение
 ```
 
 Примеры:
-```
+```text
 TRIPLEX-901 Добавить компонент Badge с темами и размерами
 TRIPLEX-912 Button: исправить стиль фокуса в теме Link
 TRIPLEX-844 List: AI refactoring + unit-тесты на ListItem

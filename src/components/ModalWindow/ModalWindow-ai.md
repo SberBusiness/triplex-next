@@ -46,21 +46,21 @@ version: "1.0"
 
 - **Controlled-only.** Состояние открытия полностью контролируется потребителем через `isOpen`. Компонент сам не закрывается на клик по backdrop'у — обработчик `Escape` живёт в `ModalWindowClose`, не в `ModalWindow`.
 - **`children` — единый `React.ReactElement`.** Это требование `CSSTransition` для анимирования одного дочернего узла. Не передавай массив или фрагмент — оборачивай контент в `ModalWindowContent`.
-- **Rendering lifecycle.** При `isOpen=true` создаётся локальный `mountNode` под `#ufs-modal-window-wrapper` и взводится `renderPortal=true`. При закрытии Portal-нода удаляется в `onExited` после завершения анимации (300ms). До завершения первой анимации компонент возвращает `null`.
+- **Rendering lifecycle.** При первом рендере синхронно создаётся локальный `mountNode` под `#ufs-modal-window-wrapper` (через `useState` lazy initializer) — это нужно, чтобы `FocusTrap` нашёл tabbable-узлы при активации. Сама модалка показывается/скрывается через `CSSTransition` (`mountOnEnter` / `unmountOnExit`); body-классы `modal-open` + `no-hash-overflow-hidden` ставятся в `onEnter` и снимаются в `onExited` (≈300ms на анимацию). При unmount-е компонента `mountNode` отвязывается от DOM.
 - **`ModalWindowViewManager` рендерится всегда** рядом с Portal — он отвечает за вычисление координат рамки, в которой живёт окно (через `useResizeDetector`), и инжектит `<style>` с CSS-переменными `--modalWindow-screen-{left,top,width}` в `:root`. Не пытайся убрать его из дерева.
 
 ---
 
 ## Дизайн-токены
 
-```
+```text
 --triplex-next-ModalWindow-Backdrop_Background
 --triplex-next-ModalWindow-Background
 ```
 
 Помимо токенов, компонент инжектит и читает несколько runtime CSS-переменных, не относящихся к дизайн-системе:
 
-```
+```text
 --modalWindow-screen-left   # координата слева, выставляется ModalWindowViewManager
 --modalWindow-screen-top    # высота шапки лайаута, выставляется ModalWindowViewManager
 --modalWindow-screen-width  # ширина области, выставляется ModalWindowViewManager

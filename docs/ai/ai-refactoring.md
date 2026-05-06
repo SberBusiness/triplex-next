@@ -23,7 +23,7 @@ breaking change — оставь как есть.
    Типичные ошибки `react-hooks`, которые встречаются после рефакторинга:
    - `react-hooks/set-state-in-effect` — `setState` синхронно внутри `useEffect`. Чини через `useState` lazy initializer, derived state или вынос в event handler.
    - `react-hooks/refs` — чтение `ref.current` во время рендера. Чини через `useState` (если значение нужно в JSX) или через `useImperativeHandle`.
-   - `react-hooks/immutability` — обращение к функции-замыканию до её объявления (в callback'е useEffect, объявленного выше функции). Чини перестановкой блоков или инлайнингом.
+   - `react-hooks/immutability` — мутация неизменяемых значений (props/state/ref-объектов и derived-данных) внутри рендера/хуков. Чини иммутабельными апдейтами: новый массив вместо `push`, спред для объектов, сеттер из `useState` вместо прямой записи в state.
 6. **ROADMAP.** Поставь ✅ в колонке `AI refactoring` для компонента.
 
 ---
@@ -53,7 +53,7 @@ breaking change — оставь как есть.
 - **Локализация хелперов.** Внутренние утилиты компонента кладутся в `src/components/{Name}/utils.ts` (или подобное) и НЕ экспортируются через barrel `index.ts`. Не добавляй в `src/utils/index.ts` — это публичный API библиотеки.
 - **Порог YAGNI.** Не выноси хелпер ради 1–2 мест с 2–3 строчками. Извлекай, когда есть ≥2 места и ≥5 строк дублирования, либо когда логика концептуально единая (например, обход DOM по data-атрибуту).
 - **Не добавляй новые абстракции.** Хуки, контексты, паттерны — только если они уже устраняют конкретное дублирование. Никаких «на будущее».
-- **Чистые initializer/factory-функции — в module scope.** Если `useState(() => {...})`, `useRef(() => {...})`, `useMemo(() => {...})` или `useCallback` содержат тело ≥5 строк, которое **не замыкает** ни props, ни state, ни другие локальные переменные компонента (ссылается только на module-level константы и глобалы) — вынеси функцию на module scope с говорящим именем. Внутри хука остаётся одна понятная строчка: `useState(getOrCreateMountNode)`. Это разгружает тело компонента и делает initializer независимо тестируемым. Пример: `getOrCreateMountNode` в `ModalWindow.tsx`, `getOrCreateModalWindowViewManagerNode` в `ModalWindowViewManager.tsx`. Если функция замыкает на `props`/`state` — оставляй inline (вынос потребует протаскивать аргументы, и это не упростит, а усложнит).
+- **Чистые initializer/factory-функции — в module scope.** Если `useState(() => {...})`, `useMemo(() => {...})` или `useCallback` содержат тело ≥5 строк, которое **не замыкает** ни props, ни state, ни другие локальные переменные компонента (ссылается только на module-level константы и глобалы) — вынеси функцию на module scope с говорящим именем. Внутри хука остаётся одна понятная строчка: `useState(getOrCreateMountNode)`. Это разгружает тело компонента и делает initializer независимо тестируемым. Пример: `getOrCreateMountNode` в `ModalWindow.tsx`, `getOrCreateModalWindowViewManagerNode` в `ModalWindowViewManager.tsx`. Если функция замыкает на `props`/`state` — оставляй inline (вынос потребует протаскивать аргументы, и это не упростит, а усложнит). `useRef` сюда **не относится**: он не вызывает переданную функцию как initializer, а сохраняет её объектом в `ref.current` — для ленивой инициализации ref'а используй паттерн `if (ref.current === null) ref.current = expensiveInit()`.
 
 ### 3. AI-friendliness — улучшить читаемость для агентов
 

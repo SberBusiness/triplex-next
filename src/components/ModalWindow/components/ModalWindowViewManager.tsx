@@ -20,13 +20,23 @@ const getOrCreateModalWindowViewManagerNode = (): HTMLDivElement => {
 };
 
 /** Элемент, определяющий позиционирование ModalWindow. */
-export const ModalWindowViewManager: React.FC = () => {
+export const ModalWindowViewManager = React.forwardRef<HTMLDivElement>((_, ref) => {
     // DOM нода, в границах которой рендерится ModalWindow.
     const [modalWindowViewManagerNode] = useState<HTMLDivElement>(getOrCreateModalWindowViewManagerNode);
     // Координаты DOM ноды, в границах которой рендерится ModalWindow.
     const [rectViewNode, setRectViewNode] = useState<DOMRect>();
     // DOM нода, в границах которой рендерится ModalWindow.
     const viewNodeRef = useRef<HTMLDivElement | null>(null);
+
+    /** Объединённый ref на внутренний div: внутренний viewNodeRef + forwarded ref. */
+    const setViewNodeRef = (instance: HTMLDivElement | null) => {
+        viewNodeRef.current = instance;
+        if (typeof ref === "function") {
+            ref(instance);
+        } else if (ref) {
+            ref.current = instance;
+        }
+    };
 
     /** Обновление координат. */
     const updateRect = () => {
@@ -58,7 +68,7 @@ export const ModalWindowViewManager: React.FC = () => {
     return modalWindowViewManagerNode ? (
         <Portal container={modalWindowViewManagerNode}>
             {/* Высота div должна быть равной высоте ModalWindowManagerNode. */}
-            <div ref={viewNodeRef} style={{ height: "100%" }}>
+            <div ref={setViewNodeRef} style={{ height: "100%" }}>
                 <div ref={resizeRef} className={styles.modalWindowResizeWrapper} />
                 {rectViewNode && (
                     <style>
@@ -74,4 +84,6 @@ export const ModalWindowViewManager: React.FC = () => {
             </div>
         </Portal>
     ) : null;
-};
+});
+
+ModalWindowViewManager.displayName = "ModalWindowViewManager";

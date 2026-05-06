@@ -18,22 +18,22 @@ export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivEl
  * Контент модального окна. Оборачивает дочерние секции в `Page` и при
  * `isLoading` показывает `LoaderScreen` поверх контента.
  */
-export const ModalWindowContent: React.FC<IModalWindowContentProps> = ({
-    isLoading,
-    className,
-    loadingTitle,
-    children,
-    ...rest
-}) => (
-    <div className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: isLoading })} {...rest}>
-        <Page className={styles.modalWindowContentPage}>{children}</Page>
+export const ModalWindowContent = React.forwardRef<HTMLDivElement, IModalWindowContentProps>(
+    ({ isLoading, className, loadingTitle, children, ...rest }, ref) => (
+        <div
+            ref={ref}
+            className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: isLoading })}
+            {...rest}
+        >
+            <Page className={styles.modalWindowContentPage}>{children}</Page>
 
-        {isLoading && (
-            <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle">
-                {loadingTitle}
-            </LoaderScreen>
-        )}
-    </div>
+            {isLoading && (
+                <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle">
+                    {loadingTitle}
+                </LoaderScreen>
+            )}
+        </div>
+    ),
 );
 
 ModalWindowContent.displayName = "ModalWindowContent";

@@ -35,7 +35,8 @@ type FocusTrapMockProps = {
 };
 
 vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: FocusTrapMockProps) => {
+    __esModule: true,
+    default: (props: FocusTrapMockProps) => {
         focusTrapMock(props);
         return <div data-testid="focus-trap">{props.children}</div>;
     },

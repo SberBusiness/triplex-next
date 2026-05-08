@@ -4,20 +4,20 @@ import { Badge, EComponentSize, EFontType, EFontWeightText, ETextSize, Text } fr
 
 export const ProductionExample = () => (
     <div style={{ display: "flex", gap: "16px" }}>
-        <Badge size={EComponentSize.MD} prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={7} />} />
-        <Badge size={EComponentSize.MD} prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={7} />}>
+        <Badge size={EComponentSize.MD} prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={10} />} />
+        <Badge size={EComponentSize.MD} prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={10} />}>
             <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
                 Badge text
             </Text>
         </Badge>
-        <Badge size={EComponentSize.MD} postfix={<PercentsmallStrokeSrvIcon20 paletteIndex={7} />}>
+        <Badge size={EComponentSize.MD} postfix={<PercentsmallStrokeSrvIcon20 paletteIndex={10} />}>
             <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
                 Badge text
             </Text>
         </Badge>
         <Badge
             size={EComponentSize.MD}
-            prefix={<NewsmallFilledSrvIcon20 paletteIndex={7} />}
+            prefix={<NewsmallFilledSrvIcon20 paletteIndex={10} />}
             style={{ backgroundColor: "#1297FE" }}
         >
             <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>

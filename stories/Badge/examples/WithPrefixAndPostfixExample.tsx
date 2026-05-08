@@ -20,8 +20,8 @@ export const WithPrefixAndPostfixExample = () => (
     <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
         <Badge
             size={EComponentSize.SM}
-            prefix={<PercentsmallStrokeSrvIcon16 paletteIndex={7} />}
-            postfix={<PercentsmallStrokeSrvIcon16 paletteIndex={7} />}
+            prefix={<PercentsmallStrokeSrvIcon16 paletteIndex={10} />}
+            postfix={<PercentsmallStrokeSrvIcon16 paletteIndex={10} />}
         >
             <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.REGULAR} type={EFontType.PRIMARY_INVERT}>
                 Badge text SM
@@ -29,8 +29,8 @@ export const WithPrefixAndPostfixExample = () => (
         </Badge>
         <Badge
             size={EComponentSize.MD}
-            prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={7} />}
-            postfix={<PercentsmallStrokeSrvIcon20 paletteIndex={7} />}
+            prefix={<PercentsmallStrokeSrvIcon20 paletteIndex={10} />}
+            postfix={<PercentsmallStrokeSrvIcon20 paletteIndex={10} />}
         >
             <Text size={ETextSize.B4} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
                 Badge text MD
@@ -38,8 +38,8 @@ export const WithPrefixAndPostfixExample = () => (
         </Badge>
         <Badge
             size={EComponentSize.LG}
-            prefix={<PercentsmallStrokeSrvIcon24 paletteIndex={7} />}
-            postfix={<PercentsmallStrokeSrvIcon24 paletteIndex={7} />}
+            prefix={<PercentsmallStrokeSrvIcon24 paletteIndex={10} />}
+            postfix={<PercentsmallStrokeSrvIcon24 paletteIndex={10} />}
         >
             <Text size={ETextSize.B3} weight={EFontWeightText.REGULAR} type={EFontType.PRIMARY_INVERT}>
                 Badge text LG

@@ -53,4 +53,10 @@ build-storybook.log
 __screenshots__/__diff__/
 
 # Claude Code (личная память и локальные настройки)
-.claude/
+.claude/*
+!.claude/agents/
+!.claude/commands/
+!.claude/skills/
+!.claude/README.md
+!.claude/settings.json
+.claude/settings.local.json

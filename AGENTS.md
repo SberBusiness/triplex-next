@@ -37,6 +37,24 @@ If `{ComponentName}-ai.md` does not exist yet:
 
 ---
 
+## Reusable skills (procedures)
+
+Procedure-style instructions for common tasks live under `.agents/skills/`.
+Each is a `SKILL.md` file describing a focused workflow. Read the relevant
+`SKILL.md` and follow its steps when the task matches.
+
+| Skill | Use it when |
+|---|---|
+| `.agents/skills/update-component-ai-md/SKILL.md` | Creating or updating `{Component}-ai.md` from current sources |
+| `.agents/skills/commit-component/SKILL.md` | Composing a commit message and staging changes per `docs/ai/commits.md` |
+
+These files are runtime-neutral. Claude Code discovers them automatically via
+symlinks under `.claude/skills/` (slash-invocable as `/update-component-ai-md`,
+`/commit-component`). Other agent runtimes should read the source files
+directly.
+
+---
+
 ## Typical task: add a prop to an existing component
 
 1. Read `docs/ai/CONTEXT.md`

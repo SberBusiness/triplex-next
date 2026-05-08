@@ -12,6 +12,7 @@ import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
 import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
+import { MobileView } from "../../MobileView/MobileView";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "./styles/LightBoxSideOverlay.module.less";
@@ -143,21 +144,31 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         </div>
     );
 
+    const renderWrapper = () => (
+        <div className={classNameOverlayWrapper} role="dialog" aria-modal="true" {...htmlDivAttributes}>
+            {content}
+        </div>
+    );
+
     return (
-        <FocusTrap
-            active={opened && !opening && !closing}
-            {...focusTrapProps}
-            focusTrapOptions={{
-                allowOutsideClick: true,
-                initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(contentRef.current),
-                preventScroll: true,
-                ...focusTrapProps?.focusTrapOptions,
-            }}
+        <MobileView
+            fallback={
+                <FocusTrap
+                    active={opened && !opening && !closing}
+                    {...focusTrapProps}
+                    focusTrapOptions={{
+                        allowOutsideClick: true,
+                        initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(contentRef.current),
+                        preventScroll: true,
+                        ...focusTrapProps?.focusTrapOptions,
+                    }}
+                >
+                    {renderWrapper()}
+                </FocusTrap>
+            }
         >
-            <div className={classNameOverlayWrapper} role="dialog" aria-modal="true" {...htmlDivAttributes}>
-                {content}
-            </div>
-        </FocusTrap>
+            {renderWrapper()}
+        </MobileView>
     );
 };
 

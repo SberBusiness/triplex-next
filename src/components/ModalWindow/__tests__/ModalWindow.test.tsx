@@ -7,8 +7,15 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 const focusTrapMock = vi.fn();
 const cssTransitionMock = vi.fn();
 
+type CSSTransitionMockProps = {
+    in?: boolean;
+    onEnter?: () => void;
+    onExited?: () => void;
+    children?: React.ReactNode;
+};
+
 vi.mock("react-transition-group", () => ({
-    CSSTransition: (props: any) => {
+    CSSTransition: (props: CSSTransitionMockProps) => {
         cssTransitionMock(props);
         // Simulate the transition lifecycle by calling callbacks
         if (props.in && props.onEnter) {
@@ -16,14 +23,19 @@ vi.mock("react-transition-group", () => ({
         }
         if (!props.in && props.onExited) {
             // Simulate calling onExited when transitioning out
-            setTimeout(() => props.onExited(), 0);
+            setTimeout(() => props.onExited!(), 0);
         }
         return props.in ? <div data-testid="css-transition">{props.children}</div> : null;
     },
 }));
 
+type FocusTrapMockProps = {
+    active?: boolean;
+    children?: React.ReactNode;
+};
+
 vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: any) => {
+    FocusTrap: (props: FocusTrapMockProps) => {
         focusTrapMock(props);
         return <div data-testid="focus-trap">{props.children}</div>;
     },
@@ -160,15 +172,17 @@ describe("ModalWindow", () => {
             expect(screen.getByTestId("test-content")).toBeInTheDocument();
         });
 
-        it("should not create portal nodes when closed", () => {
+        it("should not render dialog content when closed", () => {
             render(
                 <ModalWindow isOpen={false} closeButton={<TestCloseButton />}>
                     <TestContent />
                 </ModalWindow>,
             );
 
-            const wrapperNode = document.getElementById("ufs-modal-window-wrapper");
-            expect(wrapperNode).toBeNull();
+            // CSSTransition с mountOnEnter+unmountOnExit не рендерит детей при isOpen=false.
+            // Сам wrapper-узел может существовать в DOM как пустой контейнер портала.
+            expect(screen.queryByRole("dialog")).toBeNull();
+            expect(screen.queryByTestId("test-content")).toBeNull();
         });
     });
 

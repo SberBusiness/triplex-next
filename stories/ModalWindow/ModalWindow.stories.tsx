@@ -1,25 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title as SBTitle } from "@storybook/addon-docs/blocks";
-import { ModalWindow } from "../../src/components/ModalWindow/ModalWindow";
-import { ModalWindowContent } from "../../src/components/ModalWindow/components/ModalWindowContent";
-import { ModalWindowHeader } from "../../src/components/ModalWindow/components/ModalWindowHeader";
-import { ModalWindowBody } from "../../src/components/ModalWindow/components/ModalWindowBody";
-import { ModalWindowFooter } from "../../src/components/ModalWindow/components/ModalWindowFooter";
-import { ModalWindowClose } from "../../src/components/ModalWindow/components/ModalWindowClose";
-import { Button } from "../../src/components/Button/Button";
-import { EButtonTheme } from "../../src/components/Button/enums";
-import { Gap } from "../../src/components/Gap";
-import { Title } from "../../src/components/Typography/Title";
-import { Text } from "../../src/components/Typography/Text";
-import { ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { MobileView } from "../../src/components/MobileView/MobileView";
-
-type ModalWindowStoryArgs = {
-    isLoading: boolean;
-    size: EComponentSize;
-};
+import {
+    ArgTypes,
+    Controls,
+    Description,
+    Heading,
+    Primary,
+    Stories,
+    Title as SBTitle,
+} from "@storybook/addon-docs/blocks";
+import { EComponentSize, ModalWindow } from "@sberbusiness/triplex-next";
+import {
+    Default as DefaultRender,
+    DefaultSource,
+    IPlaygroundArgs,
+    LoadingState as LoadingStateRender,
+    LoadingStateSource,
+    Playground as PlaygroundRender,
+    Sizes as SizesRender,
+    SizesSource,
+    VISUAL_TESTS_TRIGGER_LABEL,
+    VisualTestsDefault,
+    VisualTestsLoading,
+    VisualTestsLongContent,
+    VisualTestsSizeLg,
+    VisualTestsSizeSm,
+    WithLongContent as WithLongContentRender,
+    WithLongContentSource,
+} from "./examples";
 
 const STORY_META_DESCRIPTION = `
 Компонент **ModalWindow** отображает модальное окно поверх страницы с затемнённым фоном.
@@ -54,8 +62,10 @@ const meta = {
             page: () => (
                 <>
                     <SBTitle />
-                    <Subtitle />
                     <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ModalWindow} />
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -67,72 +77,8 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<ModalWindowStoryArgs>;
-
-const ModalWindowPlayground: React.FC<ModalWindowStoryArgs> = ({ isLoading, size }) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setIsOpen(false);
-
-    return (
-        <div>
-            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
-                Открыть модальное окно
-            </Button>
-
-            <ModalWindow
-                isOpen={isOpen}
-                size={size}
-                closeButton={<ModalWindowClose onClick={handleClose} />}
-                onExited={() => console.log("Modal closed")}
-            >
-                <ModalWindowContent isLoading={isLoading} loadingTitle="Загрузка...">
-                    <ModalWindowHeader>
-                        <ModalWindowHeader.Title>
-                            <ModalWindowHeader.Title.Content>
-                                <Title tag="h1" size={ETitleSize.H1}>
-                                    Title text
-                                </Title>
-                            </ModalWindowHeader.Title.Content>
-                        </ModalWindowHeader.Title>
-                    </ModalWindowHeader>
-
-                    <ModalWindowBody>
-                        <Text tag="div" size={ETextSize.B2}>
-                            Содержимое модального окна. Здесь может быть любой контент: формы, текст, изображения и
-                            другие элементы интерфейса.
-                        </Text>
-                        <Gap size={16} />
-                        <Text tag="div" size={ETextSize.B2}>
-                            Модальное окно поддерживает различные размеры (SM, MD, LG), состояние загрузки.
-                        </Text>
-                        <Gap size={16} />
-                        <Text tag="div" size={ETextSize.B2}>
-                            Фокус автоматически остаётся внутри модального окна, а нажатие Escape закрывает его.
-                        </Text>
-                    </ModalWindowBody>
-
-                    <ModalWindowFooter>
-                        <ModalWindowFooter.Description>
-                            <ModalWindowFooter.Description.Controls>
-                                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                                    Button text
-                                </Button>
-                                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                    Button text
-                                </Button>
-                            </ModalWindowFooter.Description.Controls>
-                        </ModalWindowFooter.Description>
-                    </ModalWindowFooter>
-                </ModalWindowContent>
-            </ModalWindow>
-        </div>
-    );
-};
-
-export const Playground: Story = {
-    render: (args) => <ModalWindowPlayground {...args} />,
+export const Playground: StoryObj<IPlaygroundArgs> = {
+    tags: ["!autodocs"],
     args: {
         isLoading: false,
         size: EComponentSize.MD,
@@ -163,232 +109,127 @@ export const Playground: Story = {
             include: ["isLoading", "size"],
         },
         docs: {
-            description: {
-                story: "Интерактивный пример модального окна. Управляйте состояниями через панель Storybook.",
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: PlaygroundRender,
+};
+
+export const Default: StoryObj<typeof ModalWindow> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
             },
         },
     },
 };
 
-export const Sizes: Story = {
-    render: () => {
-        const SizeExample: React.FC<{ size: EComponentSize; title: string }> = ({ size, title }) => {
-            const [isOpen, setIsOpen] = useState(false);
-
-            const handleOpen = () => setIsOpen(true);
-            const handleClose = () => setIsOpen(false);
-
-            return (
-                <div>
-                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
-                        {title}
-                    </Button>
-
-                    <ModalWindow isOpen={isOpen} size={size} closeButton={<ModalWindowClose onClick={handleClose} />}>
-                        <ModalWindowContent>
-                            <ModalWindowHeader>
-                                <ModalWindowHeader.Title>
-                                    <ModalWindowHeader.Title.Content>
-                                        <MobileView
-                                            fallback={
-                                                <Title tag="h1" size={ETitleSize.H1}>
-                                                    Title text
-                                                </Title>
-                                            }
-                                        >
-                                            <Title tag="h2" size={ETitleSize.H2}>
-                                                Title text
-                                            </Title>
-                                        </MobileView>
-                                    </ModalWindowHeader.Title.Content>
-                                </ModalWindowHeader.Title>
-                            </ModalWindowHeader>
-
-                            <ModalWindowBody>
-                                <Text tag="div" size={ETextSize.B2}>
-                                    Пример модального окна размера {title}.
-                                </Text>
-                            </ModalWindowBody>
-
-                            <ModalWindowFooter>
-                                <ModalWindowFooter.Description>
-                                    <ModalWindowFooter.Description.Controls>
-                                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                                            Button text
-                                        </Button>
-                                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                            Button text
-                                        </Button>
-                                    </ModalWindowFooter.Description.Controls>
-                                </ModalWindowFooter.Description>
-                            </ModalWindowFooter>
-                        </ModalWindowContent>
-                    </ModalWindow>
-                </div>
-            );
-        };
-
-        return (
-            <div style={{ display: "flex", gap: 16 }}>
-                <SizeExample size={EComponentSize.SM} title="SM" />
-                <SizeExample size={EComponentSize.MD} title="MD" />
-                <SizeExample size={EComponentSize.LG} title="LG" />
-            </div>
-        );
-    },
+export const Sizes: StoryObj<typeof ModalWindow> = {
+    render: SizesRender,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Примеры модальных окон разных размеров: SM, MD и LG.",
             },
+            source: {
+                code: SizesSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
-export const WithLongContent: Story = {
-    render: () => {
-        const [isOpen, setIsOpen] = useState(false);
-
-        const handleOpen = () => setIsOpen(true);
-        const handleClose = () => setIsOpen(false);
-
-        const paragraphs = Array.from({ length: 10 }, (_, i) => (
-            <React.Fragment key={i}>
-                <Text tag="div" size={ETextSize.B2}>
-                    Параграф {i + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </Text>
-                {i < 9 && <Gap size={16} />}
-            </React.Fragment>
-        ));
-
-        return (
-            <div>
-                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
-                    Открыть с длинным контентом
-                </Button>
-
-                <ModalWindow
-                    isOpen={isOpen}
-                    size={EComponentSize.MD}
-                    closeButton={<ModalWindowClose onClick={handleClose} />}
-                >
-                    <ModalWindowContent>
-                        <ModalWindowHeader>
-                            <ModalWindowHeader.Title>
-                                <ModalWindowHeader.Title.Content>
-                                    <MobileView
-                                        fallback={
-                                            <Title tag="h1" size={ETitleSize.H1}>
-                                                Title text
-                                            </Title>
-                                        }
-                                    >
-                                        <Title tag="h2" size={ETitleSize.H2}>
-                                            Title text
-                                        </Title>
-                                    </MobileView>
-                                </ModalWindowHeader.Title.Content>
-                            </ModalWindowHeader.Title>
-                        </ModalWindowHeader>
-
-                        <ModalWindowBody>{paragraphs}</ModalWindowBody>
-
-                        <ModalWindowFooter>
-                            <ModalWindowFooter.Description>
-                                <ModalWindowFooter.Description.Controls>
-                                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                                        Button text
-                                    </Button>
-                                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                        Button text
-                                    </Button>
-                                </ModalWindowFooter.Description.Controls>
-                            </ModalWindowFooter.Description>
-                        </ModalWindowFooter>
-                    </ModalWindowContent>
-                </ModalWindow>
-            </div>
-        );
-    },
+export const WithLongContent: StoryObj<typeof ModalWindow> = {
+    render: WithLongContentRender,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Пример модального окна с длинным контентом и прилипающими заголовком и футером.",
             },
+            source: {
+                code: WithLongContentSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
 };
 
-export const LoadingState: Story = {
-    render: () => {
-        const [isOpen, setIsOpen] = useState(false);
-
-        const handleOpen = () => setIsOpen(true);
-        const handleClose = () => setIsOpen(false);
-
-        return (
-            <div>
-                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD} onClick={handleOpen}>
-                    Открыть с загрузкой
-                </Button>
-
-                <ModalWindow
-                    isOpen={isOpen}
-                    size={EComponentSize.MD}
-                    closeButton={<ModalWindowClose onClick={handleClose} />}
-                >
-                    <ModalWindowContent isLoading loadingTitle="Загрузка данных...">
-                        <ModalWindowHeader>
-                            <ModalWindowHeader.Title>
-                                <ModalWindowHeader.Title.Content>
-                                    <MobileView
-                                        fallback={
-                                            <Title tag="h1" size={ETitleSize.H1}>
-                                                Title text
-                                            </Title>
-                                        }
-                                    >
-                                        <Title tag="h2" size={ETitleSize.H2}>
-                                            Title text
-                                        </Title>
-                                    </MobileView>
-                                </ModalWindowHeader.Title.Content>
-                            </ModalWindowHeader.Title>
-                        </ModalWindowHeader>
-
-                        <ModalWindowBody>
-                            <Text tag="div" size={ETextSize.B2}>
-                                Этот контент скрыт под индикатором загрузки.
-                            </Text>
-                        </ModalWindowBody>
-
-                        <ModalWindowFooter>
-                            <ModalWindowFooter.Description>
-                                <ModalWindowFooter.Description.Controls>
-                                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
-                                        Button text
-                                    </Button>
-                                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                                        Button text
-                                    </Button>
-                                </ModalWindowFooter.Description.Controls>
-                            </ModalWindowFooter.Description>
-                        </ModalWindowFooter>
-                    </ModalWindowContent>
-                </ModalWindow>
-            </div>
-        );
-    },
+export const LoadingState: StoryObj<typeof ModalWindow> = {
+    render: LoadingStateRender,
     parameters: {
+        controls: { disable: true },
         docs: {
             description: {
                 story: "Пример модального окна в состоянии загрузки.",
             },
+            source: {
+                code: LoadingStateSource,
+                language: "tsx",
+            },
         },
-        controls: { disable: true },
     },
+};
+
+const visualTestsStoryParameters = {
+    testRunner: { skip: false },
+    controls: { disable: true },
+    docs: {
+        canvas: { sourceState: "none" as const },
+        codePanel: false,
+    },
+};
+
+const openModalPlay = async ({
+    canvas,
+    userEvent,
+}: Parameters<NonNullable<StoryObj<typeof ModalWindow>["play"]>>[0]) => {
+    const trigger = await canvas.findByRole("button", { name: VISUAL_TESTS_TRIGGER_LABEL });
+    await userEvent.click(trigger);
+};
+
+export const VisualTestsDefaultSize: StoryObj<typeof ModalWindow> = {
+    name: "Visual tests: Default",
+    tags: ["!autodocs"],
+    parameters: visualTestsStoryParameters,
+    render: VisualTestsDefault,
+    play: openModalPlay,
+};
+
+export const VisualTestsSm: StoryObj<typeof ModalWindow> = {
+    name: "Visual tests: Size SM",
+    tags: ["!autodocs"],
+    parameters: visualTestsStoryParameters,
+    render: VisualTestsSizeSm,
+    play: openModalPlay,
+};
+
+export const VisualTestsLg: StoryObj<typeof ModalWindow> = {
+    name: "Visual tests: Size LG",
+    tags: ["!autodocs"],
+    parameters: visualTestsStoryParameters,
+    render: VisualTestsSizeLg,
+    play: openModalPlay,
+};
+
+export const VisualTestsWithLongContent: StoryObj<typeof ModalWindow> = {
+    name: "Visual tests: Long Content",
+    tags: ["!autodocs"],
+    parameters: visualTestsStoryParameters,
+    render: VisualTestsLongContent,
+    play: openModalPlay,
+};
+
+export const VisualTestsLoadingState: StoryObj<typeof ModalWindow> = {
+    name: "Visual tests: Loading",
+    tags: ["!autodocs"],
+    parameters: visualTestsStoryParameters,
+    render: VisualTestsLoading,
+    play: openModalPlay,
 };

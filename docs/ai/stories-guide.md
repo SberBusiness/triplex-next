@@ -662,14 +662,17 @@ export { default as SizesSource } from "./Sizes?raw";
 
 ### Скриншот-тесты
 
+Скриншот-тесты обязательны для UI-компонентов. Без baseline-файлов в `__screenshots__/` регрессию не поймать.
+
 - [ ] Playground исключён из скриншот-тестов (`testRunner: { skip: true }`)
 - [ ] Нет дублирующих скриншотов — визуально идентичные стори исключены через `testRunner: { skip: true }`
 - [ ] Все ключевые визуальные состояния покрыты (размеры, статусы, заполненные поля, фокус)
 - [ ] Если основных сторей недостаточно — создана Visual tests с недостающими состояниями
 - [ ] Visual tests скрыта из autodocs (`tags: ["!autodocs"]`) и не показывает код
-- [ ] Если компонент требует взаимодействия (dropdown, tooltip) — реализован `play` в Visual tests
+- [ ] Если компонент требует взаимодействия (dropdown, tooltip, modal, popover) — реализован `play` в Visual tests
 - [ ] Данные в Visual tests захардкожены (нет `new Date()`, `Math.random()`)
 - [ ] Контейнеры имеют фиксированные размеры для стабильного layout'а
+- [ ] Для каждой не-skip story есть baseline-файлы в `__screenshots__/{story-id}--xs.png` и `--xl.png`. Если baseline ещё нет — запустить `GitHub Actions → Update Visual Snapshots` на ветке (CI закоммитит скриншоты), и только потом мержить.
 
 ### Для небольших изменений в legacy stories
 

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest"; // или jest
 import { Avatar } from "../Avatar";
-import { EAvatarSize, TAvatarBorderRadius } from "../enums";
+import { EAvatarSize } from "../enums";
 
 describe("Avatar component", () => {
     it("should render with default props", () => {
@@ -39,15 +39,11 @@ describe("Avatar component", () => {
             { borderRadius: 10, expectedClass: "borderRadius10" },
             { borderRadius: 12, expectedClass: "borderRadius12" },
             { borderRadius: 16, expectedClass: "borderRadius16" },
-        ];
+        ] as const;
 
         borderRadiuses.forEach(({ borderRadius, expectedClass }) => {
             const { unmount } = render(
-                <Avatar
-                    size={EAvatarSize.MD}
-                    borderRadius={borderRadius as TAvatarBorderRadius}
-                    data-testid={`avatar-${borderRadius}`}
-                />,
+                <Avatar size={EAvatarSize.MD} borderRadius={borderRadius} data-testid={`avatar-${borderRadius}`} />,
             );
 
             const avatar = screen.getByTestId(`avatar-${borderRadius}`);

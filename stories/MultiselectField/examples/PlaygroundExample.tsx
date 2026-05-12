@@ -191,7 +191,7 @@ export const PlaygroundExample = ({
 
     return (
         <div style={{ maxWidth: "320px" }}>
-            <MultiselectField renderTarget={renderTarget}>
+            <MultiselectField size={size} renderTarget={renderTarget}>
                 {({ opened, setOpened, targetRef: dropdownTargetRef, dropdownRef }) => (
                     <MultiselectField.Dropdown
                         opened={forceOpened ? true : opened}
@@ -257,11 +257,12 @@ export const PlaygroundExample = ({
                         )}
 
                         <MultiselectField.Dropdown.Content>
-                            {renderCheckboxList()}
-                            {!!filter.length && !visibleOptions.length && (
+                            {!!filter.length && !visibleOptions.length ? (
                                 <div className={`not-found ${size}`}>
                                     <Text size={ETextSize.B3}>Nothing was found.</Text>
                                 </div>
+                            ) : (
+                                renderCheckboxList()
                             )}
                         </MultiselectField.Dropdown.Content>
 

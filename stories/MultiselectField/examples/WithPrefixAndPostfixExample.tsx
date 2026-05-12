@@ -24,7 +24,7 @@ import {
     DropdownMobileFooter,
     IconWrapper,
 } from "@sberbusiness/triplex-next";
-import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import "../MultiselectField.less";
 
 interface IOption {
@@ -139,8 +139,8 @@ export const WithPrefixAndPostfixExample = () => {
                         placeholder="Select to proceed"
                         label={renderTags()}
                         prefix={
-                            <IconWrapper disableInteraction>
-                                <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                            <IconWrapper disableInteraction displayContents>
+                                <DefaulticonStrokePrdIcon20 paletteIndex={5} />
                             </IconWrapper>
                         }
                         postfix={<HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>}

@@ -12,6 +12,7 @@ export const IslandWidgetHeaderDescription: React.FC<IIslandWidgetHeaderDescript
     ...htmlDivAttributes
 }) => (
     <Text
+        tag="div"
         size={ETextSize.B4}
         type={EFontType.SECONDARY}
         {...htmlDivAttributes}

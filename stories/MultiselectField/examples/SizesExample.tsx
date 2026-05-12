@@ -143,6 +143,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 
     return (
         <MultiselectField
+            size={size}
             renderTarget={(props) => (
                 <MultiselectField.Target
                     {...props}

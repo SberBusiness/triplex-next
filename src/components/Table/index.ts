@@ -12,3 +12,7 @@ export { ColumnSettings } from "./TableBasicSettings/components/ColumnSettings";
 // импорт типов и интерфейсов
 export * from "./TableBasic/enums";
 export * from "./TableBasic/types";
+export * from "./TableFooter/components/TableFooterSummaryAmount";
+export * from "./TableFooter/components/TableFooterSummarySelectAllButton";
+export * from "./TableFooter/components/TableFooterSummarySelectedCount";
+export * from "./TableBasicSettings/components/ColumnSettingsSortableListItem";

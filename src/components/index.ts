@@ -14,6 +14,8 @@ export * from "./CheckboxTreeExtended";
 export * from "./Chip";
 export * from "./ChipGroup";
 export * from "./Col";
+export * from "./CollapsibleTree";
+export * from "./CollapsibleTreeExtended";
 export * from "./Confirm";
 export * from "./DateField";
 export * from "./DateRange";

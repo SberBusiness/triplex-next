@@ -57,7 +57,7 @@ export interface ICollapsibleTreeExtendedNodeProps
     // Render-функция дочерних нод.
     renderBody: (props: ICollapsibleTreeExtendedNodeBodyProvideProps) => React.ReactNode;
     // Render-функция не сворачиваемой части ноды.
-    renderHeader: (props: ICollapsibleTreeExtendedNodeHeaderProvideProps) => JSX.Element;
+    renderHeader: (props: ICollapsibleTreeExtendedNodeHeaderProvideProps) => React.ReactNode;
 }
 
 /**

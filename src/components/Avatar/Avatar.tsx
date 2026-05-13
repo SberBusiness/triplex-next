@@ -25,7 +25,7 @@ const BORDER_RADIUS_TO_CLASS_NAME_MAP: Record<TAvatarBorderRadius, string> = {
 
 /** Аватар, предназначен для отображения изображений профиля пользователя, инициалов или иконок. */
 export const Avatar = React.forwardRef<HTMLDivElement, IAvatarProps>(
-    ({ className, size, borderRadius = 10, ...restProps }, ref) => (
+    ({ className, size, borderRadius, ...restProps }, ref) => (
         <div
             className={clsx(
                 styles.avatar,

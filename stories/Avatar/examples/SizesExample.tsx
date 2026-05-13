@@ -8,7 +8,7 @@ export const SizesExample = () => (
         {SIZES.map((size) => (
             <div key={size} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{size.toUpperCase()}</div>
-                <Avatar size={size} />
+                <Avatar size={size} borderRadius={12} />
             </div>
         ))}
     </div>

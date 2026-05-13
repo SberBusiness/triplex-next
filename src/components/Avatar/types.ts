@@ -6,5 +6,5 @@ export interface IAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Размер. */
     size: EAvatarSize;
     /** Радиус скругления. */
-    borderRadius?: TAvatarBorderRadius;
+    borderRadius: TAvatarBorderRadius;
 }

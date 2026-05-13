@@ -8,17 +8,18 @@ import {
 import { TreeView } from "../../TreeView/TreeView";
 import { AccordionBase } from "../../AccordionBase/protected/AccordionBase";
 import clsx from "clsx";
-import styles from "../styles/CollapsableTree.module.less";
+import styles from "../styles/CollapsibleTreeExtended.module.less";
 
 /**
- * Свойства, передаваемые CollapsableTreeNode в рендер-функцию renderBody.
+ * Свойства, передаваемые CollapsibleTreeExtendedNode в рендер-функцию renderBody.
  *
  * activeNode - Текущая нода является активной при перемещении с клавиатуры.
  * animating - В текущий момент происходит анимация открытия/закрытия.
  * hasChildNodes - Текущая нода имеет дочерние ноды.
  */
-export interface ICollapsableTreeNodeBodyProvideProps
-    extends Pick<IAccordionBodyProvideProps, "animating">,
+export interface ICollapsibleTreeExtendedNodeBodyProvideProps
+    extends
+        Pick<IAccordionBodyProvideProps, "animating">,
         Pick<ITreeViewNodeProvideProps, "activeNode" | "hasChildNodes"> {
     // Текущая нода раскрыта.
     opened: boolean;
@@ -27,15 +28,16 @@ export interface ICollapsableTreeNodeBodyProvideProps
 }
 
 /**
- * Свойства, передаваемые CollapsableTreeNode в рендер-функцию renderHeader.
+ * Свойства, передаваемые CollapsibleTreeExtendedNode в рендер-функцию renderHeader.
  *
  * activeNode - Текущая нода является активной при перемещении с клавиатуры.
  * animating - В текущий момент происходит анимация открытия/закрытия.
  * hasChildNodes - Текущая нода имеет дочерние ноды.
  * isLastNode - Текущая нода является последней в дереве.
  */
-export interface ICollapsableTreeNodeHeaderProvideProps
-    extends Pick<IAccordionHeaderProvideProps, "animating">,
+export interface ICollapsibleTreeExtendedNodeHeaderProvideProps
+    extends
+        Pick<IAccordionHeaderProvideProps, "animating">,
         Pick<ITreeViewNodeProvideProps, "activeNode" | "hasChildNodes" | "isLastNode"> {
     // Текущая нода раскрыта.
     opened: boolean;
@@ -44,37 +46,39 @@ export interface ICollapsableTreeNodeHeaderProvideProps
 }
 
 /**
- * Свойства CollapsableTreeNode.
+ * Свойства CollapsibleTreeExtendedNode.
  *
  * toggle - Функция смены значения opened.
  * onToggle - Функция, вызываемая после окончания анимации открытия/закрытия.
  */
-export interface ICollapsableTreeNodeProps
-    extends Omit<ITreeViewNodeProps, "children">,
-        Pick<IAccordionBaseProps, "onToggle" | "toggle"> {
+export interface ICollapsibleTreeExtendedNodeProps
+    extends Omit<ITreeViewNodeProps, "children">, Pick<IAccordionBaseProps, "onToggle" | "toggle"> {
     children?: never;
     // Render-функция дочерних нод.
-    renderBody: (props: ICollapsableTreeNodeBodyProvideProps) => React.ReactNode;
+    renderBody: (props: ICollapsibleTreeExtendedNodeBodyProvideProps) => React.ReactNode;
     // Render-функция не сворачиваемой части ноды.
-    renderHeader: (props: ICollapsableTreeNodeHeaderProvideProps) => JSX.Element;
+    renderHeader: (props: ICollapsibleTreeExtendedNodeHeaderProvideProps) => JSX.Element;
 }
 
 /**
- * Состояние CollapsableTreeNode.
+ * Состояние CollapsibleTreeExtendedNode.
  *
  * @param {boolean} controlled - Флаг, означающий, что состояние opened передается снаружи.
  */
-interface ICollapsableTreeNodeState {
+interface ICollapsibleTreeExtendedNodeState {
     controlled: boolean;
 }
 
 /**
- * Нода дерева CollapsableTree.
+ * Нода дерева CollapsibleTreeExtended.
  * Является оберткой TreeView.Node.
  * Сворачиваться/разворачиваться может только если есть дочерние ноды. Они передаются в renderBody.
  */
-export class CollapsableTreeNode extends React.Component<ICollapsableTreeNodeProps, ICollapsableTreeNodeState> {
-    public static displayName = "CollapsableTreeNode";
+export class CollapsibleTreeExtendedNode extends React.Component<
+    ICollapsibleTreeExtendedNodeProps,
+    ICollapsibleTreeExtendedNodeState
+> {
+    public static displayName = "CollapsibleTreeExtendedNode";
 
     state = {
         controlled: typeof this.props.opened !== "undefined",
@@ -90,7 +94,7 @@ export class CollapsableTreeNode extends React.Component<ICollapsableTreeNodePro
                     const opened = controlled ? openedProps : treeViewNodeProps.openedNode;
                     return (
                         <AccordionBase
-                            expandAnimationClassName={clsx(styles.collapsableTreeNodeContent, {
+                            expandAnimationClassName={clsx(styles.collapsibleTreeExtendedNodeContent, {
                                 collapsed: !opened,
                             })}
                             renderBody={this.renderBody(treeViewNodeProps)}

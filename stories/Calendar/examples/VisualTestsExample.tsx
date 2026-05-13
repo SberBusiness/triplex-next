@@ -1,9 +1,6 @@
-import moment from "moment";
-import React, { useState } from "react";
+import React from "react";
 import { Calendar } from "@sberbusiness/triplex-next";
 
-export const VisualTestsExample = () => {
-    const [pickedDate, setPickedDate] = useState(moment("19700101"));
-
-    return <Calendar pickedDate={pickedDate} onDateChange={setPickedDate} />;
-};
+export const VisualTestsExample = () => (
+    <Calendar pickedDate={null} defaultViewDate="19700101" onDateChange={() => {}} />
+);

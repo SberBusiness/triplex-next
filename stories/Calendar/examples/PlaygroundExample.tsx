@@ -1,36 +1,67 @@
+import React, { useState, useMemo } from "react";
 import moment from "moment";
-import React, { useState } from "react";
-import { Calendar, ECalendarDateMarkType } from "@sberbusiness/triplex-next";
+import { Calendar, ECalendarDateMarkType, dateFormatYYYYMMDD } from "@sberbusiness/triplex-next";
 
-export const PlaygroundExample = (args: React.ComponentProps<typeof Calendar>) => {
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof Calendar>,
+    "defaultViewDate" | "pickType" | "reversedPick" | "adaptiveMode"
+> {
+    withMarkedDays: boolean;
+    withDisabledDays: boolean;
+    withButtons: boolean;
+}
+
+export const PlaygroundExample = ({ withMarkedDays, withDisabledDays, withButtons, ...restArgs }: PlaygroundArgs) => {
     const [pickedDate, setPickedDate] = useState(moment());
 
-    const markedDays = {
-        [moment().subtract(1, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.BASIC,
-        [moment().subtract(2, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.STANDARD,
-        [moment().add(1, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.ATTENTION,
-        [moment().add(2, "days").format("YYYY-MM-DD")]: ECalendarDateMarkType.CRITICAL,
-    };
+    const markedDays = useMemo(
+        () =>
+            withMarkedDays
+                ? {
+                      [moment().subtract(2, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.BASIC,
+                      [moment().subtract(4, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.STANDARD,
+                      [moment().add(2, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.ATTENTION,
+                      [moment().add(4, "days").format(dateFormatYYYYMMDD)]: ECalendarDateMarkType.CRITICAL,
+                  }
+                : undefined,
+        [withMarkedDays],
+    );
 
-    const disabledDays = [
-        moment().subtract(3, "days").format("YYYY-MM-DD"),
-        moment().subtract(4, "days").format("YYYY-MM-DD"),
-        moment().add(3, "days").format("YYYY-MM-DD"),
-        moment().add(4, "days").format("YYYY-MM-DD"),
-    ];
+    const disabledDays = useMemo(
+        () =>
+            withDisabledDays
+                ? [
+                      moment().subtract(3, "days").format(dateFormatYYYYMMDD),
+                      moment().subtract(5, "days").format(dateFormatYYYYMMDD),
+                      moment().add(3, "days").format(dateFormatYYYYMMDD),
+                      moment().add(5, "days").format(dateFormatYYYYMMDD),
+                  ]
+                : undefined,
+        [withDisabledDays],
+    );
+
+    const buttonProps = useMemo(
+        () =>
+            withButtons
+                ? {
+                      yesterdayButtonProps: { children: "Вчера" },
+                      tomorrowButtonProps: { children: "Завтра" },
+                      todayButtonProps: ({ currentPeriodSelected }: { currentPeriodSelected: boolean }) => ({
+                          children: currentPeriodSelected ? "Сегодня" : "К текущей дате",
+                      }),
+                  }
+                : undefined,
+        [withButtons],
+    );
 
     return (
         <Calendar
-            {...args}
+            {...restArgs}
             pickedDate={pickedDate}
-            onDateChange={setPickedDate}
             markedDays={markedDays}
             disabledDays={disabledDays}
-            yesterdayButtonProps={{ children: "Вчера" }}
-            todayButtonProps={({ currentPeriodSelected }) => ({
-                children: currentPeriodSelected ? "Сегодня" : "К текущей дате",
-            })}
-            tomorrowButtonProps={{ children: "Завтра" }}
+            onDateChange={setPickedDate}
+            {...buttonProps}
         />
     );
 };

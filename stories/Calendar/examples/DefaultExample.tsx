@@ -1,5 +1,5 @@
-import moment from "moment";
 import React, { useState } from "react";
+import moment from "moment";
 import { Calendar } from "@sberbusiness/triplex-next";
 
 export const DefaultExample = () => {

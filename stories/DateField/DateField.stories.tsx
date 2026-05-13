@@ -183,6 +183,6 @@ export const VisualTests: StoryObj<typeof DateField> = {
     render: VisualTestsExample,
     play: async ({ canvas, userEvent }) => {
         const inputs = await canvas.findAllByRole("textbox");
-        await userEvent.click(inputs[0]);
+        await userEvent.click(inputs[inputs.length - 1]);
     },
 };

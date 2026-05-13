@@ -1,25 +1,24 @@
-import clsx from "clsx";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import moment from "moment";
-import { isDateOutOfRange, isDayDisabled } from "@sberbusiness/triplex-next/components/Calendar/utils";
-import { WEEKDAYS_SET } from "@sberbusiness/triplex-next/consts/DateConst";
-import { CalendarViewContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarViewContext";
-import { CalendarViewItem } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarViewItem";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { ECalendarDateMarkType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/types";
+import clsx from "clsx";
+import { isDateOutOfRange, isDayDisabled } from "../utils";
+import { WEEKDAYS_SET } from "../../../consts/DateConst";
+import { CalendarViewContext } from "../CalendarViewContext";
+import { CalendarViewItem } from "./CalendarViewItem";
+import { isKey } from "../../../utils/keyboard";
+import { ECalendarDateMarkType, ECalendarViewMode } from "../enums";
+import { CalendarContext } from "../CalendarContext";
+import { ICalendarViewProps } from "../types";
 import styles from "../styles/CalendarView.module.less";
 
 /** Свойства компонента CalendarViewDays. */
-export interface ICalendarViewDaysProps
-    extends Omit<ICalendarViewProps, "monthHtmlAttributes" | "yearHtmlAttributes"> {}
+export interface ICalendarViewDaysProps extends Omit<
+    ICalendarViewProps,
+    "monthHtmlAttributes" | "yearHtmlAttributes"
+> {}
 
 /** Вид календаря с выбором дня. */
-export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({
-    pickedDate,
-    dayHtmlAttributes = {},
-}) => {
+export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate, dayHtmlAttributes = {} }) => {
     const { format, periodId, limitRange, viewDate, markedDays, disabledDays, onDateSelect, onPageChange } =
         useContext(CalendarContext);
     const { viewItemFocusedRef } = useContext(CalendarViewContext);

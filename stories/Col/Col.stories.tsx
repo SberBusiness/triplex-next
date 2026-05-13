@@ -151,7 +151,7 @@ export const HiddenColumns: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },

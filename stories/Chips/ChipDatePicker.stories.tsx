@@ -114,7 +114,7 @@ export const Sizes: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -125,7 +125,7 @@ export const VisualTests: Story = {
     },
     render: VisualTestsExample,
     play: async ({ canvas, userEvent }) => {
-        const chip = await canvas.findByText("Date label");
-        await userEvent.click(chip);
+        const chips = await canvas.findAllByText("01.01.1970");
+        await userEvent.click(chips[chips.length - 1]);
     },
 };

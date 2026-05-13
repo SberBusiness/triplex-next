@@ -3,7 +3,7 @@ import { IPaginationExtendedProps, PaginationExtended } from "./components/Pagin
 import { IPaginationSelectProps, PaginationSelect } from "./components/PaginationSelect";
 import { IPaginationNavigationProps, PaginationNavigation } from "./components/PaginationNavigation";
 
-interface IPaginationProps extends IPaginationExtendedProps {
+export interface IPaginationProps extends IPaginationExtendedProps {
     /** Свойства компонента PaginationSelect. */
     paginationSelectProps?: IPaginationSelectProps;
     /** Свойства компонента PaginationNavigation. */

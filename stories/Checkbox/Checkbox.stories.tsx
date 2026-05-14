@@ -127,7 +127,7 @@ export const YGroup: StoryObj<typeof CheckboxYGroup> = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },

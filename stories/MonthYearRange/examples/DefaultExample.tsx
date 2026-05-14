@@ -10,7 +10,7 @@ import {
 } from "@sberbusiness/triplex-next";
 
 export const DefaultExample = () => {
-    const [value, setValue] = useState<TMonthYearRangeValue>(["20240101", "20240301"]);
+    const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
         <MonthYearField label="Label" placeholder="МММ ГГГГ" {...props} />
     );

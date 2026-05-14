@@ -17,7 +17,7 @@ export const VisualTestsExample = () => {
     return (
         <div style={{ maxWidth: "400px" }}>
             <MonthYearRange
-                value={["20260301", "20260301"]}
+                value={["19700101", "19700101"]}
                 onChange={() => {}}
                 shiftAmount={1}
                 shiftUnit={EMonthYearRangeShiftUnit.MONTH}

@@ -15,7 +15,7 @@ interface ISizeItemProps {
 }
 
 const SizeItem = ({ size }: ISizeItemProps) => {
-    const [value, setValue] = useState<TMonthYearRangeValue>(["20240101", "20240301"]);
+    const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
 
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
         <MonthYearField label="Label" placeholder="МММ ГГГГ" size={size} {...props} />

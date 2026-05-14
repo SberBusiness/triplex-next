@@ -1,9 +1,9 @@
-import clsx from "clsx";
 import React, { useEffect, useContext, useRef } from "react";
 import moment from "moment";
-import { ECalendarDateMarkType } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { CalendarViewContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarViewContext";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import clsx from "clsx";
+import { ECalendarDateMarkType } from "../enums";
+import { CalendarViewContext } from "../CalendarViewContext";
+import { isKey } from "../../../utils/keyboard";
 import styles from "../styles/CalendarView.module.less";
 
 /** Свойства компонента CalendarViewItem. */

@@ -332,7 +332,7 @@ const VisualTestsAccordion = () => {
 };
 
 export const VisualTests: StoryObj<typeof IslandAccordion> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {

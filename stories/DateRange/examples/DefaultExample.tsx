@@ -11,7 +11,7 @@ import {
 } from "@sberbusiness/triplex-next";
 
 export const DefaultExample = () => {
-    const [value, setValue] = useState<TDateRangeValue>(["20240101", "20240131"]);
+    const [value, setValue] = useState<TDateRangeValue>(["", ""]);
     const renderPicker = (props: IDateRangePickerProvideProps) => (
         <DateField
             label="Label"

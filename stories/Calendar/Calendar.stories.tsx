@@ -1,36 +1,30 @@
-import moment from "moment";
-import "moment/locale/ru";
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import moment from "moment";
+import { Meta, StoryObj, ArgTypes as ArgTypesType } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Calendar, ECalendarPickType } from "@sberbusiness/triplex-next";
+import { Calendar, dateFormatYYYYMMDD } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundArgs,
+    PlaygroundExample,
+    PlaygroundExampleSource,
     DefaultExample,
     DefaultExampleSource,
+    MarkedDaysExample,
+    MarkedDaysExampleSource,
+    DisabledDaysExample,
+    DisabledDaysExampleSource,
+    ButtonsExample,
+    ButtonsExampleSource,
     VisualTestsExample,
     VisualTestsExampleSource,
-    PickTypesExample,
-    PickTypesExampleSource,
-    PlaygroundExample,
-} from "./examples/index";
+} from "./examples";
 
-moment.locale("ru");
-
-const meta = {
+export default {
     title: "Components/Date components/Calendar",
     component: Calendar,
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент календаря.
-
-## Особенности
-
-- Возможен выбор даты (**ECalendarPickType.datePick**) или выбор месяца и года (**ECalendarPickType.monthYearPick**)
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -47,93 +41,137 @@ const meta = {
     },
 } satisfies Meta<typeof Calendar>;
 
-export default meta;
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    // Props
+    defaultViewDate: moment().format(dateFormatYYYYMMDD),
+    adaptiveMode: false,
+    // Settings
+    withMarkedDays: false,
+    withDisabledDays: false,
+    withButtons: false,
+};
 
-type Story = StoryObj<typeof Calendar>;
+const PLAYGROUND_ARG_TYPES: ArgTypesType<PlaygroundArgs> = {
+    // Props
+    defaultViewDate: {
+        control: { type: "text" },
+        table: {
+            category: "Props",
+        },
+    },
+    adaptiveMode: {
+        control: { type: "boolean" },
+        table: {
+            category: "Props",
+        },
+    },
+    // Settings
+    withMarkedDays: {
+        description: "С отмеченными днями.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    withDisabledDays: {
+        description: "С днями недоступными для выбора.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    withButtons: {
+        description: "С кнопками быстрого выбора.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+};
 
-export const Playground: Story = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    args: {
-        defaultViewDate: moment().format("YYYY-MM-DD"),
-        reversedPick: false,
-        pickType: ECalendarPickType.datePick,
-    },
-    argTypes: {
-        defaultViewDate: {
-            control: { type: "text" },
-            description: "Отображаемая по умолчанию дата",
-            table: {
-                type: { summary: "string | Moment" },
-            },
-        },
-        format: {
-            control: { type: "text" },
-            description: "Формат для значения",
-            table: {
-                type: { summary: "string | undefined" },
-            },
-        },
-        pickType: {
-            control: { type: "select" },
-            options: Object.values(ECalendarPickType).filter((v) => typeof v === "number"),
-            description: "Вариант выбора даты",
-            table: {
-                type: { summary: "ECalendarPickType" },
-            },
-        },
-        reversedPick: {
-            control: { type: "boolean" },
-            description: "Обратный порядок выбора даты",
-            table: {
-                type: { summary: "boolean" },
-            },
-        },
-    },
+    args: PLAYGROUND_ARGS,
+    argTypes: PLAYGROUND_ARG_TYPES,
     parameters: {
-        controls: {
-            include: ["defaultViewDate", "format", "pickType", "reversedPick"],
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: PlaygroundExampleSource,
+                language: "tsx",
+            },
         },
         testRunner: { skip: true },
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-            codePanel: false,
-        },
     },
     render: PlaygroundExample,
 };
 
-export const Default: Story = {
-    render: DefaultExample,
+export const Default: StoryObj<typeof Calendar> = {
     parameters: {
         controls: { disable: true },
-        testRunner: { skip: true },
         docs: {
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
+    render: DefaultExample,
 };
 
-export const PickTypes: Story = {
-    render: PickTypesExample,
+export const MarkedDays: StoryObj<typeof Calendar> = {
+    name: "With marked days",
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: PickTypesExampleSource,
+                code: MarkedDaysExampleSource,
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
+    render: MarkedDaysExample,
 };
 
-export const VisualTests: Story = {
-    tags: ["!autodocs"],
-    render: VisualTestsExample,
+export const DisabledDays: StoryObj<typeof Calendar> = {
+    name: "With disabled days",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DisabledDaysExampleSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
+    },
+    render: DisabledDaysExample,
+};
+
+export const Buttons: StoryObj<typeof Calendar> = {
+    name: "With buttons",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ButtonsExampleSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
+    },
+    render: ButtonsExample,
+};
+
+export const VisualTests: StoryObj<typeof Calendar> = {
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -147,4 +185,5 @@ export const VisualTests: Story = {
             },
         },
     },
+    render: VisualTestsExample,
 };

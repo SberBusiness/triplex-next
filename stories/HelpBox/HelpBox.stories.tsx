@@ -213,7 +213,7 @@ export const ChangeIconProps: StoryObj<typeof HelpBox> = {
 };
 
 export const VisualTests: StoryObj<typeof HelpBox> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {

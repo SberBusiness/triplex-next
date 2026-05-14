@@ -1,27 +1,43 @@
 .calendarViewDays {
-    width: calc(100% + 2px + 2px);
-    margin: 6px -2px -2px;
-    border-spacing: 2px;
+    width: calc(100% + 4px + 4px);
+    margin: 12px -4px 0px -4px;
+    border-spacing: 4px 0px;
     table-layout: fixed;
+
+    + .calendarFooter {
+        margin-top: 18px;
+    }
 
     .adaptive & {
         width: 100%;
-        margin: 14px 0 -6px;
+        margin: 12px 0 0;
         border-spacing: 0;
+
+        + .calendarFooter {
+            margin-top: 12px;
+        }
     }
 }
 
 .calendarViewMonths,
 .calendarViewYears {
     width: calc(100% + 6px + 6px);
-    margin: -2px -6px -8px;
-    border-spacing: 6px 12px;
+    margin: 8px -6px -14px;
+    border-spacing: 6px 14px;
     table-layout: fixed;
+
+    + .calendarFooter {
+        margin-top: 22px;
+    }
 
     .adaptive & {
         width: 100%;
-        margin: 14px 0 -6px;
-        border-spacing: 0 4px;
+        margin: 4px 0 -8px;
+        border-spacing: 0 8px;
+
+        + .calendarFooter {
+            margin-top: 12px;
+        }
     }
 }
 
@@ -40,10 +56,6 @@
         display: block;
         content: '\200C';
         line-height: 8px;
-
-        .adaptive & {
-            line-height: 4px;
-        }
     }
 }
 
@@ -60,6 +72,7 @@
     }
 
     &.current {
+        font-family: SBSansTextSemibold, Arial, sans-serif;
         font-weight: 600;
     }
 
@@ -81,8 +94,12 @@
     border: 1px solid var(--triplex-next-Calendar-View_Item_BorderColor_Default);
     cursor: pointer;
 
+    &.muted {
+        color: var(--triplex-next-Calendar-View_Item_Color_Muted);
+    }
+
     &:hover {
-        color: var(--triplex-next-Calendar-View_Item_Color_Selected);
+        color: var(--triplex-next-Calendar-View_Item_Color_Hover);
         background: var(--triplex-next-Calendar-View_Item_Background_Hover);
     }
 
@@ -165,10 +182,6 @@
         background: var(--triplex-next-Calendar-View_Item_Mark_Critical_Background_Default);
     }
 
-    &.muted {
-        color: var(--triplex-next-Calendar-View_Item_Color_Muted);
-    }
-
     &.disabled {
         color: var(--triplex-next-Calendar-View_Item_Color_Disabled);
         background: none;
@@ -185,23 +198,17 @@
     width: 36px;
     height: 36px;
     border-radius: 6px;
-
-    // .adaptive & {
-    //     width: 32px;
-    //     height: 32px;
-    //     border-radius: 16px;
-    // }
 }
 
 .unitMonth,
 .unitYear {
-    width: 89px;
+    width: 88px;
     height: 48px;
     border-radius: 6px;
 
     .adaptive & {
         width: 104px;
-        height: 48px;
-        border-radius: 6px;
+        height: 56px;
+        border-radius: 10px;
     }
 }

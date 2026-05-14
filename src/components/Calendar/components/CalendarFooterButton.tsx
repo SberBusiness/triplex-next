@@ -1,14 +1,13 @@
 import React, { useContext } from "react";
 import moment from "moment";
-import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
-import { EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
-import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { isDateOutOfRange, isDayDisabled } from "@sberbusiness/triplex-next/components/Calendar/utils";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { CalendarContext } from "../CalendarContext";
+import { Button, IButtonSecondaryProps } from "../../Button/Button";
+import { EButtonTheme } from "../../Button/enums";
+import { ECalendarPickType, ECalendarViewMode } from "../enums";
+import { isDateOutOfRange, isDayDisabled } from "../utils";
 
 /** Свойства компонента CalendarFooterButton. */
-export interface ICalendarFooterButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ICalendarFooterButtonProps extends Omit<IButtonSecondaryProps, "theme"> {
     /** Дата. */
     date: moment.Moment;
     /** Выбран текущий период. */
@@ -17,14 +16,14 @@ export interface ICalendarFooterButtonProps extends React.ButtonHTMLAttributes<H
 
 /** Кнопка футера "Вчера", "Сегодня", "Завтра", "К текущей дате" или "Текущий период". */
 export const CalendarFooterButton = React.forwardRef<HTMLButtonElement, ICalendarFooterButtonProps>(
-    ({ date, currentPeriodSelected, disabled, onClick, ...rest }, ref) => {
+    ({ date, currentPeriodSelected, disabled, onClick, ...restProps }, ref) => {
         const { format, limitRange, pickType, viewMode, disabledDays, onPageChange, onViewChange, onDateSelect } =
             useContext(CalendarContext);
 
         const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
             if (currentPeriodSelected) {
                 onDateSelect(date);
-            } else if (pickType === ECalendarPickType.datePick) {
+            } else if (pickType === ECalendarPickType.DATE) {
                 if (viewMode === ECalendarViewMode.DAYS) {
                     onPageChange(date, ECalendarViewMode.DAYS);
                 } else {
@@ -44,7 +43,7 @@ export const CalendarFooterButton = React.forwardRef<HTMLButtonElement, ICalenda
         const isDisabled = () => {
             if (disabled !== undefined) {
                 return disabled;
-            } else if (pickType === ECalendarPickType.datePick) {
+            } else if (pickType === ECalendarPickType.DATE) {
                 return isDateOutOfRange(date, limitRange, "day") || isDayDisabled(date.format(format), disabledDays);
             } else {
                 return isDateOutOfRange(date, limitRange, "month");
@@ -54,10 +53,9 @@ export const CalendarFooterButton = React.forwardRef<HTMLButtonElement, ICalenda
         return (
             <Button
                 theme={EButtonTheme.SECONDARY}
-                size={EComponentSize.SM}
-                onClick={handleClick}
+                {...restProps}
                 disabled={isDisabled()}
-                {...rest}
+                onClick={handleClick}
                 ref={ref}
             />
         );

@@ -11,6 +11,8 @@ export const FormFieldCounter: React.FC<IFormFieldCounterProps> = ({ children, .
 
     useEffect(() => {
         setWithCounter(true);
+        return () => setWithCounter(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

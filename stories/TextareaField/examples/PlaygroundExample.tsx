@@ -11,7 +11,16 @@ import {
     EFontType,
     ETooltipSize,
 } from "@sberbusiness/triplex-next";
-import type { PlaygroundArgs } from "../TextareaField.stories";
+
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof TextareaField>,
+    "size" | "status" | "label" | "active" | "textareaProps"
+> {
+    maxLength: number;
+    withPostfix: boolean;
+    withDescription: boolean;
+    withCounter: boolean;
+}
 
 const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
     [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
@@ -37,7 +46,6 @@ const getPostfixStyles = (size: EComponentSize): React.CSSProperties => ({
 export const PlaygroundExample = ({
     size = EComponentSize.LG,
     status = EFormFieldStatus.DEFAULT,
-    placeholder,
     maxLength,
     textareaProps,
     withPostfix,
@@ -76,7 +84,6 @@ export const PlaygroundExample = ({
                 textareaProps={{
                     ...textareaProps,
                     value,
-                    placeholder,
                     maxLength,
                     onChange: handleTextareaChange,
                     ref: textareaRef,
@@ -91,7 +98,7 @@ export const PlaygroundExample = ({
                 }
                 description={
                     withDescription && (
-                        <Text size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
+                        <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
                             (21) Description{" "}
                             <Link href="#" onClick={handleLinkClick}>
                                 Link text
@@ -101,7 +108,7 @@ export const PlaygroundExample = ({
                 }
                 counter={
                     withCounter && (
-                        <Text size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
                             {value.length}/{maxLength}
                         </Text>
                     )

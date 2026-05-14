@@ -19,7 +19,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "Дерево с раскрывающимися нодами. Обёртка над `CollapsibleTreeExtended` с готовым заголовком: иконка-шеврон, hover и focus-visible на интерактивной строке.\n\n- Ноды с `children` интерактивны и раскрываются по клику.\n- Леаф-ноды (без `children`) отображаются без шеврона.\n- Стартовое состояние раскрытия задаётся через `defaultOpened`.",
+                    "Готовое дерево с раскрывающимися ветками. Обёртка над [`CollapsibleTreeExtended`](?path=/docs/components-collapsibletreeextended--docs) с типовым UI узла: кнопка-заголовок с иконкой-шевроном, hover и focus-visible на интерактивной строке.\n\n### Модель данных\n\n- **Ветка** (`ICollapsibleTreeNodeBranch`) — узел с `label`, может содержать дочерние узлы (ветки и листья), интерактивна и раскрывается по клику.\n- **Лист** (`ICollapsibleTreeNodeLeaf`) — конечный узел с произвольным `content`, без шеврона, не раскрывается.\n- Стартовое состояние раскрытия ветки задаётся через `defaultOpened`.\n- На верхнем уровне `nodes` допустимы только ветки; листья — внутри `children` ветки.\n\n### Когда использовать\n\n- **`CollapsibleTree`** — типовое дерево «папка/файл» с готовым шевроном и hover. Достаточно описать данные узлов.\n- **`CollapsibleTreeExtended`** — нужен нестандартный UI узла (своя иконка раскрытия, кастомный header, особое поведение клика).",
             },
             page: () => (
                 <>
@@ -41,17 +41,17 @@ const meta = {
 export default meta;
 
 const playgroundNodes = [
-    { id: "folder-1", label: "Folder text", children: [{ id: "file-1", label: "File text" }] },
+    { id: "folder-1", label: "Folder text", children: [{ id: "file-1", content: "File text" }] },
     {
         id: "folder-2",
         label: "Folder text",
         defaultOpened: true,
         children: [
-            { id: "file-2-1", label: "File text" },
-            { id: "file-2-2", label: "File text" },
+            { id: "file-2-1", content: "File text" },
+            { id: "file-2-2", content: "File text" },
         ],
     },
-    { id: "folder-3", label: "Folder text", children: [{ id: "file-3", label: "File text" }] },
+    { id: "folder-3", label: "Folder text", children: [{ id: "file-3", content: "File text" }] },
 ];
 
 export const Playground: StoryObj<typeof CollapsibleTree> = {

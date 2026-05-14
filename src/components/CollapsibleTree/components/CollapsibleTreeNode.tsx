@@ -1,50 +1,27 @@
 import React from "react";
-import { CollapsibleTreeExtended } from "../../CollapsibleTreeExtended/CollapsibleTreeExtended";
-import { ICollapsibleTreeNodeData } from "../types";
-import { CollapsibleTreeNodeHeader } from "./CollapsibleTreeNodeHeader";
+import { TCollapsibleTreeNode, isCollapsibleTreeNodeLeaf } from "../types";
+import { CollapsibleTreeBranchNode } from "./CollapsibleTreeBranchNode";
+import { CollapsibleTreeLeafNode } from "./CollapsibleTreeLeafNode";
 
 /** Свойства CollapsibleTreeNode. */
 export interface ICollapsibleTreeNodeProps {
-    /** Данные текущей ноды. */
-    node: ICollapsibleTreeNodeData;
-    /** Данные предыдущей ноды на том же уровне (для клавиатурной навигации). */
-    prevNode?: ICollapsibleTreeNodeData;
-    /** Данные следующей ноды на том же уровне (для клавиатурной навигации). */
-    nextNode?: ICollapsibleTreeNodeData;
+    /** Данные узла — ветка или лист. */
+    node: TCollapsibleTreeNode;
+    /** Идентификатор предыдущего соседнего узла (для клавиатурной навигации). */
+    prevNodeId?: string;
+    /** Идентификатор следующего соседнего узла (для клавиатурной навигации). */
+    nextNodeId?: string;
 }
 
 /**
- * Нода CollapsibleTree.
- * Хранит локальное состояние раскрытия и рекурсивно рендерит детей.
+ * Диспетчер узла CollapsibleTree.
+ * Выбирает рендер ветки или листа по форме данных узла.
  */
-export const CollapsibleTreeNode: React.FC<ICollapsibleTreeNodeProps> = ({ node, prevNode, nextNode }) => {
-    const hasChildren = Boolean(node.children?.length);
-    const [opened, setOpened] = React.useState<boolean>(node.defaultOpened ?? false);
-
-    return (
-        <CollapsibleTreeExtended.Node
-            id={node.id}
-            opened={opened}
-            toggle={setOpened}
-            prevNodeId={prevNode?.id}
-            nextNodeId={nextNode?.id}
-            renderHeader={(headerProps) => (
-                <CollapsibleTreeNodeHeader {...headerProps}>{node.label}</CollapsibleTreeNodeHeader>
-            )}
-            renderBody={() =>
-                hasChildren
-                    ? node.children!.map((child, index) => (
-                          <CollapsibleTreeNode
-                              key={child.id}
-                              node={child}
-                              prevNode={node.children![index - 1]}
-                              nextNode={node.children![index + 1]}
-                          />
-                      ))
-                    : null
-            }
-        />
+export const CollapsibleTreeNode: React.FC<ICollapsibleTreeNodeProps> = ({ node, prevNodeId, nextNodeId }) =>
+    isCollapsibleTreeNodeLeaf(node) ? (
+        <CollapsibleTreeLeafNode node={node} prevNodeId={prevNodeId} nextNodeId={nextNodeId} />
+    ) : (
+        <CollapsibleTreeBranchNode node={node} prevNodeId={prevNodeId} nextNodeId={nextNodeId} />
     );
-};
 
 CollapsibleTreeNode.displayName = "CollapsibleTreeNode";

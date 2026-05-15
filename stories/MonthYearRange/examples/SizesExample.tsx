@@ -18,7 +18,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
 
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
-        <MonthYearField label="Label" placeholder="МММ ГГГГ" size={size} {...props} />
+        <MonthYearField label="Label" placeholder="мм.гггг" size={size} {...props} />
     );
     const renderButton = (props: IMonthYearRangeButtonProvideProps) => <ButtonIcon {...props} />;
 

@@ -17,7 +17,7 @@ export const ProductionExample = () => {
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
         <MonthYearField
             label="Label"
-            placeholder="МММ ГГГГ"
+            placeholder="мм.гггг"
             targetProps={{ postfix: <HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>, inputProps: {} }}
             {...props}
         />

@@ -1,0 +1,11 @@
+import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+<Meta title="release-notes/v1/1.30.0" />
+
+<Title>v1.30.0</Title>
+
+<Heading>Изменения</Heading>
+
+**CollapsibleTreeExtended**
+
+- `CollapsibleTreeExtended.Node` — починен controlled-инвариант: режим (controlled / uncontrolled) теперь вычисляется на каждом рендере по `props.opened !== undefined`.

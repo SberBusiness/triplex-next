@@ -101,7 +101,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ChipGroup | ⬜ | ✅ | ⬜ |
 | Col | ⬜ | ✅ | ⬜ |
 | CollapsibleTree | ⬜ | ✅ | ⬜ |
-| CollapsibleTreeExtended | ⬜ | ⬜ | ⬜ |
+| CollapsibleTreeExtended | ✅ | ✅ | ✅ |
 | Confirm | ⬜ | ⬜ | ⬜ |
 | DateField | ⬜ | ✅ | ⬜ |
 | DatePickerExtended | ⬜ | ⬜ | ⬜ |

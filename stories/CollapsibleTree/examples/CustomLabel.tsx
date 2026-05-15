@@ -2,6 +2,7 @@ import React from "react";
 import {
     CollapsibleTree,
     CollapsibleTreeNodeLabel,
+    EFontWeightText,
     ETextSize,
     ICollapsibleTreeNodeBranch,
     Text,
@@ -10,12 +11,12 @@ import {
 const nodes: ICollapsibleTreeNodeBranch[] = [
     {
         id: "folder-1",
-        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
+        label: <CollapsibleTreeNodeLabel size={ETextSize.B3}>Folder text (B3)</CollapsibleTreeNodeLabel>,
         children: [
             {
                 id: "file-1",
                 content: (
-                    <Text size={ETextSize.B1} tag="span">
+                    <Text size={ETextSize.B3} tag="span">
                         File text
                     </Text>
                 ),
@@ -24,13 +25,17 @@ const nodes: ICollapsibleTreeNodeBranch[] = [
     },
     {
         id: "folder-2",
-        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
+        label: (
+            <CollapsibleTreeNodeLabel size={ETextSize.B2} weight={EFontWeightText.REGULAR}>
+                Folder text (B2, regular)
+            </CollapsibleTreeNodeLabel>
+        ),
         defaultOpened: true,
         children: [
             {
                 id: "file-2",
                 content: (
-                    <Text size={ETextSize.B1} tag="span">
+                    <Text size={ETextSize.B2} tag="span">
                         File text
                     </Text>
                 ),
@@ -39,7 +44,7 @@ const nodes: ICollapsibleTreeNodeBranch[] = [
     },
     {
         id: "folder-3",
-        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
+        label: <CollapsibleTreeNodeLabel size={ETextSize.B1}>Folder text (B1, default)</CollapsibleTreeNodeLabel>,
         children: [
             {
                 id: "file-3",
@@ -53,8 +58,8 @@ const nodes: ICollapsibleTreeNodeBranch[] = [
     },
 ];
 
-export const Opened = () => (
-    <div style={{ maxWidth: 320 }}>
+export const CustomLabel = () => (
+    <div style={{ maxWidth: 360 }}>
         <CollapsibleTree nodes={nodes} />
     </div>
 );

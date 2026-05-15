@@ -2,6 +2,7 @@ import React from "react";
 import { CollapsibleTreeExtended } from "../../CollapsibleTreeExtended/CollapsibleTreeExtended";
 import { ICollapsibleTreeNodeLeaf } from "../types";
 import { CollapsibleTreeLeafContent } from "./CollapsibleTreeLeafContent";
+import styles from "../styles/CollapsibleTreeLeafNode.module.less";
 
 /** Свойства CollapsibleTreeLeafNode. */
 export interface ICollapsibleTreeLeafNodeProps {
@@ -21,6 +22,7 @@ const noop = () => undefined;
  */
 export const CollapsibleTreeLeafNode: React.FC<ICollapsibleTreeLeafNodeProps> = ({ node, prevNodeId, nextNodeId }) => (
     <CollapsibleTreeExtended.Node
+        className={styles.collapsibleTreeLeafNode}
         id={node.id}
         opened
         toggle={noop}

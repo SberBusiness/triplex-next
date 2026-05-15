@@ -3,6 +3,7 @@ import { CollapsibleTreeExtended } from "../../CollapsibleTreeExtended/Collapsib
 import { ICollapsibleTreeNodeBranch, TCollapsibleTreeNode } from "../types";
 import { CollapsibleTreeNodeHeader } from "./CollapsibleTreeNodeHeader";
 import { CollapsibleTreeNode } from "./CollapsibleTreeNode";
+import styles from "../styles/CollapsibleTreeBranchNode.module.less";
 
 /** Свойства CollapsibleTreeBranchNode. */
 export interface ICollapsibleTreeBranchNodeProps {
@@ -28,6 +29,7 @@ export const CollapsibleTreeBranchNode: React.FC<ICollapsibleTreeBranchNodeProps
 
     return (
         <CollapsibleTreeExtended.Node
+            className={styles.collapsibleTreeBranchNode}
             id={node.id}
             opened={opened}
             toggle={setOpened}

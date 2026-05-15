@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
-import { CollapsibleTree } from "@sberbusiness/triplex-next";
+import { CollapsibleTree, CollapsibleTreeNodeLabel } from "@sberbusiness/triplex-next";
 import {
     Default as DefaultRender,
     DefaultSource,
@@ -9,6 +9,8 @@ import {
     OpenedSource,
     Nested as NestedRender,
     NestedSource,
+    CustomLabel as CustomLabelRender,
+    CustomLabelSource,
 } from "./examples";
 
 const meta = {
@@ -41,17 +43,25 @@ const meta = {
 export default meta;
 
 const playgroundNodes = [
-    { id: "folder-1", label: "Folder text", children: [{ id: "file-1", content: "File text" }] },
+    {
+        id: "folder-1",
+        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
+        children: [{ id: "file-1", content: "File text" }],
+    },
     {
         id: "folder-2",
-        label: "Folder text",
+        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
         defaultOpened: true,
         children: [
             { id: "file-2-1", content: "File text" },
             { id: "file-2-2", content: "File text" },
         ],
     },
-    { id: "folder-3", label: "Folder text", children: [{ id: "file-3", content: "File text" }] },
+    {
+        id: "folder-3",
+        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
+        children: [{ id: "file-3", content: "File text" }],
+    },
 ];
 
 export const Playground: StoryObj<typeof CollapsibleTree> = {
@@ -103,6 +113,20 @@ export const Nested: StoryObj<typeof CollapsibleTree> = {
         docs: {
             controls: { disable: true },
             source: { code: NestedSource, language: "tsx" },
+        },
+    },
+};
+
+export const CustomLabel: StoryObj<typeof CollapsibleTree> = {
+    name: "Custom label",
+    render: CustomLabelRender,
+    parameters: {
+        docs: {
+            description: {
+                story: "Размер и вес шрифта заголовка ветки задаются через пропы `size` и `weight` у `CollapsibleTreeNodeLabel`. По умолчанию — `B1` / `SEMIBOLD`.",
+            },
+            controls: { disable: true },
+            source: { code: CustomLabelSource, language: "tsx" },
         },
     },
 };

@@ -4,7 +4,7 @@ import React from "react";
 export interface ICollapsibleTreeNodeBranch {
     /** Уникальный идентификатор узла в дереве. */
     id: string;
-    /** Содержимое заголовка ветки. */
+    /** Содержимое заголовка ветки. Для типовой типографики оборачивай в `CollapsibleTreeNodeLabel`. */
     label: React.ReactNode;
     /** Начальное состояние раскрытия ветки. */
     defaultOpened?: boolean;

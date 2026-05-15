@@ -1,10 +1,16 @@
 import React from "react";
-import { CollapsibleTree, ETextSize, ICollapsibleTreeNodeBranch, Text } from "@sberbusiness/triplex-next";
+import {
+    CollapsibleTree,
+    CollapsibleTreeNodeLabel,
+    ETextSize,
+    ICollapsibleTreeNodeBranch,
+    Text,
+} from "@sberbusiness/triplex-next";
 
 const nodes: ICollapsibleTreeNodeBranch[] = [
     {
         id: "folder-1",
-        label: "Folder text",
+        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
         children: [
             {
                 id: "file-1",
@@ -18,24 +24,16 @@ const nodes: ICollapsibleTreeNodeBranch[] = [
     },
     {
         id: "folder-2",
-        label: "Folder text",
+        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
         defaultOpened: true,
         children: [
             {
                 id: "folder-2-1",
-                label: "Folder text",
+                label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
                 defaultOpened: true,
                 children: [
                     {
                         id: "file-2-1-1",
-                        content: (
-                            <Text size={ETextSize.B1} tag="span">
-                                File text
-                            </Text>
-                        ),
-                    },
-                    {
-                        id: "file-2-1-2",
                         content: (
                             <Text size={ETextSize.B1} tag="span">
                                 File text
@@ -48,7 +46,7 @@ const nodes: ICollapsibleTreeNodeBranch[] = [
     },
     {
         id: "folder-3",
-        label: "Folder text",
+        label: <CollapsibleTreeNodeLabel>Folder text</CollapsibleTreeNodeLabel>,
         defaultOpened: true,
         children: [
             {

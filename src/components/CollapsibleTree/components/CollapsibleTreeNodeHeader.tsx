@@ -3,8 +3,6 @@ import { CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import { ICollapsibleTreeExtendedNodeHeaderProvideProps } from "../../CollapsibleTreeExtended/components/CollapsibleTreeExtendedNode";
 import styles from "../styles/CollapsibleTreeNodeHeader.module.less";
-import { EFontWeightText, ETextSize } from "../../Typography/enums";
-import { Text } from "../../Typography/Text";
 
 /** Свойства CollapsibleTreeNodeHeader. */
 export interface ICollapsibleTreeNodeHeaderProps
@@ -15,7 +13,8 @@ export interface ICollapsibleTreeNodeHeaderProps
 /**
  * Заголовок ноды CollapsibleTree.
  * Рендерит кнопку с шевроном-индикатором раскрытия для нод с детьми
- * и неактивную кнопку без шеврона для леаф-нод.
+ * и неактивную кнопку без шеврона для леаф-нод. Типографику заголовка задавай
+ * через {@link CollapsibleTreeNodeLabel} в `children`.
  */
 export const CollapsibleTreeNodeHeader: React.FC<ICollapsibleTreeNodeHeaderProps> = ({
     children,
@@ -49,9 +48,7 @@ export const CollapsibleTreeNodeHeader: React.FC<ICollapsibleTreeNodeHeaderProps
                     aria-hidden
                 />
             )}
-            <Text size={ETextSize.B1} tag="span" weight={EFontWeightText.SEMIBOLD}>
-                {children}
-            </Text>
+            {children}
         </button>
     );
 };

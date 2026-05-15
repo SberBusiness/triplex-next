@@ -11,6 +11,7 @@ import {
     NestedSource,
     CustomLabel as CustomLabelRender,
     CustomLabelSource,
+    VisualTestsExample,
 } from "./examples";
 
 const meta = {
@@ -127,6 +128,18 @@ export const CustomLabel: StoryObj<typeof CollapsibleTree> = {
             },
             controls: { disable: true },
             source: { code: CustomLabelSource, language: "tsx" },
+        },
+    },
+};
+
+export const VisualTests: StoryObj<typeof CollapsibleTree> = {
+    tags: ["!autodocs"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
         },
     },
 };

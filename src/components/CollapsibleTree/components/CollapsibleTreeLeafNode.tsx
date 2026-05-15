@@ -1,4 +1,5 @@
 import React from "react";
+import { noop } from "lodash-es";
 import { CollapsibleTreeExtended } from "../../CollapsibleTreeExtended/CollapsibleTreeExtended";
 import { ICollapsibleTreeNodeLeaf } from "../types";
 import { CollapsibleTreeLeafContent } from "./CollapsibleTreeLeafContent";
@@ -13,8 +14,6 @@ export interface ICollapsibleTreeLeafNodeProps {
     /** Идентификатор следующего соседнего узла (для клавиатурной навигации). */
     nextNodeId?: string;
 }
-
-const noop = () => undefined;
 
 /**
  * Лист CollapsibleTree.

@@ -6,9 +6,7 @@ import styles from "../styles/CollapsibleTreeNodeHeader.module.less";
 
 /** Свойства CollapsibleTreeNodeHeader. */
 export interface ICollapsibleTreeNodeHeaderProps
-    extends ICollapsibleTreeExtendedNodeHeaderProvideProps, React.ButtonHTMLAttributes<HTMLButtonElement> {
-    children?: React.ReactNode;
-}
+    extends ICollapsibleTreeExtendedNodeHeaderProvideProps, React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 /**
  * Заголовок ноды CollapsibleTree.

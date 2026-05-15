@@ -3,9 +3,7 @@ import clsx from "clsx";
 import styles from "../styles/CollapsibleTreeLeafContent.module.less";
 
 /** Свойства CollapsibleTreeLeafContent. */
-export interface ICollapsibleTreeLeafContentProps extends React.HTMLAttributes<HTMLDivElement> {
-    children?: React.ReactNode;
-}
+export interface ICollapsibleTreeLeafContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /**
  * Контейнер контента листа CollapsibleTree.

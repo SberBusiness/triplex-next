@@ -1,9 +1,8 @@
 import React from "react";
 import { CollapsibleTreeExtended } from "../../CollapsibleTreeExtended/CollapsibleTreeExtended";
-import { ICollapsibleTreeNodeBranch, TCollapsibleTreeNode } from "../types";
+import { ICollapsibleTreeNodeBranch, TCollapsibleTreeNode, isCollapsibleTreeNodeLeaf } from "../types";
 import { CollapsibleTreeNodeHeader } from "./CollapsibleTreeNodeHeader";
-import { CollapsibleTreeNode } from "./CollapsibleTreeNode";
-import styles from "../styles/CollapsibleTreeBranchNode.module.less";
+import { CollapsibleTreeLeafNode } from "./CollapsibleTreeLeafNode";
 
 /** Свойства CollapsibleTreeBranchNode. */
 export interface ICollapsibleTreeBranchNodeProps {
@@ -17,7 +16,7 @@ export interface ICollapsibleTreeBranchNodeProps {
 
 /**
  * Ветка CollapsibleTree.
- * Хранит локальное состояние раскрытия и рекурсивно рендерит дочерние узлы через диспетчер CollapsibleTreeNode.
+ * Хранит локальное состояние раскрытия и рекурсивно рендерит дочерние узлы — ветки через себя же, листья через CollapsibleTreeLeafNode.
  */
 export const CollapsibleTreeBranchNode: React.FC<ICollapsibleTreeBranchNodeProps> = ({
     node,
@@ -29,7 +28,6 @@ export const CollapsibleTreeBranchNode: React.FC<ICollapsibleTreeBranchNodeProps
 
     return (
         <CollapsibleTreeExtended.Node
-            className={styles.collapsibleTreeBranchNode}
             id={node.id}
             opened={opened}
             toggle={setOpened}
@@ -39,14 +37,17 @@ export const CollapsibleTreeBranchNode: React.FC<ICollapsibleTreeBranchNodeProps
                 <CollapsibleTreeNodeHeader {...headerProps}>{node.label}</CollapsibleTreeNodeHeader>
             )}
             renderBody={() =>
-                children.map((child, index) => (
-                    <CollapsibleTreeNode
-                        key={child.id}
-                        node={child}
-                        prevNodeId={children[index - 1]?.id}
-                        nextNodeId={children[index + 1]?.id}
-                    />
-                ))
+                children.map((child, index) => {
+                    const childProps = {
+                        prevNodeId: children[index - 1]?.id,
+                        nextNodeId: children[index + 1]?.id,
+                    };
+                    return isCollapsibleTreeNodeLeaf(child) ? (
+                        <CollapsibleTreeLeafNode key={child.id} node={child} {...childProps} />
+                    ) : (
+                        <CollapsibleTreeBranchNode key={child.id} node={child} {...childProps} />
+                    );
+                })
             }
         />
     );

@@ -151,4 +151,32 @@ describe("CollapsibleTreeNodeHeader", () => {
         expect(button).toHaveAttribute("data-test-id", "header-1");
         expect(button).toHaveAttribute("id", "node-header-1");
     });
+
+    it("Не позволяет переопределить инварианты button через {...props} (type, disabled, aria-expanded)", () => {
+        renderHeader({
+            hasChildNodes: false,
+            opened: true,
+            // Эти значения должны быть проигнорированы — внутренние значения важнее.
+            type: "submit",
+            disabled: false,
+            "aria-expanded": "true",
+        } as TRenderProps);
+
+        const button = screen.getByRole("button");
+        expect(button).toHaveAttribute("type", "button");
+        expect(button).toBeDisabled();
+        expect(button).not.toHaveAttribute("aria-expanded");
+    });
+
+    it("Пробрасывает ref на корневой button (forwardRef-контракт)", () => {
+        const ref = React.createRef<HTMLButtonElement>();
+        render(
+            <CollapsibleTreeNodeHeader {...getDefaultProps()} ref={ref}>
+                Label
+            </CollapsibleTreeNodeHeader>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+        expect(ref.current).toBe(screen.getByRole("button"));
+    });
 });

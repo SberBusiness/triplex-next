@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import clsx from "clsx";
 import styles from "../styles/CollapsibleTreeLeafContent.module.less";
 
@@ -9,14 +9,12 @@ export interface ICollapsibleTreeLeafContentProps extends React.HTMLAttributes<H
  * Контейнер контента листа CollapsibleTree.
  * Рендерит произвольный контент с отступами, согласованными с заголовками веток, без интерактивных стилей.
  */
-export const CollapsibleTreeLeafContent: React.FC<ICollapsibleTreeLeafContentProps> = ({
-    children,
-    className,
-    ...props
-}) => (
-    <div className={clsx(styles.collapsibleTreeLeafContent, className)} {...props}>
-        {children}
-    </div>
+export const CollapsibleTreeLeafContent = forwardRef<HTMLDivElement, ICollapsibleTreeLeafContentProps>(
+    ({ children, className, ...props }, ref) => (
+        <div ref={ref} className={clsx(styles.collapsibleTreeLeafContent, className)} {...props}>
+            {children}
+        </div>
+    ),
 );
 
 CollapsibleTreeLeafContent.displayName = "CollapsibleTreeLeafContent";

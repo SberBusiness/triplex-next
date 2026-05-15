@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { CollapsibleTreeExtended, EFontWeightText, ETextSize, Text } from "@sberbusiness/triplex-next";
 import "./DefaultExample.less";
@@ -67,7 +68,7 @@ const TreeNode: React.FC<ITreeNodeProps> = ({ node, prevNode, nextNode }) => {
                     >
                         <CaretrightStrokeSrvIcon24
                             paletteIndex={5}
-                            className={`collapsible-tree-extended-example-chevron${opened ? " opened" : ""}`}
+                            className={clsx("collapsible-tree-extended-example-chevron", { opened })}
                             aria-hidden
                         />
                         <Text size={ETextSize.B1} tag="span" weight={EFontWeightText.SEMIBOLD}>

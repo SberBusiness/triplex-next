@@ -93,7 +93,7 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 
 ## Дизайн-токены
 
-```
+```text
 --triplex-next-CollapsibleTree-Header_Background_Hover
 --triplex-next-CollapsibleTree-Header_Shadow_Focus
 ```
@@ -108,8 +108,14 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 
 - **`CollapsibleTree` — FC без `forwardRef`.** Под капотом class-компонент
   `TreeView`, ref не пробрасывается осмысленно. Тот же инвариант, что у
-  `CollapsibleTreeExtended`.
-- **`CollapsibleTreeNodeHeader` — FC без `forwardRef`** (внутренняя кнопка).
+  `CollapsibleTreeExtended` и `CollapsibleTreeLeafNode` (тоже проксируют в
+  class-компонент).
+- **`CollapsibleTreeNodeHeader` — `forwardRef<HTMLButtonElement>`** — ref
+  идёт на корневой `<button>`, чтобы потребитель мог управлять фокусом
+  заголовка (например, программно фокусировать конкретный узел).
+- **`CollapsibleTreeLeafContent` — `forwardRef<HTMLDivElement>`** — ref на
+  корневой `<div>` контента листа (стандартный контракт для контейнерных
+  компонентов).
 - **`CollapsibleTreeNodeLabel` — `forwardRef<HTMLSpanElement>`** — нужен для
   измерения ширины лейбла потребителем.
 - **Публичные экспорты barrel** (`src/components/CollapsibleTree/index.ts`):
@@ -200,3 +206,4 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 | Дата | Изменение |
 |---|---|
 | 2026-05-15 | Создан документ. Зафиксирован «семантический хак» `LeafNode` (`opened=true + toggle=noop`), список внутренних компонентов вне barrel, инварианты по `forwardRef` |
+| 2026-05-15 | `CollapsibleTreeNodeHeader` и `CollapsibleTreeLeafContent` переведены на `forwardRef` (DOM-ref на `<button>` и `<div>` соответственно). Защищены инварианты `<button>` (`type`, `disabled`, `aria-expanded`) от перетирания через `{...props}` |

@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { CaretrightStrokeSrvIcon24, MinusStrokeSrvIcon24, PlusStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { CollapsibleTreeExtended, EFontWeightText, ETextSize, Text } from "@sberbusiness/triplex-next";
 import "./VisualTestsExample.less";
@@ -80,7 +81,7 @@ const TreeNode: React.FC<ITreeNodeProps> = ({
                     <button
                         type="button"
                         className={headerClassName}
-                        onClick={() => setOpened(!opened)}
+                        onClick={() => setOpened((prev) => !prev)}
                         aria-expanded={opened}
                     >
                         {renderToggleIcon(opened)}
@@ -118,7 +119,7 @@ const TreeNode: React.FC<ITreeNodeProps> = ({
 const renderChevronIcon = (opened: boolean) => (
     <CaretrightStrokeSrvIcon24
         paletteIndex={5}
-        className={`collapsible-tree-extended-visual-tests-chevron${opened ? " opened" : ""}`}
+        className={clsx("collapsible-tree-extended-visual-tests-chevron", { opened })}
         aria-hidden
     />
 );

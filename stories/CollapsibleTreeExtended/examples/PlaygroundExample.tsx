@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { action } from "storybook/actions";
 import { CaretrightStrokeSrvIcon24, MinusStrokeSrvIcon24, PlusStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { CollapsibleTreeExtended, EFontWeightText, ETextSize, Text } from "@sberbusiness/triplex-next";
@@ -83,7 +84,7 @@ const TreeNode: React.FC<ITreeNodeProps> = ({ node, prevNode, nextNode, defaultO
                         ) : (
                             <CaretrightStrokeSrvIcon24
                                 paletteIndex={5}
-                                className={`collapsible-tree-extended-playground-chevron${opened ? " opened" : ""}`}
+                                className={clsx("collapsible-tree-extended-playground-chevron", { opened })}
                                 aria-hidden
                             />
                         )}
@@ -92,13 +93,7 @@ const TreeNode: React.FC<ITreeNodeProps> = ({ node, prevNode, nextNode, defaultO
                         </Text>
                     </button>
                 ) : (
-                    <div
-                        className={
-                            withCustomToggle
-                                ? "collapsible-tree-extended-playground-leaf custom"
-                                : "collapsible-tree-extended-playground-leaf"
-                        }
-                    >
+                    <div className={clsx("collapsible-tree-extended-playground-leaf", { custom: withCustomToggle })}>
                         <Text size={ETextSize.B1} tag="span">
                             {node.label}
                         </Text>

@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import moment from "moment";
-import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { CalendarViewContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarViewContext";
-import { isDateOutOfRange } from "@sberbusiness/triplex-next/components/Calendar/utils";
-import { CalendarViewItem } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarViewItem";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/types";
+import { CalendarContext } from "../CalendarContext";
+import { CalendarViewContext } from "../CalendarViewContext";
+import { isDateOutOfRange } from "../utils";
+import { CalendarViewItem } from "./CalendarViewItem";
+import { isKey } from "../../../utils/keyboard";
+import { ECalendarPickType, ECalendarViewMode } from "../enums";
+import { ICalendarViewProps } from "../types";
 import styles from "../styles/CalendarView.module.less";
 
 /** Свойства компонента CalendarViewMonths. */
-export interface ICalendarViewMonthsProps
-    extends Omit<ICalendarViewProps, "dayHtmlAttributes" | "yearHtmlAttributes"> {}
+export interface ICalendarViewMonthsProps extends Omit<
+    ICalendarViewProps,
+    "dayHtmlAttributes" | "yearHtmlAttributes"
+> {}
 
 /** Вид календаря с выбором месяца. */
 export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedDate, monthHtmlAttributes = {} }) => {
@@ -157,7 +159,7 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
 
     /** Обработчик выбора даты. */
     const handleDateSelect = (date: moment.Moment) => {
-        if (pickType === ECalendarPickType.monthYearPick) {
+        if (pickType === ECalendarPickType.MONTH_YEAR) {
             onDateSelect(date);
         } else {
             onViewChange(date, ECalendarViewMode.DAYS);

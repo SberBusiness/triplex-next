@@ -289,7 +289,7 @@ export const Example: StoryObj<typeof ProductionExample> = {
 
 export const VisualTests: StoryObj<typeof PlaygroundExample> = {
     name: "Visual tests",
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -307,7 +307,7 @@ export const VisualTests: StoryObj<typeof PlaygroundExample> = {
 
 export const VisualTestsNotFound: StoryObj<typeof PlaygroundExample> = {
     name: "Visual tests: Not Found",
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {

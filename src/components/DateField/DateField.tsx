@@ -11,7 +11,7 @@ import { ETooltipSize } from "../Tooltip/enums";
 import { MobileView } from "../MobileView/MobileView";
 import { DropdownMobileMaskedInput } from "../Dropdown/mobile/DropdownMobileMaskedInput";
 import { DateFieldContext } from "./DateFieldContext";
-import { FormFieldMaskedInput } from "../FormField";
+import { FormFieldMaskedInput } from "../FormField/components/FormFieldMaskedInput";
 
 /** Компонент ввода и выбора даты. */
 export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((props, ref) => {

@@ -3,8 +3,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { DateField } from "../DateField";
 import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
-import { EFormFieldStatus } from "../../FormField";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { EComponentSize } from "../../../enums";
+import { EFormFieldStatus } from "../../FormField/enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({
     CalendarStrokeSrvIcon16: () => <span data-testid="calendar-icon" />,

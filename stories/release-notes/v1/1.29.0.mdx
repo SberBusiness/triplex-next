@@ -4,8 +4,44 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.29.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**Avatar**
+
+- Добавлено свойство `borderRadius` для управления радиусом скругления углов.
+
+**Calendar**
+
+- Переименованы значения `ECalendarPickType`.
+
+**IslandWidget**
+
+- Область `IslandWidget.Header.Content` заменена на `IslandWidget.Header.Title` со встроенным компонентом типографики и `IslandWidget.Header.Controls`.
+
 <Heading>Изменения</Heading>
 
-**Title**
+- Добавлены barrel-экспорты ранее недоступных компонентов: `CollapsableTree`, `CollapsableTreeNode`, `DatePickerExtended`, `TreeView`, `TreeViewNode`, `TreeViewGroup`, `TriggerClickOnKeyDownEvent`, `WindowResizeListener`.
+- Добавлен корневой экспорт типов из `src/types` (`CoreTypes`, `DateTypes`).
 
-- Description.
+**Calendar**
+
+- Исправлен нижний отступ в режиме выбора месяца и года, а также при наличии кнопок быстрого выбора.
+- Исправлен отступ между заголовком (дни недели) и телом календаря.
+- Исправлены горизонтальные интервалы между днями.
+- Исправлены вертикальные интервалы между днями, месяцами и годами.
+- Исправлена ширина ячеек в режимах выбора месяца и года.
+- Исправлен шрифт у сегодняшнего дня.
+- Исправлен цвет дней соседних месяцев при наведении.
+- Исправлен отступ от кнопок быстрого выбора.
+- [Тёмная тема] Исправлен цвет метки `CalendarDateMarkType.BASIC`.
+- [Адаптивный режим] Исправлен размер кнопок быстрого выбора.
+
+**FormFieldCounter**
+
+- Исправлен баг, из-за которого некорректно обрабатывалось размонтирование компонента.
+
+**IslandWidget**
+
+- Компонент типографики для `IslandWidget.Header.Description` перенесен внутрь компонента.
+- Добавлен перенос текста `IslandWidget.Header.Title` на новую строку в адаптиве.
+- В адаптиве `IslandWidgetFooterControls` переносятся на новую строку и выравниваются по левому краю.

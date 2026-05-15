@@ -10,14 +10,14 @@ import {
 
 export const VisualTestsExample = () => {
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
-        <MonthYearField label="Label" placeholder="МММ ГГГГ" {...props} />
+        <MonthYearField label="Label" placeholder="мм.гггг" {...props} />
     );
     const renderButton = (props: IMonthYearRangeButtonProvideProps) => <ButtonIcon {...props} />;
 
     return (
         <div style={{ maxWidth: "400px" }}>
             <MonthYearRange
-                value={["20260301", "20260301"]}
+                value={["19700101", "19700101"]}
                 onChange={() => {}}
                 shiftAmount={1}
                 shiftUnit={EMonthYearRangeShiftUnit.MONTH}

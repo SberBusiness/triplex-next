@@ -1,12 +1,13 @@
 import React from "react";
 import moment from "moment";
-import { dateFormatYYYYMMDD, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
-import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { ICalendarProps } from "@sberbusiness/triplex-next/components/Calendar/types";
+import { dateFormatYYYYMMDD, globalLimitRange } from "../../consts/DateConst";
+import { ECalendarPickType, ECalendarViewMode } from "./enums";
+import { ICalendarProps } from "./types";
 
 /** Свойства контекста CalendarView. */
 export interface ICalendarContext
-    extends Pick<ICalendarProps, "format" | "markedDays" | "disabledDays">,
+    extends
+        Pick<ICalendarProps, "format" | "markedDays" | "disabledDays">,
         Required<Pick<ICalendarProps, "pickType" | "limitRange" | "onPageChange" | "onViewChange">> {
     /** Дата, являющая курсором для навигации по интерфейсу. */
     viewDate: moment.Moment;
@@ -22,7 +23,7 @@ export interface ICalendarContext
 export const CalendarContext = React.createContext<ICalendarContext>({
     format: dateFormatYYYYMMDD,
     limitRange: globalLimitRange,
-    pickType: ECalendarPickType.datePick,
+    pickType: ECalendarPickType.DATE,
     viewDate: moment().startOf("day"),
     viewMode: ECalendarViewMode.DAYS,
     periodId: "",

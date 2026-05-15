@@ -89,6 +89,7 @@ const PlaygroundAccordion = (args: IIslandAccordionPlaygroundProps) => {
     const [isVisible, setIsVisible] = React.useState(true);
 
     React.useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsVisible(true);
     }, [args.disabled, args.removable, args.size, args.status, args.title, args.type]);
 
@@ -332,7 +333,7 @@ const VisualTestsAccordion = () => {
 };
 
 export const VisualTests: StoryObj<typeof IslandAccordion> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {

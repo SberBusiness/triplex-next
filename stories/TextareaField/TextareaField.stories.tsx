@@ -1,9 +1,11 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj, ArgTypes as ArgTypesType } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { TextareaField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundArgs,
     PlaygroundExample,
+    PlaygroundExampleSource,
     DefaultExample,
     DefaultExampleSource,
     SizesExample,
@@ -37,125 +39,94 @@ export default {
     tags: ["autodocs"],
 } satisfies Meta<typeof TextareaField>;
 
-type PlaygroundControlledProps = "postfix" | "description" | "counter";
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    // Props
+    size: EComponentSize.LG,
+    status: EFormFieldStatus.DEFAULT,
+    label: "Label",
+    active: false,
+    textareaProps: { placeholder: "Type to proceed" },
+    // Settings
+    maxLength: 201,
+    withPostfix: false,
+    withDescription: false,
+    withCounter: false,
+};
 
-export interface PlaygroundArgs extends Omit<React.ComponentProps<typeof TextareaField>, PlaygroundControlledProps> {
-    /** Текст-заполнитель в поле ввода. */
-    placeholder: string;
-    /** Максимальное количество символов. */
-    maxLength: number;
-    /** С постфиксом. */
-    withPostfix: boolean;
-    /** С описанием. */
-    withDescription: boolean;
-    /** Со счётчиком. */
-    withCounter: boolean;
-}
+const PLAYGROUND_ARG_TYPES: ArgTypesType<PlaygroundArgs> = {
+    // Props
+    size: {
+        control: { type: "select" },
+        options: Object.values(EComponentSize),
+        table: { category: "Props" },
+    },
+    status: {
+        control: { type: "select" },
+        options: Object.values(EFormFieldStatus),
+        table: { category: "Props" },
+    },
+    label: {
+        control: { type: "text" },
+        table: { category: "Props" },
+    },
+    active: {
+        control: { type: "boolean" },
+        table: { category: "Props" },
+    },
+    textareaProps: {
+        control: "object",
+        table: { category: "Props" },
+    },
+    // Settings
+    maxLength: {
+        description: "Максимальное количество символов.",
+        control: "number",
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "201" },
+        },
+    },
+    withPostfix: {
+        description: "С постфиксом.",
+        control: "boolean",
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    withDescription: {
+        description: "С описанием.",
+        control: "boolean",
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    withCounter: {
+        description: "Со счётчиком.",
+        control: "boolean",
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+};
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    args: {
-        // Props
-        size: EComponentSize.LG,
-        status: EFormFieldStatus.DEFAULT,
-        label: "Label",
-        active: false,
-        textareaProps: {},
-        // Playground
-        placeholder: "Type to proceed",
-        maxLength: 201,
-        withPostfix: false,
-        withDescription: false,
-        withCounter: false,
-    },
-    argTypes: {
-        // Props
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            table: { category: "Props" },
-        },
-        status: {
-            control: { type: "select" },
-            options: Object.values(EFormFieldStatus),
-            table: { category: "Props" },
-        },
-        label: {
-            control: { type: "text" },
-            table: { category: "Props" },
-        },
-        active: {
-            control: { type: "boolean" },
-            table: { category: "Props" },
-        },
-        textareaProps: {
-            control: "object",
-            table: { category: "Props" },
-        },
-        // Settings
-        placeholder: {
-            description: "Текст-заполнитель в поле ввода.",
-            control: "text",
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "Type to proceed" },
-            },
-        },
-        maxLength: {
-            description: "Максимальное количество символов.",
-            control: "number",
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "201" },
-            },
-        },
-        withPostfix: {
-            description: "С постфиксом.",
-            control: "boolean",
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "false" },
-            },
-        },
-        withDescription: {
-            description: "С описанием.",
-            control: "boolean",
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "false" },
-            },
-        },
-        withCounter: {
-            description: "Со счётчиком.",
-            control: "boolean",
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "false" },
-            },
-        },
-    },
+    args: PLAYGROUND_ARGS,
+    argTypes: PLAYGROUND_ARG_TYPES,
     render: PlaygroundExample,
     parameters: {
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
+            source: {
+                code: PlaygroundExampleSource,
+                language: "tsx",
+            },
         },
-        controls: {
-            include: [
-                // Props
-                "size",
-                "status",
-                "label",
-                "active",
-                "textareaProps",
-                // Settings
-                "placeholder",
-                "maxLength",
-                "withPostfix",
-                "withDescription",
-                "withCounter",
-            ],
-        },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
     },
 };
 

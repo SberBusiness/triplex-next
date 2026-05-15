@@ -52,7 +52,7 @@ export const PlaygroundExample = ({
                         <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
                     ),
                     description: withDescription && (
-                        <Text size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
+                        <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
                             (21) Description{" "}
                             <Link href="#" onClick={handleLinkClick}>
                                 Link text

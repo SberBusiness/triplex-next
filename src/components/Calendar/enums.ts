@@ -1,7 +1,7 @@
 /** Вариант выбора даты в календаре. */
 export enum ECalendarPickType {
-    datePick,
-    monthYearPick,
+    DATE = "date",
+    MONTH_YEAR = "month_year",
 }
 
 /** Режим отображения календаря. */

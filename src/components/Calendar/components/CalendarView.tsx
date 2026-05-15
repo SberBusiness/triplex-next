@@ -1,11 +1,11 @@
 import React, { useContext, useRef } from "react";
-import { ICalendarViewProps } from "@sberbusiness/triplex-next/components/Calendar/types";
-import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { CalendarViewContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarViewContext";
-import { ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { CalendarViewDays } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarViewDays";
-import { CalendarViewMonths } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarViewMonths";
-import { CalendarViewYears } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarViewYears";
+import { ICalendarViewProps } from "../types";
+import { CalendarContext } from "../CalendarContext";
+import { CalendarViewContext } from "../CalendarViewContext";
+import { ECalendarViewMode } from "../enums";
+import { CalendarViewDays } from "./CalendarViewDays";
+import { CalendarViewMonths } from "./CalendarViewMonths";
+import { CalendarViewYears } from "./CalendarViewYears";
 
 /** Вид календаря. */
 export const CalendarView: React.FC<ICalendarViewProps> = ({

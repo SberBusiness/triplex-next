@@ -12,9 +12,9 @@ import {
 } from "@sberbusiness/triplex-next";
 
 export const SizesExample = () => {
-    const [valueSM, setValueSM] = useState<TDateRangeValue>(["20240101", "20240131"]);
-    const [valueMD, setValueMD] = useState<TDateRangeValue>(["20240101", "20240131"]);
-    const [valueLG, setValueLG] = useState<TDateRangeValue>(["20240101", "20240131"]);
+    const [valueSM, setValueSM] = useState<TDateRangeValue>(["", ""]);
+    const [valueMD, setValueMD] = useState<TDateRangeValue>(["", ""]);
+    const [valueLG, setValueLG] = useState<TDateRangeValue>(["", ""]);
 
     const renderPickerSM = (props: IDateRangePickerProvideProps) => (
         <DateField

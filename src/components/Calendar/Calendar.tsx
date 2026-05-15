@@ -1,16 +1,17 @@
-import clsx from "clsx";
 import React from "react";
-import { uniqueId } from "lodash-es";
+import clsx from "clsx";
 import moment from "moment";
-import { dateFormatYYYYMMDD, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
-import { ICalendarProps, TPickedDate } from "@sberbusiness/triplex-next/components/Calendar/types";
-import { ECalendarPickType, ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { CalendarControls } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarControls";
-import { CalendarView } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarView";
-import { CalendarFooter } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarFooter";
-import { CalendarFooterButton } from "@sberbusiness/triplex-next/components/Calendar/components/CalendarFooterButton";
-import { formatDate, getHeader, parsePickedDate } from "@sberbusiness/triplex-next/components/Calendar/utils";
+import { uniqueId } from "lodash-es";
+import { dateFormatYYYYMMDD, globalLimitRange } from "../../consts/DateConst";
+import { EComponentSize } from "../../enums";
+import { ICalendarProps, TPickedDate } from "./types";
+import { ECalendarPickType, ECalendarViewMode } from "./enums";
+import { CalendarContext } from "./CalendarContext";
+import { CalendarControls } from "./components/CalendarControls";
+import { CalendarView } from "./components/CalendarView";
+import { CalendarFooter } from "./components/CalendarFooter";
+import { CalendarFooterButton } from "./components/CalendarFooterButton";
+import { formatDate, getHeader, parsePickedDate } from "./utils";
 import styles from "./styles/Calendar.module.less";
 
 /** Состояния компонента Calendar. */
@@ -30,7 +31,7 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
     public static defaultProps = {
         format: dateFormatYYYYMMDD,
         limitRange: globalLimitRange,
-        pickType: ECalendarPickType.datePick,
+        pickType: ECalendarPickType.DATE,
     };
 
     static contextType = CalendarContext;
@@ -50,7 +51,7 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
 
         if (reversedPick) {
             viewMode = ECalendarViewMode.YEARS;
-        } else if (pickType == ECalendarPickType.monthYearPick) {
+        } else if (pickType == ECalendarPickType.MONTH_YEAR) {
             viewMode = ECalendarViewMode.MONTHS;
         } else {
             viewMode = ECalendarViewMode.DAYS;
@@ -140,9 +141,12 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
             todayButtonProps,
         } = this.props;
         const { viewMode, viewDate, header } = this.state;
-        const classNames = clsx(styles.calendar, {
-            [styles.adaptive]: !!this.props.adaptiveMode,
-        });
+        const classNames = clsx(
+            styles.calendar,
+            this.props.adaptiveMode
+                ? styles.adaptive
+                : (viewMode !== ECalendarViewMode.DAYS || todayButtonProps) && styles.extraBottom,
+        );
 
         const pickedDate = parsePickedDate(this.props.pickedDate, format);
 
@@ -214,12 +218,12 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
 
     /** Рендер футера. */
     private renderFooter = () => {
-        const { pickType, yesterdayButtonProps, todayButtonProps, tomorrowButtonProps } = this.props;
+        const { pickType, adaptiveMode, yesterdayButtonProps, todayButtonProps, tomorrowButtonProps } = this.props;
         const { viewDate, viewMode } = this.state;
         let todayDate: moment.Moment;
         let currentPeriodSelected: boolean;
 
-        if (pickType === ECalendarPickType.datePick) {
+        if (pickType === ECalendarPickType.DATE) {
             todayDate = moment().startOf("day");
             currentPeriodSelected = viewMode === ECalendarViewMode.DAYS && viewDate.isSame(todayDate, "month");
         } else {
@@ -228,12 +232,14 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
         }
 
         const needShowAsideButtons = currentPeriodSelected && viewMode === ECalendarViewMode.DAYS;
+        const buttonSize = adaptiveMode ? EComponentSize.MD : EComponentSize.SM;
 
         return (
             <CalendarFooter>
                 {/* Вчера */}
                 {needShowAsideButtons && yesterdayButtonProps && (
                     <CalendarFooterButton
+                        size={buttonSize}
                         date={todayDate.clone().subtract(1, "day")}
                         currentPeriodSelected={currentPeriodSelected}
                         {...(typeof yesterdayButtonProps === "function"
@@ -243,6 +249,7 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
                 )}
                 {/* Сегодня / К текущей дате */}
                 <CalendarFooterButton
+                    size={buttonSize}
                     date={todayDate}
                     currentPeriodSelected={currentPeriodSelected}
                     {...(typeof todayButtonProps === "function"
@@ -252,6 +259,7 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
                 {/* Завтра */}
                 {needShowAsideButtons && tomorrowButtonProps && (
                     <CalendarFooterButton
+                        size={buttonSize}
                         date={todayDate.clone().add(1, "day")}
                         currentPeriodSelected={currentPeriodSelected}
                         {...(typeof tomorrowButtonProps === "function"

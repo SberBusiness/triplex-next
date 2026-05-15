@@ -118,7 +118,7 @@ export const Types: StoryObj<typeof LoaderScreen> = {
 
 export const VisualTests: StoryObj<typeof LoaderScreen> = {
     name: "Visual tests",
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     decorators: [
         (Story) => (
             <>

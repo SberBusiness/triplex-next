@@ -1,12 +1,16 @@
+import moment from "moment";
+import "moment/dist/locale/ru";
 import type { Preview } from "@storybook/react";
+import { withThemeByClassName } from "@storybook/addon-themes";
+import { useRef } from "react";
 import { ThemeProvider, ETriplexNextTheme } from "../src/components/ThemeProvider";
 import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next";
-import React from "react";
-import { withThemeByClassName } from "@storybook/addon-themes";
 import DocsContainer from "./DocsContainer";
-import "../src/styles/style.less";
 import "@sberbusiness/icons-next/styles/icons.css";
+import "../src/styles/style.less";
 import "./storybook.css";
+
+moment.locale("ru");
 
 const customViewports = {
     XS: {
@@ -75,7 +79,7 @@ const preview: Preview = {
     },
     decorators: [
         (Story, context) => {
-            const scopeRef = React.useRef<HTMLDivElement>(null);
+            const scopeRef = useRef<HTMLDivElement>(null);
 
             const isDark = context.globals.theme === "dark";
 
@@ -85,7 +89,6 @@ const preview: Preview = {
                         theme={isDark ? ETriplexNextTheme.DARK : ETriplexNextTheme.LIGHT}
                         scopeRef={scopeRef}
                     >
-                        {/* @ts-expect-error - Children error*/}
                         <ThemeProviderIcons theme={isDark ? EIconsTheme.DARK : EIconsTheme.LIGHT}>
                             <Story />
                         </ThemeProviderIcons>

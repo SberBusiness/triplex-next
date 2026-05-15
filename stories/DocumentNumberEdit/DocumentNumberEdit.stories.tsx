@@ -71,7 +71,7 @@ export const Default: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },

@@ -1,11 +1,7 @@
 import React from "react";
 import { Moment } from "moment";
-import {
-    ECalendarViewMode,
-    ECalendarDateMarkType,
-    ECalendarPickType,
-} from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { IDateLimitRange } from "@sberbusiness/triplex-next/types/DateTypes";
+import { ECalendarViewMode, ECalendarDateMarkType, ECalendarPickType } from "./enums";
+import { IDateLimitRange } from "../../types/DateTypes";
 
 /** Внешний тип даты, который можно передать в компонент через свойства компонента. */
 export type TPickedDateProp = string | Moment | null;
@@ -38,7 +34,7 @@ export interface ICalendarProps extends ICalendarNestedProps {
     onViewChange?: (viewDate: Moment, viewMode: ECalendarViewMode) => void;
     /** Выбранная дата. */
     pickedDate: TPickedDateProp;
-    /** Адаптированный режим. */
+    /** Адаптивный режим. */
     adaptiveMode?: boolean;
     /** Обработчик изменения даты. */
     onDateChange: (date: Moment) => void;
@@ -106,8 +102,10 @@ export interface ICalendarNestedProps {
 }
 
 /** Свойства компонента CalendarView. */
-export interface ICalendarViewProps
-    extends Pick<ICalendarProps, "dayHtmlAttributes" | "monthHtmlAttributes" | "yearHtmlAttributes"> {
+export interface ICalendarViewProps extends Pick<
+    ICalendarProps,
+    "dayHtmlAttributes" | "monthHtmlAttributes" | "yearHtmlAttributes"
+> {
     /** Выбранная дата. */
     pickedDate?: TPickedDate;
 }

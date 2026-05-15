@@ -59,7 +59,7 @@ export const WithAnimation: Story = {
 
 export const VisualTests: Story = {
     name: "Visual tests",
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     decorators: [
         (Story) => (
             <>

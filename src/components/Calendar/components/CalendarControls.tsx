@@ -1,18 +1,20 @@
 import React, { useContext } from "react";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { CalendarContext } from "@sberbusiness/triplex-next/components/Calendar/CalendarContext";
-import { ICalendarProps } from "@sberbusiness/triplex-next/components/Calendar/types";
-import { Button } from "@sberbusiness/triplex-next/components/Button/Button";
-import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
-import { EButtonIconShape, EButtonTheme } from "@sberbusiness/triplex-next/components/Button/enums";
-import { ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { CalendarContext } from "../CalendarContext";
+import { ICalendarProps } from "../types";
+import { Button } from "../../Button/Button";
+import { ButtonIcon } from "../../Button/ButtonIcon";
+import { EButtonTheme, EButtonIconShape } from "../../Button/enums";
+import { ECalendarViewMode } from "../enums";
+import { globalLimitRange } from "../../../consts/DateConst";
+import { EComponentSize } from "../../../enums/EComponentSize";
 import styles from "../styles/CalendarControls.module.less";
 
 /** Свойства компонента CalendarControls. */
-export interface ICalendarControlsProps
-    extends Pick<ICalendarProps, "prevButtonProps" | "nextButtonProps" | "viewButtonProps"> {
+export interface ICalendarControlsProps extends Pick<
+    ICalendarProps,
+    "prevButtonProps" | "nextButtonProps" | "viewButtonProps"
+> {
     children: React.ReactNode;
 }
 

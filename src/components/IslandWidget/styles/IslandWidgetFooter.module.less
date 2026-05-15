@@ -1,3 +1,5 @@
+@import "src/styles/style";
+
 .islandWidgetFooter {
     display: flex;
     justify-content: space-between;
@@ -13,4 +15,24 @@
 .islandWidgetFooterControls {
     margin-left: auto;
     white-space: nowrap;
+}
+
+
+@media (max-width: @screen-sm-max) {
+    .islandWidgetFooter {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .islandWidgetFooterControls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 0 auto 0 0;
+
+        // Переопределение правила отступов между двумя соседними кнопками.
+        > button {
+            margin-left: 0 !important;
+        }
+    }
 }

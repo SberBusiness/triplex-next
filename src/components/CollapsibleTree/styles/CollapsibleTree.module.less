@@ -2,8 +2,7 @@
 
 .collapsibleTree {
     // Отступ для вложенных групп — задаёт визуальную иерархию дерева.
-    // Используем атрибут [role="group"] из TreeView.Group (рендерится как обычный элемент без CSS Modules класса).
-    [role="group"] {
+    [class*="treeViewGroup"] {
         padding-left: 24px;
     }
 }

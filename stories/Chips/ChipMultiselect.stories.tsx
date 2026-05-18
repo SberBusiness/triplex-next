@@ -11,6 +11,8 @@ import {
     LoadingExample,
     LoadingExampleSource,
     VisualTestsExample,
+    WithCheckboxTreeExample,
+    WithCheckboxTreeExampleSource,
 } from "./examples/ChipMultiselect";
 import "./ChipMultiselect.less";
 
@@ -146,4 +148,18 @@ export const VisualTests: Story = {
         },
     },
     render: VisualTestsExample,
+};
+
+export const WithCheckboxTree: Story = {
+    name: "Example: with CheckboxTree",
+    render: WithCheckboxTreeExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: WithCheckboxTreeExampleSource,
+                language: "tsx",
+            },
+        },
+    },
 };

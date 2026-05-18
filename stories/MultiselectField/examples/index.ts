@@ -24,3 +24,6 @@ export { default as ProductionExampleSource } from "./ProductionExample?raw";
 
 export * from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+
+export * from "./WithCheckboxTreeExample";
+export { default as WithCheckboxTreeExampleSource } from "./WithCheckboxTreeExample?raw";

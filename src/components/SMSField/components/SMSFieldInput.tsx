@@ -83,14 +83,13 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
                         {...restProps}
                     />
                 </FormField>
-                <FormFieldDescription>
-                    {description || counter ? (
-                        <>
-                            {description}
-                            {counter ? <FormFieldCounter>{counter}</FormFieldCounter> : null}
-                        </>
-                    ) : null}
-                </FormFieldDescription>
+
+                {description || counter ? (
+                    <FormFieldDescription>
+                        {description}
+                        {counter ? <FormFieldCounter>{counter}</FormFieldCounter> : null}
+                    </FormFieldDescription>
+                ) : null}
             </FormGroup>
         );
     },

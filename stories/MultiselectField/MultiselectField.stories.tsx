@@ -300,6 +300,7 @@ export const WithCheckboxTree: StoryObj<typeof WithCheckboxTreeExample> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };
 

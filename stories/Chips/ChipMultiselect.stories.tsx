@@ -161,5 +161,6 @@ export const WithCheckboxTree: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };

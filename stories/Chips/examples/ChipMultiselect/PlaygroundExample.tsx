@@ -114,6 +114,7 @@ function createMultiselectFieldStoriesLogic(args: IChipMultiselectProps) {
                     <>
                         <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
                             <DropdownMobileInput
+                                autoFocus={true}
                                 placeholder="Type to proceed"
                                 value={filter}
                                 onChange={handleFilterChange}

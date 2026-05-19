@@ -183,6 +183,7 @@ const LoadingMultiselect = ({
                                     }
                                 >
                                     <DropdownMobileInput
+                                        autoFocus={true}
                                         placeholder="Type to proceed"
                                         value={filter}
                                         onChange={(event) => setFilter(event.target.value)}

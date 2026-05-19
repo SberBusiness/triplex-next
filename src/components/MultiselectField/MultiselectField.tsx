@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ISelectExtendedFieldProps, SelectExtendedField } from "../SelectExtendedField";
 import { MultiselectFieldContext } from "./MultiselectFieldContext";
 import { SelectExtendedFieldTarget } from "../SelectExtendedField";
@@ -13,10 +13,16 @@ export interface IMultiselectFieldProps extends ISelectExtendedFieldProps {
 /** Компонент мульти-списка. */
 export const MultiselectField = Object.assign(
     React.forwardRef<HTMLDivElement, IMultiselectFieldProps>(
-        ({ children, className, size = EComponentSize.MD, ...props }, ref) => {
+        ({ children, className, size = EComponentSize.MD, onMouseDown, ...props }, ref) => {
+            const mouseUsedRef = useRef(false);
+
+            const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+                mouseUsedRef.current = true;
+                onMouseDown?.(event);
+            };
             return (
-                <MultiselectFieldContext.Provider value={{ size }}>
-                    <SelectExtendedField className={className} ref={ref} {...props}>
+                <MultiselectFieldContext.Provider value={{ size, mouseUsedRef }}>
+                    <SelectExtendedField className={className} onMouseDown={handleMouseDown} ref={ref} {...props}>
                         {children}
                     </SelectExtendedField>
                 </MultiselectFieldContext.Provider>

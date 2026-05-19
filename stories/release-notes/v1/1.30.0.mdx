@@ -10,6 +10,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Механизм измерения размеров компонентов prefix/postfix переведен на ResizeObserver.
 
+**MultiselectField**
+
+- Исправлен баг, когда при закрытии `MultiselectField.Dropdown` кликом вне компонента фокус возвращался на `MultiselectField.Target`.
+
 **SMSField**
 
 - Удален лишний отступ под `SMSField.Input` при отсутствии `description` и `counter`.

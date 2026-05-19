@@ -132,6 +132,7 @@ export const LoadingExample = () => {
                                     }
                                 >
                                     <DropdownMobileInput
+                                        autoFocus={true}
                                         placeholder="Type to proceed"
                                         value={filter}
                                         onChange={handleFilterChange}

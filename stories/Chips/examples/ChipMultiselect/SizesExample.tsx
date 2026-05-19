@@ -131,6 +131,7 @@ const SizeItem = ({ size, title }: SizeItemProps) => {
                                         controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
                                     >
                                         <DropdownMobileInput
+                                            autoFocus={true}
                                             placeholder="Type to proceed"
                                             value={filter}
                                             onChange={handleFilterChange}

@@ -1,9 +1,11 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
+import { Meta, StoryObj, ArgTypes as ArgTypesType } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { SuggestField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundArgs,
     PlaygroundExample,
+    PlaygroundExampleSource,
     DefaultExample,
     DefaultExampleSource,
     SizesExample,
@@ -43,116 +45,100 @@ export default {
     },
 } satisfies Meta<typeof SuggestField>;
 
-type PlaygroundControlledProps =
-    | "value"
-    | "options"
-    | "tooltipOpen"
-    | "onFilter"
-    | "onSelect"
-    | "onClear"
-    | "prefix"
-    | "postfix"
-    | "description";
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    // Props
+    size: EComponentSize.LG,
+    status: EFormFieldStatus.DEFAULT,
+    label: "Label",
+    placeholder: "Type to proceed",
+    tooltipHint: "No matches found.",
+    active: false,
+    loading: false,
+    dropdownListLoading: false,
+    clearInputOnFocus: false,
+    inputProps: {},
+    // Settings
+    withPrefix: false,
+    withPostfix: false,
+    withDescription: false,
+};
 
-export interface PlaygroundArgs extends Omit<React.ComponentProps<typeof SuggestField>, PlaygroundControlledProps> {
-    /** С префиксом. */
-    withPrefix: boolean;
-    /** С постфиксом. */
-    withPostfix: boolean;
-    /** С описанием. */
-    withDescription: boolean;
-}
+const PLAYGROUND_ARG_TYPES: ArgTypesType<PlaygroundArgs> = {
+    // Props
+    size: {
+        control: { type: "select" },
+        options: Object.values(EComponentSize),
+        table: { category: "Props" },
+    },
+    status: {
+        control: { type: "select" },
+        options: Object.values(EFormFieldStatus),
+        table: { category: "Props" },
+    },
+    label: {
+        control: { type: "text" },
+        table: { category: "Props" },
+    },
+    placeholder: {
+        control: { type: "text" },
+        table: { category: "Props" },
+    },
+    tooltipHint: {
+        control: { type: "text" },
+        table: { category: "Props" },
+    },
+    active: {
+        control: { type: "boolean" },
+        table: { category: "Props" },
+    },
+    loading: {
+        control: { type: "boolean" },
+        table: { category: "Props" },
+    },
+    dropdownListLoading: {
+        control: { type: "boolean" },
+        table: { category: "Props" },
+    },
+    clearInputOnFocus: {
+        control: { type: "boolean" },
+        table: { category: "Props" },
+    },
+    inputProps: {
+        control: "object",
+        table: { category: "Props" },
+    },
+    // Settings
+    withPrefix: {
+        description: "С префиксом.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    withPostfix: {
+        description: "С постфиксом.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    withDescription: {
+        description: "С описанием.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+};
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     name: "Playground",
     tags: ["!autodocs"],
-    args: {
-        // Props
-        size: EComponentSize.LG,
-        status: EFormFieldStatus.DEFAULT,
-        label: "Label",
-        placeholder: "Type to proceed",
-        tooltipHint: "No matches found.",
-        active: false,
-        loading: false,
-        dropdownListLoading: false,
-        clearInputOnFocus: false,
-        inputProps: {},
-        // Settings
-        withPrefix: false,
-        withPostfix: false,
-        withDescription: false,
-    },
-    argTypes: {
-        // Props
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            table: { category: "Props" },
-        },
-        status: {
-            control: { type: "select" },
-            options: Object.values(EFormFieldStatus),
-            table: { category: "Props" },
-        },
-        label: {
-            control: { type: "text" },
-            table: { category: "Props" },
-        },
-        placeholder: {
-            control: { type: "text" },
-            table: { category: "Props" },
-        },
-        tooltipHint: {
-            control: { type: "text" },
-            table: { category: "Props" },
-        },
-        active: {
-            control: { type: "boolean" },
-            table: { category: "Props" },
-        },
-        loading: {
-            control: { type: "boolean" },
-            table: { category: "Props" },
-        },
-        dropdownListLoading: {
-            control: { type: "boolean" },
-            table: { category: "Props" },
-        },
-        clearInputOnFocus: {
-            control: { type: "boolean" },
-            table: { category: "Props" },
-        },
-        inputProps: {
-            control: "object",
-            table: { category: "Props" },
-        },
-        // Settings
-        withPrefix: {
-            description: "С префиксом.",
-            control: { type: "boolean" },
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "false" },
-            },
-        },
-        withPostfix: {
-            description: "С постфиксом.",
-            control: { type: "boolean" },
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "false" },
-            },
-        },
-        withDescription: {
-            description: "С описанием.",
-            control: { type: "boolean" },
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "false" },
-            },
-        },
-    },
+    args: PLAYGROUND_ARGS,
+    argTypes: PLAYGROUND_ARG_TYPES,
     render: PlaygroundExample,
     parameters: {
         docs: {
@@ -160,26 +146,12 @@ export const Playground: StoryObj<PlaygroundArgs> = {
                 sourceState: "none",
             },
             codePanel: false,
+            source: {
+                code: PlaygroundExampleSource,
+                language: "tsx",
+            },
         },
-        controls: {
-            include: [
-                // Props
-                "size",
-                "status",
-                "label",
-                "placeholder",
-                "tooltipHint",
-                "active",
-                "loading",
-                "dropdownListLoading",
-                "clearInputOnFocus",
-                "inputProps",
-                // Settings
-                "withPrefix",
-                "withPostfix",
-                "withDescription",
-            ],
-        },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
     },
 };
 

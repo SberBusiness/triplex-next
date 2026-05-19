@@ -22,17 +22,17 @@ export interface IFormFieldContext {
     /** Поле активно. */
     active: boolean;
     /** Установка значения targetId. */
-    setTargetId: (targetId: string | undefined) => void;
+    setTargetId: React.Dispatch<React.SetStateAction<string | undefined>>;
     /** Установка значения labelId. */
-    setLabelId: (labelId: string | undefined) => void;
+    setLabelId: React.Dispatch<React.SetStateAction<string | undefined>>;
     /** Установка значения postfixWidth. */
-    setPostfixWidth: (postfixWidth: number) => void;
+    setPostfixWidth: React.Dispatch<React.SetStateAction<number>>;
     /** Установка значения prefixWidth. */
-    setPrefixWidth: (prefixWidth: number) => void;
+    setPrefixWidth: React.Dispatch<React.SetStateAction<number>>;
     /** Установка значения filled. */
-    setFilled: (filled: boolean) => void;
+    setFilled: React.Dispatch<React.SetStateAction<boolean>>;
     /** Установка значения focused. */
-    setFocused: (focused: boolean) => void;
+    setFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const initialFormFieldContext: IFormFieldContext = {

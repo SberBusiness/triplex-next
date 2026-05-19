@@ -1,11 +1,14 @@
 import React from "react";
-import { FormField, IFormFieldProps } from "@sberbusiness/triplex-next/components/FormField/FormField";
-import { FormFieldDescription } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldDescription";
-import { FormFieldLabel } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldLabel";
-import { FormFieldPostfix } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldPostfix";
-import { FormFieldPrefix } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldPrefix";
-import { FormFieldCounter } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldCounter";
-import { FormGroup } from "@sberbusiness/triplex-next/components/FormGroup/FormGroup";
+import { FormGroup } from "../FormGroup";
+import {
+    FormField,
+    FormFieldLabel,
+    FormFieldDescription,
+    FormFieldPrefix,
+    FormFieldPostfix,
+    FormFieldCounter,
+    IFormFieldProps,
+} from "../FormField";
 
 /** Свойства компонента TextFieldBase. */
 export interface ITextFieldBaseProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {

@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { FormFieldContext } from "../FormFieldContext";
+import React, { useContext, useRef, useEffect } from "react";
 import clsx from "clsx";
+import { FormFieldContext } from "../FormFieldContext";
+import { TARGET_PADDING_X_DEFAULT } from "../consts";
 import styles from "../styles/FormFieldPostfix.module.less";
 
 /** Свойства компонента FormFieldPostfix. */
@@ -8,10 +9,10 @@ export interface IFormFieldPostfixProps extends React.HTMLAttributes<HTMLSpanEle
 
 /** Контейнер элементов, отображающихся в правой части FormField. */
 export const FormFieldPostfix = React.forwardRef<HTMLSpanElement, IFormFieldPostfixProps>(
-    ({ children, className, ...htmlSpanAttributes }, ref) => {
-        const classNames = clsx(styles.formFieldPostfix, className);
-        const { postfixWidth, setPostfixWidth } = useContext(FormFieldContext);
+    ({ children, className, ...restProps }, ref) => {
+        const { setPostfixWidth } = useContext(FormFieldContext);
         const innerRef = useRef<HTMLSpanElement | null>();
+        const classNames = clsx(styles.formFieldPostfix, className);
 
         const setRef = (instance: HTMLSpanElement | null) => {
             innerRef.current = instance;
@@ -23,18 +24,25 @@ export const FormFieldPostfix = React.forwardRef<HTMLSpanElement, IFormFieldPost
         };
 
         useEffect(() => {
-            if (!innerRef.current) {
+            const element = innerRef.current;
+            if (!element) {
                 return;
             }
-            const { width } = innerRef.current.getBoundingClientRect();
 
-            if (width !== postfixWidth) {
-                setPostfixWidth(width);
-            }
-        });
+            const resizeObserver = new ResizeObserver(([entry]) => {
+                const width = entry.target.getBoundingClientRect().width;
+                setPostfixWidth((prevWidth) => (prevWidth !== width ? width : prevWidth));
+            });
+
+            resizeObserver.observe(element);
+            return () => {
+                resizeObserver.disconnect();
+                setPostfixWidth(TARGET_PADDING_X_DEFAULT);
+            };
+        }, [setPostfixWidth]);
 
         return (
-            <span className={classNames} ref={setRef} {...htmlSpanAttributes}>
+            <span className={classNames} {...restProps} ref={setRef}>
                 {children}
             </span>
         );

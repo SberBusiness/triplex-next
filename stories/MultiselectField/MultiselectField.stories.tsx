@@ -29,6 +29,8 @@ import {
     WithClearButtonExampleSource,
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
+    WithCheckboxTreeExample,
+    WithCheckboxTreeExampleSource,
 } from "./examples";
 import "./MultiselectField.less";
 
@@ -284,6 +286,21 @@ export const Example: StoryObj<typeof ProductionExample> = {
                 language: "tsx",
             },
         },
+    },
+};
+
+export const WithCheckboxTree: StoryObj<typeof WithCheckboxTreeExample> = {
+    name: "Example: with CheckboxTree",
+    render: WithCheckboxTreeExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: WithCheckboxTreeExampleSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
     },
 };
 

@@ -1,0 +1,40 @@
+.custom-toggle-example {
+    [role="group"] {
+        padding-left: 32px;
+    }
+
+    &-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        margin: 0;
+        padding: 12px;
+        outline: none;
+        border: none;
+        border-radius: 8px;
+        background: none;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--triplex-next-CollapsibleTree-Header_Background_Hover);
+        }
+
+        &:focus-visible {
+            box-shadow: var(--triplex-next-CollapsibleTree-Header_Shadow_Focus);
+        }
+    }
+
+    &-icon {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &-leaf {
+        padding: 12px 12px 12px 44px;
+    }
+}

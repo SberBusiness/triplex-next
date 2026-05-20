@@ -7,6 +7,7 @@ export * from "./Calendar";
 export * from "./Card";
 export * from "./Checkbox";
 export * from "./Chip";
+export * from "./CollapsibleTree";
 export * from "./Divider";
 export * from "./Dropdown";
 export * from "./DropdownList";

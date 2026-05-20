@@ -1,0 +1,43 @@
+.collapsible-tree-extended-example {
+    [role="group"] {
+        padding-left: 24px;
+    }
+
+    &-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        margin: 0;
+        padding: 12px;
+        outline: none;
+        border: none;
+        border-radius: 8px;
+        background: none;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--triplex-next-CollapsibleTree-Header_Background_Hover);
+        }
+
+        &:focus-visible {
+            box-shadow: var(--triplex-next-CollapsibleTree-Header_Shadow_Focus);
+        }
+    }
+
+    &-chevron {
+        flex: 0 0 auto;
+        transition: transform 200ms ease;
+        transform: rotate(0deg);
+
+        &.opened {
+            transform: rotate(90deg);
+        }
+    }
+
+    &-leaf {
+        padding: 12px;
+    }
+}

@@ -13,7 +13,7 @@ export interface IGapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "c
 
 /** Вертикальный отступ-разделитель между блоками. Рендерит `div` с `role="presentation"` и фиксированной высотой. */
 export const Gap = React.forwardRef<HTMLDivElement, IGapProps>(({ className, size, ...restProps }, ref) => (
-    <div className={clsx(styles[`size-${size}`], className)} role="presentation" {...restProps} ref={ref} />
+    <div className={clsx(styles[`size${size}`], className)} role="presentation" {...restProps} ref={ref} />
 ));
 
 Gap.displayName = "Gap";

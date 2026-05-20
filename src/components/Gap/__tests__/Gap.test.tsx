@@ -15,7 +15,7 @@ describe("Gap", () => {
         render(<Gap size={size} />);
 
         const element = screen.getByRole("presentation");
-        expect(element).toHaveClass(`size-${size}`);
+        expect(element).toHaveClass(`size${size}`);
     });
 
     it("forwards ref to the root div element", () => {

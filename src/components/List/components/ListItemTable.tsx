@@ -33,7 +33,11 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
     ({ children, className, controlButtons, onClickItem, onSelect, selected, swipeableAreaRef, ...rest }, ref) => {
         const selectable = typeof onSelect !== "undefined" && typeof selected !== "undefined";
 
-        const renderContent = () => <ListItemContent onClick={onClickItem}>{children}</ListItemContent>;
+        const renderContent = () => (
+            <ListItemContent className={styles.content} onClick={onClickItem}>
+                {children}
+            </ListItemContent>
+        );
 
         return (
             <ListItem className={clsx(styles.listItemTable, className)} {...rest} ref={ref}>

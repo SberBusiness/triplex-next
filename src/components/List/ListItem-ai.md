@@ -15,8 +15,11 @@ version: "1.0"
 
 Базовый элемент списка `<li>` — обёртка вокруг произвольного содержимого
 (`ListItemContent`, `ListItemSelectable`, `SwipeableArea` и т.п.). Создаёт
-React-контекст `ListItemContext` с состоянием `selected`, чтобы дочерний
-`ListItemContent` мог визуально подсвечиваться, когда родитель — `ListItemSelectable`.
+React-контекст `ListItemContext` с состояниями `selected` и `selectable`:
+`selected` управляет подсветкой `ListItemContent`, `selectable` сообщает
+дочернему `ListItemContent`, что элемент выбираемый — для применения
+скругления углов (`border-radius`). Оба флага пишутся `ListItemSelectable`
+через `useEffect`.
 
 Используй `ListItem` когда: нужен произвольный layout строки списка.
 Используй `ListItemTable` когда: нужна готовая табличная строка с support'ом
@@ -50,7 +53,8 @@ swipe-actions и selectable.
 ## Инварианты
 
 - **`forwardRef`** — обязателен, target — `HTMLLIElement`. Не убирать.
-- **`ListItemContext`** — провайдер на каждом `ListItem`. Не выносить наружу — context используется парой `ListItemSelectable` (writer) ↔ `ListItemContent` (reader) внутри одной строки.
+- **`ListItemContext`** — провайдер на каждом `ListItem`. Не выносить наружу — context используется парой `ListItemSelectable` (writer для `selected` и `selectable`) ↔ `ListItemContent` (reader) внутри одной строки.
+- **Поля контекста `selected` / `selectable`** — оба `boolean`, дефолт `false`. `selectable` всегда выставляется в `true` из `ListItemSelectable` (через `useEffect`), `selected` синхронизируется с одноимённым prop'ом `ListItemSelectable`. Сеттеры (`setSelected`, `setSelectable`) предназначены только для внутренних консьюмеров.
 - **Корневой элемент `<li>`** — не менять. Семантика важна для accessibility.
 
 ---
@@ -85,3 +89,4 @@ swipe-actions и selectable.
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-05-21 | `ListItemContext` расширен полями `selectable` / `setSelectable`. Исправлен цвет токена `Background_Selected` в тёмной теме (`ColorDarkNeutral.10` → `ColorDarkNeutral.60`). |

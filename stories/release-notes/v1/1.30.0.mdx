@@ -14,6 +14,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - `CardStatic.Content.Footer` зафиксирован внизу `CardStatic` вне зависимости от высоты `CardStatic.Content.Body`.
 
+**CollapsibleTreeExtended**
+
+- `CollapsibleTreeExtended.Node` — починен controlled-инвариант: режим (controlled / uncontrolled) теперь вычисляется на каждом рендере по `props.opened !== undefined`.
+
 **FormField**
 
 - Механизм измерения размеров компонентов prefix/postfix переведен на ResizeObserver.

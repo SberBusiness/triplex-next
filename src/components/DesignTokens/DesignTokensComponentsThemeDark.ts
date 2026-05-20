@@ -13,6 +13,7 @@ import {
     Card_Tokens,
     Checkbox_Tokens,
     Chip_Tokens,
+    CollapsibleTree_Tokens,
     DropdownList_Tokens,
     DropdownMobileList_Tokens,
     DropdownMobile_Tokens,
@@ -65,6 +66,7 @@ import {
     TDesignTokensComponentsCardValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsChipValue,
+    TDesignTokensComponentsCollapsibleTreeValue,
     TDesignTokensComponentsDividerValue,
     TDesignTokensComponentsDropdownListValue,
     TDesignTokensComponentsDropdownMobileListValue,
@@ -127,6 +129,10 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.DARK, Card_Tokens),
     Checkbox: GetTokensValueByTheme<TDesignTokensComponentsCheckboxValue>(ETriplexNextTheme.DARK, Checkbox_Tokens),
     Chip: GetTokensValueByTheme<TDesignTokensComponentsChipValue>(ETriplexNextTheme.DARK, Chip_Tokens),
+    CollapsibleTree: GetTokensValueByTheme<TDesignTokensComponentsCollapsibleTreeValue>(
+        ETriplexNextTheme.DARK,
+        CollapsibleTree_Tokens,
+    ),
     Divider: GetTokensValueByTheme<TDesignTokensComponentsDividerValue>(ETriplexNextTheme.DARK, Divider_Tokens),
     Dropdown: GetTokensValueByTheme<TDesignTokensComponentsDropdownValue>(ETriplexNextTheme.DARK, Dropdown_Tokens),
     DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(

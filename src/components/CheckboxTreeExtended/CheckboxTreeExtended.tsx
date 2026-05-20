@@ -1,5 +1,8 @@
 import React from "react";
-import { CollapsableTree, ICollapsableTreeProps } from "../CollapsableTree/CollapsableTree";
+import {
+    CollapsibleTreeExtended,
+    ICollapsibleTreeExtendedProps,
+} from "../CollapsibleTreeExtended/CollapsibleTreeExtended";
 import { CheckboxTreeExtendedCheckbox } from "./components/CheckboxTreeExtendedCheckbox";
 import { CheckboxTreeExtendedNode } from "./components/CheckboxTreeExtendedNode";
 import { CheckboxTreeExtendedContext } from "./CheckboxTreeExtendedContext";
@@ -10,7 +13,7 @@ import { useMatchMedia } from "../MediaWidth/useMatchMedia";
 import styles from "./styles/CheckboxTreeExtended.module.less";
 
 /** Свойства CheckboxTreeExtended. */
-export interface ICheckboxTreeExtendedProps extends ICollapsableTreeProps {
+export interface ICheckboxTreeExtendedProps extends ICollapsibleTreeExtendedProps {
     /** Размер дерева чекбоксов. */
     size?: EComponentSize;
 }
@@ -22,7 +25,7 @@ export interface ICheckboxTreeExtendedSFC extends React.FC<ICheckboxTreeExtended
 
 /**
  * Декларативное дерево чекбоксов.
- * Является оберткой над CollapsableTree.
+ * Является оберткой над CollapsibleTreeExtended.
  */
 export const CheckboxTreeExtended: ICheckboxTreeExtendedSFC = ({ className, size = EComponentSize.MD, ...rest }) => {
     const adaptive = useMatchMedia(
@@ -32,7 +35,7 @@ export const CheckboxTreeExtended: ICheckboxTreeExtendedSFC = ({ className, size
 
     return (
         <CheckboxTreeExtendedContext.Provider value={{ size: adaptive ? EComponentSize.MD : size }}>
-            <CollapsableTree className={clsx(styles.checkboxTreeExtended, className)} {...rest} />
+            <CollapsibleTreeExtended className={clsx(styles.checkboxTreeExtended, className)} {...rest} />
         </CheckboxTreeExtendedContext.Provider>
     );
 };

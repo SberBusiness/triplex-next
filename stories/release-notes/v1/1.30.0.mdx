@@ -6,6 +6,26 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**CardAction**
+
+- `CardAction.Content.Footer` зафиксирован внизу `CardAction` вне зависимости от высоты `CardAction.Content.Body`.
+
+**CardStatic**
+
+- `CardStatic.Content.Footer` зафиксирован внизу `CardStatic` вне зависимости от высоты `CardStatic.Content.Body`.
+
 **CollapsibleTreeExtended**
 
 - `CollapsibleTreeExtended.Node` — починен controlled-инвариант: режим (controlled / uncontrolled) теперь вычисляется на каждом рендере по `props.opened !== undefined`.
+
+**FormField**
+
+- Механизм измерения размеров компонентов prefix/postfix переведен на ResizeObserver.
+
+**MultiselectField**
+
+- Исправлен баг, когда при закрытии `MultiselectField.Dropdown` кликом вне компонента фокус возвращался на `MultiselectField.Target`.
+
+**SMSField**
+
+- Удален лишний отступ под `SMSField.Input` при отсутствии `description` и `counter`.

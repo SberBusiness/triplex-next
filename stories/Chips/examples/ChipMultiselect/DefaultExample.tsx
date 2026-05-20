@@ -127,6 +127,7 @@ export const DefaultExample = () => {
                                     controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
                                 >
                                     <DropdownMobileInput
+                                        autoFocus={true}
                                         placeholder="Type to proceed"
                                         value={filter}
                                         onChange={handleFilterChange}

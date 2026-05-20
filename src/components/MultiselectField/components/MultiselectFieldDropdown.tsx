@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
 import { Dropdown, IDropdownProps, EDropdownWidth } from "../../Dropdown";
 import { MultiselectFieldDropdownHeader } from "./MultiselectFieldDropdownHeader";
@@ -16,7 +16,13 @@ export interface IMultiselectFieldDropdownProps extends IDropdownProps {
 export const MultiselectFieldDropdown = Object.assign(
     React.forwardRef<HTMLDivElement, IMultiselectFieldDropdownProps>(
         ({ children, focusTrapProps, opened, targetRef, mobileViewProps, ...rest }, ref) => {
-            const { size } = useContext(MultiselectFieldContext);
+            const { size, mouseUsedRef } = useContext(MultiselectFieldContext);
+
+            useEffect(() => {
+                if (!opened) {
+                    mouseUsedRef.current = false;
+                }
+            }, [opened, mouseUsedRef]);
 
             return (
                 <Dropdown
@@ -36,6 +42,7 @@ export const MultiselectFieldDropdown = Object.assign(
                         focusTrapOptions={{
                             clickOutsideDeactivates: true,
                             preventScroll: true,
+                            returnFocusOnDeactivate: !mouseUsedRef.current,
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >

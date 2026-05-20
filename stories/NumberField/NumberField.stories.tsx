@@ -1,8 +1,9 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundArgs,
     PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
@@ -36,18 +37,6 @@ export default {
         },
     },
 } satisfies Meta<typeof NumberField>;
-
-export interface PlaygroundArgs extends Pick<
-    React.ComponentProps<typeof NumberField>,
-    "size" | "status" | "label" | "active" | "inputProps"
-> {
-    /** Текст-заполнитель в поле ввода. */
-    placeholder: string;
-    /** С постфиксом. */
-    withPostfix: boolean;
-    /** С описанием. */
-    withDescription: boolean;
-}
 
 const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props

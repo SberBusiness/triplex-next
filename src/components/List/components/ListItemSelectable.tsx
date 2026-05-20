@@ -27,6 +27,9 @@ export const ListItemSelectable = React.forwardRef<HTMLDivElement, IListItemSele
 
         useEffect(() => {
             setSelectable(true);
+            return () => {
+                setSelectable(false);
+            };
         }, [setSelectable]);
 
         return (

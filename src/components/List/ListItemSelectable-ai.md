@@ -58,7 +58,7 @@ version: "1.0"
 - **Контракт `onSelect: (boolean) => void`** — не путать с нативным `onSelect: SelectionEvent` от `<div>`. Тип специально перекрывает нативный через `Omit<..., "onSelect">`.
 - **Два `useEffect`** — синхронизируют `ListItemContext`:
   - `[selected, setSelected]` → запись `selected` (для подсветки `ListItemContent`).
-  - `[setSelectable]` → разовая запись `selectable = true` при монтировании (для скругления углов `ListItemContent`). Не убирать — иначе у выбираемого элемента не появится `border-radius`.
+  - `[setSelectable]` → запись `selectable = true` при монтировании и cleanup в `false` при размонтировании (для скругления углов `ListItemContent`). Не убирать запись — иначе у выбираемого элемента не появится `border-radius`. Не убирать cleanup — иначе при условном размонтировании `ListItemSelectable` внутри живого `ListItem` состояние «прилипнет» в `true`.
 - **Использование внутри `ListItem`** — `setSelected` / `setSelectable` берутся из `ListItemContext`. Если рендерить `ListItemSelectable` без родительского `ListItem`, контекст вернёт no-op сеттеры.
 
 ---

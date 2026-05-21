@@ -1,8 +1,10 @@
+@import "src/styles/style";
+
 .listItemSelectable {
     display: flex;
     align-items: center;
     background: var(--triplex-next-ListItem-Background);
-    border-radius: 8px;
+    border-radius: @list-item-border-radius;
 
     &.selected {
         background: var(--triplex-next-ListItem-Background_Selected);

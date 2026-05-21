@@ -7,9 +7,10 @@ export interface IListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {}
 /** Элемент списка. */
 export const ListItem = React.forwardRef<HTMLLIElement, IListItemProps>(({ children, className, ...rest }, ref) => {
     const [selected, setSelected] = useState(false);
+    const [selectable, setSelectable] = useState(false);
 
     return (
-        <ListItemContext.Provider value={{ selected, setSelected }}>
+        <ListItemContext.Provider value={{ selected, setSelected, selectable, setSelectable }}>
             <li className={className} {...rest} data-tx={process.env.npm_package_version} ref={ref}>
                 {children}
             </li>

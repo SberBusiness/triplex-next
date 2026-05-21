@@ -1,3 +1,5 @@
+@import "src/styles/style";
+
 .listItemTable {
     margin-bottom: 4px;
 
@@ -6,6 +8,11 @@
     }
 
     .swipeableArea {
-        border-radius: 8px;
+        border-radius: @list-item-border-radius;
+    }
+
+    .content {
+        // Минимальная высота, из-за блока Action с кнопками при свайпе.
+        min-height: 56px;
     }
 }

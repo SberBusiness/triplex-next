@@ -121,11 +121,17 @@
       показать оптимизированный сценарий. — *выполняется в Разделе 4.*
 
 ### 4. Stories
-- [ ] `stories/ImageGallery/ImageGallery.stories.tsx` (modern pattern).
-- [ ] Examples: `Default`, `FixedHeight`, `WithoutThumbnails`,
-      `WithDots` (мобильный preset с тиками), `WithoutBlur`,
-      `InsideLightBox`, `InsideLightBoxMobile`.
-- [ ] `examples/` с `?raw` source файлами для каждого примера.
+- [x] `stories/ImageGallery/ImageGallery.stories.tsx` (modern pattern).
+- [x] Examples: `Default`, `FixedHeight`, `WithoutThumbnails`,
+      `WithDots` (мобильный preset через `viewport: 'XS'`), `WithoutBlur`,
+      `InsideLightBox`, `InsideLightBoxMobile`. Также есть `Playground`
+      (с Controls, не показывает код, исключён из скриншот-тестов).
+- [x] `examples/` с `?raw` source файлами для каждого примера +
+      `index.ts` реэкспортирует пары `Name` + `NameSource`.
+- [x] `InsideLightBox`/`InsideLightBoxMobile` демонстрируют
+      рекомендуемый паттерн: один и тот же `ImageGallery` рендерится
+      повторно внутри `LightBox` с другими настройками; индекс
+      синхронизируется через controlled-режим `selectedIndex` + `onChange`.
 
 ### 5. Unit-тесты `__tests__/ImageGallery.test.tsx`
 - [ ] Рендер крупной картинки и ленты миниатюр.

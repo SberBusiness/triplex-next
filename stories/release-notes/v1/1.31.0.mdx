@@ -1,0 +1,25 @@
+import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+<Meta title="release-notes/v1/1.31.0" />
+
+<Title>v1.31.0</Title>
+
+<Heading>Новые компоненты</Heading>
+
+**ImageGallery**
+
+- Новый составной компонент `ImageGallery` с маркер-элементом `ImageGallery.Item` (`src`, `alt?`, `thumbSrc?`).
+- Поддерживает controlled (`selectedIndex` + `onChange`) и uncontrolled (`defaultIndex`) режимы.
+- На десктопе под крупной картинкой — лента миниатюр с автоцентровкой активной (на `CarouselExtended`).
+- На мобильном (`<768px`) лента заменяется кликабельными тиками-индикаторами (максимум 4, картинки распределяются по бакетам равного размера), а крупная картинка обёрнута в `SwipeableArea` со свайпом prev/next.
+- Высота: `height?: 'auto' | number | string`. В режиме `'auto'` — `640px` на десктопе и `164px` на мобильном.
+- Блюр-слой по краям крупной картинки (`withBlur` по умолчанию `true`), контейнер скруглён через `border-radius` + `overflow:hidden`.
+- Клавиатура: `ArrowLeft` / `ArrowRight` при фокусе на контейнере галереи.
+- `onImageClick(index)` — точка интеграции для родительского LightBox: один и тот же `ImageGallery` можно повторно отрендерить внутри лайтбокса с другими настройками (см. story `InsideLightBox`).
+- Дизайн-токены: `ImageGallery-Container_Background_Default`, `Arrow_Background_Default/Hover/Disabled`, `ThumbCarouselButton_Background_Default`, `Dot_Background_Default/Hover/Active`, `Accent_Color`.
+
+<Heading>Изменения</Heading>
+
+**SwipeableArea**
+
+- Добавлены backwards-compatible props `onSwipeLeft?` / `onSwipeRight?` — колбэки завершённого свайпа (срабатывают только когда дельта превысила порог `SWIPE_MIN_DISTANCE`). Используются в `ImageGallery` для переключения картинки по жесту.

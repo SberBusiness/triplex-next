@@ -1,7 +1,34 @@
-// Styles наполняются в Разделе 2 ROADMAP.
+@import "src/styles/style";
+
 .dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0;
 }
+
 .dot {
+    width: 32px;
+    height: 4px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 2px;
+    background: var(--triplex-next-ImageGallery-Dot_Background_Default);
+    cursor: pointer;
+    outline: none;
+    transition: background 0.15s ease-in-out;
+
+    &:hover {
+        background: var(--triplex-next-ImageGallery-Dot_Background_Hover);
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 2px var(--triplex-next-ImageGallery-Accent_Color);
+    }
 }
+
 .active {
+    background: var(--triplex-next-ImageGallery-Dot_Background_Active);
 }

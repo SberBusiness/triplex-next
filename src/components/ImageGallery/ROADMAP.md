@@ -77,14 +77,28 @@
       `ImageGalleryMain`). Упомянуть в release notes (Раздел 7).
 
 ### 2. Стили
-- [ ] `styles/ImageGallery.module.less` — корневой layout, режимы высоты.
-- [ ] `styles/ImageGalleryMain.module.less` — крупная картинка, блюр-слой,
+- [x] `styles/ImageGallery.module.less` — корневой layout, режимы высоты.
+- [x] `styles/ImageGalleryMain.module.less` — крупная картинка, блюр-слой,
       hover-стрелки, media-query на скрытие стрелок:
-      `@media (max-width: @screen-sm-max) { ... }`.
-- [ ] `styles/ImageGalleryThumbnails.module.less` — лента, активная
-      миниатюра, fade-оверлеи на краях (отключаются при `prev/nextDisabled`).
-- [ ] `styles/ImageGalleryDots.module.less` — ряд пилюль-тиков,
+      `@media (max-width: @screen-sm-max) { ... }`. Высота `auto` →
+      `640px` десктоп / `164px` мобильный реализована через CSS-default,
+      inline-style для числовых значений перетирает default.
+- [x] `styles/ImageGalleryThumbnails.module.less` — лента, активная
+      миниатюра, hover-стрелки prev/next. **Fade-оверлеи на краях не
+      сделаны** — `overflow:hidden` карусели визуально обрезает контент;
+      вернёмся, если в визуальном ревью будет «утечка» миниатюр.
+- [x] `styles/ImageGalleryDots.module.less` — ряд пилюль-тиков,
       активный/неактивный стейт, hover/focus.
+- [x] **Дизайн-токены компонента** — создан
+      `src/components/DesignTokens/components/ImageGallery.ts` с 9 ключами
+      (`Container_Background_Default`, `Arrow_Background_Default/Hover/Disabled`,
+      `ThumbCarouselButton_Background_Default`,
+      `Dot_Background_Default/Hover/Active`, `Accent_Color`).
+      Зарегистрирован в `DesignTokensComponents.ts`,
+      `DesignTokensComponentsThemeDark.ts`, `types/DesignTokensTypes.ts`
+      и `components/index.ts`. В `.less` токены используются без
+      версионного суффикса — версия подставляется vite-плагином
+      `replaceDesignTokenVersion` при сборке.
 
 ### 3. Demo-картинки для stories
 - [ ] Подобрать 9 картинок на Unsplash (Unsplash License разрешает

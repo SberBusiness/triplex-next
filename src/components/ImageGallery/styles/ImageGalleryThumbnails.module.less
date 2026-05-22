@@ -1,15 +1,77 @@
-// Styles наполняются в Разделе 2 ROADMAP.
+@import "src/styles/style";
+
 .thumbnails {
+    position: relative;
+
+    &:hover {
+        .button {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
 }
+
 .thumb {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 64px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.15s ease-in-out;
+
+    & + & {
+        margin-left: 8px;
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 2px var(--triplex-next-ImageGallery-Accent_Color);
+    }
 }
+
 .active {
+    box-shadow: 0 0 0 2px var(--triplex-next-ImageGallery-Accent_Color);
 }
+
 .image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
 }
+
 .button {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    background: var(--triplex-next-ImageGallery-ThumbCarouselButton_Background_Default);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
 }
+
 .prev {
+    left: 0;
 }
+
 .next {
+    right: 0;
+}
+
+@media (max-width: @screen-sm-max) {
+    .button {
+        display: none;
+    }
 }

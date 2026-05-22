@@ -19,6 +19,7 @@ export * from "./HeaderPage";
 export * from "./Island";
 export * from "./IslandAccordion";
 export * from "./IslandWidget";
+export * from "./ImageGallery";
 export * from "./LightBox";
 export * from "./Link";
 export * from "./ListItem";

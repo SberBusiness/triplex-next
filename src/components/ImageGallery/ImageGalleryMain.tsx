@@ -53,7 +53,12 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
     const content = (
         <div className={clsx(styles.main, className)} style={inlineHeight ? { height: inlineHeight } : undefined}>
             {withBlur && (
-                <div className={styles.blur} style={{ backgroundImage: `url(${item.src})` }} aria-hidden="true" />
+                <div
+                    className={styles.blur}
+                    style={{ backgroundImage: `url(${item.src})` }}
+                    aria-hidden="true"
+                    data-testid="image-gallery-blur"
+                />
             )}
 
             <img

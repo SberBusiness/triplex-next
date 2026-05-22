@@ -134,25 +134,28 @@
       синхронизируется через controlled-режим `selectedIndex` + `onChange`.
 
 ### 5. Unit-тесты `__tests__/ImageGallery.test.tsx`
-- [ ] Рендер крупной картинки и ленты миниатюр.
-- [ ] Клик по миниатюре переключает большую картинку (uncontrolled).
-- [ ] Controlled-режим через `selectedIndex` + `onChange`.
-- [ ] `ArrowLeft` / `ArrowRight` переключают активный индекс.
-- [ ] `showThumbnails={false}` скрывает ленту.
-- [ ] На мобильном (`MobileView` ветка) рендерятся тики; их количество
+- [x] Рендер крупной картинки и ленты миниатюр.
+- [x] Клик по миниатюре переключает большую картинку (uncontrolled).
+- [x] Controlled-режим через `selectedIndex` + `onChange`.
+- [x] `ArrowLeft` / `ArrowRight` переключают активный индекс.
+- [x] `showThumbnails={false}` скрывает ленту.
+- [x] На мобильном (`MobileView` ветка) рендерятся тики; их количество
       равно `Math.min(items.length, 4)`, а при `items.length === 1` —
       ноль.
-- [ ] Клик по тику переключает индекс на первую картинку бакета
+- [x] Клик по тику переключает индекс на первую картинку бакета
       (`onChange(t * bucketSize)`); активный тик соответствует текущему
       `selectedIndex` по правилу из «Контекста».
-- [ ] `showDots={false}` скрывает ряд тиков на мобильном.
-- [ ] На мобильном (`MobileView` ветка) крупная картинка обёрнута в
+- [x] `showDots={false}` скрывает ряд тиков на мобильном.
+- [x] На мобильном (`MobileView` ветка) крупная картинка обёрнута в
       `SwipeableArea` с колбэками prev/next, передающими корректный индекс
       (мок `MobileView`/`SwipeableArea`; реальный жест — в e2e).
-- [ ] `withBlur={false}` не рендерит блюр-слой.
-- [ ] `onImageClick` вызывается с правильным индексом.
-- [ ] `height={number}` применяет inline-style.
-- [ ] Активная миниатюра помечена `aria-selected="true"`.
+      Заодно покрыт вызов `closeSwipe()` после каждого свайпа.
+- [x] `withBlur={false}` не рендерит блюр-слой (через `data-testid="image-gallery-blur"`).
+- [x] `onImageClick` вызывается с правильным индексом.
+- [x] `height={number}` применяет inline-style.
+- [x] Активная миниатюра помечена `aria-selected="true"`.
+- [x] **Доп.:** `<img>` миниатюры имеет `alt=""` (декоративная) — `aria-label`
+      кнопки несёт смысл активности; устраняет дубль с alt главной картинки.
 
 ### 6. E2E-тесты `e2e/tests/imageGallery.spec.ts`
 

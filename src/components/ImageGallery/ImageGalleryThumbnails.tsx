@@ -115,12 +115,7 @@ export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
                         aria-selected={isActive}
                         onClick={() => onSelect(index)}
                     >
-                        <img
-                            src={item.thumbSrc ?? item.src}
-                            alt={item.alt ?? ""}
-                            className={styles.image}
-                            loading="lazy"
-                        />
+                        <img src={item.thumbSrc ?? item.src} alt="" className={styles.image} loading="lazy" />
                     </button>
                 );
             })}

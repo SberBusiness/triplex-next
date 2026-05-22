@@ -16,8 +16,9 @@
   фактический рендер делает родитель через `React.Children`.
 - **Выбранный индекс:** uncontrolled (`defaultIndex`) + опциональный controlled
   (`selectedIndex` + `onChange`).
-- **Видимость нижней панели:** два независимых булевых — `showThumbnails`,
-  `showCounter`.
+- **Видимость нижней панели:** два независимых булевых —
+  `showThumbnails` (десктоп: лента миниатюр) и `showDots` (мобильный:
+  кликабельные тики-индикаторы).
 - **Высота:** `height?: 'auto' | number | string`. В режиме `'auto'` —
   фиксированные значения по breakpoint: десктоп `640px`, мобильный
   (`@media (max-width: @screen-sm-max)`) `164px`.
@@ -29,7 +30,7 @@
 - **LightBox:** рендерит **родитель**, не сам компонент. ImageGallery только
   отдаёт `onImageClick(index)`. Один и тот же `<ImageGallery>` затем
   используется повторно внутри родительского лайтбокса с другими
-  настройками (`showCounter`, без миниатюр и т.д.).
+  настройками (`showDots`, без миниатюр и т.д.).
 - **Keyboard:** `ArrowLeft` / `ArrowRight` переключают активный индекс при
   фокусе на контейнере галереи.
 - **Тач-детекция стрелок:** скрываем кнопки prev/next крупной картинки
@@ -37,6 +38,16 @@
 - **Дизайн-токены:** используем существующие neutral-токены (background,
   text). Специфичные ImageGallery-токены — отдельным тикетом по
   согласованию с дизайнером.
+- **Тики (мобильный)** — кликабельные индикаторы вместо ленты миниатюр.
+  Максимум 4 тика, минимум 0:
+  - `ticksCount = items.length === 1 ? 0 : Math.min(items.length, 4)`;
+  - картинки распределяются по тикам бакетами равного размера
+    `bucketSize = Math.floor(items.length / ticksCount)`; остаток (если
+    `items.length % ticksCount !== 0`) уходит в последний бакет;
+  - клик по тику с индексом `t` → `onChange(t * bucketSize)` (переход к
+    первой картинке бакета);
+  - активный тик для текущего индекса `i`:
+    `Math.min(Math.floor(i / bucketSize), ticksCount - 1)`.
 
 ---
 
@@ -54,7 +65,9 @@
       на десктопе (`fallback`) — без обёртки.
 - [ ] `ImageGalleryThumbnails.tsx` — лента миниатюр на `CarouselExtended`
       с авто-центрированием активной (паттерн как в `Stepper.alignStep`).
-- [ ] `ImageGalleryCounter.tsx` — «N / M».
+- [ ] `ImageGalleryDots.tsx` — ряд из 0..4 кликабельных тиков-пилюль
+      (см. алгоритм бакетов в разделе «Контекст»). Рендерится только в
+      мобильной ветке `MobileView` и при `showDots !== false`.
 - [ ] `types.ts` — `IImageGalleryProps`, `IImageGalleryItemProps`.
 - [ ] `index.ts` — barrel exports.
 - [ ] Подключение в `src/components/index.ts`.
@@ -66,7 +79,8 @@
       `@media (max-width: @screen-sm-max) { ... }`.
 - [ ] `styles/ImageGalleryThumbnails.module.less` — лента, активная
       миниатюра, fade-оверлеи на краях (отключаются при `prev/nextDisabled`).
-- [ ] `styles/ImageGalleryCounter.module.less` — пилюля каунтера.
+- [ ] `styles/ImageGalleryDots.module.less` — ряд пилюль-тиков,
+      активный/неактивный стейт, hover/focus.
 
 ### 3. Demo-картинки для stories
 - [ ] Подобрать 9 картинок на Unsplash (Unsplash License разрешает
@@ -87,7 +101,8 @@
 ### 4. Stories
 - [ ] `stories/ImageGallery/ImageGallery.stories.tsx` (modern pattern).
 - [ ] Examples: `Default`, `FixedHeight`, `WithoutThumbnails`,
-      `WithCounter`, `WithoutBlur`, `InsideLightBox`, `InsideLightBoxMobile`.
+      `WithDots` (мобильный preset с тиками), `WithoutBlur`,
+      `InsideLightBox`, `InsideLightBoxMobile`.
 - [ ] `examples/` с `?raw` source файлами для каждого примера.
 
 ### 5. Unit-тесты `__tests__/ImageGallery.test.tsx`
@@ -96,7 +111,13 @@
 - [ ] Controlled-режим через `selectedIndex` + `onChange`.
 - [ ] `ArrowLeft` / `ArrowRight` переключают активный индекс.
 - [ ] `showThumbnails={false}` скрывает ленту.
-- [ ] `showCounter` рендерит «N / M».
+- [ ] На мобильном (`MobileView` ветка) рендерятся тики; их количество
+      равно `Math.min(items.length, 4)`, а при `items.length === 1` —
+      ноль.
+- [ ] Клик по тику переключает индекс на первую картинку бакета
+      (`onChange(t * bucketSize)`); активный тик соответствует текущему
+      `selectedIndex` по правилу из «Контекста».
+- [ ] `showDots={false}` скрывает ряд тиков на мобильном.
 - [ ] На мобильном (`MobileView` ветка) крупная картинка обёрнута в
       `SwipeableArea` с колбэками prev/next, передающими корректный индекс
       (мок `MobileView`/`SwipeableArea`; реальный жест — в e2e).
@@ -123,9 +144,10 @@ hover-медиа. Сценарии запускаются против stories �
       `boundingBox` миниатюры относительно карусели).
 - [ ] **mobile** (`devices['iPhone 13']` или viewport `<768px` +
       `hasTouch: true`) — свайп влево/вправо листает картинку (story
-      `WithCounter`).
+      `WithDots`).
 - [ ] **mobile** — стрелки prev/next крупной картинки не отображаются;
-      при `showCounter=true` виден каунтер «N / M».
+      виден ряд тиков, клик по тику переключает картинку на первую в
+      соответствующем бакете.
 
 ### 7. Release notes
 - [ ] Раздел про `ImageGallery` в

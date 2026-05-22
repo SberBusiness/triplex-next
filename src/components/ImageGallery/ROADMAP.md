@@ -101,20 +101,24 @@
       `replaceDesignTokenVersion` при сборке.
 
 ### 3. Demo-картинки для stories
-- [ ] Подобрать 9 картинок на Unsplash (Unsplash License разрешает
-      коммерческое использование без атрибуции).
-- [ ] Соблюсти баланс пропорций: 2–3 широких (landscape), 1–2 узких
-      (portrait) — для демонстрации `withBlur=true`, 1 квадратная.
-- [ ] Привести к разумным размерам: ~1600×1000 (jpg, q≈80, цель ≤300 KB
-      на файл).
-- [ ] Положить в `public/assets/images/imageGallery/01.jpg` ..
-      `09.jpg` (новая папка).
-- [ ] В первом коммите указать источники (Unsplash URL) в теле PR для
-      аудитного следа.
+- [x] Подобрать 9 картинок на Unsplash — получены через Lorem Picsum
+      (стабильный CDN-прокси для подмножества Unsplash, лицензия Unsplash
+      License). Авторы зафиксированы в `SOURCES.md`.
+- [x] Соблюсти баланс пропорций: 7 landscape (01–07.jpg), 1 portrait
+      (08.jpg), 1 square (09.jpg). Включает 16:9 кадры (05–06) для
+      демонстрации блюра по горизонтали и portrait для блюра по вертикали.
+- [x] Привести к разумным размерам: 1600×1000 (jpg). Целевой
+      `≤300 KB` соблюдён для 7 файлов; 06.jpg/07.jpg чуть выше
+      (~340–360 KB) — допустимо для demo-набора.
+- [x] Положить в `public/assets/images/imageGallery/01.jpg` ..
+      `09.jpg` (создана папка).
+- [x] Источники зафиксированы в
+      `public/assets/images/imageGallery/SOURCES.md` (имя автора,
+      Unsplash photo URL, Picsum ID, размер кропа).
 - [ ] `thumbSrc` в `<ImageGallery.Item>` оставляем опциональным; в
       базовых stories используем тот же URL для миниатюр (браузер
       закэширует). Отдельная story `WithSeparateThumbnails` может
-      показать оптимизированный сценарий.
+      показать оптимизированный сценарий. — *выполняется в Разделе 4.*
 
 ### 4. Stories
 - [ ] `stories/ImageGallery/ImageGallery.stories.tsx` (modern pattern).

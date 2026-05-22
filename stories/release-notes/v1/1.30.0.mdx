@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**ButtonDropdown**
+
+- Исправлен отступ между соседними `ButtonDropdown` / `ButtonDropdown` и `Button`.
+
 **CardAction**
 
 - `CardAction.Content.Footer` зафиксирован внизу `CardAction` вне зависимости от высоты `CardAction.Content.Body`.
@@ -26,6 +30,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - В `ListItemContext` добавлены поля `selectable` / `setSelectable` — флаг выбираемости, который пишется `ListItemSelectable` и читается `ListItemContent`.
 - Исправлен цвет токена `ListItem.Background_Selected` в тёмной теме (`ColorDarkNeutral.10` → `ColorDarkNeutral.60`).
+- Исправлен цвет токена `ListItem.Background_Dragging` в тёмной теме (`ColorDarkNeutral.0` → `ColorDarkNeutral.10`).
+- Добавлен токен `ListItem.Background_Hover`.
 
 **ListItemContent**
 
@@ -36,6 +42,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **ListItemSelectable**
 
 - Добавлен опциональный prop `disabled` — пробрасывается во встроенный `Checkbox`.
+
+**ListMaster**
+
+- Исправлен баг, когда `ListMaster.Header` не перекрывал `TabsLine`.
 
 **MultiselectField**
 

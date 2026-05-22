@@ -113,6 +113,7 @@ export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
                         }}
                         className={clsx(styles.thumb, { [styles.active]: isActive })}
                         aria-selected={isActive}
+                        data-testid="image-gallery-thumb"
                         onClick={() => onSelect(index)}
                     >
                         <img src={item.thumbSrc ?? item.src} alt="" className={styles.image} loading="lazy" />

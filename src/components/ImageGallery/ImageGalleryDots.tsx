@@ -49,6 +49,7 @@ export const ImageGalleryDots: React.FC<IImageGalleryDotsProps> = ({
                         role="tab"
                         aria-selected={isActive}
                         className={clsx(styles.dot, { [styles.active]: isActive })}
+                        data-testid="image-gallery-dot"
                         onClick={() => onSelect(tickIndex * bucketSize)}
                     />
                 );

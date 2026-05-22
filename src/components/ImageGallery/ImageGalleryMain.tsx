@@ -66,6 +66,7 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
                 alt={item.alt ?? ""}
                 className={clsx(styles.image, { [styles.clickable]: onImageClick !== undefined })}
                 loading="lazy"
+                data-testid="image-gallery-main-image"
                 onClick={onImageClick ? () => onImageClick(selectedIndex) : undefined}
             />
 
@@ -74,6 +75,7 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
                 tabIndex={-1}
                 disabled={isFirst}
                 hidden={itemsCount <= 1}
+                data-testid="image-gallery-arrow-prev"
                 onClick={onPrev}
             >
                 <CaretleftStrokeSrvIcon24 paletteIndex={5} />
@@ -84,6 +86,7 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
                 tabIndex={-1}
                 disabled={isLast}
                 hidden={itemsCount <= 1}
+                data-testid="image-gallery-arrow-next"
                 onClick={onNext}
             >
                 <CaretrightStrokeSrvIcon24 paletteIndex={5} />

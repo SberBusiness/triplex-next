@@ -34,6 +34,7 @@ export * from "./Gap";
 export * from "./Header";
 export * from "./HelpBox";
 export * from "./IconWrapper";
+export * from "./ImageGallery";
 export * from "./Island";
 export * from "./IslandAccordion";
 export * from "./IslandWidget";

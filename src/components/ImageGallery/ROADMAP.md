@@ -54,23 +54,27 @@
 ## План работ
 
 ### 1. Заготовка структуры
-- [ ] `ImageGallery.tsx` — корневой `forwardRef`, composition `.Item`,
+- [x] `ImageGallery.tsx` — корневой `forwardRef`, composition `.Item`,
       uncontrolled/controlled state, `onChange`, `onImageClick`,
       keyboard handler.
-- [ ] `ImageGalleryItem.tsx` — типовой компонент-маркер
+- [x] `ImageGalleryItem.tsx` — типовой компонент-маркер
       (`IImageGalleryItemProps`: `src`, `alt?`, `thumbSrc?`).
-- [ ] `ImageGalleryMain.tsx` — крупное изображение, слой блюра,
+- [x] `ImageGalleryMain.tsx` — крупное изображение, слой блюра,
       кнопки prev/next. Картинка оборачивается в `MobileView`: на
       мобильном (`children`) — `SwipeableArea` со свайпом prev/next,
       на десктопе (`fallback`) — без обёртки.
-- [ ] `ImageGalleryThumbnails.tsx` — лента миниатюр на `CarouselExtended`
+- [x] `ImageGalleryThumbnails.tsx` — лента миниатюр на `CarouselExtended`
       с авто-центрированием активной (паттерн как в `Stepper.alignStep`).
-- [ ] `ImageGalleryDots.tsx` — ряд из 0..4 кликабельных тиков-пилюль
+- [x] `ImageGalleryDots.tsx` — ряд из 0..4 кликабельных тиков-пилюль
       (см. алгоритм бакетов в разделе «Контекст»). Рендерится только в
       мобильной ветке `MobileView` и при `showDots !== false`.
-- [ ] `types.ts` — `IImageGalleryProps`, `IImageGalleryItemProps`.
-- [ ] `index.ts` — barrel exports.
-- [ ] Подключение в `src/components/index.ts`.
+- [x] `types.ts` — `IImageGalleryProps`, `IImageGalleryItemProps`.
+- [x] `index.ts` — barrel exports.
+- [x] Подключение в `src/components/index.ts`.
+- [x] **Доп.:** в `SwipeableArea` добавлены backwards-compatible
+      `onSwipeLeft`/`onSwipeRight` колбэки — точка подписки на
+      завершённый свайп (нужно для переключения картинки в
+      `ImageGalleryMain`). Упомянуть в release notes (Раздел 7).
 
 ### 2. Стили
 - [ ] `styles/ImageGallery.module.less` — корневой layout, режимы высоты.

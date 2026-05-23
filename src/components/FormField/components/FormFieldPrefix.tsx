@@ -1,22 +1,22 @@
-import React, {useContext, useEffect, useRef} from 'react';
-import {FormFieldContext} from '../FormFieldContext';
-import clsx from 'clsx';
-import styles from '../styles/FormFieldPrefix.module.less';
+import React, { useContext, useRef, useEffect } from "react";
+import clsx from "clsx";
+import { FormFieldContext } from "../FormFieldContext";
+import { TARGET_PADDING_X_DEFAULT } from "../consts";
+import styles from "../styles/FormFieldPrefix.module.less";
 
 /** Свойства компонента FormFieldPrefix. */
 export interface IFormFieldPrefixProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
 /** Контейнер элементов, отображающихся в левой части FormField. */
 export const FormFieldPrefix = React.forwardRef<HTMLSpanElement, IFormFieldPrefixProps>(
-    ({children, className, ...htmlSpanAttributes}, ref) => {
-        const classNames = clsx(styles.formFieldPrefix, className);
-        const {prefixWidth, setPrefixWidth} = useContext(FormFieldContext);
-
+    ({ children, className, ...restProps }, ref) => {
+        const { setPrefixWidth } = useContext(FormFieldContext);
         const innerRef = useRef<HTMLSpanElement | null>();
+        const classNames = clsx(styles.formFieldPrefix, className);
 
         const setRef = (instance: HTMLSpanElement | null) => {
             innerRef.current = instance;
-            if (typeof ref === 'function') {
+            if (typeof ref === "function") {
                 ref(instance);
             } else if (ref) {
                 ref.current = instance;
@@ -24,22 +24,29 @@ export const FormFieldPrefix = React.forwardRef<HTMLSpanElement, IFormFieldPrefi
         };
 
         useEffect(() => {
-            if (!innerRef.current) {
+            const element = innerRef.current;
+            if (!element) {
                 return;
             }
-            const {width} = innerRef.current.getBoundingClientRect();
 
-            if (width !== prefixWidth) {
-                setPrefixWidth(width);
-            }
-        });
+            const resizeObserver = new ResizeObserver(([entry]) => {
+                const width = entry.target.getBoundingClientRect().width;
+                setPrefixWidth((prevWidth) => (prevWidth !== width ? width : prevWidth));
+            });
+
+            resizeObserver.observe(element);
+            return () => {
+                resizeObserver.disconnect();
+                setPrefixWidth(TARGET_PADDING_X_DEFAULT);
+            };
+        }, [setPrefixWidth]);
 
         return (
-            <span className={classNames} ref={setRef} {...htmlSpanAttributes}>
+            <span className={classNames} {...restProps} ref={setRef}>
                 {children}
             </span>
         );
-    }
+    },
 );
 
-FormFieldPrefix.displayName = 'FormFieldPrefix';
+FormFieldPrefix.displayName = "FormFieldPrefix";

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import {
-    ICollapsableTreeNodeHeaderProvideProps,
-    ICollapsableTreeNodeProps,
-} from "../../CollapsableTree/components/CollapsableTreeNode";
-import { CollapsableTree } from "../../CollapsableTree/CollapsableTree";
+    ICollapsibleTreeExtendedNodeHeaderProvideProps,
+    ICollapsibleTreeExtendedNodeProps,
+} from "../../CollapsibleTreeExtended/components/CollapsibleTreeExtendedNode";
+import { CollapsibleTreeExtended } from "../../CollapsibleTreeExtended/CollapsibleTreeExtended";
 import { isStaticCheckboxTreeExtended } from "../isStaticCheckboxTreeExtended";
 import clsx from "clsx";
 import { CheckboxTreeExtendedArrow } from "./CheckboxTreeExtendedArrow";
@@ -23,7 +23,7 @@ export interface ICheckboxTreeExtendedCheckboxProvideProps {
 
 /** Свойства CheckboxTreeExtendedNode. */
 interface ICheckboxTreeExtendedNodeProps extends Omit<
-    ICollapsableTreeNodeProps,
+    ICollapsibleTreeExtendedNodeProps,
     "children" | "renderBody" | "renderHeader"
 > {
     // Render-функция компонента чекбокс.
@@ -36,14 +36,14 @@ interface ICheckboxTreeExtendedNodeProps extends Omit<
 
 /**
  * Нода CheckboxTreeExtendedNode.
- * Является оберткой CollapsableTree.Node.
+ * Является оберткой CollapsibleTreeExtended.Node.
  * Добавляет стили дерева чекбоксов.
  */
 export const CheckboxTreeExtendedNode: React.FC<ICheckboxTreeExtendedNodeProps> = ({
     children,
     checkbox,
     opened,
-    ...collapsableTreeNodeProps
+    ...collapsibleTreeExtendedNodeProps
 }) => {
     const { size } = useContext(CheckboxTreeExtendedContext);
 
@@ -54,7 +54,7 @@ export const CheckboxTreeExtendedNode: React.FC<ICheckboxTreeExtendedNodeProps> 
         }
     };
 
-    const renderHeader = ({ activeNode, opened, toggle }: ICollapsableTreeNodeHeaderProvideProps) => {
+    const renderHeader = ({ activeNode, opened, toggle }: ICollapsibleTreeExtendedNodeHeaderProvideProps) => {
         return (
             <div
                 className={clsx(styles.checkboxTreeExtendedNodeHeader, sizeToClassNameMap[size], { opened: opened })}
@@ -75,12 +75,12 @@ export const CheckboxTreeExtendedNode: React.FC<ICheckboxTreeExtendedNodeProps> 
     const renderBody = () => children;
 
     return (
-        <CollapsableTree.Node
+        <CollapsibleTreeExtended.Node
             className={styles.checkboxTreeExtendedNode}
             opened={isStaticCheckboxTreeExtended ? true : opened}
             renderHeader={renderHeader}
             renderBody={renderBody}
-            {...collapsableTreeNodeProps}
+            {...collapsibleTreeExtendedNodeProps}
         />
     );
 };

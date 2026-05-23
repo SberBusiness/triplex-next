@@ -6,13 +6,13 @@
     align-items: center;
     position: relative;
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: @list-item-border-radius;
     background: var(--triplex-next-ListItem-Background);
     touch-action: manipulation;
     cursor: grab;
 
     &:hover {
-        background: var(--triplex-next-ListItem-Background_Selected);
+        background: var(--triplex-next-ListItem-Background_Hover);
     }
 
     &.dragging {

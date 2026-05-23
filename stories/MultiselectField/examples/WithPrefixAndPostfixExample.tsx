@@ -161,6 +161,7 @@ export const WithPrefixAndPostfixExample = () => {
                                         controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
                                     >
                                         <DropdownMobileInput
+                                            autoFocus={true}
                                             placeholder="Type to proceed"
                                             value={filter}
                                             onChange={(event) => setFilter(event.target.value)}

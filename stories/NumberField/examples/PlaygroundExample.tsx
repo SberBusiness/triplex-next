@@ -10,7 +10,15 @@ import {
     EFontType,
     ETooltipSize,
 } from "@sberbusiness/triplex-next";
-import type { PlaygroundArgs } from "../NumberField.stories";
+
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof NumberField>,
+    "size" | "status" | "label" | "active" | "inputProps"
+> {
+    placeholder: string;
+    withPostfix: boolean;
+    withDescription: boolean;
+}
 
 const STATUS_TO_POSTFIX_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
     [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,

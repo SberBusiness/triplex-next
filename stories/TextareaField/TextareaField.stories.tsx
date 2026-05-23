@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj, ArgTypes as ArgTypesType } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { TextareaField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
     PlaygroundArgs,

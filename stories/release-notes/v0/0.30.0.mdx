@@ -6,6 +6,51 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**Title**
+**ButtonDropdown**
 
-- Description.
+- Исправлен отступ между соседними `ButtonDropdown` / `ButtonDropdown` и `Button`.
+
+**CardAction**
+
+- `CardAction.Content.Footer` зафиксирован внизу `CardAction` вне зависимости от высоты `CardAction.Content.Body`.
+
+**CardStatic**
+
+- `CardStatic.Content.Footer` зафиксирован внизу `CardStatic` вне зависимости от высоты `CardStatic.Content.Body`.
+
+**CollapsibleTreeExtended**
+
+- `CollapsibleTreeExtended.Node` — починен controlled-инвариант: режим (controlled / uncontrolled) теперь вычисляется на каждом рендере по `props.opened !== undefined`.
+
+**FormField**
+
+- Механизм измерения размеров компонентов prefix/postfix переведен на ResizeObserver.
+
+**ListItem**
+
+- В `ListItemContext` добавлены поля `selectable` / `setSelectable` — флаг выбираемости, который пишется `ListItemSelectable` и читается `ListItemContent`.
+- Исправлен цвет токена `ListItem.Background_Selected` в тёмной теме (`ColorDarkNeutral.10` → `ColorDarkNeutral.60`).
+- Исправлен цвет токена `ListItem.Background_Dragging` в тёмной теме (`ColorDarkNeutral.0` → `ColorDarkNeutral.10`).
+- Добавлен токен `ListItem.Background_Hover`.
+
+**ListItemContent**
+
+- Изменён внутренний `padding` с `18px 0 18px 16px` на `12px 0 12px 16px`.
+- Удалён встроенный `min-height: 56px` — теперь высота определяется содержимым. Минимальная высота `56px` применяется автоматически только внутри `ListItemTable` (swipe-сценарий).
+- При нахождении внутри `ListItemSelectable` контейнер автоматически получает скругление углов (`border-radius`).
+
+**ListItemSelectable**
+
+- Добавлен опциональный prop `disabled` — пробрасывается во встроенный `Checkbox`.
+
+**ListMaster**
+
+- Исправлен баг, когда `ListMaster.Header` не перекрывал `TabsLine`.
+
+**MultiselectField**
+
+- Исправлен баг, когда при закрытии `MultiselectField.Dropdown` кликом вне компонента фокус возвращался на `MultiselectField.Target`.
+
+**SMSField**
+
+- Удален лишний отступ под `SMSField.Input` при отсутствии `description` и `counter`.

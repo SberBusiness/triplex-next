@@ -99,7 +99,7 @@ version: "1.0"
 - `CheckboxXGroup` — группировка чекбоксов по оси X.
 - `CheckboxYGroup` — группировка чекбоксов по оси Y.
 - `CheckboxTree` — декларативное дерево чекбоксов (обёртка над `CheckboxTreeExtended`), поддерживает bulk-логику и распространение состояния checked по родителям/детям.
-- `CheckboxTreeExtended` — расширенное дерево чекбоксов на базе `CollapsableTree` с `Node` / `Checkbox` подкомпонентами (использует нативный `Checkbox` внутри для каждого узла).
+- `CheckboxTreeExtended` — расширенное дерево чекбоксов на базе `CollapsibleTreeExtended` с `Node` / `Checkbox` подкомпонентами (использует нативный `Checkbox` внутри для каждого узла).
 
 ---
 

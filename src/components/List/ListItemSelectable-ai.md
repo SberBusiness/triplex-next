@@ -15,8 +15,9 @@ version: "1.0"
 
 Контейнер выбора элемента списка. Рендерит контент + чекбокс справа.
 Управляется снаружи (`selected` + `onSelect`). Через `useEffect` записывает
-`selected` в `ListItemContext`, чтобы дочерний `ListItemContent` мог
-подсветиться (`background_selected`).
+в `ListItemContext` два флага: `selected` — для подсветки фона дочернего
+`ListItemContent` (`background_selected`); `selectable: true` — для
+применения скругления углов (`border-radius`) в `ListItemContent`.
 
 Используй `ListItemSelectable` когда: нужен выбор отдельного элемента списка
 с собственным чекбоксом (multi-select).
@@ -36,6 +37,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
+| `disabled` | `boolean` | Блокирует встроенный `Checkbox` (передаётся в `Checkbox` как есть) |
 | `children` | `React.ReactNode` | Контент строки (рендерится в `<div className="childrenWrapper">`) |
 | `...HTMLDivAttributes` | — | Все атрибуты `<div>`, кроме конфликтующего `onSelect` (исключён через `Omit`) |
 
@@ -54,8 +56,10 @@ version: "1.0"
 
 - **`forwardRef`** — обязателен, target — `HTMLDivElement`. Не убирать.
 - **Контракт `onSelect: (boolean) => void`** — не путать с нативным `onSelect: SelectionEvent` от `<div>`. Тип специально перекрывает нативный через `Omit<..., "onSelect">`.
-- **`useEffect` с зависимостями `[selected, setSelected]`** — синхронизация `selected` в `ListItemContext` обязательна. Без него подсветка `ListItemContent` не работает.
-- **Использование внутри `ListItem`** — `setSelected` берётся из `ListItemContext`. Если рендерить `ListItemSelectable` без родительского `ListItem`, контекст вернёт no-op `setSelected`.
+- **Два `useEffect`** — синхронизируют `ListItemContext`:
+  - `[selected, setSelected]` → запись `selected` (для подсветки `ListItemContent`).
+  - `[setSelectable]` → запись `selectable = true` при монтировании и cleanup в `false` при размонтировании (для скругления углов `ListItemContent`). Не убирать запись — иначе у выбираемого элемента не появится `border-radius`. Не убирать cleanup — иначе при условном размонтировании `ListItemSelectable` внутри живого `ListItem` состояние «прилипнет» в `true`.
+- **Использование внутри `ListItem`** — `setSelected` / `setSelectable` берутся из `ListItemContext`. Если рендерить `ListItemSelectable` без родительского `ListItem`, контекст вернёт no-op сеттеры.
 
 ---
 
@@ -92,3 +96,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-05-21 | Добавлен опциональный prop `disabled` (пробрасывается в `Checkbox`). Компонент пишет в `ListItemContext` флаг `selectable = true` при монтировании. |

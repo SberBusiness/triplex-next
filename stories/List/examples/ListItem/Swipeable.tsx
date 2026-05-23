@@ -74,7 +74,8 @@ export const Swipeable = () => {
                         }
                     >
                         <ListItemTailRight />
-                        <ListItemContent>Свайп влево</ListItemContent>
+                        {/* Минимальная высота, из-за блока Action с кнопками при свайпе. */}
+                        <ListItemContent style={{ minHeight: "56px" }}>Свайп влево</ListItemContent>
                     </SwipeableArea>
                 </ListItem>
             </List>

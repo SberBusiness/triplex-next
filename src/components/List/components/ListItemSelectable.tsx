@@ -9,12 +9,13 @@ export interface IListItemSelectableProps extends Omit<React.HTMLAttributes<HTML
     onSelect: (selected: boolean) => void;
     /** Флаг состояния «выбран». Управляется снаружи. */
     selected: boolean;
+    disabled?: boolean;
 }
 
 /** Контейнер с выбором элемента списка. */
 export const ListItemSelectable = React.forwardRef<HTMLDivElement, IListItemSelectableProps>(
-    ({ selected, children, className, onSelect, ...rest }, ref) => {
-        const { setSelected } = useContext(ListItemContext);
+    ({ selected, children, className, onSelect, disabled, ...rest }, ref) => {
+        const { setSelected, setSelectable } = useContext(ListItemContext);
 
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             onSelect(event.target.checked);
@@ -23,6 +24,13 @@ export const ListItemSelectable = React.forwardRef<HTMLDivElement, IListItemSele
         useEffect(() => {
             setSelected(selected);
         }, [selected, setSelected]);
+
+        useEffect(() => {
+            setSelectable(true);
+            return () => {
+                setSelectable(false);
+            };
+        }, [setSelectable]);
 
         return (
             <div
@@ -36,6 +44,7 @@ export const ListItemSelectable = React.forwardRef<HTMLDivElement, IListItemSele
                         checked={selected}
                         onChange={handleChange}
                         labelAttributes={{ className: styles.checkboxLabel }}
+                        disabled={disabled}
                     >
                         <span className={styles.checkboxLabelClickArea} />
                     </Checkbox>

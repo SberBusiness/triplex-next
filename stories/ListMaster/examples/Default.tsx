@@ -584,7 +584,9 @@ export const Default = () => {
                     <ListMaster.Footer>
                         <ListMaster.FooterDescription>
                             <Text size={ETextSize.B3} weight={EFontWeightText.SEMIBOLD}>
-                                Сумма: {sumSelected.toLocaleString("ru-RU")} RUB
+                                Сумма:
+                                <br />
+                                {sumSelected.toLocaleString("ru-RU")} RUB
                             </Text>
                         </ListMaster.FooterDescription>
 

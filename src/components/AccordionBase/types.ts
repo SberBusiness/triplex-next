@@ -41,7 +41,7 @@ export interface IAccordionBaseProps {
     // Рендер-функция body.
     renderBody: (props: IAccordionBodyProvideProps) => React.ReactNode;
     // Рендер-функция header.
-    renderHeader: (props: IAccordionHeaderProvideProps) => JSX.Element;
+    renderHeader: (props: IAccordionHeaderProvideProps) => React.ReactNode;
     // Функция открыть/закрыть.
     toggle?: (isOpen: boolean) => void;
 }

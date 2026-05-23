@@ -1,7 +1,8 @@
 @import 'src/styles/style';
 
 .card {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
@@ -31,6 +32,9 @@
 
     .cardContent {
         padding: var(--padding);
+        display: flex;
+        flex-direction: column;
+        flex: 1;
 
         &.paddingMD {
             --padding: 24px;
@@ -42,6 +46,10 @@
 
         .cardContentHeader {
             margin-bottom: 16px;
+        }
+
+        .cardContentBody {
+            flex: 1;
         }
 
         .cardContentFooter {

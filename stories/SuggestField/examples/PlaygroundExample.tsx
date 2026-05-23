@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback } from "react";
+import clsx from "clsx";
 import {
     SuggestField,
     HelpBox,
@@ -7,13 +8,35 @@ import {
     useMatchMedia,
     ISuggestFieldOption,
     EScreenWidth,
+    EComponentSize,
     EFormFieldStatus,
     ETooltipSize,
     ETextSize,
     EFontType,
 } from "@sberbusiness/triplex-next";
-import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-import type { PlaygroundArgs } from "../SuggestField.stories";
+import {
+    DefaulticonStrokePrdIcon16,
+    DefaulticonStrokePrdIcon20,
+    DefaulticonStrokePrdIcon24,
+} from "@sberbusiness/icons-next";
+
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof SuggestField>,
+    | "size"
+    | "status"
+    | "inputProps"
+    | "placeholder"
+    | "label"
+    | "tooltipHint"
+    | "active"
+    | "loading"
+    | "dropdownListLoading"
+    | "clearInputOnFocus"
+> {
+    withPrefix: boolean;
+    withPostfix: boolean;
+    withDescription: boolean;
+}
 
 const FOOD_NAMES = [
     "Mushroom",
@@ -39,6 +62,12 @@ const FOOD_OPTIONS: ISuggestFieldOption[] = FOOD_NAMES.map((item, index) => ({
     label: item,
 }));
 
+const SIZE_TO_ICON_COMPONENT_MAP = {
+    [EComponentSize.SM]: DefaulticonStrokePrdIcon16,
+    [EComponentSize.MD]: DefaulticonStrokePrdIcon20,
+    [EComponentSize.LG]: DefaulticonStrokePrdIcon24,
+};
+
 const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
     [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
     [EFormFieldStatus.DISABLED]: EFontType.SECONDARY,
@@ -53,6 +82,7 @@ const getFilteredOptions = (query: string): ISuggestFieldOption[] =>
     FOOD_OPTIONS.filter(({ label }) => label.toLowerCase().includes(query.toLowerCase()));
 
 export const PlaygroundExample = ({
+    size = EComponentSize.LG,
     status = EFormFieldStatus.DEFAULT,
     inputProps,
     withPrefix,
@@ -66,6 +96,8 @@ export const PlaygroundExample = ({
     const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const adaptive = useAdaptive();
+
+    const PrefixIcon = SIZE_TO_ICON_COMPONENT_MAP[size];
 
     const reset = useCallback((newOptions: typeof options) => {
         setOptions(newOptions);
@@ -132,6 +164,7 @@ export const PlaygroundExample = ({
                 value={value}
                 options={options}
                 status={status}
+                size={size}
                 tooltipOpen={tooltipOpen}
                 onFilter={handleFilter}
                 onSelect={handleSelect}
@@ -142,15 +175,14 @@ export const PlaygroundExample = ({
                     onMouseDown: handleInputMouseDown,
                     ref: inputRef,
                 }}
-                prefix={withPrefix && <DefaulticonStrokePrdIcon24 paletteIndex={5} />}
-                postfix={
-                    withPostfix && (
-                        <>
-                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
-                            <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>
-                        </>
+                prefix={
+                    withPrefix && (
+                        <div className={clsx("hoverable", { disabled: status === EFormFieldStatus.DISABLED })}>
+                            <PrefixIcon style={{ display: "block" }} paletteIndex={5} />
+                        </div>
                     )
                 }
+                postfix={withPostfix && <HelpBox tooltipSize={ETooltipSize.SM}>Helpful details appear here</HelpBox>}
                 description={
                     withDescription && (
                         <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>

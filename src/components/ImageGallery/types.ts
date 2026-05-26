@@ -1,9 +1,10 @@
 import React from "react";
+import { IImageGalleryItemProps } from "../ImageGalleryExtended";
 
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
-    /** Элементы галереи в виде `<ImageGallery.Item>`. */
-    children: React.ReactNode;
+    /** Изображения галереи. */
+    items: ReadonlyArray<IImageGalleryItemProps>;
     /** Идентификатор активного изображения в controlled-режиме. */
     selectedId?: string;
     /** Идентификатор активного изображения по умолчанию (uncontrolled-режим). */

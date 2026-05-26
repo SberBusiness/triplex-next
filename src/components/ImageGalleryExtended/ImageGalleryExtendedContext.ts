@@ -3,7 +3,7 @@ import { IImageGalleryItemProps } from "./types";
 
 /** Контекст ImageGalleryExtended. Связывает контейнер с составными частями (`Main`/`Thumbnails`/`Dots`). */
 export interface IImageGalleryExtendedContext {
-    /** Список элементов галереи (собранных из `ImageGalleryExtended.Item`). */
+    /** Список изображений галереи (из пропа `items` контейнера). */
     items: ReadonlyArray<IImageGalleryItemProps>;
     /** Индекс активного изображения (уже приведён к допустимому диапазону). */
     selectedIndex: number;

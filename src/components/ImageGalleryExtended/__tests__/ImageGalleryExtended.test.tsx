@@ -43,25 +43,24 @@ import { EImageGalleryArrowDirection } from "../enums";
 const itemId = (index: number) => `p${index + 1}`;
 
 const buildItems = (count: number) =>
-    Array.from({ length: count }, (_, index) => (
-        <ImageGalleryExtended.Item
-            key={index}
-            id={itemId(index)}
-            src={`/img/${index + 1}.jpg`}
-            alt={`Photo ${index + 1}`}
-        />
-    ));
+    Array.from({ length: count }, (_, index) => ({
+        id: itemId(index),
+        src: `/img/${index + 1}.jpg`,
+        alt: `Photo ${index + 1}`,
+    }));
 
 /** Controlled-обёртка: держит активный id в state и прокидывает спай onChange. */
 const ControlledGallery: React.FC<{
-    children: React.ReactNode;
+    items: ReturnType<typeof buildItems>;
+    children?: React.ReactNode;
     initialId?: string;
     onChange?: (id: string) => void;
-}> = ({ children, initialId = "p1", onChange }) => {
+}> = ({ items, children, initialId = "p1", onChange }) => {
     const [id, setId] = useState(initialId);
 
     return (
         <ImageGalleryExtended
+            items={items}
             selectedId={id}
             onChange={(next) => {
                 setId(next);
@@ -83,21 +82,20 @@ beforeEach(() => {
 describe("ImageGalleryExtended — состав через контекст", () => {
     it("Main и Thumbnails берут данные из контекста контейнера", () => {
         render(
-            <ControlledGallery>
+            <ControlledGallery items={buildItems(9)}>
                 <ImageGalleryExtended.Main />
                 <ImageGalleryExtended.Thumbnails />
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
         // Main: первая картинка активна.
         expect(screen.getByAltText("Photo 1")).toHaveAttribute("src", "/img/1.jpg");
-        // Thumbnails: по кнопке на каждый Item.
+        // Thumbnails: по кнопке на каждый item.
         expect(thumbButtons()).toHaveLength(9);
     });
 
-    it("Item-маркеры сами ничего не рендерят (без layout-частей DOM пустой)", () => {
-        const { container } = render(<ControlledGallery>{buildItems(9)}</ControlledGallery>);
+    it("без layout-частей ничего не рендерит (items в пропе, но нечем рисовать)", () => {
+        const { container } = render(<ControlledGallery items={buildItems(9)} />);
 
         expect(container.querySelector("img")).toBeNull();
         expect(screen.queryAllByRole("button")).toHaveLength(0);
@@ -105,9 +103,8 @@ describe("ImageGalleryExtended — состав через контекст", ()
 
     it("рендерит только те части, что переданы (Main без Thumbnails — нет миниатюр)", () => {
         render(
-            <ControlledGallery>
+            <ControlledGallery items={buildItems(9)}>
                 <ImageGalleryExtended.Main />
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
@@ -120,10 +117,9 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
     it("клик по миниатюре вызывает onChange с её id и меняет активную картинку", () => {
         const onChange = vi.fn();
         render(
-            <ControlledGallery onChange={onChange}>
+            <ControlledGallery items={buildItems(9)} onChange={onChange}>
                 <ImageGalleryExtended.Main />
                 <ImageGalleryExtended.Thumbnails />
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
@@ -137,9 +133,8 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
     it("ArrowLeft/ArrowRight на контейнере переключают активный id", () => {
         const onChange = vi.fn();
         render(
-            <ControlledGallery initialId="p4" onChange={onChange}>
+            <ControlledGallery items={buildItems(9)} initialId="p4" onChange={onChange}>
                 <ImageGalleryExtended.Main />
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
@@ -158,9 +153,8 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
     it("onChange не вызывается, если id не меняется (клик по уже активной миниатюре)", () => {
         const onChange = vi.fn();
         render(
-            <ControlledGallery initialId="p3" onChange={onChange}>
+            <ControlledGallery items={buildItems(9)} initialId="p3" onChange={onChange}>
                 <ImageGalleryExtended.Thumbnails />
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
@@ -170,9 +164,8 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
 
     it("неизвестный selectedId резолвится в первый элемент", () => {
         render(
-            <ImageGalleryExtended selectedId="missing" onChange={vi.fn()}>
+            <ImageGalleryExtended items={buildItems(9)} selectedId="missing" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main />
-                {buildItems(9)}
             </ImageGalleryExtended>,
         );
 
@@ -183,18 +176,16 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
 describe("ImageGalleryExtended — Main", () => {
     it("withBlur рендерит блюр-слой (inline background-image)", () => {
         const { container, rerender } = render(
-            <ImageGalleryExtended selectedId="p1" onChange={vi.fn()}>
+            <ImageGalleryExtended items={buildItems(9)} selectedId="p1" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main withBlur={false} />
-                {buildItems(9)}
             </ImageGalleryExtended>,
         );
 
         expect(container.querySelector('[style*="background-image"]')).toBeNull();
 
         rerender(
-            <ImageGalleryExtended selectedId="p1" onChange={vi.fn()}>
+            <ImageGalleryExtended items={buildItems(9)} selectedId="p1" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main withBlur />
-                {buildItems(9)}
             </ImageGalleryExtended>,
         );
         expect(container.querySelector('[style*="background-image"]')).not.toBeNull();
@@ -203,9 +194,8 @@ describe("ImageGalleryExtended — Main", () => {
     it("onImageClick вызывается с активным индексом", () => {
         const onImageClick = vi.fn();
         render(
-            <ImageGalleryExtended selectedId="p5" onChange={vi.fn()}>
+            <ImageGalleryExtended items={buildItems(9)} selectedId="p5" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main onImageClick={onImageClick} />
-                {buildItems(9)}
             </ImageGalleryExtended>,
         );
 
@@ -217,7 +207,7 @@ describe("ImageGalleryExtended — Main", () => {
 describe("ImageGalleryExtended — Nav (render-функция)", () => {
     const renderWithArrows = (props: { initialId?: string; onChange?: (id: string) => void } = {}) =>
         render(
-            <ControlledGallery initialId={props.initialId} onChange={props.onChange}>
+            <ControlledGallery items={buildItems(9)} initialId={props.initialId} onChange={props.onChange}>
                 <ImageGalleryExtended.Main>
                     <ImageGalleryExtended.Nav>
                         {({ onPrev, onNext, isFirst, isLast }) => (
@@ -236,7 +226,6 @@ describe("ImageGalleryExtended — Nav (render-функция)", () => {
                         )}
                     </ImageGalleryExtended.Nav>
                 </ImageGalleryExtended.Main>
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
@@ -270,10 +259,9 @@ describe("ImageGalleryExtended — Dots (мобильный)", () => {
     it("рендерит min(items, 4) тиков и клик переключает id через bucketSize", () => {
         const onChange = vi.fn();
         render(
-            <ControlledGallery onChange={onChange}>
+            <ControlledGallery items={buildItems(9)} onChange={onChange}>
                 <ImageGalleryExtended.Main />
                 <ImageGalleryExtended.Dots />
-                {buildItems(9)}
             </ControlledGallery>,
         );
 
@@ -284,5 +272,43 @@ describe("ImageGalleryExtended — Dots (мобильный)", () => {
         fireEvent.click(dots[2]);
         expect(onChange).toHaveBeenCalledWith("p5");
         expect(screen.getByAltText("Photo 5")).toBeInTheDocument();
+    });
+});
+
+describe("ImageGalleryExtended — Thumbnails (render-функция)", () => {
+    it("кастомная render-функция получает состояние и переключает id", () => {
+        const onChange = vi.fn();
+        render(
+            <ControlledGallery items={buildItems(9)} onChange={onChange}>
+                <ImageGalleryExtended.Thumbnails>
+                    {({ item, isActive, onSelect, ref }) => (
+                        <button
+                            ref={ref}
+                            type="button"
+                            aria-label={`thumb-${item.id}`}
+                            aria-selected={isActive}
+                            onClick={onSelect}
+                        />
+                    )}
+                </ImageGalleryExtended.Thumbnails>
+            </ControlledGallery>,
+        );
+
+        // По кастомной кнопке на каждый item.
+        expect(screen.getAllByRole("button")).toHaveLength(9);
+
+        fireEvent.click(screen.getByRole("button", { name: "thumb-p5" }));
+        expect(onChange).toHaveBeenCalledWith("p5");
+        expect(screen.getByRole("button", { name: "thumb-p5" })).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("по умолчанию (без children) рисует стандартные миниатюры", () => {
+        render(
+            <ControlledGallery items={buildItems(9)}>
+                <ImageGalleryExtended.Thumbnails />
+            </ControlledGallery>,
+        );
+
+        expect(thumbButtons()).toHaveLength(9);
     });
 });

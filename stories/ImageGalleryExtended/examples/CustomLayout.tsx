@@ -1,30 +1,29 @@
 import React from "react";
 import { ImageGalleryExtended } from "@sberbusiness/triplex-next";
 
-const IMAGES = [
-    "/assets/images/imageGallery/01.jpg",
-    "/assets/images/imageGallery/02.jpg",
-    "/assets/images/imageGallery/03.jpg",
-    "/assets/images/imageGallery/04.jpg",
-    "/assets/images/imageGallery/05.jpg",
-    "/assets/images/imageGallery/06.jpg",
-    "/assets/images/imageGallery/07.jpg",
-    "/assets/images/imageGallery/08.jpg",
-    "/assets/images/imageGallery/09.jpg",
-];
+const ITEMS = Array.from({ length: 9 }, (_, i) => ({
+    id: `photo-${i + 1}`,
+    src: `/assets/images/imageGallery/0${i + 1}.jpg`,
+    alt: `Photo ${i + 1}`,
+}));
 
 /**
  * Порядок составных частей произволен: здесь лента миниатюр расположена над
- * крупной картинкой. Вместо стандартных стрелок — кастомная панель «‹ N / Total ›»:
- * `ImageGalleryExtended.Nav` отдаёт состояние навигации через render-функцию,
- * а разметку кнопок задаёт потребитель.
+ * крупной картинкой. Демонстрирует обе render-функции: `Thumbnails` рисует
+ * миниатюры через `ImageGalleryExtended.Thumb` (можно подставить любую разметку,
+ * проброс `ref` включает автоцентровку), а вместо стандартных стрелок `Nav`
+ * отдаёт состояние навигации в кастомную панель «‹ N / Total ›».
  */
 export const CustomLayout = () => {
     const [selectedId, setSelectedId] = React.useState("photo-1");
 
     return (
-        <ImageGalleryExtended selectedId={selectedId} onChange={setSelectedId}>
-            <ImageGalleryExtended.Thumbnails />
+        <ImageGalleryExtended items={ITEMS} selectedId={selectedId} onChange={setSelectedId}>
+            <ImageGalleryExtended.Thumbnails>
+                {({ item, isActive, onSelect, ref }) => (
+                    <ImageGalleryExtended.Thumb ref={ref} item={item} isActive={isActive} onClick={onSelect} />
+                )}
+            </ImageGalleryExtended.Thumbnails>
             <ImageGalleryExtended.Main withBlur height={400}>
                 <ImageGalleryExtended.Nav>
                     {({ onPrev, onNext, isFirst, isLast, selectedIndex, itemsCount }) => (
@@ -83,9 +82,6 @@ export const CustomLayout = () => {
                     )}
                 </ImageGalleryExtended.Nav>
             </ImageGalleryExtended.Main>
-            {IMAGES.map((src, i) => (
-                <ImageGalleryExtended.Item key={src} id={`photo-${i + 1}`} src={src} alt={`Photo ${i + 1}`} />
-            ))}
         </ImageGalleryExtended>
     );
 };

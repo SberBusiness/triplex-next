@@ -1,6 +1,6 @@
 import React from "react";
 
-/** Свойства одного элемента галереи (`ImageGalleryExtended.Item` / `ImageGallery.Item`). */
+/** Описание одного изображения галереи (элемент массива `items`). */
 export interface IImageGalleryItemProps {
     /** Уникальный идентификатор изображения. */
     id: string;
@@ -14,7 +14,9 @@ export interface IImageGalleryItemProps {
 
 /** Свойства компонента ImageGalleryExtended. */
 export interface IImageGalleryExtendedProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
-    /** Составные части: `ImageGalleryExtended.Main/.Thumbnails/.Dots` и маркеры `ImageGalleryExtended.Item`. */
+    /** Изображения галереи. Раздаются составным частям через контекст. */
+    items: ReadonlyArray<IImageGalleryItemProps>;
+    /** Составные части: `ImageGalleryExtended.Main/.Thumbnails/.Dots`. */
     children: React.ReactNode;
     /** Идентификатор активного изображения (controlled). */
     selectedId: string;

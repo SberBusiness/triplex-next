@@ -2,54 +2,45 @@ import React, { useCallback } from "react";
 import clsx from "clsx";
 import { isKey } from "../../utils/keyboard";
 import { ImageGalleryExtendedContext } from "./ImageGalleryExtendedContext";
-import { ImageGalleryExtendedItem } from "./components/ImageGalleryExtendedItem";
 import { ImageGalleryExtendedMain } from "./components/ImageGalleryExtendedMain";
 import { ImageGalleryExtendedNav } from "./components/ImageGalleryExtendedNav";
 import { ImageGalleryExtendedArrow } from "./components/ImageGalleryExtendedArrow";
 import { ImageGalleryExtendedThumbnails } from "./components/ImageGalleryExtendedThumbnails";
+import { ImageGalleryExtendedThumb } from "./components/ImageGalleryExtendedThumb";
 import { ImageGalleryExtendedDots } from "./components/ImageGalleryExtendedDots";
-import { IImageGalleryExtendedProps, IImageGalleryItemProps } from "./types";
+import { IImageGalleryExtendedProps } from "./types";
 import styles from "./styles/ImageGalleryExtended.module.less";
-
-/**
- * Извлекает props у `ImageGalleryExtended.Item` из children, отфильтровывая остальные элементы.
- */
-const extractItems = (children: React.ReactNode): ReadonlyArray<IImageGalleryItemProps> =>
-    React.Children.toArray(children)
-        .filter(
-            (child): child is React.ReactElement<IImageGalleryItemProps> =>
-                React.isValidElement(child) && child.type === ImageGalleryExtendedItem,
-        )
-        .map((child) => child.props);
 
 /** Внутренние составляющие компонента ImageGalleryExtended. */
 interface IImageGalleryExtendedComposition {
-    Item: typeof ImageGalleryExtendedItem;
     Main: typeof ImageGalleryExtendedMain;
     Nav: typeof ImageGalleryExtendedNav;
     Arrow: typeof ImageGalleryExtendedArrow;
     Thumbnails: typeof ImageGalleryExtendedThumbnails;
+    Thumb: typeof ImageGalleryExtendedThumb;
     Dots: typeof ImageGalleryExtendedDots;
 }
 
 /**
- * Базовый (controlled) компонент галереи изображений. Управляет активным
- * индексом и стрелочной навигацией, раздаёт данные составным частям через
- * контекст. Состав задаётся декларативно:
+ * Базовый (controlled) компонент галереи изображений. Изображения задаются
+ * массивом `items`, управляет активным индексом и стрелочной навигацией,
+ * раздаёт данные составным частям через контекст. Раскладка — декларативно:
  *
  * ```tsx
- * <ImageGalleryExtended selectedId={id} onChange={setId}>
+ * <ImageGalleryExtended
+ *     items={[{ id: "a", src: "1.jpg", alt: "…" }]}
+ *     selectedId={id}
+ *     onChange={setId}
+ * >
  *     <ImageGalleryExtended.Main withBlur />
  *     <ImageGalleryExtended.Thumbnails />
- *     <ImageGalleryExtended.Item id="a" src="1.jpg" alt="…" />
  * </ImageGalleryExtended>
  * ```
  *
  * Uncontrolled-режим и пресет раскладки см. в `ImageGallery`.
  */
 const ImageGalleryExtendedRoot = React.forwardRef<HTMLDivElement, IImageGalleryExtendedProps>(
-    ({ children, className, selectedId, onChange, onKeyDown, ...rest }, ref) => {
-        const items = extractItems(children);
+    ({ items, children, className, selectedId, onChange, onKeyDown, ...rest }, ref) => {
         // Активный id резолвится в позицию; неизвестный/отсутствующий id → первый элемент.
         const rawIndex = items.findIndex((item) => item.id === selectedId);
         const currentIndex = rawIndex >= 0 ? rawIndex : 0;
@@ -112,11 +103,11 @@ ImageGalleryExtendedRoot.displayName = "ImageGalleryExtended";
 export const ImageGalleryExtended: typeof ImageGalleryExtendedRoot & IImageGalleryExtendedComposition = Object.assign(
     ImageGalleryExtendedRoot,
     {
-        Item: ImageGalleryExtendedItem,
         Main: ImageGalleryExtendedMain,
         Nav: ImageGalleryExtendedNav,
         Arrow: ImageGalleryExtendedArrow,
         Thumbnails: ImageGalleryExtendedThumbnails,
+        Thumb: ImageGalleryExtendedThumb,
         Dots: ImageGalleryExtendedDots,
     },
 );

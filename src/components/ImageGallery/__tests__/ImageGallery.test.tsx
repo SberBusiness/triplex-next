@@ -42,13 +42,15 @@ import { ImageGallery } from "../ImageGallery";
 const itemId = (index: number) => `p${index + 1}`;
 
 const buildItems = (count: number) =>
-    Array.from({ length: count }, (_, index) => (
-        <ImageGallery.Item key={index} id={itemId(index)} src={`/img/${index + 1}.jpg`} alt={`Photo ${index + 1}`} />
-    ));
+    Array.from({ length: count }, (_, index) => ({
+        id: itemId(index),
+        src: `/img/${index + 1}.jpg`,
+        alt: `Photo ${index + 1}`,
+    }));
 
 const renderGallery = (props: Partial<React.ComponentProps<typeof ImageGallery>> = {}, itemsCount = 9) => {
-    const { children = buildItems(itemsCount), ...rest } = props;
-    return render(<ImageGallery {...rest}>{children}</ImageGallery>);
+    const { items = buildItems(itemsCount), ...rest } = props;
+    return render(<ImageGallery items={items} {...rest} />);
 };
 
 const thumbButtons = () => screen.getAllByRole("button").filter((el) => el.querySelector("img"));
@@ -92,11 +94,7 @@ describe("ImageGallery — desktop", () => {
         expect(onChange).toHaveBeenCalledWith("p6");
         expect(screen.getByAltText("Photo 3")).toBeInTheDocument();
 
-        rerender(
-            <ImageGallery selectedId="p6" onChange={onChange}>
-                {buildItems(9)}
-            </ImageGallery>,
-        );
+        rerender(<ImageGallery items={buildItems(9)} selectedId="p6" onChange={onChange} />);
         expect(screen.getByAltText("Photo 6")).toBeInTheDocument();
     });
 
@@ -129,7 +127,7 @@ describe("ImageGallery — desktop", () => {
 
         expect(container.querySelector('[style*="background-image"]')).toBeNull();
 
-        rerender(<ImageGallery withBlur>{buildItems(9)}</ImageGallery>);
+        rerender(<ImageGallery items={buildItems(9)} withBlur />);
         expect(container.querySelector('[style*="background-image"]')).not.toBeNull();
     });
 
@@ -189,10 +187,10 @@ describe("ImageGallery — mobile", () => {
         const { rerender } = renderGallery({}, 3);
         expect(screen.getAllByRole("tab")).toHaveLength(3);
 
-        rerender(<ImageGallery>{buildItems(2)}</ImageGallery>);
+        rerender(<ImageGallery items={buildItems(2)} />);
         expect(screen.getAllByRole("tab")).toHaveLength(2);
 
-        rerender(<ImageGallery>{buildItems(10)}</ImageGallery>);
+        rerender(<ImageGallery items={buildItems(10)} />);
         expect(screen.getAllByRole("tab")).toHaveLength(4);
     });
 
@@ -213,12 +211,12 @@ describe("ImageGallery — mobile", () => {
         let dots = screen.getAllByRole("tab");
         expect(dots[0]).toHaveAttribute("aria-selected", "true");
 
-        rerender(<ImageGallery selectedId="p4">{buildItems(9)}</ImageGallery>);
+        rerender(<ImageGallery items={buildItems(9)} selectedId="p4" />);
         dots = screen.getAllByRole("tab");
         // index 3 → tick = floor(3/2) = 1
         expect(dots[1]).toHaveAttribute("aria-selected", "true");
 
-        rerender(<ImageGallery selectedId="p9">{buildItems(9)}</ImageGallery>);
+        rerender(<ImageGallery items={buildItems(9)} selectedId="p9" />);
         dots = screen.getAllByRole("tab");
         // index 8 → floor(8/2) = 4, capped at ticksCount-1 = 3
         expect(dots[3]).toHaveAttribute("aria-selected", "true");

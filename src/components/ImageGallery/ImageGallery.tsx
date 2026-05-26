@@ -8,13 +8,13 @@ import { IImageGalleryProps } from "./types";
  *
  * Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки
  * (`Main` + миниатюры/тики через `MobileView`) и добавляет uncontrolled-режим
- * (`defaultId`). Дочерние элементы задаются в виде `<ImageGallery.Item id src alt thumbSrc?>`.
+ * (`defaultId`). Изображения задаются массивом `items`.
  * Поддерживает controlled (`selectedId` + `onChange`) и uncontrolled режимы.
  */
-const ImageGalleryRoot = React.forwardRef<HTMLDivElement, IImageGalleryProps>(
+export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>(
     (
         {
-            children,
+            items,
             selectedId,
             defaultId,
             onChange,
@@ -41,7 +41,13 @@ const ImageGalleryRoot = React.forwardRef<HTMLDivElement, IImageGalleryProps>(
         };
 
         return (
-            <ImageGalleryExtended ref={ref} {...rest} selectedId={currentId ?? ""} onChange={handleChange}>
+            <ImageGalleryExtended
+                ref={ref}
+                {...rest}
+                items={items}
+                selectedId={currentId ?? ""}
+                onChange={handleChange}
+            >
                 <ImageGalleryExtended.Main height={height} withBlur={withBlur} onImageClick={onImageClick}>
                     <ImageGalleryExtended.Nav>
                         {({ onPrev, onNext, isFirst, isLast, itemsCount }) => (
@@ -66,16 +72,9 @@ const ImageGalleryRoot = React.forwardRef<HTMLDivElement, IImageGalleryProps>(
                 <MobileView fallback={showThumbnails ? <ImageGalleryExtended.Thumbnails /> : null}>
                     {showDots ? <ImageGalleryExtended.Dots /> : null}
                 </MobileView>
-
-                {children}
             </ImageGalleryExtended>
         );
     },
 );
 
-ImageGalleryRoot.displayName = "ImageGallery";
-
-/** Compound-компонент с маркер-элементом `Item`. */
-export const ImageGallery = Object.assign(ImageGalleryRoot, {
-    Item: ImageGalleryExtended.Item,
-});
+ImageGallery.displayName = "ImageGallery";

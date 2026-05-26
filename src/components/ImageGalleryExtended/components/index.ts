@@ -1,4 +1,3 @@
-export * from "./ImageGalleryExtendedItem";
 export * from "./ImageGalleryExtendedMain";
 export * from "./ImageGalleryExtendedNav";
 export * from "./ImageGalleryExtendedArrow";

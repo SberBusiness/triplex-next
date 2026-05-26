@@ -4,12 +4,38 @@ import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusine
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../../CarouselExtended/CarouselExtended";
 import { scrollSmoothHorizontally } from "../../../utils/scroll";
+import { IImageGalleryItemProps } from "../types";
 import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
 import { ImageGalleryExtendedThumb } from "./ImageGalleryExtendedThumb";
 import styles from "../styles/ImageGalleryExtendedThumbnails.module.less";
 
+/** Состояние одной миниатюры, передаваемое в render-функцию `ImageGalleryExtended.Thumbnails`. */
+export interface IImageGalleryThumbRenderState {
+    /** Изображение, миниатюру которого нужно отрисовать. */
+    item: IImageGalleryItemProps;
+    /** Индекс изображения. */
+    index: number;
+    /** Активна ли миниатюра. */
+    isActive: boolean;
+    /** Выбрать это изображение. */
+    onSelect: () => void;
+    /** Ref на корневой `<button>` миниатюры — нужен для автоцентровки активной. */
+    ref: React.Ref<HTMLButtonElement>;
+}
+
 /** Свойства ImageGalleryExtendedThumbnails. */
-export interface IImageGalleryExtendedThumbnailsProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IImageGalleryExtendedThumbnailsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
+    /**
+     * Render-функция миниатюры. По умолчанию рисует `ImageGalleryExtended.Thumb`.
+     * Чтобы автоцентровка активной миниатюры работала, проброси `ref` на корневой `<button>`.
+     */
+    children?: (state: IImageGalleryThumbRenderState) => React.ReactNode;
+}
+
+/** Дефолтная отрисовка миниатюры — стандартная `ImageGalleryExtended.Thumb`. */
+const renderDefaultThumb = ({ item, isActive, onSelect, ref }: IImageGalleryThumbRenderState) => (
+    <ImageGalleryExtendedThumb ref={ref} item={item} isActive={isActive} onClick={onSelect} />
+);
 
 /** Шаг прокрутки карусели миниатюр (доля видимой ширины). */
 const SCROLL_STEP_RATIO = 0.5;
@@ -22,9 +48,11 @@ const SCROLL_PADDING_PX = 16;
  */
 export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumbnailsProps> = ({
     className,
+    children,
     ...rest
 }) => {
     const { items, selectedIndex, onSelect } = useContext(ImageGalleryExtendedContext);
+    const renderThumb = children ?? renderDefaultThumb;
     const carouselRef = useRef<HTMLDivElement>(null);
     const thumbRefs = useRef<Array<HTMLButtonElement | null>>([]);
     const [scrollStep, setScrollStep] = useState(0);
@@ -94,16 +122,21 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
             {...rest}
             className={clsx(styles.thumbnails, className)}
         >
+            {/* Колбэк-ref ниже выполняется на этапе commit (не во время рендера),
+                но правило не отслеживает его через render-функцию renderThumb. */}
+            {/* eslint-disable-next-line react-hooks/refs */}
             {items.map((item, index) => (
-                <ImageGalleryExtendedThumb
-                    key={index}
-                    ref={(instance) => {
-                        thumbRefs.current[index] = instance;
-                    }}
-                    item={item}
-                    isActive={index === selectedIndex}
-                    onClick={() => onSelect(index)}
-                />
+                <React.Fragment key={index}>
+                    {renderThumb({
+                        item,
+                        index,
+                        isActive: index === selectedIndex,
+                        onSelect: () => onSelect(index),
+                        ref: (instance) => {
+                            thumbRefs.current[index] = instance;
+                        },
+                    })}
+                </React.Fragment>
             ))}
         </CarouselExtended>
     );

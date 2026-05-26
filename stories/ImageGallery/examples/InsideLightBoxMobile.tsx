@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { ImageGallery, LightBox, Button, EButtonTheme, EComponentSize } from "@sberbusiness/triplex-next";
 
-const IMAGES = [
-    "/assets/images/imageGallery/01.jpg",
-    "/assets/images/imageGallery/02.jpg",
-    "/assets/images/imageGallery/03.jpg",
-    "/assets/images/imageGallery/04.jpg",
-    "/assets/images/imageGallery/05.jpg",
-    "/assets/images/imageGallery/06.jpg",
-    "/assets/images/imageGallery/07.jpg",
-    "/assets/images/imageGallery/08.jpg",
-    "/assets/images/imageGallery/09.jpg",
-];
+const ITEMS = Array.from({ length: 9 }, (_, i) => ({
+    id: `photo-${i + 1}`,
+    src: `/assets/images/imageGallery/0${i + 1}.jpg`,
+    alt: `Photo ${i + 1}`,
+}));
 
 /**
  * Тот же сценарий, что и `InsideLightBox`, но в мобильном viewport.
@@ -25,24 +19,20 @@ export const InsideLightBoxMobile = () => {
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
 
-    const renderItems = () =>
-        IMAGES.map((src, index) => (
-            <ImageGallery.Item key={src} id={`photo-${index + 1}`} src={src} alt={`Photo ${index + 1}`} />
-        ));
-
     return (
         <>
-            <ImageGallery selectedId={selectedId} onChange={setSelectedId} onImageClick={handleOpen}>
-                {renderItems()}
-            </ImageGallery>
+            <ImageGallery items={ITEMS} selectedId={selectedId} onChange={setSelectedId} onImageClick={handleOpen} />
 
             {isOpen ? (
                 <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
                     <LightBox.Content key="content" isLoading={false}>
                         <div style={{ padding: 16 }}>
-                            <ImageGallery selectedId={selectedId} onChange={setSelectedId} height="70vh">
-                                {renderItems()}
-                            </ImageGallery>
+                            <ImageGallery
+                                items={ITEMS}
+                                selectedId={selectedId}
+                                onChange={setSelectedId}
+                                height="70vh"
+                            />
                         </div>
                     </LightBox.Content>
 

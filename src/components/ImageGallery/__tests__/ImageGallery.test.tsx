@@ -149,6 +149,17 @@ describe("ImageGallery — desktop", () => {
         expect(main!.style.height).toBe("400px");
     });
 
+    it("arrows are baked in and switch the active image", () => {
+        renderGallery({ defaultId: "p3" });
+
+        fireEvent.click(screen.getByRole("button", { name: "Следующее изображение" }));
+        expect(screen.getByAltText("Photo 4")).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "Предыдущее изображение" }));
+        fireEvent.click(screen.getByRole("button", { name: "Предыдущее изображение" }));
+        expect(screen.getByAltText("Photo 2")).toBeInTheDocument();
+    });
+
     it("active thumbnail is marked with aria-selected='true'", () => {
         renderGallery({ defaultId: "p3" });
 

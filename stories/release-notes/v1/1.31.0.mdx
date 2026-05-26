@@ -9,9 +9,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **ImageGalleryExtended**
 
 - Базовый (controlled) декларативный компонент галереи, на котором построен `ImageGallery`.
-- Compound-состав: `ImageGalleryExtended.Item` (`id`, `src`, `alt?`, `thumbSrc?`), `.Main` (`height?`, `withBlur?`, `onImageClick?`), `.Thumbnails`, `.Dots`. Части задаются как children в произвольном порядке и берут данные из контекста контейнера.
+- Compound-состав: `ImageGalleryExtended.Item` (`id`, `src`, `alt?`, `thumbSrc?`), `.Main` (`height?`, `withBlur?`, `onImageClick?`, `children`), `.Nav`, `.Arrow`, `.Thumbnails`, `.Dots`. Части задаются как children в произвольном порядке и берут данные из контекста контейнера.
+- Стрелки переключения вынесены из `.Main` в отдельные части: `.Nav` — провайдер состояния навигации через render-функцию (`onPrev`/`onNext`/`isFirst`/`isLast`/`selectedIndex`/`itemsCount`), `.Arrow` (`direction: EImageGalleryArrowDirection`) — презентационная кнопка-стрелка. Размещаются как children `.Main` (позиционируются поверх картинки); потребитель может отрисовать стандартные `.Arrow` или произвольные свои элементы.
 - Управление только controlled: `selectedId` + `onChange(id)` обязательны (активное изображение адресуется по `id` элемента). Стрелочная навигация (`ArrowLeft`/`ArrowRight`) — на контейнере.
-- Позволяет собирать нестандартные раскладки (например, только крупная картинка или миниатюры сверху).
+- Позволяет собирать нестандартные раскладки (например, только крупная картинка, миниатюры сверху или кастомная панель навигации вместо стрелок).
 
 **ImageGallery**
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageGalleryExtended } from "@sberbusiness/triplex-next";
+import { ImageGalleryExtended, EImageGalleryArrowDirection } from "@sberbusiness/triplex-next";
 
 const IMAGES = [
     "/assets/images/imageGallery/01.jpg",
@@ -24,7 +24,26 @@ export const Playground = ({ withBlur, height }: IPlaygroundArgs) => {
 
     return (
         <ImageGalleryExtended selectedId={selectedId} onChange={setSelectedId}>
-            <ImageGalleryExtended.Main withBlur={withBlur} height={height} />
+            <ImageGalleryExtended.Main withBlur={withBlur} height={height}>
+                <ImageGalleryExtended.Nav>
+                    {({ onPrev, onNext, isFirst, isLast, itemsCount }) => (
+                        <>
+                            <ImageGalleryExtended.Arrow
+                                direction={EImageGalleryArrowDirection.PREV}
+                                onClick={onPrev}
+                                disabled={isFirst}
+                                hidden={itemsCount <= 1}
+                            />
+                            <ImageGalleryExtended.Arrow
+                                direction={EImageGalleryArrowDirection.NEXT}
+                                onClick={onNext}
+                                disabled={isLast}
+                                hidden={itemsCount <= 1}
+                            />
+                        </>
+                    )}
+                </ImageGalleryExtended.Nav>
+            </ImageGalleryExtended.Main>
             <ImageGalleryExtended.Thumbnails />
             {IMAGES.map((src, i) => (
                 <ImageGalleryExtended.Item key={src} id={`photo-${i + 1}`} src={src} alt={`Photo ${i + 1}`} />

@@ -4,6 +4,8 @@ import { isKey } from "../../utils/keyboard";
 import { ImageGalleryExtendedContext } from "./ImageGalleryExtendedContext";
 import { ImageGalleryExtendedItem } from "./components/ImageGalleryExtendedItem";
 import { ImageGalleryExtendedMain } from "./components/ImageGalleryExtendedMain";
+import { ImageGalleryExtendedNav } from "./components/ImageGalleryExtendedNav";
+import { ImageGalleryExtendedArrow } from "./components/ImageGalleryExtendedArrow";
 import { ImageGalleryExtendedThumbnails } from "./components/ImageGalleryExtendedThumbnails";
 import { ImageGalleryExtendedDots } from "./components/ImageGalleryExtendedDots";
 import { IImageGalleryExtendedProps, IImageGalleryItemProps } from "./types";
@@ -24,6 +26,8 @@ const extractItems = (children: React.ReactNode): ReadonlyArray<IImageGalleryIte
 interface IImageGalleryExtendedComposition {
     Item: typeof ImageGalleryExtendedItem;
     Main: typeof ImageGalleryExtendedMain;
+    Nav: typeof ImageGalleryExtendedNav;
+    Arrow: typeof ImageGalleryExtendedArrow;
     Thumbnails: typeof ImageGalleryExtendedThumbnails;
     Dots: typeof ImageGalleryExtendedDots;
 }
@@ -110,6 +114,8 @@ export const ImageGalleryExtended: typeof ImageGalleryExtendedRoot & IImageGalle
     {
         Item: ImageGalleryExtendedItem,
         Main: ImageGalleryExtendedMain,
+        Nav: ImageGalleryExtendedNav,
+        Arrow: ImageGalleryExtendedArrow,
         Thumbnails: ImageGalleryExtendedThumbnails,
         Dots: ImageGalleryExtendedDots,
     },

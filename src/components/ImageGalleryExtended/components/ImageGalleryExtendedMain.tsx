@@ -1,7 +1,5 @@
 import React, { useContext, useRef } from "react";
 import clsx from "clsx";
-import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../../Button/ButtonIcon";
 import { MobileView } from "../../MobileView";
 import { SwipeableArea, ISwipeableAreaRef } from "../../SwipeableArea";
 import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
@@ -15,10 +13,13 @@ export interface IImageGalleryExtendedMainProps extends React.HTMLAttributes<HTM
     withBlur?: boolean;
     /** Обработчик клика по картинке. Получает индекс активного изображения. */
     onImageClick?: (index: number) => void;
+    /** Накладываемое поверх картинки содержимое — например, `ImageGalleryExtended.Nav` со стрелками. */
+    children?: React.ReactNode;
 }
 
 /**
- * Крупное изображение галереи: блюр-слой, само изображение, кнопки prev/next.
+ * Крупное изображение галереи: блюр-слой, само изображение и накладываемое
+ * поверх содержимое (`children` — например стрелки через `ImageGalleryExtended.Nav`).
  * Данные берёт из контекста `ImageGalleryExtended`. На мобильном устройстве
  * обёрнуто в `SwipeableArea` со свайпом prev/next.
  */
@@ -27,6 +28,7 @@ export const ImageGalleryExtendedMain: React.FC<IImageGalleryExtendedMainProps> 
     withBlur = false,
     onImageClick,
     className,
+    children,
     ...rest
 }) => {
     const { items, selectedIndex, onPrev, onNext } = useContext(ImageGalleryExtendedContext);
@@ -61,25 +63,7 @@ export const ImageGalleryExtendedMain: React.FC<IImageGalleryExtendedMainProps> 
                 onClick={onImageClick ? () => onImageClick(selectedIndex) : undefined}
             />
 
-            <ButtonIcon
-                className={clsx(styles.arrow, styles.prev)}
-                tabIndex={-1}
-                disabled={isFirst}
-                hidden={itemsCount <= 1}
-                onClick={onPrev}
-            >
-                <CaretleftStrokeSrvIcon24 paletteIndex={5} />
-            </ButtonIcon>
-
-            <ButtonIcon
-                className={clsx(styles.arrow, styles.next)}
-                tabIndex={-1}
-                disabled={isLast}
-                hidden={itemsCount <= 1}
-                onClick={onNext}
-            >
-                <CaretrightStrokeSrvIcon24 paletteIndex={5} />
-            </ButtonIcon>
+            {children}
         </div>
     );
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MobileView } from "../MobileView";
-import { ImageGalleryExtended } from "../ImageGalleryExtended";
+import { ImageGalleryExtended, EImageGalleryArrowDirection } from "../ImageGalleryExtended";
 import { IImageGalleryProps } from "./types";
 
 /**
@@ -42,7 +42,26 @@ const ImageGalleryRoot = React.forwardRef<HTMLDivElement, IImageGalleryProps>(
 
         return (
             <ImageGalleryExtended ref={ref} {...rest} selectedId={currentId ?? ""} onChange={handleChange}>
-                <ImageGalleryExtended.Main height={height} withBlur={withBlur} onImageClick={onImageClick} />
+                <ImageGalleryExtended.Main height={height} withBlur={withBlur} onImageClick={onImageClick}>
+                    <ImageGalleryExtended.Nav>
+                        {({ onPrev, onNext, isFirst, isLast, itemsCount }) => (
+                            <>
+                                <ImageGalleryExtended.Arrow
+                                    direction={EImageGalleryArrowDirection.PREV}
+                                    onClick={onPrev}
+                                    disabled={isFirst}
+                                    hidden={itemsCount <= 1}
+                                />
+                                <ImageGalleryExtended.Arrow
+                                    direction={EImageGalleryArrowDirection.NEXT}
+                                    onClick={onNext}
+                                    disabled={isLast}
+                                    hidden={itemsCount <= 1}
+                                />
+                            </>
+                        )}
+                    </ImageGalleryExtended.Nav>
+                </ImageGalleryExtended.Main>
 
                 <MobileView fallback={showThumbnails ? <ImageGalleryExtended.Thumbnails /> : null}>
                     {showDots ? <ImageGalleryExtended.Dots /> : null}

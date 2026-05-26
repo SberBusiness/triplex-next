@@ -37,6 +37,7 @@ vi.mock("@sberbusiness/triplex-next/components/SwipeableArea", () => ({
 }));
 
 import { ImageGalleryExtended } from "../ImageGalleryExtended";
+import { EImageGalleryArrowDirection } from "../enums";
 
 /** Идентификатор элемента по порядковому номеру (с 1). */
 const itemId = (index: number) => `p${index + 1}`;
@@ -72,7 +73,7 @@ const ControlledGallery: React.FC<{
     );
 };
 
-const thumbButtons = () => screen.getAllByRole("button").filter((el) => el.querySelector("img"));
+const thumbButtons = () => screen.queryAllByRole("button").filter((el) => el.querySelector("img"));
 
 beforeEach(() => {
     mobileState.isMobile = false;
@@ -210,6 +211,54 @@ describe("ImageGalleryExtended — Main", () => {
 
         fireEvent.click(screen.getByAltText("Photo 5"));
         expect(onImageClick).toHaveBeenCalledWith(4);
+    });
+});
+
+describe("ImageGalleryExtended — Nav (render-функция)", () => {
+    const renderWithArrows = (props: { initialId?: string; onChange?: (id: string) => void } = {}) =>
+        render(
+            <ControlledGallery initialId={props.initialId} onChange={props.onChange}>
+                <ImageGalleryExtended.Main>
+                    <ImageGalleryExtended.Nav>
+                        {({ onPrev, onNext, isFirst, isLast }) => (
+                            <>
+                                <ImageGalleryExtended.Arrow
+                                    direction={EImageGalleryArrowDirection.PREV}
+                                    onClick={onPrev}
+                                    disabled={isFirst}
+                                />
+                                <ImageGalleryExtended.Arrow
+                                    direction={EImageGalleryArrowDirection.NEXT}
+                                    onClick={onNext}
+                                    disabled={isLast}
+                                />
+                            </>
+                        )}
+                    </ImageGalleryExtended.Nav>
+                </ImageGalleryExtended.Main>
+                {buildItems(9)}
+            </ControlledGallery>,
+        );
+
+    it("стрелки из render-функции переключают активный id", () => {
+        const onChange = vi.fn();
+        renderWithArrows({ initialId: "p3", onChange });
+
+        fireEvent.click(screen.getByRole("button", { name: "Следующее изображение" }));
+        expect(onChange).toHaveBeenLastCalledWith("p4");
+        expect(screen.getByAltText("Photo 4")).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "Предыдущее изображение" }));
+        fireEvent.click(screen.getByRole("button", { name: "Предыдущее изображение" }));
+        expect(onChange).toHaveBeenLastCalledWith("p2");
+        expect(screen.getByAltText("Photo 2")).toBeInTheDocument();
+    });
+
+    it("isFirst/isLast из состояния навигации блокируют стрелки на границах", () => {
+        renderWithArrows({ initialId: "p1" });
+
+        expect(screen.getByRole("button", { name: "Предыдущее изображение" })).toBeDisabled();
+        expect(screen.getByRole("button", { name: "Следующее изображение" })).not.toBeDisabled();
     });
 });
 

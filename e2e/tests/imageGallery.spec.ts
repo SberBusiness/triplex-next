@@ -7,8 +7,10 @@ test.describe("ImageGallery", () => {
         });
 
         test("click on a thumbnail switches the main image", async ({ page }) => {
-            const mainImage = page.getByTestId("image-gallery-main-image");
-            const thumbs = page.getByTestId("image-gallery-thumb");
+            // Крупная картинка — единственный <img> с alt; миниатюры рендерятся с alt="".
+            const mainImage = page.getByRole("img");
+            // Миниатюры — единственные кнопки с aria-selected на десктопе.
+            const thumbs = page.locator("button[aria-selected]");
 
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");
 
@@ -18,22 +20,25 @@ test.describe("ImageGallery", () => {
         });
 
         test("ArrowRight on the focused container switches the main image", async ({ page }) => {
-            const mainImage = page.getByTestId("image-gallery-main-image");
+            const mainImage = page.getByRole("img");
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");
 
-            await page.getByTestId("image-gallery-root").focus();
+            // Корневой контейнер галереи — ближайший фокусируемый предок крупной картинки.
+            await mainImage.locator('xpath=ancestor::*[@tabindex="0"]').focus();
             await page.keyboard.press("ArrowRight");
 
             await expect(mainImage).toHaveAttribute("alt", "Photo 2");
         });
 
         test("click on next/prev arrows switches the main image", async ({ page }) => {
-            const mainImage = page.getByTestId("image-gallery-main-image");
+            const mainImage = page.getByRole("img");
+            // Стрелки prev/next — единственные кнопки внутри контейнера крупной картинки.
+            const arrows = mainImage.locator("xpath=..").locator("button");
 
-            await page.getByTestId("image-gallery-arrow-next").click();
+            await arrows.nth(1).click();
             await expect(mainImage).toHaveAttribute("alt", "Photo 2");
 
-            await page.getByTestId("image-gallery-arrow-prev").click();
+            await arrows.nth(0).click();
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");
         });
     });
@@ -46,16 +51,15 @@ test.describe("ImageGallery", () => {
         });
 
         test("prev/next arrows are hidden by media-query", async ({ page }) => {
-            const prev = page.getByTestId("image-gallery-arrow-prev");
-            const next = page.getByTestId("image-gallery-arrow-next");
+            const arrows = page.getByRole("img").locator("xpath=..").locator("button");
 
-            await expect(prev).toBeHidden();
-            await expect(next).toBeHidden();
+            await expect(arrows.nth(0)).toBeHidden();
+            await expect(arrows.nth(1)).toBeHidden();
         });
 
         test("dots row is visible and click on a tick switches the main image", async ({ page }) => {
-            const mainImage = page.getByTestId("image-gallery-main-image");
-            const dots = page.getByTestId("image-gallery-dot");
+            const mainImage = page.getByRole("img");
+            const dots = page.getByRole("tab");
 
             await expect(dots).toHaveCount(4);
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");

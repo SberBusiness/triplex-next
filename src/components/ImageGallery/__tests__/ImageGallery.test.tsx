@@ -122,12 +122,13 @@ describe("ImageGallery — desktop", () => {
     });
 
     it("withBlur={false} does not render the blur layer", () => {
-        const { rerender } = renderGallery({ withBlur: false });
+        // Блюр-слой — единственный элемент с inline background-image.
+        const { container, rerender } = renderGallery({ withBlur: false });
 
-        expect(screen.queryByTestId("image-gallery-blur")).not.toBeInTheDocument();
+        expect(container.querySelector('[style*="background-image"]')).toBeNull();
 
         rerender(<ImageGallery withBlur>{buildItems(9)}</ImageGallery>);
-        expect(screen.getByTestId("image-gallery-blur")).toBeInTheDocument();
+        expect(container.querySelector('[style*="background-image"]')).not.toBeNull();
     });
 
     it("onImageClick is called with the active index", () => {

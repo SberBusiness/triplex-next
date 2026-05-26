@@ -83,26 +83,11 @@ const ImageGalleryRoot = React.forwardRef<HTMLDivElement, IImageGalleryProps>(
         };
 
         if (items.length === 0) {
-            return (
-                <div
-                    ref={ref}
-                    tabIndex={0}
-                    data-testid="image-gallery-root"
-                    {...rest}
-                    className={clsx(styles.root, className)}
-                />
-            );
+            return <div ref={ref} tabIndex={0} {...rest} className={clsx(styles.root, className)} />;
         }
 
         return (
-            <div
-                tabIndex={0}
-                data-testid="image-gallery-root"
-                {...rest}
-                ref={ref}
-                className={clsx(styles.root, className)}
-                onKeyDown={handleKeyDown}
-            >
+            <div tabIndex={0} {...rest} ref={ref} className={clsx(styles.root, className)} onKeyDown={handleKeyDown}>
                 <ImageGalleryMain
                     item={items[currentIndex]}
                     selectedIndex={currentIndex}

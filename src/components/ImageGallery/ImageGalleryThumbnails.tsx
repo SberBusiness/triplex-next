@@ -4,19 +4,18 @@ import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusine
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../CarouselExtended/CarouselExtended";
 import { scrollSmoothHorizontally } from "../../utils/scroll";
+import { ImageGalleryThumb } from "./ImageGalleryThumb";
 import { IImageGalleryItemProps } from "./types";
 import styles from "./styles/ImageGalleryThumbnails.module.less";
 
 /** Свойства ImageGalleryThumbnails. */
-export interface IImageGalleryThumbnailsProps {
+export interface IImageGalleryThumbnailsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
     /** Список элементов галереи. */
     items: ReadonlyArray<IImageGalleryItemProps>;
     /** Индекс активного изображения. */
     selectedIndex: number;
     /** Обработчик выбора миниатюры. */
     onSelect: (index: number) => void;
-    /** Дополнительный CSS-класс. */
-    className?: string;
 }
 
 /** Шаг прокрутки карусели миниатюр (доля видимой ширины). */
@@ -32,6 +31,7 @@ export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
     selectedIndex,
     onSelect,
     className,
+    ...rest
 }) => {
     const carouselRef = useRef<HTMLDivElement>(null);
     const thumbRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -95,31 +95,24 @@ export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
     return (
         <CarouselExtended
             ref={carouselRef}
-            className={clsx(styles.thumbnails, className)}
             buttonPrev={renderPrevButton}
             buttonNext={renderNextButton}
             stepPrev={scrollStep}
             stepNext={scrollStep}
+            {...rest}
+            className={clsx(styles.thumbnails, className)}
         >
-            {items.map((item, index) => {
-                const isActive = index === selectedIndex;
-
-                return (
-                    <button
-                        key={index}
-                        type="button"
-                        ref={(instance) => {
-                            thumbRefs.current[index] = instance;
-                        }}
-                        className={clsx(styles.thumb, { [styles.active]: isActive })}
-                        aria-selected={isActive}
-                        data-testid="image-gallery-thumb"
-                        onClick={() => onSelect(index)}
-                    >
-                        <img src={item.thumbSrc ?? item.src} alt="" className={styles.image} loading="lazy" />
-                    </button>
-                );
-            })}
+            {items.map((item, index) => (
+                <ImageGalleryThumb
+                    key={index}
+                    ref={(instance) => {
+                        thumbRefs.current[index] = instance;
+                    }}
+                    item={item}
+                    isActive={index === selectedIndex}
+                    onClick={() => onSelect(index)}
+                />
+            ))}
         </CarouselExtended>
     );
 };

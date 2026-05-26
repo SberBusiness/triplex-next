@@ -8,7 +8,7 @@ import { IImageGalleryItemProps } from "./types";
 import styles from "./styles/ImageGalleryMain.module.less";
 
 /** Свойства ImageGalleryMain. */
-export interface IImageGalleryMainProps {
+export interface IImageGalleryMainProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Активный элемент галереи. */
     item: IImageGalleryItemProps;
     /** Индекс активного элемента. */
@@ -25,8 +25,6 @@ export interface IImageGalleryMainProps {
     onNext: () => void;
     /** Обработчик клика по картинке. */
     onImageClick?: (index: number) => void;
-    /** Дополнительный CSS-класс. */
-    className?: string;
 }
 
 /**
@@ -43,6 +41,7 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
     onNext,
     onImageClick,
     className,
+    ...rest
 }) => {
     const swipeRef = useRef<ISwipeableAreaRef>(null);
 
@@ -51,14 +50,13 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
     const isLast = selectedIndex === itemsCount - 1;
 
     const content = (
-        <div className={clsx(styles.main, className)} style={inlineHeight ? { height: inlineHeight } : undefined}>
+        <div
+            {...rest}
+            className={clsx(styles.main, className)}
+            style={inlineHeight ? { height: inlineHeight } : undefined}
+        >
             {withBlur && (
-                <div
-                    className={styles.blur}
-                    style={{ backgroundImage: `url(${item.src})` }}
-                    aria-hidden="true"
-                    data-testid="image-gallery-blur"
-                />
+                <div className={styles.blur} style={{ backgroundImage: `url(${item.src})` }} aria-hidden="true" />
             )}
 
             <img
@@ -66,7 +64,6 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
                 alt={item.alt ?? ""}
                 className={clsx(styles.image, { [styles.clickable]: onImageClick !== undefined })}
                 loading="lazy"
-                data-testid="image-gallery-main-image"
                 onClick={onImageClick ? () => onImageClick(selectedIndex) : undefined}
             />
 
@@ -75,7 +72,6 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
                 tabIndex={-1}
                 disabled={isFirst}
                 hidden={itemsCount <= 1}
-                data-testid="image-gallery-arrow-prev"
                 onClick={onPrev}
             >
                 <CaretleftStrokeSrvIcon24 paletteIndex={5} />
@@ -86,7 +82,6 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
                 tabIndex={-1}
                 disabled={isLast}
                 hidden={itemsCount <= 1}
-                data-testid="image-gallery-arrow-next"
                 onClick={onNext}
             >
                 <CaretrightStrokeSrvIcon24 paletteIndex={5} />

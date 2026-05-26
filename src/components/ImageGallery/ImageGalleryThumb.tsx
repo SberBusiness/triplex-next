@@ -1,0 +1,32 @@
+import React from "react";
+import clsx from "clsx";
+import { IImageGalleryItemProps } from "./types";
+import styles from "./styles/ImageGalleryThumbnails.module.less";
+
+/** Свойства ImageGalleryThumb. */
+export interface IImageGalleryThumbProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Элемент галереи, миниатюра которого отображается. */
+    item: IImageGalleryItemProps;
+    /** Активна ли миниатюра. */
+    isActive: boolean;
+}
+
+/**
+ * Кнопка-миниатюра в ленте `ImageGalleryThumbnails`. `ref` пробрасывается на
+ * `<button>` — родитель собирает refs для автоцентровки активной миниатюры.
+ */
+export const ImageGalleryThumb = React.forwardRef<HTMLButtonElement, IImageGalleryThumbProps>(
+    ({ item, isActive, className, ...rest }, ref) => (
+        <button
+            ref={ref}
+            {...rest}
+            type="button"
+            className={clsx(styles.thumb, { [styles.active]: isActive }, className)}
+            aria-selected={isActive}
+        >
+            <img src={item.thumbSrc ?? item.src} alt="" className={styles.image} loading="lazy" />
+        </button>
+    ),
+);
+
+ImageGalleryThumb.displayName = "ImageGalleryThumb";

@@ -1,3 +1,3 @@
 export { ImageGallery } from "./ImageGallery";
-export { ImageGalleryItem } from "./ImageGalleryItem";
-export type { IImageGalleryProps, IImageGalleryItemProps } from "./types";
+export { ImageGalleryExtendedItem as ImageGalleryItem } from "../ImageGalleryExtended";
+export type { IImageGalleryProps } from "./types";

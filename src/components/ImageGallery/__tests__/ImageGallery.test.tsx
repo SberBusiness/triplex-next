@@ -38,15 +38,20 @@ vi.mock("@sberbusiness/triplex-next/components/SwipeableArea", () => ({
 
 import { ImageGallery } from "../ImageGallery";
 
+/** Идентификатор элемента по порядковому номеру (с 1). */
+const itemId = (index: number) => `p${index + 1}`;
+
 const buildItems = (count: number) =>
     Array.from({ length: count }, (_, index) => (
-        <ImageGallery.Item key={index} src={`/img/${index + 1}.jpg`} alt={`Photo ${index + 1}`} />
+        <ImageGallery.Item key={index} id={itemId(index)} src={`/img/${index + 1}.jpg`} alt={`Photo ${index + 1}`} />
     ));
 
 const renderGallery = (props: Partial<React.ComponentProps<typeof ImageGallery>> = {}, itemsCount = 9) => {
     const { children = buildItems(itemsCount), ...rest } = props;
     return render(<ImageGallery {...rest}>{children}</ImageGallery>);
 };
+
+const thumbButtons = () => screen.getAllByRole("button").filter((el) => el.querySelector("img"));
 
 beforeEach(() => {
     mobileState.isMobile = false;
@@ -57,60 +62,57 @@ describe("ImageGallery — desktop", () => {
     it("renders the main image and full thumbnail strip", () => {
         renderGallery();
 
-        // Main image: первая картинка активна по умолчанию.
+        // Main image: первая картинка активна по умолчанию (defaultId не задан).
         const mainImage = screen.getByAltText("Photo 1");
         expect(mainImage).toBeInTheDocument();
         expect(mainImage).toHaveAttribute("src", "/img/1.jpg");
 
         // Лента миниатюр: 9 кнопок (по числу items).
-        const thumbButtons = screen.getAllByRole("button").filter((el) => el.querySelector("img"));
-        expect(thumbButtons).toHaveLength(9);
+        expect(thumbButtons()).toHaveLength(9);
     });
 
     it("uncontrolled: click on a thumbnail switches the main image", () => {
         renderGallery();
 
-        const thumbButtons = screen.getAllByRole("button").filter((el) => el.querySelector("img"));
-        fireEvent.click(thumbButtons[3]);
+        fireEvent.click(thumbButtons()[3]);
 
         expect(screen.getByAltText("Photo 4")).toBeInTheDocument();
-        expect(thumbButtons[3]).toHaveAttribute("aria-selected", "true");
+        expect(thumbButtons()[3]).toHaveAttribute("aria-selected", "true");
     });
 
-    it("controlled: selectedIndex drives the main image and onChange fires on thumbnail click", () => {
+    it("controlled: selectedId drives the main image and onChange fires on thumbnail click", () => {
         const onChange = vi.fn();
-        const { rerender } = renderGallery({ selectedIndex: 2, onChange });
+        const { rerender } = renderGallery({ selectedId: "p3", onChange });
 
         expect(screen.getByAltText("Photo 3")).toBeInTheDocument();
 
-        const thumbButtons = screen.getAllByRole("button").filter((el) => el.querySelector("img"));
-        fireEvent.click(thumbButtons[5]);
+        fireEvent.click(thumbButtons()[5]);
 
         // В controlled-режиме внутренний state не меняется — onChange должен сообщить родителю.
-        expect(onChange).toHaveBeenCalledWith(5);
+        expect(onChange).toHaveBeenCalledWith("p6");
         expect(screen.getByAltText("Photo 3")).toBeInTheDocument();
 
         rerender(
-            <ImageGallery selectedIndex={5} onChange={onChange}>
+            <ImageGallery selectedId="p6" onChange={onChange}>
                 {buildItems(9)}
             </ImageGallery>,
         );
         expect(screen.getByAltText("Photo 6")).toBeInTheDocument();
     });
 
-    it("ArrowLeft and ArrowRight switch the active index", () => {
+    it("ArrowLeft and ArrowRight switch the active image", () => {
         const onChange = vi.fn();
-        renderGallery({ defaultIndex: 3, onChange });
+        renderGallery({ defaultId: "p4", onChange });
 
         const root = screen.getByAltText("Photo 4").closest("[tabindex]") as HTMLElement;
 
         fireEvent.keyDown(root, { key: "ArrowRight", code: "ArrowRight" });
-        expect(onChange).toHaveBeenLastCalledWith(4);
+        expect(onChange).toHaveBeenLastCalledWith("p5");
         expect(screen.getByAltText("Photo 5")).toBeInTheDocument();
 
         fireEvent.keyDown(root, { key: "ArrowLeft", code: "ArrowLeft" });
         fireEvent.keyDown(root, { key: "ArrowLeft", code: "ArrowLeft" });
-        expect(onChange).toHaveBeenLastCalledWith(2);
+        expect(onChange).toHaveBeenLastCalledWith("p3");
         expect(screen.getByAltText("Photo 3")).toBeInTheDocument();
     });
 
@@ -133,7 +135,7 @@ describe("ImageGallery — desktop", () => {
 
     it("onImageClick is called with the active index", () => {
         const onImageClick = vi.fn();
-        renderGallery({ defaultIndex: 4, onImageClick });
+        renderGallery({ defaultId: "p5", onImageClick });
 
         fireEvent.click(screen.getByAltText("Photo 5"));
         expect(onImageClick).toHaveBeenCalledWith(4);
@@ -148,11 +150,11 @@ describe("ImageGallery — desktop", () => {
     });
 
     it("active thumbnail is marked with aria-selected='true'", () => {
-        renderGallery({ defaultIndex: 2 });
+        renderGallery({ defaultId: "p3" });
 
-        const thumbButtons = screen.getAllByRole("button").filter((el) => el.querySelector("img"));
-        expect(thumbButtons[2]).toHaveAttribute("aria-selected", "true");
-        expect(thumbButtons[0]).toHaveAttribute("aria-selected", "false");
+        const thumbs = thumbButtons();
+        expect(thumbs[2]).toHaveAttribute("aria-selected", "true");
+        expect(thumbs[0]).toHaveAttribute("aria-selected", "false");
     });
 });
 
@@ -183,31 +185,31 @@ describe("ImageGallery — mobile", () => {
         expect(screen.getAllByRole("tab")).toHaveLength(4);
     });
 
-    it("click on tick t calls onChange with t * bucketSize (9 items → bucketSize=2)", () => {
+    it("click on tick t calls onChange with the id at t * bucketSize (9 items → bucketSize=2)", () => {
         const onChange = vi.fn();
         renderGallery({ onChange }, 9);
 
         const dots = screen.getAllByRole("tab");
         fireEvent.click(dots[2]);
-        expect(onChange).toHaveBeenCalledWith(4);
+        expect(onChange).toHaveBeenCalledWith("p5");
 
         fireEvent.click(dots[3]);
-        expect(onChange).toHaveBeenCalledWith(6);
+        expect(onChange).toHaveBeenCalledWith("p7");
     });
 
-    it("active dot reflects current selectedIndex via Math.floor(i / bucketSize)", () => {
-        const { rerender } = renderGallery({ selectedIndex: 0 }, 9);
+    it("active dot reflects current selectedId via Math.floor(i / bucketSize)", () => {
+        const { rerender } = renderGallery({ selectedId: "p1" }, 9);
         let dots = screen.getAllByRole("tab");
         expect(dots[0]).toHaveAttribute("aria-selected", "true");
 
-        rerender(<ImageGallery selectedIndex={3}>{buildItems(9)}</ImageGallery>);
+        rerender(<ImageGallery selectedId="p4">{buildItems(9)}</ImageGallery>);
         dots = screen.getAllByRole("tab");
-        // bucketSize=2 → tick = floor(3/2) = 1
+        // index 3 → tick = floor(3/2) = 1
         expect(dots[1]).toHaveAttribute("aria-selected", "true");
 
-        rerender(<ImageGallery selectedIndex={8}>{buildItems(9)}</ImageGallery>);
+        rerender(<ImageGallery selectedId="p9">{buildItems(9)}</ImageGallery>);
         dots = screen.getAllByRole("tab");
-        // floor(8/2) = 4, capped at ticksCount-1 = 3
+        // index 8 → floor(8/2) = 4, capped at ticksCount-1 = 3
         expect(dots[3]).toHaveAttribute("aria-selected", "true");
     });
 
@@ -216,20 +218,20 @@ describe("ImageGallery — mobile", () => {
         expect(screen.queryAllByRole("tab")).toHaveLength(0);
     });
 
-    it("main image is wrapped in SwipeableArea and swipe callbacks change the index", () => {
+    it("main image is wrapped in SwipeableArea and swipe callbacks change the image", () => {
         const onChange = vi.fn();
-        renderGallery({ onChange, defaultIndex: 2 }, 9);
+        renderGallery({ onChange, defaultId: "p3" }, 9);
 
         expect(screen.getByTestId("swipeable-area")).toBeInTheDocument();
 
-        // Свайп влево → onSwipeLeft → next (3).
+        // Свайп влево → onSwipeLeft → next (p4).
         fireEvent.click(screen.getByTestId("swipe-left"));
-        expect(onChange).toHaveBeenLastCalledWith(3);
+        expect(onChange).toHaveBeenLastCalledWith("p4");
 
-        // Свайп вправо → onSwipeRight → prev (1).
-        // Внимание: ImageGallery в uncontrolled-режиме сам обновил state, теперь currentIndex=3.
+        // Свайп вправо → onSwipeRight → prev. Внимание: ImageGallery в uncontrolled-режиме
+        // сам обновил state, теперь активен p4, prev → p3.
         fireEvent.click(screen.getByTestId("swipe-right"));
-        expect(onChange).toHaveBeenLastCalledWith(2);
+        expect(onChange).toHaveBeenLastCalledWith("p3");
 
         // closeSwipe вызывается на каждом срабатывании.
         expect(swipeRefStore.closeSwipe).toHaveBeenCalledTimes(2);

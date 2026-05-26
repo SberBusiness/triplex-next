@@ -16,7 +16,7 @@ const IMAGES = [
 export const WithoutBlur = () => (
     <ImageGallery withBlur={false}>
         {IMAGES.map((src, index) => (
-            <ImageGallery.Item key={src} src={src} alt={`Photo ${index + 1}`} />
+            <ImageGallery.Item key={src} id={`photo-${index + 1}`} src={src} alt={`Photo ${index + 1}`} />
         ))}
     </ImageGallery>
 );

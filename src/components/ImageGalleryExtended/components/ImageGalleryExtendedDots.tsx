@@ -1,33 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
-import styles from "./styles/ImageGalleryDots.module.less";
+import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
+import styles from "../styles/ImageGalleryExtendedDots.module.less";
 
-/** Свойства ImageGalleryDots. */
-export interface IImageGalleryDotsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
-    /** Общее количество элементов галереи. */
-    itemsCount: number;
-    /** Индекс активного изображения. */
-    selectedIndex: number;
-    /** Обработчик выбора тика. Принимает индекс изображения, на которое нужно перейти. */
-    onSelect: (index: number) => void;
-}
+/** Свойства ImageGalleryExtendedDots. */
+export interface IImageGalleryExtendedDotsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Максимальное количество тиков. */
 const MAX_TICKS = 4;
 
 /**
- * Ряд кликабельных тиков-индикаторов (мобильный preset).
+ * Ряд кликабельных тиков-индикаторов (мобильный preset). Данные берёт из
+ * контекста `ImageGalleryExtended`.
  *
  * Картинки распределяются по тикам бакетами равного размера; остаток уходит
- * в последний бакет. При `itemsCount === 1` ничего не рендерится.
+ * в последний бакет. При количестве элементов `<= 1` ничего не рендерится.
  */
-export const ImageGalleryDots: React.FC<IImageGalleryDotsProps> = ({
-    itemsCount,
-    selectedIndex,
-    onSelect,
-    className,
-    ...rest
-}) => {
+export const ImageGalleryExtendedDots: React.FC<IImageGalleryExtendedDotsProps> = ({ className, ...rest }) => {
+    const { items, selectedIndex, onSelect } = useContext(ImageGalleryExtendedContext);
+    const itemsCount = items.length;
+
     if (itemsCount <= 1) {
         return null;
     }
@@ -56,4 +48,4 @@ export const ImageGalleryDots: React.FC<IImageGalleryDotsProps> = ({
     );
 };
 
-ImageGalleryDots.displayName = "ImageGalleryDots";
+ImageGalleryExtendedDots.displayName = "ImageGalleryExtendedDots";

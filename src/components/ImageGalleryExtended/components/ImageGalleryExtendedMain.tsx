@@ -1,49 +1,43 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import clsx from "clsx";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../Button/ButtonIcon";
-import { MobileView } from "../MobileView";
-import { SwipeableArea, ISwipeableAreaRef } from "../SwipeableArea";
-import { IImageGalleryItemProps } from "./types";
-import styles from "./styles/ImageGalleryMain.module.less";
+import { ButtonIcon } from "../../Button/ButtonIcon";
+import { MobileView } from "../../MobileView";
+import { SwipeableArea, ISwipeableAreaRef } from "../../SwipeableArea";
+import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
+import styles from "../styles/ImageGalleryExtendedMain.module.less";
 
-/** Свойства ImageGalleryMain. */
-export interface IImageGalleryMainProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Активный элемент галереи. */
-    item: IImageGalleryItemProps;
-    /** Индекс активного элемента. */
-    selectedIndex: number;
-    /** Общее количество элементов. */
-    itemsCount: number;
+/** Свойства ImageGalleryExtendedMain. */
+export interface IImageGalleryExtendedMainProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Высота крупной картинки. `'auto'` — фиксированные значения по breakpoint. */
     height?: "auto" | number | string;
     /** Показывать ли блюр-слой по краям. */
-    withBlur: boolean;
-    /** Обработчик перехода к предыдущей картинке. */
-    onPrev: () => void;
-    /** Обработчик перехода к следующей картинке. */
-    onNext: () => void;
-    /** Обработчик клика по картинке. */
+    withBlur?: boolean;
+    /** Обработчик клика по картинке. Получает индекс активного изображения. */
     onImageClick?: (index: number) => void;
 }
 
 /**
  * Крупное изображение галереи: блюр-слой, само изображение, кнопки prev/next.
- * На мобильном устройстве обёрнуто в `SwipeableArea` со свайпом prev/next.
+ * Данные берёт из контекста `ImageGalleryExtended`. На мобильном устройстве
+ * обёрнуто в `SwipeableArea` со свайпом prev/next.
  */
-export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
-    item,
-    selectedIndex,
-    itemsCount,
+export const ImageGalleryExtendedMain: React.FC<IImageGalleryExtendedMainProps> = ({
     height = "auto",
-    withBlur,
-    onPrev,
-    onNext,
+    withBlur = false,
     onImageClick,
     className,
     ...rest
 }) => {
+    const { items, selectedIndex, onPrev, onNext } = useContext(ImageGalleryExtendedContext);
     const swipeRef = useRef<ISwipeableAreaRef>(null);
+
+    const item = items[selectedIndex];
+    const itemsCount = items.length;
+
+    if (!item) {
+        return null;
+    }
 
     const inlineHeight = height === "auto" ? undefined : typeof height === "number" ? `${height}px` : height;
     const isFirst = selectedIndex === 0;
@@ -121,4 +115,4 @@ export const ImageGalleryMain: React.FC<IImageGalleryMainProps> = ({
     return <MobileView fallback={content}>{mobileContent}</MobileView>;
 };
 
-ImageGalleryMain.displayName = "ImageGalleryMain";
+ImageGalleryExtendedMain.displayName = "ImageGalleryExtendedMain";

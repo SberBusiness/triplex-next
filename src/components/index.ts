@@ -35,6 +35,7 @@ export * from "./Header";
 export * from "./HelpBox";
 export * from "./IconWrapper";
 export * from "./ImageGallery";
+export * from "./ImageGalleryExtended";
 export * from "./Island";
 export * from "./IslandAccordion";
 export * from "./IslandWidget";

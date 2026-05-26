@@ -19,19 +19,19 @@ export interface IPlaygroundArgs {
     withBlur: boolean;
     showThumbnails: boolean;
     showDots: boolean;
-    defaultIndex: number;
+    defaultId: string;
 }
 
-export const Playground = ({ height, withBlur, showThumbnails, showDots, defaultIndex }: IPlaygroundArgs) => (
+export const Playground = ({ height, withBlur, showThumbnails, showDots, defaultId }: IPlaygroundArgs) => (
     <ImageGallery
-        defaultIndex={defaultIndex}
+        defaultId={defaultId}
         height={height}
         withBlur={withBlur}
         showThumbnails={showThumbnails}
         showDots={showDots}
     >
         {IMAGES.map((src, index) => (
-            <ImageGallery.Item key={src} src={src} alt={`Photo ${index + 1}`} />
+            <ImageGallery.Item key={src} id={`photo-${index + 1}`} src={src} alt={`Photo ${index + 1}`} />
         ))}
     </ImageGallery>
 );

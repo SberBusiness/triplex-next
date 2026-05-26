@@ -19,18 +19,20 @@ const IMAGES = [
  * свайп влево/вправо через `SwipeableArea`.
  */
 export const InsideLightBoxMobile = () => {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedId, setSelectedId] = useState("photo-1");
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
 
     const renderItems = () =>
-        IMAGES.map((src, index) => <ImageGallery.Item key={src} src={src} alt={`Photo ${index + 1}`} />);
+        IMAGES.map((src, index) => (
+            <ImageGallery.Item key={src} id={`photo-${index + 1}`} src={src} alt={`Photo ${index + 1}`} />
+        ));
 
     return (
         <>
-            <ImageGallery selectedIndex={selectedIndex} onChange={setSelectedIndex} onImageClick={handleOpen}>
+            <ImageGallery selectedId={selectedId} onChange={setSelectedId} onImageClick={handleOpen}>
                 {renderItems()}
             </ImageGallery>
 
@@ -38,7 +40,7 @@ export const InsideLightBoxMobile = () => {
                 <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
                     <LightBox.Content key="content" isLoading={false}>
                         <div style={{ padding: 16 }}>
-                            <ImageGallery selectedIndex={selectedIndex} onChange={setSelectedIndex} height="70vh">
+                            <ImageGallery selectedId={selectedId} onChange={setSelectedId} height="70vh">
                                 {renderItems()}
                             </ImageGallery>
                         </div>

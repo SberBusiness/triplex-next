@@ -48,7 +48,7 @@ const PLAYGROUND_ARGS: IPlaygroundArgs = {
     withBlur: true,
     showThumbnails: true,
     showDots: true,
-    defaultIndex: 0,
+    defaultId: "photo-1",
 };
 
 export const Playground: StoryObj<IPlaygroundArgs> = {
@@ -76,9 +76,20 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             description: "Показывать ли ряд тиков-индикаторов (мобильный).",
             table: { category: "Props" },
         },
-        defaultIndex: {
-            control: { type: "number", min: 0, max: 8, step: 1 },
-            description: "Индекс активного изображения по умолчанию.",
+        defaultId: {
+            control: { type: "select" },
+            options: [
+                "photo-1",
+                "photo-2",
+                "photo-3",
+                "photo-4",
+                "photo-5",
+                "photo-6",
+                "photo-7",
+                "photo-8",
+                "photo-9",
+            ],
+            description: "Идентификатор активного изображения по умолчанию.",
             table: { category: "Props" },
         },
     },

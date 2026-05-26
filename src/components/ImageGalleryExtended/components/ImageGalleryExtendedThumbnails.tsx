@@ -1,22 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../Button/ButtonIcon";
-import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../CarouselExtended/CarouselExtended";
-import { scrollSmoothHorizontally } from "../../utils/scroll";
-import { ImageGalleryThumb } from "./ImageGalleryThumb";
-import { IImageGalleryItemProps } from "./types";
-import styles from "./styles/ImageGalleryThumbnails.module.less";
+import { ButtonIcon } from "../../Button/ButtonIcon";
+import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../../CarouselExtended/CarouselExtended";
+import { scrollSmoothHorizontally } from "../../../utils/scroll";
+import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
+import { ImageGalleryExtendedThumb } from "./ImageGalleryExtendedThumb";
+import styles from "../styles/ImageGalleryExtendedThumbnails.module.less";
 
-/** Свойства ImageGalleryThumbnails. */
-export interface IImageGalleryThumbnailsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
-    /** Список элементов галереи. */
-    items: ReadonlyArray<IImageGalleryItemProps>;
-    /** Индекс активного изображения. */
-    selectedIndex: number;
-    /** Обработчик выбора миниатюры. */
-    onSelect: (index: number) => void;
-}
+/** Свойства ImageGalleryExtendedThumbnails. */
+export interface IImageGalleryExtendedThumbnailsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Шаг прокрутки карусели миниатюр (доля видимой ширины). */
 const SCROLL_STEP_RATIO = 0.5;
@@ -25,14 +18,13 @@ const SCROLL_PADDING_PX = 16;
 
 /**
  * Лента миниатюр на `CarouselExtended` с автоцентровкой активной миниатюры.
+ * Данные берёт из контекста `ImageGalleryExtended`.
  */
-export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
-    items,
-    selectedIndex,
-    onSelect,
+export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumbnailsProps> = ({
     className,
     ...rest
 }) => {
+    const { items, selectedIndex, onSelect } = useContext(ImageGalleryExtendedContext);
     const carouselRef = useRef<HTMLDivElement>(null);
     const thumbRefs = useRef<Array<HTMLButtonElement | null>>([]);
     const [scrollStep, setScrollStep] = useState(0);
@@ -103,7 +95,7 @@ export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
             className={clsx(styles.thumbnails, className)}
         >
             {items.map((item, index) => (
-                <ImageGalleryThumb
+                <ImageGalleryExtendedThumb
                     key={index}
                     ref={(instance) => {
                         thumbRefs.current[index] = instance;
@@ -117,4 +109,4 @@ export const ImageGalleryThumbnails: React.FC<IImageGalleryThumbnailsProps> = ({
     );
 };
 
-ImageGalleryThumbnails.displayName = "ImageGalleryThumbnails";
+ImageGalleryExtendedThumbnails.displayName = "ImageGalleryExtendedThumbnails";

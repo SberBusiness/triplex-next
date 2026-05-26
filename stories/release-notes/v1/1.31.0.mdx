@@ -6,10 +6,17 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Новые компоненты</Heading>
 
+**ImageGalleryExtended**
+
+- Базовый (controlled) декларативный компонент галереи, на котором построен `ImageGallery`.
+- Compound-состав: `ImageGalleryExtended.Item` (`id`, `src`, `alt?`, `thumbSrc?`), `.Main` (`height?`, `withBlur?`, `onImageClick?`), `.Thumbnails`, `.Dots`. Части задаются как children в произвольном порядке и берут данные из контекста контейнера.
+- Управление только controlled: `selectedId` + `onChange(id)` обязательны (активное изображение адресуется по `id` элемента). Стрелочная навигация (`ArrowLeft`/`ArrowRight`) — на контейнере.
+- Позволяет собирать нестандартные раскладки (например, только крупная картинка или миниатюры сверху).
+
 **ImageGallery**
 
-- Новый составной компонент `ImageGallery` с маркер-элементом `ImageGallery.Item` (`src`, `alt?`, `thumbSrc?`).
-- Поддерживает controlled (`selectedIndex` + `onChange`) и uncontrolled (`defaultIndex`) режимы.
+- Новый составной компонент `ImageGallery` с маркер-элементом `ImageGallery.Item` (`id`, `src`, `alt?`, `thumbSrc?`). Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки (`Main` + миниатюры/тики) и добавляет uncontrolled-режим.
+- Поддерживает controlled (`selectedId` + `onChange(id)`) и uncontrolled (`defaultId`) режимы — активное изображение адресуется по `id`.
 - На десктопе под крупной картинкой — лента миниатюр с автоцентровкой активной (на `CarouselExtended`).
 - На мобильном (`<768px`) лента заменяется кликабельными тиками-индикаторами (максимум 4, картинки распределяются по бакетам равного размера), а крупная картинка обёрнута в `SwipeableArea` со свайпом prev/next.
 - Высота: `height?: 'auto' | number | string`. В режиме `'auto'` — `640px` на десктопе и `164px` на мобильном.

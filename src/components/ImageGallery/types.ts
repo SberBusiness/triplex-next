@@ -1,25 +1,15 @@
 import React from "react";
 
-/** Свойства одного элемента галереи (`ImageGallery.Item`). */
-export interface IImageGalleryItemProps {
-    /** URL крупного изображения. */
-    src: string;
-    /** Текстовое описание изображения. */
-    alt?: string;
-    /** URL миниатюры. Если не задан, используется `src`. */
-    thumbSrc?: string;
-}
-
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
     /** Элементы галереи в виде `<ImageGallery.Item>`. */
     children: React.ReactNode;
-    /** Индекс активного изображения в controlled-режиме. */
-    selectedIndex?: number;
-    /** Индекс активного изображения по умолчанию (uncontrolled-режим). */
-    defaultIndex?: number;
-    /** Обработчик смены активного индекса. */
-    onChange?: (index: number) => void;
+    /** Идентификатор активного изображения в controlled-режиме. */
+    selectedId?: string;
+    /** Идентификатор активного изображения по умолчанию (uncontrolled-режим). */
+    defaultId?: string;
+    /** Обработчик смены активного изображения. */
+    onChange?: (id: string) => void;
     /** Обработчик клика по крупному изображению. Получает индекс кликнутого изображения. */
     onImageClick?: (index: number) => void;
     /** Высота крупного изображения. `'auto'` — фиксированные значения по breakpoint (640px / 164px). */

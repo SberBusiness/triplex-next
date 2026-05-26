@@ -19,18 +19,20 @@ const IMAGES = [
  * Индекс синхронизируется между preview и lightbox-копией через controlled-режим.
  */
 export const InsideLightBox = () => {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedId, setSelectedId] = useState("photo-1");
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
 
     const renderItems = () =>
-        IMAGES.map((src, index) => <ImageGallery.Item key={src} src={src} alt={`Photo ${index + 1}`} />);
+        IMAGES.map((src, index) => (
+            <ImageGallery.Item key={src} id={`photo-${index + 1}`} src={src} alt={`Photo ${index + 1}`} />
+        ));
 
     return (
         <>
-            <ImageGallery selectedIndex={selectedIndex} onChange={setSelectedIndex} onImageClick={handleOpen}>
+            <ImageGallery selectedId={selectedId} onChange={setSelectedId} onImageClick={handleOpen}>
                 {renderItems()}
             </ImageGallery>
 
@@ -39,8 +41,8 @@ export const InsideLightBox = () => {
                     <LightBox.Content key="content" isLoading={false}>
                         <div style={{ padding: 24 }}>
                             <ImageGallery
-                                selectedIndex={selectedIndex}
-                                onChange={setSelectedIndex}
+                                selectedId={selectedId}
+                                onChange={setSelectedId}
                                 showThumbnails={false}
                                 height="80vh"
                             >

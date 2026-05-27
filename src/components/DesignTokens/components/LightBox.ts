@@ -14,5 +14,5 @@ export type TDesignTokensComponentsLightBox = { LightBox: TDesignTokensComponent
 // Токены компонента LightBox в светлой и темной темах.
 export const LightBox_Tokens: TDesignTokensComponentsLightBoxValues = {
     Backdrop_Background: [{ ref: "ColorDarkNeutralAlpha.30" }, { ref: "ColorDarkNeutralAlpha.30" }], // var(--triplex-next-LightBox-Backdrop_Background)
-    Content_Background: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.10" }], // var(--triplex-next-LightBox-Content_Background)
+    Content_Background: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.0" }], // var(--triplex-next-LightBox-Content_Background)
 };

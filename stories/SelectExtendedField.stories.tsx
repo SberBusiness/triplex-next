@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { StoryObj } from "@storybook/react";
-import { SelectExtendedField } from "../src/components/SelectExtendedField";
-import { SelectExtendedFieldTarget } from "../src/components/SelectExtendedField/components/SelectExtendedFieldTarget";
-import { SelectExtendedFieldDropdown } from "../src/components/SelectExtendedField/components/SelectExtendedFieldDropdown";
-import { DropdownListItem } from "../src/components/Dropdown/desktop/DropdownListItem";
-import { EFormFieldStatus, FormFieldDescription } from "../src/components/FormField";
-import { Text, ETextSize, EFontType, Title as TypographyTitle, ETitleSize } from "../src/components/Typography";
-import { Gap } from "../src/components/Gap";
-import { FormGroup } from "../src/components/FormGroup";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { EComponentSize } from "../src/enums/EComponentSize";
+import {
+    FormGroup,
+    SelectExtendedField,
+    SelectExtendedFieldTarget,
+    EComponentSize,
+    SelectExtendedFieldDropdown,
+    EDropdownWidth,
+    DropdownListItem,
+    EFormFieldStatus,
+    FormFieldDescription,
+    Text,
+    ETextSize,
+    EFontType,
+    Title as TypographyTitle,
+    ETitleSize,
+    Gap,
+} from "@sberbusiness/triplex-next";
 
 export default {
     title: "Components/SelectExtendedField",
@@ -89,7 +97,7 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
         const { fieldLabel, placeholder, loading, status, descriptionText, errorText } = args;
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <FormGroup>
                     <SelectExtendedField
                         renderTarget={({ opened, setOpened }) => (
@@ -107,9 +115,11 @@ export const Playground: StoryObj<ISelectExtendedFieldPlaygroundProps> = {
                     >
                         {({ opened, dropdownRef, targetRef, setOpened }) => (
                             <SelectExtendedFieldDropdown
+                                width={EDropdownWidth.TARGET}
                                 opened={opened}
                                 forwardedRef={dropdownRef}
                                 targetRef={targetRef}
+                                setOpened={setOpened}
                             >
                                 <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                     {options.map((option) => (
@@ -253,7 +263,7 @@ export const Basic: StoryObj<typeof SelectExtendedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <SelectExtendedField
                     renderTarget={({ opened, setOpened }) => (
                         <SelectExtendedFieldTarget
@@ -267,7 +277,13 @@ export const Basic: StoryObj<typeof SelectExtendedField> = {
                     )}
                 >
                     {({ opened, dropdownRef, targetRef, setOpened }) => (
-                        <SelectExtendedFieldDropdown opened={opened} forwardedRef={dropdownRef} targetRef={targetRef}>
+                        <SelectExtendedFieldDropdown
+                            width={EDropdownWidth.TARGET}
+                            opened={opened}
+                            forwardedRef={dropdownRef}
+                            targetRef={targetRef}
+                            setOpened={setOpened}
+                        >
                             <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                 {options.map((option) => (
                                     <DropdownListItem
@@ -309,13 +325,13 @@ export const States: StoryObj<typeof SelectExtendedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <FormGroup>
                     <TypographyTitle
                         tag="h3"
                         size={ETitleSize.H3}
                         type={EFontType.PRIMARY}
-                        style={{ marginBottom: "16px" }}
+                        style={{ marginBottom: 16 }}
                     >
                         Обычное состояние
                     </TypographyTitle>
@@ -333,9 +349,11 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                     >
                         {({ opened, dropdownRef, targetRef, setOpened }) => (
                             <SelectExtendedFieldDropdown
+                                width={EDropdownWidth.TARGET}
                                 opened={opened}
                                 forwardedRef={dropdownRef}
                                 targetRef={targetRef}
+                                setOpened={setOpened}
                             >
                                 <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                     {options.map((option) => (
@@ -361,7 +379,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         tag="h3"
                         size={ETitleSize.H3}
                         type={EFontType.PRIMARY}
-                        style={{ marginBottom: "16px" }}
+                        style={{ marginBottom: 16 }}
                     >
                         Состояние загрузки
                     </TypographyTitle>
@@ -380,9 +398,11 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                     >
                         {({ opened, dropdownRef, targetRef, setOpened }) => (
                             <SelectExtendedFieldDropdown
+                                width={EDropdownWidth.TARGET}
                                 opened={opened}
                                 forwardedRef={dropdownRef}
                                 targetRef={targetRef}
+                                setOpened={setOpened}
                             >
                                 <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                     {options.map((option) => (
@@ -408,7 +428,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         tag="h3"
                         size={ETitleSize.H3}
                         type={EFontType.PRIMARY}
-                        style={{ marginBottom: "16px" }}
+                        style={{ marginBottom: 16 }}
                     >
                         Состояние ошибки
                     </TypographyTitle>
@@ -427,9 +447,11 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                     >
                         {({ opened, dropdownRef, targetRef, setOpened }) => (
                             <SelectExtendedFieldDropdown
+                                width={EDropdownWidth.TARGET}
                                 opened={opened}
                                 forwardedRef={dropdownRef}
                                 targetRef={targetRef}
+                                setOpened={setOpened}
                             >
                                 <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                     {options.map((option) => (
@@ -460,7 +482,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         tag="h3"
                         size={ETitleSize.H3}
                         type={EFontType.PRIMARY}
-                        style={{ marginBottom: "16px" }}
+                        style={{ marginBottom: 16 }}
                     >
                         Состояние предупреждения
                     </TypographyTitle>
@@ -479,9 +501,11 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                     >
                         {({ opened, dropdownRef, targetRef, setOpened }) => (
                             <SelectExtendedFieldDropdown
+                                width={EDropdownWidth.TARGET}
                                 opened={opened}
                                 forwardedRef={dropdownRef}
                                 targetRef={targetRef}
+                                setOpened={setOpened}
                             >
                                 <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                     {options.map((option) => (
@@ -512,7 +536,7 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                         tag="h3"
                         size={ETitleSize.H3}
                         type={EFontType.PRIMARY}
-                        style={{ marginBottom: "16px" }}
+                        style={{ marginBottom: 16 }}
                     >
                         Отключенное состояние
                     </TypographyTitle>
@@ -531,9 +555,11 @@ export const States: StoryObj<typeof SelectExtendedField> = {
                     >
                         {({ opened, dropdownRef, targetRef, setOpened }) => (
                             <SelectExtendedFieldDropdown
+                                width={EDropdownWidth.TARGET}
                                 opened={opened}
                                 forwardedRef={dropdownRef}
                                 targetRef={targetRef}
+                                setOpened={setOpened}
                             >
                                 <SelectExtendedFieldDropdown.List dropdownOpened={opened}>
                                     {options.map((option) => (

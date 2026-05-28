@@ -1,11 +1,10 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
 import { MobileView } from "../../MobileView";
 import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
+import { ImageGalleryExtendedSlide } from "./ImageGalleryExtendedSlide";
+import { ImageGalleryExtendedSwipeTrack } from "./ImageGalleryExtendedSwipeTrack";
 import styles from "../styles/ImageGalleryExtendedMain.module.less";
-
-/** Минимальная горизонтальная дистанция (px), при которой жест считается свайпом навигации. */
-const SWIPE_MIN_DISTANCE = 50;
 
 /** Свойства ImageGalleryExtendedMain. */
 export interface IImageGalleryExtendedMainProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,10 +19,10 @@ export interface IImageGalleryExtendedMainProps extends React.HTMLAttributes<HTM
 }
 
 /**
- * Крупное изображение галереи: блюр-слой, само изображение и накладываемое
- * поверх содержимое (`children` — например стрелки через `ImageGalleryExtended.Nav`).
- * Данные берёт из контекста `ImageGalleryExtended`. На мобильном устройстве
- * (ширина < SM) поддерживает горизонтальный свайп для перехода prev/next.
+ * Крупное изображение галереи: вьюпорт с изображением и накладываемым поверх
+ * содержимым (`children` — например стрелки через `ImageGalleryExtended.Nav`).
+ * Данные берёт из контекста `ImageGalleryExtended`. На десктопе — статичный слайд,
+ * на мобильном (ширина < SM) — лента со свайпом prev/next (`ImageGalleryExtendedSwipeTrack`).
  */
 export const ImageGalleryExtendedMain: React.FC<IImageGalleryExtendedMainProps> = ({
     height = "auto",
@@ -33,74 +32,36 @@ export const ImageGalleryExtendedMain: React.FC<IImageGalleryExtendedMainProps> 
     children,
     ...rest
 }) => {
-    const { items, selectedIndex, onPrev, onNext } = useContext(ImageGalleryExtendedContext);
-    const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+    const { items, selectedIndex } = useContext(ImageGalleryExtendedContext);
 
     const item = items[selectedIndex];
-    const itemsCount = items.length;
 
     if (!item) {
         return null;
     }
 
     const inlineHeight = height === "auto" ? undefined : typeof height === "number" ? `${height}px` : height;
+    const handleImageClick = onImageClick ? () => onImageClick(selectedIndex) : undefined;
 
-    const handleTouchStart = (event: React.TouchEvent) => {
-        const touch = event.touches[0];
-        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-    };
-
-    const handleTouchEnd = (event: React.TouchEvent) => {
-        const start = touchStartRef.current;
-        touchStartRef.current = null;
-
-        if (!start) {
-            return;
-        }
-
-        const touch = event.changedTouches[0];
-        const deltaX = touch.clientX - start.x;
-        const deltaY = touch.clientY - start.y;
-
-        // Игнорируем вертикальные (скролл) и слишком короткие жесты.
-        if (Math.abs(deltaX) < SWIPE_MIN_DISTANCE || Math.abs(deltaX) <= Math.abs(deltaY)) {
-            return;
-        }
-
-        // onPrev/onNext клампятся контейнером — отдельные проверки границ не нужны.
-        if (deltaX < 0) {
-            onNext();
-        } else {
-            onPrev();
-        }
-    };
-
-    const renderCard = (swipeable: boolean) => (
+    return (
         <div
             {...rest}
             className={clsx(styles.main, className)}
             style={inlineHeight ? { height: inlineHeight } : undefined}
-            onTouchStart={swipeable ? handleTouchStart : undefined}
-            onTouchEnd={swipeable ? handleTouchEnd : undefined}
         >
-            {withBlur && (
-                <div className={styles.blur} style={{ backgroundImage: `url(${item.src})` }} aria-hidden="true" />
-            )}
-
-            <img
-                src={item.src}
-                alt={item.alt ?? ""}
-                className={clsx(styles.image, { [styles.clickable]: onImageClick !== undefined })}
-                loading="lazy"
-                onClick={onImageClick ? () => onImageClick(selectedIndex) : undefined}
-            />
+            <MobileView
+                fallback={<ImageGalleryExtendedSlide item={item} withBlur={withBlur} onClick={handleImageClick} />}
+            >
+                {items.length > 1 ? (
+                    <ImageGalleryExtendedSwipeTrack withBlur={withBlur} onImageClick={onImageClick} />
+                ) : (
+                    <ImageGalleryExtendedSlide item={item} withBlur={withBlur} onClick={handleImageClick} />
+                )}
+            </MobileView>
 
             {children}
         </div>
     );
-
-    // Свайп нужен только на мобильном и только когда есть куда листать.
-    return <MobileView fallback={renderCard(false)}>{renderCard(itemsCount > 1)}</MobileView>;
 };
 
 ImageGalleryExtendedMain.displayName = "ImageGalleryExtendedMain";

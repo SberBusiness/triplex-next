@@ -183,17 +183,25 @@ describe("ImageGalleryExtended — Main (свайп на мобильном)", (
         mobileState.isMobile = true;
     });
 
-    /** jsdom не реализует TouchEvent — диспатчим обычный Event с touch-полями. */
-    const fireSwipe = (card: HTMLElement, fromX: number, toX: number, deltaY = 0) => {
-        const start = new Event("touchstart", { bubbles: true, cancelable: true });
-        Object.assign(start, { touches: [{ clientX: fromX, clientY: 100 }] });
-        fireEvent(card, start);
-
-        const end = new Event("touchend", { bubbles: true, cancelable: true });
-        Object.assign(end, { changedTouches: [{ clientX: toX, clientY: 100 + deltaY }] });
-        fireEvent(card, end);
+    /** jsdom не реализует TouchEvent/TransitionEvent — диспатчим обычный Event с нужными полями. */
+    const dispatch = (node: HTMLElement, type: string, init: Record<string, unknown>) => {
+        const event = new Event(type, { bubbles: true, cancelable: true });
+        Object.assign(event, init);
+        fireEvent(node, event);
     };
 
+    const fireSwipe = (track: HTMLElement, fromX: number, toX: number, deltaY = 0) => {
+        const endY = 100 + deltaY;
+
+        dispatch(track, "touchstart", { touches: [{ clientX: fromX, clientY: 100 }] });
+        // touchmove фиксирует направление жеста (горизонталь/вертикаль).
+        dispatch(track, "touchmove", { touches: [{ clientX: toX, clientY: endY }] });
+        dispatch(track, "touchend", { changedTouches: [{ clientX: toX, clientY: endY }] });
+        // Смена изображения происходит по завершении анимации доводки ленты — эмулируем её.
+        dispatch(track, "transitionend", { propertyName: "transform" });
+    };
+
+    /** Лента свайпа — обёртка слайдов: img → .slide → .track. */
     const renderMain = (onChange: (id: string) => void) => {
         render(
             <ControlledGallery items={buildItems(9)} initialId="p3" onChange={onChange}>
@@ -201,7 +209,7 @@ describe("ImageGalleryExtended — Main (свайп на мобильном)", (
             </ControlledGallery>,
         );
 
-        return screen.getByAltText("Photo 3").parentElement as HTMLElement;
+        return screen.getByAltText("Photo 3").parentElement?.parentElement as HTMLElement;
     };
 
     it("свайп влево переключает на следующее изображение", () => {

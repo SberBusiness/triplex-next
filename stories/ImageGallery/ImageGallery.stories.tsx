@@ -57,6 +57,7 @@ const PLAYGROUND_ARGS: IPlaygroundArgs = {
     dotsProps: {},
 };
 
+/** Интерактивный playground: все props галереи настраиваются через панель Controls. */
 export const Playground: StoryObj<IPlaygroundArgs> = {
     tags: ["!autodocs"],
     args: PLAYGROUND_ARGS,
@@ -130,6 +131,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     render: PlaygroundRender,
 };
 
+/** Готовая галерея с пресетом раскладки: крупная картинка со стрелками и лента миниатюр (десктоп). */
 export const Default: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -140,6 +142,7 @@ export const Default: StoryObj<typeof ImageGallery> = {
     render: DefaultRender,
 };
 
+/** Фиксированная высота крупной картинки через `height` (вместо `'auto'`). */
 export const FixedHeight: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -150,6 +153,7 @@ export const FixedHeight: StoryObj<typeof ImageGallery> = {
     render: FixedHeightRender,
 };
 
+/** Без ленты миниатюр (`showThumbnails={false}`) — только крупная картинка со стрелками. */
 export const WithoutThumbnails: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -160,6 +164,7 @@ export const WithoutThumbnails: StoryObj<typeof ImageGallery> = {
     render: WithoutThumbnailsRender,
 };
 
+/** Мобильный preset (XS viewport): лента миниатюр заменена рядом тиков-индикаторов (максимум 4). */
 export const WithDots: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -171,6 +176,7 @@ export const WithDots: StoryObj<typeof ImageGallery> = {
     render: WithDotsRender,
 };
 
+/** Проброс `id`/`data-test-id` в стрелки, ленту миниатюр и ряд тиков через `*ArrowProps` / `thumbnailsProps` / `dotsProps`. */
 export const PropsForwarding: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -181,6 +187,7 @@ export const PropsForwarding: StoryObj<typeof ImageGallery> = {
     render: PropsForwardingRender,
 };
 
+/** Без блюр-слоя по краям крупной картинки (`withBlur={false}`). */
 export const WithoutBlur: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -191,6 +198,7 @@ export const WithoutBlur: StoryObj<typeof ImageGallery> = {
     render: WithoutBlurRender,
 };
 
+/** Открытие в `LightBox` по клику на картинку (`onImageClick`); индекс синхронизирован между preview и копией в лайтбоксе (controlled). */
 export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
     name: "InsideLightBox",
     parameters: {
@@ -208,7 +216,7 @@ export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
  * (стрелка «вперёд» disabled, плюс блюр-слой). Фиксирует disabled-состояния стрелок.
  */
 export const VisualTestsArrows: StoryObj<typeof ImageGallery> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -221,7 +229,7 @@ export const VisualTestsArrows: StoryObj<typeof ImageGallery> = {
 
 /** Скриншот-тест тиков-индикаторов (мобильный preset, XS viewport): активный тик и обычные. */
 export const VisualTestsDots: StoryObj<typeof ImageGallery> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         viewport: { defaultViewport: "XS" },
         controls: { disable: true },

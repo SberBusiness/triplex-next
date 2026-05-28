@@ -48,6 +48,7 @@ const PLAYGROUND_ARGS: IPlaygroundArgs = {
     height: "auto",
 };
 
+/** Интерактивный playground: `withBlur` и `height` (`Main`) настраиваются через панель Controls. */
 export const Playground: StoryObj<IPlaygroundArgs> = {
     tags: ["!autodocs"],
     args: PLAYGROUND_ARGS,
@@ -75,6 +76,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     render: PlaygroundRender,
 };
 
+/** Полный десктопный состав, собранный вручную: крупная картинка со стрелками (`Main` + `Nav`/`Arrow`) и лента миниатюр (`Thumbnails`). */
 export const Default: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -85,6 +87,7 @@ export const Default: StoryObj<typeof ImageGalleryExtended> = {
     render: DefaultRender,
 };
 
+/** Только крупная картинка со стрелками — без миниатюр и тиков. */
 export const MainOnly: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -95,6 +98,7 @@ export const MainOnly: StoryObj<typeof ImageGalleryExtended> = {
     render: MainOnlyRender,
 };
 
+/** Мобильный preset: крупная картинка и ряд тиков-индикаторов (`Dots`) вместо ленты миниатюр. */
 export const WithDots: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -106,6 +110,7 @@ export const WithDots: StoryObj<typeof ImageGalleryExtended> = {
     render: WithDotsRender,
 };
 
+/** Произвольная раскладка: миниатюры над картинкой, а вместо стандартных стрелок — кастомная панель «N / Total» через render-функцию `Nav`. */
 export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -116,6 +121,7 @@ export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
     render: CustomLayoutRender,
 };
 
+/** Большой набор (20 изображений): горизонтальный скролл ленты миниатюр с автоцентровкой активной. */
 export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -126,6 +132,7 @@ export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
     render: ManyThumbnailsRender,
 };
 
+/** Открытие крупного изображения в `LightBox` по клику на превью-`Avatar`. */
 export const OpenFromAvatar: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -142,7 +149,7 @@ export const OpenFromAvatar: StoryObj<typeof ImageGalleryExtended> = {
  * disabled). Фиксирует disabled-состояния стрелок на границах диапазона.
  */
 export const VisualTestsArrows: StoryObj<typeof ImageGalleryExtended> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -155,7 +162,7 @@ export const VisualTestsArrows: StoryObj<typeof ImageGalleryExtended> = {
 
 /** Скриншот-тест тиков-индикаторов (мобильный preset): активный тик и обычные. */
 export const VisualTestsDots: StoryObj<typeof ImageGalleryExtended> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {

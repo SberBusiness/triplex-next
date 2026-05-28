@@ -9,3 +9,5 @@ export * from "./CustomLayout";
 export { default as CustomLayoutSource } from "./CustomLayout?raw";
 export * from "./ManyThumbnails";
 export { default as ManyThumbnailsSource } from "./ManyThumbnails?raw";
+export * from "./OpenFromAvatar";
+export { default as OpenFromAvatarSource } from "./OpenFromAvatar?raw";

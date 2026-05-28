@@ -15,6 +15,8 @@ import {
     CustomLayoutSource,
     ManyThumbnails as ManyThumbnailsRender,
     ManyThumbnailsSource,
+    OpenFromAvatar as OpenFromAvatarRender,
+    OpenFromAvatarSource,
 } from "./examples";
 
 export default {
@@ -120,4 +122,14 @@ export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
         },
     },
     render: ManyThumbnailsRender,
+};
+
+export const OpenFromAvatar: StoryObj<typeof ImageGalleryExtended> = {
+    parameters: {
+        docs: {
+            controls: { disable: true },
+            source: { code: OpenFromAvatarSource, language: "tsx" },
+        },
+    },
+    render: OpenFromAvatarRender,
 };

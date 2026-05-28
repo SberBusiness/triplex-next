@@ -15,7 +15,7 @@ export interface IImageGalleryThumbRenderState {
     index: number;
     /** Активна ли миниатюра. */
     isActive: boolean;
-    /** Доступное имя миниатюры, сформированное родителем. */
+    /** Доступное имя миниатюры (`item.alt`). */
     ariaLabel?: string;
     /** Выбрать это изображение. */
     onSelect: () => void;
@@ -30,8 +30,6 @@ export interface IImageGalleryExtendedThumbnailsProps extends Omit<React.HTMLAtt
      * Чтобы автоцентровка активной миниатюры работала, проброси `ref` на корневой `<button>`.
      */
     children?: (state: IImageGalleryThumbRenderState) => React.ReactNode;
-    /** Формирует доступное имя стандартной кнопки-миниатюры. Если не задано, используется `item.alt`. */
-    getThumbnailAriaLabel?: (state: Omit<IImageGalleryThumbRenderState, "onSelect" | "ref">) => string | undefined;
 }
 
 /** Дефолтная отрисовка миниатюры — стандартная `ImageGalleryExtended.Thumb`. */
@@ -44,7 +42,7 @@ const renderDefaultThumb = ({ item, isActive, ariaLabel, onSelect, ref }: IImage
  * Данные берёт из контекста `ImageGalleryExtended`.
  */
 export const ImageGalleryExtendedThumbnails = React.forwardRef<HTMLDivElement, IImageGalleryExtendedThumbnailsProps>(
-    ({ className, children, getThumbnailAriaLabel, onKeyDown, ...rest }, ref) => {
+    ({ className, children, onKeyDown, ...rest }, ref) => {
         const { items, selectedIndex, onSelect } = useContext(ImageGalleryExtendedContext);
         const renderThumb = children ?? renderDefaultThumb;
         const carouselRef = useRef<HTMLDivElement>(null);
@@ -101,13 +99,7 @@ export const ImageGalleryExtendedThumbnails = React.forwardRef<HTMLDivElement, I
                             item,
                             index,
                             isActive: index === selectedIndex,
-                            ariaLabel:
-                                getThumbnailAriaLabel?.({
-                                    item,
-                                    index,
-                                    isActive: index === selectedIndex,
-                                    ariaLabel: item.alt,
-                                }) ?? item.alt,
+                            ariaLabel: item.alt,
                             onSelect: () => onSelect(index),
                             ref: (instance) => {
                                 thumbRefs.current[index] = instance;

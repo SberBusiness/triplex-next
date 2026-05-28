@@ -10,15 +10,15 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
 export const PropsForwarding = () => (
     <ImageGallery
         items={ITEMS}
-        prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
-        nextArrowProps={{ "aria-label": "Следующее изображение" }}
+        prevArrowProps={{ "aria-label": "Предыдущее изображение", "data-test-id": "image-gallery-prev" }}
+        nextArrowProps={{ "aria-label": "Следующее изображение", "data-test-id": "image-gallery-next" }}
         thumbnailsProps={{
             id: "image-gallery-thumbnails",
-            getThumbnailAriaLabel: ({ item, index }) => `Миниатюра ${index + 1}: ${item.id}`,
+            "data-test-id": "image-gallery-thumbnails",
         }}
         dotsProps={{
             id: "image-gallery-dots",
-            getDotAriaLabel: ({ item, tickIndex }) => `Тик ${tickIndex + 1}: ${item.id}`,
+            "data-test-id": "image-gallery-dots",
         }}
     />
 );

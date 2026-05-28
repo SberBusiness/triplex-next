@@ -181,16 +181,19 @@ describe("ImageGallery — desktop", () => {
         expect(thumbs[0]).not.toHaveAttribute("aria-current");
     });
 
-    it("passes thumbnailsProps to desktop thumbnails", () => {
+    it("passes thumbnailsProps (including data-*) to desktop thumbnails", () => {
         renderGallery({
             thumbnailsProps: {
                 id: "thumbnails",
-                getThumbnailAriaLabel: ({ item, index }) => `Миниатюра ${index + 1}: ${item.id}`,
+                "data-test-id": "thumbnails-test-id",
             },
         });
 
-        expect(document.getElementById("thumbnails")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Миниатюра 5: p5" })).toBeInTheDocument();
+        const thumbnails = document.getElementById("thumbnails");
+        expect(thumbnails).toBeInTheDocument();
+        expect(thumbnails).toHaveAttribute("data-test-id", "thumbnails-test-id");
+        // Доступное имя миниатюры берётся из item.alt.
+        expect(screen.getByRole("button", { name: "Photo 5" })).toBeInTheDocument();
     });
 });
 
@@ -280,19 +283,22 @@ describe("ImageGallery — mobile", () => {
         expect(screen.queryAllByRole("button", { name: /Photo/ })).toHaveLength(0);
     });
 
-    it("passes dotsProps to mobile dots", () => {
+    it("passes dotsProps (including data-*) to mobile dots", () => {
         renderGallery(
             {
                 dotsProps: {
                     id: "dots",
-                    getDotAriaLabel: ({ item, tickIndex }) => `Тик ${tickIndex + 1}: ${item.id}`,
+                    "data-test-id": "dots-test-id",
                 },
             },
             9,
         );
 
-        expect(document.getElementById("dots")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Тик 3: p5" })).toBeInTheDocument();
+        const dots = document.getElementById("dots");
+        expect(dots).toBeInTheDocument();
+        expect(dots).toHaveAttribute("data-test-id", "dots-test-id");
+        // Доступное имя тика берётся из item.alt (тик 3 → index 4 → Photo 5).
+        expect(screen.getByRole("button", { name: "Photo 5" })).toBeInTheDocument();
     });
 
     /** jsdom не реализует TouchEvent/TransitionEvent — диспатчим обычный Event с нужными полями. */

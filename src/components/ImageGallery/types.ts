@@ -5,18 +5,20 @@ import {
     IImageGalleryExtendedThumbnailsProps,
     IImageGalleryItemProps,
 } from "../ImageGalleryExtended";
+import { DataAttributes } from "../../types/CoreTypes";
 
-/** Свойства стрелки, которые ImageGallery пробрасывает в ImageGalleryExtended.Arrow. */
+/** Свойства стрелки, которые ImageGallery пробрасывает в ImageGalleryExtended.Arrow. Допускают `data-*`. */
 export type TImageGalleryArrowProps = Omit<
     IImageGalleryExtendedArrowProps,
     "direction" | "onClick" | "disabled" | "hidden" | "type"
->;
+> &
+    DataAttributes;
 
-/** Свойства ленты миниатюр, которые ImageGallery пробрасывает в ImageGalleryExtended.Thumbnails. */
-export type TImageGalleryThumbnailsProps = Omit<IImageGalleryExtendedThumbnailsProps, "children">;
+/** Свойства ленты миниатюр, которые ImageGallery пробрасывает в ImageGalleryExtended.Thumbnails. Допускают `data-*`. */
+export type TImageGalleryThumbnailsProps = Omit<IImageGalleryExtendedThumbnailsProps, "children"> & DataAttributes;
 
-/** Свойства тиков, которые ImageGallery пробрасывает в ImageGalleryExtended.Dots. */
-export type TImageGalleryDotsProps = Omit<IImageGalleryExtendedDotsProps, "children">;
+/** Свойства тиков, которые ImageGallery пробрасывает в ImageGalleryExtended.Dots. Допускают `data-*`. */
+export type TImageGalleryDotsProps = Omit<IImageGalleryExtendedDotsProps, "children"> & DataAttributes;
 
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {

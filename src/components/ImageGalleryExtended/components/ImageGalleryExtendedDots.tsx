@@ -1,26 +1,10 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
 import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
-import { IImageGalleryItemProps } from "../types";
 import styles from "../styles/ImageGalleryExtendedDots.module.less";
 
-/** Состояние тика-индикатора для формирования доступного имени. */
-export interface IImageGalleryDotLabelState {
-    /** Изображение, к которому ведёт тик. */
-    item: IImageGalleryItemProps;
-    /** Индекс изображения, к которому ведёт тик. */
-    index: number;
-    /** Индекс тика. */
-    tickIndex: number;
-    /** Активен ли тик. */
-    isActive: boolean;
-}
-
 /** Свойства ImageGalleryExtendedDots. */
-export interface IImageGalleryExtendedDotsProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Формирует доступное имя кнопки тика. Если не задано, используется `item.alt`. */
-    getDotAriaLabel?: (state: IImageGalleryDotLabelState) => string | undefined;
-}
+export interface IImageGalleryExtendedDotsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Максимальное количество тиков. */
 const MAX_TICKS = 4;
@@ -33,7 +17,7 @@ const MAX_TICKS = 4;
  * в последний бакет. При количестве элементов `<= 1` ничего не рендерится.
  */
 export const ImageGalleryExtendedDots = React.forwardRef<HTMLDivElement, IImageGalleryExtendedDotsProps>(
-    ({ className, getDotAriaLabel, ...rest }, ref) => {
+    ({ className, ...rest }, ref) => {
         const { items, selectedIndex, onSelect } = useContext(ImageGalleryExtendedContext);
         const itemsCount = items.length;
 
@@ -51,14 +35,13 @@ export const ImageGalleryExtendedDots = React.forwardRef<HTMLDivElement, IImageG
                     const isActive = tickIndex === activeTick;
                     const targetIndex = tickIndex * bucketSize;
                     const item = items[targetIndex];
-                    const ariaLabel = getDotAriaLabel?.({ item, index: targetIndex, tickIndex, isActive }) ?? item.alt;
 
                     return (
                         <button
                             key={tickIndex}
                             type="button"
                             aria-current={isActive ? "true" : undefined}
-                            aria-label={ariaLabel}
+                            aria-label={item.alt}
                             className={clsx(styles.dot, { [styles.active]: isActive })}
                             onClick={() => onSelect(targetIndex)}
                         />

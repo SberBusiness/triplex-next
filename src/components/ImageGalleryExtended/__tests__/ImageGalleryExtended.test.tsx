@@ -315,11 +315,12 @@ describe("ImageGalleryExtended — Dots (мобильный)", () => {
         render(
             <ControlledGallery items={buildItems(9)} onChange={onChange}>
                 <ImageGalleryExtended.Main />
-                <ImageGalleryExtended.Dots getDotAriaLabel={({ item }) => `dot-${item.id}`} />
+                <ImageGalleryExtended.Dots />
             </ControlledGallery>,
         );
 
-        const dots = screen.getAllByRole("button", { name: /^dot-/ });
+        // Доступное имя тика берётся из item.alt.
+        const dots = screen.getAllByRole("button", { name: /^Photo/ });
         expect(dots).toHaveLength(4);
 
         // 9 items, bucketSize=2: тик 2 → index 4 → p5.

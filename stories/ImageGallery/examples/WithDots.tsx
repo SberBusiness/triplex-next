@@ -11,4 +11,11 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
  * На мобильном viewport (<768px) лента миниатюр заменяется кликабельными
  * тиками-индикаторами. Максимум 4 тика; картинки распределяются по бакетам.
  */
-export const WithDots = () => <ImageGallery items={ITEMS} showDots />;
+export const WithDots = () => (
+    <ImageGallery
+        items={ITEMS}
+        showDots
+        prevArrowAriaLabel="Предыдущее изображение"
+        nextArrowAriaLabel="Следующее изображение"
+    />
+);

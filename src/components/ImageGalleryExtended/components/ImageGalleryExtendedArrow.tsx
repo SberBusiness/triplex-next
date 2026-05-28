@@ -1,24 +1,24 @@
 import React from "react";
 import clsx from "clsx";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { IconWrapper } from "../../IconWrapper";
 import { EImageGalleryArrowDirection } from "../enums";
 import styles from "../styles/ImageGalleryExtendedMain.module.less";
-import { IconWrapper } from "@sberbusiness/triplex-next/components";
 
 /** Свойства ImageGalleryExtendedArrow. */
-export interface IImageGalleryExtendedArrowProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IImageGalleryExtendedArrowProps extends Omit<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    "aria-label"
+> {
     /** Направление: предыдущее (`PREV`) или следующее (`NEXT`) изображение. */
     direction: EImageGalleryArrowDirection;
+    /** Доступное имя кнопки. Передаётся потребителем, чтобы не хардкодить язык в компоненте. */
+    "aria-label": string;
 }
 
 const DIRECTION_CLASS: Record<EImageGalleryArrowDirection, string> = {
     [EImageGalleryArrowDirection.PREV]: styles.prev,
     [EImageGalleryArrowDirection.NEXT]: styles.next,
-};
-
-const DIRECTION_LABEL: Record<EImageGalleryArrowDirection, string> = {
-    [EImageGalleryArrowDirection.PREV]: "Предыдущее изображение",
-    [EImageGalleryArrowDirection.NEXT]: "Следующее изображение",
 };
 
 /**
@@ -37,10 +37,9 @@ export const ImageGalleryExtendedArrow = React.forwardRef<HTMLButtonElement, IIm
                 <button
                     type="button"
                     ref={ref}
-                    tabIndex={-1}
                     disabled={disabled}
                     {...rest}
-                    aria-label={ariaLabel ?? DIRECTION_LABEL[direction]}
+                    aria-label={ariaLabel}
                     className={clsx(styles.arrow, DIRECTION_CLASS[direction], className)}
                 >
                     <Icon paletteIndex={7} />

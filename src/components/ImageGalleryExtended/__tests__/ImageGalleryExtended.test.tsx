@@ -101,7 +101,7 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
 
         expect(onChange).toHaveBeenCalledWith("p5");
         expect(screen.getByAltText("Photo 5")).toBeInTheDocument();
-        expect(thumbButtons()[4]).toHaveAttribute("aria-selected", "true");
+        expect(thumbButtons()[4]).toHaveAttribute("aria-current", "true");
     });
 
     it("ArrowLeft/ArrowRight на контейнере переключают активный id", () => {
@@ -148,21 +148,21 @@ describe("ImageGalleryExtended — controlled-навигация", () => {
 });
 
 describe("ImageGalleryExtended — Main", () => {
-    it("withBlur рендерит блюр-слой (inline background-image)", () => {
+    it("withBlur рендерит блюр-слой", () => {
         const { container, rerender } = render(
             <ImageGalleryExtended items={buildItems(9)} selectedId="p1" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main withBlur={false} />
             </ImageGalleryExtended>,
         );
 
-        expect(container.querySelector('[style*="background-image"]')).toBeNull();
+        expect(container.querySelector('img[aria-hidden="true"]')).toBeNull();
 
         rerender(
             <ImageGalleryExtended items={buildItems(9)} selectedId="p1" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main withBlur />
             </ImageGalleryExtended>,
         );
-        expect(container.querySelector('[style*="background-image"]')).not.toBeNull();
+        expect(container.querySelector('img[aria-hidden="true"]')).not.toBeNull();
     });
 
     it("onImageClick вызывается с активным индексом", () => {
@@ -260,11 +260,13 @@ describe("ImageGalleryExtended — Nav (render-функция)", () => {
                             <>
                                 <ImageGalleryExtended.Arrow
                                     direction={EImageGalleryArrowDirection.PREV}
+                                    aria-label="Предыдущее изображение"
                                     onClick={onPrev}
                                     disabled={isFirst}
                                 />
                                 <ImageGalleryExtended.Arrow
                                     direction={EImageGalleryArrowDirection.NEXT}
+                                    aria-label="Следующее изображение"
                                     onClick={onNext}
                                     disabled={isLast}
                                 />
@@ -307,11 +309,11 @@ describe("ImageGalleryExtended — Dots (мобильный)", () => {
         render(
             <ControlledGallery items={buildItems(9)} onChange={onChange}>
                 <ImageGalleryExtended.Main />
-                <ImageGalleryExtended.Dots />
+                <ImageGalleryExtended.Dots getDotAriaLabel={({ item }) => `dot-${item.id}`} />
             </ControlledGallery>,
         );
 
-        const dots = screen.getAllByRole("tab");
+        const dots = screen.getAllByRole("button", { name: /^dot-/ });
         expect(dots).toHaveLength(4);
 
         // 9 items, bucketSize=2: тик 2 → index 4 → p5.
@@ -332,7 +334,7 @@ describe("ImageGalleryExtended — Thumbnails (render-функция)", () => {
                             ref={ref}
                             type="button"
                             aria-label={`thumb-${item.id}`}
-                            aria-selected={isActive}
+                            aria-current={isActive ? "true" : undefined}
                             onClick={onSelect}
                         />
                     )}
@@ -345,7 +347,7 @@ describe("ImageGalleryExtended — Thumbnails (render-функция)", () => {
 
         fireEvent.click(screen.getByRole("button", { name: "thumb-p5" }));
         expect(onChange).toHaveBeenCalledWith("p5");
-        expect(screen.getByRole("button", { name: "thumb-p5" })).toHaveAttribute("aria-selected", "true");
+        expect(screen.getByRole("button", { name: "thumb-p5" })).toHaveAttribute("aria-current", "true");
     });
 
     it("по умолчанию (без children) рисует стандартные миниатюры", () => {
@@ -359,6 +361,28 @@ describe("ImageGalleryExtended — Thumbnails (render-функция)", () => {
     });
 });
 
+describe("ImageGalleryExtended — refs", () => {
+    it("пробрасывает ref в корневые DOM-элементы публичных составных частей", () => {
+        const rootRef = React.createRef<HTMLDivElement>();
+        const mainRef = React.createRef<HTMLDivElement>();
+        const dotsRef = React.createRef<HTMLDivElement>();
+        const thumbnailsRef = React.createRef<HTMLDivElement>();
+
+        render(
+            <ImageGalleryExtended ref={rootRef} items={buildItems(9)} selectedId="p1" onChange={vi.fn()}>
+                <ImageGalleryExtended.Main ref={mainRef} />
+                <ImageGalleryExtended.Dots ref={dotsRef} />
+                <ImageGalleryExtended.Thumbnails ref={thumbnailsRef} />
+            </ImageGalleryExtended>,
+        );
+
+        expect(rootRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(mainRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(dotsRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(thumbnailsRef.current).toBeInstanceOf(HTMLDivElement);
+    });
+});
+
 describe("ImageGalleryExtended — Thumbnails (фокус следует за выбором)", () => {
     it("при навигации стрелками фокус переносится с прежней миниатюры на активную", () => {
         render(
@@ -369,13 +393,11 @@ describe("ImageGalleryExtended — Thumbnails (фокус следует за в
         );
 
         const thumbs = thumbButtons();
-        const root = screen.getByAltText("Photo 3").closest("[tabindex]") as HTMLElement;
-
         // Фокус на текущей активной миниатюре — как остаётся после клика мышью.
         thumbs[2].focus();
         expect(thumbs[2]).toHaveFocus();
 
-        fireEvent.keyDown(root, { key: "ArrowRight", code: "ArrowRight" });
+        fireEvent.keyDown(thumbs[2], { key: "ArrowRight", code: "ArrowRight" });
 
         // Фокус ушёл на новую активную миниатюру, на старой его не осталось
         // (иначе :focus-visible подсветил бы сразу две миниатюры).

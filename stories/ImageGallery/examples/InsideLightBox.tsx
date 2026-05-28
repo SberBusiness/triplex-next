@@ -21,7 +21,14 @@ export const InsideLightBox = () => {
 
     return (
         <>
-            <ImageGallery items={ITEMS} selectedId={selectedId} onChange={setSelectedId} onImageClick={handleOpen} />
+            <ImageGallery
+                items={ITEMS}
+                selectedId={selectedId}
+                onChange={setSelectedId}
+                onImageClick={handleOpen}
+                prevArrowAriaLabel="Предыдущее изображение"
+                nextArrowAriaLabel="Следующее изображение"
+            />
 
             {isOpen ? (
                 <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
@@ -33,6 +40,8 @@ export const InsideLightBox = () => {
                                 onChange={setSelectedId}
                                 showThumbnails={false}
                                 height="80vh"
+                                prevArrowAriaLabel="Предыдущее изображение"
+                                nextArrowAriaLabel="Следующее изображение"
                             />
                         </div>
                     </LightBox.Content>

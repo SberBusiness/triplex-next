@@ -7,4 +7,11 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     alt: `Photo ${i + 1}`,
 }));
 
-export const WithoutBlur = () => <ImageGallery items={ITEMS} withBlur={false} />;
+export const WithoutBlur = () => (
+    <ImageGallery
+        items={ITEMS}
+        withBlur={false}
+        prevArrowAriaLabel="Предыдущее изображение"
+        nextArrowAriaLabel="Следующее изображение"
+    />
+);

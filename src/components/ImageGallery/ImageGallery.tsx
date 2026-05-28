@@ -23,6 +23,10 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
             withBlur = true,
             showThumbnails = true,
             showDots = true,
+            prevArrowAriaLabel,
+            nextArrowAriaLabel,
+            getThumbnailAriaLabel,
+            getDotAriaLabel,
             ...rest
         },
         ref,
@@ -54,12 +58,14 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
                             <>
                                 <ImageGalleryExtended.Arrow
                                     direction={EImageGalleryArrowDirection.PREV}
+                                    aria-label={prevArrowAriaLabel}
                                     onClick={onPrev}
                                     disabled={isFirst}
                                     hidden={itemsCount <= 1}
                                 />
                                 <ImageGalleryExtended.Arrow
                                     direction={EImageGalleryArrowDirection.NEXT}
+                                    aria-label={nextArrowAriaLabel}
                                     onClick={onNext}
                                     disabled={isLast}
                                     hidden={itemsCount <= 1}
@@ -69,8 +75,14 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
                     </ImageGalleryExtended.Nav>
                 </ImageGalleryExtended.Main>
 
-                <MobileView fallback={showThumbnails ? <ImageGalleryExtended.Thumbnails /> : null}>
-                    {showDots ? <ImageGalleryExtended.Dots /> : null}
+                <MobileView
+                    fallback={
+                        showThumbnails ? (
+                            <ImageGalleryExtended.Thumbnails getThumbnailAriaLabel={getThumbnailAriaLabel} />
+                        ) : null
+                    }
+                >
+                    {showDots ? <ImageGalleryExtended.Dots getDotAriaLabel={getDotAriaLabel} /> : null}
                 </MobileView>
             </ImageGalleryExtended>
         );

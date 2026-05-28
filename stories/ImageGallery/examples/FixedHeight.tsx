@@ -7,4 +7,11 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     alt: `Photo ${i + 1}`,
 }));
 
-export const FixedHeight = () => <ImageGallery items={ITEMS} height={400} />;
+export const FixedHeight = () => (
+    <ImageGallery
+        items={ITEMS}
+        height={400}
+        prevArrowAriaLabel="Предыдущее изображение"
+        nextArrowAriaLabel="Следующее изображение"
+    />
+);

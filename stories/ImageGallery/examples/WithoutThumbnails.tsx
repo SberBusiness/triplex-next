@@ -7,4 +7,11 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     alt: `Photo ${i + 1}`,
 }));
 
-export const WithoutThumbnails = () => <ImageGallery items={ITEMS} showThumbnails={false} />;
+export const WithoutThumbnails = () => (
+    <ImageGallery
+        items={ITEMS}
+        showThumbnails={false}
+        prevArrowAriaLabel="Предыдущее изображение"
+        nextArrowAriaLabel="Следующее изображение"
+    />
+);

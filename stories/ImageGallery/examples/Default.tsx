@@ -7,4 +7,10 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     alt: `Photo ${i + 1}`,
 }));
 
-export const Default = () => <ImageGallery items={ITEMS} />;
+export const Default = () => (
+    <ImageGallery
+        items={ITEMS}
+        prevArrowAriaLabel="Предыдущее изображение"
+        nextArrowAriaLabel="Следующее изображение"
+    />
+);

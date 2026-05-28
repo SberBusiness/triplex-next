@@ -10,7 +10,7 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
 /**
  * Тот же сценарий, что и `InsideLightBox`, но в мобильном viewport.
  * На <768px лента миниатюр заменяется тиками-индикаторами и появляется
- * свайп влево/вправо через `SwipeableArea`.
+ * свайп влево/вправо.
  */
 export const InsideLightBoxMobile = () => {
     const [selectedId, setSelectedId] = useState("photo-1");
@@ -21,7 +21,14 @@ export const InsideLightBoxMobile = () => {
 
     return (
         <>
-            <ImageGallery items={ITEMS} selectedId={selectedId} onChange={setSelectedId} onImageClick={handleOpen} />
+            <ImageGallery
+                items={ITEMS}
+                selectedId={selectedId}
+                onChange={setSelectedId}
+                onImageClick={handleOpen}
+                prevArrowAriaLabel="Предыдущее изображение"
+                nextArrowAriaLabel="Следующее изображение"
+            />
 
             {isOpen ? (
                 <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened={false}>
@@ -32,6 +39,8 @@ export const InsideLightBoxMobile = () => {
                                 selectedId={selectedId}
                                 onChange={setSelectedId}
                                 height="70vh"
+                                prevArrowAriaLabel="Предыдущее изображение"
+                                nextArrowAriaLabel="Следующее изображение"
                             />
                         </div>
                     </LightBox.Content>

@@ -24,5 +24,7 @@ export const Playground = ({ height, withBlur, showThumbnails, showDots, default
         withBlur={withBlur}
         showThumbnails={showThumbnails}
         showDots={showDots}
+        prevArrowAriaLabel="Предыдущее изображение"
+        nextArrowAriaLabel="Следующее изображение"
     />
 );

@@ -16,13 +16,14 @@ export interface IImageGalleryExtendedThumbProps extends React.ButtonHTMLAttribu
  * на `<button>` — родитель собирает refs для автоцентровки активной миниатюры.
  */
 export const ImageGalleryExtendedThumb = React.forwardRef<HTMLButtonElement, IImageGalleryExtendedThumbProps>(
-    ({ item, isActive, className, ...rest }, ref) => (
+    ({ item, isActive, className, "aria-label": ariaLabel, ...rest }, ref) => (
         <button
             ref={ref}
             {...rest}
             type="button"
             className={clsx(styles.thumb, { [styles.active]: isActive }, className)}
-            aria-selected={isActive}
+            aria-current={isActive ? "true" : undefined}
+            aria-label={ariaLabel ?? item.alt}
         >
             <img src={item.thumbSrc ?? item.src} alt="" className={styles.image} loading="lazy" />
         </button>

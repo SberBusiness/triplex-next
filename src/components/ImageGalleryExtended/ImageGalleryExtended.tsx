@@ -40,7 +40,7 @@ interface IImageGalleryExtendedComposition {
  * Uncontrolled-режим и пресет раскладки см. в `ImageGallery`.
  */
 const ImageGalleryExtendedRoot = React.forwardRef<HTMLDivElement, IImageGalleryExtendedProps>(
-    ({ items, children, className, selectedId, onChange, onKeyDown, ...rest }, ref) => {
+    ({ items, children, className, selectedId, onChange, onKeyDown, tabIndex, ...rest }, ref) => {
         // Активный id резолвится в позицию; неизвестный/отсутствующий id → первый элемент.
         const rawIndex = items.findIndex((item) => item.id === selectedId);
         const currentIndex = rawIndex >= 0 ? rawIndex : 0;
@@ -60,6 +60,11 @@ const ImageGalleryExtendedRoot = React.forwardRef<HTMLDivElement, IImageGalleryE
         const handleNext = useCallback(() => handleSelect(currentIndex + 1), [currentIndex, handleSelect]);
 
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (event.target !== event.currentTarget) {
+                onKeyDown?.(event);
+                return;
+            }
+
             const key = event.code || event.keyCode;
 
             if (isKey(key, "ARROW_LEFT")) {
@@ -84,8 +89,8 @@ const ImageGalleryExtendedRoot = React.forwardRef<HTMLDivElement, IImageGalleryE
                 }}
             >
                 <div
-                    tabIndex={0}
                     {...rest}
+                    tabIndex={tabIndex ?? 0}
                     ref={ref}
                     className={clsx(styles.root, className)}
                     onKeyDown={handleKeyDown}

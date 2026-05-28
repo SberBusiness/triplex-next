@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from "react";
+import clsx from "clsx";
 import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
 import { ImageGalleryExtendedSlide } from "./ImageGalleryExtendedSlide";
 import styles from "../styles/ImageGalleryExtendedMain.module.less";
@@ -9,10 +10,13 @@ const SWIPE_MIN_DISTANCE = 50;
 const DIRECTION_LOCK_PX = 8;
 /** Коэффициент «резинки» при свайпе за пределы (на первом/последнем изображении). */
 const EDGE_RESISTANCE = 0.35;
-/** CSS-переход для доводки/возврата ленты. */
-const SLIDE_TRANSITION = "transform 0.3s ease-out";
 
 type SwipeDirection = "prev" | "next";
+
+interface IImageGalleryExtendedTrackStyle extends React.CSSProperties {
+    "--triplex-next-runtime-ImageGalleryExtended-Track_Shift": string;
+    "--triplex-next-runtime-ImageGalleryExtended-Track_Drag": string;
+}
 
 /** Свойства ленты свайпа. */
 export interface IImageGalleryExtendedSwipeTrackProps {
@@ -165,15 +169,16 @@ export const ImageGalleryExtendedSwipeTrack: React.FC<IImageGalleryExtendedSwipe
 
     // Базовое смещение центрирует текущий слайд; при доводке сдвигаемся к соседнему.
     const shift = committing === "next" ? currentSlot + 1 : committing === "prev" ? currentSlot - 1 : currentSlot;
-    const transform = committing
-        ? `translateX(calc(${-shift * 100}%))`
-        : `translateX(calc(${-shift * 100}% + ${dragX}px))`;
+    const trackStyle: IImageGalleryExtendedTrackStyle = {
+        "--triplex-next-runtime-ImageGalleryExtended-Track_Shift": `${-shift * 100}%`,
+        "--triplex-next-runtime-ImageGalleryExtended-Track_Drag": committing ? "0px" : `${dragX}px`,
+    };
 
     return (
         <div
             ref={setTrackRef}
-            className={styles.track}
-            style={{ transform, transition: animating ? SLIDE_TRANSITION : "none" }}
+            className={clsx(styles.track, { [styles.animating]: animating })}
+            style={trackStyle}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onTransitionEnd={handleTransitionEnd}

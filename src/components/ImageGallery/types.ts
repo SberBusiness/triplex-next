@@ -1,5 +1,9 @@
 import React from "react";
-import { IImageGalleryItemProps } from "../ImageGalleryExtended";
+import {
+    IImageGalleryDotLabelState,
+    IImageGalleryItemProps,
+    IImageGalleryThumbRenderState,
+} from "../ImageGalleryExtended";
 
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
@@ -21,4 +25,12 @@ export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivEle
     showThumbnails?: boolean;
     /** Показывать ли ряд тиков-индикаторов (мобильный). */
     showDots?: boolean;
+    /** Доступное имя кнопки перехода к предыдущему изображению. */
+    prevArrowAriaLabel: string;
+    /** Доступное имя кнопки перехода к следующему изображению. */
+    nextArrowAriaLabel: string;
+    /** Формирует доступное имя кнопки-миниатюры. Если не задано, используется `item.alt`. */
+    getThumbnailAriaLabel?: (state: Omit<IImageGalleryThumbRenderState, "onSelect" | "ref">) => string | undefined;
+    /** Формирует доступное имя кнопки тика. Если не задано, используется `item.alt`. */
+    getDotAriaLabel?: (state: IImageGalleryDotLabelState) => string | undefined;
 }

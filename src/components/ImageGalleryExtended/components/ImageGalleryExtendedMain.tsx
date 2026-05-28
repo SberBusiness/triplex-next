@@ -18,50 +18,48 @@ export interface IImageGalleryExtendedMainProps extends React.HTMLAttributes<HTM
     children?: React.ReactNode;
 }
 
+interface IImageGalleryExtendedMainStyle extends React.CSSProperties {
+    "--triplex-next-runtime-ImageGalleryExtended-Main_Height"?: string;
+}
+
 /**
  * Крупное изображение галереи: вьюпорт с изображением и накладываемым поверх
  * содержимым (`children` — например стрелки через `ImageGalleryExtended.Nav`).
  * Данные берёт из контекста `ImageGalleryExtended`. На десктопе — статичный слайд,
  * на мобильном (ширина < SM) — лента со свайпом prev/next (`ImageGalleryExtendedSwipeTrack`).
  */
-export const ImageGalleryExtendedMain: React.FC<IImageGalleryExtendedMainProps> = ({
-    height = "auto",
-    withBlur = false,
-    onImageClick,
-    className,
-    children,
-    ...rest
-}) => {
-    const { items, selectedIndex } = useContext(ImageGalleryExtendedContext);
+export const ImageGalleryExtendedMain = React.forwardRef<HTMLDivElement, IImageGalleryExtendedMainProps>(
+    ({ height = "auto", withBlur = false, onImageClick, className, children, style, ...rest }, ref) => {
+        const { items, selectedIndex } = useContext(ImageGalleryExtendedContext);
 
-    const item = items[selectedIndex];
+        const item = items[selectedIndex];
 
-    if (!item) {
-        return null;
-    }
+        if (!item) {
+            return null;
+        }
 
-    const inlineHeight = height === "auto" ? undefined : typeof height === "number" ? `${height}px` : height;
-    const handleImageClick = onImageClick ? () => onImageClick(selectedIndex) : undefined;
+        const heightValue = height === "auto" ? undefined : typeof height === "number" ? `${height}px` : height;
+        const mainStyle: IImageGalleryExtendedMainStyle | undefined = heightValue
+            ? { ...style, "--triplex-next-runtime-ImageGalleryExtended-Main_Height": heightValue }
+            : style;
+        const handleImageClick = onImageClick ? () => onImageClick(selectedIndex) : undefined;
 
-    return (
-        <div
-            {...rest}
-            className={clsx(styles.main, className)}
-            style={inlineHeight ? { height: inlineHeight } : undefined}
-        >
-            <MobileView
-                fallback={<ImageGalleryExtendedSlide item={item} withBlur={withBlur} onClick={handleImageClick} />}
-            >
-                {items.length > 1 ? (
-                    <ImageGalleryExtendedSwipeTrack withBlur={withBlur} onImageClick={onImageClick} />
-                ) : (
-                    <ImageGalleryExtendedSlide item={item} withBlur={withBlur} onClick={handleImageClick} />
-                )}
-            </MobileView>
+        return (
+            <div {...rest} ref={ref} className={clsx(styles.main, className)} style={mainStyle}>
+                <MobileView
+                    fallback={<ImageGalleryExtendedSlide item={item} withBlur={withBlur} onClick={handleImageClick} />}
+                >
+                    {items.length > 1 ? (
+                        <ImageGalleryExtendedSwipeTrack withBlur={withBlur} onImageClick={onImageClick} />
+                    ) : (
+                        <ImageGalleryExtendedSlide item={item} withBlur={withBlur} onClick={handleImageClick} />
+                    )}
+                </MobileView>
 
-            {children}
-        </div>
-    );
-};
+                {children}
+            </div>
+        );
+    },
+);
 
 ImageGalleryExtendedMain.displayName = "ImageGalleryExtendedMain";

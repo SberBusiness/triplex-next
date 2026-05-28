@@ -19,15 +19,20 @@ export interface IImageGalleryExtendedSlideProps {
  */
 export const ImageGalleryExtendedSlide: React.FC<IImageGalleryExtendedSlideProps> = ({ item, withBlur, onClick }) => (
     <div className={styles.slide}>
-        {withBlur && <div className={styles.blur} style={{ backgroundImage: `url(${item.src})` }} aria-hidden="true" />}
+        {withBlur && <img src={item.src} alt="" className={styles.blur} aria-hidden="true" />}
 
-        <img
-            src={item.src}
-            alt={item.alt ?? ""}
-            className={clsx(styles.image, { [styles.clickable]: onClick !== undefined })}
-            loading="lazy"
-            onClick={onClick}
-        />
+        {onClick ? (
+            <button type="button" className={styles.imageButton} onClick={onClick}>
+                <img
+                    src={item.src}
+                    alt={item.alt ?? ""}
+                    className={clsx(styles.image, styles.clickable)}
+                    loading="lazy"
+                />
+            </button>
+        ) : (
+            <img src={item.src} alt={item.alt ?? ""} className={styles.image} loading="lazy" />
+        )}
     </div>
 );
 

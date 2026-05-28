@@ -24,12 +24,14 @@ export const Playground = ({ withBlur, height }: IPlaygroundArgs) => {
                         <>
                             <ImageGalleryExtended.Arrow
                                 direction={EImageGalleryArrowDirection.PREV}
+                                aria-label="Предыдущее изображение"
                                 onClick={onPrev}
                                 disabled={isFirst}
                                 hidden={itemsCount <= 1}
                             />
                             <ImageGalleryExtended.Arrow
                                 direction={EImageGalleryArrowDirection.NEXT}
+                                aria-label="Следующее изображение"
                                 onClick={onNext}
                                 disabled={isLast}
                                 hidden={itemsCount <= 1}

@@ -2,38 +2,13 @@ import React, { useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mobileState, swipeRefStore } = vi.hoisted(() => ({
+const { mobileState } = vi.hoisted(() => ({
     mobileState: { isMobile: false },
-    swipeRefStore: { closeSwipe: vi.fn() },
 }));
 
 vi.mock("@sberbusiness/triplex-next/components/MobileView", () => ({
     MobileView: ({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) =>
         mobileState.isMobile ? <>{children}</> : <>{fallback}</>,
-}));
-
-vi.mock("@sberbusiness/triplex-next/components/SwipeableArea", () => ({
-    SwipeableArea: React.forwardRef<
-        unknown,
-        {
-            children: React.ReactNode;
-            onSwipeLeft?: () => void;
-            onSwipeRight?: () => void;
-        }
-    >(({ children, onSwipeLeft, onSwipeRight }, ref) => {
-        React.useImperativeHandle(ref, () => ({
-            closeSwipe: swipeRefStore.closeSwipe,
-            swipeLeft: vi.fn(),
-            swipeRight: vi.fn(),
-        }));
-        return (
-            <div data-testid="swipeable-area">
-                <button type="button" data-testid="swipe-left" onClick={onSwipeLeft} />
-                <button type="button" data-testid="swipe-right" onClick={onSwipeRight} />
-                {children}
-            </div>
-        );
-    }),
 }));
 
 import { ImageGalleryExtended } from "../ImageGalleryExtended";
@@ -76,7 +51,6 @@ const thumbButtons = () => screen.queryAllByRole("button").filter((el) => el.que
 
 beforeEach(() => {
     mobileState.isMobile = false;
-    swipeRefStore.closeSwipe.mockClear();
 });
 
 describe("ImageGalleryExtended — состав через контекст", () => {
@@ -201,6 +175,70 @@ describe("ImageGalleryExtended — Main", () => {
 
         fireEvent.click(screen.getByAltText("Photo 5"));
         expect(onImageClick).toHaveBeenCalledWith(4);
+    });
+});
+
+describe("ImageGalleryExtended — Main (свайп на мобильном)", () => {
+    beforeEach(() => {
+        mobileState.isMobile = true;
+    });
+
+    /** jsdom не реализует TouchEvent — диспатчим обычный Event с touch-полями. */
+    const fireSwipe = (card: HTMLElement, fromX: number, toX: number, deltaY = 0) => {
+        const start = new Event("touchstart", { bubbles: true, cancelable: true });
+        Object.assign(start, { touches: [{ clientX: fromX, clientY: 100 }] });
+        fireEvent(card, start);
+
+        const end = new Event("touchend", { bubbles: true, cancelable: true });
+        Object.assign(end, { changedTouches: [{ clientX: toX, clientY: 100 + deltaY }] });
+        fireEvent(card, end);
+    };
+
+    const renderMain = (onChange: (id: string) => void) => {
+        render(
+            <ControlledGallery items={buildItems(9)} initialId="p3" onChange={onChange}>
+                <ImageGalleryExtended.Main />
+            </ControlledGallery>,
+        );
+
+        return screen.getByAltText("Photo 3").parentElement as HTMLElement;
+    };
+
+    it("свайп влево переключает на следующее изображение", () => {
+        const onChange = vi.fn();
+        const card = renderMain(onChange);
+
+        fireSwipe(card, 300, 200);
+
+        expect(onChange).toHaveBeenCalledWith("p4");
+    });
+
+    it("свайп вправо переключает на предыдущее изображение", () => {
+        const onChange = vi.fn();
+        const card = renderMain(onChange);
+
+        fireSwipe(card, 200, 300);
+
+        expect(onChange).toHaveBeenCalledWith("p2");
+    });
+
+    it("вертикальный жест не переключает изображение", () => {
+        const onChange = vi.fn();
+        const card = renderMain(onChange);
+
+        // Малое горизонтальное смещение при большом вертикальном — это скролл.
+        fireSwipe(card, 300, 285, 120);
+
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("короткий горизонтальный жест ниже порога игнорируется", () => {
+        const onChange = vi.fn();
+        const card = renderMain(onChange);
+
+        fireSwipe(card, 300, 280);
+
+        expect(onChange).not.toHaveBeenCalled();
     });
 });
 

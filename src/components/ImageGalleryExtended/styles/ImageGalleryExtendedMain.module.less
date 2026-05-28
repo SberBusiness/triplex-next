@@ -6,6 +6,8 @@
     height: 504px;
     border-radius: 16px;
     overflow: hidden;
+    // Горизонтальный жест отдаём свайп-навигации, вертикальный — скроллу страницы.
+    touch-action: pan-y;
 
     &:hover .arrow {
         opacity: 1;
@@ -76,13 +78,6 @@
     &.next {
         right: 16px;
     }
-}
-
-.swipeIndicator {
-    width: 1px;
-    height: 100%;
-    opacity: 0;
-    pointer-events: none;
 }
 
 @media (max-width: @screen-sm-max) {

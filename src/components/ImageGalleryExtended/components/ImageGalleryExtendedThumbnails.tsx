@@ -39,9 +39,6 @@ const renderDefaultThumb = ({ item, isActive, ariaLabel, onSelect, ref }: IImage
     <ImageGalleryExtendedThumb ref={ref} item={item} isActive={isActive} aria-label={ariaLabel} onClick={onSelect} />
 );
 
-/** Отступ при автоцентровании миниатюры от края ленты. */
-const SCROLL_PADDING_PX = 16;
-
 /**
  * Горизонтальная лента миниатюр с нативным скроллом и автоцентровкой активной миниатюры.
  * Данные берёт из контекста `ImageGalleryExtended`.
@@ -75,11 +72,11 @@ export const ImageGalleryExtendedThumbnails = React.forwardRef<HTMLDivElement, I
             const carouselRect = carousel.getBoundingClientRect();
             const thumbRect = thumb.getBoundingClientRect();
 
-            if (thumbRect.left < carouselRect.left) {
-                scrollSmoothHorizontally(carousel, Math.floor(thumbRect.left - carouselRect.left - SCROLL_PADDING_PX));
-            } else if (thumbRect.right > carouselRect.right) {
-                scrollSmoothHorizontally(carousel, Math.ceil(thumbRect.right - carouselRect.right + SCROLL_PADDING_PX));
-            }
+            // Центрируем активную миниатюру в видимой области ленты. У краёв браузер
+            // сам ограничит scrollLeft, поэтому первая/последняя прижмутся к краю.
+            const offsetToCenter = thumbRect.left + thumbRect.width / 2 - (carouselRect.left + carouselRect.width / 2);
+
+            scrollSmoothHorizontally(carousel, Math.round(offsetToCenter));
         }, [selectedIndex]);
 
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

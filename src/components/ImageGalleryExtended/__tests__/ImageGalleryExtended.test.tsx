@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mobileState } = vi.hoisted(() => ({
+const { mobileState, scrollSpy } = vi.hoisted(() => ({
     mobileState: { isMobile: false },
+    scrollSpy: vi.fn(),
 }));
 
 vi.mock("@sberbusiness/triplex-next/components/MobileView", () => ({
     MobileView: ({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) =>
         mobileState.isMobile ? <>{children}</> : <>{fallback}</>,
+}));
+
+vi.mock("@sberbusiness/triplex-next/utils/scroll", () => ({
+    scrollSmoothHorizontally: scrollSpy,
 }));
 
 import { ImageGalleryExtended } from "../ImageGalleryExtended";
@@ -51,6 +56,7 @@ const thumbButtons = () => screen.queryAllByRole("button").filter((el) => el.que
 
 beforeEach(() => {
     mobileState.isMobile = false;
+    scrollSpy.mockClear();
 });
 
 describe("ImageGalleryExtended — состав через контекст", () => {
@@ -420,5 +426,39 @@ describe("ImageGalleryExtended — Thumbnails (фокус следует за в
 
         expect(screen.getByAltText("Photo 4")).toBeInTheDocument();
         thumbButtons().forEach((btn) => expect(btn).not.toHaveFocus());
+    });
+});
+
+describe("ImageGalleryExtended — Thumbnails (центрирование активной)", () => {
+    /** Подменяет getBoundingClientRect элемента фиксированной геометрией по горизонтали. */
+    const mockRect = (element: HTMLElement, left: number, width: number) => {
+        element.getBoundingClientRect = vi.fn(
+            () => ({ left, width, right: left + width, top: 0, bottom: 0, height: 0, x: left, y: 0 }) as DOMRect,
+        );
+    };
+
+    it("при смене выбора лента скроллится так, чтобы центр активной миниатюры совпал с центром ленты", () => {
+        const carouselRef = React.createRef<HTMLDivElement>();
+
+        render(
+            <ControlledGallery items={buildItems(9)} initialId="p1">
+                <ImageGalleryExtended.Main />
+                <ImageGalleryExtended.Thumbnails ref={carouselRef} />
+            </ControlledGallery>,
+        );
+
+        const carousel = carouselRef.current!;
+        const thumbs = thumbButtons();
+
+        // Видимая область ленты: центр на 150px. Активная миниатюра справа за кадром,
+        // её центр на 425px → нужно проскроллить на 425 - 150 = 275px.
+        mockRect(carousel, 0, 300);
+        mockRect(thumbs[4], 400, 50);
+
+        // Эффект на mount уже отработал на нулевых rect'ах — очищаем перед проверкой.
+        scrollSpy.mockClear();
+        fireEvent.click(thumbs[4]);
+
+        expect(scrollSpy).toHaveBeenCalledWith(carousel, 275);
     });
 });

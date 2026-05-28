@@ -9,29 +9,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **ImageGalleryExtended**
 
 - Базовый (controlled) декларативный компонент галереи, на котором построен `ImageGallery`.
-- Изображения задаются массивом `items` (`{ id, src, alt?, thumbSrc? }`) и раздаются составным частям через контекст. Раскладка собирается из compound-частей-children в произвольном порядке.
-- Compound-состав: `.Main` (`height?`, `withBlur?`, `onImageClick?`, `children`), `.Nav`, `.Arrow`, `.Thumbnails`, `.Thumb`, `.Dots`.
-- Стрелки переключения вынесены из `.Main` в отдельные части: `.Nav` — провайдер состояния навигации через render-функцию (`onPrev`/`onNext`/`isFirst`/`isLast`/`selectedIndex`/`itemsCount`), `.Arrow` (`direction: EImageGalleryArrowDirection`) — презентационная кнопка-стрелка. Размещаются как children `.Main` (позиционируются поверх картинки); потребитель может отрисовать стандартные `.Arrow` или произвольные свои элементы.
-- `.Thumbnails` принимает render-функцию миниатюры (`{ item, index, isActive, onSelect, ref }`); по умолчанию рисует `.Thumb`. Проброс `ref` сохраняет автоцентровку активной миниатюры.
-- Управление только controlled: `selectedId` + `onChange(id)` обязательны (активное изображение адресуется по `id` элемента). Стрелочная навигация (`ArrowLeft`/`ArrowRight`) — на контейнере.
 - Позволяет собирать нестандартные раскладки (например, только крупная картинка, миниатюры сверху, кастомные миниатюры или панель навигации вместо стрелок).
 
 **ImageGallery**
 
-- Новый компонент `ImageGallery`: изображения задаются массивом `items` (`{ id, src, alt?, thumbSrc? }`). Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки (`Main` + миниатюры/тики) и добавляет uncontrolled-режим.
-- Поддерживает controlled (`selectedId` + `onChange(id)`) и uncontrolled (`defaultId`) режимы — активное изображение адресуется по `id`.
-- На десктопе под крупной картинкой — нативная горизонтальная лента миниатюр с автоцентровкой активной.
-- На мобильном (`<768px`) лента заменяется кликабельными тиками-индикаторами (максимум 4, картинки распределяются по бакетам равного размера), а крупная картинка поддерживает свайп prev/next.
-- Высота: `height?: 'auto' | number | string`. В режиме `'auto'` — `504px` на десктопе и `264px` на мобильном.
-- Блюр-слой по краям крупной картинки (`withBlur` по умолчанию `true`), контейнер скруглён через `border-radius` + `overflow:hidden`.
-- Клавиатура: `ArrowLeft` / `ArrowRight` при фокусе на контейнере галереи или миниатюре.
-- Стрелки настраиваются через `prevArrowProps` / `nextArrowProps`; компонент сам задаёт направление, обработчик, `disabled` и `hidden`.
-- Лента миниатюр и ряд тиков настраиваются через `thumbnailsProps` / `dotsProps`.
-- `onImageClick(index)` — точка интеграции для родительского LightBox: один и тот же `ImageGallery` можно повторно отрендерить внутри лайтбокса с другими настройками (см. story `InsideLightBox`).
-- Дизайн-токены: `ImageGallery-Container_Background_Default`, `Arrow_Background_Default/Hover/Disabled`, `ThumbCarouselButton_Background_Default`, `Dot_Background_Default/Hover/Active`, `Accent_Color`.
+- Компонент галереи. Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки (`Main` + миниатюры/тики) и добавляет uncontrolled-режим.
 
 <Heading>Изменения</Heading>
 
 **SwipeableArea**
 
-- Добавлены backwards-compatible props `onSwipeLeft?` / `onSwipeRight?` — колбэки завершённого свайпа (срабатывают только когда дельта превысила порог `SWIPE_MIN_DISTANCE`). Используются в `ImageGallery` для переключения картинки по жесту.
+- Добавлены backwards-compatible props `onSwipeLeft?` / `onSwipeRight?` — колбэки завершённого свайпа (срабатывают только когда дельта превысила порог `SWIPE_MIN_DISTANCE`).

@@ -11,3 +11,4 @@ export * from "./ManyThumbnails";
 export { default as ManyThumbnailsSource } from "./ManyThumbnails?raw";
 export * from "./OpenFromAvatar";
 export { default as OpenFromAvatarSource } from "./OpenFromAvatar?raw";
+export * from "./VisualTests";

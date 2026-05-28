@@ -62,7 +62,7 @@ export const ImageGalleryExtendedThumbnails = React.forwardRef<HTMLDivElement, I
             // Если фокус остался на ранее выбранной миниатюре (клик мышью + навигация стрелками),
             // переносим его на активную — иначе кольцо :focus-visible осталось бы на старой
             // миниатюре одновременно с кольцом .active новой.
-            const focusedThumb = thumbRefs.current.find((ref) => ref && ref === document.activeElement);
+            const focusedThumb = thumbRefs.current.find((thumbEl) => thumbEl && thumbEl === document.activeElement);
             if (focusedThumb && focusedThumb !== thumb) {
                 thumb.focus({ preventScroll: true });
             }

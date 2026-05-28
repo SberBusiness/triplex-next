@@ -17,6 +17,8 @@ import {
     ManyThumbnailsSource,
     OpenFromAvatar as OpenFromAvatarRender,
     OpenFromAvatarSource,
+    VisualTestsArrows as VisualTestsArrowsRender,
+    VisualTestsDots as VisualTestsDotsRender,
 } from "./examples";
 
 export default {
@@ -132,4 +134,34 @@ export const OpenFromAvatar: StoryObj<typeof ImageGalleryExtended> = {
         },
     },
     render: OpenFromAvatarRender,
+};
+
+/**
+ * Скриншот-тест стрелок навигации поверх крупной картинки: слева — первое
+ * изображение (стрелка «назад» disabled), справа — последнее (стрелка «вперёд»
+ * disabled). Фиксирует disabled-состояния стрелок на границах диапазона.
+ */
+export const VisualTestsArrows: StoryObj<typeof ImageGalleryExtended> = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsArrowsRender,
+};
+
+/** Скриншот-тест тиков-индикаторов (мобильный preset): активный тик и обычные. */
+export const VisualTestsDots: StoryObj<typeof ImageGalleryExtended> = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsDotsRender,
 };

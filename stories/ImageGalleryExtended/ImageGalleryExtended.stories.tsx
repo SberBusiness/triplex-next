@@ -13,6 +13,8 @@ import {
     WithDotsSource,
     CustomLayout as CustomLayoutRender,
     CustomLayoutSource,
+    ManyThumbnails as ManyThumbnailsRender,
+    ManyThumbnailsSource,
 } from "./examples";
 
 export default {
@@ -108,4 +110,14 @@ export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
         },
     },
     render: CustomLayoutRender,
+};
+
+export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
+    parameters: {
+        docs: {
+            controls: { disable: true },
+            source: { code: ManyThumbnailsSource, language: "tsx" },
+        },
+    },
+    render: ManyThumbnailsRender,
 };

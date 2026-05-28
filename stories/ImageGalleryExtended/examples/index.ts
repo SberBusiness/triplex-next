@@ -7,3 +7,5 @@ export * from "./WithDots";
 export { default as WithDotsSource } from "./WithDots?raw";
 export * from "./CustomLayout";
 export { default as CustomLayoutSource } from "./CustomLayout?raw";
+export * from "./ManyThumbnails";
+export { default as ManyThumbnailsSource } from "./ManyThumbnails?raw";

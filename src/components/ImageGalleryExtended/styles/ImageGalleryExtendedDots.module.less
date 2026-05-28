@@ -4,13 +4,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
-    padding: 8px 0;
+    gap: 8px;
 }
 
 .dot {
-    width: 32px;
-    height: 4px;
+    width: 16px;
+    height: 3px;
     padding: 0;
     margin: 0;
     border: none;
@@ -18,7 +17,7 @@
     background: var(--triplex-next-ImageGallery-Dot_Background_Default);
     cursor: pointer;
     outline: none;
-    transition: background 0.15s ease-in-out;
+    transition: background 0.15s ease-in-out, width 0.15s ease-in-out;
 
     &:hover {
         background: var(--triplex-next-ImageGallery-Dot_Background_Hover);
@@ -29,6 +28,7 @@
     }
 
     &.active {
+        width: 24px;
         background: var(--triplex-next-ImageGallery-Dot_Background_Active);
     }
 }

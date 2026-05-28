@@ -1,11 +1,16 @@
 @import "src/styles/style";
 
 .thumbnails {
-    position: relative;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
 
-    &:hover .button {
-        opacity: 1;
-        pointer-events: auto;
+    // Hide scrollbar
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE + Edge
+
+    &::-webkit-scrollbar {
+        display: none; // Chrome
     }
 }
 
@@ -41,30 +46,3 @@
     }
 }
 
-.button {
-    position: absolute;
-    top: 50%;
-    z-index: 1;
-    transform: translateY(-50%);
-    background: var(--triplex-next-ImageGallery-ThumbCarouselButton_Background_Default);
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease-in-out;
-
-    &.prev {
-        left: 0;
-    }
-
-    &.next {
-        right: 0;
-    }
-}
-
-@media (max-width: @screen-sm-max) {
-    .button {
-        display: none;
-    }
-}

@@ -1,8 +1,5 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import clsx from "clsx";
-import { CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
-import { ButtonIcon } from "../../Button/ButtonIcon";
-import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../../CarouselExtended/CarouselExtended";
 import { scrollSmoothHorizontally } from "../../../utils/scroll";
 import { IImageGalleryItemProps } from "../types";
 import { ImageGalleryExtendedContext } from "../ImageGalleryExtendedContext";
@@ -37,13 +34,11 @@ const renderDefaultThumb = ({ item, isActive, onSelect, ref }: IImageGalleryThum
     <ImageGalleryExtendedThumb ref={ref} item={item} isActive={isActive} onClick={onSelect} />
 );
 
-/** Шаг прокрутки карусели миниатюр (доля видимой ширины). */
-const SCROLL_STEP_RATIO = 0.5;
-/** Отступ при автоцентровании миниатюры от края карусели. */
+/** Отступ при автоцентровании миниатюры от края ленты. */
 const SCROLL_PADDING_PX = 16;
 
 /**
- * Лента миниатюр на `CarouselExtended` с автоцентровкой активной миниатюры.
+ * Горизонтальная лента миниатюр с нативным скроллом и автоцентровкой активной миниатюры.
  * Данные берёт из контекста `ImageGalleryExtended`.
  */
 export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumbnailsProps> = ({
@@ -55,44 +50,6 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
     const renderThumb = children ?? renderDefaultThumb;
     const carouselRef = useRef<HTMLDivElement>(null);
     const thumbRefs = useRef<Array<HTMLButtonElement | null>>([]);
-    const [scrollStep, setScrollStep] = useState(0);
-
-    useEffect(() => {
-        const carousel = carouselRef.current;
-
-        if (!carousel) {
-            return;
-        }
-
-        const updateStep = () => setScrollStep(carousel.clientWidth * SCROLL_STEP_RATIO);
-
-        updateStep();
-
-        const resizeObserver = new ResizeObserver(updateStep);
-        resizeObserver.observe(carousel);
-
-        return () => resizeObserver.disconnect();
-    }, []);
-
-    const renderPrevButton = useCallback(
-        ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
-            hidden ? null : (
-                <ButtonIcon className={clsx(styles.button, styles.prev)} tabIndex={-1} {...rest}>
-                    <CaretleftStrokeSrvIcon20 paletteIndex={5} />
-                </ButtonIcon>
-            ),
-        [],
-    );
-
-    const renderNextButton = useCallback(
-        ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
-            hidden ? null : (
-                <ButtonIcon className={clsx(styles.button, styles.next)} tabIndex={-1} {...rest}>
-                    <CaretrightStrokeSrvIcon20 paletteIndex={5} />
-                </ButtonIcon>
-            ),
-        [],
-    );
 
     useEffect(() => {
         const carousel = carouselRef.current;
@@ -121,15 +78,7 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
     }, [selectedIndex]);
 
     return (
-        <CarouselExtended
-            ref={carouselRef}
-            buttonPrev={renderPrevButton}
-            buttonNext={renderNextButton}
-            stepPrev={scrollStep}
-            stepNext={scrollStep}
-            {...rest}
-            className={clsx(styles.thumbnails, className)}
-        >
+        <div ref={carouselRef} {...rest} className={clsx(styles.thumbnails, className)}>
             {/* Колбэк-ref ниже выполняется на этапе commit (не во время рендера),
                 но правило не отслеживает его через render-функцию renderThumb. */}
             {/* eslint-disable-next-line react-hooks/refs */}
@@ -146,7 +95,7 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
                     })}
                 </React.Fragment>
             ))}
-        </CarouselExtended>
+        </div>
     );
 };
 

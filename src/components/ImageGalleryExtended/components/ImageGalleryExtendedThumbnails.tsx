@@ -102,6 +102,14 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
             return;
         }
 
+        // Если фокус остался на ранее выбранной миниатюре (клик мышью + навигация стрелками),
+        // переносим его на активную — иначе кольцо :focus-visible осталось бы на старой
+        // миниатюре одновременно с кольцом .active новой.
+        const focusedThumb = thumbRefs.current.find((ref) => ref && ref === document.activeElement);
+        if (focusedThumb && focusedThumb !== thumb) {
+            thumb.focus({ preventScroll: true });
+        }
+
         const carouselRect = carousel.getBoundingClientRect();
         const thumbRect = thumb.getBoundingClientRect();
 

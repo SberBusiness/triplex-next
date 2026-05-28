@@ -312,3 +312,45 @@ describe("ImageGalleryExtended — Thumbnails (render-функция)", () => {
         expect(thumbButtons()).toHaveLength(9);
     });
 });
+
+describe("ImageGalleryExtended — Thumbnails (фокус следует за выбором)", () => {
+    it("при навигации стрелками фокус переносится с прежней миниатюры на активную", () => {
+        render(
+            <ControlledGallery items={buildItems(9)} initialId="p3">
+                <ImageGalleryExtended.Main />
+                <ImageGalleryExtended.Thumbnails />
+            </ControlledGallery>,
+        );
+
+        const thumbs = thumbButtons();
+        const root = screen.getByAltText("Photo 3").closest("[tabindex]") as HTMLElement;
+
+        // Фокус на текущей активной миниатюре — как остаётся после клика мышью.
+        thumbs[2].focus();
+        expect(thumbs[2]).toHaveFocus();
+
+        fireEvent.keyDown(root, { key: "ArrowRight", code: "ArrowRight" });
+
+        // Фокус ушёл на новую активную миниатюру, на старой его не осталось
+        // (иначе :focus-visible подсветил бы сразу две миниатюры).
+        expect(thumbButtons()[3]).toHaveFocus();
+        expect(thumbButtons()[2]).not.toHaveFocus();
+    });
+
+    it("навигация стрелками не уводит фокус в ленту, если он не на миниатюре", () => {
+        render(
+            <ControlledGallery items={buildItems(9)} initialId="p3">
+                <ImageGalleryExtended.Main />
+                <ImageGalleryExtended.Thumbnails />
+            </ControlledGallery>,
+        );
+
+        const root = screen.getByAltText("Photo 3").closest("[tabindex]") as HTMLElement;
+        root.focus();
+
+        fireEvent.keyDown(root, { key: "ArrowRight", code: "ArrowRight" });
+
+        expect(screen.getByAltText("Photo 4")).toBeInTheDocument();
+        thumbButtons().forEach((btn) => expect(btn).not.toHaveFocus());
+    });
+});

@@ -3,49 +3,42 @@
 .thumbnails {
     position: relative;
 
-    &:hover {
-        .button {
-            opacity: 1;
-            pointer-events: auto;
-        }
+    &:hover .button {
+        opacity: 1;
+        pointer-events: auto;
     }
 }
 
 .thumb {
     flex: 0 0 auto;
-    width: 96px;
-    height: 64px;
+    display: block;
     margin: 0;
-    padding: 0;
-    border: none;
-    border-radius: 8px;
-    overflow: hidden;
+    padding: 2px;
+    border: 2px solid transparent;
+    border-radius: 12px;
     background: transparent;
     cursor: pointer;
     outline: none;
-    box-shadow: 0 0 0 0 transparent;
-    transition: box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out;
 
     & + & {
         margin-left: 8px;
     }
 
-    &:focus-visible {
-        box-shadow: 0 0 0 2px var(--triplex-next-ImageGallery-Accent_Color);
+    &:focus-visible,
+    &.active {
+        border-color: var(--triplex-next-ImageGallery-Accent_Color);
     }
-}
 
-.active {
-    box-shadow: 0 0 0 2px var(--triplex-next-ImageGallery-Accent_Color);
-}
-
-.image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-    user-select: none;
+    .image {
+        display: block;
+        width: 72px;
+        height: 72px;
+        border-radius: 8px;
+        object-fit: cover;
+        pointer-events: none;
+        user-select: none;
+    }
 }
 
 .button {
@@ -60,14 +53,14 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease-in-out;
-}
 
-.prev {
-    left: 0;
-}
+    &.prev {
+        left: 0;
+    }
 
-.next {
-    right: 0;
+    &.next {
+        right: 0;
+    }
 }
 
 @media (max-width: @screen-sm-max) {

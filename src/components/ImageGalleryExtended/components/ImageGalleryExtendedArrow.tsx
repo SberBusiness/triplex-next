@@ -1,7 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { IconWrapper } from "../../IconWrapper";
 import { EImageGalleryArrowDirection } from "../enums";
 import styles from "../styles/ImageGalleryExtendedMain.module.less";
 
@@ -33,18 +32,16 @@ export const ImageGalleryExtendedArrow = React.forwardRef<HTMLButtonElement, IIm
             direction === EImageGalleryArrowDirection.PREV ? CaretleftStrokeSrvIcon24 : CaretrightStrokeSrvIcon24;
 
         return (
-            <IconWrapper disabled={disabled}>
-                <button
-                    type="button"
-                    ref={ref}
-                    disabled={disabled}
-                    {...rest}
-                    aria-label={ariaLabel}
-                    className={clsx(styles.arrow, DIRECTION_CLASS[direction], className)}
-                >
-                    <Icon paletteIndex={7} />
-                </button>
-            </IconWrapper>
+            <button
+                type="button"
+                ref={ref}
+                disabled={disabled}
+                {...rest}
+                aria-label={ariaLabel}
+                className={clsx(styles.arrow, DIRECTION_CLASS[direction], "hoverable", className)}
+            >
+                <Icon paletteIndex={7} />
+            </button>
         );
     },
 );

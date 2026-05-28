@@ -19,8 +19,6 @@ import {
     WithoutBlurSource,
     InsideLightBox as InsideLightBoxRender,
     InsideLightBoxSource,
-    InsideLightBoxMobile as InsideLightBoxMobileRender,
-    InsideLightBoxMobileSource,
 } from "./examples";
 
 export default {
@@ -200,16 +198,4 @@ export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
         },
     },
     render: InsideLightBoxRender,
-};
-
-export const InsideLightBoxMobileStory: StoryObj<typeof ImageGallery> = {
-    name: "InsideLightBoxMobile",
-    parameters: {
-        viewport: { defaultViewport: "XS" },
-        docs: {
-            controls: { disable: true },
-            source: { code: InsideLightBoxMobileSource, language: "tsx" },
-        },
-    },
-    render: InsideLightBoxMobileRender,
 };

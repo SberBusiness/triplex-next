@@ -132,8 +132,8 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
 export const Default: StoryObj<typeof ImageGallery> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: DefaultSource, language: "tsx" },
         },
     },
@@ -142,8 +142,8 @@ export const Default: StoryObj<typeof ImageGallery> = {
 
 export const FixedHeight: StoryObj<typeof ImageGallery> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: FixedHeightSource, language: "tsx" },
         },
     },
@@ -152,8 +152,8 @@ export const FixedHeight: StoryObj<typeof ImageGallery> = {
 
 export const WithoutThumbnails: StoryObj<typeof ImageGallery> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: WithoutThumbnailsSource, language: "tsx" },
         },
     },
@@ -162,9 +162,9 @@ export const WithoutThumbnails: StoryObj<typeof ImageGallery> = {
 
 export const WithDots: StoryObj<typeof ImageGallery> = {
     parameters: {
+        controls: { disable: true },
         viewport: { defaultViewport: "XS" },
         docs: {
-            controls: { disable: true },
             source: { code: WithDotsSource, language: "tsx" },
         },
     },
@@ -173,8 +173,8 @@ export const WithDots: StoryObj<typeof ImageGallery> = {
 
 export const PropsForwarding: StoryObj<typeof ImageGallery> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: PropsForwardingSource, language: "tsx" },
         },
     },
@@ -183,8 +183,8 @@ export const PropsForwarding: StoryObj<typeof ImageGallery> = {
 
 export const WithoutBlur: StoryObj<typeof ImageGallery> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: WithoutBlurSource, language: "tsx" },
         },
     },
@@ -194,8 +194,8 @@ export const WithoutBlur: StoryObj<typeof ImageGallery> = {
 export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
     name: "InsideLightBox",
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: InsideLightBoxSource, language: "tsx" },
         },
     },

@@ -143,7 +143,7 @@ import { Button } from "../Button";
 
 Паттерн runtime CSS-переменных:
 
-```
+```text
 --triplex-next-runtime-{Component}-{Element}_{Property}
 ```
 

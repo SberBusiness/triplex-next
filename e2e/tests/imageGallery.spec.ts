@@ -9,14 +9,14 @@ test.describe("ImageGallery", () => {
         test("click on a thumbnail switches the main image", async ({ page }) => {
             // Крупная картинка — единственный <img> с alt; миниатюры рендерятся с alt="".
             const mainImage = page.getByRole("img");
-            // Миниатюры — единственные кнопки с aria-selected на десктопе.
-            const thumbs = page.locator("button[aria-selected]");
+            // Миниатюры — кнопки с aria-label вида "Photo N" (на десктопе вместо тиков).
+            const thumbs = page.getByRole("button", { name: /^Photo \d+$/ });
 
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");
 
             await thumbs.nth(4).click();
             await expect(mainImage).toHaveAttribute("alt", "Photo 5");
-            await expect(thumbs.nth(4)).toHaveAttribute("aria-selected", "true");
+            await expect(thumbs.nth(4)).toHaveAttribute("aria-current", "true");
         });
 
         test("ArrowRight on the focused container switches the main image", async ({ page }) => {
@@ -59,7 +59,8 @@ test.describe("ImageGallery", () => {
 
         test("dots row is visible and click on a tick switches the main image", async ({ page }) => {
             const mainImage = page.getByRole("img");
-            const dots = page.getByRole("tab");
+            // Тики-индикаторы — кнопки с aria-label вида "Photo N" (на мобильном вместо миниатюр).
+            const dots = page.getByRole("button", { name: /^Photo \d+$/ });
 
             await expect(dots).toHaveCount(4);
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");
@@ -67,7 +68,7 @@ test.describe("ImageGallery", () => {
             // 9 items, bucketSize=2: тик 2 → index 4 → Photo 5
             await dots.nth(2).click();
             await expect(mainImage).toHaveAttribute("alt", "Photo 5");
-            await expect(dots.nth(2)).toHaveAttribute("aria-selected", "true");
+            await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
         });
     });
 });

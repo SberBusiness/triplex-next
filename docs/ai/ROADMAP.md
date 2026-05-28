@@ -120,7 +120,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Header | ⬜ | ⬜ | ⬜ |
 | HelpBox | ✅ | ✅ | ⬜ |
 | IconWrapper | ⬜ | ✅ | ⬜ |
-| ImageGallery | ✅ | ✅| ✅ |
+| ImageGallery | ✅ | ✅ | ✅ |
 | ImageGalleryExtended | ✅ | ✅ | ✅ |
 | Island | ⬜ | ✅ | ⬜ |
 | IslandAccordion | ⬜ | ✅ | ⬜ |
@@ -192,19 +192,6 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | UnorderedList | ⬜ | ⬜ | ⬜ |
 | UploadZone | ⬜ | ⬜ | ⬜ |
 | WindowResizeListener | ⬜ | ⬜ | ⬜ |
-
-[^igx-baseline]: ImageGalleryExtended — stories в modern pattern готовы (Default,
-MainOnly, WithDots, CustomLayout, ManyThumbnails, OpenFromAvatar + VisualTests),
-но baseline-скриншоты ещё не сгенерированы. Ждёт прогона
-`GitHub Actions → Update Visual Snapshots` на ветке. После коммита baseline'ов
-от workflow — заменить `⏳` на `✅`.
-
-[^ig-baseline]: ImageGallery — stories в modern pattern готовы (Default,
-FixedHeight, WithoutThumbnails, WithDots, PropsForwarding, WithoutBlur,
-InsideLightBox + VisualTestsArrows/VisualTestsDots), но baseline-скриншоты ещё не
-сгенерированы (для ImageGallery их нет вовсе). Ждёт прогона
-`GitHub Actions → Update Visual Snapshots` на ветке. После коммита baseline'ов
-от workflow — заменить `⏳` на `✅`.
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

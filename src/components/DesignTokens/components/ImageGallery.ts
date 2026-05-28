@@ -10,7 +10,6 @@ export const designTokensComponentsImageGalleryKeys = [
     "Arrow_BorderColor_Hover",
     "Arrow_BorderColor_Active",
     "Arrow_BorderColor_Disabled",
-    "ThumbCarouselButton_Background_Default",
     "Dot_Background_Default",
     "Dot_Background_Hover",
     "Dot_Background_Active",
@@ -41,7 +40,6 @@ export const ImageGallery_Tokens: TDesignTokensComponentsImageGalleryValues = {
     Arrow_BorderColor_Hover: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Hover)
     Arrow_BorderColor_Active: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Active)
     Arrow_BorderColor_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Disabled)
-    ThumbCarouselButton_Background_Default: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-ImageGallery-ThumbCarouselButton_Background_Default)
     Dot_Background_Default: [{ ref: "ColorDarkNeutralAlpha.80" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-ImageGallery-Dot_Background_Default)
     Dot_Background_Hover: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.60" }], // var(--triplex-next-ImageGallery-Dot_Background_Hover)
     Dot_Background_Active: [{ ref: "ColorDarkNeutralAlpha.30" }, { ref: "ColorNeutralAlpha.30" }], // var(--triplex-next-ImageGallery-Dot_Background_Active)

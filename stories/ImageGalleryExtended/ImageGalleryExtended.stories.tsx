@@ -77,8 +77,8 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
 export const Default: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: DefaultSource, language: "tsx" },
         },
     },
@@ -87,8 +87,8 @@ export const Default: StoryObj<typeof ImageGalleryExtended> = {
 
 export const MainOnly: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: MainOnlySource, language: "tsx" },
         },
     },
@@ -97,9 +97,9 @@ export const MainOnly: StoryObj<typeof ImageGalleryExtended> = {
 
 export const WithDots: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
+        controls: { disable: true },
         viewport: { defaultViewport: "XS" },
         docs: {
-            controls: { disable: true },
             source: { code: WithDotsSource, language: "tsx" },
         },
     },
@@ -108,8 +108,8 @@ export const WithDots: StoryObj<typeof ImageGalleryExtended> = {
 
 export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: CustomLayoutSource, language: "tsx" },
         },
     },
@@ -118,8 +118,8 @@ export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
 
 export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: ManyThumbnailsSource, language: "tsx" },
         },
     },
@@ -128,8 +128,8 @@ export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
 
 export const OpenFromAvatar: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: { code: OpenFromAvatarSource, language: "tsx" },
         },
     },

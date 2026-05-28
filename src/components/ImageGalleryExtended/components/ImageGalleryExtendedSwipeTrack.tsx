@@ -143,6 +143,15 @@ export const ImageGalleryExtendedSwipeTrack: React.FC<IImageGalleryExtendedSwipe
         }
     };
 
+    // Браузер прервал жест (system gesture, входящий звонок и т.п.) — сбрасываем состояние,
+    // чтобы лента не залипла в промежуточном сдвиге до следующего касания.
+    const handleTouchCancel = () => {
+        touchStartRef.current = null;
+        isHorizontalRef.current = null;
+        setDragX(0);
+        setAnimating(false);
+    };
+
     const handleTransitionEnd = (event: React.TransitionEvent) => {
         if (event.propertyName !== "transform") {
             return;
@@ -181,6 +190,7 @@ export const ImageGalleryExtendedSwipeTrack: React.FC<IImageGalleryExtendedSwipe
             style={trackStyle}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchCancel}
             onTransitionEnd={handleTransitionEnd}
         >
             {slides.map(({ item, index }) => (

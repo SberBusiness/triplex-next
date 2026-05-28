@@ -13,3 +13,4 @@ export * from "./WithoutBlur";
 export { default as WithoutBlurSource } from "./WithoutBlur?raw";
 export * from "./InsideLightBox";
 export { default as InsideLightBoxSource } from "./InsideLightBox?raw";
+export * from "./VisualTests";

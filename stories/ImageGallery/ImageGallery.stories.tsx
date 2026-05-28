@@ -19,6 +19,8 @@ import {
     WithoutBlurSource,
     InsideLightBox as InsideLightBoxRender,
     InsideLightBoxSource,
+    VisualTestsArrows as VisualTestsArrowsRender,
+    VisualTestsDots as VisualTestsDotsRender,
 } from "./examples";
 
 export default {
@@ -198,4 +200,35 @@ export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
         },
     },
     render: InsideLightBoxRender,
+};
+
+/**
+ * Скриншот-тест встроенных стрелок навигации на границах диапазона (desktop preset):
+ * слева — первое изображение (стрелка «назад» disabled), справа — последнее
+ * (стрелка «вперёд» disabled, плюс блюр-слой). Фиксирует disabled-состояния стрелок.
+ */
+export const VisualTestsArrows: StoryObj<typeof ImageGallery> = {
+    tags: ["!autodocs"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsArrowsRender,
+};
+
+/** Скриншот-тест тиков-индикаторов (мобильный preset, XS viewport): активный тик и обычные. */
+export const VisualTestsDots: StoryObj<typeof ImageGallery> = {
+    tags: ["!autodocs"],
+    parameters: {
+        viewport: { defaultViewport: "XS" },
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsDotsRender,
 };

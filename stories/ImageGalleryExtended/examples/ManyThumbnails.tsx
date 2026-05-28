@@ -9,7 +9,7 @@ const ITEMS = Array.from({ length: 20 }, (_, i) => {
 
     return {
         id: `photo-${i + 1}`,
-        src: `/assets/images/imageGallery/0${imageIndex}.jpg`,
+        src: `assets/images/imageGallery/0${imageIndex}.jpg`,
         alt: `Photo ${i + 1}`,
     };
 });

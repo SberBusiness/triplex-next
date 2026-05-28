@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ImageGalleryExtended, LightBox, Page, EBodyPageType, Avatar, EAvatarSize } from "@sberbusiness/triplex-next";
 
-const ITEMS = [{ id: "photo-1", src: "/assets/images/imageGallery/01.jpg", alt: "Photo 1" }];
+const ITEMS = [{ id: "photo-1", src: "assets/images/imageGallery/01.jpg", alt: "Photo 1" }];
 
 /**
  * Сначала рендерится `Avatar` с миниатюрой изображения. Клик (или Enter/Space)

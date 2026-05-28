@@ -26,6 +26,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Блюр-слой по краям крупной картинки (`withBlur` по умолчанию `true`), контейнер скруглён через `border-radius` + `overflow:hidden`.
 - Клавиатура: `ArrowLeft` / `ArrowRight` при фокусе на контейнере галереи или миниатюре.
 - Стрелки настраиваются через `prevArrowProps` / `nextArrowProps`; компонент сам задаёт направление, обработчик, `disabled` и `hidden`.
+- Лента миниатюр и ряд тиков настраиваются через `thumbnailsProps` / `dotsProps`.
 - `onImageClick(index)` — точка интеграции для родительского LightBox: один и тот же `ImageGallery` можно повторно отрендерить внутри лайтбокса с другими настройками (см. story `InsideLightBox`).
 - Дизайн-токены: `ImageGallery-Container_Background_Default`, `Arrow_Background_Default/Hover/Disabled`, `ThumbCarouselButton_Background_Default`, `Dot_Background_Default/Hover/Active`, `Accent_Color`.
 

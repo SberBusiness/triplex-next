@@ -1,5 +1,10 @@
 import React from "react";
-import { ImageGallery, TImageGalleryArrowProps } from "@sberbusiness/triplex-next";
+import {
+    ImageGallery,
+    TImageGalleryArrowProps,
+    TImageGalleryDotsProps,
+    TImageGalleryThumbnailsProps,
+} from "@sberbusiness/triplex-next";
 
 const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     id: `photo-${i + 1}`,
@@ -16,6 +21,8 @@ export interface IPlaygroundArgs {
     defaultId: string;
     prevArrowProps: TImageGalleryArrowProps;
     nextArrowProps: TImageGalleryArrowProps;
+    thumbnailsProps: TImageGalleryThumbnailsProps;
+    dotsProps: TImageGalleryDotsProps;
 }
 
 export const Playground = ({
@@ -26,6 +33,8 @@ export const Playground = ({
     defaultId,
     prevArrowProps,
     nextArrowProps,
+    thumbnailsProps,
+    dotsProps,
 }: IPlaygroundArgs) => (
     <ImageGallery
         items={ITEMS}
@@ -36,5 +45,7 @@ export const Playground = ({
         showDots={showDots}
         prevArrowProps={prevArrowProps}
         nextArrowProps={nextArrowProps}
+        thumbnailsProps={thumbnailsProps}
+        dotsProps={dotsProps}
     />
 );

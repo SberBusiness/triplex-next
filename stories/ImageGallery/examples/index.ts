@@ -7,6 +7,8 @@ export * from "./WithoutThumbnails";
 export { default as WithoutThumbnailsSource } from "./WithoutThumbnails?raw";
 export * from "./WithDots";
 export { default as WithDotsSource } from "./WithDots?raw";
+export * from "./PropsForwarding";
+export { default as PropsForwardingSource } from "./PropsForwarding?raw";
 export * from "./WithoutBlur";
 export { default as WithoutBlurSource } from "./WithoutBlur?raw";
 export * from "./InsideLightBox";

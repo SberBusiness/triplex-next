@@ -1,9 +1,9 @@
 import React from "react";
 import {
-    IImageGalleryDotLabelState,
     IImageGalleryExtendedArrowProps,
+    IImageGalleryExtendedDotsProps,
+    IImageGalleryExtendedThumbnailsProps,
     IImageGalleryItemProps,
-    IImageGalleryThumbRenderState,
 } from "../ImageGalleryExtended";
 
 /** Свойства стрелки, которые ImageGallery пробрасывает в ImageGalleryExtended.Arrow. */
@@ -11,6 +11,12 @@ export type TImageGalleryArrowProps = Omit<
     IImageGalleryExtendedArrowProps,
     "direction" | "onClick" | "disabled" | "hidden" | "type"
 >;
+
+/** Свойства ленты миниатюр, которые ImageGallery пробрасывает в ImageGalleryExtended.Thumbnails. */
+export type TImageGalleryThumbnailsProps = Omit<IImageGalleryExtendedThumbnailsProps, "children">;
+
+/** Свойства тиков, которые ImageGallery пробрасывает в ImageGalleryExtended.Dots. */
+export type TImageGalleryDotsProps = Omit<IImageGalleryExtendedDotsProps, "children">;
 
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
@@ -36,8 +42,8 @@ export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivEle
     prevArrowProps: TImageGalleryArrowProps;
     /** Свойства кнопки перехода к следующему изображению. */
     nextArrowProps: TImageGalleryArrowProps;
-    /** Формирует доступное имя кнопки-миниатюры. Если не задано, используется `item.alt`. */
-    getThumbnailAriaLabel?: (state: Omit<IImageGalleryThumbRenderState, "onSelect" | "ref">) => string | undefined;
-    /** Формирует доступное имя кнопки тика. Если не задано, используется `item.alt`. */
-    getDotAriaLabel?: (state: IImageGalleryDotLabelState) => string | undefined;
+    /** Свойства ленты миниатюр (десктоп). */
+    thumbnailsProps?: TImageGalleryThumbnailsProps;
+    /** Свойства ряда тиков-индикаторов (мобильный). */
+    dotsProps?: TImageGalleryDotsProps;
 }

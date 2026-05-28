@@ -13,6 +13,8 @@ import {
     WithoutThumbnailsSource,
     WithDots as WithDotsRender,
     WithDotsSource,
+    PropsForwarding as PropsForwardingRender,
+    PropsForwardingSource,
     WithoutBlur as WithoutBlurRender,
     WithoutBlurSource,
     InsideLightBox as InsideLightBoxRender,
@@ -51,6 +53,8 @@ const PLAYGROUND_ARGS: IPlaygroundArgs = {
     defaultId: "photo-1",
     prevArrowProps: { "aria-label": "Предыдущее изображение" },
     nextArrowProps: { "aria-label": "Следующее изображение" },
+    thumbnailsProps: {},
+    dotsProps: {},
 };
 
 export const Playground: StoryObj<IPlaygroundArgs> = {
@@ -104,6 +108,16 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             description: "Свойства кнопки перехода к следующему изображению.",
             table: { category: "Accessibility" },
         },
+        thumbnailsProps: {
+            control: "object",
+            description: "Свойства ленты миниатюр (десктоп).",
+            table: { category: "Props" },
+        },
+        dotsProps: {
+            control: "object",
+            description: "Свойства ряда тиков-индикаторов (мобильный).",
+            table: { category: "Props" },
+        },
     },
     parameters: {
         testRunner: { skip: true },
@@ -155,6 +169,16 @@ export const WithDots: StoryObj<typeof ImageGallery> = {
         },
     },
     render: WithDotsRender,
+};
+
+export const PropsForwarding: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        docs: {
+            controls: { disable: true },
+            source: { code: PropsForwardingSource, language: "tsx" },
+        },
+    },
+    render: PropsForwardingRender,
 };
 
 export const WithoutBlur: StoryObj<typeof ImageGallery> = {

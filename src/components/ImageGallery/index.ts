@@ -1,2 +1,7 @@
 export { ImageGallery } from "./ImageGallery";
-export type { IImageGalleryProps, TImageGalleryArrowProps } from "./types";
+export type {
+    IImageGalleryProps,
+    TImageGalleryArrowProps,
+    TImageGalleryDotsProps,
+    TImageGalleryThumbnailsProps,
+} from "./types";

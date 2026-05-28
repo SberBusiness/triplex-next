@@ -181,11 +181,15 @@ describe("ImageGallery — desktop", () => {
         expect(thumbs[0]).not.toHaveAttribute("aria-current");
     });
 
-    it("passes getThumbnailAriaLabel to desktop thumbnails", () => {
+    it("passes thumbnailsProps to desktop thumbnails", () => {
         renderGallery({
-            getThumbnailAriaLabel: ({ item, index }) => `Миниатюра ${index + 1}: ${item.id}`,
+            thumbnailsProps: {
+                id: "thumbnails",
+                getThumbnailAriaLabel: ({ item, index }) => `Миниатюра ${index + 1}: ${item.id}`,
+            },
         });
 
+        expect(document.getElementById("thumbnails")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Миниатюра 5: p5" })).toBeInTheDocument();
     });
 });
@@ -276,14 +280,18 @@ describe("ImageGallery — mobile", () => {
         expect(screen.queryAllByRole("button", { name: /Photo/ })).toHaveLength(0);
     });
 
-    it("passes getDotAriaLabel to mobile dots", () => {
+    it("passes dotsProps to mobile dots", () => {
         renderGallery(
             {
-                getDotAriaLabel: ({ item, tickIndex }) => `Тик ${tickIndex + 1}: ${item.id}`,
+                dotsProps: {
+                    id: "dots",
+                    getDotAriaLabel: ({ item, tickIndex }) => `Тик ${tickIndex + 1}: ${item.id}`,
+                },
             },
             9,
         );
 
+        expect(document.getElementById("dots")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Тик 3: p5" })).toBeInTheDocument();
     });
 

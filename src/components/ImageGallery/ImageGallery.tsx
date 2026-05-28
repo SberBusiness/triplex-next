@@ -25,8 +25,8 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
             showDots = true,
             prevArrowProps,
             nextArrowProps,
-            getThumbnailAriaLabel,
-            getDotAriaLabel,
+            thumbnailsProps,
+            dotsProps,
             ...rest
         },
         ref,
@@ -75,14 +75,8 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
                     </ImageGalleryExtended.Nav>
                 </ImageGalleryExtended.Main>
 
-                <MobileView
-                    fallback={
-                        showThumbnails ? (
-                            <ImageGalleryExtended.Thumbnails getThumbnailAriaLabel={getThumbnailAriaLabel} />
-                        ) : null
-                    }
-                >
-                    {showDots ? <ImageGalleryExtended.Dots getDotAriaLabel={getDotAriaLabel} /> : null}
+                <MobileView fallback={showThumbnails ? <ImageGalleryExtended.Thumbnails {...thumbnailsProps} /> : null}>
+                    {showDots ? <ImageGalleryExtended.Dots {...dotsProps} /> : null}
                 </MobileView>
             </ImageGalleryExtended>
         );

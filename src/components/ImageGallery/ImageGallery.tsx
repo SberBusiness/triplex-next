@@ -23,8 +23,8 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
             withBlur = true,
             showThumbnails = true,
             showDots = true,
-            prevArrowAriaLabel,
-            nextArrowAriaLabel,
+            prevArrowProps,
+            nextArrowProps,
             getThumbnailAriaLabel,
             getDotAriaLabel,
             ...rest
@@ -57,15 +57,15 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
                         {({ onPrev, onNext, isFirst, isLast, itemsCount }) => (
                             <>
                                 <ImageGalleryExtended.Arrow
+                                    {...prevArrowProps}
                                     direction={EImageGalleryArrowDirection.PREV}
-                                    aria-label={prevArrowAriaLabel}
                                     onClick={onPrev}
                                     disabled={isFirst}
                                     hidden={itemsCount <= 1}
                                 />
                                 <ImageGalleryExtended.Arrow
+                                    {...nextArrowProps}
                                     direction={EImageGalleryArrowDirection.NEXT}
-                                    aria-label={nextArrowAriaLabel}
                                     onClick={onNext}
                                     disabled={isLast}
                                     hidden={itemsCount <= 1}

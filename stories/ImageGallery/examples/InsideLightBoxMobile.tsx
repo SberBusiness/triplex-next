@@ -26,8 +26,8 @@ export const InsideLightBoxMobile = () => {
                 selectedId={selectedId}
                 onChange={setSelectedId}
                 onImageClick={handleOpen}
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />
 
             {isOpen ? (
@@ -39,8 +39,8 @@ export const InsideLightBoxMobile = () => {
                                 selectedId={selectedId}
                                 onChange={setSelectedId}
                                 height="70vh"
-                                prevArrowAriaLabel="Предыдущее изображение"
-                                nextArrowAriaLabel="Следующее изображение"
+                                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                                nextArrowProps={{ "aria-label": "Следующее изображение" }}
                             />
                         </div>
                     </LightBox.Content>

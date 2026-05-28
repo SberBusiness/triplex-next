@@ -10,7 +10,7 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
 export const Default = () => (
     <ImageGallery
         items={ITEMS}
-        prevArrowAriaLabel="Предыдущее изображение"
-        nextArrowAriaLabel="Следующее изображение"
+        prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+        nextArrowProps={{ "aria-label": "Следующее изображение" }}
     />
 );

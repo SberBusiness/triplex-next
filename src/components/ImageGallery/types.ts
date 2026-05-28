@@ -1,9 +1,16 @@
 import React from "react";
 import {
     IImageGalleryDotLabelState,
+    IImageGalleryExtendedArrowProps,
     IImageGalleryItemProps,
     IImageGalleryThumbRenderState,
 } from "../ImageGalleryExtended";
+
+/** Свойства стрелки, которые ImageGallery пробрасывает в ImageGalleryExtended.Arrow. */
+export type TImageGalleryArrowProps = Omit<
+    IImageGalleryExtendedArrowProps,
+    "direction" | "onClick" | "disabled" | "hidden" | "type"
+>;
 
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
@@ -25,10 +32,10 @@ export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivEle
     showThumbnails?: boolean;
     /** Показывать ли ряд тиков-индикаторов (мобильный). */
     showDots?: boolean;
-    /** Доступное имя кнопки перехода к предыдущему изображению. */
-    prevArrowAriaLabel: string;
-    /** Доступное имя кнопки перехода к следующему изображению. */
-    nextArrowAriaLabel: string;
+    /** Свойства кнопки перехода к предыдущему изображению. */
+    prevArrowProps: TImageGalleryArrowProps;
+    /** Свойства кнопки перехода к следующему изображению. */
+    nextArrowProps: TImageGalleryArrowProps;
     /** Формирует доступное имя кнопки-миниатюры. Если не задано, используется `item.alt`. */
     getThumbnailAriaLabel?: (state: Omit<IImageGalleryThumbRenderState, "onSelect" | "ref">) => string | undefined;
     /** Формирует доступное имя кнопки тика. Если не задано, используется `item.alt`. */

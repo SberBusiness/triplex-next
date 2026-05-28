@@ -28,8 +28,8 @@ const renderGallery = (props: Partial<React.ComponentProps<typeof ImageGallery>>
     return render(
         <ImageGallery
             items={items}
-            prevArrowAriaLabel="Предыдущее изображение"
-            nextArrowAriaLabel="Следующее изображение"
+            prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+            nextArrowProps={{ "aria-label": "Следующее изображение" }}
             {...rest}
         />,
     );
@@ -88,8 +88,8 @@ describe("ImageGallery — desktop", () => {
                 items={buildItems(9)}
                 selectedId="p6"
                 onChange={onChange}
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />,
         );
         expect(screen.getByAltText("Photo 6")).toBeInTheDocument();
@@ -127,8 +127,8 @@ describe("ImageGallery — desktop", () => {
             <ImageGallery
                 items={buildItems(9)}
                 withBlur
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />,
         );
         expect(container.querySelector('img[aria-hidden="true"]')).not.toBeNull();
@@ -163,14 +163,14 @@ describe("ImageGallery — desktop", () => {
         expect(screen.getByAltText("Photo 2")).toBeInTheDocument();
     });
 
-    it("uses arrow aria-label props as accessible names", () => {
+    it("passes arrow props to the navigation buttons", () => {
         renderGallery({
-            prevArrowAriaLabel: "Previous photo",
-            nextArrowAriaLabel: "Next photo",
+            prevArrowProps: { "aria-label": "Previous photo", title: "Go back" },
+            nextArrowProps: { "aria-label": "Next photo", title: "Go forward" },
         });
 
-        expect(screen.getByRole("button", { name: "Previous photo" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Next photo" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Previous photo" })).toHaveAttribute("title", "Go back");
+        expect(screen.getByRole("button", { name: "Next photo" })).toHaveAttribute("title", "Go forward");
     });
 
     it("active thumbnail is marked with aria-current='true'", () => {
@@ -213,8 +213,8 @@ describe("ImageGallery — mobile", () => {
         rerender(
             <ImageGallery
                 items={buildItems(2)}
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />,
         );
         expect(screen.getAllByRole("button", { name: /Photo/ })).toHaveLength(2);
@@ -222,8 +222,8 @@ describe("ImageGallery — mobile", () => {
         rerender(
             <ImageGallery
                 items={buildItems(10)}
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />,
         );
         expect(screen.getAllByRole("button", { name: /Photo/ })).toHaveLength(4);
@@ -250,8 +250,8 @@ describe("ImageGallery — mobile", () => {
             <ImageGallery
                 items={buildItems(9)}
                 selectedId="p4"
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />,
         );
         dots = screen.getAllByRole("button", { name: /Photo/ });
@@ -262,8 +262,8 @@ describe("ImageGallery — mobile", () => {
             <ImageGallery
                 items={buildItems(9)}
                 selectedId="p9"
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />,
         );
         dots = screen.getAllByRole("button", { name: /Photo/ });

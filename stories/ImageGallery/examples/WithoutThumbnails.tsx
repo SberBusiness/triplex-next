@@ -11,7 +11,7 @@ export const WithoutThumbnails = () => (
     <ImageGallery
         items={ITEMS}
         showThumbnails={false}
-        prevArrowAriaLabel="Предыдущее изображение"
-        nextArrowAriaLabel="Следующее изображение"
+        prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+        nextArrowProps={{ "aria-label": "Следующее изображение" }}
     />
 );

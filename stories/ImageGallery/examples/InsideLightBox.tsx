@@ -26,8 +26,8 @@ export const InsideLightBox = () => {
                 selectedId={selectedId}
                 onChange={setSelectedId}
                 onImageClick={handleOpen}
-                prevArrowAriaLabel="Предыдущее изображение"
-                nextArrowAriaLabel="Следующее изображение"
+                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                nextArrowProps={{ "aria-label": "Следующее изображение" }}
             />
 
             {isOpen ? (
@@ -40,8 +40,8 @@ export const InsideLightBox = () => {
                                 onChange={setSelectedId}
                                 showThumbnails={false}
                                 height="80vh"
-                                prevArrowAriaLabel="Предыдущее изображение"
-                                nextArrowAriaLabel="Следующее изображение"
+                                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+                                nextArrowProps={{ "aria-label": "Следующее изображение" }}
                             />
                         </div>
                     </LightBox.Content>

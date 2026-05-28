@@ -15,7 +15,7 @@ export const WithDots = () => (
     <ImageGallery
         items={ITEMS}
         showDots
-        prevArrowAriaLabel="Предыдущее изображение"
-        nextArrowAriaLabel="Следующее изображение"
+        prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
+        nextArrowProps={{ "aria-label": "Следующее изображение" }}
     />
 );

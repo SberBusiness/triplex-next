@@ -42,6 +42,14 @@ beforeEach(() => {
 });
 
 describe("ImageGallery — desktop", () => {
+    it("forwards ref to the gallery root", () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        renderGallery({ ref });
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    });
+
     it("renders the main image and full thumbnail strip", () => {
         renderGallery();
 
@@ -155,12 +163,30 @@ describe("ImageGallery — desktop", () => {
         expect(screen.getByAltText("Photo 2")).toBeInTheDocument();
     });
 
+    it("uses arrow aria-label props as accessible names", () => {
+        renderGallery({
+            prevArrowAriaLabel: "Previous photo",
+            nextArrowAriaLabel: "Next photo",
+        });
+
+        expect(screen.getByRole("button", { name: "Previous photo" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Next photo" })).toBeInTheDocument();
+    });
+
     it("active thumbnail is marked with aria-current='true'", () => {
         renderGallery({ defaultId: "p3" });
 
         const thumbs = thumbButtons();
         expect(thumbs[2]).toHaveAttribute("aria-current", "true");
         expect(thumbs[0]).not.toHaveAttribute("aria-current");
+    });
+
+    it("passes getThumbnailAriaLabel to desktop thumbnails", () => {
+        renderGallery({
+            getThumbnailAriaLabel: ({ item, index }) => `Миниатюра ${index + 1}: ${item.id}`,
+        });
+
+        expect(screen.getByRole("button", { name: "Миниатюра 5: p5" })).toBeInTheDocument();
     });
 });
 
@@ -248,6 +274,17 @@ describe("ImageGallery — mobile", () => {
     it("showDots={false} hides the dots row", () => {
         renderGallery({ showDots: false }, 9);
         expect(screen.queryAllByRole("button", { name: /Photo/ })).toHaveLength(0);
+    });
+
+    it("passes getDotAriaLabel to mobile dots", () => {
+        renderGallery(
+            {
+                getDotAriaLabel: ({ item, tickIndex }) => `Тик ${tickIndex + 1}: ${item.id}`,
+            },
+            9,
+        );
+
+        expect(screen.getByRole("button", { name: "Тик 3: p5" })).toBeInTheDocument();
     });
 
     /** jsdom не реализует TouchEvent/TransitionEvent — диспатчим обычный Event с нужными полями. */

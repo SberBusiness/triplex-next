@@ -49,6 +49,8 @@ const PLAYGROUND_ARGS: IPlaygroundArgs = {
     showThumbnails: true,
     showDots: true,
     defaultId: "photo-1",
+    prevArrowAriaLabel: "Предыдущее изображение",
+    nextArrowAriaLabel: "Следующее изображение",
 };
 
 export const Playground: StoryObj<IPlaygroundArgs> = {
@@ -91,6 +93,16 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             ],
             description: "Идентификатор активного изображения по умолчанию.",
             table: { category: "Props" },
+        },
+        prevArrowAriaLabel: {
+            control: "text",
+            description: "Доступное имя кнопки перехода к предыдущему изображению.",
+            table: { category: "Accessibility" },
+        },
+        nextArrowAriaLabel: {
+            control: "text",
+            description: "Доступное имя кнопки перехода к следующему изображению.",
+            table: { category: "Accessibility" },
         },
     },
     parameters: {

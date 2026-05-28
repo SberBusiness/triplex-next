@@ -14,9 +14,19 @@ export interface IPlaygroundArgs {
     showThumbnails: boolean;
     showDots: boolean;
     defaultId: string;
+    prevArrowAriaLabel: string;
+    nextArrowAriaLabel: string;
 }
 
-export const Playground = ({ height, withBlur, showThumbnails, showDots, defaultId }: IPlaygroundArgs) => (
+export const Playground = ({
+    height,
+    withBlur,
+    showThumbnails,
+    showDots,
+    defaultId,
+    prevArrowAriaLabel,
+    nextArrowAriaLabel,
+}: IPlaygroundArgs) => (
     <ImageGallery
         items={ITEMS}
         defaultId={defaultId}
@@ -24,7 +34,7 @@ export const Playground = ({ height, withBlur, showThumbnails, showDots, default
         withBlur={withBlur}
         showThumbnails={showThumbnails}
         showDots={showDots}
-        prevArrowAriaLabel="Предыдущее изображение"
-        nextArrowAriaLabel="Следующее изображение"
+        prevArrowAriaLabel={prevArrowAriaLabel}
+        nextArrowAriaLabel={nextArrowAriaLabel}
     />
 );

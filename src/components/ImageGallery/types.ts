@@ -17,7 +17,7 @@ export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivEle
     onChange?: (id: string) => void;
     /** Обработчик клика по крупному изображению. Получает индекс кликнутого изображения. */
     onImageClick?: (index: number) => void;
-    /** Высота крупного изображения. `'auto'` — фиксированные значения по breakpoint (640px / 164px). */
+    /** Высота крупного изображения. `'auto'` — фиксированные значения по breakpoint (504px / 264px). */
     height?: "auto" | number | string;
     /** Показывать ли блюр-слой по краям крупного изображения. */
     withBlur?: boolean;

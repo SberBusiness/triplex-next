@@ -20,11 +20,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Новый компонент `ImageGallery`: изображения задаются массивом `items` (`{ id, src, alt?, thumbSrc? }`). Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки (`Main` + миниатюры/тики) и добавляет uncontrolled-режим.
 - Поддерживает controlled (`selectedId` + `onChange(id)`) и uncontrolled (`defaultId`) режимы — активное изображение адресуется по `id`.
-- На десктопе под крупной картинкой — лента миниатюр с автоцентровкой активной (на `CarouselExtended`).
-- На мобильном (`<768px`) лента заменяется кликабельными тиками-индикаторами (максимум 4, картинки распределяются по бакетам равного размера), а крупная картинка обёрнута в `SwipeableArea` со свайпом prev/next.
-- Высота: `height?: 'auto' | number | string`. В режиме `'auto'` — `640px` на десктопе и `164px` на мобильном.
+- На десктопе под крупной картинкой — нативная горизонтальная лента миниатюр с автоцентровкой активной.
+- На мобильном (`<768px`) лента заменяется кликабельными тиками-индикаторами (максимум 4, картинки распределяются по бакетам равного размера), а крупная картинка поддерживает свайп prev/next.
+- Высота: `height?: 'auto' | number | string`. В режиме `'auto'` — `504px` на десктопе и `264px` на мобильном.
 - Блюр-слой по краям крупной картинки (`withBlur` по умолчанию `true`), контейнер скруглён через `border-radius` + `overflow:hidden`.
-- Клавиатура: `ArrowLeft` / `ArrowRight` при фокусе на контейнере галереи.
+- Клавиатура: `ArrowLeft` / `ArrowRight` при фокусе на контейнере галереи или миниатюре.
 - `onImageClick(index)` — точка интеграции для родительского LightBox: один и тот же `ImageGallery` можно повторно отрендерить внутри лайтбокса с другими настройками (см. story `InsideLightBox`).
 - Дизайн-токены: `ImageGallery-Container_Background_Default`, `Arrow_Background_Default/Hover/Disabled`, `ThumbCarouselButton_Background_Default`, `Dot_Background_Default/Hover/Active`, `Accent_Color`.
 

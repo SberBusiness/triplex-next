@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../../CarouselExtended/CarouselExtended";
 import { scrollSmoothHorizontally } from "../../../utils/scroll";
@@ -78,7 +78,7 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
         ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
             hidden ? null : (
                 <ButtonIcon className={clsx(styles.button, styles.prev)} tabIndex={-1} {...rest}>
-                    <CaretleftStrokeSrvIcon24 paletteIndex={5} />
+                    <CaretleftStrokeSrvIcon20 paletteIndex={5} />
                 </ButtonIcon>
             ),
         [],
@@ -88,7 +88,7 @@ export const ImageGalleryExtendedThumbnails: React.FC<IImageGalleryExtendedThumb
         ({ hidden, ...rest }: ICarouselExtendedButtonProvideProps) =>
             hidden ? null : (
                 <ButtonIcon className={clsx(styles.button, styles.next)} tabIndex={-1} {...rest}>
-                    <CaretrightStrokeSrvIcon24 paletteIndex={5} />
+                    <CaretrightStrokeSrvIcon20 paletteIndex={5} />
                 </ButtonIcon>
             ),
         [],

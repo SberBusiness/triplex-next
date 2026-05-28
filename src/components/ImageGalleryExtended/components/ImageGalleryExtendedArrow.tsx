@@ -1,12 +1,12 @@
 import React from "react";
 import clsx from "clsx";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { ButtonIcon, IButtonIconProps } from "../../Button/ButtonIcon";
 import { EImageGalleryArrowDirection } from "../enums";
 import styles from "../styles/ImageGalleryExtendedMain.module.less";
+import { IconWrapper } from "@sberbusiness/triplex-next/components";
 
 /** Свойства ImageGalleryExtendedArrow. */
-export interface IImageGalleryExtendedArrowProps extends IButtonIconProps {
+export interface IImageGalleryExtendedArrowProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Направление: предыдущее (`PREV`) или следующее (`NEXT`) изображение. */
     direction: EImageGalleryArrowDirection;
 }
@@ -28,20 +28,24 @@ const DIRECTION_LABEL: Record<EImageGalleryArrowDirection, string> = {
  * `ImageGalleryExtended.Main`, поэтому используется как его child.
  */
 export const ImageGalleryExtendedArrow = React.forwardRef<HTMLButtonElement, IImageGalleryExtendedArrowProps>(
-    ({ direction, className, "aria-label": ariaLabel, ...rest }, ref) => {
+    ({ direction, className, "aria-label": ariaLabel, disabled, ...rest }, ref) => {
         const Icon =
             direction === EImageGalleryArrowDirection.PREV ? CaretleftStrokeSrvIcon24 : CaretrightStrokeSrvIcon24;
 
         return (
-            <ButtonIcon
-                ref={ref}
-                tabIndex={-1}
-                {...rest}
-                aria-label={ariaLabel ?? DIRECTION_LABEL[direction]}
-                className={clsx(styles.arrow, DIRECTION_CLASS[direction], className)}
-            >
-                <Icon paletteIndex={5} />
-            </ButtonIcon>
+            <IconWrapper disabled={disabled}>
+                <button
+                    type="button"
+                    ref={ref}
+                    tabIndex={-1}
+                    disabled={disabled}
+                    {...rest}
+                    aria-label={ariaLabel ?? DIRECTION_LABEL[direction]}
+                    className={clsx(styles.arrow, DIRECTION_CLASS[direction], className)}
+                >
+                    <Icon paletteIndex={7} />
+                </button>
+            </IconWrapper>
         );
     },
 );

@@ -38,25 +38,36 @@
 }
 
 .arrow {
+    outline: none;
     position: absolute;
     top: 50%;
     z-index: 2;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     transform: translateY(-50%);
     background: var(--triplex-next-ImageGallery-Arrow_Background_Default);
-    border-radius: 50%;
-    opacity: 0.7;
-    transition: opacity 0.2s ease-in-out;
+    border: 1px solid var(--triplex-next-ImageGallery-Arrow_BorderColor_Default);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 
     &:hover {
         background: var(--triplex-next-ImageGallery-Arrow_Background_Hover);
-        opacity: 1;
+        border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Hover);
+    }
+
+    &:active {
+        background: var(--triplex-next-ImageGallery-Arrow_Background_Active);
+        border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Active);
     }
 
     &:disabled {
         background: var(--triplex-next-ImageGallery-Arrow_Background_Disabled);
+        border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Disabled);
         cursor: default;
+        pointer-events: none;
     }
 
     &.prev {

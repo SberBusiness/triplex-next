@@ -5,7 +5,12 @@ export const designTokensComponentsImageGalleryKeys = [
     "Container_Background_Default",
     "Arrow_Background_Default",
     "Arrow_Background_Hover",
+    "Arrow_Background_Active",
     "Arrow_Background_Disabled",
+    "Arrow_BorderColor_Default",
+    "Arrow_BorderColor_Hover",
+    "Arrow_BorderColor_Active",
+    "Arrow_BorderColor_Disabled",
     "ThumbCarouselButton_Background_Default",
     "Dot_Background_Default",
     "Dot_Background_Hover",
@@ -30,9 +35,14 @@ export type TDesignTokensComponentsImageGallery = { ImageGallery: TDesignTokensC
 // Токены компонента ImageGallery в светлой и темной темах.
 export const ImageGallery_Tokens: TDesignTokensComponentsImageGalleryValues = {
     Container_Background_Default: [{ ref: "ColorDarkNeutralAlpha.100" }, { ref: "ColorNeutralAlpha.100" }], // var(--triplex-next-ImageGallery-Container_Background_Default)
-    Arrow_Background_Default: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-ImageGallery-Arrow_Background_Default)
-    Arrow_Background_Hover: [{ ref: "ColorDarkNeutralAlpha.30" }, { ref: "ColorDarkNeutralAlpha.30" }], // var(--triplex-next-ImageGallery-Arrow_Background_Hover)
-    Arrow_Background_Disabled: [{ ref: "ColorDarkNeutralAlpha.80" }, { ref: "ColorDarkNeutralAlpha.80" }], // var(--triplex-next-ImageGallery-Arrow_Background_Disabled)
+    Arrow_Background_Default: [{ ref: "ColorDarkNeutralAlpha.80" }, { ref: "ColorNeutralAlpha.70" }], // var(--triplex-next-ImageGallery-Arrow_Background_Default)
+    Arrow_Background_Hover: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-ImageGallery-Arrow_Background_Hover)
+    Arrow_Background_Active: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorNeutralAlpha.40" }], // var(--triplex-next-ImageGallery-Arrow_Background_Active)
+    Arrow_Background_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_Background_Disabled)
+    Arrow_BorderColor_Default: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Default)
+    Arrow_BorderColor_Hover: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Hover)
+    Arrow_BorderColor_Active: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Active)
+    Arrow_BorderColor_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-ImageGallery-Arrow_BorderColor_Disabled)
     ThumbCarouselButton_Background_Default: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-ImageGallery-ThumbCarouselButton_Background_Default)
     Dot_Background_Default: [{ ref: "ColorDarkNeutralAlpha.70" }, { ref: "ColorDarkNeutralAlpha.70" }], // var(--triplex-next-ImageGallery-Dot_Background_Default)
     Dot_Background_Hover: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorDarkNeutralAlpha.50" }], // var(--triplex-next-ImageGallery-Dot_Background_Hover)

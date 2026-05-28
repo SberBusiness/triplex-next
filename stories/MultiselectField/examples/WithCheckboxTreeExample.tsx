@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
     Button,
     CheckboxTreeExtended,
@@ -54,8 +54,6 @@ const createNodes = (): INode[] => [
 const getLeafIds = (node: INode): string[] => (node.children ? node.children.flatMap(getLeafIds) : [node.id]);
 
 export const WithCheckboxTreeExample = () => {
-    /** Ref на target, который нужен для корректного позиционирования dropdown. */
-    const targetRef = useRef<HTMLDivElement>(null);
     /** Мемоизированные исходные ноды дерева, чтобы не пересоздавать их на каждый рендер. */
     const nodes = useMemo(() => createNodes(), []);
     /** Массив id выбранных leaf-чекбоксов. */
@@ -138,9 +136,11 @@ export const WithCheckboxTreeExample = () => {
                 <Tag
                     id="many"
                     size={EComponentSize.SM}
+                    onFocus={handleTagFocus}
                     onBlur={handleTagBlur}
                     onClick={handleTagClick}
                     onKeyDown={handleTagKeyDown}
+                    onRemove={() => setSelectedIds([])}
                 >
                     {`Выбрано ${selectedLeafNodes.length} значения`}
                 </Tag>
@@ -172,7 +172,6 @@ export const WithCheckboxTreeExample = () => {
                 renderTarget={(props) => (
                     <MultiselectField.Target
                         {...props}
-                        ref={targetRef}
                         size={EComponentSize.MD}
                         fieldLabel="Label"
                         placeholder="Select to proceed"
@@ -180,7 +179,7 @@ export const WithCheckboxTreeExample = () => {
                     />
                 )}
             >
-                {({ opened, setOpened, dropdownRef }) => (
+                {({ opened, setOpened, dropdownRef, targetRef }) => (
                     <MultiselectField.Dropdown
                         opened={opened}
                         setOpened={setOpened}

@@ -21,32 +21,22 @@ import {
     ETextSize,
     Text,
 } from "@sberbusiness/triplex-next";
+import { CHIP_MULTISELECT_OPTIONS } from "./storyConstants";
 
 type SizeItemProps = { size: EComponentSize; title: string };
 
-const getDemoOptions = (title: string) => [
-    { id: `${title}-multiselect-option-1-1`, label: "Значение 1-1" },
-    { id: `${title}-multiselect-option-1-2`, label: "Значение 1-2" },
-    { id: `${title}-multiselect-option-1-3`, label: "Значение 1-3" },
-    { id: `${title}-multiselect-option-2-1`, label: "Значение 2-1" },
-    { id: `${title}-multiselect-option-2-2`, label: "Значение 2-2" },
-    { id: `${title}-multiselect-option-3`, label: "Значение 3" },
-];
-
 const SizeItem = ({ size, title }: SizeItemProps) => {
-    const options = useMemo(() => getDemoOptions(title), [title]);
-
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [filter, setFilter] = useState("");
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
     const visibleOptions = useMemo(() => {
         const lower = filter.trim().toLowerCase();
         if (!lower.length) {
-            return options;
+            return CHIP_MULTISELECT_OPTIONS;
         }
 
-        return options.filter((opt) => opt.label.toLowerCase().includes(lower));
-    }, [filter, options]);
+        return CHIP_MULTISELECT_OPTIONS.filter((opt) => opt.label.toLowerCase().includes(lower));
+    }, [filter]);
 
     const handleToggle = (optionId: string, checked: boolean) => {
         setSelectedIds((prev) => {

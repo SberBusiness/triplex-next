@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { Row } from "../Row";
 import { Col } from "../../Col";
+import { EComponentSize } from "../../../enums/EComponentSize";
 
 const getRowDiv = () => screen.getByTestId("row-div");
 
@@ -65,6 +66,41 @@ describe("Row Component", () => {
 
             const row = getRowDiv();
             expect(row).toHaveClass("noPaddingBottom");
+        });
+    });
+
+    describe("gapSize", () => {
+        it("should apply SM class by default when gridHorizontalGap is not provided", () => {
+            render(
+                <Row data-testid="row-div">
+                    <Col>Test content</Col>
+                </Row>,
+            );
+
+            expect(getRowDiv()).toHaveClass("SM");
+            expect(getRowDiv()).not.toHaveClass("MD");
+        });
+
+        it("should apply MD class when gridHorizontalGap is MD", () => {
+            render(
+                <Row data-testid="row-div" gridHorizontalGap={EComponentSize.MD}>
+                    <Col>Test content</Col>
+                </Row>,
+            );
+
+            expect(getRowDiv()).toHaveClass("MD");
+            expect(getRowDiv()).not.toHaveClass("SM");
+        });
+
+        it("should apply SM class when gridHorizontalGap is SM", () => {
+            render(
+                <Row data-testid="row-div" gridHorizontalGap={EComponentSize.SM}>
+                    <Col>Test content</Col>
+                </Row>,
+            );
+
+            expect(getRowDiv()).toHaveClass("SM");
+            expect(getRowDiv()).not.toHaveClass("MD");
         });
     });
 

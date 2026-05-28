@@ -90,9 +90,10 @@
         }
     }
 
-    & + .button {
+    & + .button,
+    & + .buttonDropdown {
         &:not(.block) {
-            margin-left: 12px;
+            margin-left: @button-siblings-margin-left;
         }
     }
 

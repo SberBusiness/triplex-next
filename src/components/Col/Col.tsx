@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
 import styles from "./styles/Col.module.less";
+import { RowContext } from "../Row/RowContext";
+import { EComponentSize } from "../../enums/EComponentSize";
 
 export type TColumnSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type TOffsetSize = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+
+const GRID_HORIZONTAL_GAP_TO_CLASS_NAME_MAP = {
+    [EComponentSize.SM]: styles.gridHorizontalGapSM,
+    [EComponentSize.MD]: styles.gridHorizontalGapMD,
+};
 
 /** Свойства Col. */
 export interface IColProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -91,6 +98,8 @@ export const Col: React.FC<IColProps> = ({
     offsetXl,
     ...props
 }) => {
+    const { gridHorizontalGap } = useContext(RowContext);
+
     const classNames = [
         ...getClassNames({ block, hidden, offset, size }),
         ...getClassNames({ block: blockSm, hidden: hiddenSm, offset: offsetSm, prefix: "sm", size: sizeSm }),
@@ -101,7 +110,10 @@ export const Col: React.FC<IColProps> = ({
     const mappedClasses = classNames.map((c) => styles[c]).filter(Boolean);
 
     return (
-        <div {...props} className={clsx(className, ...mappedClasses)}>
+        <div
+            {...props}
+            className={clsx(className, GRID_HORIZONTAL_GAP_TO_CLASS_NAME_MAP[gridHorizontalGap], ...mappedClasses)}
+        >
             {children}
         </div>
     );

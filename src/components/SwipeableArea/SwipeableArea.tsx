@@ -9,6 +9,10 @@ export interface ISwipeableAreaProps extends React.HTMLAttributes<HTMLDivElement
     leftSwipeableArea?: React.ReactNode;
     /** Появляющийся контент при свайпе влево. */
     rightSwipeableArea?: React.ReactNode;
+    /** Колбэк завершённого свайпа влево (открытие rightSwipeableArea). Срабатывает только если дельта превысила порог. */
+    onSwipeLeft?: () => void;
+    /** Колбэк завершённого свайпа вправо (открытие leftSwipeableArea). Срабатывает только если дельта превысила порог. */
+    onSwipeRight?: () => void;
 }
 
 // Минимальная ширина свайпа в px, при котором откроется боковая панель.
@@ -43,7 +47,7 @@ export interface ISwipeableAreaRef {
  * При свайпе вправо открывается leftSwipeableArea.
  */
 export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaProps>(
-    ({ children, className, leftSwipeableArea, rightSwipeableArea, ...rest }, ref) => {
+    ({ children, className, leftSwipeableArea, rightSwipeableArea, onSwipeLeft, onSwipeRight, ...rest }, ref) => {
         // Происходит анимация завершения свайпа.
         const [animating, setAnimating] = useState(false);
         // Направление перемещения пальца, вертикальное - скролл, горизонтальное - свайп.
@@ -73,18 +77,20 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 // Свайп влево.
                 if (deltaContentTranslateX > 0) {
                     // Если сдвиг слишком короткий - возврат на прежнее положение, или открытие левого контента.
-                    setContentTranslateX(
-                        deltaContentTranslateX > SWIPE_MIN_DISTANCE
-                            ? -rightSwipeableAreaRef.current!.getBoundingClientRect().width
-                            : 0,
-                    );
+                    if (deltaContentTranslateX > SWIPE_MIN_DISTANCE) {
+                        setContentTranslateX(-rightSwipeableAreaRef.current!.getBoundingClientRect().width);
+                        onSwipeLeft?.();
+                    } else {
+                        setContentTranslateX(0);
+                    }
                 } else {
                     // Свайп вправо.
-                    setContentTranslateX(
-                        Math.abs(deltaContentTranslateX) > SWIPE_MIN_DISTANCE
-                            ? leftSwipeableAreaRef.current!.getBoundingClientRect().width
-                            : 0,
-                    );
+                    if (Math.abs(deltaContentTranslateX) > SWIPE_MIN_DISTANCE) {
+                        setContentTranslateX(leftSwipeableAreaRef.current!.getBoundingClientRect().width);
+                        onSwipeRight?.();
+                    } else {
+                        setContentTranslateX(0);
+                    }
                 }
             } else if (contentTranslateXOnStartRef.current > 0) {
                 // Свайп закрытия левой области.

@@ -24,6 +24,7 @@ import {
     Island_Tokens,
     IslandAccordion_Tokens,
     IslandWidget_Tokens,
+    ImageGallery_Tokens,
     LightBox_Tokens,
     Link_Tokens,
     ListItemControlsButton_Tokens,
@@ -78,6 +79,7 @@ import {
     TDesignTokensComponentsIslandValue,
     TDesignTokensComponentsIslandAccordionValue,
     TDesignTokensComponentsIslandWidgetValue,
+    TDesignTokensComponentsImageGalleryValue,
     TDesignTokensComponentsLightBoxValue,
     TDesignTokensComponentsLinkValue,
     TDesignTokensComponentsListItemControlsButtonValue,
@@ -164,6 +166,10 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     IslandWidget: GetTokensValueByTheme<TDesignTokensComponentsIslandWidgetValue>(
         ETriplexNextTheme.DARK,
         IslandWidget_Tokens,
+    ),
+    ImageGallery: GetTokensValueByTheme<TDesignTokensComponentsImageGalleryValue>(
+        ETriplexNextTheme.DARK,
+        ImageGallery_Tokens,
     ),
     LightBox: GetTokensValueByTheme<TDesignTokensComponentsLightBoxValue>(ETriplexNextTheme.DARK, LightBox_Tokens),
     Link: GetTokensValueByTheme<TDesignTokensComponentsLinkValue>(ETriplexNextTheme.DARK, Link_Tokens),

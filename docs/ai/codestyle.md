@@ -24,15 +24,15 @@
 
 ### Именование
 
-| Сущность | Префикс | Пример |
-|---|---|---|
-| Interface | `I` | `IButtonProps`, `IButtonGeneralProps` |
-| Union type | `T` | `TButtonProps` |
-| Enum | `E` | `EButtonTheme`, `EComponentSize` |
-| Константа (модульного уровня) | UPPER_SNAKE_CASE | `DEFAULT_TIMEOUT` |
-| Компонент | PascalCase | `Button`, `DateField` |
-| Хук | camelCase с `use` | `useClickOutside` |
-| Утилита | camelCase | `formatDate`, `uniqueId` |
+| Сущность                      | Префикс           | Пример                                |
+| ----------------------------- | ----------------- | ------------------------------------- |
+| Interface                     | `I`               | `IButtonProps`, `IButtonGeneralProps` |
+| Union type                    | `T`               | `TButtonProps`                        |
+| Enum                          | `E`               | `EButtonTheme`, `EComponentSize`      |
+| Константа (модульного уровня) | UPPER_SNAKE_CASE  | `DEFAULT_TIMEOUT`                     |
+| Компонент                     | PascalCase        | `Button`, `DateField`                 |
+| Хук                           | camelCase с `use` | `useClickOutside`                     |
+| Утилита                       | camelCase         | `formatDate`, `uniqueId`              |
 
 ### Интерфейсы компонента
 
@@ -113,10 +113,12 @@ import { Button } from "../Button";
 ```
 
 Правила:
+
 - В новых stories/examples, которые показывают копируемый код, импортируй публичный API из `@sberbusiness/triplex-next` или публичных subentry.
 - В unit-тестах и внутреннем коде следуй локальному паттерну файла и предпочитай ближайшие импорты для тестируемого модуля и внутренних зависимостей.
 
 Порядок импортов (prettier-plugin-organize-imports не используется, но придерживайся):
+
 1. React
 2. Сторонние библиотеки
 3. Внутренние (`@sberbusiness/triplex-next/...`)
@@ -133,9 +135,31 @@ import { Button } from "../Button";
 - Имена классов — **camelCase**: `styles.secondaryLight`, `styles.iconOnly`.
 - Никаких **inline styles** в компонентах (в stories допустимо для лейаута примеров).
 - **Цвета** — только через CSS-переменные токенов (`var(--triplex-next-...)`). Никаких hex/rgb.
+- Runtime CSS-переменные, которые компонент задаёт сам (например через `style` для динамической высоты,
+  transform или координат), называй с префиксом `--triplex-next-runtime-...`.
+  Они не являются дизайн-токенами и не должны попадать в `src/components/DesignTokens` или generated-файлы.
 - **Переиспользуемые размерные константы** (z-index, отступы страницы, ширины оверлеев) — через LESS-переменные из `src/styles/components/` (`@page-padding-desktop-x`, `@sideOverlayLGWidth` и т.д.). Компонент-специфичные значения (высота кнопки, радиус скругления) можно задавать литералом.
 - `!important` — только в крайнем случае, с комментарием почему.
 
+Паттерн runtime CSS-переменных:
+
+```text
+--triplex-next-runtime-{Component}-{Element}_{Property}
+```
+
+Примеры:
+
+```tsx
+interface IStyle extends React.CSSProperties {
+    "--triplex-next-runtime-ImageGalleryExtended-Track_Shift": string;
+}
+```
+
+```less
+.track {
+    transform: translateX(var(--triplex-next-runtime-ImageGalleryExtended-Track_Shift, 0%));
+}
+```
 
 ### Применение LESS-переменных (общие размерные константы)
 
@@ -191,8 +215,11 @@ import { Button } from "../Button";
 ## Принципы написания кода
 
 ### DRY (Don't Repeat Yourself)
+
 ### KISS (Keep It Simple, Stupid)
+
 ### YAGNI (You Aren't Gonna Need It)
+
 ### Single Responsibility
 
 ### Не добавляй без задачи

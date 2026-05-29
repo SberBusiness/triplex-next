@@ -1,0 +1,139 @@
+@import "src/styles/style";
+
+.main {
+    position: relative;
+    width: 100%;
+    height: var(--triplex-next-runtime-ImageGalleryExtended-Main_Height, 504px);
+    border-radius: 16px;
+    overflow: hidden;
+    // Горизонтальный жест отдаём свайп-навигации, вертикальный — скроллу страницы.
+    touch-action: pan-y;
+
+    &:hover .arrow {
+        opacity: 1;
+    }
+
+    .image {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        user-select: none;
+    }
+}
+
+.imageButton {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+// Лента свайпа: окно соседних слайдов, сдвигается через transform.
+.track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transform: translateX(
+        calc(
+            var(--triplex-next-runtime-ImageGalleryExtended-Track_Shift, 0%) +
+                var(--triplex-next-runtime-ImageGalleryExtended-Track_Drag, 0px)
+        )
+    );
+    transition: none;
+    will-change: transform;
+
+    &.animating {
+        transition: transform 0.3s ease-out;
+    }
+}
+
+// Слайд занимает всю ширину вьюпорта; соседние клипаются overflow у .main.
+// overflow:hidden держит масштабированный блюр (scale 1.2) в границах своего слайда,
+// чтобы он не залезал на соседнюю картинку.
+.slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.blur {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(40px);
+    transform: scale(1.2);
+    pointer-events: none;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.arrow {
+    outline: none;
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    transform: translateY(-50%);
+    background: var(--triplex-next-ImageGallery-Arrow_Background_Default);
+    border: 1px solid var(--triplex-next-ImageGallery-Arrow_BorderColor_Default);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    // Стрелки скрыты по умолчанию и проявляются при ховере на .main (см. .main:hover .arrow).
+    opacity: 0;
+    transition: opacity 0.15s ease;
+
+    // Стрелка в фокусе с клавиатуры остаётся видимой, иначе её нельзя было бы использовать.
+    &:focus-visible {
+        opacity: 1;
+    }
+
+    &:hover {
+        background: var(--triplex-next-ImageGallery-Arrow_Background_Hover);
+        border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Hover);
+    }
+
+    &:active {
+        background: var(--triplex-next-ImageGallery-Arrow_Background_Active);
+        border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Active);
+    }
+
+    // Неактивную стрелку (первый/последний слайд) не показываем вовсе, даже при ховере на .main.
+    &:disabled {
+        display: none;
+    }
+
+    &.prev {
+        left: 16px;
+    }
+
+    &.next {
+        right: 16px;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .main {
+        height: var(--triplex-next-runtime-ImageGalleryExtended-Main_Height, 264px);
+        border-radius: 8px;
+    }
+
+    .arrow {
+        display: none;
+    }
+}

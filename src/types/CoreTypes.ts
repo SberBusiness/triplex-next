@@ -1,5 +1,7 @@
 /** Data-аттрибуты. */
-export type DataAttributes = Record<`data-${string}`, string>;
+export type DataAttributes = {
+    [key in `data-${string}`]?: string;
+};
 
 /**
  * Интерфейс для пропсов компонент с тестовым атрибутом.

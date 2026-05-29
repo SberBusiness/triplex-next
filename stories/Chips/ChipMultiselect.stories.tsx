@@ -1,11 +1,13 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { ChipMultiselect, EComponentSize } from "@sberbusiness/triplex-next";
-import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
+import { ChipMultiselect, EChipType, EComponentSize } from "@sberbusiness/triplex-next";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import {
     PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
     SizesExample,
     SizesExampleSource,
     LoadingExample,
@@ -22,11 +24,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент выбора нескольких значений из списка в виде компонента Chip.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -50,41 +47,34 @@ type Story = StoryObj<typeof ChipMultiselect>;
 export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
+        type: EChipType.TYPE_1,
         size: EComponentSize.MD,
         label: "Multiselect label",
-        displayedValue: "Multiselect value",
+        displayedValue: undefined,
         disabled: false,
     },
     argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(EChipType),
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер компонента",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: EComponentSize.MD },
-            },
         },
         label: {
             control: { type: "text" },
-            description: "Название поля, которое отображается, когда значение не выбрано",
         },
         displayedValue: {
             control: { type: "text" },
-            description: "Лейбл, который отображается вместо выбранного значения",
         },
         disabled: {
             control: { type: "boolean" },
-            description: "Состояние disabled",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
         },
     },
     parameters: {
         controls: {
-            include: ["size", "label", "displayedValue", "disabled"],
+            include: ["type", "size", "label", "displayedValue", "disabled"],
         },
         docs: {
             canvas: {
@@ -104,6 +94,19 @@ export const Default: Story = {
         docs: {
             source: {
                 code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Types: Story = {
+    render: TypesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesExampleSource,
                 language: "tsx",
             },
         },

@@ -10,7 +10,6 @@ export const WithCustomDisplayedValueExample = () => {
             onChange={setValue}
             alignment={EDropdownAlignment.LEFT}
             size={EComponentSize.MD}
-            status="default"
             displayedValue="Date value"
         />
     );

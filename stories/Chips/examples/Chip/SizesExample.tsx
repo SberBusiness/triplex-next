@@ -1,21 +1,35 @@
 import React, { useState } from "react";
 import { Chip, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const SizesExample = () => {
-    const [sm, setSm] = useState(false);
-    const [md, setMd] = useState(false);
-    const [lg, setLg] = useState(false);
+type SizeItemProps = {
+    size: EComponentSize;
+    label: string;
+};
+
+const SizeItem = ({ size, label }: SizeItemProps) => {
+    const [selected, setSelected] = useState(false);
+
+    const handleClick = () => setSelected((prevSelected) => !prevSelected);
+
     return (
-        <div style={{ display: "flex", gap: 12 }}>
-            <Chip size={EComponentSize.SM} selected={sm} onClick={() => setSm((s) => !s)}>
-                SM
-            </Chip>
-            <Chip size={EComponentSize.MD} selected={md} onClick={() => setMd((s) => !s)}>
-                MD
-            </Chip>
-            <Chip size={EComponentSize.LG} selected={lg} onClick={() => setLg((s) => !s)}>
-                LG
+        <div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{label}</div>
+            <Chip size={size} selected={selected} onClick={handleClick}>
+                Value
             </Chip>
         </div>
     );
 };
+
+const sizeOptions = Object.values(EComponentSize).map((size) => ({
+    value: size,
+    label: size.toUpperCase(),
+}));
+
+export const SizesExample = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {sizeOptions.map(({ value, label }) => (
+            <SizeItem key={value} size={value} label={label} />
+        ))}
+    </div>
+);

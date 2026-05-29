@@ -11,7 +11,8 @@ import { DropdownMobileMaskedInput } from "../../Dropdown/mobile/DropdownMobileM
 import styles from "../styles/Chip.module.less";
 
 /** Свойства компонента ChipDatePicker. */
-export interface IChipDatePickerProps extends Omit<IDateFieldProps, "invalidDateHint">, Pick<IChipProps, "disabled"> {
+export interface IChipDatePickerProps
+    extends Omit<IDateFieldProps, "status" | "invalidDateHint">, Pick<IChipProps, "type" | "disabled"> {
     /** Название поля, когда не выбрано значение. */
     label: React.ReactNode;
     /** Лейбл, отображаемый вместо выбранного значения. */
@@ -21,18 +22,19 @@ export interface IChipDatePickerProps extends Omit<IDateFieldProps, "invalidDate
 /** DatePicker с видом компонента Chip. */
 export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerProps>((props, ref) => {
     const {
+        size,
         value,
-        label,
         placeholderMask,
         format = dateFormatYYYYMMDD,
         limitRange = globalLimitRange,
         disabledDays,
-        disabled,
+        type,
+        label,
         displayedValue,
+        disabled,
         onChange,
         onDropdownOpen,
         onDropdownClose,
-        size,
         ...rest
     } = props;
     const [pickerValues, setPickerValues] = useState(
@@ -58,7 +60,7 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         const selected = currentPickerValues.calendarDate !== null;
 
         return (
-            <ChipDatePickerTarget selected={selected} disabled={disabled} onClear={handleClear} size={size}>
+            <ChipDatePickerTarget type={type} size={size} selected={selected} disabled={disabled} onClear={handleClear}>
                 {selected ? (displayedValue ?? currentPickerValues.inputString) : label}
             </ChipDatePickerTarget>
         );

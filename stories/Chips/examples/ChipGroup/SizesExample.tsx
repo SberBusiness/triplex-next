@@ -1,59 +1,49 @@
 import React, { useState } from "react";
 import { Chip, ChipGroup, EComponentSize } from "@sberbusiness/triplex-next";
 
-export const SizesExample = () => {
-    const [selectedSM, setSelectedSM] = useState<number | null>(null);
-    const [selectedMD, setSelectedMD] = useState<number | null>(null);
-    const [selectedLG, setSelectedLG] = useState<number | null>(null);
-    const chips = ["Alpha", "Beta", "Gamma", "Delta"];
+type SizeItemProps = {
+    size: EComponentSize;
+    label: string;
+};
+
+type SizeItemChipProps = Pick<SizeItemProps, "size"> & {
+    name: string;
+};
+
+const SizeItemChip = ({ size, name }: SizeItemChipProps) => {
+    const [selected, setSelected] = useState(false);
+
+    const handleClick = () => setSelected((prevSelected) => !prevSelected);
 
     return (
-        <div style={{ display: "flex", gap: 16, flexDirection: "column" }}>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>
-                <ChipGroup size={EComponentSize.SM} style={{ maxWidth: 360 }}>
-                    {chips.map((label, index) => (
-                        <Chip
-                            size={EComponentSize.SM}
-                            key={label}
-                            selected={selectedSM === index}
-                            onClick={() => setSelectedSM(index)}
-                        >
-                            {label}
-                        </Chip>
-                    ))}
-                </ChipGroup>
-            </div>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>MD</div>
-                <ChipGroup size={EComponentSize.MD} style={{ maxWidth: 360 }}>
-                    {chips.map((label, index) => (
-                        <Chip
-                            size={EComponentSize.MD}
-                            key={label}
-                            selected={selectedMD === index}
-                            onClick={() => setSelectedMD(index)}
-                        >
-                            {label}
-                        </Chip>
-                    ))}
-                </ChipGroup>
-            </div>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LG</div>
-                <ChipGroup size={EComponentSize.LG} style={{ maxWidth: 360 }}>
-                    {chips.map((label, index) => (
-                        <Chip
-                            size={EComponentSize.LG}
-                            key={label}
-                            selected={selectedLG === index}
-                            onClick={() => setSelectedLG(index)}
-                        >
-                            {label}
-                        </Chip>
-                    ))}
-                </ChipGroup>
-            </div>
-        </div>
+        <Chip size={size} selected={selected} onClick={handleClick}>
+            {name}
+        </Chip>
     );
 };
+
+const NAMES = ["Alpha", "Beta", "Gamma", "Delta"];
+
+const SizeItem = ({ size, label }: SizeItemProps) => (
+    <div>
+        <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{label}</div>
+        <ChipGroup size={size}>
+            {NAMES.map((name) => (
+                <SizeItemChip key={name} size={size} name={name} />
+            ))}
+        </ChipGroup>
+    </div>
+);
+
+const sizeOptions = Object.values(EComponentSize).map((size) => ({
+    value: size,
+    label: size.toUpperCase(),
+}));
+
+export const SizesExample = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {sizeOptions.map(({ value, label }) => (
+            <SizeItem key={value} size={value} label={label} />
+        ))}
+    </div>
+);

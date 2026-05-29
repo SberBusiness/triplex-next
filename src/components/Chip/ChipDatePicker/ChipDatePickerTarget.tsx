@@ -10,7 +10,7 @@ export interface IChipDatePickerTargetProps extends IChipProps {
 }
 
 export const ChipDatePickerTarget = React.forwardRef<HTMLSpanElement, IChipDatePickerTargetProps>((props, ref) => {
-    const { children, selected, onKeyDown, onClick, onClear, size, ...rest } = props;
+    const { children, size, selected, onKeyDown, onClick, onClear, ...restProps } = props;
     const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
@@ -41,13 +41,13 @@ export const ChipDatePickerTarget = React.forwardRef<HTMLSpanElement, IChipDateP
 
     return (
         <Chip
-            postfix={renderTargetPostfix()}
+            size={size}
             selected={selected}
             aria-expanded={dropdownOpen}
             onKeyDown={handleKeyDown}
             onClick={handleClick}
-            size={size}
-            {...rest}
+            postfix={renderTargetPostfix()}
+            {...restProps}
             ref={ref}
         >
             {children}

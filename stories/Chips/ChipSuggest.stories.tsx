@@ -1,11 +1,13 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
-import { ChipSuggest, EComponentSize } from "@sberbusiness/triplex-next";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { ChipSuggest, EChipType, EComponentSize } from "@sberbusiness/triplex-next";
 import {
     PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
     SizesExample,
     SizesExampleSource,
     StatesExample,
@@ -21,11 +23,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент выбора одного значения из списка с возможностью фильтрации. Выбранное значение отображается в виде компонента Chip.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -40,42 +37,6 @@ const meta = {
             ),
         },
     },
-    argTypes: {
-        size: {
-            control: { type: "select" },
-            options: Object.values(EComponentSize),
-            description: "Размер компонента.",
-            table: {
-                type: {
-                    summary: Object.values(EComponentSize).join(" | "),
-                },
-                defaultValue: { summary: EComponentSize.LG },
-            },
-        },
-        label: {
-            control: { type: "text" },
-            description: "Текст лейбла, который отображается над полем ввода.",
-        },
-        displayedValue: {
-            control: { type: "text" },
-            description: "Лейбл, отображаемый вместо выбранного значения.",
-        },
-        placeholder: {
-            control: { type: "text" },
-        },
-        noOptionsText: {
-            control: { type: "text" },
-            description: "Текст, отображаемый при отсутствии опций.",
-        },
-        loading: {
-            control: { type: "boolean" },
-            description: "Флаг состояния загрузки.",
-        },
-        clearInputOnFocus: {
-            control: { type: "boolean" },
-            description: "Определяет, нужно ли очищать поле ввода при получении фокуса.",
-        },
-    },
 } satisfies Meta<typeof ChipSuggest>;
 
 export default meta;
@@ -85,18 +46,51 @@ type Story = StoryObj<typeof ChipSuggest>;
 export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
-        size: EComponentSize.LG,
+        type: EChipType.TYPE_1,
+        size: EComponentSize.MD,
         label: "Suggest label",
         displayedValue: undefined,
         placeholder: "Type to proceed",
         noOptionsText: "No matches found.",
         loading: false,
         clearInputOnFocus: false,
-        targetProps: { disabled: false },
+        targetProps: { type: EChipType.TYPE_1, disabled: false },
+    },
+    argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(EChipType),
+        },
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+        },
+        label: {
+            control: { type: "text" },
+        },
+        displayedValue: {
+            control: { type: "text" },
+        },
+        placeholder: {
+            control: { type: "text" },
+        },
+        noOptionsText: {
+            control: { type: "text" },
+        },
+        loading: {
+            control: { type: "boolean" },
+        },
+        clearInputOnFocus: {
+            control: { type: "boolean" },
+        },
+        targetProps: {
+            control: { type: "object" },
+        },
     },
     parameters: {
         controls: {
             include: [
+                "type",
                 "size",
                 "label",
                 "displayedValue",
@@ -104,6 +98,7 @@ export const Playground: Story = {
                 "noOptionsText",
                 "loading",
                 "clearInputOnFocus",
+                "targetProps",
             ],
         },
         docs: {
@@ -124,6 +119,19 @@ export const Default: Story = {
         docs: {
             source: {
                 code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Types: Story = {
+    render: TypesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesExampleSource,
                 language: "tsx",
             },
         },

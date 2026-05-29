@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { ChipSort, type ISelectFieldOption } from "@sberbusiness/triplex-next";
 
-export type ChipSortPlaygroundArgs = Omit<React.ComponentProps<typeof ChipSort>, "defaultValue"> & {
+export type PlaygroundArgs = Omit<React.ComponentProps<typeof ChipSort>, "defaultValue"> & {
     /** Индекс опции в демо-списке для дефолта (контроль Storybook). */
     defaultValue: number;
 };
 
-export const PlaygroundExample = (args: ChipSortPlaygroundArgs) => {
+export const PlaygroundExample = (args: PlaygroundArgs) => {
     const options: ISelectFieldOption[] = [
         { id: "chip-sort-1", label: "По дате", value: "i1" },
         { id: "chip-sort-2", label: "По времени", value: "i2" },

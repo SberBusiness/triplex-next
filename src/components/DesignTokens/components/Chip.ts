@@ -6,9 +6,11 @@ import {
 // Название токенов компонента Chip.
 export const designTokensComponentsChipKeys = [
     "Background_Active",
-    "Background_Default",
     "Background_Disabled",
-    "Background_Hover",
+    "Background_Type1_Default",
+    "Background_Type1_Hover",
+    "Background_Type2_Default",
+    "Background_Type2_Hover",
     "Background_Selected_Active",
     "Background_Selected_Default",
     "Background_Selected_Disabled",
@@ -37,9 +39,11 @@ export type TDesignTokensComponentsChip = { Chip: TDesignTokensComponentsChipVal
 // Токены компонента Chip в светлой и темной темах.
 export const Chip_Tokens: TDesignTokensComponentsChipValues = {
     Background_Active: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Chip-Background_Active)
-    Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Chip-Background_Default)
     Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Chip-Background_Disabled)
-    Background_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Chip-Background_Hover)
+    Background_Type1_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Chip-Background_Type1_Default)
+    Background_Type1_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Background_Type1_Hover)
+    Background_Type2_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Chip-Background_Type2_Default)
+    Background_Type2_Hover: [{ ref: "ColorNeutral.80" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Chip-Background_Type2_Hover)
     Background_Selected_Active: [{ ref: "ColorDarkNeutral.100" }, { ref: "ColorNeutral.40" }], // var(--triplex-next-Chip-Background_Selected_Active)
     Background_Selected_Default: [{ ref: "ColorDarkNeutral.70" }, { ref: "ColorNeutral.90" }], // var(--triplex-next-Chip-Background_Selected_Default)
     Background_Selected_Disabled: [{ ref: "ColorDarkNeutral.60" }, { ref: "ColorNeutral.90" }], // var(--triplex-next-Chip-Background_Selected_Disabled)

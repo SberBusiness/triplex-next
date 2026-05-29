@@ -1,17 +1,19 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Controls, Stories, ArgTypes, Heading, Primary } from "@storybook/addon-docs/blocks";
-import { Chip, EComponentSize } from "@sberbusiness/triplex-next";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Chip, EChipType, EComponentSize } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
     SizesExample,
     SizesExampleSource,
     StatesExample,
     StatesExampleSource,
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
-    PlaygroundExample,
     WithNotificationIconExample,
 } from "./examples/Chip";
 
@@ -21,15 +23,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент предоставляет возможность произвести действие по нажатию, а также отображает выбранное состояние.
-
-## Особенности:
-
-- prefix и postfix можно передать через одноименные свойства.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -53,18 +46,30 @@ export const Playground: Story = {
     tags: ["!autodocs"],
     render: PlaygroundExample,
     args: {
+        type: EChipType.TYPE_1,
         size: EComponentSize.MD,
         disabled: false,
         showNotificationIcon: false,
     },
     argTypes: {
-        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
-        disabled: { control: { type: "boolean" } },
-        showNotificationIcon: { control: { type: "boolean" } },
+        type: {
+            control: { type: "select" },
+            options: Object.values(EChipType),
+        },
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+        },
+        disabled: {
+            control: { type: "boolean" },
+        },
+        showNotificationIcon: {
+            control: { type: "boolean" },
+        },
     },
     parameters: {
         controls: {
-            include: ["size", "disabled", "showNotificationIcon"],
+            include: ["type", "size", "disabled", "showNotificationIcon"],
         },
         docs: {
             canvas: {
@@ -81,6 +86,14 @@ export const Default: StoryObj<typeof Chip> = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: DefaultExampleSource, language: "tsx" } },
+    },
+};
+
+export const Types: Story = {
+    render: TypesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: { source: { code: TypesExampleSource, language: "tsx" } },
     },
 };
 

@@ -154,7 +154,8 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         <MobileView
             fallback={
                 <FocusTrap
-                    active={opened && !opening && !closing}
+                    // active={opened && !opening && !closing}
+                    active={false}
                     {...focusTrapProps}
                     focusTrapOptions={{
                         allowOutsideClick: true,

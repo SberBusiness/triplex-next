@@ -32,13 +32,14 @@ test.describe("ImageGallery", () => {
 
         test("click on next/prev arrows switches the main image", async ({ page }) => {
             const mainImage = page.getByRole("img");
-            // Стрелки prev/next — единственные кнопки внутри контейнера крупной картинки.
-            const arrows = mainImage.locator("xpath=..").locator("button");
+            // Стрелки prev/next — кнопки с aria-label, заданным потребителем (см. story Default).
+            const prevArrow = page.getByRole("button", { name: "Предыдущее изображение" });
+            const nextArrow = page.getByRole("button", { name: "Следующее изображение" });
 
-            await arrows.nth(1).click();
+            await nextArrow.click();
             await expect(mainImage).toHaveAttribute("alt", "Photo 2");
 
-            await arrows.nth(0).click();
+            await prevArrow.click();
             await expect(mainImage).toHaveAttribute("alt", "Photo 1");
         });
     });
@@ -58,16 +59,17 @@ test.describe("ImageGallery", () => {
         });
 
         test("dots row is visible and click on a tick switches the main image", async ({ page }) => {
-            const mainImage = page.getByRole("img");
             // Тики-индикаторы — кнопки с aria-label вида "Photo N" (на мобильном вместо миниатюр).
             const dots = page.getByRole("button", { name: /^Photo \d+$/ });
 
             await expect(dots).toHaveCount(4);
-            await expect(mainImage).toHaveAttribute("alt", "Photo 1");
+            // На мобильном Main — карусельная лента: в DOM окно соседних слайдов (prev/current/next),
+            // поэтому активную картинку определяем по её попаданию во вьюпорт (соседи клипаются .main).
+            await expect(page.getByRole("img", { name: "Photo 1" })).toBeInViewport();
 
             // 9 items, bucketSize=2: тик 2 → index 4 → Photo 5
             await dots.nth(2).click();
-            await expect(mainImage).toHaveAttribute("alt", "Photo 5");
+            await expect(page.getByRole("img", { name: "Photo 5" })).toBeInViewport();
             await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
         });
     });

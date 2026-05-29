@@ -4,8 +4,37 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.31.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**ImageGalleryExtended**
+
+- Базовый (controlled) декларативный компонент галереи, на котором построен `ImageGallery`.
+- Позволяет собирать нестандартные раскладки (например, только крупная картинка, миниатюры сверху, кастомные миниатюры или панель навигации вместо стрелок).
+
+**ImageGallery**
+
+- Компонент галереи. Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки (`Main` + миниатюры/тики) и добавляет uncontrolled-режим.
+
+<Heading>Ломающие изменения</Heading>
+
+**Table**
+
+- Компонент `MasterTable.TabsLinePanel` переименован в `MasterTable.ChipPanel`.
+
 <Heading>Изменения</Heading>
 
-**Title**
+**LightBox**
 
-- Description.
+- Исправлен цвет токена `LightBox.Content_Background` в тёмной теме (`ColorDarkNeutral.10` → `ColorDarkNeutral.0`).
+
+**Row**
+
+- Добавлено свойство `gridHorizontalGap` для определения расстояния между `Col`.
+
+**StatusTracker**
+
+- Добавлено выравнивание текста по левому краю.
+
+**SwipeableArea**
+
+- Добавлены backwards-compatible props `onSwipeLeft?` / `onSwipeRight?` — колбэки завершённого свайпа (срабатывают только когда дельта превысила порог `SWIPE_MIN_DISTANCE`).

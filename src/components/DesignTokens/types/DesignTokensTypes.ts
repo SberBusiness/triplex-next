@@ -21,6 +21,7 @@ import {
     TDesignTokensComponentsIsland,
     TDesignTokensComponentsIslandAccordion,
     TDesignTokensComponentsIslandWidget,
+    TDesignTokensComponentsImageGallery,
     TDesignTokensComponentsLightBox,
     TDesignTokensComponentsLink,
     TDesignTokensComponentsListItem,
@@ -311,6 +312,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsIsland
     | TDesignTokensComponentsIslandAccordion
     | TDesignTokensComponentsIslandWidget
+    | TDesignTokensComponentsImageGallery
     | TDesignTokensComponentsLightBox
     | TDesignTokensComponentsLink
     | TDesignTokensComponentsListItem

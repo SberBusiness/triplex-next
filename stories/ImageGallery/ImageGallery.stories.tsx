@@ -1,0 +1,242 @@
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { ImageGallery } from "@sberbusiness/triplex-next";
+import {
+    IPlaygroundArgs,
+    Playground as PlaygroundRender,
+    Default as DefaultRender,
+    DefaultSource,
+    FixedHeight as FixedHeightRender,
+    FixedHeightSource,
+    WithoutThumbnails as WithoutThumbnailsRender,
+    WithoutThumbnailsSource,
+    WithDots as WithDotsRender,
+    WithDotsSource,
+    PropsForwarding as PropsForwardingRender,
+    PropsForwardingSource,
+    WithoutBlur as WithoutBlurRender,
+    WithoutBlurSource,
+    InsideLightBox as InsideLightBoxRender,
+    InsideLightBoxSource,
+    VisualTestsArrows as VisualTestsArrowsRender,
+    VisualTestsDots as VisualTestsDotsRender,
+} from "./examples";
+
+export default {
+    title: "Components/ImageGallery",
+    component: ImageGallery,
+    tags: ["autodocs"],
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={ImageGallery} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
+                    <Stories />
+                </>
+            ),
+        },
+    },
+} satisfies Meta<typeof ImageGallery>;
+
+const PLAYGROUND_ARGS: IPlaygroundArgs = {
+    height: "auto",
+    withBlur: true,
+    showThumbnails: true,
+    showDots: true,
+    defaultId: "photo-1",
+    prevArrowProps: { "aria-label": "Предыдущее изображение" },
+    nextArrowProps: { "aria-label": "Следующее изображение" },
+    thumbnailsProps: {},
+    dotsProps: {},
+};
+
+/** Интерактивный playground: все props галереи настраиваются через панель Controls. */
+export const Playground: StoryObj<IPlaygroundArgs> = {
+    tags: ["!autodocs"],
+    args: PLAYGROUND_ARGS,
+    argTypes: {
+        height: {
+            control: { type: "select" },
+            options: ["auto", 320, 480, 640],
+            description: "Высота крупной картинки. `'auto'` — фиксированные значения по breakpoint.",
+            table: { category: "Props" },
+        },
+        withBlur: {
+            control: "boolean",
+            description: "Показывать ли блюр-слой по краям крупного изображения.",
+            table: { category: "Props" },
+        },
+        showThumbnails: {
+            control: "boolean",
+            description: "Показывать ли ленту миниатюр (десктоп).",
+            table: { category: "Props" },
+        },
+        showDots: {
+            control: "boolean",
+            description: "Показывать ли ряд тиков-индикаторов (мобильный).",
+            table: { category: "Props" },
+        },
+        defaultId: {
+            control: { type: "select" },
+            options: [
+                "photo-1",
+                "photo-2",
+                "photo-3",
+                "photo-4",
+                "photo-5",
+                "photo-6",
+                "photo-7",
+                "photo-8",
+                "photo-9",
+            ],
+            description: "Идентификатор активного изображения по умолчанию.",
+            table: { category: "Props" },
+        },
+        prevArrowProps: {
+            control: "object",
+            description: "Свойства кнопки перехода к предыдущему изображению.",
+            table: { category: "Accessibility" },
+        },
+        nextArrowProps: {
+            control: "object",
+            description: "Свойства кнопки перехода к следующему изображению.",
+            table: { category: "Accessibility" },
+        },
+        thumbnailsProps: {
+            control: "object",
+            description: "Свойства ленты миниатюр (десктоп).",
+            table: { category: "Props" },
+        },
+        dotsProps: {
+            control: "object",
+            description: "Свойства ряда тиков-индикаторов (мобильный).",
+            table: { category: "Props" },
+        },
+    },
+    parameters: {
+        testRunner: { skip: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+    },
+    render: PlaygroundRender,
+};
+
+/** Готовая галерея с пресетом раскладки: крупная картинка со стрелками и лента миниатюр (десктоп). */
+export const Default: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: DefaultSource, language: "tsx" },
+        },
+    },
+    render: DefaultRender,
+};
+
+/** Фиксированная высота крупной картинки через `height` (вместо `'auto'`). */
+export const FixedHeight: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: FixedHeightSource, language: "tsx" },
+        },
+    },
+    render: FixedHeightRender,
+};
+
+/** Без ленты миниатюр (`showThumbnails={false}`) — только крупная картинка со стрелками. */
+export const WithoutThumbnails: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: WithoutThumbnailsSource, language: "tsx" },
+        },
+    },
+    render: WithoutThumbnailsRender,
+};
+
+/** Мобильный preset (XS viewport): лента миниатюр заменена рядом тиков-индикаторов (максимум 4). */
+export const WithDots: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        controls: { disable: true },
+        viewport: { defaultViewport: "XS" },
+        docs: {
+            source: { code: WithDotsSource, language: "tsx" },
+        },
+    },
+    render: WithDotsRender,
+};
+
+/** Проброс `id`/`data-test-id` в стрелки, ленту миниатюр и ряд тиков через `*ArrowProps` / `thumbnailsProps` / `dotsProps`. */
+export const PropsForwarding: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: PropsForwardingSource, language: "tsx" },
+        },
+    },
+    render: PropsForwardingRender,
+};
+
+/** Без блюр-слоя по краям крупной картинки (`withBlur={false}`). */
+export const WithoutBlur: StoryObj<typeof ImageGallery> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: WithoutBlurSource, language: "tsx" },
+        },
+    },
+    render: WithoutBlurRender,
+};
+
+/** Открытие в `LightBox` по клику на картинку (`onImageClick`); индекс синхронизирован между preview и копией в лайтбоксе (controlled). */
+export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
+    name: "InsideLightBox",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: InsideLightBoxSource, language: "tsx" },
+        },
+    },
+    render: InsideLightBoxRender,
+};
+
+/**
+ * Скриншот-тест встроенных стрелок навигации на границах диапазона (desktop preset):
+ * слева — первое изображение (стрелка «назад» disabled), справа — последнее
+ * (стрелка «вперёд» disabled, плюс блюр-слой). Фиксирует disabled-состояния стрелок.
+ */
+export const VisualTestsArrows: StoryObj<typeof ImageGallery> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsArrowsRender,
+};
+
+/** Скриншот-тест тиков-индикаторов (мобильный preset, XS viewport): активный тик и обычные. */
+export const VisualTestsDots: StoryObj<typeof ImageGallery> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        viewport: { defaultViewport: "XS" },
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsDotsRender,
+};

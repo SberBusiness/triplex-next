@@ -120,6 +120,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Header | ⬜ | ⬜ | ⬜ |
 | HelpBox | ✅ | ✅ | ⬜ |
 | IconWrapper | ⬜ | ✅ | ⬜ |
+| ImageGallery | ✅ | ✅ | ✅ |
+| ImageGalleryExtended | ✅ | ✅ | ✅ |
 | Island | ⬜ | ✅ | ⬜ |
 | IslandAccordion | ⬜ | ✅ | ⬜ |
 | IslandWidget | ⬜ | ✅ | ⬜ |

@@ -16,5 +16,5 @@ export type TDesignTokensComponentsTopOverlay = { TopOverlay: TDesignTokensCompo
 
 // Токены компонента TopOverlay в светлой и темной темах.
 export const TopOverlay_Tokens: TDesignTokensComponentsTopOverlayValues = {
-    Background: [{ ref: "ColorDarkNeutralAlpha.50" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-TopOverlay-Background)
+    Background: [{ value: "rgba(79,79,82,.15)" }, { value: "rgba(0,0,0,.45)" }], // var(--triplex-next-TopOverlay-Background)
 };

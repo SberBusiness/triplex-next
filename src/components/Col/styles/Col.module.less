@@ -1,4 +1,4 @@
-@import '../../../styles/style';
+@import "../../../styles/style";
 
 @base-col: (100% / 12);
 
@@ -7,8 +7,8 @@
         .col-@{resolutionType}@{value} {
         position: relative;
         width: 100%;
-        padding-right: @grid-horizontal-gap;
-        padding-left: @grid-horizontal-gap;
+        padding-right: var(--grid-horizontal-gap, @grid-horizontal-gap-MD);
+        padding-left: var(--grid-horizontal-gap, @grid-horizontal-gap-MD);
         flex: 0 0 (@base-col * @value);
         max-width: (@base-col * @value);
         box-sizing: border-box;
@@ -20,10 +20,18 @@
     }});
 }
 
+.gridHorizontalGapSM {
+    --grid-horizontal-gap: @grid-horizontal-gap-SM;
+}
+
+.gridHorizontalGapMD {
+    --grid-horizontal-gap: @grid-horizontal-gap-MD;
+}
+
 // https://getbootstrap.com/docs/4.1/layout/grid/#grid-options
 
 // Extra small (на всех разрешениях)
-.createCol(~'');
+.createCol(~"");
 
 .d-none {
     display: none !important;

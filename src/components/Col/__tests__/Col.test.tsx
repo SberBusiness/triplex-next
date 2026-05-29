@@ -2,6 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { Col } from "../Col";
+import { Row } from "../../Row/Row";
+import { RowContext } from "../../Row/RowContext";
+import { EComponentSize } from "../../../enums/EComponentSize";
 
 // Mock child for testing
 const MockChild: React.FC = () => <span data-testid="mock-child">Child</span>;
@@ -123,6 +126,72 @@ describe("Col Component", () => {
             expectedClasses.forEach((cls) => {
                 expect(col).toHaveClass(cls);
             });
+        });
+    });
+
+    describe("gapSize from RowContext", () => {
+        it("should apply gridHorizontalGapSM when rendered without Row (context default)", () => {
+            render(
+                <Col data-testid="col-div">
+                    <MockChild />
+                </Col>,
+            );
+
+            const col = getColDiv();
+            expect(col).toHaveClass("gridHorizontalGapSM");
+            expect(col).not.toHaveClass("gridHorizontalGapMD");
+        });
+
+        it("should apply gridHorizontalGapSM when inside Row with gridHorizontalGap SM", () => {
+            render(
+                <Row gridHorizontalGap={EComponentSize.SM}>
+                    <Col data-testid="col-div">
+                        <MockChild />
+                    </Col>
+                </Row>,
+            );
+
+            const col = getColDiv();
+            expect(col).toHaveClass("gridHorizontalGapSM");
+            expect(col).not.toHaveClass("gridHorizontalGapMD");
+        });
+
+        it("should apply gridHorizontalGapMD when inside Row with gridHorizontalGap MD", () => {
+            render(
+                <Row gridHorizontalGap={EComponentSize.MD}>
+                    <Col data-testid="col-div">
+                        <MockChild />
+                    </Col>
+                </Row>,
+            );
+
+            const col = getColDiv();
+            expect(col).toHaveClass("gridHorizontalGapMD");
+            expect(col).not.toHaveClass("gridHorizontalGapSM");
+        });
+
+        it("should apply gridHorizontalGapSM for all columns in the same row", () => {
+            render(
+                <Row gridHorizontalGap={EComponentSize.SM}>
+                    <Col data-testid="col-1">First</Col>
+                    <Col data-testid="col-2">Second</Col>
+                </Row>,
+            );
+
+            expect(screen.getByTestId("col-1")).toHaveClass("gridHorizontalGapSM");
+            expect(screen.getByTestId("col-2")).toHaveClass("gridHorizontalGapSM");
+        });
+
+        it("should use gridHorizontalGap from explicit RowContext.Provider", () => {
+            render(
+                <RowContext.Provider value={{ gridHorizontalGap: EComponentSize.SM }}>
+                    <Col data-testid="col-div">
+                        <MockChild />
+                    </Col>
+                </RowContext.Provider>,
+            );
+
+            expect(getColDiv()).toHaveClass("gridHorizontalGapSM");
         });
     });
 

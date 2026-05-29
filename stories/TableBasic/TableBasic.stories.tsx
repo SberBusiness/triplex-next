@@ -533,8 +533,8 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         return (
             <div style={args.withHorizontalScroll ? { width: "100%" } : undefined}>
                 <MasterTable loading={args.isLoading}>
-                    <MasterTable.TabsLinePanel>
-                        <MasterTable.TabsLinePanel.Links>
+                    <MasterTable.ChipPanel>
+                        <MasterTable.ChipPanel.Links>
                             {isAnyFilterChanged && <Link onClick={handleClickResetFilters}>Сбросить всё</Link>}
                             <Link onClick={handleClickShowFilterPanel}>
                                 {isShowAdditionalFilterPanel
@@ -543,8 +543,8 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                                       ? "Изменить фильтры"
                                       : "Фильтры"}
                             </Link>
-                        </MasterTable.TabsLinePanel.Links>
-                    </MasterTable.TabsLinePanel>
+                        </MasterTable.ChipPanel.Links>
+                    </MasterTable.ChipPanel>
                     {renderFilterPanel()}
                     <div style={args.withHorizontalScroll ? { overflow: "auto hidden" } : undefined}>
                         <MasterTable.TableBasic
@@ -781,8 +781,8 @@ export const TableSettingsColumn: StoryObj = {
 
         return (
             <MasterTable>
-                <MasterTable.TabsLinePanel>
-                    <MasterTable.TabsLinePanel.Links>
+                <MasterTable.ChipPanel>
+                    <MasterTable.ChipPanel.Links>
                         <MasterTable.TableBasicSettings
                             linkTitle={settingsDropdownOpened ? "Скрыть настройки" : "Настройки"}
                             opened={settingsDropdownOpened}
@@ -805,8 +805,8 @@ export const TableSettingsColumn: StoryObj = {
                                 </Button>
                             </MasterTable.TableBasicSettings.Footer>
                         </MasterTable.TableBasicSettings>
-                    </MasterTable.TabsLinePanel.Links>
-                </MasterTable.TabsLinePanel>
+                    </MasterTable.ChipPanel.Links>
+                </MasterTable.ChipPanel>
                 <MasterTable.TableBasic
                     columns={columns}
                     data={data}
@@ -1044,8 +1044,8 @@ export const TableSettingsColumnExtended: StoryObj = {
 
         return (
             <MasterTable>
-                <MasterTable.TabsLinePanel>
-                    <MasterTable.TabsLinePanel.Links>
+                <MasterTable.ChipPanel>
+                    <MasterTable.ChipPanel.Links>
                         <MasterTable.TableBasicSettings
                             linkTitle={settingsDropdownOpened ? "Скрыть настройки" : "Настройки"}
                             opened={settingsDropdownOpened}
@@ -1068,8 +1068,8 @@ export const TableSettingsColumnExtended: StoryObj = {
                                 </Button>
                             </MasterTable.TableBasicSettings.Footer>
                         </MasterTable.TableBasicSettings>
-                    </MasterTable.TabsLinePanel.Links>
-                </MasterTable.TabsLinePanel>
+                    </MasterTable.ChipPanel.Links>
+                </MasterTable.ChipPanel>
                 <MasterTable.TableBasic
                     columns={columns}
                     data={data}

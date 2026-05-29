@@ -107,11 +107,13 @@ export interface INoColumnsProps extends React.HTMLAttributes<HTMLDivElement> {}
 /** Свойства компонента FilterPanel. */
 export interface IFilterPanelProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-/** Свойства компонента TabsLinePanel. */
-export interface ITabsLinePanelProps extends React.HTMLAttributes<HTMLDivElement> {}
+/** Свойства компонента ChipPanel. */
+export interface IChipPanelProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export interface ITableBasicSettingsProps
-    extends Omit<IButtonDropdownExtendedProps, "renderDropdown" | "renderButton" | "dropdownRef"> {
+export interface ITableBasicSettingsProps extends Omit<
+    IButtonDropdownExtendedProps,
+    "renderDropdown" | "renderButton" | "dropdownRef"
+> {
     /** Название кнопки. */
     linkTitle: string;
     children?: React.ReactNode;
@@ -123,8 +125,8 @@ export interface ITableFooterProps extends React.HTMLAttributes<HTMLDivElement> 
 /** Свойства компонента PaginationPanel. */
 export interface IPaginationPanelProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-/** Свойства компонента TabsLinePanelLinks. */
-export interface ITabsLinePanelLinksProps extends React.HTMLAttributes<HTMLDivElement> {
+/** Свойства компонента ChipPanelLinks. */
+export interface IChipPanelLinksProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
 }
 

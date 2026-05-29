@@ -7,7 +7,7 @@ import { ChipSuggestDropdown } from "./ChipSuggestDropdown";
 import styles from "../styles/Chip.module.less";
 
 const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
-    { className, displayedValue, label, prefix, targetProps, dropdownProps, ...restProps }: IChipSuggestProps<T>,
+    { className, type, displayedValue, label, prefix, targetProps, dropdownProps, ...restProps }: IChipSuggestProps<T>,
     ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
     const { value, size } = restProps;
@@ -26,7 +26,7 @@ const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
 
     return (
         <Suggest className={clsx(styles.chipGroupItem, className)} {...restProps} ref={setRef}>
-            <ChipSuggestTarget size={size} {...targetProps} ref={targetRef}>
+            <ChipSuggestTarget size={size} {...targetProps} type={type} ref={targetRef}>
                 {value ? (displayedValue ?? value.label) : label}
             </ChipSuggestTarget>
             <ChipSuggestDropdown size={size} targetRef={suggestRef} {...dropdownProps}>

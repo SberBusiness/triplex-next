@@ -1,45 +1,37 @@
 import React, { useState } from "react";
 import { ChipDatePicker, EComponentSize, EDropdownAlignment } from "@sberbusiness/triplex-next";
 
-export const SizesExample = () => {
-    const [sm, setSm] = useState("");
-    const [md, setMd] = useState("");
-    const [lg, setLg] = useState("");
+type SizeItemProps = {
+    size: EComponentSize;
+    label: string;
+};
+
+const SizeItem = ({ size, label }: SizeItemProps) => {
+    const [value, setValue] = useState("");
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>
-                <ChipDatePicker
-                    value={sm}
-                    label="Date label"
-                    onChange={setSm}
-                    alignment={EDropdownAlignment.LEFT}
-                    size={EComponentSize.SM}
-                    status="default"
-                />
-            </div>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>MD</div>
-                <ChipDatePicker
-                    value={md}
-                    label="Date label"
-                    onChange={setMd}
-                    alignment={EDropdownAlignment.LEFT}
-                    size={EComponentSize.MD}
-                    status="default"
-                />
-            </div>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LG</div>
-                <ChipDatePicker
-                    value={lg}
-                    label="Date label"
-                    onChange={setLg}
-                    alignment={EDropdownAlignment.LEFT}
-                    size={EComponentSize.LG}
-                    status="default"
-                />
-            </div>
+        <div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{label}</div>
+            <ChipDatePicker
+                size={size}
+                alignment={EDropdownAlignment.LEFT}
+                value={value}
+                label="Date label"
+                onChange={setValue}
+            />
         </div>
     );
 };
+
+const sizeOptions = Object.values(EComponentSize).map((size) => ({
+    value: size,
+    label: size.toUpperCase(),
+}));
+
+export const SizesExample = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {sizeOptions.map(({ value, label }) => (
+            <SizeItem key={value} size={value} label={label} />
+        ))}
+    </div>
+);

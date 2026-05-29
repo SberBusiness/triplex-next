@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Chip, ChipGroup } from "@sberbusiness/triplex-next";
+import { ChipGroup, Chip } from "@sberbusiness/triplex-next";
 
-interface IPlaygroundArgs extends React.ComponentProps<typeof ChipGroup> {
-    size: React.ComponentProps<typeof Chip>["size"];
-}
+export interface PlaygroundArgs extends Pick<React.ComponentProps<typeof ChipGroup>, "size" | "oneLine"> {}
 
-export const PlaygroundExample = (args: IPlaygroundArgs) => {
+export const PlaygroundExample = (args: PlaygroundArgs) => {
     const [selected, setSelected] = useState<number | null>(null);
     const chips = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta"];
 

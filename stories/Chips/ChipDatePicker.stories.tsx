@@ -1,15 +1,17 @@
 import React from "react";
-import { Title, Description, Controls, Stories, Primary, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Meta, StoryObj } from "@storybook/react";
-import { ChipDatePicker, EComponentSize } from "@sberbusiness/triplex-next";
+import { ChipDatePicker, EChipType, EComponentSize } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
     SizesExample,
     SizesExampleSource,
     WithCustomDisplayedValueExample,
     WithCustomDisplayedValueExampleSource,
-    PlaygroundExample,
     VisualTestsExample,
     VisualTestsExampleSource,
 } from "./examples/ChipDatePicker";
@@ -43,7 +45,7 @@ export const Playground: Story = {
     tags: ["!autodocs"],
     parameters: {
         controls: {
-            include: ["size", "label", "displayedValue", "disabled"],
+            include: ["type", "size", "label", "displayedValue", "disabled"],
         },
         docs: {
             canvas: {
@@ -54,31 +56,29 @@ export const Playground: Story = {
         testRunner: { skip: true },
     },
     args: {
+        type: EChipType.TYPE_1,
         size: EComponentSize.MD,
         label: "Date label",
+        displayedValue: undefined,
         disabled: false,
     },
     argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(EChipType),
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер компонента",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: EComponentSize.MD },
-            },
         },
         label: {
             control: { type: "text" },
-            description: "Название поля, которое отображается, когда значение не выбрано",
         },
         displayedValue: {
             control: { type: "text" },
-            description: "Лейбл, который отображается вместо выбранного значения",
         },
         disabled: {
             control: { type: "boolean" },
-            description: "Состояние disabled",
         },
     },
     render: PlaygroundExample,
@@ -92,16 +92,11 @@ export const Default: Story = {
     },
 };
 
-export const WithCustomDisplayedValue: Story = {
-    render: WithCustomDisplayedValueExample,
+export const Types: Story = {
+    render: TypesExample,
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "ChipDatePicker с переданным displayedValue.",
-            },
-            source: { code: WithCustomDisplayedValueExampleSource, language: "tsx" },
-        },
+        docs: { source: { code: TypesExampleSource, language: "tsx" } },
     },
 };
 
@@ -110,6 +105,17 @@ export const Sizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: SizesExampleSource, language: "tsx" } },
+    },
+};
+
+export const WithCustomDisplayedValue: Story = {
+    name: "With custom displayed value",
+    render: WithCustomDisplayedValueExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: { code: WithCustomDisplayedValueExampleSource, language: "tsx" },
+        },
     },
 };
 

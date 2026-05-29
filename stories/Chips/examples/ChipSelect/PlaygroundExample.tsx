@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChipSelect, type ISelectFieldOption } from "@sberbusiness/triplex-next";
 
-const demoOptions: ISelectFieldOption[] = [
+const options: ISelectFieldOption[] = [
     { id: "1", value: "option1", label: "Первая опция" },
     { id: "2", value: "option2", label: "Вторая опция" },
     { id: "3", value: "option3", label: "Третья опция" },
@@ -10,23 +10,18 @@ const demoOptions: ISelectFieldOption[] = [
     { id: "6", value: "option6", label: "Шестая опция" },
 ];
 
-interface IChipSelectPlaygroundProps extends Omit<
+export interface PlaygroundArgs extends Pick<
     React.ComponentProps<typeof ChipSelect>,
-    "onChange" | "clearSelected" | "value" | "options"
-> {
-    selectedValueId?: string;
-}
+    "type" | "size" | "label" | "displayedValue" | "disabled"
+> {}
 
-export const PlaygroundExample = (args: IChipSelectPlaygroundProps) => {
-    const [selectedOption, setSelectedOption] = useState<ISelectFieldOption | undefined>(
-        args.selectedValueId ? demoOptions.find((opt) => opt.id === args.selectedValueId) : undefined,
-    );
+export const PlaygroundExample = (args: PlaygroundArgs) => {
+    const [selectedOption, setSelectedOption] = useState<ISelectFieldOption | undefined>(undefined);
 
     return (
         <ChipSelect
             {...args}
-            displayedValue={args.displayedValue || undefined}
-            options={demoOptions}
+            options={options}
             value={selectedOption}
             onChange={setSelectedOption}
             clearSelected={() => setSelectedOption(undefined)}

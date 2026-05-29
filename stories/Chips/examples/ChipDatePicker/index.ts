@@ -1,10 +1,12 @@
 export { DefaultExample } from "./DefaultExample";
 export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export { WithCustomDisplayedValueExample } from "./WithCustomDisplayedValueExample";
-export { default as WithCustomDisplayedValueExampleSource } from "./WithCustomDisplayedValueExample?raw";
-export { SizesExample } from "./SizesExample";
-export { default as SizesExampleSource } from "./SizesExample?raw";
 export { PlaygroundExample } from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { SizesExample } from "./SizesExample";
+export { default as SizesExampleSource } from "./SizesExample?raw";
+export { TypesExample } from "./TypesExample";
+export { default as TypesExampleSource } from "./TypesExample?raw";
 export { VisualTestsExample } from "./VisualTestsExample";
 export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";
+export { WithCustomDisplayedValueExample } from "./WithCustomDisplayedValueExample";
+export { default as WithCustomDisplayedValueExampleSource } from "./WithCustomDisplayedValueExample?raw";

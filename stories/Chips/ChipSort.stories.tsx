@@ -1,12 +1,14 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
-import { ChipSort, EComponentSize } from "@sberbusiness/triplex-next";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { ChipSort, EChipType, EComponentSize } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundArgs,
     PlaygroundExample,
-    ChipSortPlaygroundArgs,
     DefaultExample,
     DefaultExampleSource,
+    TypesExample,
+    TypesExampleSource,
     SizesExample,
     SizesExampleSource,
     VisualTestsExample,
@@ -18,11 +20,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-ChipSelect с иконкой выбора сортировки.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -43,32 +40,40 @@ export default meta;
 
 type Story = StoryObj<typeof ChipSort>;
 
-export const Playground: StoryObj<ChipSortPlaygroundArgs> = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
     args: {
+        type: EChipType.TYPE_1,
         size: EComponentSize.MD,
         disabled: false,
         defaultValue: 0,
     },
     argTypes: {
+        type: {
+            control: { type: "select" },
+            options: Object.values(EChipType),
+            table: { category: "Props" },
+        },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
+            table: { category: "Props" },
         },
-        disabled: { control: { type: "boolean" } },
+        disabled: {
+            control: { type: "boolean" },
+            table: { category: "Props" },
+        },
         defaultValue: {
             control: { type: "select" },
             options: [0, 1, 2],
             description: "Дефолтное значение",
-            table: {
-                category: "Settings",
-            },
+            table: { category: "Settings" },
         },
     },
     parameters: {
         testRunner: { skip: true },
         controls: {
-            include: ["size", "disabled", "defaultValue"],
+            include: ["type", "size", "disabled", "defaultValue"],
         },
         docs: {
             canvas: {
@@ -87,6 +92,19 @@ export const Default: Story = {
         docs: {
             source: {
                 code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Types: Story = {
+    render: TypesExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesExampleSource,
                 language: "tsx",
             },
         },

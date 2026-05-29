@@ -1,15 +1,15 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Controls, Stories, ArgTypes, Primary, Heading } from "@storybook/addon-docs/blocks";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { ChipGroup, EComponentSize } from "@sberbusiness/triplex-next";
 import {
+    PlaygroundExample,
     DefaultExample,
     DefaultExampleSource,
-    OneLineExample,
-    OneLineExampleSource,
     SizesExample,
     SizesExampleSource,
-    PlaygroundExample,
+    OneLineExample,
+    OneLineExampleSource,
 } from "./examples/ChipGroup";
 
 const meta = {
@@ -18,14 +18,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `Контейнер для группировки нескольких компонентов Chip.
-
-## Особенности:
-
-- Для отображения чипов в одну строку используется свойство **oneLine**.
-                    `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -48,10 +40,18 @@ type Story = StoryObj<typeof ChipGroup>;
 export const Playground: Story = {
     tags: ["!autodocs"],
     render: PlaygroundExample,
-    args: { oneLine: false, size: EComponentSize.MD },
+    args: {
+        size: EComponentSize.MD,
+        oneLine: false,
+    },
     argTypes: {
-        oneLine: { control: { type: "boolean" } },
-        size: { control: { type: "select" }, options: Object.values(EComponentSize) },
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+        },
+        oneLine: {
+            control: { type: "boolean" },
+        },
     },
     parameters: {
         controls: {

@@ -1,3 +1,4 @@
+export * from "./enums";
 export * from "./Chip";
 export * from "./ChipDatePicker";
 export * from "./ChipClearButton";

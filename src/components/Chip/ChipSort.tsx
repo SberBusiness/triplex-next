@@ -25,7 +25,7 @@ export interface IChipSortProps extends Omit<IChipSelectProps, "targetProps" | "
  * ChipSelect с иконкой выбора сортировки.
  */
 export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
-    ({ className, defaultValue, disabled, label, onChange, options, value, size, ...rest }, ref) => {
+    ({ className, defaultValue, disabled, label, onChange, options, value, size, type, ...restProps }, ref) => {
         const instanceId = useRef(uniqueId());
         const selected = Boolean(value) && !isEqual(defaultValue, value);
 
@@ -39,15 +39,16 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
 
             return (
                 <ChipIcon
-                    ref={ref}
                     disabled={disabled}
                     selected={selected}
                     onClick={() => setOpened(!opened)}
                     onKeyDown={handleKeyDown}
                     size={size}
+                    type={type}
                     role="combobox"
                     aria-expanded={opened}
                     aria-controls={instanceId.current}
+                    ref={ref}
                 >
                     <IconWrapper active={opened} disabled={disabled} displayContents>
                         {selected ? <SortStrokeSrvIcon24 paletteIndex={6} /> : <SortStrokeSrvIcon24 paletteIndex={5} />}
@@ -72,7 +73,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
             <SelectExtendedField
                 className={clsx(styles.chipGroupItem, className)}
                 renderTarget={renderTarget}
-                {...rest}
+                {...restProps}
             >
                 {renderDropdown}
             </SelectExtendedField>

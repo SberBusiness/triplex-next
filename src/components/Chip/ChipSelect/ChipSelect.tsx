@@ -1,19 +1,19 @@
 import React from "react";
+import clsx from "clsx";
 import {
     ISelectExtendedFieldDropdownProvideProps,
     ISelectExtendedFieldTargetProvideProps,
     SelectExtendedField,
-} from "@sberbusiness/triplex-next/components/SelectExtendedField";
+} from "../../SelectExtendedField";
 import { IChipProps } from "../Chip";
-import { SelectExtendedFieldDropdownDefault } from "@sberbusiness/triplex-next/components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
-import { ISelectFieldProps } from "@sberbusiness/triplex-next/components/SelectField";
+import { SelectExtendedFieldDropdownDefault } from "../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
+import { ISelectFieldProps } from "../../SelectField";
 import { ChipSelectTarget } from "./ChipSelectTarget";
 import styles from "../styles/Chip.module.less";
-import clsx from "clsx";
 
 export interface IChipSelectProps
     extends
-        Pick<IChipProps, "disabled" | "className">,
+        Pick<IChipProps, "className" | "disabled" | "type">,
         Omit<
             ISelectFieldProps,
             | "children"
@@ -37,7 +37,22 @@ export interface IChipSelectProps
  * Выбранное значение отображается компонентом Chip.
  */
 export const ChipSelect = React.forwardRef<HTMLDivElement, IChipSelectProps>(
-    ({ className, clearSelected, disabled, size, label, displayedValue, onChange, options, value, ...rest }, ref) => {
+    (
+        {
+            className,
+            disabled,
+            value,
+            options,
+            onChange,
+            type,
+            size,
+            clearSelected,
+            label,
+            displayedValue,
+            ...restProps
+        },
+        ref,
+    ) => {
         const renderDropdown = (props: ISelectExtendedFieldDropdownProvideProps) => (
             <SelectExtendedFieldDropdownDefault
                 {...props}
@@ -54,10 +69,11 @@ export const ChipSelect = React.forwardRef<HTMLDivElement, IChipSelectProps>(
 
             return (
                 <ChipSelectTarget
+                    type={type}
+                    size={size}
                     selected={selected}
                     disabled={disabled}
                     onClear={clearSelected}
-                    size={size}
                     opened={opened}
                     setOpened={setOpened}
                 >
@@ -70,7 +86,7 @@ export const ChipSelect = React.forwardRef<HTMLDivElement, IChipSelectProps>(
             <SelectExtendedField
                 className={clsx(styles.chipGroupItem, className)}
                 renderTarget={renderTarget}
-                {...rest}
+                {...restProps}
                 ref={ref}
             >
                 {renderDropdown}

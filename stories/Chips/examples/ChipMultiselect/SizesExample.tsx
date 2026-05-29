@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import clsx from "clsx";
 import {
     EComponentSize,
     MultiselectField,
@@ -23,9 +24,12 @@ import {
 } from "@sberbusiness/triplex-next";
 import { CHIP_MULTISELECT_OPTIONS } from "./storyConstants";
 
-type SizeItemProps = { size: EComponentSize; title: string };
+type SizeItemProps = {
+    size: EComponentSize;
+    label: string;
+};
 
-const SizeItem = ({ size, title }: SizeItemProps) => {
+const SizeItem = ({ size, label }: SizeItemProps) => {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [filter, setFilter] = useState("");
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -73,7 +77,7 @@ const SizeItem = ({ size, title }: SizeItemProps) => {
         return renderCheckboxes ? (
             renderCheckboxList()
         ) : (
-            <div className={`not-found ${size}`}>
+            <div className={clsx("not-found", size)}>
                 <Text size={ETextSize.B3}>Nothing was found</Text>
             </div>
         );
@@ -98,7 +102,7 @@ const SizeItem = ({ size, title }: SizeItemProps) => {
 
     return (
         <div>
-            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{title}</div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{label}</div>
             <ChipMultiselect
                 size={size}
                 clearSelected={unselectAll}
@@ -181,10 +185,15 @@ const SizeItem = ({ size, title }: SizeItemProps) => {
     );
 };
 
+const sizeOptions = Object.values(EComponentSize).map((size) => ({
+    value: size,
+    label: size.toUpperCase(),
+}));
+
 export const SizesExample = () => (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-        <SizeItem size={EComponentSize.SM} title="SM" />
-        <SizeItem size={EComponentSize.MD} title="MD" />
-        <SizeItem size={EComponentSize.LG} title="LG" />
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {sizeOptions.map(({ value, label }) => (
+            <SizeItem key={value} size={value} label={label} />
+        ))}
     </div>
 );

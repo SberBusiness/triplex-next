@@ -5,10 +5,10 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 export interface IChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Чипсы выводятся в одну строку со скроллом. */
-    oneLine?: boolean;
     /** Размер компонента. */
     size?: EComponentSize;
+    /** Чипсы выводятся в одну строку со скроллом. */
+    oneLine?: boolean;
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);

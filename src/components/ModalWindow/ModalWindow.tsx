@@ -146,7 +146,8 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                     unmountOnExit
                 >
                     <FocusTrap
-                        active={isOpen}
+                        // active={isOpen}
+                        active={false}
                         {...focusTrapProps}
                         focusTrapOptions={{
                             allowOutsideClick: true,

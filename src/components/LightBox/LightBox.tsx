@@ -168,7 +168,8 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                 <MobileView
                     fallback={
                         <FocusTrap
-                            active={!isLoading}
+                            // active={!isLoading}
+                            active={false}
                             {...focusTrapProps}
                             focusTrapOptions={{
                                 allowOutsideClick: true,

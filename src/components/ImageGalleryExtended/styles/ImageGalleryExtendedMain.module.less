@@ -94,6 +94,14 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    // Стрелки скрыты по умолчанию и проявляются при ховере на .main (см. .main:hover .arrow).
+    opacity: 0;
+    transition: opacity 0.15s ease;
+
+    // Стрелка в фокусе с клавиатуры остаётся видимой, иначе её нельзя было бы использовать.
+    &:focus-visible {
+        opacity: 1;
+    }
 
     &:hover {
         background: var(--triplex-next-ImageGallery-Arrow_Background_Hover);
@@ -105,10 +113,9 @@
         border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Active);
     }
 
+    // Неактивную стрелку (первый/последний слайд) не показываем вовсе, даже при ховере на .main.
     &:disabled {
-        background: var(--triplex-next-ImageGallery-Arrow_Background_Disabled);
-        border-color: var(--triplex-next-ImageGallery-Arrow_BorderColor_Disabled);
-        cursor: default;
+        display: none;
     }
 
     &.prev {

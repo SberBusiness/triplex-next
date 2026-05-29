@@ -14,7 +14,8 @@ tokens: [
   "--triplex-next-ImageGallery-Arrow_BorderColor_Disabled",
   "--triplex-next-ImageGallery-Dot_Background_Default",
   "--triplex-next-ImageGallery-Dot_Background_Hover",
-  "--triplex-next-ImageGallery-Dot_Background_Active"
+  "--triplex-next-ImageGallery-Dot_Background_Active",
+  "--triplex-next-ImageGallery-Thumb_Mask_Background"
 ]
 stories: stories/ImageGallery/ImageGallery.stories.tsx
 version: "1.0"
@@ -107,6 +108,8 @@ controlled-only контейнера `ImageGalleryExtended`. Изображен�
 --triplex-next-ImageGallery-Dot_Background_Default
 --triplex-next-ImageGallery-Dot_Background_Hover
 --triplex-next-ImageGallery-Dot_Background_Active
+
+--triplex-next-ImageGallery-Thumb_Mask_Background
 ```
 
 Runtime CSS-переменная высоты крупной картинки

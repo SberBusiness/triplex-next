@@ -15,6 +15,7 @@
 }
 
 .thumb {
+    position: relative;
     flex: 0 0 auto;
     display: block;
     margin: 0;
@@ -33,6 +34,23 @@
     &:focus-visible,
     &.active {
         border-color: var(--triplex-next-ImageGallery-Accent_Color);
+    }
+
+    // Полупрозрачная маска поверх изображения; inset 2px выравнивает её по картинке внутри padding.
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        border-radius: 8px;
+        background: var(--triplex-next-ImageGallery-Thumb_Mask_Background);
+        pointer-events: none;
+        transition: opacity 0.15s ease-in-out;
+    }
+
+    // На hover и для активной миниатюры маску скрываем.
+    &:hover::after,
+    &.active::after {
+        opacity: 0;
     }
 
     .image {

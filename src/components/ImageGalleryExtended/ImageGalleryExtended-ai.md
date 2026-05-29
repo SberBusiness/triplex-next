@@ -14,7 +14,8 @@ tokens: [
   "--triplex-next-ImageGallery-Arrow_BorderColor_Disabled",
   "--triplex-next-ImageGallery-Dot_Background_Default",
   "--triplex-next-ImageGallery-Dot_Background_Hover",
-  "--triplex-next-ImageGallery-Dot_Background_Active"
+  "--triplex-next-ImageGallery-Dot_Background_Active",
+  "--triplex-next-ImageGallery-Thumb_Mask_Background"
 ]
 stories: stories/ImageGalleryExtended/ImageGalleryExtended.stories.tsx
 version: "1.0"
@@ -103,7 +104,9 @@ child `.Main`, чтобы стрелки позиционировались по
 ### `ImageGalleryExtended.Thumb`
 
 Кнопка-миниатюра. `ref` пробрасывается на `<button>` (родитель собирает refs для
-центровки).
+центровки). Поверх изображения лежит полупрозрачная маска
+(`Thumb_Mask_Background`), которая скрывается на hover и для активной миниатюры
+(`isActive`).
 
 | Prop | Тип | Обязательный | Описание |
 |---|---|---|---|
@@ -138,6 +141,8 @@ child `.Main`, чтобы стрелки позиционировались по
 --triplex-next-ImageGallery-Dot_Background_Default
 --triplex-next-ImageGallery-Dot_Background_Hover
 --triplex-next-ImageGallery-Dot_Background_Active
+
+--triplex-next-ImageGallery-Thumb_Mask_Background
 ```
 
 Runtime CSS-переменные (задаются компонентом через `style`, **не** дизайн-токены,

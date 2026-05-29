@@ -13,6 +13,7 @@ export const designTokensComponentsImageGalleryKeys = [
     "Dot_Background_Default",
     "Dot_Background_Hover",
     "Dot_Background_Active",
+    "Thumb_Mask_Background",
     "Accent_Color",
 ] as const;
 // Тип, содержащий названия токенов компонента ImageGallery.
@@ -43,5 +44,6 @@ export const ImageGallery_Tokens: TDesignTokensComponentsImageGalleryValues = {
     Dot_Background_Default: [{ ref: "ColorDarkNeutralAlpha.80" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-ImageGallery-Dot_Background_Default)
     Dot_Background_Hover: [{ ref: "ColorDarkNeutralAlpha.60" }, { ref: "ColorNeutralAlpha.60" }], // var(--triplex-next-ImageGallery-Dot_Background_Hover)
     Dot_Background_Active: [{ ref: "ColorDarkNeutralAlpha.30" }, { ref: "ColorNeutralAlpha.30" }], // var(--triplex-next-ImageGallery-Dot_Background_Active)
+    Thumb_Mask_Background: [{ ref: "ColorDarkNeutralAlpha.80" }, { ref: "ColorDarkNeutralAlpha.80" }], // var(--triplex-next-ImageGallery-Thumb_Mask_Background)
     Accent_Color: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.60" }], // var(--triplex-next-ImageGallery-Accent_Color)
 };

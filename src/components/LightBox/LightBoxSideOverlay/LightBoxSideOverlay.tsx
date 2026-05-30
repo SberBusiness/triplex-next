@@ -69,7 +69,6 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
 
     useEffect(() => {
         if (prevOpened.current && !opened) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setOpening(false); // opened меняется в процессе анимации открытия.
             setClosing(true);
         } else if (!prevOpened.current && opened) {
@@ -154,7 +153,8 @@ export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
         <MobileView
             fallback={
                 <FocusTrap
-                    active={opened && !opening && !closing}
+                    // active={opened && !opening && !closing}
+                    active={false}
                     {...focusTrapProps}
                     focusTrapOptions={{
                         allowOutsideClick: true,

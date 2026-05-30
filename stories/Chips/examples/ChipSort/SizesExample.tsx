@@ -7,43 +7,31 @@ const options: ISelectFieldOption[] = [
     { id: "chip-sort-3", label: "По названию", value: "i3" },
 ];
 
-export const SizesExample = () => {
-    const [valueSM, setValueSM] = useState<ISelectFieldOption>(options[0]);
-    const [valueMD, setValueMD] = useState<ISelectFieldOption>(options[0]);
-    const [valueLG, setValueLG] = useState<ISelectFieldOption>(options[0]);
+type SizeItemProps = {
+    size: EComponentSize;
+    label: string;
+};
+
+const SizeItem = ({ size, label }: SizeItemProps) => {
+    const [value, setValue] = useState<ISelectFieldOption>(options[0]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>
-                <ChipSort
-                    defaultValue={options[0]}
-                    size={EComponentSize.SM}
-                    value={valueSM}
-                    options={options}
-                    onChange={setValueSM}
-                />
-            </div>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>MD</div>
-                <ChipSort
-                    defaultValue={options[0]}
-                    size={EComponentSize.MD}
-                    value={valueMD}
-                    options={options}
-                    onChange={setValueMD}
-                />
-            </div>
-            <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LG</div>
-                <ChipSort
-                    defaultValue={options[0]}
-                    size={EComponentSize.LG}
-                    value={valueLG}
-                    options={options}
-                    onChange={setValueLG}
-                />
-            </div>
+        <div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{label}</div>
+            <ChipSort size={size} defaultValue={options[0]} value={value} options={options} onChange={setValue} />
         </div>
     );
 };
+
+const sizeOptions = Object.values(EComponentSize).map((size) => ({
+    value: size,
+    label: size.toUpperCase(),
+}));
+
+export const SizesExample = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {sizeOptions.map(({ value, label }) => (
+            <SizeItem key={value} size={value} label={label} />
+        ))}
+    </div>
+);

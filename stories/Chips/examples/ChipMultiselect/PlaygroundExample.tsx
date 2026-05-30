@@ -177,13 +177,7 @@ export const PlaygroundExample = (args: IChipMultiselectProps) => {
     const { renderDropdown, unselectAll, selectedIds } = createMultiselectFieldStoriesLogic(args);
 
     return (
-        <ChipMultiselect
-            {...args}
-            clearSelected={unselectAll}
-            selected={selectedIds.length > 0}
-            label={args.label}
-            displayedValue={args.displayedValue}
-        >
+        <ChipMultiselect {...args} clearSelected={unselectAll} selected={selectedIds.length > 0} label={args.label}>
             {(dropdownProps) => renderDropdown(dropdownProps)}
         </ChipMultiselect>
     );

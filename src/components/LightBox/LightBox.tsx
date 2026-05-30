@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import React, { useEffect, useRef } from "react";
 import FocusTrap from "focus-trap-react";
 import { LightBoxContent } from "./LightBoxContent";
@@ -168,7 +169,8 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                 <MobileView
                     fallback={
                         <FocusTrap
-                            active={!isLoading}
+                            // active={!isLoading}
+                            active={false}
                             {...focusTrapProps}
                             focusTrapOptions={{
                                 allowOutsideClick: true,

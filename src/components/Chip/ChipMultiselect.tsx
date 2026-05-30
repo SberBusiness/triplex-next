@@ -1,6 +1,6 @@
 import React from "react";
 import { IMultiselectFieldProps, MultiselectField } from "../MultiselectField";
-import { Chip } from "./Chip";
+import { Chip, IChipProps } from "./Chip";
 import { ChipClearButton } from "./ChipClearButton";
 import { ChipDropdownArrow } from "./ChipDropdownArrow";
 import { ISelectExtendedFieldTargetProvideProps } from "../SelectExtendedField";
@@ -8,7 +8,7 @@ import { isKey } from "../../utils/keyboard";
 import styles from "./styles/Chip.module.less";
 import clsx from "clsx";
 
-export interface IChipMultiselectProps extends Omit<IMultiselectFieldProps, "renderTarget"> {
+export interface IChipMultiselectProps extends Omit<IMultiselectFieldProps, "renderTarget">, Pick<IChipProps, "type"> {
     /** Функция отмены выбора. */
     clearSelected: () => void;
     /** Состояние disabled. */
@@ -26,7 +26,10 @@ export interface IChipMultiselectProps extends Omit<IMultiselectFieldProps, "ren
  * Количество выбранных значений отображается компонентом Chip.
  */
 export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselectProps>(
-    ({ children, className, clearSelected, disabled, label, displayedValue, selected, size, ...rest }, ref) => {
+    (
+        { children, className, clearSelected, disabled, label, displayedValue, selected, size, type, ...restProps },
+        ref,
+    ) => {
         const handleKeyDownClearButton = (event: React.KeyboardEvent<HTMLButtonElement>) => {
             if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
                 // Предотвращаем всплытие события до Chip
@@ -53,6 +56,7 @@ export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselect
                     aria-expanded={opened}
                     disabled={disabled}
                     size={size}
+                    type={type}
                     onClick={() => setOpened(!opened)}
                     onKeyDown={handleKeyDown}
                     postfix={
@@ -80,7 +84,7 @@ export const ChipMultiselect = React.forwardRef<HTMLDivElement, IChipMultiselect
                 size={size}
                 renderTarget={renderTarget}
                 className={clsx(styles.chipGroupItem, className)}
-                {...rest}
+                {...restProps}
             >
                 {children}
             </MultiselectField>

@@ -10,7 +10,6 @@ export const DefaultExample = () => {
             onChange={setValue}
             alignment={EDropdownAlignment.LEFT}
             size={EComponentSize.MD}
-            status="default"
         />
     );
 };

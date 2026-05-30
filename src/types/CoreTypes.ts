@@ -1,5 +1,7 @@
 /** Data-аттрибуты. */
-export type DataAttributes = Record<`data-${string}`, string>;
+export type DataAttributes = {
+    [key in `data-${string}`]?: string;
+};
 
 /**
  * Интерфейс для пропсов компонент с тестовым атрибутом.
@@ -11,6 +13,7 @@ export interface TestProps {
 }
 
 // Определяем типы, которые должны обрабатываться как единое целое (атомарные объекты)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-function-type
 type BuiltIn = Function | Date | RegExp | Map<any, any> | Set<any> | Promise<any> | symbol;
 
 /** Утилита типов, которая делает все свойства объекта (и его вложенные свойства) необязательными. */

@@ -4,27 +4,26 @@
 }
 
 .chip {
-    background: var(--triplex-next-Chip-Background_Default);
-    color: var(--triplex-next-Chip-Color_Default);
-    flex-shrink: 0;
-    max-width: 264px;
-    min-width: 40px;
-    box-sizing: border-box;
-    display: inline-flex;
-    gap: 2px;
-    align-items: center;
-    cursor: pointer;
-    outline: none;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    box-sizing: border-box;
+    min-width: 40px;
+    max-width: 264px;
+    flex-shrink: 0;
     // Без этого свойства, чипсы с иконкой прыгают вверх.
     vertical-align: middle;
+    cursor: pointer;
+    outline: none;
+    color: var(--triplex-next-Chip-Color_Default);
 
     &.lg {
         height: 56px;
+        padding: 0 16px;
         font-size: 16px;
         line-height: 20px;
         border-radius: 10px;
-        padding: 0 16px;
 
         .prefix {
             padding-left: 16px;
@@ -35,17 +34,17 @@
         }
 
         .notificationIcon {
-            right: 6px;
             top: 6px;
+            right: 6px;
         }
     }
 
     &.md {
         height: 40px;
+        padding: 0 12px;
         font-size: 14px;
         line-height: 20px;
         border-radius: 8px;
-        padding: 0 12px;
 
         .prefix {
             padding-left: 12px;
@@ -56,17 +55,17 @@
         }
 
         .notificationIcon {
-            right: 4px;
             top: 4px;
+            right: 4px;
         }
     }
 
     &.sm {
         height: 28px;
+        padding: 0 12px;
         font-size: 12px;
         line-height: 16px;
         border-radius: 6px;
-        padding: 0 12px;
 
         .prefix {
             padding-left: 8px;
@@ -77,13 +76,28 @@
         }
 
         .notificationIcon {
-            right: 3px;
             top: 3px;
+            right: 3px;
+        }
+    }
+
+    &.type1 {
+        background: var(--triplex-next-Chip-Background_Type1_Default);
+
+        &:hover {
+            background: var(--triplex-next-Chip-Background_Type1_Hover);
+        }
+    }
+
+    &.type2 {
+        background: var(--triplex-next-Chip-Background_Type2_Default);
+
+        &:hover {
+            background: var(--triplex-next-Chip-Background_Type2_Hover);
         }
     }
 
     &:hover {
-        background: var(--triplex-next-Chip-Background_Hover);
         color: var(--triplex-next-Chip-Color_Hover);
     }
 
@@ -95,13 +109,6 @@
     &[aria-expanded="true"] {
         background: var(--triplex-next-Chip-Background_Active);
         color: var(--triplex-next-Chip-Color_Active);
-    }
-
-    &.disabled {
-        background: var(--triplex-next-Chip-Background_Disabled);
-        color: var(--triplex-next-Chip-Color_Disabled);
-        cursor: default;
-        pointer-events: none;
     }
 
     &.selected {
@@ -125,6 +132,13 @@
         }
     }
 
+    &.disabled {
+        pointer-events: none;
+        cursor: default;
+        background: var(--triplex-next-Chip-Background_Disabled);
+        color: var(--triplex-next-Chip-Color_Disabled);
+    }
+
     &.withPrefix {
         padding-left: 0;
     }
@@ -134,11 +148,11 @@
     }
 
     .content {
+        flex-grow: 1;
+        text-align: center;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        flex-grow: 1;
-        text-align: center;
     }
 
     .prefix {

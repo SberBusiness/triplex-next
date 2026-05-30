@@ -1,12 +1,13 @@
 import React, { useCallback } from "react";
 import clsx from "clsx";
-import styles from "./styles/Chip.module.less";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums";
-import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
-import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
+import { EComponentSize } from "../../enums";
+import { createSizeToClassNameMap } from "../../utils/classNameMaps";
+import { DataAttributes } from "../../types/CoreTypes";
 import { isKey } from "../../utils/keyboard";
 import { Badge } from "../Badge/Badge";
 import { IconWrapper } from "../IconWrapper";
+import { EChipType } from "./enums";
+import styles from "./styles/Chip.module.less";
 
 /** Свойства компонента Chip. */
 export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "prefix">, DataAttributes {
@@ -20,10 +21,19 @@ export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
     postfix?: React.ReactNode;
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
-    /** Размер Chip. */
+    /** Размер. */
     size?: EComponentSize;
+    /** Тип. */
+    type?: EChipType;
 }
 
+/** Соответствие типа имени класса. */
+const typeToClassNameMap: Record<EChipType, string> = {
+    [EChipType.TYPE_1]: styles.type1,
+    [EChipType.TYPE_2]: styles.type2,
+};
+
+/** Соответствие размера имени класса. */
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /**
@@ -41,13 +51,14 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
             selected,
             showNotificationIcon,
             size = EComponentSize.MD,
+            type = EChipType.TYPE_1,
             onKeyDown,
-            ...rest
+            ...restProps
         },
         ref,
     ) => {
-        const handleKeyDown = useCallback(
-            (event: React.KeyboardEvent<HTMLSpanElement>) => {
+        const handleKeyDown = useCallback<React.KeyboardEventHandler<HTMLSpanElement>>(
+            (event) => {
                 if (isKey(event.code, "SPACE")) {
                     event.preventDefault();
                 }
@@ -61,6 +72,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 className={clsx(
                     styles.chip,
                     styles.chipGroupItem,
+                    typeToClassNameMap[type],
                     sizeToClassNameMap[size],
                     {
                         [styles.disabled]: Boolean(disabled),
@@ -73,7 +85,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 role="button"
                 tabIndex={disabled ? -1 : 0}
                 onKeyDown={handleKeyDown}
-                {...rest}
+                {...restProps}
                 ref={ref}
             >
                 {prefix ? (

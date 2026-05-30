@@ -23,6 +23,7 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
     // Флаг, в текущий момент оверлей закрывается.
     const [closing, setClosing] = useState(false);
     // FocusTrap активен.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [activeFocusTrap, setActiveFocusTrap] = useState(false);
     // Позиция top для lightBoxTopOverlayWrapper, высчитывается исходя из scrollTop родителя.
     const [overlayWrapperTopPosition, setOverlayWrapperTopPosition] = useState<number | string>(0);
@@ -120,7 +121,8 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
 
     return (
         <FocusTrap
-            active={activeFocusTrap}
+            // active={activeFocusTrap}
+            active={false}
             {...focusTrapProps}
             focusTrapOptions={{
                 allowOutsideClick: true,

@@ -5,10 +5,8 @@ import { IDropdownProps } from "../../Dropdown";
 import FocusTrap from "focus-trap-react";
 
 /** Свойства компонента ChipSuggest. */
-export interface IChipSuggestProps<T extends ISuggestOption = ISuggestOption> extends Omit<
-    ISuggestProps<T>,
-    "renderTarget"
-> {
+export interface IChipSuggestProps<T extends ISuggestOption = ISuggestOption>
+    extends Omit<ISuggestProps<T>, "renderTarget">, Pick<IChipProps, "type"> {
     /** Название поля, когда не выбрано значение. */
     label: React.ReactNode;
     /** Лейбл, отображаемый вместо выбранного значения. */

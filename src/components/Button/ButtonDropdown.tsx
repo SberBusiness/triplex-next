@@ -135,7 +135,6 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
 
         const renderButtonDots = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
             const classNames = clsx(styles.buttonDropdownTarget, styles.dots, {
-                [styles.md]: size === EComponentSize.MD,
                 [styles.block]: !!block,
             });
 

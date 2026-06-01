@@ -60,14 +60,22 @@ export const TableBasicRow = ({ columns, data, onClickRow }: ITableBasicRowProps
 
         const renderContent = () => {
             if (!cellNode) {
-                return <Text size={ETextSize.B3}>---</Text>;
+                return (
+                    <Text size={ETextSize.B3} tag="div">
+                        ---
+                    </Text>
+                );
             }
 
             if (cellType === ECellType.CHECKBOX || cellType === ECellType.COMPONENTS) {
                 return cellNode;
             }
 
-            return <Text size={ETextSize.B3}>{cellNode}</Text>;
+            return (
+                <Text size={ETextSize.B3} tag="div">
+                    {cellNode}
+                </Text>
+            );
         };
 
         return (

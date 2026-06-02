@@ -160,7 +160,7 @@ const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
                     placeholder="Select to proceed"
                     label={renderTags()}
                     prefix={
-                        <IconWrapper disableInteraction disabled={status === EFormFieldStatus.DISABLED}>
+                        <IconWrapper disableInteraction disabled={status === EFormFieldStatus.DISABLED} displayContents>
                             <DefaulticonStrokePrdIcon24 paletteIndex={5} />
                         </IconWrapper>
                     }

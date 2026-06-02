@@ -26,7 +26,7 @@ import {
     TagGroup,
     Text,
 } from "@sberbusiness/triplex-next";
-import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 import "../MultiselectField.less";
 
 interface IOption {
@@ -155,7 +155,7 @@ const ProductionMultiselect = () => {
                     fieldLabel="Label"
                     placeholder="Select to proceed"
                     label={renderTags()}
-                    prefix={<DefaulticonStrokePrdIcon24 paletteIndex={5} />}
+                    prefix={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
                     postfix={<HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>}
                 />
             )}

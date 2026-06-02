@@ -167,6 +167,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                             className={styles.caretWrapper}
                             active={opened}
                             disabled={status === EFormFieldStatus.DISABLED}
+                            displayContents
                         >
                             {sizeToCaretIconMap[size]}
                         </IconWrapper>

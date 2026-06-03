@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { TabsExtended } from "@sberbusiness/triplex-next/components/TabsExtended";
+import { ETabsExtendedType, TabsExtended } from "@sberbusiness/triplex-next/components/TabsExtended";
 import { ITabsExtendedDropdownWrapperProvideProps } from "@sberbusiness/triplex-next/components/TabsExtended";
 import { ButtonDropdown } from "@sberbusiness/triplex-next/components/Button";
 import { EButtonDotsTheme } from "@sberbusiness/triplex-next/components/Button";
@@ -26,6 +26,11 @@ export interface ITabsProps extends ITabsExtendedProps {
     tabs: Array<ITabsItem>;
 }
 
+const TYPE_TO_BUTTON_DOTS_THEME_MAP: Record<ETabsExtendedType, EButtonDotsTheme> = {
+    [ETabsExtendedType.TYPE_1]: EButtonDotsTheme.DOTS_SECONDARY,
+    [ETabsExtendedType.TYPE_2]: EButtonDotsTheme.DOTS_SECONDARY_LIGHT,
+};
+
 /** Компонент Tabs. */
 export const Tabs: React.FC<ITabsProps> = ({
     buttonDropdownAttributes,
@@ -33,6 +38,7 @@ export const Tabs: React.FC<ITabsProps> = ({
     onSelectTab,
     size = EComponentSize.MD,
     tabs,
+    type = ETabsExtendedType.TYPE_1,
     ...props
 }) => {
     // Id таба с tabIndex = 0;
@@ -114,14 +120,14 @@ export const Tabs: React.FC<ITabsProps> = ({
     };
 
     return (
-        <TabsExtended {...props} selectedId={selectedId} onSelectTab={onSelectTab}>
+        <TabsExtended {...props} selectedId={selectedId} onSelectTab={onSelectTab} type={type}>
             <TabsExtended.Content className={styles.tabsContent} size={size}>
                 <TabsExtended.Content.TabsWrapper>{tabs.map(renderTab)}</TabsExtended.Content.TabsWrapper>
 
                 <TabsExtended.Content.DropdownWrapper>
                     {({ dropdownItemsIds, onSelectTab }) => (
                         <ButtonDropdown
-                            theme={EButtonDotsTheme.DOTS_SECONDARY}
+                            theme={TYPE_TO_BUTTON_DOTS_THEME_MAP[type]}
                             size={size}
                             options={getDropdownOptions({ dropdownItemsIds, onSelectTab })}
                             selected={tabs.filter((tab) => tab.id === selectedId)[0]}

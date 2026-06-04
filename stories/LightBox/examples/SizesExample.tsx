@@ -92,14 +92,18 @@ export const SizesExample = () => {
 
                             <Page.Body type={EBodyPageType.SECOND}>
                                 <PoemBlock />
-                                <Gap size={24} />
+                                <Gap size={16} />
                                 <PoemBlock />
                             </Page.Body>
 
                             <Page.Footer type={EFooterPageType.FIRST} sticky>
                                 <Page.Footer.Description>
                                     <Page.Footer.Description.Controls>
-                                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleClose}>
+                                        <Button
+                                            theme={EButtonTheme.GENERAL}
+                                            size={EComponentSize.MD}
+                                            onClick={handleClose}
+                                        >
                                             Закрыть
                                         </Button>
                                     </Page.Footer.Description.Controls>

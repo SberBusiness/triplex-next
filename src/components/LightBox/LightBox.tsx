@@ -7,7 +7,6 @@ import { Portal } from "../Portal/Portal";
 import { addClassNameWithScrollbarWidth } from "../../utils/scroll/scrollbar";
 import { TopOverlay } from "../TopOverlay/TopOverlay";
 import { LightBoxViewManager } from "./LightBoxViewManager/LightBoxViewManager";
-import { MobileView } from "../MobileView/MobileView";
 import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
 import clsx from "clsx";
@@ -97,9 +96,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         return lightBoxViewManagerMountNode;
     };
 
-    /**
-     * DOM node, в которую рендерится лайтбокс.
-     */
+    /** DOM node, в которую рендерится лайтбокс. */
     const lightBoxMountNode = useRef<HTMLDivElement | null>(getLightBoxMountNode());
     /**
      * DOM node, в визуальных границах которой рендерится лайтбокс.
@@ -138,7 +135,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         }
     };
 
-    const classNameLightBox = clsx(
+    const classNames = clsx(
         scopeClassName,
         styles.lightBox,
         styles[size],
@@ -154,37 +151,26 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         return null;
     }
 
-    const renderLightBox = () => (
-        <div className={classNameLightBox} ref={setRef} role="dialog" aria-modal="true" {...htmlDivAttributes}>
-            <div className={styles.lightBoxBackdrop} />
-            {children}
-            <span ref={tempButtonRef} className={styles.tempElSafariBug} />
-        </div>
-    );
-
     return (
         <>
             <Portal container={lightBoxMountNode.current}>
-                <MobileView
-                    fallback={
-                        <FocusTrap
-                            // active={!isLoading}
-                            active={false}
-                            {...focusTrapProps}
-                            focusTrapOptions={{
-                                allowOutsideClick: true,
-                                initialFocus: () =>
-                                    FocusTrapUtils.getFirstInteractionElementByDataAttr(containerRef.current),
-                                preventScroll: true,
-                                ...focusTrapProps?.focusTrapOptions,
-                            }}
-                        >
-                            {renderLightBox()}
-                        </FocusTrap>
-                    }
+                <FocusTrap
+                    // active={!isLoading}
+                    active={false}
+                    {...focusTrapProps}
+                    focusTrapOptions={{
+                        allowOutsideClick: true,
+                        initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(containerRef.current),
+                        preventScroll: true,
+                        ...focusTrapProps?.focusTrapOptions,
+                    }}
                 >
-                    {renderLightBox()}
-                </MobileView>
+                    <div className={classNames} role="dialog" aria-modal="true" {...htmlDivAttributes} ref={setRef}>
+                        <div className={styles.lightBoxBackdrop} />
+                        {children}
+                        <span ref={tempButtonRef} className={styles.tempElSafariBug} />
+                    </div>
+                </FocusTrap>
             </Portal>
 
             {lightBoxViewManagerNode.current && (

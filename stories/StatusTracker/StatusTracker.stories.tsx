@@ -1,6 +1,6 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Meta, StoryObj, ArgTypes as ArgTypesType } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { WaitStsIcon84, WarningStsIcon84, ErrorStsIcon84, SuccessStsIcon84 } from "@sberbusiness/icons-next";
 import { IStatusTrackerProps, StatusTracker } from "../../src/components/StatusTracker";
 import { EStatusTrackerType, EStatusTrackerVerticalAlign } from "../../src/components/StatusTracker/enums";
@@ -10,37 +10,20 @@ import { EAlertType } from "../../src/components/Alert";
 import { EButtonTheme } from "../../src/components/Button";
 import "./StatusTracker.less";
 
-const meta: Meta<typeof StatusTracker> = {
+export default {
     title: "Components/StatusTracker",
     component: StatusTracker,
     tags: ["autodocs"],
     parameters: {
         testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Компонент предназначен для визуального отображения статуса документа.
-
-## Особенности
-
-- **Типы - type**:
-Draft - черновик, создан без ошибок и еще не отправлен в банк,
-Waiting - в обработке, ожидает ответ от банка,
-Warning - предупреждение, документ создан с ошибками,
-Rejected - документ отклонен банком,
-Approved - документ исполнен банком
-
-- **Выравнивание по вертикали - verticalAlign**: Top, Middle, Bottom
-
-- Ширину статус-трекера определяет родительский контейнер
-
-                `,
-            },
             page: () => (
                 <>
                     <Title />
-                    <Subtitle />
                     <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={StatusTracker} />
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -48,39 +31,42 @@ Approved - документ исполнен банком
             ),
         },
     },
-    argTypes: {
-        type: {
-            control: "select",
-            options: Object.values(EStatusTrackerType),
-            description: "Тип статус-трекера",
-        },
-        verticalAlign: {
-            control: "select",
-            options: Object.values(EStatusTrackerVerticalAlign),
-            description: "Вертикальное выравнивание блоков",
-            table: {
-                type: { summary: "EStatusTrackerVerticalAlign" },
-                defaultValue: { summary: "EStatusTrackerVerticalAlign.TOP" },
-            },
-        },
+} satisfies Meta<typeof StatusTracker>;
+
+export interface PlaygroundArgs extends Pick<React.ComponentProps<typeof StatusTracker>, "type" | "verticalAlign"> {}
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    type: EStatusTrackerType.WAITING,
+    verticalAlign: EStatusTrackerVerticalAlign.TOP,
+};
+
+const PLAYGROUND_ARG_TYPES: ArgTypesType<PlaygroundArgs> = {
+    type: {
+        control: "select",
+        options: Object.values(EStatusTrackerType),
+    },
+    verticalAlign: {
+        control: "select",
+        options: Object.values(EStatusTrackerVerticalAlign),
     },
 };
 
-export default meta;
-
 export const Playground: StoryObj<typeof StatusTracker> = {
-    args: {
-        type: EStatusTrackerType.WAITING,
-        verticalAlign: EStatusTrackerVerticalAlign.TOP,
-    },
+    tags: ["!autodocs"],
+    args: PLAYGROUND_ARGS,
+    argTypes: PLAYGROUND_ARG_TYPES,
     parameters: {
         controls: {
-            include: ["type", "verticalAlign"],
+            include: Object.keys(PLAYGROUND_ARGS),
+        },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
         },
     },
     render: (args: IStatusTrackerProps) => (
-        <div className="statusTracker-example-wrapper">
-            <StatusTracker type={args.type} verticalAlign={args.verticalAlign}>
+        <div className="status-tracker-wrapper" style={{ height: 744 }}>
+            <StatusTracker {...args}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
@@ -124,7 +110,7 @@ export const Draft: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Header>
                     <StatusTracker.Header.Sum amountProps={{ value: "50000.00", currency: "₽" }} />
@@ -149,7 +135,7 @@ export const Waiting: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
@@ -180,18 +166,20 @@ export const Warning: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.WARNING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WarningStsIcon84 />
                 </StatusTracker.Media>
                 <StatusTracker.Body>
-                    <StatusTracker.Body.Status status={EMarkerStatus.WARNING} size={EComponentSize.LG}>
-                        Требуется исправление
-                    </StatusTracker.Body.Status>
-                    <StatusTracker.Body.Status status={EMarkerStatus.WARNING} size={EComponentSize.LG}>
-                        Не может быть отправлено
-                    </StatusTracker.Body.Status>
+                    <StatusTracker.Body.StatusGroup>
+                        <StatusTracker.Body.Status status={EMarkerStatus.WARNING} size={EComponentSize.LG}>
+                            Требуется исправление
+                        </StatusTracker.Body.Status>
+                        <StatusTracker.Body.Status status={EMarkerStatus.WARNING} size={EComponentSize.LG}>
+                            Не может быть отправлено
+                        </StatusTracker.Body.Status>
+                    </StatusTracker.Body.StatusGroup>
                     <StatusTracker.Body.Alert type={EAlertType.WARNING} closable>
                         Обнаружены ошибки в документе. Пожалуйста, проверьте и исправьте их перед отправкой.
                     </StatusTracker.Body.Alert>
@@ -212,7 +200,7 @@ export const Rejected: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.REJECTED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <ErrorStsIcon84 />
@@ -236,7 +224,7 @@ export const Approved: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.APPROVED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <SuccessStsIcon84 />
@@ -260,7 +248,7 @@ export const VerticalAlignTop: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.WAITING} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />
@@ -282,7 +270,7 @@ export const VerticalAlignMiddle: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Body>
                     <StatusTracker.Body.Status status={EMarkerStatus.WAITING} size={EComponentSize.LG}>
@@ -303,7 +291,7 @@ export const VerticalAlignBottom: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.BOTTOM}>
                 <StatusTracker.Footer>
                     <StatusTracker.Footer.Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
@@ -327,7 +315,7 @@ export const WideParent: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper statusTracker-example-wide-wrapper">
+        <div className="status-tracker-wrapper status-tracker-wide-wrapper">
             <StatusTracker type={EStatusTrackerType.APPROVED} verticalAlign={EStatusTrackerVerticalAlign.TOP}>
                 <StatusTracker.Media>
                     <SuccessStsIcon84 />
@@ -358,7 +346,7 @@ export const WithMediaOnly: StoryObj<typeof StatusTracker> = {
         controls: { disable: true },
     },
     render: () => (
-        <div className="statusTracker-example-wrapper">
+        <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.WARNING} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Media>
                     <WaitStsIcon84 />

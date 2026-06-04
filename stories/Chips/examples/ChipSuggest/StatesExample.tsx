@@ -10,7 +10,7 @@ const states = [
 export const StatesExample = () => {
     const initialOptions = mapFruitsToSuggestOptions([...SUGGEST_STORY_FRUITS]);
 
-    const [valueSelected, setValueSelected] = useState<ISuggestFieldOption>();
+    const [valueSelected, setValueSelected] = useState<ISuggestFieldOption>(initialOptions[0]);
     const [valueDisabled, setValueDisabled] = useState<ISuggestFieldOption>();
     const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
     const [tooltipOpen, setTooltipOpen] = useState(false);

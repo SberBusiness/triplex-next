@@ -4,7 +4,7 @@ import { ETextSize } from "../../Typography/enums";
 import { TTextProps } from "../../Typography/Text";
 
 /** Свойства компонента ConfirmContentSubTitle. */
-export interface IConfirmContentSubTitleProps extends TTextProps<"div"> {}
+export interface IConfirmContentSubTitleProps extends Partial<TTextProps<"div">> {}
 
 export const ConfirmContentSubTitle: React.FC<IConfirmContentSubTitleProps> = ({
     children,

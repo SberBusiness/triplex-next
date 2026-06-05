@@ -129,7 +129,13 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ size, isLoading, showControls, stickyHeader, stickyFooter }) => {
+const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({
+    size,
+    isLoading,
+    showControls,
+    stickyHeader,
+    stickyFooter,
+}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
@@ -175,7 +181,7 @@ const LightBoxPlayground: React.FC<LightBoxStoryArgs> = ({ size, isLoading, show
                     {[0, 1, 2].map((index) => (
                         <React.Fragment key={index}>
                             <PoemBlock />
-                            {index < 2 && <Gap size={24} />}
+                            {index < 2 && <Gap size={16} />}
                         </React.Fragment>
                     ))}
                 </Page.Body>

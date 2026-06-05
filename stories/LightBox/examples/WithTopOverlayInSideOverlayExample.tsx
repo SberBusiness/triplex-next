@@ -165,7 +165,7 @@ export const WithTopOverlayInSideOverlayExample = () => {
                     {[0, 1, 2].map((index) => (
                         <React.Fragment key={index}>
                             <PoemBlock />
-                            {index < 2 && <Gap size={24} />}
+                            {index < 2 && <Gap size={16} />}
                         </React.Fragment>
                     ))}
                 </Page.Body>
@@ -245,7 +245,7 @@ export const WithTopOverlayInSideOverlayExample = () => {
                                 {[0, 1, 2].map((index) => (
                                     <React.Fragment key={index}>
                                         <PoemBlock />
-                                        {index < 2 && <Gap size={24} />}
+                                        {index < 2 && <Gap size={16} />}
                                     </React.Fragment>
                                 ))}
                             </Page.Body>

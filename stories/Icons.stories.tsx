@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { StoryObj } from "@storybook/react";
+import { StoryObj, ArgTypes } from "@storybook/react";
 import * as iconModule from "@sberbusiness/icons-next";
 
 const paletteIndexes = Array.from(Array(12).keys());
@@ -72,21 +72,55 @@ const IconDisplay: React.FC<IIconDisplayProps> = ({ name, ...restProps }) => (
     </div>
 );
 
-interface IIconStoryArgs extends Pick<iconModule.ISingleColorIconProps, "paletteIndex"> {
+interface StoryArgs extends Pick<iconModule.ISingleColorIconProps, "paletteIndex"> {
     hoverable: boolean;
     disabled: boolean;
 }
 
-export const Playground: StoryObj<IIconStoryArgs> = {
-    args: {
-        paletteIndex: 0,
+const STORY_ARGS: StoryArgs = {
+    // Props
+    paletteIndex: 0,
+    // Settings
+    hoverable: false,
+    disabled: false,
+};
+
+const STORY_ARG_TYPES: ArgTypes<StoryArgs> = {
+    // Props
+    paletteIndex: {
+        control: { type: "number" },
+        table: {
+            category: "Props",
+        },
     },
-    render: ({ paletteIndex }) => {
+    // Settings
+    hoverable: {
+        description: "Флаг интерактивности.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+    disabled: {
+        description: "Отключённое состояние.",
+        control: { type: "boolean" },
+        table: {
+            category: "Settings",
+            defaultValue: { summary: "false" },
+        },
+    },
+};
+
+export const Playground: StoryObj<StoryArgs> = {
+    args: STORY_ARGS,
+    argTypes: STORY_ARG_TYPES,
+    render: ({ paletteIndex, hoverable, disabled }) => {
         const { DefaulticonStrokePrdIcon32 } = iconModule;
         const inverted = paletteIndex === 6;
 
         return (
-            <IconItem inverted={inverted} hoverable={true}>
+            <IconItem inverted={inverted} hoverable={hoverable} disabled={disabled}>
                 <DefaulticonStrokePrdIcon32 paletteIndex={paletteIndex} />
             </IconItem>
         );
@@ -100,7 +134,7 @@ export const Playground: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const Palettes: StoryObj<IIconStoryArgs> = {
+export const Palettes: StoryObj<StoryArgs> = {
     args: {
         hoverable: true,
         disabled: false,
@@ -138,7 +172,7 @@ export const Palettes: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const BrandIcons: StoryObj<IIconStoryArgs> = {
+export const BrandIcons: StoryObj<StoryArgs> = {
     name: "Brand icons",
     args: {
         paletteIndex: 0,
@@ -169,7 +203,7 @@ export const BrandIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const MapIcons: StoryObj<IIconStoryArgs> = {
+export const MapIcons: StoryObj<StoryArgs> = {
     name: "Map icons",
     args: {
         paletteIndex: 0,
@@ -200,7 +234,7 @@ export const MapIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const MarkerIcons: StoryObj<IIconStoryArgs> = {
+export const MarkerIcons: StoryObj<StoryArgs> = {
     name: "Marker icons",
     args: {
         paletteIndex: 0,
@@ -231,7 +265,7 @@ export const MarkerIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const MarketingIcons: StoryObj<IIconStoryArgs> = {
+export const MarketingIcons: StoryObj<StoryArgs> = {
     name: "Marketing icons",
     args: {
         paletteIndex: 0,
@@ -262,7 +296,7 @@ export const MarketingIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const NavigationIcons: StoryObj<IIconStoryArgs> = {
+export const NavigationIcons: StoryObj<StoryArgs> = {
     name: "Navigation icons",
     args: {
         paletteIndex: 0,
@@ -292,7 +326,7 @@ export const NavigationIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const ProductIcons: StoryObj<IIconStoryArgs> = {
+export const ProductIcons: StoryObj<StoryArgs> = {
     name: "Product icons",
     args: {
         paletteIndex: 0,
@@ -322,7 +356,7 @@ export const ProductIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const ServiceIcons: StoryObj<IIconStoryArgs> = {
+export const ServiceIcons: StoryObj<StoryArgs> = {
     name: "Service icons",
     args: {
         paletteIndex: 0,
@@ -352,7 +386,7 @@ export const ServiceIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const StatusIcons: StoryObj<IIconStoryArgs> = {
+export const StatusIcons: StoryObj<StoryArgs> = {
     name: "Status icons",
     args: {
         paletteIndex: 0,
@@ -383,7 +417,7 @@ export const StatusIcons: StoryObj<IIconStoryArgs> = {
     },
 };
 
-export const SystemIcons: StoryObj<IIconStoryArgs> = {
+export const SystemIcons: StoryObj<StoryArgs> = {
     name: "System icons",
     args: {
         paletteIndex: 0,

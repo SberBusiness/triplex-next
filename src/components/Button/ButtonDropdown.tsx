@@ -6,6 +6,7 @@ import {
     CaretdownStrokeSrvIcon20,
     CaretdownStrokeSrvIcon16,
     DotshorizontalStrokeSrvIcon32,
+    DotshorizontalStrokeSrvIcon24,
     DotshorizontalStrokeSrvIcon20,
 } from "@sberbusiness/icons-next";
 import {
@@ -77,7 +78,7 @@ interface IButtonDotsProps extends IButtonDropdownProps {
 
 const SIZE_TO_DOTS_ICON_MAP: Record<EComponentSize, React.ReactElement> = {
     [EComponentSize.SM]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
-    [EComponentSize.MD]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
+    [EComponentSize.MD]: <DotshorizontalStrokeSrvIcon24 paletteIndex={0} />,
     [EComponentSize.LG]: <DotshorizontalStrokeSrvIcon32 paletteIndex={0} />,
 };
 
@@ -133,7 +134,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         };
 
         const renderButtonDots = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = clsx(styles.buttonDropdownTarget, {
+            const classNames = clsx(styles.buttonDropdownTarget, styles.dots, {
                 [styles.block]: !!block,
             });
 

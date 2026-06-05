@@ -6,7 +6,7 @@ import clsx from "clsx";
 import styles from "../styles/Confirm.module.less";
 
 /** Свойства компонента ConfirmContentTitle. */
-export interface IConfirmContentTitleProps extends TTitleProps<"h1"> {}
+export interface IConfirmContentTitleProps extends Partial<TTitleProps<"h1">> {}
 
 export const ConfirmContentTitle: React.FC<IConfirmContentTitleProps> = ({
     children,

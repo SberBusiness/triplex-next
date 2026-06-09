@@ -3,14 +3,14 @@ import { ChipSuggest, EComponentSize, type ISuggestFieldOption } from "@sberbusi
 import { mapFruitsToSuggestOptions, SUGGEST_STORY_FRUITS } from "./storyConstants";
 
 const states = [
-    { id: "selected" as const, targetProps: { selected: true as const } },
-    { id: "disabled" as const, targetProps: { disabled: true as const } },
+    { id: "selected" as const, label: "SELECTED", targetProps: { selected: true as const } },
+    { id: "disabled" as const, label: "DISABLED", targetProps: { disabled: true as const } },
 ];
 
 export const StatesExample = () => {
     const initialOptions = mapFruitsToSuggestOptions([...SUGGEST_STORY_FRUITS]);
 
-    const [valueSelected, setValueSelected] = useState<ISuggestFieldOption>();
+    const [valueSelected, setValueSelected] = useState<ISuggestFieldOption>(initialOptions[0]);
     const [valueDisabled, setValueDisabled] = useState<ISuggestFieldOption>();
     const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
     const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -37,26 +37,28 @@ export const StatesExample = () => {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {states.map((state) => (
-                <ChipSuggest
-                    key={state.id}
-                    label={state.targetProps.selected ? "Selected" : "Disabled"}
-                    size={EComponentSize.MD}
-                    placeholder="Type to proceed"
-                    noOptionsText="No matches found."
-                    value={state.targetProps.selected ? valueSelected : valueDisabled}
-                    options={options}
-                    tooltipOpen={tooltipOpen}
-                    onSelect={state.targetProps.selected ? setValueSelected : setValueDisabled}
-                    onFilter={handleFilter}
-                    targetProps={{
-                        clearSelected: () =>
-                            state.targetProps.selected ? setValueSelected(undefined) : setValueDisabled(undefined),
-                        ...state.targetProps,
-                    }}
-                    dropdownProps={{ onOpen: handleDropdownOpen }}
-                />
+                <div key={state.id}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{state.label}</div>
+                    <ChipSuggest
+                        label="Suggest label"
+                        size={EComponentSize.MD}
+                        placeholder="Type to proceed"
+                        noOptionsText="No matches found."
+                        value={state.targetProps.selected ? valueSelected : valueDisabled}
+                        options={options}
+                        tooltipOpen={tooltipOpen}
+                        onSelect={state.targetProps.selected ? setValueSelected : setValueDisabled}
+                        onFilter={handleFilter}
+                        targetProps={{
+                            clearSelected: () =>
+                                state.targetProps.selected ? setValueSelected(undefined) : setValueDisabled(undefined),
+                            ...state.targetProps,
+                        }}
+                        dropdownProps={{ onOpen: handleDropdownOpen }}
+                    />
+                </div>
             ))}
         </div>
     );

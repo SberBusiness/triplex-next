@@ -49,7 +49,9 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         if (value === undefined) {
             return <ChipDropdownArrow rotated={dropdownOpen} size={size} />;
         } else {
-            return <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />;
+            return (
+                <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} size={size} />
+            );
         }
     }, [value, size, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
 

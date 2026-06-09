@@ -11,9 +11,15 @@ interface IChipSuggestDesktopDropdownFieldProps {
     size?: EComponentSize;
 }
 
+const SIZE_TO_LOADER_SIZE_MAP: Record<EComponentSize, EComponentSize> = {
+    [EComponentSize.SM]: EComponentSize.SM,
+    [EComponentSize.MD]: EComponentSize.SM,
+    [EComponentSize.LG]: EComponentSize.MD,
+};
+
 export const ChipSuggestDesktopDropdownField: React.FC<IChipSuggestDesktopDropdownFieldProps> = ({
     children,
-    size,
+    size = EComponentSize.MD,
 }) => {
     const {
         inputValue,
@@ -77,7 +83,7 @@ export const ChipSuggestDesktopDropdownField: React.FC<IChipSuggestDesktopDropdo
             </Tooltip>
             <FormFieldPostfix>
                 <FormFieldClear onClick={handleClearClick} />
-                {loading && <LoaderSmall theme={ELoaderSmallTheme.BRAND} size={EComponentSize.SM} />}
+                {loading && <LoaderSmall theme={ELoaderSmallTheme.BRAND} size={SIZE_TO_LOADER_SIZE_MAP[size]} />}
             </FormFieldPostfix>
         </FormField>
     );

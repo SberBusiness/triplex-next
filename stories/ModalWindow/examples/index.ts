@@ -8,3 +8,5 @@ export { default as WithLongContentSource } from "./WithLongContent?raw";
 export * from "./LoadingState";
 export { default as LoadingStateSource } from "./LoadingState?raw";
 export * from "./VisualTests";
+export * from "./WithoutFooter";
+export { default as WithoutFooterSource } from "./WithoutFooter?raw";

@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
  * @param initial Начальное значение
  * @returns Результат window.matchMedia(query)
  */
-export function useMatchMedia(query: string, initial: boolean): boolean {
-    const [matches, setMatches] = useState(initial);
+export function useMatchMedia(query: string, initialMatch: boolean): boolean {
+    const [matches, setMatches] = useState(initialMatch);
 
     useEffect(() => {
         const mediaQueryList = window.matchMedia(query);

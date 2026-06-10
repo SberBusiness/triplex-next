@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
+import { FocusTrapExtended, IFocusTrapExtendedProps } from "../../FocusTrapExtended";
 import {
     EOverlayDirection,
     IOverlayBaseProps,
@@ -8,11 +9,9 @@ import {
 } from "../../Overlay/OverlayBase";
 import { OverlayMask } from "../../Overlay/OverlayMask";
 import { LightBoxSideOverlayLoader } from "./LightBoxSideOverlayLoader";
-import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
 import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
-import { MobileView } from "../../MobileView/MobileView";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "./styles/LightBoxSideOverlay.module.less";
@@ -20,8 +19,8 @@ import styles from "./styles/LightBoxSideOverlay.module.less";
 /** Свойства компонента LightBoxSideOverlay. */
 export interface ILightBoxSideOverlayProps
     extends React.HTMLAttributes<HTMLDivElement>, Pick<IOverlayBaseProps, "opened" | "onClose" | "onOpen"> {
-    /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    /** Свойства компонента FocusTrapExtended. */
+    focusTrapProps?: IFocusTrapExtendedProps;
     /** Состояние загрузки. */
     isLoading?: boolean;
     /** Текст под спиннером. */
@@ -34,145 +33,136 @@ export interface ILightBoxSideOverlayProps
     size?: EComponentSize;
 }
 
-export interface ILightBoxSideOverlayFC extends React.FC<ILightBoxSideOverlayProps> {
-    CloseDesktop: typeof LightBoxSideOverlayCloseDesktop;
-    CloseMobile: typeof LightBoxSideOverlayCloseMobile;
-}
-
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
-/**
- * Боковая панель LightBox.
- * Выезжает из правой границы LightBox.
- */
-export const LightBoxSideOverlay: ILightBoxSideOverlayFC = ({
-    children,
-    className,
-    focusTrapProps,
-    isLoading,
-    loadingTitle,
-    isTopLevelSideOverlayOpened,
-    isTopOverlayOpened,
-    onClose,
-    onOpen,
-    opened,
-    size = EComponentSize.MD,
-    ...htmlDivAttributes
-}) => {
-    // Флаг, в текущий момент оверлей закрывается.
-    const [closing, setClosing] = useState(false);
-    // Флаг, в текущий момент оверлей открывается.
-    const [opening, setOpening] = useState(false);
-    // Предыдущее состояние открыт/закрыт.
-    const prevOpened = useRef(opened);
-    const contentRef = useRef<HTMLDivElement>(null);
+const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOverlayProps>(
+    (
+        {
+            children,
+            className,
+            focusTrapProps,
+            isLoading,
+            loadingTitle,
+            isTopLevelSideOverlayOpened,
+            isTopOverlayOpened,
+            onClose,
+            onOpen,
+            opened,
+            size = EComponentSize.MD,
+            ...htmlDivAttributes
+        },
+        ref,
+    ) => {
+        // Флаг, в текущий момент оверлей закрывается.
+        const [closing, setClosing] = useState(false);
+        // Флаг, в текущий момент оверлей открывается.
+        const [opening, setOpening] = useState(false);
+        // Предыдущее состояние открыт/закрыт.
+        const prevOpened = useRef(opened);
+        const contentRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (prevOpened.current && !opened) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setOpening(false); // opened меняется в процессе анимации открытия.
-            setClosing(true);
-        } else if (!prevOpened.current && opened) {
-            setClosing(false); // opened меняется в процессе анимации закрытия.
-            setOpening(true);
-        }
-
-        prevOpened.current = opened;
-    }, [opened]);
-
-    const handleTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
-        const { target, currentTarget } = event;
-
-        if (target === currentTarget) {
-            if (closing) {
-                setClosing(false);
-                onClose?.();
-            } else if (opening) {
-                setOpening(false);
-                onOpen?.();
+        useEffect(() => {
+            if (prevOpened.current && !opened) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
+                setOpening(false); // opened меняется в процессе анимации открытия.
+                setClosing(true);
+            } else if (!prevOpened.current && opened) {
+                setClosing(false); // opened меняется в процессе анимации закрытия.
+                setOpening(true);
             }
-        }
-    };
 
-    const renderMask = ({ opened }: IOverlayChildrenProvideProps) => (
-        <OverlayMask opened={opened} className={styles.lightBoxSideOverlayMask} />
-    );
+            prevOpened.current = opened;
+        }, [opened]);
 
-    const renderPanel = () => (
-        <div
-            className={clsx(styles.lightBoxSideOverlayContent, {
-                [styles.closing]: closing,
-                [styles.opening]: opening,
-                [styles.opened]: opened,
-            })}
-            onTransitionEnd={handleTransitionEnd}
-            ref={contentRef}
-        >
-            {children}
+        const handleTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
+            const { target, currentTarget } = event;
 
-            {isLoading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
-        </div>
-    );
+            if (target === currentTarget) {
+                if (closing) {
+                    setClosing(false);
+                    onClose?.();
+                } else if (opening) {
+                    setOpening(false);
+                    onOpen?.();
+                }
+            }
+        };
 
-    const setOpened = () => {};
+        const renderMask = ({ opened }: IOverlayChildrenProvideProps) => (
+            <OverlayMask opened={opened} className={styles.lightBoxSideOverlayMask} />
+        );
 
-    const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, sizeToClassNameMap[size], {
-        [styles.closing]: closing,
-        [styles.opened]: opened,
-        [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
-        [styles.overflowYHidden]:
-            Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
-    });
+        const renderPanel = () => (
+            <div
+                className={clsx(styles.lightBoxSideOverlayContent, {
+                    [styles.closing]: closing,
+                    [styles.opening]: opening,
+                    [styles.opened]: opened,
+                })}
+                onTransitionEnd={handleTransitionEnd}
+                ref={contentRef}
+            >
+                {children}
 
-    const renderOverlay = (provideProps: IOverlayChildrenProvideProps) => (
-        <>
-            {renderMask(provideProps)}
-            {renderPanel()}
-        </>
-    );
+                {isLoading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
+            </div>
+        );
 
-    const content = (
-        <div
-            className={clsx(styles.lightBoxSideOverlay, {
-                [styles.closing]: closing,
-                [styles.opening]: opening,
-            })}
-        >
-            <OverlayBase direction={EOverlayDirection.RIGHT} opened={opened} setOpened={setOpened}>
-                {renderOverlay}
-            </OverlayBase>
-        </div>
-    );
+        const setOpened = () => {};
 
-    const renderWrapper = () => (
-        <div className={classNameOverlayWrapper} role="dialog" aria-modal="true" {...htmlDivAttributes}>
-            {content}
-        </div>
-    );
+        const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, sizeToClassNameMap[size], {
+            [styles.closing]: closing,
+            [styles.opened]: opened,
+            [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
+            [styles.overflowYHidden]:
+                Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
+        });
 
-    return (
-        <MobileView
-            fallback={
-                <FocusTrap
-                    // active={opened && !opening && !closing}
-                    active={false}
-                    {...focusTrapProps}
-                    focusTrapOptions={{
-                        allowOutsideClick: true,
-                        initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(contentRef.current),
-                        preventScroll: true,
-                        ...focusTrapProps?.focusTrapOptions,
-                    }}
+        const renderOverlay = (provideProps: IOverlayChildrenProvideProps) => (
+            <>
+                {renderMask(provideProps)}
+                {renderPanel()}
+            </>
+        );
+
+        return (
+            <FocusTrapExtended
+                active={opened && !opening && !closing}
+                {...focusTrapProps}
+                focusTrapOptions={{
+                    allowOutsideClick: true,
+                    initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(contentRef.current),
+                    preventScroll: true,
+                    ...focusTrapProps?.focusTrapOptions,
+                }}
+            >
+                <div
+                    className={classNameOverlayWrapper}
+                    role="dialog"
+                    aria-modal="true"
+                    {...htmlDivAttributes}
+                    ref={ref}
                 >
-                    {renderWrapper()}
-                </FocusTrap>
-            }
-        >
-            {renderWrapper()}
-        </MobileView>
-    );
-};
+                    <div
+                        className={clsx(styles.lightBoxSideOverlay, {
+                            [styles.closing]: closing,
+                            [styles.opening]: opening,
+                        })}
+                    >
+                        <OverlayBase direction={EOverlayDirection.RIGHT} opened={opened} setOpened={setOpened}>
+                            {renderOverlay}
+                        </OverlayBase>
+                    </div>
+                </div>
+            </FocusTrapExtended>
+        );
+    },
+);
 
-LightBoxSideOverlay.displayName = "LightBoxSideOverlay";
-LightBoxSideOverlay.CloseDesktop = LightBoxSideOverlayCloseDesktop;
-LightBoxSideOverlay.CloseMobile = LightBoxSideOverlayCloseMobile;
+LightBoxSideOverlayBase.displayName = "LightBoxSideOverlay";
+
+/** Боковая панель LightBox, выезжающая с правой стороны. */
+export const LightBoxSideOverlay = Object.assign(LightBoxSideOverlayBase, {
+    CloseDesktop: LightBoxSideOverlayCloseDesktop,
+    CloseMobile: LightBoxSideOverlayCloseMobile,
+});

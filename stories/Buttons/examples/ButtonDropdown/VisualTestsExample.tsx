@@ -4,10 +4,9 @@ import {
     ButtonDropdown,
     EButtonTheme,
     EComponentSize,
-    EScreenWidth,
     IButtonDropdownOption,
+    useMobileView,
 } from "@sberbusiness/triplex-next";
-import { AdaptiveUtils } from "../../../utils/adaptiveUtils";
 
 const createOptions = (onItemSelect?: (id: string) => void): IButtonDropdownOption[] => [
     {
@@ -43,7 +42,7 @@ export const VisualTestsExample = () => {
     const selectedMD = options.find((o) => o.id === selectedId);
     const selectedLG = options.find((o) => o.id === selectedId);
 
-    const openedMdLg = !AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX);
+    const openedMdLg = !useMobileView();
 
     return (
         <div style={{ display: "flex", gap: 16 }}>

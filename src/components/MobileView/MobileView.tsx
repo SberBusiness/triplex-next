@@ -2,9 +2,7 @@ import React from "react";
 import { EScreenWidth } from "../../helpers/breakpoints";
 import { MediaWidth } from "../MediaWidth";
 
-/**
- * Свойства MobileView.
- */
+/** Свойства компонента MobileView. */
 export interface IMobileViewProps {
     /** Элементы, которые рендерятся, когда ширина окна браузера соответствует ширине мобильного устройства (<768px). */
     children: React.ReactElement | null;

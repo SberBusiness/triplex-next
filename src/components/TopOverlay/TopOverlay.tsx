@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
-import { Overlay, IOverlayProps } from "../Overlay/Overlay";
-import FocusTrap, { FocusTrapProps } from "focus-trap-react";
 import clsx from "clsx";
+import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
+import { Overlay, IOverlayProps } from "../Overlay/Overlay";
+import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
 import styles from "./styles/TopOverlay.module.less";
 
 /** Свойства компонента TopOverlay. */
 export interface ITopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
     children?: React.ReactNode;
-    /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrapProps;
+    /** Свойства компонента FocusTrapExtended. */
+    focusTrapProps?: IFocusTrapExtendedProps;
 }
 
 export const TopOverlay: React.FC<ITopOverlayProps> = ({
@@ -103,28 +103,11 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
         [styles.opened]: opened,
     });
 
-    const overlay = (
-        <Overlay
-            onClose={handleClose}
-            onClosing={handleClosing}
-            onOpen={handleOpen}
-            opened={opened}
-            setOpened={setOpened}
-            {...OverlayBaseProps}
-            className={styles.topOverlay}
-            direction={EOverlayDirection.TOP}
-        >
-            {renderOverlay}
-        </Overlay>
-    );
-
     return (
-        <FocusTrap
-            // active={activeFocusTrap}
-            active={false}
+        <FocusTrapExtended
+            active={activeFocusTrap}
             {...focusTrapProps}
             focusTrapOptions={{
-                allowOutsideClick: true,
                 preventScroll: true,
                 ...focusTrapProps?.focusTrapOptions,
             }}
@@ -134,8 +117,19 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
                 ref={overlayWrapperRef}
                 style={overlayWrapperTopPosition ? { top: `${overlayWrapperTopPosition}px` } : undefined}
             >
-                {overlay}
+                <Overlay
+                    onClose={handleClose}
+                    onClosing={handleClosing}
+                    onOpen={handleOpen}
+                    opened={opened}
+                    setOpened={setOpened}
+                    {...OverlayBaseProps}
+                    className={styles.topOverlay}
+                    direction={EOverlayDirection.TOP}
+                >
+                    {renderOverlay}
+                </Overlay>
             </div>
-        </FocusTrap>
+        </FocusTrapExtended>
     );
 };

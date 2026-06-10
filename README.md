@@ -12,9 +12,10 @@ npm install @sberbusiness/triplex-next @sberbusiness/icons-next
 ```
 
 ## Импортировать стили
+
 ```ts
-import '@sberbusiness/triplex-next/styles/triplex-next.css';
-import '@sberbusiness/icons-next/styles/icons.css';
+import "@sberbusiness/triplex-next/styles/triplex-next.css";
+import "@sberbusiness/icons-next/styles/icons.css";
 ```
 
 ## 🔤 Шрифты
@@ -23,55 +24,54 @@ import '@sberbusiness/icons-next/styles/icons.css';
 
 ```css
 @font-face {
-    font-family: 'SBSansDisplay';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Regular.woff2') format('woff2');
+    font-family: SBSansDisplay;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansDisplayMedium';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
+    font-family: SBSansDisplayMedium;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Medium.woff2") format("woff2");
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansDisplaySemibold';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
+    font-family: SBSansDisplaySemibold;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-SemiBold.woff2") format("woff2");
     font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansDisplayBold';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
+    font-family: SBSansDisplayBold;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansDisplay-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansText';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Regular.woff2') format('woff2');
+    font-family: SBSansText;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansTextSemibold';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
+    font-family: SBSansTextSemibold;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansText-Semibold.woff2") format("woff2");
     font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansTextMono';
-    src: url('node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansTextMono-Regular.woff2') format('woff2');
+    font-family: SBSansTextMono;
+    src: url("node_modules/@sberbusiness/triplex-next/assets/fonts/SBSansTextMono-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 ```
-
 
 ---
 
@@ -93,16 +93,16 @@ src/
 
 ## 📜 Скрипты
 
-| Скрипт | Назначение |
-|-------|------------|
-| `npm run build` | Сборка компонентов и `style.css` в `dist/` |
-| `npm run storybook` | Локальный просмотр компонентов |
-| `npm run storybook:build` | Сборка Storybook в `storybook-static/` |
-| `npm run test-visual:docker` | Визуальные тесты в Docker-контейнере (сборка + запуск) |
-| `npm run test-visual:docker:update` | Обновить baseline-скриншоты в Docker-контейнере |
-| `npm run test-visual:debug` | Отладка визуальных тестов локально (Storybook должен быть запущен) |
-| `npm run test-visual:ci` | Визуальные тесты — используется в CI и Docker |
-| `npm run test-visual:ci:update` | Обновление baseline — используется в CI и Docker |
+| Скрипт                              | Назначение                                                         |
+| ----------------------------------- | ------------------------------------------------------------------ |
+| `npm run build`                     | Сборка компонентов и `style.css` в `dist/`                         |
+| `npm run storybook`                 | Локальный просмотр компонентов                                     |
+| `npm run storybook:build`           | Сборка Storybook в `storybook-static/`                             |
+| `npm run test-visual:docker`        | Визуальные тесты в Docker-контейнере (сборка + запуск)             |
+| `npm run test-visual:docker:update` | Обновить baseline-скриншоты в Docker-контейнере                    |
+| `npm run test-visual:debug`         | Отладка визуальных тестов локально (Storybook должен быть запущен) |
+| `npm run test-visual:ci`            | Визуальные тесты — используется в CI и Docker                      |
+| `npm run test-visual:ci:update`     | Обновление baseline — используется в CI и Docker                   |
 
 ---
 
@@ -125,10 +125,11 @@ index.ts         ← обязательный!
 3. Указать экспорт в `src/index.ts`:
 
 ```ts
-export * from './components/Alert';
+export * from "./components/Alert";
 ```
 
 ---
+
 ## 🧪 Тестирование
 
 Проект использует [Vitest](https://vitest.dev/) для unit-тестирования и [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) для тестирования компонентов.
@@ -144,11 +145,13 @@ export * from './components/Alert';
 #### Как обновить baseline-скриншоты
 
 **Через Docker (рекомендуется):**
+
 ```bash
 npm run test-visual:docker:update
 ```
 
 **Через CI:**
+
 1. Запушить ветку с изменениями
 2. В GitHub → Actions → **Update Visual Snapshots** → Run workflow → выбрать ветку
 3. Воркфлоу пересоздаст скриншоты и сделает коммит в ту же ветку
@@ -185,10 +188,10 @@ npm run test-visual:debug            # локально (Storybook должен 
 
 Визуальные тесты в CI работают на собранной (build) версии Storybook, а не на dev-сервере — это исключает race conditions при загрузке модулей.
 
-| Воркфлоу | Триггер | Что делает |
-|---|---|---|
-| `visual-test.yml` | Каждый PR | Прогоняет тесты, загружает диффы как артефакты при падении |
-| `visual-update.yml` | Ручной запуск (`workflow_dispatch`) | Пересоздаёт baselines и коммитит их в ветку |
+| Воркфлоу            | Триггер                             | Что делает                                                 |
+| ------------------- | ----------------------------------- | ---------------------------------------------------------- |
+| `visual-test.yml`   | Каждый PR                           | Прогоняет тесты, загружает диффы как артефакты при падении |
+| `visual-update.yml` | Ручной запуск (`workflow_dispatch`) | Пересоздаёт baselines и коммитит их в ветку                |
 
 #### Как отлаживать локально
 

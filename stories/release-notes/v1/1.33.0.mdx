@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.33.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**FocusTrapExtended**
+
+- Обёртка над `FocusTrap`, которая управляет возвратом фокуса в зависимости от сценария закрытия.
+
 <Heading>Изменения</Heading>
 
 **Button**
@@ -22,6 +28,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **LightBox**
 
 - Изменен цвет фона `LightBoxSideOverlay` в темной теме.
+
+**LightBoxSideOverlay**
+
+- Компонент переведён на использование `forwardRef`.
+
+**LightBox / LightBoxSideOverlay / ModalWindow / TopOverlay**
+
+- Включена ловушка фокуса.
 
 **ModalWindow**
 

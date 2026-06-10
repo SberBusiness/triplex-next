@@ -1,5 +1,5 @@
 body {
-    font-family: 'SBSansText';
+    font-family: SBSansText, Arial, sans-serif;
 }
 
 .icon-item {
@@ -69,46 +69,50 @@ body {
 }
 
 @font-face {
-    font-family: 'SBSansText';
-    src: url('/assets/fonts/SBSansText-Regular.woff2') format('woff2');
+    font-family: SBSansDisplay;
+    src: url("/assets/fonts/SBSansDisplay-Regular.woff2") format("woff2");
     font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'SBSansTextSemibold';
-    src: url('/assets/fonts/SBSansText-Semibold.woff2') format('woff2');
-    font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'SBSansDisplayBold';
-    src: url('/assets/fonts/SBSansDisplay-Bold.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'SBSansDisplayMedium';
-    src: url('/assets/fonts/SBSansDisplay-Medium.woff2') format('woff2');
+    font-family: SBSansDisplayMedium;
+    src: url("/assets/fonts/SBSansDisplay-Medium.woff2") format("woff2");
     font-weight: 500;
     font-style: normal;
 }
+
 @font-face {
-    font-family: 'SBSansDisplay';
-    src: url('/assets/fonts/SBSansDisplay-Regular.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'SBSansDisplaySemibold';
-    src: url('/assets/fonts/SBSansDisplay-SemiBold.woff2') format('woff2');
+    font-family: SBSansDisplaySemibold;
+    src: url("/assets/fonts/SBSansDisplay-SemiBold.woff2") format("woff2");
     font-weight: 600;
     font-style: normal;
 }
+
 @font-face {
-    font-family: 'SBSansTextMono';
-    src: url('/assets/fonts/SBSansTextMono-Regular.woff2') format('woff2');
-    font-weight: 400;
+    font-family: SBSansDisplayBold;
+    src: url("/assets/fonts/SBSansDisplay-Bold.woff2") format("woff2");
+    font-weight: 700;
     font-style: normal;
 }
 
+@font-face {
+    font-family: SBSansText;
+    src: url("/assets/fonts/SBSansText-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: SBSansTextSemibold;
+    src: url("/assets/fonts/SBSansText-Semibold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: SBSansTextMono;
+    src: url("/assets/fonts/SBSansTextMono-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}

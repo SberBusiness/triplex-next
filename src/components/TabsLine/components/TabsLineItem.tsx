@@ -75,7 +75,7 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
                 >
                     {label}
                 </Text>
-                {showNotificationIcon && <Badge.Dot size={EComponentSize.MD} className={styles.notificationIcon} />}
+                {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}
             </button>
         );
     },

@@ -3,14 +3,14 @@ import { ChipSuggest, EComponentSize, type ISuggestFieldOption } from "@sberbusi
 import { mapFruitsToSuggestOptions, SUGGEST_STORY_FRUITS } from "./storyConstants";
 
 const states = [
-    { id: "selected" as const, label: "SELECTED", targetProps: { selected: true as const } },
-    { id: "disabled" as const, label: "DISABLED", targetProps: { disabled: true as const } },
+    { id: "selected", label: "SELECTED" },
+    { id: "disabled", label: "DISABLED", targetProps: { disabled: true } },
 ];
 
 export const StatesExample = () => {
     const initialOptions = mapFruitsToSuggestOptions([...SUGGEST_STORY_FRUITS]);
 
-    const [valueSelected, setValueSelected] = useState<ISuggestFieldOption>(initialOptions[0]);
+    const [valueSelected, setValueSelected] = useState<ISuggestFieldOption | undefined>(initialOptions[0]);
     const [valueDisabled, setValueDisabled] = useState<ISuggestFieldOption>();
     const [options, setOptions] = useState<ISuggestFieldOption[]>([]);
     const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -46,14 +46,14 @@ export const StatesExample = () => {
                         size={EComponentSize.MD}
                         placeholder="Type to proceed"
                         noOptionsText="No matches found."
-                        value={state.targetProps.selected ? valueSelected : valueDisabled}
+                        value={state.id === "selected" ? valueSelected : valueDisabled}
                         options={options}
                         tooltipOpen={tooltipOpen}
-                        onSelect={state.targetProps.selected ? setValueSelected : setValueDisabled}
+                        onSelect={state.id === "selected" ? setValueSelected : setValueDisabled}
                         onFilter={handleFilter}
                         targetProps={{
                             clearSelected: () =>
-                                state.targetProps.selected ? setValueSelected(undefined) : setValueDisabled(undefined),
+                                state.id === "selected" ? setValueSelected(undefined) : setValueDisabled(undefined),
                             ...state.targetProps,
                         }}
                         dropdownProps={{ onOpen: handleDropdownOpen }}

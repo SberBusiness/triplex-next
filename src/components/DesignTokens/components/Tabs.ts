@@ -26,10 +26,10 @@ export type TDesignTokensComponentsTabs = { Tabs: TDesignTokensComponentsTabsVal
 
 // Токены компонента Tabs в светлой и темной темах.
 export const Tabs_Tokens: TDesignTokensComponentsTabsValues = {
-    Type1_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Tabs-Type1_Background)
+    Type1_Background: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Tabs-Type1_Background)
     Type2_Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Tabs-Type2_Background)
 
-    Type1_Tab_Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Default)
+    Type1_Tab_Background_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Default)
     Type2_Tab_Background_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Tabs-Type2_Tab_Background_Default)
     Type1_Tab_Background_Selected: [{ ref: "ColorNeutral.30" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Tabs-Type1_Tab_Background_Selected)
     Type2_Tab_Background_Selected: [{ ref: "ColorNeutral.50" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Tabs-Type2_Tab_Background_Selected)

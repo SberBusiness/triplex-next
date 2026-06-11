@@ -18,7 +18,7 @@ import {
     TagGroup,
     IconWrapper,
 } from "@sberbusiness/triplex-next";
-import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
+import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 import "../MultiselectField.less";
 
@@ -161,7 +161,7 @@ const StatusItem = ({ idPrefix, status }: IStatusItemProps) => {
                     label={renderTags()}
                     prefix={
                         <IconWrapper disableInteraction disabled={status === EFormFieldStatus.DISABLED} displayContents>
-                            <DefaulticonStrokePrdIcon24 paletteIndex={5} />
+                            <DefaulticonStrokePrdIcon20 paletteIndex={5} />
                         </IconWrapper>
                     }
                 />

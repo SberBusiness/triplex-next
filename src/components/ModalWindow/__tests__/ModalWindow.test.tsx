@@ -188,17 +188,17 @@ describe("ModalWindow", () => {
     });
 
     describe("Focus Trap", () => {
-        // it("should render focus trap with correct active state", () => {
-        //     render(
-        //         <ModalWindow isOpen={true} closeButton={<TestCloseButton />}>
-        //             <TestContent />
-        //         </ModalWindow>,
-        //     );
+        it("should render focus trap with correct active state", () => {
+            render(
+                <ModalWindow isOpen={true} closeButton={<TestCloseButton />}>
+                    <TestContent />
+                </ModalWindow>,
+            );
 
-        //     expect(focusTrapMock).toHaveBeenCalled();
-        //     const focusTrapProps = focusTrapMock.mock.calls[0][0];
-        //     expect(focusTrapProps.active).toBe(true);
-        // });
+            expect(focusTrapMock).toHaveBeenCalled();
+            const focusTrapProps = focusTrapMock.mock.calls[0][0];
+            expect(focusTrapProps.active).toBe(true);
+        });
 
         it("should configure focus trap with correct default options", () => {
             render(
@@ -208,7 +208,7 @@ describe("ModalWindow", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBeInstanceOf(Function);
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
         });
 
@@ -226,7 +226,7 @@ describe("ModalWindow", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
+            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBeInstanceOf(Function);
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
             expect(focusTrapProps.focusTrapOptions.escapeDeactivates).toBe(false);
         });

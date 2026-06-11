@@ -38,7 +38,7 @@ export type TDesignTokensComponentsChip = { Chip: TDesignTokensComponentsChipVal
 
 // Токены компонента Chip в светлой и темной темах.
 export const Chip_Tokens: TDesignTokensComponentsChipValues = {
-    Background_Active: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Chip-Background_Active)
+    Background_Active: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Chip-Background_Active)
     Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Chip-Background_Disabled)
     Background_Type1_Default: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.80" }], // var(--triplex-next-Chip-Background_Type1_Default)
     Background_Type1_Hover: [{ ref: "ColorNeutral.70" }, { ref: "ColorDarkNeutral.90" }], // var(--triplex-next-Background_Type1_Hover)

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import clsx from "clsx";
 import { CSSTransition } from "react-transition-group";
-import { Portal } from "../Portal/Portal";
-import FocusTrap from "focus-trap-react";
+import { Portal } from "../Portal";
+import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { ModalWindowViewManager } from "./components/ModalWindowViewManager";
 import { useToken } from "../ThemeProvider/useToken";
-import clsx from "clsx";
-import styles from "./styles/ModalWindow.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import styles from "./styles/ModalWindow.module.less";
 
 /** Свойства компонента модального окна. */
 export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,8 +17,8 @@ export interface IModalWindowProps extends React.HTMLAttributes<HTMLDivElement> 
     children: React.ReactElement;
     /** ClassName контейнера модального окна. */
     containerClassName?: string;
-    /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    /** Свойства компонента FocusTrapExtended. */
+    focusTrapProps?: IFocusTrapExtendedProps;
     /** Callback после анимации закрытия модального окна. */
     onExited?: () => void;
     /** Кнопка закрыть. Обычно — `ModalWindowClose`. Рендерится внутри корневого dialog-элемента поверх контента. */
@@ -145,12 +145,10 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                     mountOnEnter
                     unmountOnExit
                 >
-                    <FocusTrap
-                        // active={isOpen}
-                        active={false}
+                    <FocusTrapExtended
+                        active={isOpen}
                         {...focusTrapProps}
                         focusTrapOptions={{
-                            allowOutsideClick: true,
                             preventScroll: true,
                             ...focusTrapProps?.focusTrapOptions,
                         }}
@@ -170,7 +168,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                                 </div>
                             </div>
                         </div>
-                    </FocusTrap>
+                    </FocusTrapExtended>
                 </CSSTransition>
             </Portal>
             <ModalWindowViewManager />

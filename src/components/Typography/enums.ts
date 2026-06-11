@@ -62,8 +62,8 @@ export enum EFontWeightCaption {
 
 /** Возможные начертания шрифта компонента Title. */
 export enum EFontWeightTitle {
-    MEDIUM = "medium",
     REGULAR = "regular",
+    MEDIUM = "medium",
     SEMIBOLD = "semibold",
     BOLD = "bold",
 }

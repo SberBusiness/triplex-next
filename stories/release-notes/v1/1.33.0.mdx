@@ -4,8 +4,58 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.33.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**FocusTrapExtended**
+
+- Обёртка над `FocusTrap`, которая управляет возвратом фокуса в зависимости от сценария закрытия.
+
 <Heading>Изменения</Heading>
 
-**Title**
+**Button**
 
-- Description..
+- Исправлен цвет токена `Button.SecondaryLight_Background_Active` в светлой и темной темах.
+- Исправлен шрифт.
+
+**Chip**
+
+- Исправлен цвет токена `Chip.Background_Active` в темной теме.
+
+**ChipSuggest**
+
+- Добавлена зависимость `ChipClearButton` от размера компонента.
+- Исправлены размеры `LoaderSmall` в input внутри `Dropdown`.
+
+**Dropdown**
+
+- Исправлены горизонтальные отступы у `DropdownDesktopListItem`.
+
+**LightBox**
+
+- Изменен цвет фона `LightBoxSideOverlay` в темной теме.
+
+**LightBoxSideOverlay**
+
+- Компонент переведён на использование `forwardRef`.
+
+**LightBox / LightBoxSideOverlay / ModalWindow / TopOverlay**
+
+- Включена ловушка фокуса.
+
+**ModalWindow**
+
+- Отступ от компонента снизу изменен на 100px.
+- Удален нижний отступ у `ModalWindowBody` при отсутствии `ModalWindowFooter`.
+
+**Notification**
+
+- Исправлен шрифт заголовка.
+
+**Stepper**
+
+- Добавлен экспорт `StepperStepIcon`.
+
+**Tabs**
+
+- Исправлены внутренние горизонтальные отступы внутри `TabsExtendedTabButton`.
+- Исправлены цвета токенов `Tabs.Type1_Background` и `Tabs.Type1_Tab_Background_Default` в темной теме.

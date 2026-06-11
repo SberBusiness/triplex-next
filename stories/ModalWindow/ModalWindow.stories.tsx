@@ -25,6 +25,8 @@ import {
     VisualTestsLongContent,
     VisualTestsSizeLg,
     VisualTestsSizeSm,
+    WithoutFooter as WithoutFooterRender,
+    WithoutFooterSource,
     WithLongContent as WithLongContentRender,
     WithLongContentSource,
 } from "./examples";
@@ -171,6 +173,20 @@ export const LoadingState: StoryObj<typeof ModalWindow> = {
             },
             source: {
                 code: LoadingStateSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithoutFooter: StoryObj<typeof ModalWindow> = {
+    name: "Example: without footer",
+    render: WithoutFooterRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: WithoutFooterSource,
                 language: "tsx",
             },
         },

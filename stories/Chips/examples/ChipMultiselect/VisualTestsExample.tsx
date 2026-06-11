@@ -19,10 +19,9 @@ import {
     ChipMultiselect,
     ETextSize,
     Text,
-    EScreenWidth,
+    useMobileView,
     type ISelectExtendedFieldDropdownProvideProps,
 } from "@sberbusiness/triplex-next";
-import { AdaptiveUtils } from "../../../utils/adaptiveUtils";
 import { CHIP_MULTISELECT_VISUAL_TEST_OPTIONS } from "./storyConstants";
 
 export const VisualTestsExample = () => {
@@ -104,7 +103,7 @@ export const VisualTestsExample = () => {
             setFilter(event.target.value);
         };
 
-        const shouldBeOpened = args.size === EComponentSize.SM ? true : !AdaptiveUtils.isAdaptive(EScreenWidth.SM_MAX);
+        const shouldBeOpened = args.size === EComponentSize.SM ? true : !useMobileView();
 
         useLayoutEffect(() => {
             const el = chipRef.current;

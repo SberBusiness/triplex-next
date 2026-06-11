@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/refs */
 import React, { useEffect, useRef } from "react";
-import FocusTrap from "focus-trap-react";
+import clsx from "clsx";
+import { Portal } from "../Portal";
+import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { LightBoxContent } from "./LightBoxContent";
 import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
 import { LightBoxSideOverlay } from "./LightBoxSideOverlay/LightBoxSideOverlay";
-import { Portal } from "../Portal/Portal";
 import { addClassNameWithScrollbarWidth } from "../../utils/scroll/scrollbar";
 import { TopOverlay } from "../TopOverlay/TopOverlay";
 import { LightBoxViewManager } from "./LightBoxViewManager/LightBoxViewManager";
 import { FocusTrapUtils } from "../../utils/focus/FocusTrapUtils";
 import { useToken } from "../ThemeProvider/useToken";
-import clsx from "clsx";
 import { LightBoxLeftSidebar } from "./LightBoxSidebars/LightBoxLeftSidebar";
 import { LightBoxRightSidebar } from "./LightBoxSidebars/LightBoxRightSidebar";
 import { ELightBoxSize } from "./enums";
@@ -26,8 +26,8 @@ export const lightBoxViewManagerNodeIdDefault = "LightBox-next-view-manager-node
 /** Свойства компонента LightBox. */
 export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactElement[];
-    /** Свойства FocusTrap. Используется npm-пакет focus-trap-react. */
-    focusTrapProps?: FocusTrap.Props;
+    /** Свойства компонента FocusTrapExtended. */
+    focusTrapProps?: IFocusTrapExtendedProps;
     /** Ref на контейнер LightBox. */
     forwardRef?: React.MutableRefObject<HTMLElement | null>;
     /** DOM-нода в которую будет рендерится лайтбокс. */
@@ -127,6 +127,10 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         }
     }, [isSideOverlayOpened]);
 
+    if (!lightBoxMountNode.current) {
+        return null;
+    }
+
     /** Функция для хранения ссылки. */
     const setRef = (instance: HTMLDivElement | null) => {
         containerRef.current = instance;
@@ -148,19 +152,13 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         className,
     );
 
-    if (!lightBoxMountNode.current) {
-        return null;
-    }
-
     return (
         <>
             <Portal container={lightBoxMountNode.current}>
-                <FocusTrap
-                    // active={!isLoading}
-                    active={false}
+                <FocusTrapExtended
+                    active={!isLoading}
                     {...focusTrapProps}
                     focusTrapOptions={{
-                        allowOutsideClick: true,
                         initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(containerRef.current),
                         preventScroll: true,
                         ...focusTrapProps?.focusTrapOptions,
@@ -171,7 +169,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                         {children}
                         <span ref={tempButtonRef} className={styles.tempElSafariBug} />
                     </div>
-                </FocusTrap>
+                </FocusTrapExtended>
             </Portal>
 
             {lightBoxViewManagerNode.current && (

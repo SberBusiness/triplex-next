@@ -6,15 +6,15 @@ import { action } from "storybook/actions";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import {
     Stepper,
-    StepperExtended,
+    StepperStepIcon,
     CarouselExtended,
+    StepperExtended,
     ButtonIcon,
     ICarouselExtendedButtonProvideProps,
     EComponentSize,
     EStepperStepType,
     EStepperStepIconType,
 } from "@sberbusiness/triplex-next";
-import { StepperStepIcon } from "../../src/components/Stepper/StepperStepIcon";
 import "./Stepper.less";
 
 export default {

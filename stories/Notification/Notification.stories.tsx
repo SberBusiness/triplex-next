@@ -7,6 +7,8 @@ import {
     BusinessSource,
     BusinessStack as BusinessStackRender,
     BusinessStackSource,
+    Default as DefaultRender,
+    DefaultSource,
     FeedbackWithoutStars as FeedbackWithoutStarsRender,
     FeedbackWithoutStarsSource,
     FeedbackWithStars as FeedbackWithStarsRender,
@@ -194,6 +196,19 @@ export const Playground: StoryObj<INotificationPlaygroundProps> = {
         },
     },
     render: (args) => <PlaygroundRender {...args} />,
+};
+
+export const Default: StoryObj<typeof Notification> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
+        },
+    },
 };
 
 export const Status: StoryObj<typeof Notification> = {

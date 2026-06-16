@@ -135,6 +135,7 @@ Notification
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Playground` | `Playground.tsx` | Интерактивный контроль наполнения уведомления |
+| `Default` | `Default.tsx` | Минимальное уведомление: иконка, заголовок, текст, закрытие |
 | `Status` | `Status.tsx` | Success / Warning / Error со списком |
 | `Business` | `Business.tsx` | Бизнес-уведомления: текст, кнопка, вложенный Alert |
 | `Business Stack` | `BusinessStack.tsx` | Уведомления в `NotificationGrouped` (стопка) |

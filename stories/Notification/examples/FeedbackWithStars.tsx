@@ -100,7 +100,7 @@ export const FeedbackWithStars = () => {
                                 ))}
                             </div>
                             <CheckboxYGroup
-                                aria-labelledby="checkbox-y-group-label"
+                                aria-label="Причины неудовлетворенности"
                                 className="notificationBodyCheckbox"
                             >
                                 {checkboxes.map((checkboxValue, index) => (

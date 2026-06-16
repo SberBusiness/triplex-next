@@ -100,6 +100,7 @@ version: "1.0"
 | `Statuses` | `StatusesExample.tsx` | Статусы default / disabled / error / warning |
 | `Production` (`Example: production`) | `ProductionExample.tsx` | Production-композиция: postfix `HelpBox`, description со ссылкой, кнопка очистки и фокус на input |
 | `VisualTests` | `VisualTestsExample.tsx` | Скриншот-регрессия: все размеры (пустые/заполненные), статусы, поле с очисткой и постфиксом |
+| `VisualTestsOpen` | `VisualTestsOpenExample.tsx` | Скриншот-регрессия раскрытого состояния: dropdown с календарём открывается через `play` |
 
 ---
 
@@ -108,3 +109,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-06-16 | Создан документ. AI-рефакторинг (JSDoc-фиксы), unit-тесты для `utils.ts`, story `VisualTests` и включение скриншот-тестов |
+| 2026-06-16 | Добавлена story `VisualTestsOpen` — скриншот раскрытого dropdown с календарём (через `play`) |

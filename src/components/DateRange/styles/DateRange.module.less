@@ -1,6 +1,27 @@
 .dateRange {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+
+    &:has([class*="sm"]) {
+        .dateRangeButton,
+        .separator {
+            margin-top: 4px;
+        }
+    }
+
+    &:has([class*="md"]) {
+        .dateRangeButton,
+        .separator {
+            margin-top: 10px;
+        }
+    }
+
+    &:has([class*="lg"]) {
+        .dateRangeButton,
+        .separator {
+            margin-top: 18px;
+        }
+    }
 }
 
 .dateRangeButton {

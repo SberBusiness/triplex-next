@@ -11,6 +11,8 @@ import {
     VisualTestsExample,
     SizesExample,
     SizesExampleSource,
+    ProductionExample,
+    ProductionExampleSource,
 } from "./examples";
 
 const meta = {
@@ -98,6 +100,20 @@ export const WithoutNavigation: Story = {
         docs: {
             description: { story: "DateRange без кнопок навигации - только поля выбора дат." },
             source: { code: WithoutNavigationExampleSource, language: "tsx" },
+        },
+    },
+};
+
+export const Example: StoryObj<typeof ProductionExample> = {
+    name: "Example: production",
+    render: ProductionExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ProductionExampleSource,
+                language: "tsx",
+            },
         },
     },
 };

@@ -6,3 +6,5 @@ export { default as WithoutNavigationExampleSource } from "./WithoutNavigationEx
 export { VisualTestsExample } from "./VisualTestsExample";
 export { default as SizesExampleSource } from "./SizesExample?raw";
 export { SizesExample } from "./SizesExample";
+export { ProductionExample } from "./ProductionExample";
+export { default as ProductionExampleSource } from "./ProductionExample?raw";

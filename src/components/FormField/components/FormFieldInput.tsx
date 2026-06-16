@@ -16,9 +16,10 @@ export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, 
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement>, DataAttributes {
-    /** Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
-     *  Через аргументы props инпуту передастся нужная стилизация.
-     * */
+    /**
+     * Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
+     * Через аргументы props инпуту передастся нужная стилизация.
+     */
     render?: (props: IFormFieldInputProvideProps, ref?: React.Ref<HTMLInputElement>) => React.ReactNode;
 }
 

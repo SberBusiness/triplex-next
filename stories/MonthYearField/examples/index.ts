@@ -8,3 +8,4 @@ export { StatusesExample } from "./StatusesExample";
 export { default as StatusesExampleSource } from "./StatusesExample?raw";
 export { ProductionExample } from "./ProductionExample";
 export { default as ProductionExampleSource } from "./ProductionExample?raw";
+export { VisualTestsExample } from "./VisualTestsExample";

@@ -13,6 +13,7 @@ import {
     StatusesExampleSource,
     ProductionExample,
     ProductionExampleSource,
+    VisualTestsExample,
 } from "./examples";
 
 export default {
@@ -34,7 +35,6 @@ export default {
                 </>
             ),
         },
-        testRunner: { skip: true },
     },
 } satisfies Meta<typeof MonthYearField>;
 
@@ -164,4 +164,16 @@ export const Production: StoryObj<typeof MonthYearField> = {
         },
     },
     render: ProductionExample,
+};
+
+export const VisualTests: StoryObj<typeof MonthYearField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsExample,
 };

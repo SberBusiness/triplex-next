@@ -1,12 +1,9 @@
 import React from "react";
 import styles from "../styles/Notification.module.less";
 
-/**
- * Опции футера нотификации.
- *
- * @prop {React.ReactNode} children Дочерний элемент футера нотификации.
- */
+/** Опции футера нотификации. */
 export interface INotificationFooterProps {
+    /** Дочерний элемент футера нотификации. */
     children: React.ReactNode;
 }
 

@@ -7,25 +7,25 @@ import styles from "../styles/Notification.module.less";
 
 /** Свойства компонента NotificationBody. */
 interface INotificationBodyProps {
+    /** Содержимое тела нотификации: Header, Content, List, Footer. */
     children?: React.ReactNode;
 }
 
-export interface INotificationBodySFC extends React.FC<INotificationBodyProps> {
-    Header: typeof NotificationHeader;
-    Content: typeof NotificationBodyContent;
-    List: typeof NotificationBodyList;
-    Footer: typeof NotificationFooter;
-}
-
 /** Тело нотификации. Состоит из 4х уровней Header, Content, List, Footer. */
-export const NotificationBody: INotificationBodySFC = ((props) => {
-    const { children } = props;
-
-    return <div className={styles.notificationBody}>{children}</div>;
-}) as INotificationBodySFC;
+export const NotificationBody = Object.assign(
+    React.forwardRef<HTMLDivElement, INotificationBodyProps>(function NotificationBody({ children }, ref) {
+        return (
+            <div className={styles.notificationBody} ref={ref}>
+                {children}
+            </div>
+        );
+    }),
+    {
+        Header: NotificationHeader,
+        Content: NotificationBodyContent,
+        List: NotificationBodyList,
+        Footer: NotificationFooter,
+    },
+);
 
 NotificationBody.displayName = "NotificationBody";
-NotificationBody.Header = NotificationHeader;
-NotificationBody.Content = NotificationBodyContent;
-NotificationBody.List = NotificationBodyList;
-NotificationBody.Footer = NotificationFooter;

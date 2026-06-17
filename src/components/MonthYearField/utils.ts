@@ -3,13 +3,13 @@ import { TPickedDate } from "../Calendar/types";
 import { IDateLimitRange } from "../../types/DateTypes";
 import { inputMonthYearFormat } from "./constants";
 
-/** Значения MonthYearPicker. */
+/** Значения пикера MonthYearField. */
 interface IMonthYearPickerValues {
     inputString: string;
     calendarDate: TPickedDate;
 }
 
-/** Утилиты для компонента MonthYearPicker. */
+/** Утилиты для компонента MonthYearField. */
 export const MonthYearPickerUtils = {
     /** Получить значения пикера. */
     getPickerValues: (value: string, format: string, limitRange: IDateLimitRange): IMonthYearPickerValues => {

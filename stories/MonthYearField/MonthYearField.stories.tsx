@@ -13,6 +13,8 @@ import {
     StatusesExampleSource,
     ProductionExample,
     ProductionExampleSource,
+    VisualTestsExample,
+    VisualTestsOpenExample,
 } from "./examples";
 
 export default {
@@ -34,7 +36,6 @@ export default {
                 </>
             ),
         },
-        testRunner: { skip: true },
     },
 } satisfies Meta<typeof MonthYearField>;
 
@@ -164,4 +165,33 @@ export const Production: StoryObj<typeof MonthYearField> = {
         },
     },
     render: ProductionExample,
+};
+
+export const VisualTests: StoryObj<typeof MonthYearField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsExample,
+};
+
+export const VisualTestsOpen: StoryObj<typeof MonthYearField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsOpenExample,
+    play: async ({ canvas, userEvent }) => {
+        const inputs = await canvas.findAllByRole("textbox");
+
+        await userEvent.click(inputs[0]);
+    },
 };

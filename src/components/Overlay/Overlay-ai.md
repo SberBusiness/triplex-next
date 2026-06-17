@@ -121,14 +121,17 @@ Box-shadow панели и тайминги transition (`0.3s ease-in-out`) за
 - **React 17-совместимость** (ветка `release-0`): без `useId` и других React
   18-only API.
 
-### Известная проблема (не баг текущего рефакторинга)
+### Гарантия однократного вызова lifecycle-колбэков
 
-`OverlayBase` вызывает `onClosing` / `onOpening` **дважды** при переходе: один
-раз в `useLayoutEffect([opened])` в момент установки флага, второй — в
-`useEffect([closing])` / `useEffect([opening])`. Рефакторинг сохранил это
-поведение без изменений; фикс требует отдельного согласования (вероятно, в
-`useEffect`-ветках оставить только завершающие `onClose`/`onOpen`). Unit-тесты
-намеренно не закрепляют двойной вызов.
+`OverlayBase` вызывает каждый из `onOpening` / `onClosing` / `onOpen` / `onClose`
+**ровно один раз** за переход. `useLayoutEffect([opened])` только выставляет
+флаги `opening` / `closing`, а сами колбэки вызываются исключительно в
+`useEffect([opening])` / `useEffect([closing])`. Однократность закреплена
+unit-тестами (`toHaveBeenCalledTimes(1)`).
+
+> Ранее (до 2026-06-17) колбэки `onOpening` / `onClosing` вызывались дважды
+> за переход — прямой вызов из `useLayoutEffect` дублировал эффект-driven вызов.
+> Исправлено: прямые вызовы из layout-эффекта удалены.
 
 ---
 
@@ -179,4 +182,4 @@ Visual baseline для `components-overlay--visual-tests` генерируетс
 
 | Дата | Изменение |
 |---|---|
-| 2026-06-17 | Создан документ. `Overlay` переведён на `forwardRef` (ref → корневой `div`, аддитивно, release notes 1.34.0). Дедуплицирован флаг `closing` (единый источник — `OverlayBase`). Codestyle/JSDoc cleanup в 4 файлах. Добавлены 4 unit-тест-файла. Зафиксирована известная проблема двойного вызова `onClosing`/`onOpening`. |
+| 2026-06-17 | Создан документ. `Overlay` переведён на `forwardRef` (ref → корневой `div`, аддитивно, release notes 1.34.0). Дедуплицирован флаг `closing` (единый источник — `OverlayBase`). Codestyle/JSDoc cleanup в 4 файлах. Добавлены 4 unit-тест-файла. Исправлен двойной вызов `onClosing`/`onOpening` за переход — теперь ровно один раз (закреплено `toHaveBeenCalledTimes(1)`). |

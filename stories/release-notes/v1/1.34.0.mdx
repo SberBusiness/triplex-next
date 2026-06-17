@@ -17,6 +17,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Overlay**
 
 - Компонент `Overlay` переведён на использование `forwardRef` (ref ведёт на корневой `div`).
+- Исправлен двойной вызов колбэков `onOpening` / `onClosing` — теперь каждый вызывается ровно один раз за переход.
+
 **SegmentedControl**
 
 - Исправлен баг, при котором сегменты становились неодинаковой ширины из-за разного объема текста.

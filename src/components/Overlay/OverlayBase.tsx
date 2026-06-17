@@ -99,11 +99,9 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
         if (prevOpened.current && !opened) {
             setOpening(false); // opened меняется в процессе анимации открытия.
             setClosing(true);
-            callbacks.current.onClosing?.();
         } else if (!prevOpened.current && opened) {
             setClosing(false); // opened меняется в процессе анимации закрытия.
             setOpening(true);
-            callbacks.current.onOpening?.();
         }
 
         prevOpened.current = opened;

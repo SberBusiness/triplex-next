@@ -100,10 +100,56 @@ describe("Overlay", () => {
 
         // Переход в состояние закрытия отражается классом closing на корневом div.
         expect(screen.getByTestId("overlay-root")).toHaveClass("closing");
-        // onClosing вызывается при переходе opened: true -> false.
-        expect(onClosing).toHaveBeenCalled();
+        // onClosing вызывается ровно один раз при переходе opened: true -> false.
+        expect(onClosing).toHaveBeenCalledTimes(1);
         // onClose ещё не вызывается, пока closing не сброшен.
         expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it("transitions closed -> opening: calls onOpening exactly once when opened changes false to true", () => {
+        const onOpening = vi.fn();
+        const onOpen = vi.fn();
+
+        const { rerender } = render(
+            <Overlay
+                data-testid="overlay-root"
+                direction={EOverlayDirection.RIGHT}
+                opened={false}
+                setOpened={vi.fn()}
+                onOpening={onOpening}
+                onOpen={onOpen}
+            >
+                {(provideProps) => (
+                    <Overlay.Panel data-testid="overlay-panel" {...provideProps}>
+                        content
+                    </Overlay.Panel>
+                )}
+            </Overlay>,
+        );
+
+        expect(onOpening).not.toHaveBeenCalled();
+
+        rerender(
+            <Overlay
+                data-testid="overlay-root"
+                direction={EOverlayDirection.RIGHT}
+                opened
+                setOpened={vi.fn()}
+                onOpening={onOpening}
+                onOpen={onOpen}
+            >
+                {(provideProps) => (
+                    <Overlay.Panel data-testid="overlay-panel" {...provideProps}>
+                        content
+                    </Overlay.Panel>
+                )}
+            </Overlay>,
+        );
+
+        // onOpening вызывается ровно один раз при переходе opened: false -> true.
+        expect(onOpening).toHaveBeenCalledTimes(1);
+        // onOpen вызывается только после завершения transition.
+        expect(onOpen).not.toHaveBeenCalled();
     });
 
     it("calls onClose after the panel transition ends and clears closing", () => {

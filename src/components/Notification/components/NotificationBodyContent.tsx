@@ -3,7 +3,8 @@ import { Text } from "../../Typography/Text";
 import { ETextSize, EFontType } from "../../Typography/enums";
 
 /** Свойства компонента NotificationBodyContent. */
-interface INotificationBodyContentProps {
+export interface INotificationBodyContentProps {
+    /** Основное сообщение нотификации. */
     children?: React.ReactNode;
 }
 

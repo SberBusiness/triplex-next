@@ -149,7 +149,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | MonthYearField | ✅ | ✅ | ✅ |
 | MonthYearRange | ⬜ | ✅ | ⬜ |
 | MultiselectField | ⬜ | ✅ | ⬜ |
-| Notification | ⬜ | ⬜ | ⬜ |
+| Notification | ✅ | ✅ | ✅ |
 | NumberField | ⬜ | ✅ | ⬜ |
 | OrderedList | ⬜ | ✅ | ⬜ |
 | Overlay | ⬜ | ⬜ | ⬜ |

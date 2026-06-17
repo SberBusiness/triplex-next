@@ -26,7 +26,7 @@ import {
 import { setForwardedRef } from "@sberbusiness/triplex-next/components/List/utils";
 import styles from "../styles/ListItemControlsButton.module.less";
 
-interface IListItemControlsButtonDropdownProps
+export interface IListItemControlsButtonDropdownProps
     extends Omit<IButtonDropdownProps, "size">, Pick<IListItemControlsButtonProps, "icon"> {}
 
 /** Кнопка-дропдаун listItem для области под свайпом. */

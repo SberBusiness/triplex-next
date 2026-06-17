@@ -4,7 +4,8 @@ import styles from "../styles/Notification.module.less";
 import clsx from "clsx";
 
 /** Свойства компонента NotificationBodyList. */
-interface INotificationBodyListProps extends IUnorderedListProps {
+export interface INotificationBodyListProps extends IUnorderedListProps {
+    /** Значения элементов списка. */
     values: string[];
 }
 

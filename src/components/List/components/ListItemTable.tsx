@@ -8,14 +8,14 @@ import { ListItemTailRight } from "@sberbusiness/triplex-next/components/List/co
 import clsx from "clsx";
 import styles from "../styles/ListItemTable.module.less";
 
-interface IListItemTableSelectableProps extends Omit<IListItemTableProps, "selected" | "onSelect"> {
+export interface IListItemTableSelectableProps extends Omit<IListItemTableProps, "selected" | "onSelect"> {
     /** Обработчик изменения флага selected. */
     onSelect: (selected: boolean) => void;
     /** Флаг состояния selected. */
     selected: boolean;
 }
 
-interface IListItemTableProps extends Omit<IListItemProps, "onSelect"> {
+export interface IListItemTableProps extends Omit<IListItemProps, "onSelect"> {
     /** Кнопки действий - <ListItemControlsButton ... /> */
     controlButtons?: React.ReactNode;
     /** Обработчик клика по контенту элемента списка. Событие onClick передается на контейнер контента. */

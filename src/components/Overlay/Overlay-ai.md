@@ -106,8 +106,9 @@ Box-shadow панели и тайминги transition (`0.3s ease-in-out`) за
   `Overlay.Mask` и `Overlay.Panel`. Не убирать. `OverlayBase` — render-prop,
   `forwardRef` к нему неприменим.
 - **Статические `Overlay.Mask` / `Overlay.Panel`** — часть публичного API
-  (составной компонент). Навешиваются на `forwardRef`-объект через присваивание;
-  тип — `IOverlayFC` (`ForwardRefExoticComponent & { Mask; Panel }`).
+  (составной компонент). Навешиваются на `forwardRef`-объект через `Object.assign`
+  (как `Badge.Dot`), тип компонента выводится автоматически — отдельный `*FC`-тип
+  не нужен.
 - **Значения `EOverlayDirection`** (`"right"`/`"left"`/`"top"`/`"bottom"`) —
   публичный API, не переименовывать.
 - **Единый источник истины по `closing`/`opening`/`opened`** — `OverlayBase`.

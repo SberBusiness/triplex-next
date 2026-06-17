@@ -9,6 +9,9 @@ export enum EOverlayDirection {
 }
 
 export interface IOverlayBaseProps {
+    /**
+     * Render-функция контента оверлея. Получает свойства состояния оверлея.
+     */
     children: (props: IOverlayChildrenProvideProps) => React.ReactElement;
     /**
      * Расположение панели с контентом.
@@ -41,7 +44,7 @@ export interface IOverlayBaseProps {
 }
 
 /**
- * Свойства, передаваемые в render-фцнкцию панели оверлея.
+ * Свойства, передаваемые в render-функцию панели оверлея.
  */
 export interface IOverlayChildrenProvideProps extends Pick<IOverlayBaseProps, "direction" | "opened" | "setOpened"> {
     /**
@@ -75,57 +78,64 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
     onOpening,
     setOpened,
 }) => {
-    // Флаг, компонент примонтировался.
-    const [isMount, setIsMount] = useState(false);
     // Флаг, в текущий момент оверлей закрывается.
     const [closing, setClosing] = useState(false);
     // Флаг, в текущий момент оверлей открывается.
     const [opening, setOpening] = useState(false);
     // Предыдущее состояние opened.
     const prevOpened = useRef(opened);
+    // Флаг первого рендера. Эффекты по [closing]/[opening] не должны срабатывать на маунте.
+    const isFirstRender = useRef(true);
+    // Актуальные колбэки. Хранятся в ref, чтобы эффекты зависели только от своих state-триггеров.
+    const callbacks = useRef({ onClose, onClosing, onOpen, onOpening });
 
-    useEffect(() => {
-        setIsMount(true);
-    }, []);
+    // Обновление ref с колбэками выполняется в layout-фазе до эффектов, читающих callbacks.current.
+    useLayoutEffect(() => {
+        callbacks.current = { onClose, onClosing, onOpen, onOpening };
+    });
 
-    // Здесь намеренно используется useLayoutEffect, а не useEffect, иначе в браузере может быть морганме при закрытии.
+    // Здесь намеренно используется useLayoutEffect, а не useEffect, иначе в браузере может быть мерцание при закрытии.
     useLayoutEffect(() => {
         if (prevOpened.current && !opened) {
             setOpening(false); // opened меняется в процессе анимации открытия.
             setClosing(true);
-            onClosing?.();
+            callbacks.current.onClosing?.();
         } else if (!prevOpened.current && opened) {
             setClosing(false); // opened меняется в процессе анимации закрытия.
             setOpening(true);
-            onOpening?.();
+            callbacks.current.onOpening?.();
         }
 
         prevOpened.current = opened;
     }, [opened]);
 
     useEffect(() => {
-        if (!isMount) {
+        if (isFirstRender.current) {
             return;
         }
 
         if (closing) {
-            onClosing?.();
+            callbacks.current.onClosing?.();
         } else {
-            onClose?.();
+            callbacks.current.onClose?.();
         }
     }, [closing]);
 
     useEffect(() => {
-        if (!isMount) {
+        if (isFirstRender.current) {
             return;
         }
 
         if (opening) {
-            onOpening?.();
+            callbacks.current.onOpening?.();
         } else {
-            onOpen?.();
+            callbacks.current.onOpen?.();
         }
     }, [opening]);
+
+    useEffect(() => {
+        isFirstRender.current = false;
+    }, []);
 
     return children({ closing, direction, opened, opening, setClosing, setOpened, setOpening });
 };

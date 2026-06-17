@@ -4,7 +4,12 @@ import { EOverlayDirection, IOverlayChildrenProvideProps } from "./OverlayBase";
 import styles from "./styles/Overlay.module.less";
 
 /** Свойства компонента OverlayPanel. */
-export interface IOverlayPanelProps extends React.HTMLAttributes<HTMLDivElement>, IOverlayChildrenProvideProps {}
+export interface IOverlayPanelProps extends React.HTMLAttributes<HTMLDivElement>, IOverlayChildrenProvideProps {
+    /**
+     * Контент панели оверлея.
+     */
+    children?: React.ReactNode;
+}
 
 /** Выезжающая с контентом панель оверлея. */
 export const OverlayPanel = React.forwardRef<HTMLDivElement, IOverlayPanelProps>(

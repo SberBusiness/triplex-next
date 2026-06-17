@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "../styles/ListItemContent.module.less";
 import { ListItemContext } from "@sberbusiness/triplex-next/components/List/components/ListItemContext";
 
-interface IListItemContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IListItemContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Контент элемента списка. */
 export const ListItemContent = React.forwardRef<HTMLDivElement, IListItemContentProps>(

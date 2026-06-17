@@ -6,7 +6,7 @@ import { NotificationBodyList } from "./NotificationBodyList";
 import styles from "../styles/Notification.module.less";
 
 /** Свойства компонента NotificationBody. */
-interface INotificationBodyProps {
+export interface INotificationBodyProps {
     /** Содержимое тела нотификации: Header, Content, List, Footer. */
     children?: React.ReactNode;
 }

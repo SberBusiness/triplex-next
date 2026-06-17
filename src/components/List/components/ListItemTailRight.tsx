@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import styles from "../styles/ListItemTail.module.less";
 
-interface IListItemTailRightProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IListItemTailRightProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: never;
 }
 

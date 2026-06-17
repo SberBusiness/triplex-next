@@ -37,6 +37,7 @@ version: "1.0"
 - **`forwardRef`** — обязателен, target — `HTMLUListElement`. Не убирать.
 - **Корневой элемент `<ul>`** — не менять. Семантика списка важна для accessibility.
 - `loading` — overlay-стратегия (содержимое не размонтируется), не путать с `ListItemLoading` (отдельный элемент-спиннер для пагинации).
+- **`.listLoaderScreen` — `z-index: @z-index-step`**. Понижает z-index относительно глобального `@z-index-loader-screen` у `LoaderScreen`, чтобы спиннер перекрывал только содержимое списка, а не `LightBox` / `ModalWindow`. Не повышать без проверки наложения на модальные слои.
 
 ---
 
@@ -72,3 +73,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-06-17 | `List.module.less`: локальный `z-index: @z-index-step` на `.listLoaderScreen` — исправлено перекрытие `LoaderScreen` поверх `LightBox` / `ModalWindow` |

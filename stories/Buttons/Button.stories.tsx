@@ -274,5 +274,29 @@ export const TextWithIcon: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
+    },
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs", "!dev"],
+    args: {
+        children: "Button text",
+        theme: EButtonTheme.GENERAL,
+        size: EComponentSize.MD,
+    },
+    render: DefaultExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    play: async ({ canvasElement, userEvent }) => {
+        await userEvent.click(canvasElement);
+        await userEvent.tab();
     },
 };

@@ -26,6 +26,8 @@ import {
     RoundingSizesExampleSource,
     ThemesExample,
     ThemesExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples/CardAction";
 
 type TCardActionPlaygroundProps = Pick<
@@ -160,4 +162,24 @@ export const RoundingSizes: StoryObj<TCardActionPlaygroundProps> = {
         },
     },
     render: RoundingSizesExample,
+};
+
+export const VisualTests: StoryObj<TCardActionPlaygroundProps> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: VisualTestsExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: VisualTestsExample,
+    play: async ({ canvas, userEvent }) => {
+        const cards = await canvas.findAllByRole("button");
+
+        await userEvent.click(cards[0]);
+        cards[1].focus();
+    },
 };

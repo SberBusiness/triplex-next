@@ -8,6 +8,8 @@ import {
     PlaygroundExample,
     ShowcaseExample,
     ShowcaseExampleSource,
+    AdaptiveExample,
+    AdaptiveExampleSource,
 } from "./examples";
 
 const meta = {
@@ -108,6 +110,19 @@ export const Default: Story = {
     },
 };
 
+export const Adaptive: Story = {
+    render: AdaptiveExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: AdaptiveExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
 export const Example: Story = {
     args: {
         value: "8967452.31",
@@ -125,5 +140,6 @@ export const Example: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };

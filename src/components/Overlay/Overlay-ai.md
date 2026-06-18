@@ -1,7 +1,7 @@
 ---
 component: Overlay
 category: Overlay
-related: [OverlayBase, OverlayMask, OverlayPanel, LightBox, TopOverlay, ModalWindow]
+related: [OverlayBase, OverlayMask, OverlayPanel, LightBox, TopOverlay, ModalWindow, DropdownMobile]
 tokens: [--triplex-next-Overlay-Background, --triplex-next-Overlay-Panel_Background]
 stories: stories/Overlay/Overlay.stories.tsx
 version: "1.34.0"

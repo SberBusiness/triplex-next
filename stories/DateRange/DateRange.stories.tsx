@@ -8,7 +8,6 @@ import {
     DefaultExampleSource,
     WithoutNavigationExample,
     WithoutNavigationExampleSource,
-    VisualTestsExample,
     SizesExample,
     SizesExampleSource,
     ProductionExample,
@@ -115,14 +114,6 @@ export const Example: StoryObj<typeof ProductionExample> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
-};
-
-export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
-    parameters: {
-        controls: { disable: true },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
-    },
-    render: VisualTestsExample,
 };

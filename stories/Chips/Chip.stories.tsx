@@ -127,3 +127,16 @@ export const WithNotificationIcon: StoryObj<typeof Chip> = {
     },
     render: WithNotificationIconExample,
 };
+
+export const VisualTests: Story = {
+    tags: ["!autodocs", "!dev"],
+    render: DefaultExample,
+    parameters: {
+        controls: { disable: true },
+        docs: { source: { code: DefaultExampleSource, language: "tsx" } },
+    },
+    play: async ({ canvasElement, userEvent }) => {
+        await userEvent.click(canvasElement);
+        await userEvent.tab();
+    },
+};

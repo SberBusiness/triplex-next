@@ -13,36 +13,37 @@ const verticalMarginToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
 };
 
 export interface IBodyPageTypeFirstProps extends IBodyProps {
+    /** Контент тела страницы. */
     children: React.ReactNode;
-    /** Тип компонента BodyPage. */
+    /** Тип компонента BodyPage. FIRST оборачивает контент в Island (карточку). */
     type: EBodyPageType.FIRST;
-    /** Размер острова. */
+    /** Размер острова (Island). */
     size?: EComponentSize;
     /**
-     * Отступы сверху и снизу.
-     * По-умолчанию LARGE (24px), в LightBox следует использовать SMALL (16px).
+     * Вертикальные отступы (сверху и снизу).
+     * По умолчанию LARGE (24px); в LightBox следует использовать SMALL (16px).
      */
     verticalMargin?: EBodyPageVerticalMargin;
 }
 
 export interface IBodyPageTypeSecondProps extends IBodyProps {
+    /** Контент тела страницы. */
     children: React.ReactNode;
-    /** Тип компонента BodyPage. */
+    /** Тип компонента BodyPage. SECOND рендерит контент без карточки. */
     type: EBodyPageType.SECOND;
-
-    /** Размер острова. */
+    /** Размер острова недоступен для типа SECOND, так как контент не оборачивается в Island. */
     size?: never;
     /**
-     * Отступы сверху и снизу.
-     * По-умолчанию LARGE (24px), в LightBox следует использовать SMALL (16px).
+     * Вертикальные отступы (сверху и снизу).
+     * По умолчанию LARGE (24px); в LightBox следует использовать SMALL (16px).
      */
     verticalMargin?: EBodyPageVerticalMargin;
 }
 
-/** Тело компонента Page. */
+/** Тело компонента Page. Контейнер для основного контента страницы. */
 export const BodyPage = React.forwardRef<HTMLDivElement, IBodyPageTypeFirstProps | IBodyPageTypeSecondProps>(
     ({ className, type, size, verticalMargin = EBodyPageVerticalMargin.LARGE, ...rest }, ref) => {
-        const bodyPageClassNames = clsx(className, styles.bodyPage, verticalMarginToClassNameMap[verticalMargin]);
+        const bodyPageClassNames = clsx(styles.bodyPage, verticalMarginToClassNameMap[verticalMargin], className);
 
         return type === EBodyPageType.FIRST ? (
             <Island className={bodyPageClassNames} type={EIslandType.TYPE_1} ref={ref} size={size}>

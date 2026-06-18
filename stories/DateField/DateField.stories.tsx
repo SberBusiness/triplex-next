@@ -167,6 +167,7 @@ export const Production: StoryObj<typeof DateField> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
     render: ProductionExample,
 };

@@ -153,6 +153,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | NumberField | ⬜ | ✅ | ⬜ |
 | OrderedList | ⬜ | ✅ | ⬜ |
 | Overlay | ✅ | ✅ | ✅ |
+| BodyPage | ✅ | ✅ | ✅ |
 | Page | ⬜ | ⬜ | ⬜ |
 | Pagination | ⬜ | ⬜ | ⬜ |
 | Portal | ⬜ | ⬜ | ⬜ |

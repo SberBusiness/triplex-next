@@ -1,12 +1,9 @@
 import React from "react";
 import styles from "../styles/Notification.module.less";
 
-/**
- * Опции кастомной иконки нотификации.
- *
- * @prop {React.ReactElement} children Кастомная иконка нотификации.
- */
+/** Опции кастомной иконки нотификации. */
 export interface INotificationIconProps {
+    /** Кастомная иконка нотификации. */
     children: React.ReactElement;
 }
 

@@ -4,6 +4,32 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.34.0</Title>
 
-**Title**
+<Heading>Изменения</Heading>
 
-- Description.
+**DateRange**
+
+- Исправлено выравнивание `ButtonBack`, `ButtonForward` и иконки между полями.
+
+**Notification**
+
+- Компоненты `Notification`, `NotificationGrouped` и `Notification.Body` переведены на использование `forwardRef` (ref ведёт на корневой `div`). **Breaking**: изменился ref-контракт.
+- Удалены типы `INotificationSFC` и `INotificationBodySFC`. **Breaking**: тип `INotificationSFC` больше не экспортируется из пакета.
+- Тип `Notification.Time.time` расширен с `React.ReactText` до `React.ReactNode`.
+
+**Overlay**
+
+- Компонент `Overlay` переведён на использование `forwardRef` (ref ведёт на корневой `div`).
+- Исправлен двойной вызов колбэков `onOpening` / `onClosing` — теперь каждый вызывается ровно один раз за переход.
+
+**SegmentedControl**
+
+- Исправлен баг, при котором сегменты становились неодинаковой ширины из-за разного объема текста.
+
+**TableBasic / List**
+
+- Исправлен баг, при котором в состоянии загрузки `LoaderScreen` перекрывал открытые `LightBox` и `ModalWindow`.
+
+**TabsLine**
+
+- Добавлена зависимость размера `NotificationIcon` от размера компонента.
+- Исправлено горизонтальное расположение `NotificationIcon` внутри компонента.

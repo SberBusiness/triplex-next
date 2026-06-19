@@ -4,8 +4,7 @@ import { IOverlayChildrenProvideProps } from "@sberbusiness/triplex-next/compone
 import styles from "./styles/Overlay.module.less";
 
 export interface IOverlayMaskProps
-    extends Pick<IOverlayChildrenProvideProps, "opened">,
-        React.HTMLAttributes<HTMLDivElement> {}
+    extends Pick<IOverlayChildrenProvideProps, "opened">, React.HTMLAttributes<HTMLDivElement> {}
 
 /**
  * Область с полупрозрачным фоном между контейнером оверлея и OverlayPanel.

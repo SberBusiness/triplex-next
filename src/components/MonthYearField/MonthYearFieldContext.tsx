@@ -1,7 +1,7 @@
 import React from "react";
 import { IMonthYearFieldProps } from "./types";
 
-/** Свойства контекста компонента DatePickerExtended. */
+/** Свойства контекста компонента MonthYearField. */
 interface IMonthYearFieldContext extends Pick<IMonthYearFieldProps, "onChange"> {}
 
 /** Контекст компонента MonthYearField. */

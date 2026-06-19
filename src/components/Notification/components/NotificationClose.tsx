@@ -3,14 +3,11 @@ import { ButtonIcon, IButtonIconProps } from "@sberbusiness/triplex-next/compone
 import React from "react";
 import styles from "../styles/Notification.module.less";
 
-/**
- * Свойства компонента кнопки закрытия нотификации.
- *
- * @prop {Function} onClick Обработчик закрытия нотификации.
- * @prop {never} [children] Дочерний элемент.
- */
+/** Свойства компонента кнопки закрытия нотификации. */
 export interface INotificationCloseProps extends Omit<IButtonIconProps, "children"> {
+    /** Обработчик закрытия нотификации. */
     onClick: () => void;
+    /** Дочерний элемент. */
     children?: never;
 }
 

@@ -8,9 +8,10 @@ import {
     DefaultExampleSource,
     WithoutNavigationExample,
     WithoutNavigationExampleSource,
-    VisualTestsExample,
     SizesExample,
     SizesExampleSource,
+    ProductionExample,
+    ProductionExampleSource,
 } from "./examples";
 
 const meta = {
@@ -102,11 +103,17 @@ export const WithoutNavigation: Story = {
     },
 };
 
-export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+export const Example: StoryObj<typeof ProductionExample> = {
+    name: "Example: production",
+    render: ProductionExample,
     parameters: {
         controls: { disable: true },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        docs: {
+            source: {
+                code: ProductionExampleSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
     },
-    render: VisualTestsExample,
 };

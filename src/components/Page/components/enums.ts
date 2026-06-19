@@ -14,6 +14,8 @@ export enum EBodyPageType {
 }
 
 export enum EBodyPageVerticalMargin {
-    LARGE = "large", // 24px
-    SMALL = "small", // 16px
+    /** Большие вертикальные отступы: 24px (16px на узких экранах). Значение по умолчанию. */
+    LARGE = "large",
+    /** Маленькие вертикальные отступы: 16px (8px на узких экранах). Используется в LightBox. */
+    SMALL = "small",
 }

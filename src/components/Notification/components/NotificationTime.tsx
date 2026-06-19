@@ -1,13 +1,10 @@
 import React from "react";
 import styles from "../styles/Notification.module.less";
 
-/**
- * Опции надписи времени нотификации.
- *
- * @prop {React.ReactText} time Строковое значение времени нотификации.
- */
+/** Опции надписи времени нотификации. */
 export interface INotificationTimeProps {
-    time: React.ReactText;
+    /** Значение времени нотификации. */
+    time: React.ReactNode;
 }
 
 /**

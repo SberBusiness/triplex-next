@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 import { FooterPage } from "../components/FooterPage";
 import { EFooterPageType } from "../components/enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";

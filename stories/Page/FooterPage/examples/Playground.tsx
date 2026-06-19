@@ -12,10 +12,9 @@ import {
 interface IPlaygroundArgs {
     type: EFooterPageType;
     size?: EComponentSize;
-    sticky?: boolean;
 }
 
-export const Playground = ({ type, size, sticky }: IPlaygroundArgs) => {
+export const Playground = ({ type, size }: IPlaygroundArgs) => {
     const content = (
         <Page.Footer.Description>
             <Page.Footer.Description.Content>
@@ -35,9 +34,9 @@ export const Playground = ({ type, size, sticky }: IPlaygroundArgs) => {
         </Page.Footer.Description>
     );
 
-    // size и sticky доступны только для типа FIRST; для SECOND они типизированы как never.
+    // size доступен только для типа FIRST; для SECOND проп size типизирован как never.
     return type === EFooterPageType.FIRST ? (
-        <Page.Footer type={type} size={size} sticky={sticky}>
+        <Page.Footer type={type} size={size}>
             {content}
         </Page.Footer>
     ) : (

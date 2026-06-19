@@ -8,8 +8,6 @@ import {
     DefaultSource,
     Types as TypesRender,
     TypesSource,
-    Sticky as StickyRender,
-    StickySource,
     VisualTests as VisualTestsRender,
 } from "./examples";
 
@@ -49,7 +47,6 @@ export default meta;
 interface IPlaygroundArgs {
     type: EFooterPageType;
     size?: EComponentSize;
-    sticky?: boolean;
 }
 
 export const Playground: StoryObj<IPlaygroundArgs> = {
@@ -57,7 +54,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     args: {
         type: EFooterPageType.FIRST,
         size: EComponentSize.MD,
-        sticky: false,
     },
     render: PlaygroundRender,
     argTypes: {
@@ -80,19 +76,10 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 defaultValue: { summary: "EComponentSize.MD" },
             },
         },
-        sticky: {
-            control: { type: "boolean" },
-            description: "Прилипание к нижней границе при скролле. Только для типа FIRST внутри LightBox.",
-            if: { arg: "type", eq: EFooterPageType.FIRST },
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
-        },
     },
     parameters: {
         controls: {
-            include: ["type", "size", "sticky"],
+            include: ["type", "size"],
         },
         testRunner: { skip: true },
         docs: {
@@ -122,20 +109,6 @@ export const Types: StoryObj<typeof Page.Footer> = {
         docs: {
             source: {
                 code: TypesSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const Sticky: StoryObj<typeof Page.Footer> = {
-    render: StickyRender,
-    parameters: {
-        controls: { disable: true },
-        testRunner: { skip: true },
-        docs: {
-            source: {
-                code: StickySource,
                 language: "tsx",
             },
         },

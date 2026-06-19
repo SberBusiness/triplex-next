@@ -101,10 +101,9 @@ version: "1.0"
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | `Playground.tsx` | Интерактивный контроль `type`, `size`, `sticky` |
+| `Playground` | `Playground.tsx` | Интерактивный контроль `type`, `size` |
 | `Default` | `Default.tsx` | Минимальный пример (FIRST, футер в карточке) |
 | `Types` | `Types.tsx` | Сравнение типов FIRST и SECOND |
-| `Sticky` | `Sticky.tsx` | Прилипающий футер в контейнере прокрутки |
 | `VisualTests` | `VisualTests.tsx` | Матрица типов для скриншот-регрессии |
 
 ---

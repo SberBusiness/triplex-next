@@ -93,7 +93,7 @@ version: "1.0"
 | `Default` | `Default.tsx` | Минимальный пример (FIRST, контент в карточке) |
 | `Types` | `Types.tsx` | Сравнение типов FIRST и SECOND |
 | `VerticalMargins` | `VerticalMargins.tsx` | Отступы LARGE (24px) и SMALL (16px) |
-| `VisualTests` | — | Матрица type × verticalMargin для скриншот-регрессии |
+| `VisualTests` | `VisualTests.tsx` | Матрица type × verticalMargin для скриншот-регрессии |
 
 ---
 

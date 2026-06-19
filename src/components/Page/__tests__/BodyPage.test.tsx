@@ -31,7 +31,7 @@ describe("BodyPage", () => {
         const { container } = render(<BodyPage type={EBodyPageType.SECOND}>content</BodyPage>);
 
         const root = container.firstElementChild as HTMLElement;
-        expect(root.className).toMatch(/verticalMargin24/);
+        expect(root).toHaveClass("verticalMargin24");
     });
 
     it("verticalMargin SMALL → класс отступа 16px", () => {
@@ -42,7 +42,7 @@ describe("BodyPage", () => {
         );
 
         const root = container.firstElementChild as HTMLElement;
-        expect(root.className).toMatch(/verticalMargin16/);
+        expect(root).toHaveClass("verticalMargin16");
     });
 
     it("мёрджит пользовательский className на корневой элемент", () => {
@@ -54,7 +54,7 @@ describe("BodyPage", () => {
 
         const root = container.firstElementChild as HTMLElement;
         expect(root).toHaveClass("custom-class");
-        expect(root.className).toMatch(/bodyPage/);
+        expect(root).toHaveClass("bodyPage");
     });
 
     it("forwardRef указывает на корневой div (type FIRST → Island)", () => {

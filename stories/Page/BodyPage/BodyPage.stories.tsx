@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Page, EBodyPageType, EBodyPageVerticalMargin, Text, ETextSize, EFontType } from "@sberbusiness/triplex-next";
+import { Page, EBodyPageType, EBodyPageVerticalMargin, EComponentSize } from "@sberbusiness/triplex-next";
 import {
     Playground as PlaygroundRender,
     Default as DefaultRender,
@@ -10,6 +10,7 @@ import {
     TypesSource,
     VerticalMargins as VerticalMarginsRender,
     VerticalMarginsSource,
+    VisualTests as VisualTestsRender,
 } from "./examples";
 
 const meta = {
@@ -47,6 +48,7 @@ export default meta;
 
 interface IPlaygroundArgs {
     type: EBodyPageType;
+    size?: EComponentSize;
     verticalMargin: EBodyPageVerticalMargin;
 }
 
@@ -54,6 +56,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     tags: ["!autodocs"],
     args: {
         type: EBodyPageType.FIRST,
+        size: EComponentSize.MD,
         verticalMargin: EBodyPageVerticalMargin.LARGE,
     },
     render: PlaygroundRender,
@@ -65,6 +68,16 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             table: {
                 type: { summary: "EBodyPageType" },
                 defaultValue: { summary: "EBodyPageType.FIRST" },
+            },
+        },
+        size: {
+            control: { type: "select" },
+            options: Object.values(EComponentSize),
+            description: "Размер острова (Island). Доступен только для типа FIRST.",
+            if: { arg: "type", eq: EBodyPageType.FIRST },
+            table: {
+                type: { summary: "EComponentSize" },
+                defaultValue: { summary: "EComponentSize.MD" },
             },
         },
         verticalMargin: {
@@ -79,11 +92,12 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     },
     parameters: {
         controls: {
-            include: ["type", "verticalMargin"],
+            include: ["type", "size", "verticalMargin"],
         },
         testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
+            codePanel: false,
         },
     },
 };
@@ -128,7 +142,7 @@ export const VerticalMargins: StoryObj<typeof Page.Body> = {
 };
 
 export const VisualTests: StoryObj<typeof Page.Body> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -136,28 +150,5 @@ export const VisualTests: StoryObj<typeof Page.Body> = {
             codePanel: false,
         },
     },
-    render: () => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-            <Page.Body type={EBodyPageType.FIRST} verticalMargin={EBodyPageVerticalMargin.LARGE}>
-                <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
-                    FIRST + LARGE (24px) — контент в карточке.
-                </Text>
-            </Page.Body>
-            <Page.Body type={EBodyPageType.FIRST} verticalMargin={EBodyPageVerticalMargin.SMALL}>
-                <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
-                    FIRST + SMALL (16px) — контент в карточке.
-                </Text>
-            </Page.Body>
-            <Page.Body type={EBodyPageType.SECOND} verticalMargin={EBodyPageVerticalMargin.LARGE}>
-                <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
-                    SECOND + LARGE (24px) — контент без карточки.
-                </Text>
-            </Page.Body>
-            <Page.Body type={EBodyPageType.SECOND} verticalMargin={EBodyPageVerticalMargin.SMALL}>
-                <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
-                    SECOND + SMALL (16px) — контент без карточки.
-                </Text>
-            </Page.Body>
-        </div>
-    ),
+    render: VisualTestsRender,
 };

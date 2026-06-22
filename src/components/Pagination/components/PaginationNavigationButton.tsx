@@ -5,13 +5,15 @@ import { EPaginationNavigationIconDirection } from "../enums";
 import { CaretleftStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import styles from "../styles/PaginationNavigationButton.module.less";
 
-/* Свойства компонента PaginationNavigationButton. */
+/** Свойства компонента PaginationNavigationButton. */
 export interface IPaginationNavigationButtonProps extends Omit<IButtonIconProps, "shape" | "active" | "children"> {
+    /** Кнопка навигации не принимает дочерние элементы — иконка определяется направлением. */
     children?: never;
+    /** Направление кнопки навигации (предыдущая или следующая страница). */
     direction: EPaginationNavigationIconDirection;
 }
 
-/* Кнопки-навигация. */
+/** Кнопка навигации пагинации (переход к предыдущей или следующей странице). */
 export const PaginationNavigationButton = React.forwardRef<HTMLButtonElement, IPaginationNavigationButtonProps>(
     ({ direction, ...rest }, ref) => {
         const isDirectionBack = direction === EPaginationNavigationIconDirection.BACK;

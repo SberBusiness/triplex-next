@@ -6,15 +6,14 @@ import { ETextSize, Text } from "../../Typography";
 import { SelectField, ISelectFieldProps } from "../../SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
-/* Свойства видимого компонента PaginationSelect. */
+/** Свойства компонента PaginationSelect. */
 export interface IPaginationSelectProps
-    extends Omit<ISelectFieldProps, "size" | "value">,
-        Required<Pick<ISelectFieldProps, "value">> {
+    extends Omit<ISelectFieldProps, "size" | "value">, Required<Pick<ISelectFieldProps, "value">> {
     /** Текст лейбла пагинации. */
     paginationLabel: React.ReactNode;
 }
 
-/* Выбор количества элементов на странице. */
+/** Выбор количества элементов на странице. */
 export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSelectProps>(
     ({ paginationLabel, className, options, value, onChange }, ref) => {
         const [instanceId] = useState(() => `Pagination-${uniqueId()}`);

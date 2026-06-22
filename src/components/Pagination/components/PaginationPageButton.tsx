@@ -4,15 +4,19 @@ import { Text, ETextSize } from "../../Typography";
 import { ButtonBase } from "../../Button";
 import styles from "../styles/PaginationPageButton.module.less";
 
-/* Свойства компонента PaginationPageButton. */
+/** Свойства компонента PaginationPageButton. */
 type TPaginationPageButtonProps = {
+    /** Является ли страница текущей (активной). */
     isCurrent?: boolean;
+    /** Дополнительный CSS-класс. */
     className?: string;
+    /** Номер страницы. */
     children: React.ReactNode;
+    /** Обработчик клика по странице. */
     onClick: () => void;
 };
 
-/* Кнопки-страницы.  */
+/** Кнопка-страница пагинации. */
 export const PaginationPageButton = React.forwardRef<HTMLButtonElement, TPaginationPageButtonProps>(
     ({ isCurrent = false, children, className, ...rest }, ref) => {
         return (

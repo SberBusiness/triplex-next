@@ -14,6 +14,8 @@ export const Extended = () => {
 
     const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
         setPageSize(Number(option.value));
+        // Смена размера страницы меняет totalPages — возвращаемся на первую, чтобы не оказаться вне диапазона.
+        setPage(1);
     };
 
     const options: ISelectExtendedFieldDefaultOption[] = [

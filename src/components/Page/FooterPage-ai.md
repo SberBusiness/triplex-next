@@ -103,8 +103,7 @@ version: "1.0"
 |---|---|---|
 | `Playground` | `Playground.tsx` | Интерактивный контроль `type`, `size` |
 | `Default` | `Default.tsx` | Минимальный пример (FIRST, футер в карточке) |
-| `Types` | `Types.tsx` | Сравнение типов FIRST и SECOND |
-| `VisualTests` | `VisualTests.tsx` | Матрица типов для скриншот-регрессии |
+| `Types` | `Types.tsx` | Сравнение типов FIRST и SECOND (покрывает скриншот-регрессию) |
 
 ---
 

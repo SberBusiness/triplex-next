@@ -8,7 +8,6 @@ import {
     DefaultSource,
     Types as TypesRender,
     TypesSource,
-    VisualTests as VisualTestsRender,
 } from "./examples";
 
 const meta = {
@@ -113,16 +112,4 @@ export const Types: StoryObj<typeof Page.Footer> = {
             },
         },
     },
-};
-
-export const VisualTests: StoryObj<typeof Page.Footer> = {
-    tags: ["!autodocs", "!dev"],
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    render: VisualTestsRender,
 };

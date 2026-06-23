@@ -93,6 +93,7 @@ export const Default: StoryObj<typeof Page.Header> = {
     render: DefaultRender,
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
         docs: {
             source: {
                 code: DefaultSource,

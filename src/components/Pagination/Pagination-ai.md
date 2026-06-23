@@ -124,7 +124,7 @@ version: "1.0"
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | — | Интерактивный контроль `currentPage`, `totalPages`, `boundaryCount`, `siblingCount`, `hidePaginationSelect`, `paginationLabel`, `className` |
+| `Playground` | `Playground.tsx` | Интерактивный контроль `currentPage`, `totalPages`, `boundaryCount`, `siblingCount`, `hidePaginationSelect`, `paginationLabel`, `className` |
 | `Default` | `Default.tsx` | Базовая навигация без селекта (50 элементов, размер страницы 10) |
 | `WithSelectField` | `WithSelectField.tsx` | Навигация с селектом размера страницы, `boundaryCount`/`siblingCount = 1` |
 | `Extended` | `Extended.tsx` | Кастомная компоновка через `PaginationExtended` + `PaginationNavigation` + `PaginationSelect` |

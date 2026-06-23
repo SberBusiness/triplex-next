@@ -2,10 +2,10 @@ import React from "react";
 import styles from "../styles/PaginationNavigationExtended.module.less";
 import clsx from "clsx";
 
-/* Свойства компонента PaginationNavigation. */
+/** Свойства компонента PaginationNavigationExtended. */
 export interface IPaginationNavigationExtendedProps extends React.HTMLAttributes<HTMLUListElement> {}
 
-/* Контейнер для компоновки кастомной навигации. */
+/** Контейнер-список для компоновки кастомной навигации пагинации. */
 export const PaginationNavigationExtended = React.forwardRef<HTMLUListElement, IPaginationNavigationExtendedProps>(
     ({ children, className, ...rest }, ref) => {
         return (

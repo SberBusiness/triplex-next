@@ -119,6 +119,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | FormGroup | ⬜ | ⬜ | ⬜ |
 | Gap | ✅ | ✅ | ✅ |
 | Header | ⬜ | ⬜ | ⬜ |
+| HeaderPage | ✅ | ✅ | ✅ |
 | HelpBox | ✅ | ✅ | ⬜ |
 | IconWrapper | ⬜ | ✅ | ⬜ |
 | ImageGallery | ✅ | ✅ | ✅ |

@@ -110,9 +110,9 @@ aria-атрибутов. Семантику задаёт потребитель 
 | `WithIslands` | `WithIslands.tsx` | Все части типа FIRST — острова (карточки); для LightBox |
 | `WithoutIslands` | `WithoutIslands.tsx` | Все части типа SECOND — без островов; для layout |
 
-`Page` исключён из скриншот-тестов (`testRunner: { skip: true }` на уровне meta): это
-каркас-композиция, визуальная регрессия покрывается скриншотами его частей (`BodyPage`,
-`FooterPage`) и `HeaderPage`.
+`Default`, `WithIslands` и `WithoutIslands` участвуют в скриншот-тестах (покрывают
+комбинации типов `FIRST` / `SECOND` у частей). `Playground` интерактивен и исключён
+(`testRunner: { skip: true }`).
 
 ---
 

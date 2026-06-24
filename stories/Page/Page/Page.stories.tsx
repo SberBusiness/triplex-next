@@ -19,9 +19,6 @@ const meta = {
         backgrounds: { value: "gray" },
     },
     parameters: {
-        // Page — каркас-композиция; визуальная регрессия покрывается скриншот-тестами
-        // его частей (BodyPage, FooterPage) и HeaderPage. Сам Page из скриншотов исключён.
-        testRunner: { skip: true },
         docs: {
             description: {
                 component:
@@ -95,6 +92,8 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         controls: {
             include: ["headerType", "footerType", "verticalMargin"],
         },
+        // Playground интерактивен (управляется controls) — из скриншот-тестов исключён.
+        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,

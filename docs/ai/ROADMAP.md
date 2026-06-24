@@ -155,7 +155,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | OrderedList | ⬜ | ✅ | ⬜ |
 | Overlay | ✅ | ✅ | ✅ |
 | BodyPage | ✅ | ✅ | ✅ |
-| Page | ⬜ | ⬜ | ⬜ |
+| Page | ✅ | ✅ | ✅ |
 | Pagination | ✅ | ✅ | ✅ |
 | Portal | ⬜ | ⬜ | ⬜ |
 | Radio | ⬜ | ⬜ | ⬜ |

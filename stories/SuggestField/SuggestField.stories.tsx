@@ -27,7 +27,6 @@ export default {
     component: SuggestField,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -152,6 +151,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             },
         },
         controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
     },
 };
 
@@ -228,6 +228,7 @@ export const Production: StoryObj<typeof SuggestField> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -244,6 +245,7 @@ export const CustomOptions: StoryObj<typeof SuggestField> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -260,5 +262,6 @@ export const Async: StoryObj<typeof SuggestField> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };

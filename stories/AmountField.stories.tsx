@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
-import { AmountField } from "../../src/components/AmountField/AmountField";
-import { Text, ETextSize, EFontType } from "../../src/components/Typography";
-import { EFormFieldStatus } from "../../src/components/FormField/enums";
-import { HelpBox } from "../../src/components/HelpBox/HelpBox";
-import { Link } from "../../src/components/Link";
-import { ETooltipSize } from "../../src/components/Tooltip/enums";
-import { EComponentSize } from "../../src/enums/EComponentSize";
+import {
+    AmountField,
+    HelpBox,
+    Text,
+    Link,
+    EComponentSize,
+    EFormFieldStatus,
+    ETooltipSize,
+    ETextSize,
+    EFontType,
+} from "@sberbusiness/triplex-next";
 
-const meta = {
+export default {
     title: "Components/TextFields/AmountField",
     component: AmountField,
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -32,9 +35,6 @@ const meta = {
     tags: ["autodocs"],
 } satisfies Meta<typeof AmountField>;
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
 const useAmountFieldLogic = (defaultValue = "") => {
     const [value, setValue] = useState(defaultValue);
 
@@ -49,76 +49,52 @@ const useAmountFieldLogic = (defaultValue = "") => {
     };
 };
 
-export const Playground: Story = {
+export const Playground: StoryObj<typeof AmountField> = {
     parameters: {
         docs: {
-            description: { story: "Интерактивная демонстрация." },
             canvas: { sourceState: "none" },
+            testRunner: { skip: true },
         },
     },
     tags: ["!autodocs"],
     argTypes: {
         inputProps: {
-            description: "Свойства поля ввода",
             table: { type: { summary: "object" } },
         },
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
-            description: "Состояние поля",
-            table: {
-                type: { summary: "EFormFieldStatus" },
-                defaultValue: { summary: "DEFAULT" },
-            },
         },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер поля",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.LG" },
-            },
         },
         label: {
             control: { type: "text" },
-            description: "Текст лейбла",
-            table: { type: { summary: "string" } },
         },
         currency: {
             control: { type: "text" },
-            description: "Валюта",
-            table: { type: { summary: "string" } },
         },
         prefix: {
             control: { type: "text" },
-            description: "Текст префикса",
-            table: { type: { summary: "string" } },
         },
         postfix: {
             control: { type: "text" },
-            description: "Текст постфикса",
-            table: { type: { summary: "string" } },
         },
         description: {
             control: { type: "text" },
-            description: "Текст описания",
-            table: { type: { summary: "string" } },
         },
         counter: {
             control: { type: "text" },
-            description: "Текст счётчика",
-            table: { type: { summary: "string" } },
         },
         maxIntegerDigits: {
             control: { type: "number" },
-            description: "Макс. знаков до запятой",
-            table: { type: { summary: "number" }, defaultValue: { summary: "16" } },
         },
         fractionDigits: {
             control: { type: "number" },
-            description: "Знаков после запятой",
-            table: { type: { summary: "number" }, defaultValue: { summary: "2" } },
+        },
+        active: {
+            control: { type: "boolean" },
         },
     },
     args: {
@@ -133,13 +109,14 @@ export const Playground: Story = {
         counter: "",
         maxIntegerDigits: 16,
         fractionDigits: 2,
+        active: false,
     },
     render: (args) => {
         const { value, onChange } = useAmountFieldLogic();
         const { inputProps, ...restArgs } = args;
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <AmountField
                     {...restArgs}
                     inputProps={{
@@ -153,10 +130,9 @@ export const Playground: Story = {
     },
 };
 
-export const Basic: Story = {
+export const Basic: StoryObj<typeof AmountField> = {
     parameters: {
         docs: {
-            description: { story: "Базовый пример." },
             controls: { disable: true },
         },
     },
@@ -164,7 +140,7 @@ export const Basic: Story = {
         const { value, onChange } = useAmountFieldLogic();
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <AmountField
                     inputProps={{
                         value,
@@ -183,16 +159,15 @@ export const Basic: Story = {
     },
 };
 
-export const Sizes: Story = {
+export const Sizes: StoryObj<typeof AmountField> = {
     parameters: {
-        docs: { description: { story: "Размеры" } },
         controls: { disable: true },
     },
     render: () => {
         const sizes = Object.values(EComponentSize);
 
         return (
-            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
                 {sizes.map((size) => {
                     const { value, onChange } = useAmountFieldLogic();
 
@@ -214,16 +189,15 @@ export const Sizes: Story = {
     },
 };
 
-export const Statuses: Story = {
+export const Statuses: StoryObj<typeof AmountField> = {
     parameters: {
-        docs: { description: { story: "Статусы." } },
         controls: { disable: true },
     },
     render: () => {
         const statuses = Object.values(EFormFieldStatus);
 
         return (
-            <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ maxWidth: 300, display: "flex", flexDirection: "column", gap: 16 }}>
                 {statuses.map((status) => {
                     const { value, onChange } = useAmountFieldLogic();
 
@@ -245,17 +219,16 @@ export const Statuses: Story = {
     },
 };
 
-export const WithClearButton: Story = {
+export const WithClearButton: StoryObj<typeof AmountField> = {
     name: "With clear button",
     parameters: {
-        docs: { description: { story: "С кнопкой очистки." } },
         controls: { disable: true },
     },
     render: () => {
         const { value, onChange, onClear } = useAmountFieldLogic("8967452.31");
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <AmountField
                     inputProps={{
                         value,
@@ -270,16 +243,17 @@ export const WithClearButton: Story = {
     },
 };
 
-export const Example: Story = {
+export const Production: StoryObj<typeof AmountField> = {
+    name: "Example: production",
     parameters: {
-        docs: { description: { story: "В сочетании с другими компонентами." } },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const { value, onChange, onClear } = useAmountFieldLogic("");
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <AmountField
                     inputProps={{
                         value,

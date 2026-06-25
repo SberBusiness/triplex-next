@@ -20,7 +20,6 @@ export default {
     component: NumberField,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -108,6 +107,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             codePanel: false,
         },
         controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
     },
     render: PlaygroundExample,
 };
@@ -161,6 +161,7 @@ export const Production: StoryObj<typeof NumberField> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
     render: ProductionExample,
 };

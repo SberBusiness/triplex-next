@@ -1,41 +1,40 @@
 import React, { useRef } from "react";
+import clsx from "clsx";
 import { Header, IHeaderProps } from "@sberbusiness/triplex-next/components/Header/Header";
 import { EHeaderPageType } from "./enums";
-import clsx from "clsx";
-import { Island } from "../../Island/Island";
-import { EIslandType } from "../../Island/enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
+import { EIslandType, Island } from "../../Island";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import styles from "../styles/Page.module.less";
 
 export interface IHeaderPageTypeSecondProps extends IHeaderProps {
+    /** Контент заголовка страницы. */
     children: React.ReactNode;
-    /** Тип компонента HeaderPage. */
+    /** Тип компонента HeaderPage. SECOND рендерит заголовок без карточки (Island). */
     type: EHeaderPageType.SECOND;
-    /**
-     * Header прилипает к верхней границе экрана при скролле. Только для второго типа HeaderPage и только внутри LightBox.
-     * */
+    /** Прилипание к верхней границе экрана недоступно для типа SECOND. */
     sticky?: never;
-    /** Размер острова. */
+    /** Размер острова недоступен для типа SECOND, так как контент не оборачивается в Island. */
     size?: never;
 }
 
 export interface IHeaderPageTypeFirstProps extends IHeaderProps {
+    /** Контент заголовка страницы. */
     children: React.ReactNode;
-    /** Тип компонента HeaderPage. */
+    /** Тип компонента HeaderPage. FIRST оборачивает заголовок в Island (карточку). */
     type: EHeaderPageType.FIRST;
-    /**
-     * Header прилипает к верхней границе экрана при скролле. Только для второго типа HeaderPage и только внутри LightBox.
-     * */
+    /** Header прилипает к верхней границе экрана при скролле. Только для типа FIRST внутри LightBox. */
     sticky?: boolean;
-    /** Размер острова. */
+    /** Размер острова (Island). Доступен только для типа FIRST. */
     size?: EComponentSize;
 }
+
+/** Заголовок страницы Page. Доступен как `Page.Header`. Верхний блок страницы с заголовком, табами и подзаголовком. */
 export const HeaderPage = Object.assign(
     React.forwardRef<HTMLDivElement, IHeaderPageTypeFirstProps | IHeaderPageTypeSecondProps>(
         ({ className, type, size, sticky, ...rest }, ref) => {
             const islandRef = useRef<HTMLDivElement | null>(null);
-
+            // Плавное обнуление верхних углов и добавление тени при прилипании к верху.
             useStickyCornerRadius(islandRef, "top", type === EHeaderPageType.FIRST && sticky);
 
             const setIslandRef = (instance: HTMLDivElement | null) => {
@@ -47,9 +46,13 @@ export const HeaderPage = Object.assign(
                 }
             };
 
-            const headerPageFirstClassNames = clsx(className, styles.headerPageTypeFirst, {
-                [styles.sticky]: type === EHeaderPageType.FIRST && sticky,
-            });
+            const headerPageFirstClassNames = clsx(
+                styles.headerPageTypeFirst,
+                {
+                    [styles.sticky]: type === EHeaderPageType.FIRST && sticky,
+                },
+                className,
+            );
 
             return type === EHeaderPageType.FIRST ? (
                 <Island className={headerPageFirstClassNames} type={EIslandType.TYPE_1} size={size} ref={setIslandRef}>
@@ -67,3 +70,5 @@ export const HeaderPage = Object.assign(
         Title: Header.Title,
     },
 );
+
+HeaderPage.displayName = "HeaderPage";

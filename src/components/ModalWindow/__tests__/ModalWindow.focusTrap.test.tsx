@@ -97,16 +97,12 @@ describe("ModalWindow — focus trap activation (real focus-trap)", () => {
     it("обычная модалка с интерактивным содержимым открывается без ошибок", () => {
         expect(() =>
             render(
-                <ModalWindow
-                    isOpen={true}
-                    closeButton={<button data-testid="close">Закрыть</button>}
-                    focusTrapProps={focusTrapProps}
-                >
-                    <button data-testid="action">OK</button>
+                <ModalWindow isOpen={true} closeButton={<button>Закрыть</button>} focusTrapProps={focusTrapProps}>
+                    <button>OK</button>
                 </ModalWindow>,
             ),
         ).not.toThrow();
 
-        expect(screen.getByTestId("action")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "OK" })).toBeInTheDocument();
     });
 });

@@ -17,9 +17,11 @@ export default function writeCommonCssBundlesPlugin() {
 
         generateBundle(options, bundle) {
             Object.keys(bundle).forEach((file) => {
-                bundle[file].source = bundle[file].fileName.endsWith(".css")
-                    ? `${cssVariablesContent}\n${bundle[file].source}`
-                    : "";
+                // Дописываем общие css-переменные в начало каждого css-бандла.
+                // Остальные ассеты (sourcemaps и т.п.) не трогаем.
+                if (bundle[file].fileName.endsWith(".css")) {
+                    bundle[file].source = `${cssVariablesContent}\n${bundle[file].source}`;
+                }
             });
         },
     };

@@ -54,6 +54,9 @@ export default defineConfig({
             entry: resolve(__dirname, "src/index.ts"),
             formats: ["es"],
         },
+        // Не минифицируем: потребитель пересобирает библиотеку своим бандлером
+        // и минифицирует сам. Читаемый код проще дебажить и лучше тришейкается.
+        minify: false,
         sourcemap: true,
 
         rollupOptions: {

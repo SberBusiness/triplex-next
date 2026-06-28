@@ -10,3 +10,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Публикуемый JS больше не минифицируется — минификацию выполняет бандлер потребителя (это улучшает tree-shaking и упрощает отладку).
 - В пакет теперь включаются sourcemaps (`*.js.map`) с встроенными исходниками — отладка ведётся по исходному коду компонентов.
+
+**ModalWindow**
+
+- Исправлено падение `focus-trap` (`"must have at least one container with at least one tabbable node"`) при открытии модального окна без tabbable-узлов (асинхронный контент, лоадер, отложенный `closeButton`).

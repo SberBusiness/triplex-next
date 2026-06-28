@@ -89,6 +89,9 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     // синхронно при открытии, и если внутри ещё нет tabbable-узлов (контент грузится асинхронно,
     // показан лоадер и т.п.), focus-trap без fallback падает с
     // "must have at least one container with at least one tabbable node".
+    // fallbackFocus вызывается только пока ловушка активна, то есть пока dialog смонтирован,
+    // а его ref проставляется до componentDidMount FocusTrap (потомок монтируется раньше родителя),
+    // поэтому dialogRef.current на момент вызова всегда заполнен — non-null assertion безопасен.
     const dialogRef = useRef<HTMLDivElement | null>(null);
 
     const { scopeClassName } = useToken();
@@ -158,7 +161,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                         {...focusTrapProps}
                         focusTrapOptions={{
                             preventScroll: true,
-                            fallbackFocus: () => dialogRef.current ?? document.body,
+                            fallbackFocus: () => dialogRef.current!,
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >

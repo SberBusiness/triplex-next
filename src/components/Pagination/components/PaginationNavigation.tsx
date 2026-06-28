@@ -7,7 +7,7 @@ import { PaginationPageButton } from "./PaginationPageButton";
 import { PaginationNavigationExtended } from "./PaginationNavigationExtended";
 import { PaginationNavigationExtendedItem } from "./PaginationNavigationExtendedItem";
 
-/* Свойства компонента PaginationNavigation. */
+/** Свойства компонента PaginationNavigation. */
 export interface IPaginationNavigationProps extends React.HTMLAttributes<HTMLUListElement> {
     /** Свойства кнопки "Следующая страница". */
     buttonNextProps?: Omit<IPaginationNavigationButtonProps, "direction" | "children">;
@@ -25,7 +25,7 @@ export interface IPaginationNavigationProps extends React.HTMLAttributes<HTMLULi
     siblingCount?: number;
 }
 
-/* Контейнер для компоновки кастомной навигации. */
+/** Навигация по страницам: кнопки "Назад"/"Вперёд", номера страниц и многоточия. */
 export const PaginationNavigation = React.forwardRef<HTMLUListElement, IPaginationNavigationProps>(
     (
         {

@@ -3,6 +3,7 @@ import { IPaginationExtendedProps, PaginationExtended } from "./components/Pagin
 import { IPaginationSelectProps, PaginationSelect } from "./components/PaginationSelect";
 import { IPaginationNavigationProps, PaginationNavigation } from "./components/PaginationNavigation";
 
+/** Свойства компонента Pagination. */
 export interface IPaginationProps extends IPaginationExtendedProps {
     /** Свойства компонента PaginationSelect. */
     paginationSelectProps?: IPaginationSelectProps;
@@ -10,6 +11,7 @@ export interface IPaginationProps extends IPaginationExtendedProps {
     paginationNavigationProps: IPaginationNavigationProps;
 }
 
+/** Пагинация: выбор количества элементов на странице (PaginationSelect) и навигация по страницам (PaginationNavigation). */
 export const Pagination = React.forwardRef<HTMLSpanElement, IPaginationProps>(
     ({ paginationNavigationProps, paginationSelectProps, ...rest }, ref) => {
         return (

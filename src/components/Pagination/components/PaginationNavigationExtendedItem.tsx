@@ -1,10 +1,10 @@
 import React from "react";
 
-/* Свойства компонента PaginationNavigation. */
-interface IPaginationNavigationExtendedProps extends React.HTMLAttributes<HTMLLIElement> {}
+/** Свойства компонента PaginationNavigationExtendedItem. */
+interface IPaginationNavigationExtendedItemProps extends React.HTMLAttributes<HTMLLIElement> {}
 
-/* Контейнер для компоновки кастомной навигации. */
-export const PaginationNavigationExtendedItem = React.forwardRef<HTMLLIElement, IPaginationNavigationExtendedProps>(
+/** Элемент списка навигации пагинации (обёртка для кнопки страницы или многоточия). */
+export const PaginationNavigationExtendedItem = React.forwardRef<HTMLLIElement, IPaginationNavigationExtendedItemProps>(
     ({ children, className, ...rest }, ref) => {
         return (
             <li className={className} {...rest} ref={ref}>

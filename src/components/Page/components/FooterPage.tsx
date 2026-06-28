@@ -8,35 +8,33 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 import styles from "../styles/Page.module.less";
 
 export interface IFooterPageTypeSecondProps extends IFooterProps {
+    /** Контент футера страницы. */
     children: React.ReactNode;
-    /** Тип компонента FooterPage. */
+    /** Тип компонента FooterPage. SECOND рендерит футер без карточки (Island). */
     type: EFooterPageType.SECOND;
-    /**
-     * Footer прилипает к нижней границе экрана при скролле. Не используется.
-     * */
+    /** Прилипание к нижней границе экрана недоступно для типа SECOND. */
     sticky?: never;
-    /** Размер острова. */
+    /** Размер острова недоступен для типа SECOND, так как контент не оборачивается в Island. */
     size?: never;
 }
 
 export interface IFooterPageTypeFirstProps extends IFooterProps {
+    /** Контент футера страницы. */
     children: React.ReactNode;
-    /** Тип компонента FooterPage. */
+    /** Тип компонента FooterPage. FIRST оборачивает футер в Island (карточку). */
     type: EFooterPageType.FIRST;
-    /**
-     * Footer прилипает к нижней границе экрана при скролле. Только для первого типа FooterPage внутри LightBox.
-     * */
+    /** Footer прилипает к нижней границе экрана при скролле. Только для типа FIRST внутри LightBox. */
     sticky?: boolean;
-    /** Размер острова. */
+    /** Размер острова (Island). Доступен только для типа FIRST. */
     size?: EComponentSize;
 }
 
-/** Свойства компонента FooterPage. */
+/** Футер компонента Page. Доступен как `Page.Footer`. Нижний блок страницы с контентом и управляющими элементами. */
 export const FooterPage = Object.assign(
     React.forwardRef<HTMLDivElement, IFooterPageTypeFirstProps | IFooterPageTypeSecondProps>(
         ({ className, type, size, sticky, ...rest }, ref) => {
             const footerRef = useRef<HTMLDivElement | null>(null);
-            // Плавное обнуление нижних углов и добавление тени при прилипания к низу.
+            // Плавное обнуление нижних углов и добавление тени при прилипании к низу.
             useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && sticky);
 
             const setFooterRef = (instance: HTMLDivElement | null) => {
@@ -48,9 +46,13 @@ export const FooterPage = Object.assign(
                 }
             };
 
-            const footerPageTypeFirstClassNames = clsx(className, styles.footerPageTypeFirst, {
-                [styles.sticky]: type === EFooterPageType.FIRST && sticky,
-            });
+            const footerPageTypeFirstClassNames = clsx(
+                styles.footerPageTypeFirst,
+                {
+                    [styles.sticky]: type === EFooterPageType.FIRST && sticky,
+                },
+                className,
+            );
 
             return type === EFooterPageType.FIRST ? (
                 <Island
@@ -70,3 +72,5 @@ export const FooterPage = Object.assign(
         Description: Footer.Description,
     },
 );
+
+FooterPage.displayName = "FooterPage";

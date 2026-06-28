@@ -1,20 +1,23 @@
 import range from "lodash-es/range";
 
+/** Параметры для построения итогового массива страниц пагинации. */
 interface IGeneratePageNumbersProps {
-    /* Текущая страница. */
+    /** Текущая страница. */
     currentPage: number;
-    /* Количество всегда видимых страниц по краям текущей страницы. */
+    /** Количество всегда видимых страниц по краям текущей страницы. */
     siblingCount: number;
-    /* Количество всегда видимых страниц в начале и в конце. */
+    /** Количество всегда видимых страниц в начале и в конце. */
     boundaryCount: number;
-    /* Общее количество страниц. */
+    /** Общее количество страниц. */
     totalPages: number;
 }
 
+/** Служебное значение в массиве страниц, обозначающее место отрисовки многоточия. */
 export const PAGINATION_ELLIPSIS_VALUE = -1;
 
+/** Набор утилит для вычисления массива отображаемых номеров страниц пагинации. */
 export const PaginationUtils = {
-    // Создание массива чисел в заданном диапазоне с заданным шагом.
+    /** Создание массива чисел в заданном диапазоне (включительно) с заданным шагом. Возвращает пустой массив, если from > to. */
     generateRange: (from: number, to: number, step = 1): number[] => {
         if (from > to) {
             return [];
@@ -23,7 +26,7 @@ export const PaginationUtils = {
         return range(from, to + 1, step);
     },
 
-    // Создание массивов страниц в начале, конце и вокруг текущей.
+    /** Вычисление диапазонов страниц в начале, конце и вокруг текущей, а также границ для расстановки многоточий. */
     generatePageRanges: (currentPage: number, siblingCount: number, boundaryCount: number, totalPages: number) => {
         // Удвоение числа соседей текущей страницы, чтобы учесть их как слева, так и справа.
         const doubleSiblings = 2;
@@ -61,7 +64,7 @@ export const PaginationUtils = {
         return { boundaryDivider, endPages, siblingsEnd, siblingsStart, startPages };
     },
 
-    // Создание итогового массива страниц для отображения.
+    /** Создание итогового массива номеров страниц для отображения. Места многоточий помечаются значением PAGINATION_ELLIPSIS_VALUE. */
     createPagesArray: ({
         currentPage,
         siblingCount,

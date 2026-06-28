@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { CSSTransition } from "react-transition-group";
 import { Portal } from "../Portal";
@@ -85,6 +85,15 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     // Сама модалка скрывается/показывается через CSSTransition (mountOnEnter / unmountOnExit).
     const [mountNode] = useState<HTMLDivElement>(getOrCreateMountNode);
 
+    // Узел role="dialog". Используется как fallbackFocus для FocusTrap: ловушка активируется
+    // синхронно при открытии, и если внутри ещё нет tabbable-узлов (контент грузится асинхронно,
+    // показан лоадер и т.п.), focus-trap без fallback падает с
+    // "must have at least one container with at least one tabbable node".
+    // fallbackFocus вызывается только пока ловушка активна, то есть пока dialog смонтирован,
+    // а его ref проставляется до componentDidMount FocusTrap (потомок монтируется раньше родителя),
+    // поэтому dialogRef.current на момент вызова всегда заполнен — non-null assertion безопасен.
+    const dialogRef = useRef<HTMLDivElement | null>(null);
+
     const { scopeClassName } = useToken();
 
     /** Удаление стилей body. */
@@ -112,6 +121,8 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
 
     /** Установка ref. */
     const setRef = (instance: HTMLDivElement | null) => {
+        dialogRef.current = instance;
+
         if (typeof ref === "function") {
             ref(instance);
         } else if (ref) {
@@ -150,6 +161,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                         {...focusTrapProps}
                         focusTrapOptions={{
                             preventScroll: true,
+                            fallbackFocus: () => dialogRef.current!,
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >
@@ -158,6 +170,9 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                             <div
                                 role="dialog"
                                 aria-modal="true"
+                                // tabIndex нужен, чтобы dialog мог принять фокус как fallbackFocus
+                                // FocusTrap, когда внутри ещё нет tabbable-узлов.
+                                tabIndex={-1}
                                 {...rest}
                                 ref={setRef}
                                 className={classNameModalWindow}

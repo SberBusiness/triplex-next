@@ -114,10 +114,12 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | EmptyView | ✅ | ✅ | ⬜ |
 | ExpandAnimation | ⬜ | ⬜ | ⬜ |
 | Footer | ⬜ | ⬜ | ⬜ |
+| FooterPage | ✅ | ✅ | ✅ |
 | FormField | ⬜ | ✅ | ⬜ |
 | FormGroup | ⬜ | ⬜ | ⬜ |
 | Gap | ✅ | ✅ | ✅ |
 | Header | ⬜ | ⬜ | ⬜ |
+| HeaderPage | ✅ | ✅ | ✅ |
 | HelpBox | ✅ | ✅ | ⬜ |
 | IconWrapper | ⬜ | ✅ | ⬜ |
 | ImageGallery | ✅ | ✅ | ✅ |
@@ -155,7 +157,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Overlay | ✅ | ✅ | ✅ |
 | BodyPage | ✅ | ✅ | ✅ |
 | Page | ⬜ | ⬜ | ⬜ |
-| Pagination | ⬜ | ⬜ | ⬜ |
+| Pagination | ✅ | ✅ | ✅ |
 | Portal | ⬜ | ⬜ | ⬜ |
 | Radio | ⬜ | ⬜ | ⬜ |
 | Row | ⬜ | ⬜ | ⬜ |

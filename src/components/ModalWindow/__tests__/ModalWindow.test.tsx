@@ -212,6 +212,19 @@ describe("ModalWindow", () => {
             expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
         });
 
+        it("should provide fallbackFocus pointing at the dialog node", () => {
+            render(
+                <ModalWindow isOpen={true} closeButton={<TestCloseButton />}>
+                    <TestContent />
+                </ModalWindow>,
+            );
+
+            const focusTrapProps = focusTrapMock.mock.calls[0][0];
+            expect(focusTrapProps.focusTrapOptions.fallbackFocus).toBeInstanceOf(Function);
+            // fallbackFocus возвращает сам dialog-узел, чтобы ловушка не падала без tabbable-узлов.
+            expect(focusTrapProps.focusTrapOptions.fallbackFocus()).toBe(screen.getByRole("dialog"));
+        });
+
         it("should merge custom focus trap options with defaults", () => {
             const customOptions = { escapeDeactivates: false };
 

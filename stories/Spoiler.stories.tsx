@@ -10,16 +10,7 @@ export default {
     component: Spoiler,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Компонент используется для раскрытия внутреннего содержимого.
-
-Особенности:
-- Размеры - small (SM), medium (MD), large (LG)
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -50,25 +41,19 @@ export const Playground: StoryObj<typeof Spoiler> = {
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер спойлера",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: EComponentSize.MD },
-            },
         },
         labelExpand: {
             control: { type: "text" },
-            description: "Текст кнопки раскрытия содержимого",
         },
         labelCollapse: {
             control: { type: "text" },
-            description: "Текст кнопки скрытия содержимого",
         },
     },
     parameters: {
         controls: {
             include: ["size", "labelExpand", "labelCollapse"],
         },
+        testRunner: { skip: true },
     },
     render: (args) => (
         <Spoiler {...args}>
@@ -127,16 +112,13 @@ export const Controlled: StoryObj<typeof Spoiler> = {
     argTypes: {
         expanded: {
             control: { type: "boolean" },
-            description: "Состояние спойлера",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
     },
     parameters: {
         controls: {
             include: ["expanded"],
         },
+        testRunner: { skip: true },
     },
     render: (args) => (
         <Spoiler {...args} labelExpand="Развернуть" labelCollapse="Свернуть" size={EComponentSize.MD}>

@@ -1,13 +1,17 @@
 import React from "react";
 import { Meta, StoryObj, ArgTypes as ArgTypesType } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import {
+    StatusTracker,
+    IStatusTrackerProps,
+    EStatusTrackerType,
+    EStatusTrackerVerticalAlign,
+    EMarkerStatus,
+    EComponentSize,
+    EAlertType,
+    EButtonTheme,
+} from "@sberbusiness/triplex-next";
 import { WaitStsIcon84, WarningStsIcon84, ErrorStsIcon84, SuccessStsIcon84 } from "@sberbusiness/icons-next";
-import { IStatusTrackerProps, StatusTracker } from "../../src/components/StatusTracker";
-import { EStatusTrackerType, EStatusTrackerVerticalAlign } from "../../src/components/StatusTracker/enums";
-import { EMarkerStatus } from "../../src/components/Marker";
-import { EComponentSize } from "../../src/enums";
-import { EAlertType } from "../../src/components/Alert";
-import { EButtonTheme } from "../../src/components/Button";
 import "./StatusTracker.less";
 
 export default {
@@ -15,7 +19,6 @@ export default {
     component: StatusTracker,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -63,6 +66,7 @@ export const Playground: StoryObj<typeof StatusTracker> = {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     render: (args: IStatusTrackerProps) => (
         <div className="status-tracker-wrapper" style={{ height: 744 }}>

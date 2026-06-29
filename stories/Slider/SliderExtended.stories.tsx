@@ -11,21 +11,7 @@ export default {
     component: SliderExtended,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Расширенный компонент слайдера для создания кастомных конфигураций.
-
-## Особенности
-
-- **Гибкая конфигурация**: возможность создавать кастомные слайдеры с различными компонентами
-- **Компоненты**: Rail, Track, Dot, Marks, Mark, Tooltip
-- **Шаги**: настраиваемая длина шага или массив шагов
-- **Состояния**: disabled, reverse
-- **Кастомизация**: полный контроль над структурой и поведением слайдера
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -40,7 +26,6 @@ export default {
 } as const;
 
 export const Playground: StoryObj<ISliderExtendedProps> = {
-    name: "Playground",
     render: (args) => {
         const [value, setValue] = useState(35);
 
@@ -80,58 +65,33 @@ export const Playground: StoryObj<ISliderExtendedProps> = {
     argTypes: {
         min: {
             control: { type: "number" },
-            description: "Минимальное значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         max: {
             control: { type: "number" },
-            description: "Максимальное значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         step: {
             control: { type: "number" },
-            description: "Длина шага",
-            table: {
-                type: { summary: "number | number[]" },
-            },
         },
         disabled: {
             control: { type: "boolean" },
-            description: "Слайдер не активен",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
         reverse: {
             control: { type: "boolean" },
-            description: "Реверсивный слайдер",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
         size: {
             control: { type: "select" },
             options: [EComponentSize.MD, EComponentSize.LG],
-            description: "Размер компонента",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.MD" },
-            },
         },
     },
     parameters: {
         controls: {
             include: ["min", "max", "step", "disabled", "reverse", "size"],
         },
+        testRunner: { skip: true },
     },
 };
 
 export const Default: StoryObj<ISliderExtendedProps> = {
-    name: "Default",
     render: () => {
         const [value, setValue] = useState(35);
 
@@ -156,17 +116,11 @@ export const Default: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования SliderExtended с одним ползунком и метками.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const Range: StoryObj<ISliderExtendedProps> = {
-    name: "Range",
     render: () => {
         const [value1, setValue1] = useState(35);
         const [value2, setValue2] = useState(60);
@@ -191,17 +145,12 @@ export const Range: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Пример использования SliderExtended для создания слайдера диапазона с двумя ползунками.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const RangeWithTooltip: StoryObj<ISliderExtendedProps> = {
-    name: "Range With Tooltip",
+    name: "Range with Tooltip",
     render: () => {
         const [value1, setValue1] = useState(35);
         const [value2, setValue2] = useState(60);
@@ -230,17 +179,12 @@ export const RangeWithTooltip: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер диапазона с тултипами для обоих ползунков.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const WithCustomSteps: StoryObj<ISliderExtendedProps> = {
-    name: "With Custom Steps",
+    name: "With custom steps",
     render: () => {
         const [value, setValue] = useState(50);
 
@@ -266,17 +210,12 @@ export const WithCustomSteps: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "SliderExtended с кастомными шагами. Ползунок может находиться только в определенных позициях.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
 export const WithoutTooltip: StoryObj<ISliderExtendedProps> = {
-    name: "Without Tooltip",
     render: () => {
         const [value, setValue] = useState(35);
 
@@ -305,11 +244,11 @@ export const WithoutTooltip: StoryObj<ISliderExtendedProps> = {
             },
         },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
 export const Disabled: StoryObj<ISliderExtendedProps> = {
-    name: "Disabled",
     render: () => {
         return (
             <div style={{ maxWidth: "750px", padding: "30px" }}>
@@ -330,17 +269,12 @@ export const Disabled: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "SliderExtended в состоянии disabled.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
 export const Reverse: StoryObj<ISliderExtendedProps> = {
-    name: "Reverse",
     render: () => {
         const [value, setValue] = useState(35);
 
@@ -365,17 +299,12 @@ export const Reverse: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Реверсивный SliderExtended.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
 export const Amounts: StoryObj<ISliderExtendedProps> = {
-    name: "Amounts",
     render: () => {
         const [value, setValue] = useState(1000000);
 
@@ -418,11 +347,7 @@ export const Amounts: StoryObj<ISliderExtendedProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Пример использования SliderExtended с нелинейной шкалой.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };

@@ -11,21 +11,7 @@ export default {
     component: Slider,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Компонент слайдера с одним ползунком.
-
-## Особенности
-
-- **Метки**: поддержка меток под полосой слайдера
-- **Шаги**: настраиваемая длина шага или массив шагов
-- **Тултип**: опциональный тултип при наведении и перемещении
-- **Диапазон**: настраиваемые минимальное и максимальное значения
-- **Состояния**: disabled, reverse
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -40,7 +26,6 @@ export default {
 } as const;
 
 export const Playground: StoryObj<ISliderProps> = {
-    name: "Playground",
     render: (args) => {
         const [value, setValue] = useState(args.value ?? 35);
 
@@ -50,7 +35,7 @@ export const Playground: StoryObj<ISliderProps> = {
         };
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>value = {value}</div>
                 <br />
                 <Slider {...args} value={value} onChange={handleChange} />
@@ -75,62 +60,28 @@ export const Playground: StoryObj<ISliderProps> = {
     argTypes: {
         min: {
             control: { type: "number" },
-            description: "Минимальное значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         max: {
             control: { type: "number" },
-            description: "Максимальное значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         value: {
             control: { type: "number" },
-            description: "Текущее значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         step: {
             control: { type: "number" },
-            description: "Длина шага",
-            table: {
-                type: { summary: "number | number[]" },
-                defaultValue: { summary: "1" },
-            },
         },
         disabled: {
             control: { type: "boolean" },
-            description: "Слайдер не активен",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
         reverse: {
             control: { type: "boolean" },
-            description: "Реверсивный слайдер",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
         size: {
             control: { type: "select" },
             options: [EComponentSize.MD, EComponentSize.LG],
-            description: "Размер слайдера",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.MD" },
-            },
         },
         marks: {
             control: { type: "object" },
-            description: "Массив меток под полосой слайдера",
-            table: {
-                type: { summary: "ISliderMark[]" },
-            },
         },
         onChange: {
             table: {
@@ -147,16 +98,16 @@ export const Playground: StoryObj<ISliderProps> = {
         controls: {
             include: ["min", "max", "value", "step", "disabled", "reverse", "size", "marks"],
         },
+        testRunner: { skip: true },
     },
 };
 
 export const Default: StoryObj<ISliderProps> = {
-    name: "Default",
     render: () => {
         const [value, setValue] = useState(35);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>value = {value}</div>
                 <br />
                 <Slider
@@ -176,22 +127,16 @@ export const Default: StoryObj<ISliderProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования слайдера с метками.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const WithTooltip: StoryObj<ISliderProps> = {
-    name: "With Tooltip",
     render: () => {
         const [value, setValue] = useState(35);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>value = {value}</div>
                 <br />
                 <Slider
@@ -212,22 +157,17 @@ export const WithTooltip: StoryObj<ISliderProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер с тултипом, отображающим текущее значение в процентах.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const WithCustomSteps: StoryObj<ISliderProps> = {
-    name: "With Custom Steps",
+    name: "With custom steps",
     render: () => {
         const [value, setValue] = useState(50);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>value = {value}</div>
                 <br />
                 <Slider
@@ -249,20 +189,14 @@ export const WithCustomSteps: StoryObj<ISliderProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер с кастомными шагами. Ползунок может находиться только в определенных позициях.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const Disabled: StoryObj<ISliderProps> = {
-    name: "Disabled",
     render: () => {
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <Slider
                     size={EComponentSize.MD}
                     min={0}
@@ -281,22 +215,16 @@ export const Disabled: StoryObj<ISliderProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер в состоянии disabled.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const Reverse: StoryObj<ISliderProps> = {
-    name: "Reverse",
     render: () => {
         const [value, setValue] = useState(35);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>value = {value}</div>
                 <br />
                 <Slider
@@ -317,17 +245,11 @@ export const Reverse: StoryObj<ISliderProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Реверсивный слайдер.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const Amounts: StoryObj<ISliderProps> = {
-    name: "Amounts",
     render: () => {
         const [value, setValue] = useState(1000000);
 
@@ -349,7 +271,7 @@ export const Amounts: StoryObj<ISliderProps> = {
         ];
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>{new Intl.NumberFormat("ru-RU").format(value)}</div>
                 <br />
                 <Slider
@@ -369,11 +291,6 @@ export const Amounts: StoryObj<ISliderProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер с нелинейной шкалой.",
-            },
-        },
         controls: { disable: true },
     },
 };

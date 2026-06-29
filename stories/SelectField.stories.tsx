@@ -1,44 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { StoryObj } from "@storybook/react";
-import { SelectField, ISelectFieldOption } from "../src/components/SelectField";
-import { EFormFieldStatus, FormFieldDescription } from "../src/components/FormField";
-import { Text, ETextSize, EFontType, Title, ETitleSize } from "../src/components/Typography";
-import { Gap } from "../src/components/Gap";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Primary, Controls, Stories, Heading } from "@storybook/addon-docs/blocks";
+import {
+    SelectField,
+    FormFieldDescription,
+    Text,
+    ISelectFieldOption,
+    EFormFieldStatus,
+    ETextSize,
+    EFontType,
+} from "@sberbusiness/triplex-next";
 import { FormGroup } from "../src/components/FormGroup";
 import { EComponentSize } from "../src/enums/EComponentSize";
-import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
     title: "Components/SelectField",
     component: SelectField,
     parameters: {
-        testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Упрощенный компонент выбора, построенный на основе SelectExtendedField.
-
-## Особенности:
-
-- **Размеры**: small (SM), medium (MD), large (LG)
-- Поддержка всех состояний (disabled, error, warning, loading)
-
-## Использование:
-Компонент принимает массив опций и обрабатывает выбор автоматически. Для отображения лейбла поля необходимо передать \`targetProps\` с обязательным свойством \`fieldLabel\`.
-                `,
-            },
             page: () => (
                 <>
-                    <DocsTitle />
+                    <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={SelectField} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
     tags: ["autodocs"],
-};
+} satisfies Meta<typeof SelectField>;
 
 const options: ISelectFieldOption[] = [
     { id: "option1", value: "option1", label: "Первая опция" },
@@ -75,7 +70,7 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
         const { fieldLabel, placeholder, loading, status, descriptionText, errorText, size } = args;
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <FormGroup>
                     <SelectField
                         size={size || EComponentSize.LG}
@@ -111,50 +106,22 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
     argTypes: {
         fieldLabel: {
             control: { type: "text" },
-            description: "Текст лейбла поля",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Выберите опцию" },
-            },
         },
         placeholder: {
             control: { type: "text" },
-            description: "Текст плейсхолдера",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Выберите опцию из списка" },
-            },
         },
         loading: {
             control: { type: "boolean" },
-            description: "Состояние загрузки",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "false" },
-            },
         },
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
-            description: "Состояние поля",
-            table: {
-                type: { summary: "EFormFieldStatus" },
-                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
-            },
         },
         descriptionText: {
             control: { type: "text" },
-            description: "Текст описания поля",
-            table: {
-                type: { summary: "string" },
-            },
         },
         errorText: {
             control: { type: "text" },
-            description: "Текст ошибки",
-            table: {
-                type: { summary: "string" },
-            },
         },
         selectedValue: {
             control: { type: "select" },
@@ -163,20 +130,10 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
                 null: undefined,
                 ...Object.fromEntries(options.map((opt, index) => [index, opt])),
             },
-            description: "Предварительно выбранное значение",
-            table: {
-                type: { summary: "ISelectFieldOption | undefined" },
-                defaultValue: { summary: "undefined" },
-            },
         },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер поля",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.LG" },
-            },
         },
     },
     args: {
@@ -190,11 +147,7 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
         size: EComponentSize.LG,
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Позволяет настраивать все основные свойства компонента, включая текст лейбла, текст плейсхолдера, состояния (отключенное, ошибка, загрузка), предварительно выбранное значение и другие.",
-            },
-        },
+        testRunner: { skip: true },
         controls: {
             include: [
                 "fieldLabel",
@@ -213,11 +166,6 @@ export const Playground: StoryObj<ISelectFieldPlaygroundProps> = {
 export const Default: StoryObj<typeof SelectField> = {
     name: "Default",
     parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования SelectField с простым списком опций.",
-            },
-        },
         controls: { disable: true },
     },
     render: function Render() {
@@ -228,7 +176,7 @@ export const Default: StoryObj<typeof SelectField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <SelectField
                     size={EComponentSize.MD}
                     value={selectedValue}
@@ -242,140 +190,6 @@ export const Default: StoryObj<typeof SelectField> = {
                 />
             </div>
         );
-    },
-};
-
-export const States: StoryObj<typeof SelectField> = {
-    render: function Render() {
-        const [selectedValue, setSelectedValue] = useState<ISelectFieldOption | undefined>(options[1]);
-
-        const handleChange = (option: ISelectFieldOption) => {
-            setSelectedValue(option);
-        };
-
-        return (
-            <div style={{ maxWidth: "300px" }}>
-                <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Обычное состояние
-                    </Title>
-                    <SelectField
-                        size={EComponentSize.LG}
-                        value={selectedValue}
-                        options={options}
-                        onChange={handleChange}
-                        placeholder="Выберите опцию из списка"
-                        targetProps={{
-                            fieldLabel: "Выберите опцию",
-                        }}
-                        mobileTitle="Выберите опцию"
-                    />
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Состояние загрузки
-                    </Title>
-                    <SelectField
-                        size={EComponentSize.LG}
-                        value={selectedValue}
-                        options={options}
-                        onChange={handleChange}
-                        placeholder="Загрузка..."
-                        loading
-                        targetProps={{
-                            fieldLabel: "Загрузка опций",
-                        }}
-                        mobileTitle="Загрузка опций"
-                    />
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Состояние ошибки
-                    </Title>
-                    <SelectField
-                        size={EComponentSize.LG}
-                        value={selectedValue}
-                        options={options}
-                        onChange={handleChange}
-                        placeholder="Выберите опцию из списка"
-                        status={EFormFieldStatus.ERROR}
-                        targetProps={{
-                            fieldLabel: "Выберите опцию",
-                        }}
-                        mobileTitle="Выберите опцию"
-                    />
-                    <FormFieldDescription>
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                            Обязательное поле
-                        </Text>
-                    </FormFieldDescription>
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Состояние предупреждения
-                    </Title>
-                    <SelectField
-                        size={EComponentSize.LG}
-                        value={selectedValue}
-                        options={options}
-                        onChange={handleChange}
-                        placeholder="Выберите опцию из списка"
-                        status={EFormFieldStatus.WARNING}
-                        targetProps={{
-                            fieldLabel: "Выберите опцию",
-                        }}
-                        mobileTitle="Выберите опцию"
-                    />
-                    <FormFieldDescription>
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
-                            Обязательное поле
-                        </Text>
-                    </FormFieldDescription>
-                </FormGroup>
-
-                <Gap size={24} />
-
-                <FormGroup>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Отключенное состояние
-                    </Title>
-                    <SelectField
-                        size={EComponentSize.LG}
-                        value={selectedValue}
-                        options={options}
-                        onChange={handleChange}
-                        placeholder="Поле недоступно"
-                        status={EFormFieldStatus.DISABLED}
-                        targetProps={{
-                            fieldLabel: "Отключенное поле",
-                        }}
-                        mobileTitle="Отключенное поле"
-                    />
-                    <FormFieldDescription>
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Поле временно недоступно
-                        </Text>
-                    </FormFieldDescription>
-                </FormGroup>
-            </div>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация различных состояний SelectField: обычное, загрузка, ошибка, предупреждение и отключенное состояние.",
-            },
-        },
-        controls: { disable: true },
     },
 };
 
@@ -398,11 +212,9 @@ export const Sizes: StoryObj<typeof SelectField> = {
         };
 
         return (
-            <div style={{ maxWidth: "400px" }}>
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер SM (маленький)
-                    </Title>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>SM</div>
                     <SelectField
                         size={EComponentSize.SM}
                         value={selectedValueSM}
@@ -416,10 +228,8 @@ export const Sizes: StoryObj<typeof SelectField> = {
                     />
                 </div>
 
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер MD (средний)
-                    </Title>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>MD</div>
                     <SelectField
                         size={EComponentSize.MD}
                         value={selectedValueMD}
@@ -433,10 +243,8 @@ export const Sizes: StoryObj<typeof SelectField> = {
                     />
                 </div>
 
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Размер LG (большой)
-                    </Title>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>LG</div>
                     <SelectField
                         size={EComponentSize.LG}
                         value={selectedValueLG}
@@ -453,11 +261,117 @@ export const Sizes: StoryObj<typeof SelectField> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация различных размеров SelectField: SM (маленький), MD (средний), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
-            },
-        },
+        controls: { disable: true },
+    },
+};
+
+export const States: StoryObj<typeof SelectField> = {
+    render: function Render() {
+        const [selectedValue, setSelectedValue] = useState<ISelectFieldOption | undefined>(options[1]);
+
+        const handleChange = (option: ISelectFieldOption) => {
+            setSelectedValue(option);
+        };
+
+        return (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>DEFAULT</div>
+                    <SelectField
+                        size={EComponentSize.LG}
+                        value={selectedValue}
+                        options={options}
+                        onChange={handleChange}
+                        placeholder="Выберите опцию из списка"
+                        targetProps={{
+                            fieldLabel: "Выберите опцию",
+                        }}
+                        mobileTitle="Выберите опцию"
+                    />
+                </div>
+
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>LOADING</div>
+                    <SelectField
+                        size={EComponentSize.LG}
+                        value={selectedValue}
+                        options={options}
+                        onChange={handleChange}
+                        placeholder="Загрузка..."
+                        loading
+                        targetProps={{
+                            fieldLabel: "Загрузка опций",
+                        }}
+                        mobileTitle="Загрузка опций"
+                    />
+                </div>
+
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>ERROR</div>
+                    <SelectField
+                        size={EComponentSize.LG}
+                        value={selectedValue}
+                        options={options}
+                        onChange={handleChange}
+                        placeholder="Выберите опцию из списка"
+                        status={EFormFieldStatus.ERROR}
+                        targetProps={{
+                            fieldLabel: "Выберите опцию",
+                        }}
+                        mobileTitle="Выберите опцию"
+                    />
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                            Обязательное поле
+                        </Text>
+                    </FormFieldDescription>
+                </div>
+
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>WARNING</div>
+                    <SelectField
+                        size={EComponentSize.LG}
+                        value={selectedValue}
+                        options={options}
+                        onChange={handleChange}
+                        placeholder="Выберите опцию из списка"
+                        status={EFormFieldStatus.WARNING}
+                        targetProps={{
+                            fieldLabel: "Выберите опцию",
+                        }}
+                        mobileTitle="Выберите опцию"
+                    />
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
+                            Обязательное поле
+                        </Text>
+                    </FormFieldDescription>
+                </div>
+
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>DISABLED</div>
+                    <SelectField
+                        size={EComponentSize.LG}
+                        value={selectedValue}
+                        options={options}
+                        onChange={handleChange}
+                        placeholder="Поле недоступно"
+                        status={EFormFieldStatus.DISABLED}
+                        targetProps={{
+                            fieldLabel: "Отключенное поле",
+                        }}
+                        mobileTitle="Отключенное поле"
+                    />
+                    <FormFieldDescription>
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            Поле временно недоступно
+                        </Text>
+                    </FormFieldDescription>
+                </div>
+            </div>
+        );
+    },
+    parameters: {
         controls: { disable: true },
     },
 };
@@ -471,7 +385,7 @@ export const WithDescription: StoryObj<typeof SelectField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <FormGroup>
                     <SelectField
                         size={EComponentSize.LG}
@@ -494,11 +408,7 @@ export const WithDescription: StoryObj<typeof SelectField> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "SelectField с описанием поля. Описание отображается под полем ввода и используется для предоставления дополнительной информации пользователю.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };

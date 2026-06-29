@@ -20,7 +20,6 @@ export default {
     title: "Components/TextFields/TextareaField",
     component: TextareaField,
     parameters: {
-        testRunner: { skip: true },
         docs: {
             page: () => (
                 <>
@@ -127,6 +126,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             },
         },
         controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
     },
 };
 
@@ -183,5 +183,6 @@ export const Production: StoryObj<typeof TextareaField> = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };

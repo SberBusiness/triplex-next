@@ -6,8 +6,10 @@ on:
   workflow_dispatch:
 
 env:
-  STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
-  STORYBOOK_URL_BASE: "https://storybook.triplex-dev.ru"
+  STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV: "/var/www/storybook/data"
+  STORYBOOK_URL_BASE_TRIPLEX_DEV: "https://storybook.triplex-dev.ru"
+  STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN: "/var/www/storybook/data"
+  STORYBOOK_URL_BASE_TRIPLEX_DESIGN: "https://triplex-design.ru/storybook"
 
 jobs:
   preview:
@@ -15,34 +17,107 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - name: Install dependencies
         run: npm ci
+
       - name: Build Storybook
         run: npm run storybook:build
+
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
-      - name: Deploy Storybook to server
+          # Оба ключа загружаются в ssh-agent (по одному на сервер)
+          ssh-private-key: |
+            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DEV }}
+            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DESIGN }}
+
+      - name: Get preview dir
+        id: vars
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "mkdir -p $STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}"
-          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}/
-      - name: Comment PR with Storybook URL
+          # Номер PR всегда целочисленный — валидируем, чтобы исключить
+          # подстановку shell-метасимволов в путь.
+          if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "::error::Некорректный номер PR: $PR_NUMBER"
+            exit 1
+          fi
+          echo "preview_dir=pr-$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+      # Деплой на каждый сервер — независимый шаг с continue-on-error,
+      # чтобы недоступность одного сервера не отменяла публикацию на другом.
+      - name: Deploy Storybook to triplex-dev
+        id: deploy_dev
+        continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR\""
+          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR/"
+
+      - name: Deploy Storybook to triplex-design
+        id: deploy_design
+        continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR\""
+          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR/"
+
+      # Комментарий в PR со ссылками — только на те серверы, куда деплой удался.
+      - name: Comment PR with Storybook URLs
+        if: always()
         uses: actions/github-script@v7
         env:
-          STORYBOOK_URL_BASE: ${{ env.STORYBOOK_URL_BASE }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+          URL_DEV: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DEV }}
+          URL_DESIGN: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DESIGN }}
+          OUTCOME_DEV: ${{ steps.deploy_dev.outcome }}
+          OUTCOME_DESIGN: ${{ steps.deploy_design.outcome }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
+            const dir = process.env.PREVIEW_DIR;
+            const lines = [];
+            if (process.env.OUTCOME_DEV === 'success') {
+              const url = `${process.env.URL_DEV}/${dir}`;
+              lines.push(`- triplex-dev: [${url}](${url})`);
+            }
+            if (process.env.OUTCOME_DESIGN === 'success') {
+              const url = `${process.env.URL_DESIGN}/${dir}`;
+              lines.push(`- triplex-design: [${url}](${url})`);
+            }
+            const body = lines.length
+              ? `🚀 Storybook Preview:\n${lines.join('\n')}`
+              : `⚠️ Не удалось опубликовать Storybook Preview ни на один сервер.`;
+            await github.rest.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Storybook Preview: [${process.env.STORYBOOK_URL_BASE}/pr-${context.payload.pull_request.number}](https://storybook.triplex-dev.ru/pr-${context.payload.pull_request.number})`
-            })
+              body,
+            });
+
+      # Job падает только если недоступны ОБА сервера.
+      - name: Report deploy results
+        if: always()
+        env:
+          OUTCOME_DEV: ${{ steps.deploy_dev.outcome }}
+          OUTCOME_DESIGN: ${{ steps.deploy_design.outcome }}
+        run: |
+          [[ "$OUTCOME_DEV" == "success" ]] || echo "::warning::Деплой превью на triplex-dev не удался (outcome=$OUTCOME_DEV)"
+          [[ "$OUTCOME_DESIGN" == "success" ]] || echo "::warning::Деплой превью на triplex-design не удался (outcome=$OUTCOME_DESIGN)"
+
+          if [[ "$OUTCOME_DEV" != "success" && "$OUTCOME_DESIGN" != "success" ]]; then
+            echo "::error::Оба сервера недоступны — превью не опубликовано ни на один из них"
+            exit 1
+          fi
 
   cleanup:
     if: github.event.action == 'closed'
@@ -51,6 +126,35 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
-      - name: Remove Storybook preview from server
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "rm -rf $STORYBOOK_PREVIEW_BASE/pr-${{ github.event.pull_request.number }}"
+          ssh-private-key: |
+            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DEV }}
+            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DESIGN }}
+
+      - name: Get preview dir
+        id: vars
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "::error::Некорректный номер PR: $PR_NUMBER"
+            exit 1
+          fi
+          echo "preview_dir=pr-$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+      # Удаление превью на каждом сервере независимо. Недоступность сервера
+      # не должна ронять job — каталог переживёт до следующей чистки.
+      - name: Remove preview from triplex-dev
+        continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "rm -rf \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR\""
+
+      - name: Remove preview from triplex-design
+        continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "rm -rf \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR\""

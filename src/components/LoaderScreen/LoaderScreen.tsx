@@ -1,5 +1,7 @@
 import React from "react";
 import { LoaderSmall, ELoaderSmallTheme, LoaderMiddle } from "../Loader";
+import { Gap } from "../Gap";
+import { ETextSize, Text } from "../Typography";
 import clsx from "clsx";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import styles from "./styles/LoaderScreen.module.less";
@@ -8,17 +10,20 @@ import styles from "./styles/LoaderScreen.module.less";
 export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Тип лоадера. */
     type: "small" | "middle";
-    /** Тема лоадера для типа small. */
-    theme?: ELoaderSmallTheme;
     /** Размер лоадера для типа small. */
     size?: EComponentSize;
+    /** Текст, который будет отображаться под спиннером. */
+    description?: string;
+    /** Кнопки, которые будут отображаться под спиннером. */
+    controls?: React.ReactNode;
 }
 
 export const LoaderScreen: React.FC<ILoaderScreenProps> = ({
     className,
     size = EComponentSize.MD,
     type,
-    theme = ELoaderSmallTheme.BRAND,
+    description,
+    controls,
     ...htmlDivAttributes
 }) => {
     const classNames = clsx(className, styles.loaderScreen, {
@@ -28,13 +33,25 @@ export const LoaderScreen: React.FC<ILoaderScreenProps> = ({
 
     return (
         <div className={classNames} {...htmlDivAttributes}>
-            {type === "small" ? (
-                <LoaderSmall size={size} theme={theme} />
-            ) : (
-                <div className={styles.loaderMiddleBackground}>
-                    <LoaderMiddle />
-                </div>
-            )}
+            <div className={styles.loaderContent}>
+                {type === "small" ? <LoaderSmall size={size} theme={ELoaderSmallTheme.BRAND} /> : <LoaderMiddle />}
+
+                {description && (
+                    <>
+                        <Gap size={24} />
+                        <div className={styles.description}>
+                            <Text size={ETextSize.B2}>{description}</Text>
+                        </div>
+                    </>
+                )}
+
+                {controls && (
+                    <>
+                        {description && <Gap size={24} />}
+                        <div>{controls}</div>
+                    </>
+                )}
+            </div>
         </div>
     );
 };

@@ -99,7 +99,7 @@ version: "1.0"
 
 Все экспортируются из `@sberbusiness/triplex-next` через barrel `src/components/ModalWindow/index.ts`:
 
-- **`ModalWindowContent`** — контейнер контента. Оборачивает дочерние секции в `Page` (`triplex-next/Page`). Имеет `isLoading?: boolean` и `loadingTitle?: React.ReactNode` — при `isLoading` поверх контента показывается `LoaderScreen` типа `middle`. Свой `displayName`. Свои props через интерфейс `IModalWindowContentProps` — экспортируется.
+- **`ModalWindowContent`** — контейнер контента. Оборачивает дочерние секции в `Page` (`triplex-next/Page`). Имеет `isLoading?: boolean` и `loadingTitle?: string` — при `isLoading` поверх контента показывается `LoaderScreen` типа `middle`; текст под спиннером передаётся в `LoaderScreen` через prop `description`. Свой `displayName`. Свои props через интерфейс `IModalWindowContentProps` — экспортируется.
 - **`ModalWindowHeader`** — заголовок. Тривиальная обёртка над `HeaderPage` с фиксированным `type=FIRST` и доп. отступом справа под кнопку закрытия (через less). Экспонирует статическое поле `Title = HeaderPage.Title`. Тип `IModalWindowHeaderProps` (Omit `children`/`type` от `IHeaderPageTypeFirstProps`).
 - **`ModalWindowBody`** — тело. Тривиальная обёртка над `Island` с фиксированными `type=TYPE_1` и `size=MD`. Тип `IModalWindowBodyProps extends IIslandProps`.
 - **`ModalWindowFooter`** — футер. Тривиальная обёртка над `FooterPage` с фиксированным `type=FIRST`. Экспонирует статическое поле `Description = FooterPage.Description`.
@@ -119,7 +119,7 @@ version: "1.0"
 | `Default` | `Default.tsx` | Минимальный пример: открытие/закрытие, заголовок, body, футер |
 | `Sizes` | `Sizes.tsx` | Размеры `SM` / `MD` / `LG`, для каждого — отдельный триггер |
 | `WithLongContent` | `WithLongContent.tsx` | Длинный контент с прилипающими header/footer |
-| `LoadingState` | `LoadingState.tsx` | Состояние загрузки (`isLoading=true` + `loadingTitle`) |
+| `LoadingState` | `LoadingState.tsx` | Состояние загрузки (`isLoading=true` + `loadingTitle` как строка) |
 
 Все стори, кроме скриншотных проверок, исключены из визуальных тестов на уровне `meta.parameters.testRunner: { skip: true }` — модалка анимируется и реализована через Portal вне Storybook canvas, скриншоты были бы пустыми.
 

@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { LoaderScreen } from "../LoaderScreen";
-import { ELoaderSmallTheme } from "../../Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 
 const getLoaderScreen = () => screen.getByRole("status", { name: "loading" });
@@ -18,18 +17,8 @@ describe("LoaderScreen", () => {
         expect(loader).toHaveClass("md");
     });
 
-    it("Should render LoaderSmall in different themes", () => {
-        render(<LoaderScreen type="small" theme={ELoaderSmallTheme.NEUTRAL} size={EComponentSize.MD} />);
-
-        const loader = getLoaderScreen();
-        expect(loader).toBeInTheDocument();
-        expect(loader).toHaveClass("loaderSmall");
-        expect(loader).toHaveClass("neutral");
-        expect(loader).toHaveClass("md");
-    });
-
     it("Should render LoaderSmall in different sizes", () => {
-        render(<LoaderScreen type="small" theme={ELoaderSmallTheme.BRAND} size={EComponentSize.SM} />);
+        render(<LoaderScreen type="small" size={EComponentSize.SM} />);
 
         const loader = getLoaderScreen();
         expect(loader).toBeInTheDocument();
@@ -44,5 +33,24 @@ describe("LoaderScreen", () => {
         const loader = getLoaderScreen();
         expect(loader).toBeInTheDocument();
         expect(loader).toHaveClass("loaderMiddle");
+    });
+
+    it("Should render description when provided", () => {
+        render(<LoaderScreen type="middle" description="Loading data..." />);
+        expect(screen.getByText("Loading data...")).toBeInTheDocument();
+        expect(getLoaderScreen()).toBeInTheDocument();
+    });
+
+    it("Should render controls when provided", () => {
+        render(<LoaderScreen type="middle" controls={<button type="button">Cancel</button>} />);
+        expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    });
+
+    it("Should render description and controls together", () => {
+        render(
+            <LoaderScreen type="middle" description="Please wait" controls={<button type="button">Retry</button>} />,
+        );
+        expect(screen.getByText("Please wait")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
     });
 });

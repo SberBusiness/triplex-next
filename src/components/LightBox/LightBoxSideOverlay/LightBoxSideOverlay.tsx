@@ -24,7 +24,7 @@ export interface ILightBoxSideOverlayProps
     /** Состояние загрузки. */
     isLoading?: boolean;
     /** Текст под спиннером. */
-    loadingTitle?: React.ReactNode;
+    loadingTitle?: string;
     /** Открыт другой SideOverlay поверх текущего. */
     isTopLevelSideOverlayOpened?: boolean;
     /** Открыт TopOverlay в текущем SideOverlay. */
@@ -63,7 +63,6 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
 
         useEffect(() => {
             if (prevOpened.current && !opened) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setOpening(false); // opened меняется в процессе анимации открытия.
                 setClosing(true);
             } else if (!prevOpened.current && opened) {

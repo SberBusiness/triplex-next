@@ -11,7 +11,7 @@ export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivEl
     /** Если `true`, поверх контента показывается `LoaderScreen`. */
     isLoading?: boolean;
     /** Текст под спиннером в режиме загрузки. */
-    loadingTitle?: React.ReactNode;
+    loadingTitle?: string;
 }
 
 /**
@@ -28,9 +28,7 @@ export const ModalWindowContent = React.forwardRef<HTMLDivElement, IModalWindowC
             <Page className={styles.modalWindowContentPage}>{children}</Page>
 
             {isLoading && (
-                <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle">
-                    {loadingTitle}
-                </LoaderScreen>
+                <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle" description={loadingTitle} />
             )}
         </div>
     ),

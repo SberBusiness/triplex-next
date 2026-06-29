@@ -4,8 +4,18 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.36.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**LoaderScreen**
+
+- Удалено свойство `theme`, всегда используется `ELoaderSmallTheme.BRAND`.
+
+**ModalWindow / LightBox**
+
+- Тип свойства `loadingTitle` сужен с `React.ReactNode` до `string`.
+
 <Heading>Изменения</Heading>
 
-**Title**
+**LoaderScreen**
 
-- Description.
+- Добавлены свойства `description` и `controls` для отображения контента под спиннером.

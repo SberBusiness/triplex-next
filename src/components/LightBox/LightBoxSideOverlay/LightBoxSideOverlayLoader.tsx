@@ -5,7 +5,7 @@ import styles from "./styles/LightBoxSideOverlayLoader.module.less";
 
 interface ILightBoxSideOverlayLoaderProps {
     /** Текст под спиннером.*/
-    loadingTitle?: React.ReactNode;
+    loadingTitle?: string;
 }
 
 export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps> = ({ loadingTitle }) => {
@@ -31,7 +31,7 @@ export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps
 
     return (
         <div ref={loaderRef} className={styles.lightBoxSideOverlayLoaderWrapper} style={{ top: `${topPosition}px` }}>
-            <LoaderScreen type="middle">{loadingTitle}</LoaderScreen>
+            <LoaderScreen type="middle" description={loadingTitle} />
         </div>
     );
 };

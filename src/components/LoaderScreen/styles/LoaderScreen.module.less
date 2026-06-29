@@ -2,7 +2,6 @@
 
 .loaderScreen {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: absolute;
@@ -18,5 +17,17 @@
 
     &.loaderMiddleBackdrop {
         background: var(--triplex-next-LoaderScreen-Middle_Backdrop_Default);
+    }
+
+    .loaderContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 380px;
+    }
+
+    .description {
+        text-align: center;
     }
 }

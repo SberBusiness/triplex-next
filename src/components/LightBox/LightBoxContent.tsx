@@ -8,7 +8,7 @@ import styles from "./styles/LightBox.module.less";
 export interface ILightBoxContentProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     isLoading?: boolean;
-    loadingTitle?: React.ReactNode;
+    loadingTitle?: string;
 }
 
 /**
@@ -45,15 +45,15 @@ export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
     }, [updateStyle]);
 
     useLayoutEffect(() => {
-        updateStyle();
+        const frameId = requestAnimationFrame(updateStyle);
 
         return () => {
+            cancelAnimationFrame(frameId);
             if (updateStyleTimeoutIdRef.current) {
                 clearTimeout(updateStyleTimeoutIdRef.current);
             }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [updateStyle]);
 
     useEffect(() => {
         updateStyleWithTimeout();
@@ -80,9 +80,7 @@ export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
                 {children}
 
                 {isLoading && (
-                    <LoaderScreen className={styles.loadingContentOverlay} type="middle">
-                        {loadingTitle}
-                    </LoaderScreen>
+                    <LoaderScreen className={styles.loadingContentOverlay} type="middle" description={loadingTitle} />
                 )}
 
                 <div className={styles.lightBoxContentResizeWrapper} ref={resizeRef} />

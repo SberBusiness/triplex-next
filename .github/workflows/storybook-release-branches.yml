@@ -41,27 +41,36 @@ jobs:
       - name: Get deploy dir
         id: vars
         run: |
-          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
-            echo "preview_dir=main" >> $GITHUB_OUTPUT
-          else
-            echo "preview_dir=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+          ref="${GITHUB_REF##*/}"
+          # Допускаем только безопасные символы для имени каталога,
+          # чтобы исключить shell-инъекцию через имя ветки.
+          if [[ ! "$ref" =~ ^[A-Za-z0-9._-]+$ ]]; then
+            echo "::error::Недопустимое имя ветки для preview_dir: $ref"
+            exit 1
           fi
+          echo "preview_dir=$ref" >> $GITHUB_OUTPUT
 
       # Деплой на каждый сервер — независимый шаг с continue-on-error,
       # чтобы недоступность одного сервера не отменяла публикацию на другом.
       - name: Deploy Storybook to triplex-dev
         id: deploy_dev
         continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }} "mkdir -p $STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/${{ steps.vars.outputs.preview_dir }}"
-          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/${{ steps.vars.outputs.preview_dir }}/
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR\""
+          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR/"
 
       - name: Deploy Storybook to triplex-design
         id: deploy_design
         continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }} "mkdir -p $STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/${{ steps.vars.outputs.preview_dir }}"
-          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/${{ steps.vars.outputs.preview_dir }}/
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR\""
+          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR/"
 
       # Репорт результатов: warning на каждый упавший сервер,
       # job падает только если недоступны ОБА сервера.

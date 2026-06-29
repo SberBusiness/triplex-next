@@ -10,22 +10,7 @@ export default {
     component: SliderRange,
     tags: ["autodocs"],
     parameters: {
-        testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Компонент слайдера с двумя ползунками для выбора диапазона значений.
-
-## Особенности
-
-- **Диапазон**: два ползунка для выбора диапазона значений
-- **Метки**: поддержка меток под полосой слайдера
-- **Шаги**: настраиваемая длина шага или массив шагов
-- **Трек**: возможность перетаскивания трека между ползунками
-- **Тултип**: опциональный тултип при наведении и перемещении
-- **Состояния**: disabled, reverse
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -40,7 +25,6 @@ export default {
 } as const;
 
 export const Playground: StoryObj<ISliderRangeProps> = {
-    name: "Playground",
     render: (args) => {
         const [values, setValues] = useState<TSliderRangeValues>(args.values ?? [35, 60]);
 
@@ -50,7 +34,7 @@ export const Playground: StoryObj<ISliderRangeProps> = {
         };
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>values = {`[${values[0]}, ${values[1]}]`}</div>
                 <br />
                 <SliderRange {...args} values={values} onChange={handleChange} />
@@ -76,83 +60,44 @@ export const Playground: StoryObj<ISliderRangeProps> = {
     argTypes: {
         min: {
             control: { type: "number" },
-            description: "Минимальное значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         max: {
             control: { type: "number" },
-            description: "Максимальное значение слайдера",
-            table: {
-                type: { summary: "number" },
-            },
         },
         values: {
             control: { type: "object" },
-            description: "Значения Range - массив из двух чисел",
-            table: {
-                type: { summary: "[number, number]" },
-            },
         },
         step: {
             control: { type: "number" },
-            description: "Длина шага",
-            table: {
-                type: { summary: "number | number[]" },
-                defaultValue: { summary: "1" },
-            },
         },
         disabled: {
             control: { type: "boolean" },
-            description: "Слайдер не активен",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
         reverse: {
             control: { type: "boolean" },
-            description: "Реверсивный слайдер",
-            table: {
-                type: { summary: "boolean" },
-            },
         },
         size: {
             control: { type: "select" },
             options: [EComponentSize.MD, EComponentSize.LG],
-            description: "Размер слайдера",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.MD" },
-            },
         },
         draggableTrack: {
             control: { type: "boolean" },
-            description: "Трек можно передвигать",
-            table: {
-                type: { summary: "boolean" },
-                defaultValue: { summary: "true" },
-            },
         },
         marks: {
             control: { type: "object" },
-            description: "Массив меток под полосой слайдера",
-            table: {
-                type: { summary: "ISliderRangeMark[]" },
-            },
         },
     },
     parameters: {
         controls: {
             include: ["min", "max", "values", "step", "disabled", "reverse", "size", "draggableTrack", "marks"],
         },
+        testRunner: { skip: true },
     },
 };
 
 export const Default: StoryObj<ISliderRangeProps> = {
-    name: "Default",
     render: () => {
-        const [values, setValues] = React.useState([30, 50]);
+        const [values, setValues] = useState<TSliderRangeValues>([30, 50]);
 
         const marks = [
             { label: 0, value: 0 },
@@ -162,7 +107,7 @@ export const Default: StoryObj<ISliderRangeProps> = {
         ];
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>values = {`[${values[0]}, ${values[1]}]`}</div>
                 <br />
                 <SliderRange values={values} marks={marks} min={0} max={100} step={1} onChange={setValues} />
@@ -170,11 +115,6 @@ export const Default: StoryObj<ISliderRangeProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования слайдера диапазона с метками.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -185,7 +125,7 @@ export const WithTooltip: StoryObj<ISliderRangeProps> = {
         const [values, setValues] = useState<TSliderRangeValues>([35, 60]);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>values = {`[${values[0]}, ${values[1]}]`}</div>
                 <br />
                 <SliderRange
@@ -206,22 +146,18 @@ export const WithTooltip: StoryObj<ISliderRangeProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер диапазона с тултипами, отображающими текущие значения в процентах.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
 export const WithCustomSteps: StoryObj<ISliderRangeProps> = {
-    name: "With Custom Steps",
+    name: "With custom steps",
     render: () => {
         const [values, setValues] = useState<TSliderRangeValues>([25, 75]);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>values = {`[${values[0]}, ${values[1]}]`}</div>
                 <br />
                 <SliderRange
@@ -242,22 +178,17 @@ export const WithCustomSteps: StoryObj<ISliderRangeProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер диапазона с кастомными шагами. Ползунки могут находиться только в определенных позициях.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const NonDraggableTrack: StoryObj<ISliderRangeProps> = {
-    name: "Non Draggable Track",
+    name: "Non-draggable Track",
     render: () => {
         const [values, setValues] = useState<TSliderRangeValues>([35, 60]);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>values = {`[${values[0]}, ${values[1]}]`}</div>
                 <br />
                 <SliderRange
@@ -277,20 +208,15 @@ export const NonDraggableTrack: StoryObj<ISliderRangeProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер диапазона с отключенной возможностью перетаскивания трека.",
-            },
-        },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
 export const Disabled: StoryObj<ISliderRangeProps> = {
-    name: "Disabled",
     render: () => {
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <SliderRange
                     min={0}
                     max={100}
@@ -308,22 +234,16 @@ export const Disabled: StoryObj<ISliderRangeProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Слайдер диапазона в состоянии disabled.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
 export const Reverse: StoryObj<ISliderRangeProps> = {
-    name: "Reverse",
     render: () => {
         const [values, setValues] = useState<TSliderRangeValues>([35, 60]);
 
         return (
-            <div style={{ maxWidth: "750px", padding: "30px" }}>
+            <div style={{ maxWidth: 750, padding: 30 }}>
                 <div>values = {`[${values[0]}, ${values[1]}]`}</div>
                 <br />
                 <SliderRange
@@ -343,11 +263,6 @@ export const Reverse: StoryObj<ISliderRangeProps> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Реверсивный слайдер диапазона.",
-            },
-        },
         controls: { disable: true },
     },
 };

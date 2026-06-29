@@ -1,90 +1,43 @@
 import React, { useState } from "react";
-import { StoryObj } from "@storybook/react";
-import { MaskedField } from "../../src/components/TextField";
-import { Text, ETextSize, EFontType, Title, ETitleSize } from "../../src/components/Typography";
-import { EFormFieldStatus } from "../../src/components/FormField/enums";
-import { Gap } from "../../src/components/Gap";
-import { FormFieldClear, FormFieldMaskedInput } from "../../src/components/FormField";
-import { Title as DocsTitle, Description, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { Link } from "../../src/components/Link";
-import { HelpBox } from "../../src/components/HelpBox/HelpBox";
-import { ETooltipPreferPlace, ETooltipSize } from "../../src/components/Tooltip/enums";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import {
+    MaskedField,
+    FormFieldMaskedInput,
+    FormFieldClear,
+    HelpBox,
+    Text,
+    Link,
+    EComponentSize,
+    EFormFieldStatus,
+    ETooltipSize,
+    ETooltipPreferPlace,
+    ETextSize,
+    EFontType,
+} from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon20, DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
-import { EComponentSize } from "../../src/enums/EComponentSize";
 
 export default {
     title: "Components/TextFields/MaskedField",
     component: MaskedField,
     parameters: {
-        testRunner: { skip: true },
         docs: {
-            description: {
-                component: `
-Компонент MaskedField представляет собой поле ввода с маской для структурированных данных, построенное на основе TextField.
-Для более гибкой настройки можно использовать маскированный ввод на основе компонента FormField.
-Основан на https://github.com/text-mask/text-mask.
-
-## Основные возможности
-
-- **Размеры** - SM (маленький), MD (средний), LG (большой - по умолчанию)
-- **Маскированный ввод** - автоматическое форматирование данных
-- **Валидация** - проверка корректности введенных данных
-
-## Доступные маски
-
-### Финансовые
-- Номер счета (00000 000 0 00000000000)
-- БИК (000000000)
-- Номер карты (0000 0000 0000 0000)
-- КБК (00000000000000000000)
-- КПП (000000000)
-- УИН (00000000000000000000)
-
-### Идентификационные
-- ИНН (0000000000)
-- ОГРН (0000000000000)
-- ОКТМО (00000000)
-- СНИЛС (000-000-000 00)
-- Водительское удостоверение (00 00 000000)
-
-### Контактные
-- Номер телефона (+7 (XXX) XXX-XX-XX)
-- Добавочный номер (000)
-- Почтовый индекс (000000)
-
-### Географические
-- Широта (00.000000)
-- Долгота (00.000000)
-
-### Транспортные
-- Номер автомобиля (A000AA00)
-
-### Дата и время
-- Дата (дд.мм.гггг)
-
-### ЖКХ
-- Номер счета ЖКУ (00АА000000)
-- Идентификатор ЖКУ (00АА000000-00)
-- Платёжный документ ЖКУ (00АА000000-00-0000)
-
-### Паспортные данные
-- Серия паспорта (00 00)
-- Номер паспорта (000000)
-- Код подразделения (000-000)
-                `,
-            },
             page: () => (
                 <>
-                    <DocsTitle />
+                    <Title />
                     <Description />
-                    <Controls of={Default} />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={MaskedField} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
     tags: ["autodocs"],
-};
+} satisfies Meta<typeof MaskedField>;
 
 interface IMaskedPlaygroundProps extends React.ComponentProps<typeof MaskedField> {
     labelText?: string;
@@ -232,7 +185,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
         const maskConfig = getMaskConfig();
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <MaskedField
                     {...maskedFieldProps}
                     description={
@@ -257,76 +210,29 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
         status: {
             control: { type: "select" },
             options: Object.values(EFormFieldStatus),
-            description: "Состояние поля",
-            table: {
-                type: { summary: "EFormFieldStatus" },
-                defaultValue: { summary: "EFormFieldStatus.DEFAULT" },
-            },
         },
         labelText: {
             control: { type: "text" },
-            description: "Текст лейбла",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Label" },
-            },
         },
         descriptionText: {
             control: { type: "text" },
-            description: "Текст описания",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "(21) Description" },
-            },
         },
         maskType: {
             control: { type: "select" },
             options: Object.keys(FormFieldMaskedInput.presets.masks),
-            description: "Тип маски",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "phone" },
-            },
         },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер поля ввода",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.LG" },
-            },
-        },
-        className: {
-            control: { type: "text" },
-            description: "Дополнительные CSS классы",
-            table: {
-                type: { summary: "string" },
-            },
         },
         placeholder: {
             control: { type: "text" },
-            description: "Плейсхолдер поля ввода",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "Placeholder" },
-            },
         },
         prefix: {
             control: { type: "text" },
-            description: "Префикс",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "" },
-            },
         },
         postfix: {
             control: { type: "text" },
-            description: "Постфикс",
-            table: {
-                type: { summary: "string" },
-                defaultValue: { summary: "" },
-            },
         },
     },
     args: {
@@ -341,11 +247,6 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
         className: "",
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Интерактивная демонстрация MaskedField с расширенными controls. Позволяет настраивать тип маски, текст лейбла, описание и состояния компонента.",
-            },
-        },
         controls: {
             include: [
                 "status",
@@ -359,6 +260,7 @@ export const Playground: StoryObj<IMaskedPlaygroundProps> = {
                 "placeholder",
             ],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -371,7 +273,7 @@ export const Default: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -389,11 +291,6 @@ export const Default: StoryObj<typeof MaskedField> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования MaskedInputField с маской номера телефона.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -403,6 +300,7 @@ export const States: StoryObj<typeof MaskedField> = {
         const [phoneValue, setPhoneValue] = useState("");
         const [phoneValueError, setPhoneValueError] = useState("");
         const [phoneValueWarning, setPhoneValueWarning] = useState("");
+
         const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setPhoneValue(e.target.value);
         };
@@ -416,79 +314,80 @@ export const States: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
-                <MaskedField
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            (21) Description
-                        </Text>
-                    }
-                    maskedInputProps={{
-                        value: phoneValue,
-                        onChange: handlePhoneChange,
-                        mask: FormFieldMaskedInput.presets.masks.phone,
-                    }}
-                    label="Label"
-                />
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>DEFAULT</div>
+                    <MaskedField
+                        description={
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                (21) Description
+                            </Text>
+                        }
+                        maskedInputProps={{
+                            value: phoneValue,
+                            onChange: handlePhoneChange,
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                        }}
+                        label="Label"
+                    />
+                </div>
 
-                <Gap size={24} />
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>ERROR</div>
+                    <MaskedField
+                        status={EFormFieldStatus.ERROR}
+                        description={
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
+                                Error text
+                            </Text>
+                        }
+                        maskedInputProps={{
+                            value: phoneValueError,
+                            onChange: handlePhoneChangeError,
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                        }}
+                        label="Label"
+                    />
+                </div>
 
-                <MaskedField
-                    status={EFormFieldStatus.ERROR}
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                            Error text
-                        </Text>
-                    }
-                    maskedInputProps={{
-                        value: phoneValueError,
-                        onChange: handlePhoneChangeError,
-                        mask: FormFieldMaskedInput.presets.masks.phone,
-                    }}
-                    label="Label"
-                />
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>WARNING</div>
+                    <MaskedField
+                        status={EFormFieldStatus.WARNING}
+                        description={
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
+                                Warning text
+                            </Text>
+                        }
+                        maskedInputProps={{
+                            value: phoneValueWarning,
+                            onChange: handlePhoneChangeWarning,
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                        }}
+                        label="Label"
+                    />
+                </div>
 
-                <Gap size={24} />
-
-                <MaskedField
-                    status={EFormFieldStatus.WARNING}
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.WARNING}>
-                            Warning text
-                        </Text>
-                    }
-                    maskedInputProps={{
-                        value: phoneValueWarning,
-                        onChange: handlePhoneChangeWarning,
-                        mask: FormFieldMaskedInput.presets.masks.phone,
-                    }}
-                    label="Label"
-                />
-
-                <Gap size={24} />
-
-                <MaskedField
-                    status={EFormFieldStatus.DISABLED}
-                    description={
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                            Disabled text
-                        </Text>
-                    }
-                    maskedInputProps={{
-                        value: "9999999999",
-                        mask: FormFieldMaskedInput.presets.masks.phone,
-                    }}
-                    label="Label"
-                />
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>DISABLED</div>
+                    <MaskedField
+                        status={EFormFieldStatus.DISABLED}
+                        description={
+                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                                Disabled text
+                            </Text>
+                        }
+                        maskedInputProps={{
+                            value: "",
+                            mask: FormFieldMaskedInput.presets.masks.phone,
+                        }}
+                        label="Label"
+                    />
+                </div>
             </div>
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Различные состояния MaskedInputField: обычное, с ошибкой, отключенное.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -512,11 +411,9 @@ export const Sizes: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "400px" }}>
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Size SM (small)
-                    </Title>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>SM</div>
                     <MaskedField
                         size={EComponentSize.SM}
                         maskedInputProps={{
@@ -528,10 +425,8 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                     />
                 </div>
 
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Size MD (medium)
-                    </Title>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>MD</div>
                     <MaskedField
                         size={EComponentSize.MD}
                         maskedInputProps={{
@@ -545,10 +440,8 @@ export const Sizes: StoryObj<typeof MaskedField> = {
                     />
                 </div>
 
-                <div style={{ marginBottom: "32px" }}>
-                    <Title tag="h3" size={ETitleSize.H3} type={EFontType.PRIMARY} style={{ marginBottom: "16px" }}>
-                        Size LG (large) - default
-                    </Title>
+                <div style={{ maxWidth: 300 }}>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>LG</div>
                     <MaskedField
                         size={EComponentSize.LG}
                         maskedInputProps={{
@@ -565,11 +458,6 @@ export const Sizes: StoryObj<typeof MaskedField> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация различных размеров MaskedInputField: SM (маленький), MD (средний), LG (большой - по умолчанию). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -813,16 +701,12 @@ export const AllMasks: StoryObj<typeof MaskedField> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Демонстрация всех доступных масок MaskedField. Показывает, как выглядят и работают различные типы масок для ввода структурированных данных.",
-            },
-        },
         controls: { disable: true },
     },
 };
 
-export const Examples: StoryObj<typeof MaskedField> = {
+export const Production: StoryObj<typeof MaskedField> = {
+    name: "Example: production",
     render: () => {
         const [phoneValue, setPhoneValue] = useState("");
 
@@ -831,7 +715,7 @@ export const Examples: StoryObj<typeof MaskedField> = {
         };
 
         return (
-            <div style={{ maxWidth: "300px" }}>
+            <div style={{ maxWidth: 300 }}>
                 <MaskedField
                     description={
                         <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
@@ -860,11 +744,6 @@ export const Examples: StoryObj<typeof MaskedField> = {
         );
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Базовый пример использования MaskedInputField с маской номера телефона.",
-            },
-        },
         controls: { disable: true },
     },
 };

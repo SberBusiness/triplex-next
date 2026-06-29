@@ -5,7 +5,7 @@ import styles from "./styles/LightBoxSideOverlayLoader.module.less";
 
 interface ILightBoxSideOverlayLoaderProps {
     /** Текст под спиннером.*/
-    loadingTitle?: string;
+    loadingTitle?: React.ReactNode;
 }
 
 export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps> = ({ loadingTitle }) => {

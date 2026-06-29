@@ -13,7 +13,7 @@ export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement>
     /** Размер лоадера для типа small. */
     size?: EComponentSize;
     /** Текст, который будет отображаться под спиннером. */
-    description?: string;
+    description?: React.ReactNode;
     /** Кнопки, которые будут отображаться под спиннером. */
     controls?: React.ReactNode;
 }
@@ -39,9 +39,9 @@ export const LoaderScreen: React.FC<ILoaderScreenProps> = ({
                 {description && (
                     <>
                         <Gap size={24} />
-                        <div className={styles.description}>
-                            <Text size={ETextSize.B2}>{description}</Text>
-                        </div>
+                        <Text className={styles.description} tag="div" size={ETextSize.B2}>
+                            {description}
+                        </Text>
                     </>
                 )}
 

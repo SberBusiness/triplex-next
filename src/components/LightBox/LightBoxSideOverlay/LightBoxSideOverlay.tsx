@@ -24,7 +24,7 @@ export interface ILightBoxSideOverlayProps
     /** Состояние загрузки. */
     isLoading?: boolean;
     /** Текст под спиннером. */
-    loadingTitle?: string;
+    loadingTitle?: React.ReactNode;
     /** Открыт другой SideOverlay поверх текущего. */
     isTopLevelSideOverlayOpened?: boolean;
     /** Открыт TopOverlay в текущем SideOverlay. */

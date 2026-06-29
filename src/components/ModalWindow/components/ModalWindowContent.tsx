@@ -11,7 +11,7 @@ export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivEl
     /** Если `true`, поверх контента показывается `LoaderScreen`. */
     isLoading?: boolean;
     /** Текст под спиннером в режиме загрузки. */
-    loadingTitle?: string;
+    loadingTitle?: React.ReactNode;
 }
 
 /**

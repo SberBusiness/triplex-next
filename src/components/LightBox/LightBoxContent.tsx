@@ -8,7 +8,7 @@ import styles from "./styles/LightBox.module.less";
 export interface ILightBoxContentProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     isLoading?: boolean;
-    loadingTitle?: string;
+    loadingTitle?: React.ReactNode;
 }
 
 /**

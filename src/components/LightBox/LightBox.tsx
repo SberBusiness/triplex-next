@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Portal } from "../Portal";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
@@ -69,7 +69,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         if (mountNode) {
             lightBoxMountNode = mountNode;
         } else {
-            lightBoxMountNode = document.querySelector(`#${lightBoxMountNodeIdDefault}`);
+            lightBoxMountNode = document.getElementById(lightBoxMountNodeIdDefault) as HTMLDivElement | null;
 
             if (!lightBoxMountNode) {
                 lightBoxMountNode = document.createElement("div");
@@ -84,7 +84,8 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
     const getLightBoxViewManagerMountNode = () => {
         let lightBoxViewManagerMountNode: HTMLDivElement | null = null;
         if (lightBoxViewManagerNodeId) {
-            lightBoxViewManagerMountNode = document.querySelector(`#${lightBoxViewManagerNodeId}`);
+            // getElementById вместо querySelector — устойчив к произвольному значению id (спецсимволы CSS-селектора).
+            lightBoxViewManagerMountNode = document.getElementById(lightBoxViewManagerNodeId) as HTMLDivElement | null;
         }
 
         if (!lightBoxViewManagerMountNode) {
@@ -96,13 +97,13 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         return lightBoxViewManagerMountNode;
     };
 
-    /** DOM node, в которую рендерится лайтбокс. */
-    const lightBoxMountNode = useRef<HTMLDivElement | null>(getLightBoxMountNode());
+    /** DOM node, в которую рендерится лайтбокс. Вычисляется один раз. */
+    const [lightBoxMountNode] = useState<HTMLDivElement | null>(getLightBoxMountNode);
     /**
-     * DOM node, в визуальных границах которой рендерится лайтбокс.
+     * DOM node, в визуальных границах которой рендерится лайтбокс. Вычисляется один раз.
      * Левая и правая граница LightBox будут соответствовать левой и правой границе lightBoxViewManagerNode.
      */
-    const lightBoxViewManagerNode = useRef<HTMLDivElement | null>(getLightBoxViewManagerMountNode());
+    const [lightBoxViewManagerNode] = useState<HTMLDivElement | null>(getLightBoxViewManagerMountNode);
 
     const addClassNamesToDocumentElement = () => {
         bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.add(className));
@@ -126,7 +127,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         }
     }, [isSideOverlayOpened]);
 
-    if (!lightBoxMountNode.current) {
+    if (!lightBoxMountNode) {
         return null;
     }
 
@@ -153,7 +154,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
 
     return (
         <>
-            <Portal container={lightBoxMountNode.current}>
+            <Portal container={lightBoxMountNode}>
                 <FocusTrapExtended
                     active={!isLoading}
                     {...focusTrapProps}
@@ -171,10 +172,10 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                 </FocusTrapExtended>
             </Portal>
 
-            {lightBoxViewManagerNode.current && (
+            {lightBoxViewManagerNode && (
                 <LightBoxViewManager
-                    lightBoxViewManagerNode={lightBoxViewManagerNode.current}
-                    lightBoxMountNode={lightBoxMountNode.current}
+                    lightBoxViewManagerNode={lightBoxViewManagerNode}
+                    lightBoxMountNode={lightBoxMountNode}
                 />
             )}
         </>

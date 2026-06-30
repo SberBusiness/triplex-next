@@ -1,0 +1,21 @@
+import { getSafeRel } from "@sberbusiness/triplex-next/utils/html/anchorSecurity";
+
+describe("getSafeRel", () => {
+    test("подставляет noopener noreferrer для target=_blank без явного rel", () => {
+        expect(getSafeRel("_blank", undefined)).toBe("noopener noreferrer");
+    });
+
+    test("сохраняет явный rel при target=_blank", () => {
+        expect(getSafeRel("_blank", "nofollow")).toBe("nofollow");
+    });
+
+    test("не сохраняет небезопасный дефолт, если потребитель явно передал пустой rel", () => {
+        expect(getSafeRel("_blank", "")).toBe("");
+    });
+
+    test("не меняет rel для прочих значений target", () => {
+        expect(getSafeRel("_self", undefined)).toBeUndefined();
+        expect(getSafeRel(undefined, undefined)).toBeUndefined();
+        expect(getSafeRel("_parent", "nofollow")).toBe("nofollow");
+    });
+});

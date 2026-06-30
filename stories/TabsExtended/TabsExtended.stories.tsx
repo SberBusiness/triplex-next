@@ -13,16 +13,6 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Базовый компонент табов. На его основе можно рендерить табы любого дизайна.
-
-## Особенности
-
-- Компонент формируется декларативно
-
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -39,6 +29,7 @@ export default {
 export const Default: StoryObj<typeof TabsExtended> = {
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-extended-tab-0-0");

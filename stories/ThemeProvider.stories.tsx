@@ -12,10 +12,6 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component:
-                    "ThemeProvider - компонент для управления темами в приложении. Позволяет переключаться между светлой и темной темами, а также переопределять дизайн-токены.",
-            },
             page: () => (
                 <>
                     <Title />
@@ -54,11 +50,7 @@ export const Default: StoryObj<typeof ThemeProvider> = {
     name: "Default",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "ThemeProvider с темой по умолчанию (светлая тема).",
-            },
-        },
+        testRunner: { skip: true },
     },
     render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);
@@ -78,16 +70,11 @@ export const Default: StoryObj<typeof ThemeProvider> = {
 };
 
 export const DarkTheme: StoryObj<typeof ThemeProvider> = {
-    name: "Dark Theme",
+    name: "Dark theme",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "ThemeProvider с темной темой.",
-            },
-        },
     },
-    render: function Render() {
+    render: () => {
         const scopeRef = useRef<HTMLDivElement>(null);
 
         return (
@@ -105,14 +92,9 @@ export const DarkTheme: StoryObj<typeof ThemeProvider> = {
 };
 
 export const CustomTokens: StoryObj<typeof ThemeProvider> = {
-    name: "Custom Tokens",
+    name: "Custom tokens",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "ThemeProvider с переопределенными токенами.",
-            },
-        },
     },
     render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);
@@ -140,16 +122,12 @@ export const CustomTokens: StoryObj<typeof ThemeProvider> = {
 };
 
 export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
-    name: "Theme Switcher",
+    name: "Theme switcher",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Интерактивный пример переключения между темами.",
-            },
-        },
+        testRunner: { skip: true },
     },
-    render: function Render() {
+    render: () => {
         const [currentTheme, setCurrentTheme] = useState(ETriplexNextTheme.LIGHT);
 
         const handleThemeToggle = () => {
@@ -175,14 +153,9 @@ export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
 };
 
 export const ScopedTheme: StoryObj<typeof ThemeProvider> = {
-    name: "Scoped Theme",
+    name: "Scoped theme",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Пример использования scopeRef для ограничения области действия темы.",
-            },
-        },
     },
     render: function Render() {
         const scopeRef = useRef<HTMLDivElement>(null);

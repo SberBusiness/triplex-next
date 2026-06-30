@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox, EComponentSize, Gap } from "@sberbusiness/triplex-next";
 
-export const VisualTestsExample = () => (
+export const VisualTestsSelectedExample = () => (
     <div style={{ display: "flex", gap: 24 }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
             <Checkbox size={EComponentSize.SM} checked>

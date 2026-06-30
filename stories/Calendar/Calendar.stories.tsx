@@ -15,6 +15,8 @@ import {
     DisabledDaysExampleSource,
     ButtonsExample,
     ButtonsExampleSource,
+    ReversedPickExample,
+    ReversedPickExampleSource,
     VisualTestsExample,
     VisualTestsExampleSource,
 } from "./examples";
@@ -168,6 +170,20 @@ export const Buttons: StoryObj<typeof Calendar> = {
         testRunner: { skip: true },
     },
     render: ButtonsExample,
+};
+
+export const ReversedPick: StoryObj<typeof Calendar> = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ReversedPickExampleSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
+    },
+    render: ReversedPickExample,
 };
 
 export const VisualTests: StoryObj<typeof Calendar> = {

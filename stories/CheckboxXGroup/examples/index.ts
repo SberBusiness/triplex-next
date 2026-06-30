@@ -4,5 +4,5 @@ export * from "./SizesExample";
 export { default as SizesExampleSource } from "./SizesExample?raw";
 export * from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
-export * from "./VisualTestsSelectedExample";
-export { default as VisualTestsSelectedExampleSource } from "./VisualTestsSelectedExample?raw";
+export * from "./IndentsExample";
+export { default as IndentsExampleSource } from "./IndentsExample?raw";

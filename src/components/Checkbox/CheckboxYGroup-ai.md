@@ -3,7 +3,7 @@ component: CheckboxYGroup
 category: Inputs
 related: [Checkbox, CheckboxXGroup]
 tokens: []
-stories: stories/Checkbox/Checkbox.stories.tsx
+stories: stories/CheckboxYGroup/CheckboxYGroup.stories.tsx
 version: "1.0"
 ---
 
@@ -66,12 +66,13 @@ version: "1.0"
 
 ## Stories
 
-Основные истории: `stories/Checkbox/Checkbox.stories.tsx`
-Файлы примеров: `stories/Checkbox/examples/`
+Основные истории: `stories/CheckboxYGroup/CheckboxYGroup.stories.tsx`
+Файлы примеров: `stories/CheckboxYGroup/examples/`
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `YGroup` | `YGroupExample.tsx` | Группа по оси Y |
+| `Default` | `DefaultExample.tsx` | Группа по оси Y |
+| `CheckboxSizes` | `SizesExample.tsx` | Группа чекбоксов разных размеров |
 
 ---
 

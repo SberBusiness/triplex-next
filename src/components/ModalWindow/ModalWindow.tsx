@@ -40,8 +40,8 @@ const bodyClassNameModalOpen = ["modal-open", "no-hash-overflow-hidden"];
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
-/** Создаёт портальную ноду модалки и прикрепляет её к общему wrapper в body. */
-const getOrCreateMountNode = (): HTMLDivElement => {
+/** Возвращает общий wrapper модалок в body, создавая его при первом обращении. */
+const getOrCreateWrapperNode = (): HTMLDivElement => {
     let wrapperNode = document.querySelector<HTMLDivElement>(`#${modalNodeName}-wrapper`);
 
     if (!wrapperNode) {
@@ -50,9 +50,14 @@ const getOrCreateMountNode = (): HTMLDivElement => {
         document.body.appendChild(wrapperNode);
     }
 
+    return wrapperNode;
+};
+
+/** Создаёт портальную ноду модалки и прикрепляет её к общему wrapper в body. */
+const getOrCreateMountNode = (): HTMLDivElement => {
     const node = document.createElement("div");
     node.className = `${modalNodeName}-portal-node`;
-    wrapperNode.appendChild(node);
+    getOrCreateWrapperNode().appendChild(node);
     return node;
 };
 
@@ -131,6 +136,15 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     };
 
     useEffect(() => {
+        // В React 18 StrictMode (dev) компонент проходит цикл mount → unmount → mount.
+        // На искусственном unmount срабатывает cleanup ниже и открепляет mountNode, а
+        // инициализатор useState на повторном mount заново не вызывается (стейт сохраняется) —
+        // узел остаётся висеть вне DOM, и Portal рендерит модалку в невидимый контейнер.
+        // Поэтому при (повторном) mount возвращаем узел в wrapper, если он оказался откреплён.
+        if (!mountNode.parentNode) {
+            getOrCreateWrapperNode().appendChild(mountNode);
+        }
+
         return () => {
             mountNode.parentNode?.removeChild(mountNode);
             removeBodyClasses();

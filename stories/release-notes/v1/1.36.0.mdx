@@ -6,6 +6,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**Title**
+**LightBox**
 
-- Description.
+- Исправлено дёрганье/зависание `TopOverlay` при быстрых нажатиях Esc: пока `TopOverlay` открыт или закрывается, кнопки закрытия (`LightBox.Controls.Close`, `SideOverlay.CloseDesktop`) автоматически отключают свой Esc-триггер и больше не переоткрывают оверлей. Координация внутри компонентов — дополнительный код в прикладном коде не требуется.
+- `SideOverlay.CloseDesktop` — проп `clickByEsc` стал необязательным (по умолчанию `true`); вручную гасить Esc при открытом `TopOverlay` больше не нужно.

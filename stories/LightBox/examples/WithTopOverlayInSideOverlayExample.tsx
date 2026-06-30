@@ -184,7 +184,6 @@ export const WithTopOverlayInSideOverlayExample = () => {
 
             <LightBox.SideOverlay.CloseDesktop
                 data-test-id="lightbox-side-overlay-close"
-                clickByEsc={!openedTopOverlay}
                 onClick={handleCloseSideOverlayMD}
             />
 

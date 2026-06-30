@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import clsx from "clsx";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { Overlay, IOverlayProps } from "../Overlay/Overlay";
 import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
+import { LightBoxOverlayContext } from "../LightBox/LightBoxOverlayContext";
 import styles from "./styles/TopOverlay.module.less";
 
 /** Свойства компонента TopOverlay. */
@@ -30,6 +31,18 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
     const prevOpened = useRef(opened);
     // Ref контейнера.
     const overlayWrapperRef = useRef<HTMLDivElement | null>(null);
+
+    const { registerEscCapturingOverlay } = useContext(LightBoxOverlayContext);
+
+    // Пока оверлей на экране (открыт ИЛИ анимирует закрытие), регистрируем его в контексте
+    // LightBox, чтобы кнопки закрытия отключили свой Esc-триггер и не переоткрывали оверлей.
+    const escCapturingActive = opened || closing;
+    useEffect(() => {
+        if (!escCapturingActive) {
+            return;
+        }
+        return registerEscCapturingOverlay();
+    }, [escCapturingActive, registerEscCapturingOverlay]);
 
     // Пересчет позиционирования оверлея. Бывает неверная позиция, например, при открытии во время скролла.
     const updateTopPosition = () => {

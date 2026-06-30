@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from "react";
+/* eslint-disable react-hooks/refs */
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { Portal } from "../Portal";
+import { LightBoxOverlayContext } from "./LightBoxOverlayContext";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { LightBoxContent } from "./LightBoxContent";
 import { LightBoxControls } from "./LightBoxControls/LightBoxControls";
@@ -63,6 +65,19 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const { scopeClassName } = useToken();
+
+    // Количество активных (открытых/закрывающихся) TopOverlay, перехватывающих Esc.
+    // Пока их больше нуля, кнопки закрытия LightBox/SideOverlay отключают свой Esc-триггер,
+    // иначе быстрые Esc одновременно закрывают и заново открывают оверлей.
+    const [escCapturingOverlayCount, setEscCapturingOverlayCount] = useState(0);
+    const registerEscCapturingOverlay = useCallback(() => {
+        setEscCapturingOverlayCount((count) => count + 1);
+        return () => setEscCapturingOverlayCount((count) => count - 1);
+    }, []);
+    const overlayContextValue = useMemo(
+        () => ({ registerEscCapturingOverlay, escCapturingOverlayActive: escCapturingOverlayCount > 0 }),
+        [registerEscCapturingOverlay, escCapturingOverlayCount],
+    );
 
     const getLightBoxMountNode = () => {
         let lightBoxMountNode: HTMLDivElement | null = null;
@@ -165,7 +180,9 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                 >
                     <div className={classNames} role="dialog" aria-modal="true" {...htmlDivAttributes} ref={setRef}>
                         <div className={styles.lightBoxBackdrop} />
-                        {children}
+                        <LightBoxOverlayContext.Provider value={overlayContextValue}>
+                            {children}
+                        </LightBoxOverlayContext.Provider>
                         <span ref={tempButtonRef} className={styles.tempElSafariBug} />
                     </div>
                 </FocusTrapExtended>

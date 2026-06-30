@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import clsx from "clsx";
@@ -6,13 +6,16 @@ import { CrossStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { EButtonTheme } from "../../Button/enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { Button } from "../../Button/Button";
+import { LightBoxOverlayContext } from "../LightBoxOverlayContext";
 import styles from "./styles/LightBoxSideOverlayClose.module.less";
 
 export interface ILightBoxSideOverlayCloseDesktopProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
-     * Триггер click по нажатию Esc.
+     * Триггер click по нажатию Esc. По умолчанию true.
+     * Пока на экране есть TopOverlay (открыт или закрывается), Esc-триггер
+     * отключается автоматически — задавать это вручную не требуется.
      */
-    clickByEsc: boolean;
+    clickByEsc?: boolean;
 }
 
 /**
@@ -21,10 +24,15 @@ export interface ILightBoxSideOverlayCloseDesktopProps extends React.HTMLAttribu
  */
 export const LightBoxSideOverlayCloseDesktop: React.FC<ILightBoxSideOverlayCloseDesktopProps> = ({
     className,
-    clickByEsc,
+    clickByEsc = true,
     ...htmlButtonAttributes
 }) => {
     const ref = useRef<HTMLButtonElement>(null);
+
+    // Пока на экране есть TopOverlay, он сам перехватывает Esc — отключаем свой триггер,
+    // иначе быстрые Esc будут закрывать TopOverlay и тут же открывать его заново.
+    const { escCapturingOverlayActive } = useContext(LightBoxOverlayContext);
+    const escEnabled = clickByEsc && !escCapturingOverlayActive;
 
     const renderButton = () => (
         <Button
@@ -40,7 +48,7 @@ export const LightBoxSideOverlayCloseDesktop: React.FC<ILightBoxSideOverlayClose
     );
 
     const renderContent = () => {
-        if (clickByEsc) {
+        if (escEnabled) {
             return (
                 <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={ref}>
                     {renderButton()}

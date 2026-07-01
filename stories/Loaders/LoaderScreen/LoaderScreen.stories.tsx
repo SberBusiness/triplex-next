@@ -141,7 +141,7 @@ export const Types: StoryObj<typeof LoaderScreen> = {
 
 export const VisualTests: StoryObj<typeof LoaderScreen> = {
     name: "Visual tests",
-    tags: ["!autodocs", "!dev"],
+    // tags: ["!autodocs", "!dev"],
     decorators: [
         (Story) => (
             <>
@@ -151,7 +151,7 @@ export const VisualTests: StoryObj<typeof LoaderScreen> = {
         ),
     ],
     render: () => (
-        <div style={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
             <div style={{ position: "relative", height: "200px", width: "300px" }}>
                 <LoaderScreen type="small" size={EComponentSize.MD} />
             </div>

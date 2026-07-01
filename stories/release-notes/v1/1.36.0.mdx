@@ -6,6 +6,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**Title**
+**Link**
 
-- Description.
+- При `target="_blank"` автоматически добавляется `rel="noopener"` (защита от reverse tabnabbing). Явно переданный потребителем `rel` сохраняется.
+
+**ThemeProvider**
+
+- Предупреждение о неподдержке динамической темы при SSR выводится через `console.warn` вместо `console.log`.
+
+**TooltipLink**
+
+- При `target="_blank"` автоматически добавляется `rel="noopener"` (защита от reverse tabnabbing). Явно переданный потребителем `rel` сохраняется.

@@ -6,7 +6,11 @@ import React from "react";
  * При открытии ссылки в новой вкладке (target="_blank") новая страница получает доступ
  * к window.opener исходной вкладки и может перенаправить её на фишинговый ресурс
  * (атака reverse tabnabbing). Чтобы это предотвратить, для target="_blank" по умолчанию
- * подставляется rel="noopener noreferrer".
+ * подставляется rel="noopener".
+ *
+ * Используется только noopener (без noreferrer): noopener разрывает доступ к window.opener
+ * и закрывает уязвимость, тогда как noreferrer дополнительно скрывает заголовок Referer,
+ * что ломает реферальную аналитику на целевом сайте — нежелательный побочный эффект.
  *
  * Если потребитель явно задал rel, его значение сохраняется без изменений.
  *
@@ -18,7 +22,7 @@ export const getSafeRel = (
     rel: React.AnchorHTMLAttributes<HTMLAnchorElement>["rel"],
 ): React.AnchorHTMLAttributes<HTMLAnchorElement>["rel"] => {
     if (target === "_blank" && rel === undefined) {
-        return "noopener noreferrer";
+        return "noopener";
     }
 
     return rel;

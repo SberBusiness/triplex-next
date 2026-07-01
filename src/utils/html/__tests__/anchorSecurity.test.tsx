@@ -1,8 +1,8 @@
 import { getSafeRel } from "@sberbusiness/triplex-next/utils/html/anchorSecurity";
 
 describe("getSafeRel", () => {
-    test("подставляет noopener noreferrer для target=_blank без явного rel", () => {
-        expect(getSafeRel("_blank", undefined)).toBe("noopener noreferrer");
+    test("подставляет noopener для target=_blank без явного rel", () => {
+        expect(getSafeRel("_blank", undefined)).toBe("noopener");
     });
 
     test("сохраняет явный rel при target=_blank", () => {

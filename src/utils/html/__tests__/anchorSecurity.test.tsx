@@ -9,8 +9,8 @@ describe("getSafeRel", () => {
         expect(getSafeRel("_blank", "nofollow")).toBe("nofollow");
     });
 
-    test("не сохраняет небезопасный дефолт, если потребитель явно передал пустой rel", () => {
-        expect(getSafeRel("_blank", "")).toBe("");
+    test("подставляет noopener для target=_blank при пустом rel", () => {
+        expect(getSafeRel("_blank", "")).toBe("noopener");
     });
 
     test("не меняет rel для прочих значений target", () => {

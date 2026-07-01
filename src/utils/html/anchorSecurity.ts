@@ -12,7 +12,9 @@ import React from "react";
  * и закрывает уязвимость, тогда как noreferrer дополнительно скрывает заголовок Referer,
  * что ломает реферальную аналитику на целевом сайте — нежелательный побочный эффект.
  *
- * Если потребитель явно задал rel, его значение сохраняется без изменений.
+ * Если потребитель явно задал непустой rel, его значение сохраняется без изменений.
+ * Пустая строка трактуется как отсутствие rel: она не является осмысленным способом
+ * отключить защиту, поэтому для target="_blank" всё равно подставляется noopener.
  *
  * @param target Значение атрибута target гиперссылки.
  * @param rel Значение атрибута rel, переданное потребителем (если есть).
@@ -21,7 +23,7 @@ export const getSafeRel = (
     target: React.AnchorHTMLAttributes<HTMLAnchorElement>["target"],
     rel: React.AnchorHTMLAttributes<HTMLAnchorElement>["rel"],
 ): React.AnchorHTMLAttributes<HTMLAnchorElement>["rel"] => {
-    if (target === "_blank" && rel === undefined) {
+    if (target === "_blank" && !rel) {
         return "noopener";
     }
 

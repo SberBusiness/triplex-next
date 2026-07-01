@@ -2,15 +2,7 @@ import { toMatchImageSnapshot } from "jest-image-snapshot";
 import type { TestRunnerConfig } from "@storybook/test-runner";
 import type { Page } from "playwright";
 import { getStoryContext } from "@storybook/test-runner";
-
-/**
- * Viewport'ы для визуальных скриншотов.
- * Каждая стори снимается на двух размерах — мобильном (XS) и десктопном (XL).
- */
-const viewports = [
-    { name: "xs", width: 575 },
-    { name: "xl", width: 1200 },
-] as const;
+import { VISUAL_TEST_VIEWPORTS } from "./visualTestViewports";
 
 /**
  * Перемонтирует стори через внутренний канал Storybook и ждёт стабилизации DOM.
@@ -90,7 +82,7 @@ const config: TestRunnerConfig = {
             return;
         }
 
-        for (const viewport of viewports) {
+        for (const viewport of VISUAL_TEST_VIEWPORTS) {
             await page.setViewportSize({ width: viewport.width, height: 768 });
             await remountAndSettle(page, context.id);
 

@@ -24,6 +24,8 @@ jobs:
         run: npx playwright install chromium --with-deps
       - name: Build Storybook
         run: npm run storybook:build
+      - name: Check for orphan screenshots
+        run: npx tsx scripts/checkOrphanScreenshots.ts
       - name: Run visual tests
         run: npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:ci
       - name: Upload diffs on failure

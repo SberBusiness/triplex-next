@@ -19,7 +19,7 @@ services:
 
   update:
     <<: *common
-    command: sh -c "npm ci && npm run storybook:build && mkdir -p __screenshots__ && find __screenshots__ -maxdepth 1 -name '*.png' -delete && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:ci:update"
+    command: sh -c "npm ci && npm run storybook:build && npx start-server-and-test 'npx http-server storybook-static -p 6006' http://localhost:6006 test-visual:ci:update"
 
 volumes:
   node_modules:

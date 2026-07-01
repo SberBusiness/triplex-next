@@ -23,22 +23,6 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент Stepper для отображения последовательности шагов с возможностью навигации.
-
-## Особенности
-
-- **Навигация**: Поддержка горизонтальной прокрутки с кнопками навигации
-- **Адаптивность**: Автоматическое выравнивание шагов на разных экранах
-- **Доступность**: Поддержка ARIA атрибутов и клавиатурной навигации
-- **Карусель**: Интегрированная карусель для удобной навигации по шагам
-
-## Использование
-
-Компонент принимает массив шагов и автоматически создает интерактивную навигацию.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -128,14 +112,14 @@ export const Playground: StoryObj<typeof Stepper> = {
         return <Stepper {...args} selectedStepId={selectedStepId} onSelectStep={handleSelectStep} />;
     },
     parameters: {
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
         controls: {
             include: ["steps", "size", "selectedStepId"],
         },
-        docs: {
-            description: {
-                story: "Интерактивная демонстрация Stepper. Позволяет настраивать список шагов, размер, а также контролировать текущий выбранный шаг.",
-            },
-        },
+        testRunner: { skip: true },
     },
 };
 

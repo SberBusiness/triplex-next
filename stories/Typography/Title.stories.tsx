@@ -9,7 +9,7 @@ import {
     ArgTypes,
     Heading,
 } from "@storybook/addon-docs/blocks";
-import { Title, ETitleSize, EFontWeightTitle, EFontType } from "../../src";
+import { Title, ETitleSize, EFontWeightTitle, EFontType } from "@sberbusiness/triplex-next";
 import "./Typography.less";
 
 export default {
@@ -113,17 +113,13 @@ export const Playground: StoryObj<typeof Title> = {
     },
     parameters: {
         docs: {
-            description: {
-                story: "Интерактивная демонстрация компонента Title с возможностью изменения всех пропсов через controls панель.",
-            },
-            canvas: {
-                sourceState: "none",
-            },
+            canvas: { sourceState: "none" },
             codePanel: false,
         },
         controls: {
             include: ["size", "weight", "type", "tag", "underline", "strikethrough"],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -136,11 +132,6 @@ export const Sizes: StoryObj<typeof Title> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Основные размеры заголовков: H1 (28px), H2 (24px), H3 (20px)",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -163,11 +154,6 @@ export const Weights: StoryObj<typeof Title> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные веса шрифта для заголовков: Regular, Medium, Semibold, Bold",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -248,11 +234,26 @@ export const Types: StoryObj<typeof Title> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные типы цветов для заголовков: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled и их инвертированные варианты.",
-            },
-        },
+        controls: { disable: true },
+    },
+};
+
+export const Decorations: StoryObj<typeof Title> = {
+    render: () => (
+        <div className="typography-example">
+            <Title size={ETitleSize.H2}>Заголовок без декораций</Title>
+            <Title size={ETitleSize.H2} underline>
+                Заголовок с подчеркиванием
+            </Title>
+            <Title size={ETitleSize.H2} strikethrough>
+                Заголовок с зачеркиванием
+            </Title>
+            <Title size={ETitleSize.H2} underline strikethrough>
+                Заголовок с подчеркиванием и зачеркиванием
+            </Title>
+        </div>
+    ),
+    parameters: {
         controls: { disable: true },
     },
 };

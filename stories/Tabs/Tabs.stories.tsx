@@ -24,18 +24,6 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент навигации первого уровня, используемый для организации и переключения между основными разделами приложения.
-Визуально и структурно доминирует над другими элементами интерфейса, располагаясь непосредственно под шапкой.
-
-## Особенности
-
-- **Типы**: type1, type2
-- **Размеры**: SM, MD, LG
-
-                `,
-            },
             page: () => (
                 <>
                     <DocsTitle />
@@ -81,11 +69,10 @@ export const Playground: StoryObj<typeof Tabs> = {
             include: ["size", "type"],
         },
         docs: {
-            canvas: {
-                sourceState: "none",
-            },
+            canvas: { sourceState: "none" },
             codePanel: false,
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-tab-0");

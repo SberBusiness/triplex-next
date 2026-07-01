@@ -82,39 +82,17 @@ export const Default: Story = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
-export const Basic: Story = {
-    args: {
-        children: "Selected value",
-        id: "basic-tag",
-        size: EComponentSize.LG,
-        disabled: false,
-        onEdit: undefined,
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Базовый тег с функцией удаления.",
-            },
-        },
-        controls: { disable: true },
-    },
-};
-
-export const Edit: Story = {
+export const Editable: Story = {
     args: {
         children: "Selected value",
         id: "editable-tag",
         size: EComponentSize.LG,
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Тег с возможностью редактирования и удаления.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -134,11 +112,6 @@ export const Sizes: Story = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Теги разных размеров: SM, MD, LG.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -151,11 +124,6 @@ export const Disabled: Story = {
         disabled: true,
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Отключенный тег.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -176,11 +144,6 @@ export const WithCustomButtonProps: Story = {
         },
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Тег с кастомными свойствами для кнопок редактирования и удаления.",
-            },
-        },
         controls: { disable: true },
         testRunner: { skip: true },
     },
@@ -196,11 +159,6 @@ export const WithOverflow: Story = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Тег с длинным текстом, который обрезается многоточием.",
-            },
-        },
         controls: { disable: true },
     },
 };

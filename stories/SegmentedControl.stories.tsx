@@ -23,7 +23,7 @@ const meta = {
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
-                    <ArgTypes of={Basic} />
+                    <ArgTypes of={Default} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -43,8 +43,8 @@ export const Playground: Story = {
             include: ["type", "theme", "size", "disabled"],
         },
         docs: {
-            description: { story: "Интерактивный пример." },
             canvas: { sourceState: "none" },
+            codePanel: false,
         },
         testRunner: { skip: true },
     },
@@ -91,10 +91,10 @@ export const Playground: Story = {
     },
 };
 
-export const Basic: Story = {
+export const Default: Story = {
     parameters: {
-        docs: { description: { story: "Базовый пример." } },
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const [value, setValue] = useState("segment_3");
@@ -119,12 +119,11 @@ export const Basic: Story = {
 
 export const Types: Story = {
     parameters: {
-        docs: { description: { story: "Демонстрация всех типов компонента." } },
         controls: { disable: true },
     },
     render: () => {
         const [singleValue, setSingleValue] = useState("segment_3");
-        const [multipleValue, setMultipleValue] = useState(["segment_3"]);
+        const [multipleValue, setMultipleValue] = useState(["segment_2", "segment_4"]);
 
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
@@ -168,7 +167,6 @@ export const Types: Story = {
 
 export const Themes: Story = {
     parameters: {
-        docs: { description: { story: "Демонстрация всех доступных тем компонента." } },
         controls: { disable: true },
     },
     render: () => {
@@ -210,7 +208,6 @@ export const Themes: Story = {
 
 export const Sizes: Story = {
     parameters: {
-        docs: { description: { story: "Демонстрация всех доступных размеров компонента." } },
         controls: { disable: true },
     },
     render: () => {
@@ -252,7 +249,6 @@ export const Sizes: Story = {
 
 export const Disabled: Story = {
     parameters: {
-        docs: { description: { story: "Демонстрация заблокированного состояния компонента." } },
         controls: { disable: true },
     },
     render: () => {
@@ -281,7 +277,6 @@ export const Disabled: Story = {
 
 export const Example: Story = {
     parameters: {
-        docs: { description: { story: "В сочетании с иконками." } },
         controls: { disable: true },
         testRunner: { skip: true },
     },

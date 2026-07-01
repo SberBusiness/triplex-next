@@ -8,8 +8,8 @@ import {
     SizesExample,
     SizesExampleSource,
     PlaygroundExample,
-    VisualTestsSelectedExample,
-    VisualTestsSelectedExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples";
 
 const meta = {
@@ -96,32 +96,15 @@ export const Sizes: Story = {
     parameters: { controls: { disable: true }, docs: { source: { code: SizesExampleSource, language: "tsx" } } },
 };
 
-export const VisualTestsSelected: Story = {
-    tags: ["!autodocs", "!dev"],
-    render: VisualTestsSelectedExample,
+export const VisualTests: Story = {
+    render: VisualTestsExample,
     parameters: {
         controls: { disable: true },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
             source: {
-                code: VisualTestsSelectedExampleSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const VisualTestsFocused: Story = {
-    tags: ["!autodocs", "!dev"],
-    render: DefaultExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-            source: {
-                code: DefaultExampleSource,
+                code: VisualTestsExampleSource,
                 language: "tsx",
             },
         },

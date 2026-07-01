@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import { LoaderScreen } from "../../LoaderScreen/LoaderScreen";
+import { LoaderScreen, ILoaderScreenMiddleProps } from "../../LoaderScreen/LoaderScreen";
 import styles from "../styles/ModalWindow.module.less";
 import { Page } from "../../Page/Page";
 
@@ -10,8 +10,8 @@ export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivEl
     children?: React.ReactNode;
     /** Если `true`, поверх контента показывается `LoaderScreen`. */
     isLoading?: boolean;
-    /** Текст под спиннером в режиме загрузки. */
-    loadingTitle?: React.ReactNode;
+    /** Свойства компонента LoaderScreen. */
+    loaderScreenProps?: ILoaderScreenMiddleProps;
 }
 
 /**
@@ -19,7 +19,7 @@ export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivEl
  * `isLoading` показывает `LoaderScreen` поверх контента.
  */
 export const ModalWindowContent = React.forwardRef<HTMLDivElement, IModalWindowContentProps>(
-    ({ isLoading, className, loadingTitle, children, ...rest }, ref) => (
+    ({ isLoading, className, loaderScreenProps, children, ...rest }, ref) => (
         <div
             ref={ref}
             className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: isLoading })}
@@ -28,7 +28,11 @@ export const ModalWindowContent = React.forwardRef<HTMLDivElement, IModalWindowC
             <Page className={styles.modalWindowContentPage}>{children}</Page>
 
             {isLoading && (
-                <LoaderScreen className={styles.modalWindowLoaderScreen} type="middle" description={loadingTitle} />
+                <LoaderScreen
+                    {...loaderScreenProps}
+                    className={clsx(styles.modalWindowLoaderScreen, loaderScreenProps?.className)}
+                    type="middle"
+                />
             )}
         </div>
     ),

@@ -171,6 +171,21 @@ export const VisualTests: StoryObj<typeof LoaderScreen> = {
                     }
                 />
             </div>
+            <div style={{ position: "relative", height: "300px", width: "400px" }}>
+                <LoaderScreen
+                    type="middle"
+                    controls={
+                        <>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                        </>
+                    }
+                />
+            </div>
         </div>
     ),
     parameters: {

@@ -8,6 +8,7 @@ import {
     IOverlayChildrenProvideProps,
 } from "../../Overlay/OverlayBase";
 import { OverlayMask } from "../../Overlay/OverlayMask";
+import { ILoaderScreenMiddleProps } from "../../LoaderScreen/LoaderScreen";
 import { LightBoxSideOverlayLoader } from "./LightBoxSideOverlayLoader";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
@@ -23,8 +24,8 @@ export interface ILightBoxSideOverlayProps
     focusTrapProps?: IFocusTrapExtendedProps;
     /** Состояние загрузки. */
     isLoading?: boolean;
-    /** Текст под спиннером. */
-    loadingTitle?: React.ReactNode;
+    /** Свойства компонента LoaderScreen. */
+    loaderScreenProps?: ILoaderScreenMiddleProps;
     /** Открыт другой SideOverlay поверх текущего. */
     isTopLevelSideOverlayOpened?: boolean;
     /** Открыт TopOverlay в текущем SideOverlay. */
@@ -42,7 +43,7 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
             className,
             focusTrapProps,
             isLoading,
-            loadingTitle,
+            loaderScreenProps,
             isTopLevelSideOverlayOpened,
             isTopOverlayOpened,
             onClose,
@@ -103,7 +104,7 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
             >
                 {children}
 
-                {isLoading && <LightBoxSideOverlayLoader loadingTitle={loadingTitle} />}
+                {isLoading && <LightBoxSideOverlayLoader loaderScreenProps={loaderScreenProps} />}
             </div>
         );
 

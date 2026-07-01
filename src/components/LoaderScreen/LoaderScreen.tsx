@@ -18,42 +18,39 @@ export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement>
     controls?: React.ReactNode;
 }
 
-export const LoaderScreen: React.FC<ILoaderScreenProps> = ({
-    className,
-    size = EComponentSize.MD,
-    type,
-    description,
-    controls,
-    ...htmlDivAttributes
-}) => {
-    const classNames = clsx(className, styles.loaderScreen, {
-        [styles.loaderSmallBackdrop]: type === "small",
-        [styles.loaderMiddleBackdrop]: type === "middle",
-    });
+export interface ILoaderScreenMiddleProps extends Omit<ILoaderScreenProps, "type" | "size"> {}
 
-    return (
-        <div className={classNames} {...htmlDivAttributes}>
-            <div className={styles.loaderContent}>
-                {type === "small" ? <LoaderSmall size={size} theme={ELoaderSmallTheme.BRAND} /> : <LoaderMiddle />}
+export const LoaderScreen = React.forwardRef<HTMLDivElement, ILoaderScreenProps>(
+    ({ className, size = EComponentSize.MD, type, description, controls, ...htmlDivAttributes }, ref) => {
+        const classNames = clsx(className, styles.loaderScreen, {
+            [styles.loaderSmallBackdrop]: type === "small",
+            [styles.loaderMiddleBackdrop]: type === "middle",
+        });
 
-                {description && (
-                    <>
-                        <Gap size={24} />
-                        <Text className={styles.description} tag="div" size={ETextSize.B2}>
-                            {description}
-                        </Text>
-                    </>
-                )}
+        return (
+            <div ref={ref} className={classNames} {...htmlDivAttributes}>
+                <div className={styles.loaderContent}>
+                    {type === "small" ? <LoaderSmall size={size} theme={ELoaderSmallTheme.BRAND} /> : <LoaderMiddle />}
 
-                {controls && (
-                    <>
-                        {description && <Gap size={24} />}
-                        <div>{controls}</div>
-                    </>
-                )}
+                    {description && (
+                        <>
+                            <Gap size={24} />
+                            <Text className={styles.description} tag="div" size={ETextSize.B2}>
+                                {description}
+                            </Text>
+                        </>
+                    )}
+
+                    {controls && (
+                        <>
+                            <Gap size={24} />
+                            <div>{controls}</div>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+    },
+);
 
 LoaderScreen.displayName = "LoaderScreen";

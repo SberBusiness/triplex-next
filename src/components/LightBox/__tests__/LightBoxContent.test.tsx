@@ -39,7 +39,7 @@ describe("LightBoxContent", () => {
 
     it("renders loader overlay with provided title", () => {
         render(
-            <LightBoxContent isLoading loadingTitle="Loading message">
+            <LightBoxContent isLoading loaderScreenProps={{ description: "Loading message" }}>
                 <span>Body content</span>
             </LightBoxContent>,
         );

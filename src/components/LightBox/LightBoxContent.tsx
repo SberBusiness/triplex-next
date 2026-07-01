@@ -2,20 +2,21 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { useResizeDetector } from "react-resize-detector";
 import { WindowResizeListener } from "../WindowResizeListener/WindowResizeListener";
 import clsx from "clsx";
-import { LoaderScreen } from "../LoaderScreen/LoaderScreen";
+import { LoaderScreen, ILoaderScreenMiddleProps } from "../LoaderScreen/LoaderScreen";
 import styles from "./styles/LightBox.module.less";
 
 export interface ILightBoxContentProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     isLoading?: boolean;
-    loadingTitle?: React.ReactNode;
+    /** Свойства компонента LoaderScreen. */
+    loaderScreenProps?: ILoaderScreenMiddleProps;
 }
 
 /**
  * Компонента контента лайтбокса.
  */
 export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
-    const { children, className, isLoading, loadingTitle, ...htmlDivAttributes } = props;
+    const { children, className, isLoading, loaderScreenProps, ...htmlDivAttributes } = props;
 
     const [paddingTop, setPaddingTop] = useState<number>(0);
     const updateStyleTimeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,7 +58,7 @@ export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
 
     useEffect(() => {
         updateStyleWithTimeout();
-    }, [children, className, isLoading, loadingTitle, updateStyleWithTimeout]);
+    }, [children, className, isLoading, loaderScreenProps, updateStyleWithTimeout]);
 
     const { ref: resizeRef } = useResizeDetector({
         handleWidth: true,
@@ -80,7 +81,11 @@ export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
                 {children}
 
                 {isLoading && (
-                    <LoaderScreen className={styles.loadingContentOverlay} type="middle" description={loadingTitle} />
+                    <LoaderScreen
+                        {...loaderScreenProps}
+                        className={clsx(styles.loadingContentOverlay, loaderScreenProps?.className)}
+                        type="middle"
+                    />
                 )}
 
                 <div className={styles.lightBoxContentResizeWrapper} ref={resizeRef} />

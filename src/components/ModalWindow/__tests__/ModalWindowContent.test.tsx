@@ -31,7 +31,7 @@ describe("ModalWindowContent", () => {
 
     it("renders LoaderScreen and applies isLoading class when isLoading is true", () => {
         const { container } = render(
-            <ModalWindowContent isLoading loadingTitle="Загрузка...">
+            <ModalWindowContent isLoading loaderScreenProps={{ description: "Загрузка..." }}>
                 <div>Hello</div>
             </ModalWindowContent>,
         );

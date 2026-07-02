@@ -8,5 +8,7 @@ export * from "./DisabledDaysExample";
 export { default as DisabledDaysExampleSource } from "./DisabledDaysExample?raw";
 export * from "./ButtonsExample";
 export { default as ButtonsExampleSource } from "./ButtonsExample?raw";
+export * from "./ReversedPickExample";
+export { default as ReversedPickExampleSource } from "./ReversedPickExample?raw";
 export * from "./VisualTestsExample";
 export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";

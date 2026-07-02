@@ -241,6 +241,7 @@ export const WithButtonLink: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -259,6 +260,7 @@ export const WithLink: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };
 

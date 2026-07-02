@@ -1,23 +1,19 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Stories, ArgTypes, Controls, Heading } from "@storybook/addon-docs/blocks";
-import { Checkbox, CheckboxXGroup, CheckboxYGroup, EComponentSize } from "@sberbusiness/triplex-next";
+import { Checkbox, EComponentSize } from "@sberbusiness/triplex-next";
 import {
     DefaultExample,
     DefaultExampleSource,
     SizesExample,
     SizesExampleSource,
-    XGroupExample,
-    XGroupExampleSource,
-    YGroupExample,
-    YGroupExampleSource,
     PlaygroundExample,
     VisualTestsExample,
     VisualTestsExampleSource,
 } from "./examples";
 
 const meta = {
-    title: "Components/Checkbox",
+    title: "Components/Checkboxes/Checkbox",
     component: Checkbox,
     tags: ["autodocs"],
     parameters: {
@@ -25,10 +21,6 @@ const meta = {
             description: {
                 component: `
 Компонент чекбокса с поддержкой различных состояний и режимов.
-
-## Особенности
-
-- Возможна группировка по осям X (компонент **CheckboxXGroup**) и Y (компонент **CheckboxYGroup**)
                 `,
             },
             page: () => (
@@ -104,30 +96,7 @@ export const Sizes: Story = {
     parameters: { controls: { disable: true }, docs: { source: { code: SizesExampleSource, language: "tsx" } } },
 };
 
-export const XGroup: StoryObj<typeof CheckboxXGroup> = {
-    render: XGroupExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: { story: "Группа чекбоксов с направлением по оси X" },
-            source: { code: XGroupExampleSource, language: "tsx" },
-        },
-    },
-};
-
-export const YGroup: StoryObj<typeof CheckboxYGroup> = {
-    render: YGroupExample,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: { story: "Группа чекбоксов с направлением по оси Y" },
-            source: { code: YGroupExampleSource, language: "tsx" },
-        },
-    },
-};
-
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },
@@ -139,5 +108,8 @@ export const VisualTests: Story = {
                 language: "tsx",
             },
         },
+    },
+    play: async ({ userEvent }) => {
+        await userEvent.tab();
     },
 };

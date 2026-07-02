@@ -11,6 +11,8 @@ import {
     StatesExampleSource,
     SizesExample,
     SizesExampleSource,
+    VisualTestsExample,
+    VisualTestsExampleSource,
 } from "./examples/ButtonIcon/index";
 
 const meta = {
@@ -145,5 +147,46 @@ export const States: Story = {
                 language: "tsx",
             },
         },
+    },
+};
+
+export const VisualTestsSquircle: Story = {
+    tags: ["!autodocs", "!dev"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: VisualTestsExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    play: async ({ canvasElement, userEvent }) => {
+        await userEvent.click(canvasElement);
+        await userEvent.tab();
+    },
+};
+
+export const VisualTestsCircle: Story = {
+    tags: ["!autodocs", "!dev"],
+    render: VisualTestsExample,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: VisualTestsExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+    play: async ({ canvasElement, userEvent }) => {
+        await userEvent.click(canvasElement);
+        await userEvent.tab();
+        await userEvent.tab();
     },
 };

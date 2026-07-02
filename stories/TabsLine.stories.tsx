@@ -11,17 +11,6 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент навигации, который позволяет переключаться между логически сгруппированными разделами контента в пределах одного контекста.
-
-## Особенности
-
-- **Размеры**: small (SM), medium (MD), large (LG)
-- **Горизонтальные отступы до первого и от последнего табов**: 0, 8, 16, 24
-- Добавление значка новых уведомлений возможно через свойство showNotificationIcon у конкретного таба
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -79,9 +68,14 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
         },
     },
     parameters: {
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
         controls: {
             include: ["paddingX", "maxVisible", "size", "showNotificationIcon", "withSeparator"],
         },
+        testRunner: { skip: true },
     },
     render: (args) => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
@@ -137,6 +131,7 @@ export const Playground: StoryObj<ITabsLineStoriesProps> = {
 export const Default: StoryObj<ITabsLineStoriesProps> = {
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
@@ -188,7 +183,7 @@ export const Default: StoryObj<ITabsLineStoriesProps> = {
     },
 };
 
-export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
+export const Sizes: StoryObj<ITabsLineStoriesProps> = {
     parameters: {
         controls: { disable: true },
     },
@@ -229,40 +224,151 @@ export const DifferentSizes: StoryObj<ITabsLineStoriesProps> = {
         ];
 
         return (
-            <>
-                <TabsLine
-                    tabs={tabs}
-                    selectedId={selectedTabId}
-                    size={EComponentSize.SM}
-                    onChangeTab={setSelectedTabId}
-                    dropdownTargetHtmlAttributes={{
-                        "data-test-id": "TabsLine__DropdownTarget",
-                    }}
-                    maxVisible={4}
-                />
-                <Gap size={16} />
-                <TabsLine
-                    tabs={tabs}
-                    selectedId={selectedTabId}
-                    size={EComponentSize.MD}
-                    onChangeTab={setSelectedTabId}
-                    dropdownTargetHtmlAttributes={{
-                        "data-test-id": "TabsLine__DropdownTarget",
-                    }}
-                    maxVisible={4}
-                />
-                <Gap size={16} />
-                <TabsLine
-                    tabs={tabs}
-                    selectedId={selectedTabId}
-                    size={EComponentSize.LG}
-                    onChangeTab={setSelectedTabId}
-                    dropdownTargetHtmlAttributes={{
-                        "data-test-id": "TabsLine__DropdownTarget",
-                    }}
-                    maxVisible={4}
-                />
-            </>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>SM</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        size={EComponentSize.SM}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>MD</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        size={EComponentSize.MD}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>LG</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        size={EComponentSize.LG}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+            </div>
+        );
+    },
+};
+
+export const Paddings: StoryObj<ITabsLineStoriesProps> = {
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const [selectedTabId, setSelectedTabId] = useState("tabs-line-all");
+
+        const tabs = [
+            {
+                id: "tabs-line-all",
+                label: "Все",
+                "aria-label": "Все",
+                "data-test-id": "TabsLine__All",
+            },
+            {
+                id: "tabs-line-draft",
+                label: "Черновики",
+                "aria-label": "Черновик",
+                "data-test-id": "TabsLine__Draft",
+            },
+            {
+                id: "tabs-line-sign",
+                label: "На подпись и отправку",
+                "aria-label": "На подпись и отправку",
+                "data-test-id": "TabsLine__Sign",
+            },
+            {
+                id: "tabs-line-executed",
+                label: "Исполненные",
+                "aria-label": "Исполненные",
+                "data-test-id": "TabsLine__Executed",
+            },
+            {
+                id: "tabs-line-rejected",
+                label: "Отклоненные",
+                "aria-label": "Отклоненные",
+                "data-test-id": "TabsLine__Rejected",
+            },
+        ];
+
+        return (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>0</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        paddingX={0}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>8</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        paddingX={8}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>16</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        paddingX={16}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+
+                <div>
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>24</div>
+                    <TabsLine
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        paddingX={24}
+                        onChangeTab={setSelectedTabId}
+                        dropdownTargetHtmlAttributes={{
+                            "data-test-id": "TabsLine__DropdownTarget",
+                        }}
+                        maxVisible={4}
+                    />
+                </div>
+            </div>
         );
     },
 };

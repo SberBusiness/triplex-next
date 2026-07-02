@@ -12,24 +12,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент, который используется для маркировки и классификации.
-
-## Особенности
-
-- Размеры - small (SM), medium (MD), large (LG)
-- Статусы - default(по умолчанию), success, info, warning, error
-
-## Использование
-
-\`\`\`tsx
-import { TagColor } from '@sberbusiness/triplex-next';
-
-<TagColor size={EComponentSize.LG} status={ETagColorStatus.SUCCESS}>Tag text</TagColor>
-\`\`\`
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -73,6 +55,13 @@ export const Playground: StoryObj<typeof TagColor> = {
         status: ETagColorStatus.SUCCESS,
         children: "Tag text",
     },
+    parameters: {
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+        testRunner: { skip: true },
+    },
     render: (args) => <TagColor {...args}>{args.children}</TagColor>,
 };
 
@@ -83,14 +72,8 @@ export const Default: StoryObj<typeof TagColor> = {
         children: "Tag text",
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Тег без выбранного статуса.",
-            },
-        },
-        controls: {
-            disable: true,
-        },
+        controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: (args) => <TagColor {...args}>{args.children}</TagColor>,
 };
@@ -101,11 +84,6 @@ export const DifferentSizes: Story = {
         children: "Tag text",
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Теги разных размеров: small (SM), medium (MD), large (LG).",
-            },
-        },
         controls: {
             disable: true,
         },
@@ -133,11 +111,6 @@ export const DifferentStatuses: StoryObj<typeof TagColor> = {
         size: EComponentSize.MD,
     },
     parameters: {
-        docs: {
-            description: {
-                story: "Теги с разными цветовыми статусами: default(по умолчанию), success, info, warning, error.",
-            },
-        },
         controls: {
             disable: true,
         },

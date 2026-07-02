@@ -1,7 +1,7 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { CodeText, EFontType } from "../../src";
+import { CodeText, EFontType } from "@sberbusiness/triplex-next";
 import "./Typography.less";
 
 export default {
@@ -84,12 +84,7 @@ export const Playground: StoryObj<typeof CodeText> = {
     },
     parameters: {
         docs: {
-            description: {
-                story: "Интерактивная демонстрация компонента CodeText с возможностью изменения всех пропсов через controls панель.",
-            },
-            canvas: {
-                sourceState: "none",
-            },
+            canvas: { sourceState: "none" },
             codePanel: false,
         },
         controls: {
@@ -131,11 +126,6 @@ export const Types: StoryObj<typeof CodeText> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные типы цветов: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled и их инвертированные варианты.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -152,11 +142,6 @@ export const Decorations: StoryObj<typeof CodeText> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Варианты декорации текста: без декораций, подчеркивание, зачеркивание, комбинация.",
-            },
-        },
         controls: { disable: true },
     },
 };

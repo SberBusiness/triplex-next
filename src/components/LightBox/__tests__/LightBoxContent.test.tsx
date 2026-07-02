@@ -16,11 +16,10 @@ describe("LightBoxContent", () => {
         vi.restoreAllMocks();
     });
 
-    it("applies padding equal to controls height", () => {
+    it("applies padding after requestAnimationFrame", async () => {
         const controlsNode = document.createElement("div");
         Object.defineProperty(controlsNode, "offsetHeight", { value: 48, configurable: true });
-
-        const querySpy = vi.spyOn(document, "querySelector").mockReturnValue(controlsNode);
+        vi.spyOn(document, "querySelector").mockReturnValue(controlsNode);
 
         render(
             <LightBoxContent>
@@ -29,13 +28,18 @@ describe("LightBoxContent", () => {
         );
 
         const container = screen.getByText("Body content").parentElement as HTMLDivElement;
+        expect(container.style.paddingTop).toBe("");
+
+        await act(async () => {
+            await new Promise(requestAnimationFrame);
+        });
+
         expect(container.style.paddingTop).toBe("48px");
-        expect(querySpy).toHaveBeenCalled();
     });
 
     it("renders loader overlay with provided title", () => {
         render(
-            <LightBoxContent isLoading loadingTitle="Loading message">
+            <LightBoxContent isLoading loaderScreenProps={{ description: "Loading message" }}>
                 <span>Body content</span>
             </LightBoxContent>,
         );

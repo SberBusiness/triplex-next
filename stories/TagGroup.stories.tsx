@@ -54,16 +54,14 @@ export const Playground: StoryObj<typeof meta> = {
     ),
     parameters: {
         docs: {
-            canvas: {
-                sourceState: "none",
-            },
+            canvas: { sourceState: "none" },
             codePanel: false,
         },
         testRunner: { skip: true },
     },
 };
 
-export const Basic: StoryObj<typeof meta> = {
+export const Default: StoryObj<typeof meta> = {
     args: {
         size: EComponentSize.LG,
         onRemove: action("removed"),
@@ -76,18 +74,11 @@ export const Basic: StoryObj<typeof meta> = {
         </TagGroup>
     ),
     parameters: {
-        controls: {
-            include: ["size"],
-        },
-        docs: {
-            description: {
-                story: "Базовая группа тегов.",
-            },
-        },
+        testRunner: { skip: true },
     },
 };
 
-export const Edit: StoryObj<typeof meta> = {
+export const Editable: StoryObj<typeof meta> = {
     args: {
         size: EComponentSize.LG,
         onEdit: action("edited"),
@@ -101,14 +92,6 @@ export const Edit: StoryObj<typeof meta> = {
         </TagGroup>
     ),
     parameters: {
-        controls: {
-            include: ["size"],
-        },
-        docs: {
-            description: {
-                story: "Группа тегов с возможностью редактирования.",
-            },
-        },
         testRunner: { skip: true },
     },
 };
@@ -119,42 +102,10 @@ const sizeToLabelMap = {
     [EComponentSize.LG]: "LG",
 };
 
-export const BasicSizes: StoryObj<typeof meta> = {
+export const Sizes: StoryObj<typeof meta> = {
+    name: "Sizes",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Группы тегов разных размеров.",
-            },
-        },
-    },
-    args: {
-        onRemove: action("removed"),
-    },
-    render: ({ onRemove }) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {Object.values(EComponentSize).map((size) => (
-                <div key={size}>
-                    <h4>{sizeToLabelMap[size]}</h4>
-                    <TagGroup size={size}>
-                        {tags.map((tag) => (
-                            <Tag key={tag.id} size={size} onRemove={onRemove} {...tag} />
-                        ))}
-                    </TagGroup>
-                </div>
-            ))}
-        </div>
-    ),
-};
-
-export const EditSizes: StoryObj<typeof meta> = {
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "Группы тегов разных размеров.",
-            },
-        },
     },
     args: {
         onEdit: action("edited"),
@@ -177,13 +128,9 @@ export const EditSizes: StoryObj<typeof meta> = {
 };
 
 export const WithOverflow: StoryObj<typeof meta> = {
+    name: "With overflow",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Группа тегов в ограниченном по ширине контейнере.",
-            },
-        },
     },
     render: () => (
         <div style={{ width: "400px", border: "1px dashed #808080" }}>

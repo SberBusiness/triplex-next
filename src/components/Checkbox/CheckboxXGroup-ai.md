@@ -3,7 +3,7 @@ component: CheckboxXGroup
 category: Inputs
 related: [Checkbox]
 tokens: []
-stories: stories/Checkbox/Checkbox.stories.tsx
+stories: stories/CheckboxXGroup/CheckboxXGroup.stories.tsx
 version: "1.0"
 ---
 
@@ -68,12 +68,15 @@ version: "1.0"
 
 ## Stories
 
-Основные истории: `stories/Checkbox/Checkbox.stories.tsx`
-Файлы примеров: `stories/Checkbox/examples/`
+Основные истории: `stories/CheckboxXGroup/CheckboxXGroup.stories.tsx`
+Файлы примеров: `stories/CheckboxXGroup/examples/`
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `XGroup` | `XGroupExample.tsx` | Группа по оси X |
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `indent` |
+| `Default` | `DefaultExample.tsx` | Группа по оси X |
+| `CheckboxSizes` | `SizesExample.tsx` | Группа чекбоксов разных размеров |
+| `Indents` | `IndentsExample.tsx` | Различные значения отступа |
 
 ---
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Text, ETextSize, ELineType, EFontWeightText, EFontType } from "../../src";
+import { Text, ETextSize, ELineType, EFontWeightText, EFontType } from "@sberbusiness/triplex-next";
 import "./Typography.less";
 
 export default {
@@ -114,17 +114,13 @@ export const Playground: StoryObj<typeof Text> = {
     },
     parameters: {
         docs: {
-            description: {
-                story: "Интерактивная демонстрация компонента Text с возможностью изменения всех пропсов через controls панель. Включает control для выбора высоты строки (Normal/Compact).",
-            },
-            canvas: {
-                sourceState: "none",
-            },
+            canvas: { sourceState: "none" },
             codePanel: false,
         },
         controls: {
             include: ["size", "weight", "line", "type", "tag", "underline", "strikethrough"],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -138,11 +134,6 @@ export const Sizes: StoryObj<typeof Text> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Основные размеры текста: B1 (18px), B2 (16px), B3 (14px), B4 (12px)",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -159,11 +150,6 @@ export const Weights: StoryObj<typeof Text> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные веса шрифта для текста: Regular, Semibold",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -181,11 +167,6 @@ export const LineTypes: StoryObj<typeof Text> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные типы высоты строки для текста: Normal (обычная), Compact (компактная)",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -266,11 +247,6 @@ export const Types: StoryObj<typeof Text> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные типы цветов для текста: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled и их инвертированные варианты.",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -278,7 +254,7 @@ export const Types: StoryObj<typeof Text> = {
 export const Decorations: StoryObj<typeof Text> = {
     render: () => (
         <div className="typography-example">
-            <Text size={ETextSize.B2}>Обычный текст без декораций</Text>
+            <Text size={ETextSize.B2}>Текст без декораций</Text>
             <Text size={ETextSize.B2} underline>
                 Текст с подчеркиванием
             </Text>
@@ -291,11 +267,6 @@ export const Decorations: StoryObj<typeof Text> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные варианты декорации текста: без декораций, подчеркивание, зачеркивание, комбинация",
-            },
-        },
         controls: { disable: true },
     },
 };

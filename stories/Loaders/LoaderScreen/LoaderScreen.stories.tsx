@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { LoaderScreen, ELoaderSmallTheme, EComponentSize } from "@sberbusiness/triplex-next";
+import { LoaderScreen, EComponentSize, EButtonTheme, Button } from "@sberbusiness/triplex-next";
 import { DefaultExample, DefaultExampleSource, TypesExample, TypesExampleSource } from "./examples";
 
 const meta = {
@@ -31,14 +31,18 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+export type PlaygroundArgs = React.ComponentProps<typeof LoaderScreen> & {
+    /** С кнопками. */
+    withButtons: boolean;
+};
 
-export const Playground: Story = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
     args: {
         type: "small",
-        theme: ELoaderSmallTheme.BRAND,
         size: EComponentSize.MD,
+        description: "This message provides additional context or highlights important information to note.",
+        withButtons: true,
     },
     argTypes: {
         type: {
@@ -47,16 +51,6 @@ export const Playground: Story = {
             description: "Тип лоадера",
             table: {
                 type: { summary: '"small" | "middle"' },
-            },
-        },
-        theme: {
-            control: { type: "select" },
-            options: Object.values(ELoaderSmallTheme),
-            description: "Тема (только для типа small)",
-            if: { arg: "type", eq: "small" },
-            table: {
-                type: { summary: "ELoaderSmallTheme" },
-                defaultValue: { summary: "ELoaderSmallTheme.BRAND" },
             },
         },
         size: {
@@ -69,6 +63,18 @@ export const Playground: Story = {
                 defaultValue: { summary: "EComponentSize.MD" },
             },
         },
+        description: {
+            control: { type: "text" },
+            description: "Текст, который будет отображаться под спиннером.",
+        },
+        withButtons: {
+            control: { type: "boolean" },
+            table: { category: "Settings" },
+        },
+        controls: {
+            control: false,
+            table: { disable: true },
+        },
     },
     decorators: [
         (Story) => (
@@ -77,11 +83,28 @@ export const Playground: Story = {
             </div>
         ),
     ],
-    render: (args) => <LoaderScreen {...args} />,
+    render: ({ withButtons, ...args }) => (
+        <LoaderScreen
+            {...args}
+            controls={
+                withButtons ? (
+                    <>
+                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                            Button text
+                        </Button>
+                    </>
+                ) : null
+            }
+        />
+    ),
     parameters: {
         testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
+            codePanel: false,
         },
     },
 };
@@ -90,9 +113,9 @@ export const Default: StoryObj<typeof LoaderScreen> = {
     name: "Default",
     render: DefaultExample,
     parameters: {
+        controls: { disable: true },
         testRunner: { skip: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
@@ -106,8 +129,8 @@ export const Types: StoryObj<typeof LoaderScreen> = {
     render: TypesExample,
     parameters: {
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: TypesExampleSource,
                 language: "tsx",
@@ -118,7 +141,7 @@ export const Types: StoryObj<typeof LoaderScreen> = {
 
 export const VisualTests: StoryObj<typeof LoaderScreen> = {
     name: "Visual tests",
-    tags: ["!autodocs", "!dev"],
+    // tags: ["!autodocs", "!dev"],
     decorators: [
         (Story) => (
             <>
@@ -128,15 +151,40 @@ export const VisualTests: StoryObj<typeof LoaderScreen> = {
         ),
     ],
     render: () => (
-        <div style={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
             <div style={{ position: "relative", height: "200px", width: "300px" }}>
-                <LoaderScreen type="small" theme={ELoaderSmallTheme.BRAND} size={EComponentSize.MD} />
+                <LoaderScreen type="small" size={EComponentSize.MD} />
             </div>
-            <div style={{ position: "relative", height: "200px", width: "300px" }}>
-                <LoaderScreen type="small" theme={ELoaderSmallTheme.NEUTRAL} size={EComponentSize.MD} />
+            <div style={{ position: "relative", height: "300px", width: "400px" }}>
+                <LoaderScreen
+                    type="middle"
+                    description="This message provides additional context or highlights important information to note."
+                    controls={
+                        <>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                        </>
+                    }
+                />
             </div>
-            <div style={{ position: "relative", height: "200px", width: "300px" }}>
-                <LoaderScreen type="middle" />
+            <div style={{ position: "relative", height: "300px", width: "400px" }}>
+                <LoaderScreen
+                    type="middle"
+                    controls={
+                        <>
+                            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                                Button text
+                            </Button>
+                        </>
+                    }
+                />
             </div>
         </div>
     ),

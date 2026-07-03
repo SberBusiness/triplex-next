@@ -5,19 +5,22 @@ import {
 } from "@sberbusiness/triplex-next/components/FormField/components/FormFieldInput";
 import { ITextFieldBaseProps, TextFieldBase } from "./TextFieldBase";
 
-/** Свойства TextField. */
+/** Свойства компонента TextField. */
 export interface ITextFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
     inputProps: IFormFieldInputProps & { ref?: React.RefObject<HTMLInputElement> };
 }
 
-/** Компонент текстового ввода.
- *  Является более компактным вариантом отображения инпутов, чем FormGroup.
- * */
-export const TextField: React.FC<ITextFieldProps> = ({ inputProps, ...textFieldBaseProps }) => (
-    <TextFieldBase {...textFieldBaseProps}>
-        <FormFieldInput {...inputProps} />
-    </TextFieldBase>
+/**
+ * Компонент текстового ввода.
+ * Является более компактным вариантом отображения инпутов, чем FormGroup.
+ */
+export const TextField = React.forwardRef<HTMLDivElement, ITextFieldProps>(
+    ({ inputProps, ...textFieldBaseProps }, ref) => (
+        <TextFieldBase {...textFieldBaseProps} ref={ref}>
+            <FormFieldInput {...inputProps} />
+        </TextFieldBase>
+    ),
 );
 
 TextField.displayName = "TextField";

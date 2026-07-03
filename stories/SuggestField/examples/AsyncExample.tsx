@@ -1,9 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
     SuggestField,
-    useMatchMedia,
+    useMobileView,
     ISuggestFieldOption,
-    EScreenWidth,
     EComponentSize,
     EFormFieldStatus,
 } from "@sberbusiness/triplex-next";
@@ -33,9 +32,6 @@ const FOOD_OPTIONS: ISuggestFieldOption[] = FOOD_NAMES.map((item, index) => ({
     label: item,
 }));
 
-const useAdaptive = () =>
-    useMatchMedia(`(max-width: ${EScreenWidth.SM_MAX})`, window.innerWidth <= parseInt(EScreenWidth.SM_MAX));
-
 const getFilteredOptions = (query: string): ISuggestFieldOption[] =>
     FOOD_OPTIONS.filter(({ label }) => label.toLowerCase().includes(query.toLowerCase()));
 
@@ -51,7 +47,7 @@ export const AsyncExample = () => {
     const activeRequestRef = useRef<boolean>(false);
     const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
-    const adaptive = useAdaptive();
+    const adaptive = useMobileView();
 
     const debouncedFilter = useRef(
         // eslint-disable-next-line react-hooks/refs

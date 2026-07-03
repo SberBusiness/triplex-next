@@ -4,6 +4,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.37.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**FormFieldMaskedInput**
+
+- Удалено свойство `error`.
+- Теперь `className` пробрасывается в корневой элемент, вместо дублирования на двух внутренних узлах.
+
 <Heading>Изменения</Heading>
 
 **CollapsibleTree**
@@ -17,6 +24,19 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлены размеры разделителя.
 
+**DateField / MonthYearField**
+
+- Теперь `Dropdown` октрывается по нажатию мыши, а не клику.
+- Исправлено отображение плейсхолдера-маски `FormFieldMaskedInput` в заголовке `Dropdown`.
+
+**FormFieldInput**
+
+- Исправлено вертикальное выравнивание текста в размере `SM`.
+
+**FormFieldMaskedInput**
+
+- Исправлен баг с визуальным утолщением шрифта при наличии значения в поле ввода.
+
 **HeaderPage**
 
 - Исправлено расположение `Page.Header.Tabs.Controls`
@@ -28,6 +48,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **TableBasic**
 
 - Максимальная высота `TableBasicSettingsBody` изменена с `372px` на `302px`.
+
+**TextField / MaskedField**
+
+- Компонент переписан на `forwardRef`.
 
 **ThemeProvider**
 

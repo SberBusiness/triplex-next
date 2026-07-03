@@ -13,9 +13,8 @@ import { Step, EStepStatus, EStepPosition } from "../../Step";
 import { IslandAccordionContext } from "../IslandAccordionContext";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { ETitleSize, Title, EFontType, EFontWeightTitle } from "../../Typography";
+import { useMobileView } from "../../MobileView";
 import styles from "../styles/IslandAccordion.module.less";
-import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
-import { useMatchMedia } from "../../MediaWidth/useMatchMedia";
 
 export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
     /** Нода с названием заголовка. */
@@ -82,10 +81,7 @@ export const IslandAccordionItem = Object.assign(
             const headerInstanceId = `${instanceId}header`;
             const bodyInstanceId = `${instanceId}body`;
 
-            const adaptive = useMatchMedia(
-                `(max-width: ${EScreenWidth.SM_MAX})`,
-                window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-            );
+            const adaptive = useMobileView();
 
             useEffect(() => {
                 if (opened !== undefined && isOpen !== opened) {

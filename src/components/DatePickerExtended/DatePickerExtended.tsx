@@ -10,9 +10,9 @@ import { EComponentSize } from "../../enums";
 
 /** Свойства компонента DatePickerExtended. */
 export interface IDatePickerExtendedProps
-    extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
-        Pick<IDropdownProps, "alignment">,
-        ICalendarProps {
+    extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">, Pick<IDropdownProps, "alignment">, ICalendarProps {
+    /** Ссылка на целевой элемент для Dropdown. */
+    dropdownTargetRef?: React.RefObject<HTMLElement>;
     /** Рендер-функция целевого элемента. */
     renderTarget: () => React.ReactNode;
     /** Рендер-функция целевого элемента в заголовке DropdownMobile. */
@@ -29,6 +29,7 @@ export interface IDatePickerExtendedProps
 export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerExtendedProps>((props, ref) => {
     const {
         // Dropdown props
+        dropdownTargetRef,
         alignment = EDropdownAlignment.LEFT,
         focusTrapProps,
         // Calendar props
@@ -62,7 +63,7 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    // Пользователь взаимодействует мышью.
+    /** Флаг взаимодействия пользователя мышью. */
     const mouseUsedRef = useRef(false);
 
     useEffect(() => {
@@ -163,7 +164,7 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
                     opened={dropdownOpen}
                     size={EComponentSize.MD}
                     alignment={alignment}
-                    targetRef={containerRef}
+                    targetRef={dropdownTargetRef || containerRef}
                     focusTrapProps={focusTrapProps}
                     renderCalendar={renderCalendar}
                     renderHeaderTarget={renderDropdownHeaderTarget}

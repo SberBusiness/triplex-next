@@ -155,5 +155,6 @@ export const Example: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
 };

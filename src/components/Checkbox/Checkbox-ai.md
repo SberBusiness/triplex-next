@@ -113,8 +113,6 @@ version: "1.0"
 | `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль основных props |
 | `Default` | `DefaultExample.tsx` | Минимальное использование |
 | `Sizes` | `SizesExample.tsx` | Размеры `SM` / `MD` / `LG` |
-| `XGroup` | `XGroupExample.tsx` | Группа по оси X |
-| `YGroup` | `YGroupExample.tsx` | Группа по оси Y |
 
 ---
 

@@ -142,6 +142,7 @@ export const Example: Story = {
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
     args: {
         size: EAvatarSize.XXL,

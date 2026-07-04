@@ -1,6 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Page } from "../../Page";
+import { BodyPage } from "../components/BodyPage";
+import { HeaderPage } from "../components/HeaderPage";
+import { FooterPage } from "../components/FooterPage";
 
 describe("Page", () => {
     it("renders root element", () => {
@@ -8,6 +11,19 @@ describe("Page", () => {
 
         const root = screen.getByTestId("page-root");
         expect(root).toBeInTheDocument();
+    });
+
+    it("merges custom className into root element", () => {
+        render(<Page className="custom-class" data-testid="page-root" />);
+
+        const root = screen.getByTestId("page-root");
+        expect(root).toHaveClass("page", "global-page", "custom-class");
+    });
+
+    it("exposes Header, Body and Footer as static sub-components", () => {
+        expect(Page.Header).toBe(HeaderPage);
+        expect(Page.Body).toBe(BodyPage);
+        expect(Page.Footer).toBe(FooterPage);
     });
 
     it("forwards ref to root div", () => {

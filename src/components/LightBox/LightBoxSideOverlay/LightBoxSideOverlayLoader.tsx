@@ -1,14 +1,14 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { LoaderScreen } from "../../LoaderScreen/LoaderScreen";
+import { LoaderScreen, ILoaderScreenMiddleProps } from "../../LoaderScreen/LoaderScreen";
 import styles from "./styles/LightBoxSideOverlayLoader.module.less";
 
 interface ILightBoxSideOverlayLoaderProps {
-    /** Текст под спиннером.*/
-    loadingTitle?: React.ReactNode;
+    /** Свойства компонента LoaderScreen. */
+    loaderScreenProps?: ILoaderScreenMiddleProps;
 }
 
-export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps> = ({ loadingTitle }) => {
+export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps> = ({ loaderScreenProps }) => {
     // Позиция top, высчитывается из scrollTop родителя.
     const [topPosition, setTopPosition] = useState<number | string>(0);
     const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -31,7 +31,7 @@ export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps
 
     return (
         <div ref={loaderRef} className={styles.lightBoxSideOverlayLoaderWrapper} style={{ top: `${topPosition}px` }}>
-            <LoaderScreen type="middle">{loadingTitle}</LoaderScreen>
+            <LoaderScreen {...loaderScreenProps} type="middle" />
         </div>
     );
 };

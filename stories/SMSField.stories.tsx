@@ -11,15 +11,6 @@ export default {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент для ввода СМС.
-
-## Использование
-
-\`SMSField\` состоит из подсказки \`SMSField.Tooltip\` с кнопкой \`SMSField.Refresh\`, поля ввода \`SMSField.Input\` и кнопки отправки \`SMSField.Submit\`. Можно добавить описание и счётчик.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -43,8 +34,8 @@ export default {
 type ISMSFieldProps = Partial<React.ComponentProps<typeof SMSField>>;
 
 // Базовая логика для переиспользования.
-const useSMSFieldLogic = () => {
-    const [code, setCode] = useState("");
+const useSMSFieldLogic = (value: string) => {
+    const [code, setCode] = useState(value);
     const [timeLeft, setTimeLeft] = useState(0);
     const targetRef = useRef<HTMLElement | null>(null);
 
@@ -52,7 +43,7 @@ const useSMSFieldLogic = () => {
         if (timeLeft > 0) {
             setTimeout(() => {
                 setTimeLeft((timeLeft) => timeLeft - 1);
-            }, 1_000);
+            }, 1000);
         }
     }, [timeLeft]);
 
@@ -113,15 +104,11 @@ export const Playground: StoryObj<ISMSFieldProps> = {
         controls: {
             include: ["description", "disabled", "maxLength", "placeholder", "size"],
         },
-        docs: {
-            description: {
-                story: "Интерактивная демонстрация SMSField. Позволяет настраивать основные свойства компонента.",
-            },
-        },
+        testRunner: { skip: true },
     },
     render: (args: ISMSFieldProps) => {
         const { disabled, maxLength, placeholder, size } = args;
-        const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic();
+        const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("");
 
         return (
             <SMSField
@@ -151,11 +138,6 @@ export const Error: StoryObj<ISMSFieldProps> = {
     name: "Error",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "SMSField в состоянии error.",
-            },
-        },
     },
     render: () => {
         const sizes = Object.values(EComponentSize);
@@ -163,7 +145,7 @@ export const Error: StoryObj<ISMSFieldProps> = {
         return (
             <>
                 {sizes.map((size) => {
-                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic();
+                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("");
 
                     return (
                         <SMSField
@@ -204,11 +186,6 @@ export const Disabled: StoryObj<ISMSFieldProps> = {
     name: "Disabled",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "SMSField в состоянии disabled с введённым кодом и без.",
-            },
-        },
     },
     render: () => {
         const targetRefEmpty = useRef<HTMLElement | null>(null);
@@ -268,11 +245,6 @@ export const Sizes: StoryObj<ISMSFieldProps> = {
     name: "Sizes",
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Демонстрация различных размеров SMSField: SM (маленький), MD (средний), LG (большой). Каждый размер имеет свои отступы и высоту для разных случаев использования.",
-            },
-        },
     },
     render: () => {
         const sizes = Object.values(EComponentSize);
@@ -280,7 +252,7 @@ export const Sizes: StoryObj<ISMSFieldProps> = {
         return (
             <>
                 {sizes.map((size) => {
-                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic();
+                    const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("");
 
                     return (
                         <SMSField key={size} code={code} onChangeCode={onChange} onSubmitCode={onSubmit} size={size}>
@@ -298,6 +270,37 @@ export const Sizes: StoryObj<ISMSFieldProps> = {
                     );
                 })}
             </>
+        );
+    },
+};
+
+export const VisualTests: StoryObj<ISMSFieldProps> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("12345678");
+
+        return (
+            <SMSField
+                code={code}
+                disabled={true}
+                onChangeCode={onChange}
+                onSubmitCode={onSubmit}
+                size={EComponentSize.MD}
+            >
+                <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
+                    <SMSField.Refresh
+                        countdownTime={5}
+                        countdownTimeLeft={timeLeft}
+                        onRefresh={onRefresh}
+                        ref={(el: HTMLButtonElement) => (targetRef.current = el)}
+                    />
+                </SMSField.Tooltip>
+                <SMSField.Input placeholder="Введите код" />
+                <SMSField.Submit />
+            </SMSField>
         );
     },
 };

@@ -51,7 +51,10 @@ const VisualTestsModal = ({
                 size={size}
                 closeButton={<ModalWindowClose onClick={handleClose} title="Закрыть" />}
             >
-                <ModalWindowContent isLoading={isLoading} loadingTitle={isLoading ? "Загрузка данных..." : undefined}>
+                <ModalWindowContent
+                    isLoading={isLoading}
+                    loaderScreenProps={isLoading ? { description: "Загрузка данных..." } : undefined}
+                >
                     <ModalWindowHeader>
                         <ModalWindowHeader.Title>
                             <ModalWindowHeader.Title.Content>

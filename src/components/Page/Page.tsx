@@ -5,10 +5,15 @@ import { HeaderPage } from "./components/HeaderPage";
 import { FooterPage } from "./components/FooterPage";
 import styles from "./styles/Page.module.less";
 
-/** Свойства компонента Page. */
+/** Свойства компонента Page. Расширяют стандартные HTML-атрибуты `<div>`. */
 export interface IPageProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-/** Страница. Может содержать только Body, Header и Footer. */
+/**
+ * Каркас страницы. Вертикальный flex-контейнер, в который вкладываются только
+ * составные части: `Page.Header`, `Page.Body` и `Page.Footer`.
+ *
+ * Типичное место использования — содержимое `LightBox`.
+ */
 export const Page = Object.assign(
     React.forwardRef<HTMLDivElement, IPageProps>(function Page({ children, className, ...rest }, ref) {
         return (

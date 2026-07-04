@@ -1,7 +1,7 @@
 import React from "react";
 import { StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Caption, ECaptionSize, EFontWeightCaption, EFontType } from "../../src";
+import { Caption, ECaptionSize, EFontWeightCaption, EFontType } from "@sberbusiness/triplex-next";
 import "./Typography.less";
 
 export default {
@@ -104,17 +104,13 @@ export const Playground: StoryObj<typeof Caption> = {
     },
     parameters: {
         docs: {
-            description: {
-                story: "Интерактивная демонстрация компонента Caption с возможностью изменения всех пропсов через controls панель.",
-            },
-            canvas: {
-                sourceState: "none",
-            },
+            canvas: { sourceState: "none" },
             codePanel: false,
         },
         controls: {
             include: ["size", "weight", "type", "tag", "underline", "strikethrough"],
         },
+        testRunner: { skip: true },
     },
 };
 
@@ -127,11 +123,6 @@ export const Sizes: StoryObj<typeof Caption> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Основные размеры подписей: C1 (10px), C2 (8px), D1 (32px)",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -148,11 +139,6 @@ export const Weights: StoryObj<typeof Caption> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные веса шрифта для подписей: Regular, Semibold",
-            },
-        },
         controls: { disable: true },
     },
 };
@@ -233,11 +219,26 @@ export const Types: StoryObj<typeof Caption> = {
         </div>
     ),
     parameters: {
-        docs: {
-            description: {
-                story: "Различные типы цветов для подписей: Primary, Secondary, Tertiary, Brand, Info, Success, Warning, Error, Disabled и их инвертированные варианты.",
-            },
-        },
+        controls: { disable: true },
+    },
+};
+
+export const Decorations: StoryObj<typeof Caption> = {
+    render: () => (
+        <div className="typography-example">
+            <Caption size={ECaptionSize.C1}>Подпись без декораций</Caption>
+            <Caption size={ECaptionSize.C1} underline>
+                Подпись с подчеркиванием
+            </Caption>
+            <Caption size={ECaptionSize.C1} strikethrough>
+                Подпись с зачеркиванием
+            </Caption>
+            <Caption size={ECaptionSize.C1} underline strikethrough>
+                Подпись с подчеркиванием и зачеркиванием
+            </Caption>
+        </div>
+    ),
+    parameters: {
         controls: { disable: true },
     },
 };

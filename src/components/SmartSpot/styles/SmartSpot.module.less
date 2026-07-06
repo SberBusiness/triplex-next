@@ -1,0 +1,121 @@
+.smartSpot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.blur {
+    position: absolute;
+    inset: 0;
+    filter: blur(var(--triplex-next-runtime-SmartSpot-Blur_Sigma, 0px));
+}
+
+.move {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+    transform: translate(
+        var(--triplex-next-runtime-SmartSpot-Move_X, 0px),
+        var(--triplex-next-runtime-SmartSpot-Move_Y, 0px)
+    );
+}
+
+.spot {
+    position: absolute;
+    left: var(--triplex-next-runtime-SmartSpot-Spot_X);
+    top: var(--triplex-next-runtime-SmartSpot-Spot_Y);
+    width: var(--triplex-next-runtime-SmartSpot-Spot_Size);
+    height: var(--triplex-next-runtime-SmartSpot-Spot_Size);
+    border-radius: 50%;
+    background: var(--triplex-next-runtime-SmartSpot-Spot_Color);
+    opacity: var(--triplex-next-runtime-SmartSpot-Spot_Opacity);
+    transform: scale(var(--triplex-next-runtime-SmartSpot-Spot_Scale, 1));
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.success {
+    background: var(--triplex-next-ColorBrand-20);
+
+    .spot:nth-child(1) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSuccess-80);
+    }
+
+    .spot:nth-child(2) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSuccess-50);
+    }
+
+    .spot:nth-child(3) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorBrand-60);
+    }
+
+    .spot:nth-child(4) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSuccess-80);
+    }
+}
+
+.warning {
+    background: var(--triplex-next-ColorWarning-30);
+
+    .spot:nth-child(1) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-30);
+    }
+
+    .spot:nth-child(2) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-70);
+    }
+
+    .spot:nth-child(3) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-50);
+    }
+
+    .spot:nth-child(4) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-80);
+    }
+}
+
+.error {
+    background: var(--triplex-next-ColorError-20);
+
+    .spot:nth-child(1) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-30);
+    }
+
+    .spot:nth-child(2) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-30);
+    }
+
+    .spot:nth-child(3) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorWarning-50);
+    }
+
+    .spot:nth-child(4) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorError-70);
+    }
+}
+
+.waiting {
+    background: var(--triplex-next-ColorSystem-30);
+
+    .spot:nth-child(1) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSystem-100);
+    }
+
+    .spot:nth-child(2) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSystem-60);
+    }
+
+    .spot:nth-child(3) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSystem-90);
+    }
+
+    .spot:nth-child(4) {
+        --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSystem-90);
+    }
+}

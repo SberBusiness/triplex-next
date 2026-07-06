@@ -55,6 +55,26 @@ describe("CollapsibleTree", () => {
         expect(emptyFolderButton.querySelector("svg")).toBeNull();
     });
 
+    it("Ветка с disabled: true не раскрывается: кнопка disabled, с классом disabled и шевроном", () => {
+        const nodes: ICollapsibleTreeNodeBranch[] = [
+            {
+                id: "disabled-folder",
+                label: "Disabled folder",
+                disabled: true,
+                children: [{ id: "file", content: "File" }],
+            },
+        ];
+
+        render(<CollapsibleTree nodes={nodes} />);
+
+        const button = screen.getByRole("button", { name: /Disabled folder/ });
+        expect(button).toBeDisabled();
+        expect(button.className).toMatch(/disabled/);
+        expect(button.className).not.toMatch(/interactive/);
+        // Шеврон сохраняется — узел остаётся визуально веткой.
+        expect(button.querySelector("svg")).not.toBeNull();
+    });
+
     it("Кнопка раскрывающейся ветки получает класс interactive", () => {
         render(<CollapsibleTree nodes={getMockNodes()} />);
 

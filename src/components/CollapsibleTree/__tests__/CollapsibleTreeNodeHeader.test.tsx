@@ -96,6 +96,36 @@ describe("CollapsibleTreeNodeHeader", () => {
         });
     });
 
+    describe("disabled=true", () => {
+        it("Кнопка disabled, с классом disabled и без класса interactive", () => {
+            renderHeader({ hasChildNodes: true, disabled: true });
+
+            const button = screen.getByRole("button");
+            expect(button).toBeDisabled();
+            expect(button.className).toMatch(/disabled/);
+            expect(button.className).not.toMatch(/interactive/);
+        });
+
+        it("Шеврон рендерится (узел с детьми остаётся визуально веткой)", () => {
+            renderHeader({ hasChildNodes: true, disabled: true });
+            expect(screen.getByRole("button").querySelector("svg")).not.toBeNull();
+        });
+
+        it("Сохраняет aria-expanded (состояние раскрытия остаётся в семантике)", () => {
+            renderHeader({ hasChildNodes: true, disabled: true, opened: false });
+            expect(screen.getByRole("button")).toHaveAttribute("aria-expanded", "false");
+        });
+
+        it("Не вызывает toggle (даже при программном click)", () => {
+            const toggle = vi.fn();
+            renderHeader({ hasChildNodes: true, disabled: true, toggle });
+
+            // Программный click игнорирует disabled, поэтому проверяем именно ветку handleClick.
+            fireEvent.click(screen.getByRole("button"));
+            expect(toggle).not.toHaveBeenCalled();
+        });
+    });
+
     describe("Click", () => {
         it("Вызывает toggle(true) когда opened=false и hasChildNodes=true", () => {
             const toggle = vi.fn();

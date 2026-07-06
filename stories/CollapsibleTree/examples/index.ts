@@ -6,4 +6,6 @@ export * from "./Nested";
 export { default as NestedSource } from "./Nested?raw";
 export * from "./CustomLabel";
 export { default as CustomLabelSource } from "./CustomLabel?raw";
+export * from "./Disabled";
+export { default as DisabledSource } from "./Disabled?raw";
 export * from "./VisualTestsExample";

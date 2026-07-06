@@ -207,3 +207,4 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 |---|---|
 | 2026-05-15 | Создан документ. Зафиксирован «семантический хак» `LeafNode` (`opened=true + toggle=noop`), список внутренних компонентов вне barrel, инварианты по `forwardRef` |
 | 2026-05-15 | `CollapsibleTreeNodeHeader` и `CollapsibleTreeLeafContent` переведены на `forwardRef` (DOM-ref на `<button>` и `<div>` соответственно). Защищены инварианты `<button>` (`type`, `disabled`, `aria-expanded`) от перетирания через `{...props}` |
+| 2026-07-06 | Шеврон открытого узла теперь указывает вверх (`rotate(-90deg)`), а не вниз |

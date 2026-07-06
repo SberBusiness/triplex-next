@@ -8,6 +8,7 @@ export * from "./stringUtils";
 export * from "./focus/FocusTrapUtils";
 export * from "./html/AriaAttributes";
 export * from "./html/DataAttributes";
+export * from "./html/anchorSecurity";
 export * from "./scroll/scrollbar";
 export type { TEventKeys, TEventKeysValues } from "./keyboard";
 export type { TAriaHTMLAttributes } from "./html/AriaAttributes";

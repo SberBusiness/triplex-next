@@ -4,6 +4,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.37.0</Title>
 
+<Heading>Изменения</Heading>
+
 **CollapsibleTree**
 
 - Добавлено свойство `disabled` для узла-ветки (`ICollapsibleTreeNodeBranch`) — узел не раскрывается, шеврон отображается приглушённым цветом. Для приглушённого текста передайте `type={EFontType.DISABLED}` в `CollapsibleTreeNodeLabel`.
@@ -14,3 +16,15 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **DateRange**
 
 - Исправлены размеры иконки разделителя.
+
+**Link**
+
+- При `target="_blank"` автоматически добавляется `rel="noopener"` (защита от reverse tabnabbing). Явно переданный потребителем `rel` сохраняется.
+
+**ThemeProvider**
+
+- Предупреждение о неподдержке динамической темы при SSR выводится через `console.warn` вместо `console.log`.
+
+**TooltipLink**
+
+- При `target="_blank"` автоматически добавляется `rel="noopener"` (защита от reverse tabnabbing). Явно переданный потребителем `rel` сохраняется.

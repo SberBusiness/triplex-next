@@ -27,7 +27,7 @@ const LINE_TYPE_TO_CLASS_NAME_MAP: Record<ELineType, string> = {
     [ELineType.COMPACT]: styles.compact,
 };
 
-interface ITextProps extends ITypographyProps {
+export interface ITextProps extends ITypographyProps {
     /** Размер текста. */
     size: ETextSize;
     /** Высота блока строки. */

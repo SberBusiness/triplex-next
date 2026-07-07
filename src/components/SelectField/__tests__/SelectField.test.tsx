@@ -4,7 +4,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SelectField, ISelectFieldOption } from "../SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { EFormFieldStatus } from "../../FormField/enums";
-import { EDropdownWidth } from "../../Dropdown";
 
 // Mock для KeyDownListener
 vi.mock("../../KeyDownListener", () => ({
@@ -302,6 +301,7 @@ vi.mock("../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault
         loading,
         mobileTitle,
         dropdownListItemClassName,
+        dropdownProps,
     }: {
         options: ISelectFieldOption[];
         onChange: (option: ISelectFieldOption) => void;
@@ -313,9 +313,11 @@ vi.mock("../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault
         loading?: boolean;
         mobileTitle?: React.ReactNode;
         dropdownListItemClassName?: string;
+        dropdownProps?: Record<string, unknown>;
     }) => (
         <div
             data-testid="select-extended-field-dropdown-default"
+            {...dropdownProps}
             data-opened={String(opened)}
             data-list-id={listId}
             data-size={size}
@@ -542,6 +544,24 @@ describe("SelectField", () => {
 
             // Verify option is rendered (dropdownListItemClassName is passed to SelectExtendedFieldDropdownDefault)
             expect(screen.getByTestId(`option-${mockOptions[0].id}`)).toBeInTheDocument();
+        });
+    });
+
+    it("Should pass dropdownProps to dropdown", async () => {
+        const dropdownProps = {
+            className: "custom-dropdown-class",
+            "data-custom": "dropdown-value",
+        };
+
+        render(<SelectField {...defaultProps} dropdownProps={dropdownProps} data-testid="select-field" />);
+
+        const target = screen.getByTestId("select-extended-field-target");
+        fireEvent.click(target);
+
+        await waitFor(() => {
+            const dropdown = screen.getByTestId("select-extended-field-dropdown-default");
+            expect(dropdown).toHaveAttribute("data-custom", "dropdown-value");
+            expect(dropdown).toHaveClass("custom-dropdown-class");
         });
     });
 

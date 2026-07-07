@@ -18,6 +18,11 @@ export interface ISelectExtendedFieldDropdownDefaultProps
     extends ISelectExtendedFieldDropdownProvideProps, Pick<IDropdownProps, "size" | "width"> {
     /* ClassName для модификации SelectExtendedField.Dropdown.List.Item. */
     dropdownListItemClassName?: string;
+    /* Свойства, передающиеся в Dropdown. */
+    dropdownProps?: Omit<
+        IDropdownProps,
+        "children" | "opened" | "setOpened" | "targetRef" | "size" | "mobileViewProps"
+    >;
     /* Состояние загрузки. В этот момент Dropdown закрыт, Target отображает loader. */
     loading?: boolean;
     /* Id SelectExtendedField.Dropdown.List. Нужен для связи с Target. */
@@ -39,6 +44,7 @@ export interface ISelectExtendedFieldDropdownDefaultProps
 export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDropdownDefaultProps> = ({
     dropdownRef,
     dropdownListItemClassName,
+    dropdownProps,
     width,
     loading,
     listId,
@@ -59,6 +65,7 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
             setOpened={setOpened}
             targetRef={targetRef}
             size={size}
+            {...dropdownProps}
             mobileViewProps={{
                 children: (
                     <>

@@ -2,6 +2,7 @@ import React from "react";
 import {
     CollapsibleTree,
     CollapsibleTreeNodeLabel,
+    EFontType,
     EFontWeightText,
     ETextSize,
     ICollapsibleTreeNodeBranch,
@@ -161,6 +162,38 @@ const customLabelNodes: ICollapsibleTreeNodeBranch[] = [
     },
 ];
 
+const disabledNodes: ICollapsibleTreeNodeBranch[] = [
+    {
+        id: "vt-disabled-folder-1",
+        label: <CollapsibleTreeNodeLabel type={EFontType.DISABLED}>Folder 1</CollapsibleTreeNodeLabel>,
+        disabled: true,
+        children: [
+            {
+                id: "vt-disabled-file-1",
+                content: (
+                    <Text size={ETextSize.B1} tag="span">
+                        File 1
+                    </Text>
+                ),
+            },
+        ],
+    },
+    {
+        id: "vt-disabled-folder-2",
+        label: <CollapsibleTreeNodeLabel>Folder 2</CollapsibleTreeNodeLabel>,
+        children: [
+            {
+                id: "vt-disabled-file-2",
+                content: (
+                    <Text size={ETextSize.B1} tag="span">
+                        File 2
+                    </Text>
+                ),
+            },
+        ],
+    },
+];
+
 interface IVariantProps {
     title: string;
     nodes: ICollapsibleTreeNodeBranch[];
@@ -178,5 +211,6 @@ export const VisualTestsExample = () => (
         <Variant title="Collapsed" nodes={collapsedNodes} />
         <Variant title="Expanded" nodes={expandedNodes} />
         <Variant title="Custom label sizes" nodes={customLabelNodes} />
+        <Variant title="Disabled" nodes={disabledNodes} />
     </div>
 );

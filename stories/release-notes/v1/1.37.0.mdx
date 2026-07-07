@@ -6,6 +6,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**CollapsibleTree**
+
+- Добавлено свойство `disabled` для узла-ветки (`ICollapsibleTreeNodeBranch`) — узел не раскрывается, шеврон отображается приглушённым цветом. Для приглушённого текста передайте `type={EFontType.DISABLED}` в `CollapsibleTreeNodeLabel`.
+- `CollapsibleTreeNodeHeader` теперь учитывает проп `disabled`.
+- Шеврон открытого узла теперь указывает вверх, а не вниз.
+- Отступ вложенных групп увеличен с 24px до 32px.
+
 **DateRange**
 
 - Исправлены размеры иконки разделителя.

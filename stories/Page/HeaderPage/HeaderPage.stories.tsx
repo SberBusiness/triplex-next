@@ -8,6 +8,8 @@ import {
     DefaultSource,
     Types as TypesRender,
     TypesSource,
+    ExampleWithTabs as ExampleWithTabsRender,
+    ExampleWithTabsSource,
 } from "./examples";
 
 const meta = {
@@ -110,6 +112,20 @@ export const Types: StoryObj<typeof Page.Header> = {
         docs: {
             source: {
                 code: TypesSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Example: StoryObj<typeof Page.Header> = {
+    name: "Example: with tabs",
+    render: ExampleWithTabsRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ExampleWithTabsSource,
                 language: "tsx",
             },
         },

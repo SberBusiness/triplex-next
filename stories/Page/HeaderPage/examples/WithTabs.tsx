@@ -19,7 +19,7 @@ const tabs = [
     { id: "header-page-tab-operations", label: "Операции" },
 ];
 
-export const ExampleWithTabs = () => {
+export const WithTabs = () => {
     const [selectedTabId, setSelectedTabId] = useState("header-page-tab-overview");
 
     return (

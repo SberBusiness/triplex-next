@@ -100,6 +100,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
                 size={size}
                 width={EDropdownWidth.TARGET}
                 dropdownProps={dropdownProps}
+                dropdownListItemClassName={dropdownListItemClassName}
                 loading={loading}
                 listId={instanceId.current}
                 mobileTitle={mobileTitle}

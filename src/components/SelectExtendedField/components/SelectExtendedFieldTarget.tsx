@@ -97,8 +97,8 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
 
         /* Обработчик нажатия клавиши. */
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-            if (loading && status === EFormFieldStatus.DISABLED) {
-                return; // Не реагируем на клавиши в состоянии загрузки
+            if (loading || status === EFormFieldStatus.DISABLED) {
+                return; // Не реагируем на клавиши в состоянии загрузки или disabled
             }
 
             if (!opened) {

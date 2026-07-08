@@ -1,8 +1,9 @@
-@import '../../../styles/style';
+@import "../../../styles/style";
 
 .headerTabs {
     display: flex;
     justify-content: space-between;
+    margin-top: 8px;
 
     .headerTabsContent {
         flex-grow: 1;
@@ -21,21 +22,19 @@
 @media (max-width: @screen-sm-max) {
     .headerTabs {
         flex-wrap: wrap;
-
-        .headerTabsContent {
-            width: 100%;
-        }
+        gap: 16px;
+        margin-top: 16px;
 
         .headerTabsControls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 12px;
             flex-shrink: initial;
             padding-left: 0;
-            white-space: normal;
-            // Отступы, компенсирующие отступы у Button.
-            margin-left: -16px;
 
+            // Переопределение правила отступов между двумя соседними кнопками.
             > button {
-                margin-left: 16px;
-                margin-top: 16px;
+                margin-left: 0 !important;
             }
         }
     }

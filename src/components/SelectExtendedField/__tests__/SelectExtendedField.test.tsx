@@ -37,121 +37,6 @@ vi.mock("../../KeyDownListener", () => ({
     },
 }));
 
-// Mock для Dropdown
-vi.mock("../../Dropdown", () => ({
-    Dropdown: React.forwardRef<
-        HTMLDivElement,
-        {
-            children: React.ReactNode;
-            opened: boolean;
-            mobileViewProps?: { children?: React.ReactNode };
-            setOpened?: (opened: boolean) => void;
-            targetRef?: React.RefObject<HTMLElement>;
-            [key: string]: unknown;
-        }
-    >(({ children, opened, mobileViewProps, setOpened, targetRef, ...props }, ref) => (
-        <div data-testid="dropdown" data-opened={String(opened)} ref={ref} {...props}>
-            {opened && children}
-            {opened && mobileViewProps?.children}
-        </div>
-    )),
-    DropdownList: ({ children }: { children: React.ReactNode }) => <div data-testid="dropdown-list">{children}</div>,
-    DropdownMobileHeader: ({
-        controlButtons,
-        children,
-    }: {
-        controlButtons?: React.ReactNode;
-        children: React.ReactNode;
-    }) => (
-        <div data-testid="dropdown-mobile-header">
-            {controlButtons}
-            {children}
-        </div>
-    ),
-    DropdownMobileClose: ({ onClick }: { onClick: () => void }) => (
-        <button data-testid="dropdown-mobile-close" onClick={onClick} />
-    ),
-    DropdownMobileBody: ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="dropdown-mobile-body">{children}</div>
-    ),
-    DropdownMobileList: ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="dropdown-mobile-list">{children}</div>
-    ),
-    DropdownMobileListItem: ({
-        id,
-        selected,
-        className,
-        onSelect,
-        children,
-    }: {
-        id: string;
-        selected?: boolean;
-        className?: string;
-        onSelect?: () => void;
-        children: React.ReactNode;
-    }) => (
-        <div
-            data-testid={`dropdown-mobile-list-item-${id}`}
-            data-selected={String(selected)}
-            className={className}
-            onClick={() => onSelect?.()}
-        >
-            {children}
-        </div>
-    ),
-}));
-
-// Mock для DropdownList (desktop), чтобы удобно проверять элементы
-vi.mock("../../Dropdown/desktop/DropdownList", () => {
-    const DropdownListItem = ({
-        id,
-        selected,
-        className,
-        onSelect,
-        children,
-    }: {
-        id: string;
-        selected?: boolean;
-        className?: string;
-        onSelect?: () => void;
-        children: React.ReactNode;
-    }) => (
-        <div
-            data-testid={`dropdown-list-item-${id}`}
-            data-selected={String(selected)}
-            className={className}
-            onClick={() => onSelect?.()}
-        >
-            {children}
-        </div>
-    );
-
-    const DropdownList = ({
-        children,
-        id,
-        dropdownOpened,
-        size,
-    }: {
-        children: React.ReactNode;
-        id?: string;
-        dropdownOpened?: boolean;
-        size?: EComponentSize;
-    }) => (
-        <div
-            data-testid="dropdown-list-desktop"
-            data-id={id}
-            data-dropdown-opened={String(dropdownOpened)}
-            data-size={size}
-        >
-            {children}
-        </div>
-    );
-
-    (DropdownList as typeof DropdownList & { Item: typeof DropdownListItem }).Item = DropdownListItem;
-
-    return { DropdownList };
-});
-
 // Mock для FormField
 vi.mock("../../FormField", () => ({
     FormField: ({
@@ -226,6 +111,9 @@ vi.mock("@sberbusiness/icons-next", () => ({
         <div data-testid="caret-icon-24" className={className}>
             Caret Icon 24
         </div>
+    ),
+    CrossStrokeSrvIcon16: ({ className }: { className?: string }) => (
+        <div data-testid="cross-icon-16" className={className} />
     ),
 }));
 
@@ -882,7 +770,7 @@ describe("SelectExtendedFieldDropdown", () => {
         vi.clearAllMocks();
     });
 
-    it("Should render with required props", () => {
+    it("Should not render content when closed", () => {
         render(
             <SelectExtendedFieldDropdown
                 forwardedRef={mockDropdownRef}
@@ -894,12 +782,11 @@ describe("SelectExtendedFieldDropdown", () => {
             </SelectExtendedFieldDropdown>,
         );
 
-        expect(screen.getByTestId("dropdown")).toBeInTheDocument();
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "false");
+        expect(screen.queryByTestId("dropdown-content")).not.toBeInTheDocument();
     });
 
-    it("Should render children when opened", () => {
-        render(
+    it("Should render children through Portal when opened", () => {
+        const { container } = render(
             <SelectExtendedFieldDropdown
                 forwardedRef={mockDropdownRef}
                 targetRef={mockTargetRef}
@@ -910,24 +797,27 @@ describe("SelectExtendedFieldDropdown", () => {
             </SelectExtendedFieldDropdown>,
         );
 
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "true");
-        expect(screen.getByTestId("dropdown-content")).toBeInTheDocument();
+        const content = screen.getByTestId("dropdown-content");
+        expect(content).toBeInTheDocument();
+        // Dropdown рендерится через Portal в document.body, вне контейнера рендера
+        expect(container).not.toContainElement(content);
     });
 
-    it("Should not render children when closed", () => {
+    it("Should assign forwardedRef to dropdown container when opened", () => {
+        const ref = React.createRef<HTMLDivElement>();
         render(
             <SelectExtendedFieldDropdown
-                forwardedRef={mockDropdownRef}
+                forwardedRef={ref}
                 targetRef={mockTargetRef}
-                opened={false}
+                opened={true}
                 setOpened={mockSetOpened}
             >
                 <div data-testid="dropdown-content">Dropdown content</div>
             </SelectExtendedFieldDropdown>,
         );
 
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "false");
-        expect(screen.queryByTestId("dropdown-content")).not.toBeInTheDocument();
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toContainElement(screen.getByTestId("dropdown-content"));
     });
 
     it("Should pass through additional props", () => {
@@ -935,7 +825,7 @@ describe("SelectExtendedFieldDropdown", () => {
             <SelectExtendedFieldDropdown
                 forwardedRef={mockDropdownRef}
                 targetRef={mockTargetRef}
-                opened={false}
+                opened={true}
                 setOpened={mockSetOpened}
                 className="custom-dropdown-class"
                 data-testid="custom-dropdown"
@@ -966,162 +856,119 @@ describe("SelectExtendedFieldDropdownDefault", () => {
     const mockOnChange = vi.fn();
     const mockSetOpened = vi.fn();
 
+    const renderDropdownDefault = (
+        props: Partial<React.ComponentProps<typeof SelectExtendedFieldDropdownDefault>> = {},
+    ) =>
+        render(
+            <SelectExtendedFieldDropdownDefault
+                options={mockOptions}
+                onChange={mockOnChange}
+                opened={true}
+                setOpened={mockSetOpened}
+                listId="list-1"
+                size={EComponentSize.MD}
+                width={EDropdownWidth.TARGET}
+                loading={false}
+                targetRef={mockTargetRef}
+                dropdownRef={mockDropdownRef}
+                {...props}
+            />,
+        );
+
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
-    it("Should render desktop and mobile options when opened and not loading", () => {
-        render(
-            <SelectExtendedFieldDropdownDefault
-                options={mockOptions}
-                onChange={mockOnChange}
-                value={mockOptions[1]}
-                opened={true}
-                setOpened={mockSetOpened}
-                listId="list-1"
-                size={EComponentSize.MD}
-                width={EDropdownWidth.TARGET}
-                loading={false}
-                mobileTitle="Mobile title"
-                dropdownListItemClassName="custom-item-class"
-                targetRef={mockTargetRef}
-                dropdownRef={mockDropdownRef}
-            />,
-        );
+    it("Should render desktop options when opened and not loading", () => {
+        renderDropdownDefault({ value: mockOptions[1], dropdownListItemClassName: "custom-item-class" });
 
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "true");
+        const list = screen.getByRole("listbox");
+        expect(list).toHaveAttribute("id", "list-1");
 
-        // Desktop list items
-        expect(screen.getByTestId("dropdown-list-item-1")).toHaveTextContent("Первая опция");
-        expect(screen.getByTestId("dropdown-list-item-2")).toHaveAttribute("data-selected", "true");
-        expect(screen.getByTestId("dropdown-list-item-2")).toHaveClass("custom-item-class");
+        expect(screen.getAllByRole("option")).toHaveLength(3);
+        expect(screen.getByRole("option", { name: "Первая опция" })).toBeInTheDocument();
 
-        // Mobile list items
-        expect(screen.getByTestId("dropdown-mobile-list-item-1")).toHaveTextContent("Первая опция");
-        expect(screen.getByTestId("dropdown-mobile-list-item-2")).toHaveAttribute("data-selected", "true");
-        expect(screen.getByTestId("dropdown-mobile-list-item-2")).toHaveClass("custom-item-class");
-
-        // Mobile title
-        expect(screen.getByText("Mobile title")).toBeInTheDocument();
+        const selectedOption = screen.getByRole("option", { name: "Вторая опция", selected: true });
+        expect(selectedOption).toHaveClass("custom-item-class");
     });
 
     it("Should hide options when loading is true", () => {
-        render(
-            <SelectExtendedFieldDropdownDefault
-                options={mockOptions}
-                onChange={mockOnChange}
-                value={mockOptions[1]}
-                opened={true}
-                setOpened={mockSetOpened}
-                listId="list-1"
-                size={EComponentSize.MD}
-                width={EDropdownWidth.TARGET}
-                loading={true}
-                mobileTitle="Mobile title"
-                dropdownListItemClassName="custom-item-class"
-                targetRef={mockTargetRef}
-                dropdownRef={mockDropdownRef}
-            />,
-        );
+        renderDropdownDefault({ value: mockOptions[1], loading: true });
 
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "false");
-        expect(screen.queryByTestId("dropdown-list-item-1")).not.toBeInTheDocument();
-        expect(screen.queryByTestId("dropdown-mobile-list-item-1")).not.toBeInTheDocument();
-        expect(screen.queryByText("Mobile title")).not.toBeInTheDocument();
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        expect(screen.queryByRole("option")).not.toBeInTheDocument();
     });
 
     it("Should call onChange and close when desktop item selected", () => {
-        render(
-            <SelectExtendedFieldDropdownDefault
-                options={mockOptions}
-                onChange={mockOnChange}
-                opened={true}
-                setOpened={mockSetOpened}
-                listId="list-1"
-                size={EComponentSize.MD}
-                width={EDropdownWidth.TARGET}
-                loading={false}
-                targetRef={mockTargetRef}
-                dropdownRef={mockDropdownRef}
-            />,
-        );
+        renderDropdownDefault();
 
-        fireEvent.click(screen.getByTestId("dropdown-list-item-2"));
+        fireEvent.click(screen.getByRole("option", { name: "Вторая опция" }));
 
         expect(mockOnChange).toHaveBeenCalledWith(mockOptions[1]);
         expect(mockSetOpened).toHaveBeenCalledWith(false);
-    });
-
-    it("Should call onChange and close when mobile item selected", () => {
-        render(
-            <SelectExtendedFieldDropdownDefault
-                options={mockOptions}
-                onChange={mockOnChange}
-                opened={true}
-                setOpened={mockSetOpened}
-                listId="list-1"
-                size={EComponentSize.MD}
-                width={EDropdownWidth.TARGET}
-                loading={false}
-                mobileTitle="Mobile title"
-                targetRef={mockTargetRef}
-                dropdownRef={mockDropdownRef}
-            />,
-        );
-
-        fireEvent.click(screen.getByTestId("dropdown-mobile-list-item-2"));
-
-        expect(mockOnChange).toHaveBeenCalledWith(mockOptions[1]);
-        expect(mockSetOpened).toHaveBeenCalledWith(false);
-    });
-
-    it("Should close on mobile close button click", () => {
-        render(
-            <SelectExtendedFieldDropdownDefault
-                options={mockOptions}
-                onChange={mockOnChange}
-                opened={true}
-                setOpened={mockSetOpened}
-                listId="list-1"
-                size={EComponentSize.MD}
-                width={EDropdownWidth.TARGET}
-                loading={false}
-                mobileTitle="Mobile title"
-                targetRef={mockTargetRef}
-                dropdownRef={mockDropdownRef}
-            />,
-        );
-
-        fireEvent.click(screen.getByTestId("dropdown-mobile-close"));
-
-        expect(mockSetOpened).toHaveBeenCalledWith(false);
-        expect(mockOnChange).not.toHaveBeenCalled();
     });
 
     it("Should pass dropdownProps to Dropdown", () => {
         const dropdownProps = {
             className: "custom-dropdown-class",
+            "data-testid": "dropdown",
             "data-custom": "dropdown-value",
         };
 
-        render(
-            <SelectExtendedFieldDropdownDefault
-                options={mockOptions}
-                onChange={mockOnChange}
-                opened={true}
-                setOpened={mockSetOpened}
-                listId="list-1"
-                size={EComponentSize.MD}
-                width={EDropdownWidth.TARGET}
-                loading={false}
-                dropdownProps={dropdownProps}
-                targetRef={mockTargetRef}
-                dropdownRef={mockDropdownRef}
-            />,
-        );
+        renderDropdownDefault({ dropdownProps });
 
         const dropdown = screen.getByTestId("dropdown");
         expect(dropdown).toHaveAttribute("data-custom", "dropdown-value");
         expect(dropdown).toHaveClass("custom-dropdown-class");
+    });
+
+    // В мобильном режиме (ширина окна <768px) Dropdown рендерит mobileViewProps.children
+    describe("mobile view", () => {
+        const originalInnerWidth = window.innerWidth;
+
+        beforeEach(() => {
+            Object.defineProperty(window, "innerWidth", { configurable: true, writable: true, value: 500 });
+        });
+
+        afterEach(() => {
+            Object.defineProperty(window, "innerWidth", {
+                configurable: true,
+                writable: true,
+                value: originalInnerWidth,
+            });
+        });
+
+        it("Should render mobile options and title", () => {
+            renderDropdownDefault({
+                value: mockOptions[1],
+                mobileTitle: "Mobile title",
+                dropdownListItemClassName: "custom-item-class",
+            });
+
+            expect(screen.getByText("Mobile title")).toBeInTheDocument();
+            expect(screen.getAllByRole("option")).toHaveLength(3);
+            expect(screen.getByRole("option", { name: "Первая опция" })).toBeInTheDocument();
+
+            const selectedOption = screen.getByRole("option", { name: "Вторая опция", selected: true });
+            expect(selectedOption).toHaveClass("custom-item-class");
+        });
+
+        it("Should call onChange and close when mobile item selected", () => {
+            renderDropdownDefault({ mobileTitle: "Mobile title" });
+
+            fireEvent.click(screen.getByRole("option", { name: "Вторая опция" }));
+
+            expect(mockOnChange).toHaveBeenCalledWith(mockOptions[1]);
+            expect(mockSetOpened).toHaveBeenCalledWith(false);
+        });
+
+        it("Should close on mobile close button click", () => {
+            renderDropdownDefault({ mobileTitle: "Mobile title" });
+
+            fireEvent.click(screen.getByRole("button"));
+
+            expect(mockSetOpened).toHaveBeenCalledWith(false);
+            expect(mockOnChange).not.toHaveBeenCalled();
+        });
     });
 });

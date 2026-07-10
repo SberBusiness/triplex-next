@@ -4,6 +4,68 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v0.37.0</Title>
 
-**Title**
+<Heading>Ломающие изменения</Heading>
 
-- Description.
+**FormFieldMaskedInput**
+
+- Удалено свойство `error`.
+- Теперь `className` пробрасывается в корневой элемент, вместо дублирования на двух внутренних узлах.
+
+<Heading>Изменения</Heading>
+
+**ButtonDropdown**
+
+- Добавлено свойство `dropdownAttributes` — позволяет передавать HTML-атрибуты и data-атрибуты в `Dropdown`.
+
+**CollapsibleTree**
+
+- Добавлено свойство `disabled` для узла-ветки (`ICollapsibleTreeNodeBranch`) — узел не раскрывается, шеврон отображается приглушённым цветом. Для приглушённого текста передайте `type={EFontType.DISABLED}` в `CollapsibleTreeNodeLabel`.
+- `CollapsibleTreeNodeHeader` теперь учитывает проп `disabled`.
+- Шеврон открытого узла теперь указывает вверх, а не вниз.
+- Отступ вложенных групп увеличен с 24px до 32px.
+
+**DateRange**
+
+- Исправлены размеры разделителя.
+
+**DateField / MonthYearField**
+
+- Теперь `Dropdown` октрывается по нажатию мыши, а не клику.
+- Исправлено отображение плейсхолдера-маски `FormFieldMaskedInput` в заголовке `Dropdown`.
+
+**FormFieldInput**
+
+- Исправлено вертикальное выравнивание текста в размере `SM`.
+
+**FormFieldMaskedInput**
+
+- Исправлен баг с визуальным утолщением шрифта при наличии значения в поле ввода.
+
+**HeaderPage**
+
+- Исправлено расположение `Page.Header.Tabs.Controls`
+
+**Link**
+
+- При `target="_blank"` автоматически добавляется `rel="noopener"` (защита от reverse tabnabbing). Явно переданный потребителем `rel` сохраняется.
+
+**SelectField**
+
+- Добавлено свойство `dropdownProps` — позволяет передавать свойства и data-атрибуты в `Dropdown`.
+- Исправлено свойство `dropdownListItemClassName` — ранее оно не передавалось в элементы выпадающего списка и игнорировалось.
+
+**TableBasic**
+
+- Максимальная высота `TableBasicSettingsBody` изменена с `372px` на `302px`.
+
+**TextField / MaskedField**
+
+- Компонент переписан на `forwardRef`.
+
+**ThemeProvider**
+
+- Предупреждение о неподдержке динамической темы при SSR выводится через `console.warn` вместо `console.log`.
+
+**TooltipLink**
+
+- При `target="_blank"` автоматически добавляется `rel="noopener"` (защита от reverse tabnabbing). Явно переданный потребителем `rel` сохраняется.

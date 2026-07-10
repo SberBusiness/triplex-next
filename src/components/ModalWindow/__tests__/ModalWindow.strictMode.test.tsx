@@ -21,9 +21,11 @@ vi.mock("react-transition-group", () => ({
     },
 }));
 
-vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: { children?: React.ReactNode }) => <div>{props.children}</div>,
-}));
+// focus-trap-react 10 (release-0) импортируется как default, 11 (main) — как именованный экспорт.
+vi.mock("focus-trap-react", () => {
+    const FocusTrap = (props: { children?: React.ReactNode }) => <div>{props.children}</div>;
+    return { FocusTrap, default: FocusTrap };
+});
 
 vi.mock("../components/ModalWindowViewManager", () => ({
     ModalWindowViewManager: () => <div />,

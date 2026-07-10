@@ -7,6 +7,7 @@ import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { EFormFieldStatus } from "../../FormField/enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { EDropdownWidth } from "../../Dropdown/desktop/enums";
+import { EScreenWidth } from "../../../helpers/breakpoints";
 
 // Mock для KeyDownListener
 vi.mock("../../KeyDownListener", () => ({
@@ -922,19 +923,35 @@ describe("SelectExtendedFieldDropdownDefault", () => {
         expect(dropdown).toHaveClass("custom-dropdown-class");
     });
 
-    // В мобильном режиме (ширина окна <768px) Dropdown рендерит mobileViewProps.children
+    // В мобильном режиме Dropdown рендерит mobileViewProps.children. Мобильность определяется
+    // через window.matchMedia (MobileView → MediaMaxWidth → useMatchMedia), а не через
+    // window.innerWidth, поэтому мокаем matchMedia: мобильный запрос (max-width: SM_MAX) совпадает.
     describe("mobile view", () => {
-        const originalInnerWidth = window.innerWidth;
+        const originalMatchMedia = window.matchMedia;
 
         beforeEach(() => {
-            Object.defineProperty(window, "innerWidth", { configurable: true, writable: true, value: 500 });
+            Object.defineProperty(window, "matchMedia", {
+                configurable: true,
+                writable: true,
+                value: (query: string) =>
+                    ({
+                        matches: query === `(max-width: ${EScreenWidth.SM_MAX})`,
+                        media: query,
+                        onchange: null,
+                        addEventListener: () => {},
+                        removeEventListener: () => {},
+                        addListener: () => {},
+                        removeListener: () => {},
+                        dispatchEvent: () => false,
+                    }) as unknown as MediaQueryList,
+            });
         });
 
         afterEach(() => {
-            Object.defineProperty(window, "innerWidth", {
+            Object.defineProperty(window, "matchMedia", {
                 configurable: true,
                 writable: true,
-                value: originalInnerWidth,
+                value: originalMatchMedia,
             });
         });
 

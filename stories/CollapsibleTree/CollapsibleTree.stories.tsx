@@ -11,6 +11,8 @@ import {
     NestedSource,
     CustomLabel as CustomLabelRender,
     CustomLabelSource,
+    Disabled as DisabledRender,
+    DisabledSource,
     VisualTestsExample,
 } from "./examples";
 
@@ -128,6 +130,20 @@ export const CustomLabel: StoryObj<typeof CollapsibleTree> = {
             },
             controls: { disable: true },
             source: { code: CustomLabelSource, language: "tsx" },
+        },
+    },
+};
+
+export const Disabled: StoryObj<typeof CollapsibleTree> = {
+    name: "Disabled",
+    render: DisabledRender,
+    parameters: {
+        docs: {
+            description: {
+                story: "Узел с `disabled: true` не раскрывается: кнопка заголовка неактивна, шеврон отображается приглушённым цветом. Для приглушённого текста передайте `type={EFontType.DISABLED}` в `CollapsibleTreeNodeLabel`.",
+            },
+            controls: { disable: true },
+            source: { code: DisabledSource, language: "tsx" },
         },
     },
 };

@@ -8,8 +8,7 @@ import { CheckboxTreeExtendedNode } from "./components/CheckboxTreeExtendedNode"
 import { CheckboxTreeExtendedContext } from "./CheckboxTreeExtendedContext";
 import clsx from "clsx";
 import { EComponentSize } from "../../enums/EComponentSize";
-import { EScreenWidth } from "../../helpers/breakpoints";
-import { useMatchMedia } from "../MediaWidth/useMatchMedia";
+import { useMobileView } from "../MobileView";
 import styles from "./styles/CheckboxTreeExtended.module.less";
 
 /** Свойства CheckboxTreeExtended. */
@@ -28,10 +27,7 @@ export interface ICheckboxTreeExtendedSFC extends React.FC<ICheckboxTreeExtended
  * Является оберткой над CollapsibleTreeExtended.
  */
 export const CheckboxTreeExtended: ICheckboxTreeExtendedSFC = ({ className, size = EComponentSize.MD, ...rest }) => {
-    const adaptive = useMatchMedia(
-        `(max-width: ${EScreenWidth.SM_MAX})`,
-        window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-    );
+    const adaptive = useMobileView();
 
     return (
         <CheckboxTreeExtendedContext.Provider value={{ size: adaptive ? EComponentSize.MD : size }}>

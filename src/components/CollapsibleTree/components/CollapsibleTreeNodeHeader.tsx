@@ -15,9 +15,9 @@ export interface ICollapsibleTreeNodeHeaderProps
  * через {@link CollapsibleTreeNodeLabel} в `children`.
  */
 export const CollapsibleTreeNodeHeader = forwardRef<HTMLButtonElement, ICollapsibleTreeNodeHeaderProps>(
-    ({ children, className, opened, toggle, onClick, hasChildNodes, ...props }, ref) => {
+    ({ children, className, opened, toggle, onClick, hasChildNodes, disabled, ...props }, ref) => {
         const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-            if (hasChildNodes) {
+            if (hasChildNodes && !disabled) {
                 toggle(!opened);
             }
             onClick?.(event);
@@ -28,10 +28,14 @@ export const CollapsibleTreeNodeHeader = forwardRef<HTMLButtonElement, ICollapsi
                 {...props}
                 ref={ref}
                 type="button"
-                className={clsx(styles.collapsibleTreeNodeHeader, className, { [styles.interactive]: hasChildNodes })}
+                className={clsx(styles.collapsibleTreeNodeHeader, className, {
+                    [styles.interactive]: hasChildNodes && !disabled,
+                    // Глобальные классы @sberbusiness/icons-next — задают приглушённый цвет шеврона.
+                    "hoverable disabled": disabled,
+                })}
                 onClick={handleClick}
                 aria-expanded={hasChildNodes ? opened : undefined}
-                disabled={!hasChildNodes}
+                disabled={disabled || !hasChildNodes}
             >
                 {hasChildNodes && (
                     <CaretrightStrokeSrvIcon24

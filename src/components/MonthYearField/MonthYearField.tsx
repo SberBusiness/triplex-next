@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import moment from "moment";
 import { IMonthYearFieldProps } from "./types";
 import { DatePickerExtended } from "../DatePickerExtended/DatePickerExtended";
@@ -25,6 +25,7 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
         ...restProps
     } = props;
     const [pickerValues, setPickerValues] = useState(MonthYearPickerUtils.getPickerValues(value, format, limitRange));
+    const dropdownTargetRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const newPickerValues = MonthYearPickerUtils.getPickerValues(value, format, limitRange);
@@ -52,6 +53,7 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
                         ...inputProps,
                     }}
                     {...restTargetProps}
+                    ref={dropdownTargetRef}
                 />
             </MonthYearFieldContext.Provider>
         );
@@ -67,6 +69,7 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
 
     return (
         <DatePickerExtended
+            dropdownTargetRef={dropdownTargetRef}
             renderTarget={renderTarget}
             renderDropdownHeaderTarget={renderDropdownHeaderTarget}
             pickedDate={pickerValues.calendarDate}

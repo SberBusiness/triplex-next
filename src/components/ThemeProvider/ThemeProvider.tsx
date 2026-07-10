@@ -35,7 +35,7 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({
             // Обновление мета тега со стилями темы. Обновляется тег с ключом triplex-next-dynamic-theme.
             updateCSS(style, `triplex-next-dynamic-tokens-${scopeCssClassName}`);
         } else {
-            console.log("ThemeProvider", "SSR do not support dynamic theme with css variables.");
+            console.warn("ThemeProvider", "SSR do not support dynamic theme with css variables.");
         }
     }, [scopeCssClassName, theme, tokens]);
 

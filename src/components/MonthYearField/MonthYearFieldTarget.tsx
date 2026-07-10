@@ -4,6 +4,7 @@ import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExten
 import { TextField } from "../TextField/TextField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
 import { ButtonIcon } from "../Button/ButtonIcon";
+import { useMobileView } from "../MobileView";
 import { isKey } from "../../utils/keyboard";
 import { EComponentSize } from "../../enums";
 import { EFormFieldStatus } from "../FormField/enums";
@@ -15,63 +16,68 @@ const sizeToCalendarIconMap = {
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
-export const MonthYearFieldTarget: React.FC<IMonthYearFieldTargetProps> = ({
-    size = EComponentSize.MD,
-    postfix,
-    onClear,
-    inputProps,
-    ...restProps
-}) => {
-    const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
-    const { status } = restProps;
-    const { onKeyDown: onInputKeyDown, onClick: onInputClick, ...restInputProps } = inputProps;
-    const disabled = status === EFormFieldStatus.DISABLED;
+export const MonthYearFieldTarget = React.forwardRef<HTMLDivElement, IMonthYearFieldTargetProps>(
+    ({ size = EComponentSize.MD, postfix, onClear, inputProps, ...restProps }, ref) => {
+        const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
+        const { status } = restProps;
+        const { onKeyDown: onInputKeyDown, onMouseDown: onInputMouseDown, ...restInputProps } = inputProps;
+        const adaptive = useMobileView();
+        const disabled = status === EFormFieldStatus.DISABLED;
 
-    const handleInputClick = (event: React.MouseEvent<HTMLInputElement>) => {
-        setDropdownOpen(!dropdownOpen);
-        onInputClick?.(event);
-    };
+        const handleMouseDown: React.MouseEventHandler<HTMLInputElement> = (event) => {
+            if (!dropdownOpen) {
+                if (adaptive) {
+                    event.preventDefault();
+                }
+                // setTimeout для корректной работы label
+                setTimeout(() => setDropdownOpen(true));
+            }
 
-    const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (isKey(event.code, "ENTER")) {
-            setDropdownOpen(!dropdownOpen);
-        } else if (isKey(event.code, "SPACE")) {
-            event.preventDefault();
-            setDropdownOpen(!dropdownOpen);
-        }
-        onInputKeyDown?.(event);
-    };
+            onInputMouseDown?.(event);
+        };
 
-    const handleButtonClick = () => setDropdownOpen(!dropdownOpen);
+        const handleInputKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+            if (isKey(event.code, "ENTER")) {
+                setDropdownOpen(!dropdownOpen);
+            } else if (isKey(event.code, "SPACE")) {
+                event.preventDefault();
+                setDropdownOpen(!dropdownOpen);
+            }
+            onInputKeyDown?.(event);
+        };
 
-    const renderPostfixContent = () => (
-        <>
-            {onClear && <FormFieldClear onClick={onClear} />}
-            <ButtonIcon
-                role="presentation"
-                tabIndex={-1}
-                active={dropdownOpen}
-                disabled={disabled}
-                onClick={handleButtonClick}
-            >
-                {sizeToCalendarIconMap[size]}
-            </ButtonIcon>
-            {postfix}
-        </>
-    );
+        const handleButtonClick = () => setDropdownOpen(!dropdownOpen);
 
-    return (
-        <TextField
-            size={size}
-            inputProps={{
-                readOnly: true,
-                disabled: disabled,
-                onClick: handleInputClick,
-                onKeyDown: handleInputKeyDown,
-                ...restInputProps,
-            }}
-            postfix={renderPostfixContent()}
-            {...restProps}
-        />
-    );
-};
+        const renderPostfixContent = () => (
+            <>
+                {onClear && <FormFieldClear onClick={onClear} />}
+                <ButtonIcon
+                    role="presentation"
+                    tabIndex={-1}
+                    active={dropdownOpen}
+                    disabled={disabled}
+                    onClick={handleButtonClick}
+                >
+                    {sizeToCalendarIconMap[size]}
+                </ButtonIcon>
+                {postfix}
+            </>
+        );
+
+        return (
+            <TextField
+                size={size}
+                inputProps={{
+                    ...restInputProps,
+                    readOnly: true,
+                    disabled: disabled,
+                    onMouseDown: handleMouseDown,
+                    onKeyDown: handleInputKeyDown,
+                }}
+                postfix={renderPostfixContent()}
+                {...restProps}
+                ref={ref}
+            />
+        );
+    },
+);

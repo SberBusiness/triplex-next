@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import {
     SuggestField,
-    useMatchMedia,
+    useMobileView,
     ISuggestFieldOption,
-    EScreenWidth,
     EComponentSize,
     EFormFieldStatus,
 } from "@sberbusiness/triplex-next";
@@ -36,9 +35,6 @@ const FOOD_OPTIONS: ISuggestFieldOption[] = FOOD_NAMES.map((item, index) => ({
     label: item,
 }));
 
-const useAdaptive = () =>
-    useMatchMedia(`(max-width: ${EScreenWidth.SM_MAX})`, window.innerWidth <= parseInt(EScreenWidth.SM_MAX));
-
 const getFilteredOptions = (query: string): ISuggestFieldOption[] =>
     FOOD_OPTIONS.filter(({ label }) => label.toLowerCase().includes(query.toLowerCase()));
 
@@ -48,7 +44,7 @@ const StatusItem = ({ status }: IStatusItemProps) => {
     const [inputPristine, setInputPristine] = useState(true);
     const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
-    const adaptive = useAdaptive();
+    const adaptive = useMobileView();
 
     const reset = (newOptions: typeof options) => {
         setOptions(newOptions);

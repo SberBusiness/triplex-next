@@ -9,10 +9,12 @@ export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children">
 }
 
 /** Компонент ввода с маской. */
-export const MaskedField: React.FC<IMaskedFieldProps> = ({ maskedInputProps, ...textFieldProps }) => (
-    <TextFieldBase {...textFieldProps}>
-        <FormFieldMaskedInput {...maskedInputProps} />
-    </TextFieldBase>
+export const MaskedField = React.forwardRef<HTMLDivElement, IMaskedFieldProps>(
+    ({ maskedInputProps, ...restProps }, ref) => (
+        <TextFieldBase {...restProps} ref={ref}>
+            <FormFieldMaskedInput {...maskedInputProps} />
+        </TextFieldBase>
+    ),
 );
 
 MaskedField.displayName = "MaskedField";

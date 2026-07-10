@@ -167,6 +167,7 @@ export const Default: StoryObj<typeof SelectField> = {
     name: "Default",
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: function Render() {
         const [selectedValue, setSelectedValue] = useState<ISelectFieldOption | undefined>();
@@ -410,5 +411,21 @@ export const WithDescription: StoryObj<typeof SelectField> = {
     parameters: {
         controls: { disable: true },
         testRunner: { skip: true },
+    },
+};
+
+export const VisualTests: StoryObj<typeof SelectField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: Default.render,
+    play: async ({ canvas, userEvent }) => {
+        const input = await canvas.findByRole("combobox");
+        await userEvent.click(input);
     },
 };

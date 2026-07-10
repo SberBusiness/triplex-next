@@ -5,6 +5,7 @@ import { DateFieldContext } from "./DateFieldContext";
 import { MaskedField } from "../TextField/MaskedField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
 import { ButtonIcon } from "../Button/ButtonIcon";
+import { useMobileView } from "../MobileView";
 import { isKey } from "../../utils/keyboard";
 import { EComponentSize } from "../../enums";
 import { EFormFieldStatus } from "../FormField/enums";
@@ -17,83 +18,86 @@ const sizeToCalendarIconMap = {
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
-export const DateFieldTarget: React.FC<IDateFieldTargetProps> = ({
-    size = EComponentSize.MD,
-    postfix,
-    maskedInputProps,
-    onClear,
-    ...restProps
-}) => {
-    const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
-    const { inputFocusedRef, triggerChangeFromInput } = useContext(DateFieldContext);
-    const { status } = restProps;
-    const {
-        onFocus: onInputFocus,
-        onBlur: onInputBlur,
-        onKeyDown: onInputKeyDown,
-        onClick: onInputClick,
-        ...restInputProps
-    } = maskedInputProps;
-    const disabled = status === EFormFieldStatus.DISABLED;
+export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTargetProps>(
+    ({ size = EComponentSize.MD, postfix, maskedInputProps, onClear, ...restProps }, ref) => {
+        const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
+        const { inputFocusedRef, triggerChangeFromInput } = useContext(DateFieldContext);
+        const { status } = restProps;
+        const {
+            onFocus: onInputFocus,
+            onBlur: onInputBlur,
+            onKeyDown: onInputKeyDown,
+            onMouseDown: onInputMouseDown,
+            ...restInputProps
+        } = maskedInputProps;
+        const adaptive = useMobileView();
+        const disabled = status === EFormFieldStatus.DISABLED;
 
-    const handleInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-        inputFocusedRef.current = true;
-        onInputFocus?.(event);
-    };
+        const handleInputFocus: React.FocusEventHandler<HTMLInputElement> = (event) => {
+            inputFocusedRef.current = true;
+            onInputFocus?.(event);
+        };
 
-    const handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        inputFocusedRef.current = false;
+        const handleInputBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
+            inputFocusedRef.current = false;
 
-        if (!dropdownOpen) {
-            triggerChangeFromInput();
-        }
+            if (!dropdownOpen) {
+                triggerChangeFromInput();
+            }
 
-        onInputBlur?.(event);
-    };
+            onInputBlur?.(event);
+        };
 
-    const handleInputClick = (event: React.MouseEvent<HTMLInputElement>) => {
-        if (!dropdownOpen) {
-            setDropdownOpen(true);
-        }
-        onInputClick?.(event);
-    };
+        const handleMouseDown: React.MouseEventHandler<HTMLInputElement> = (event) => {
+            if (!dropdownOpen) {
+                if (adaptive) {
+                    event.preventDefault();
+                }
+                // setTimeout для корректной работы label
+                setTimeout(() => setDropdownOpen(true));
+            }
 
-    const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (isKey(event.code, "ENTER")) {
-            setDropdownOpen(!dropdownOpen);
-        } else if (isKey(event.code, "SPACE")) {
-            event.preventDefault();
-            setDropdownOpen(!dropdownOpen);
-        }
+            onInputMouseDown?.(event);
+        };
 
-        onInputKeyDown?.(event);
-    };
+        const handleInputKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+            if (isKey(event.code, "ENTER")) {
+                setDropdownOpen(!dropdownOpen);
+            } else if (isKey(event.code, "SPACE")) {
+                event.preventDefault();
+                setDropdownOpen(!dropdownOpen);
+            }
 
-    const handleButtonClick = () => setDropdownOpen(!dropdownOpen);
+            onInputKeyDown?.(event);
+        };
 
-    const renderPostfixContent = () => (
-        <>
-            {onClear && <FormFieldClear onClick={onClear} />}
-            <ButtonIcon active={dropdownOpen} disabled={disabled} onClick={handleButtonClick}>
-                {sizeToCalendarIconMap[size]}
-            </ButtonIcon>
-            {postfix}
-        </>
-    );
+        const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = () => setDropdownOpen(!dropdownOpen);
 
-    return (
-        <MaskedField
-            size={size}
-            maskedInputProps={{
-                disabled: disabled,
-                onFocus: handleInputFocus,
-                onBlur: handleInputBlur,
-                onClick: handleInputClick,
-                onKeyDown: handleInputKeyDown,
-                ...restInputProps,
-            }}
-            postfix={renderPostfixContent()}
-            {...restProps}
-        />
-    );
-};
+        const renderPostfixContent = () => (
+            <>
+                {onClear && <FormFieldClear onClick={onClear} />}
+                <ButtonIcon active={dropdownOpen} disabled={disabled} onClick={handleButtonClick}>
+                    {sizeToCalendarIconMap[size]}
+                </ButtonIcon>
+                {postfix}
+            </>
+        );
+
+        return (
+            <MaskedField
+                size={size}
+                maskedInputProps={{
+                    ...restInputProps,
+                    disabled: disabled,
+                    onFocus: handleInputFocus,
+                    onBlur: handleInputBlur,
+                    onMouseDown: handleMouseDown,
+                    onKeyDown: handleInputKeyDown,
+                }}
+                postfix={renderPostfixContent()}
+                {...restProps}
+                ref={ref}
+            />
+        );
+    },
+);

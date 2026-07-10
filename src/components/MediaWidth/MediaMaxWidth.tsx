@@ -1,11 +1,9 @@
 import React from "react";
-import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
-import { useMatchMedia } from "@sberbusiness/triplex-next/components/MediaWidth/useMatchMedia";
+import { EScreenWidth } from "../../helpers/breakpoints";
+import { useMatchMedia } from "./useMatchMedia";
 
-/**
- * Свойства MediaMaxWidth.
- */
-interface IMediaMaxWidthProps {
+/** Свойства компонента MediaMaxWidth. */
+export interface IMediaMaxWidthProps {
     /** Элементы, которые рендерятся, когда ширина окна браузера соответствует значению maxWidth. */
     children: React.ReactElement | null;
     /** Максимальная ширина экран, при которой будут отрендерены children. */
@@ -19,7 +17,7 @@ interface IMediaMaxWidthProps {
  * В противном случае рендерится fallback.
  */
 export const MediaMaxWidth: React.FC<IMediaMaxWidthProps> = ({ children, fallback, maxWidth }) => {
-    const matches = useMatchMedia(`(max-width: ${maxWidth})`, window.innerWidth <= parseInt(maxWidth));
+    const matches = useMatchMedia(`(max-width: ${maxWidth})`);
 
     return matches ? children : fallback;
 };

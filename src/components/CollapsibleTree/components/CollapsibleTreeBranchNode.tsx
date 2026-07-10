@@ -34,7 +34,9 @@ export const CollapsibleTreeBranchNode: React.FC<ICollapsibleTreeBranchNodeProps
             prevNodeId={prevNodeId}
             nextNodeId={nextNodeId}
             renderHeader={(headerProps) => (
-                <CollapsibleTreeNodeHeader {...headerProps}>{node.label}</CollapsibleTreeNodeHeader>
+                <CollapsibleTreeNodeHeader {...headerProps} disabled={node.disabled}>
+                    {node.label}
+                </CollapsibleTreeNodeHeader>
             )}
             renderBody={() =>
                 children.map((child, index) => {

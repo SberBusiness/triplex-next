@@ -10,8 +10,7 @@ import styles from "./styles/IslandWidget.module.less";
 import { IslandWidgetLayoutContext } from "./IslandWidgetLayoutContext";
 import { IslandWidgetContext } from "./IslandWidgetContext";
 import { ExpandAnimation } from "../ExpandAnimation/ExpandAnimation";
-import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
-import { useMatchMedia } from "../MediaWidth/useMatchMedia";
+import { useMobileView } from "../MobileView";
 
 export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Размер компонента. */
@@ -43,10 +42,7 @@ export const IslandWidget = Object.assign(
             const { hasExtraFooter } = useContext(IslandWidgetLayoutContext);
             const [open, setOpen] = useState(disableAdaptiveCollapsing);
 
-            const adaptive = useMatchMedia(
-                `(max-width: ${EScreenWidth.SM_MAX})`,
-                window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-            );
+            const adaptive = useMobileView();
 
             const handleHeaderClick = (): void => {
                 const newOpen = !open;

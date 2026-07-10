@@ -38,6 +38,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         DateFieldUtils.getPickerValues(value, format, limitRange, disabledDays),
     );
     const tooltipTargetRef = useRef<HTMLDivElement | null>(null);
+    const dropdownTargetRef = useRef<HTMLDivElement | null>(null);
     const lastValidPickerValuesRef = useRef(pickerValues);
     const inputFocusedRef = useRef(false);
     const dropdownOpenRef = useRef(false);
@@ -89,6 +90,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
                         ...restMaskedInputProps,
                     }}
                     {...restTargetProps}
+                    ref={dropdownTargetRef}
                 />
             </DateFieldContext.Provider>
         );
@@ -187,6 +189,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
 
     const renderDatePickerExtended = () => (
         <DatePickerExtended
+            dropdownTargetRef={dropdownTargetRef}
             renderTarget={renderTarget}
             renderDropdownHeaderTarget={renderDropdownHeaderTarget}
             pickedDate={pickerValues.calendarDate}

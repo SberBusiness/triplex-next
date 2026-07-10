@@ -4,10 +4,8 @@ import { MediaMaxWidth } from "./MediaMaxWidth";
 import { MediaMinWidth } from "./MediaMinWidth";
 import { MediaBetweenWidth } from "./MediaBetweenWidth";
 
-/**
- * Свойства MediaWidth.
- */
-interface IMediaProps {
+/** Свойства компонента MediaWidth. */
+export interface IMediaProps {
     /** Элементы, которые рендерятся, когда ширина окна браузера попадает в диапазон minWidth и/или maxWidth. */
     children: React.ReactElement | null;
     /** Минимальная ширина экран, при которой будут отрендерены children. */
@@ -18,9 +16,7 @@ interface IMediaProps {
     fallback: React.ReactElement | null;
 }
 
-/**
- * Компонент, который рендерит элементы в зависимости от ширины окна браузера.
- */
+/** Компонент, который рендерит элементы в зависимости от ширины окна браузера. */
 export const MediaWidth: React.FC<IMediaProps> = ({ children, fallback, maxWidth, minWidth }) => {
     if (minWidth && maxWidth) {
         return (

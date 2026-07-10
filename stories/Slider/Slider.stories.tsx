@@ -128,6 +128,7 @@ export const Default: StoryObj<ISliderProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -158,6 +159,7 @@ export const WithTooltip: StoryObj<ISliderProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -190,6 +192,7 @@ export const WithCustomSteps: StoryObj<ISliderProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -216,6 +219,7 @@ export const Disabled: StoryObj<ISliderProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -246,6 +250,7 @@ export const Reverse: StoryObj<ISliderProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -292,5 +297,6 @@ export const Amounts: StoryObj<ISliderProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };

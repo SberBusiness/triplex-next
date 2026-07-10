@@ -184,6 +184,7 @@ export const Default: StoryObj<typeof TextField> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 

@@ -138,8 +138,8 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
     args: PLAYGROUND_ARGS,
     argTypes: PLAYGROUND_ARG_TYPES,
-    render: PlaygroundExample,
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         docs: {
             canvas: {
                 sourceState: "none",
@@ -150,79 +150,69 @@ export const Playground: StoryObj<PlaygroundArgs> = {
                 language: "tsx",
             },
         },
-        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         testRunner: { skip: true },
     },
+    render: PlaygroundExample,
 };
 
 export const Default: StoryObj<typeof SuggestField> = {
-    render: DefaultExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
+    render: DefaultExample,
 };
 
 export const Sizes: StoryObj<typeof SuggestField> = {
-    render: SizesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: SizesExampleSource,
                 language: "tsx",
             },
         },
     },
+    render: SizesExample,
 };
 
 export const Statuses: StoryObj<typeof SuggestField> = {
-    render: StatusesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: StatusesExampleSource,
                 language: "tsx",
             },
         },
     },
+    render: StatusesExample,
 };
 
 export const Loading: StoryObj<typeof SuggestField> = {
-    render: LoadingExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: LoadingExampleSource,
                 language: "tsx",
             },
         },
     },
+    render: LoadingExample,
 };
 
 export const Production: StoryObj<typeof SuggestField> = {
     name: "Example: production",
-    render: ProductionExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: ProductionExampleSource,
                 language: "tsx",
@@ -230,16 +220,14 @@ export const Production: StoryObj<typeof SuggestField> = {
         },
         testRunner: { skip: true },
     },
+    render: ProductionExample,
 };
 
 export const CustomOptions: StoryObj<typeof SuggestField> = {
     name: "Example: custom options",
-    render: CustomOptionsExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: CustomOptionsExampleSource,
                 language: "tsx",
@@ -247,21 +235,36 @@ export const CustomOptions: StoryObj<typeof SuggestField> = {
         },
         testRunner: { skip: true },
     },
+    render: CustomOptionsExample,
 };
 
 export const Async: StoryObj<typeof SuggestField> = {
     name: "Example: async",
-    render: AsyncExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: {
-                disable: true,
-            },
             source: {
                 code: AsyncExampleSource,
                 language: "tsx",
             },
         },
         testRunner: { skip: true },
+    },
+    render: AsyncExample,
+};
+
+export const VisualTests: StoryObj<typeof SuggestField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: DefaultExample,
+    play: async ({ canvas, userEvent }) => {
+        const input = await canvas.findByRole("combobox");
+        await userEvent.click(input);
     },
 };

@@ -68,6 +68,7 @@ export const Default: StoryObj<typeof Spoiler> = {
     name: "Default",
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => (
         <Spoiler labelExpand="Развернуть" labelCollapse="Свернуть" size={EComponentSize.MD}>
@@ -79,7 +80,7 @@ export const Default: StoryObj<typeof Spoiler> = {
 };
 
 export const DifferentSizes: StoryObj<typeof Spoiler> = {
-    name: "Different Sizes",
+    name: "Different sizes",
     parameters: {
         controls: { disable: true },
     },
@@ -127,4 +128,19 @@ export const Controlled: StoryObj<typeof Spoiler> = {
             </Text>
         </Spoiler>
     ),
+};
+
+export const VisualTests: StoryObj<typeof Spoiler> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    args: {
+        expanded: true,
+    },
+    render: Controlled.render,
 };

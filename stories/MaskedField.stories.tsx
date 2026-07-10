@@ -292,6 +292,7 @@ export const Default: StoryObj<typeof MaskedField> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -389,6 +390,7 @@ export const States: StoryObj<typeof MaskedField> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -459,6 +461,7 @@ export const Sizes: StoryObj<typeof MaskedField> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -702,6 +705,7 @@ export const AllMasks: StoryObj<typeof MaskedField> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -745,5 +749,6 @@ export const Production: StoryObj<typeof MaskedField> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };

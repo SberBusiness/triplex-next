@@ -180,6 +180,7 @@ export const RangeWithTooltip: StoryObj<ISliderExtendedProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -211,7 +212,6 @@ export const WithCustomSteps: StoryObj<ISliderExtendedProps> = {
     },
     parameters: {
         controls: { disable: true },
-        testRunner: { skip: true },
     },
 };
 
@@ -270,7 +270,6 @@ export const Disabled: StoryObj<ISliderExtendedProps> = {
     },
     parameters: {
         controls: { disable: true },
-        testRunner: { skip: true },
     },
 };
 
@@ -300,7 +299,6 @@ export const Reverse: StoryObj<ISliderExtendedProps> = {
     },
     parameters: {
         controls: { disable: true },
-        testRunner: { skip: true },
     },
 };
 
@@ -348,6 +346,20 @@ export const Amounts: StoryObj<ISliderExtendedProps> = {
     },
     parameters: {
         controls: { disable: true },
-        testRunner: { skip: true },
+    },
+};
+
+export const VisualTests: StoryObj<typeof SliderExtended> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: Default.render,
+    play: async ({ userEvent }) => {
+        await userEvent.tab();
     },
 };

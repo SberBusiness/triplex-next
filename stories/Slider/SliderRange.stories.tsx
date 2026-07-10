@@ -116,6 +116,7 @@ export const Default: StoryObj<ISliderRangeProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -179,6 +180,7 @@ export const WithCustomSteps: StoryObj<ISliderRangeProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -235,6 +237,7 @@ export const Disabled: StoryObj<ISliderRangeProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };
 
@@ -264,5 +267,6 @@ export const Reverse: StoryObj<ISliderRangeProps> = {
     },
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
 };

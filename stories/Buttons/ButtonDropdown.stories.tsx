@@ -87,6 +87,7 @@ export const Playground: Story = {
         options: { table: { disable: true } },
         selected: { table: { disable: true } },
         buttonAttributes: { table: { disable: true } },
+        dropdownAttributes: { table: { disable: true } },
     },
     args: {
         theme: EButtonTheme.GENERAL,

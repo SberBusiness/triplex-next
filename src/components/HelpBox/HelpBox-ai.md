@@ -96,12 +96,12 @@ version: "1.0"
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Playground` | — | Интерактивный контроль всех props |
-| `Default` | `DefaultExample.tsx` | Минимальное использование |
-| `Sizes` | `SizesExample.tsx` | Размеры тултипа `SM` / `LG` |
-| `Placement` | `PlacementExample.tsx` | Расположение: above, below, left, right |
-| `WithMobileHeader` | `WithMobileHeaderExample.tsx` | Мобильный заголовок |
-| `Controlled` | `ControlledExample.tsx` | Управляемое состояние (`isOpen` + `toggle`) |
-| `ChangeIconProps` | `ChangeIconPropsExample.tsx` | Кастомизация иконки через `iconProps` |
+| `Default` | `Default.tsx` | Минимальное использование |
+| `Sizes` | `Sizes.tsx` | Размеры тултипа `SM` / `LG` |
+| `Placement` | `Placement.tsx` | Расположение: above, below, left, right |
+| `WithMobileHeader` | `WithMobileHeader.tsx` | Мобильный заголовок |
+| `Controlled` | `Controlled.tsx` | Управляемое состояние (`isOpen` + `toggle`) |
+| `ChangeIconProps` | `ChangeIconProps.tsx` | Кастомизация иконки через `iconProps` |
 | `VisualTests` | — | Скриншот-тест с открытым тултипом |
 
 ---
@@ -112,3 +112,4 @@ version: "1.0"
 |---|---|
 | 2026-04-08 | Создан документ. Добавлен `forwardRef`. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», их содержимое перенесено в `Ограничения использования` и `Accessibility`, переставлены секции, добавлена колонка `Example file`. |
+| 2026-07-08 | Актуализирована колонка `Example file`: имена файлов примеров приведены к фактическим (без постфикса `Example`). |

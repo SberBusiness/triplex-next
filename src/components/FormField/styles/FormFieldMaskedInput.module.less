@@ -1,59 +1,42 @@
 .formFieldMaskedInputWrapper {
     position: relative;
+}
 
-    .formFieldMaskedInputPlaceholder {
-        position: absolute;
-        left: 0;
-        top: 0;
+.formFieldMaskedInputPlaceholder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    pointer-events: none;
+    user-select: none;
+    white-space: pre;
+    font-family: inherit;
+    color: var(--triplex-next-FormField-Placeholder_Color);
 
-        &::placeholder {
-            // Переопределяет opacity: 0 в FormFieldInput.less.
-            opacity: 1;
-        }
-
-        // Скрываем маску в состоянии disabled, иначе получается темный шрифт value т.к. он с альфа-каналом.
-        &:disabled {
-            visibility: hidden;
-        }
-    }
-
-
-    &.size-sm {
+    &.sm {
+        padding-top: 6px;
+        padding-bottom: 6px;
         font-size: 12px;
         line-height: 16px;
-
-        .formFieldMaskedInputPlaceholder {
-            top: 6px;
-            font-size: 12px;
-            line-height: 16px;
-        }
     }
 
-    &.size-md {
+    &.md {
+        padding-top: 10px;
+        padding-bottom: 10px;
         font-size: 14px;
         line-height: 20px;
-
-        .formFieldMaskedInputPlaceholder {
-            top: 10px;
-            font-size: 14px;
-            line-height: 20px;
-        }
     }
 
-    &.size-lg {
+    &.lg {
+        padding-top: 26px;
+        padding-bottom: 10px;
         font-size: 16px;
         line-height: 20px;
-
-        .formFieldMaskedInputPlaceholder {
-            top: 26px;
-            font-size: 16px;
-            line-height: 20px;
-        }
     }
+}
 
-    .formFieldMaskedInput {
-        display: block;
-        position: relative;
-        background: none !important;
-    }
+.transparentText {
+    color: transparent;
 }

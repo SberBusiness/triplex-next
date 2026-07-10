@@ -36,6 +36,7 @@ version: "1.0"
 | `selected` | `IButtonDropdownOption` | — | Предвыбранная опция для подсветки в списке |
 | `disabled` | `boolean` | `false` | Блокирует кнопку и открытие списка |
 | `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | — | Дополнительные HTML-атрибуты нативной кнопки (включая `aria-label`) |
+| `dropdownAttributes` | `React.HTMLAttributes<HTMLDivElement> & DataAttributes` | — | HTML-атрибуты выпадающего блока, включая `data-*`; `className` мержится с внутренними классами; применяется в desktop-отображении |
 | `block` | `boolean` | `false` | Полноширинный режим (только для non-dots тем) |
 | `className` | `string` | — | Дополнительный CSS-класс контейнера |
 | `...rest` | `React.HTMLAttributes<HTMLDivElement>` | — | Атрибуты корневого `<div>` компонента |
@@ -115,3 +116,4 @@ version: "1.0"
 |---|---|
 | 2026-04-15 | Создан документ AI-ready для `ButtonDropdown`. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», их содержимое перенесено в `Ограничения по темам` и `Accessibility`, добавлена колонка `Example file`. |
+| 2026-07-09 | Добавлено свойство `dropdownAttributes` — HTML-атрибуты выпадающего блока (в том числе возможность поднять `z-index` через `style`). |

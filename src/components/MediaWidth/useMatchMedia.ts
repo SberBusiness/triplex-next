@@ -6,19 +6,32 @@ import { useEffect, useState } from "react";
  * @param initial Начальное значение
  * @returns Результат window.matchMedia(query)
  */
-export function useMatchMedia(query: string, initialMatch: boolean): boolean {
-    const [matches, setMatches] = useState(initialMatch);
+export function useMatchMedia(query: string): boolean {
+    const [state, setState] = useState(() => ({ query, matches: window.matchMedia(query).matches }));
+
+    if (state.query !== query) {
+        setState({ query, matches: window.matchMedia(query).matches });
+    }
 
     useEffect(() => {
         const mediaQueryList = window.matchMedia(query);
-        const handleChangeMatches = (event: MediaQueryListEvent) => setMatches(event.matches);
 
-        mediaQueryList.addEventListener("change", handleChangeMatches);
+        const handleChangeMatches = (event: MediaQueryListEvent) => setState({ query, matches: event.matches });
+
+        if (mediaQueryList.addEventListener) {
+            mediaQueryList.addEventListener("change", handleChangeMatches);
+        } else {
+            mediaQueryList.addListener(handleChangeMatches);
+        }
 
         return () => {
-            mediaQueryList.removeEventListener("change", handleChangeMatches);
+            if (mediaQueryList.removeEventListener) {
+                mediaQueryList.removeEventListener("change", handleChangeMatches);
+            } else {
+                mediaQueryList.removeListener(handleChangeMatches);
+            }
         };
     }, [query]);
 
-    return matches;
+    return state.matches;
 }

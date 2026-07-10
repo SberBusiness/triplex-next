@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
-import { MobileView } from "@sberbusiness/triplex-next/components/MobileView/MobileView";
-import { TooltipDesktop } from "@sberbusiness/triplex-next/components/Tooltip/components/desktop/TooltipDesktop";
-import { TooltipMobile } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/TooltipMobile";
-import { TooltipBody } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipBody";
-import { TooltipLink } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipLink";
-import { TooltipTarget } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipTarget";
-import { TooltipXButton } from "@sberbusiness/triplex-next/components/Tooltip/components/common/TooltipXButton";
-import { TooltipMobileHeader } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileHeader";
-import { ITooltipElements, ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
-import { useTooltipTheme } from "@sberbusiness/triplex-next/components/Tooltip/utils/useTooltipTheme";
-import { useMatchMedia } from "@sberbusiness/triplex-next/components/MediaWidth";
-import { EScreenWidth } from "@sberbusiness/triplex-next/helpers/breakpoints";
+import { TooltipContext } from "./TootlipContext";
+import { MobileView } from "../MobileView/MobileView";
+import { TooltipDesktop } from "./components/desktop/TooltipDesktop";
+import { TooltipMobile } from "./components/mobile/TooltipMobile";
+import { TooltipBody } from "./components/common/TooltipBody";
+import { TooltipLink } from "./components/common/TooltipLink";
+import { TooltipTarget } from "./components/common/TooltipTarget";
+import { TooltipXButton } from "./components/common/TooltipXButton";
+import { TooltipMobileHeader } from "./components/mobile/components/TooltipMobileHeader";
+import { ITooltipElements, ITooltipProps } from "./types";
+import { useTooltipTheme } from "./utils/useTooltipTheme";
+import { useMobileView } from "../MobileView";
 
 /** Внутренние составляющие компонента Tooltip. */
 interface ITooltipComposition {
@@ -32,10 +31,7 @@ export const Tooltip: React.FC<ITooltipProps> & ITooltipComposition = ({
     toggle,
     ...rest
 }) => {
-    const isMobileScreenWidth = useMatchMedia(
-        `(max-width: ${EScreenWidth.SM_MAX})`,
-        window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-    );
+    const isMobileScreenWidth = useMobileView();
     const [openState, setOpenState] = useState(false);
     const targetHoveredRef = useRef(false);
     const open = openProp ?? openState;

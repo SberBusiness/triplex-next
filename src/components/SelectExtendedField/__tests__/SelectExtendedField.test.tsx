@@ -1,9 +1,13 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SelectExtendedField, SelectExtendedFieldTarget, SelectExtendedFieldDropdown } from "../index";
+import { SelectExtendedFieldDropdownDefault } from "../components/SelectExtendedFieldDropdownDefault";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { EFormFieldStatus } from "../../FormField/enums";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EDropdownWidth } from "../../Dropdown/desktop/enums";
+import { EScreenWidth } from "../../../helpers/breakpoints";
 
 // Mock для KeyDownListener
 vi.mock("../../KeyDownListener", () => ({
@@ -34,38 +38,22 @@ vi.mock("../../KeyDownListener", () => ({
     },
 }));
 
-// Mock для Dropdown
-vi.mock("../../Dropdown", () => ({
-    Dropdown: ({
-        children,
-        opened,
-        ...props
-    }: {
-        children: React.ReactNode;
-        opened: boolean;
-        [key: string]: unknown;
-    }) => (
-        <div data-testid="dropdown" data-opened={opened} {...props}>
-            {opened && children}
-        </div>
-    ),
-    DropdownList: ({ children }: { children: React.ReactNode }) => <div data-testid="dropdown-list">{children}</div>,
-}));
-
 // Mock для FormField
 vi.mock("../../FormField", () => ({
     FormField: ({
         children,
         onClick,
         onKeyDown,
+        active,
         ...props
     }: {
         children: React.ReactNode;
         onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
         onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+        active?: boolean;
         [key: string]: unknown;
     }) => (
-        <div data-testid="form-field" onClick={onClick} onKeyDown={onKeyDown} {...props}>
+        <div data-testid="form-field" data-active={String(active)} onClick={onClick} onKeyDown={onKeyDown} {...props}>
             {children}
         </div>
     ),
@@ -76,6 +64,12 @@ vi.mock("../../FormField", () => ({
     ),
     FormFieldPostfix: ({ children }: { children: React.ReactNode }) => (
         <div data-testid="form-field-postfix">{children}</div>
+    ),
+    FormFieldPrefix: ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="form-field-prefix">{children}</div>
+    ),
+    FormFieldClear: ({ onClick }: { onClick: () => void }) => (
+        <button data-testid="form-field-clear" onClick={onClick} />
     ),
     EFormFieldStatus: { DEFAULT: "default", DISABLED: "disabled", ERROR: "error", WARNING: "warning" },
 }));
@@ -118,6 +112,9 @@ vi.mock("@sberbusiness/icons-next", () => ({
         <div data-testid="caret-icon-24" className={className}>
             Caret Icon 24
         </div>
+    ),
+    CrossStrokeSrvIcon16: ({ className }: { className?: string }) => (
+        <div data-testid="cross-icon-16" className={className} />
     ),
 }));
 
@@ -170,6 +167,17 @@ describe("SelectExtendedField", () => {
         expect(selectField).toHaveClass("custom-class");
     });
 
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <SelectExtendedField renderTarget={mockRenderTarget} ref={ref} data-testid="select-field">
+                {mockRenderDropdown}
+            </SelectExtendedField>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    });
+
     it("Should handle open/close callbacks", async () => {
         render(
             <SelectExtendedField
@@ -186,13 +194,13 @@ describe("SelectExtendedField", () => {
         const setOpened = mockRenderTarget.mock.calls[0][0].setOpened;
 
         // Открываем dropdown
-        setOpened(true);
+        act(() => setOpened(true));
         await waitFor(() => {
             expect(mockOnOpen).toHaveBeenCalledTimes(1);
         });
 
         // Закрываем dropdown
-        setOpened(false);
+        act(() => setOpened(false));
         await waitFor(() => {
             expect(mockOnClose).toHaveBeenCalledTimes(1);
         });
@@ -220,6 +228,58 @@ describe("SelectExtendedField", () => {
         );
     });
 
+    it("Should close opened dropdown on Tab key when closeOnTab is set", async () => {
+        render(
+            <SelectExtendedField renderTarget={mockRenderTarget} closeOnTab={true} data-testid="select-field">
+                {mockRenderDropdown}
+            </SelectExtendedField>,
+        );
+
+        const setOpened = mockRenderTarget.mock.calls[0][0].setOpened;
+        act(() => setOpened(true));
+
+        await waitFor(() => {
+            expect(mockRenderTarget).toHaveBeenLastCalledWith({
+                opened: true,
+                setOpened: expect.any(Function),
+            });
+        });
+
+        fireEvent.keyDown(screen.getByTestId("select-field"), { keyCode: EVENT_KEY_CODES.TAB });
+
+        await waitFor(() => {
+            expect(mockRenderTarget).toHaveBeenLastCalledWith({
+                opened: false,
+                setOpened: expect.any(Function),
+            });
+        });
+    });
+
+    it("Should not close opened dropdown on Tab key without closeOnTab", async () => {
+        render(
+            <SelectExtendedField renderTarget={mockRenderTarget} data-testid="select-field">
+                {mockRenderDropdown}
+            </SelectExtendedField>,
+        );
+
+        const setOpened = mockRenderTarget.mock.calls[0][0].setOpened;
+        act(() => setOpened(true));
+
+        await waitFor(() => {
+            expect(mockRenderTarget).toHaveBeenLastCalledWith({
+                opened: true,
+                setOpened: expect.any(Function),
+            });
+        });
+
+        fireEvent.keyDown(screen.getByTestId("select-field"), { keyCode: EVENT_KEY_CODES.TAB });
+
+        expect(mockRenderTarget).toHaveBeenLastCalledWith({
+            opened: true,
+            setOpened: expect.any(Function),
+        });
+    });
+
     it("Should close dropdown on Escape key", async () => {
         render(
             <SelectExtendedField renderTarget={mockRenderTarget} data-testid="select-field">
@@ -229,11 +289,10 @@ describe("SelectExtendedField", () => {
 
         // Открываем dropdown
         const setOpened = mockRenderTarget.mock.calls[0][0].setOpened;
-        setOpened(true);
+        act(() => setOpened(true));
 
         // Нажимаем Escape
-        const escapeEvent = new KeyboardEvent("keydown", { keyCode: EVENT_KEY_CODES.ESCAPE });
-        document.dispatchEvent(escapeEvent);
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE });
 
         await waitFor(() => {
             expect(mockRenderTarget).toHaveBeenCalledWith({
@@ -255,7 +314,7 @@ describe("SelectExtendedField", () => {
 
         // Открываем dropdown
         const setOpened = mockRenderTarget.mock.calls[0][0].setOpened;
-        setOpened(true);
+        act(() => setOpened(true));
 
         // Кликаем вне компонента
         const outsideElement = screen.getByTestId("outside-element");
@@ -278,7 +337,7 @@ describe("SelectExtendedField", () => {
 
         // Открываем dropdown
         const setOpened = mockRenderTarget.mock.calls[0][0].setOpened;
-        setOpened(true);
+        act(() => setOpened(true));
 
         // Кликаем внутри компонента
         const selectField = screen.getByTestId("select-field");
@@ -429,13 +488,31 @@ describe("SelectExtendedFieldTarget", () => {
         expect(mockOnClick).toHaveBeenCalledTimes(1);
     });
 
-    it("Should not respond to clicks when loading and disabled", () => {
+    it("Should not respond to clicks when loading", () => {
         render(
             <SelectExtendedFieldTarget
                 fieldLabel="Test Field"
                 opened={false}
                 setOpened={mockSetOpened}
                 loading={true}
+                onClick={mockOnClick}
+                data-testid="target"
+            />,
+        );
+
+        const formField = screen.getByTestId("target");
+        fireEvent.click(formField);
+
+        expect(mockSetOpened).not.toHaveBeenCalled();
+        expect(mockOnClick).not.toHaveBeenCalled();
+    });
+
+    it("Should not respond to clicks when disabled", () => {
+        render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
                 status={EFormFieldStatus.DISABLED}
                 onClick={mockOnClick}
                 data-testid="target"
@@ -483,13 +560,31 @@ describe("SelectExtendedFieldTarget", () => {
         expect(mockSetOpened).toHaveBeenCalledWith(true);
     });
 
-    it("Should not respond to keyboard events when loading and disabled", () => {
+    it("Should not respond to keyboard events when loading", () => {
         render(
             <SelectExtendedFieldTarget
                 fieldLabel="Test Field"
                 opened={false}
                 setOpened={mockSetOpened}
                 loading={true}
+                onKeyDown={mockOnKeyDown}
+                data-testid="target"
+            />,
+        );
+
+        const formField = screen.getByTestId("target");
+        fireEvent.keyDown(formField, { keyCode: EVENT_KEY_CODES.SPACE });
+
+        expect(mockSetOpened).not.toHaveBeenCalled();
+        expect(mockOnKeyDown).not.toHaveBeenCalled();
+    });
+
+    it("Should not respond to keyboard events when disabled", () => {
+        render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
                 status={EFormFieldStatus.DISABLED}
                 onKeyDown={mockOnKeyDown}
                 data-testid="target"
@@ -503,8 +598,26 @@ describe("SelectExtendedFieldTarget", () => {
         expect(mockOnKeyDown).not.toHaveBeenCalled();
     });
 
-    it("Should apply correct ARIA attributes", () => {
+    it("Should not open dropdown on unrelated key", () => {
         render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                onKeyDown={mockOnKeyDown}
+                data-testid="target"
+            />,
+        );
+
+        const formField = screen.getByTestId("target");
+        fireEvent.keyDown(formField, { keyCode: 65 });
+
+        expect(mockSetOpened).not.toHaveBeenCalled();
+        expect(mockOnKeyDown).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should apply correct ARIA attributes", () => {
+        const { rerender } = render(
             <SelectExtendedFieldTarget
                 fieldLabel="Test Field"
                 opened={true}
@@ -513,9 +626,21 @@ describe("SelectExtendedFieldTarget", () => {
             />,
         );
 
-        const formField = screen.getByTestId("target");
+        let formField = screen.getByTestId("target");
         expect(formField).toHaveAttribute("aria-expanded", "true");
         expect(formField).toHaveAttribute("aria-haspopup", "listbox");
+
+        rerender(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                data-testid="target"
+            />,
+        );
+
+        formField = screen.getByTestId("target");
+        expect(formField).toHaveAttribute("aria-expanded", "false");
     });
 
     it("Should forward ref correctly", () => {
@@ -547,6 +672,94 @@ describe("SelectExtendedFieldTarget", () => {
         const formField = screen.getByTestId("target");
         expect(formField).toHaveClass("custom-target-class");
     });
+
+    it("Should apply placeholder class when placeholder is set without label", () => {
+        render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                placeholder="Выберите значение"
+                opened={false}
+                setOpened={mockSetOpened}
+                data-testid="target"
+            />,
+        );
+
+        const target = screen.getByTestId("form-field-target");
+        expect(target).toHaveClass("placeholder");
+        expect(target).not.toHaveClass("label");
+    });
+
+    it("Should render caret icon according to size", () => {
+        const { rerender } = render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                size={EComponentSize.SM}
+                data-testid="target"
+            />,
+        );
+
+        expect(screen.getByTestId("caret-icon-16")).toBeInTheDocument();
+
+        rerender(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                size={EComponentSize.MD}
+                data-testid="target"
+            />,
+        );
+
+        expect(screen.getByTestId("caret-icon-20")).toBeInTheDocument();
+
+        rerender(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                size={EComponentSize.LG}
+                data-testid="target"
+            />,
+        );
+
+        expect(screen.getByTestId("caret-icon-24")).toBeInTheDocument();
+    });
+
+    it("Should render clear button and call onClear", () => {
+        const mockOnClear = vi.fn();
+        render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                onClear={mockOnClear}
+                data-testid="target"
+            />,
+        );
+
+        fireEvent.click(screen.getByTestId("form-field-clear"));
+
+        expect(mockOnClear).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should render prefix and postfix", () => {
+        render(
+            <SelectExtendedFieldTarget
+                fieldLabel="Test Field"
+                opened={false}
+                setOpened={mockSetOpened}
+                prefix={<span data-testid="custom-prefix" />}
+                postfix={<span data-testid="custom-postfix" />}
+                data-testid="target"
+            />,
+        );
+
+        expect(screen.getByTestId("form-field-prefix")).toBeInTheDocument();
+        expect(screen.getByTestId("custom-prefix")).toBeInTheDocument();
+        expect(screen.getByTestId("custom-postfix")).toBeInTheDocument();
+    });
 });
 
 describe("SelectExtendedFieldDropdown", () => {
@@ -558,7 +771,7 @@ describe("SelectExtendedFieldDropdown", () => {
         vi.clearAllMocks();
     });
 
-    it("Should render with required props", () => {
+    it("Should not render content when closed", () => {
         render(
             <SelectExtendedFieldDropdown
                 forwardedRef={mockDropdownRef}
@@ -570,12 +783,11 @@ describe("SelectExtendedFieldDropdown", () => {
             </SelectExtendedFieldDropdown>,
         );
 
-        expect(screen.getByTestId("dropdown")).toBeInTheDocument();
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "false");
+        expect(screen.queryByTestId("dropdown-content")).not.toBeInTheDocument();
     });
 
-    it("Should render children when opened", () => {
-        render(
+    it("Should render children through Portal when opened", () => {
+        const { container } = render(
             <SelectExtendedFieldDropdown
                 forwardedRef={mockDropdownRef}
                 targetRef={mockTargetRef}
@@ -586,24 +798,27 @@ describe("SelectExtendedFieldDropdown", () => {
             </SelectExtendedFieldDropdown>,
         );
 
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "true");
-        expect(screen.getByTestId("dropdown-content")).toBeInTheDocument();
+        const content = screen.getByTestId("dropdown-content");
+        expect(content).toBeInTheDocument();
+        // Dropdown рендерится через Portal в document.body, вне контейнера рендера
+        expect(container).not.toContainElement(content);
     });
 
-    it("Should not render children when closed", () => {
+    it("Should assign forwardedRef to dropdown container when opened", () => {
+        const ref = React.createRef<HTMLDivElement>();
         render(
             <SelectExtendedFieldDropdown
-                forwardedRef={mockDropdownRef}
+                forwardedRef={ref}
                 targetRef={mockTargetRef}
-                opened={false}
+                opened={true}
                 setOpened={mockSetOpened}
             >
                 <div data-testid="dropdown-content">Dropdown content</div>
             </SelectExtendedFieldDropdown>,
         );
 
-        expect(screen.getByTestId("dropdown")).toHaveAttribute("data-opened", "false");
-        expect(screen.queryByTestId("dropdown-content")).not.toBeInTheDocument();
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toContainElement(screen.getByTestId("dropdown-content"));
     });
 
     it("Should pass through additional props", () => {
@@ -611,7 +826,7 @@ describe("SelectExtendedFieldDropdown", () => {
             <SelectExtendedFieldDropdown
                 forwardedRef={mockDropdownRef}
                 targetRef={mockTargetRef}
-                opened={false}
+                opened={true}
                 setOpened={mockSetOpened}
                 className="custom-dropdown-class"
                 data-testid="custom-dropdown"
@@ -626,5 +841,151 @@ describe("SelectExtendedFieldDropdown", () => {
 
     it("Should have List static property", () => {
         expect(SelectExtendedFieldDropdown.List).toBeDefined();
+    });
+});
+
+describe("SelectExtendedFieldDropdownDefault", () => {
+    const mockOptions = [
+        { id: "1", value: "option1", label: "Первая опция" },
+        { id: "2", value: "option2", label: "Вторая опция" },
+        { id: "3", value: "option3", label: "Третья опция" },
+    ];
+
+    const mockTargetRef = React.createRef<HTMLDivElement>();
+    const mockDropdownRef = React.createRef<HTMLDivElement>();
+
+    const mockOnChange = vi.fn();
+    const mockSetOpened = vi.fn();
+
+    const renderDropdownDefault = (
+        props: Partial<React.ComponentProps<typeof SelectExtendedFieldDropdownDefault>> = {},
+    ) =>
+        render(
+            <SelectExtendedFieldDropdownDefault
+                options={mockOptions}
+                onChange={mockOnChange}
+                opened={true}
+                setOpened={mockSetOpened}
+                listId="list-1"
+                size={EComponentSize.MD}
+                width={EDropdownWidth.TARGET}
+                loading={false}
+                targetRef={mockTargetRef}
+                dropdownRef={mockDropdownRef}
+                {...props}
+            />,
+        );
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it("Should render desktop options when opened and not loading", () => {
+        renderDropdownDefault({ value: mockOptions[1], dropdownListItemClassName: "custom-item-class" });
+
+        const list = screen.getByRole("listbox");
+        expect(list).toHaveAttribute("id", "list-1");
+
+        expect(screen.getAllByRole("option")).toHaveLength(3);
+        expect(screen.getByRole("option", { name: "Первая опция" })).toBeInTheDocument();
+
+        const selectedOption = screen.getByRole("option", { name: "Вторая опция", selected: true });
+        expect(selectedOption).toHaveClass("custom-item-class");
+    });
+
+    it("Should hide options when loading is true", () => {
+        renderDropdownDefault({ value: mockOptions[1], loading: true });
+
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        expect(screen.queryByRole("option")).not.toBeInTheDocument();
+    });
+
+    it("Should call onChange and close when desktop item selected", () => {
+        renderDropdownDefault();
+
+        fireEvent.click(screen.getByRole("option", { name: "Вторая опция" }));
+
+        expect(mockOnChange).toHaveBeenCalledWith(mockOptions[1]);
+        expect(mockSetOpened).toHaveBeenCalledWith(false);
+    });
+
+    it("Should pass dropdownProps to Dropdown", () => {
+        const dropdownProps = {
+            className: "custom-dropdown-class",
+            "data-testid": "dropdown",
+            "data-custom": "dropdown-value",
+        };
+
+        renderDropdownDefault({ dropdownProps });
+
+        const dropdown = screen.getByTestId("dropdown");
+        expect(dropdown).toHaveAttribute("data-custom", "dropdown-value");
+        expect(dropdown).toHaveClass("custom-dropdown-class");
+    });
+
+    // В мобильном режиме Dropdown рендерит mobileViewProps.children. Мобильность определяется
+    // через window.matchMedia (MobileView → MediaMaxWidth → useMatchMedia), а не через
+    // window.innerWidth, поэтому мокаем matchMedia: мобильный запрос (max-width: SM_MAX) совпадает.
+    describe("mobile view", () => {
+        const originalMatchMedia = window.matchMedia;
+
+        beforeEach(() => {
+            Object.defineProperty(window, "matchMedia", {
+                configurable: true,
+                writable: true,
+                value: (query: string) =>
+                    ({
+                        matches: query === `(max-width: ${EScreenWidth.SM_MAX})`,
+                        media: query,
+                        onchange: null,
+                        addEventListener: () => {},
+                        removeEventListener: () => {},
+                        addListener: () => {},
+                        removeListener: () => {},
+                        dispatchEvent: () => false,
+                    }) as unknown as MediaQueryList,
+            });
+        });
+
+        afterEach(() => {
+            Object.defineProperty(window, "matchMedia", {
+                configurable: true,
+                writable: true,
+                value: originalMatchMedia,
+            });
+        });
+
+        it("Should render mobile options and title", () => {
+            renderDropdownDefault({
+                value: mockOptions[1],
+                mobileTitle: "Mobile title",
+                dropdownListItemClassName: "custom-item-class",
+            });
+
+            expect(screen.getByText("Mobile title")).toBeInTheDocument();
+            expect(screen.getAllByRole("option")).toHaveLength(3);
+            expect(screen.getByRole("option", { name: "Первая опция" })).toBeInTheDocument();
+
+            const selectedOption = screen.getByRole("option", { name: "Вторая опция", selected: true });
+            expect(selectedOption).toHaveClass("custom-item-class");
+        });
+
+        it("Should call onChange and close when mobile item selected", () => {
+            renderDropdownDefault({ mobileTitle: "Mobile title" });
+
+            fireEvent.click(screen.getByRole("option", { name: "Вторая опция" }));
+
+            expect(mockOnChange).toHaveBeenCalledWith(mockOptions[1]);
+            expect(mockSetOpened).toHaveBeenCalledWith(false);
+        });
+
+        it("Should close on mobile close button click", () => {
+            renderDropdownDefault({ mobileTitle: "Mobile title" });
+
+            fireEvent.click(screen.getByRole("button"));
+
+            expect(mockSetOpened).toHaveBeenCalledWith(false);
+            expect(mockOnChange).not.toHaveBeenCalled();
+        });
     });
 });

@@ -19,7 +19,8 @@
 .agents/
 └── skills/                              # каноничное место для skills (runtime-neutral)
     ├── update-component-ai-md/SKILL.md
-    └── commit-component/SKILL.md
+    ├── commit-component/SKILL.md
+    └── prepare-release/SKILL.md
 
 .claude/
 ├── agents/
@@ -29,7 +30,8 @@
 │   └── change-reviewer.md               # ревью diff'а перед коммитом (read-only)
 ├── skills/                              # симлинки на .agents/skills/*
 │   ├── update-component-ai-md → ../../.agents/skills/update-component-ai-md
-│   └── commit-component       → ../../.agents/skills/commit-component
+│   ├── commit-component       → ../../.agents/skills/commit-component
+│   └── prepare-release        → ../../.agents/skills/prepare-release
 └── README.md                            # этот файл
 ```
 
@@ -135,6 +137,25 @@ props, stories), дописывает строку в «Историю изме�
 - Не пушит автоматически.
 
 Запускается **только по явной просьбе пользователя**.
+
+---
+
+### `/prepare-release`
+
+Готовит релизную ветку и PR для новой версии. Запускается по фразе
+«Подготовь релиз X.Y.Z» (номер версии обязателен):
+
+- Проверяет чистоту рабочего дерева и отсутствие ветки `TRIPLEX-0` на origin.
+- От актуального `main` создаёт ветку `TRIPLEX-0`.
+- `npm version X.Y.Z --no-git-tag-version` — обновляет `package.json`
+  и `package-lock.json`.
+- Создаёт заготовку release notes на **следующую** версию —
+  `stories/release-notes/v1/X.(Y+1).0.mdx` (notes самой X.Y.Z уже
+  заполнены по ходу разработки).
+- Коммитит (`TRIPLEX-0 Подготовка релиза X.Y.Z`), пушит, создаёт PR
+  `New release` через `gh` (или даёт compare-ссылку, если `gh` недоступен).
+
+Тег и GitHub Release **не** создаёт — это отдельный шаг после мержа PR.
 
 ---
 

@@ -59,9 +59,7 @@ export const Playground: StoryObj<typeof StatusTracker> = {
     args: PLAYGROUND_ARGS,
     argTypes: PLAYGROUND_ARG_TYPES,
     parameters: {
-        controls: {
-            include: Object.keys(PLAYGROUND_ARGS),
-        },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,

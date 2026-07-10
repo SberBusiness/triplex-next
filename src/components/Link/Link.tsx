@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { getSafeRel } from "@sberbusiness/triplex-next/utils/html/anchorSecurity";
 import { IconWrapper } from "../IconWrapper";
 import styles from "./styles/Link.module.less";
 
@@ -15,7 +16,7 @@ export interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorE
 
 /** Гиперссылка. */
 export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
-    ({ children, className, onBlur, onMouseDown, contentAfter, contentBefore, ...rest }, ref) => {
+    ({ children, className, onBlur, onMouseDown, contentAfter, contentBefore, target, rel, ...rest }, ref) => {
         /** Рендер функция предшествующего контента. */
         const renderContentBefore = () =>
             contentBefore ? (
@@ -104,6 +105,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
             <a
                 role="link"
                 {...rest}
+                target={target}
+                // Защита от reverse tabnabbing при target="_blank".
+                rel={getSafeRel(target, rel)}
                 className={clsx(className, styles.link)}
                 onBlur={onBlur}
                 onMouseDown={onMouseDown}

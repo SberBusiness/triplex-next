@@ -55,6 +55,7 @@ React 17 совместимость, modern story pattern, формат комм
 | `change-reviewer` | агент | Read-only ревью diff'а перед коммитом |
 | `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
 | `commit-component` | skill | Коммит по `commits.md` (только по явной просьбе) |
+| `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `TRIPLEX-0`, PR «New release» |
 
 **Подробности и сценарии вызова:** [`.claude/README.md`](./.claude/README.md).
 

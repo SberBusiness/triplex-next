@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import {
     SuggestField,
     Text,
-    useMatchMedia,
+    useMobileView,
     ISuggestFieldOption,
-    EScreenWidth,
     EComponentSize,
     EFormFieldStatus,
     ETextSize,
@@ -46,9 +45,6 @@ const FOOD_OPTIONS: ISuggestFieldOption[] = FOOD_DATA.map((item, index) => ({
     ),
 }));
 
-const useAdaptive = () =>
-    useMatchMedia(`(max-width: ${EScreenWidth.SM_MAX})`, window.innerWidth <= parseInt(EScreenWidth.SM_MAX));
-
 const getFilteredOptions = (query: string): ISuggestFieldOption[] =>
     FOOD_OPTIONS.filter(({ label }) => label.toLowerCase().includes(query.toLowerCase()));
 
@@ -58,7 +54,7 @@ export const CustomOptionsExample = () => {
     const [inputPristine, setInputPristine] = useState(true);
     const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
-    const adaptive = useAdaptive();
+    const adaptive = useMobileView();
 
     const reset = (newOptions: typeof options) => {
         setOptions(newOptions);

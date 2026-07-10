@@ -84,7 +84,7 @@ version: "1.0"
 | `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `shape`, `active`, `disabled` |
 | `Default` | `DefaultExample.tsx` | Базовый сценарий использования |
 | `Sizes` | `SizesExample.tsx` | Разные размеры через размер иконки (16/20/24/32) |
-| `Disabled` | `DisabledExample.tsx` | Неактивное состояние |
+| `States` | `StatesExample.tsx` | Состояния `active` и `disabled` |
 
 ---
 
@@ -94,3 +94,4 @@ version: "1.0"
 |---|---|
 | 2026-04-15 | Создан документ AI-ready для `ButtonIcon`. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убрана секция «Файловая структура», содержимое «Ключевых особенностей реализации» перенесено в `Ограничения использования`, добавлена колонка `Example file`. |
+| 2026-07-08 | Актуализирована таблица Stories: story `Disabled` заменена на `States` (`StatesExample.tsx`). |

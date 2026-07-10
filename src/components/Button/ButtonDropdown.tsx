@@ -31,6 +31,7 @@ import {
 } from "../Dropdown";
 import { Text, ETextSize } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
+import { DataAttributes } from "../../types/CoreTypes";
 import styles from "./styles/ButtonDropdown.module.less";
 
 /** Свойства опции в выпадающем списке действий. */
@@ -50,6 +51,8 @@ export interface IButtonDropdownOption extends Omit<
 export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
     /** HTML-атрибуты кнопки. */
     buttonAttributes?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+    /** HTML-атрибуты Dropdown. */
+    dropdownAttributes?: React.HTMLAttributes<HTMLDivElement> & DataAttributes;
     /** Размер кнопки. */
     size: EComponentSize;
     /** Список опций. */
@@ -97,8 +100,19 @@ const SIZE_TO_CARET_ICON_MAP: Record<EComponentSize, (paletteIndex: 0 | 7) => Re
 /** Кнопка с выпадающим списком действий. */
 export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps | IButtonDotsProps>(
     (props, ref) => {
-        const { buttonAttributes, children, className, theme, size, options, selected, block, disabled, ...rest } =
-            props;
+        const {
+            buttonAttributes,
+            dropdownAttributes = {},
+            children,
+            className,
+            theme,
+            size,
+            options,
+            selected,
+            block,
+            disabled,
+            ...rest
+        } = props;
 
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
@@ -193,11 +207,13 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         };
 
         const renderDropdown = ({ opened, setOpened, className }: IButtonDropdownExtendedDropdownProvideProps) => {
-            const classNames = clsx(styles.buttonDropdownMenu, className);
+            const { className: dropdownClassName, ...restDropdownAttributes } = dropdownAttributes;
+            const classNames = clsx(styles.buttonDropdownMenu, className, dropdownClassName);
 
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                     <ButtonDropdownExtended.Dropdown
+                        {...restDropdownAttributes}
                         className={classNames}
                         size={size}
                         width={EDropdownWidth.MIN_TARGET}

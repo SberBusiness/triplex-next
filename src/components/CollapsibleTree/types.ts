@@ -8,6 +8,8 @@ export interface ICollapsibleTreeNodeBranch {
     label: React.ReactNode;
     /** Начальное состояние раскрытия ветки. */
     defaultOpened?: boolean;
+    /** Отключает узел: кнопка заголовка становится неактивной, текст и шеврон отображаются приглушённым цветом. */
+    disabled?: boolean;
     /** Дочерние узлы — другие ветки или листья. Если массив пуст или не передан — ветка отображается без шеврона и не раскрывается. */
     children?: TCollapsibleTreeNode[];
 }

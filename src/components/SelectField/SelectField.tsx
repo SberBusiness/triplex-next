@@ -7,7 +7,10 @@ import {
     ISelectExtendedFieldTargetProps,
     SelectExtendedField,
 } from "@sberbusiness/triplex-next/components/SelectExtendedField";
-import { SelectExtendedFieldDropdownDefault } from "@sberbusiness/triplex-next/components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
+import {
+    ISelectExtendedFieldDropdownDefaultProps,
+    SelectExtendedFieldDropdownDefault,
+} from "@sberbusiness/triplex-next/components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { uniqueId } from "lodash-es";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
@@ -31,6 +34,8 @@ export interface ISelectFieldProps
     onChange: (option: ISelectFieldOption) => void;
     /** Свойства, передающиеся в SelectExtendedField.Target. */
     targetProps?: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
+    /** Свойства, передающиеся в SelectExtendedField.Dropdown. */
+    dropdownProps?: ISelectExtendedFieldDropdownDefaultProps["dropdownProps"];
     /** ClassName передающийся в DropdownListItem. */
     dropdownListItemClassName?: string;
     /** Название Select отображающееся в мобильном режиме. */
@@ -53,6 +58,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
         dropdownListItemClassName,
         mobileTitle,
         targetProps,
+        dropdownProps,
         ...rest
     } = props;
 
@@ -93,6 +99,8 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
                 {...props}
                 size={size}
                 width={EDropdownWidth.TARGET}
+                dropdownProps={dropdownProps}
+                dropdownListItemClassName={dropdownListItemClassName}
                 loading={loading}
                 listId={instanceId.current}
                 mobileTitle={mobileTitle}

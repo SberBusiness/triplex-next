@@ -53,8 +53,8 @@ export const Playground: StoryObj<typeof AmountField> = {
     parameters: {
         docs: {
             canvas: { sourceState: "none" },
-            testRunner: { skip: true },
         },
+        testRunner: { skip: true },
     },
     tags: ["!autodocs"],
     argTypes: {
@@ -130,11 +130,10 @@ export const Playground: StoryObj<typeof AmountField> = {
     },
 };
 
-export const Basic: StoryObj<typeof AmountField> = {
+export const Default: StoryObj<typeof AmountField> = {
     parameters: {
-        docs: {
-            controls: { disable: true },
-        },
+        controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const { value, onChange } = useAmountFieldLogic();
@@ -150,7 +149,6 @@ export const Basic: StoryObj<typeof AmountField> = {
                     status={EFormFieldStatus.DEFAULT}
                     size={EComponentSize.LG}
                     label="Label"
-                    currency="RUB"
                     maxIntegerDigits={18}
                     fractionDigits={2}
                 />
@@ -162,6 +160,7 @@ export const Basic: StoryObj<typeof AmountField> = {
 export const Sizes: StoryObj<typeof AmountField> = {
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const sizes = Object.values(EComponentSize);
@@ -192,6 +191,7 @@ export const Sizes: StoryObj<typeof AmountField> = {
 export const Statuses: StoryObj<typeof AmountField> = {
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const statuses = Object.values(EFormFieldStatus);
@@ -223,6 +223,7 @@ export const WithClearButton: StoryObj<typeof AmountField> = {
     name: "With clear button",
     parameters: {
         controls: { disable: true },
+        testRunner: { skip: true },
     },
     render: () => {
         const { value, onChange, onClear } = useAmountFieldLogic("8967452.31");

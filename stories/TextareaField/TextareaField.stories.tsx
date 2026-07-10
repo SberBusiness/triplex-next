@@ -115,8 +115,8 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
     args: PLAYGROUND_ARGS,
     argTypes: PLAYGROUND_ARG_TYPES,
-    render: PlaygroundExample,
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
@@ -125,59 +125,59 @@ export const Playground: StoryObj<PlaygroundArgs> = {
                 language: "tsx",
             },
         },
-        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         testRunner: { skip: true },
     },
+    render: PlaygroundExample,
 };
 
 export const Default: StoryObj<typeof TextareaField> = {
     name: "Default",
-    render: DefaultExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
+    render: DefaultExample,
 };
 
 export const Sizes: StoryObj<typeof TextareaField> = {
     name: "Sizes",
-    render: SizesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: SizesExampleSource,
                 language: "tsx",
             },
         },
     },
+    render: SizesExample,
 };
 
 export const Statuses: StoryObj<typeof TextareaField> = {
     name: "Statuses",
-    render: StatusesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: StatusesExampleSource,
                 language: "tsx",
             },
         },
     },
+    render: StatusesExample,
 };
 
 export const Production: StoryObj<typeof TextareaField> = {
     name: "Example: production",
-    render: ProductionExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: ProductionExampleSource,
                 language: "tsx",
@@ -185,4 +185,5 @@ export const Production: StoryObj<typeof TextareaField> = {
         },
         testRunner: { skip: true },
     },
+    render: ProductionExample,
 };

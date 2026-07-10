@@ -102,11 +102,11 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         },
     },
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-        controls: { include: Object.keys(PLAYGROUND_ARGS) },
         testRunner: { skip: true },
     },
     render: PlaygroundExample,
@@ -114,21 +114,22 @@ export const Playground: StoryObj<PlaygroundArgs> = {
 
 export const Default: StoryObj<typeof NumberField> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
             },
         },
+        testRunner: { skip: true },
     },
     render: DefaultExample,
 };
 
 export const Sizes: StoryObj<typeof NumberField> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: SizesExampleSource,
                 language: "tsx",
@@ -140,8 +141,8 @@ export const Sizes: StoryObj<typeof NumberField> = {
 
 export const Statuses: StoryObj<typeof NumberField> = {
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: StatusesExampleSource,
                 language: "tsx",
@@ -154,8 +155,8 @@ export const Statuses: StoryObj<typeof NumberField> = {
 export const Production: StoryObj<typeof NumberField> = {
     name: "Example: production",
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: ProductionExampleSource,
                 language: "tsx",

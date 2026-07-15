@@ -5,6 +5,8 @@ import { ListItem } from "@sberbusiness/triplex-next";
 import {
     Default as DefaultRender,
     DefaultSource,
+    Action as ActionRender,
+    ActionSource,
     Loading as LoadingRender,
     LoadingSource,
     Selectable as SelectableRender,
@@ -48,6 +50,22 @@ export const Default: StoryObj<typeof ListItem> = {
             description: { story: "Базовый элемент списка с контентом." },
             source: {
                 code: DefaultSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Action: StoryObj<typeof ListItem> = {
+    render: ActionRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Интерактивный элемент списка: hover-подсветка, focus-обводка по Tab и клик по всей строке (onClick, Enter/Space).",
+            },
+            source: {
+                code: ActionSource,
                 language: "tsx",
             },
         },

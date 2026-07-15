@@ -8,13 +8,13 @@ export interface IListItemContentProps extends React.HTMLAttributes<HTMLDivEleme
 /** Контент элемента списка. */
 export const ListItemContent = React.forwardRef<HTMLDivElement, IListItemContentProps>(
     ({ children, className, ...rest }, ref) => {
-        const { selected, selectable } = useContext(ListItemContext);
+        const { selected, selectable, action } = useContext(ListItemContext);
 
         return (
             <div
                 className={clsx(
                     styles.listItemContent,
-                    { [styles.selected]: selected, [styles.selectable]: selectable },
+                    { [styles.selected]: selected, [styles.selectable]: selectable, [styles.action]: action },
                     className,
                 )}
                 {...rest}

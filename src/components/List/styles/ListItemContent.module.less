@@ -8,7 +8,14 @@
     &.selected {
         background: var(--triplex-next-ListItem-Background_Selected);
     }
+
     &.selectable {
         border-radius: @list-item-border-radius;
+    }
+
+    &.action {
+        &:hover {
+            background: var(--triplex-next-ListItem-Background_Hover);
+        }
     }
 }

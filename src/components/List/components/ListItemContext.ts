@@ -9,6 +9,10 @@ export interface IListItemContext {
     selected: boolean;
     /** Устанавливает значение selected. */
     setSelected: (selected: boolean) => void;
+    /** Элемент списка интерактивный. */
+    action: boolean;
+    /** Устанавливает значение action. */
+    setAction: (action: boolean) => void;
 }
 
 /** Контекст компонента ListItem. */
@@ -17,4 +21,6 @@ export const ListItemContext = React.createContext<IListItemContext>({
     setSelectable: () => {},
     selected: false,
     setSelected: () => {},
+    action: false,
+    setAction: () => {},
 });

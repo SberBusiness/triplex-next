@@ -3,6 +3,7 @@ export * from "./ListSortable";
 export * from "./components/ListItem";
 export * from "./components/ListItemControls";
 export * from "./components/ListItemContent";
+export * from "./components/ListItemAction";
 export * from "./components/ListItemControlsButton";
 export * from "./components/ListItemControlsButtonDropdown";
 export * from "./components/ListEmptyState";

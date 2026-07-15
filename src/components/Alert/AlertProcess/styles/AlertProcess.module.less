@@ -64,6 +64,10 @@
 
     .closeButton {
         margin-left: 10px;
+        // Прижимает иконку закрытия к первой строке контента независимо
+        // от inline-выравнивания ButtonIcon (vertical-align: middle).
+        display: flex;
+        align-items: flex-start;
     }
 
     .expandButton {

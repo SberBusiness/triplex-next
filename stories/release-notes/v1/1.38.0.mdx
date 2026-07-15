@@ -5,3 +5,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v1.38.0</Title>
 
 <Heading>Изменения</Heading>
+
+**Button / ButtonIcon / ButtonDropdown**
+
+- Исправлено вертикальное выравнивание кнопок в inline-контейнерах (например, в `Page.Header.Title.Controls`): icon-only кнопка смещалась относительно соседней текстовой из-за baseline-выравнивания. Кнопкам задан `vertical-align: middle` — кнопки разной высоты центрируются между собой и относительно строки инлайн-текста.

@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { MinusStrokeSrvIcon24, PlusStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { CollapsibleTreeExtended, EFontWeightText, ETextSize, Text } from "@sberbusiness/triplex-next";
 import "./CustomToggleExample.less";
@@ -51,7 +52,8 @@ const TreeNode: React.FC<ITreeNodeProps> = ({ node, prevNode, nextNode }) => {
                 hasChildNodes ? (
                     <button
                         type="button"
-                        className="custom-toggle-example-header"
+                        // Глобальные классы @sberbusiness/icons-next "hoverable" и "active" — задают цвет иконки.
+                        className={clsx("custom-toggle-example-header", "hoverable", { active: opened })}
                         onClick={() => setOpened(!opened)}
                         aria-expanded={opened}
                     >

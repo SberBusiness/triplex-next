@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
 import { Portal } from "../Portal";
@@ -144,7 +145,6 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         styles.lightBox,
         styles[size],
         {
-            [styles.isLoading]: Boolean(isLoading),
             [styles.lightBoxSideOverlayActive]: Boolean(isSideOverlayOpened),
             [styles.lightBoxTopOverlayActive]: Boolean(isTopOverlayOpened),
         },

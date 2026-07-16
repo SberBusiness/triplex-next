@@ -80,7 +80,8 @@ const TreeNode: React.FC<ITreeNodeProps> = ({
                 hasChildNodes ? (
                     <button
                         type="button"
-                        className={headerClassName}
+                        // Глобальные классы @sberbusiness/icons-next "hoverable" и "active" — задают цвет иконки.
+                        className={clsx(headerClassName, "hoverable", { active: opened })}
                         onClick={() => setOpened((prev) => !prev)}
                         aria-expanded={opened}
                     >

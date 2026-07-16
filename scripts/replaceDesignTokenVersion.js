@@ -1,39 +1,28 @@
-import { uniq } from "lodash-es";
 import { version } from "../package.json";
 
 // Текущая версия npm пакета. Точки заменены на '-'. Например 10-0-5.
 const currentPackageVersion = version.replace(/\./g, "-");
 
 function replaceDesignTokenVersion(content, id) {
+    // Обрабатываем только less-файлы
     if (!id.includes(".less")) {
         return {
             code: content,
-            map: null, // provide source map if available
+            map: null,
         };
     }
 
-    // Содержимое less-файла с добавленной версией npm пакета.
-    let contentNext = content;
-    // Регулярное выражение, для поиска css-переменных.
-    const cssVariableRegexp = /(--)[^,:)]+/g;
-    // Массив css-переменных файла.
-    const cssVariableMatch = content.match(cssVariableRegexp);
+    // Ищем только переменные, которые начинаются с --triplex-next-
+    const varRegex = /--triplex-next-([^\s):,]+)/g;
 
-    if (cssVariableMatch) {
-        // Массив css-переменных файла без повторений, содержащие подстроку -triplex.
-        const cssVariableUniq = uniq(cssVariableMatch).filter((cssVariable) => cssVariable.includes("--triplex"));
-
-        if (cssVariableUniq.length) {
-            // Замена 'version' на текущую версию npm пакета.
-            cssVariableUniq.forEach((cssVariable) => {
-                // Добавление версии npm пакета в конец переменной.
-                const cssVariableNameWithVersion = `var(${cssVariable}-${currentPackageVersion})`;
-                // Название css-переменной без версии npm пакета.
-                const regex = new RegExp(`var\\(${cssVariable}\\)`, "g");
-                contentNext = contentNext.replace(regex, cssVariableNameWithVersion);
-            });
+    const contentNext = content.replace(varRegex, (match, tokenTail) => {
+        // Пропускаем переменные runtime, возвращая их как есть
+        if (tokenTail.startsWith("runtime")) {
+            return match;
         }
-    }
+        // Для остальных токенов просто дописываем версию к найденному совпадению
+        return `${match}-${currentPackageVersion}`;
+    });
 
     return {
         code: contentNext,

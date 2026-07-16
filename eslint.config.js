@@ -80,4 +80,14 @@ export default defineConfig(
     },
     // Prettier recommended configuration
     prettierRecommended,
+    {
+        rules: {
+            "prettier/prettier": [
+                "error",
+                {
+                    endOfLine: "auto",
+                },
+            ],
+        },
+    },
 );

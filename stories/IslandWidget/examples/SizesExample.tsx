@@ -11,8 +11,6 @@ import {
     EFontType,
     DateField,
     EFormFieldStatus,
-    EScreenWidth,
-    useMatchMedia,
 } from "@sberbusiness/triplex-next";
 import { SettingsStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
@@ -23,17 +21,7 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState("");
 
-    const adaptive = useMatchMedia(
-        `(max-width: ${EScreenWidth.SM_MAX})`,
-        window.innerWidth <= parseInt(EScreenWidth.SM_MAX),
-    );
-
-    const buttonSize =
-        size === EComponentSize.LG
-            ? EComponentSize.MD
-            : size === EComponentSize.MD && adaptive
-              ? EComponentSize.MD
-              : EComponentSize.SM;
+    const buttonSize = size === EComponentSize.LG || size === EComponentSize.MD ? EComponentSize.MD : EComponentSize.SM;
 
     return (
         <IslandWidget

@@ -30,6 +30,13 @@
     margin-left: 4px;
 }
 
+.tabsExtendedDropdown {
+    // Убирает инлайн-контекст вокруг dropdown-кнопки: с vertical-align: middle
+    // у ButtonDropdownExtended строчный strut растягивал контейнер выше кнопки.
+    display: flex;
+    align-items: center;
+}
+
 .tabsReal,
 .tabsFake {
     display: flex;

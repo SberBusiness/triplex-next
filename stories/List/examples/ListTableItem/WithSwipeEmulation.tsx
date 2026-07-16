@@ -5,39 +5,63 @@ import {
     EFontWeightText,
     EMarkerStatus,
     ETextSize,
+    ISwipeableAreaRef,
     List,
     ListItemControlsButton,
     ListItemControlsButtonDropdown,
-    ListItemTable,
+    ListTableItem,
     MarkerStatus,
     Text,
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 
-export const Default = () => {
+export const WithSwipeEmulation = () => {
     const options = [
         {
-            id: "button-dropdown-card-option-1",
+            id: "button-dropdown-swipe-emulation-option-1",
             label: "Текст пункта меню 1",
-            onSelect: () => {},
+            onSelect: () => alert("Выбран пункт меню 1."),
         },
         {
-            id: "button-dropdown-card-option-2",
+            id: "button-dropdown-swipe-emulation-card-option-2",
             label: "Текст пункта меню 2",
-            onSelect: () => {},
+            onSelect: () => alert("Выбран пункт меню 2."),
         },
         {
-            id: "button-dropdown-card-option-3",
+            id: "button-dropdown-swipe-emulation-card-option-3",
             label: "Текст пункта меню 3",
-            onSelect: () => {},
+            onSelect: () => alert("Выбран пункт меню 3."),
         },
     ];
 
+    const ref = React.useRef<ISwipeableAreaRef>(null);
+
     return (
         <div style={{ maxWidth: "500px" }}>
+            <button
+                onClick={() => {
+                    if (ref.current) {
+                        ref.current.swipeLeft();
+                    }
+                }}
+            >
+                swipe
+            </button>
+            <button
+                onClick={() => {
+                    if (ref.current) {
+                        ref.current.closeSwipe();
+                    }
+                }}
+            >
+                close
+            </button>
+            <br />
+
             <List>
-                <ListItemTable
-                    onClickItem={() => {}}
+                <ListTableItem
+                    swipeableAreaRef={ref}
+                    onClickItem={() => console.log("Клик по карточке.")}
                     controlButtons={
                         <>
                             <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
@@ -71,7 +95,7 @@ export const Default = () => {
                     <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
                         Status text
                     </MarkerStatus>
-                </ListItemTable>
+                </ListTableItem>
             </List>
         </div>
     );

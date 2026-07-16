@@ -8,43 +8,36 @@ import {
     List,
     ListItemControlsButton,
     ListItemControlsButtonDropdown,
-    ListItemTable,
+    ListTableItem,
     MarkerStatus,
     Text,
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
-import { action } from "storybook/actions";
-import { useArgs } from "storybook/preview-api";
 
-export interface PlaygroundArgs {
-    selected: boolean;
-}
-
-const dropdownOptions = [
-    {
-        id: "playground-dropdown-option-1",
-        label: "Текст пункта меню 1",
-        onSelect: action("onSelect: option 1"),
-    },
-    {
-        id: "playground-dropdown-option-2",
-        label: "Текст пункта меню 2",
-        onSelect: action("onSelect: option 2"),
-    },
-];
-
-export const Playground = ({ selected }: PlaygroundArgs) => {
-    // Привязка к Storybook controls: и Controls panel, и клик по чекбоксу
-    // обновляют один и тот же arg, поэтому состояние не дублируется в локальном useState.
-    const [, updateArgs] = useArgs<PlaygroundArgs>();
+export const Default = () => {
+    const options = [
+        {
+            id: "button-dropdown-card-option-1",
+            label: "Текст пункта меню 1",
+            onSelect: () => {},
+        },
+        {
+            id: "button-dropdown-card-option-2",
+            label: "Текст пункта меню 2",
+            onSelect: () => {},
+        },
+        {
+            id: "button-dropdown-card-option-3",
+            label: "Текст пункта меню 3",
+            onSelect: () => {},
+        },
+    ];
 
     return (
         <div style={{ maxWidth: "500px" }}>
             <List>
-                <ListItemTable
-                    selected={selected}
-                    onSelect={(next) => updateArgs({ selected: next })}
-                    onClickItem={action("onClickItem")}
+                <ListTableItem
+                    onClickItem={() => {}}
                     controlButtons={
                         <>
                             <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
@@ -52,7 +45,7 @@ export const Playground = ({ selected }: PlaygroundArgs) => {
                             </ListItemControlsButton>
                             <ListItemControlsButtonDropdown
                                 icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                options={dropdownOptions}
+                                options={options}
                             >
                                 Действия
                             </ListItemControlsButtonDropdown>
@@ -66,6 +59,9 @@ export const Playground = ({ selected }: PlaygroundArgs) => {
                     <Text size={ETextSize.B3} tag="div">
                         №1 ООО Голубая Роза Голубая
                     </Text>
+                    <Text size={ETextSize.B3} tag="div">
+                        Длинное назначение платежа
+                    </Text>
                     <Text size={ETextSize.B3} type={EFontType.SECONDARY} tag="div">
                         НДС не облагается
                     </Text>
@@ -75,7 +71,7 @@ export const Playground = ({ selected }: PlaygroundArgs) => {
                     <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
                         Status text
                     </MarkerStatus>
-                </ListItemTable>
+                </ListTableItem>
             </List>
         </div>
     );

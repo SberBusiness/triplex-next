@@ -1,7 +1,7 @@
 ---
 component: ListItem
 category: List
-related: [List, ListItemContent, ListActionItem, ListItemSelectable, ListItemTable, ListSortableItem]
+related: [List, ListItemContent, ListActionItem, ListItemSelectable, ListTableItem, ListSortableItem]
 tokens:
   - --triplex-next-ListItem-Background
   - --triplex-next-ListItem-Background_Selected
@@ -23,7 +23,7 @@ React-контекст `ListItemContext` с состояниями `selected` и
 углов (`border-radius`). Оба флага пишутся `ListItemSelectable` через `useEffect`.
 
 Используй `ListItem` когда: нужен произвольный layout строки списка.
-Используй `ListItemTable` когда: нужна готовая табличная строка с support'ом
+Используй `ListTableItem` когда: нужна готовая табличная строка с support'ом
 swipe-actions и selectable.
 
 ---
@@ -70,7 +70,7 @@ swipe-actions и selectable.
 - `ListItemLoading` — элемент-спиннер для пагинации (используется как последний элемент).
 - `ListItemControls`, `ListItemControlsButton`, `ListItemControlsButtonDropdown` — кнопки действий, обычно внутри `SwipeableArea.rightSwipeableArea`.
 - `ListItemTailLeft` / `ListItemTailRight` — декоративные хвосты для `SwipeableArea`.
-- `ListItemTable` — комбинированная высокоуровневая обёртка.
+- `ListTableItem` — комбинированная высокоуровневая обёртка.
 
 ---
 

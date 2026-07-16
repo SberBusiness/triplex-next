@@ -27,7 +27,7 @@ version: "1.0"
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `loading` | `boolean` | `false` | Показывает `LoaderScreen` поверх содержимого. Используется при обновлении текущего списка новыми данными (например, после применения фильтра) |
-| `children` | `React.ReactNode` | — | Элементы списка (обычно `<ListItem>` или `<ListItemTable>`) |
+| `children` | `React.ReactNode` | — | Элементы списка (обычно `<ListItem>` или `<ListTableItem>`) |
 | `...HTMLUListElementAttributes` | — | — | Все стандартные атрибуты `<ul>` |
 
 ---

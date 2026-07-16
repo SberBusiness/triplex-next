@@ -25,7 +25,7 @@ hover-подсветку, focus-обводку по Tab и активацию п
 контентом.
 
 Используй `ListActionItem` когда: строка целиком кликабельна (навигация, открытие
-деталей, выбор из списка без чекбокса). Не используй внутри `ListItemTable` —
+деталей, выбор из списка без чекбокса). Не используй внутри `ListTableItem` —
 там `onClickItem` вешается напрямую на `ListItemContent` без hover/focus/keyboard.
 
 Распределение пропсов:
@@ -117,7 +117,7 @@ hover-подсветку, focus-обводку по Tab и активацию п
 - **Не вкладывай другие интерактивные элементы** (кнопки, ссылки, чекбоксы) внутрь
   `ListActionItem` — получится nested interactive elements. Для выбора с чекбоксом
   используй `ListItemSelectable` без `ListActionItem`; для клика по всей строке в
-  табличном списке — `ListItemTable` + `onClickItem`.
+  табличном списке — `ListTableItem` + `onClickItem`.
 - Для навигации по ссылке предпочтительнее нативный `<a>` / роутер-линк, а не
   `ListActionItem` с `role="link"` — компонент не даёт семантики ссылки из коробки.
 
@@ -132,7 +132,7 @@ hover-подсветку, focus-обводку по Tab и активацию п
   `ListItem` внутри себя.
 - `ListItemSelectable` — альтернатива для multi-select с чекбоксом. Не комбинировать
   с `ListActionItem` в одной строке без явной a11y-стратегии.
-- `ListItemTable` — использует `onClickItem` на `ListItemContent`, не `ListActionItem`.
+- `ListTableItem` — использует `onClickItem` на `ListItemContent`, не `ListActionItem`.
 - `CardAction` — аналогичный паттерн интерактивной обёртки в семействе Card.
 
 ---

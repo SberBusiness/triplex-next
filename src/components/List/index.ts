@@ -9,7 +9,7 @@ export * from "./components/ListItemControlsButtonDropdown";
 export * from "./components/ListEmptyState";
 export * from "./components/ListItemLoading";
 export * from "./components/ListItemSelectable";
-export * from "./components/ListItemTable";
+export * from "./components/ListTableItem";
 export * from "./components/ListItemTailLeft";
 export * from "./components/ListItemTailRight";
 export * from "./components/ListSortableItem";

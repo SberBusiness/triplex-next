@@ -67,7 +67,7 @@ version: "1.0"
 
 - Чекбокс — встроенный `<Checkbox>` из библиотеки, имеет нативный `<input type="checkbox">`.
 - Клик по любой части `.childrenWrapper` **не** переключает чекбокс — только клик по самому чекбоксу или его расширенной области (`.checkboxLabelClickArea`, `+4px` со всех сторон).
-- Если нужен клик по всей строке — оборачивай в `<label>` или используй `ListItemTable` + `onClickItem`.
+- Если нужен клик по всей строке — оборачивай в `<label>` или используй `ListTableItem` + `onClickItem`.
 
 ---
 
@@ -76,7 +76,7 @@ version: "1.0"
 - `ListItem` — родительский `<li>`, провайдер `ListItemContext`.
 - `ListItemContent` — потребитель `ListItemContext.selected` для применения класса `selected`.
 - `Checkbox` — встроенный чекбокс выбора.
-- `ListItemTable` — использует `ListItemSelectable` автоматически в selectable-варианте.
+- `ListTableItem` — использует `ListItemSelectable` автоматически в selectable-варианте.
 
 ---
 

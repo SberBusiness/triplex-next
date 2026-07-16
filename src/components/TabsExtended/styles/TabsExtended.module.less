@@ -35,6 +35,12 @@
     // у ButtonDropdownExtended строчный strut растягивал контейнер выше кнопки.
     display: flex;
     align-items: center;
+
+    // display: flex перебивает UA-правило [hidden] { display: none },
+    // из-за чего пустой dropdown становился видимым.
+    &[hidden] {
+        display: none;
+    }
 }
 
 .tabsReal,

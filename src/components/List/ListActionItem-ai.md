@@ -32,14 +32,14 @@ hover-подсветку, focus-обводку по Tab и активацию п
 
 - **собственные пропсы `ListActionItem`** (`extends React.LiHTMLAttributes<HTMLLIElement>`)
   уходят на корневой `<li>` (`ListItem`) — `className`, `style`, `id`, `data-*` строки;
-- **`listActionItemProps`** — на интерактивный `ListItemContent`: `onClick`,
+- **`listItemContentProps`** — на интерактивный `ListItemContent`: `onClick`,
   `onKeyDown`, переопределение `role` / `tabIndex`, `className` контента и т.д.
 
 Типичная композиция:
 
 ```tsx
 <List>
-    <ListActionItem listActionItemProps={{ onClick: handleClick }}>Текст строки</ListActionItem>
+    <ListActionItem listItemContentProps={{ onClick: handleClick }}>Текст строки</ListActionItem>
 </List>
 ```
 
@@ -52,11 +52,11 @@ hover-подсветку, focus-обводку по Tab и активацию п
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `children` | `React.ReactNode` | — | Содержимое строки (рендерится внутри `ListItemContent`) |
-| `listActionItemProps` | `React.HTMLAttributes<HTMLDivElement>` | — | Пропсы интерактивного слоя (`ListItemContent`): `onClick`, `onKeyDown`, `role`, `tabIndex`, `className` контента и т.д. |
+| `listItemContentProps` | `React.HTMLAttributes<HTMLDivElement>` | — | Пропсы интерактивного слоя (`ListItemContent`): `onClick`, `onKeyDown`, `role`, `tabIndex`, `className` контента и т.д. |
 | `className` | `string` | — | CSS-класс корневого `<li>` (`ListItem`) |
 | `...HTMLLIAttributes` | — | — | Остальные атрибуты `<li>` спредятся на внутренний `ListItem` |
 
-### Пропсы внутри `listActionItemProps`
+### Пропсы внутри `listItemContentProps`
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
@@ -96,10 +96,10 @@ hover-подсветку, focus-обводку по Tab и активацию п
   перекрытие слоёв.
 - **Разделение пропсов** — собственные пропсы компонента (`extends
   LiHTMLAttributes`) идут на корневой `ListItem` (`<li>`), интерактивные — только
-  через `listActionItemProps` на `ListItemContent`. Не спредить `...rest` на
+  через `listItemContentProps` на `ListItemContent`. Не спредить `...rest` на
   `ListItemContent`: тогда пропсы `<li>` и контента снова смешаются.
 - **`role="button"` и `tabIndex={0}`** — задаются по умолчанию, но переопределяются
-  через `listActionItemProps` (`{...restActionProps}` идёт после дефолтов). Не
+  через `listItemContentProps` (`{...restListItemContentProps}` идёт после дефолтов). Не
   убирать дефолты без обновления тестов и a11y-контракта.
 - **Клавиатура** — Enter и Space обрабатываются через `isKey` из
   `@sberbusiness/triplex-next/utils/keyboard`; Space вызывает `preventDefault()`,
@@ -152,4 +152,4 @@ hover-подсветку, focus-обводку по Tab и активацию п
 
 | Дата | Изменение |
 |---|---|
-| 2026-07-16 | Создан компонент `ListActionItem` — самодостаточная интерактивная строка (hover, focus по Tab, `onClick` + Enter/Space). Сам рендерит `ListItem` + `ListItemContent`; интерактивность и весь фон живут на одном `ListItemContent`. Пропсы разделены: собственные — на `<li>`, интерактивные — через `listActionItemProps`. |
+| 2026-07-16 | Создан компонент `ListActionItem` — самодостаточная интерактивная строка (hover, focus по Tab, `onClick` + Enter/Space). Сам рендерит `ListItem` + `ListItemContent`; интерактивность и весь фон живут на одном `ListItemContent`. Пропсы разделены: собственные — на `<li>`, интерактивные — через `listItemContentProps`. |

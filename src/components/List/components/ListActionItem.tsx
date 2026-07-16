@@ -6,13 +6,13 @@ import { ListItemContent } from "@sberbusiness/triplex-next/components/List/comp
 import styles from "../styles/ListActionItem.module.less";
 
 export interface IListActionItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
-    listActionItemProps?: React.HTMLAttributes<HTMLDivElement>;
+    listItemContentProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 /** Интерактивная обёртка над элементом списка. */
 export const ListActionItem = React.forwardRef<HTMLDivElement, IListActionItemProps>(
-    ({ children, listActionItemProps = {}, ...rest }, ref) => {
-        const { className: actionClassName, onKeyDown, ...restActionProps } = listActionItemProps;
+    ({ children, listItemContentProps = {}, ...rest }, ref) => {
+        const { className, onKeyDown, ...restListItemContentProps } = listItemContentProps;
 
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
             onKeyDown?.(event);
@@ -30,11 +30,11 @@ export const ListActionItem = React.forwardRef<HTMLDivElement, IListActionItemPr
         return (
             <ListItem {...rest}>
                 <ListItemContent
-                    className={clsx(styles.listActionItem, actionClassName)}
+                    className={clsx(styles.listActionItem, className)}
                     tabIndex={0}
                     role="button"
                     onKeyDown={handleKeyDown}
-                    {...restActionProps}
+                    {...restListItemContentProps}
                     ref={ref}
                 >
                     {children}

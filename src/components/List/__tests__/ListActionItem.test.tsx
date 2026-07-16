@@ -47,10 +47,10 @@ describe("ListActionItem", () => {
         expect(listItem).toHaveClass("li-class");
     });
 
-    it("merges listActionItemProps.className on the content element", () => {
+    it("merges listItemContentProps.className on the content element", () => {
         render(
             <List>
-                <ListActionItem listActionItemProps={{ className: "custom" }}>Content</ListActionItem>
+                <ListActionItem listItemContentProps={{ className: "custom" }}>Content</ListActionItem>
             </List>,
         );
         expect(screen.getByRole("button", { name: "Content" })).toHaveClass("custom");
@@ -66,10 +66,10 @@ describe("ListActionItem", () => {
         expect(action).toHaveAttribute("tabindex", "0");
     });
 
-    it("respects explicitly passed tabIndex and role via listActionItemProps", () => {
+    it("respects explicitly passed tabIndex and role via listItemContentProps", () => {
         render(
             <List>
-                <ListActionItem listActionItemProps={{ tabIndex: -1, role: "link" }}>Content</ListActionItem>
+                <ListActionItem listItemContentProps={{ tabIndex: -1, role: "link" }}>Content</ListActionItem>
             </List>,
         );
         const action = screen.getByRole("link", { name: "Content" });
@@ -77,12 +77,12 @@ describe("ListActionItem", () => {
         expect(action).toHaveAttribute("role", "link");
     });
 
-    it("calls onClick from listActionItemProps when clicked", async () => {
+    it("calls onClick from listItemContentProps when clicked", async () => {
         const onClick = vi.fn();
         const user = userEvent.setup();
         render(
             <List>
-                <ListActionItem listActionItemProps={{ onClick }}>Content</ListActionItem>
+                <ListActionItem listItemContentProps={{ onClick }}>Content</ListActionItem>
             </List>,
         );
         await user.click(screen.getByRole("button", { name: "Content" }));
@@ -94,7 +94,7 @@ describe("ListActionItem", () => {
         const user = userEvent.setup();
         render(
             <List>
-                <ListActionItem listActionItemProps={{ onClick }}>Content</ListActionItem>
+                <ListActionItem listItemContentProps={{ onClick }}>Content</ListActionItem>
             </List>,
         );
         const action = screen.getByRole("button", { name: "Content" });
@@ -105,13 +105,13 @@ describe("ListActionItem", () => {
         expect(onClick).toHaveBeenCalledTimes(2);
     });
 
-    it("calls onKeyDown from listActionItemProps before internal Enter/Space handling", async () => {
+    it("calls onKeyDown from listItemContentProps before internal Enter/Space handling", async () => {
         const onKeyDown = vi.fn();
         const onClick = vi.fn();
         const user = userEvent.setup();
         render(
             <List>
-                <ListActionItem listActionItemProps={{ onKeyDown, onClick }}>Content</ListActionItem>
+                <ListActionItem listItemContentProps={{ onKeyDown, onClick }}>Content</ListActionItem>
             </List>,
         );
         const action = screen.getByRole("button", { name: "Content" });

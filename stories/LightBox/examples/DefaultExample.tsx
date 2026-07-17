@@ -51,7 +51,7 @@ const PoemBlock: React.FC = () => (
     </Island>
 );
 
-export const DefaultExample = () => {
+const DefaultExample = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
@@ -86,11 +86,9 @@ export const DefaultExample = () => {
                                         </Text>
                                     </Page.Header.Title.Content>
                                     <Page.Header.Title.Controls>
-                                        <Button
-                                            icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
-                                            theme={EButtonTheme.SECONDARY}
-                                            size={EComponentSize.MD}
-                                        />
+                                        <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                                            Button text
+                                        </Button>
                                         <Button
                                             icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                                             theme={EButtonTheme.SECONDARY}
@@ -143,3 +141,4 @@ export const DefaultExample = () => {
         </div>
     );
 };
+export default DefaultExample;

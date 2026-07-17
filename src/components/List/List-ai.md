@@ -64,6 +64,7 @@ version: "1.0"
 | `EmptyState` | `EmptyState.tsx` | Использование `ListEmptyState` |
 | `Virtualized` | `Virtualized.tsx` | Виртуализированный список (большие наборы данных) |
 | `Sortable` | `Sortable.tsx` | DnD-сортировка через `ListSortable` + `ListSortableItem` |
+| `WithActionItems` | `WithActionItems.tsx` | Список из кликабельных строк `ListActionItem` |
 | `SortableWithInteractiveElements` | `SortableWithInteractiveElements.tsx` | DnD с интерактивными элементами внутри строк (`data-draggable="false"`) |
 
 ---

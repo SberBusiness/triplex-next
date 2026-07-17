@@ -17,6 +17,8 @@ import {
     SortableWithInteractiveElementsSource,
     Virtualized as VirtualizedRender,
     VirtualizedSource,
+    WithActionItems as WithActionItemsRender,
+    WithActionItemsSource,
 } from "./examples/List";
 
 const meta = {
@@ -162,6 +164,22 @@ export const SortableWithInteractiveElements: StoryObj<typeof List> = {
             },
             source: {
                 code: SortableWithInteractiveElementsSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithActionItems: StoryObj<typeof List> = {
+    render: WithActionItemsRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Список из интерактивных элементов ListActionItem — каждая строка целиком кликабельна (клик, Enter, Space). Все обработчики (onClick, onKeyDown и т.д.) передаются через listItemContentProps, а не на сам ListActionItem — пропсы контейнера уходят на корневой li, который не является интерактивным элементом.",
+            },
+            source: {
+                code: WithActionItemsSource,
                 language: "tsx",
             },
         },

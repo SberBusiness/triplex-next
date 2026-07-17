@@ -145,6 +145,7 @@ hover-подсветку, focus-обводку по Tab и активацию п
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Action` | `Action.tsx` | `ListActionItem` напрямую внутри `List` |
+| `WithActionItems` (в `List.stories.tsx`) | `examples/List/WithActionItems.tsx` | Список из нескольких кликабельных строк `ListActionItem` |
 
 ---
 
@@ -152,4 +153,5 @@ hover-подсветку, focus-обводку по Tab и активацию п
 
 | Дата | Изменение |
 |---|---|
+| 2026-07-17 | Добавлена story `WithActionItems` в `List.stories.tsx` — список из нескольких `ListActionItem`. |
 | 2026-07-16 | Создан компонент `ListActionItem` — самодостаточная интерактивная строка (hover, focus по Tab, `onClick` + Enter/Space). Сам рендерит `ListItem` + `ListItemContent`; интерактивность и весь фон живут на одном `ListItemContent`. Пропсы разделены: собственные — на `<li>`, интерактивные — через `listItemContentProps`. |

@@ -6,6 +6,11 @@ import { ListItemContent } from "@sberbusiness/triplex-next/components/List/comp
 import styles from "../styles/ListActionItem.module.less";
 
 export interface IListActionItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
+    /**
+     * Пропсы интерактивного слоя (ListItemContent). Все обработчики (onClick, onKeyDown и т.д.)
+     * нужно передавать сюда, а не на сам ListActionItem — пропсы контейнера уходят на корневой <li>,
+     * который не является интерактивным элементом.
+     */
     listItemContentProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 

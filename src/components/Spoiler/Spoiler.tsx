@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/refs */
 import React, { useCallback, useRef, useState } from "react";
 import { CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { Button, EButtonTheme } from "../Button";
@@ -9,7 +8,7 @@ import { uniqueId } from "lodash-es";
 import styles from "./styles/Spoiler.module.less";
 
 /** Базовые свойства компонента Spoiler. */
-interface ISpoilerBaseProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ISpoilerBaseProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Текст раскрытия содержимого. */
     labelExpand: string;
     /** Текст скрытия содержимого. */
@@ -23,7 +22,7 @@ interface ISpoilerBaseProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** Свойства контролируемого Spoiler. */
-interface ISpoilerControlledProps extends ISpoilerBaseProps {
+export interface ISpoilerControlledProps extends ISpoilerBaseProps {
     /** Контролируемое состояние скрыт/раскрыт. */
     expanded: boolean;
     /** Контролирующая функция скрытия/раскрытия. */
@@ -31,7 +30,7 @@ interface ISpoilerControlledProps extends ISpoilerBaseProps {
 }
 
 /** Свойства неконтролируемого Spoiler. */
-interface ISpoilerUncontrolledProps extends ISpoilerBaseProps {
+export interface ISpoilerUncontrolledProps extends ISpoilerBaseProps {
     /** Контролируемое состояние скрыт/раскрыт. */
     expanded?: never;
     /** Контролирующая функция скрытия/раскрытия. */
@@ -39,7 +38,7 @@ interface ISpoilerUncontrolledProps extends ISpoilerBaseProps {
 }
 
 /** Комбинированные свойства компонента Spoiler. */
-type TSpoilerProps = ISpoilerControlledProps | ISpoilerUncontrolledProps;
+export type TSpoilerProps = ISpoilerControlledProps | ISpoilerUncontrolledProps;
 
 const sizeToCaretIconMap = {
     [EComponentSize.SM]: <CaretdownStrokeSrvIcon16 paletteIndex={5} className={styles.caretIcon} />,

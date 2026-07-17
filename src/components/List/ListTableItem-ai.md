@@ -1,15 +1,15 @@
 ---
-component: ListItemTable
+component: ListTableItem
 category: List
 related: [ListItem, ListItemSelectable, ListItemControls, ListItemControlsButton, SwipeableArea]
 tokens:
   - --triplex-next-ListItem-Background
   - --triplex-next-ListItem-Background_Selected
-stories: stories/List/ListItemTable.stories.tsx
+stories: stories/List/ListTableItem.stories.tsx
 version: "1.0"
 ---
 
-# ListItemTable
+# ListTableItem
 
 ## Назначение
 
@@ -18,7 +18,7 @@ version: "1.0"
 правый «хвост» (`ListItemTailRight`) и контейнер для swipe-actions
 (`ListItemControls`).
 
-Используй `ListItemTable` когда: нужна готовая строка с поддержкой swipe и
+Используй `ListTableItem` когда: нужна готовая строка с поддержкой swipe и
 выбора. Не нужен — собирай руками из `ListItem` + `ListItemContent` +
 `SwipeableArea` + `ListItemSelectable`.
 
@@ -26,7 +26,7 @@ version: "1.0"
 
 ## Варианты и props
 
-`ListItemTable` имеет **discriminated union** API: либо без выбора (`onSelect`/`selected` запрещены типом), либо selectable (оба обязательны).
+`ListTableItem` имеет **discriminated union** API: либо без выбора (`onSelect`/`selected` запрещены типом), либо selectable (оба обязательны).
 
 ### Общие опциональные props
 
@@ -56,7 +56,7 @@ version: "1.0"
 ```
 
 Применяются в подкомпонентах `ListItemContent`/`ListItemSelectable`. Сам
-`ListItemTable.module.less` задаёт только `margin-bottom: 4px` и
+`ListTableItem.module.less` задаёт только `margin-bottom: 4px` и
 `border-radius: 8px` для `swipeableArea`.
 
 ---
@@ -64,7 +64,7 @@ version: "1.0"
 ## Инварианты
 
 - **`forwardRef`** — обязателен, target — `HTMLLIElement`. Не убирать.
-- **Discriminated union** `IListItemTableProps | IListItemTableSelectableProps` — selectable определяется наличием **обоих** prop'ов `onSelect` и `selected`. Не делай частичную проверку.
+- **Discriminated union** `IListTableItemProps | IListTableItemSelectableProps` — selectable определяется наличием **обоих** prop'ов `onSelect` и `selected`. Не делай частичную проверку.
 - **Корневой элемент `<li>`** — не менять.
 - **`SwipeableArea`** всегда оборачивает контент, даже без `controlButtons` — нужно для свайп-жестов на мобильных.
 
@@ -83,8 +83,8 @@ version: "1.0"
 
 ## Stories
 
-Основные истории: `stories/List/ListItemTable.stories.tsx`
-Файлы примеров: `stories/List/examples/ListItemTable/`
+Основные истории: `stories/List/ListTableItem.stories.tsx`
+Файлы примеров: `stories/List/examples/ListTableItem/`
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
@@ -100,3 +100,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-07-16 | Компонент переименован `ListItemTable` → `ListTableItem`. Пропсы `IListItemTableProps`/`IListItemTableSelectableProps` → `IListTableItemProps`/`IListTableItemSelectableProps`, CSS-класс `.listItemTable` → `.listTableItem`, файлы `ListTableItem.*`. **Breaking change.** |

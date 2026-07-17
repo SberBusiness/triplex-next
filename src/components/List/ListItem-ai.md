@@ -1,10 +1,12 @@
 ---
 component: ListItem
 category: List
-related: [List, ListItemContent, ListItemSelectable, ListItemTable, ListSortableItem]
+related: [List, ListItemContent, ListActionItem, ListItemSelectable, ListTableItem, ListSortableItem]
 tokens:
   - --triplex-next-ListItem-Background
   - --triplex-next-ListItem-Background_Selected
+  - --triplex-next-ListItem-Background_Hover
+  - --triplex-next-ListItem-BorderColor_Focus
 stories: stories/List/ListItem.stories.tsx
 version: "1.0"
 ---
@@ -17,12 +19,11 @@ version: "1.0"
 (`ListItemContent`, `ListItemSelectable`, `SwipeableArea` и т.п.). Создаёт
 React-контекст `ListItemContext` с состояниями `selected` и `selectable`:
 `selected` управляет подсветкой `ListItemContent`, `selectable` сообщает
-дочернему `ListItemContent`, что элемент выбираемый — для применения
-скругления углов (`border-radius`). Оба флага пишутся `ListItemSelectable`
-через `useEffect`.
+дочернему `ListItemContent`, что элемент выбираемый — для применения скругления
+углов (`border-radius`). Оба флага пишутся `ListItemSelectable` через `useEffect`.
 
 Используй `ListItem` когда: нужен произвольный layout строки списка.
-Используй `ListItemTable` когда: нужна готовая табличная строка с support'ом
+Используй `ListTableItem` когда: нужна готовая табличная строка с support'ом
 swipe-actions и selectable.
 
 ---
@@ -41,11 +42,13 @@ swipe-actions и selectable.
 ## Дизайн-токены
 
 Сами стили `ListItem.tsx` пустые — токены применяются в подкомпонентах
-(`ListItemContent`, `ListItemSelectable`):
+(`ListItemContent`, `ListItemSelectable`, `ListActionItem`):
 
 ```text
---triplex-next-ListItem-Background          // фон по умолчанию
---triplex-next-ListItem-Background_Selected // фон, когда selected=true
+--triplex-next-ListItem-Background          // фон по умолчанию (ListItemContent)
+--triplex-next-ListItem-Background_Selected // фон, когда selected=true (ListItemContent)
+--triplex-next-ListItem-Background_Hover    // фон при hover на desktop (ListActionItem на ListItemContent)
+--triplex-next-ListItem-BorderColor_Focus   // цвет focus-обводки на desktop (ListActionItem)
 ```
 
 ---
@@ -62,11 +65,12 @@ swipe-actions и selectable.
 ## Связанные компоненты
 
 - `ListItemContent` — внутренняя обёртка для контента, читает `selected` из контекста.
+- `ListActionItem` — самодостаточный интерактивный элемент: сам рендерит `ListItem` + `ListItemContent` (hover, focus по Tab, клик по всей строке — `onClick`, Enter/Space). Используется напрямую внутри `List`. Другие компоненты семейства его не используют.
 - `ListItemSelectable` — добавляет чекбокс выбора, синхронизирует `selected` в контекст через `useEffect`.
 - `ListItemLoading` — элемент-спиннер для пагинации (используется как последний элемент).
 - `ListItemControls`, `ListItemControlsButton`, `ListItemControlsButtonDropdown` — кнопки действий, обычно внутри `SwipeableArea.rightSwipeableArea`.
 - `ListItemTailLeft` / `ListItemTailRight` — декоративные хвосты для `SwipeableArea`.
-- `ListItemTable` — комбинированная высокоуровневая обёртка.
+- `ListTableItem` — комбинированная высокоуровневая обёртка.
 
 ---
 
@@ -78,6 +82,7 @@ swipe-actions и selectable.
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Default` | `Default.tsx` | Базовый элемент с произвольным контентом |
+| `Action` | `Action.tsx` | Использование `ListActionItem`  |
 | `Loading` | `Loading.tsx` | `ListItemLoading` как последний элемент при пагинации |
 | `Selectable` | `Selectable.tsx` | Использование `ListItemSelectable` внутри `ListItem` |
 | `Swipeable` | `Swipeable.tsx` | `ListItem` внутри `SwipeableArea` с `ListItemControls` |
@@ -90,3 +95,4 @@ swipe-actions и selectable.
 |---|---|
 | 2026-04-29 | Создан документ |
 | 2026-05-21 | `ListItemContext` расширен полями `selectable` / `setSelectable`. Исправлен цвет токена `Background_Selected` в тёмной теме (`ColorDarkNeutral.10` → `ColorDarkNeutral.60`). |
+| 2026-07-16 | Добавлен самодостаточный компонент `ListActionItem` (сам рендерит `ListItem` + `ListItemContent`; hover, focus по Tab, `onClick` + Enter/Space). Координация фона через контекст не понадобилась — `ListItemContext` без изменений. Другие компоненты семейства его не используют. |

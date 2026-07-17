@@ -30,7 +30,7 @@ import {
     ListEmptyState,
     ListItemControlsButton,
     ListItemControlsButtonDropdown,
-    ListItemTable,
+    ListTableItem,
     ListMaster,
     MarkerStatus,
     MultiselectField,
@@ -518,7 +518,7 @@ export const Default = () => {
                     {sortedItems.length ? (
                         <List>
                             {sortedItems.map((item) => (
-                                <ListItemTable
+                                <ListTableItem
                                     key={item.id}
                                     selected={selectedListItemIds.includes(item.id)}
                                     onSelect={(sel) => handleSelectListItem(item.id, sel)}
@@ -556,7 +556,7 @@ export const Default = () => {
                                     <MarkerStatus status={statusToMarker[item.status]} size={EComponentSize.LG}>
                                         {item.statusText}
                                     </MarkerStatus>
-                                </ListItemTable>
+                                </ListTableItem>
                             ))}
                         </List>
                     ) : (

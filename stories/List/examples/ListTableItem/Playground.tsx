@@ -5,63 +5,46 @@ import {
     EFontWeightText,
     EMarkerStatus,
     ETextSize,
-    ISwipeableAreaRef,
     List,
     ListItemControlsButton,
     ListItemControlsButtonDropdown,
-    ListItemTable,
+    ListTableItem,
     MarkerStatus,
     Text,
 } from "@sberbusiness/triplex-next";
 import { AttachmentStrokeSrvIcon20, DotshorizontalStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import { action } from "storybook/actions";
+import { useArgs } from "storybook/preview-api";
 
-export const WithSwipeEmulation = () => {
-    const options = [
-        {
-            id: "button-dropdown-swipe-emulation-option-1",
-            label: "Текст пункта меню 1",
-            onSelect: () => alert("Выбран пункт меню 1."),
-        },
-        {
-            id: "button-dropdown-swipe-emulation-card-option-2",
-            label: "Текст пункта меню 2",
-            onSelect: () => alert("Выбран пункт меню 2."),
-        },
-        {
-            id: "button-dropdown-swipe-emulation-card-option-3",
-            label: "Текст пункта меню 3",
-            onSelect: () => alert("Выбран пункт меню 3."),
-        },
-    ];
+export interface PlaygroundArgs {
+    selected: boolean;
+}
 
-    const ref = React.useRef<ISwipeableAreaRef>(null);
+const dropdownOptions = [
+    {
+        id: "playground-dropdown-option-1",
+        label: "Текст пункта меню 1",
+        onSelect: action("onSelect: option 1"),
+    },
+    {
+        id: "playground-dropdown-option-2",
+        label: "Текст пункта меню 2",
+        onSelect: action("onSelect: option 2"),
+    },
+];
+
+export const Playground = ({ selected }: PlaygroundArgs) => {
+    // Привязка к Storybook controls: и Controls panel, и клик по чекбоксу
+    // обновляют один и тот же arg, поэтому состояние не дублируется в локальном useState.
+    const [, updateArgs] = useArgs<PlaygroundArgs>();
 
     return (
         <div style={{ maxWidth: "500px" }}>
-            <button
-                onClick={() => {
-                    if (ref.current) {
-                        ref.current.swipeLeft();
-                    }
-                }}
-            >
-                swipe
-            </button>
-            <button
-                onClick={() => {
-                    if (ref.current) {
-                        ref.current.closeSwipe();
-                    }
-                }}
-            >
-                close
-            </button>
-            <br />
-
             <List>
-                <ListItemTable
-                    swipeableAreaRef={ref}
-                    onClickItem={() => console.log("Клик по карточке.")}
+                <ListTableItem
+                    selected={selected}
+                    onSelect={(next) => updateArgs({ selected: next })}
+                    onClickItem={action("onClickItem")}
                     controlButtons={
                         <>
                             <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
@@ -69,7 +52,7 @@ export const WithSwipeEmulation = () => {
                             </ListItemControlsButton>
                             <ListItemControlsButtonDropdown
                                 icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
-                                options={options}
+                                options={dropdownOptions}
                             >
                                 Действия
                             </ListItemControlsButtonDropdown>
@@ -83,9 +66,6 @@ export const WithSwipeEmulation = () => {
                     <Text size={ETextSize.B3} tag="div">
                         №1 ООО Голубая Роза Голубая
                     </Text>
-                    <Text size={ETextSize.B3} tag="div">
-                        Длинное назначение платежа
-                    </Text>
                     <Text size={ETextSize.B3} type={EFontType.SECONDARY} tag="div">
                         НДС не облагается
                     </Text>
@@ -95,7 +75,7 @@ export const WithSwipeEmulation = () => {
                     <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
                         Status text
                     </MarkerStatus>
-                </ListItemTable>
+                </ListTableItem>
             </List>
         </div>
     );

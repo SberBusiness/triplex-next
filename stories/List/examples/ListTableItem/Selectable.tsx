@@ -8,7 +8,7 @@ import {
     List,
     ListItemControlsButton,
     ListItemControlsButtonDropdown,
-    ListItemTable,
+    ListTableItem,
     MarkerStatus,
     Text,
 } from "@sberbusiness/triplex-next";
@@ -38,7 +38,7 @@ export const Selectable = () => {
     return (
         <div style={{ maxWidth: "500px" }}>
             <List>
-                <ListItemTable
+                <ListTableItem
                     selected={selected}
                     onSelect={setSelected}
                     onClickItem={() => console.log("Клик по карточке.")}
@@ -75,7 +75,7 @@ export const Selectable = () => {
                     <MarkerStatus status={EMarkerStatus.SUCCESS} size={EComponentSize.LG}>
                         Status text
                     </MarkerStatus>
-                </ListItemTable>
+                </ListTableItem>
             </List>
         </div>
     );

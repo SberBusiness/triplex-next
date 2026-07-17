@@ -267,7 +267,7 @@ AI-агента.
 
 | Создаём AI.md | Описываем в родителе |
 |---|---|
-| `List`, `ListItem`, `ListItemTable`, `ListItemSelectable`, `ListItemControlsButton`, `ListItemControlsButtonDropdown`, `ListSortable`, `ListSortableItem` | `ListItemControls`, `ListItemContent`, `ListEmptyState`, `ListItemLoading`, `ListItemTailLeft`, `ListItemTailRight`, `ListSortableItemTarget`, `ListSortableItemControls` |
+| `List`, `ListItem`, `ListActionItem`, `ListTableItem`, `ListItemSelectable`, `ListItemControlsButton`, `ListItemControlsButtonDropdown`, `ListSortable`, `ListSortableItem` | `ListItemControls`, `ListItemContent`, `ListEmptyState`, `ListItemLoading`, `ListItemTailLeft`, `ListItemTailRight`, `ListSortableItemTarget`, `ListSortableItemControls` |
 
 В ROADMAP-таблице каждый AI.md-достойный компонент идёт отдельной строкой —
 так считается прогресс покрытия и видны субкомпоненты с собственным API.

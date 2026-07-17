@@ -135,7 +135,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ListItemControlsButton | ✅ | ✅ | ✅ |
 | ListItemControlsButtonDropdown | ✅ | ✅ | ✅ |
 | ListItemSelectable | ✅ | ✅ | ✅ |
-| ListItemTable | ✅ | ✅ | ✅ |
+| ListActionItem | ✅ | ✅ | ✅ |
+| ListTableItem | ✅ | ✅ | ✅ |
 | ListMaster | ✅ | ✅ | ✅ |
 | ListMasterFooter | ✅ | ✅ | ✅ |
 | ListMasterHeader | ✅ | ✅ | ✅ |

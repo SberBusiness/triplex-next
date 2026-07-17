@@ -21,7 +21,7 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState("");
 
-    const buttonSize = size === EComponentSize.LG || size === EComponentSize.MD ? EComponentSize.MD : EComponentSize.SM;
+    const buttonSize = size === EComponentSize.SM ? EComponentSize.SM : EComponentSize.MD;
 
     return (
         <IslandWidget

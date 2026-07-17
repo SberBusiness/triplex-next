@@ -4,4 +4,33 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.38.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**ListTableItem**
+
+- Компонент `ListItemTable` переименован в `ListTableItem`.
+- Типы `IListItemTableProps` / `IListItemTableSelectableProps` переименованы в `IListTableItemProps` / `IListTableItemSelectableProps`.
+
+<Heading>Новые компоненты</Heading>
+
+**ListActionItem**
+
+- Интерактивная обёртка над `ListItem` и `ListItemContent`, которая добавляет элементу списка состояния hover, focused и позволяет передавать `listItemContentProps`.
+
 <Heading>Изменения</Heading>
+
+**Button / ButtonIcon / ButtonDropdown**
+
+- Исправлено вертикальное выравнивание кнопок в inline-контейнерах (например, в `Page.Header.Title.Controls`): icon-only кнопка смещалась относительно соседней текстовой из-за baseline-выравнивания. Кнопкам задан `vertical-align: middle` — кнопки разной высоты центрируются между собой и относительно строки инлайн-текста.
+
+**CollapsibleTree**
+
+- Класс `hoverable` (стили `@sberbusiness/icons-next`) на кнопке заголовка узла теперь установлен всегда, а не только в состоянии `disabled` — корректная окраска шеврона при наведении.
+
+**IslandWidget**
+
+- Начертание шрифта `Title` изменено на `Medium`.
+
+**LightBox**
+
+- Исправлено добавление класса `undefined` на корневой элемент в состоянии `isLoading`.

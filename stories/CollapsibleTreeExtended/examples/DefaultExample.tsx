@@ -62,7 +62,8 @@ const TreeNode: React.FC<ITreeNodeProps> = ({ node, prevNode, nextNode }) => {
                 hasChildNodes ? (
                     <button
                         type="button"
-                        className="collapsible-tree-extended-example-header"
+                        // Глобальные классы @sberbusiness/icons-next "hoverable" и "active" — задают цвет шеврона.
+                        className={clsx("collapsible-tree-extended-example-header", "hoverable", { active: opened })}
                         onClick={() => setOpened(!opened)}
                         aria-expanded={opened}
                     >

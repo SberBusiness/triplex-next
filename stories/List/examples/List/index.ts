@@ -12,3 +12,5 @@ export * from "./Sortable";
 export { default as SortableSource } from "./Sortable?raw";
 export * from "./SortableWithInteractiveElements";
 export { default as SortableWithInteractiveElementsSource } from "./SortableWithInteractiveElements?raw";
+export * from "./WithActionItems";
+export { default as WithActionItemsSource } from "./WithActionItems?raw";

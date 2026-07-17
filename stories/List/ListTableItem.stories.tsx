@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
-import { ListItemTable } from "@sberbusiness/triplex-next";
+import { ListTableItem } from "@sberbusiness/triplex-next";
 import {
     Default as DefaultRender,
     DefaultSource,
@@ -11,11 +11,11 @@ import {
     SelectableSource,
     WithSwipeEmulation as WithSwipeEmulationRender,
     WithSwipeEmulationSource,
-} from "./examples/ListItemTable";
+} from "./examples/ListTableItem";
 
 const meta = {
-    title: "Components/List/ListItemTable",
-    component: ListItemTable,
+    title: "Components/List/ListTableItem",
+    component: ListTableItem,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -29,7 +29,7 @@ const meta = {
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
-                    <ArgTypes of={ListItemTable} />
+                    <ArgTypes of={ListTableItem} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -38,7 +38,7 @@ const meta = {
             ),
         },
     },
-} satisfies Meta<typeof ListItemTable>;
+} satisfies Meta<typeof ListTableItem>;
 
 export default meta;
 
@@ -70,7 +70,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     render: PlaygroundRender,
 };
 
-export const Default: StoryObj<typeof ListItemTable> = {
+export const Default: StoryObj<typeof ListTableItem> = {
     render: DefaultRender,
     parameters: {
         controls: { disable: true },
@@ -86,7 +86,7 @@ export const Default: StoryObj<typeof ListItemTable> = {
     },
 };
 
-export const Selectable: StoryObj<typeof ListItemTable> = {
+export const Selectable: StoryObj<typeof ListTableItem> = {
     render: SelectableRender,
     parameters: {
         controls: { disable: true },
@@ -102,7 +102,7 @@ export const Selectable: StoryObj<typeof ListItemTable> = {
     },
 };
 
-export const WithSwipeEmulation: StoryObj<typeof ListItemTable> = {
+export const WithSwipeEmulation: StoryObj<typeof ListTableItem> = {
     render: WithSwipeEmulationRender,
     parameters: {
         controls: { disable: true },

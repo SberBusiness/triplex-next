@@ -82,7 +82,7 @@ sticky-футер с агрегатами и действиями. Сам по �
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Default` | `Default.tsx` | Production-like пример: TabsLine + `ChipGroup`-фильтры + selectable `ListItemTable` + sticky Header при выделении + sticky Footer с суммой и действиями + LightBox с расширенными фильтрами + пустое состояние |
+| `Default` | `Default.tsx` | Production-like пример: TabsLine + `ChipGroup`-фильтры + selectable `ListTableItem` + sticky Header при выделении + sticky Footer с суммой и действиями + LightBox с расширенными фильтрами + пустое состояние |
 
 ---
 

@@ -1,4 +1,4 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
@@ -7,8 +7,12 @@ import globals from "globals";
 import prettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default defineConfig(
+    globalIgnores(["dist/", "storybook-static/", "package.json", "tsconfig.json"]),
     // ESLint recommended configuration
-    eslint.configs.recommended,
+    {
+        files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+        ...eslint.configs.recommended,
+    },
     // TypeScript-ESLint recommended configuration
     tseslint.configs.recommended,
     // TypeScript-specific adds/overrides
@@ -50,7 +54,10 @@ export default defineConfig(
         },
     },
     // React hooks recommended configuration
-    reactHooks.configs.flat["recommended-latest"],
+    {
+        files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+        ...reactHooks.configs.flat["recommended-latest"],
+    },
     // Enviroment-specific adds/overrides
     {
         files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
@@ -70,10 +77,6 @@ export default defineConfig(
         rules: {
             "react-hooks/rules-of-hooks": "off", // Disable hooks rules for stories
         },
-    },
-    // Global ignores (e.g., build output)
-    {
-        ignores: ["dist", "storybook-static"],
     },
     // Prettier recommended configuration
     prettierRecommended,

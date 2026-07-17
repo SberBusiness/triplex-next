@@ -28,10 +28,12 @@ export const CollapsibleTreeNodeHeader = forwardRef<HTMLButtonElement, ICollapsi
                 {...props}
                 ref={ref}
                 type="button"
-                className={clsx(styles.collapsibleTreeNodeHeader, className, {
+                // Глобальные классы @sberbusiness/icons-next "hoverable", "active" и "disabled" — задают цвет шеврона.
+                className={clsx(styles.collapsibleTreeNodeHeader, "hoverable", className, {
                     [styles.interactive]: hasChildNodes && !disabled,
-                    // Глобальные классы @sberbusiness/icons-next — задают приглушённый цвет шеврона.
-                    "hoverable disabled": disabled,
+                    // У леаф-нод opened всегда true (хак LeafNode), поэтому active только при наличии детей.
+                    active: hasChildNodes && opened,
+                    disabled,
                 })}
                 onClick={handleClick}
                 aria-expanded={hasChildNodes ? opened : undefined}

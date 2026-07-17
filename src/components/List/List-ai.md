@@ -27,7 +27,7 @@ version: "1.0"
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `loading` | `boolean` | `false` | Показывает `LoaderScreen` поверх содержимого. Используется при обновлении текущего списка новыми данными (например, после применения фильтра) |
-| `children` | `React.ReactNode` | — | Элементы списка (обычно `<ListItem>` или `<ListItemTable>`) |
+| `children` | `React.ReactNode` | — | Элементы списка (обычно `<ListItem>` или `<ListTableItem>`) |
 | `...HTMLUListElementAttributes` | — | — | Все стандартные атрибуты `<ul>` |
 
 ---
@@ -64,6 +64,7 @@ version: "1.0"
 | `EmptyState` | `EmptyState.tsx` | Использование `ListEmptyState` |
 | `Virtualized` | `Virtualized.tsx` | Виртуализированный список (большие наборы данных) |
 | `Sortable` | `Sortable.tsx` | DnD-сортировка через `ListSortable` + `ListSortableItem` |
+| `WithActionItems` | `WithActionItems.tsx` | Список из кликабельных строк `ListActionItem` |
 | `SortableWithInteractiveElements` | `SortableWithInteractiveElements.tsx` | DnD с интерактивными элементами внутри строк (`data-draggable="false"`) |
 
 ---

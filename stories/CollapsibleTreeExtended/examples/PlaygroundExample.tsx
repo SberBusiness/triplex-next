@@ -69,7 +69,8 @@ const TreeNode: React.FC<ITreeNodeProps> = ({ node, prevNode, nextNode, defaultO
                 hasChildNodes ? (
                     <button
                         type="button"
-                        className="collapsible-tree-extended-playground-header"
+                        // Глобальные классы @sberbusiness/icons-next "hoverable" и "active" — задают цвет иконки.
+                        className={clsx("collapsible-tree-extended-playground-header", "hoverable", { active: opened })}
                         onClick={() => handleToggle(!opened)}
                         aria-expanded={opened}
                     >

@@ -6,16 +6,16 @@ import { ListItemControls } from "@sberbusiness/triplex-next/components/List/com
 import { ListItemSelectable } from "@sberbusiness/triplex-next/components/List/components/ListItemSelectable";
 import { ListItemTailRight } from "@sberbusiness/triplex-next/components/List/components/ListItemTailRight";
 import clsx from "clsx";
-import styles from "../styles/ListItemTable.module.less";
+import styles from "../styles/ListTableItem.module.less";
 
-export interface IListItemTableSelectableProps extends Omit<IListItemTableProps, "selected" | "onSelect"> {
+export interface IListTableItemSelectableProps extends Omit<IListTableItemProps, "selected" | "onSelect"> {
     /** Обработчик изменения флага selected. */
     onSelect: (selected: boolean) => void;
     /** Флаг состояния selected. */
     selected: boolean;
 }
 
-export interface IListItemTableProps extends Omit<IListItemProps, "onSelect"> {
+export interface IListTableItemProps extends Omit<IListItemProps, "onSelect"> {
     /** Кнопки действий - <ListItemControlsButton ... /> */
     controlButtons?: React.ReactNode;
     /** Обработчик клика по контенту элемента списка. Событие onClick передается на контейнер контента. */
@@ -29,7 +29,7 @@ export interface IListItemTableProps extends Omit<IListItemProps, "onSelect"> {
 }
 
 /** Элемент списка, для отображения табличных данных. */
-export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps | IListItemTableSelectableProps>(
+export const ListTableItem = React.forwardRef<HTMLLIElement, IListTableItemProps | IListTableItemSelectableProps>(
     ({ children, className, controlButtons, onClickItem, onSelect, selected, swipeableAreaRef, ...rest }, ref) => {
         const selectable = typeof onSelect !== "undefined" && typeof selected !== "undefined";
 
@@ -40,7 +40,7 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
         );
 
         return (
-            <ListItem className={clsx(styles.listItemTable, className)} {...rest} ref={ref}>
+            <ListItem className={clsx(styles.listTableItem, className)} {...rest} ref={ref}>
                 <SwipeableArea
                     className={styles.swipeableArea}
                     ref={swipeableAreaRef}
@@ -63,4 +63,4 @@ export const ListItemTable = React.forwardRef<HTMLLIElement, IListItemTableProps
     },
 );
 
-ListItemTable.displayName = "ListItemTable";
+ListTableItem.displayName = "ListTableItem";

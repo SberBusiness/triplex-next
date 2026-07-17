@@ -76,7 +76,9 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 | `aria-expanded={opened}` | `hasChildNodes === true` (для листьев не ставится, при `disabled` сохраняется) |
 | Шеврон отрендерен | `hasChildNodes === true` (в том числе при `disabled`) |
 | Класс `interactive` | `hasChildNodes === true && !disabled` |
-| Глобальные классы `hoverable disabled` | проп `disabled === true` — управляют приглушённым цветом шеврона через стили `@sberbusiness/icons-next` (как в `IconWrapper`) |
+| Глобальный класс `hoverable` | всегда — управляет цветом шеврона через стили `@sberbusiness/icons-next` (как в `IconWrapper`) |
+| Глобальный класс `active` | `hasChildNodes === true && opened === true` — цвет шеврона раскрытого узла (у леаф-нод `opened` всегда `true` из-за хака `LeafNode`, поэтому им класс не ставится) |
+| Глобальный класс `disabled` | проп `disabled === true` — приглушает цвет шеврона |
 | Класс `chevron.opened` | `opened === true` |
 | `toggle(!opened)` вызывается | по клику, только при `hasChildNodes === true && !disabled` |
 | Кастомный `onClick` | вызывается всегда после `toggle` |
@@ -105,8 +107,8 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 --triplex-next-CollapsibleTree-Header_Shadow_Focus
 ```
 
-Цвета disabled-состояния задаются без собственных токенов: шеврон — глобальными
-классами `hoverable disabled` на кнопке заголовка (стили `@sberbusiness/icons-next`),
+Цвета disabled-состояния задаются без собственных токенов: шеврон — глобальным
+классом `disabled` на кнопке заголовка (класс `hoverable` стоит всегда, стили `@sberbusiness/icons-next`),
 текст — `type={EFontType.DISABLED}` у `CollapsibleTreeNodeLabel` на стороне потребителя.
 
 Анимация раскрытия и базовая семантика дерева наследуются от
@@ -221,3 +223,4 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 | 2026-05-15 | `CollapsibleTreeNodeHeader` и `CollapsibleTreeLeafContent` переведены на `forwardRef` (DOM-ref на `<button>` и `<div>` соответственно). Защищены инварианты `<button>` (`type`, `disabled`, `aria-expanded`) от перетирания через `{...props}` |
 | 2026-07-06 | Шеврон открытого узла теперь указывает вверх (`rotate(-90deg)`), а не вниз |
 | 2026-07-06 | Добавлено свойство `disabled` у `ICollapsibleTreeNodeBranch` и поддержка пропа `disabled` в `CollapsibleTreeNodeHeader`. Без новых токенов: шеврон приглушается глобальными классами `hoverable disabled` (icons-next), текст — через `type={EFontType.DISABLED}` у лейбла |
+| 2026-07-14 | Глобальный класс `hoverable` (icons-next) на кнопке заголовка теперь стоит всегда, а не только при `disabled` — для корректной окраски шеврона. Добавлен класс `active` на раскрытый узел с детьми (по паттерну `IconWrapper`/`Button`) |

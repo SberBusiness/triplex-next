@@ -1,6 +1,6 @@
 import React from "react";
 import { Title } from "@sberbusiness/triplex-next/components/Typography";
-import { ETitleSize } from "@sberbusiness/triplex-next/components/Typography/enums";
+import { ETitleSize, EFontWeightTitle } from "@sberbusiness/triplex-next/components/Typography/enums";
 import styles from "../styles/IslandWidgetHeader.module.less";
 import clsx from "clsx";
 
@@ -11,7 +11,12 @@ export const IslandWidgetHeaderTitle: React.FC<IIslandWidgetHeaderTitleProps> = 
     className,
     ...htmlDivAttributes
 }) => (
-    <Title size={ETitleSize.H3} {...htmlDivAttributes} className={clsx(styles.islandWidgetHeaderTitle, className)}>
+    <Title
+        size={ETitleSize.H3}
+        weight={EFontWeightTitle.MEDIUM}
+        {...htmlDivAttributes}
+        className={clsx(styles.islandWidgetHeaderTitle, className)}
+    >
         {children}
     </Title>
 );

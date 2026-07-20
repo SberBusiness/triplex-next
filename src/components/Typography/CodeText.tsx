@@ -3,6 +3,7 @@ import { clsx } from "clsx";
 import { EFontType } from "./enums";
 import { ITypographyProps } from "./types";
 import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
+import { getTextDecorationClassName } from "./utils";
 import styles from "./styles/CodeText.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
@@ -27,11 +28,7 @@ export const CodeText = forwardRef<HTMLElement, TCodeTextProps<keyof JSX.Intrins
             typographyStyles.typography,
             styles.codeText,
             FONT_TYPE_TO_CLASS_NAME_MAP[type],
-            {
-                [typographyStyles.strikethrough]: !!strikethrough && !underline,
-                [typographyStyles.underline]: !!underline && !strikethrough,
-                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-            },
+            getTextDecorationClassName(typographyStyles, underline, strikethrough),
             className,
         );
 

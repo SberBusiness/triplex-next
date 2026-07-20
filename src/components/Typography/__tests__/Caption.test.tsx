@@ -129,6 +129,35 @@ describe("Caption", () => {
         expect(ref.current?.tagName).toBe("P");
     });
 
+    it.each([
+        [ECaptionSize.C1, "c1"],
+        [ECaptionSize.C2, "c2"],
+        [ECaptionSize.D1, "d1"],
+    ])("applies correct class for size %s", (size, expectedClass) => {
+        render(<Caption size={size}>Size Caption</Caption>);
+
+        expect(screen.getByText("Size Caption").className).toContain(expectedClass);
+    });
+
+    it.each([
+        [EFontWeightCaption.REGULAR, "regular"],
+        [EFontWeightCaption.SEMIBOLD, "semibold"],
+    ])("applies correct class for weight %s", (weight, expectedClass) => {
+        render(
+            <Caption size={ECaptionSize.C1} weight={weight}>
+                Weight Caption
+            </Caption>,
+        );
+
+        expect(screen.getByText("Weight Caption").className).toContain(expectedClass);
+    });
+
+    it("applies regular weight by default", () => {
+        render(<Caption size={ECaptionSize.C1}>Default Weight Caption</Caption>);
+
+        expect(screen.getByText("Default Weight Caption").className).toContain("regular");
+    });
+
     it("applies correct CSS classes for different combinations", () => {
         render(
             <Caption

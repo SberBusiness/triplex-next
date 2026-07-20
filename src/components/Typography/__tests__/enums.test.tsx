@@ -1,4 +1,13 @@
-import { ETextSize, ECaptionSize, ETitleSize, EFontType, EFontWeightText, EFontWeightTitle, ELineType } from "../enums";
+import {
+    ETextSize,
+    ECaptionSize,
+    ETitleSize,
+    EFontType,
+    EFontWeightText,
+    EFontWeightCaption,
+    EFontWeightTitle,
+    ELineType,
+} from "../enums";
 
 describe("Typography Enums", () => {
     describe("ETextSize", () => {
@@ -57,6 +66,13 @@ describe("Typography Enums", () => {
         it("has correct string values", () => {
             expect(EFontWeightText.REGULAR).toBe("regular");
             expect(EFontWeightText.SEMIBOLD).toBe("semibold");
+        });
+    });
+
+    describe("EFontWeightCaption", () => {
+        it("has correct string values", () => {
+            expect(EFontWeightCaption.REGULAR).toBe("regular");
+            expect(EFontWeightCaption.SEMIBOLD).toBe("semibold");
         });
     });
 

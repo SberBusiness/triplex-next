@@ -1,11 +1,26 @@
 import React from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Caption, ECaptionSize, EFontWeightCaption, EFontType } from "@sberbusiness/triplex-next";
-import "./Typography.less";
+import { Caption, ECaptionSize, EFontType, EFontWeightCaption } from "@sberbusiness/triplex-next";
+import {
+    Playground as PlaygroundRender,
+    PlaygroundArgs,
+    Default as DefaultRender,
+    DefaultSource,
+    Sizes as SizesRender,
+    SizesSource,
+    Weights as WeightsRender,
+    WeightsSource,
+    Types as TypesRender,
+    TypesSource,
+    Decorations as DecorationsRender,
+    DecorationsSource,
+} from "./examples/Caption";
 
-export default {
+const meta = {
     title: "Components/Typography/Caption",
+    component: Caption,
+    tags: ["autodocs"],
     parameters: {
         docs: {
             page: () => (
@@ -22,20 +37,26 @@ export default {
             ),
         },
     },
-    tags: ["autodocs"],
+} satisfies Meta<typeof Caption>;
+
+export default meta;
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    size: ECaptionSize.C1,
+    weight: EFontWeightCaption.REGULAR,
+    type: EFontType.PRIMARY,
+    tag: "span",
+    underline: false,
+    strikethrough: false,
 };
 
-export const Playground: StoryObj<typeof Caption> = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    render: (args) => (
-        <div className="typography-example">
-            <Caption {...args}>Интерактивная подпись с controls</Caption>
-        </div>
-    ),
+    args: PLAYGROUND_ARGS,
     argTypes: {
         size: {
             control: { type: "select" },
-            options: [ECaptionSize.C1, ECaptionSize.C2, ECaptionSize.D1],
+            options: Object.values(ECaptionSize),
             description: "Размер подписи",
             table: {
                 type: { summary: "ECaptionSize" },
@@ -85,160 +106,81 @@ export const Playground: StoryObj<typeof Caption> = {
                 defaultValue: { summary: "false" },
             },
         },
-        className: {
-            control: { type: "text" },
-            description: "Дополнительные CSS классы",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-    },
-    args: {
-        size: ECaptionSize.C1,
-        weight: EFontWeightCaption.REGULAR,
-        type: EFontType.PRIMARY,
-        tag: "span",
-        underline: false,
-        strikethrough: false,
-        className: "",
     },
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-        controls: {
-            include: ["size", "weight", "type", "tag", "underline", "strikethrough"],
+    },
+    render: PlaygroundRender,
+};
+
+export const Default: StoryObj<typeof Caption> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
         },
+        // Визуально дублирует подпись C1 из стори Sizes — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };
 
 export const Sizes: StoryObj<typeof Caption> = {
-    render: () => (
-        <div className="typography-example">
-            <Caption size={ECaptionSize.C1}>C1 - Подпись малого размера (10px)</Caption>
-            <Caption size={ECaptionSize.C2}>C2 - Подпись очень малого размера (8px)</Caption>
-            <Caption size={ECaptionSize.D1}>D1 - Подпись большого размера (32px)</Caption>
-        </div>
-    ),
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: SizesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Weights: StoryObj<typeof Caption> = {
-    render: () => (
-        <div className="typography-example">
-            <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.REGULAR}>
-                Regular - Обычный вес подписи
-            </Caption>
-            <Caption size={ECaptionSize.C1} weight={EFontWeightCaption.SEMIBOLD}>
-                Semibold - Полужирная подпись
-            </Caption>
-        </div>
-    ),
+    render: WeightsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: WeightsSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Types: StoryObj<typeof Caption> = {
-    render: () => (
-        <div className="typography-examples-wrapper">
-            <div className="typography-example">
-                <Caption size={ECaptionSize.C1} type={EFontType.PRIMARY}>
-                    Primary
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.COMPLEMENTARY}>
-                    Complementary
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.SECONDARY}>
-                    Secondary
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.TERTIARY}>
-                    Tertiary
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.BRAND}>
-                    Brand
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.INFO}>
-                    Info
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.SUCCESS}>
-                    Success
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.WARNING}>
-                    Warning
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.ERROR}>
-                    Error
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.DISABLED}>
-                    Disabled
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.SYSTEM}>
-                    System
-                </Caption>
-            </div>
-            <div className="typography-invert-example">
-                <Caption size={ECaptionSize.C1} type={EFontType.PRIMARY_INVERT}>
-                    Primary Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.COMPLEMENTARY_INVERT}>
-                    Complementary Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.SECONDARY_INVERT}>
-                    Secondary Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.TERTIARY_INVERT}>
-                    Tertiary Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.BRAND_INVERT}>
-                    Brand Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.INFO_INVERT}>
-                    Info Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.SUCCESS_INVERT}>
-                    Success Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.WARNING_INVERT}>
-                    Warning Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.ERROR_INVERT}>
-                    Error Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.DISABLED_INVERT}>
-                    Disabled Invert
-                </Caption>
-                <Caption size={ECaptionSize.C1} type={EFontType.SYSTEM_INVERT}>
-                    System Invert
-                </Caption>
-            </div>
-        </div>
-    ),
+    render: TypesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Decorations: StoryObj<typeof Caption> = {
-    render: () => (
-        <div className="typography-example">
-            <Caption size={ECaptionSize.C1}>Подпись без декораций</Caption>
-            <Caption size={ECaptionSize.C1} underline>
-                Подпись с подчеркиванием
-            </Caption>
-            <Caption size={ECaptionSize.C1} strikethrough>
-                Подпись с зачеркиванием
-            </Caption>
-            <Caption size={ECaptionSize.C1} underline strikethrough>
-                Подпись с подчеркиванием и зачеркиванием
-            </Caption>
-        </div>
-    ),
+    render: DecorationsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DecorationsSource,
+                language: "tsx",
+            },
+        },
     },
 };

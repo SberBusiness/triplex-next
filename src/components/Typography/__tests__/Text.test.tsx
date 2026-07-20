@@ -129,6 +129,72 @@ describe("Text", () => {
         expect(ref.current?.tagName).toBe("P");
     });
 
+    it.each([
+        [ETextSize.B1, "b1"],
+        [ETextSize.B2, "b2"],
+        [ETextSize.B3, "b3"],
+        [ETextSize.B4, "b4"],
+    ])("applies correct class for size %s", (size, expectedClass) => {
+        render(<Text size={size}>Size Text</Text>);
+
+        expect(screen.getByText("Size Text").className).toContain(expectedClass);
+    });
+
+    it.each([
+        [EFontWeightText.REGULAR, "regular"],
+        [EFontWeightText.SEMIBOLD, "semibold"],
+    ])("applies correct class for weight %s", (weight, expectedClass) => {
+        render(
+            <Text size={ETextSize.B2} weight={weight}>
+                Weight Text
+            </Text>,
+        );
+
+        expect(screen.getByText("Weight Text").className).toContain(expectedClass);
+    });
+
+    it("applies regular weight by default", () => {
+        render(<Text size={ETextSize.B2}>Default Weight Text</Text>);
+
+        expect(screen.getByText("Default Weight Text").className).toContain("regular");
+    });
+
+    it("applies compact class for line COMPACT", () => {
+        render(
+            <Text size={ETextSize.B3} line={ELineType.COMPACT}>
+                Compact Text
+            </Text>,
+        );
+
+        expect(screen.getByText("Compact Text").className).toContain("compact");
+    });
+
+    it("does not apply compact class for line NORMAL", () => {
+        render(
+            <Text size={ETextSize.B3} line={ELineType.NORMAL}>
+                Normal Text
+            </Text>,
+        );
+
+        expect(screen.getByText("Normal Text").className).not.toContain("compact");
+    });
+
+    it("applies primary type class by default", () => {
+        render(<Text size={ETextSize.B2}>Default Type Text</Text>);
+
+        expect(screen.getByText("Default Type Text").className).toContain("primary");
+    });
+
+    it("applies correct class for type", () => {
+        render(
+            <Text size={ETextSize.B2} type={EFontType.ERROR}>
+                Error Text
+            </Text>,
+        );
+
+        expect(screen.getByText("Error Text").className).toContain("error");
+    });
+
     it("applies correct CSS classes for different combinations", () => {
         render(
             <Text

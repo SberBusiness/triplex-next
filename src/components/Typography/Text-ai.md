@@ -76,7 +76,7 @@ version: "1.0"
 
 Цвета — только через CSS-переменные группы Typography (общие для всего семейства, см. frontmatter):
 
-```
+```text
 --triplex-next-Typography-{Type}_Color
 --triplex-next-Typography-{Type}Invert_Color
 ```

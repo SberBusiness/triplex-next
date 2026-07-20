@@ -120,4 +120,5 @@ aria-атрибутов. Семантику задаёт потребитель 
 
 | Дата | Изменение |
 |---|---|
+| 2026-07-20 | Вертикальные padding изменены: 24px (было 32px) для desktop, 8px (было 16px) для mobile — через `@page-padding-desktop-y` / `@page-padding-mobile-y`. |
 | 2026-06-24 | Создан документ. AI-рефакторинг (JSDoc на компоненте и `IPageProps`), unit-тесты (className-merge, статические части), миграция stories на modern pattern. |

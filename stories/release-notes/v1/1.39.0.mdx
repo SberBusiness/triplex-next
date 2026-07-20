@@ -6,6 +6,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**Page**
+
+- Вертикальные внутренние отступы изменены: 24px (было 32px) для desktop и 8px (было 16px) для мобильных экранов. Горизонтальные отступы не изменились.
+
+**LightBox / LightBoxSideOverlay**
+
+- Удалены избыточные переопределения вертикальных отступов `Page` — отступы теперь задаются только стилями самого `Page` (визуальный результат не изменился).
+
 **Typography (Text / Title / Caption / CodeText)**
 
 - AI-рефакторинг: JSDoc на всех props и значениях enum (подсказки в IDE), дублирующаяся логика классов `underline` / `strikethrough` вынесена во внутренний хелпер. Публичный API не изменён.

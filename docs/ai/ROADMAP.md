@@ -192,7 +192,10 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TopOverlay | ⬜ | ⬜ | ⬜ |
 | TreeView | ⬜ | ⬜ | ⬜ |
 | Triggers | ⬜ | ⬜ | ⬜ |
-| Typography | ⬜ | ⬜ | ⬜ |
+| Text | ✅ | ✅ | ✅ |
+| Title | ✅ | ✅ | ✅ |
+| Caption | ✅ | ✅ | ✅ |
+| CodeText | ✅ | ✅ | ✅ |
 | UnorderedList | ⬜ | ⬜ | ⬜ |
 | UploadZone | ⬜ | ⬜ | ⬜ |
 | WindowResizeListener | ⬜ | ⬜ | ⬜ |

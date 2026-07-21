@@ -1,11 +1,28 @@
 import React from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
-import { Text, ETextSize, ELineType, EFontWeightText, EFontType } from "@sberbusiness/triplex-next";
-import "./Typography.less";
+import { Text, ETextSize, ELineType, EFontType, EFontWeightText } from "@sberbusiness/triplex-next";
+import {
+    Playground as PlaygroundRender,
+    PlaygroundArgs,
+    Default as DefaultRender,
+    DefaultSource,
+    Sizes as SizesRender,
+    SizesSource,
+    Weights as WeightsRender,
+    WeightsSource,
+    LineTypes as LineTypesRender,
+    LineTypesSource,
+    Types as TypesRender,
+    TypesSource,
+    Decorations as DecorationsRender,
+    DecorationsSource,
+} from "./examples/Text";
 
-export default {
+const meta = {
     title: "Components/Typography/Text",
+    component: Text,
+    tags: ["autodocs"],
     parameters: {
         docs: {
             page: () => (
@@ -22,20 +39,27 @@ export default {
             ),
         },
     },
-    tags: ["autodocs"],
+} satisfies Meta<typeof Text>;
+
+export default meta;
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    size: ETextSize.B2,
+    weight: EFontWeightText.REGULAR,
+    line: ELineType.NORMAL,
+    type: EFontType.PRIMARY,
+    tag: "span",
+    underline: false,
+    strikethrough: false,
 };
 
-export const Playground: StoryObj<typeof Text> = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    render: (args) => (
-        <div className="typography-example">
-            <Text {...args}>Интерактивный текст с controls</Text>
-        </div>
-    ),
+    args: PLAYGROUND_ARGS,
     argTypes: {
         size: {
             control: { type: "select" },
-            options: [ETextSize.B1, ETextSize.B2, ETextSize.B3, ETextSize.B4],
+            options: Object.values(ETextSize),
             description: "Размер текста",
             table: {
                 type: { summary: "ETextSize" },
@@ -44,7 +68,7 @@ export const Playground: StoryObj<typeof Text> = {
         },
         weight: {
             control: { type: "select" },
-            options: [EFontWeightText.REGULAR, EFontWeightText.SEMIBOLD],
+            options: Object.values(EFontWeightText),
             description: "Толщина шрифта",
             table: {
                 type: { summary: "EFontWeightText" },
@@ -53,7 +77,7 @@ export const Playground: StoryObj<typeof Text> = {
         },
         line: {
             control: { type: "select" },
-            options: [ELineType.NORMAL, ELineType.COMPACT],
+            options: Object.values(ELineType),
             description: "Высота блока строки (Normal = обычная, Compact = компактная)",
             table: {
                 type: { summary: "ELineType" },
@@ -94,179 +118,94 @@ export const Playground: StoryObj<typeof Text> = {
                 defaultValue: { summary: "false" },
             },
         },
-        className: {
-            control: { type: "text" },
-            description: "Дополнительные CSS классы",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-    },
-    args: {
-        size: ETextSize.B2,
-        weight: EFontWeightText.REGULAR,
-        line: ELineType.NORMAL,
-        type: EFontType.PRIMARY,
-        tag: "span",
-        underline: false,
-        strikethrough: false,
-        className: "",
     },
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-        controls: {
-            include: ["size", "weight", "line", "type", "tag", "underline", "strikethrough"],
+    },
+    render: PlaygroundRender,
+};
+
+export const Default: StoryObj<typeof Text> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
         },
+        // Визуально дублирует строку B2 из стори Sizes — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };
 
 export const Sizes: StoryObj<typeof Text> = {
-    render: () => (
-        <div className="typography-example">
-            <Text size={ETextSize.B1}>B1 - Основной текст большого размера (18px)</Text>
-            <Text size={ETextSize.B2}>B2 - Основной текст среднего размера (16px)</Text>
-            <Text size={ETextSize.B3}>B3 - Основной текст малого размера (14px)</Text>
-            <Text size={ETextSize.B4}>B4 - Основной текст очень малого размера (12px)</Text>
-        </div>
-    ),
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: SizesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Weights: StoryObj<typeof Text> = {
-    render: () => (
-        <div className="typography-example">
-            <Text size={ETextSize.B2} weight={EFontWeightText.REGULAR}>
-                Regular - Обычный вес текста
-            </Text>
-            <Text size={ETextSize.B2} weight={EFontWeightText.SEMIBOLD}>
-                Semibold - Полужирный текст
-            </Text>
-        </div>
-    ),
+    render: WeightsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: WeightsSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const LineTypes: StoryObj<typeof Text> = {
-    render: () => (
-        <div className="typography-example">
-            <Text size={ETextSize.B3} line={ELineType.NORMAL}>
-                Normal - Обычная высота строки. Этот текст демонстрирует нормальную высоту строки для лучшей читаемости.
-            </Text>
-            <Text size={ETextSize.B3} line={ELineType.COMPACT}>
-                Compact - Компактная высота строки. Этот текст демонстрирует компактную высоту строки для экономии
-                места.
-            </Text>
-        </div>
-    ),
+    render: LineTypesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: LineTypesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Types: StoryObj<typeof Text> = {
-    render: () => (
-        <div className="typography-examples-wrapper">
-            <div className="typography-example">
-                <Text size={ETextSize.B2} type={EFontType.PRIMARY}>
-                    Primary
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.COMPLEMENTARY}>
-                    Complementary
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.SECONDARY}>
-                    Secondary
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.TERTIARY}>
-                    Tertiary
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.BRAND}>
-                    Brand
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.INFO}>
-                    Info
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.SUCCESS}>
-                    Success
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.WARNING}>
-                    Warning
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.ERROR}>
-                    Error
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.DISABLED}>
-                    Disabled
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.SYSTEM}>
-                    System
-                </Text>
-            </div>
-            <div className="typography-invert-example">
-                <Text size={ETextSize.B2} type={EFontType.PRIMARY_INVERT}>
-                    Primary Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.COMPLEMENTARY_INVERT}>
-                    Complementary Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.SECONDARY_INVERT}>
-                    Secondary Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.TERTIARY_INVERT}>
-                    Tertiary Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.BRAND_INVERT}>
-                    Brand Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.INFO_INVERT}>
-                    Info Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.SUCCESS_INVERT}>
-                    Success Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.WARNING_INVERT}>
-                    Warning Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.ERROR_INVERT}>
-                    Error Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.DISABLED_INVERT}>
-                    Disabled Invert
-                </Text>
-                <Text size={ETextSize.B2} type={EFontType.SYSTEM_INVERT}>
-                    System Invert
-                </Text>
-            </div>
-        </div>
-    ),
+    render: TypesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Decorations: StoryObj<typeof Text> = {
-    render: () => (
-        <div className="typography-example">
-            <Text size={ETextSize.B2}>Текст без декораций</Text>
-            <Text size={ETextSize.B2} underline>
-                Текст с подчеркиванием
-            </Text>
-            <Text size={ETextSize.B2} strikethrough>
-                Текст с зачеркиванием
-            </Text>
-            <Text size={ETextSize.B2} underline strikethrough>
-                Текст с подчеркиванием и зачеркиванием
-            </Text>
-        </div>
-    ),
+    render: DecorationsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DecorationsSource,
+                language: "tsx",
+            },
+        },
     },
 };

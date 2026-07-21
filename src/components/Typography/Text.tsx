@@ -3,10 +3,11 @@ import { clsx } from "clsx";
 import { EFontType, EFontWeightText, ELineType, ETextSize } from "./enums";
 import { ITypographyProps } from "./types";
 import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
+import { getTextDecorationClassName } from "./utils";
 import styles from "./styles/Text.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
-// Соответствие размера имени класса.
+/** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP: Record<ETextSize, string> = {
     [ETextSize.B1]: styles.b1,
     [ETextSize.B2]: styles.b2,
@@ -14,13 +15,13 @@ const SIZE_TO_CLASS_NAME_MAP: Record<ETextSize, string> = {
     [ETextSize.B4]: styles.b4,
 };
 
-// Соответствие веса шрифта имени класса.
+/** Соответствие веса шрифта имени класса. */
 const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightText, string> = {
     [EFontWeightText.REGULAR]: styles.regular,
     [EFontWeightText.SEMIBOLD]: styles.semibold,
 };
 
-// Соответствие типа высоты строки имени класса.
+/** Соответствие типа высоты строки имени класса. */
 const LINE_TYPE_TO_CLASS_NAME_MAP: Record<ELineType, string> = {
     [ELineType.NORMAL]: "",
     [ELineType.COMPACT]: styles.compact,
@@ -61,11 +62,7 @@ export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElemen
             FONT_WEIGHT_TO_CLASS_NAME_MAP[weight],
             LINE_TYPE_TO_CLASS_NAME_MAP[line],
             FONT_TYPE_TO_CLASS_NAME_MAP[type],
-            {
-                [typographyStyles.strikethrough]: !!strikethrough && !underline,
-                [typographyStyles.underline]: !!underline && !strikethrough,
-                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-            },
+            getTextDecorationClassName(typographyStyles, underline, strikethrough),
             className,
         );
 

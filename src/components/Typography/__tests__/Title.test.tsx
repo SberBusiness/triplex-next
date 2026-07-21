@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Title } from "../Title";
-import { ETitleSize } from "../enums";
+import { EFontWeightTitle, ETitleSize } from "../enums";
 
 describe("Title", () => {
     it("renders with default props", () => {
@@ -88,6 +88,39 @@ describe("Title", () => {
 
         expect(screen.getByText("Nested")).toBeDefined();
         expect(screen.getByText("Content")).toBeDefined();
+    });
+
+    it.each([
+        [ETitleSize.H1, "H1", 1],
+        [ETitleSize.H2, "H2", 2],
+        [ETitleSize.H3, "H3", 3],
+    ])("renders heading tag and applies correct class for size %s", (size, expectedTag, level) => {
+        render(<Title size={size}>Size Title</Title>);
+
+        const title = screen.getByRole("heading", { level });
+        expect(title.tagName).toBe(expectedTag);
+        expect(title.className).toContain(size);
+    });
+
+    it.each([
+        [EFontWeightTitle.REGULAR, "regular"],
+        [EFontWeightTitle.MEDIUM, "medium"],
+        [EFontWeightTitle.SEMIBOLD, "semibold"],
+        [EFontWeightTitle.BOLD, "bold"],
+    ])("applies correct class for weight %s", (weight, expectedClass) => {
+        render(
+            <Title size={ETitleSize.H2} weight={weight}>
+                Weight Title
+            </Title>,
+        );
+
+        expect(screen.getByText("Weight Title").className).toContain(expectedClass);
+    });
+
+    it("applies semibold weight by default", () => {
+        render(<Title size={ETitleSize.H2}>Default Weight Title</Title>);
+
+        expect(screen.getByText("Default Weight Title").className).toContain("semibold");
     });
 
     it("forwards ref correctly for heading element", () => {

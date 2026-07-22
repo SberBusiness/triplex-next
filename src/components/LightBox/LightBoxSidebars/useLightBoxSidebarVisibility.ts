@@ -19,6 +19,8 @@ export const useLightBoxSidebarVisibility = (
     { minVisibleWidth, onShow, onHide }: IUseLightBoxSidebarVisibilityParams,
 ): boolean => {
     const [isVisible, setIsVisible] = useState(true);
+    // Текущее значение видимости вне state, чтобы вызывать onShow/onHide вне setState-updater (updater должен быть чистым).
+    const isVisibleRef = useRef(true);
     const onShowRef = useRef(onShow);
     const onHideRef = useRef(onHide);
 
@@ -35,16 +37,17 @@ export const useLightBoxSidebarVisibility = (
             for (const entry of entries) {
                 const shouldBeVisible = entry.contentRect.width > minVisibleWidth;
 
-                setIsVisible((prev) => {
-                    if (shouldBeVisible !== prev) {
-                        if (shouldBeVisible) {
-                            onShowRef.current?.();
-                        } else {
-                            onHideRef.current?.();
-                        }
+                if (shouldBeVisible !== isVisibleRef.current) {
+                    isVisibleRef.current = shouldBeVisible;
+
+                    if (shouldBeVisible) {
+                        onShowRef.current?.();
+                    } else {
+                        onHideRef.current?.();
                     }
-                    return shouldBeVisible;
-                });
+                }
+
+                setIsVisible(shouldBeVisible);
             }
         });
 

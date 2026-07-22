@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import { LightBox } from "../LightBox";
+import { LightBox, lightBoxMountNodeIdDefault } from "../LightBox";
 import { ELightBoxSize } from "../enums";
 import styles from "../styles/LightBox.module.less";
 import { addClassNameWithScrollbarWidth } from "../../../utils/scroll/scrollbar";
@@ -81,7 +81,7 @@ describe("LightBox", () => {
         );
 
         expect(screen.getAllByText("Dialog content")[0]).toBeInTheDocument();
-        expect(document.getElementById("LightBox-next-mount-node")).toBeTruthy();
+        expect(document.getElementById(lightBoxMountNodeIdDefault)).toBeTruthy();
         expect(document.documentElement.classList.contains(styles.bodyOverflowHidden)).toBe(true);
         expect(addClassNameWithScrollbarWidth).toHaveBeenCalledTimes(1);
 
@@ -172,6 +172,6 @@ describe("LightBox", () => {
         );
 
         // Дефолтная mount-нода не создаётся, когда передана пользовательская.
-        expect(document.getElementById("LightBox-next-mount-node")).toBeNull();
+        expect(document.getElementById(lightBoxMountNodeIdDefault)).toBeNull();
     });
 });

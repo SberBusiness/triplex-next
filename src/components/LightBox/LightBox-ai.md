@@ -88,7 +88,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
+```css
 --triplex-next-LightBox-Backdrop_Background
 --triplex-next-LightBox-Content_Background
 --triplex-next-LightBox-SideOverlay_Background
@@ -180,6 +180,7 @@ version: "1.0"
 | `WithSideOverlayLoading` | `WithSideOverlayLoadingExample.tsx` | SideOverlay в состоянии загрузки |
 | `WithTopOverlay` | `WithTopOverlayExample.tsx` | Верхняя панель |
 | `WithTopOverlayInSideOverlay` | `WithTopOverlayInSideOverlayExample.tsx` | TopOverlay внутри SideOverlay |
+| `LightBoxInitialOpened/Default` | — | Visual regression: лайтбокс, открытый сразу при рендере (`LightBoxInitialOpened.stories.tsx`, baseline в `__screenshots__/`) |
 
 ---
 

@@ -10,10 +10,21 @@ vi.mock("@sberbusiness/icons-next", () => ({
     CaretrightStrokeSrvIcon20: () => <span data-testid="icon-next-mobile" />,
 }));
 
+/**
+ * Мокает offsetParent, моделируя видимость кнопок: скрыта кнопка противоположного режима.
+ * В jsdom offsetParent всегда null, а TriggerClickOnKeyDownEvent кликает только по видимой кнопке.
+ */
+const mockViewport = (mode: "desktop" | "mobile") => {
+    const hiddenClassName = mode === "desktop" ? styles.lightBoxControlsMobile : styles.lightBoxControlsDesktop;
+
+    vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(function (this: HTMLElement) {
+        return this.classList.contains(hiddenClassName) ? null : document.body;
+    } as () => Element | null);
+};
+
 describe("LightBoxNext", () => {
     beforeEach(() => {
-        // В jsdom offsetParent всегда null, а TriggerClickOnKeyDownEvent кликает только по видимой кнопке.
-        vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockReturnValue(document.body);
+        mockViewport("desktop");
     });
 
     afterEach(() => {
@@ -43,7 +54,16 @@ describe("LightBoxNext", () => {
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 
-    it("calls onClick on ArrowRight keydown when clickByArrowRight is set", () => {
+    it("calls onClick once on ArrowRight keydown in desktop mode when clickByArrowRight is set", () => {
+        const onClick = vi.fn();
+        render(<LightBoxNext title="Вперёд" onClick={onClick} clickByArrowRight />);
+
+        fireEvent.keyDown(window, { keyCode: EVENT_KEY_CODES.ARROW_RIGHT });
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("calls onClick once on ArrowRight keydown in mobile mode when clickByArrowRight is set", () => {
+        mockViewport("mobile");
         const onClick = vi.fn();
         render(<LightBoxNext title="Вперёд" onClick={onClick} clickByArrowRight />);
 

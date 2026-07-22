@@ -21,9 +21,12 @@ export const LightBoxClose: React.FC<ILightBoxCloseProps> = ({
     title = "Закрыть",
     ...htmlDivAttributes
 }) => {
-    const ref = useRef<HTMLButtonElement>(null);
+    // Отдельные ссылки на десктопную и мобильную кнопки: видимой в каждый момент является только одна,
+    // а TriggerClickOnKeyDownEvent кликает только по видимой (offsetParent !== null).
+    const desktopButtonRef = useRef<HTMLButtonElement>(null);
+    const mobileButtonRef = useRef<HTMLButtonElement>(null);
 
-    const renderButton = (buttonRef?: Ref<HTMLButtonElement>) => (
+    const renderButton = (desktopRef?: Ref<HTMLButtonElement>, mobileRef?: Ref<HTMLButtonElement>) => (
         <>
             {/* Кнопка для экранов шире 1024px */}
             <Button
@@ -31,7 +34,7 @@ export const LightBoxClose: React.FC<ILightBoxCloseProps> = ({
                 onClick={onClick}
                 title={title}
                 data-exclude-modal-focus
-                ref={buttonRef}
+                ref={desktopRef}
                 icon={<CrossStrokeSrvIcon32 paletteIndex={0} />}
                 size={EComponentSize.LG}
                 theme={EButtonTheme.SECONDARY_LIGHT}
@@ -42,6 +45,7 @@ export const LightBoxClose: React.FC<ILightBoxCloseProps> = ({
                 onClick={onClick}
                 title={title}
                 data-exclude-modal-focus
+                ref={mobileRef}
                 icon={<CrossStrokeSrvIcon20 paletteIndex={0} />}
                 size={EComponentSize.MD}
                 theme={EButtonTheme.SECONDARY_LIGHT}
@@ -53,8 +57,10 @@ export const LightBoxClose: React.FC<ILightBoxCloseProps> = ({
         <div className={clsx(className, styles.lightBoxClose)} {...htmlDivAttributes}>
             {/* Кнопка с триггером по Esc. */}
             <span className={styles.withKeyboardEvent}>
-                <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={ref}>
-                    {renderButton(ref)}
+                <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={desktopButtonRef}>
+                    <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={mobileButtonRef}>
+                        {renderButton(desktopButtonRef, mobileButtonRef)}
+                    </TriggerClickOnKeyDownEvent>
                 </TriggerClickOnKeyDownEvent>
             </span>
 

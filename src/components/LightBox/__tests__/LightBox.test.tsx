@@ -68,8 +68,6 @@ describe("LightBox", () => {
     });
 
     it("renders children inside portal and toggles overflow class", () => {
-        vi.useFakeTimers();
-
         const { unmount } = render(
             <LightBox>
                 {[
@@ -86,6 +84,34 @@ describe("LightBox", () => {
         expect(addClassNameWithScrollbarWidth).toHaveBeenCalledTimes(1);
 
         unmount();
+        expect(document.documentElement.classList.contains(styles.bodyOverflowHidden)).toBe(false);
+    });
+
+    it("keeps overflow class while another lightbox is still mounted", () => {
+        // Сценарий переключения через роутер: второй лайтбокс монтируется раньше, чем размонтируется первый.
+        const first = render(
+            <LightBox>
+                {[
+                    <LightBox.Content key="content">
+                        <div>first</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+        const second = render(
+            <LightBox>
+                {[
+                    <LightBox.Content key="content">
+                        <div>second</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        first.unmount();
+        expect(document.documentElement.classList.contains(styles.bodyOverflowHidden)).toBe(true);
+
+        second.unmount();
         expect(document.documentElement.classList.contains(styles.bodyOverflowHidden)).toBe(false);
     });
 

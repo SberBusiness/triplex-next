@@ -57,6 +57,13 @@ const removeClassNamesFromDocumentElement = () => {
     bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.remove(className));
 };
 
+/**
+ * Количество смонтированных лайтбоксов. При переключении между лайтбоксами через роутер второй может
+ * смонтироваться раньше, чем размонтируется первый, поэтому классы с documentElement снимаются только
+ * при размонтировании последнего лайтбокса.
+ */
+let mountedLightBoxCount = 0;
+
 const LightBoxBase: React.FC<ILightBoxProps> = ({
     children,
     className,
@@ -118,11 +125,16 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
 
     useEffect(() => {
         addClassNameWithScrollbarWidth(scrollStyles);
+        mountedLightBoxCount += 1;
         addClassNamesToDocumentElement();
-        // Фикс бага в роутере - при переключении между лайтбоксами иногда сначала происходит componentDidMount 2го и затем componentWillUnmount первого, css классы удаляются.
-        setTimeout(addClassNamesToDocumentElement, 100);
 
-        return removeClassNamesFromDocumentElement;
+        return () => {
+            mountedLightBoxCount -= 1;
+
+            if (mountedLightBoxCount === 0) {
+                removeClassNamesFromDocumentElement();
+            }
+        };
     }, []);
 
     useEffect(() => {

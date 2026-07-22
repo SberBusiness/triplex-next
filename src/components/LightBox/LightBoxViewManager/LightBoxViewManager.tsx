@@ -20,6 +20,24 @@ const lightBoxMountNodeClassName = "LightBoxMountNodeViewManager";
 const rectComparedKeys = ["top", "left", "width", "height"];
 
 /**
+ * Количество активных LightBoxViewManager на каждую mount-ноду. Нода общая для всех лайтбоксов
+ * (при переключении через роутер менеджеры могут перекрываться во времени), поэтому классы
+ * снимаются только при размонтировании последнего менеджера этой ноды.
+ */
+const viewManagerCountByMountNode = new WeakMap<HTMLDivElement, number>();
+
+/** Удаляет с mount-ноды класс области видимости CSS-переменных и breakpoint-классы. */
+const removeClassNamesFromMountNode = (mountNode: HTMLDivElement) => {
+    mountNode.classList.remove(lightBoxMountNodeClassName);
+
+    Array.from(mountNode.classList).forEach((className) => {
+        if (className.includes("LB-")) {
+            mountNode.classList.remove(className);
+        }
+    });
+};
+
+/**
  * Расчет класснеймов на основе ширины области viewNode.
  * Эти класснеймы определяют позиционирование LightBox.
  */
@@ -81,7 +99,20 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
     useLayoutEffect(() => {
         updateRectAndClassNames();
 
+        viewManagerCountByMountNode.set(
+            lightBoxMountNode,
+            (viewManagerCountByMountNode.get(lightBoxMountNode) ?? 0) + 1,
+        );
         lightBoxMountNode.classList.add(lightBoxMountNodeClassName);
+
+        return () => {
+            const nextCount = (viewManagerCountByMountNode.get(lightBoxMountNode) ?? 1) - 1;
+            viewManagerCountByMountNode.set(lightBoxMountNode, nextCount);
+
+            if (nextCount === 0) {
+                removeClassNamesFromMountNode(lightBoxMountNode);
+            }
+        };
     }, [lightBoxMountNode, updateRectAndClassNames]);
 
     useLayoutEffect(() => {

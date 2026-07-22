@@ -31,8 +31,10 @@ interface ILightBoxArrowProps extends React.HTMLAttributes<HTMLDivElement> {
 interface IRenderButtonParams {
     /** Флаг, добавляющий data-test-id. Нужен, чтобы data-test-id не дублировался несколько раз на странице. */
     addDataTestId: boolean;
-    /** Установка ссылки на кнопку. */
-    buttonRef?: Ref<HTMLButtonElement>;
+    /** Установка ссылки на десктопную кнопку. */
+    desktopButtonRef?: Ref<HTMLButtonElement>;
+    /** Установка ссылки на мобильную кнопку. */
+    mobileButtonRef?: Ref<HTMLButtonElement>;
 }
 
 /** Внутренний компонент стрелки лайтбокса (общая реализация для LightBoxPrev и LightBoxNext). */
@@ -50,7 +52,10 @@ export const LightBoxArrow: React.FC<ILightBoxArrowProps> = ({
     title,
     ...htmlDivAttributes
 }) => {
-    const ref = useRef<HTMLButtonElement>(null);
+    // Отдельные ссылки на десктопную и мобильную кнопки: видимой в каждый момент является только одна,
+    // а TriggerClickOnKeyDownEvent кликает только по видимой (offsetParent !== null).
+    const desktopButtonRef = useRef<HTMLButtonElement>(null);
+    const mobileButtonRef = useRef<HTMLButtonElement>(null);
 
     /**
      * Отображение кнопки.
@@ -64,7 +69,7 @@ export const LightBoxArrow: React.FC<ILightBoxArrowProps> = ({
                 data-tutorial-id={dataTutorialId}
                 onClick={onClick}
                 title={title}
-                ref={params?.buttonRef}
+                ref={params?.desktopButtonRef}
                 icon={iconDesktop}
                 size={EComponentSize.LG}
                 theme={EButtonTheme.SECONDARY_LIGHT}
@@ -76,7 +81,7 @@ export const LightBoxArrow: React.FC<ILightBoxArrowProps> = ({
                 data-tutorial-id={dataTutorialId}
                 onClick={onClick}
                 title={title}
-                ref={params?.buttonRef}
+                ref={params?.mobileButtonRef}
                 icon={iconMobile}
                 size={EComponentSize.MD}
                 theme={EButtonTheme.SECONDARY_LIGHT}
@@ -90,8 +95,10 @@ export const LightBoxArrow: React.FC<ILightBoxArrowProps> = ({
                 <span>
                     {/* Кнопка с триггером при нажатии стрелки на клавиатуре. */}
                     <span className={styles.withKeyboardEvent}>
-                        <TriggerClickOnKeyDownEvent targetRef={ref} eventKeyCode={eventKeyCode}>
-                            {renderButton({ addDataTestId: true, buttonRef: ref })}
+                        <TriggerClickOnKeyDownEvent targetRef={desktopButtonRef} eventKeyCode={eventKeyCode}>
+                            <TriggerClickOnKeyDownEvent targetRef={mobileButtonRef} eventKeyCode={eventKeyCode}>
+                                {renderButton({ addDataTestId: true, desktopButtonRef, mobileButtonRef })}
+                            </TriggerClickOnKeyDownEvent>
                         </TriggerClickOnKeyDownEvent>
                     </span>
                     {/* Кнопка без триггера при нажатии стрелки на клавиатуре. Нельзя нажать, когда открыт SideOverlay. */}

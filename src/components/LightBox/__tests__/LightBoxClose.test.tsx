@@ -10,10 +10,21 @@ vi.mock("@sberbusiness/icons-next", () => ({
     CrossStrokeSrvIcon20: () => <span data-testid="icon-close-mobile" />,
 }));
 
+/**
+ * Мокает offsetParent, моделируя видимость кнопок: скрыта кнопка противоположного режима.
+ * В jsdom offsetParent всегда null, а TriggerClickOnKeyDownEvent кликает только по видимой кнопке.
+ */
+const mockViewport = (mode: "desktop" | "mobile") => {
+    const hiddenClassName = mode === "desktop" ? styles.lightBoxControlsMobile : styles.lightBoxControlsDesktop;
+
+    vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(function (this: HTMLElement) {
+        return this.classList.contains(hiddenClassName) ? null : document.body;
+    } as () => Element | null);
+};
+
 describe("LightBoxClose", () => {
     beforeEach(() => {
-        // В jsdom offsetParent всегда null, а TriggerClickOnKeyDownEvent кликает только по видимой кнопке.
-        vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockReturnValue(document.body);
+        mockViewport("desktop");
     });
 
     afterEach(() => {
@@ -41,7 +52,16 @@ describe("LightBoxClose", () => {
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 
-    it("calls onClick on Escape keydown", () => {
+    it("calls onClick once on Escape keydown in desktop mode", () => {
+        const onClick = vi.fn();
+        render(<LightBoxClose onClick={onClick} />);
+
+        fireEvent.keyDown(window, { keyCode: EVENT_KEY_CODES.ESCAPE });
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("calls onClick once on Escape keydown in mobile mode", () => {
+        mockViewport("mobile");
         const onClick = vi.fn();
         render(<LightBoxClose onClick={onClick} />);
 

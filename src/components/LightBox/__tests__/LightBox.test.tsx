@@ -2,13 +2,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import { LightBox } from "../LightBox";
+import { ELightBoxSize } from "../enums";
 import styles from "../styles/LightBox.module.less";
 import { addClassNameWithScrollbarWidth } from "../../../utils/scroll/scrollbar";
+
+interface IFocusTrapMockProps {
+    active?: boolean;
+    children?: React.ReactNode;
+}
 
 const focusTrapMock = vi.fn();
 
 vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: any) => {
+    FocusTrap: (props: IFocusTrapMockProps) => {
         focusTrapMock(props);
         return <div data-testid="focus-trap">{props.children}</div>;
     },
@@ -102,5 +108,70 @@ describe("LightBox", () => {
         expect(focusTrapMock).toHaveBeenCalled();
         const focusTrapProps = focusTrapMock.mock.calls[0][0];
         expect(focusTrapProps.active).toBe(false);
+    });
+
+    it("applies size class to the dialog element", () => {
+        render(
+            <LightBox size={ELightBoxSize.LG}>
+                {[
+                    <LightBox.Content key="content">
+                        <div>content</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        expect(screen.getByRole("dialog")).toHaveClass(styles.lg);
+    });
+
+    it("applies overlay state classes when side and top overlays are opened", () => {
+        render(
+            <LightBox isSideOverlayOpened isTopOverlayOpened>
+                {[
+                    <LightBox.Content key="content">
+                        <div>content</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        const dialog = screen.getByRole("dialog");
+        expect(dialog).toHaveClass(styles.lightBoxSideOverlayActive);
+        expect(dialog).toHaveClass(styles.lightBoxTopOverlayActive);
+    });
+
+    it("passes forwardRef and merges className on the dialog element", () => {
+        const forwardRef: React.MutableRefObject<HTMLElement | null> = { current: null };
+
+        render(
+            <LightBox forwardRef={forwardRef} className="custom-class">
+                {[
+                    <LightBox.Content key="content">
+                        <div>content</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        expect(forwardRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(forwardRef.current).toHaveClass("custom-class", styles.lightBox);
+    });
+
+    it("renders into provided mountNode", () => {
+        const mountNode = document.createElement("div");
+        document.body.appendChild(mountNode);
+
+        render(
+            <LightBox mountNode={mountNode}>
+                {[
+                    <LightBox.Content key="content">
+                        <div>content</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        // Дефолтная mount-нода не создаётся, когда передана пользовательская.
+        expect(document.getElementById("LightBox-next-mount-node")).toBeNull();
     });
 });

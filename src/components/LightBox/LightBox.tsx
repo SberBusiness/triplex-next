@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/refs */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Portal } from "../Portal";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
@@ -17,14 +16,15 @@ import { ELightBoxSize } from "./enums";
 import styles from "./styles/LightBox.module.less";
 import scrollStyles from "./styles/LightBoxScroll.module.less";
 
-// Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body.
+/** Идентификатор DOM-элемента, в который рендерится лайтбокс. При отсутствии элемента в DOM – создается в body. */
 export const lightBoxMountNodeIdDefault = "LightBox-next-mount-node";
 
-// Идентификатор DOM-элемента, в визуальных границах (левая и правая координата) которого рендерится лайтбокс.
+/** Идентификатор DOM-элемента, в визуальных границах (левая и правая координата) которого рендерится лайтбокс. */
 export const lightBoxViewManagerNodeIdDefault = "LightBox-next-view-manager-node";
 
 /** Свойства компонента LightBox. */
 export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое лайтбокса. */
     children: React.ReactElement[];
     /** Свойства компонента FocusTrapExtended. */
     focusTrapProps?: IFocusTrapExtendedProps;
@@ -44,7 +44,18 @@ export interface ILightBoxProps extends React.HTMLAttributes<HTMLDivElement> {
     size?: ELightBoxSize;
 }
 
+/** CSS-классы, добавляемые на корневой элемент документа, пока лайтбокс открыт. */
 const bodyClassNamesIsLightBoxOpen = [styles.bodyOverflowHidden];
+
+/** Добавляет CSS-классы открытого лайтбокса на корневой элемент документа. */
+const addClassNamesToDocumentElement = () => {
+    bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.add(className));
+};
+
+/** Удаляет CSS-классы открытого лайтбокса с корневого элемента документа. */
+const removeClassNamesFromDocumentElement = () => {
+    bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.remove(className));
+};
 
 const LightBoxBase: React.FC<ILightBoxProps> = ({
     children,
@@ -65,27 +76,27 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
 
     const { scopeClassName } = useToken();
 
-    const getLightBoxMountNode = () => {
-        let lightBoxMountNode: HTMLDivElement | null = null;
+    const getLightBoxMountNode = (): HTMLDivElement => {
         if (mountNode) {
-            lightBoxMountNode = mountNode;
-        } else {
-            lightBoxMountNode = document.querySelector(`#${lightBoxMountNodeIdDefault}`);
+            return mountNode;
+        }
 
-            if (!lightBoxMountNode) {
-                lightBoxMountNode = document.createElement("div");
-                lightBoxMountNode.setAttribute("id", lightBoxMountNodeIdDefault);
-                document.body.appendChild(lightBoxMountNode);
-            }
+        let lightBoxMountNode = document.querySelector<HTMLDivElement>(`#${lightBoxMountNodeIdDefault}`);
+
+        if (!lightBoxMountNode) {
+            lightBoxMountNode = document.createElement("div");
+            lightBoxMountNode.setAttribute("id", lightBoxMountNodeIdDefault);
+            document.body.appendChild(lightBoxMountNode);
         }
 
         return lightBoxMountNode;
     };
 
-    const getLightBoxViewManagerMountNode = () => {
+    const getLightBoxViewManagerMountNode = (): HTMLDivElement => {
         let lightBoxViewManagerMountNode: HTMLDivElement | null = null;
+
         if (lightBoxViewManagerNodeId) {
-            lightBoxViewManagerMountNode = document.querySelector(`#${lightBoxViewManagerNodeId}`);
+            lightBoxViewManagerMountNode = document.querySelector<HTMLDivElement>(`#${lightBoxViewManagerNodeId}`);
         }
 
         if (!lightBoxViewManagerMountNode) {
@@ -98,16 +109,12 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
     };
 
     /** DOM node, в которую рендерится лайтбокс. */
-    const lightBoxMountNode = useRef<HTMLDivElement | null>(getLightBoxMountNode());
+    const [lightBoxMountNode] = useState<HTMLDivElement>(getLightBoxMountNode);
     /**
      * DOM node, в визуальных границах которой рендерится лайтбокс.
      * Левая и правая граница LightBox будут соответствовать левой и правой границе lightBoxViewManagerNode.
      */
-    const lightBoxViewManagerNode = useRef<HTMLDivElement | null>(getLightBoxViewManagerMountNode());
-
-    const addClassNamesToDocumentElement = () => {
-        bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.add(className));
-    };
+    const [lightBoxViewManagerNode] = useState<HTMLDivElement>(getLightBoxViewManagerMountNode);
 
     useEffect(() => {
         addClassNameWithScrollbarWidth(scrollStyles);
@@ -115,8 +122,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         // Фикс бага в роутере - при переключении между лайтбоксами иногда сначала происходит componentDidMount 2го и затем componentWillUnmount первого, css классы удаляются.
         setTimeout(addClassNamesToDocumentElement, 100);
 
-        return () =>
-            bodyClassNamesIsLightBoxOpen.forEach((className) => document.documentElement.classList.remove(className));
+        return removeClassNamesFromDocumentElement;
     }, []);
 
     useEffect(() => {
@@ -127,11 +133,6 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         }
     }, [isSideOverlayOpened]);
 
-    if (!lightBoxMountNode.current) {
-        return null;
-    }
-
-    /** Функция для хранения ссылки. */
     const setRef = (instance: HTMLDivElement | null) => {
         containerRef.current = instance;
 
@@ -153,7 +154,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
 
     return (
         <>
-            <Portal container={lightBoxMountNode.current}>
+            <Portal container={lightBoxMountNode}>
                 <FocusTrapExtended
                     active={!isLoading}
                     {...focusTrapProps}
@@ -171,18 +172,17 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
                 </FocusTrapExtended>
             </Portal>
 
-            {lightBoxViewManagerNode.current && (
-                <LightBoxViewManager
-                    lightBoxViewManagerNode={lightBoxViewManagerNode.current}
-                    lightBoxMountNode={lightBoxMountNode.current}
-                />
-            )}
+            <LightBoxViewManager
+                lightBoxViewManagerNode={lightBoxViewManagerNode}
+                lightBoxMountNode={lightBoxMountNode}
+            />
         </>
     );
 };
 
 LightBoxBase.displayName = "LightBoxBase";
 
+/** Лайтбокс — полноэкранный диалог поверх страницы с контентом, кнопками управления и боковыми панелями. */
 export const LightBox = Object.assign(LightBoxBase, {
     Content: LightBoxContent,
     SideOverlay: LightBoxSideOverlay,

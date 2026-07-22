@@ -1,7 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import clsx from "clsx";
+import { useLightBoxSidebarVisibility } from "./useLightBoxSidebarVisibility";
 import styles from "./styles/LightBoxLeftSidebar.module.less";
 
+/** Свойства компонента LightBoxLeftSidebar. */
 export interface ILightBoxLeftSidebarProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Фиксация боковой панели. */
     fixed?: boolean;
@@ -17,40 +19,9 @@ export interface ILightBoxLeftSidebarProps extends React.HTMLAttributes<HTMLDivE
 export const LightBoxLeftSidebar = forwardRef<HTMLDivElement, ILightBoxLeftSidebarProps>(
     ({ children, className, fixed, minVisibleWidth = 100, onShow, onHide, ...htmlDivAttributes }, ref) => {
         const outerRef = useRef<HTMLDivElement>(null);
+        // Callback вызывается после монтирования, когда outerRef уже установлен.
         useImperativeHandle(ref, () => outerRef.current!);
-        const [isVisible, setIsVisible] = useState(true);
-        const onShowRef = useRef(onShow);
-        const onHideRef = useRef(onHide);
-
-        useEffect(() => {
-            onShowRef.current = onShow;
-            onHideRef.current = onHide;
-        }, [onShow, onHide]);
-
-        useEffect(() => {
-            const element = outerRef.current;
-            if (!element) return;
-
-            const observer = new ResizeObserver((entries) => {
-                for (const entry of entries) {
-                    const shouldBeVisible = entry.contentRect.width > minVisibleWidth;
-
-                    setIsVisible((prev) => {
-                        if (shouldBeVisible !== prev) {
-                            if (shouldBeVisible) {
-                                onShowRef.current?.();
-                            } else {
-                                onHideRef.current?.();
-                            }
-                        }
-                        return shouldBeVisible;
-                    });
-                }
-            });
-
-            observer.observe(element);
-            return () => observer.disconnect();
-        }, [minVisibleWidth]);
+        const isVisible = useLightBoxSidebarVisibility(outerRef, { minVisibleWidth, onShow, onHide });
 
         return (
             <div

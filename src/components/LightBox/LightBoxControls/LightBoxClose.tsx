@@ -9,7 +9,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 import styles from "../styles/LightBoxControls.module.less";
 
 /** Свойства LightBoxClose. */
-interface ILightBoxCloseProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ILightBoxCloseProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Обработчик закрытия лайтбокса. */
     onClick: () => void;
 }

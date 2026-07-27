@@ -24,7 +24,10 @@ const meta = {
 
 ## Особенности
 
+- Рендерится как live-region (**role="alert"**) — текст озвучивается скринридером при появлении.
+- Иконка по умолчанию выбирается по свойству **type**.
 - Передать кастомную иконку можно через свойство **renderIcon**.
+- Поддерживаются типы **info**, **warning**, **error**, **system**. Тип **feature** не поддерживается.
                 `,
             },
             page: () => (
@@ -47,6 +50,9 @@ export default meta;
 
 type Story = StoryObj<typeof AlertContext>;
 
+/** Типы, поддерживаемые AlertContext (EAlertType.FEATURE исключён типом свойства type). */
+const TYPE_OPTIONS = Object.values(EAlertType).filter((type) => type !== EAlertType.FEATURE);
+
 export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
@@ -56,15 +62,15 @@ export const Playground: Story = {
     argTypes: {
         type: {
             control: { type: "select" },
-            options: Object.values(EAlertType),
-            description: "Тип предупреждения",
+            options: TYPE_OPTIONS,
+            description: "Тип предупреждения. EAlertType.FEATURE не поддерживается.",
             table: {
-                type: { summary: "EAlertType" },
+                type: { summary: "Exclude<EAlertType, EAlertType.FEATURE>" },
             },
         },
         children: {
             control: { type: "text" },
-            description: "Текст сообщения",
+            description: "Текст предупреждения",
             table: {
                 type: { summary: "React.ReactNode" },
             },
@@ -86,10 +92,6 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
-    args: {
-        children: "This message provides context or highlights important information to note.",
-        type: EAlertType.INFO,
-    },
     render: DefaultExample,
     parameters: {
         controls: { disable: true },
@@ -103,14 +105,13 @@ export const Default: Story = {
 };
 
 export const Types: Story = {
-    args: {
-        children: "This message provides context or highlights important information to note.",
-        type: EAlertType.INFO,
-    },
     render: TypesExample,
     parameters: {
         controls: { disable: true },
         docs: {
+            description: {
+                story: "Все поддерживаемые типы предупреждения. Тип EAlertType.FEATURE исключён типом свойства type.",
+            },
             source: {
                 code: TypesExampleSource,
                 language: "tsx",
@@ -120,10 +121,6 @@ export const Types: Story = {
 };
 
 export const WithCustomIcon: Story = {
-    args: {
-        children: "This message provides context or highlights important information to note.",
-        type: EAlertType.INFO,
-    },
     render: WithCustomIconExample,
     parameters: {
         controls: { disable: true },

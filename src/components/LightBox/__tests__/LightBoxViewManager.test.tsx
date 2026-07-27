@@ -89,14 +89,25 @@ describe("LightBoxViewManager", () => {
     });
 
     it("keeps mount node class names while another view manager of the same node is mounted", () => {
+        vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(createRect({ width: 500 }));
         const first = renderViewManager();
         const second = renderViewManager();
 
         first.unmount();
         expect(mountNode.classList.contains("LightBoxMountNodeViewManager")).toBe(true);
+        expect(
+            mountNode.classList.contains(
+                LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-0"],
+            ),
+        ).toBe(true);
 
         second.unmount();
         expect(mountNode.classList.contains("LightBoxMountNodeViewManager")).toBe(false);
+        expect(
+            mountNode.classList.contains(
+                LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-0"],
+            ),
+        ).toBe(false);
     });
 
     it("renders style tag with CSS variables based on view node rect", () => {

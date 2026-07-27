@@ -137,6 +137,51 @@ npx prettier --write src/components/Button/Button.tsx
 
 ---
 
+## GitHub-операции от аккаунта бота
+
+Автоматические GitHub-операции (создание PR, комментарии в PR, запуск
+workflow, авторство коммитов автофинала) выполняются от отдельного
+machine-аккаунта, если у разработчика задан его токен:
+
+```bash
+# fine-grained PAT бота: contents:write, pull-requests:write, actions:write
+export TRIPLEX_BOT_GH_TOKEN=...   # в ~/.zshrc, НЕ в репозитории
+```
+
+**Паттерн для агентов** — в начале Bash-вызова с командами `gh`:
+
+```bash
+if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
+gh pr create ...   # выполнится от бота; без токена — от разработчика (fallback)
+```
+
+**Авторство коммитов автофинала** (identity бота выводится из токена,
+дополнительные переменные не нужны):
+
+```bash
+if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then
+  BOT_LOGIN=$(GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN" gh api user -q .login)
+  BOT_EMAIL=$(GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN" gh api user -q '"\(.id)+\(.login)@users.noreply.github.com"')
+  git -c user.name="$BOT_LOGIN" -c user.email="$BOT_EMAIL" commit -m "..."
+else
+  git commit -m "..."
+fi
+```
+
+Правила:
+
+- Токен нигде не печатать, не логировать и не коммитить; в репозитории
+  он не хранится ни в каком виде.
+- `git push` остаётся по SSH разработчика — авторство коммита и аккаунт
+  пушащего могут различаться, это нормально.
+- Проверка «кто я» перед автофиналом: `gh api user -q .login`
+  (с учётом паттерна выше) — чтобы в отчёте было видно, от чьего имени
+  созданы PR/комментарии.
+- Действия в Linear выполняются от сессии разработчика — бот на них
+  не распространяется.
+
+---
+
 ## PR-воркфлоу
 
 **Работа по задаче Linear:** после коммита агент сам пушит ветку и создаёт PR:

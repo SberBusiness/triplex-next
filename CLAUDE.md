@@ -57,6 +57,7 @@ React 17 совместимость, modern story pattern, формат комм
 | `commit-component` | skill | Коммит по `commits.md` (по явной просьбе; в финале задачи Linear — автоматически, с пушем и PR) |
 | `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `TRIPLEX-0`, PR «New release» |
 | `update-visual-baselines` | skill | Baseline-скриншоты через CI-workflow + чистка orphan (автоматически в финале задач Linear) |
+| `address-pr-feedback` | skill | Отработка комментариев ревьюеров в PR: триаж → план → правки → ответы → резолв тредов |
 | `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент → автокоммит + PR |
 | `finish-task` | skill | Финализация задачи Linear: резюме, линковка PR (автоматически в финале задач Linear) |
 | `create-task` | skill | Создать оформленную задачу в Linear из короткого описания |

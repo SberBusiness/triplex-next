@@ -32,7 +32,11 @@ description: Обновляет baseline-скриншоты через GitHub Ac
 
 ### 2. Запусти workflow и дождись
 
+Все команды `gh` здесь и ниже — с учётом bot-токена
+(см. `docs/ai/commits.md` § «GitHub-операции от аккаунта бота»):
+
 ```bash
+if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
 gh workflow run visual-update.yml --ref <ветка>
 sleep 10   # run появляется в списке не мгновенно
 gh run list --workflow=visual-update.yml --branch <ветка> --limit 1 \

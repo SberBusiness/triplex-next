@@ -118,6 +118,11 @@ git add <конкретные файлы>     # не git add -A / git add .
 git commit -m "TRI-XXX ..."
 ```
 
+**В автоматическом сценарии задачи Linear** коммит подписывается ботом,
+если задан `TRIPLEX_BOT_GH_TOKEN` — см. `docs/ai/commits.md`
+§ «GitHub-операции от аккаунта бота» (сниппет с `git -c user.name=... -c
+user.email=...`). Без токена — обычное авторство разработчика (fallback).
+
 **Никогда не используй:**
 - `git add -A` или `git add .` — может добавить sensitive/temp файлы.
 - `--no-verify` — обходит linter/husky, нарушает требования проекта.
@@ -147,8 +152,13 @@ git log -1 --oneline
 
 ```bash
 git push -u origin TRI-XXX-...
+if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
 gh pr create --title "TRI-XXX Краткое описание" --body "..."
 ```
+
+С токеном бота PR создаётся от machine-аккаунта (разработчик сможет сам
+апрувить PR); без токена — от разработчика (см. `docs/ai/commits.md`
+§ «GitHub-операции от аккаунта бота»).
 
 Покажи пользователю ссылку на PR. Дальше финал продолжается автоматически:
 skill `update-visual-baselines` (если менялись stories/визуал) и skill

@@ -45,7 +45,7 @@ description: Завершает работу над задачей Linear пос
 
 ### 4. Комментарий в задачу
 
-`create_comment` в задачу TRI-XXX:
+`save_comment` в задачу TRI-XXX:
 
 ```markdown
 ## Резюме работы

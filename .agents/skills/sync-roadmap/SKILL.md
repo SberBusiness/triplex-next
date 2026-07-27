@@ -21,7 +21,7 @@ description: Сверяет docs/ai/ROADMAP.md с задачами Linear в п�
 ### 2. Прочитай Linear
 
 - Найди проект «AI-Ready Phase 1» (`list_projects`). Если его нет —
-  предложи создать (после подтверждения — `create_project`).
+  предложи создать (после подтверждения — `save_project`).
 - `list_issues` проекта, включая закрытые.
 - Задачи компонентов ищи по заголовку `{Component}: AI-Ready`.
 
@@ -41,7 +41,7 @@ description: Сверяет docs/ai/ROADMAP.md с задачами Linear в п�
 
 ### 5. Создай задачи батчем
 
-Для каждого подтверждённого компонента — `create_issue`:
+Для каждого подтверждённого компонента — `save_issue` (без `id` — создание):
 
 - Title: `{Component}: AI-Ready (Phase 1)`
 - Описание: текущее состояние колонок ROADMAP, что осталось сделать,

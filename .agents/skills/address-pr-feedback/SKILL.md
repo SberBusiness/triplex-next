@@ -29,7 +29,8 @@ gh api repos/{owner}/{repo}/pulls/{N}/comments        # inline-коммента�
   GraphQL (`reviewThreads` с `isResolved`), поле недоступно в `gh pr view --json`:
 
 ```bash
-gh api graphql -f query='query{repository(owner:"{owner}",name:"{repo}"){pullRequest(number:{N}){reviewThreads(first:50){nodes{id isResolved comments(first:10){nodes{databaseId body author{login} path line}}}}}}}'
+# подставь owner/repo/N литералами — в -f query gh плейсхолдеры НЕ раскрывает
+gh api graphql -f query='query{repository(owner:"SberBusiness",name:"triplex-next"){pullRequest(number:N){reviewThreads(first:50){nodes{id isResolved comments(first:10){nodes{databaseId body author{login} path line}}}}}}}'
 ```
 
 Если новых комментариев нет — сообщи и выйди.

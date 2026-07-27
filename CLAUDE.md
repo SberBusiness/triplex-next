@@ -53,6 +53,7 @@ React 17 совместимость, modern story pattern, формат комм
 | `component-refactorer` | агент | AI-рефакторинг + unit-тесты по `ai-refactoring.md` |
 | `story-writer` | агент | Storybook stories по `stories-guide.md` (modern pattern) |
 | `change-reviewer` | агент | Read-only ревью diff'а перед коммитом |
+| `pr-reviewer` | агент | Ревью созданного PR «с чистого листа», комментарии в GitHub (автоматически в финале задач Linear) |
 | `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
 | `commit-component` | skill | Коммит по `commits.md` (по явной просьбе; в финале задачи Linear — автоматически, с пушем и PR) |
 | `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `TRIPLEX-0`, PR «New release» |

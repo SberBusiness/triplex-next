@@ -104,7 +104,7 @@ version: "1.0"
 | `WithClearButton` | `WithClearButton.tsx` | Кнопка очистки `FormFieldClear` в постфиксе |
 | `WithCounter` | `WithCounter.tsx` | Описание и счётчик символов под полем |
 | `PassRefToInput` | `PassRefToInput.tsx` | Проброс ref на input через `inputProps.ref` |
-| `Production` (`Example: production`) | `Production.tsx` | Production-композиция: `HelpBox` в постфиксе, description со ссылкой, лимит длины со счётчиком, кнопка очистки |
+| `Production` | `Production.tsx` | Production-композиция (`Example: production`): `HelpBox` в постфиксе, description со ссылкой, лимит длины со счётчиком, кнопка очистки |
 | `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: фокус (через `play`), заполненные размеры, prefix/postfix, description/counter, статусы |
 
 ---

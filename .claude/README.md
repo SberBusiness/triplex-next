@@ -21,6 +21,7 @@
     ├── update-component-ai-md/SKILL.md
     ├── commit-component/SKILL.md
     ├── prepare-release/SKILL.md
+    ├── update-visual-baselines/SKILL.md   # baseline-скриншоты через CI + чистка orphan
     ├── take-task/SKILL.md               # Linear: взять задачу в работу
     ├── finish-task/SKILL.md             # Linear: финализация после коммита
     ├── create-task/SKILL.md             # Linear: завести оформленную задачу
@@ -165,6 +166,23 @@ Linear не пушит.
 
 ---
 
+### `/update-visual-baselines`
+
+Приводит `__screenshots__/` в соответствие со stories текущей ветки:
+
+- Запускает GitHub Actions «Update Visual Snapshots» (`gh workflow run`)
+  на запушенной ветке и ждёт завершения (`gh run watch`).
+- Подтягивает коммит со свежими baseline (`git pull`).
+- Находит orphan-скриншоты (story ID отсутствует в
+  `storybook-static/index.json`), удаляет их отдельным коммитом и пушит —
+  pre-commit hook пропускает удаления в `__screenshots__/` без вопросов.
+
+Запускается по явной просьбе либо **автоматически в финале задачи Linear**,
+если менялись stories или визуал компонентов. Локально скриншоты не
+генерирует никогда (только CI/Linux).
+
+---
+
 ## Linear (таск-трекер)
 
 Задачи ведутся в Linear: workspace `triplex-next`, команда **TRI**
@@ -213,6 +231,7 @@ labels `component:*` / `type:*`), создаёт только после под�
 > /take-task TRI-12                           # план → In Progress → ветка → агент
 > ... работа агента ...
 > ... автоматически: коммит → push → PR ...   # после зелёного ревью, без подтверждения
+> ... автоматически: /update-visual-baselines # если менялись stories/визуал
 > /finish-task                                # резюме в задачу, линковка PR
 ```
 

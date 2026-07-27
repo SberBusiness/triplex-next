@@ -56,6 +56,7 @@ React 17 совместимость, modern story pattern, формат комм
 | `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
 | `commit-component` | skill | Коммит по `commits.md` (по явной просьбе; в финале задачи Linear — автоматически, с пушем и PR) |
 | `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `TRIPLEX-0`, PR «New release» |
+| `update-visual-baselines` | skill | Baseline-скриншоты через CI-workflow + чистка orphan (автоматически в финале задач Linear) |
 | `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент → автокоммит + PR |
 | `finish-task` | skill | Финализация задачи Linear после коммита: резюме, линковка PR |
 | `create-task` | skill | Создать оформленную задачу в Linear из короткого описания |

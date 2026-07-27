@@ -84,7 +84,10 @@ git checkout -b TRI-XXX-короткое-описание
 1. Коммит по конвенциям — skill `commit-component`.
 2. `git push -u origin TRI-XXX-...`
 3. `gh pr create --title "TRI-XXX Краткое описание" ...`
-4. Предложи `/finish-task` (комментарий-резюме в задачу, проверка линковки PR).
+4. Если менялись stories или визуал компонентов — skill
+   `update-visual-baselines`: запуск CI-workflow «Update Visual Snapshots»,
+   ожидание, pull коммита со скриншотами, удаление orphan-скриншотов.
+5. Предложи `/finish-task` (комментарий-резюме в задачу, проверка линковки PR).
 
 Гейты обязательны и в автоматическом режиме: упавшие проверки, отсутствующие
 release notes при изменении публичного поведения, блокеры ревьюера,

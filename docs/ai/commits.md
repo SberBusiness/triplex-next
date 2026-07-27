@@ -120,7 +120,10 @@ npx prettier --write src/components/Button/Button.tsx
 
 1. делает коммит по конвенциям этого файла (skill `commit-component`);
 2. пушит ветку;
-3. создаёт PR (см. «PR-воркфлоу»).
+3. создаёт PR (см. «PR-воркфлоу»);
+4. если менялись stories или визуал компонентов — обновляет baseline-скриншоты
+   через skill `update-visual-baselines` (CI-workflow «Update Visual
+   Snapshots» + чистка orphan-скриншотов).
 
 Гейты остаются обязательными и в автоматическом режиме — при любом из них
 остановиться и спросить разработчика:

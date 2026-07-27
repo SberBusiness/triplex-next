@@ -15,7 +15,7 @@
 
 ## Структура
 
-```
+```text
 .agents/
 └── skills/                              # каноничное место для skills (runtime-neutral)
     ├── update-component-ai-md/SKILL.md
@@ -56,11 +56,11 @@ ROADMAP. По задаче Linear (`TRI-XXX`) после зелёного рев
 колонки таблицы для X».
 
 **Вызов:**
-```
+```text
 Use the ai-ready-builder agent to bring Alert to AI-Ready
 ```
 или
-```
+```text
 запусти ai-ready-builder для Alert
 ```
 
@@ -189,9 +189,10 @@ Linear не пушит.
 
 Приводит `__screenshots__/` в соответствие со stories текущей ветки:
 
-- Запускает GitHub Actions «Update Visual Snapshots» (`gh workflow run`)
-  на запушенной ветке и ждёт завершения (`gh run watch`).
-- Подтягивает коммит со свежими baseline (`git pull`).
+- Запускает GitHub Actions «Update Visual Snapshots» (`gh workflow run
+  visual-update.yml --ref <ветка>`), находит созданный run по `headSha`
+  текущего HEAD и ждёт его завершения (`gh run watch <run-id>`).
+- Подтягивает коммит со свежими baseline (`git pull --ff-only`).
 - Находит orphan-скриншоты (story ID отсутствует в
   `storybook-static/index.json`), удаляет их отдельным коммитом и пушит —
   pre-commit hook пропускает удаления в `__screenshots__/` без вопросов.
@@ -237,8 +238,14 @@ Linear линкует PR по номеру в имени ветки и двиг�
 
 GitHub-операции автофинала (PR, комментарии, workflow) могут выполняться
 от machine-аккаунта: задай `TRIPLEX_BOT_GH_TOKEN` (fine-grained PAT бота) —
-без него fallback на аккаунт разработчика. См. `docs/ai/commits.md`
-§ «GitHub-операции от аккаунта бота».
+без него fallback на аккаунт разработчика. Перед `gh`-командами токен
+подставляется в `GH_TOKEN`, откуда его читает GitHub CLI:
+
+```bash
+if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
+```
+
+См. `docs/ai/commits.md` § «GitHub-операции от аккаунта бота».
 
 ### `/take-task TRI-123`
 
@@ -274,7 +281,7 @@ labels `component:*` / `type:*`), создаёт только после под�
 
 ### Полный цикл с Linear
 
-```
+```text
 > /create-task добавить Badge тему DANGER     # если задачи ещё нет
 > /take-task TRI-12                           # план → In Progress → ветка → агент
 > ... работа агента ...
@@ -289,7 +296,7 @@ pr-reviewer) и мерж.
 
 ### Полный цикл AI-Ready для одного компонента
 
-```
+```text
 > запусти ai-ready-builder для Alert
 ```
 
@@ -305,19 +312,19 @@ pr-reviewer) и мерж.
 
 ### Только stories (компонент уже отрефакторен)
 
-```
+```text
 > Use the story-writer agent to add stories for Calendar
 ```
 
 ### Только AI.md (без правок кода)
 
-```
+```text
 > /update-component-ai-md for Avatar
 ```
 
 ### Ручная правка → ревью → коммит
 
-```
+```text
 > /change-reviewer
 > /commit-component
 ```

@@ -71,7 +71,7 @@ tools:
 
 - [ ] Все ключевые визуальные состояния (размеры, статусы, темы, focus, hover, disabled, loading) покрыты обычными stories или собраны в `VisualTests`.
 - [ ] Если компонент требует интеракции для показа состояния (открытый dropdown / modal / tooltip / hover / focus) — есть `VisualTests` story с `play`-функцией.
-- [ ] Для каждой новой/переименованной не-Playground story есть baseline-файл в `__screenshots__/{story-id}--xs.png` и `--xl.png`. Если baseline ещё нет — это блокер: запросить у пользователя прогон `GitHub Actions → Update Visual Snapshots`.
+- [ ] Для каждой новой/переименованной не-Playground story учтён baseline `__screenshots__/{story-id}--xs.png` и `--xl.png`: файл либо уже существует, либо его отсутствие ожидаемо — baseline сгенерирует CI-workflow «Update Visual Snapshots» после пуша (в финале задачи Linear — автоматически через skill `update-visual-baselines`). Отсутствие baseline до CI — не блокер; зафиксируй список таких stories в вердикте.
 - [ ] Все baseline-скриншоты в `__screenshots__/` сгенерированы CI/Docker (Linux). Никаких macOS-скриншотов в коммите.
 
 ### Документация

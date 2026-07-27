@@ -195,4 +195,4 @@ skill `update-visual-baselines` (если менялись stories/визуал)
 - Обновление `docs/ai/ROADMAP.md` (галочки)
 - При изменении публичного поведения (не только breaking change) — `stories/release-notes/v1/<версия>.mdx` (см. шаг 3)
 
-Всё это укладывается в один коммит `TRIPLEX-XXX {Name}: AI-Ready` или аналогичный.
+Всё это укладывается в один коммит `TRI-XXX {Name}: AI-Ready` или аналогичный.

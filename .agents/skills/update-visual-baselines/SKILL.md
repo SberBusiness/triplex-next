@@ -39,10 +39,16 @@ description: Обновляет baseline-скриншоты через GitHub Ac
 if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
 gh workflow run visual-update.yml --ref <ветка>
 sleep 10   # run появляется в списке не мгновенно
-gh run list --workflow=visual-update.yml --branch <ветка> --limit 1 \
-  --json databaseId,status -q '.[0].databaseId'
+# Бери run именно этого запуска — фильтруй по headSha текущего HEAD,
+# слепой --limit 1 может зафиксировать более старый run этой ветки.
+gh run list --workflow=visual-update.yml --branch <ветка> --limit 5 \
+  --json databaseId,headSha \
+  -q '[.[] | select(.headSha == "'"$(git rev-parse HEAD)"'")][0].databaseId'
 gh run watch <run-id> --exit-status --interval 30
 ```
+
+Если фильтр вернул пусто — run ещё не зарегистрировался, подожди ещё
+10–20 секунд и повтори `gh run list`.
 
 **Пока идёт прогон — не пушь в ветку.** Workflow делает `git pull --rebase`
 перед своим пушем, но лишняя гонка ни к чему; новые коммиты копи локально
@@ -57,8 +63,12 @@ gh run watch <run-id> --exit-status --interval 30
 ### 3. Подтяни результат
 
 ```bash
-git pull
+git pull --ff-only
 ```
+
+`--ff-only` защищает от незаметного merge-коммита: если история
+разошлась (кто-то запушил в ветку во время прогона) — команда упадёт;
+остановись и разберись, не создавай merge/rebase автоматически.
 
 Workflow коммитит `chore: update visual snapshots [skip ci]` только если
 скриншоты изменились. «No snapshot changes» в логе — не ошибка.

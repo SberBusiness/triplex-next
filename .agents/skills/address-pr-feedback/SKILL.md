@@ -71,7 +71,7 @@ PR #NNN: {title}
 
 - Мелкие правки — сам; крупные по профилю — субагентами
   (`component-refactorer`, `story-writer`).
-- Прогони проверки: `npx tsc --noEmit`, focused vitest, eslint
+- Прогони проверки: `npx --no-install tsc --noEmit`, focused vitest, eslint
   на затронутых файлах.
 - Правки по одному смысловому блоку — не смешивай с несвязанными
   изменениями.

@@ -26,7 +26,7 @@ export interface ITextFieldBaseProps extends Omit<IFormFieldProps, "prefix" | "p
     label?: React.ReactNode;
 }
 
-/** Компонент текстового ввода, на основе которого реализуются TextField и MaskedInputField. */
+/** Базовый компонент текстового ввода, на основе которого реализуются TextField и MaskedField. */
 export const TextFieldBase = React.forwardRef<HTMLDivElement, ITextFieldBaseProps>(
     ({ children, description, label, prefix, postfix, counter, ...formFieldProps }, ref) => (
         <FormGroup>

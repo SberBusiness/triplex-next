@@ -54,9 +54,9 @@ React 17 совместимость, modern story pattern, формат комм
 | `story-writer` | агент | Storybook stories по `stories-guide.md` (modern pattern) |
 | `change-reviewer` | агент | Read-only ревью diff'а перед коммитом |
 | `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
-| `commit-component` | skill | Коммит по `commits.md` (только по явной просьбе) |
+| `commit-component` | skill | Коммит по `commits.md` (по явной просьбе; в финале задачи Linear — автоматически, с пушем и PR) |
 | `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `TRIPLEX-0`, PR «New release» |
-| `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент |
+| `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент → автокоммит + PR |
 | `finish-task` | skill | Финализация задачи Linear после коммита: резюме, линковка PR |
 | `create-task` | skill | Создать оформленную задачу в Linear из короткого описания |
 | `sync-roadmap` | skill | Сверка `docs/ai/ROADMAP.md` с проектом «AI-Ready Phase 1» в Linear |

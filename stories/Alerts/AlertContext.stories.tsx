@@ -3,13 +3,13 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { AlertContext, EAlertType } from "@sberbusiness/triplex-next";
 import {
-    DefaultExample,
-    DefaultExampleSource,
-    PlaygroundExample,
-    TypesExample,
-    TypesExampleSource,
-    WithCustomIconExample,
-    WithCustomIconExampleSource,
+    Playground as PlaygroundRender,
+    Default as DefaultRender,
+    DefaultSource,
+    Types as TypesRender,
+    TypesSource,
+    WithCustomIcon as WithCustomIconRender,
+    WithCustomIconSource,
 } from "./examples/AlertContext";
 
 const meta = {
@@ -24,7 +24,7 @@ const meta = {
 
 ## Особенности
 
-- Рендерится как live-region (**role="alert"**) — текст озвучивается скринридером при появлении.
+- Рендерится как live-region (**role="alert"**) — изменения текста озвучиваются скринридером.
 - Иконка по умолчанию выбирается по свойству **type**.
 - Передать кастомную иконку можно через свойство **renderIcon**.
 - Поддерживаются типы **info**, **warning**, **error**, **system**. Тип **feature** не поддерживается.
@@ -46,12 +46,12 @@ const meta = {
     },
 } satisfies Meta<typeof AlertContext>;
 
+/** Типы, поддерживаемые AlertContext (EAlertType.FEATURE исключён типом свойства type). */
+const TYPE_OPTIONS = Object.values(EAlertType).filter((type) => type !== EAlertType.FEATURE);
+
 export default meta;
 
 type Story = StoryObj<typeof AlertContext>;
-
-/** Типы, поддерживаемые AlertContext (EAlertType.FEATURE исключён типом свойства type). */
-const TYPE_OPTIONS = Object.values(EAlertType).filter((type) => type !== EAlertType.FEATURE);
 
 export const Playground: Story = {
     tags: ["!autodocs"],
@@ -88,16 +88,16 @@ export const Playground: Story = {
             codePanel: false,
         },
     },
-    render: PlaygroundExample,
+    render: PlaygroundRender,
 };
 
 export const Default: Story = {
-    render: DefaultExample,
+    render: DefaultRender,
     parameters: {
         controls: { disable: true },
         docs: {
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
@@ -105,7 +105,7 @@ export const Default: Story = {
 };
 
 export const Types: Story = {
-    render: TypesExample,
+    render: TypesRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -113,7 +113,7 @@ export const Types: Story = {
                 story: "Все поддерживаемые типы предупреждения. Тип EAlertType.FEATURE исключён типом свойства type.",
             },
             source: {
-                code: TypesExampleSource,
+                code: TypesSource,
                 language: "tsx",
             },
         },
@@ -121,7 +121,7 @@ export const Types: Story = {
 };
 
 export const WithCustomIcon: Story = {
-    render: WithCustomIconExample,
+    render: WithCustomIconRender,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -129,7 +129,7 @@ export const WithCustomIcon: Story = {
                 story: "Компонент с иконкой, переданной через свойство renderIcon.",
             },
             source: {
-                code: WithCustomIconExampleSource,
+                code: WithCustomIconSource,
                 language: "tsx",
             },
         },

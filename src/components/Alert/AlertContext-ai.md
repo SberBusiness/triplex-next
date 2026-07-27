@@ -121,6 +121,7 @@ version: "1.0"
   | `WARNING` | нейтральный, те же значения | оранжевый `#EF4C01` / `#FF7A17` |
   | `ERROR` | `#D10032` / `#F80C45` | `#D10032` / `#F80C45` — совпадает |
   | `SYSTEM` | нейтральный, альфа `1` | `SECONDARY`: альфа `.65` / `.55` |
+
 - **Из `.alertContext` удалены `font-size: 12px` / `line-height: 16px`**
   (2026-07-27) как мёртвые правила: типографику текста задаёт `Text` через
   класс `.b4` на самом текстовом элементе, а собственное объявление потомка
@@ -173,12 +174,12 @@ version: "1.0"
 Основные истории: `stories/Alerts/AlertContext.stories.tsx`
 Файлы примеров: `stories/Alerts/examples/AlertContext/`
 
-| Story            | Example file                | Что демонстрирует                                                |
-| ---------------- | --------------------------- | ---------------------------------------------------------------- |
-| `Playground`     | `PlaygroundExample.tsx`     | Интерактивный контроль `type` и `children`                       |
-| `Default`        | `DefaultExample.tsx`        | Базовое предупреждение с типом `INFO`                            |
-| `Types`          | `TypesExample.tsx`          | Все поддерживаемые типы: `INFO` / `WARNING` / `ERROR` / `SYSTEM` |
-| `WithCustomIcon` | `WithCustomIconExample.tsx` | Замена иконки через `renderIcon`                                 |
+| Story            | Example file         | Что демонстрирует                                                |
+| ---------------- | -------------------- | ---------------------------------------------------------------- |
+| `Playground`     | `Playground.tsx`     | Интерактивный контроль `type` и `children`                       |
+| `Default`        | `Default.tsx`        | Базовое предупреждение с типом `INFO`                            |
+| `Types`          | `Types.tsx`          | Все поддерживаемые типы: `INFO` / `WARNING` / `ERROR` / `SYSTEM` |
+| `WithCustomIcon` | `WithCustomIcon.tsx` | Замена иконки через `renderIcon`                                 |
 
 Скриншот-тесты: baseline для всех stories лежат в `__screenshots__/` как
 `alerts-alertcontext--{default,types,with-custom-icon,playground}--{xs,xl}.png`.
@@ -192,4 +193,4 @@ version: "1.0"
 
 | Дата       | Изменение                                                                                                                                                                                                                                                                                                                         |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-07-27 | Создан документ. AI-рефакторинг: switch иконок заменён на `TYPE_TO_DEFAULT_ICON_MAP`, в `IAlertContextProps` добавлен явный `children`, из `.alertContext` удалены мёртвые `font-size` / `line-height`, из `Text` убран prop `type` вместе с маппингом `EFontType` (перекрывался специфичностью и расходился по значениям с токенами `AlertContext-*`). Unit-тесты расширены с 6 до 26 кейсов. Публичный API не менялся. |
+| 2026-07-27 | Создан документ. AI-рефакторинг: switch иконок заменён на `TYPE_TO_DEFAULT_ICON_MAP`, в `IAlertContextProps` добавлен явный `children`, из `.alertContext` удалены мёртвые `font-size` / `line-height`, из `Text` убран prop `type` вместе с маппингом `EFontType` (перекрывался специфичностью и расходился по значениям с токенами `AlertContext-*`). Unit-тесты расширены с 6 до 25 кейсов. Файлы примеров в `stories/Alerts/examples/AlertContext/` переименованы под modern pattern — без суффикса `Example`. Публичный API не менялся. |

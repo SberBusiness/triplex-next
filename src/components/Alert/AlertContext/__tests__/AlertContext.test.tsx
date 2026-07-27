@@ -93,7 +93,7 @@ describe("AlertContext", () => {
         expect(alertElement).toHaveClass("custom-alert-class");
     });
 
-    it("renders with custom icon", () => {
+    it("renders custom icon instead of default one when renderIcon is passed", () => {
         const customIcon = <div data-testid="custom-icon">Custom Icon</div>;
         render(
             <AlertContext type={EAlertType.INFO} renderIcon={customIcon}>
@@ -102,16 +102,6 @@ describe("AlertContext", () => {
         );
 
         expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
-    });
-
-    it("does not render default icon when renderIcon is passed", () => {
-        const customIcon = <div data-testid="custom-icon">Custom Icon</div>;
-        render(
-            <AlertContext type={EAlertType.INFO} renderIcon={customIcon}>
-                {testText}
-            </AlertContext>,
-        );
-
         expect(screen.queryByTestId("info-icon")).not.toBeInTheDocument();
     });
 

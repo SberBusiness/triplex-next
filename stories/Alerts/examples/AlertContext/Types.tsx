@@ -3,7 +3,7 @@ import { AlertContext, EAlertType } from "@sberbusiness/triplex-next";
 
 const TYPES = Object.values(EAlertType).filter((type) => type !== EAlertType.FEATURE);
 
-export const TypesExample = () => (
+export const Types = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
         {TYPES.map((type) => (
             <div key={type}>

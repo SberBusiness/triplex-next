@@ -24,8 +24,9 @@
      дай ему **Write** в репозитории;
    - сгенерируй fine-grained PAT: `contents: write`,
      `pull-requests: write`, `actions: write`;
-   - положи токен в `~/.zshrc`: `export TRIPLEX_BOT_GH_TOKEN=...`
-     (в репозиторий токен не попадает).
+   - положи токен в `~/.zshenv`: `export TRIPLEX_BOT_GH_TOKEN=...`
+     (именно `.zshenv`, а не `.zshrc` — агент работает в неинтерактивном
+     shell, который `.zshrc` не читает; в репозиторий токен не попадает).
 
    Без токена всё работает от твоего аккаунта (fallback). С ботом-автором
    PR ты сможешь сам его апрувить. Подробности —

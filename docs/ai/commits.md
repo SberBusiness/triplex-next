@@ -145,7 +145,8 @@ machine-аккаунта, если у разработчика задан его
 
 ```bash
 # fine-grained PAT бота: contents:write, pull-requests:write, actions:write
-export TRIPLEX_BOT_GH_TOKEN=...   # в ~/.zshrc, НЕ в репозитории
+export TRIPLEX_BOT_GH_TOKEN=...   # в ~/.zshenv (не ~/.zshrc — агент работает
+                                  # в неинтерактивном shell), НЕ в репозитории
 ```
 
 **Паттерн для агентов** — в начале Bash-вызова с командами `gh`:

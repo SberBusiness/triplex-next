@@ -12,8 +12,6 @@ interface ILightBoxArrowProps extends React.HTMLAttributes<HTMLDivElement> {
     buttonClassName: string;
     /** Кликнуть по кнопке при нажатии соответствующей стрелки на клавиатуре. */
     clickByArrowKey?: boolean;
-    /** CSS-класс контейнера стрелки. */
-    containerClassName: string;
     /** Значение data-test-id кнопки. */
     dataTestId: string;
     /** Идентификатор для обучающего тура. */
@@ -42,7 +40,6 @@ export const LightBoxArrow: React.FC<ILightBoxArrowProps> = ({
     buttonClassName,
     className,
     clickByArrowKey,
-    containerClassName,
     dataTestId,
     dataTutorialId,
     eventKeyCode,
@@ -90,7 +87,7 @@ export const LightBoxArrow: React.FC<ILightBoxArrowProps> = ({
     );
 
     return (
-        <div className={clsx(className, containerClassName)} {...htmlDivAttributes}>
+        <div className={className} {...htmlDivAttributes}>
             {clickByArrowKey ? (
                 <span>
                     {/* Кнопка с триггером при нажатии стрелки на клавиатуре. */}

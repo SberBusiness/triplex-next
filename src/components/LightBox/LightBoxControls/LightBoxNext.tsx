@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { CaretrightStrokeSrvIcon20, CaretrightStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { LightBoxArrow } from "./LightBoxArrow";
@@ -15,12 +16,12 @@ export interface ILightBoxNextProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 /** Стрелка лайтбокса "Вперёд". */
-export const LightBoxNext: React.FC<ILightBoxNextProps> = ({ clickByArrowRight, ...rest }) => (
+export const LightBoxNext: React.FC<ILightBoxNextProps> = ({ className, clickByArrowRight, ...rest }) => (
     <LightBoxArrow
         {...rest}
         buttonClassName={styles.lightBoxNextButton}
+        className={clsx(className, styles.lightBoxNext)}
         clickByArrowKey={clickByArrowRight}
-        containerClassName={styles.lightBoxNext}
         dataTestId="lightBox-next"
         eventKeyCode={EVENT_KEY_CODES.ARROW_RIGHT}
         iconDesktop={<CaretrightStrokeSrvIcon32 paletteIndex={0} />}

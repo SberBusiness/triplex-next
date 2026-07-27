@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { CaretleftStrokeSrvIcon32, CaretleftStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { LightBoxArrow } from "./LightBoxArrow";
@@ -15,12 +16,12 @@ export interface ILightBoxPrevProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 /** Стрелка лайтбокса "Назад". */
-export const LightBoxPrev: React.FC<ILightBoxPrevProps> = ({ clickByArrowLeft, ...rest }) => (
+export const LightBoxPrev: React.FC<ILightBoxPrevProps> = ({ className, clickByArrowLeft, ...rest }) => (
     <LightBoxArrow
         {...rest}
         buttonClassName={styles.lightBoxPrevButton}
+        className={clsx(className, styles.lightBoxPrev)}
         clickByArrowKey={clickByArrowLeft}
-        containerClassName={styles.lightBoxPrev}
         dataTestId="lightBox-prev"
         eventKeyCode={EVENT_KEY_CODES.ARROW_LEFT}
         iconDesktop={<CaretleftStrokeSrvIcon32 paletteIndex={0} />}

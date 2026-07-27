@@ -2,17 +2,29 @@
 
 ---
 
+## Задачи и тикеты
+
+Задачи ведутся в Linear, команда `TRI` (https://linear.app/triplex-next).
+Номер задачи `TRI-XXX` — обязательный префикс веток и коммитов: по нему
+GitHub-интеграция Linear линкует PR и двигает статусы задачи
+(ветка → In Progress, PR → In Review, merge → Done).
+
+**Legacy:** исторические ветки и коммиты используют префикс `TRIPLEX-XXX`.
+Существующие не переименовываем; всё новое — только `TRI-XXX`.
+
+---
+
 ## Именование веток
 
-**Формат:** `TRIPLEX-XXX-короткое-описание`
+**Формат:** `TRI-XXX-короткое-описание`
 
 - Строчные буквы, слова через дефис.
-- Всегда начинается с номера тикета.
+- Всегда начинается с номера задачи Linear.
 
 ```text
-TRIPLEX-844-ai-ready-design-system
-TRIPLEX-901-add-badge-component
-TRIPLEX-912-fix-button-focus-style
+TRI-12-add-badge-component
+TRI-15-fix-button-focus-style
+TRI-21-alert-ai-ready
 ```
 
 **Исключения:**
@@ -34,23 +46,22 @@ TRIPLEX-912-fix-button-focus-style
 
 ## Формат коммитов
 
-**Формат:** `TRIPLEX-XXX Краткое описание`
+**Формат:** `TRI-XXX Краткое описание`
 
 ```text
-TRIPLEX-844 Добавить AI-Ready документацию для компонентов
-TRIPLEX-901 Добавить компонент Badge с темами и размерами
-TRIPLEX-912 Исправить стиль фокуса для Button в теме Link
+TRI-12 Добавить компонент Badge с темами и размерами
+TRI-15 Исправить стиль фокуса для Button в теме Link
 ```
 
 Если нужно уточнение — добавляй через двоеточие:
 
 ```text
-TRIPLEX-844 AI-Ready Design System: фундамент и пилот Button
-TRIPLEX-901 Badge: добавить тему DANGER и размер SM
+TRI-12 Badge: добавить тему DANGER и размер SM
+TRI-21 Alert: AI refactoring + unit-тесты
 ```
 
 **Правила:**
-- Все коммиты в ветке начинаются с одного номера тикета.
+- Все коммиты в ветке начинаются с одного номера задачи.
 - Первая строка — не длиннее 72 символов.
 - Тело коммита опционально (для сложных изменений).
 - Язык: русский или английский — не смешивать в одном коммите.
@@ -110,16 +121,18 @@ npx prettier --write src/components/Button/Button.tsx
 **Агент пушит ветку — разработчик создаёт PR.**
 
 ```bash
-git push -u origin TRIPLEX-XXX-feature-name
+git push -u origin TRI-XXX-feature-name
 ```
 
 После пуша разработчик сам открывает PR через GitHub UI или `gh pr create`.
+После пуша/PR можно запустить skill `finish-task` — он оставит в задаче Linear
+комментарий-резюме и проверит линковку PR.
 
 **Исключение:** если разработчик явно просит агента создать PR, используй:
 
 ```bash
 gh pr create \
-  --title "TRIPLEX-XXX Краткое описание" \
+  --title "TRI-XXX Краткое описание" \
   --body "## Что сделано\n- ...\n\n## Как проверить\n- ..."
 ```
 

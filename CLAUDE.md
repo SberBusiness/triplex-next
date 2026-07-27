@@ -56,6 +56,10 @@ React 17 совместимость, modern story pattern, формат комм
 | `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
 | `commit-component` | skill | Коммит по `commits.md` (только по явной просьбе) |
 | `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `TRIPLEX-0`, PR «New release» |
+| `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент |
+| `finish-task` | skill | Финализация задачи Linear после коммита: резюме, линковка PR |
+| `create-task` | skill | Создать оформленную задачу в Linear из короткого описания |
+| `sync-roadmap` | skill | Сверка `docs/ai/ROADMAP.md` с проектом «AI-Ready Phase 1» в Linear |
 
 **Подробности и сценарии вызова:** [`.claude/README.md`](./.claude/README.md).
 

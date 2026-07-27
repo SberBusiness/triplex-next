@@ -20,7 +20,11 @@
 └── skills/                              # каноничное место для skills (runtime-neutral)
     ├── update-component-ai-md/SKILL.md
     ├── commit-component/SKILL.md
-    └── prepare-release/SKILL.md
+    ├── prepare-release/SKILL.md
+    ├── take-task/SKILL.md               # Linear: взять задачу в работу
+    ├── finish-task/SKILL.md             # Linear: финализация после коммита
+    ├── create-task/SKILL.md             # Linear: завести оформленную задачу
+    └── sync-roadmap/SKILL.md            # Linear: сверка с docs/ai/ROADMAP.md
 
 .claude/
 ├── agents/
@@ -28,11 +32,10 @@
 │   ├── component-refactorer.md          # AI-рефакторинг + unit-тесты
 │   ├── story-writer.md                  # Storybook stories (modern pattern)
 │   └── change-reviewer.md               # ревью diff'а перед коммитом (read-only)
-├── skills/                              # симлинки на .agents/skills/*
-│   ├── update-component-ai-md → ../../.agents/skills/update-component-ai-md
-│   ├── commit-component       → ../../.agents/skills/commit-component
-│   └── prepare-release        → ../../.agents/skills/prepare-release
+├── skills/                              # симлинки на .agents/skills/* (по одному на каждый skill)
 └── README.md                            # этот файл
+
+.mcp.json                                # Linear MCP (project-scoped, общий для команды)
 ```
 
 ---
@@ -159,7 +162,55 @@ props, stories), дописывает строку в «Историю изме�
 
 ---
 
+## Linear (таск-трекер)
+
+Задачи ведутся в Linear: workspace `triplex-next`, команда **TRI**
+(https://linear.app/triplex-next). Номер задачи `TRI-XXX` — префикс веток и
+коммитов (см. `docs/ai/commits.md`; `TRIPLEX-XXX` — legacy). GitHub-интеграция
+Linear линкует PR по номеру в имени ветки и двигает статусы автоматически:
+ветка → In Progress, PR → In Review, merge → Done.
+
+Доступ агентов к Linear — через Linear MCP, настроен в `.mcp.json` в корне
+репозитория. При первом использовании нужна авторизация (`/mcp` в Claude Code).
+
+### `/take-task TRI-123`
+
+Начало работы: читает задачу, показывает план, после подтверждения — переводит
+в In Progress, назначает исполнителя, создаёт ветку `TRI-XXX-...` от `main`
+и предлагает подходящего агента (по labels `type:*`).
+
+### `/finish-task`
+
+После коммита: определяет задачу из имени ветки, публикует комментарий-резюме
+(что сделано, проверки, release notes, PR), проверяет линковку PR. Статусы
+двигает GitHub-интеграция; Done вручную не ставит.
+
+### `/create-task`
+
+Превращает короткое описание в оформленную задачу: сверяется с кодом и
+ROADMAP, проверяет дубликаты, показывает черновик (title, acceptance criteria,
+labels `component:*` / `type:*`), создаёт только после подтверждения.
+
+### `/sync-roadmap`
+
+Сверка `docs/ai/ROADMAP.md` ↔ проект «AI-Ready Phase 1» в Linear: предлагает
+создать недостающие задачи на компоненты, репортит расхождения статусов.
+Ничего не создаёт без подтверждения.
+
+---
+
 ## Типичные сценарии
+
+### Полный цикл с Linear
+
+```
+> /create-task добавить Badge тему DANGER     # если задачи ещё нет
+> /take-task TRI-12                           # план → In Progress → ветка → агент
+> ... работа агента ...
+> /commit-component
+> git push (по запросу)
+> /finish-task                                # резюме в задачу, линковка PR
+```
 
 ### Полный цикл AI-Ready для одного компонента
 

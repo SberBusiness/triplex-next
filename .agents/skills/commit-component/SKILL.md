@@ -1,6 +1,6 @@
 ---
 name: commit-component
-description: Формирует коммит по docs/ai/commits.md для текущих незакоммиченных изменений в triplex-next — проверяет git status, формирует сообщение в формате "TRIPLEX-XXX Описание", делает коммит. Запускается только по явной просьбе пользователя.
+description: Формирует коммит по docs/ai/commits.md для текущих незакоммиченных изменений в triplex-next — проверяет git status, формирует сообщение в формате "TRI-XXX Описание" (legacy-ветки — "TRIPLEX-XXX"), делает коммит. Запускается только по явной просьбе пользователя.
 ---
 
 # commit-component
@@ -24,7 +24,7 @@ git log -5 --oneline    # стиль последних коммитов
 git rev-parse --abbrev-ref HEAD   # текущая ветка
 ```
 
-Имя ветки должно быть в формате `TRIPLEX-XXX-краткое-описание` (см. `docs/ai/commits.md`). Извлеки `TRIPLEX-XXX` для коммита.
+Имя ветки должно быть в формате `TRI-XXX-краткое-описание` (см. `docs/ai/commits.md`; legacy-ветки — `TRIPLEX-XXX-...`). Извлеки номер задачи по паттерну `(TRI|TRIPLEX)-\d+` — он идёт в префикс коммита.
 
 ### 2. Анализ изменений
 
@@ -77,21 +77,23 @@ Release notes **не нужны** для изменений только в stor
 ### 5. Формат сообщения
 
 ```text
-TRIPLEX-XXX Краткое описание (≤72 символа)
+TRI-XXX Краткое описание (≤72 символа)
 ```
 
 Если нужно уточнение — двоеточие:
 ```text
-TRIPLEX-XXX Component: уточнение
+TRI-XXX Component: уточнение
 ```
 
 Примеры:
 ```text
-TRIPLEX-901 Добавить компонент Badge с темами и размерами
-TRIPLEX-912 Button: исправить стиль фокуса в теме Link
-TRIPLEX-844 List: AI refactoring + unit-тесты на ListItem
-TRIPLEX-844 List: добавить List-ai.md и Storybook examples
+TRI-12 Добавить компонент Badge с темами и размерами
+TRI-15 Button: исправить стиль фокуса в теме Link
+TRI-21 List: AI refactoring + unit-тесты на ListItem
+TRI-21 List: добавить List-ai.md и Storybook examples
 ```
+
+Для legacy-веток `TRIPLEX-XXX-...` префикс остаётся `TRIPLEX-XXX`.
 
 **Правила:**
 - Первая строка ≤72 символов.
@@ -104,7 +106,7 @@ TRIPLEX-844 List: добавить List-ai.md и Storybook examples
 
 ```bash
 git add <конкретные файлы>     # не git add -A / git add .
-git commit -m "TRIPLEX-XXX ..."
+git commit -m "TRI-XXX ..."
 ```
 
 **Никогда не используй:**
@@ -132,6 +134,9 @@ git log -1 --oneline
 - Что попало в коммит (список файлов).
 
 **Не пушь автоматически.** Push — только по отдельной явной просьбе.
+
+Если ветка привязана к задаче Linear (`TRI-XXX`) — напомни, что после пуша
+можно запустить skill `finish-task` (комментарий-резюме в задачу, проверка линковки PR).
 
 ## Жёсткие ограничения
 

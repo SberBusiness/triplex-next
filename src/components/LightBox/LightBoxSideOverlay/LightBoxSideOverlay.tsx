@@ -36,6 +36,9 @@ export interface ILightBoxSideOverlayProps
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
+/** Заглушка для OverlayBase: состояние открытия SideOverlay управляется снаружи через prop opened. */
+const setOpened = () => {};
+
 const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOverlayProps>(
     (
         {
@@ -107,8 +110,6 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
                 {isLoading && <LightBoxSideOverlayLoader loaderScreenProps={loaderScreenProps} />}
             </div>
         );
-
-        const setOpened = () => {};
 
         const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, sizeToClassNameMap[size], {
             [styles.closing]: closing,

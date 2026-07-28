@@ -5,8 +5,11 @@ import clsx from "clsx";
 import { LoaderScreen, ILoaderScreenMiddleProps } from "../LoaderScreen/LoaderScreen";
 import styles from "./styles/LightBox.module.less";
 
+/** Свойства компонента LightBoxContent. */
 export interface ILightBoxContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое контентной области лайтбокса. */
     children: React.ReactNode;
+    /** Флаг состояния загрузки. */
     isLoading?: boolean;
     /** Свойства компонента LoaderScreen. */
     loaderScreenProps?: ILoaderScreenMiddleProps;
@@ -24,7 +27,7 @@ export const LightBoxContent: React.FC<ILightBoxContentProps> = (props) => {
     const updateStyle = useCallback(() => {
         let nextPaddingTop = 0;
 
-        const controlsNode = document.querySelector(`[data-lightbox-component="controls"]`) as HTMLDivElement | null;
+        const controlsNode = document.querySelector<HTMLDivElement>(`[data-lightbox-component="controls"]`);
         if (controlsNode) {
             nextPaddingTop += controlsNode.offsetHeight;
         }

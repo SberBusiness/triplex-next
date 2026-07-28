@@ -1,32 +1,31 @@
-import React from "react";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LoaderScreen, ILoaderScreenMiddleProps } from "../../LoaderScreen/LoaderScreen";
 import styles from "./styles/LightBoxSideOverlayLoader.module.less";
 
-interface ILightBoxSideOverlayLoaderProps {
+/** Свойства компонента LightBoxSideOverlayLoader. */
+export interface ILightBoxSideOverlayLoaderProps {
     /** Свойства компонента LoaderScreen. */
     loaderScreenProps?: ILoaderScreenMiddleProps;
 }
 
+/** Экран загрузки, перекрывающий содержимое SideOverlay. */
 export const LightBoxSideOverlayLoader: React.FC<ILightBoxSideOverlayLoaderProps> = ({ loaderScreenProps }) => {
     // Позиция top, высчитывается из scrollTop родителя.
-    const [topPosition, setTopPosition] = useState<number | string>(0);
+    const [topPosition, setTopPosition] = useState<number>(0);
     const loaderRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             if (loaderRef.current) {
                 const position = loaderRef.current.getBoundingClientRect();
-                // position.top равен высоте скролла родителя.
-                if (position.top !== topPosition) {
-                    if (position.top > 0) {
-                        setTopPosition(0);
-                    } else {
-                        setTopPosition(Math.abs(position.top));
-                    }
+                // position.top равен высоте скролла родителя. Отрицательное значение — родитель прокручен вниз.
+                if (position.top < 0) {
+                    setTopPosition(Math.abs(position.top));
                 }
             }
         });
+
+        return () => clearTimeout(timeoutId);
     }, []);
 
     return (

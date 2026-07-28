@@ -64,11 +64,11 @@ export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 /** Темы триггера, отображаемого как обычная кнопка (без dots-вариантов). */
-type TButtonDropdownButtonTheme =
+export type TButtonDropdownButtonTheme =
     EButtonTheme.GENERAL | EButtonTheme.SECONDARY | EButtonTheme.SECONDARY_LIGHT | EButtonTheme.DANGER;
 
 /** Свойства основной/вспомогательной кнопки с выпадающим списком действий. */
-interface IButtonDropdownBaseProps extends IButtonDropdownProps {
+export interface IButtonDropdownBaseProps extends IButtonDropdownProps {
     /** Тема кнопки. */
     theme: TButtonDropdownButtonTheme;
     /** Блочное состояние кнопки. */
@@ -76,7 +76,7 @@ interface IButtonDropdownBaseProps extends IButtonDropdownProps {
 }
 
 /** Свойства контекстной кнопки с выпадающим списком действий. */
-interface IButtonDotsProps extends IButtonDropdownProps {
+export interface IButtonDotsProps extends IButtonDropdownProps {
     /** Тема кнопки. */
     theme: EButtonDotsTheme;
     /** Блочное состояние кнопки. */
@@ -84,7 +84,7 @@ interface IButtonDotsProps extends IButtonDropdownProps {
 }
 
 /** Тема триггера: обычная кнопка либо кнопка-dots. */
-type TButtonDropdownTheme = TButtonDropdownButtonTheme | EButtonDotsTheme;
+export type TButtonDropdownTheme = TButtonDropdownButtonTheme | EButtonDotsTheme;
 
 /** Триггер отображается как кнопка-dots (иконка вместо текста и каретки). */
 const isDotsTheme = (theme: TButtonDropdownTheme): theme is EButtonDotsTheme =>

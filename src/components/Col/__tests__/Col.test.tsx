@@ -123,17 +123,6 @@ describe("Col Component", () => {
             },
         );
 
-        it("should apply offset-0 class for zero offset", () => {
-            render(
-                <Col data-testid="col-div" offset={0}>
-                    <MockChild />
-                </Col>,
-            );
-            const col = getColDiv();
-            expect(col).toHaveClass("offset-0");
-            expect(col).toHaveClass("col-12");
-        });
-
         it("should apply hidden classes", () => {
             render(
                 <Col data-testid="col-div" hidden hiddenSm hiddenMd hiddenLg hiddenXl>

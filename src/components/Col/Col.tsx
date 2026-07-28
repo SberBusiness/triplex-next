@@ -18,7 +18,7 @@ const GRID_HORIZONTAL_GAP_TO_CLASS_NAME_MAP = {
 export interface IColProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Содержимое колонки. */
     children?: React.ReactNode;
-    /** Ширина колонки на всех экранах. */
+    /** Ширина колонки на всех экранах. По умолчанию 12 (вся ширина). */
     size?: TColumnSize;
     /** Ширина колонки на экранах от sm и шире. */
     sizeSm?: TColumnSize;
@@ -38,7 +38,7 @@ export interface IColProps extends React.HTMLAttributes<HTMLDivElement> {
     offsetLg?: TOffsetSize;
     /** Отступ слева на экранах от xl и шире. */
     offsetXl?: TOffsetSize;
-    /** Скрытие колонки на всех экранах. */
+    /** Скрытие колонки на всех экранах (CSS display: none; переопределяет нативный HTML-атрибут hidden). */
     hidden?: boolean;
     /** Скрытие колонки на экранах от sm и шире. */
     hiddenSm?: boolean;

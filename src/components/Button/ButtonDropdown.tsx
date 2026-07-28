@@ -61,6 +61,10 @@ export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElemen
     selected?: IButtonDropdownOption;
     /** Отключенное состояние кнопки. */
     disabled?: boolean;
+    /** Управляемое состояние открытости dropdown (controlled-режим). Задаётся в паре с setOpened; без setOpened состояние зафиксировано (например, для visual-тестов). */
+    opened?: boolean;
+    /** Обработчик изменения состояния открытости dropdown (пара к opened). */
+    setOpened?: (opened: boolean) => void;
 }
 
 /** Темы триггера, отображаемого как обычная кнопка (без dots-вариантов). */
@@ -167,12 +171,16 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         const handleKeyDown =
             ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) =>
             (event: React.KeyboardEvent<HTMLButtonElement>) => {
-                const { key } = event;
+                // Сравнивается event.code (как в ButtonDropdownExtended): event.key пробела — " ", он не входит в EVENT_KEYS.SPACE.
+                const key: string | number = event.code || event.keyCode;
 
                 if (isKey(key, "SPACE") || isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN")) {
                     event.preventDefault();
                 }
-                if (!opened && (isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN"))) {
+                if (isKey(key, "SPACE")) {
+                    // preventDefault отменяет нативную click-активацию кнопки по пробелу — переключение выполняется явно.
+                    setOpened(!opened);
+                } else if (!opened && (isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN"))) {
                     setOpened(true);
                 }
             };
@@ -240,17 +248,17 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                                     </DropdownMobileHeader>
                                     <DropdownMobileBody>
                                         <DropdownMobileList>
-                                            {options.map((option) => (
+                                            {options.map(({ label, ...restOption }) => (
                                                 <DropdownMobileListItem
-                                                    {...option}
-                                                    key={option.id}
-                                                    selected={option.id === selected?.id}
+                                                    {...restOption}
+                                                    key={restOption.id}
+                                                    selected={restOption.id === selected?.id}
                                                     onSelect={() => {
-                                                        option.onSelect?.();
+                                                        restOption.onSelect?.();
                                                         setOpened(false);
                                                     }}
                                                 >
-                                                    {option.label}
+                                                    {label}
                                                 </DropdownMobileListItem>
                                             ))}
                                         </DropdownMobileList>
@@ -260,18 +268,18 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                         }}
                     >
                         <DropdownList dropdownOpened={opened} id={instanceId} size={size}>
-                            {options.map((option) => (
+                            {options.map(({ label, ...restOption }) => (
                                 <DropdownList.Item
-                                    {...option}
+                                    {...restOption}
                                     className={styles.buttonDropdownMenuItem}
-                                    key={option.id}
-                                    selected={option.id === selected?.id}
+                                    key={restOption.id}
+                                    selected={restOption.id === selected?.id}
                                     onSelect={() => {
-                                        option.onSelect?.();
+                                        restOption.onSelect?.();
                                         setOpened(false);
                                     }}
                                 >
-                                    {option.label}
+                                    {label}
                                 </DropdownList.Item>
                             ))}
                         </DropdownList>

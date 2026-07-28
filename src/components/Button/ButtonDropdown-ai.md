@@ -38,6 +38,8 @@ version: "1.0"
 | `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | — | Дополнительные HTML-атрибуты нативной кнопки (включая `aria-label`) |
 | `dropdownAttributes` | `React.HTMLAttributes<HTMLDivElement> & DataAttributes` | — | HTML-атрибуты выпадающего блока, включая `data-*`; `className` мержится с внутренними классами; применяется в desktop-отображении |
 | `block` | `boolean` | `false` | Полноширинный режим (только для non-dots тем) |
+| `opened` | `boolean` | — | Управляемое состояние открытости dropdown (controlled-режим); задаётся в паре с `setOpened`, без него состояние зафиксировано |
+| `setOpened` | `(opened: boolean) => void` | — | Обработчик изменения состояния открытости (пара к `opened`) |
 | `className` | `string` | — | Дополнительный CSS-класс контейнера |
 | `...rest` | `React.HTMLAttributes<HTMLDivElement>` | — | Атрибуты корневого `<div>` компонента |
 
@@ -78,8 +80,7 @@ version: "1.0"
 
 - Триггер строится на `Button` (нативный `<button>`), базовая keyboard-навигация сохраняется.
 - Кнопка получает `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`. Связка trigger/list осуществляется через `instanceId` (`uniqueId()`); `aria-activedescendant` синхронизируется через `DropdownListContext`.
-- На кнопке перехватываются `Space`, `ArrowUp`, `ArrowDown` с `preventDefault`. `ArrowUp` / `ArrowDown` открывают dropdown, если он закрыт. Dropdown закрывается по `Escape` и (из-за `closeOnTab`) по `Tab`.
-- Известное расхождение: обработчик кнопки сравнивает `event.key` со списком `EVENT_KEYS.SPACE` (`["Spacebar", "Space"]`), а современные браузеры отдают `" "` — фактически `preventDefault` для пробела не срабатывает (`ArrowUp` / `ArrowDown` работают штатно). Поведение существует с момента создания компонента, отдельной задачей не закрыто.
+- На кнопке перехватываются `Space`, `ArrowUp`, `ArrowDown` с `preventDefault` (сравнение по `event.code`, как в `ButtonDropdownExtended`). `Space` явно переключает dropdown (нативная click-активация отменена `preventDefault`), `ArrowUp` / `ArrowDown` открывают его, если закрыт. Dropdown закрывается по `Escape` и (из-за `closeOnTab`) по `Tab`.
 - Компонент **не хардкодит** aria-тексты: при необходимости `aria-label` нужно передавать через `buttonAttributes`. Для корректной доступности меню потребитель должен передавать понятные `label` для `options`.
 - На mobile-заголовке dropdown отображается `children` триггера; если в продукте нужен локализованный отдельный заголовок, его нужно задавать на уровне композиции (через `ButtonDropdownExtended`).
 
@@ -121,3 +122,4 @@ version: "1.0"
 | 2026-07-15 | В `ButtonDropdownExtended` `vertical-align: top` заменён на `middle` (синхронно с `Button`) — общая опорная точка для кнопок разной высоты и центрирование относительно строки инлайн-текста. |
 | 2026-07-28 | AI-рефакторинг: dots- и обычный триггер объединены в один `renderButton` (общая a11y-обвязка), тема кнопки и палитра каретки выведены через мапы вместо `as`-каста и `switch`, удалено обращение к несуществующему CSS-классу `buttonDropdownMenu` (в LESS его не было, в сборке значение было `undefined`). Публичный API и разметка не изменились. Unit-тесты расширены до 32 кейсов. |
 | 2026-07-29 | Правки по ревью PR #482: типы триггера и props-интерфейсы вариантов теперь экспортируются (`TButtonDropdownButtonTheme`, `TButtonDropdownTheme`, `IButtonDropdownBaseProps`, `IButtonDotsProps`) — по конвенции все типы barrel-компонентов публичны; поведение не изменилось. |
+| 2026-07-29 | Отработка находок AI-рефакторинга: починен перехват пробела на триггере (сравнение по `event.code`; `Space` явно переключает dropdown), `label` опции больше не утекает в DOM-атрибут элемента списка, легализован controlled-режим — публичные props `opened` / `setOpened` (ранее `opened` работал только через нетипизированный spread). |

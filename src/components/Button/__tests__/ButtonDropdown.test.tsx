@@ -299,10 +299,27 @@ describe("ButtonDropdown", () => {
         );
 
         const button = screen.getByRole("button");
-        const prevented = !fireEvent.keyDown(button, { key });
+        const prevented = !fireEvent.keyDown(button, { code: key });
 
         expect(prevented).toBe(true);
         expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("toggles dropdown on Space and prevents default click activation", () => {
+        render(
+            <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
+                Actions
+            </ButtonDropdown>,
+        );
+
+        const button = screen.getByRole("button");
+        const prevented = !fireEvent.keyDown(button, { code: "Space" });
+
+        expect(prevented).toBe(true);
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+        fireEvent.keyDown(button, { code: "Space" });
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
     it("keeps dropdown opened on repeated ArrowDown", () => {
@@ -313,8 +330,29 @@ describe("ButtonDropdown", () => {
         );
 
         const button = screen.getByRole("button");
-        fireEvent.keyDown(button, { key: "ArrowDown" });
-        fireEvent.keyDown(button, { key: "ArrowDown" });
+        fireEvent.keyDown(button, { code: "ArrowDown" });
+        fireEvent.keyDown(button, { code: "ArrowDown" });
+
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("does not leak option label into DOM attributes", () => {
+        render(
+            <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options}>
+                Actions
+            </ButtonDropdown>,
+        );
+
+        fireEvent.click(screen.getByRole("button"));
+        screen.getAllByRole("option").forEach((option) => expect(option).not.toHaveAttribute("label"));
+    });
+
+    it("renders dropdown opened in controlled mode via opened prop", () => {
+        render(
+            <ButtonDropdown theme={EButtonTheme.GENERAL} size={EComponentSize.MD} options={options} opened>
+                Actions
+            </ButtonDropdown>,
+        );
 
         expect(screen.getByRole("listbox")).toBeInTheDocument();
     });

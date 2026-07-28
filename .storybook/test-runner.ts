@@ -92,7 +92,9 @@ const config: TestRunnerConfig = {
                 content: "* { caret-color: transparent !important; }",
             });
 
-            const screenshot = await page.screenshot();
+            // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
+            // снимаются целиком, а не обрезаются по высоте viewport.
+            const screenshot = await page.screenshot({ fullPage: true });
 
             // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
             const snapshotId = context.id.replace(/^components-/, "");

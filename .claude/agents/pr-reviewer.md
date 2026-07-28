@@ -29,9 +29,12 @@ git fetch origin <headRefName>
 переключай ветки и не трогай рабочее дерево. Итоговое состояние файла
 важнее diff'а: смотри, как изменение выглядит в контексте всего файла.
 
-Прочитай уже существующие ревью-треды (`gh api
-repos/{owner}/{repo}/pulls/<N>/comments`) — **не дублируй** замечания,
-которые уже оставлены (в том числе тобой в прошлый прогон).
+Прочитай уже оставленный фидбэк — оба эндпоинта, обязательно с
+`--paginate`: `gh api --paginate repos/{owner}/{repo}/pulls/<N>/comments`
+(inline-треды на diff) и `gh api --paginate
+repos/{owner}/{repo}/pulls/<N>/reviews` (summary-тексты ревью в
+`reviews[].body`). **Не дублируй** замечания, которые уже оставлены
+(в том числе тобой в прошлый прогон).
 
 ### 2. Чек-лист ревью
 
@@ -72,15 +75,18 @@ repos/{owner}/{repo}/pulls/<N>/comments`) — **не дублируй** заме
 Собери все inline-комментарии в ОДИН review-запрос (не спамь отдельными):
 
 ```bash
-gh api repos/{owner}/{repo}/pulls/<N>/reviews -X POST \
-  -f event=COMMENT \
-  -f body='<резюме: 2–5 предложений — общее впечатление, счёт blocker/warning/nit>' \
-  --input - <<'JSON'
-{"comments": [{"path": "src/...", "line": 42, "side": "RIGHT", "body": "..."}]}
+gh api repos/{owner}/{repo}/pulls/<N>/reviews -X POST --input - <<'JSON'
+{
+  "event": "COMMENT",
+  "body": "<резюме: 2–5 предложений — общее впечатление, счёт blocker/warning/nit>",
+  "comments": [{"path": "src/...", "line": 42, "side": "RIGHT", "body": "..."}]
+}
 JSON
 ```
 
-(объедини body и comments в один JSON-input). Каждый inline-комментарий:
+Все поля (`event`, `body`, `comments`) — только внутри JSON-тела: при
+`--input` флаги `-f`/`-F` уходят в query string URL и в тело запроса не
+попадают (review остался бы PENDING без резюме). Каждый inline-комментарий:
 суть проблемы → почему (ссылка на гайд/инвариант) → предложение как
 исправить. Язык — русский. Тон — доброжелательный и конкретный.
 

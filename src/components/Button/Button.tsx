@@ -60,6 +60,7 @@ export interface IButtonSecondaryLightProps extends IButtonBaseProps {
     /** Содержимое кнопки. */
     children?: React.ReactNode;
 }
+
 /** Свойства кнопки типа Danger. */
 export interface IButtonDangerProps extends IButtonBaseProps {
     /** Тема кнопки. */
@@ -94,11 +95,7 @@ export interface IButtonLinkProps extends IButtonBaseProps {
 
 /** Свойства компонента Button. */
 export type TButtonProps =
-    | IButtonGeneralProps
-    | IButtonSecondaryProps
-    | IButtonSecondaryLightProps
-    | IButtonDangerProps
-    | IButtonLinkProps;
+    IButtonGeneralProps | IButtonSecondaryProps | IButtonSecondaryLightProps | IButtonDangerProps | IButtonLinkProps;
 
 const THEME_TO_CLASS_NAME_MAP: Record<EButtonTheme, string> = {
     [EButtonTheme.GENERAL]: generalStyles.general,
@@ -120,26 +117,30 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
-    const dotsTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
+    const loaderTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
         ? ELoaderSmallTheme.BRAND
         : ELoaderSmallTheme.NEUTRAL;
 
-    return <LoaderSmall theme={dotsTheme} size={size} />;
+    return <LoaderSmall theme={loaderTheme} size={size} />;
 };
 
-/** Кнопка. */
+/**
+ * Кнопка — основной интерактивный элемент для запуска действий.
+ * Поддерживает пять тем (EButtonTheme), три размера, состояние загрузки, иконку и блочный режим.
+ */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EComponentSize.MD, block, loading, icon, ...rest } = props;
 
+    // aria-expanded остаётся в rest и попадает на DOM-элемент, здесь читается для визуального состояния «раскрыто».
     const { "aria-expanded": expanded } = props;
     const classNames = clsx(
         styles.button,
         THEME_TO_CLASS_NAME_MAP[theme],
         SIZE_TO_CLASS_NAME_MAP[size],
         {
-            [styles.block]: !!block,
-            [styles.loading]: !!loading,
-            [styles.icon]: !!icon && !children,
+            [styles.block]: block,
+            [styles.loading]: loading,
+            [styles.icon]: Boolean(icon) && !children,
             [THEME_TO_EXPANDED_CLASS_NAME_MAP[theme]]: !!expanded,
         },
         className,

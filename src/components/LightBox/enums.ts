@@ -1,3 +1,4 @@
+/** Размер контента LightBox. */
 export enum ELightBoxSize {
     SM = "sm",
     MD = "md",

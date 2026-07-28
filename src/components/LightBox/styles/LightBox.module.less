@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .lightBox {
     --lightBox-content-max-width: @lightBox-content-max-width-md;
@@ -31,11 +31,11 @@
     }
 
     .lightBoxBackdrop {
-        content: '';
+        content: "";
         position: fixed;
         top: var(--lightBox-screen-top);
         left: var(--lightBox-screen-left);
-        width: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0));
+        width: calc(var(--lightBox-screen-width) - var(--lightBox-scroll-width, 0));
         height: 100%;
         pointer-events: none;
         background-color: var(--triplex-next-LightBox-Backdrop_Background);
@@ -94,8 +94,7 @@
     overflow: hidden;
 }
 
-
-/** Breakpoint для экранов менее 1024px. */
+// Breakpoint для экранов не шире 1024px (<= 1024px).
 .global-LB-less-or-equal-media-point-0 {
     .lightBox {
         &.lightBoxSideOverlayActive {
@@ -109,9 +108,8 @@
     }
 }
 
-/** Breakpoint для экранов шире 1024px. */
+// Breakpoint для экранов шире 1024px (> 1024px).
 .global-LB-more-media-point-0 {
-    /* стили для экранов шире 1024px */
     .lightBoxContent {
         // Отступы для кнопок вперед/назад.
         padding-left: 80px;

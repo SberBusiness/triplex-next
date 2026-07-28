@@ -6,7 +6,7 @@ import clsx from "clsx";
 import styles from "../styles/LightBoxControls.module.less";
 
 /** Свойства компонента LightBoxControls. */
-interface ILightBoxControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ILightBoxControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export interface ILightBoxControlsFC extends React.FC<ILightBoxControlsProps> {
     Close: typeof LightBoxClose;

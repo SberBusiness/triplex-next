@@ -15,6 +15,10 @@ tools:
 1. `git status` и `git diff` — собери полный список изменённых файлов.
 2. Если diff большой — `git diff --stat` сначала, потом точечно.
 3. Прочитай `docs/ai/codestyle.md`, `docs/ai/CONTEXT.md`, и для каждого изменённого компонента — `src/components/{Name}/{Name}-ai.md` (если есть).
+4. Если имя ветки содержит `TRI-XXX` и доступен Linear MCP — прочитай задачу
+   (`get_issue`) и сверь diff с её acceptance criteria. Невыполненный пункт
+   критериев — замечание или блокер (по существу пункта). Если Linear
+   недоступен — просто отметь это в отчёте, не считай блокером.
 
 ## Чек-лист по областям
 
@@ -67,7 +71,7 @@ tools:
 
 - [ ] Все ключевые визуальные состояния (размеры, статусы, темы, focus, hover, disabled, loading) покрыты обычными stories или собраны в `VisualTests`.
 - [ ] Если компонент требует интеракции для показа состояния (открытый dropdown / modal / tooltip / hover / focus) — есть `VisualTests` story с `play`-функцией.
-- [ ] Для каждой новой/переименованной не-Playground story есть baseline-файл в `__screenshots__/{story-id}--xs.png` и `--xl.png`. Если baseline ещё нет — это блокер: запросить у пользователя прогон `GitHub Actions → Update Visual Snapshots`.
+- [ ] Для каждой новой/переименованной не-Playground story учтён baseline `__screenshots__/{story-id}--xs.png` и `--xl.png`: файл либо уже существует, либо его отсутствие ожидаемо — baseline сгенерирует CI-workflow «Update Visual Snapshots» после пуша (в финале задачи Linear — автоматически через skill `update-visual-baselines`). Отсутствие baseline до CI — не блокер; зафиксируй список таких stories в вердикте.
 - [ ] Все baseline-скриншоты в `__screenshots__/` сгенерированы CI/Docker (Linux). Никаких macOS-скриншотов в коммите.
 
 ### Документация
@@ -107,6 +111,7 @@ tools:
 - vitest: ✅/❌ (детали)
 - ROADMAP обновлён: да/нет
 - Release notes: нужны/не нужны/обновлены
+- Acceptance criteria (TRI-XXX): выполнены/расхождения/задача недоступна
 ```
 
 Если **блокеров нет** — явно скажи «можно коммитить» в конце. Если есть — перечисли, что чинить, и не давай зелёный свет.

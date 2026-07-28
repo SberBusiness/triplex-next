@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.39.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**Carousel**
+
+- Карусель (бета-версия).
+
 <Heading>Изменения</Heading>
 
 **AlertContext**
@@ -17,6 +23,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **LightBox / LightBoxSideOverlay**
 
 - Удалены избыточные переопределения вертикальных отступов `Page` — отступы теперь задаются только стилями самого `Page` (визуальный результат не изменился).
+
+**LightBox**
+
+- Исправлено: клавиатурные триггеры контролов (`clickByArrowLeft` / `clickByArrowRight` у `Controls.Prev` / `Controls.Next`) не срабатывали на экранах шире 1024px, а Esc у `Controls.Close` — на экранах уже 1024px (триггер ссылался на скрытую кнопку другого режима).
+- Исправлено: при размонтировании лайтбокса в течение 100мс после открытия скролл страницы мог остаться заблокированным (незачищенный таймер возвращал класс `bodyOverflowHidden`). Таймер-фикс заменён счётчиком открытых лайтбоксов, сценарий переключения между лайтбоксами через роутер сохранён.
+- Исправлено: `LightBoxViewManager` не снимал с mount-ноды CSS-классы позиционирования (`LightBoxMountNodeViewManager`, `LB-*`) при размонтировании; классы удаляются при размонтировании последнего лайтбокса.
+- AI-рефакторинг: JSDoc на всех props, общая реализация стрелок Prev/Next, общий хук видимости сайдбаров, unit-тесты. Публичный API не изменён; props-интерфейсы контролов и `SideOverlayLoader` теперь экспортируются.
 
 **Typography (Text / Title / Caption / CodeText)**
 

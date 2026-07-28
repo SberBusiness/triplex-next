@@ -1,20 +1,50 @@
-import React from "react";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
-import { Portal } from "../../Portal/Portal";
-import { LightBoxViewManagerConsts } from "./LightBoxViewManagerConsts";
 import isEqual from "lodash-es/isEqual";
 import pick from "lodash-es/pick";
+import { Portal } from "../../Portal/Portal";
+import { LightBoxViewManagerConsts } from "./LightBoxViewManagerConsts";
 
+/** Свойства компонента LightBoxViewManager. */
 export interface ILightBoxViewManagerProps {
-    // Элемент, в который рендерится LightBox.
+    /** Элемент, в который рендерится LightBox. */
     lightBoxMountNode: HTMLDivElement;
-    // Элемент, в визуальных границах (левая и правая координата) которого рендерится LightBox. Отступ LightBox от верхней границы экрана равен высоте этого элемента.
+    /** Элемент, в визуальных границах (левая и правая координата) которого рендерится LightBox. Отступ LightBox от верхней границы экрана равен высоте этого элемента. */
     lightBoxViewManagerNode: HTMLDivElement;
 }
 
-// Css класс, подставляемый в lightBoxMountNode. Нужен для создания области видимости css переменных.
+/** Css класс, подставляемый в lightBoxMountNode. Нужен для создания области видимости css переменных. */
 const lightBoxMountNodeClassName = "LightBoxMountNodeViewManager";
+
+/** Свойства DOMRect, изменение которых требует обновления позиционирования LightBox. */
+const rectComparedKeys = ["top", "left", "width", "height"];
+
+/**
+ * Количество активных LightBoxViewManager на каждую mount-ноду. Нода общая для всех лайтбоксов
+ * (при переключении через роутер менеджеры могут перекрываться во времени), поэтому классы
+ * снимаются только при размонтировании последнего менеджера этой ноды.
+ */
+const viewManagerCountByMountNode = new WeakMap<HTMLDivElement, number>();
+
+/** Удаляет с mount-ноды класс области видимости CSS-переменных и breakpoint-классы. */
+const removeClassNamesFromMountNode = (mountNode: HTMLDivElement) => {
+    mountNode.classList.remove(lightBoxMountNodeClassName);
+
+    Array.from(mountNode.classList).forEach((className) => {
+        if (className.includes("LB-")) {
+            mountNode.classList.remove(className);
+        }
+    });
+};
+
+/**
+ * Расчет класснеймов на основе ширины области viewNode.
+ * Эти класснеймы определяют позиционирование LightBox.
+ */
+const getBreakPointsClassNames = (rect: DOMRect): string =>
+    rect.width <= LightBoxViewManagerConsts.lightBoxMediaPoint0
+        ? LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-0"]
+        : LightBoxViewManagerConsts.breakPointsClassNames["more-media-point-0"];
 
 /**
  * Элемент, определяющий позиционирование LightBox.
@@ -30,56 +60,27 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
     // DOM нода, в границах которой рендерится LightBox.
     const viewNodeRef = useRef<HTMLDivElement | null>(null);
 
-    /**
-     * Раcчет класснеймов на основе ширины области viewNode.
-     * Эти класснеймы опеределяют позиционирование LightBox.
-     */
-    const calculateBreakPointsClassNames = useCallback(
-        (rect: DOMRect | undefined) => {
-            if (!rect) {
-                return;
-            }
-
-            let classNames: Array<string> | string = [];
-
-            if (rect.width <= LightBoxViewManagerConsts.lightBoxMediaPoint0) {
-                classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["less-or-equal-media-point-0"]);
-            } else {
-                classNames.push(LightBoxViewManagerConsts.breakPointsClassNames["more-media-point-0"]);
-            }
-
-            classNames = classNames.sort().join(" ");
-
-            if (breakPointsClassNames !== classNames) {
-                setBreakPointsClassNames(classNames);
-            }
-        },
-        [breakPointsClassNames],
-    );
-
+    /** Обновление координат viewNode, если они изменились. */
     const updateRect = () => {
         if (viewNodeRef.current) {
             const nextRect = viewNodeRef.current.getBoundingClientRect();
 
-            if (
-                !isEqual(
-                    pick(rectViewNode, ["top", "left", "width", "height"]),
-                    pick(nextRect, ["top", "left", "width", "height"]),
-                )
-            ) {
-                setRectViewNode(nextRect);
-            }
+            setRectViewNode((prevRect) =>
+                isEqual(pick(prevRect, rectComparedKeys), pick(nextRect, rectComparedKeys)) ? prevRect : nextRect,
+            );
         }
     };
 
+    /** Обновление координат viewNode и breakpoint-класснеймов. */
     const updateRectAndClassNames = useCallback(() => {
         if (viewNodeRef.current) {
             const nextRect = viewNodeRef.current.getBoundingClientRect();
             setRectViewNode(nextRect);
-            calculateBreakPointsClassNames(nextRect);
+            setBreakPointsClassNames(getBreakPointsClassNames(nextRect));
         }
-    }, [calculateBreakPointsClassNames]);
+    }, []);
 
+    /** Подстановка breakpoint-класснеймов в lightBoxMountNode. */
     const addClassNameToMountNode = useCallback(() => {
         if (!breakPointsClassNames) {
             return;
@@ -88,18 +89,31 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
         // Удаление предыдущих классов.
         Array.from(lightBoxMountNode.classList).forEach((c) => {
             if (c.includes("LB-")) {
-                lightBoxMountNode.classList.toggle(c);
+                lightBoxMountNode.classList.remove(c);
             }
         });
 
         breakPointsClassNames.split(" ").forEach((c) => lightBoxMountNode.classList.add(c));
-    }, [breakPointsClassNames, lightBoxMountNode.classList]);
+    }, [breakPointsClassNames, lightBoxMountNode]);
 
     useLayoutEffect(() => {
         updateRectAndClassNames();
 
+        viewManagerCountByMountNode.set(
+            lightBoxMountNode,
+            (viewManagerCountByMountNode.get(lightBoxMountNode) ?? 0) + 1,
+        );
         lightBoxMountNode.classList.add(lightBoxMountNodeClassName);
-    }, []);
+
+        return () => {
+            const nextCount = (viewManagerCountByMountNode.get(lightBoxMountNode) ?? 1) - 1;
+            viewManagerCountByMountNode.set(lightBoxMountNode, nextCount);
+
+            if (nextCount === 0) {
+                removeClassNamesFromMountNode(lightBoxMountNode);
+            }
+        };
+    }, [lightBoxMountNode, updateRectAndClassNames]);
 
     useLayoutEffect(() => {
         addClassNameToMountNode();
@@ -115,6 +129,7 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
         refreshMode: "throttle",
         refreshRate: 150,
     });
+
     return (
         <Portal container={lightBoxViewManagerNode}>
             {/* Высота div должна быть равной высоте lightBoxViewManagerNode. */}
@@ -138,3 +153,5 @@ export const LightBoxViewManager: React.FC<ILightBoxViewManagerProps> = ({
         </Portal>
     );
 };
+
+LightBoxViewManager.displayName = "LightBoxViewManager";

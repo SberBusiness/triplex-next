@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 @sideOverlayBorderRadius: 32px;
 @sideOverlayBorderRadiusMobile: 16px;
@@ -12,7 +12,7 @@
     position: fixed;
     min-height: calc(100% - var(--lightBox-screen-top));
     top: var(--lightBox-screen-top);
-    left: 0; 
+    left: 0;
     width: 0;
     z-index: @z-index-step * 2;
     overflow-y: auto;
@@ -56,7 +56,6 @@
         margin: 16px auto 0;
         display: flex;
         justify-content: center;
-
 
         &.opened {
             // Убирается контекст для вложенных элементов с position: fixed.

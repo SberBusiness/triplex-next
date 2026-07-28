@@ -54,6 +54,11 @@ describe("Button", () => {
         expect(getButton()).toHaveClass(expectedClass);
     });
 
+    it("applies md size class by default when size is not provided", () => {
+        render(<Button theme={EButtonTheme.GENERAL}>Default size</Button>);
+        expect(getButton()).toHaveClass("md");
+    });
+
     it.each([
         [EButtonTheme.GENERAL, "general"],
         [EButtonTheme.SECONDARY, "secondary"],
@@ -185,6 +190,28 @@ describe("Button", () => {
     it("does not add expanded class when aria-expanded is false", () => {
         render(
             <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded={false}>
+                Collapsed
+            </Button>,
+        );
+        const button = getButton();
+        expect(button).not.toHaveClass("expanded");
+        expect(button).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("adds expanded class when aria-expanded is string 'true'", () => {
+        render(
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded="true">
+                Expandable
+            </Button>,
+        );
+        const button = getButton();
+        expect(button).toHaveClass("expanded");
+        expect(button).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("does not add expanded class when aria-expanded is string 'false'", () => {
+        render(
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} aria-expanded="false">
                 Collapsed
             </Button>,
         );

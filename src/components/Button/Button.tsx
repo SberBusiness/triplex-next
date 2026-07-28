@@ -17,8 +17,8 @@ import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/class
 export interface IButtonGeneralProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.GENERAL;
-    /** Размер кнопки. */
-    size: EComponentSize;
+    /** Размер кнопки. По умолчанию EComponentSize.MD. */
+    size?: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -33,8 +33,8 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
 export interface IButtonSecondaryProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY;
-    /** Размер кнопки. */
-    size: EComponentSize;
+    /** Размер кнопки. По умолчанию EComponentSize.MD. */
+    size?: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -49,8 +49,8 @@ export interface IButtonSecondaryProps extends IButtonBaseProps {
 export interface IButtonSecondaryLightProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.SECONDARY_LIGHT;
-    /** Размер кнопки. */
-    size: EComponentSize;
+    /** Размер кнопки. По умолчанию EComponentSize.MD. */
+    size?: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -65,8 +65,8 @@ export interface IButtonSecondaryLightProps extends IButtonBaseProps {
 export interface IButtonDangerProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.DANGER;
-    /** Размер кнопки. */
-    size: EComponentSize;
+    /** Размер кнопки. По умолчанию EComponentSize.MD. */
+    size?: EComponentSize;
     /** Блочный режим. */
     block?: boolean;
     /** Режим загрузки. */
@@ -81,8 +81,8 @@ export interface IButtonDangerProps extends IButtonBaseProps {
 export interface IButtonLinkProps extends IButtonBaseProps {
     /** Тема кнопки. */
     theme: EButtonTheme.LINK;
-    /** Размер кнопки. */
-    size: EComponentSize;
+    /** Размер кнопки. По умолчанию EComponentSize.MD. */
+    size?: EComponentSize;
     /** Блочный режим. */
     block?: never;
     /** Режим загрузки. */
@@ -132,7 +132,9 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     const { children, className, disabled, theme, size = EComponentSize.MD, block, loading, icon, ...rest } = props;
 
     // aria-expanded остаётся в rest и попадает на DOM-элемент, здесь читается для визуального состояния «раскрыто».
-    const { "aria-expanded": expanded } = props;
+    // Тип атрибута — Booleanish: строковое "false" — валидное «закрытое» состояние, поэтому truthy-проверки недостаточно.
+    const ariaExpanded = props["aria-expanded"];
+    const expanded = ariaExpanded === true || ariaExpanded === "true";
     const classNames = clsx(
         styles.button,
         THEME_TO_CLASS_NAME_MAP[theme],
@@ -141,14 +143,14 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
             [styles.block]: block,
             [styles.loading]: loading,
             [styles.icon]: Boolean(icon) && !children,
-            [THEME_TO_EXPANDED_CLASS_NAME_MAP[theme]]: !!expanded,
+            [THEME_TO_EXPANDED_CLASS_NAME_MAP[theme]]: expanded,
         },
         className,
     );
 
     return (
         <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
-            <IconWrapper className={styles.content} disabled={disabled} active={!!expanded}>
+            <IconWrapper className={styles.content} disabled={disabled} active={expanded}>
                 {icon}
                 {children}
             </IconWrapper>

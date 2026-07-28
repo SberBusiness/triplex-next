@@ -5,6 +5,7 @@ export * from "./Badge";
 export * from "./Button";
 export * from "./Calendar";
 export * from "./Card";
+export * from "./Carousel";
 export * from "./Checkbox";
 export * from "./Chip";
 export * from "./CollapsibleTree";

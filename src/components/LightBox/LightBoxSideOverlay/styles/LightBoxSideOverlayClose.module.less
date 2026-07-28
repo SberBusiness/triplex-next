@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .lightBoxSideOverlayCloseDesktopContainer {
     position: absolute;
@@ -21,7 +21,7 @@
     margin: 0 !important;
 }
 
-/** Breakpoint для экранов менее 1024px. */
+// Breakpoint для экранов не шире 1024px (<= 1024px).
 .global-LB-less-or-equal-media-point-0 {
     .lightBoxSideOverlayCloseDesktopContainer {
         display: none;
@@ -39,12 +39,12 @@
     }
 }
 
-/** Breakpoint для экранов шире 1024px. */
+// Breakpoint для экранов шире 1024px (> 1024px).
 .global-LB-more-media-point-0 {
     .lightBoxSideOverlayCloseDesktopContainer {
         display: block;
     }
-    
+
     .lightBoxSideOverlayCloseMobile {
         display: none;
     }

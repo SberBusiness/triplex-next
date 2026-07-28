@@ -1,0 +1,246 @@
+@import "src/styles/style";
+
+.carousel {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    &.horizontal {
+        flex-direction: column;
+    }
+
+    &.vertical {
+        flex-direction: row;
+    }
+}
+
+.viewPort {
+    position: relative;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: var(--triplex-next-runtime-carousel-viewport-padding);
+    overflow: hidden;
+
+    .horizontal & {
+        touch-action: pan-y;
+    }
+
+    .vertical & {
+        touch-action: pan-x;
+    }
+
+    &:hover {
+        .navButton {
+            opacity: 1;
+        }
+    }
+}
+
+.track {
+    display: flex;
+    gap: var(--triplex-next-runtime-carousel-gap);
+    transform: var(--triplex-next-runtime-carousel-transform);
+    transition: transform 0.3s cubic-bezier(0.5, 0, 0.5, 1);
+
+    .horizontal & {
+        flex-direction: row;
+        width: max-content;
+        height: 100%;
+    }
+
+    .vertical & {
+        flex-direction: column;
+        width: 100%;
+        height: max-content;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.navButton {
+    position: absolute;
+    padding: 9px;
+    border: 1px solid var(--triplex-next-Carousel-Button_BorderColor);
+    border-radius: 8px;
+    background-color: var(--triplex-next-Carousel-Button_BackgroundColor_Default);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    .horizontal & {
+        top: 50%;
+        transform: translateY(-50%);
+
+        &.prev {
+            left: 16px;
+        }
+
+        &.next {
+            right: 16px;
+        }
+    }
+
+    .vertical & {
+        left: 50%;
+        transform: translateX(-50%);
+
+        &.prev {
+            top: 16px;
+        }
+
+        &.next {
+            bottom: 16px;
+        }
+    }
+
+    &:hover {
+        background: var(--triplex-next-Carousel-Button_BackgroundColor_Hover);
+    }
+
+    &:focus-visible {
+        opacity: 1;
+    }
+
+    &:active {
+        background: var(--triplex-next-Carousel-Button_BackgroundColor_Active);
+    }
+
+    &[aria-disabled="true"] {
+        background: var(--triplex-next-Carousel-Button_BackgroundColor_Disabled);
+        cursor: default;
+    }
+}
+
+.indicators {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .horizontal & {
+        margin-top: 16px;
+        flex-direction: row;
+        width: fit-content;
+    }
+
+    .vertical & {
+        margin-left: 16px;
+        flex-direction: column;
+        width: fit-content;
+    }
+}
+
+.indicator {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    background-color: transparent;
+    position: relative;
+
+    &.active {
+        .horizontal & {
+            width: 24px;
+        }
+
+        .vertical & {
+            height: 24px;
+        }
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        background-color: var(--triplex-next-Carousel-Indicator_Inactive_BackgroundColor_Default);
+        border-radius: 2px;
+
+        .horizontal & {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+        }
+
+        .vertical & {
+            top: 0;
+            right: 0;
+            width: 3px;
+            height: 100%;
+        }
+    }
+
+    &:hover {
+        &::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Inactive_BackgroundColor_Hover);
+        }
+    }
+
+    &:focus-visible {
+        outline: 1px solid var(--triplex-next-Carousel-Indicator_OutlineColor);
+    }
+
+    &:active {
+        &::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Inactive_BackgroundColor_Pressed);
+        }
+    }
+
+    &:disabled {
+        &::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Inactive_BackgroundColor_Disabled);
+        }
+    }
+
+    &.active {
+        &::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Active_BackgroundColor_Default);
+        }
+
+        &:hover::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Active_BackgroundColor_Hover);
+        }
+
+        &:active::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Active_BackgroundColor_Pressed);
+        }
+
+        &:disabled::after {
+            background-color: var(--triplex-next-Carousel-Indicator_Active_BackgroundColor_Disabled);
+        }
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .indicators {
+        position: absolute;
+        pointer-events: none;
+
+        .horizontal & {
+            margin-top: 0;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .vertical & {
+            margin-left: 0;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}

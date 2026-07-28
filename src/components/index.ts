@@ -7,6 +7,7 @@ export * from "./Body";
 export * from "./Button";
 export * from "./Calendar";
 export * from "./Card";
+export * from "./Carousel";
 export * from "./CarouselExtended";
 export * from "./Checkbox";
 export * from "./CheckboxTree";

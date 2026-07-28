@@ -11,7 +11,7 @@ version: "1.0"
 
 ## Назначение
 
-Строка сетки: flex-контейнер с нижним отступом, принимающий в children только колонки `Col`. Передаёт размер горизонтального отступа между колонками (`gridHorizontalGap`) в дочерние `Col` через внутренний `RowContext`.
+Строка сетки: flex-контейнер с нижним отступом, предназначенный для использования с колонками `Col` в children. Передаёт размер горизонтального отступа между колонками (`gridHorizontalGap`) в дочерние `Col` через внутренний `RowContext`.
 
 Используй когда: нужно разместить контент в колоночной сетке — несколько `Col` в одной строке с управляемым горизонтальным отступом между ними и вертикальным отступом между строками.
 
@@ -47,7 +47,7 @@ version: "1.0"
 
 Компонент не использует CSS-переменных `--triplex-next-*`. Размеры берутся из LESS-переменных сетки в `src/styles/components/grid.less`:
 
-```
+```less
 @row-bottom-padding: 16px
 @grid-horizontal-gap-SM: 8px
 @grid-horizontal-gap-MD: 12px
@@ -63,7 +63,7 @@ version: "1.0"
 - **`RowContext` — внутренний контракт с `Col`**: `Col` читает `gridHorizontalGap` из контекста (`src/components/Col/Col.tsx`). Изменение формы `IRowContext` или дефолтного значения контекста требует синхронного обновления `Col`.
 - **Значение контекста мемоизировано** (`React.useMemo` по `gridHorizontalGap`) — не убирать, иначе все `Col`-потребители будут перерендериваться на каждом рендере `Row`.
 - **Корневой DOM-элемент — `<div>`** без ARIA-роли.
-- **CSS-классы `row`, `SM`, `MD`, `noPaddingBottom`** в `Row.module.less` используются в unit-тестах; `SM`/`MD` — исторически не camelCase, переименование требует синхронного обновления тестов и проверки visual baseline.
+- **CSS-классы `SM`, `MD`, `noPaddingBottom`** в `Row.module.less` используются в unit-тестах; класс `row` — корневой, тестами не проверяется, но фиксируется visual baseline. `SM`/`MD` — исторически не camelCase, переименование требует синхронного обновления тестов и проверки visual baseline.
 - **`displayName = "Row"`** — проверяется тестом.
 
 ---
@@ -91,7 +91,7 @@ version: "1.0"
 | `Playground` | `Playground.tsx` | Интерактивный контроль `paddingBottom` и `gridHorizontalGap` |
 | `Default` | `Default.tsx` | Две строки по две колонки, отступ между строками по умолчанию |
 | `GridHorizontalGaps` | `GridHorizontalGaps.tsx` | Отступы между колонками SM (8px) и MD (12px) |
-| `WithoutPaddingBottom` | `WithoutPaddingBottom.tsx` | Строки с `paddingBottom={false}` в контрасте со строкой с отступом |
+| `WithoutPaddingBottom` | `WithoutPaddingBottom.tsx` | Строки 1 и 3 с `paddingBottom={false}` в контрасте со строкой 2 с отступом по умолчанию |
 
 ---
 

@@ -15,7 +15,7 @@ export const WithoutPaddingBottom = () => (
                 </div>
             </Col>
         </Row>
-        <Row paddingBottom={false}>
+        <Row>
             <Col size={6}>
                 <div style={{ padding: "16px", textAlign: "center", backgroundColor: "rgb(255, 217, 160)" }}>
                     Row 2, Col 1
@@ -27,7 +27,7 @@ export const WithoutPaddingBottom = () => (
                 </div>
             </Col>
         </Row>
-        <Row>
+        <Row paddingBottom={false}>
             <Col size={6}>
                 <div style={{ padding: "16px", textAlign: "center", backgroundColor: "rgb(255, 217, 160)" }}>
                     Row 3, Col 1

@@ -20,11 +20,11 @@ const meta = {
         docs: {
             description: {
                 component: `
-Строка сетки, принимающая в children только компоненты Col.
+Строка сетки, предназначенная для использования с компонентами Col.
 
 ## Особенности
 
-- Принимает только компоненты Col в качестве children.
+- Предназначена для использования с компонентами Col в качестве children.
 - Имеет нижний отступ по умолчанию, отключается через **paddingBottom**.
 - Размер отступа между колонками задаётся через **gridHorizontalGap** и передаётся в Col через контекст.
                 `,
@@ -127,7 +127,7 @@ export const WithoutPaddingBottom: Story = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Строки без нижнего отступа (paddingBottom={false}) прижаты друг к другу; последняя строка — с отступом по умолчанию.",
+                story: "У строк 1 и 3 отступ отключён (paddingBottom={false}), у строки 2 — отступ по умолчанию: строки 1 и 2 прижаты друг к другу, а после строки 2 виден отступ.",
             },
             source: {
                 code: WithoutPaddingBottomSource,

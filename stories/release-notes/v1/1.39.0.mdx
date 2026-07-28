@@ -34,7 +34,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Row**
 
 - Добавлен `forwardRef` — ref пробрасывается на корневой `div`.
-- AI-рефакторинг: JSDoc на всех props и контексте, значение `RowContext` мемоизировано (колонки `Col` не перерендериваются без смены `gridHorizontalGap`). Публичный API не изменён.
+- AI-рефакторинг: JSDoc на всех props и контексте, значение `RowContext` мемоизировано (предотвращает перерендеры колонок `Col` через контекст, пока `gridHorizontalGap` не меняется). Публичный API не изменён.
 
 **Typography (Text / Title / Caption / CodeText)**
 

@@ -6,6 +6,8 @@ import { RowContext } from "./RowContext";
 
 /** Свойства компонента Row. */
 export interface IRowProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Колонки Col. */
+    children?: React.ReactNode;
     /** Вертикальный нижний отступ. По умолчанию true. */
     paddingBottom?: boolean;
     /** Размер отступа между колонками. По умолчанию EComponentSize.SM. */
@@ -18,7 +20,7 @@ const GRID_HORIZONTAL_GAP_TO_CLASS_NAME_MAP = {
 };
 
 /**
- * Строка сетки с нижним отступом, принимающая в children только колонки Col.
+ * Строка сетки с нижним отступом, предназначенная для использования с колонками Col в children.
  * Передаёт размер отступа между колонками в Col через RowContext.
  */
 export const Row = React.forwardRef<HTMLDivElement, IRowProps>(

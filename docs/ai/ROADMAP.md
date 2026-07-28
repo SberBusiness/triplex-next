@@ -78,7 +78,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
 |---|---|---|---|
-| AlertContext | ⬜ | ⬜ | ⬜ |
+| AbstractTree | ⬜ | ⬜ | ⬜ |
+| AccordionBase | ⬜ | ⬜ | ⬜ |
+| AlertContext | ✅ | ✅ | ✅ |
 | AlertProcess | ⬜ | ⬜ | ⬜ |
 | Amount | ⬜ | ✅ | ⬜ |
 | AmountField | ⬜ | ⬜ | ⬜ |

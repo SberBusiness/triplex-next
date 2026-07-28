@@ -2,7 +2,7 @@ import React from "react";
 import { EAlertType } from "../EAlertType";
 import { ALERT_TYPE_TO_CLASS_NAME_MAP } from "../AlertTypeUtils";
 import { Text } from "../../Typography/Text";
-import { EFontType, ETextSize } from "../../Typography/enums";
+import { ETextSize } from "../../Typography/enums";
 import {
     InfoStrokeStsIcon16,
     WarningStrokeStsIcon16,
@@ -18,30 +18,23 @@ export interface IAlertContextProps extends React.HTMLAttributes<HTMLSpanElement
     type: Exclude<EAlertType, EAlertType.FEATURE>;
     /** Отображаемая иконка. */
     renderIcon?: React.ReactNode;
+    /** Текст предупреждения. */
+    children?: React.ReactNode;
 }
 
-const renderDefaultIcon = (type: Exclude<EAlertType, EAlertType.FEATURE>): React.JSX.Element => {
-    switch (type) {
-        case EAlertType.INFO:
-            return <InfoStrokeStsIcon16 paletteIndex={3} />;
-        case EAlertType.WARNING:
-            return <WarningStrokeStsIcon16 paletteIndex={2} />;
-        case EAlertType.ERROR:
-            return <ErrorStrokeStsIcon16 paletteIndex={1} />;
-        case EAlertType.SYSTEM:
-            return <SystemStrokeStsIcon16 paletteIndex={4} />;
-    }
+/** Маппинг типов предупреждений к иконкам по умолчанию. */
+const TYPE_TO_DEFAULT_ICON_MAP: Record<Exclude<EAlertType, EAlertType.FEATURE>, React.ReactNode> = {
+    [EAlertType.INFO]: <InfoStrokeStsIcon16 paletteIndex={3} />,
+    [EAlertType.WARNING]: <WarningStrokeStsIcon16 paletteIndex={2} />,
+    [EAlertType.ERROR]: <ErrorStrokeStsIcon16 paletteIndex={1} />,
+    [EAlertType.SYSTEM]: <SystemStrokeStsIcon16 paletteIndex={4} />,
 };
 
-/** Маппинг типов предупреждений к типам шрифтов. */
-const alertTypeToFontTypeMap: Record<Exclude<EAlertType, EAlertType.FEATURE>, EFontType> = {
-    [EAlertType.INFO]: EFontType.INFO,
-    [EAlertType.WARNING]: EFontType.WARNING,
-    [EAlertType.ERROR]: EFontType.ERROR,
-    [EAlertType.SYSTEM]: EFontType.SECONDARY,
-};
-
-/** Компонент контекстного предупреждения. */
+/**
+ * Компонент контекстного предупреждения.
+ * Рендерит live-region (`role="alert"`) с иконкой и текстом. Иконка выбирается по `type`,
+ * её можно переопределить через `renderIcon`.
+ */
 export const AlertContext = React.forwardRef<HTMLSpanElement, IAlertContextProps>(
     ({ children, className, type, renderIcon, ...rest }, ref) => {
         return (
@@ -52,8 +45,8 @@ export const AlertContext = React.forwardRef<HTMLSpanElement, IAlertContextProps
                 data-tx={process.env.npm_package_version}
                 ref={ref}
             >
-                {renderIcon || renderDefaultIcon(type)}
-                <Text size={ETextSize.B4} type={alertTypeToFontTypeMap[type]} className={styles.alertContextText}>
+                {renderIcon || TYPE_TO_DEFAULT_ICON_MAP[type]}
+                <Text size={ETextSize.B4} className={styles.alertContextText}>
                     {children}
                 </Text>
             </span>

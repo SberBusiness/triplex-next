@@ -1,8 +1,7 @@
-export { DefaultExample } from "./DefaultExample";
-export { default as DefaultExampleSource } from "./DefaultExample?raw";
-export { TypesExample } from "./TypesExample";
-export { default as TypesExampleSource } from "./TypesExample?raw";
-export { WithCustomIconExample } from "./WithCustomIconExample";
-export { default as WithCustomIconExampleSource } from "./WithCustomIconExample?raw";
-export { PlaygroundExample } from "./PlaygroundExample";
-export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export * from "./Playground";
+export * from "./Default";
+export { default as DefaultSource } from "./Default?raw";
+export * from "./Types";
+export { default as TypesSource } from "./Types?raw";
+export * from "./WithCustomIcon";
+export { default as WithCustomIconSource } from "./WithCustomIcon?raw";

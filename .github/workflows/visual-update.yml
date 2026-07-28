@@ -42,5 +42,7 @@ jobs:
             echo "No snapshot changes"
           else
             git commit -m "chore: update visual snapshots [skip ci]"
+            # Ветка могла уйти вперёд, пока шёл прогон — подтягиваем перед пушем.
+            git pull --rebase
             git push || (echo "❌ Push failed. Check branch protection rules or GITHUB_TOKEN permissions." && exit 1)
           fi

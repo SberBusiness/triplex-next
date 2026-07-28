@@ -156,13 +156,17 @@ describe("AlertContext", () => {
         [EAlertType.WARNING, "warning"],
         [EAlertType.ERROR, "error"],
         [EAlertType.SYSTEM, "secondary"],
-    ])("does not set a Typography font type class on text for %s", (type, fontTypeClass) => {
+    ])("does not set the mapped Typography font type class on text for %s", (type, fontTypeClass) => {
         render(<AlertContext type={type}>{testText}</AlertContext>);
 
         // Цвет текста задаёт правило .alertContext.alertTypeX .alertContextText через токены
         // AlertContext-*, а не prop type у Text: токены Typography-* отличаются для всех типов,
-        // кроме ERROR. Появление здесь font-type класса означает возврат мёртвого дублирования.
-        expect(screen.getByText(testText)).not.toHaveClass(fontTypeClass);
+        // кроме ERROR. Появление здесь маппированного font-type класса означает возврат мёртвого
+        // дублирования. Класс primary при этом остаётся — Text подставляет EFontType.PRIMARY
+        // по умолчанию, его перекрывает локальное правило AlertContext.
+        const textElement = screen.getByText(testText);
+        expect(textElement).not.toHaveClass(fontTypeClass);
+        expect(textElement).toHaveClass("primary");
     });
 
     it("renders complex children", () => {

@@ -96,7 +96,10 @@ version: "1.0"
   unit-тестах, не переименовывать.
 - **`Text` получает только `size` и `className`** — никакого `type`. Цвет —
   зона ответственности `AlertContext`, см. «Подводные камни». Тест
-  `does not set a Typography font type class on text` охраняет это правило.
+  `does not set the mapped Typography font type class on text` охраняет это
+  правило. В DOM класс `primary` при этом присутствует: `Text` подставляет
+  `EFontType.PRIMARY` по умолчанию — на цвет он не влияет, его перекрывает
+  локальное правило.
 - **`ALERT_TYPE_TO_CLASS_NAME_MAP`** (`AlertTypeUtils.tsx`) — общий с
   `AlertProcess` и экспортируется из barrel. Его форма (`Record<EAlertType,
 (styles) => string>`) — часть публичного API, менять нельзя без breaking change.
@@ -181,8 +184,13 @@ version: "1.0"
 | `Types`          | `Types.tsx`          | Все поддерживаемые типы: `INFO` / `WARNING` / `ERROR` / `SYSTEM` |
 | `WithCustomIcon` | `WithCustomIcon.tsx` | Замена иконки через `renderIcon`                                 |
 
-Скриншот-тесты: baseline для всех stories лежат в `__screenshots__/` как
-`alerts-alertcontext--{default,types,with-custom-icon,playground}--{xs,xl}.png`.
+Скриншот-тесты: baseline лежат в `__screenshots__/` как
+`alerts-alertcontext--{default,types,with-custom-icon}--{xs,xl}.png`.
+`Playground` исключён из скриншот-тестов через `testRunner: { skip: true }`
+(по `docs/ai/stories-guide.md` — всегда), его визуальная регрессия не покрыта.
+Устаревшие `alerts-alertcontext--playground--{xs,xl}.png` удалены: скрипт
+`scripts/checkOrphanScreenshots.ts` такие файлы не ловит — `parameters` нет в
+`storybook-static/index.json`, поэтому skip-стори считаются ожидаемыми.
 Отдельная `VisualTests` story не создавалась — у компонента нет состояний,
 требующих взаимодействия (hover / focus / disabled / loading отсутствуют).
 Непокрытый визуальный кейс — перенос текста на несколько строк.

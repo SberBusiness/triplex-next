@@ -102,6 +102,27 @@ describe("Col Component", () => {
             });
         });
 
+        it.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const)("should apply class col-%i for size prop", (size) => {
+            render(
+                <Col data-testid="col-div" size={size}>
+                    <MockChild />
+                </Col>,
+            );
+            expect(getColDiv()).toHaveClass(`col-${size}`);
+        });
+
+        it.each([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const)(
+            "should apply class offset-%i for offset prop",
+            (offset) => {
+                render(
+                    <Col data-testid="col-div" offset={offset}>
+                        <MockChild />
+                    </Col>,
+                );
+                expect(getColDiv()).toHaveClass(`offset-${offset}`);
+            },
+        );
+
         it("should apply hidden classes", () => {
             render(
                 <Col data-testid="col-div" hidden hiddenSm hiddenMd hiddenLg hiddenXl>
@@ -126,6 +147,42 @@ describe("Col Component", () => {
             expectedClasses.forEach((cls) => {
                 expect(col).toHaveClass(cls);
             });
+        });
+
+        it("should not apply visibility classes when hidden and block are false", () => {
+            render(
+                <Col data-testid="col-div" hidden={false} block={false}>
+                    <MockChild />
+                </Col>,
+            );
+            const col = getColDiv();
+            expect(col).not.toHaveClass("d-none");
+            expect(col).not.toHaveClass("d-block");
+        });
+
+        it("should merge custom className with generated grid classes", () => {
+            render(
+                <Col data-testid="col-div" className="custom-class" size={6}>
+                    <MockChild />
+                </Col>,
+            );
+            const col = getColDiv();
+            expect(col).toHaveClass("custom-class");
+            expect(col).toHaveClass("col-6");
+            expect(col).toHaveClass("gridHorizontalGapSM");
+        });
+    });
+
+    describe("forwardRef", () => {
+        it("should forward ref to the root div element", () => {
+            const ref = React.createRef<HTMLDivElement>();
+            render(
+                <Col data-testid="col-div" ref={ref}>
+                    <MockChild />
+                </Col>,
+            );
+            expect(ref.current).toBeInstanceOf(HTMLDivElement);
+            expect(ref.current).toBe(getColDiv());
         });
     });
 

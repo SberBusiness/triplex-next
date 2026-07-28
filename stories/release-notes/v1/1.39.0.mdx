@@ -31,6 +31,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: `LightBoxViewManager` не снимал с mount-ноды CSS-классы позиционирования (`LightBoxMountNodeViewManager`, `LB-*`) при размонтировании; классы удаляются при размонтировании последнего лайтбокса.
 - AI-рефакторинг: JSDoc на всех props, общая реализация стрелок Prev/Next, общий хук видимости сайдбаров, unit-тесты. Публичный API не изменён; props-интерфейсы контролов и `SideOverlayLoader` теперь экспортируются.
 
+**Col**
+
+- Компонент `Col` переведён на использование `forwardRef` (ref ведёт на корневой `div`).
+- AI-рефакторинг: JSDoc на всех props и экспортируемых типах. Публичный API не изменён.
+
 **Typography (Text / Title / Caption / CodeText)**
 
 - AI-рефакторинг: JSDoc на всех props и значениях enum (подсказки в IDE), дублирующаяся логика классов `underline` / `strikethrough` вынесена во внутренний хелпер. Публичный API не изменён.

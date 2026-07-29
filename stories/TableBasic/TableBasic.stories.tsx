@@ -441,7 +441,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 <Row paddingBottom={false}>
                     <Col size={6}>
                         <SelectField
-                            size={EComponentSize.LG}
+                            size={EComponentSize.MD}
                             value={tempFilters.counterpartyOption}
                             options={counterpartyExampleOptions}
                             onChange={handleChangeCounterpartyOption}
@@ -453,7 +453,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                     </Col>
                     <Col size={6}>
                         <SelectField
-                            size={EComponentSize.LG}
+                            size={EComponentSize.MD}
                             value={tempFilters.statusOption}
                             options={statusExampleOptions}
                             onChange={handleChangeStatusOption}
@@ -526,6 +526,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                     <Row paddingBottom={false}>
                         <Col size={6}>
                             <TextField
+                                size={EComponentSize.MD}
                                 inputProps={{
                                     value: appliedFilters.docNumber,
                                     onChange: handleChangeDocNumber,
@@ -536,6 +537,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                         </Col>
                         <Col size={6}>
                             <TextField
+                                size={EComponentSize.MD}
                                 inputProps={{
                                     value: appliedFilters.counterparty,
                                     onChange: handleChangeCounterparty,
@@ -555,7 +557,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 <MasterTable loading={args.isLoading}>
                     <MasterTable.ChipPanel>
                         <MasterTable.ChipPanel.Links>
-                            {isAnyFilterChanged && <Link onClick={handleClickResetFilters}>Сбросить всё</Link>}
+                            {isSpoilerFilterChanged && <Link onClick={handleClickResetFilters}>Сбросить всё</Link>}
                             <Link onClick={handleClickShowFilterPanel}>
                                 {isShowAdditionalFilterPanel
                                     ? "Скрыть фильтры"
@@ -1682,7 +1684,7 @@ export const ExampleProduction: StoryObj = {
                         ))}
                     </ChipGroup>
                     <MasterTable.ChipPanel.Links>
-                        {isAnyFilterApplied && <Link onClick={handleClickResetAllFilters}>Сбросить всё</Link>}
+                        {isExtraFilterApplied && <Link onClick={handleClickResetAllFilters}>Сбросить всё</Link>}
                         <Link onClick={handleClickToggleExtraFilters}>
                             {showExtraFilters
                                 ? "Скрыть фильтры"
@@ -1718,7 +1720,7 @@ export const ExampleProduction: StoryObj = {
     parameters: {
         docs: {
             description: {
-                story: "Пример, приближённый к production. Статусная панель чипов (ChipPanel) работает как segmented control — активен только один чип. Ниже расположены быстрые фильтры (ChipMultiselect «Статус» и поле «Получатель»), а ссылка «Фильтры» раскрывает дополнительные поля — выбор получателя из списка и номер документа. Дополнительные фильтры применяются только по кнопке «Применить»: панель закрывается, а применённые значения показываются тегами, каждый из которых можно снять. Кнопка «Сбросить» очищает поля панели, ссылка «Сбросить всё» — все фильтры.",
+                story: "Пример, приближённый к production. Статусная панель чипов (ChipPanel) работает как segmented control — активен только один чип. Ниже расположены быстрые фильтры (ChipMultiselect «Статус» и поле «Получатель»), а ссылка «Фильтры» раскрывает дополнительные поля — выбор получателя из списка и номер документа. Дополнительные фильтры применяются только по кнопке «Применить»: панель закрывается, а применённые значения показываются тегами, каждый из которых можно снять. Кнопка «Сбросить» очищает поля панели, а ссылка «Сбросить всё» появляется только при применённых дополнительных фильтрах и сбрасывает все фильтры.",
             },
         },
         controls: { disable: true },

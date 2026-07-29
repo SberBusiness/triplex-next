@@ -11,6 +11,8 @@ import styles from "./styles/Chip.module.less";
 
 /** Свойства компонента Chip. */
 export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "prefix">, DataAttributes {
+    /** Основной контент. */
+    children?: React.ReactNode;
     /** Состояние disabled. */
     disabled?: boolean;
     /** Выбранное состояние. */
@@ -21,20 +23,20 @@ export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
     postfix?: React.ReactNode;
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
-    /** Размер. */
+    /** Размер. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
-    /** Тип. */
+    /** Тип. По умолчанию EChipType.TYPE_1. */
     type?: EChipType;
 }
 
 /** Соответствие типа имени класса. */
-const typeToClassNameMap: Record<EChipType, string> = {
+const TYPE_TO_CLASS_NAME_MAP: Record<EChipType, string> = {
     [EChipType.TYPE_1]: styles.type1,
     [EChipType.TYPE_2]: styles.type2,
 };
 
 /** Соответствие размера имени класса. */
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /**
  * Предоставляет возможность произвести действие по нажатию, также отображает выбранное состояние.
@@ -57,6 +59,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
         },
         ref,
     ) => {
+        /** Отменяет прокрутку страницы при нажатии пробела, так как Chip является фокусируемым элементом. */
         const handleKeyDown = useCallback<React.KeyboardEventHandler<HTMLSpanElement>>(
             (event) => {
                 if (isKey(event.code, "SPACE")) {
@@ -72,13 +75,13 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 className={clsx(
                     styles.chip,
                     styles.chipGroupItem,
-                    typeToClassNameMap[type],
-                    sizeToClassNameMap[size],
+                    TYPE_TO_CLASS_NAME_MAP[type],
+                    SIZE_TO_CLASS_NAME_MAP[size],
                     {
-                        [styles.disabled]: Boolean(disabled),
-                        [styles.selected]: Boolean(selected),
-                        [styles.withPostfix]: typeof postfix !== "undefined",
-                        [styles.withPrefix]: typeof prefix !== "undefined",
+                        [styles.disabled]: disabled,
+                        [styles.selected]: selected,
+                        [styles.withPostfix]: postfix !== undefined,
+                        [styles.withPrefix]: prefix !== undefined,
                     },
                     className,
                 )}
@@ -89,7 +92,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 ref={ref}
             >
                 {prefix ? (
-                    <IconWrapper className={styles.prefix} disabled={Boolean(disabled)}>
+                    <IconWrapper className={styles.prefix} disabled={disabled}>
                         {prefix}
                     </IconWrapper>
                 ) : null}
@@ -97,12 +100,12 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                 <span className={styles.content}>{children}</span>
 
                 {postfix ? (
-                    <IconWrapper className={styles.postfix} disabled={Boolean(disabled)}>
+                    <IconWrapper className={styles.postfix} disabled={disabled}>
                         {postfix}
                     </IconWrapper>
                 ) : null}
 
-                {showNotificationIcon && <Badge.Dot size={size} className={styles.notificationIcon} />}
+                {showNotificationIcon ? <Badge.Dot size={size} className={styles.notificationIcon} /> : null}
             </span>
         );
     },

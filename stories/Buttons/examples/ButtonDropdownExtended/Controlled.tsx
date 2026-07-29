@@ -6,6 +6,7 @@ import {
     EComponentSize,
     EDropdownAlignment,
     EDropdownWidth,
+    IButtonDropdownExtendedButtonProvideProps,
     IButtonDropdownExtendedDropdownProvideProps,
 } from "@sberbusiness/triplex-next";
 
@@ -21,7 +22,9 @@ export const Controlled = () => {
     // opened должен быть определён уже на первом рендере — режим управления фиксируется на монтировании.
     const [opened, setOpened] = useState(false);
 
-    const renderButton = () => (
+    // В контролируемом режиме render-функции получают то же значение opened и тот же обработчик,
+    // что и в неконтролируемом, — контракт render-props одинаков в обоих режимах.
+    const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => (
         <Button
             theme={EButtonTheme.GENERAL}
             size={EComponentSize.MD}
@@ -34,7 +37,7 @@ export const Controlled = () => {
         </Button>
     );
 
-    const renderDropdown = ({ className }: IButtonDropdownExtendedDropdownProvideProps) => (
+    const renderDropdown = ({ className, opened, setOpened }: IButtonDropdownExtendedDropdownProvideProps) => (
         <ButtonDropdownExtended.Dropdown
             className={className}
             size={EComponentSize.MD}

@@ -7,6 +7,7 @@ import {
     EDropdownAlignment,
     ETextSize,
     EDropdownWidth,
+    IButtonDropdownExtendedButtonProvideProps,
     IButtonDropdownExtendedDropdownProvideProps,
     Text,
 } from "@sberbusiness/triplex-next";
@@ -16,7 +17,7 @@ export const WithCustomContent = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [opened, setOpened] = useState(false);
 
-    const renderButton = () => (
+    const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => (
         <Button
             theme={EButtonTheme.SECONDARY}
             size={EComponentSize.MD}
@@ -29,7 +30,7 @@ export const WithCustomContent = () => {
         </Button>
     );
 
-    const renderDropdown = ({ className }: IButtonDropdownExtendedDropdownProvideProps) => (
+    const renderDropdown = ({ className, opened, setOpened }: IButtonDropdownExtendedDropdownProvideProps) => (
         <ButtonDropdownExtended.Dropdown
             className={className}
             size={EComponentSize.MD}

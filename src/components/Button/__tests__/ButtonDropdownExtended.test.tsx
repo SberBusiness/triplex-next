@@ -188,6 +188,36 @@ describe("ButtonDropdownExtended", () => {
 
             expect(setOpened).not.toHaveBeenCalled();
         });
+
+        it("closes in uncontrolled mode", () => {
+            render(<Harness />);
+            fireEvent.click(getTrigger());
+
+            fireEvent.keyDown(document, { code: "Escape" });
+
+            expect(getTrigger()).toHaveTextContent("closed");
+            expect(screen.queryByTestId("dropdown")).not.toBeInTheDocument();
+        });
+
+        it("removes listeners on unmount", () => {
+            const setOpened = vi.fn();
+            const { unmount } = render(<Harness opened setOpened={setOpened} />);
+
+            unmount();
+            fireEvent.keyDown(document, { code: "Escape" });
+
+            expect(setOpened).not.toHaveBeenCalled();
+        });
+
+        it("removes listeners after closing", () => {
+            const setOpened = vi.fn();
+            const { rerender } = render(<Harness opened setOpened={setOpened} />);
+
+            rerender(<Harness opened={false} setOpened={setOpened} />);
+            fireEvent.keyDown(document, { code: "Escape" });
+
+            expect(setOpened).not.toHaveBeenCalled();
+        });
     });
 
     describe("closing by click outside", () => {
@@ -243,6 +273,18 @@ describe("ButtonDropdownExtended", () => {
             renderWithOutsideNode({ opened: false, setOpened });
 
             fireEvent.mouseDown(screen.getByTestId("outside"));
+
+            expect(setOpened).not.toHaveBeenCalled();
+        });
+
+        it("removes listeners on unmount", () => {
+            const setOpened = vi.fn();
+            const { unmount } = renderWithOutsideNode({ opened: true, setOpened });
+            const outside = screen.getByTestId("outside");
+
+            unmount();
+            fireEvent.mouseDown(outside);
+            fireEvent.touchStart(outside);
 
             expect(setOpened).not.toHaveBeenCalled();
         });

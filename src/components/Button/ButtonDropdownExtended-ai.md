@@ -53,7 +53,9 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Собственных CSS-переменных нет. `ButtonDropdownExtended.module.less` задаёт только раскладку: `display: inline-block`, `position: relative`, `vertical-align: middle` (общая опорная точка с `Button`), `line-height: 0` и отступы позиционирующего класса выпадающего блока. Цвета и размеры приходят из вложенных `Button` и `Dropdown`.
+Собственных CSS-переменных нет. `ButtonDropdownExtended.module.less` задаёт только раскладку корневого контейнера: `display: inline-block`, `position: relative`, `vertical-align: middle` (общая опорная точка с `Button`), `line-height: 0`. Цвета и размеры приходят из вложенных `Button` и `Dropdown`.
+
+Правила класса выпадающего блока (`padding: 4px`, `margin-top: 4px`, `right: 0`) объявлены **вложенным** селектором внутри `.buttonDropdownExtended`, то есть компилируются в потомковый. При штатном использовании они не применяются: `ButtonDropdownExtended.Dropdown` рендерится через `<Portal container={document.body}>`, и узел с этим классом не является потомком корневого `<div>`. Позиционирование блока в этом случае обеспечивает сам `Dropdown` по `targetRef`. Учитывай это, если правишь отступы: менять их нужно не здесь.
 
 ---
 
@@ -63,7 +65,7 @@ version: "1.0"
 - Публичные имена `ButtonDropdownExtended`, `IButtonDropdownExtendedProps`, `IButtonDropdownExtendedButtonProvideProps`, `IButtonDropdownExtendedDropdownProvideProps`, `IButtonDropdownExtendedComponent` экспортируются из `src/components/Button/index.ts` — сохранять.
 - Статические свойства `Dropdown` и `DropdownList` — часть публичного API.
 - Фиксация режима управления на монтировании — наблюдаемое поведение, на него опираются потребители. Менять только осознанно.
-- `renderDropdown` обязан применить переданный `className` к выпадающему блоку — на нём держатся отступы и выравнивание блока относительно кнопки.
+- `renderDropdown` обязан применить переданный `className` к выпадающему блоку. Но не считай, что на нём держится раскладка: стили этого класса объявлены вложенным селектором внутри `.buttonDropdownExtended` и при рендере блока в портале (штатный путь через `ButtonDropdownExtended.Dropdown`) не применяются — см. раздел «Дизайн-токены».
 - Корневой DOM-элемент — `<div>` с классом `buttonDropdownExtended`; на нём же живёт `containerRef`, по которому определяется «клик внутри триггера».
 - Слушатели `keydown` / `mousedown` / `touchstart` вешаются на `document` только пока блок открыт.
 

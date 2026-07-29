@@ -109,7 +109,7 @@ version: "1.0"
 
 Паттерн: `--triplex-next-Chip-{Property}_{Modifier}_{State}`
 
-```
+```text
 --triplex-next-Chip-Background_Type1_Default
 --triplex-next-Chip-Background_Type1_Hover
 --triplex-next-Chip-Background_Type2_Default
@@ -146,10 +146,13 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 - **`role` и `tabIndex` выставляются до `{...restProps}`**, то есть потребитель может
   их переопределить через props. Это часть текущего контракта — менять порядок осознанно.
   (`ref` при `forwardRef` в `restProps` не попадает, на него порядок не влияет.)
-- **Класс `.chipGroupItem`** выставляется всегда, наравне с `.chip`. Его использует
-  раскладка `ChipGroup`, причём `.chipGroupItem` не всегда совпадает с `.chip`
-  (в `ChipSelect` / `ChipMultiselect` `.chip` лежит внутри элемента с `.chipGroupItem`).
-  Не удалять и не переименовывать.
+- **Класс `.chipGroupItem`** выставляется всегда, наравне с `.chip`. Объявлен
+  в `styles/Chip.module.less` и служит общим маркером «элемент верхнего уровня
+  в ряду чипсов»: его проставляют себе все члены семейства — `Chip`, `ChipSort`,
+  `ChipMultiselect`, `ChipSelect`, `ChipDatePicker`, `ChipSuggest`. Причём
+  `.chipGroupItem` не всегда совпадает с `.chip`: в `ChipSelect` / `ChipMultiselect`
+  `.chip` лежит внутри элемента с `.chipGroupItem`. Раскладка `ChipGroup` на этот
+  класс не опирается — в её стилях он не встречается. Не удалять и не переименовывать.
 - **`EChipType` значения** (`type_1`, `type_2`) — публичное API, не переименовывать.
 - **`EComponentSize`** — общий enum из `src/enums/EComponentSize`, локального аналога не заводить.
 - **Селектор `[aria-expanded="true"]`** в LESS даёт active-стиль. На него опираются
@@ -193,8 +196,13 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 - `ChipIcon` — тонкая обёртка: `children` уходит в `prefix`, `postfix` заполняется
   пустым `<span />` ради симметричных отступов
 - `ChipOptions` — чипс с иконкой опций и кнопкой сброса выбора (`clearSelected`)
-- `ChipClearButton`, `ChipDropdownArrow` — вспомогательные элементы для `postfix`;
-  собственного API сверх `onClick` / `size` не имеют
+- `ChipClearButton` — кнопка сброса для `postfix`; `forwardRef` на `HTMLButtonElement`,
+  props расширяют `Omit<IButtonIconProps, "children">` (то есть доступен весь API
+  `ButtonIcon`, включая `onClick` и `aria-label`) плюс собственный `size?: EComponentSize`,
+  выбирающий размер иконки-крестика
+- `ChipDropdownArrow` — стрелка дропдауна для `postfix`; объявлена как `React.FC`
+  (не `forwardRef`), собственных обработчиков не имеет. Props: **обязательный**
+  `rotated: boolean` (даёт класс `.rotated`) и `size?: EComponentSize`
 - `ChipSelect`, `ChipMultiselect`, `ChipSuggest`, `ChipDatePicker`, `ChipSort` —
   составные компоненты, использующие `Chip` как target-элемент дропдауна
 - `Badge` (`Badge.Dot`) — значок уведомлений при `showNotificationIcon`
@@ -227,3 +235,4 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 |---|---|
 | 2026-07-29 | Создан документ (TRI-26, AI-Ready Phase 1) |
 | 2026-07-29 | AI-рефакторинг (TRI-26): codestyle-чистка `Chip.tsx` (константы-маппинги в UPPER_SNAKE_CASE, эквивалентные упрощения в `clsx`, JSDoc на `children` и `handleKeyDown`), unit-тесты расширены с 5 до 22 кейсов; публичный API, DOM и визуал не изменены |
+| 2026-07-29 | Правки по ревью PR #487: уточнена атрибуция класса `.chipGroupItem` (его проставляет семейство Chip*, а не раскладка `ChipGroup`) и описание API `ChipClearButton` / `ChipDropdownArrow` |

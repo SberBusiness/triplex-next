@@ -158,7 +158,8 @@ describe("Chip", () => {
             </Chip>,
         );
 
-        const chip = screen.getByTestId("chip");
+        const chip = screen.getByRole("button");
+        expect(chip).toHaveAttribute("data-testid", "chip");
         expect(chip).toHaveAttribute("id", "chip-id");
         expect(chip).toHaveAttribute("aria-expanded", "true");
     });

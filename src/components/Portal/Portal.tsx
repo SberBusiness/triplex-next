@@ -9,10 +9,5 @@ export interface IPortalProps {
     container: Element | DocumentFragment;
 }
 
-/**
- * Портал для рендера содержимого во внешний DOM-узел (обёртка над ReactDOM.createPortal).
- *
- * Не имеет forwardRef (осознанное исключение): Portal не рендерит собственный host-элемент,
- * ref форвардить некуда.
- */
+/** Портал для рендера содержимого во внешний DOM-узел (обёртка над ReactDOM.createPortal). */
 export const Portal: React.FC<IPortalProps> = ({ children, container }) => ReactDOM.createPortal(children, container);

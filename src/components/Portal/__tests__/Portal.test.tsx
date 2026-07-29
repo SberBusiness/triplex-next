@@ -5,6 +5,7 @@ import { Portal } from "../Portal";
 
 describe("Portal", () => {
     let portalContainer: HTMLDivElement;
+    let nextContainer: HTMLDivElement | undefined;
 
     beforeEach(() => {
         portalContainer = document.createElement("div");
@@ -13,6 +14,8 @@ describe("Portal", () => {
 
     afterEach(() => {
         portalContainer.remove();
+        nextContainer?.remove();
+        nextContainer = undefined;
     });
 
     it("renders children into the given container, not into the render parent", () => {
@@ -49,7 +52,7 @@ describe("Portal", () => {
     });
 
     it("moves children when container changes on rerender", () => {
-        const nextContainer = document.createElement("div");
+        nextContainer = document.createElement("div");
         document.body.appendChild(nextContainer);
 
         const { rerender } = render(<Portal container={portalContainer}>Content</Portal>);
@@ -57,8 +60,6 @@ describe("Portal", () => {
 
         expect(portalContainer).toBeEmptyDOMElement();
         expect(nextContainer).toHaveTextContent("Content");
-
-        nextContainer.remove();
     });
 
     it("removes children from the container on unmount", () => {

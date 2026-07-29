@@ -3,18 +3,19 @@ import { clsx } from "clsx";
 import { EFontType, EFontWeightTitle, ETitleSize } from "./enums";
 import { ITypographyProps } from "./types";
 import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
+import { getTextDecorationClassName } from "./utils";
 import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/Title.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
-// Соответствие размера имени класса.
+/** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP: Record<ETitleSize, string> = {
     [ETitleSize.H1]: styles.h1,
     [ETitleSize.H2]: styles.h2,
     [ETitleSize.H3]: styles.h3,
 };
 
-// Соответствие веса шрифта имени класса.
+/** Соответствие веса шрифта имени класса. */
 const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightTitle, string> = {
     [EFontWeightTitle.MEDIUM]: styles.medium,
     [EFontWeightTitle.REGULAR]: styles.regular,
@@ -58,15 +59,11 @@ export const Title: TitleComponent = React.forwardRef(
             SIZE_TO_CLASS_NAME_MAP[size],
             FONT_WEIGHT_TO_CLASS_NAME_MAP[weight],
             FONT_TYPE_TO_CLASS_NAME_MAP[type],
-            {
-                [typographyStyles.strikethrough]: !!strikethrough && !underline,
-                [typographyStyles.underline]: !!underline && !strikethrough,
-                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-            },
+            getTextDecorationClassName(typographyStyles, underline, strikethrough),
             className,
         );
 
-        const Tag = tag || "h1";
+        const Tag: React.ElementType = tag || "h1";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

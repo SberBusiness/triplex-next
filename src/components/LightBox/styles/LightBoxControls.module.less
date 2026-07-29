@@ -1,4 +1,4 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .lightBoxControls {
     z-index: 100;
@@ -31,10 +31,7 @@
     }
 }
 
-/*
-    Breakpoint для экранов менее 1024px.
-    < 1024px
-*/
+// Breakpoint для экранов не шире 1024px (<= 1024px).
 .global-LB-less-or-equal-media-point-0 {
     .lightBoxControls {
         position: absolute;
@@ -76,13 +73,10 @@
     }
 }
 
-/*
-    Breakpoint для экранов шире 1024px.
-    > 1024px
-*/
+// Breakpoint для экранов шире 1024px (> 1024px).
 .global-LB-more-media-point-0 {
     .lightBoxControls {
-                position: static;
+        position: static;
     }
 
     .lightBoxControlsDesktop {
@@ -95,10 +89,13 @@
 
     .lightBoxClose {
         position: fixed;
-        left: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0) + var(--lightBox-screen-left) - @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight);
+        left: calc(
+            var(--lightBox-screen-width) - var(--lightBox-scroll-width, 0) + var(--lightBox-screen-left) -
+                @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight
+        );
         top: calc(40px + var(--lightBox-screen-top));
     }
-    
+
     .lightBoxPrev,
     .lightBoxNext {
         user-select: none;
@@ -106,12 +103,15 @@
         top: 50%;
         transform: translateY(-50%);
     }
-    
+
     .lightBoxPrev {
-        left:  calc(var(--lightBox-screen-left) + @lightBoxContentMarginX + @lightBoxControlsPrevButtonMarginLeft)
+        left: calc(var(--lightBox-screen-left) + @lightBoxContentMarginX + @lightBoxControlsPrevButtonMarginLeft);
     }
-    
+
     .lightBoxNext {
-        left: calc(var(--lightBox-screen-width) - var(--triplex-next-scroll-width, 0) + var(--lightBox-screen-left) - @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight);
+        left: calc(
+            var(--lightBox-screen-width) - var(--lightBox-scroll-width, 0) + var(--lightBox-screen-left) -
+                @lightBoxControlsButtonWidth - @lightBoxContentMarginX - @lightBoxControlsNextButtonMarginRight
+        );
     }
 }

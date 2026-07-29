@@ -63,6 +63,13 @@ describe("CodeText", () => {
         expect(codeText.className).toContain("custom-class");
         expect(codeText.className).toContain("typography");
         expect(codeText.className).toContain("codeText");
+        expect(codeText.className).toContain("brand");
+    });
+
+    it("applies primary type class by default", () => {
+        render(<CodeText>Default Type CodeText</CodeText>);
+
+        expect(screen.getByText("Default Type CodeText").className).toContain("primary");
     });
 
     it("passes through additional props", () => {

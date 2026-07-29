@@ -4,17 +4,18 @@ import { EFontWeightCaption, ECaptionSize, EFontType } from "./enums";
 import { ITypographyProps } from "./types";
 import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
+import { getTextDecorationClassName } from "./utils";
 import styles from "./styles/Caption.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
-// Соответствие размера имени класса.
+/** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP: Record<ECaptionSize, string> = {
     [ECaptionSize.C1]: styles.c1,
     [ECaptionSize.C2]: styles.c2,
     [ECaptionSize.D1]: styles.d1,
 };
 
-// Соответствие веса шрифта имени класса.
+/** Соответствие веса шрифта имени класса. */
 const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightCaption, string> = {
     [EFontWeightCaption.REGULAR]: styles.regular,
     [EFontWeightCaption.SEMIBOLD]: styles.semibold,
@@ -56,15 +57,11 @@ export const Caption: TitleComponent = React.forwardRef(
             SIZE_TO_CLASS_NAME_MAP[size],
             FONT_WEIGHT_TO_CLASS_NAME_MAP[weight],
             FONT_TYPE_TO_CLASS_NAME_MAP[type],
-            {
-                [typographyStyles.strikethrough]: !!strikethrough && !underline,
-                [typographyStyles.underline]: !!underline && !strikethrough,
-                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-            },
+            getTextDecorationClassName(typographyStyles, underline, strikethrough),
             className,
         );
 
-        const Tag = tag || "span";
+        const Tag: React.ElementType = tag || "span";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

@@ -7,6 +7,7 @@ import {
     TDesignTokensComponentsButton,
     TDesignTokensComponentsCalendar,
     TDesignTokensComponentsCard,
+    TDesignTokensComponentsCarousel,
     TDesignTokensComponentsCheckbox,
     TDesignTokensComponentsChip,
     TDesignTokensComponentsCollapsibleTree,
@@ -298,6 +299,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsButton
     | TDesignTokensComponentsCalendar
     | TDesignTokensComponentsCard
+    | TDesignTokensComponentsCarousel
     | TDesignTokensComponentsCheckbox
     | TDesignTokensComponentsChip
     | TDesignTokensComponentsCollapsibleTree

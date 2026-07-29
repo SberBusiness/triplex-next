@@ -1,8 +1,5 @@
 import React from "react";
-import {
-    FormFieldInput,
-    IFormFieldInputProps,
-} from "@sberbusiness/triplex-next/components/FormField/components/FormFieldInput";
+import { FormFieldInput, IFormFieldInputProps } from "../FormField/components/FormFieldInput";
 import { ITextFieldBaseProps, TextFieldBase } from "./TextFieldBase";
 
 /** Свойства компонента TextField. */

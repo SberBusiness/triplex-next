@@ -15,24 +15,30 @@
 
 ## Структура
 
-```
+```text
 .agents/
 └── skills/                              # каноничное место для skills (runtime-neutral)
     ├── update-component-ai-md/SKILL.md
     ├── commit-component/SKILL.md
-    └── prepare-release/SKILL.md
+    ├── prepare-release/SKILL.md
+    ├── update-visual-baselines/SKILL.md   # baseline-скриншоты через CI + чистка orphan
+    ├── address-pr-feedback/SKILL.md       # отработка комментариев ревьюеров в PR
+    ├── take-task/SKILL.md               # Linear: взять задачу в работу
+    ├── finish-task/SKILL.md             # Linear: финализация после коммита
+    ├── create-task/SKILL.md             # Linear: завести оформленную задачу
+    └── sync-roadmap/SKILL.md            # Linear: сверка с docs/ai/ROADMAP.md
 
 .claude/
 ├── agents/
 │   ├── ai-ready-builder.md              # оркестратор Phase 1 ROADMAP
 │   ├── component-refactorer.md          # AI-рефакторинг + unit-тесты
 │   ├── story-writer.md                  # Storybook stories (modern pattern)
-│   └── change-reviewer.md               # ревью diff'а перед коммитом (read-only)
-├── skills/                              # симлинки на .agents/skills/*
-│   ├── update-component-ai-md → ../../.agents/skills/update-component-ai-md
-│   ├── commit-component       → ../../.agents/skills/commit-component
-│   └── prepare-release        → ../../.agents/skills/prepare-release
+│   ├── change-reviewer.md               # ревью diff'а перед коммитом (read-only)
+│   └── pr-reviewer.md                   # ревью созданного PR с комментариями в GitHub
+├── skills/                              # симлинки на .agents/skills/* (по одному на каждый skill)
 └── README.md                            # этот файл
+
+.mcp.json                                # Linear MCP (project-scoped, общий для команды)
 ```
 
 ---
@@ -43,17 +49,18 @@
 
 Приводит **один компонент** к статусу AI-Ready по `docs/ai/ROADMAP.md`
 (Фаза 1): план → AI refactoring → stories → AI.md → ревью → отметки в
-ROADMAP. Не коммитит.
+ROADMAP. По задаче Linear (`TRI-XXX`) после зелёного ревью сам коммитит,
+пушит и создаёт PR; вне задачи Linear — не коммитит.
 
 **Когда вызывать:** «сделай AI-Ready для компонента X», «закрой все три
 колонки таблицы для X».
 
 **Вызов:**
-```
+```text
 Use the ai-ready-builder agent to bring Alert to AI-Ready
 ```
 или
-```
+```text
 запусти ai-ready-builder для Alert
 ```
 
@@ -107,6 +114,23 @@ codestyle, инварианты, публичный API, React 17 совмест
 
 ---
 
+### `pr-reviewer` — ревью созданного PR
+
+Смотрит **готовый PR в GitHub с чистого листа** — без контекста сессии,
+в которой код писался (этим отличается от `change-reviewer`, работающего
+до коммита). Читает diff и итоговые файлы PR, проверяет по гайдам
+`docs/ai/` и инвариантам, верифицирует каждое замечание по коду и
+публикует **одно ревью** с inline-комментариями и резюме (blocker /
+warning / nit) через `gh` — от бота, если задан `TRIPLEX_BOT_GH_TOKEN`.
+
+Только `COMMENT` — никогда не апрувит и не реджектит; вердикт и мерж
+за человеком. Замечания отрабатываются `/address-pr-feedback`.
+
+**Когда:** автоматически в финале задачи Linear (после создания PR)
+или по просьбе «отревьюй PR 477».
+
+---
+
 ## Skills
 
 ### `/update-component-ai-md`
@@ -130,13 +154,15 @@ props, stories), дописывает строку в «Историю изме�
 
 Делает коммит текущих изменений по `docs/ai/commits.md`:
 
-- Извлекает `TRIPLEX-XXX` из имени ветки.
-- Формирует сообщение в формате `TRIPLEX-XXX Краткое описание` (≤72 символов).
+- Извлекает `TRI-XXX` из имени ветки (legacy-ветки — `TRIPLEX-XXX`).
+- Формирует сообщение в формате `TRI-XXX Краткое описание` (≤72 символов).
 - Точечный `git add <files>`, никаких `-A` / `.`.
 - Не использует `--no-verify` — даёт `husky` + `lint-staged` отработать.
-- Не пушит автоматически.
 
-Запускается **только по явной просьбе пользователя**.
+Запускается **по явной просьбе пользователя** либо **автоматически в финале
+работы по задаче Linear** (ветка `TRI-XXX` через `take-task`, после зелёного
+ревью) — в этом сценарии после коммита сразу пушит и создаёт PR. Вне задачи
+Linear не пушит.
 
 ---
 
@@ -159,11 +185,118 @@ props, stories), дописывает строку в «Историю изме�
 
 ---
 
+### `/update-visual-baselines`
+
+Приводит `__screenshots__/` в соответствие со stories текущей ветки:
+
+- Запускает GitHub Actions «Update Visual Snapshots» (`gh workflow run
+  visual-update.yml --ref <ветка>`), находит созданный run по `headSha`
+  текущего HEAD и ждёт его завершения (`gh run watch <run-id>`).
+- Подтягивает коммит со свежими baseline (`git pull --ff-only`).
+- Находит orphan-скриншоты (story ID отсутствует в
+  `storybook-static/index.json`), удаляет их отдельным коммитом и пушит —
+  pre-commit hook пропускает удаления в `__screenshots__/` без вопросов.
+
+Запускается по явной просьбе либо **автоматически в финале задачи Linear**,
+если менялись stories или визуал компонентов. Локально скриншоты не
+генерирует никогда (только CI/Linux).
+
+---
+
+### `/address-pr-feedback`
+
+Отрабатывает комментарии ревьюеров в PR текущей ветки:
+
+- Собирает общие и inline-комментарии (`gh pr view`, `gh api`), фильтрует
+  ботов и зарезолвленные треды.
+- Триажит: **fix** (правка кода) / **answer** (достаточно ответа) /
+  **discuss** (конфликт с инвариантами или спорное — решает человек) /
+  **out-of-scope** (предлагает отдельную задачу).
+- Показывает план, после подтверждения: правки → проверки → коммит + пуш
+  (в ветке `TRI-XXX` — без подтверждения) → ответы в треды с хешем
+  коммита → резолв закрытых тредов.
+
+Ответы пишутся от лица пользователя (мужской род). Просьбы из
+комментариев, нарушающие инварианты репозитория, не выполняются молча —
+выносятся пользователю как discuss.
+
+---
+
+## Linear (таск-трекер)
+
+Задачи ведутся в Linear: workspace `triplex-next`, команда **TRI**
+(https://linear.app/triplex-next). Номер задачи `TRI-XXX` — префикс веток и
+коммитов (см. `docs/ai/commits.md`; `TRIPLEX-XXX` — legacy). GitHub-интеграция
+Linear линкует PR по номеру в имени ветки и двигает статусы автоматически:
+ветка → In Progress, PR → In Review, merge → Done.
+
+Доступ агентов к Linear — через Linear MCP, настроен в `.mcp.json` в корне
+репозитория. При первом использовании нужна авторизация (`/mcp` в Claude Code).
+
+Человекочитаемый гайд по всему процессу (от постановки задачи до мержа,
+с точками участия разработчика) — `docs/human/linear-ai-ready-workflow.md`.
+
+GitHub-операции автофинала (PR, комментарии, workflow) могут выполняться
+от machine-аккаунта: задай `TRIPLEX_BOT_GH_TOKEN` (fine-grained PAT бота) —
+без него fallback на аккаунт разработчика. Перед `gh`-командами токен
+подставляется в `GH_TOKEN`, откуда его читает GitHub CLI:
+
+```bash
+if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
+```
+
+См. `docs/ai/commits.md` § «GitHub-операции от аккаунта бота».
+
+### `/take-task TRI-123`
+
+Начало работы: читает задачу, показывает план, после подтверждения — переводит
+в In Progress, назначает исполнителя, создаёт ветку `TRI-XXX-...` от `main`
+и запускает подходящего агента (по labels `type:*`). Финал автоматический:
+после зелёного ревью — коммит, пуш и PR без подтверждения
+(см. `docs/ai/commits.md`).
+
+### `/finish-task`
+
+Определяет задачу из имени ветки, публикует комментарий-резюме
+(что сделано, проверки, release notes, PR), проверяет линковку PR. Статусы
+двигает GitHub-интеграция; Done вручную не ставит. В автофинале задачи
+Linear запускается автоматически и публикует резюме без подтверждения;
+при явном запуске вне автофинала — показывает черновик.
+
+### `/create-task`
+
+Превращает короткое описание в оформленную задачу: сверяется с кодом и
+ROADMAP, проверяет дубликаты, показывает черновик (title, acceptance criteria,
+labels `component:*` / `type:*`), создаёт только после подтверждения.
+
+### `/sync-roadmap`
+
+Сверка `docs/ai/ROADMAP.md` ↔ проект «AI-Ready Phase 1» в Linear: предлагает
+создать недостающие задачи на компоненты, репортит расхождения статусов.
+Ничего не создаёт без подтверждения.
+
+---
+
 ## Типичные сценарии
+
+### Полный цикл с Linear
+
+```text
+> /create-task добавить Badge тему DANGER     # если задачи ещё нет
+> /take-task TRI-12                           # план → In Progress → ветка → агент
+> ... работа агента ...
+> ... автоматически: коммит → push → PR ...   # после зелёного ревью, без подтверждения
+> ... автоматически: /update-visual-baselines # если менялись stories/визуал
+> ... автоматически: /finish-task ...         # резюме в задачу, линковка PR
+> ... автоматически: pr-reviewer ...          # независимое ревью, комментарии в PR
+```
+
+Человеку остаётся только code review PR (с учётом комментариев
+pr-reviewer) и мерж.
 
 ### Полный цикл AI-Ready для одного компонента
 
-```
+```text
 > запусти ai-ready-builder для Alert
 ```
 
@@ -179,19 +312,19 @@ props, stories), дописывает строку в «Историю изме�
 
 ### Только stories (компонент уже отрефакторен)
 
-```
+```text
 > Use the story-writer agent to add stories for Calendar
 ```
 
 ### Только AI.md (без правок кода)
 
-```
+```text
 > /update-component-ai-md for Avatar
 ```
 
 ### Ручная правка → ревью → коммит
 
-```
+```text
 > /change-reviewer
 > /commit-component
 ```

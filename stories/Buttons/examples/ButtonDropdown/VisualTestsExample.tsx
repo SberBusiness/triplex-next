@@ -46,37 +46,33 @@ export const VisualTestsExample = () => {
 
     return (
         <div style={{ display: "flex", gap: 16 }}>
-            {/* opened пробрасывается в ButtonDropdownExtended через rest (см. ButtonDropdown.tsx) */}
             <ButtonDropdown
-                {...({
-                    opened: true,
-                    theme: EButtonTheme.GENERAL,
-                    size: EComponentSize.SM,
-                    options,
-                    selected: selectedSM,
-                    children: "Button text",
-                } as React.ComponentProps<typeof ButtonDropdown>)}
-            />
+                opened
+                theme={EButtonTheme.GENERAL}
+                size={EComponentSize.SM}
+                options={options}
+                selected={selectedSM}
+            >
+                Button text
+            </ButtonDropdown>
             <ButtonDropdown
-                {...({
-                    opened: openedMdLg,
-                    theme: EButtonTheme.GENERAL,
-                    size: EComponentSize.MD,
-                    options,
-                    selected: selectedMD,
-                    children: "Button text",
-                } as React.ComponentProps<typeof ButtonDropdown>)}
-            />
+                opened={openedMdLg}
+                theme={EButtonTheme.GENERAL}
+                size={EComponentSize.MD}
+                options={options}
+                selected={selectedMD}
+            >
+                Button text
+            </ButtonDropdown>
             <ButtonDropdown
-                {...({
-                    opened: openedMdLg,
-                    theme: EButtonTheme.GENERAL,
-                    size: EComponentSize.LG,
-                    options,
-                    selected: selectedLG,
-                    children: "Button text",
-                } as React.ComponentProps<typeof ButtonDropdown>)}
-            />
+                opened={openedMdLg}
+                theme={EButtonTheme.GENERAL}
+                size={EComponentSize.LG}
+                options={options}
+                selected={selectedLG}
+            >
+                Button text
+            </ButtonDropdown>
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import {
     Title as DocsTitle,
     Description,
@@ -9,11 +9,26 @@ import {
     ArgTypes,
     Heading,
 } from "@storybook/addon-docs/blocks";
-import { Title, ETitleSize, EFontWeightTitle, EFontType } from "@sberbusiness/triplex-next";
-import "./Typography.less";
+import { Title, ETitleSize, EFontType, EFontWeightTitle } from "@sberbusiness/triplex-next";
+import {
+    Playground as PlaygroundRender,
+    PlaygroundArgs,
+    Default as DefaultRender,
+    DefaultSource,
+    Sizes as SizesRender,
+    SizesSource,
+    Weights as WeightsRender,
+    WeightsSource,
+    Types as TypesRender,
+    TypesSource,
+    Decorations as DecorationsRender,
+    DecorationsSource,
+} from "./examples/Title";
 
-export default {
+const meta = {
     title: "Components/Typography/Title",
+    component: Title,
+    tags: ["autodocs"],
     parameters: {
         docs: {
             page: () => (
@@ -30,16 +45,26 @@ export default {
             ),
         },
     },
-    tags: ["autodocs"],
+} satisfies Meta<typeof Title>;
+
+export default meta;
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    size: ETitleSize.H1,
+    weight: EFontWeightTitle.SEMIBOLD,
+    type: EFontType.PRIMARY,
+    tag: "h1",
+    underline: false,
+    strikethrough: false,
 };
 
-export const Playground: StoryObj<typeof Title> = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    render: (args) => <Title {...args}>Интерактивный заголовок с controls</Title>,
+    args: PLAYGROUND_ARGS,
     argTypes: {
         size: {
             control: { type: "select" },
-            options: [ETitleSize.H1, ETitleSize.H2, ETitleSize.H3],
+            options: Object.values(ETitleSize),
             description: "Размер заголовка",
             table: {
                 type: { summary: "ETitleSize" },
@@ -48,12 +73,7 @@ export const Playground: StoryObj<typeof Title> = {
         },
         weight: {
             control: { type: "select" },
-            options: [
-                EFontWeightTitle.REGULAR,
-                EFontWeightTitle.MEDIUM,
-                EFontWeightTitle.SEMIBOLD,
-                EFontWeightTitle.BOLD,
-            ],
+            options: Object.values(EFontWeightTitle),
             description: "Толщина шрифта",
             table: {
                 type: { summary: "EFontWeightTitle" },
@@ -94,166 +114,81 @@ export const Playground: StoryObj<typeof Title> = {
                 defaultValue: { summary: "false" },
             },
         },
-        className: {
-            control: { type: "text" },
-            description: "Дополнительные CSS классы",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-    },
-    args: {
-        size: ETitleSize.H1,
-        weight: EFontWeightTitle.SEMIBOLD,
-        type: EFontType.PRIMARY,
-        tag: "h1",
-        underline: false,
-        strikethrough: false,
-        className: "",
     },
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-        controls: {
-            include: ["size", "weight", "type", "tag", "underline", "strikethrough"],
+    },
+    render: PlaygroundRender,
+};
+
+export const Default: StoryObj<typeof Title> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
         },
+        // Визуально дублирует заголовок H1 из стори Sizes — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };
 
 export const Sizes: StoryObj<typeof Title> = {
-    render: () => (
-        <div className="typography-example">
-            <Title size={ETitleSize.H1}>Заголовок H1</Title>
-            <Title size={ETitleSize.H2}>Заголовок H2</Title>
-            <Title size={ETitleSize.H3}>Заголовок H3</Title>
-        </div>
-    ),
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: SizesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Weights: StoryObj<typeof Title> = {
-    render: () => (
-        <div className="typography-example">
-            <Title size={ETitleSize.H2} weight={EFontWeightTitle.REGULAR}>
-                Regular - Обычный вес
-            </Title>
-            <Title size={ETitleSize.H2} weight={EFontWeightTitle.MEDIUM}>
-                Medium - Средний вес
-            </Title>
-            <Title size={ETitleSize.H2} weight={EFontWeightTitle.SEMIBOLD}>
-                Semibold - Полужирный
-            </Title>
-            <Title size={ETitleSize.H2} weight={EFontWeightTitle.BOLD}>
-                Bold - Жирный
-            </Title>
-        </div>
-    ),
+    render: WeightsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: WeightsSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Types: StoryObj<typeof Title> = {
-    render: () => (
-        <div className="typography-examples-wrapper">
-            <div className="typography-example">
-                <Title size={ETitleSize.H2} type={EFontType.PRIMARY}>
-                    Primary
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.COMPLEMENTARY}>
-                    Complementary
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.SECONDARY}>
-                    Secondary
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.TERTIARY}>
-                    Tertiary
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.BRAND}>
-                    Brand
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.INFO}>
-                    Info
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.SUCCESS}>
-                    Success
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.WARNING}>
-                    Warning
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.ERROR}>
-                    Error
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.DISABLED}>
-                    Disabled
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.SYSTEM}>
-                    System
-                </Title>
-            </div>
-            <div className="typography-invert-example">
-                <Title size={ETitleSize.H2} type={EFontType.PRIMARY_INVERT}>
-                    Primary Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.COMPLEMENTARY_INVERT}>
-                    Complementary Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.SECONDARY_INVERT}>
-                    Secondary Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.TERTIARY_INVERT}>
-                    Tertiary Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.BRAND_INVERT}>
-                    Brand Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.INFO_INVERT}>
-                    Info Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.SUCCESS_INVERT}>
-                    Success Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.WARNING_INVERT}>
-                    Warning Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.ERROR_INVERT}>
-                    Error Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.DISABLED_INVERT}>
-                    Disabled Invert
-                </Title>
-                <Title size={ETitleSize.H2} type={EFontType.SYSTEM_INVERT}>
-                    System Invert
-                </Title>
-            </div>
-        </div>
-    ),
+    render: TypesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Decorations: StoryObj<typeof Title> = {
-    render: () => (
-        <div className="typography-example">
-            <Title size={ETitleSize.H2}>Заголовок без декораций</Title>
-            <Title size={ETitleSize.H2} underline>
-                Заголовок с подчеркиванием
-            </Title>
-            <Title size={ETitleSize.H2} strikethrough>
-                Заголовок с зачеркиванием
-            </Title>
-            <Title size={ETitleSize.H2} underline strikethrough>
-                Заголовок с подчеркиванием и зачеркиванием
-            </Title>
-        </div>
-    ),
+    render: DecorationsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DecorationsSource,
+                language: "tsx",
+            },
+        },
     },
 };

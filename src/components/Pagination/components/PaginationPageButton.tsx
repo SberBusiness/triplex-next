@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { Text, ETextSize } from "../../Typography";
-import { ButtonBase } from "../../Button";
+import { ButtonBase } from "../../Button/ButtonBase";
 import styles from "../styles/PaginationPageButton.module.less";
 
 /** Свойства компонента PaginationPageButton. */

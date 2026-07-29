@@ -1,13 +1,14 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { clsx } from "clsx";
 import { EFontType, EFontWeightText, ELineType, ETextSize } from "./enums";
 import { ITypographyProps } from "./types";
 import { FONT_TYPE_TO_CLASS_NAME_MAP } from "./constants";
+import { getTextDecorationClassName } from "./utils";
 import { PolymorphicComponentPropsWithRef } from "../../types/CoreTypes";
 import styles from "./styles/Text.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
-// Соответствие размера имени класса.
+/** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP: Record<ETextSize, string> = {
     [ETextSize.B1]: styles.b1,
     [ETextSize.B2]: styles.b2,
@@ -15,13 +16,13 @@ const SIZE_TO_CLASS_NAME_MAP: Record<ETextSize, string> = {
     [ETextSize.B4]: styles.b4,
 };
 
-// Соответствие веса шрифта имени класса.
+/** Соответствие веса шрифта имени класса. */
 const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightText, string> = {
     [EFontWeightText.REGULAR]: styles.regular,
     [EFontWeightText.SEMIBOLD]: styles.semibold,
 };
 
-// Соответствие типа высоты строки имени класса.
+/** Соответствие типа высоты строки имени класса. */
 const LINE_TYPE_TO_CLASS_NAME_MAP: Record<ELineType, string> = {
     [ELineType.NORMAL]: "",
     [ELineType.COMPACT]: styles.compact,
@@ -32,6 +33,7 @@ export interface ITextProps extends ITypographyProps {
     size: ETextSize;
     /** Высота блока строки. */
     line?: ELineType;
+    /** Толщина шрифта. */
     weight?: EFontWeightText;
 }
 
@@ -43,7 +45,7 @@ type TextComponent = (<T extends React.ElementType = "span">(props: TTextProps<T
 };
 
 /** Текст (типографика). */
-export const Text: TextComponent = React.forwardRef(
+export const Text: TextComponent = forwardRef(
     <T extends React.ElementType = "span">(
         {
             children,
@@ -66,15 +68,11 @@ export const Text: TextComponent = React.forwardRef(
             FONT_WEIGHT_TO_CLASS_NAME_MAP[weight],
             LINE_TYPE_TO_CLASS_NAME_MAP[line],
             FONT_TYPE_TO_CLASS_NAME_MAP[type],
-            {
-                [typographyStyles.strikethrough]: !!strikethrough && !underline,
-                [typographyStyles.underline]: !!underline && !strikethrough,
-                [typographyStyles.underlineStrikethrough]: !!strikethrough && !!underline,
-            },
+            getTextDecorationClassName(typographyStyles, underline, strikethrough),
             className,
         );
 
-        const Tag = tag || "span";
+        const Tag: React.ElementType = tag || "span";
 
         return (
             <Tag ref={ref} className={classes} {...props}>

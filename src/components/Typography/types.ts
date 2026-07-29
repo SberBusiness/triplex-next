@@ -2,7 +2,9 @@ import { EFontType } from "./enums";
 
 /** Свойства компонента типографики. */
 export interface ITypographyProps {
-    /** Тип (цвет шрифта) */
+    /** Название тэга. */
+    tag?: string;
+    /** Тип (цвет шрифта). */
     type?: EFontType;
     /** Наличие подчёркивания. */
     underline?: boolean;

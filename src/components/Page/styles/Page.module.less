@@ -1,4 +1,4 @@
-@import '../../../styles/style';
+@import "src/styles/style";
 
 @page-island-border-radius: 24px;
 
@@ -21,34 +21,35 @@
     }
 }
 
-/*
-    Breakpoint для экранов шире 1024px.
-    > 1024px
-*/
+// Breakpoint для экранов шире 1024px (> 1024px).
 .global-LB-more-media-point-0 {
     .headerPageTypeFirst.sticky {
-            z-index: @page-header-sticky-z-index;
-            position: sticky;
-            top: 0;
-            border-top-left-radius: var(--r-top, @page-island-border-radius) !important;
-            border-top-right-radius: var(--r-top, @page-island-border-radius) !important;
-            transition: border-radius 0.2s ease, box-shadow 0.2s ease;
+        z-index: @page-header-sticky-z-index;
+        position: sticky;
+        top: 0;
+        border-top-left-radius: var(--r-top, @page-island-border-radius);
+        border-top-right-radius: var(--r-top, @page-island-border-radius);
+        transition:
+            border-radius 0.2s ease,
+            box-shadow 0.2s ease;
 
-            &[data-stuck="true"] {
-                box-shadow: var(--triplex-next-HeaderPage-StickyShadow) !important;
-            }
+        &[data-stuck="true"] {
+            box-shadow: var(--triplex-next-HeaderPage-StickyShadow);
+        }
     }
 
     .footerPageTypeFirst.sticky {
         z-index: @page-header-sticky-z-index;
         position: sticky;
         bottom: 0;
-        transition: border-radius 0.2s ease, box-shadow 0.2s ease;
-        border-bottom-left-radius: var(--r-bottom, @page-island-border-radius) !important;
-        border-bottom-right-radius: var(--r-bottom, @page-island-border-radius) !important;
-    
+        transition:
+            border-radius 0.2s ease,
+            box-shadow 0.2s ease;
+        border-bottom-left-radius: var(--r-bottom, @page-island-border-radius);
+        border-bottom-right-radius: var(--r-bottom, @page-island-border-radius);
+
         &[data-stuck="true"] {
-            box-shadow: var(--triplex-next-FooterPage-StickyShadow) !important;
+            box-shadow: var(--triplex-next-FooterPage-StickyShadow);
         }
     }
 }

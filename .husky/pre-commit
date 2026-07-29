@@ -1,7 +1,8 @@
 npx lint-staged
 
-# Проверка коммита baseline-скриншотов — допускаются только из Docker
-if git diff --cached --name-only | grep -q '^__screenshots__/'; then
+# Проверка коммита baseline-скриншотов — добавление/изменение допускается только из Docker/CI.
+# Удаления (--diff-filter=d исключает deleted) пропускаются: чистка orphan-скриншотов безопасна.
+if git diff --cached --name-only --diff-filter=d | grep -q '^__screenshots__/'; then
   echo "⚠️  Вы коммитите скриншоты из __screenshots__/."
   echo "   Скриншоты должны быть сделаны через Docker (npm run test-visual:docker:update)."
   printf "   Скриншоты сделаны через Docker? (y/n) "

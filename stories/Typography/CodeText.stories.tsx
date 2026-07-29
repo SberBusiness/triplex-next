@@ -1,11 +1,22 @@
 import React from "react";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { CodeText, EFontType } from "@sberbusiness/triplex-next";
-import "./Typography.less";
+import {
+    Playground as PlaygroundRender,
+    PlaygroundArgs,
+    Default as DefaultRender,
+    DefaultSource,
+    Types as TypesRender,
+    TypesSource,
+    Decorations as DecorationsRender,
+    DecorationsSource,
+} from "./examples/CodeText";
 
-export default {
+const meta = {
     title: "Components/Typography/CodeText",
+    component: CodeText,
+    tags: ["autodocs"],
     parameters: {
         docs: {
             page: () => (
@@ -22,16 +33,20 @@ export default {
             ),
         },
     },
-    tags: ["autodocs"],
+} satisfies Meta<typeof CodeText>;
+
+export default meta;
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    type: EFontType.PRIMARY,
+    tag: "span",
+    underline: false,
+    strikethrough: false,
 };
 
-export const Playground: StoryObj<typeof CodeText> = {
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    render: (args) => (
-        <div className="typography-example">
-            <CodeText {...args}>const greeting = &quot;Hello, World!&quot;;</CodeText>
-        </div>
-    ),
+    args: PLAYGROUND_ARGS,
     argTypes: {
         type: {
             control: { type: "select" },
@@ -67,81 +82,55 @@ export const Playground: StoryObj<typeof CodeText> = {
                 defaultValue: { summary: "false" },
             },
         },
-        className: {
-            control: { type: "text" },
-            description: "Дополнительные CSS классы",
-            table: {
-                type: { summary: "string" },
-            },
-        },
-    },
-    args: {
-        type: EFontType.PRIMARY,
-        tag: "span",
-        underline: false,
-        strikethrough: false,
-        className: "",
     },
     parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-        controls: {
-            include: ["type", "tag", "underline", "strikethrough"],
+    },
+    render: PlaygroundRender,
+};
+
+export const Default: StoryObj<typeof CodeText> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
         },
+        // Визуально дублирует первую строку стори Decorations — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };
 
 export const Types: StoryObj<typeof CodeText> = {
-    render: () => (
-        <div className="typography-examples-wrapper">
-            <div className="typography-example">
-                <CodeText type={EFontType.PRIMARY}>Primary</CodeText>
-                <CodeText type={EFontType.COMPLEMENTARY}>Complementary</CodeText>
-                <CodeText type={EFontType.SECONDARY}>Secondary</CodeText>
-                <CodeText type={EFontType.TERTIARY}>Tertiary</CodeText>
-                <CodeText type={EFontType.BRAND}>Brand</CodeText>
-                <CodeText type={EFontType.INFO}>Info</CodeText>
-                <CodeText type={EFontType.SUCCESS}>Success</CodeText>
-                <CodeText type={EFontType.WARNING}>Warning</CodeText>
-                <CodeText type={EFontType.ERROR}>Error</CodeText>
-                <CodeText type={EFontType.DISABLED}>Disabled</CodeText>
-                <CodeText type={EFontType.SYSTEM}>System</CodeText>
-            </div>
-            <div className="typography-invert-example">
-                <CodeText type={EFontType.PRIMARY_INVERT}>Primary Invert</CodeText>
-                <CodeText type={EFontType.COMPLEMENTARY_INVERT}>Complementary Invert</CodeText>
-                <CodeText type={EFontType.SECONDARY_INVERT}>Secondary Invert</CodeText>
-                <CodeText type={EFontType.TERTIARY_INVERT}>Tertiary Invert</CodeText>
-                <CodeText type={EFontType.BRAND_INVERT}>Brand Invert</CodeText>
-                <CodeText type={EFontType.INFO_INVERT}>Info Invert</CodeText>
-                <CodeText type={EFontType.SUCCESS_INVERT}>Success Invert</CodeText>
-                <CodeText type={EFontType.WARNING_INVERT}>Warning Invert</CodeText>
-                <CodeText type={EFontType.ERROR_INVERT}>Error Invert</CodeText>
-                <CodeText type={EFontType.DISABLED_INVERT}>Disabled Invert</CodeText>
-                <CodeText type={EFontType.SYSTEM_INVERT}>System Invert</CodeText>
-            </div>
-        </div>
-    ),
+    render: TypesRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
 export const Decorations: StoryObj<typeof CodeText> = {
-    render: () => (
-        <div className="typography-example">
-            <CodeText>const x = 42;</CodeText>
-            <CodeText underline>const x = 42; // с подчеркиванием</CodeText>
-            <CodeText strikethrough>const x = 42; // с зачеркиванием</CodeText>
-            <CodeText underline strikethrough>
-                const x = 42; // с подчеркиванием и зачеркиванием
-            </CodeText>
-        </div>
-    ),
+    render: DecorationsRender,
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DecorationsSource,
+                language: "tsx",
+            },
+        },
     },
 };

@@ -11,6 +11,7 @@ import {
     Button_Tokens,
     Calendar_Tokens,
     Card_Tokens,
+    Carousel_Tokens,
     Checkbox_Tokens,
     Chip_Tokens,
     CollapsibleTree_Tokens,
@@ -65,6 +66,7 @@ import {
     TDesignTokensComponentsButtonValue,
     TDesignTokensComponentsCalendarValue,
     TDesignTokensComponentsCardValue,
+    TDesignTokensComponentsCarouselValue,
     TDesignTokensComponentsCheckboxValue,
     TDesignTokensComponentsChipValue,
     TDesignTokensComponentsCollapsibleTreeValue,
@@ -129,6 +131,7 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Button: GetTokensValueByTheme<TDesignTokensComponentsButtonValue>(ETriplexNextTheme.DARK, Button_Tokens),
     Calendar: GetTokensValueByTheme<TDesignTokensComponentsCalendarValue>(ETriplexNextTheme.DARK, Calendar_Tokens),
     Card: GetTokensValueByTheme<TDesignTokensComponentsCardValue>(ETriplexNextTheme.DARK, Card_Tokens),
+    Carousel: GetTokensValueByTheme<TDesignTokensComponentsCarouselValue>(ETriplexNextTheme.DARK, Carousel_Tokens),
     Checkbox: GetTokensValueByTheme<TDesignTokensComponentsCheckboxValue>(ETriplexNextTheme.DARK, Checkbox_Tokens),
     Chip: GetTokensValueByTheme<TDesignTokensComponentsChipValue>(ETriplexNextTheme.DARK, Chip_Tokens),
     CollapsibleTree: GetTokensValueByTheme<TDesignTokensComponentsCollapsibleTreeValue>(

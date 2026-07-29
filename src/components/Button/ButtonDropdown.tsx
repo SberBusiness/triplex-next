@@ -61,23 +61,51 @@ export interface IButtonDropdownProps extends React.HTMLAttributes<HTMLDivElemen
     selected?: IButtonDropdownOption;
     /** Отключенное состояние кнопки. */
     disabled?: boolean;
+    /** Управляемое состояние открытости dropdown (controlled-режим). Задаётся в паре с setOpened; без setOpened состояние зафиксировано (например, для visual-тестов). */
+    opened?: boolean;
+    /** Обработчик изменения состояния открытости dropdown (пара к opened). */
+    setOpened?: (opened: boolean) => void;
 }
 
+/** Темы триггера, отображаемого как обычная кнопка (без dots-вариантов). */
+export type TButtonDropdownButtonTheme =
+    EButtonTheme.GENERAL | EButtonTheme.SECONDARY | EButtonTheme.SECONDARY_LIGHT | EButtonTheme.DANGER;
+
 /** Свойства основной/вспомогательной кнопки с выпадающим списком действий. */
-interface IButtonDropdownBaseProps extends IButtonDropdownProps {
+export interface IButtonDropdownBaseProps extends IButtonDropdownProps {
     /** Тема кнопки. */
-    theme: EButtonTheme.GENERAL | EButtonTheme.SECONDARY | EButtonTheme.SECONDARY_LIGHT | EButtonTheme.DANGER;
+    theme: TButtonDropdownButtonTheme;
     /** Блочное состояние кнопки. */
     block?: boolean;
 }
 
 /** Свойства контекстной кнопки с выпадающим списком действий. */
-interface IButtonDotsProps extends IButtonDropdownProps {
+export interface IButtonDotsProps extends IButtonDropdownProps {
     /** Тема кнопки. */
     theme: EButtonDotsTheme;
     /** Блочное состояние кнопки. */
     block?: never;
 }
+
+/** Тема триггера: обычная кнопка либо кнопка-dots. */
+export type TButtonDropdownTheme = TButtonDropdownButtonTheme | EButtonDotsTheme;
+
+/** Триггер отображается как кнопка-dots (иконка вместо текста и каретки). */
+const isDotsTheme = (theme: TButtonDropdownTheme): theme is EButtonDotsTheme =>
+    theme === EButtonDotsTheme.DOTS_SECONDARY || theme === EButtonDotsTheme.DOTS_SECONDARY_LIGHT;
+
+const DOTS_THEME_TO_BUTTON_THEME_MAP: Record<EButtonDotsTheme, TButtonDropdownButtonTheme> = {
+    [EButtonDotsTheme.DOTS_SECONDARY]: EButtonTheme.SECONDARY,
+    [EButtonDotsTheme.DOTS_SECONDARY_LIGHT]: EButtonTheme.SECONDARY_LIGHT,
+};
+
+/** Индекс палитры каретки: на цветной заливке — светлая иконка (7), на светлом фоне — тёмная (0). */
+const THEME_TO_CARET_PALETTE_INDEX_MAP: Record<TButtonDropdownButtonTheme, 0 | 7> = {
+    [EButtonTheme.GENERAL]: 7,
+    [EButtonTheme.DANGER]: 7,
+    [EButtonTheme.SECONDARY]: 0,
+    [EButtonTheme.SECONDARY_LIGHT]: 0,
+};
 
 const SIZE_TO_DOTS_ICON_MAP: Record<EComponentSize, React.ReactElement> = {
     [EComponentSize.SM]: <DotshorizontalStrokeSrvIcon20 paletteIndex={0} />,
@@ -97,7 +125,10 @@ const SIZE_TO_CARET_ICON_MAP: Record<EComponentSize, (paletteIndex: 0 | 7) => Re
     ),
 };
 
-/** Кнопка с выпадающим списком действий. */
+/**
+ * Кнопка с выпадающим списком действий.
+ * Триггер отображается либо как обычная кнопка с текстом и кареткой, либо как кнопка-dots (тема EButtonDotsTheme).
+ */
 export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdownBaseProps | IButtonDotsProps>(
     (props, ref) => {
         const {
@@ -118,61 +149,18 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         const dropdownRef = useRef<HTMLDivElement>(null);
         const classNames = clsx(styles.buttonDropdown, { [styles.block]: !!block }, className);
         const [activeDescendant, setActiveDescendant] = useState<string>();
-        const instanceId = useRef(uniqueId());
+        const [instanceId] = useState(() => uniqueId());
 
-        const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = clsx(styles.buttonDropdownTarget, {
-                [styles.block]: !!block,
-                [styles.active]: opened,
-            });
+        const isDots = isDotsTheme(theme);
+        const buttonTheme = isDots ? DOTS_THEME_TO_BUTTON_THEME_MAP[theme] : theme;
 
-            return (
-                <Button
-                    className={classNames}
-                    theme={theme as EButtonTheme}
-                    size={size}
-                    onKeyDown={handleKeyDown({ opened, setOpened })}
-                    onClick={handleClick({ opened, setOpened })}
-                    disabled={disabled}
-                    aria-haspopup="menu"
-                    aria-expanded={opened}
-                    aria-controls={instanceId.current}
-                    aria-activedescendant={activeDescendant}
-                    {...buttonAttributes}
-                    ref={setRef}
-                >
-                    {children}
-                    {renderCaret()}
-                </Button>
-            );
-        };
-
-        const renderButtonDots = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
-            const classNames = clsx(styles.buttonDropdownTarget, styles.dots, {
-                [styles.block]: !!block,
-            });
-
-            return (
-                <Button
-                    className={classNames}
-                    theme={
-                        theme === EButtonDotsTheme.DOTS_SECONDARY
-                            ? EButtonTheme.SECONDARY
-                            : EButtonTheme.SECONDARY_LIGHT
-                    }
-                    size={size}
-                    onKeyDown={handleKeyDown({ opened, setOpened })}
-                    onClick={handleClick({ opened, setOpened })}
-                    disabled={disabled}
-                    aria-haspopup="menu"
-                    aria-expanded={opened}
-                    aria-controls={instanceId.current}
-                    aria-activedescendant={activeDescendant}
-                    {...buttonAttributes}
-                    ref={setRef}
-                    icon={SIZE_TO_DOTS_ICON_MAP[size]}
-                />
-            );
+        const setRef = (instance: HTMLButtonElement | null) => {
+            buttonRef.current = instance;
+            if (typeof ref === "function") {
+                ref(instance);
+            } else if (ref) {
+                ref.current = instance;
+            }
         };
 
         const handleClick =
@@ -183,32 +171,58 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         const handleKeyDown =
             ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) =>
             (event: React.KeyboardEvent<HTMLButtonElement>) => {
-                const { key } = event;
+                // Сравнивается event.code (как в ButtonDropdownExtended): event.key пробела — " ", он не входит в EVENT_KEYS.SPACE.
+                const key: string | number = event.code || event.keyCode;
 
                 if (isKey(key, "SPACE") || isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN")) {
                     event.preventDefault();
                 }
-                if (!opened && (isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN"))) {
+                if (isKey(key, "SPACE")) {
+                    // preventDefault отменяет нативную click-активацию кнопки по пробелу — переключение выполняется явно.
+                    setOpened(!opened);
+                } else if (!opened && (isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN"))) {
                     setOpened(true);
                 }
             };
 
-        const renderCaret = () => {
-            switch (theme) {
-                case EButtonTheme.GENERAL:
-                case EButtonTheme.DANGER:
-                    return SIZE_TO_CARET_ICON_MAP[size](7);
-                case EButtonTheme.SECONDARY:
-                case EButtonTheme.SECONDARY_LIGHT:
-                    return SIZE_TO_CARET_ICON_MAP[size](0);
-                default:
-                    return null;
-            }
+        const renderCaret = () => SIZE_TO_CARET_ICON_MAP[size](THEME_TO_CARET_PALETTE_INDEX_MAP[buttonTheme]);
+
+        const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
+            const classNames = clsx(styles.buttonDropdownTarget, {
+                [styles.dots]: isDots,
+                [styles.block]: !!block,
+                [styles.active]: opened && !isDots,
+            });
+
+            return (
+                <Button
+                    className={classNames}
+                    theme={buttonTheme}
+                    size={size}
+                    onKeyDown={handleKeyDown({ opened, setOpened })}
+                    onClick={handleClick({ opened, setOpened })}
+                    disabled={disabled}
+                    aria-haspopup="menu"
+                    aria-expanded={opened}
+                    aria-controls={instanceId}
+                    aria-activedescendant={activeDescendant}
+                    icon={isDots ? SIZE_TO_DOTS_ICON_MAP[size] : undefined}
+                    {...buttonAttributes}
+                    ref={setRef}
+                >
+                    {isDots ? undefined : (
+                        <>
+                            {children}
+                            {renderCaret()}
+                        </>
+                    )}
+                </Button>
+            );
         };
 
         const renderDropdown = ({ opened, setOpened, className }: IButtonDropdownExtendedDropdownProvideProps) => {
             const { className: dropdownClassName, ...restDropdownAttributes } = dropdownAttributes;
-            const classNames = clsx(styles.buttonDropdownMenu, className, dropdownClassName);
+            const classNames = clsx(className, dropdownClassName);
 
             return (
                 <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
@@ -234,17 +248,17 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                                     </DropdownMobileHeader>
                                     <DropdownMobileBody>
                                         <DropdownMobileList>
-                                            {options.map((option) => (
+                                            {options.map(({ label, ...restOption }) => (
                                                 <DropdownMobileListItem
-                                                    {...option}
-                                                    key={option.id}
-                                                    selected={option.id === selected?.id}
+                                                    {...restOption}
+                                                    key={restOption.id}
+                                                    selected={restOption.id === selected?.id}
                                                     onSelect={() => {
-                                                        option.onSelect?.();
+                                                        restOption.onSelect?.();
                                                         setOpened(false);
                                                     }}
                                                 >
-                                                    {option.label}
+                                                    {label}
                                                 </DropdownMobileListItem>
                                             ))}
                                         </DropdownMobileList>
@@ -253,19 +267,19 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                             ),
                         }}
                     >
-                        <DropdownList dropdownOpened={opened} id={instanceId.current} size={size}>
-                            {options.map((option) => (
+                        <DropdownList dropdownOpened={opened} id={instanceId} size={size}>
+                            {options.map(({ label, ...restOption }) => (
                                 <DropdownList.Item
-                                    {...option}
+                                    {...restOption}
                                     className={styles.buttonDropdownMenuItem}
-                                    key={option.id}
-                                    selected={option.id === selected?.id}
+                                    key={restOption.id}
+                                    selected={restOption.id === selected?.id}
                                     onSelect={() => {
-                                        option.onSelect?.();
+                                        restOption.onSelect?.();
                                         setOpened(false);
                                     }}
                                 >
-                                    {option.label}
+                                    {label}
                                 </DropdownList.Item>
                             ))}
                         </DropdownList>
@@ -274,24 +288,10 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             );
         };
 
-        /** Функция для хранения ссылки. */
-        const setRef = (instance: HTMLButtonElement | null) => {
-            buttonRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        };
-
         return (
             <ButtonDropdownExtended
                 className={classNames}
-                renderButton={
-                    theme === EButtonDotsTheme.DOTS_SECONDARY || theme === EButtonDotsTheme.DOTS_SECONDARY_LIGHT
-                        ? renderButtonDots
-                        : renderButton
-                }
+                renderButton={renderButton}
                 renderDropdown={renderDropdown}
                 dropdownRef={dropdownRef}
                 closeOnTab

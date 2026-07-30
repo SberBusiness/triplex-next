@@ -8,6 +8,8 @@ import {
     getNavigationShift,
     getShiftedDateInRange,
     isDateOutOfRange,
+    VIEW_GRID_COLUMNS,
+    VIEW_GRID_ROWS,
 } from "../utils";
 import { CalendarViewItem } from "./CalendarViewItem";
 import { ECalendarPickType, ECalendarViewMode } from "../enums";
@@ -19,12 +21,6 @@ export interface ICalendarViewMonthsProps extends Omit<
     ICalendarViewProps,
     "dayHtmlAttributes" | "yearHtmlAttributes"
 > {}
-
-/** Строки сетки месяцев. */
-const GRID_ROWS = [0, 1, 2, 3];
-
-/** Колонки сетки месяцев. */
-const GRID_COLUMNS = [0, 1, 2];
 
 /** Величины сдвига даты при клавиатурной навигации по сетке месяцев. */
 const NAVIGATION_STEPS: ICalendarNavigationSteps = {
@@ -74,9 +70,9 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
     /** Рендер тела таблицы. */
     const renderTableBody = () => (
         <tbody>
-            {GRID_ROWS.map((row) => (
+            {VIEW_GRID_ROWS.map((row) => (
                 <tr key={`calendar-view-months-row-${row}`}>
-                    {GRID_COLUMNS.map((cell) => renderTableData(row, cell))}
+                    {VIEW_GRID_COLUMNS.map((cell) => renderTableData(row, cell))}
                 </tr>
             ))}
         </tbody>
@@ -84,7 +80,7 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
 
     /** Рендер ячейки таблицы. */
     const renderTableData = (row: number, cell: number) => {
-        const month = row * 3 + cell;
+        const month = row * VIEW_GRID_COLUMNS.length + cell;
         const date = viewDate.clone().startOf("month").month(month);
         const active = isActiveDate(date);
         const disabled = isDisabledDate(date);

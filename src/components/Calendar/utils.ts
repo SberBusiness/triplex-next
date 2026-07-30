@@ -152,3 +152,9 @@ export function getNavigationShift(
         return { operation: "subtract", ...steps.page };
     }
 }
+
+/** Строки сетки видов месяцев и годов. */
+export const VIEW_GRID_ROWS = [0, 1, 2, 3];
+
+/** Колонки сетки видов месяцев и годов. */
+export const VIEW_GRID_COLUMNS = [0, 1, 2];

@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Calendar } from "../Calendar";
 import { ICalendarProps } from "../types";
 import { ECalendarDateMarkType, ECalendarPickType, ECalendarViewMode } from "../enums";
@@ -33,6 +33,15 @@ const getCell = (text: string) => {
 describe("Calendar", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        // Часть тестов сравнивает результат с "сегодня" — фиксируем его, иначе
+        // прогон на границе суток или месяца может мигать. Месяц намеренно отличается
+        // от PICKED_DATE: на этом различии построены тесты футера.
+        vi.useFakeTimers({ shouldAdvanceTime: true });
+        vi.setSystemTime(new Date(1970, 5, 10));
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     it("renders grid with header of the picked date", () => {
@@ -308,10 +317,42 @@ describe("Calendar", () => {
         expect(onPageChange.mock.calls[0][0].format("YYYY")).toBe("1982");
     });
 
-    it("does not render footer without todayButtonProps", () => {
+    it("moves focus to the tabbable cell while navigating with the keyboard", () => {
         renderCalendar();
 
-        expect(screen.queryByTestId("calendar-today")).not.toBeInTheDocument();
+        fireEvent.focus(getCell("15"));
+        fireEvent.keyDown(getCell("15"), { code: "ArrowRight" });
+
+        expect(getCell("16")).toHaveFocus();
+    });
+
+    it("keeps the focused cell across a page change in years view", () => {
+        renderCalendar({ reversedPick: true });
+
+        // Пока фокус находится в сетке, смена страницы не сбрасывает выбранную ячейку,
+        // поэтому шаг страницы (12 лет) наблюдаем напрямую.
+        fireEvent.focus(getCell("1970"));
+        fireEvent.keyDown(getCell("1970"), { code: "PageDown" });
+
+        expect(getCell("1982")).toHaveAttribute("tabindex", "0");
+    });
+
+    it("keeps the focused cell across a page change in months view", () => {
+        renderCalendar({ pickType: ECalendarPickType.MONTH_YEAR });
+
+        fireEvent.focus(getCell("Jan"));
+        fireEvent.keyDown(getCell("Jan"), { code: "ArrowUp" });
+
+        // Шаг по вертикали в месяцах равен 3, поэтому фокус уходит на предыдущую страницу.
+        expect(screen.getByTestId("calendar-view")).toHaveTextContent("1969");
+        expect(getCell("Oct")).toHaveAttribute("tabindex", "0");
+    });
+
+    it("does not render footer without todayButtonProps", () => {
+        const { container } = renderCalendar();
+
+        expect(container.querySelector(".calendarFooter")).toBeNull();
+        expect(container.firstChild).not.toHaveClass("extraBottom");
     });
 
     it("renders footer buttons for the current month", () => {

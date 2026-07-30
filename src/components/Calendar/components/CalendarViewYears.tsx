@@ -8,6 +8,8 @@ import {
     getNavigationShift,
     getShiftedDateInRange,
     isDateOutOfRange,
+    VIEW_GRID_COLUMNS,
+    VIEW_GRID_ROWS,
 } from "../utils";
 import { CalendarViewItem } from "./CalendarViewItem";
 import { ECalendarViewMode } from "../enums";
@@ -19,12 +21,6 @@ export interface ICalendarViewYearsProps extends Omit<
     ICalendarViewProps,
     "dayHtmlAttributes" | "monthHtmlAttributes"
 > {}
-
-/** Строки сетки годов. */
-const GRID_ROWS = [0, 1, 2, 3];
-
-/** Колонки сетки годов. */
-const GRID_COLUMNS = [0, 1, 2];
 
 /** Количество лет до отображаемого года, попадающих на страницу. */
 const YEARS_BEFORE_VIEW_DATE = 5;
@@ -76,15 +72,17 @@ export const CalendarViewYears: React.FC<ICalendarViewYearsProps> = ({ pickedDat
     /** Рендер тела таблицы. */
     const renderTableBody = () => (
         <tbody>
-            {GRID_ROWS.map((row) => (
-                <tr key={`calendar-view-years-row-${row}`}>{GRID_COLUMNS.map((cell) => renderTableData(row, cell))}</tr>
+            {VIEW_GRID_ROWS.map((row) => (
+                <tr key={`calendar-view-years-row-${row}`}>
+                    {VIEW_GRID_COLUMNS.map((cell) => renderTableData(row, cell))}
+                </tr>
             ))}
         </tbody>
     );
 
     /** Рендер ячейки таблицы. */
     const renderTableData = (row: number, cell: number) => {
-        const year = currentYear + row * GRID_COLUMNS.length + cell - YEARS_BEFORE_VIEW_DATE;
+        const year = currentYear + row * VIEW_GRID_COLUMNS.length + cell - YEARS_BEFORE_VIEW_DATE;
         const date = viewDate.clone().startOf("year").year(year);
         const active = isActiveDate(date);
         const disabled = isDisabledDate(date);

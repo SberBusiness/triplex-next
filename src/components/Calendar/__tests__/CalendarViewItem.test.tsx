@@ -8,7 +8,7 @@ import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
 
 const date = moment("19700115", dateFormatYYYYMMDD);
 
-const renderItem = (props: Partial<ICalendarViewItemProps> = {}) => {
+const renderItem = (props: Partial<ICalendarViewItemProps> & Record<string, unknown> = {}) => {
     const allProps: ICalendarViewItemProps = {
         date,
         unit: "day",
@@ -175,7 +175,7 @@ describe("CalendarViewItem", () => {
     });
 
     it("merges className and spreads rest props to the cell", () => {
-        renderItem({ className: "custom-class", "data-test-id": "day-cell" } as Partial<ICalendarViewItemProps>);
+        renderItem({ className: "custom-class", "data-test-id": "day-cell" });
 
         expect(getCell()).toHaveClass("calendarViewItem");
         expect(getCell()).toHaveClass("custom-class");

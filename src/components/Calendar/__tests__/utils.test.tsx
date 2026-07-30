@@ -1,5 +1,5 @@
 import moment from "moment";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
     formatDate,
     getHeader,
@@ -20,6 +20,16 @@ const limitRange = {
 };
 
 describe("Calendar utils", () => {
+    beforeEach(() => {
+        // Фиксируем "сегодня" — часть хелперов использует его как fallback.
+        vi.useFakeTimers({ shouldAdvanceTime: true });
+        vi.setSystemTime(new Date(1970, 5, 10));
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
     describe("parsePickedDate", () => {
         it("returns null for empty values", () => {
             expect(parsePickedDate(null)).toBeNull();
@@ -47,11 +57,11 @@ describe("Calendar utils", () => {
         });
 
         it("falls back to current date for null value", () => {
-            expect(getHeader(null)).toBe(moment().format("MMMM YYYY"));
+            expect(getHeader(null)).toBe("June 1970");
         });
 
         it("falls back to current date for invalid value", () => {
-            expect(getHeader(moment("not a date", dateFormatYYYYMMDD))).toBe(moment().format("MMMM YYYY"));
+            expect(getHeader(moment("not a date", dateFormatYYYYMMDD))).toBe("June 1970");
         });
     });
 
@@ -71,7 +81,7 @@ describe("Calendar utils", () => {
         });
 
         it("falls back to current date for null value", () => {
-            expect(formatDate(null, ECalendarViewMode.MONTHS)).toBe(moment().format("YYYY"));
+            expect(formatDate(null, ECalendarViewMode.MONTHS)).toBe("1970");
         });
 
         it("does not mutate the given date", () => {

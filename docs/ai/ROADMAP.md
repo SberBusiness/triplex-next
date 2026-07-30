@@ -87,10 +87,10 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Avatar | ⬜ | ✅ | ⬜ |
 | Badge | ⬜ | ✅ | ⬜ |
 | Body | ⬜ | ⬜ | ⬜ |
-| Button | ✅ | ✅ | ⬜ |
+| Button | ✅ | ✅ | ✅ |
 | ButtonDropdown | ✅ | ✅ | ✅ |
 | ButtonDropdownExtended | ✅ | ✅ | ✅ |
-| ButtonIcon | ✅ | ✅ | ⬜ |
+| ButtonIcon | ✅ | ✅ | ✅ |
 | Calendar | ⬜ | ✅ | ⬜ |
 | CardAction | ⬜ | ⬜ | ⬜ |
 | CardStatic | ⬜ | ⬜ | ⬜ |
@@ -167,11 +167,11 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Pagination | ✅ | ✅ | ✅ |
 | PaginationExtended | ⬜ | ⬜ | ⬜ |
 | PaginationNavigationExtended | ⬜ | ⬜ | ⬜ |
-| Portal | ⬜ | ⬜ | ⬜ |
+| Portal | ✅ | ✅ | ✅ |
 | Radio | ⬜ | ⬜ | ⬜ |
 | RadioXGroup | ⬜ | ⬜ | ⬜ |
 | RadioYGroup | ⬜ | ⬜ | ⬜ |
-| Row | ⬜ | ⬜ | ⬜ |
+| Row | ✅ | ✅ | ✅ |
 | SMSField | ⬜ | ⬜ | ⬜ |
 | SegmentedControl | ⬜ | ⬜ | ⬜ |
 | SelectExtendedField | ⬜ | ⬜ | ⬜ |

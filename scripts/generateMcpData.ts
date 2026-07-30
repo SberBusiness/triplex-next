@@ -94,7 +94,13 @@ function readPackageVersion(): string {
  * показа кода, VisualTests — скриншот-регрессия без показа кода. Обе бесполезны
  * как пример использования для AI-агента. См. docs/ai/stories-guide.md.
  */
-const EXCLUDED_STORIES = new Set(["Playground", "VisualTests", "VisualTestsOpen"]);
+const EXCLUDED_STORIES = new Set([
+    "Playground",
+    "VisualTests",
+    "VisualTestsOpen",
+    "VisualTestsSquircle",
+    "VisualTestsCircle",
+]);
 
 /**
  * Парсит секцию `## Stories` в AI.md, вытаскивает ссылки из колонки `Example file`

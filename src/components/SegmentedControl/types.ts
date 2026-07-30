@@ -3,7 +3,7 @@ import {
     ESegmentedControlTheme,
     ESegmentedControlSize,
 } from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
-import { IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button";
+import { IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
 
 /** Общие свойства компонента SegmentedControl. */
 export interface ISegmentedControlCommonProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {

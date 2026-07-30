@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { Row } from "../Row";
+import { RowContext } from "../RowContext";
 import { Col } from "../../Col";
 import { EComponentSize } from "../../../enums/EComponentSize";
 
@@ -101,6 +102,47 @@ describe("Row Component", () => {
 
             expect(getRowDiv()).toHaveClass("SM");
             expect(getRowDiv()).not.toHaveClass("MD");
+        });
+    });
+
+    describe("ref forwarding", () => {
+        it("should forward ref to the root div element", () => {
+            const ref = React.createRef<HTMLDivElement>();
+            render(
+                <Row data-testid="row-div" ref={ref}>
+                    <Col>Test content</Col>
+                </Row>,
+            );
+
+            expect(ref.current).toBeInstanceOf(HTMLDivElement);
+            expect(ref.current).toBe(getRowDiv());
+        });
+    });
+
+    describe("RowContext", () => {
+        const ContextConsumer = () => {
+            const { gridHorizontalGap } = React.useContext(RowContext);
+            return <span data-testid="context-value">{gridHorizontalGap}</span>;
+        };
+
+        it("should provide default gridHorizontalGap SM to context consumers", () => {
+            render(
+                <Row>
+                    <ContextConsumer />
+                </Row>,
+            );
+
+            expect(screen.getByTestId("context-value")).toHaveTextContent(EComponentSize.SM);
+        });
+
+        it("should provide gridHorizontalGap MD to context consumers", () => {
+            render(
+                <Row gridHorizontalGap={EComponentSize.MD}>
+                    <ContextConsumer />
+                </Row>,
+            );
+
+            expect(screen.getByTestId("context-value")).toHaveTextContent(EComponentSize.MD);
         });
     });
 

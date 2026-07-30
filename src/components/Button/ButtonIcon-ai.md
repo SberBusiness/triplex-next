@@ -31,6 +31,7 @@ version: "1.0"
 |---|---|---|---|
 | `shape` | `EButtonIconShape` | `SQUIRCLE` | Форма кнопки: `SQUIRCLE` (радиус 4px) или `CIRCLE` (радиус 50%) |
 | `active` | `boolean` | `false` | Визуально активное состояние |
+| `children` | `React.ReactNode` | — | Содержимое кнопки, обычно иконка из `@sberbusiness/icons-next` |
 | `className` | `string` | — | Дополнительный CSS-класс |
 | `...rest` | `React.ButtonHTMLAttributes<HTMLButtonElement> & DataAttributes` | — | Нативные атрибуты `<button>`, включая `disabled`, `aria-*`, `data-*` |
 
@@ -96,3 +97,4 @@ version: "1.0"
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убрана секция «Файловая структура», содержимое «Ключевых особенностей реализации» перенесено в `Ограничения использования`, добавлена колонка `Example file`. |
 | 2026-07-08 | Актуализирована таблица Stories: story `Disabled` заменена на `States` (`StatesExample.tsx`). |
 | 2026-07-15 | `vertical-align: top` заменён на `middle` (синхронно с `Button`) — общая опорная точка для кнопок разной высоты и центрирование относительно строки инлайн-текста. |
+| 2026-07-30 | AI-рефакторинг: внутренние импорты переведены на относительные, `children` объявлен и задокументирован явно, JSDoc уточнён дефолтами; добавлены unit-тесты `__tests__/ButtonIcon.test.tsx`. Публичный API не изменён. |

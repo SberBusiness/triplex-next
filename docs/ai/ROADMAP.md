@@ -90,7 +90,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Button | ✅ | ✅ | ✅ |
 | ButtonDropdown | ✅ | ✅ | ✅ |
 | ButtonDropdownExtended | ⬜ | ⬜ | ⬜ |
-| ButtonIcon | ✅ | ✅ | ⬜ |
+| ButtonIcon | ✅ | ✅ | ✅ |
 | Calendar | ⬜ | ✅ | ⬜ |
 | CardAction | ⬜ | ⬜ | ⬜ |
 | CardStatic | ⬜ | ⬜ | ⬜ |

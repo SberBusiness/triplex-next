@@ -8,7 +8,8 @@ import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
 
 const date = moment("19700115", dateFormatYYYYMMDD);
 
-const renderItem = (props: Partial<ICalendarViewItemProps> & Record<string, unknown> = {}) => {
+/** Собирает разметку ячейки с валидным табличным контекстом. */
+const buildItem = (props: Partial<ICalendarViewItemProps> & Record<string, unknown> = {}) => {
     const allProps: ICalendarViewItemProps = {
         date,
         unit: "day",
@@ -19,17 +20,30 @@ const renderItem = (props: Partial<ICalendarViewItemProps> & Record<string, unkn
         ...props,
     };
 
-    const result = render(
-        <table>
-            <tbody>
-                <tr>
-                    <CalendarViewItem {...allProps}>15</CalendarViewItem>
-                </tr>
-            </tbody>
-        </table>,
-    );
+    return {
+        allProps,
+        markup: (
+            <table>
+                <tbody>
+                    <tr>
+                        <CalendarViewItem {...allProps}>15</CalendarViewItem>
+                    </tr>
+                </tbody>
+            </table>
+        ),
+    };
+};
 
-    return { ...result, onDateSelect: allProps.onDateSelect };
+const renderItem = (props: Partial<ICalendarViewItemProps> & Record<string, unknown> = {}) => {
+    const { allProps, markup } = buildItem(props);
+    const result = render(markup);
+
+    return {
+        ...result,
+        onDateSelect: allProps.onDateSelect,
+        rerenderItem: (nextProps: Partial<ICalendarViewItemProps> & Record<string, unknown> = {}) =>
+            result.rerender(buildItem(nextProps).markup),
+    };
 };
 
 /** Возвращает ячейку таблицы. */
@@ -47,28 +61,11 @@ describe("CalendarViewItem", () => {
     });
 
     it("is focusable only when tabbable", () => {
-        const { rerender } = renderItem({ tabbable: true });
+        const { rerenderItem } = renderItem({ tabbable: true });
 
         expect(getCell()).toHaveAttribute("tabindex", "0");
 
-        rerender(
-            <table>
-                <tbody>
-                    <tr>
-                        <CalendarViewItem
-                            date={date}
-                            unit="day"
-                            active={false}
-                            disabled={false}
-                            tabbable={false}
-                            onDateSelect={vi.fn()}
-                        >
-                            15
-                        </CalendarViewItem>
-                    </tr>
-                </tbody>
-            </table>,
-        );
+        rerenderItem({ tabbable: false });
 
         expect(getCell()).toHaveAttribute("tabindex", "-1");
     });

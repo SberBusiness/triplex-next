@@ -36,6 +36,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: `label` опции утекал в DOM как невалидный атрибут элемента выпадающего списка (для не-строковых `label` — с warning в консоли React).
 - Новые props `opened` / `setOpened` — типизированный controlled-режим открытости dropdown (ранее `opened` работал только через нетипизированный spread во внутренний `ButtonDropdownExtended`).
 
+**Calendar**
+
+- AI-рефакторинг: JSDoc на props и внутренних компонентах, codestyle-чистка, unit-тесты (Calendar, CalendarViewItem, utils), создан `Calendar-ai.md`. Публичный API и наблюдаемое поведение не изменены; внутренний `CalendarFooter` теперь применяет объявленные, но ранее игнорировавшиеся `className` и `...rest`.
+
 **Col**
 
 - Компонент `Col` переведён на использование `forwardRef` (ref ведёт на корневой `div`).

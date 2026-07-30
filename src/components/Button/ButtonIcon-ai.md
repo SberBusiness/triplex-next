@@ -86,6 +86,8 @@ version: "1.0"
 | `Default` | `DefaultExample.tsx` | Базовый сценарий использования |
 | `Sizes` | `SizesExample.tsx` | Разные размеры через размер иконки (16/20/24/32) |
 | `States` | `StatesExample.tsx` | Состояния `active` и `disabled` |
+| `VisualTestsSquircle` | `VisualTestsExample.tsx` | Скриншот-регрессия: `:focus-visible` на squircle-кнопке |
+| `VisualTestsCircle` | `VisualTestsExample.tsx` | Скриншот-регрессия: `:focus-visible` на circle-кнопке |
 
 ---
 
@@ -97,4 +99,4 @@ version: "1.0"
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убрана секция «Файловая структура», содержимое «Ключевых особенностей реализации» перенесено в `Ограничения использования`, добавлена колонка `Example file`. |
 | 2026-07-08 | Актуализирована таблица Stories: story `Disabled` заменена на `States` (`StatesExample.tsx`). |
 | 2026-07-15 | `vertical-align: top` заменён на `middle` (синхронно с `Button`) — общая опорная точка для кнопок разной высоты и центрирование относительно строки инлайн-текста. |
-| 2026-07-30 | AI-рефакторинг: внутренние импорты переведены на относительные, `children` объявлен и задокументирован явно, JSDoc уточнён дефолтами; добавлены unit-тесты `__tests__/ButtonIcon.test.tsx`. Публичный API не изменён. |
+| 2026-07-30 | AI-рефакторинг: внутренние импорты переведены на относительные, `children` объявлен и задокументирован явно, JSDoc уточнён дефолтами; добавлены unit-тесты `__tests__/ButtonIcon.test.tsx`; в таблицу Stories добавлены отсутствовавшие `VisualTestsSquircle` и `VisualTestsCircle`. Публичный API не изменён. |

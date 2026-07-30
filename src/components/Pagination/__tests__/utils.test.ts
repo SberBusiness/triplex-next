@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { PaginationUtils, PAGINATION_ELLIPSIS_VALUE } from "../utils/paginationUtils";
+import { PaginationUtils, PAGINATION_ELLIPSIS_VALUE } from "../utils";
 
 const { generateRange, generatePageRanges, createPagesArray } = PaginationUtils;
 

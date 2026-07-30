@@ -47,8 +47,7 @@ describe("AmountField utils", () => {
             setFallbackCaret(input, core, 2);
 
             expect(input.value).toBe("1 234,56");
-            // When backspacing near separator, caret may move backward by one
-            expect(input.selectionStart).toBeLessThanOrEqual(2);
+            expect(input.selectionStart).toBe(1);
             expect(input.selectionEnd).toBe(input.selectionStart);
         });
 

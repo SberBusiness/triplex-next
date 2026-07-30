@@ -22,6 +22,8 @@ describe("ButtonIcon", () => {
         expect(button).toHaveClass("squircle");
         expect(button).not.toHaveClass("circle");
         expect(button).toContainElement(screen.getByTestId("icon"));
+        // ButtonIcon всегда передаёт displayContents в IconWrapper — обёртка прозрачна для layout.
+        expect(getIconWrapper()).toHaveClass("displayContents");
     });
 
     it("renders native button with type='button' by default and allows overriding via rest", () => {

@@ -38,7 +38,8 @@ version: "1.0"
 ### Ограничения использования
 
 - Размер `ButtonIcon` задаётся размером переданной иконки; у компонента нет собственного prop `size`.
-- Корневой DOM-элемент всегда `<button>`, `type` по умолчанию принудительно установлен в `button`.
+- Внешний DOM-узел — не `<button>`: компонент рендерит `IconWrapper` (`<span>` с классами `hoverable` и `displayContents`, то есть `display: contents`), а внутри него — `<button>`. Ref-target и получатель `className` / `...rest` — всегда `<button>`; классы состояний `active` и `disabled` выставляются на span-обёртке. Это важно для `>`-селекторов и логики на `parentElement`.
+- `type="button"` выставляется компонентом (чтобы кнопка не триггерила submit формы), но может быть переопределён через `...rest`.
 - При расширении `EButtonIconShape` необходимо добавить класс в маппинг `Record<EButtonIconShape, string>` и в `ButtonIcon.module.less`.
 
 ---

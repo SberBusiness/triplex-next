@@ -16,7 +16,10 @@ export interface IButtonIconProps extends React.ButtonHTMLAttributes<HTMLButtonE
     shape?: EButtonIconShape;
     /** Активное состояние. По умолчанию false. */
     active?: boolean;
-    /** Содержимое кнопки, обычно иконка из @sberbusiness/icons-next. */
+    /**
+     * Содержимое кнопки, обычно иконка из @sberbusiness/icons-next.
+     * Не деструктурируется отдельно — уходит на корневой button внутри ...rest.
+     */
     children?: React.ReactNode;
 }
 

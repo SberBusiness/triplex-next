@@ -108,20 +108,17 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
         const prevPickedDate = parsePickedDate(prevProps.pickedDate, format);
 
         if (!(!pickedDateValid || prevPickedDate?.isSame(resultDate, "day"))) {
-            let newDateContext = {};
-
+            // Выбранная дата переехала в другой месяц — переводим навигацию на её страницу.
             if (viewDate && !viewDate.isSame(pickedDateState, "month")) {
-                newDateContext = {
-                    currentTab: ECalendarViewMode.DAYS,
+                this.setState({
                     header: getHeader(resultDate),
+                    // Значение не null: ветка выполняется только при валидной pickedDate, тогда resultDate === pickedDateState.
                     viewDate: resultDate!.clone(),
-                };
+                    pickedDate: pickedDateState,
+                });
+            } else {
+                this.setState({ pickedDate: pickedDateState });
             }
-
-            this.setState({
-                ...newDateContext,
-                pickedDate: pickedDateState,
-            });
         }
     }
 
@@ -154,13 +151,14 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
             <div className={classNames} data-tx={process.env.npm_package_version}>
                 <CalendarContext.Provider
                     value={{
-                        format: format,
+                        format,
+                        // Значения не undefined: заданы в defaultProps, но TypeScript не сужает тип опциональных props.
                         limitRange: limitRange!,
                         pickType: pickType!,
-                        markedDays: markedDays,
-                        disabledDays: disabledDays,
-                        viewDate: viewDate,
-                        viewMode: viewMode,
+                        markedDays,
+                        disabledDays,
+                        viewDate,
+                        viewMode,
                         periodId: this.periodId,
                         onDateSelect: this.handleDateSelect,
                         onPageChange: this.handlePageChange,

@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import moment from "moment";
 import clsx from "clsx";
-import { isDateOutOfRange, isDayDisabled } from "../utils";
-import { WEEKDAYS_SET } from "../../../consts/DateConst";
+import {
+    ICalendarNavigationShift,
+    ICalendarNavigationSteps,
+    getNavigationShift,
+    isDateOutOfRange,
+    isDayDisabled,
+    shiftDate,
+} from "../utils";
+import { WEEKDAYS_SET, WEEKS_SET } from "../../../consts/DateConst";
 import { CalendarViewContext } from "../CalendarViewContext";
 import { CalendarViewItem } from "./CalendarViewItem";
-import { isKey } from "../../../utils/keyboard";
 import { ECalendarDateMarkType, ECalendarViewMode } from "../enums";
 import { CalendarContext } from "../CalendarContext";
 import { ICalendarViewProps } from "../types";
@@ -16,6 +22,13 @@ export interface ICalendarViewDaysProps extends Omit<
     ICalendarViewProps,
     "monthHtmlAttributes" | "yearHtmlAttributes"
 > {}
+
+/** Величины сдвига даты при клавиатурной навигации по сетке дней. */
+const NAVIGATION_STEPS: ICalendarNavigationSteps = {
+    horizontal: { amount: 1, unit: "day" },
+    vertical: { amount: 1, unit: "week" },
+    page: { amount: 1, unit: "month" },
+};
 
 /** Вид календаря с выбором дня. */
 export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate, dayHtmlAttributes = {} }) => {
@@ -81,10 +94,8 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate,
     /** Рендер тела таблицы. */
     const renderTableBody = () => (
         <tbody className={styles.calendarViewDaysBody}>
-            {[0, 1, 2, 3, 4, 5].map((row) => (
-                <tr key={`calendar-table-row-${row}`}>
-                    {[0, 1, 2, 3, 4, 5, 6].map((cell) => renderTableData(row, cell))}
-                </tr>
+            {WEEKS_SET.map((row) => (
+                <tr key={`calendar-table-row-${row}`}>{WEEKDAYS_SET.map((cell) => renderTableData(row, cell))}</tr>
             ))}
         </tbody>
     );
@@ -114,7 +125,7 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate,
                 muted={muted}
                 markType={markType}
                 onKeyDown={handleItemKeyDown(date)}
-                onDateSelect={handleDateSelect}
+                onDateSelect={onDateSelect}
             >
                 {date.date()}
             </CalendarViewItem>
@@ -155,71 +166,38 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate,
                     return ECalendarDateMarkType.BASIC;
                 }
             } else if (day in markedDays) {
-                return markedDays[date.format(format)];
+                return markedDays[day];
             }
         }
     };
 
-    /** Возвращает доступную для выбора дату после сдвига. */
-    const getShiftedDate = (
-        currentDate: moment.Moment,
-        operation: "add" | "subtract",
-        amount: number,
-        unit: "day" | "week" | "month",
-    ) => {
+    /** Возвращает доступную для выбора дату после сдвига. Недоступные дни пропускаются. */
+    const getShiftedDate = (currentDate: moment.Moment, shift: ICalendarNavigationShift) => {
         const day = currentDate.clone();
-        const shiftDay = {
-            add: moment.fn.add.bind(day),
-            subtract: moment.fn.subtract.bind(day),
-        }[operation];
 
-        while (shiftDay(amount, unit)) {
+        do {
+            shiftDate(day, shift);
+
             // Если вышли за пределы доступного периода – возвращаем текущий день.
             if (isDateOutOfRange(day, limitRange, "day")) {
                 return currentDate;
             }
-            // Если день доступен для выбора – выходим из поиска.
-            if (!isDisabledDate(day)) {
-                break;
-            }
-        }
+            // Если день недоступен для выбора – продолжаем поиск в том же направлении.
+        } while (isDisabledDate(day));
 
         return day;
     };
 
     /** Обработчик нажатия клавиши CalendarViewItem. */
     const handleItemKeyDown = (date: moment.Moment) => (event: React.KeyboardEvent<HTMLTableCellElement>) => {
-        const key = event.code || event.keyCode;
-        let nextFocusedDate;
+        const shift = getNavigationShift(event.code || event.keyCode, NAVIGATION_STEPS);
 
-        if (isKey(key, "ARROW_RIGHT")) {
-            nextFocusedDate = getShiftedDate(date, "add", 1, "day");
-            event.preventDefault();
-        } else if (isKey(key, "ARROW_LEFT")) {
-            nextFocusedDate = getShiftedDate(date, "subtract", 1, "day");
-            event.preventDefault();
-        } else if (isKey(key, "ARROW_DOWN")) {
-            nextFocusedDate = getShiftedDate(date, "add", 1, "week");
-            event.preventDefault();
-        } else if (isKey(key, "ARROW_UP")) {
-            nextFocusedDate = getShiftedDate(date, "subtract", 1, "week");
-            event.preventDefault();
-        } else if (isKey(key, "PAGE_DOWN")) {
-            nextFocusedDate = getShiftedDate(date, "add", 1, "month");
-            event.preventDefault();
-        } else if (isKey(key, "PAGE_UP")) {
-            nextFocusedDate = getShiftedDate(date, "subtract", 1, "month");
-            event.preventDefault();
+        if (!shift) {
+            return;
         }
 
-        if (nextFocusedDate) {
-            changeTabbableDate(nextFocusedDate);
-        }
-    };
-
-    /** Обработчик клика по дате. */
-    const handleDateSelect = (date: moment.Moment) => {
-        onDateSelect(date);
+        event.preventDefault();
+        changeTabbableDate(getShiftedDate(date, shift));
     };
 
     /** Изменение фокусируемой даты. */
@@ -242,3 +220,5 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate,
         </table>
     );
 };
+
+CalendarViewDays.displayName = "CalendarViewDays";

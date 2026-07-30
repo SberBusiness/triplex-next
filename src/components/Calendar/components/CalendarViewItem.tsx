@@ -36,9 +36,9 @@ const markTypeToClassNameMap = {
 
 /** Соответствие единицы измерения имени класса. */
 const unitToClassNameMap = {
-    ["day"]: styles.unitDay,
-    ["month"]: styles.unitMonth,
-    ["year"]: styles.unitYear,
+    day: styles.unitDay,
+    month: styles.unitMonth,
+    year: styles.unitYear,
 };
 
 /** Элемент таблицы CalendarView[Days/Months/Years]. */
@@ -123,3 +123,5 @@ export const CalendarViewItem: React.FC<ICalendarViewItemProps> = ({
         </td>
     );
 };
+
+CalendarViewItem.displayName = "CalendarViewItem";

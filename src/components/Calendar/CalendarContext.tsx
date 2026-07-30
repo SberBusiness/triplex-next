@@ -4,7 +4,7 @@ import { dateFormatYYYYMMDD, globalLimitRange } from "../../consts/DateConst";
 import { ECalendarPickType, ECalendarViewMode } from "./enums";
 import { ICalendarProps } from "./types";
 
-/** Свойства контекста CalendarView. */
+/** Свойства контекста Calendar. */
 export interface ICalendarContext
     extends
         Pick<ICalendarProps, "format" | "markedDays" | "disabledDays">,

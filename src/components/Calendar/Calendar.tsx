@@ -11,7 +11,7 @@ import { CalendarControls } from "./components/CalendarControls";
 import { CalendarView } from "./components/CalendarView";
 import { CalendarFooter } from "./components/CalendarFooter";
 import { CalendarFooterButton } from "./components/CalendarFooterButton";
-import { formatDate, getHeader, parsePickedDate } from "./utils";
+import { formatDate, parsePickedDate } from "./utils";
 import styles from "./styles/Calendar.module.less";
 
 /** Состояния компонента Calendar. */
@@ -98,7 +98,7 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
 
     public componentDidUpdate(prevProps: ICalendarProps, prevState: ICalendarState): void {
         const { format } = this.props;
-        const { viewDate } = this.state;
+        const { viewDate, viewMode } = this.state;
         const { viewDate: prevViewDate } = prevState;
 
         const pickedDateState = parsePickedDate(this.props.pickedDate, format);
@@ -111,7 +111,8 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
             // Выбранная дата переехала в другой месяц — переводим навигацию на её страницу.
             if (viewDate && !viewDate.isSame(pickedDateState, "month")) {
                 this.setState({
-                    header: getHeader(resultDate),
+                    // Формат заголовка зависит от вида отображения — как в handlePageChange / handleViewChange.
+                    header: formatDate(resultDate, viewMode),
                     // Значение не null: ветка выполняется только при валидной pickedDate, тогда resultDate === pickedDateState.
                     viewDate: resultDate!.clone(),
                     pickedDate: pickedDateState,

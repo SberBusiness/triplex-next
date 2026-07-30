@@ -4,6 +4,7 @@ import clsx from "clsx";
 import {
     ICalendarNavigationShift,
     ICalendarNavigationSteps,
+    getFirstEnabledDate,
     getNavigationShift,
     isDateOutOfRange,
     isDayDisabled,
@@ -48,17 +49,11 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate,
     const getInitialTabbableDate = useCallback(() => {
         if (pickedDate && pickedDate.isSame(viewDate, "month")) {
             return pickedDate;
-        } else {
-            const date = viewDate.clone().startOf("month");
-
-            for (let i = 0; i < date.daysInMonth(); i++) {
-                date.add(i, "day");
-
-                if (!isDisabledDate(date)) {
-                    return date;
-                }
-            }
         }
+
+        const startOfMonth = viewDate.clone().startOf("month");
+
+        return getFirstEnabledDate(startOfMonth, startOfMonth.daysInMonth(), "day", isDisabledDate);
     }, [pickedDate, viewDate, isDisabledDate]);
 
     const [tabbableDate, setTabbableDate] = useState(getInitialTabbableDate());
@@ -200,16 +195,20 @@ export const CalendarViewDays: React.FC<ICalendarViewDaysProps> = ({ pickedDate,
         changeTabbableDate(getShiftedDate(date, shift));
     };
 
-    /** Изменение фокусируемой даты. */
+    /** Изменение фокусируемой даты. При уходе даты за пределы страницы перелистывает страницу на шаг NAVIGATION_STEPS.page. */
     const changeTabbableDate = (date: moment.Moment) => {
         setTabbableDate(date);
 
         if (date.isBefore(viewDate, "month")) {
-            date = viewDate.clone().subtract(1, "month");
-            onPageChange(date, ECalendarViewMode.DAYS);
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "subtract", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.DAYS,
+            );
         } else if (date.isAfter(viewDate, "month")) {
-            date = viewDate.clone().add(1, "month");
-            onPageChange(date, ECalendarViewMode.DAYS);
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "add", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.DAYS,
+            );
         }
     };
 

@@ -49,10 +49,8 @@ export interface IDayHtmlAttributesFunctionParams {
     marked: boolean;
 }
 
-/** Функция для получения HTML атрибутов компонента дня. */
-export type TDayHtmlAttributesFunction = (
-    params: IDayHtmlAttributesFunctionParams,
-) => React.TdHTMLAttributes<HTMLTableCellElement>;
+/** Функция для получения HTML атрибутов компонента дня. Как и объектный вариант, допускает data-атрибуты. */
+export type TDayHtmlAttributesFunction = (params: IDayHtmlAttributesFunctionParams) => TTdHTMLAttributesWithData;
 
 /** Alias для data атрибутов. */
 type TDataAttributeAlias = `data-${string}`;

@@ -5,9 +5,11 @@ import { CalendarViewContext } from "../CalendarViewContext";
 import {
     ICalendarNavigationShift,
     ICalendarNavigationSteps,
+    getFirstEnabledDate,
     getNavigationShift,
     getShiftedDateInRange,
     isDateOutOfRange,
+    shiftDate,
     VIEW_GRID_COLUMNS,
     VIEW_GRID_ROWS,
 } from "../utils";
@@ -46,17 +48,14 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
     const getInitialTabbableDate = useCallback(() => {
         if (pickedDate && pickedDate.isSame(viewDate, "year")) {
             return pickedDate;
-        } else {
-            const date = viewDate.clone().startOf("year");
-
-            for (let i = 0; i < 12; i++) {
-                date.add(i, "month");
-
-                if (!isDisabledDate(date)) {
-                    return date;
-                }
-            }
         }
+
+        return getFirstEnabledDate(
+            viewDate.clone().startOf("year"),
+            VIEW_GRID_ROWS.length * VIEW_GRID_COLUMNS.length,
+            "month",
+            isDisabledDate,
+        );
     }, [pickedDate, viewDate, isDisabledDate]);
 
     const [tabbableDate, setTabbableDate] = useState(getInitialTabbableDate());
@@ -146,16 +145,20 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
         }
     };
 
-    /** Изменение фокусируемой даты. */
+    /** Изменение фокусируемой даты. При уходе даты за пределы страницы перелистывает страницу на шаг NAVIGATION_STEPS.page. */
     const changeTabbableDate = (date: moment.Moment) => {
         setTabbableDate(date);
 
         if (date.isBefore(viewDate, "year")) {
-            date = viewDate.clone().subtract(1, "year");
-            onPageChange(date, ECalendarViewMode.MONTHS);
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "subtract", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.MONTHS,
+            );
         } else if (date.isAfter(viewDate, "year")) {
-            date = viewDate.clone().add(1, "year");
-            onPageChange(date, ECalendarViewMode.MONTHS);
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "add", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.MONTHS,
+            );
         }
     };
 

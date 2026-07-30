@@ -198,6 +198,16 @@ describe("Calendar", () => {
         expect(getCell("20")).not.toHaveClass("disabled");
     });
 
+    it("supports partially defined limitRange", () => {
+        renderCalendar({ limitRange: { dateFrom: moment("19700110", dateFormatYYYYMMDD) } });
+
+        expect(getCell("5")).toHaveClass("disabled");
+        expect(getCell("20")).not.toHaveClass("disabled");
+        expect(screen.getByTestId("calendar-prev")).toBeDisabled();
+        // Верхняя граница не задана — действует глобальное ограничение.
+        expect(screen.getByTestId("calendar-next")).not.toBeDisabled();
+    });
+
     it("passes html attributes to day cells", () => {
         renderCalendar({ dayHtmlAttributes: { "data-testid": "day" } });
 
@@ -212,6 +222,16 @@ describe("Calendar", () => {
 
         expect(getCell("20")).toHaveAttribute("title", "marked");
         expect(getCell("21")).toHaveAttribute("title", "not marked");
+    });
+
+    it("applies data attributes returned by dayHtmlAttributes function", () => {
+        renderCalendar({
+            markedDays: ["19700120"],
+            dayHtmlAttributes: ({ marked }) => ({ "data-marked": String(marked) }),
+        });
+
+        expect(getCell("20")).toHaveAttribute("data-marked", "true");
+        expect(getCell("21")).toHaveAttribute("data-marked", "false");
     });
 
     it("applies adaptive class in adaptive mode", () => {
@@ -255,6 +275,26 @@ describe("Calendar", () => {
         fireEvent.keyDown(getCell("15"), { code: "ArrowRight" });
 
         expect(getCell("15")).toHaveAttribute("tabindex", "0");
+    });
+
+    it("makes the first enabled day of the page tabbable when initial days are disabled", () => {
+        renderCalendar({ pickedDate: null, defaultViewDate: "19700101", disabledDays: ["19700101", "19700102"] });
+
+        // Кандидаты перебираются подряд, без накопления шага: 1, 2, 3 — а не 1, 2, 4.
+        expect(getCell("3")).toHaveAttribute("tabindex", "0");
+        expect(getCell("4")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("makes the first year within the limit range tabbable in years view", () => {
+        renderCalendar({
+            reversedPick: true,
+            pickedDate: null,
+            defaultViewDate: "19700101",
+            limitRange: { dateFrom: moment("19710101", dateFormatYYYYMMDD) },
+        });
+
+        expect(getCell("1970")).toHaveClass("disabled");
+        expect(getCell("1971")).toHaveAttribute("tabindex", "0");
     });
 
     it("switches page when keyboard navigation leaves the current month", () => {
@@ -348,6 +388,52 @@ describe("Calendar", () => {
         expect(getCell("Oct")).toHaveAttribute("tabindex", "0");
     });
 
+    it("moves focus to the new tabbable cell after a keyboard page change in days view", () => {
+        renderCalendar();
+
+        getCell("15").focus();
+        fireEvent.keyDown(getCell("15"), { code: "PageDown" });
+
+        expect(screen.getByTestId("calendar-view")).toHaveTextContent("February 1970");
+        expect(getCell("15")).toHaveFocus();
+
+        fireEvent.keyDown(getCell("15"), { code: "PageUp" });
+
+        expect(screen.getByTestId("calendar-view")).toHaveTextContent("January 1970");
+        expect(getCell("15")).toHaveFocus();
+    });
+
+    it("returns focus to the tabbable cell when its grid position survives a page change", () => {
+        renderCalendar({ reversedPick: true });
+
+        // При смене страницы годов на 12 лет tabbable-ячейка остаётся на той же позиции сетки.
+        fireEvent.focus(getCell("1970"));
+        fireEvent.keyDown(getCell("1970"), { code: "PageDown" });
+
+        expect(getCell("1982")).toHaveFocus();
+    });
+
+    it("keeps focus on the tabbable cell across a page change in months view", () => {
+        renderCalendar({ pickType: ECalendarPickType.MONTH_YEAR });
+
+        fireEvent.focus(getCell("Jan"));
+        fireEvent.keyDown(getCell("Jan"), { code: "PageDown" });
+
+        expect(screen.getByTestId("calendar-view")).toHaveTextContent(/^1971$/);
+        expect(getCell("Jan")).toHaveAttribute("tabindex", "0");
+        expect(getCell("Jan")).toHaveFocus();
+    });
+
+    it("does not move focus into the grid on a page change from the controls", () => {
+        renderCalendar();
+
+        const nextButton = screen.getByTestId("calendar-next");
+        nextButton.focus();
+        fireEvent.click(nextButton);
+
+        expect(nextButton).toHaveFocus();
+    });
+
     it("does not render footer without todayButtonProps", () => {
         const { container } = renderCalendar();
 
@@ -435,5 +521,15 @@ describe("Calendar", () => {
 
         expect(screen.getByTestId("calendar-view")).toHaveTextContent("June 1970");
         expect(getCell("20")).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("formats header by the current view on external pickedDate change for MONTH_YEAR pick type", () => {
+        const { rerender } = renderCalendar({ pickType: ECalendarPickType.MONTH_YEAR });
+
+        rerender(<Calendar {...defaultProps} pickType={ECalendarPickType.MONTH_YEAR} pickedDate="19710315" />);
+
+        // Заголовок вида MONTHS — только год, без месяца ("1971", а не "March 1971").
+        expect(screen.getByTestId("calendar-view")).toHaveTextContent(/^1971$/);
+        expect(getCell("Mar")).toHaveAttribute("aria-selected", "true");
     });
 });

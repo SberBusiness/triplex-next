@@ -16,8 +16,8 @@ export const headerDateFormat = "MMMM YYYY";
 /** Транспортный (backend) формат даты. */
 export const dateFormatYYYYMMDD = "YYYYMMDD";
 
-/** Глобальный ограничитель для выбора дат. */
-export const globalLimitRange: IDateLimitRange = {
+/** Глобальный ограничитель для выбора дат. Обе границы заданы всегда — служит fallback'ом для частично заданного `IDateLimitRange`. */
+export const globalLimitRange: Required<IDateLimitRange> = {
     dateFrom: moment(new Date("1900-01-01")),
     dateTo: moment(new Date("2199-12-31")),
 };

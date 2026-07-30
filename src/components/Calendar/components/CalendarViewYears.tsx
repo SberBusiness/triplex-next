@@ -5,9 +5,11 @@ import { CalendarViewContext } from "../CalendarViewContext";
 import {
     ICalendarNavigationShift,
     ICalendarNavigationSteps,
+    getFirstEnabledDate,
     getNavigationShift,
     getShiftedDateInRange,
     isDateOutOfRange,
+    shiftDate,
     VIEW_GRID_COLUMNS,
     VIEW_GRID_ROWS,
 } from "../utils";
@@ -24,6 +26,9 @@ export interface ICalendarViewYearsProps extends Omit<
 
 /** Количество лет до отображаемого года, попадающих на страницу. */
 const YEARS_BEFORE_VIEW_DATE = 5;
+
+/** Количество лет после отображаемого года, попадающих на страницу. */
+const YEARS_AFTER_VIEW_DATE = 6;
 
 /** Величины сдвига даты при клавиатурной навигации по сетке годов. */
 const NAVIGATION_STEPS: ICalendarNavigationSteps = {
@@ -48,17 +53,14 @@ export const CalendarViewYears: React.FC<ICalendarViewYearsProps> = ({ pickedDat
     const getInitialTabbableDate = useCallback(() => {
         if (pickedDate && pickedDate.isSame(viewDate, "year")) {
             return pickedDate;
-        } else {
-            const date = viewDate.clone().subtract(YEARS_BEFORE_VIEW_DATE, "year");
-
-            for (let i = 0; i < 12; i++) {
-                date.add(i, "month");
-
-                if (!isDisabledDate(date)) {
-                    return date;
-                }
-            }
         }
+
+        return getFirstEnabledDate(
+            viewDate.clone().subtract(YEARS_BEFORE_VIEW_DATE, "year"),
+            VIEW_GRID_ROWS.length * VIEW_GRID_COLUMNS.length,
+            "year",
+            isDisabledDate,
+        );
     }, [pickedDate, viewDate, isDisabledDate]);
 
     const [tabbableDate, setTabbableDate] = useState(getInitialTabbableDate());
@@ -144,16 +146,20 @@ export const CalendarViewYears: React.FC<ICalendarViewYearsProps> = ({ pickedDat
         onViewChange(date, ECalendarViewMode.MONTHS);
     };
 
-    /** Изменение фокусируемой даты. */
+    /** Изменение фокусируемой даты. При уходе даты за пределы страницы перелистывает страницу на шаг NAVIGATION_STEPS.page. */
     const changeFocusedDate = (date: moment.Moment) => {
         setTabbableDate(date);
 
-        if (date.year() + 5 < viewDate.year()) {
-            date = viewDate.clone().subtract(12, "years");
-            onPageChange(date, ECalendarViewMode.YEARS);
-        } else if (date.year() - 6 > viewDate.year()) {
-            date = viewDate.clone().add(12, "years");
-            onPageChange(date, ECalendarViewMode.YEARS);
+        if (date.year() < viewDate.year() - YEARS_BEFORE_VIEW_DATE) {
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "subtract", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.YEARS,
+            );
+        } else if (date.year() > viewDate.year() + YEARS_AFTER_VIEW_DATE) {
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "add", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.YEARS,
+            );
         }
     };
 

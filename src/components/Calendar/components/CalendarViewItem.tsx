@@ -60,12 +60,17 @@ export const CalendarViewItem: React.FC<ICalendarViewItemProps> = ({
 }) => {
     const { viewItemFocusedRef } = useContext(CalendarViewContext);
     const ref = useRef<HTMLTableCellElement | null>(null);
+    // Примитивное значение даты для зависимостей эффекта: экземпляры Moment пересоздаются на каждом рендере.
+    const dateValue = date.valueOf();
 
+    // Возвращает фокус tabbable-ячейке при смене tabbable-даты и при смене даты самой ячейки (перелистывание
+    // страницы, в том числе когда tabbable-ячейка остаётся на той же позиции сетки). Фокус восстанавливается
+    // только когда он уже находится внутри сетки — программная смена страницы фокус не забирает.
     useEffect(() => {
         if (tabbable && viewItemFocusedRef.current) {
             ref.current?.focus();
         }
-    }, [tabbable, viewItemFocusedRef]);
+    }, [tabbable, dateValue, viewItemFocusedRef]);
 
     /** Обработчик получения фокуса. */
     const handleFocus = (event: React.FocusEvent<HTMLTableCellElement>) => {

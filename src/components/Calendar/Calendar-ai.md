@@ -64,7 +64,7 @@ version: "1.0"
 | `format` | `string` | `dateFormatYYYYMMDD` (`"YYYYMMDD"`) | Формат парсинга `pickedDate` / `defaultViewDate` и ключей `markedDays` / `disabledDays`. |
 | `pickType` | `ECalendarPickType` | `DATE` | `DATE` — выбор дня (стартовый вид `DAYS`), `MONTH_YEAR` — выбор месяца (стартовый вид `MONTHS`, клик по месяцу вызывает `onDateChange`). |
 | `defaultViewDate` | `string \| Moment` | — | Страница, открываемая при пустой `pickedDate`. Учитывается только при инициализации. |
-| `limitRange` | `IDateLimitRange` | `globalLimitRange` (1900-01-01 — 2199-12-31) | Допустимый период. Даты вне периода отключены, кнопки перелистывания у границы — `disabled`. |
+| `limitRange` | `IDateLimitRange` | `globalLimitRange` (1900-01-01 — 2199-12-31) | Допустимый период. Даты вне периода отключены, кнопки перелистывания у границы — `disabled`. Обе границы (`dateFrom` / `dateTo`) опциональны — незаданная сторона берётся из `globalLimitRange`. |
 | `markedDays` | `string[] \| Record<string, ECalendarDateMarkType>` | — | Дни с точкой-отметкой. Массив — отметка типа `BASIC`; объект — тип отметки на каждый день. Ключи в формате `format`. |
 | `disabledDays` | `string[]` | — | Дни, недоступные для выбора (в формате `format`). При клавиатурной навигации пропускаются. |
 | `reversedPick` | `boolean` | `false` | Обратный порядок выбора: старт с вида `YEARS` (год → месяц → день). Учитывается только при инициализации. |
@@ -76,7 +76,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `dayHtmlAttributes` | `TTdHTMLAttributesWithData \| (({marked}) => React.TdHTMLAttributes)` | Атрибуты ячейки дня. Функциональный вариант получает признак `marked` — им удобно помечать дни с отметкой. |
+| `dayHtmlAttributes` | `TTdHTMLAttributesWithData \| (({marked}) => TTdHTMLAttributesWithData)` | Атрибуты ячейки дня. Функциональный вариант получает признак `marked` — им удобно помечать дни с отметкой. Оба варианта допускают `data-*` атрибуты. |
 | `monthHtmlAttributes` / `yearHtmlAttributes` | `TTdHTMLAttributesWithData` | Атрибуты ячеек месяца / года. |
 | `prevButtonProps` / `nextButtonProps` | `TButtonHTMLAttributesWithData \| ((viewMode) => ...)` | Props кнопок перелистывания. `disabled` объединяется с внутренним расчётом по `limitRange`, `onClick` вызывается после смены страницы. |
 | `viewButtonProps` | `TButtonHTMLAttributesWithData \| ((viewMode) => ...)` | Props кнопки заголовка (смена вида). В виде `YEARS` кнопка не рендерится — период выводится как `<span>`. |
@@ -87,7 +87,6 @@ version: "1.0"
 
 - `defaultViewDate` и `reversedPick` влияют на стартовое состояние и не пересчитываются при последующих ререндерах (кроме синхронизации страницы с изменившейся `pickedDate`).
 - `pickType` задаёт стартовый вид только при инициализации, но продолжает влиять на поведение при каждом рендере: от него зависят выбор месяца (`MONTH_YEAR` возвращает дату, иначе — проваливается в дни) и состав футера.
-- Функциональный вариант `dayHtmlAttributes` типизирован как `React.TdHTMLAttributes` — вернуть `data-*` атрибуты из функции типы не позволяют (объектный вариант — позволяет).
 
 ---
 
@@ -136,7 +135,7 @@ version: "1.0"
 - Публичный API (`ICalendarProps`, `ICalendarNestedProps`, `ICalendarViewProps`, `TPickedDate`, `TPickedDateProp`, `TCalendarMarkedDays`, `TDayHtmlAttributes`, `TTdHTMLAttributesWithData`, `TButtonHTMLAttributesWithData`, `ECalendarPickType`, `ECalendarViewMode`, `ECalendarDateMarkType`) экспортируется через `src/components/Calendar/index.ts` — переименования и изменения значений enum'ов недопустимы.
 - `ECalendarDateMarkType` — числовой enum. Проверки типа отметки делаются через `markType !== undefined`, а не через truthy — `BASIC` равен `0`.
 - Компонент не хардкодит текст: подписи кнопок футера, `aria-label` кнопок перелистывания и любые заголовки передаёт потребитель через `*ButtonProps`. Библиотека мультиязычная.
-- Внутренние модули (`utils.ts`, `CalendarContext`, `CalendarViewContext`, `components/*`) в barrel не экспортируются, но `isDayDisabled` из `utils.ts` импортируется соседними компонентами (`DateField`) — не удалять и не переименовывать без проверки потребителей внутри `src`.
+- Внутренние модули (`utils.ts`, `CalendarContext`, `CalendarViewContext`, `components/*`) в barrel не экспортируются, но `isDayDisabled` и `isDateOutOfRange` из `utils.ts` импортируются соседними компонентами (`DateField`, `MonthYearField`) — не удалять и не переименовывать без проверки потребителей внутри `src`.
 - `periodId` (`calendar-period-{uniqueId}`) связывает заголовок и таблицу через `aria-labelledby` — не удалять.
 - В библиотеке действует React 17-совместимость (ветка `release-0`): не переводить компонент на `useId` и другие React 18-only API.
 
@@ -152,7 +151,7 @@ version: "1.0"
   - `PageUp` / `PageDown` — предыдущая / следующая страница (месяц / год / 12 лет);
   - `Enter` / `Space` — выбор даты (с `preventDefault`).
 - Недоступные дни (`disabledDays`, выход за `limitRange`) при навигации стрелками пропускаются; попытка выйти за `limitRange` оставляет фокус на текущей дате.
-- Уход навигации за пределы текущей страницы автоматически перелистывает страницу (`onPageChange`) и сохраняет фокус на новой ячейке.
+- Уход навигации за пределы текущей страницы автоматически перелистывает страницу (`onPageChange`) и возвращает фокус на новую tabbable-ячейку. Фокус восстанавливается только если он уже находился внутри сетки — программная смена страницы (кнопки перелистывания, внешняя смена `pickedDate`) фокус не забирает.
 - Выбранная ячейка помечается `aria-selected="true"`; отключённая — классом `disabled` и `pointer-events: none` (атрибут `disabled` у `<td>` невозможен).
 - Кнопки перелистывания — `ButtonIcon` без текста: потребитель обязан передать `aria-label` через `prevButtonProps` / `nextButtonProps`.
 
@@ -161,8 +160,8 @@ version: "1.0"
 ## Связанные компоненты
 
 - `DatePickerExtended` — выпадающий календарь над произвольным таргетом; рендерит `Calendar` внутри дропдауна.
-- `DateField` — поле ввода даты с календарём; использует `isDayDisabled` из `Calendar/utils` и тип `TPickedDate` из `Calendar/types`.
-- `MonthYearField`, `MonthYearRange` — выбор месяца и года, конфигурируют `Calendar` через `pickType={ECalendarPickType.MONTH_YEAR}`.
+- `DateField` — поле ввода даты с календарём; использует `isDayDisabled` и `isDateOutOfRange` из `Calendar/utils` и тип `TPickedDate` из `Calendar/types`.
+- `MonthYearField`, `MonthYearRange` — выбор месяца и года, конфигурируют `Calendar` через `pickType={ECalendarPickType.MONTH_YEAR}`; `MonthYearField` использует `isDateOutOfRange` из `Calendar/utils`.
 - `DateRange` — выбор диапазона дат двумя полями.
 - `ChipDatePicker` — чип-фильтр с календарём.
 
@@ -199,3 +198,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-30 | Создан документ. AI-рефакторинг: общие хелперы клавиатурной навигации и сдвига даты в `utils.ts`, чистка дублирования в `CalendarControls` и сетках, JSDoc на публичных типах, `displayName` у субкомпонентов; добавлены unit-тесты (`Calendar`, `CalendarViewItem`, `utils`) |
+| 2026-07-30 | Исправлены найденные при рефакторинге баги: выбор первой tabbable-ячейки перебирал кандидатов с накоплением шага (в виде годов — месяцами вместо лет; хелпер `getFirstEnabledDate`); заголовок при внешней смене `pickedDate` игнорировал формат вида (`MONTH_YEAR` показывал «March 1970» вместо «1970»); фокус после `PageUp`/`PageDown` не возвращался на tabbable-ячейку, если её позиция сетки не менялась; шаг страницы в `changeTabbableDate`/`changeFocusedDate` переведён на `NAVIGATION_STEPS.page`. Расширения API: `dateFrom`/`dateTo` в `IDateLimitRange` стали опциональными, функциональный `dayHtmlAttributes` допускает `data-*` (`TTdHTMLAttributesWithData`) |

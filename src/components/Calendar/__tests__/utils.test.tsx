@@ -2,6 +2,7 @@ import moment from "moment";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
     formatDate,
+    getFirstEnabledDate,
     getHeader,
     getNavigationShift,
     getShiftedDateInRange,
@@ -113,11 +114,18 @@ describe("Calendar utils", () => {
         });
 
         it("falls back to global limit range for empty range", () => {
-            // Тип IDateLimitRange требует обе даты, но функция поддерживает частично заданный диапазон в рантайме.
-            const emptyRange = {} as IDateLimitRange;
+            const emptyRange: IDateLimitRange = {};
 
             expect(isDateOutOfRange(moment("20200101", dateFormatYYYYMMDD), emptyRange, "day")).toBe(false);
             expect(isDateOutOfRange(moment("18000101", dateFormatYYYYMMDD), emptyRange, "day")).toBe(true);
+        });
+
+        it("supports partially defined range", () => {
+            const range: IDateLimitRange = { dateFrom: moment("19700101", dateFormatYYYYMMDD) };
+
+            expect(isDateOutOfRange(moment("19691231", dateFormatYYYYMMDD), range, "day")).toBe(true);
+            // Верхняя граница не задана — действует глобальное ограничение.
+            expect(isDateOutOfRange(moment("21000101", dateFormatYYYYMMDD), range, "day")).toBe(false);
         });
     });
 
@@ -189,6 +197,50 @@ describe("Calendar utils", () => {
             getShiftedDateInRange(date, { operation: "add", amount: 1, unit: "month" }, limitRange, "month");
 
             expect(date.format(dateFormatYYYYMMDD)).toBe("19700115");
+        });
+    });
+
+    describe("getFirstEnabledDate", () => {
+        it("returns the start date when it is enabled", () => {
+            const startDate = moment("19700101", dateFormatYYYYMMDD);
+            const result = getFirstEnabledDate(startDate, 31, "day", () => false);
+
+            expect(result?.format(dateFormatYYYYMMDD)).toBe("19700101");
+        });
+
+        it("iterates adjacent candidates in order without step accumulation", () => {
+            const checkedDates: string[] = [];
+            const isDateDisabled = (date: moment.Moment) => {
+                checkedDates.push(date.format(dateFormatYYYYMMDD));
+
+                return checkedDates.length < 3;
+            };
+
+            const result = getFirstEnabledDate(moment("19700101", dateFormatYYYYMMDD), 31, "day", isDateDisabled);
+
+            expect(checkedDates).toEqual(["19700101", "19700102", "19700103"]);
+            expect(result?.format(dateFormatYYYYMMDD)).toBe("19700103");
+        });
+
+        it("shifts candidates by years for year unit", () => {
+            const isDateDisabled = (date: moment.Moment) => date.year() < 1971;
+            const result = getFirstEnabledDate(moment("19650101", dateFormatYYYYMMDD), 12, "year", isDateDisabled);
+
+            expect(result?.format(dateFormatYYYYMMDD)).toBe("19710101");
+        });
+
+        it("returns undefined when all candidates are disabled", () => {
+            expect(getFirstEnabledDate(moment("19700101", dateFormatYYYYMMDD), 12, "month", () => true)).toBe(
+                undefined,
+            );
+        });
+
+        it("does not mutate the start date", () => {
+            const startDate = moment("19700101", dateFormatYYYYMMDD);
+
+            getFirstEnabledDate(startDate, 12, "month", () => true);
+
+            expect(startDate.format(dateFormatYYYYMMDD)).toBe("19700101");
         });
     });
 

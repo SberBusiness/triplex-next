@@ -129,6 +129,30 @@ export function getShiftedDateInRange(
 }
 
 /**
+ * Возвращает первую не отключённую дату среди `count` дат-кандидатов, начиная с `startDate`,
+ * с шагом в одну единицу `unit` между соседними кандидатами. Исходная дата не мутируется.
+ * Если все кандидаты отключены — возвращает undefined.
+ * @param startDate Первая дата-кандидат.
+ * @param count Количество проверяемых кандидатов.
+ * @param unit Единица измерения шага между кандидатами.
+ * @param isDateDisabled Предикат отключённой даты.
+ */
+export function getFirstEnabledDate(
+    startDate: moment.Moment,
+    count: number,
+    unit: TCalendarShiftUnit,
+    isDateDisabled: (date: moment.Moment) => boolean,
+): moment.Moment | undefined {
+    for (let i = 0; i < count; i++) {
+        const date = startDate.clone().add(i, unit);
+
+        if (!isDateDisabled(date)) {
+            return date;
+        }
+    }
+}
+
+/**
  * Возвращает направление и величину сдвига даты для нажатой клавиши навигации.
  * Для клавиш, не участвующих в навигации по сетке календаря, возвращает undefined.
  * @param key Код нажатой клавиши.

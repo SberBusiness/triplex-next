@@ -167,7 +167,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Pagination | ✅ | ✅ | ✅ |
 | PaginationExtended | ⬜ | ⬜ | ⬜ |
 | PaginationNavigationExtended | ⬜ | ⬜ | ⬜ |
-| Portal | ⬜ | ⬜ | ⬜ |
+| Portal | ✅ | ✅ | ✅ |
 | Radio | ⬜ | ⬜ | ⬜ |
 | RadioXGroup | ⬜ | ⬜ | ⬜ |
 | RadioYGroup | ⬜ | ⬜ | ⬜ |

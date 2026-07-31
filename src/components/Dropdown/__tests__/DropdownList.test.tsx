@@ -106,6 +106,23 @@ describe("DropdownList", () => {
         expect(getItems()[0]).toHaveClass("active");
     });
 
+    it("clears the active item when the dropdown is closed", () => {
+        const { rerender } = renderList();
+
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+        expect(getItems()[1]).toHaveClass("active");
+
+        rerender(
+            <DropdownList dropdownOpened={false}>
+                <DropdownList.Item id="item-1">Option 1</DropdownList.Item>
+                <DropdownList.Item id="item-2">Option 2</DropdownList.Item>
+                <DropdownList.Item id="item-3">Option 3</DropdownList.Item>
+            </DropdownList>,
+        );
+
+        getItems().forEach((item) => expect(item).not.toHaveClass("active"));
+    });
+
     it("moves the active item down on ArrowDown and wraps around", () => {
         renderList();
 

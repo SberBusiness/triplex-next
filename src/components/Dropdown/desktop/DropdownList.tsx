@@ -73,13 +73,12 @@ export const DropdownList: IDropdownListComponent = (props) => {
     );
     const [prevDropdownOpened, setPrevDropdownOpened] = useState(dropdownOpened);
 
-    // Сброс активного элемента при открытии — корректировка state в ответ на изменение props.
+    // Сброс активного элемента при смене открытости — корректировка state в ответ на изменение props.
+    // Сброс симметричен: на закрытии активный элемент снимается вместе с activeDescendant,
+    // иначе список, оставленный смонтированным в закрытом виде, сохранял бы подсветку.
     if (dropdownOpened !== prevDropdownOpened) {
         setPrevDropdownOpened(dropdownOpened);
-
-        if (dropdownOpened) {
-            setActiveListItemIndex(activeListItemIndexOnOpen);
-        }
+        setActiveListItemIndex(dropdownOpened ? activeListItemIndexOnOpen : undefined);
     }
 
     const childrenCount = React.Children.count(children);

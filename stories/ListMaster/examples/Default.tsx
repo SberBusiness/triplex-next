@@ -458,7 +458,6 @@ export const Default = () => {
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 gap: 8,
-                                                padding: "12px 12px 0 12px",
                                             }}
                                         >
                                             {statusOptions.map((opt) => {

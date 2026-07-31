@@ -9,17 +9,18 @@ import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropd
 import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import { getSelectedListItemIndex, scrollListToItem, scrollListToTop } from "./utils";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Dropdown открыт. */
+    /** Dropdown открыт. При открытии список подписывается на клавиатурную навигацию. */
     dropdownOpened: boolean;
     /** Объект для создания ссылки на html-элемент "список". */
     listRef?: React.RefObject<HTMLDivElement>;
-    /** Состояние загрузки. */
+    /** Состояние загрузки. Дополняет список элементом с лоадером. */
     loading?: boolean;
-    /** Размер списка. */
+    /** Размер списка. Пробрасывается в элементы списка. */
     size?: EComponentSize;
 }
 
@@ -28,16 +29,20 @@ type TActiveListItemIndex = number | undefined;
 
 /** Композиция компонента DropdownList. */
 export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
+    /** Элемент выпадающего списка. */
     Item: typeof DropdownListItem;
 }
 
 // Соответствие размера имени класса.
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
+/** Идентификатор служебного элемента списка с лоадером. */
+const LOADER_ITEM_ID = "dropdown-desktop-list-loader-item";
+
 /**
  * Компонент DropdownList.
- * Используется для обрамления вложенного списка и добавляет спику возможность навигации с клавиатуры.
- * В качестве children принимает только DropdownDesktopList.Item.
+ * Используется для обрамления вложенного списка и добавляет списку возможность навигации с клавиатуры.
+ * В качестве children принимает только DropdownList.Item.
  */
 export const DropdownList: IDropdownListComponent = (props) => {
     const {
@@ -51,39 +56,33 @@ export const DropdownList: IDropdownListComponent = (props) => {
     } = props;
     const classNames = clsx(styles.dropdownDesktopList, sizeToClassNameMap[size], className);
 
-    const { activeDescendant, setActiveDescendant } = useContext(DropdownListContext);
+    const { setActiveDescendant } = useContext(DropdownListContext);
 
-    // Ref контейнера списка.
-    const containerRef = listRef || React.createRef<HTMLDivElement>();
+    // Ref контейнера списка. Используется внутренний ref, если listRef не передан снаружи.
+    const innerContainerRef = useRef<HTMLDivElement>(null);
+    const containerRef = listRef || innerContainerRef;
     // Массив DOM-элементов списка.
     const listItemsRef = useRef<Array<HTMLDivElement | null>>([]);
-    const [activeListItemIndex, setActiveListItemIndex] = useState<TActiveListItemIndex>(undefined);
+
+    // Индекс элемента, который становится активным при открытии: выбранный элемент либо первый.
+    const selectedListItemIndex = getSelectedListItemIndex(children);
+    const activeListItemIndexOnOpen = selectedListItemIndex ?? 0;
+
+    const [activeListItemIndex, setActiveListItemIndex] = useState<TActiveListItemIndex>(
+        dropdownOpened ? activeListItemIndexOnOpen : undefined,
+    );
+    const [prevDropdownOpened, setPrevDropdownOpened] = useState(dropdownOpened);
+
+    // Сброс активного элемента при открытии — корректировка state в ответ на изменение props.
+    if (dropdownOpened !== prevDropdownOpened) {
+        setPrevDropdownOpened(dropdownOpened);
+
+        if (dropdownOpened) {
+            setActiveListItemIndex(activeListItemIndexOnOpen);
+        }
+    }
 
     const childrenCount = React.Children.count(children);
-
-    const scrollContainerToItem = (itemIndex: number) => {
-        const parent = containerRef?.current;
-        const activeItem = listItemsRef.current[itemIndex];
-
-        if (parent && activeItem) {
-            const { top: parentTop, bottom: parentBottom } = parent.getBoundingClientRect();
-            const { top: itemTop, bottom: itemBottom } = activeItem.getBoundingClientRect();
-            const offset = 4;
-
-            if (parentTop > itemTop) {
-                parent.scrollTop = parent.scrollTop - parentTop + itemTop - offset;
-            } else if (itemBottom > parentBottom) {
-                parent.scrollTop = parent.scrollTop + itemBottom - parentBottom + offset;
-            }
-        }
-    };
-
-    const scrollContainerToTop = () => {
-        const container = containerRef?.current;
-        if (container) {
-            container.scrollTop = 0;
-        }
-    };
 
     // Подписка на keydown когда открыт, с актуальным индексом.
     useEffect(() => {
@@ -92,37 +91,24 @@ export const DropdownList: IDropdownListComponent = (props) => {
         }
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            const { keyCode } = event;
-            const childrenLength = childrenCount;
-            const currentIndex = activeListItemIndex;
             let nextActiveListItemIndex: number | undefined;
 
-            if (keyCode === EVENT_KEY_CODES.ARROW_DOWN) {
-                if (currentIndex !== undefined) {
-                    if (currentIndex < childrenLength - 1) {
-                        nextActiveListItemIndex = currentIndex + 1;
-                    } else {
-                        nextActiveListItemIndex = 0;
-                    }
-                } else {
-                    nextActiveListItemIndex = 0;
-                }
+            if (event.keyCode === EVENT_KEY_CODES.ARROW_DOWN) {
+                nextActiveListItemIndex =
+                    activeListItemIndex === undefined || activeListItemIndex >= childrenCount - 1
+                        ? 0
+                        : activeListItemIndex + 1;
                 event.preventDefault();
-            } else if (keyCode === EVENT_KEY_CODES.ARROW_UP) {
-                if (currentIndex !== undefined) {
-                    if (currentIndex > 0) {
-                        nextActiveListItemIndex = currentIndex - 1;
-                    } else {
-                        nextActiveListItemIndex = childrenLength - 1;
-                    }
-                } else {
-                    nextActiveListItemIndex = childrenLength - 1;
-                }
+            } else if (event.keyCode === EVENT_KEY_CODES.ARROW_UP) {
+                nextActiveListItemIndex =
+                    activeListItemIndex === undefined || activeListItemIndex <= 0
+                        ? childrenCount - 1
+                        : activeListItemIndex - 1;
                 event.preventDefault();
             }
 
-            if (nextActiveListItemIndex !== undefined && currentIndex !== nextActiveListItemIndex) {
-                scrollContainerToItem(nextActiveListItemIndex);
+            if (nextActiveListItemIndex !== undefined && activeListItemIndex !== nextActiveListItemIndex) {
+                scrollListToItem(containerRef.current, listItemsRef.current[nextActiveListItemIndex]);
                 setActiveListItemIndex(nextActiveListItemIndex);
             }
         };
@@ -131,47 +117,42 @@ export const DropdownList: IDropdownListComponent = (props) => {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dropdownOpened, activeListItemIndex, childrenCount]);
+    }, [dropdownOpened, activeListItemIndex, childrenCount, containerRef]);
 
-    // Установка активного элемента и скролла при открытии.
+    // Прокрутка списка к активному элементу при открытии.
     useEffect(() => {
         if (!dropdownOpened) {
             return;
         }
-        let isSelectedItemExist = false;
-        React.Children.forEach(children, (child, index) => {
-            if (React.isValidElement<IDropdownListItemProps>(child) && child.props.selected) {
-                isSelectedItemExist = true;
-                scrollContainerToItem(index);
-                setActiveListItemIndex(index);
-            }
-        });
-        if (!isSelectedItemExist) {
-            setActiveListItemIndex(0);
-            scrollContainerToTop();
+
+        if (selectedListItemIndex === undefined) {
+            scrollListToTop(containerRef.current);
+        } else {
+            scrollListToItem(containerRef.current, listItemsRef.current[selectedListItemIndex]);
         }
+        // Прокрутка выполняется один раз на открытие, по состоянию списка на момент открытия.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dropdownOpened]);
 
-    // Синхронизация activeDescendant при изменении activeListItemIndex
+    // Синхронизация activeDescendant при изменении activeListItemIndex.
     useEffect(() => {
         if (dropdownOpened && activeListItemIndex !== undefined) {
             setActiveDescendant(listItemsRef.current[activeListItemIndex]?.id);
             return;
         }
-        if (!dropdownOpened && activeDescendant !== undefined) {
-            setActiveDescendant();
-        }
-    }, [dropdownOpened, activeListItemIndex, activeDescendant, setActiveDescendant]);
 
-    useEffect(() => {
-        return () => {
-            if (activeDescendant !== undefined) {
-                setActiveDescendant();
-            }
-        };
-    }, [activeDescendant, setActiveDescendant]);
+        if (!dropdownOpened) {
+            setActiveDescendant(undefined);
+        }
+    }, [dropdownOpened, activeListItemIndex, setActiveDescendant]);
+
+    // Сброс activeDescendant при размонтировании списка.
+    useEffect(
+        () => () => {
+            setActiveDescendant(undefined);
+        },
+        [setActiveDescendant],
+    );
 
     const renderedChildren = React.Children.map(children, (child, index) => {
         if (!React.isValidElement<IDropdownListItemProps & React.RefAttributes<HTMLDivElement>>(child)) {
@@ -196,7 +177,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
     });
 
     const renderLoaderItem = () => (
-        <DropdownListItem id="dropdown-desktop-list-loader-item">
+        <DropdownListItem id={LOADER_ITEM_ID}>
             <LoaderSmall className={styles.dropdownDesktopListLoader} theme={ELoaderSmallTheme.BRAND} size={size} />
         </DropdownListItem>
     );

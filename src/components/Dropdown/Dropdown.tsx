@@ -17,20 +17,35 @@ export interface IDropdownProps extends IDropdownDesktopProps {
     mobileViewProps?: Omit<IDropdownMobileProps, "opened" | "setOpened">;
 }
 
-/** Выпадающее меню. */
+/**
+ * Выпадающее меню.
+ * Рендерится через Portal в document.body и позиционируется относительно targetRef.
+ * Если передан mobileViewProps, на мобильной ширине экрана вместо десктопного меню рендерится
+ * полноэкранная мобильная версия (DropdownMobile).
+ */
 export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
     ({ children, opened, setOpened, onOpen, onClose, mobileViewProps, ...desktopProps }, ref) => {
         const mountedRef = useRef(false);
+        // Актуальные колбэки хранятся в ref, чтобы эффект зависел только от opened
+        // и не вызывал onOpen/onClose при смене идентичности колбэков.
+        const callbacksRef = useRef({ onOpen, onClose });
 
         useEffect(() => {
+            callbacksRef.current = { onOpen, onClose };
+        });
+
+        useEffect(() => {
+            // Колбэки вызываются только на смену состояния, но не на первом рендере.
             if (!mountedRef.current) {
                 mountedRef.current = true;
-            } else if (opened) {
-                onOpen?.();
-            } else {
-                onClose?.();
+                return;
             }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+
+            if (opened) {
+                callbacksRef.current.onOpen?.();
+            } else {
+                callbacksRef.current.onClose?.();
+            }
         }, [opened]);
 
         return (
@@ -44,7 +59,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
                         }
                     >
                         <DropdownMobile opened={opened} setOpened={setOpened} {...mobileViewProps} ref={ref}>
-                            {mobileViewProps?.children || children}
+                            {mobileViewProps.children || children}
                         </DropdownMobile>
                     </MobileView>
                 ) : (

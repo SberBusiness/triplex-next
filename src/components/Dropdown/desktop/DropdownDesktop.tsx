@@ -29,7 +29,15 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 const overflowHiddenClassName = styles.dropdownDesktopOverflowHidden;
 
-/** Выпадающее меню. */
+/** Отступ между управляющим элементом и выпадающим меню, px. */
+const TARGET_OFFSET = 4;
+
+/**
+ * Десктопная версия выпадающего меню.
+ * Позиционируется фиксированно относительно targetRef, пересчитывает положение при скролле,
+ * ресайзе окна и изменении размеров меню или управляющего элемента. Пока меню открыто,
+ * скролл страницы вне меню заблокирован. В закрытом состоянии ничего не рендерит.
+ */
 export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktopProps>((props, ref) => {
     const {
         children,
@@ -51,14 +59,11 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     const classNames = clsx(styles.dropdownDesktop, sizeToClassNameMap[size], scopeClassName, className);
 
     /** Блокировка скролла вне дропдауна. */
-    const wheelHandler = useCallback(
-        (event: WheelEvent) => {
-            if (!dropdownRef.current?.contains(event.target as Node)) {
-                event.preventDefault();
-            }
-        },
-        [dropdownRef],
-    );
+    const wheelHandler = useCallback((event: WheelEvent) => {
+        if (!dropdownRef.current?.contains(event.target as Node)) {
+            event.preventDefault();
+        }
+    }, []);
 
     const keyDownHandler = useCallback((event: KeyboardEvent) => {
         if (event.target === document.body) {
@@ -80,9 +85,8 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         }
     }, []);
 
-    /** Управление скроллом внешней области.  */
+    /** Управление подпиской на события, блокирующие скролл страницы вне дропдауна. */
     const toggleScrollEventListener = useCallback(
-        /** Запрет скролла всей страницы. */
         (add: boolean) => {
             if (add) {
                 document.addEventListener("wheel", wheelHandler, { passive: false });
@@ -117,24 +121,21 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     /** Расчёт положения по вертикали. */
     const calculatePositionVertical = useCallback(
         (css: React.CSSProperties, dropdownRect: DOMRect, targetRect: DOMRect) => {
-            // Отступ между target и dropdown.
-            const offset = 4;
-
             if (direction === EDropdownDirection.AUTO) {
-                if (targetRect.bottom + offset + dropdownRect.height < document.documentElement.clientHeight) {
+                if (targetRect.bottom + TARGET_OFFSET + dropdownRect.height < document.documentElement.clientHeight) {
                     // Если влезает снизу.
-                    css.top = targetRect.bottom + offset;
-                } else if (targetRect.top - offset - dropdownRect.height > 0) {
+                    css.top = targetRect.bottom + TARGET_OFFSET;
+                } else if (targetRect.top - TARGET_OFFSET - dropdownRect.height > 0) {
                     // Если не влезает снизу, но влезает сверху.
-                    css.bottom = document.documentElement.clientHeight - targetRect.top + offset;
+                    css.bottom = document.documentElement.clientHeight - targetRect.top + TARGET_OFFSET;
                 } else {
                     // Если не влезает снизу и сверху.
-                    css.top = targetRect.bottom + offset;
+                    css.top = targetRect.bottom + TARGET_OFFSET;
                 }
             } else if (direction === EDropdownDirection.BOTTOM) {
-                css.top = targetRect.bottom + offset;
+                css.top = targetRect.bottom + TARGET_OFFSET;
             } else if (direction === EDropdownDirection.TOP) {
-                css.bottom = document.documentElement.clientHeight - targetRect.top + offset;
+                css.bottom = document.documentElement.clientHeight - targetRect.top + TARGET_OFFSET;
             }
         },
         [direction],
@@ -165,7 +166,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
 
     useEffect(() => {
         if (opened) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
+            // Положение можно посчитать только после того, как меню отрендерено и его размеры измеримы.
             setPosition();
         } else {
             setStyleState({ opacity: 0 });
@@ -204,7 +205,6 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         }
     }, [opened, updatePosition, toggleScrollEventListener]);
 
-    /** Функция для хранения ссылки. */
     const setRef = (instance: HTMLDivElement | null) => {
         dropdownRef.current = instance;
         if (typeof ref === "function") {

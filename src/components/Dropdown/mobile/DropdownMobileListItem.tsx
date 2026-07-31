@@ -8,8 +8,11 @@ import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileListItem. */
 export interface IDropdownMobileListItemProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Идентификатор элемента. */
     id: string;
+    /** Обработчик выбора текущего элемента. Вызывается по клику, до onClick. */
     onSelect?: () => void;
+    /** Флаг - текущий элемент выбран. */
     selected?: boolean;
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;

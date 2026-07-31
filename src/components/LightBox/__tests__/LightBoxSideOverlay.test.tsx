@@ -13,12 +13,16 @@ interface IFocusTrapMockProps {
 
 const focusTrapMock = vi.fn();
 
-vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: IFocusTrapMockProps) => {
+vi.mock("focus-trap-react", () => {
+    const FocusTrapMock = (props: IFocusTrapMockProps) => {
         focusTrapMock(props);
         return <>{props.children}</>;
-    },
-}));
+    };
+
+    // В focus-trap-react 10 (версия React 17-ветки) компонент экспортируется по
+    // умолчанию, в 11 — именованным. Отдаём оба, чтобы мок не зависел от версии.
+    return { default: FocusTrapMock, FocusTrap: FocusTrapMock };
+});
 
 describe("LightBoxSideOverlay", () => {
     afterEach(() => {

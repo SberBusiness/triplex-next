@@ -26,7 +26,11 @@ export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElem
 
 const KEY_CODES_FOR_SELECTION_DEFAULT = [EVENT_KEY_CODES.SPACE, EVENT_KEY_CODES.ENTER];
 
-/** Элемент выпадающего списка. */
+/**
+ * Элемент выпадающего списка.
+ * Пока элемент активен (active), слушает клавиатуру документа и вызывает onSelect
+ * при нажатии клавиш из keyCodesForSelection.
+ */
 export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListItemProps>(
     (
         {
@@ -43,33 +47,31 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
         },
         ref,
     ) => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            const { keyCode } = event;
-
-            // При нажатии Enter или Space выбирается текущий пункт.
-            if (keyCodesForSelection.includes(keyCode)) {
-                event.preventDefault();
-                onSelect?.();
-            }
-        };
-
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             onSelect?.();
             onClick?.(event);
         };
 
+        // Подписка на ввод с клавиатуры для выбора активного пункта.
         useEffect(() => {
-            if (active) {
-                // Подписка на ввод клавиатуры для выбора активного пункта.
-                document.addEventListener("keydown", handleKeyDown);
-            } else {
-                document.removeEventListener("keydown", handleKeyDown);
+            if (!active) {
+                return;
             }
+
+            const handleKeyDown = (event: KeyboardEvent) => {
+                // По умолчанию при нажатии Enter или Space выбирается текущий пункт.
+                if (keyCodesForSelection.includes(event.keyCode)) {
+                    event.preventDefault();
+                    onSelect?.();
+                }
+            };
+
+            document.addEventListener("keydown", handleKeyDown);
 
             return () => {
                 document.removeEventListener("keydown", handleKeyDown);
             };
-        }, [active]);
+        }, [active, keyCodesForSelection, onSelect]);
 
         return (
             <div

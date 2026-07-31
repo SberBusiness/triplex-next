@@ -63,7 +63,9 @@ export const Title: TitleComponent = React.forwardRef(
             className,
         );
 
-        const Tag: React.ElementType = tag || "h1";
+        // Значения ETitleSize совпадают с именами тегов (h1/h2/h3), поэтому по умолчанию
+        // уровень заголовка следует за размером — как в React 18-ветке.
+        const Tag: React.ElementType = tag || size;
 
         return (
             <Tag ref={ref} className={classes} {...props}>

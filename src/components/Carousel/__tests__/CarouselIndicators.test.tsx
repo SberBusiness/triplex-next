@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Carousel } from "../Carousel";
 import { ECarouselOrientation, ECarouselScrollMode } from "../enums";
 import { TCarouselViewportPadding, ICarouselIndicatorsProps } from "../types";
-import { getResizeCallback, resetResizeCallback, mockElementSize } from "./utils";
+import { getResizeCallback, resetResizeCallback, mockElementSize } from "../../../../test-utils/dom";
 
 interface IWrapperProps {
     scrollMode?: ECarouselScrollMode;

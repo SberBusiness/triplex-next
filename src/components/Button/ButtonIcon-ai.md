@@ -31,13 +31,15 @@ version: "1.0"
 |---|---|---|---|
 | `shape` | `EButtonIconShape` | `SQUIRCLE` | Форма кнопки: `SQUIRCLE` (радиус 4px) или `CIRCLE` (радиус 50%) |
 | `active` | `boolean` | `false` | Визуально активное состояние |
+| `children` | `React.ReactNode` | — | Содержимое кнопки, обычно иконка из `@sberbusiness/icons-next` |
 | `className` | `string` | — | Дополнительный CSS-класс |
 | `...rest` | `React.ButtonHTMLAttributes<HTMLButtonElement> & DataAttributes` | — | Нативные атрибуты `<button>`, включая `disabled`, `aria-*`, `data-*` |
 
 ### Ограничения использования
 
 - Размер `ButtonIcon` задаётся размером переданной иконки; у компонента нет собственного prop `size`.
-- Корневой DOM-элемент всегда `<button>`, `type` по умолчанию принудительно установлен в `button`.
+- Внешний DOM-узел — не `<button>`: компонент рендерит `IconWrapper` (`<span>` с классами `hoverable` и `displayContents`, то есть `display: contents`), а внутри него — `<button>`. Ref-target и получатель `className` / `...rest` — всегда `<button>`; классы состояний `active` и `disabled` выставляются на span-обёртке. Это важно для `>`-селекторов и логики на `parentElement`.
+- `type="button"` выставляется компонентом (чтобы кнопка не триггерила submit формы), но может быть переопределён через `...rest`.
 - При расширении `EButtonIconShape` необходимо добавить класс в маппинг `Record<EButtonIconShape, string>` и в `ButtonIcon.module.less`.
 
 ---
@@ -85,6 +87,8 @@ version: "1.0"
 | `Default` | `DefaultExample.tsx` | Базовый сценарий использования |
 | `Sizes` | `SizesExample.tsx` | Разные размеры через размер иконки (16/20/24/32) |
 | `States` | `StatesExample.tsx` | Состояния `active` и `disabled` |
+| `VisualTestsSquircle` | `VisualTestsExample.tsx` | Скриншот-регрессия: `:focus-visible` на squircle-кнопке |
+| `VisualTestsCircle` | `VisualTestsExample.tsx` | Скриншот-регрессия: `:focus-visible` на circle-кнопке |
 
 ---
 
@@ -96,3 +100,4 @@ version: "1.0"
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убрана секция «Файловая структура», содержимое «Ключевых особенностей реализации» перенесено в `Ограничения использования`, добавлена колонка `Example file`. |
 | 2026-07-08 | Актуализирована таблица Stories: story `Disabled` заменена на `States` (`StatesExample.tsx`). |
 | 2026-07-15 | `vertical-align: top` заменён на `middle` (синхронно с `Button`) — общая опорная точка для кнопок разной высоты и центрирование относительно строки инлайн-текста. |
+| 2026-07-30 | AI-рефакторинг: внутренние импорты переведены на относительные, `children` объявлен и задокументирован явно, JSDoc уточнён дефолтами; добавлены unit-тесты `__tests__/ButtonIcon.test.tsx`; в таблицу Stories добавлены отсутствовавшие `VisualTestsSquircle` и `VisualTestsCircle`. Публичный API не изменён. |

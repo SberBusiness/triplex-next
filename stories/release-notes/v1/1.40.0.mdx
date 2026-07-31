@@ -7,3 +7,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Table**
 
 - Исправлено вертикальное положение chipPanelLinks.
+
+**Сборка пакета**
+
+- Исправлено: в 1.39.0 в опубликованный бандл попадал `vitest`, из-за чего импорт практически любого компонента ронял приложение потребителя с ошибкой `Uncaught Error: Vitest failed to access its internal state`.

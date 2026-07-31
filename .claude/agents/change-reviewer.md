@@ -55,6 +55,7 @@ tools:
 
 - [ ] Если изменилась нетривиальная логика — есть unit-тест.
 - [ ] Тесты в `__tests__/{Component}.test.tsx`.
+- [ ] **Блокер:** `import ... from "vitest"` (а также `@testing-library/*`, `storybook/test`) встречается только в файлах `*.test.ts`/`*.test.tsx`, в `vitest.setup.ts` или в `test-utils/`. Любой другой файл внутри `src/` становится entry-точкой сборки и утягивает vitest в бандл — пакет падает у потребителей с `Vitest failed to access its internal state` (регрессия 1.39.0). Общие тестовые хелперы — в `test-utils/` в корне репозитория, не в `src/**/__tests__/`. Проверка: `grep -rln "from \"vitest\"" src | grep -v "\.test\.tsx\?$"` — должно быть пусто.
 - [ ] Callbacks тестируются на аргументы (`toHaveBeenCalledWith`), не только на факт вызова.
 - [ ] Используется приоритет запросов Testing Library (`getByRole` > `getByLabelText` > `getByText` > `getByTestId`).
 - [ ] Нет фиксированных таймаутов (`setTimeout`) — `waitFor`/`findBy*`.

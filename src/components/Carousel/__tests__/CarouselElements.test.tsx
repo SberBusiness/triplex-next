@@ -4,7 +4,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Carousel } from "../Carousel";
 import { ICarouselViewportProps } from "../types";
 import { ECarouselScrollMode } from "../enums";
-import { getResizeCallback, resetResizeCallback, mockElementSize, createTouch, createTouchList } from "./utils";
+import {
+    getResizeCallback,
+    resetResizeCallback,
+    mockElementSize,
+    createTouch,
+    createTouchList,
+} from "../../../../test-utils/dom";
 
 interface ITestProps {
     slideSizes?: number[];

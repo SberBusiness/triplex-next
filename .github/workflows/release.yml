@@ -87,18 +87,23 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: npm run generateMcpData -- --out "mcp-data-${RELEASE_TAG}.json"
 
+      # fail_on_unmatched_files: по умолчанию action молча пропускает ненайденные
+      # файлы — релиз опубликовался бы без архива, и это заметили бы уже потребители.
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: dist-${{ github.event.release.tag_name }}.zip
+          fail_on_unmatched_files: true
 
       # Отдельным шагом: для 0.* бандла нет, и указывать его в files выше значило бы
-      # ссылаться на несуществующий файл.
+      # ссылаться на несуществующий файл. Шаг идёт под тем же условием, что и
+      # генерация, поэтому отсутствие файла здесь — тоже повод упасть.
       - name: Upload MCP bundle to GitHub Release
         if: steps.mcp.outputs.eligible == 'true'
         uses: softprops/action-gh-release@v2
         with:
           files: mcp-data-${{ github.event.release.tag_name }}.json
+          fail_on_unmatched_files: true
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook

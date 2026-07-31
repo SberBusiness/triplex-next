@@ -88,8 +88,8 @@ gh release view <V0> 2>&1 | head -3
 
 ## 3. React 17 — `release-react17`
 
-Запусти [`release-react17`](../release-react17/SKILL.md), передав все три
-объявленных им входа:
+Запусти [`release-react17`](../release-react17/SKILL.md), передав все
+объявленные им входы:
 
 | Вход | Значение |
 |---|---|

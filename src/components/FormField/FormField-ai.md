@@ -35,7 +35,7 @@ version: "1.0"
 
 Используй когда: собираешь поле из частей вручную — `FormFieldLabel` + один из элементов ввода (`FormFieldInput` / `FormFieldTextarea` / `FormFieldMaskedInput` / `FormFieldTarget`) + опционально `FormFieldPrefix` / `FormFieldPostfix` / `FormFieldDescription` / `FormFieldCounter`, либо строишь на его основе собственный field-компонент.
 
-Не используй когда: достаточно готовой обёртки — `TextField` (однострочный ввод), `TextareaField` (многострочный), `MaskedField` (маска), `SelectField` / `SuggestField` / `DateField` (выбор значения), `FormGroup` (раскладка label + поле + сообщение об ошибке в форме).
+Не используй когда: достаточно готовой обёртки — `TextField` (однострочный ввод), `TextareaField` (многострочный), `MaskedField` (маска), `SelectField` / `SuggestField` / `DateField` (выбор значения). `FormGroup` альтернативой не является: это контейнер, внутрь которого кладут само поле вместе с сообщением об ошибке.
 
 ---
 
@@ -128,7 +128,8 @@ version: "1.0"
 - `FormFieldClear` — кнопка очистки (`ButtonIcon` с иконкой креста), гасит фокус на `mousedown`.
 - `FormFieldDescription` — описание под полем; провайдер `FormFieldDescriptionContext`.
 - `FormFieldCounter` — счётчик символов внутри описания; сообщает `FormFieldDescription` о своём наличии.
-- `FormGroup`, `TextField`, `TextareaField`, `MaskedField`, `SelectField`, `SuggestField`, `DateField` — компоненты уровнем выше, построенные на этом семействе.
+- `TextField`, `TextareaField`, `MaskedField`, `SelectField`, `SuggestField`, `DateField` — компоненты уровнем выше, построенные на этом семействе.
+- `FormGroup` — контейнер формы (`div` без собственной логики), объединяющий поле с `HelpBox` / `Alert` / описанием. О `FormField` ничего не знает и на семействе не построен: поле кладут внутрь него.
 
 ---
 

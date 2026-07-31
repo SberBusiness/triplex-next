@@ -211,6 +211,16 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | UploadZone | ⬜ | ⬜ | ⬜ |
 | WindowResizeListener | ⬜ | ⬜ | ⬜ |
 
+**Сноски к таблице**
+
+- **FormField** — ✅ проставлены по корневым файлам компонента (`FormField.tsx`,
+  контексты, `enums.ts`, `consts.ts`, `types.ts`). Субкомпоненты из
+  `src/components/FormField/components/` (`FormFieldInput`, `FormFieldLabel`,
+  `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix` / `FormFieldPostfix`,
+  `FormFieldDescription` / `FormFieldCounter`, `components/utils.ts`) в TRI-40 не
+  рефакторились и unit-тестами не покрывались — они описаны разделом «Связанные
+  компоненты» в `FormField-ai.md` и ждут отдельных задач.
+
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать
 документацию компонентов через MCP без чтения файлов репозитория.

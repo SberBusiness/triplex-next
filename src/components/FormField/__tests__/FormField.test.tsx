@@ -175,6 +175,23 @@ describe("FormField", () => {
         expect(screen.getByTestId("form-field")).not.toHaveClass("filled");
     });
 
+    it("syncs filled state through context on input and clearing", () => {
+        render(
+            <FormField data-testid="form-field">
+                <FormFieldInput />
+            </FormField>,
+        );
+
+        const input = screen.getByRole("textbox");
+        const formField = screen.getByTestId("form-field");
+
+        fireEvent.change(input, { target: { value: "x" } });
+        expect(formField).toHaveClass("filled");
+
+        fireEvent.change(input, { target: { value: "" } });
+        expect(formField).not.toHaveClass("filled");
+    });
+
     it("binds label to the nested input through context", () => {
         render(
             <FormField>

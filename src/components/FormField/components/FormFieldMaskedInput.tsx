@@ -3,7 +3,6 @@ import MaskedInputTextMask, { conformToMask, MaskedInputProps, PipeConfig } from
 import clsx from "clsx";
 import { DataAttributes } from "../../../types/CoreTypes";
 import { presets } from "./FormFieldMaskedInputPresets";
-import { setForwardedRef } from "./utils";
 import { FormFieldInput } from "./FormFieldInput";
 import { FormFieldContext } from "../FormFieldContext";
 import { TFormFieldMaskedInputMask } from "../types";
@@ -14,7 +13,6 @@ import styles from "../styles/FormFieldMaskedInput.module.less";
 /** Свойства компонента FormFieldMaskedInput. */
 export interface IFormFieldMaskedInputProps
     extends Omit<MaskedInputProps, "guide" | "mask" | "render">, DataAttributes {
-    /** Значение поля ввода. */
     value: string;
     /** Ссылка на поле ввода. */
     forwardedRef?: React.Ref<HTMLInputElement>;
@@ -30,12 +28,6 @@ export interface IFormFieldMaskedInputProps
 /** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/**
- * Компонент маскированного ввода.
- *
- * Рендерит поверх FormFieldInput дополнительный слой с оставшейся частью маски (aria-hidden),
- * а само значение форматируется библиотекой react-text-mask.
- */
 const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMaskedInputProps>(
     (
         {
@@ -51,11 +43,9 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
         },
         ref,
     ) => {
-        // Значение слоя, отображающего часть введенного значения и оставшуюся маску.
+        // Значение инпута, отображающего часть введенного значения и оставшуюся маску.
         const [placeholderValue, setPlaceholderValue] = useState("");
-        // Длина уже введенной пользователем части значения — по ней слой маски делится на две части.
         const [filledLength, setFilledLength] = useState(0);
-        // Признак того, что последнее изменение значения произошло вставкой из буфера обмена.
         const pasted = useRef(false);
         const { filled, focused, size, status } = useContext(FormFieldContext);
 
@@ -129,7 +119,7 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             pasted.current = true;
         };
 
-        /** Постобработчик введенных значений. Выполняется после внутреннего форматирования и до onChange. */
+        // Постобработчик введенных значений. Выполняется после внутреннего форматирования и до onChange.
         const pipe = (conformedValue: string, config: PipeConfig) => {
             // Для маски с номером телефона отдельный обработчик.
             if (mask === presets.masks.phone) {
@@ -146,7 +136,7 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             return conformedValue;
         };
 
-        /** Постобработчик введенных значений, если маска является номером телефона. */
+        // Постобработчик введенных значений, если маска является номером телефона.
         const phonePipe = (text: string) => {
             let indexesOfPipedChars: number[] = [];
 
@@ -175,14 +165,9 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             };
         };
 
-        /**
-         * Возвращает value для передачи в компоненты рендера.
-         * Для некоторых типов масок value приходится модифицировать из-за багов react-text-mask.
-         */
+        // Возвращает value, для передачи в компоненты рендера. Для некоторых типов масок, value приходится модифицировать из-за багов.
         const getValue = (): string => {
             if (mask === presets.masks.phone) {
-                // Переприсваивание намеренное: это же значение читает замыкание render ниже,
-                // передавая его в FormFieldInput. Замена на return phonePipe(value).value меняет поведение.
                 value = phonePipe(value).value;
                 return value;
             }
@@ -190,17 +175,18 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             return conformToMask(value, mask, { guide: false, placeholderChar }).conformedValue;
         };
 
-        /** Объединяет ref, требуемый react-text-mask, с внешним forwardedRef. */
-        const mergeInputRef =
-            (setTextMaskRef: (inputElement: HTMLElement) => void) => (instance: HTMLInputElement | null) => {
-                if (instance) {
-                    setTextMaskRef(instance);
-                }
+        /** Функция для хранения ссылки. */
+        const setRef = (ref: (inputElement: HTMLElement) => void) => (instance: HTMLInputElement | null) => {
+            if (instance) {
+                ref(instance);
+            }
+            if (typeof forwardedRef === "function") {
+                forwardedRef(instance);
+            } else if (forwardedRef) {
+                (forwardedRef as React.MutableRefObject<HTMLInputElement | null>).current = instance;
+            }
+        };
 
-                setForwardedRef(forwardedRef, instance);
-            };
-
-        /** Возвращает значение слоя с маской: он скрыт, пока поле пустое и не в фокусе. */
         const getPlaceholderValue = () => {
             if ((!filled && !focused) || (!value && placeholder)) {
                 return "";
@@ -227,13 +213,8 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
                     disabled={status === EFormFieldStatus.DISABLED}
                     /* Input отображает только введенное значение без маски, маска рисуется в inputPlaceholder. */
                     guide={false}
-                    render={(textMaskRef, props) => (
-                        <FormFieldInput
-                            {...props}
-                            value={value}
-                            placeholder={placeholder || ""}
-                            ref={mergeInputRef(textMaskRef)}
-                        />
+                    render={(ref, props) => (
+                        <FormFieldInput {...props} value={value} placeholder={placeholder || ""} ref={setRef(ref)} />
                     )}
                     mask={mask}
                     onChange={handleChange}
@@ -253,9 +234,7 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
 FormFieldMaskedInputBase.displayName = "FormFieldMaskedInput";
 
 /**
- * Компонент маскированного ввода. Основан на https://github.com/text-mask/text-mask.
- *
- * Статическое свойство presets содержит готовые маски и плейсхолдеры масок
- * (дата, телефон, ИНН, СНИЛС и другие).
+ * Компонент маскированного ввода.
+ * Основан на https://github.com/text-mask/text-mask.
  */
 export const FormFieldMaskedInput = Object.assign(FormFieldMaskedInputBase, { presets });

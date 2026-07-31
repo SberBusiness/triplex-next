@@ -12,13 +12,16 @@ export interface IFormFieldDescriptionProps extends React.HTMLAttributes<HTMLDiv
  * Является провайдером FormFieldDescriptionContext: вложенный FormFieldCounter сообщает
  * о своём присутствии, и описание перестраивает раскладку под счётчик.
  */
-export const FormFieldDescription: React.FC<IFormFieldDescriptionProps> = ({ children, ...rest }) => {
+export const FormFieldDescription: React.FC<IFormFieldDescriptionProps> = ({ children, className, ...rest }) => {
     const [withCounter, setWithCounter] = useState(false);
     const contextValue = useMemo<IFormFieldDescriptionContext>(() => ({ withCounter, setWithCounter }), [withCounter]);
 
     return (
         <FormFieldDescriptionContext.Provider value={contextValue}>
-            <div className={clsx(styles.formFieldDescription, { [styles.withCounter]: withCounter })} {...rest}>
+            <div
+                className={clsx(styles.formFieldDescription, { [styles.withCounter]: withCounter }, className)}
+                {...rest}
+            >
                 {children}
             </div>
         </FormFieldDescriptionContext.Provider>

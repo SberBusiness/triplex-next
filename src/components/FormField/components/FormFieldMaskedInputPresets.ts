@@ -1,93 +1,91 @@
 import { TFormFieldMaskedInputMask } from "../types";
 
-/** Предзаготовленные маски и плейсхолдеры масок компонента FormFieldMaskedInput. */
 export interface TFormFieldMaskedInputPresets {
-    /** Предзаготовленный набор плейсхолдеров масок. */
+    // Предзаготовленный набор плейсхолдеров масок.
     placeholderMasks: {
-        /** Номер автомобиля A000AA 00. */
+        // Номер автомобиля A000AA 00.
         carNumber: string;
-        /** Номер карты 0000 0000 0000 0000 (от 16 до 20 символов). */
+        // Номер карты 0000 0000 0000 0000 (от 16 до 20 символов).
         cardNumber: string;
-        /** Дата дд.мм.гггг. */
+        // Дата дд.мм.гггг.
         date: string;
-        /** ИНН 0000000000 (от 10 до 12 символов). */
+        // ИНН 0000000000 (от 10 до 12 символов).
         inn: string;
-        /** Доб. номер 000 (от 3 до 4 символов). */
+        // Доб. номер 000 (от 3 до 4 символов).
         phoneExtension: string;
-        /** SWIFT код AAAAAAAA (от 8 до 11 символов). */
+        // SWIFT код AAAAAAAA (от 8 до 11 символов).
         swiftCode: string;
-        /** Время чч:мм. */
+        // Время чч:мм.
         time: string;
-        /** УИН 00000000000000000000 (от 20 до 25 символов). */
+        // УИН 00000000000000000000 (от 20 до 25 символов).
         uin: string;
-        /** Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000. */
+        // Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000.
         zhkuAccount: string;
-        /** Идентификатор ЖКУ 00АА000000-00. */
+        // Идентификатор ЖКУ 00АА000000-00.
         zhkuId: string;
-        /** Идентификатор платёжного документа (ЖКУ) 00АА000000-00-0000. */
+        // Идентификатор платёжного документа (ЖКУ) 00АА000000-00-0000.
         zhkuPaymentDocumentId: string;
     };
-    /** Предзаготовленный набор масок. */
+    // Предзаготовленный набор масок.
     masks: {
-        /** Номер счета 00000 000 0 00000000000. */
+        // Номер счета 00000 000 0 00000000000.
         account: TFormFieldMaskedInputMask;
-        /** БИК 000 000 000. */
+        // БИК 000 000 000.
         bic: TFormFieldMaskedInputMask;
-        /** Номер автомобиля A000AA 00. */
+        // Номер автомобиля A000AA 00.
         carNumber: TFormFieldMaskedInputMask;
-        /** Номер карты 0000 0000 0000 0000 (от 16 до 20 символов). */
+        // Номер карты 0000 0000 0000 0000 (от 16 до 20 символов).
         cardNumber: TFormFieldMaskedInputMask;
-        /** Дата. */
+        // Дата.
         date: TFormFieldMaskedInputMask;
-        /** Водительское удостоверение 00 00 000000. */
+        // Водительское удостоверение 00 00 000000.
         driversLicense: TFormFieldMaskedInputMask;
-        /** ИНН 0000000000 (от 10 до 12 символов). */
+        // ИНН 0000000000 (от 10 до 12 символов).
         inn: TFormFieldMaskedInputMask;
-        /** КБК 00000000000000000000. */
+        // КБК 00000000000000000000.
         kbk: TFormFieldMaskedInputMask;
-        /** КПП 000000000. */
+        // КПП 000000000.
         kpp: TFormFieldMaskedInputMask;
-        /** Широта 00.000000. */
+        // Широта 00.000000.
         latitude: TFormFieldMaskedInputMask;
-        /** Долгота 00.000000. */
+        // Долгота 00.000000.
         longitude: TFormFieldMaskedInputMask;
-        /** ОГРН 0000000000000. */
+        // ОГРН 0000000000000.
         ogrn: TFormFieldMaskedInputMask;
-        /** ОКТМО 00000000. */
+        // ОКТМО 00000000.
         oktmo: TFormFieldMaskedInputMask;
-        /** Паспорт РФ. */
+        // Паспорт РФ.
         passport: {
-            /** Код подразделения 000-000. */
+            // Код подразделения 000-000.
             departmentCode: TFormFieldMaskedInputMask;
-            /** Номер 000000. */
+            // Номер 000000.
             number: TFormFieldMaskedInputMask;
-            /** Серия 00 00. */
+            // Серия 00 00.
             series: TFormFieldMaskedInputMask;
         };
-        /** Номер телефона. */
+        // Номер телефона.
         phone: TFormFieldMaskedInputMask;
-        /** Доб. номер 000 (от 3 до 4 символов). */
+        // Доб. номер 000 (от 3 до 4 символов).
         phoneExtension: TFormFieldMaskedInputMask;
-        /** SWIFT код AAAAAAAA (от 8 до 11 символов). */
+        // SWIFT код AAAAAAAA (от 8 до 11 символов).
         swiftCode: TFormFieldMaskedInputMask;
-        /** Время чч:мм. */
+        // Время чч:мм.
         time: TFormFieldMaskedInputMask;
-        /** Индекс 000000. */
+        // Индекс 000000.
         postalCode: TFormFieldMaskedInputMask;
-        /** СНИЛС 000-000-000 00. */
+        // СНЛС 000-000-000 00.
         snils: TFormFieldMaskedInputMask;
-        /** УИН 00000000000000000000 (от 20 до 25 символов). */
+        // УИН 00000000000000000000 (от 20 до 25 символов).
         uin: TFormFieldMaskedInputMask;
-        /** Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000. */
+        // Единый лицевой счёт поставщика услуг (ЖКУ) 00АА000000.
         zhkuAccount: TFormFieldMaskedInputMask;
-        /** Идентификатор ЖКУ 00АА000000-00. */
+        // Идентификатор ЖКУ 00АА000000-00.
         zhkuId: TFormFieldMaskedInputMask;
-        /** Идентификатор платёжного документа (ЖКУ) 00АА000000-00-0000. */
+        // Идентификатор платёжного документа (ЖКУ) 00АА000000-00-0000.
         zhkuPaymentDocumentId: TFormFieldMaskedInputMask;
     };
 }
 
-/** Готовые маски и плейсхолдеры масок, доступные как FormFieldMaskedInput.presets. */
 export const presets: TFormFieldMaskedInputPresets = {
     // Предзаготовленный набор масок.
     masks: {

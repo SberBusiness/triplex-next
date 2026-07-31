@@ -16,7 +16,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **FormField**
 
-- AI-рефакторинг: документация props и значений `EFormFieldStatus`, внутренние упрощения и расширенные unit-тесты. Охвачены все субкомпоненты семейства (`FormFieldInput`, `FormFieldTextarea`, `FormFieldLabel`, `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`). Публичный API и поведение не изменены.
+- Исправлено: `className`, переданный в `FormFieldDescription` или `FormFieldCounter`, затирал базовый класс компонента вместо того, чтобы дополнять его. Теперь классы объединяются, как у остальных компонентов библиотеки.
+- AI-рефакторинг: документация props и значений `EFormFieldStatus`, внутренние упрощения и расширенные unit-тесты. Охвачены `FormFieldInput`, `FormFieldLabel`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`. Публичный API не изменён.
 
 **Table**
 

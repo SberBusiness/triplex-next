@@ -66,4 +66,17 @@ describe("FormFieldCounter", () => {
 
         expect(screen.getByTestId("description")).toContainElement(screen.getByTestId("counter"));
     });
+
+    it("merges a custom className with the base one", () => {
+        render(
+            <FormFieldCounter data-testid="counter" className="custom-class">
+                3/10
+            </FormFieldCounter>,
+        );
+
+        const counter = screen.getByTestId("counter");
+
+        expect(counter).toHaveClass("formFieldCounter");
+        expect(counter).toHaveClass("custom-class");
+    });
 });

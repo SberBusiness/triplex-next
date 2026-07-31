@@ -56,4 +56,17 @@ describe("FormFieldDescription", () => {
         expect(description).toHaveAttribute("id", "description-id");
         expect(description).toHaveAttribute("aria-live", "polite");
     });
+
+    it("merges a custom className with the base one", () => {
+        render(
+            <FormFieldDescription data-testid="description" className="custom-class">
+                Description text
+            </FormFieldDescription>,
+        );
+
+        const description = screen.getByTestId("description");
+
+        expect(description).toHaveClass("formFieldDescription");
+        expect(description).toHaveClass("custom-class");
+    });
 });

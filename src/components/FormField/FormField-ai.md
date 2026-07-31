@@ -102,7 +102,7 @@ version: "1.0"
 - `FormFieldContext` и `FormFieldDescriptionContext` в barrel не входят: это внутренний механизм семейства, но на нём завязаны все субкомпоненты — менять форму значения контекста без правки субкомпонентов нельзя.
 - Классы `formField`, `filled`, `active`, `error`, `warning`, `disabled`, а также `sm` / `md` / `lg` проверяются unit-тестами и используются в вложенных селекторах стилей семейства.
 - Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
-- `FormFieldDescription` и `FormFieldCounter` объявлены как `React.FC` без `forwardRef` — историческое отличие от остальных субкомпонентов. Добавление ref расширяет публичный API и требует отдельного решения.
+- `FormFieldDescription` и `FormFieldCounter` объявлены как `React.FC` без `forwardRef` — осознанное историческое отличие от остальных субкомпонентов. Добавление ref расширяет публичный API; решение владельца — оставить как есть.
 - Внутренние утилиты семейства (`components/utils.ts` — `isFilled`, `setForwardedRef`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`.
 - Компонент не рендерит собственных подписей и текстов — библиотека мультиязычная.
 
@@ -160,4 +160,5 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-31 | Создан документ. AI-рефакторинг FormField: JSDoc на props, enum, контекстах и константах, активное состояние вычисляется одним выражением, контекст типизирован `IFormFieldContext`, unit-тесты расширены с 4 до 23 кейсов. Публичный API не изменён. |
-| 2026-07-31 | AI-рефакторинг распространён на все субкомпоненты семейства (`components/*`): JSDoc с тегом `@default`, дедупликация `FormFieldPrefix` / `FormFieldPostfix` через внутренний хук `useFormFieldAffixWidth`, общий `setForwardedRef` в `components/utils.ts`. Добавлены unit-тесты на субкомпоненты — 10 новых файлов, по семейству стало 144 кейса в 12 файлах. Публичный API и поведение не изменены. |
+| 2026-07-31 | AI-рефакторинг распространён на субкомпоненты `FormFieldInput`, `FormFieldLabel`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`: JSDoc с тегом `@default`, дедупликация `FormFieldPrefix` / `FormFieldPostfix` через внутренний хук `useFormFieldAffixWidth`, общий `setForwardedRef` в `components/utils.ts`, unit-тесты. Публичный API не изменён. `FormFieldTextarea`, `FormFieldTarget` и `FormFieldMaskedInput` намеренно не затронуты — их покрывают задачи `TextareaField`, `SelectField` и `MaskedField`. |
+| 2026-07-31 | Исправлено: `className` у `FormFieldDescription` и `FormFieldCounter` затирал базовый класс — теперь объединяется через `clsx`. Изменение наблюдаемого поведения, зафиксировано в release notes 1.40.0. |

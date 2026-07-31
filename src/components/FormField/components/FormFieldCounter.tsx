@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import clsx from "clsx";
 import { FormFieldDescriptionContext } from "../FormFieldDescriptionContext";
 import styles from "../styles/FormFieldCounter.module.less";
 
@@ -10,7 +11,7 @@ export interface IFormFieldCounterProps extends React.HTMLAttributes<HTMLDivElem
  *
  * Сообщает родительскому FormFieldDescription о своём присутствии через FormFieldDescriptionContext.
  */
-export const FormFieldCounter: React.FC<IFormFieldCounterProps> = ({ children, ...rest }) => {
+export const FormFieldCounter: React.FC<IFormFieldCounterProps> = ({ children, className, ...rest }) => {
     const { setWithCounter } = useContext(FormFieldDescriptionContext);
 
     useEffect(() => {
@@ -20,7 +21,7 @@ export const FormFieldCounter: React.FC<IFormFieldCounterProps> = ({ children, .
     }, [setWithCounter]);
 
     return (
-        <div className={styles.formFieldCounter} {...rest}>
+        <div className={clsx(styles.formFieldCounter, className)} {...rest}>
             {children}
         </div>
     );

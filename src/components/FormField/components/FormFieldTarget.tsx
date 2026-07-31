@@ -2,34 +2,25 @@ import React, { useContext, useMemo, useLayoutEffect, useCallback } from "react"
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { FormFieldContext } from "../FormFieldContext";
-import { EFormFieldStatus } from "../enums";
+import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField/enums";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import styles from "../styles/FormFieldTarget.module.less";
 
 /** Свойства компонента FormFieldTarget. */
 export interface IFormFieldTargetProps extends React.HTMLAttributes<HTMLDivElement> {
-    /**
-     * Текст или компонент, отображающийся, когда значение не выбрано.
-     * Отличие от children в том, что placeholder отображается только при отсутствии children и более бледным цветом.
-     */
+    /** Текст, или компонент отображающий выбранное placeholder. Отличие от children в том, что placeholder отображается только когда нет children и более бледным цветом. */
     placeholder?: React.ReactNode;
 }
 
-/** Соответствие размера имени класса. */
-const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
+const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
-/**
- * Компонент, отображающий нередактируемое значение поля (например, выбранную опцию селекта).
- *
- * Фокусируемый div: получает tabIndex, связывается с лейблом через aria-labelledby и
- * сообщает в FormFieldContext о фокусе и о заполненности (наличии children).
- */
+/** Компонент, отображающий нередактируемое значение. */
 export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTargetProps>(
     ({ children, id: idProp, className, placeholder, onFocus, onBlur, ...restProps }, ref) => {
         const { size, status, active, labelId, setFilled, setFocused, setTargetId } = useContext(FormFieldContext);
         const id = useMemo(() => (idProp === undefined ? uniqueId("target_") : idProp), [idProp]);
         const childrenExist = useMemo(() => React.Children.toArray(children).length !== 0, [children]);
-        const classNames = clsx(styles.formFieldTarget, SIZE_TO_CLASS_NAME_MAP[size], className, {
+        const classNames = clsx(styles.formFieldTarget, sizeToClassNameMap[size], className, {
             [styles.disabled]: status === EFormFieldStatus.DISABLED,
             [styles.placeholder]: !!placeholder && !childrenExist && status !== EFormFieldStatus.DISABLED,
             [styles.active]: active,

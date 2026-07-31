@@ -3,7 +3,7 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Carousel } from "../Carousel";
 import { ECarouselOrientation, ECarouselScrollMode } from "../enums";
-import { getResizeCallback, resetResizeCallback, mockElementSize } from "./utils";
+import { getResizeCallback, resetResizeCallback, mockElementSize } from "../../../../test-utils/dom";
 
 interface ITestCarouselProps {
     orientation?: ECarouselOrientation;

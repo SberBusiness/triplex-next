@@ -60,7 +60,11 @@ export default defineConfig(
     },
     // Enviroment-specific adds/overrides
     {
-        files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+        files: [
+            "src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+            "stories/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+            "test-utils/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+        ],
         languageOptions: {
             globals: globals.browser,
         },

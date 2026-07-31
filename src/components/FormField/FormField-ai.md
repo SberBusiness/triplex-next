@@ -102,6 +102,8 @@ version: "1.0"
 - `FormFieldContext` и `FormFieldDescriptionContext` в barrel не входят: это внутренний механизм семейства, но на нём завязаны все субкомпоненты — менять форму значения контекста без правки субкомпонентов нельзя.
 - Классы `formField`, `filled`, `active`, `error`, `warning`, `disabled`, а также `sm` / `md` / `lg` проверяются unit-тестами и используются в вложенных селекторах стилей семейства.
 - Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
+- `FormFieldDescription` и `FormFieldCounter` объявлены как `React.FC` без `forwardRef` — историческое отличие от остальных субкомпонентов. Добавление ref расширяет публичный API и требует отдельного решения.
+- Внутренние утилиты семейства (`components/utils.ts` — `isFilled`, `setForwardedRef`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`.
 - Компонент не рендерит собственных подписей и текстов — библиотека мультиязычная.
 
 ---
@@ -124,7 +126,7 @@ version: "1.0"
 - `FormFieldTextarea` — многострочный ввод.
 - `FormFieldMaskedInput` — маскированный ввод на базе `react-text-mask`; содержит пресеты масок (`FormFieldMaskedInput.presets`).
 - `FormFieldTarget` — нередактируемое значение с `placeholder`, используется select-подобными полями.
-- `FormFieldPrefix` / `FormFieldPostfix` — контейнеры слева/справа; их измеренная ширина становится внутренним отступом поля.
+- `FormFieldPrefix` / `FormFieldPostfix` — контейнеры слева/справа; их измеренная ширина становится внутренним отступом поля. Общая логика измерения и проброса ref вынесена во внутренний хук `components/useFormFieldAffixWidth.ts` (в barrel не экспортируется).
 - `FormFieldClear` — кнопка очистки (`ButtonIcon` с иконкой креста), гасит фокус на `mousedown`.
 - `FormFieldDescription` — описание под полем; провайдер `FormFieldDescriptionContext`.
 - `FormFieldCounter` — счётчик символов внутри описания; сообщает `FormFieldDescription` о своём наличии.
@@ -157,4 +159,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-07-31 | Создан документ. AI-рефакторинг FormField: JSDoc на props, enum, контекстах и константах, активное состояние вычисляется одним выражением, контекст типизирован `IFormFieldContext`, unit-тесты расширены с 4 до 22 кейсов. Публичный API не изменён. |
+| 2026-07-31 | Создан документ. AI-рефакторинг FormField: JSDoc на props, enum, контекстах и константах, активное состояние вычисляется одним выражением, контекст типизирован `IFormFieldContext`, unit-тесты расширены с 4 до 23 кейсов. Публичный API не изменён. |
+| 2026-07-31 | AI-рефакторинг распространён на все субкомпоненты семейства (`components/*`): JSDoc с тегом `@default`, дедупликация `FormFieldPrefix` / `FormFieldPostfix` через внутренний хук `useFormFieldAffixWidth`, общий `setForwardedRef` в `components/utils.ts`. Добавлены unit-тесты на субкомпоненты — 10 новых файлов, по семейству стало 144 кейса в 12 файлах. Публичный API и поведение не изменены. |

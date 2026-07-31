@@ -213,13 +213,15 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 **Сноски к таблице**
 
-- **FormField** — ✅ проставлены по корневым файлам компонента (`FormField.tsx`,
-  контексты, `enums.ts`, `consts.ts`, `types.ts`). Субкомпоненты из
-  `src/components/FormField/components/` (`FormFieldInput`, `FormFieldLabel`,
-  `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix` / `FormFieldPostfix`,
-  `FormFieldDescription` / `FormFieldCounter`, `components/utils.ts`) в TRI-40 не
-  рефакторились и unit-тестами не покрывались — они описаны разделом «Связанные
-  компоненты» в `FormField-ai.md` и ждут отдельных задач.
+- **FormField** — ✅ покрывают и корневые файлы компонента (`FormField.tsx`,
+  контексты, `enums.ts`, `consts.ts`, `types.ts`), и все субкомпоненты из
+  `src/components/FormField/components/` (`FormFieldInput`, `FormFieldTextarea`,
+  `FormFieldLabel`, `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix` /
+  `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription` / `FormFieldCounter`,
+  `components/utils.ts`, `components/useFormFieldAffixWidth.ts`,
+  `FormFieldMaskedInputPresets.ts`): всё отрефакторено и
+  покрыто unit-тестами в рамках TRI-40, отдельных задач по субкомпонентам нет.
+  Субкомпоненты описаны разделом «Связанные компоненты» в `FormField-ai.md`.
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

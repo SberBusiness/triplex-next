@@ -9,14 +9,24 @@ import styles from "../styles/FormFieldLabel.module.less";
 
 /** Свойства компонента FormFieldLabel. */
 export interface IFormFieldLabelProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "htmlFor"> {
-    /** Label отображается в уменьшенном виде над полем ввода/селектом. */
+    /**
+     * Label отображается в уменьшенном виде над полем ввода/селектом.
+     * Если значение не задано, вычисляется из состояния поля в FormFieldContext.
+     * @default filled || active
+     */
     floating?: boolean;
 }
 
-// Соответствие размера имени класса.
+/** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Лейбл поля ввода/селекта. Отображается по-середине поля ввода, когда инпут/селект имеет значение или фокус, перемещается в верхний левый угол. */
+/**
+ * Лейбл поля ввода/селекта.
+ *
+ * Отображается по середине поля ввода; когда инпут/селект имеет значение или фокус,
+ * перемещается в верхний левый угол. Атрибут htmlFor берётся из FormFieldContext (targetId),
+ * собственный идентификатор публикуется в контекст как labelId.
+ */
 export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabelProps>(
     ({ children, id: idProp, className, style, floating: floatingProp, ...restProps }, ref) => {
         const { targetId, size, status, filled, active, prefixWidth, postfixWidth, setLabelId } =
@@ -35,10 +45,9 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
             className,
         );
 
-        const stylesLabel = {
-            // Левая позиция элемента. Когда label по-середине инпута, позиция учитывает иконки по краям, когда сверху, позиция на все ширину поля ввода.
+        const labelStyle = {
+            // Позиции по краям учитывают ширину префикса и постфикса, чтобы лейбл не перекрывался иконками.
             left: prefixWidth || TARGET_PADDING_X_DEFAULT,
-            // Правая позиция элемента. Когда label по-середине инпута, позиция учитывает иконки по краям, когда сверху, позиция на все ширину поля ввода.
             right: postfixWidth || TARGET_PADDING_X_DEFAULT,
             ...style,
         };
@@ -48,7 +57,7 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
         }, [id, setLabelId]);
 
         return (
-            <label {...restProps} id={id} className={classNames} htmlFor={targetId} style={stylesLabel} ref={ref}>
+            <label {...restProps} id={id} className={classNames} htmlFor={targetId} style={labelStyle} ref={ref}>
                 <span className={styles.formFieldLabelText}>{children}</span>
             </label>
         );

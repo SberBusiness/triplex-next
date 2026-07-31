@@ -10,10 +10,15 @@ import styles from "../styles/FormFieldTextarea.module.less";
 /** Свойства компонента FormFieldTextarea. */
 export interface IFormFieldTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
-// Соответствие размера имени класса.
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+/** Соответствие размера имени класса. */
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Компонент, отображающий textarea. */
+/**
+ * Компонент, отображающий textarea.
+ *
+ * Синхронизирует с FormFieldContext идентификатор элемента ввода, состояния фокуса и заполненности,
+ * а также блокируется, когда поле имеет статус EFormFieldStatus.DISABLED.
+ */
 export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFieldTextareaProps>(
     (
         { id: idProp, className, value, defaultValue, onFocus, onBlur, onAnimationStart, onChange, ...restProps },
@@ -21,7 +26,7 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
     ) => {
         const { size, status, setFocused, setTargetId, setFilled } = useContext(FormFieldContext);
         const id = useMemo(() => (idProp === undefined ? uniqueId("textarea_") : idProp), [idProp]);
-        const classNames = clsx(styles.formFieldTextarea, sizeToClassNameMap[size], className);
+        const classNames = clsx(styles.formFieldTextarea, SIZE_TO_CLASS_NAME_MAP[size], className);
 
         const syncFilled = useCallback(
             (nextValue: IFormFieldTextareaProps["value"]) => {
@@ -34,6 +39,8 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
             setTargetId(id);
         }, [id, setTargetId]);
 
+        // Начальная синхронизация заполненности: defaultValue учитывается только при монтировании,
+        // дальнейшие изменения value обрабатываются эффектом ниже.
         useLayoutEffect(() => {
             syncFilled(value ?? defaultValue);
             // eslint-disable-next-line react-hooks/exhaustive-deps

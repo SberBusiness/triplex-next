@@ -223,15 +223,31 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 - [x] Скрипт генерации `mcp-data.json` в triplex-next (`scripts/generateMcpData.ts`, npm: `generateMcpData`)
 - [x] Публикация bundle как GitHub Release asset (`.github/workflows/release.yml`)
 - [x] Beta-публикация npm-пакета `@sberbusiness/triplex-next-mcp-server`
+- [x] Автоматизация обновления bundle на релиз библиотеки (workflow `sync-bundle.yml` в репозитории mcp-server)
 - [ ] Stable-релиз npm-пакета (после стабилизации API tools)
 - [ ] Расширенные tools: `search_components`, `get_props`, `get_invariants`, `get_release_notes`, MCP Prompts/Resources и др. — отслеживается в собственном ROADMAP репозитория mcp-server
 
 **Как это работает:**
-1. На релиз triplex-next workflow генерирует `mcp-data.json` (плоский JSON со всеми `*-ai.md`,
-   `docs/ai/*.md`, release notes в поле `raw`) и прикладывает к GitHub Release.
+1. На релиз triplex-next workflow генерирует `mcp-data-<версия>.json` (плоский JSON
+   со всеми `*-ai.md`, `docs/ai/*.md`, release notes в поле `raw`) и прикладывает
+   к GitHub Release. Только для `1.*`: документация в `0.*` идентична, а два
+   одинаковых бандла сделали бы неоднозначным выбор источника.
 2. `fetch-bundle.ts` в mcp-server скачивает asset и раскладывает в дерево
    `bundle/{components,guides,release-notes}/` + `bundle/manifest.json`.
 3. MCP-сервер на старте читает manifest и парсит нужные файлы через gray-matter.
+
+Шаг 2 автоматизирован **на стороне mcp-server**: workflow `sync-bundle.yml`
+по расписанию сверяет `bundle/manifest.json.triplexVersion` с последним
+релизом triplex-next и при расхождении открывает PR с обновлённым bundle.
+Pull-модель выбрана намеренно — triplex-next публичный, его релизы читаются
+без авторизации, тогда как push-триггер потребовал бы хранить в публичном
+репозитории токен к приватному mcp-server.
+
+Bundle всегда разворачивается с флагом `--merge`: пока Phase 1 не закрыта,
+компоненты без `*-ai.md` приходят с `raw: null`, и прогон без флага стёр бы
+уже накопленную документацию (в том числе унаследованную от старого формата
+`*-AI.md`). Отказаться от флага можно будет, когда все компоненты получат
+`*-ai.md`.
 
 **Заметка:** Все `{Component}-ai.md` файлы содержат YAML frontmatter с machine-readable метаданными —
 mcp-server не требует изменений в формате, достаточно держать `docs/ai/template-ai.md` консистентным.

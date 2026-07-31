@@ -58,20 +58,21 @@ jobs:
       - name: Create dist.zip
         run: zip -r "dist-${{ github.event.release.tag_name }}.zip" dist
 
-      # Собрать MCP-бандл (docs/ai/*.md + src/components/**/*-AI.md + release notes)
-      # для @sberbusiness/triplex-next-mcp-server. Подробнее: docs/ai/ROADMAP.md (Фаза 4).
-      # Временно отключено: документация компонентов приводится к единому шаблону;
-      # вернуть шаг после стабилизации структуры -AI.md файлов.
-      # - name: Generate MCP bundle
-      #   run: npm run generateMcpData -- --out mcp-data.json
+      # Собрать MCP-бандл (docs/ai/*.md + src/components/**/*-ai.md + release notes)
+      # для @sberbusiness/triplex-next-mcp-server. Подробнее: docs/ai/ROADMAP.md (Фаза 2).
+      # Только для 1.* — документация в 0.* (React 17) идентична, а два одинаковых
+      # бандла в разных релизах сделали бы неоднозначным выбор источника
+      # для fetch-bundle.ts в mcp-server.
+      - name: Generate MCP bundle
+        if: startsWith(github.ref_name, '1.')
+        run: npm run generateMcpData -- --out "mcp-data-${{ github.event.release.tag_name }}.json"
 
-      # mcp-data.json временно не прикладывается к релизу — см. закомментированный
-      # шаг "Generate MCP bundle" выше.
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist-${{ github.event.release.tag_name }}.zip
+            mcp-data-${{ github.event.release.tag_name }}.json
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook

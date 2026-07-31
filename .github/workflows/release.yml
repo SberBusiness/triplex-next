@@ -54,25 +54,51 @@ jobs:
             exit 1
           fi
 
-      # Упаковать dist.zip как release asset
+      # Упаковать dist.zip как release asset.
+      # Тег приходит через env, а не через ${{ }} прямо в run: значение задаёт тот,
+      # кто создаёт релиз, и подстановка в shell была бы точкой инъекции.
       - name: Create dist.zip
-        run: zip -r "dist-${{ github.event.release.tag_name }}.zip" dist
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: zip -r "dist-${RELEASE_TAG}.zip" dist
 
-      # Собрать MCP-бандл (docs/ai/*.md + src/components/**/*-ai.md + release notes)
-      # для @sberbusiness/triplex-next-mcp-server. Подробнее: docs/ai/ROADMAP.md (Фаза 2).
-      # Только для 1.* — документация в 0.* (React 17) идентична, а два одинаковых
-      # бандла в разных релизах сделали бы неоднозначным выбор источника
-      # для fetch-bundle.ts в mcp-server.
+      # MCP-бандл собирается только для стабильных релизов React 18 (ровно 1.Y.0):
+      # документация в 0.* (React 17) идентична, а два одинаковых бандла в разных
+      # релизах сделали бы неоднозначным выбор источника для fetch-bundle.ts
+      # в mcp-server. Проверка вынесена в отдельный шаг, потому что выражения
+      # GitHub Actions не умеют регулярные выражения, а startsWith('1.') пропустил бы
+      # и 1.40.1, и 1.4.0-beta.
+      - name: Detect MCP bundle eligibility
+        id: mcp
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          IS_PRERELEASE: ${{ github.event.release.prerelease }}
+        run: |
+          if [[ "${IS_PRERELEASE}" == "false" && "${RELEASE_TAG}" =~ ^1\.[0-9]+\.0$ ]]; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            echo "MCP bundle не генерируется: tag=${RELEASE_TAG}, prerelease=${IS_PRERELEASE}."
+          fi
+
       - name: Generate MCP bundle
-        if: startsWith(github.ref_name, '1.')
-        run: npm run generateMcpData -- --out "mcp-data-${{ github.event.release.tag_name }}.json"
+        if: steps.mcp.outputs.eligible == 'true'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: npm run generateMcpData -- --out "mcp-data-${RELEASE_TAG}.json"
 
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist-${{ github.event.release.tag_name }}.zip
-            mcp-data-${{ github.event.release.tag_name }}.json
+          files: dist-${{ github.event.release.tag_name }}.zip
+
+      # Отдельным шагом: для 0.* бандла нет, и указывать его в files выше значило бы
+      # ссылаться на несуществующий файл.
+      - name: Upload MCP bundle to GitHub Release
+        if: steps.mcp.outputs.eligible == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mcp-data-${{ github.event.release.tag_name }}.json
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook
@@ -84,9 +110,14 @@ jobs:
           ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
 
       - name: Deploy Storybook to server
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.STORYBOOK_SSH_USER }} "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}"
-          rsync -avz --delete storybook-static/ ${{ secrets.STORYBOOK_SSH_USER }}:$STORYBOOK_PREVIEW_BASE/releases/${{ github.event.release.tag_name }}/
+          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}"
+          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}/"
 
       - name: Output Storybook URL
-        run: echo "Storybook deployed ${{ env.STORYBOOK_URL_BASE }}/releases/${{ github.event.release.tag_name }}"
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: echo "Storybook deployed ${STORYBOOK_URL_BASE}/releases/${RELEASE_TAG}"

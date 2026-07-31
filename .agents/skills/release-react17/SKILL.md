@@ -17,6 +17,9 @@ description: Парный React 17-релиз triplex-next (0.Y.0, npm-тег re
 - `V1` — уже опубликованная React 18-версия, `1.Y.0`.
 - `V0` — `0.Y.0`, минор совпадает с `V1`.
 - `NEXT0` — `0.(Y+1).0`, для заготовки notes.
+- `TASK` — номер задачи Linear на релиз, формат `TRI-XXX`; тот же, что и в
+  React 18-части. Идёт префиксом в коммит по
+  [`docs/ai/commits.md`](../../../docs/ai/commits.md).
 
 ## Ключевые отличия от [React 18-части](../release-react18/SKILL.md)
 
@@ -178,10 +181,14 @@ git diff origin/release-0..HEAD -- src package.json
 решены. После подтверждения:
 
 ```bash
-git add package.json package-lock.json stories/release-notes/v0/
-git commit -m "TRIPLEX-0 Подготовка релиза <V0>"     # от бота, если задан TRIPLEX_BOT_GH_TOKEN
+git add package.json package-lock.json \
+  "stories/release-notes/v0/<V0>.mdx" "stories/release-notes/v0/<NEXT0>.mdx"
+git commit -m "<TRI-XXX> Подготовка релиза <V0>"     # от бота, если задан TRIPLEX_BOT_GH_TOKEN
 git push origin release-0
 ```
+
+Пути к notes указывай точно — `git add stories/release-notes/v0/` затянул бы
+в релизный коммит любой посторонний файл, оказавшийся в каталоге.
 
 Коммит мержа и коммит подготовки релиза — два отдельных коммита, это нормально.
 Авторство бота — по паттерну из [`docs/ai/commits.md`](../../../docs/ai/commits.md).

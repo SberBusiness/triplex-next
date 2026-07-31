@@ -206,7 +206,8 @@ React 18-релиз `1.Y.0` (npm-тег `latest`) из `main`.
   если её нет — создаёт от актуального `main`.
 - `npm version X.Y.Z --no-git-tag-version` + заготовка release notes на
   следующую версию `X.(Y+1).0`.
-- Коммит `TRIPLEX-0 Подготовка релиза X.Y.Z`, push, PR `New release <версия>`.
+- Коммит `TRI-XXX Подготовка релиза X.Y.Z` (номер задачи Linear на релиз;
+  нет задачи — заводится через `/create-task`), push, PR `New release <версия>`.
 - Ждёт зелёный CI, **сам мержит** PR, создаёт GitHub Release с notes из MDX
   (`<Heading>X</Heading>` → `## X`) и пометкой latest.
 - Ждёт `release.yml` и проверяет, что версия реально в npm с нужным dist-tag.

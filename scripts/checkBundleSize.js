@@ -24,12 +24,34 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, "../dist");
 
+/**
+ * Читает лимит из переменной окружения. Значения вроде NaN или Infinity молча
+ * отключили бы проверку (`size > NaN` всегда false), поэтому принимаются только
+ * конечные положительные числа — иначе падаем сразу, а не выпускаем раздутый бандл.
+ */
+function readLimitKb(envName, fallback) {
+    const raw = process.env[envName];
+
+    if (raw === undefined) {
+        return fallback;
+    }
+
+    const value = Number(raw);
+
+    if (!Number.isFinite(value) || value <= 0) {
+        console.error(`❌ ${envName}="${raw}" — ожидается конечное положительное число (KB).`);
+        process.exit(1);
+    }
+
+    return value;
+}
+
 /** Лимит на один JS-файл в KB. Переопределяется через BUNDLE_SIZE_LIMIT_KB. */
-const LIMIT_KB = Number(process.env.BUNDLE_SIZE_LIMIT_KB ?? 700);
+const LIMIT_KB = readLimitKb("BUNDLE_SIZE_LIMIT_KB", 700);
 const LIMIT_BYTES = LIMIT_KB * 1024;
 
 /** Лимит на суммарный вес всех JS-файлов в KB. Переопределяется через BUNDLE_TOTAL_LIMIT_KB. */
-const TOTAL_LIMIT_KB = Number(process.env.BUNDLE_TOTAL_LIMIT_KB ?? 2000);
+const TOTAL_LIMIT_KB = readLimitKb("BUNDLE_TOTAL_LIMIT_KB", 2000);
 const TOTAL_LIMIT_BYTES = TOTAL_LIMIT_KB * 1024;
 
 /** Сколько самых крупных файлов показывать в отчёте. */

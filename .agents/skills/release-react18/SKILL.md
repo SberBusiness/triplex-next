@@ -23,6 +23,11 @@ description: React 18-релиз triplex-next (1.Y.0, npm-тег latest) — б�
   (патч-релиз, скачок минора) — остановись и спроси.
 - `NEXT` — `1.(Y+1).0`. На неё создаётся **заготовка** release notes, в которой
   будут копиться изменения до следующего релиза.
+- `TASK` — номер задачи Linear на этот релиз, формат `TRI-XXX`. Идёт префиксом
+  в релизный коммит по [`docs/ai/commits.md`](../../../docs/ai/commits.md).
+  Если задачи нет — заведи её через skill `create-task` («Релиз
+  <VERSION>») и возьми её номер; не выдумывай номер и не используй legacy-
+  префикс `TRIPLEX-XXX`.
 
 ## 1. Валидация
 
@@ -110,9 +115,9 @@ git add package.json package-lock.json stories/release-notes/v1/<NEXT>.mdx
 if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then
   BOT_LOGIN=$(GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN" gh api user -q .login)
   BOT_EMAIL=$(GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN" gh api user -q '"\(.id)+\(.login)@users.noreply.github.com"')
-  git -c user.name="$BOT_LOGIN" -c user.email="$BOT_EMAIL" commit -m "TRIPLEX-0 Подготовка релиза <VERSION>"
+  git -c user.name="$BOT_LOGIN" -c user.email="$BOT_EMAIL" commit -m "<TASK> Подготовка релиза <VERSION>"
 else
-  git commit -m "TRIPLEX-0 Подготовка релиза <VERSION>"
+  git commit -m "<TASK> Подготовка релиза <VERSION>"
 fi
 ```
 

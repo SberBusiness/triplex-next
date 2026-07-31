@@ -19,7 +19,7 @@
         "prepare": "husky",
         "prebuild": "npm run generateTokensTypes && npm run generateThemeCssVariables && npm run generateColorsLessVariables && tsc -p tsconfig.build.json --noEmit",
         "build": "vite build",
-        "postbuild": "node scripts/generate-package-json.js && node scripts/copyReadmeToDist.js && npm run copyLessHelpers",
+        "postbuild": "node scripts/checkBundleSize.js && node scripts/generate-package-json.js && node scripts/copyReadmeToDist.js && npm run copyLessHelpers",
         "storybook": "storybook dev -p 6006",
         "storybook:build": "npm run generateTokensTypes && npm run generateThemeCssVariables && storybook build",
         "storybook:serve": "npx http-server storybook-static -p 6007",

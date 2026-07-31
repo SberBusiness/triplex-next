@@ -19,6 +19,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: `className`, переданный в `FormFieldDescription` или `FormFieldCounter`, затирал базовый класс компонента вместо того, чтобы дополнять его. Теперь классы объединяются, как у остальных компонентов библиотеки.
 - AI-рефакторинг: документация props и значений `EFormFieldStatus`, внутренние упрощения и расширенные unit-тесты. Охвачены `FormFieldInput`, `FormFieldLabel`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`. Публичный API не изменён.
 
+**List**
+
+- Исправлен цвет фона `ListItemTail` в темной теме.
+
 **Table**
 
 - Исправлено вертикальное положение chipPanelLinks.
+
+**Сборка пакета**
+
+- Исправлено: в 1.39.0 в опубликованный бандл попадал `vitest`, из-за чего импорт практически любого компонента ронял приложение потребителя с ошибкой `Uncaught Error: Vitest failed to access its internal state`.

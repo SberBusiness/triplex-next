@@ -23,7 +23,7 @@ interface IWidthItemProps {
 
 const WidthItem = ({ width }: IWidthItemProps) => {
     const targetRef = useRef<HTMLButtonElement>(null);
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(false);
 
     return (
         <div style={{ width: "280px" }}>

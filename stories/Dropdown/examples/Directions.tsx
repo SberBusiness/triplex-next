@@ -23,7 +23,7 @@ interface IDirectionItemProps {
 
 const DirectionItem = ({ direction }: IDirectionItemProps) => {
     const targetRef = useRef<HTMLButtonElement>(null);
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(false);
 
     return (
         <div>

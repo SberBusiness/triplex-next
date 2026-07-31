@@ -23,7 +23,7 @@ interface ISizeItemProps {
 
 const SizeItem = ({ size }: ISizeItemProps) => {
     const targetRef = useRef<HTMLButtonElement>(null);
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(false);
 
     return (
         <div>

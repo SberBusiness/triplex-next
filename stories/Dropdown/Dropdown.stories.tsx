@@ -75,6 +75,21 @@ const meta = {
 
 export default meta;
 
+type TPlay = NonNullable<StoryObj<typeof Dropdown>["play"]>;
+
+/**
+ * Раскрывает все меню на канвасе.
+ * Документационные примеры стартуют закрытыми — иначе на странице autodocs все стори
+ * рендерятся разом, и каждое открытое меню блокирует скролл страницы и перекрывает текст.
+ */
+const openAllDropdowns: TPlay = async ({ canvas, userEvent }) => {
+    const triggers = await canvas.findAllByRole("button", { name: /Button text/ });
+
+    for (const trigger of triggers) {
+        await userEvent.click(trigger);
+    }
+};
+
 const PLAYGROUND_ARGS: IPlaygroundProps = {
     size: EComponentSize.MD,
     direction: EDropdownDirection.AUTO,
@@ -159,9 +174,7 @@ export const Default: StoryObj<typeof Dropdown> = {
             },
         },
     },
-    play: async ({ canvas, userEvent }) => {
-        await userEvent.click(await canvas.findByRole("button", { name: /Button text/ }));
-    },
+    play: openAllDropdowns,
 };
 
 export const Sizes: StoryObj<typeof Dropdown> = {
@@ -176,6 +189,7 @@ export const Sizes: StoryObj<typeof Dropdown> = {
             },
         },
     },
+    play: openAllDropdowns,
 };
 
 export const Directions: StoryObj<typeof Dropdown> = {
@@ -192,6 +206,7 @@ export const Directions: StoryObj<typeof Dropdown> = {
             },
         },
     },
+    play: openAllDropdowns,
 };
 
 export const Alignments: StoryObj<typeof Dropdown> = {
@@ -208,6 +223,7 @@ export const Alignments: StoryObj<typeof Dropdown> = {
             },
         },
     },
+    play: openAllDropdowns,
 };
 
 export const Widths: StoryObj<typeof Dropdown> = {
@@ -224,6 +240,7 @@ export const Widths: StoryObj<typeof Dropdown> = {
             },
         },
     },
+    play: openAllDropdowns,
 };
 
 export const Loading: StoryObj<typeof Dropdown> = {
@@ -238,6 +255,7 @@ export const Loading: StoryObj<typeof Dropdown> = {
             },
         },
     },
+    play: openAllDropdowns,
 };
 
 export const WithSelectedOption: StoryObj<typeof Dropdown> = {
@@ -254,6 +272,7 @@ export const WithSelectedOption: StoryObj<typeof Dropdown> = {
             },
         },
     },
+    play: openAllDropdowns,
 };
 
 export const MobileView: StoryObj<typeof Dropdown> = {
@@ -271,9 +290,7 @@ export const MobileView: StoryObj<typeof Dropdown> = {
             },
         },
     },
-    play: async ({ canvas, userEvent }) => {
-        await userEvent.click(await canvas.findByRole("button", { name: /Button text/ }));
-    },
+    play: openAllDropdowns,
 };
 
 export const VisualTests: StoryObj<typeof Dropdown> = {

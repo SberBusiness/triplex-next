@@ -17,7 +17,7 @@ const OPTIONS = [
 
 export const WithSelectedOption = () => {
     const targetRef = useRef<HTMLButtonElement>(null);
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(false);
     const [selectedId, setSelectedId] = useState("selected-option-2");
 
     const handleSelect = (id: string) => {

@@ -25,7 +25,9 @@ export interface IDropdownProps extends IDropdownDesktopProps {
  */
 export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
     ({ children, opened, setOpened, onOpen, onClose, mobileViewProps, ...desktopProps }, ref) => {
-        const mountedRef = useRef(false);
+        // Предыдущее состояние открытости. Сравнение со значением вместо флага "смонтирован"
+        // делает эффект идемпотентным: повторный маунт в StrictMode не вызывает колбэки.
+        const prevOpenedRef = useRef(opened);
         // Актуальные колбэки хранятся в ref, чтобы эффект зависел только от opened
         // и не вызывал onOpen/onClose при смене идентичности колбэков.
         const callbacksRef = useRef({ onOpen, onClose });
@@ -36,10 +38,11 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
 
         useEffect(() => {
             // Колбэки вызываются только на смену состояния, но не на первом рендере.
-            if (!mountedRef.current) {
-                mountedRef.current = true;
+            if (prevOpenedRef.current === opened) {
                 return;
             }
+
+            prevOpenedRef.current = opened;
 
             if (opened) {
                 callbacksRef.current.onOpen?.();

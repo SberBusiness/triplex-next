@@ -38,7 +38,10 @@ function readLimitKb(envName, fallback) {
 
     const value = Number(raw);
 
-    if (!Number.isFinite(value) || value <= 0) {
+    // Проверяем и значение, и результат перевода в байты: 1e308 сам по себе конечен,
+    // но 1e308 * 1024 переполняется в Infinity, и сравнение `size > LIMIT_BYTES`
+    // снова перестаёт срабатывать.
+    if (!Number.isFinite(value) || value <= 0 || !Number.isFinite(value * 1024)) {
         console.error(`❌ ${envName}="${raw}" — ожидается конечное положительное число (KB).`);
         process.exit(1);
     }

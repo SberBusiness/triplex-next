@@ -23,9 +23,13 @@ export interface IChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
     postfix?: React.ReactNode;
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
-    /** Размер. По умолчанию EComponentSize.MD. */
+    /** Размер.
+     * @default EComponentSize.MD
+     */
     size?: EComponentSize;
-    /** Тип. По умолчанию EChipType.TYPE_1. */
+    /** Тип.
+     * @default EChipType.TYPE_1
+     */
     type?: EChipType;
 }
 

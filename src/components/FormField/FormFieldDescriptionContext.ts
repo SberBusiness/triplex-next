@@ -1,12 +1,14 @@
 import React from "react";
 
+/** Значение контекста описания поля ввода. */
 export interface IFormFieldDescriptionContext {
-    // Поле имеет счетчик символов.
+    /** Описание содержит счетчик символов (FormFieldCounter). */
     withCounter: boolean;
-    // Установка значения withCounter.
+    /** Установка значения withCounter. */
     setWithCounter: (withCounter: boolean) => void;
 }
 
+/** Значение контекста по умолчанию — используется вне FormFieldDescription. */
 export const initialFormFieldDescriptionContext: IFormFieldDescriptionContext = {
     withCounter: false,
     setWithCounter: () => {},

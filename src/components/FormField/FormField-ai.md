@@ -1,0 +1,159 @@
+---
+component: FormField
+category: FormField
+related: [FormFieldLabel, FormFieldInput, FormFieldTextarea, FormFieldTarget, FormFieldMaskedInput, FormFieldPrefix, FormFieldPostfix, FormFieldClear, FormFieldDescription, FormFieldCounter, FormGroup, TextField, TextareaField, MaskedField, SelectField, SuggestField, DateField]
+tokens:
+  - --triplex-next-FormField-Background_Default
+  - --triplex-next-FormField-Background_Hover
+  - --triplex-next-FormField-Background_Active
+  - --triplex-next-FormField-Background_Disabled
+  - --triplex-next-FormField-Background_Error
+  - --triplex-next-FormField-Background_Error_Hover
+  - --triplex-next-FormField-Background_Warning
+  - --triplex-next-FormField-Background_Warning_Hover
+  - --triplex-next-FormField-Shadow_Default
+  - --triplex-next-FormField-Shadow_Active
+  - --triplex-next-FormField-Shadow_Error_Active
+  - --triplex-next-FormField-Shadow_Warning_Active
+  - --triplex-next-FormField-Input_Color_Default
+  - --triplex-next-FormField-Input_Color_Disabled
+  - --triplex-next-FormField-Label_Color_Default
+  - --triplex-next-FormField-Label_Color_Disabled
+  - --triplex-next-FormField-Placeholder_Color
+  - --triplex-next-FormField-Target_Color_Default
+  - --triplex-next-FormField-Target_Color_Disabled
+  - --triplex-next-FormField-Target_PlaceholderColor_Default
+stories: stories/FormField/FormField.stories.tsx
+version: "1.0"
+---
+
+# FormField
+
+## Назначение
+
+Низкоуровневый контейнер поля ввода: рисует фон, скругление, обводку и состояния (default / error / warning / disabled, активное и заполненное), а также раздаёт вложенным субкомпонентам общий контекст (`FormFieldContext`) — размер, статус, фокус, заполненность, идентификаторы элемента ввода и лейбла, ширины префикса и постфикса.
+
+Используй когда: собираешь поле из частей вручную — `FormFieldLabel` + один из элементов ввода (`FormFieldInput` / `FormFieldTextarea` / `FormFieldMaskedInput` / `FormFieldTarget`) + опционально `FormFieldPrefix` / `FormFieldPostfix` / `FormFieldDescription` / `FormFieldCounter`, либо строишь на его основе собственный field-компонент.
+
+Не используй когда: достаточно готовой обёртки — `TextField` (однострочный ввод), `TextareaField` (многострочный), `MaskedField` (маска), `SelectField` / `SuggestField` / `DateField` (выбор значения), `FormGroup` (раскладка label + поле + сообщение об ошибке в форме).
+
+---
+
+## Варианты и props
+
+`FormField` — контейнер и провайдер контекста. Собственного «значения» у него нет: состояния `filled` и `focused` вычисляются вложенными элементами ввода и поднимаются в контекст через сеттеры.
+
+### Обязательные props
+
+Обязательных custom-props нет. Практически всегда передаётся `children` — субкомпоненты семейства.
+
+### Опциональные props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `size` | `EComponentSize` | `EComponentSize.LG` | Размер поля: `SM` / `MD` / `LG`. Влияет на скругление корневого элемента и через контекст — на размеры лейбла, элемента ввода и плейсхолдера маски. |
+| `status` | `EFormFieldStatus` | `EFormFieldStatus.DEFAULT` | Визуальное состояние: `DEFAULT` / `ERROR` / `WARNING` / `DISABLED`. `DISABLED` дополнительно проставляет `disabled` вложенным `input`/`textarea` и `aria-disabled` + `tabIndex={-1}` у `FormFieldTarget`. |
+| `active` | `boolean` | `false` | Принудительно активное состояние (например, когда фокус визуально принадлежит связанному dropdown). Итоговая активность = `active \|\| focused`. |
+
+Остальные props — стандартные атрибуты `div` и `data-*`, они пробрасываются на корневой элемент.
+
+### Особенности поведения
+
+- Горизонтальные внутренние отступы корневого `div` задаются инлайн-стилем из ширин префикса и постфикса (`paddingLeft: prefixWidth`, `paddingRight: postfixWidth`). Значение по умолчанию — `TARGET_PADDING_X_DEFAULT` (12px); `FormFieldPrefix` / `FormFieldPostfix` измеряют себя через `ResizeObserver` и обновляют его. Пользовательский `style` мерджится последним и может переопределить отступы.
+- Класс `filled` выставляется, когда вложенный элемент ввода сообщил о наличии значения. Для `FormFieldInput` / `FormFieldTextarea` это включает браузерное автозаполнение (ловится через CSS-анимационные хуки `autofill-applied-hook` / `autofill-cancelled-hook`), для `FormFieldTarget` — наличие `children`.
+- Кнопка `FormFieldClear` показывается стилями только при `filled` и hover/активном состоянии непустого и не заблокированного поля, а также при собственном фокусе (`:focus`) — чтобы кнопка оставалась видимой при клавиатурной навигации.
+- Идентификаторы генерируются субкомпонентами (`uniqueId` из `lodash-es`, не `React.useId` — код должен оставаться совместимым с React 17) и попадают в контекст как `targetId` / `labelId`; на них опирается связка `label[htmlFor]` ↔ элемент ввода.
+- Вне `FormField` субкомпоненты используют `initialFormFieldContext`, где `filled: true` — это осознанный временный фикс для `DropdownMobileHeader`, а сеттеры являются no-op.
+
+---
+
+## Дизайн-токены
+
+```
+--triplex-next-FormField-Background_Default
+--triplex-next-FormField-Background_Hover
+--triplex-next-FormField-Background_Active
+--triplex-next-FormField-Background_Disabled
+--triplex-next-FormField-Background_Error
+--triplex-next-FormField-Background_Error_Hover
+--triplex-next-FormField-Background_Warning
+--triplex-next-FormField-Background_Warning_Hover
+--triplex-next-FormField-Shadow_Default
+--triplex-next-FormField-Shadow_Active
+--triplex-next-FormField-Shadow_Error_Active
+--triplex-next-FormField-Shadow_Warning_Active
+--triplex-next-FormField-Input_Color_Default
+--triplex-next-FormField-Input_Color_Disabled
+--triplex-next-FormField-Label_Color_Default
+--triplex-next-FormField-Label_Color_Disabled
+--triplex-next-FormField-Placeholder_Color
+--triplex-next-FormField-Target_Color_Default
+--triplex-next-FormField-Target_Color_Disabled
+--triplex-next-FormField-Target_PlaceholderColor_Default
+```
+
+---
+
+## Инварианты
+
+- `forwardRef` обязателен, ref ведёт на корневой `div`; корневой элемент менять нельзя.
+- `EFormFieldStatus` и его строковые значения (`default` / `disabled` / `error` / `warning`) — публичный API, как и props `size` / `status` / `active`.
+- Barrel `src/components/FormField/index.ts` реэкспортирует `enums`, `types`, `components` и сам `FormField` — состав экспортов не сокращать. Экспорт `statusToClassNameMap` из `FormField.tsx` тоже попадает в публичный barrel.
+- `FormFieldContext` и `FormFieldDescriptionContext` в barrel не входят: это внутренний механизм семейства, но на нём завязаны все субкомпоненты — менять форму значения контекста без правки субкомпонентов нельзя.
+- Классы `formField`, `filled`, `active`, `error`, `warning`, `disabled`, а также `sm` / `md` / `lg` проверяются unit-тестами и используются в вложенных селекторах стилей семейства.
+- Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
+- Компонент не рендерит собственных подписей и текстов — библиотека мультиязычная.
+
+---
+
+## Accessibility
+
+- Корневой элемент — обычный `div` без роли: семантику даёт вложенный нативный `input` / `textarea`.
+- Связка лейбла и поля: `FormFieldLabel` получает `htmlFor={targetId}` из контекста, элемент ввода — сгенерированный `id`. Поэтому `screen.getByLabelText(...)` находит поле, а клик по лейблу фокусирует ввод.
+- `FormFieldTarget` (нередактируемое значение, например для select-подобных полей) получает `tabIndex={0}`, `aria-labelledby={labelId}` и `aria-disabled`; при `status = DISABLED` — `tabIndex={-1}`.
+- При `status = DISABLED` вложенные `input` / `textarea` получают нативный `disabled`, то есть выпадают из таб-порядка.
+- Плейсхолдер маски в `FormFieldMaskedInput` рендерится с `aria-hidden="true"` — скринридер читает только реальное значение input.
+- Текст описания (`FormFieldDescription`) визуально связан с полем, но не связывается автоматически через `aria-describedby` — при необходимости потребитель передаёт `aria-describedby` элементу ввода сам.
+
+---
+
+## Связанные компоненты
+
+- `FormFieldLabel` — плавающий лейбл; поднимается над полем, когда поле заполнено или активно (можно форсировать props `floating`).
+- `FormFieldInput` — однострочный ввод; поддерживает render-prop `render` для подмены инпута с сохранением стилизации.
+- `FormFieldTextarea` — многострочный ввод.
+- `FormFieldMaskedInput` — маскированный ввод на базе `react-text-mask`; содержит пресеты масок (`FormFieldMaskedInput.presets`).
+- `FormFieldTarget` — нередактируемое значение с `placeholder`, используется select-подобными полями.
+- `FormFieldPrefix` / `FormFieldPostfix` — контейнеры слева/справа; их измеренная ширина становится внутренним отступом поля.
+- `FormFieldClear` — кнопка очистки (`ButtonIcon` с иконкой креста), гасит фокус на `mousedown`.
+- `FormFieldDescription` — описание под полем; провайдер `FormFieldDescriptionContext`.
+- `FormFieldCounter` — счётчик символов внутри описания; сообщает `FormFieldDescription` о своём наличии.
+- `FormGroup`, `TextField`, `TextareaField`, `MaskedField`, `SelectField`, `SuggestField`, `DateField` — компоненты уровнем выше, построенные на этом семействе.
+
+---
+
+## Stories
+
+Основные истории: `stories/FormField/FormField.stories.tsx`
+Файлы примеров: `stories/FormField/examples/`
+
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `status`, `size`, лейбла, плейсхолдера и описания |
+| `Default` | `DefaultExample.tsx` | Минимальная композиция: лейбл + input |
+| `WithPrefixAndPostfix` | `WithPrefixAndPostfixExample.tsx` | Контент слева и справа от поля и влияние на отступы |
+| `WithClearButton` | `WithClearButtonExample.tsx` | Кнопка очистки значения в постфиксе |
+| `WithCounter` | `WithCounterExample.tsx` | Описание со счётчиком символов |
+| `States` | `StatesExample.tsx` | Статусы default / error / warning / disabled |
+| `Textarea` | `TextareaExample.tsx` | Многострочный ввод |
+| `Sizes` | `SizesExample.tsx` | Размеры `SM` / `MD` / `LG` |
+| `MaskedInput` | `MaskedInputExample.tsx` | Маскированный ввод и пресеты масок |
+| `VisualTests` | `VisualTestsExample.tsx` | Скриншот-регрессия: состояния и размеры на одной странице |
+
+---
+
+## История изменений
+
+| Дата | Изменение |
+|---|---|
+| 2026-07-31 | Создан документ. AI-рефакторинг FormField: JSDoc на props, enum, контекстах и константах, активное состояние вычисляется одним выражением, контекст типизирован `IFormFieldContext`, unit-тесты расширены с 4 до 22 кейсов. Публичный API не изменён. |

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import clsx from "clsx";
-import { FormFieldContext } from "./FormFieldContext";
+import { FormFieldContext, IFormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
 import { EFormFieldStatus } from "./enums";
 import { EComponentSize } from "../../enums/EComponentSize";
@@ -10,14 +10,15 @@ import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, DataAttributes {
-    /** Визуальное состояние. */
+    /** Визуальное состояние поля. По умолчанию EFormFieldStatus.DEFAULT. Значение DISABLED блокирует вложенные элементы ввода. */
     status?: EFormFieldStatus;
-    /** Размер. */
+    /** Размер поля. По умолчанию EComponentSize.LG. Прокидывается вложенным элементам через контекст. */
     size?: EComponentSize;
-    /** Активное состояние. */
+    /** Принудительно активное состояние. По умолчанию false. Поле также становится активным, когда вложенный элемент ввода в фокусе. */
     active?: boolean;
 }
 
+/** Соответствие статуса имени класса. */
 export const statusToClassNameMap = {
     [EFormFieldStatus.DEFAULT]: styles.default,
     [EFormFieldStatus.DISABLED]: styles.disabled,
@@ -25,9 +26,16 @@ export const statusToClassNameMap = {
     [EFormFieldStatus.WARNING]: styles.warning,
 };
 
+/** Соответствие размера имени класса. */
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
-/** Элемент, отображающий input/select/textarea + label. */
+/**
+ * Элемент, отображающий input/select/textarea + label.
+ *
+ * Является провайдером FormFieldContext: размер, статус и состояния поля (фокус, заполненность,
+ * идентификаторы элемента ввода и лейбла, ширины префикса и постфикса) распространяются
+ * на вложенные FormFieldLabel / FormFieldInput / FormFieldTarget и другие субкомпоненты.
+ */
 export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
     (
         {
@@ -48,7 +56,10 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
         const [filled, setFilled] = useState(false);
         const [focused, setFocused] = useState(false);
 
-        const contextValue = useMemo(
+        // Поле активно, если активность задана снаружи или вложенный элемент ввода в фокусе.
+        const isActive = active || focused;
+
+        const contextValue = useMemo<IFormFieldContext>(
             () => ({
                 size,
                 status,
@@ -58,7 +69,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                 prefixWidth,
                 filled,
                 focused,
-                active: active || focused,
+                active: isActive,
                 setTargetId,
                 setLabelId,
                 setPostfixWidth,
@@ -66,7 +77,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                 setFilled,
                 setFocused,
             }),
-            [size, status, targetId, labelId, postfixWidth, prefixWidth, filled, focused, active],
+            [size, status, targetId, labelId, postfixWidth, prefixWidth, filled, focused, isActive],
         );
 
         return (
@@ -78,7 +89,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                         statusToClassNameMap[status],
                         {
                             [styles.filled]: filled,
-                            [styles.active]: active || focused,
+                            [styles.active]: isActive,
                         },
                         className,
                     )}

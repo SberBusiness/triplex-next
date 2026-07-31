@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
@@ -24,7 +23,7 @@ export const DropdownMobileList = React.forwardRef<HTMLDivElement, IDropdownMobi
         );
 
         return (
-            <div className={clsx(styles.dropdownMobileList, className)} role="listbox" {...htmlAttributes} ref={ref}>
+            <div className={className} role="listbox" {...htmlAttributes} ref={ref}>
                 {children}
                 {loading && renderLoaderItem()}
             </div>

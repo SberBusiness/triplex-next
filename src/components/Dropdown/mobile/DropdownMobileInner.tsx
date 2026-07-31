@@ -29,11 +29,15 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
         const { scopeClassName } = useToken();
 
         useEffect(() => {
-            setTimeout(() => setOpeningState(openingProps));
+            const timeoutId = setTimeout(() => setOpeningState(openingProps));
+
+            return () => clearTimeout(timeoutId);
         }, [openingProps]);
 
         useEffect(() => {
-            setTimeout(() => setOpenedState(openedProps));
+            const timeoutId = setTimeout(() => setOpenedState(openedProps));
+
+            return () => clearTimeout(timeoutId);
         }, [openedProps]);
 
         const classNamesWrapper = clsx(styles.dropdownMobileWrapper, scopeClassName, className);

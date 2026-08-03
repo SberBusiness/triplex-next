@@ -29,6 +29,30 @@ const AlignedStart = () => {
     );
 };
 
+/** Подсказка с указателем, выровненным по концу целевого элемента. */
+const AlignedEnd = () => {
+    const targetRef = useRef<HTMLButtonElement | null>(null);
+
+    return (
+        <Tooltip
+            size={ETooltipSize.SM}
+            toggleType="hover"
+            preferPlace={ETooltipPreferPlace.BELOW}
+            alignTip={ETooltipAlign.END}
+            isOpen
+            disableAdaptiveMode
+            targetRef={targetRef}
+        >
+            <Tooltip.Target>
+                <ButtonIcon aria-label="Указатель в конце" ref={targetRef}>
+                    <QuestioncircleFilledSrvIcon16 paletteIndex={5} />
+                </ButtonIcon>
+            </Tooltip.Target>
+            <Tooltip.Body>alignTip: end</Tooltip.Body>
+        </Tooltip>
+    );
+};
+
 /** Широкая подсказка с длинным текстом, ссылкой и кнопкой закрытия. */
 const LargeWithLinkAndClose = () => {
     const targetRef = useRef<HTMLButtonElement | null>(null);
@@ -60,6 +84,9 @@ export const VisualTests = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", padding: "64px 0" }}>
             <AlignedStart />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", padding: "64px 0" }}>
+            <AlignedEnd />
         </div>
         <div style={{ display: "flex", alignItems: "center", padding: "104px 0" }}>
             <LargeWithLinkAndClose />

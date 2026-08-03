@@ -1,9 +1,9 @@
 import moment from "moment";
-import { headerDateFormat, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
-import { ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { TPickedDate, TPickedDateProp } from "@sberbusiness/triplex-next/components/Calendar/types";
-import { IDateLimitRange } from "@sberbusiness/triplex-next/types/DateTypes";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
+import { headerDateFormat, globalLimitRange } from "../../consts/DateConst";
+import { ECalendarViewMode } from "./enums";
+import { TPickedDate, TPickedDateProp } from "./types";
+import { IDateLimitRange } from "../../types/DateTypes";
+import { isKey } from "../../utils/keyboard";
 
 /** Направление сдвига даты. */
 export type TCalendarShiftOperation = "add" | "subtract";

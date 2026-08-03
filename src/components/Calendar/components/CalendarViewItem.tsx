@@ -27,7 +27,7 @@ export interface ICalendarViewItemProps extends React.TdHTMLAttributes<HTMLTable
 }
 
 /** Соответствие типа отметки имени класса. */
-const markTypeToClassNameMap = {
+const MARK_TYPE_TO_CLASS_NAME_MAP = {
     [ECalendarDateMarkType.BASIC]: styles.basicMark,
     [ECalendarDateMarkType.STANDARD]: styles.standardMark,
     [ECalendarDateMarkType.ATTENTION]: styles.attentionMark,
@@ -35,7 +35,7 @@ const markTypeToClassNameMap = {
 };
 
 /** Соответствие единицы измерения имени класса. */
-const unitToClassNameMap = {
+const UNIT_TO_CLASS_NAME_MAP = {
     day: styles.unitDay,
     month: styles.unitMonth,
     year: styles.unitYear,
@@ -112,14 +112,14 @@ export const CalendarViewItem: React.FC<ICalendarViewItemProps> = ({
             <div
                 className={clsx(
                     styles.calendarViewItemLabel,
-                    unitToClassNameMap[unit],
+                    UNIT_TO_CLASS_NAME_MAP[unit],
                     {
                         [styles.disabled]: disabled,
                         [styles.marked]: markType !== undefined,
                         [styles.muted]: !!muted,
                         [styles.selected]: active,
                     },
-                    markType !== undefined ? markTypeToClassNameMap[markType] : undefined,
+                    markType !== undefined ? MARK_TYPE_TO_CLASS_NAME_MAP[markType] : undefined,
                 )}
                 onClick={() => onDateSelect(date)}
             >

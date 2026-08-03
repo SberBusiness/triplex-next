@@ -11,10 +11,10 @@ export const TooltipLink = React.forwardRef<HTMLAnchorElement, ITooltipLinkProps
         // Защита от reverse tabnabbing при target="_blank".
         const safeRel = getSafeRel(target, rel);
 
-        /** Рендер десктоп версии. */
-        const renderDesktopLink = () => (
+        /** Рендер ссылки с классом варианта отображения (десктопный или мобильный). */
+        const renderLink = (variantClassName: string) => (
             <a
-                className={clsx(styles.tooltipLink, styles.desktop, className)}
+                className={clsx(styles.tooltipLink, variantClassName, className)}
                 {...rest}
                 target={target}
                 rel={safeRel}
@@ -25,20 +25,7 @@ export const TooltipLink = React.forwardRef<HTMLAnchorElement, ITooltipLinkProps
             </a>
         );
 
-        return (
-            <MobileView fallback={renderDesktopLink()}>
-                <a
-                    className={clsx(styles.tooltipLink, styles.mobile, className)}
-                    {...rest}
-                    target={target}
-                    rel={safeRel}
-                    data-tx={process.env.npm_package_version}
-                    ref={ref}
-                >
-                    {children}
-                </a>
-            </MobileView>
-        );
+        return <MobileView fallback={renderLink(styles.desktop)}>{renderLink(styles.mobile)}</MobileView>;
     },
 );
 

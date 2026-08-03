@@ -37,6 +37,24 @@ describe("CardAction", () => {
         expect(root.className).toContain("roundingSM");
     });
 
+    it("applies rounding class for each ECardRoundingSize value", () => {
+        const { rerender } = render(<CardAction roundingSize={ECardRoundingSize.SM}>card</CardAction>);
+        const root = getCard();
+        expect(root.className).toContain("roundingSM");
+
+        rerender(<CardAction roundingSize={ECardRoundingSize.MD}>card</CardAction>);
+        expect(root.className).toContain("roundingMD");
+
+        rerender(<CardAction roundingSize={ECardRoundingSize.LG}>card</CardAction>);
+        expect(root.className).toContain("roundingLG");
+    });
+
+    it("applies rounding MD by default", () => {
+        render(<CardAction>card</CardAction>);
+
+        expect(getCard().className).toContain("roundingMD");
+    });
+
     it("uncontrolled: toggles on click and space/enter, calls onToggle", () => {
         const onToggle = vi.fn();
         render(

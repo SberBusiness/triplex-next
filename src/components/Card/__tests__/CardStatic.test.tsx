@@ -34,6 +34,24 @@ describe("CardStatic", () => {
         expect(classAfter).not.toEqual(classBefore);
     });
 
+    it("applies rounding class for each ECardRoundingSize value", () => {
+        const { rerender } = render(<CardStatic roundingSize={ECardRoundingSize.SM}>card</CardStatic>);
+        const root = screen.getByText("card");
+        expect(root.className).toContain("roundingSM");
+
+        rerender(<CardStatic roundingSize={ECardRoundingSize.MD}>card</CardStatic>);
+        expect(root.className).toContain("roundingMD");
+
+        rerender(<CardStatic roundingSize={ECardRoundingSize.LG}>card</CardStatic>);
+        expect(root.className).toContain("roundingLG");
+    });
+
+    it("applies rounding MD by default", () => {
+        render(<CardStatic>card</CardStatic>);
+
+        expect(screen.getByText("card").className).toContain("roundingMD");
+    });
+
     it("merges className and forwards attributes", () => {
         render(
             <CardStatic theme={ECardTheme.GENERAL} className="extra" id="card-id" title="title-attr" data-testid="card">

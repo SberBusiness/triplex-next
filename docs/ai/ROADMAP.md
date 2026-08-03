@@ -91,7 +91,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ButtonDropdown | ✅ | ✅ | ✅ |
 | ButtonDropdownExtended | ✅ | ✅ | ✅ |
 | ButtonIcon | ✅ | ✅ | ✅ |
-| Calendar | ⬜ | ✅ | ⬜ |
+| Calendar | ✅ | ✅ | ✅ |
 | CardAction | ⬜ | ⬜ | ⬜ |
 | CardStatic | ⬜ | ⬜ | ⬜ |
 | CarouselExtended | ⬜ | ⬜ | ⬜ |
@@ -100,7 +100,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CheckboxTreeExtended | ⬜ | ✅ | ⬜ |
 | CheckboxXGroup | ✅ | ✅ | ⬜ |
 | CheckboxYGroup | ✅ | ✅ | ⬜ |
-| Chip | ⬜ | ✅ | ⬜ |
+| Chip | ✅ | ✅ | ✅ |
 | ChipGroup | ⬜ | ✅ | ⬜ |
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
@@ -117,7 +117,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ExpandAnimation | ⬜ | ⬜ | ⬜ |
 | Footer | ⬜ | ⬜ | ⬜ |
 | FooterPage | ✅ | ✅ | ✅ |
-| FormField | ⬜ | ✅ | ⬜ |
+| FormField | ✅ | ✅ | ✅ |
 | FormGroup | ⬜ | ⬜ | ⬜ |
 | Gap | ✅ | ✅ | ✅ |
 | Header | ⬜ | ⬜ | ⬜ |
@@ -199,7 +199,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TextField | ✅ | ✅ | ✅ |
 | TextareaField | ⬜ | ✅ | ⬜ |
 | ThemeProvider | ⬜ | ⬜ | ⬜ |
-| Tooltip | ⬜ | ⬜ | ⬜ |
+| Tooltip | ✅ | ✅ | ✅ |
 | TopOverlay | ⬜ | ⬜ | ⬜ |
 | TreeView | ⬜ | ⬜ | ⬜ |
 | Text | ✅ | ✅ | ✅ |

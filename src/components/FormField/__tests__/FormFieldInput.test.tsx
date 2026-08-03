@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, createEvent } from "@testing-library/react";
 import { EFormFieldStatus, FormField, FormFieldInput, FormFieldLabel } from "@sberbusiness/triplex-next/components";
 import { IFormFieldInputProvideProps } from "../components/FormFieldInput";
 
@@ -90,5 +90,61 @@ describe("FormFieldInput", () => {
         const input = screen.getByTestId("input-test");
         expect(input).toHaveClass("custom-input-class");
         expect(input).toHaveAttribute("maxLength", "10");
+    });
+
+    it("syncs filled state from the controlled value", () => {
+        const { rerender } = render(
+            <FormField data-testid="form-field">
+                <FormFieldInput value="" onChange={vi.fn()} />
+            </FormField>,
+        );
+
+        expect(screen.getByTestId("form-field")).not.toHaveClass("filled");
+
+        rerender(
+            <FormField data-testid="form-field">
+                <FormFieldInput value="value" onChange={vi.fn()} />
+            </FormField>,
+        );
+
+        expect(screen.getByTestId("form-field")).toHaveClass("filled");
+    });
+
+    it("reports filled state on browser autofill and resets it on autofill cancel", () => {
+        // jsdom не реализует AnimationEvent, поэтому animationName проставляется вручную.
+        const fireAnimationStart = (element: HTMLElement, animationName: string) => {
+            const event = createEvent.animationStart(element, {});
+
+            Object.defineProperty(event, "animationName", { value: animationName });
+            fireEvent(element, event);
+        };
+
+        render(
+            <FormField data-testid="form-field">
+                <FormFieldInput />
+            </FormField>,
+        );
+
+        const input = screen.getByRole("textbox");
+        const formField = screen.getByTestId("form-field");
+
+        fireAnimationStart(input, "autofill-applied-hook-1");
+        expect(formField).toHaveClass("filled");
+
+        fireAnimationStart(input, "autofill-cancelled-hook-1");
+        expect(formField).not.toHaveClass("filled");
+    });
+
+    it("forwards ref to the input element", () => {
+        const ref = React.createRef<HTMLInputElement>();
+
+        render(
+            <FormField>
+                <FormFieldInput ref={ref} />
+            </FormField>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLInputElement);
+        expect(ref.current).toBe(screen.getByRole("textbox"));
     });
 });

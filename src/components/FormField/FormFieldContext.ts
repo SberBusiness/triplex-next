@@ -2,6 +2,7 @@ import React from "react";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { EFormFieldStatus } from "./enums";
 
+/** Значение контекста поля ввода. Провайдер — компонент FormField. */
 export interface IFormFieldContext {
     /** Размер поля. */
     size: EComponentSize;
@@ -35,6 +36,10 @@ export interface IFormFieldContext {
     setFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ * Значение контекста по умолчанию — используется субкомпонентами, отрендеренными вне FormField.
+ * Сеттеры в этом случае являются no-op.
+ */
 export const initialFormFieldContext: IFormFieldContext = {
     size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,

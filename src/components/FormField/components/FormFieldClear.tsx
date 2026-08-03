@@ -4,10 +4,14 @@ import { CrossStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import styles from "../styles/FormFieldClear.module.less";
 
-/** Свойства компонета FormFieldClear. */
+/** Свойства компонента FormFieldClear. */
 export interface IFormFieldClearProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children"> {}
 
-/** Кнопка очищения введенного значения. */
+/**
+ * Кнопка очистки введённого значения.
+ *
+ * Гасит установку фокуса на mousedown, чтобы поле ввода не теряло фокус при клике по кнопке.
+ */
 export const FormFieldClear = React.forwardRef<HTMLButtonElement, IFormFieldClearProps>(
     ({ className, onMouseDown, ...restProps }, ref) => {
         const handleMouseDown = useCallback<React.MouseEventHandler<HTMLButtonElement>>(

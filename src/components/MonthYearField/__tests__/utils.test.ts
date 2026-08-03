@@ -34,7 +34,7 @@ describe("MonthYearPickerUtils", () => {
 
             expect(result.inputString).toBe("Jan 1970");
             expect(moment.isMoment(result.calendarDate)).toBe(true);
-            expect((result.calendarDate as moment.Moment).format(dateFormatYYYYMMDD)).toBe("19700101");
+            expect(result.calendarDate?.format(dateFormatYYYYMMDD)).toBe("19700101");
         });
 
         it("formats input string according to inputMonthYearFormat ignoring the parse format", () => {
@@ -65,14 +65,14 @@ describe("MonthYearPickerUtils", () => {
             const date = MonthYearPickerUtils.getCalendarDate("19750601", dateFormatYYYYMMDD, limitRange1970to1980);
 
             expect(moment.isMoment(date)).toBe(true);
-            expect((date as moment.Moment).format(dateFormatYYYYMMDD)).toBe("19750601");
+            expect(date?.format(dateFormatYYYYMMDD)).toBe("19750601");
         });
 
         it("parses non-default formats", () => {
             const date = MonthYearPickerUtils.getCalendarDate("1970.01", "YYYY.MM", globalLimitRange);
 
             expect(moment.isMoment(date)).toBe(true);
-            expect((date as moment.Moment).format("YYYY.MM")).toBe("1970.01");
+            expect(date?.format("YYYY.MM")).toBe("1970.01");
         });
     });
 

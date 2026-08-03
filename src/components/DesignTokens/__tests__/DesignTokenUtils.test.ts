@@ -1,11 +1,23 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { DesignTokenUtils } from "../DesignTokenUtils";
 import { ETriplexNextTheme } from "../../ThemeProvider/ETriplexNextTheme";
 import { TDesignTokenValue } from "../types/DesignTokenTypes";
 import { TDesignTokens } from "../types/DesignTokensTypes";
 
+/** Хранилище для восстановления исходного окружения. */
+let originalVersion: string | undefined;
+
 beforeEach(() => {
+    originalVersion = process.env.npm_package_version;
     process.env.npm_package_version = "1.0.0";
+});
+
+afterEach(() => {
+    if (originalVersion === undefined) {
+        delete process.env.npm_package_version;
+    } else {
+        process.env.npm_package_version = originalVersion;
+    }
 });
 
 vi.mock("../DesignTokensCore", () => ({
@@ -83,7 +95,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
-
             expect(result).toBe("#21A19A");
         });
 
@@ -96,7 +107,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
-
             expect(result).toBe("#21A19A");
         });
 
@@ -104,27 +114,26 @@ describe("DesignTokenUtils", () => {
             const tokenValue: TDesignTokenValue = { ref: "ColorBrand.60" };
             const tokens = {
                 ColorBrand: {
-                    "60": { value: "#19BDB0" },
-                    "80": { ref: "ColorBrand.50" },
+                    "40": { value: "#19BDB0" },
+                    "50": { ref: "ColorBrand.40" },
+                    "60": { ref: "ColorBrand.50" },
                 },
             };
 
             const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
-
             expect(result).toBe("#19BDB0");
         });
 
         it("should return empty string for invalid reference", () => {
-            const tokenValue: TDesignTokenValue = { ref: "Invalid.Token" } as unknown as TDesignTokenValue;
+            const tokenValue: TDesignTokenValue = { ref: "ColorBrand.100" } as unknown as TDesignTokenValue;
             const tokens = {
                 ColorBrand: {
                     "50": { value: "#21A19A" },
                 },
             };
 
-            expect(() => {
-                DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
-            }).toThrow();
+            const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
+            expect(result).toBe("");
         });
 
         it("should return empty string for token without value or ref", () => {
@@ -136,7 +145,20 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
+            expect(result).toBe("");
+        });
 
+        it("should prevent stack overflow on circular references", () => {
+            const tokenValue: TDesignTokenValue = { ref: "ColorBrand.10" };
+            const tokens = {
+                ColorBrand: {
+                    "10": { ref: "ColorBrand.20" },
+                    "20": { ref: "ColorBrand.30" },
+                    "30": { ref: "ColorBrand.10" },
+                },
+            };
+
+            const result = DesignTokenUtils.getTokenValue(tokenValue, tokens as TDesignTokens);
             expect(result).toBe("");
         });
     });
@@ -157,7 +179,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
         });
@@ -177,7 +198,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getStyleByTokens(tokens as TDesignTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
             expect(result).toContain("--triplex-next-ColorNeutral-0-1-0-0: #FFFFFF;");
@@ -194,7 +214,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getStyle(undefined, customTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
         });
 
@@ -206,7 +225,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, customTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
         });
 
@@ -218,7 +236,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.DARK, customTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-dark-color;");
         });
 
@@ -230,29 +247,28 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, customTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
             expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
         });
     });
 
     describe("Integration Tests", () => {
-        it("should handle complex token resolution chain", () => {
+        it("should handle missing package version", () => {
+            delete process.env.npm_package_version;
+
+            const tokenGroup = {
+                ColorBrand: {
+                    "50": { value: "#21A19A" },
+                },
+            };
             const tokens = {
                 ColorBrand: {
-                    "0": { value: "#1F3336" },
                     "50": { value: "#21A19A" },
-                    "60": { ref: "ColorBrand.50" },
-                    "80": { ref: "ColorBrand.60" },
                 },
             };
 
-            const result = DesignTokenUtils.getStyleByTokens(tokens as TDesignTokens);
-
-            expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
-            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
-            expect(result).toContain("--triplex-next-ColorBrand-60-1-0-0: #21A19A;");
-            expect(result).toContain("--triplex-next-ColorBrand-80-1-0-0: #21A19A;");
+            const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
+            expect(result).toContain("--triplex-next-ColorBrand-50-0-0-0:");
         });
     });
 
@@ -272,7 +288,6 @@ describe("DesignTokenUtils", () => {
             };
 
             const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
-
             expect(result).toContain("--triplex-next-ColorBrand-50-2-1-3:");
         });
 
@@ -290,9 +305,8 @@ describe("DesignTokenUtils", () => {
                 },
             };
 
-            expect(() => {
-                DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
-            }).toThrow();
+            const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokenGroup, tokens as TDesignTokens);
+            expect(result).toContain("--triplex-next-ColorBrand-50-0-0-0:");
         });
     });
 });

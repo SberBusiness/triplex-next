@@ -3,6 +3,14 @@ import { ETooltipDirection } from "@sberbusiness/triplex-next/components/Tooltip
 import clsx from "clsx";
 import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipDesktop.module.less";
 
+/** Класс модификатора для каждого направления указателя. */
+const DIRECTION_CLASS_NAMES: Record<ETooltipDirection, string> = {
+    [ETooltipDirection.UP]: styles.up,
+    [ETooltipDirection.DOWN]: styles.down,
+    [ETooltipDirection.LEFT]: styles.left,
+    [ETooltipDirection.RIGHT]: styles.right,
+};
+
 /** Свойства компонента TooltipDesktopTip. */
 interface ITooltipDesktopTipProps {
     /** Направление, на которое смотрит указатель "стрелочки" (треугольника). */
@@ -15,24 +23,7 @@ interface ITooltipDesktopTipProps {
 export const TooltipDesktopTip = React.forwardRef<HTMLDivElement, ITooltipDesktopTipProps>((props, ref) => {
     const { direction } = props;
 
-    let directionClass;
-
-    switch (direction) {
-        case ETooltipDirection.UP:
-            directionClass = styles.up;
-            break;
-        case ETooltipDirection.DOWN:
-            directionClass = styles.down;
-            break;
-        case ETooltipDirection.LEFT:
-            directionClass = styles.left;
-            break;
-        case ETooltipDirection.RIGHT:
-            directionClass = styles.right;
-            break;
-    }
-
-    return <div className={clsx(styles.tooltipDesktopTip, directionClass)} ref={ref} />;
+    return <div className={clsx(styles.tooltipDesktopTip, DIRECTION_CLASS_NAMES[direction])} ref={ref} />;
 });
 
 TooltipDesktopTip.displayName = "TooltipDesktopTip";

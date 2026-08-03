@@ -22,8 +22,8 @@ import {
 const WINDOW_OFFSET = 8;
 
 /**
- * Сравнивает координаты. По сути shadowEqual, но она делает лишние проверки, здесь мы ограничваемся только обьектом
- * координат.
+ * Сравнивает координаты. По сути shallowEqual, но он делает лишние проверки — здесь достаточно сравнить
+ * только поля объекта координат.
  * @param {ITooltipBounds} o1 Сравниваемые координаты.
  * @param {ITooltipBounds} o2 Координаты для сравнения.
  */
@@ -119,19 +119,19 @@ const place = (
 
     if (align === ETooltipAlign.CENTER) {
         return centerOfBounds(flow, axis, bounds) - centerOfSize(flow, axis, size);
-    } else {
-        if (align === ETooltipAlign.END) {
-            return bounds[axisProps.end];
-        } else {
-            /* Рендеринг дома левосторонний. Поэтому если вспомогательный элемент спозиционирован перед основным, то
-                расположение вспомогательного должно быть с дополнительным отступом на его (вспомогательного) длину.*/
-            if (align === ETooltipAlign.START) {
-                return bounds[axisProps.start] - size[axisProps.size];
-            } else {
-                return 0;
-            }
-        }
     }
+
+    if (align === ETooltipAlign.END) {
+        return bounds[axisProps.end];
+    }
+
+    if (align === ETooltipAlign.START) {
+        /* Рендеринг дома левосторонний. Поэтому если вспомогательный элемент спозиционирован перед основным, то
+            расположение вспомогательного должно быть с дополнительным отступом на его (вспомогательного) длину.*/
+        return bounds[axisProps.start] - size[axisProps.size];
+    }
+
+    return 0;
 };
 
 // Расчеты размеров элемента
@@ -290,17 +290,25 @@ const calcRelPos = (
     const mainStart = place(zone.flow, ETooltipAxesType.MAIN, zone.side, targetBounds, tooltipSize);
     const mainSize = tooltipSize[main.size];
     const crossStart = place(zone.flow, ETooltipAxesType.CROSS, crossAlign, targetBounds, tooltipSize);
-
     const crossSize = tooltipSize[cross.size];
-    const result = {
-        [cross.start]: crossStart,
+
+    // Главная и вспомогательная оси вместе покрывают все четыре координаты, поэтому нули — это заглушки,
+    // которые перезаписываются ниже.
+    const position: ITooltipRelPosition = {
+        [ETooltipStartCoordinates.X]: 0,
+        [ETooltipEndCoordinates.X]: 0,
+        [ETooltipStartCoordinates.Y]: 0,
+        [ETooltipEndCoordinates.Y]: 0,
         crossLength: crossSize,
-        [cross.end]: crossStart + crossSize,
-        [main.start]: mainStart,
         mainLength: mainSize,
-        [main.end]: mainStart + mainSize,
     };
-    return result as unknown as ITooltipRelPosition;
+
+    position[cross.start] = crossStart;
+    position[cross.end] = crossStart + crossSize;
+    position[main.start] = mainStart;
+    position[main.end] = mainStart + mainSize;
+
+    return position;
 };
 
 export {

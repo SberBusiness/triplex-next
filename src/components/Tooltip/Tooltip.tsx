@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { TooltipContext } from "./TootlipContext";
 import { MobileView } from "../MobileView/MobileView";
 import { TooltipDesktop } from "./components/desktop/TooltipDesktop";
@@ -8,18 +8,61 @@ import { TooltipLink } from "./components/common/TooltipLink";
 import { TooltipTarget } from "./components/common/TooltipTarget";
 import { TooltipXButton } from "./components/common/TooltipXButton";
 import { TooltipMobileHeader } from "./components/mobile/components/TooltipMobileHeader";
-import { ITooltipElements, ITooltipProps } from "./types";
+import {
+    ITooltipBodyProps,
+    ITooltipElements,
+    ITooltipLinkProps,
+    ITooltipMobileHeaderProps,
+    ITooltipProps,
+    ITooltipTargetProps,
+    ITooltipXButtonProps,
+} from "./types";
 import { useTooltipTheme } from "./utils/useTooltipTheme";
 import { useMobileView } from "../MobileView";
 
 /** Внутренние составляющие компонента Tooltip. */
 interface ITooltipComposition {
+    /** Целевой элемент, к которому привязана подсказка. */
     Target: typeof TooltipTarget;
+    /** Содержимое подсказки. */
     Body: typeof TooltipBody;
+    /** Гиперссылка внутри подсказки. */
     Link: typeof TooltipLink;
+    /** Кнопка закрытия подсказки. */
     XButton: typeof TooltipXButton;
+    /** Заголовок мобильной (адаптивной) версии подсказки. */
     MobileHeader: typeof TooltipMobileHeader;
 }
+
+/**
+ * Разбирает children на именованные слоты Tooltip.
+ * Узлы, не являющиеся субкомпонентами Tooltip, игнорируются.
+ */
+const collectTooltipElements = (children: React.ReactNode): ITooltipElements => {
+    const elements: ITooltipElements = {
+        body: null,
+        link: null,
+        closeButton: null,
+        mobileHeader: null,
+        target: null,
+    };
+
+    React.Children.forEach(children, (child) => {
+        if (React.isValidElement<ITooltipTargetProps>(child) && child.type === TooltipTarget) {
+            elements.target = child;
+        } else if (React.isValidElement<ITooltipBodyProps>(child) && child.type === TooltipBody) {
+            elements.body = child;
+        } else if (React.isValidElement<ITooltipLinkProps>(child) && child.type === TooltipLink) {
+            elements.link = child;
+        } else if (React.isValidElement<ITooltipXButtonProps>(child) && child.type === TooltipXButton) {
+            elements.closeButton = child;
+        } else if (React.isValidElement<ITooltipMobileHeaderProps>(child) && child.type === TooltipMobileHeader) {
+            elements.mobileHeader = child;
+        }
+    });
+
+    return elements;
+};
 
 /** Всплывающая подсказка. */
 export const Tooltip: React.FC<ITooltipProps> & ITooltipComposition = ({
@@ -37,7 +80,9 @@ export const Tooltip: React.FC<ITooltipProps> & ITooltipComposition = ({
     const open = openProp ?? openState;
     // renderContainer для mobile режима только document.body
     const isBodyOnlyRenderContainer = isMobileScreenWidth && !disableAdaptiveMode;
-    useTooltipTheme(open, isBodyOnlyRenderContainer ? document.body : (rest.renderContainer ?? document.body));
+    const themeContainer = isBodyOnlyRenderContainer ? document.body : (rest.renderContainer ?? document.body);
+
+    useTooltipTheme(open, themeContainer);
 
     useEffect(() => {
         if (openProp === false) {
@@ -45,67 +90,44 @@ export const Tooltip: React.FC<ITooltipProps> & ITooltipComposition = ({
         }
     }, [openProp]);
 
-    /** Получить дочерние React-элементы. */
-    const getChildrenElements = useCallback(() => {
-        const elements: ITooltipElements = {
-            body: null,
-            link: null,
-            closeButton: null,
-            mobileHeader: null,
-            target: null,
-        };
-
-        React.Children.map(children, (child) => {
-            if (React.isValidElement<React.ReactElement>(child)) {
-                if (child.type === TooltipTarget) {
-                    elements.target = child as React.ReactElement;
-                } else if (child.type === TooltipBody) {
-                    elements.body = child as React.ReactElement;
-                } else if (child.type === TooltipLink) {
-                    elements.link = child as React.ReactElement;
-                } else if (child.type === TooltipXButton) {
-                    elements.closeButton = child as React.ReactElement;
-                } else if (child.type === TooltipMobileHeader) {
-                    elements.mobileHeader = child as React.ReactElement;
-                }
-            }
-        });
-
-        return elements;
-    }, [children]);
+    const elements = useMemo(() => collectTooltipElements(children), [children]);
 
     /** Обработчик изменения состояния компонента. */
-    const handleOpen = (nextOpen: boolean) => {
-        if (openProp === undefined) {
-            if (!nextOpen) {
-                targetHoveredRef.current = false;
+    const handleOpen = useCallback(
+        (nextOpen: boolean) => {
+            if (openProp === undefined) {
+                if (!nextOpen) {
+                    targetHoveredRef.current = false;
+                }
+                setOpenState(nextOpen);
             }
-            setOpenState(nextOpen);
-        }
 
-        toggle?.(nextOpen);
-    };
+            toggle?.(nextOpen);
+        },
+        [openProp, toggle],
+    );
+
+    const contextValue = useMemo(
+        () => ({
+            elements,
+            setTooltipOpen: handleOpen,
+            targetHoveredRef,
+            toggleType,
+            tooltipOpen: open,
+        }),
+        [elements, handleOpen, toggleType, open],
+    );
 
     /** Рендер десктоп версии компонента. */
-    const renderDesktopTooltip = () => {
-        return <TooltipDesktop isOpen={open} toggleType={toggleType} preferPlace={preferPlace} {...rest} />;
-    };
+    const renderDesktopTooltip = () => (
+        <TooltipDesktop isOpen={open} toggleType={toggleType} preferPlace={preferPlace} {...rest} />
+    );
 
     /** Рендер мобильной версии компонента. */
-    const renderMobileTooltip = () => {
-        return <TooltipMobile isOpen={open} {...rest} />;
-    };
+    const renderMobileTooltip = () => <TooltipMobile isOpen={open} {...rest} />;
 
     return (
-        <TooltipContext.Provider
-            value={{
-                elements: getChildrenElements(),
-                setTooltipOpen: handleOpen,
-                targetHoveredRef,
-                toggleType,
-                tooltipOpen: open,
-            }}
-        >
+        <TooltipContext.Provider value={contextValue}>
             {disableAdaptiveMode ? (
                 renderDesktopTooltip()
             ) : (

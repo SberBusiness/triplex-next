@@ -21,12 +21,14 @@ export interface ITooltipMobileProps extends Omit<ITooltipProps, "preferPlace" |
  * Рендерится в document.body поверх страницы как нижний оверлей (DropdownMobile).
  */
 export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
-    // children, renderContainer, targetRef и disableAdaptiveMode не нужны мобильной версии
-    // и не должны попадать в DOM — исключаются из rest.
+    // children, renderContainer, targetRef, disableAdaptiveMode, size и alignTip не нужны мобильной
+    // версии и не должны попадать в DOM — исключаются из rest, который спредится на DropdownMobile.
     children,
     renderContainer,
     targetRef,
     disableAdaptiveMode,
+    size,
+    alignTip,
     className,
     isOpen,
     onShow,

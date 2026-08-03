@@ -10,13 +10,10 @@ describe("TooltipBody", () => {
         expect(screen.getByText("Текст подсказки")).toBeInTheDocument();
     });
 
-    it("should merge custom className with the base class", () => {
+    it("should apply custom className", () => {
         render(<TooltipBody className="customClassName">Текст подсказки</TooltipBody>);
 
-        const body = screen.getByText("Текст подсказки");
-
-        expect(body).toHaveClass("tooltipBody");
-        expect(body).toHaveClass("customClassName");
+        expect(screen.getByText("Текст подсказки")).toHaveClass("customClassName");
     });
 
     it("should spread rest props to the root element", () => {

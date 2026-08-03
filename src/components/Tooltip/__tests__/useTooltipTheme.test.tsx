@@ -16,18 +16,20 @@ const ThemeConsumer: React.FC<{ open: boolean; container: Element }> = ({ open, 
     return null;
 };
 
+const renderTree = (open: boolean, container: Element, scopeClassName = SCOPE_CLASS_NAME) => (
+    <ThemeProviderContext.Provider
+        value={{
+            scopeClassName,
+            theme: ETriplexNextTheme.LIGHT,
+            tokens: { ...DesignTokensCore, ...DesignTokensComponents },
+        }}
+    >
+        <ThemeConsumer open={open} container={container} />
+    </ThemeProviderContext.Provider>
+);
+
 const renderHookComponent = (open: boolean, container: Element, scopeClassName = SCOPE_CLASS_NAME) =>
-    render(
-        <ThemeProviderContext.Provider
-            value={{
-                scopeClassName,
-                theme: ETriplexNextTheme.LIGHT,
-                tokens: { ...DesignTokensCore, ...DesignTokensComponents },
-            }}
-        >
-            <ThemeConsumer open={open} container={container} />
-        </ThemeProviderContext.Provider>,
-    );
+    render(renderTree(open, container, scopeClassName));
 
 describe("useTooltipTheme", () => {
     let container: HTMLElement;
@@ -67,17 +69,7 @@ describe("useTooltipTheme", () => {
     it("should remove the theme class after the closing animation delay", () => {
         const { rerender } = renderHookComponent(true, container);
 
-        rerender(
-            <ThemeProviderContext.Provider
-                value={{
-                    scopeClassName: SCOPE_CLASS_NAME,
-                    theme: ETriplexNextTheme.LIGHT,
-                    tokens: { ...DesignTokensCore, ...DesignTokensComponents },
-                }}
-            >
-                <ThemeConsumer open={false} container={container} />
-            </ThemeProviderContext.Provider>,
-        );
+        rerender(renderTree(false, container));
 
         // Класс держится, пока проигрывается анимация закрытия.
         expect(container).toHaveClass(SCOPE_CLASS_NAME);
@@ -109,6 +101,46 @@ describe("useTooltipTheme", () => {
     it("should remove the theme class on unmount of the last open tooltip", () => {
         const { unmount } = renderHookComponent(true, container);
 
+        unmount();
+
+        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container.hasAttribute(COUNTER_ATTR)).toBe(false);
+    });
+
+    it("should keep the theme class when the tooltip is reopened before the delay expires", () => {
+        const { rerender } = renderHookComponent(true, container);
+
+        rerender(renderTree(false, container));
+        vi.advanceTimersByTime(200);
+        rerender(renderTree(true, container));
+        vi.advanceTimersByTime(500);
+
+        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container.getAttribute(COUNTER_ATTR)).toBe("1");
+    });
+
+    it("should keep the theme class when another tooltip claims the container during the delay", () => {
+        const first = renderHookComponent(true, container);
+
+        first.rerender(renderTree(false, container));
+        vi.advanceTimersByTime(200);
+
+        const second = renderHookComponent(true, container);
+
+        vi.advanceTimersByTime(500);
+
+        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container.getAttribute(COUNTER_ATTR)).toBe("1");
+
+        second.unmount();
+
+        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+    });
+
+    it("should remove the theme class on unmount during the pending cleanup", () => {
+        const { rerender, unmount } = renderHookComponent(true, container);
+
+        rerender(renderTree(false, container));
         unmount();
 
         expect(container).not.toHaveClass(SCOPE_CLASS_NAME);

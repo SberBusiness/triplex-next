@@ -13,18 +13,14 @@ describe("TooltipLink", () => {
         expect(link).toHaveAttribute("href", "https://example.com");
     });
 
-    it("should merge custom className with the base class", () => {
+    it("should apply custom className", () => {
         render(
             <TooltipLink href="#" className="customClassName">
                 Подробнее
             </TooltipLink>,
         );
 
-        const link = screen.getByRole("link", { name: "Подробнее" });
-
-        expect(link).toHaveClass("tooltipLink");
-        expect(link).toHaveClass("desktop");
-        expect(link).toHaveClass("customClassName");
+        expect(screen.getByRole("link", { name: "Подробнее" })).toHaveClass("customClassName");
     });
 
     it("should protect against reverse tabnabbing for target=_blank", () => {

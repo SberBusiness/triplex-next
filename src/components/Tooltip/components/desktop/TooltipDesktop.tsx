@@ -78,8 +78,16 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
         document.removeEventListener("mousedown", this.closeIfOuterAction);
         document.removeEventListener("keydown", this.closeIfEscapeKey);
 
-        if (targetRef.current && toggleType === "hover") {
-            this.removeHoverListeners(targetRef.current);
+        if (toggleType === "hover") {
+            if (targetRef.current) {
+                this.removeHoverListeners(targetRef.current);
+            }
+
+            // На саму подсказку обработчики вешает setTooltipRef — снимаем их симметрично,
+            // иначе при размонтировании открытой подсказки они остаются на ноде.
+            if (this.tooltip) {
+                this.removeHoverListeners(this.tooltip);
+            }
         }
 
         clearTimeout(this.timeout);

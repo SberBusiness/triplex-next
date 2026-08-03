@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useToken } from "@sberbusiness/triplex-next/components/ThemeProvider";
 
 /**
@@ -21,24 +21,43 @@ const getUsageCounterAttrName = (scopeClassName: string) => `data-tooltip-theme-
  */
 export function useTooltipTheme(open: boolean, renderContainer: Element) {
     const { scopeClassName } = useToken();
+    /** Держит ли эта подсказка сейчас инкремент счётчика — чтобы не декрементировать чужой. */
+    const hasUsageRef = useRef(false);
+    /** Идентификатор отложенного снятия класса темы, запланированного этой подсказкой. */
+    const cleanupTimeoutRef = useRef<number | undefined>(undefined);
 
     useEffect(() => {
         if (scopeClassName && renderContainer) {
             const cl = renderContainer.classList;
 
             if (open) {
+                // Подсказку открыли снова до истечения задержки — снятие класса больше не нужно.
+                if (cleanupTimeoutRef.current !== undefined) {
+                    window.clearTimeout(cleanupTimeoutRef.current);
+                    cleanupTimeoutRef.current = undefined;
+                }
+
                 if (!cl.contains(scopeClassName)) {
                     cl.add(scopeClassName);
                 }
-                incTooltipThemeUsage(renderContainer, scopeClassName);
-            } else {
-                if (cl.contains(scopeClassName)) {
-                    const usage = decTooltipThemeUsage(renderContainer, scopeClassName);
-                    if (usage <= 0) {
-                        window.setTimeout(() => {
+
+                if (!hasUsageRef.current) {
+                    incTooltipThemeUsage(renderContainer, scopeClassName);
+                    hasUsageRef.current = true;
+                }
+            } else if (hasUsageRef.current) {
+                hasUsageRef.current = false;
+
+                const usage = decTooltipThemeUsage(renderContainer, scopeClassName);
+                if (usage <= 0) {
+                    cleanupTimeoutRef.current = window.setTimeout(() => {
+                        cleanupTimeoutRef.current = undefined;
+
+                        // За время задержки контейнер могла занять эта же или другая подсказка — класс ещё нужен.
+                        if (getTooltipThemeUsage(renderContainer, scopeClassName) <= 0) {
                             cl.remove(scopeClassName);
-                        }, THEME_CLEANUP_DELAY_MS);
-                    }
+                        }
+                    }, THEME_CLEANUP_DELAY_MS);
                 }
             }
         }
@@ -49,20 +68,43 @@ export function useTooltipTheme(open: boolean, renderContainer: Element) {
     // unmount, если тултип еще отображался в этот момент
     useEffect(() => {
         return () => {
+            const hasPendingCleanup = cleanupTimeoutRef.current !== undefined;
+
+            if (hasPendingCleanup) {
+                window.clearTimeout(cleanupTimeoutRef.current);
+                cleanupTimeoutRef.current = undefined;
+            }
+
             if (!scopeClassName || !renderContainer) {
                 return;
             }
 
             const cl = renderContainer.classList;
 
-            if (cl.contains(scopeClassName)) {
+            if (hasUsageRef.current) {
+                hasUsageRef.current = false;
+
                 const usage = decTooltipThemeUsage(renderContainer, scopeClassName);
                 if (usage <= 0) {
                     cl.remove(scopeClassName);
                 }
+            } else if (hasPendingCleanup && getTooltipThemeUsage(renderContainer, scopeClassName) <= 0) {
+                // Снятие класса было отложено, но ждать больше нечему — снимаем сразу.
+                cl.remove(scopeClassName);
             }
         };
     }, [renderContainer, scopeClassName]);
+}
+
+/**
+ * Текущее значение счётчика подсказок, использующих класс темы на контейнере.
+ * @param node Контейнер рендера подсказки.
+ * @param scopeClassName Класс темы.
+ */
+function getTooltipThemeUsage(node: Element, scopeClassName: string): number {
+    const counterAttr = node.getAttribute(getUsageCounterAttrName(scopeClassName));
+
+    return counterAttr ? parseInt(counterAttr, 10) : 0;
 }
 
 /**

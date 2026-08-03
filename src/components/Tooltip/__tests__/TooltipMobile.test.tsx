@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Tooltip } from "../Tooltip";
-import { ETooltipSize } from "../enums";
+import { ETooltipAlign, ETooltipSize } from "../enums";
 
 /** Подменяет matchMedia так, чтобы MobileView считал экран мобильным. */
 const mockMobileScreen = () => {
@@ -117,5 +117,38 @@ describe("Tooltip (mobile)", () => {
         renderMobileTooltip({ isOpen: false, onShow });
 
         expect(onShow).not.toHaveBeenCalled();
+    });
+
+    it("should not leak desktop-only props to the overlay DOM node", () => {
+        const targetRef: React.MutableRefObject<HTMLElement | null> = { current: null };
+        let overlay: HTMLDivElement | null = null;
+
+        render(
+            <Tooltip
+                size={ETooltipSize.LG}
+                alignTip={ETooltipAlign.START}
+                toggleType="click"
+                isOpen
+                targetRef={targetRef}
+                onShow={(node) => {
+                    overlay = node;
+                }}
+            >
+                <Tooltip.Target>
+                    <button
+                        type="button"
+                        ref={(el) => {
+                            targetRef.current = el;
+                        }}
+                        aria-label="Tooltip target"
+                    />
+                </Tooltip.Target>
+                <Tooltip.Body>Текст подсказки</Tooltip.Body>
+            </Tooltip>,
+        );
+
+        expect(overlay).not.toBeNull();
+        expect(overlay!.hasAttribute("alignTip")).toBe(false);
+        expect(overlay!.hasAttribute("size")).toBe(false);
     });
 });

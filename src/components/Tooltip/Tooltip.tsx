@@ -8,7 +8,15 @@ import { TooltipLink } from "./components/common/TooltipLink";
 import { TooltipTarget } from "./components/common/TooltipTarget";
 import { TooltipXButton } from "./components/common/TooltipXButton";
 import { TooltipMobileHeader } from "./components/mobile/components/TooltipMobileHeader";
-import { ITooltipElements, ITooltipProps } from "./types";
+import {
+    ITooltipBodyProps,
+    ITooltipElements,
+    ITooltipLinkProps,
+    ITooltipMobileHeaderProps,
+    ITooltipProps,
+    ITooltipTargetProps,
+    ITooltipXButtonProps,
+} from "./types";
 import { useTooltipTheme } from "./utils/useTooltipTheme";
 import { useMobileView } from "../MobileView";
 
@@ -40,20 +48,16 @@ const collectTooltipElements = (children: React.ReactNode): ITooltipElements => 
     };
 
     React.Children.forEach(children, (child) => {
-        if (!React.isValidElement(child)) {
-            return;
-        }
-
-        if (child.type === TooltipTarget) {
-            elements.target = child as ITooltipElements["target"];
-        } else if (child.type === TooltipBody) {
-            elements.body = child as ITooltipElements["body"];
-        } else if (child.type === TooltipLink) {
-            elements.link = child as ITooltipElements["link"];
-        } else if (child.type === TooltipXButton) {
-            elements.closeButton = child as ITooltipElements["closeButton"];
-        } else if (child.type === TooltipMobileHeader) {
-            elements.mobileHeader = child as ITooltipElements["mobileHeader"];
+        if (React.isValidElement<ITooltipTargetProps>(child) && child.type === TooltipTarget) {
+            elements.target = child;
+        } else if (React.isValidElement<ITooltipBodyProps>(child) && child.type === TooltipBody) {
+            elements.body = child;
+        } else if (React.isValidElement<ITooltipLinkProps>(child) && child.type === TooltipLink) {
+            elements.link = child;
+        } else if (React.isValidElement<ITooltipXButtonProps>(child) && child.type === TooltipXButton) {
+            elements.closeButton = child;
+        } else if (React.isValidElement<ITooltipMobileHeaderProps>(child) && child.type === TooltipMobileHeader) {
+            elements.mobileHeader = child;
         }
     });
 

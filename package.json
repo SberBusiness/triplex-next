@@ -56,7 +56,7 @@
         "@eslint/js": "9.39.5",
         "@lottiefiles/react-lottie-player": "3.6.0",
         "@playwright/test": "1.62.0",
-        "@sberbusiness/icons-next": "1.31.0",
+        "@sberbusiness/icons-next": "1.32.0",
         "@storybook/addon-docs": "9.1.20",
         "@storybook/addon-themes": "9.1.20",
         "@storybook/react-vite": "9.1.20",

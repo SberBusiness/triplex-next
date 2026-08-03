@@ -7,7 +7,7 @@ export const WithCloseButton = () => {
     const [opened, setOpened] = useState(true);
 
     return (
-        <div style={{ display: "flex", justifyContent: "center", height: "220px" }}>
+        <div style={{ display: "flex", justifyContent: "center", paddingBottom: "160px" }}>
             <Tooltip
                 size={ETooltipSize.LG}
                 toggleType="click"

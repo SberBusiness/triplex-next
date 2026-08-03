@@ -1,7 +1,7 @@
 import range from "lodash-es/range";
 
 /** Параметры для построения итогового массива страниц пагинации. */
-interface IGeneratePageNumbersProps {
+export interface IGeneratePageNumbersProps {
     /** Текущая страница. */
     currentPage: number;
     /** Количество всегда видимых страниц по краям текущей страницы. */

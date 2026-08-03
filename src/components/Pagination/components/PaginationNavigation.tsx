@@ -1,7 +1,7 @@
 import React from "react";
 import { EPaginationNavigationIconDirection } from "../enums";
 import { IPaginationNavigationButtonProps, PaginationNavigationButton } from "./PaginationNavigationButton";
-import { PaginationUtils, PAGINATION_ELLIPSIS_VALUE } from "../utils/paginationUtils";
+import { PaginationUtils, PAGINATION_ELLIPSIS_VALUE } from "../utils";
 import { PaginationPageEllipsis } from "./PaginationPageEllipsis";
 import { PaginationPageButton } from "./PaginationPageButton";
 import { PaginationNavigationExtended } from "./PaginationNavigationExtended";

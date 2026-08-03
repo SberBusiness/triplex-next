@@ -13,39 +13,70 @@ import { DesignTokensComponentsThemeDark } from "./DesignTokensComponentsThemeDa
 import { TDesignTokenValue } from "./types/DesignTokenTypes";
 
 export interface IDesignTokenUtils {
-    // Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: '#fff'; --variable-name-2: '#0ed'`.
+    /** Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: "#000000"; --variable-name-2: "16px"`. */
     getCSSVariableByTokenGroup: (tokenGroup: TDesignTokensGroupAbstract, tokens: TDesignTokens) => string;
-    // Возвращает токены, которые использует компонент.
+    /** Возвращает токены, которые использует компонент. */
     getComponentTokens: (componentName: string) => { core: string[]; components: string[] };
-    // Возвращает строку с css-переменными на основе темы и токенов.
+    /** Возвращает строку с css-переменными на основе темы и токенов. */
     getStyle: (theme: ETriplexNextTheme | undefined, tokens: TDesignTokensPartial) => string;
-    // Возвращает строку с css-переменными.
+    /** Возвращает строку с css-переменными. */
     getStyleByTokens: (tokens: TDesignTokens) => string;
-    // Возвращает значение токена. Если токен имеет значение в виде строки, будет возвращена эта строка, если токен ссылается на другой токен, будет возвращено значение другого токена.
+    /** Возвращает значение токена. Если токен имеет значение в виде строки, будет возвращена эта строка, если токен ссылается на другой токен, будет возвращено значение другого токена. */
     getTokenValue: (tokenValue: TDesignTokenValue, tokens: TDesignTokens) => string;
 }
+
+/** Внутренний помощник для безопасного рекурсивного разрешения значений токенов. */
+const resolveTokenValue = (tokenValue: TDesignTokenValue, tokens: TDesignTokens, visitedRefs: Set<string>): string => {
+    if (tokenValue.value !== undefined) {
+        return tokenValue.value;
+    }
+
+    if (tokenValue.ref !== undefined) {
+        if (visitedRefs.has(tokenValue.ref)) {
+            return "";
+        }
+        visitedRefs.add(tokenValue.ref);
+
+        const [groupName, tokenName] = tokenValue.ref.split(".");
+        const abstractTokens: TDesignTokensGroupAbstract = tokens;
+
+        const tokenGroup = Object.prototype.hasOwnProperty.call(abstractTokens, groupName)
+            ? abstractTokens[groupName]
+            : undefined;
+
+        if (tokenGroup && Object.prototype.hasOwnProperty.call(tokenGroup, tokenName)) {
+            const nextToken = abstractTokens[groupName][tokenName];
+
+            if (nextToken.value !== undefined) {
+                return nextToken.value;
+            } else if (nextToken.ref !== undefined) {
+                return resolveTokenValue(nextToken, tokens, visitedRefs);
+            }
+        }
+    }
+
+    return "";
+};
 
 export const DesignTokenUtils: IDesignTokenUtils = {
     getCSSVariableByTokenGroup: (tokenGroup, tokens) => {
         const tokenGroupTitle = Object.keys(tokenGroup)[0];
-
         const tokenPrefix = "triplex-next";
-        // Не объединять в одну строку  const tokenVersion = process.env.npm_package_version!.replace(/\./g, '-');
-        // Иначе rollup не заменяет process.env.npm_package_version на значение.
-        let tokenVersion = process.env.npm_package_version;
-        tokenVersion = tokenVersion!.replace(/\./g, "-");
+
+        // Безопасный fallback для Rollup, защищающий от отсутствия версии
+        let tokenVersion = process.env.npm_package_version || "0.0.0";
+        tokenVersion = tokenVersion.replace(/\./g, "-");
 
         return Object.keys(tokenGroup[tokenGroupTitle])
             .map(
                 (tokenTitle) =>
-                    `--${tokenPrefix}-${tokenGroupTitle}-${tokenTitle}-${tokenVersion!}: ${DesignTokenUtils.getTokenValue(
+                    `--${tokenPrefix}-${tokenGroupTitle}-${tokenTitle}-${tokenVersion}: ${DesignTokenUtils.getTokenValue(
                         tokenGroup[tokenGroupTitle][tokenTitle],
                         tokens,
                     )};`,
             )
             .join("\n");
     },
-    // Возвращает токены, которые использует компонент.
     getComponentTokens: (componentName) => {
         // Общие токены.
         const coreTokens: string[] = [];
@@ -66,7 +97,6 @@ export const DesignTokenUtils: IDesignTokenUtils = {
 
         return { components: componentsTokens, core: coreTokens };
     },
-
     getStyle: (theme = ETriplexNextTheme.LIGHT, tokens) => {
         let style = "";
         switch (theme) {
@@ -88,7 +118,6 @@ export const DesignTokenUtils: IDesignTokenUtils = {
         }
         return style;
     },
-    // Возвращает строку с css-переменными.
     getStyleByTokens: (tokens) => {
         // Convert to css variables
         const cssList = Object.keys(tokens).map((token) =>
@@ -102,24 +131,7 @@ export const DesignTokenUtils: IDesignTokenUtils = {
 
         return cssList.join("\n").trim();
     },
-    // Возвращает значение токена. Если токен имеет значение в виде строки, будет возвращена эта строка, если токен ссылается на другой токен, будет возвращено значение другого токена.
     getTokenValue: (tokenValue, tokens) => {
-        let value = "";
-        if (tokenValue.value) {
-            value = tokenValue.value;
-        } else if (tokenValue.ref) {
-            const refArr = tokenValue.ref.split(".");
-            const nextValue = (tokens as TDesignTokensGroupAbstract)[refArr[0]][refArr[1]].value;
-            if (nextValue) {
-                value = nextValue;
-            } else if ((tokens as TDesignTokensGroupAbstract)[refArr[0]][refArr[1]].ref) {
-                value = DesignTokenUtils.getTokenValue(
-                    (tokens as TDesignTokensGroupAbstract)[refArr[0]][refArr[1]],
-                    tokens,
-                );
-            }
-        }
-
-        return value;
+        return resolveTokenValue(tokenValue, tokens, new Set<string>());
     },
 };

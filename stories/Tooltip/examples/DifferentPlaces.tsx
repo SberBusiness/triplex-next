@@ -10,7 +10,7 @@ const PlaceItem = ({ place }: IPlaceItemProps) => {
     const targetRef = useRef<HTMLButtonElement | null>(null);
 
     return (
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", height: "160px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", padding: "64px 0" }}>
             <div style={{ fontSize: "16px", fontWeight: "700", width: "56px" }}>{place}</div>
             <Tooltip
                 size={ETooltipSize.SM}

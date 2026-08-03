@@ -15,7 +15,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
     const targetRef = useRef<HTMLButtonElement | null>(null);
 
     return (
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", height: "160px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", padding: "64px 0" }}>
             <div style={{ fontSize: "16px", fontWeight: "700", width: "40px" }}>{size.toUpperCase()}</div>
             <Tooltip
                 size={size}

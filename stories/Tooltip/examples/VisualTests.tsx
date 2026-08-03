@@ -58,10 +58,10 @@ const LargeWithLinkAndClose = () => {
 
 export const VisualTests = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", height: "160px" }}>
+        <div style={{ display: "flex", alignItems: "center", padding: "64px 0" }}>
             <AlignedStart />
         </div>
-        <div style={{ display: "flex", alignItems: "center", height: "240px" }}>
+        <div style={{ display: "flex", alignItems: "center", padding: "104px 0" }}>
             <LargeWithLinkAndClose />
         </div>
     </div>

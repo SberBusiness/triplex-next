@@ -8,7 +8,7 @@ export const RenderContainer = () => {
     const [container, setContainer] = useState<HTMLElement | null>(null);
 
     return (
-        <div style={{ display: "flex", justifyContent: "center", height: "220px" }}>
+        <div style={{ display: "flex", justifyContent: "center", paddingBottom: "160px" }}>
             <div ref={setContainer} />
 
             {container ? (

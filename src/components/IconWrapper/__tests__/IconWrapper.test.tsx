@@ -51,7 +51,7 @@ describe("IconWrapper", () => {
 
     it("applies disabled class when disabled prop is set", () => {
         renderComponent({ disabled: true });
-        expect(getWrapper()).toHaveClass("disabled");
+        expect(getWrapper()).toHaveClass("hoverable", "disabled");
     });
 
     it("does not apply disabled class when disabled is false", () => {
@@ -61,22 +61,22 @@ describe("IconWrapper", () => {
 
     it("applies disableInteraction style", () => {
         renderComponent({ disableInteraction: true });
-        expect(getWrapper().className).toMatch(/disableInteraction/);
+        expect(getWrapper()).toHaveClass("disableInteraction");
     });
 
     it("does not apply disableInteraction style by default", () => {
         renderComponent();
-        expect(getWrapper().className).not.toMatch(/disableInteraction/);
+        expect(getWrapper()).not.toHaveClass("disableInteraction");
     });
 
     it("applies displayContents style when displayContents prop is set", () => {
         renderComponent({ displayContents: true });
-        expect(getWrapper().className).toMatch(/displayContents/);
+        expect(getWrapper()).toHaveClass("displayContents");
     });
 
     it("does not apply displayContents style by default", () => {
         renderComponent();
-        expect(getWrapper().className).not.toMatch(/displayContents/);
+        expect(getWrapper()).not.toHaveClass("displayContents");
     });
 
     it("merges custom className with own classes", () => {

@@ -21,8 +21,9 @@ version: "1.0"
 из состояния родителя.
 
 Не используй когда:
-- Нужен интерактивный элемент — IconWrapper не кнопка: нет `type`, `onKeyDown`, фокуса и
-  ARIA-роли. Возьми `ButtonIcon` (он сам оборачивает `<button>` в IconWrapper).
+- Нужен интерактивный элемент — IconWrapper не кнопка: это `<span>` без роли, фокуса и
+  клавиатурной обработки, и сам он ничего из этого не реализует, даже если прокинуть
+  обработчики через spread. Возьми `ButtonIcon` (он сам оборачивает `<button>` в IconWrapper).
 - Иконка статична и её цвет задаётся напрямую через `paletteIndex` иконки или CSS родителя —
   обёртка избыточна.
 - Нужно менять размер иконки — IconWrapper не влияет на размер, его задаёт сама иконка
@@ -54,10 +55,13 @@ version: "1.0"
 ### Ограничения
 
 - `disabled` и `disableInteraction` независимы: `disabled` красит, `disableInteraction` гасит
-  события мыши. Для «выглядит выключенным и не кликается» нужны оба (так и делают потребители).
+  события мыши. Для «выглядит выключенным и не кликается» нужны оба — пример:
+  `stories/MultiselectField/examples/StatusesExample.tsx`. В `src/**` `disableInteraction`
+  не передаёт ни один компонент.
 - `displayContents` меняет только участие обёртки в layout; классы состояний по-прежнему стоят
-  на `<span>`, поэтому CSS-селекторы вида `> span` и логика на `parentElement` продолжают видеть
-  обёртку в DOM.
+  на `<span>`, и сам `<span>` остаётся в DOM — на это опираются тесты потребителей, которые
+  достают обёртку через `parentElement` (`Button/__tests__/ButtonIcon.test.tsx`,
+  `IconWrapper/__tests__/IconWrapper.test.tsx`).
 - Класс `hoverable` выставляется всегда, включая `disabled`-состояние — так работает цветовая
   логика `@sberbusiness/icons-next`.
 
@@ -108,6 +112,9 @@ CSS-модуль `styles/IconWrapper.module.less` содержит только 
   сделать кликабельную иконку.
 - `Link` (`src/components/Link/Link.tsx`) — оборачивает содержимое ссылки в
   `IconWrapper displayContents`, чтобы иконка внутри ссылки красилась вместе с текстом.
+- `Button` (`src/components/Button/Button.tsx`) — оборачивает содержимое кнопки в
+  `IconWrapper` с кастомным `className` и прокидывает `disabled` / `active`. Единственный
+  в `src/**` случай передачи собственного `className` в IconWrapper.
 - `Chip`, `ChipSort`, `SegmentedControlSegment`, `StepperStep`, `ListItemControlsButton`,
   `SelectExtendedFieldTarget` — используют IconWrapper для синхронизации цвета иконки
   с состоянием элемента.

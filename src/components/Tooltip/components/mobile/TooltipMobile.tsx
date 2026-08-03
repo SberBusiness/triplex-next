@@ -16,13 +16,18 @@ export interface ITooltipMobileProps extends Omit<ITooltipProps, "preferPlace" |
     children?: never;
 }
 
-/** Мобильная версия Tooltip. */
+/**
+ * Мобильная версия Tooltip.
+ * Рендерится в document.body поверх страницы как нижний оверлей (DropdownMobile).
+ */
 export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
+    // children, renderContainer, targetRef и disableAdaptiveMode не нужны мобильной версии
+    // и не должны попадать в DOM — исключаются из rest.
     children,
-    className,
     renderContainer,
     targetRef,
     disableAdaptiveMode,
+    className,
     isOpen,
     onShow,
     ...rest
@@ -32,9 +37,11 @@ export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
     const classNames = clsx(styles.tooltipMobile, { [styles.headerless]: elements.mobileHeader === null }, className);
 
     useEffect(() => {
-        if (isOpen) {
-            onShow?.(tooltipRef.current!);
+        if (isOpen && tooltipRef.current) {
+            onShow?.(tooltipRef.current);
         }
+        // onShow намеренно вне зависимостей: колбэк вызывается только на открытие подсказки,
+        // иначе нестабильная inline-функция вызывала бы его на каждый рендер.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 

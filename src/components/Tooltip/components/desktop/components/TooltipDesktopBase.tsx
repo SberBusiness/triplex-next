@@ -33,19 +33,19 @@ import {
 import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipDesktop.module.less";
 
 // Маппер flow в translate для Tip (стрелочка)
-const flowToTipTranslations: { [key: string]: string } = {
-    column: "translateX",
-    row: "translateY",
+const flowToTipTranslations: Record<ETooltipFlowTypes, string> = {
+    [ETooltipFlowTypes.COLUMN]: "translateX",
+    [ETooltipFlowTypes.ROW]: "translateY",
 };
 
 // Маппер flow в translate для самого Tooltip
-const flowToTooltipTranslations: { [key: string]: string } = {
-    column: "translateY",
-    row: "translateX",
+const flowToTooltipTranslations: Record<ETooltipFlowTypes, string> = {
+    [ETooltipFlowTypes.COLUMN]: "translateY",
+    [ETooltipFlowTypes.ROW]: "translateX",
 };
 
 // Маппер EPreferPlace в EDirection для Tip (стрелочка)
-const DIRECTIONS = {
+const DIRECTIONS: Record<ETooltipPreferPlace, ETooltipDirection> = {
     [ETooltipPreferPlace.ABOVE]: ETooltipDirection.DOWN,
     [ETooltipPreferPlace.BELOW]: ETooltipDirection.UP,
     [ETooltipPreferPlace.LEFT]: ETooltipDirection.RIGHT,
@@ -64,7 +64,7 @@ const TIP_HEIGHT = 8;
 const MAX_FROM_EDGE_FOR_TIP = 16;
 
 /** Свойства компонента TooltipDesktopBase. */
-export interface ITooltipDesktopBaseProps extends Omit<ITooltipDesktopProps, "forwardedRef"> {
+export interface ITooltipDesktopBaseProps extends ITooltipDesktopProps {
     /** Получение ноды Tooltip. */
     setTooltipRef?: (node: HTMLDivElement | null) => void;
 }
@@ -81,9 +81,13 @@ interface ITooltipDesktopBaseState {
     needRenderTooltip: boolean;
 }
 
-/** Базовый компонент "Тултипа". */
+/**
+ * Базовый компонент "Тултипа".
+ * Рендерит подсказку в Portal, вычисляет её положение относительно целевого элемента
+ * и проигрывает анимации появления и исчезновения.
+ */
 export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps, ITooltipDesktopBaseState> {
-    public static displayName = "TooltipBase";
+    public static displayName = "TooltipDesktopBase";
     public static contextType = TooltipContext;
 
     declare context: React.ContextType<typeof TooltipContext>;
@@ -200,7 +204,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         }
     }
 
-    // Открыть поповер
+    /** Открыть подсказку. */
     private prepareOpen = () => {
         if (this.state.exiting) {
             this.animateExitStop();
@@ -208,12 +212,12 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         this.setState({ isOpen: true, needRenderTooltip: true });
     };
 
-    // Закрыть поповер
+    /** Закрыть подсказку. */
     private close = () => {
         this.setState({ isOpen: false });
     };
 
-    // Метод начала отслеживания поповера и анимация его появления
+    /** Начало отслеживания подсказки и анимация её появления. */
     private enter = () => {
         this.trackTooltip();
         this.animateEnter();
@@ -222,13 +226,14 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         }
     };
 
-    // Метод окончания отслеживания поповера и анимация его исчезновения
+    /** Окончание отслеживания подсказки и анимация её исчезновения. */
     private exit = () => {
         this.animateExit();
         this.untrackTooltip();
     };
 
-    private setTooltipNode = (node: HTMLDivElement) => {
+    /** Сохранение ноды подсказки и ссылок на её тело и стрелочку. */
+    private setTooltipNode = (node: HTMLDivElement | null) => {
         const { setTooltipRef } = this.props;
 
         if (node) {
@@ -242,7 +247,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         setTooltipRef?.(this.tooltipNode);
     };
 
-    // Рендер поповера
+    /** Расчёт и применение положения подсказки и её стрелочки. */
     private resolveTooltipLayout = () => {
         if (!this.tooltipNode) {
             return;
@@ -289,7 +294,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
 
         let dockingEdgeBufferLength = 0;
         if (this.bodyEl) {
-            dockingEdgeBufferLength = Math.round(+getComputedStyle(this.bodyEl).borderRadius.slice(0, -2)) || 0;
+            dockingEdgeBufferLength = Math.round(parseFloat(getComputedStyle(this.bodyEl).borderRadius)) || 0;
         }
         /*
          * Ограничение позиционирование обертки внутри элемента рамки. Попытка не попасть в визуально допустимый
@@ -377,7 +382,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         }
     };
 
-    // Метод проверки изменения границ обернутого элемента.
+    /** Проверка изменения границ целевого элемента. Возвращает true, если границы изменились. */
     private setAndCheckResizeTargetBounds = () => {
         const { targetRef } = this.props;
 
@@ -394,14 +399,14 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         return true;
     };
 
-    // Метод проверки необходимости перерисовки лейаута
+    /** Перерасчёт положения, если границы целевого элемента изменились. */
     private checkTargetReposition = () => {
         if (this.setAndCheckResizeTargetBounds()) {
             this.resolveTooltipLayout();
         }
     };
 
-    // Метод измерения размеров тела тултипа (без стрелочки)
+    /** Измерение размеров тела подсказки (без стрелочки). */
     private setTooltipBodySize = () => {
         if (!this.bodyEl) {
             return;
@@ -410,7 +415,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         this.tooltipBodySize = { w: this.bodyEl.offsetWidth, h: this.bodyEl.offsetHeight };
     };
 
-    // Очистка таймеров анимации исчезновения
+    /** Очистка таймеров анимации исчезновения. */
     private animateExitStop = () => {
         if (this.exitingAnimationTimer1) {
             window.clearTimeout(this.exitingAnimationTimer1);
@@ -421,7 +426,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         this.setState({ exiting: false });
     };
 
-    // Анимация исчезновения
+    /** Анимация исчезновения. */
     private animateExit = () => {
         this.setState({ exiting: true });
         this.exitingAnimationTimer2 = window.setTimeout(() => {
@@ -441,7 +446,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         }, ENTER_EXIT_TRANSITION_DURATION_MS);
     };
 
-    // Анимация появления
+    /** Анимация появления. */
     private animateEnter = () => {
         if (!this.tooltipNode) {
             return;
@@ -467,7 +472,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         this.tooltipNode.style.transform = "translateY(0)";
     };
 
-    //  Отслеживание поповера
+    /** Начало отслеживания положения подсказки: опрос границ, подписка на scroll и resize. */
     private trackTooltip = () => {
         if (!this.tooltipNode) {
             return;
@@ -493,7 +498,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         this.resolveTooltipLayout();
     };
 
-    // Отписка от отслеживания поповера
+    /** Отписка от отслеживания положения подсказки. */
     private untrackTooltip = () => {
         if (!this.tooltipNode) {
             return;
@@ -506,20 +511,20 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         this.hasTracked = false;
     };
 
-    // Перерисовка при скролле "рамки"
+    /** Перерасчёт положения при скролле окна. */
     private onWindowScroll = () => {
         this.setAndCheckResizeTargetBounds();
         this.resolveTooltipLayout();
     };
 
-    // Перерисовка при изменении размеров "рамки"
+    /** Перерасчёт положения при изменении размеров окна. */
     private onWindowResize = () => {
         this.windowBounds = calcBounds(window);
         this.resolveTooltipLayout();
     };
 
-    // Отрисовка самого Tooltip
-    private tooltipRender: () => React.ReactElement = () => {
+    /** Разметка подсказки: тело, ссылка, кнопка закрытия и стрелочка. */
+    private tooltipRender = (): React.ReactElement => {
         const {
             className,
             size,

@@ -121,7 +121,7 @@ describe("Tooltip (mobile)", () => {
 
     it("should not leak desktop-only props to the overlay DOM node", () => {
         const targetRef: React.MutableRefObject<HTMLElement | null> = { current: null };
-        let overlay: HTMLDivElement | null = null;
+        const onShow = vi.fn<(node: HTMLDivElement) => void>();
 
         render(
             <Tooltip
@@ -130,9 +130,7 @@ describe("Tooltip (mobile)", () => {
                 toggleType="click"
                 isOpen
                 targetRef={targetRef}
-                onShow={(node) => {
-                    overlay = node;
-                }}
+                onShow={onShow}
             >
                 <Tooltip.Target>
                     <button
@@ -147,8 +145,11 @@ describe("Tooltip (mobile)", () => {
             </Tooltip>,
         );
 
-        expect(overlay).not.toBeNull();
-        expect(overlay!.hasAttribute("alignTip")).toBe(false);
-        expect(overlay!.hasAttribute("size")).toBe(false);
+        expect(onShow).toHaveBeenCalledTimes(1);
+
+        const overlay = onShow.mock.calls[0][0];
+
+        expect(overlay.hasAttribute("alignTip")).toBe(false);
+        expect(overlay.hasAttribute("size")).toBe(false);
     });
 });

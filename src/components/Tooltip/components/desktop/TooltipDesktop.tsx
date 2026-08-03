@@ -63,11 +63,15 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
             }
         }
 
-        if (targetRef.current && prevProps.toggleType !== this.props.toggleType) {
+        // Смена toggleType на лету: обработчики нужно синхронизировать и на целевом элементе,
+        // и на самой подсказке — на неё их вешает setTooltipRef, который повторно не вызывается.
+        if (prevProps.toggleType !== this.props.toggleType) {
+            const elements = [targetRef.current, this.tooltip];
+
             if (this.props.toggleType === "hover") {
-                this.addHoverListeners(targetRef.current);
+                elements.forEach((element) => element && this.addHoverListeners(element));
             } else if (prevProps.toggleType === "hover") {
-                this.removeHoverListeners(targetRef.current);
+                elements.forEach((element) => element && this.removeHoverListeners(element));
             }
         }
     }

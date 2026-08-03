@@ -55,14 +55,12 @@ const renderDesktopTooltip = ({
                     aria-label={label}
                 />
             </Tooltip.Target>
-            <Tooltip.Body>
-                {body}
-                {link ? (
-                    <Tooltip.Link href={link.href} target="_blank" rel="noopener noreferrer">
-                        {link.text}
-                    </Tooltip.Link>
-                ) : null}
-            </Tooltip.Body>
+            <Tooltip.Body>{body}</Tooltip.Body>
+            {link ? (
+                <Tooltip.Link href={link.href} target="_blank" rel="noopener noreferrer">
+                    {link.text}
+                </Tooltip.Link>
+            ) : null}
             {withClose ? <Tooltip.XButton aria-label="Close tooltip" /> : null}
         </Tooltip>,
     );

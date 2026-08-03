@@ -119,6 +119,35 @@ describe("Tooltip (mobile)", () => {
         expect(onShow).not.toHaveBeenCalled();
     });
 
+    it("should render the desktop version on a mobile screen with disableAdaptiveMode", () => {
+        const targetRef: React.MutableRefObject<HTMLElement | null> = { current: null };
+
+        render(
+            <Tooltip size={ETooltipSize.SM} toggleType="click" isOpen disableAdaptiveMode targetRef={targetRef}>
+                <Tooltip.Target>
+                    <button
+                        type="button"
+                        ref={(el) => {
+                            targetRef.current = el;
+                        }}
+                        aria-label="Tooltip target"
+                    />
+                </Tooltip.Target>
+                <Tooltip.Body>Текст подсказки</Tooltip.Body>
+            </Tooltip>,
+        );
+
+        expect(document.querySelector(".tooltipDesktop")).not.toBeNull();
+        expect(document.querySelector(".tooltipMobile")).toBeNull();
+    });
+
+    it("should render the mobile overlay on a mobile screen without disableAdaptiveMode", () => {
+        renderMobileTooltip();
+
+        expect(document.querySelector(".tooltipMobile")).not.toBeNull();
+        expect(document.querySelector(".tooltipDesktop")).toBeNull();
+    });
+
     it("should not leak desktop-only props to the overlay DOM node", () => {
         const targetRef: React.MutableRefObject<HTMLElement | null> = { current: null };
         const onShow = vi.fn<(node: HTMLDivElement) => void>();

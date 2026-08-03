@@ -123,7 +123,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Header | ⬜ | ⬜ | ⬜ |
 | HeaderPage | ✅ | ✅ | ✅ |
 | HelpBox | ✅ | ✅ | ⬜ |
-| IconWrapper | ⬜ | ✅ | ⬜ |
+| IconWrapper | ✅ | ✅ | ✅ |
 | ImageGallery | ✅ | ✅ | ✅ |
 | ImageGalleryExtended | ✅ | ✅ | ✅ |
 | Island | ⬜ | ✅ | ⬜ |

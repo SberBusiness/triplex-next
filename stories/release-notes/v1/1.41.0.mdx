@@ -17,6 +17,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: `className`, переданный в `FormFieldDescription` или `FormFieldCounter`, затирал базовый класс компонента вместо того, чтобы дополнять его. Теперь классы объединяются, как у остальных компонентов библиотеки.
 - AI-рефакторинг: документация props и значений `EFormFieldStatus`, внутренние упрощения и расширенные unit-тесты. Охвачены `FormFieldInput`, `FormFieldLabel`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`. Остальной публичный API не изменён.
 
+**IconWrapper**
+
+- AI-рефакторинг: JSDoc на props, расширены unit-тесты. Публичный API и поведение не изменены.
+
 **Tooltip**
 
 - Исправлено: подсказка, смонтированная сразу открытой (управляемый режим `isOpen`), не закрывалась по действию мышью вне неё — при монтировании навешивался обработчик `click`, а снимался `mousedown`.

@@ -9,26 +9,13 @@ export type TCarouselViewportPadding =
 
 /** Свойства компонента Carousel. */
 export interface ICarouselProps extends React.HTMLAttributes<HTMLDivElement> {
-    /**
-     * Расстояние (зазор) между слайдами в пикселях.
-     * @default 16
-     */
+    /** Расстояние (зазор) между слайдами в пикселях. По умолчанию 16. */
     gap?: number;
-    /**
-     * Режим прокрутки карусели: поочередно по одному элементу или постранично.
-     * @default ECarouselScrollMode.ITEM
-     */
+    /** Режим прокрутки карусели: поочередно по одному элементу или постранично. По умолчанию ECarouselScrollMode.ITEM. */
     scrollMode?: ECarouselScrollMode;
-    /**
-     * Направление движения карусели (горизонтальное или вертикальное).
-     * @default ECarouselOrientation.HORIZONTAL
-     */
+    /** Направление движения карусели (горизонтальное или вертикальное). По умолчанию ECarouselOrientation.HORIZONTAL. */
     orientation?: ECarouselOrientation;
-    /**
-     * Внутренние отступы области видимости слайдов (Viewport).
-     * Задают зазоры по краям рабочей области скролла.
-     * @default 0
-     */
+    /** Внутренние отступы области видимости слайдов (Viewport), задающие зазоры по краям рабочей области скролла. По умолчанию 0. */
     viewportPadding?: TCarouselViewportPadding;
 }
 

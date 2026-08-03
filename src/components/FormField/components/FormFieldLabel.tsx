@@ -9,11 +9,7 @@ import styles from "../styles/FormFieldLabel.module.less";
 
 /** Свойства компонента FormFieldLabel. */
 export interface IFormFieldLabelProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "htmlFor"> {
-    /**
-     * Label отображается в уменьшенном виде над полем ввода/селектом.
-     * Если значение не задано, вычисляется из состояния поля в FormFieldContext.
-     * @default filled || active
-     */
+    /** Label отображается в уменьшенном виде над полем ввода/селектом. Если значение не задано, вычисляется как filled || active из FormFieldContext. */
     floating?: boolean;
 }
 

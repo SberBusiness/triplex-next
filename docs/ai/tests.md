@@ -38,6 +38,48 @@ src/components/{ComponentName}/__tests__/{ComponentName}.test.tsx
 
 Один файл на компонент. Если компонент имеет субкомпоненты (ButtonIcon, ButtonDropdown), тесты субкомпонентов — в отдельных файлах той же локальной папки тестов.
 
+### Импорты `vitest` — только в `*.test.ts` / `*.test.tsx` ⚠️
+
+**Правило:** `import ... from "vitest"` (а также `@testing-library/*`, `storybook/test`)
+допустим **исключительно** в файлах с постфиксом `.test.ts` / `.test.tsx`,
+в `vitest.setup.ts` и в `test-utils/`. Нигде больше.
+
+Причина — сборка. `vite.config.ts` строит entry-точку из **каждого** файла
+`src/**/*.{ts,tsx}`, кроме исключённых глобом. Любой файл внутри `src/`, который
+импортирует `vitest` и не подпадает под исключения, попадает в бандл, а вместе с
+ним vitest уезжает в общий чанк `vendor` — тот самый, который тянут почти все
+компоненты. Потребитель падает на старте:
+
+```text
+Uncaught Error: Vitest failed to access its internal state.
+```
+
+Именно это произошло в 1.39.0 из-за файла `src/components/Carousel/__tests__/utils.ts`
+(хелпер без постфикса `.test`). Чанк `vendor` вырос с 640 KB до 1.28 MB.
+
+**Общие тестовые хелперы** (моки `ResizeObserver`, фейковые `Touch`, подмена
+размеров элементов и т.п.) кладём в `test-utils/` в корне репозитория — вне `src/`,
+поэтому сборка их физически не видит:
+
+```typescript
+// ✅ src/components/Carousel/__tests__/CarouselRoot.test.tsx
+import { getResizeCallback, mockElementSize } from "../../../../test-utils/dom";
+
+// ❌ src/components/Carousel/__tests__/utils.ts — станет entry-точкой сборки
+import { vi } from "vitest";
+```
+
+Не называй хелпер `utils.ts` рядом с `utils.test.tsx`: `__tests__/utils.test.tsx` —
+это **тесты для `../utils.ts`** компонента, а не тесты хелпера. Хелперы нельзя
+класть и в сам `*.test.tsx`-файл: при импорте из другого теста его `describe`
+зарегистрируется повторно и тесты прогонятся несколько раз.
+
+Страховка на уровне сборки: `npm run build` запускает `scripts/checkBundleSize.js`
+и падает, если в `dist` превышен один из двух лимитов — **700 KB на отдельный
+JS-файл** (ловит распухший `vendor`: всё из `node_modules` сливается в него
+единственным чанком) или **2000 KB суммарно по всем JS-файлам** (ловит утечку
+кода мимо `node_modules` и медленный рост множества мелких файлов).
+
 ### Импорты
 
 ```typescript

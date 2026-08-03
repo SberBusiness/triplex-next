@@ -3,5 +3,5 @@
     "compilerOptions": {
         "types": ["@testing-library/jest-dom/vitest", "vitest/globals", "storybook/test"]
     },
-    "include": ["src", "stories"]
+    "include": ["src", "stories", "test-utils"]
 }

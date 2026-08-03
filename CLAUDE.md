@@ -56,7 +56,9 @@ React 17 совместимость, modern story pattern, формат комм
 | `pr-reviewer` | агент | Ревью созданного PR «с чистого листа», комментарии в GitHub (автоматически в финале задач Linear) |
 | `update-component-ai-md` | skill | Создаёт/обновляет `{Component}-ai.md` |
 | `commit-component` | skill | Коммит по `commits.md` (по явной просьбе; в финале задачи Linear — автоматически, с пушем и PR) |
-| `prepare-release` | skill | Подготовка релиза: версия, заготовка release notes, ветка `prepare-release-XX`, PR «New release» |
+| `release` | skill | Оркестратор релиза: запускает `release-react18`, затем `release-react17` |
+| `release-react18` | skill | Релиз `1.Y.0` из `main` (npm-тег `latest`): версия, PR из `prerelease-X.Y.0`, мерж, GitHub Release, публикация |
+| `release-react17` | skill | Парный релиз `0.Y.0` из `release-0` (npm-тег `react17`) |
 | `update-visual-baselines` | skill | Baseline-скриншоты через CI-workflow + чистка orphan (автоматически в финале задач Linear) |
 | `address-pr-feedback` | skill | Отработка комментариев ревьюеров в PR: триаж → план → правки → ответы → резолв тредов |
 | `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент → автокоммит + PR |

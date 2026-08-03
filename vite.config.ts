@@ -60,10 +60,19 @@ export default defineConfig({
         sourcemap: true,
 
         rollupOptions: {
-            // делаем entry для всех исходников, кроме .d.ts и тестов
+            // делаем entry для всех исходников, кроме .d.ts, тестов и stories
             input: Object.fromEntries(
                 globSync("src/**/*.{ts,tsx}", {
-                    ignore: ["src/**/*.d.ts", "src/**/*.test.{ts,tsx}"],
+                    ignore: [
+                        "src/**/*.d.ts",
+                        "src/**/*.test.{ts,tsx}",
+                        // вся папка целиком: тестовые хелперы без постфикса .test
+                        // иначе становятся entry и тянут vitest в бандл
+                        "src/**/__tests__/**",
+                        "src/**/__test__/**",
+                        "src/**/tests/**",
+                        "src/**/*.stories.{ts,tsx}",
+                    ],
                 }).map((file) => [
                     // src/foo/bar.tsx -> foo/bar
                     relative("src", file.slice(0, file.length - extname(file).length)),

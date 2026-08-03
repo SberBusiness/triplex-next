@@ -47,11 +47,23 @@ Each is a `SKILL.md` file describing a focused workflow. Read the relevant
 |---|---|
 | `.agents/skills/update-component-ai-md/SKILL.md` | Creating or updating `{Component}-ai.md` from current sources |
 | `.agents/skills/commit-component/SKILL.md` | Composing a commit message and staging changes per `docs/ai/commits.md` |
+| `.agents/skills/release/SKILL.md` | Releasing a new version: orchestrates the React 18 and React 17 halves |
+| `.agents/skills/release-react18/SKILL.md` | Releasing `1.Y.0` from `main` (npm tag `latest`) |
+| `.agents/skills/release-react17/SKILL.md` | Releasing the paired `0.Y.0` from `release-0` (npm tag `react17`) |
+| `.agents/skills/take-task/SKILL.md` | Picking up a Linear task `TRI-XXX` and starting work on it |
+| `.agents/skills/finish-task/SKILL.md` | Wrapping up a Linear task after the commit: summary comment, PR linkage |
+| `.agents/skills/create-task/SKILL.md` | Creating a well-formed Linear task from a short description |
+| `.agents/skills/address-pr-feedback/SKILL.md` | Working through reviewer comments on a PR |
+| `.agents/skills/update-visual-baselines/SKILL.md` | Refreshing `__screenshots__/` baselines via the CI workflow |
+| `.agents/skills/sync-roadmap/SKILL.md` | Reconciling `docs/ai/ROADMAP.md` with the Linear project |
 
 These files are runtime-neutral. Claude Code discovers them automatically via
-symlinks under `.claude/skills/` (slash-invocable as `/update-component-ai-md`,
-`/commit-component`). Other agent runtimes should read the source files
-directly.
+symlinks under `.claude/skills/`, making each slash-invocable by its name
+(`/update-component-ai-md`, `/commit-component`, `/release`, …). Other agent
+runtimes should read the source files directly.
+
+Keep this table in sync with the skills table in `CLAUDE.md` — both list the
+same set.
 
 ---
 

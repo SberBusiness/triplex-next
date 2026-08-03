@@ -3,10 +3,15 @@ import { TTooltipToggleType, ITooltipElements } from "@sberbusiness/triplex-next
 
 /** Свойства контекста Tooltip. */
 export interface ITooltipContext {
+    /** Способ открытия подсказки: по клику или по наведению. */
     toggleType?: TTooltipToggleType;
+    /** Субкомпоненты, разобранные из children Tooltip. */
     elements: ITooltipElements;
+    /** Признак того, что подсказка открыта. */
     tooltipOpen: boolean;
+    /** Признак того, что открытие было инициировано наведением на целевой элемент. */
     targetHoveredRef: React.MutableRefObject<boolean>;
+    /** Изменение состояния открытости подсказки. */
     setTooltipOpen: (open: boolean) => void;
 }
 

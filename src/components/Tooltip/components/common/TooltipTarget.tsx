@@ -3,7 +3,11 @@ import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/To
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { ITooltipTargetProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
-/** Целевой элемент компонента Tooltip. */
+/**
+ * Целевой элемент компонента Tooltip.
+ * Не рендерит собственную разметку: клонирует единственный дочерний элемент,
+ * добавляя ему обработчики открытия подсказки. Собственные onClick/onKeyDown ребёнка сохраняются.
+ */
 export const TooltipTarget: React.FC<ITooltipTargetProps> = ({ children }) => {
     const { toggleType, tooltipOpen, targetHoveredRef, setTooltipOpen } = useContext(TooltipContext);
     const child = React.Children.only(children);

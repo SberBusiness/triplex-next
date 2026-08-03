@@ -98,7 +98,7 @@ version: "1.0"
 
 - `forwardRef` обязателен, ref ведёт на корневой `div`; корневой элемент менять нельзя.
 - `EFormFieldStatus` и его строковые значения (`default` / `disabled` / `error` / `warning`) — публичный API, как и props `size` / `status` / `active`.
-- Barrel `src/components/FormField/index.ts` реэкспортирует `enums`, `types`, `components` и сам `FormField` — состав экспортов не сокращать. Экспорт `statusToClassNameMap` из `FormField.tsx` тоже попадает в публичный barrel.
+- Barrel `src/components/FormField/index.ts` реэкспортирует `enums`, `types`, `components` и сам `FormField` — состав экспортов не сокращать. Маппинг статуса на класс (`STATUS_TO_CLASS_NAME_MAP`) — внутренняя константа модуля и в barrel не входит.
 - `FormFieldContext` и `FormFieldDescriptionContext` в barrel не входят: это внутренний механизм семейства, но на нём завязаны все субкомпоненты — менять форму значения контекста без правки субкомпонентов нельзя.
 - Классы `formField`, `filled`, `active`, `error`, `warning`, `disabled`, а также `sm` / `md` / `lg` проверяются unit-тестами и используются в вложенных селекторах стилей семейства.
 - Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
@@ -161,4 +161,5 @@ version: "1.0"
 |---|---|
 | 2026-07-31 | Создан документ. AI-рефакторинг FormField: JSDoc на props, enum, контекстах и константах, активное состояние вычисляется одним выражением, контекст типизирован `IFormFieldContext`, unit-тесты расширены с 4 до 23 кейсов. Публичный API не изменён. |
 | 2026-07-31 | AI-рефакторинг распространён на субкомпоненты `FormFieldInput`, `FormFieldLabel`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`: JSDoc с тегом `@default`, дедупликация `FormFieldPrefix` / `FormFieldPostfix` через внутренний хук `useFormFieldAffixWidth`, общий `setForwardedRef` в `components/utils.ts`, unit-тесты. Публичный API не изменён. `FormFieldTextarea`, `FormFieldTarget` и `FormFieldMaskedInput` намеренно не затронуты — их покрывают задачи `TextareaField`, `SelectField` и `MaskedField`. |
-| 2026-07-31 | Исправлено: `className` у `FormFieldDescription` и `FormFieldCounter` затирал базовый класс — теперь объединяется через `clsx`. Изменение наблюдаемого поведения, зафиксировано в release notes 1.40.0. |
+| 2026-07-31 | Исправлено: `className` у `FormFieldDescription` и `FormFieldCounter` затирал базовый класс — теперь объединяется через `clsx`. Изменение наблюдаемого поведения, зафиксировано в release notes 1.41.0. |
+| 2026-08-03 | Ломающее изменение: `statusToClassNameMap` убран из публичного barrel и переименован во внутреннюю константу `STATUS_TO_CLASS_NAME_MAP`. Зафиксировано в release notes 1.41.0. |

@@ -28,7 +28,7 @@ export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, D
 }
 
 /** Соответствие статуса имени класса. */
-export const statusToClassNameMap = {
+const STATUS_TO_CLASS_NAME_MAP = {
     [EFormFieldStatus.DEFAULT]: styles.default,
     [EFormFieldStatus.DISABLED]: styles.disabled,
     [EFormFieldStatus.ERROR]: styles.error,
@@ -36,7 +36,7 @@ export const statusToClassNameMap = {
 };
 
 /** Соответствие размера имени класса. */
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /**
  * Элемент, отображающий input/select/textarea + label.
@@ -94,8 +94,8 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                 <div
                     className={clsx(
                         styles.formField,
-                        sizeToClassNameMap[size],
-                        statusToClassNameMap[status],
+                        SIZE_TO_CLASS_NAME_MAP[size],
+                        STATUS_TO_CLASS_NAME_MAP[status],
                         {
                             [styles.filled]: filled,
                             [styles.active]: isActive,

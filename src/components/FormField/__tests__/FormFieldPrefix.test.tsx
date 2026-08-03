@@ -1,7 +1,11 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import { FormField, FormFieldInput, FormFieldPrefix } from "@sberbusiness/triplex-next/components";
-import { getActiveResizeObserverCount, resetResizeObservers, resizeElement } from "./resizeObserverMock";
+import {
+    getActiveResizeObserverCount,
+    resetResizeObservers,
+    resizeElement,
+} from "../../../../test-utils/resizeObserver";
 
 describe("FormFieldPrefix", () => {
     afterEach(() => {

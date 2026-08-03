@@ -8,7 +8,7 @@ import {
     FormFieldPrefix,
 } from "@sberbusiness/triplex-next/components";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { resetResizeObservers, resizeElement } from "./resizeObserverMock";
+import { resetResizeObservers, resizeElement } from "../../../../test-utils/resizeObserver";
 
 describe("FormFieldLabel", () => {
     afterEach(() => {

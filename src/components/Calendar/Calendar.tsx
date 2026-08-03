@@ -11,7 +11,7 @@ import { CalendarControls } from "./components/CalendarControls";
 import { CalendarView } from "./components/CalendarView";
 import { CalendarFooter } from "./components/CalendarFooter";
 import { CalendarFooterButton } from "./components/CalendarFooterButton";
-import { formatDate, getHeader, parsePickedDate } from "./utils";
+import { formatDate, parsePickedDate } from "./utils";
 import styles from "./styles/Calendar.module.less";
 
 /** Состояния компонента Calendar. */
@@ -98,7 +98,7 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
 
     public componentDidUpdate(prevProps: ICalendarProps, prevState: ICalendarState): void {
         const { format } = this.props;
-        const { viewDate } = this.state;
+        const { viewDate, viewMode } = this.state;
         const { viewDate: prevViewDate } = prevState;
 
         const pickedDateState = parsePickedDate(this.props.pickedDate, format);
@@ -108,20 +108,18 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
         const prevPickedDate = parsePickedDate(prevProps.pickedDate, format);
 
         if (!(!pickedDateValid || prevPickedDate?.isSame(resultDate, "day"))) {
-            let newDateContext = {};
-
+            // Выбранная дата переехала в другой месяц — переводим навигацию на её страницу.
             if (viewDate && !viewDate.isSame(pickedDateState, "month")) {
-                newDateContext = {
-                    currentTab: ECalendarViewMode.DAYS,
-                    header: getHeader(resultDate),
+                this.setState({
+                    // Формат заголовка зависит от вида отображения — как в handlePageChange / handleViewChange.
+                    header: formatDate(resultDate, viewMode),
+                    // Значение не null: ветка выполняется только при валидной pickedDate, тогда resultDate === pickedDateState.
                     viewDate: resultDate!.clone(),
-                };
+                    pickedDate: pickedDateState,
+                });
+            } else {
+                this.setState({ pickedDate: pickedDateState });
             }
-
-            this.setState({
-                ...newDateContext,
-                pickedDate: pickedDateState,
-            });
         }
     }
 
@@ -154,13 +152,14 @@ export class Calendar extends React.PureComponent<ICalendarProps, ICalendarState
             <div className={classNames} data-tx={process.env.npm_package_version}>
                 <CalendarContext.Provider
                     value={{
-                        format: format,
+                        format,
+                        // Значения не undefined: заданы в defaultProps, но TypeScript не сужает тип опциональных props.
                         limitRange: limitRange!,
                         pickType: pickType!,
-                        markedDays: markedDays,
-                        disabledDays: disabledDays,
-                        viewDate: viewDate,
-                        viewMode: viewMode,
+                        markedDays,
+                        disabledDays,
+                        viewDate,
+                        viewMode,
                         periodId: this.periodId,
                         onDateSelect: this.handleDateSelect,
                         onPageChange: this.handlePageChange,

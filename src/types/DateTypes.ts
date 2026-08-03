@@ -1,11 +1,9 @@
 import { Moment } from "moment";
 
-/**
- * Интерфейс на диапазон выбираемых дат.
- * @prop {Moment} [dateFrom] Дата начала периода.
- * @prop {Moment} [dateTo] Дата конца периода.
- */
+/** Диапазон выбираемых дат. Обе границы опциональны — незаданная сторона периода не ограничивает выбор. */
 export interface IDateLimitRange {
-    dateFrom: Moment;
-    dateTo: Moment;
+    /** Дата начала периода. Если не задана, используется глобальная нижняя граница (`globalLimitRange.dateFrom`). */
+    dateFrom?: Moment;
+    /** Дата конца периода. Если не задана, используется глобальная верхняя граница (`globalLimitRange.dateTo`). */
+    dateTo?: Moment;
 }

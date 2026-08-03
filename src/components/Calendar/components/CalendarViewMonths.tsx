@@ -2,9 +2,18 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import moment from "moment";
 import { CalendarContext } from "../CalendarContext";
 import { CalendarViewContext } from "../CalendarViewContext";
-import { isDateOutOfRange } from "../utils";
+import {
+    ICalendarNavigationShift,
+    ICalendarNavigationSteps,
+    getFirstEnabledDate,
+    getNavigationShift,
+    getShiftedDateInRange,
+    isDateOutOfRange,
+    shiftDate,
+    VIEW_GRID_COLUMNS,
+    VIEW_GRID_ROWS,
+} from "../utils";
 import { CalendarViewItem } from "./CalendarViewItem";
-import { isKey } from "../../../utils/keyboard";
 import { ECalendarPickType, ECalendarViewMode } from "../enums";
 import { ICalendarViewProps } from "../types";
 import styles from "../styles/CalendarView.module.less";
@@ -14,6 +23,13 @@ export interface ICalendarViewMonthsProps extends Omit<
     ICalendarViewProps,
     "dayHtmlAttributes" | "yearHtmlAttributes"
 > {}
+
+/** Величины сдвига даты при клавиатурной навигации по сетке месяцев. */
+const NAVIGATION_STEPS: ICalendarNavigationSteps = {
+    horizontal: { amount: 1, unit: "month" },
+    vertical: { amount: 3, unit: "month" },
+    page: { amount: 1, unit: "year" },
+};
 
 /** Вид календаря с выбором месяца. */
 export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedDate, monthHtmlAttributes = {} }) => {
@@ -32,17 +48,14 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
     const getInitialTabbableDate = useCallback(() => {
         if (pickedDate && pickedDate.isSame(viewDate, "year")) {
             return pickedDate;
-        } else {
-            const date = viewDate.clone().startOf("year");
-
-            for (let i = 0; i < 12; i++) {
-                date.add(i, "month");
-
-                if (!isDisabledDate(date)) {
-                    return date;
-                }
-            }
         }
+
+        return getFirstEnabledDate(
+            viewDate.clone().startOf("year"),
+            VIEW_GRID_ROWS.length * VIEW_GRID_COLUMNS.length,
+            "month",
+            isDisabledDate,
+        );
     }, [pickedDate, viewDate, isDisabledDate]);
 
     const [tabbableDate, setTabbableDate] = useState(getInitialTabbableDate());
@@ -56,15 +69,17 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
     /** Рендер тела таблицы. */
     const renderTableBody = () => (
         <tbody>
-            {[0, 1, 2, 3].map((row) => (
-                <tr key={`calendar-view-months-row-${row}`}>{[0, 1, 2].map((cell) => renderTableData(row, cell))}</tr>
+            {VIEW_GRID_ROWS.map((row) => (
+                <tr key={`calendar-view-months-row-${row}`}>
+                    {VIEW_GRID_COLUMNS.map((cell) => renderTableData(row, cell))}
+                </tr>
             ))}
         </tbody>
     );
 
     /** Рендер ячейки таблицы. */
     const renderTableData = (row: number, cell: number) => {
-        const month = row * 3 + cell;
+        const month = row * VIEW_GRID_COLUMNS.length + cell;
         const date = viewDate.clone().startOf("month").month(month);
         const active = isActiveDate(date);
         const disabled = isDisabledDate(date);
@@ -107,55 +122,19 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
 
     /** Обработчик нажатия клавиши CalendarViewItem. */
     const handleItemKeyDown = (date: moment.Moment) => (event: React.KeyboardEvent<HTMLTableCellElement>) => {
-        const key = event.code || event.keyCode;
-        let nextFocusedDate;
+        const shift = getNavigationShift(event.code || event.keyCode, NAVIGATION_STEPS);
 
-        if (isKey(key, "ARROW_RIGHT")) {
-            nextFocusedDate = getShiftedDate(date, "add", 1, "month");
-            event.preventDefault();
-        } else if (isKey(key, "ARROW_LEFT")) {
-            nextFocusedDate = getShiftedDate(date, "subtract", 1, "month");
-            event.preventDefault();
-        } else if (isKey(key, "ARROW_DOWN")) {
-            nextFocusedDate = getShiftedDate(date, "add", 3, "month");
-            event.preventDefault();
-        } else if (isKey(key, "ARROW_UP")) {
-            nextFocusedDate = getShiftedDate(date, "subtract", 3, "month");
-            event.preventDefault();
-        } else if (isKey(key, "PAGE_DOWN")) {
-            nextFocusedDate = getShiftedDate(date, "add", 1, "year");
-            event.preventDefault();
-        } else if (isKey(key, "PAGE_UP")) {
-            nextFocusedDate = getShiftedDate(date, "subtract", 1, "year");
-            event.preventDefault();
+        if (!shift) {
+            return;
         }
 
-        if (nextFocusedDate) {
-            changeTabbableDate(nextFocusedDate);
-        }
+        event.preventDefault();
+        changeTabbableDate(getShiftedDate(date, shift));
     };
 
     /** Возвращает доступную для выбора дату после сдвига. */
-    const getShiftedDate = (
-        currentDate: moment.Moment,
-        operation: "add" | "subtract",
-        amount: number,
-        unit: "month" | "year",
-    ) => {
-        const date = currentDate.clone();
-        const shiftDate = {
-            add: moment.fn.add.bind(date),
-            subtract: moment.fn.subtract.bind(date),
-        }[operation];
-
-        shiftDate(amount, unit);
-
-        if (isDateOutOfRange(date, limitRange, "month")) {
-            return currentDate;
-        }
-
-        return date;
-    };
+    const getShiftedDate = (currentDate: moment.Moment, shift: ICalendarNavigationShift) =>
+        getShiftedDateInRange(currentDate, shift, limitRange, "month");
 
     /** Обработчик выбора даты. */
     const handleDateSelect = (date: moment.Moment) => {
@@ -166,16 +145,20 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
         }
     };
 
-    /** Изменение фокусируемой даты. */
+    /** Изменение фокусируемой даты. При уходе даты за пределы страницы перелистывает страницу на шаг NAVIGATION_STEPS.page. */
     const changeTabbableDate = (date: moment.Moment) => {
         setTabbableDate(date);
 
         if (date.isBefore(viewDate, "year")) {
-            date = viewDate.clone().subtract(1, "year");
-            onPageChange(date, ECalendarViewMode.MONTHS);
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "subtract", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.MONTHS,
+            );
         } else if (date.isAfter(viewDate, "year")) {
-            date = viewDate.clone().add(1, "year");
-            onPageChange(date, ECalendarViewMode.MONTHS);
+            onPageChange(
+                shiftDate(viewDate.clone(), { operation: "add", ...NAVIGATION_STEPS.page }),
+                ECalendarViewMode.MONTHS,
+            );
         }
     };
 
@@ -185,3 +168,5 @@ export const CalendarViewMonths: React.FC<ICalendarViewMonthsProps> = ({ pickedD
         </table>
     );
 };
+
+CalendarViewMonths.displayName = "CalendarViewMonths";

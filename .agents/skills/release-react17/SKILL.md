@@ -36,11 +36,14 @@ description: Парный React 17-релиз triplex-next (0.Y.0, npm-тег re
 ## Ключевое отличие от [React 18-части](../release-react18/SKILL.md)
 
 **CI на `release-0` запускается на push** ([`ci.yml`](../../../.github/workflows/ci.yml),
-триггер `push: branches: [release-0]`), но не на релизный коммит этого
-skill'а — он проверяет состояние ветки *после ручного перелития*. Значит
-защиты две: зелёный прогон на вершине `release-0` (предусловие шага 1) и
-локальные гейты шага 2. Пропускать вторые нельзя: релизный коммит меняет
-версию и notes уже после того, как CI отработал.
+триггер `push: branches: [release-0]`) — в том числе на релизный коммит
+этого skill'а. Но **дождаться** его нельзя: GitHub Release создаётся сразу
+после push, и прогон, стартующий одновременно, ничего не защищает.
+
+Значит гейтов два: зелёный прогон на вершине `release-0` *после ручного
+перелития* (предусловие шага 1) и локальные гейты шага 2. Пропускать вторые
+нельзя — релизный коммит меняет версию и notes уже после того, как первый
+прогон отработал.
 
 ---
 
@@ -119,7 +122,7 @@ git diff --name-only origin/release-0..HEAD -- src | \
 ```bash
 git status --porcelain
 git fetch origin main release-0
-gh release view <V1> --json tagName,isLatest
+gh release view <V1> --json tagName,publishedAt
 gh release view <V0> 2>&1 | head -3
 npm view @sberbusiness/triplex-next@<V1> version
 git show origin/release-0:package.json | grep -m1 '"version"'
@@ -181,7 +184,22 @@ git rev-parse origin/release-0
 `status` = `completed`, `conclusion` = `success`. Прогон на другом коммите
 не считается — значит проверялось не то состояние ветки.
 
-## 2. Гейты — обязательно до push
+## 2. Перейти в `release-0` и прогнать гейты
+
+Первым делом — переключиться на ветку. Все дальнейшие шаги (гейты, бамп,
+коммит, push) идут в `release-0`, а текущей веткой почти наверняка будет
+`main`: React 18-половина закончила на ней после мержа релизного PR.
+
+```bash
+git checkout release-0
+git pull origin release-0
+```
+
+Рабочее дерево должно остаться чистым, а `git rev-parse HEAD` — совпасть
+с `origin/release-0`: это то состояние, которое проверил CI на шаге 1.
+Расхождение — стоп.
+
+**Гейты — обязательно до push:**
 
 ```bash
 npm install
@@ -252,10 +270,23 @@ npm version <V0> --no-git-tag-version
 
 ## 4. Показать diff и запушить
 
+Показывать нужно **несохранённые изменения релизной подготовки** — бамп
+версии и notes. Сравнение `origin/release-0..HEAD` здесь бессмысленно: мерж
+сделал и запушил человек, `HEAD` совпадает с `origin/release-0`, и такой
+diff всегда пуст.
+
 ```bash
-git diff --stat origin/release-0..HEAD
-git diff origin/release-0..HEAD -- src package.json
+git status --short
+git diff --stat
+git diff -- package.json "stories/release-notes/v0/<V0>.mdx"
 ```
+
+Ожидается ровно четыре файла: `package.json`, `package-lock.json` и два
+`v0/*.mdx`. Что-то ещё — стоп: в дерево попало постороннее.
+
+Что именно приехало перелитием, при необходимости смотрится отдельно —
+`git diff --stat <MAIN_SHA>..origin/release-0`, — но это работа человека,
+сделанная до релиза, и повторно её здесь не ревьюят.
 
 В интерактивном режиме покажи сводку разработчику и дождись подтверждения.
 В unattended — включи `git diff --stat` в отчёт и продолжай: содержимое

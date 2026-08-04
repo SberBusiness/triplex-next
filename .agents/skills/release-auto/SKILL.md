@@ -60,7 +60,7 @@ git ls-remote --heads origin 'refs/heads/prerelease-*'
 
 ```bash
 git status --porcelain
-node -p "require('./package.json').version"                    # версия main
+git show origin/main:package.json | grep -m1 '"version"'       # версия main
 git show origin/release-0:package.json | grep -m1 '"version"'  # версия release-0
 gh release view <VERSION> 2>&1 | head -3
 gh release view <V0> 2>&1 | head -3

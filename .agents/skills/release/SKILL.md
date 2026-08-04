@@ -41,6 +41,10 @@ triplex-next достаточно, чтобы в релиз попал ассе�
 - `VERSION` — React 18-версия, формат `1.Y.0`. Выпускаются только минорные
   релизы: `Y` = текущий минор + 1, патч всегда `0`.
 - `V0` — `0.Y.0`, парная React 17-версия; минор совпадает с `VERSION`.
+- `NEXT` — `1.(Y+1).0`, для заготовки release notes React 18-половины.
+- `NEXT0` — `0.(Y+1).0`, то же для React 17-половины.
+- `MAIN_SHA` — SHA `origin/main` на момент предполёта (шаг 1). Фиксируется
+  здесь и передаётся в React 17-часть; сам разработчик его не передаёт.
 
 - `TASK` — номер задачи Linear на релиз, формат `TRI-XXX`. Используется
   префиксом в релизных коммитах обеих половин. Если разработчик не назвал
@@ -76,7 +80,7 @@ git ls-remote --heads origin 'refs/heads/prerelease-*'
 ```bash
 git status --porcelain
 git fetch origin main release-0
-node -p "require('./package.json').version"
+git show origin/main:package.json | grep -m1 '"version"'
 git show origin/release-0:package.json | grep -m1 '"version"'
 gh release view <VERSION> 2>&1 | head -3
 gh release view <V0> 2>&1 | head -3
@@ -106,16 +110,29 @@ SHA `origin/main` на этот момент и передай в React 17-ча�
 
 ## 2. React 18 — `release-react18`
 
-Запусти [`release-react18`](../release-react18/SKILL.md) с аргументом
-`VERSION`. Он ведёт весь цикл: ветка `prerelease-<VERSION>` → бамп → PR →
-зелёный CI → мерж → GitHub Release → публикация в npm.
+Запусти [`release-react18`](../release-react18/SKILL.md), передав все
+объявленные им входы:
+
+| Вход | Значение |
+|---|---|
+| `VERSION` | `1.Y.0` |
+| `NEXT` | `1.(Y+1).0` |
+| `TASK` | номер задачи Linear на релиз |
+| `UNATTENDED` | как передано сюда |
+
+Передавать нужно все четыре: без `TASK` под-skill полезет заводить задачу
+через `create-task`, без `UNATTENDED` — уйдёт в `gh pr checks --watch` и
+станет ждать подтверждения notes, которого в routine некому дать.
+
+Он ведёт весь цикл: ветка `prerelease-<VERSION>` → бамп → PR → зелёный CI →
+мерж → GitHub Release → публикация в npm.
 
 **Гейт.** Если под-skill остановился на любом шаге — остановись и ты. Не
 запускай React 17-часть: она опирается на уже опубликованную `1.Y.0` и на
 её release notes в `main`.
 
 Покажи разработчику итог первой половины (версия, PR, релиз, npm) прежде чем
-идти дальше.
+идти дальше; в unattended — включи его в итоговый отчёт.
 
 ## 3. React 17 — `release-react17`
 

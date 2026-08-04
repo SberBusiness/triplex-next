@@ -61,6 +61,15 @@
 
         .footer {
             text-align: right;
+
+            // Аккордеон владеет своей внутренней вёрсткой: паддинги Island обнулены выше
+            // (.islandAccordion .island), а свои заданы на .header / .body / .footer.
+            // При этом подвал несёт и базовый класс Island (islandFooter), поэтому на него
+            // действует правило .island.{size} .islandBody + .islandFooter { margin-top }.
+            // Гасим через !important намеренно: правило Island имеет специфичность в четыре
+            // класса, и перебить его селектором пришлось бы цепочкой из пяти
+            // (.islandAccordion .item .island .body + .footer) — она хрупкая и нечитаемая.
+            margin-top: 0 !important;
         }
 
         .body,

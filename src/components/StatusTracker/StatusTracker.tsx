@@ -17,7 +17,8 @@ export interface IStatusTrackerProps extends React.HTMLAttributes<HTMLDivElement
 }
 
 /** Мапа для получения CSS класса по типу статус-трекера. */
-const typeToClassNameMap: Partial<Record<EStatusTrackerType, string>> = {
+const TYPE_TO_CLASS_NAME_MAP: Record<EStatusTrackerType, string> = {
+    [EStatusTrackerType.DRAFT]: styles.draft,
     [EStatusTrackerType.REJECTED]: styles.rejected,
     [EStatusTrackerType.WAITING]: styles.waiting,
     [EStatusTrackerType.WARNING]: styles.warning,
@@ -25,7 +26,7 @@ const typeToClassNameMap: Partial<Record<EStatusTrackerType, string>> = {
 };
 
 /** Мапа для получения CSS класса для выравнивания блоков. */
-const verticalAlignToClassNameMap: Partial<Record<EStatusTrackerVerticalAlign, string>> = {
+const VERTICAL_ALIGN_TO_CLASS_NAME_MAP: Partial<Record<EStatusTrackerVerticalAlign, string>> = {
     [EStatusTrackerVerticalAlign.MIDDLE]: styles.verticalAlignMiddle,
     [EStatusTrackerVerticalAlign.BOTTOM]: styles.verticalAlignBottom,
 };
@@ -45,10 +46,12 @@ export const StatusTracker = Object.assign(
                 ref={ref}
                 data-tx={process.env.npm_package_version}
             >
-                <div className={clsx(styles.statusTrackerBackground, typeToClassNameMap[type])} key={type}>
-                    <div className={clsx(styles.statusTrackerColor, typeToClassNameMap[type])} />
+                <div className={clsx(styles.statusTrackerBackground, TYPE_TO_CLASS_NAME_MAP[type])} key={type}>
+                    <div className={clsx(styles.statusTrackerColor, TYPE_TO_CLASS_NAME_MAP[type])} />
                 </div>
-                <div className={clsx(styles.statusTracker, verticalAlignToClassNameMap[verticalAlign])}>{children}</div>
+                <div className={clsx(styles.statusTracker, VERTICAL_ALIGN_TO_CLASS_NAME_MAP[verticalAlign])}>
+                    {children}
+                </div>
             </div>
         );
     }),

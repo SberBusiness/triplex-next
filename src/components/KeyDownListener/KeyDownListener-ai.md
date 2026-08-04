@@ -109,17 +109,18 @@ version: "1.0"
 ### `ComposedKeyDownListener` (`src/components/KeyDownListener/ComposedKeyDownListener.tsx`)
 
 Композитор: оборачивает `children` в `KeyDownListener` по одному на каждый
-элемент `keyDownListeners`. Экспортируется из того же barrel.
+элемент `keyDownListeners`. Экспортируется из того же barrel вместе со своим
+интерфейсом props `IComposedKeyDownListenerProps` — публичное API, не менять.
 
-Отдельного AI.md не имеет — вся его логика описана здесь. Это осознанное
-отступление от правила `docs/ai/CONTEXT.md` § «Когда создавать
-`{ComponentName}-ai.md`»: формально оба условия выполнены (barrel-экспорт +
-собственный prop `keyDownListeners`), но по scope задачи TRI-48 соседние
-экспортируемые компоненты выносятся в отдельные задачи. Следствие, о котором
-нужно знать: `scripts/generateMcpData.ts` собирает записи по файлам
+Собственного AI.md пока не имеет — вся его логика описана здесь. По правилу
+`docs/ai/CONTEXT.md` § «Когда создавать `{ComponentName}-ai.md`» он его
+заслуживает (оба условия выполнены: barrel-экспорт + собственный prop
+`keyDownListeners`), но по scope задачи TRI-48 соседние экспортируемые
+компоненты выносятся в отдельные задачи. Компонент добавлен отдельной строкой в
+`docs/ai/ROADMAP.md`, документ будет заведён своей задачей. Следствие, о котором
+нужно знать до тех пор: `scripts/generateMcpData.ts` собирает записи по файлам
 `src/components/*/*-ai.md`, поэтому отдельной записи в `mcp-data.json` у
 `ComposedKeyDownListener` нет — агент найдёт его только через этот документ.
-Решение о заведении отдельного AI.md — за мейнтейнером.
 
 | Prop | Тип | Описание |
 |---|---|---|
@@ -167,4 +168,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-04 | По ревью PR #502: интерфейс props `IComposedKeyDownListenerProps` стал экспортируемым — публичная поверхность пакета расширена аддитивно. `ComposedKeyDownListener` добавлен отдельной строкой в `docs/ai/ROADMAP.md`, собственный AI.md вынесен в отдельную задачу. |
 | 2026-08-04 | Создан документ. AI-рефакторинг (TRI-48): JSDoc на props `IKeyDownListenerProps` и `ComposedKeyDownListener`, ветвление в `handleKeyDown` сведено к одной проверке (снят `eslint-disable`), в `ComposedKeyDownListener` убран `as JSX.Element` и добавлен `displayName`, unit-тесты (16 кейсов на оба компонента), stories по modern pattern. Публичный API не менялся; компонент остаётся class-компонентом, `forwardRef` осознанно отсутствует. |

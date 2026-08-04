@@ -2,7 +2,7 @@ import React from "react";
 import { IKeyDownListenerProps, KeyDownListener } from "./KeyDownListener";
 
 /** Свойства компонента ComposedKeyDownListener. */
-interface IComposedKeyDownListenerProps {
+export interface IComposedKeyDownListenerProps {
     /** Содержимое. Рендерится как есть, без обёртки и без собственной разметки. */
     children?: React.ReactNode;
     /** Массив-конфигуратор keydown слушателей. Поле children каждого элемента не используется. */

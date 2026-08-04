@@ -11,13 +11,9 @@ import styles from "./styles/Island.module.less";
 
 /** Свойства компонента Island. */
 export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Тип. Отличаются цвет фона и тень.
-     * @default EIslandType.TYPE_1
-     */
+    /** Тип. Отличаются цвет фона и тень. По умолчанию EIslandType.TYPE_1. */
     type?: EIslandType;
-    /** Размер. Задаёт скругление, внутренние отступы и отступы между Header, Body и Footer.
-     * @default EComponentSize.MD
-     */
+    /** Размер. Задаёт скругление, внутренние отступы и отступы между Header, Body и Footer. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
 }
 

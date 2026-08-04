@@ -30,6 +30,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Между телом и подвалом раскрытого элемента появился вертикальный отступ, заданный размером острова (8/12/16px для SM/MD/LG) — следствие исправления мержа `className` в `Island.Footer`, см. **Island**.
 
+**StatusTracker**
+
+- Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.
+- Токен `StatusTracker.Draft_Background` теперь задает цвет подсветки статуса `draft`.
+- Изменены цвета токенов `StatusTracker.Draft_Background`, `StatusTracker.Draft_Color`, `StatusTracker.Rejected_Color` в светлой и темной темах.
+- Минимальная высота изменена для десктоп экранов и удалена для мобильных экранов.
+
 **Tooltip**
 
 - Исправлено: подсказка, смонтированная сразу открытой (управляемый режим `isOpen`), не закрывалась по действию мышью вне неё — при монтировании навешивался обработчик `click`, а снимался `mousedown`.

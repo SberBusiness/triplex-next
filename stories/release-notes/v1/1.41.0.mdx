@@ -21,6 +21,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - AI-рефакторинг: JSDoc на props, расширены unit-тесты. Публичный API и поведение не изменены.
 
+**KeyDownListener**
+
+- AI-рефакторинг: JSDoc на props, обработчик нажатия сведён к одной проверке кода клавиши, в `ComposedKeyDownListener` убрано приведение типа `children` и добавлен `displayName`, добавлены unit-тесты и stories. Публичный API не изменён (props, barrel-экспорты, class-компонент `KeyDownListener` с публичным методом `handleKeyDown` — как были).
+- Исправлено: `ComposedKeyDownListener` с пустым `keyDownListeners` и без `children` больше не возвращает `undefined` из рендера — на React 17 это приводило к ошибке «Nothing was returned from render».
+
 **Tooltip**
 
 - Исправлено: подсказка, смонтированная сразу открытой (управляемый режим `isOpen`), не закрывалась по действию мышью вне неё — при монтировании навешивался обработчик `click`, а снимался `mousedown`.

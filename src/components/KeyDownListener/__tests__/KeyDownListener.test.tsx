@@ -22,6 +22,18 @@ describe("KeyDownListener", () => {
         expect(container).toBeEmptyDOMElement();
     });
 
+    // Инвариант: render возвращает children || null, поэтому falsy-children осознанно дают null.
+    // Замена || на ?? отрендерила бы текстовый узел "0" — этот кейс её ловит.
+    it("renders nothing when children are falsy", () => {
+        const { container } = render(
+            <KeyDownListener eventKeyCode={EVENT_KEY_CODES.ESCAPE} onMatch={() => {}}>
+                {0}
+            </KeyDownListener>,
+        );
+
+        expect(container).toBeEmptyDOMElement();
+    });
+
     it("calls onMatch with the keyboard event when the pressed key matches", () => {
         const onMatch = vi.fn();
 

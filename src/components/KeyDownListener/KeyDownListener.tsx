@@ -1,7 +1,10 @@
 import React from "react";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 
-/** Числовой код клавиши — одно из значений EVENT_KEY_CODES. */
+/**
+ * Числовой код клавиши. Используй константы из EVENT_KEY_CODES: тип схлопывается
+ * в number (EVENT_KEY_CODES объявлен без as const), поэтому набор значений типами не ограничен.
+ */
 type TKeyCode = (typeof EVENT_KEY_CODES)[keyof typeof EVENT_KEY_CODES];
 
 /** Свойства компонента KeyDownListener. */

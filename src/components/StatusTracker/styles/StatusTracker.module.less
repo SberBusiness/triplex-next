@@ -3,13 +3,13 @@
 .statusTrackerWrapper {
     display: flex;
     justify-content: center;
-    min-height: 358px;
+    min-height: 338px;
     position: relative;
     border-radius: 24px;
     border: 1px solid;
     border-color: var(--triplex-next-StatusTracker-Border_Color);
     width: 100%;
-    background: var(--triplex-next-StatusTracker-Draft_Background);
+    background: var(--triplex-next-StatusTracker-Background);
     overflow: hidden;
     height: 100%;
 
@@ -86,6 +86,10 @@
         bottom: 89px;
         border-radius: 50%;
 
+        &.draft {
+            background: var(--triplex-next-StatusTracker-Draft_Color);
+        }
+
         &.waiting {
             background: var(--triplex-next-StatusTracker-Waiting_Color);
         }
@@ -114,6 +118,10 @@
         filter: blur(50px);
         border-radius: 50%;
 
+        &.draft {   
+            background: var(--triplex-next-StatusTracker-Draft_Background);
+        }
+
         &.waiting {
             background: var(--triplex-next-StatusTracker-Waiting_Background);
         }
@@ -134,6 +142,7 @@
 
 @media (max-width: @screen-sm-max) {
     .statusTrackerWrapper {
+        min-height: 0;
         border-radius: 16px;
     }
 }

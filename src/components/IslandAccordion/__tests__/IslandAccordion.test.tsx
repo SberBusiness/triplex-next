@@ -39,4 +39,18 @@ describe("IslandAccordion", () => {
 
         expect(islandAccordion.firstChild).toHaveClass("sm");
     });
+
+    it("Should keep base Island classes on item content and footer", () => {
+        render(
+            <IslandAccordion>
+                <IslandAccordion.Item title="First item" id="first-item" num={1} opened>
+                    <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
+                    <IslandAccordion.Item.Footer>Footer</IslandAccordion.Item.Footer>
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(screen.getByText("Content")).toHaveClass("islandBody", "body");
+        expect(screen.getByText("Footer")).toHaveClass("islandFooter", "footer");
+    });
 });

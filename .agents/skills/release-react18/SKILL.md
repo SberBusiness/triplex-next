@@ -37,16 +37,19 @@ description: React 18-релиз triplex-next (1.Y.0, npm-тег latest) — б�
 ```bash
 git status --porcelain
 git rev-parse --abbrev-ref HEAD
-node -p "require('./package.json').version"
 git fetch origin main
+git show origin/main:package.json | grep -m1 '"version"'
 gh release view <VERSION> 2>&1 | head -3
 ```
 
 Проверки. **При любом провале — остановись и сообщи разработчику**, ничего
 не чини молча:
 
-- `VERSION` — валидный semver вида `1.Y.0`, минор ровно на 1 больше текущего
-  в `package.json`.
+- `VERSION` — валидный semver вида `1.Y.0`, минор ровно на 1 больше версии
+  **в `origin/main`**. Сравнивать нужно именно с ней, а не с рабочей копией
+  (`node -p "require('./package.json').version"`): на этом шаге чекаут ещё
+  не переключён и может стоять на произвольной ветке — в unattended-прогоне
+  это дало бы ложный стоп.
 - Релиза/тега `VERSION` ещё нет (`gh release view` отвечает `release not found`).
 - `stories/release-notes/v1/<VERSION>.mdx` существует **и не пустой** по
   предикату заготовки (ниже). Если файла нет или он заготовка — **публиковать

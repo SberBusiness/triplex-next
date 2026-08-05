@@ -1,7 +1,7 @@
 ---
 component: ThemeProvider
 category: ThemeProvider
-related: [DesignTokens, Tooltip, Dropdown, ModalWindow, LightBox]
+related: [useToken, ETriplexNextTheme, ThemeProviderContext, DesignTokens, Portal, Dropdown, ModalWindow, LightBox, Tooltip]
 tokens: []
 stories: stories/ThemeProvider/ThemeProvider.stories.tsx
 version: "1.0"
@@ -85,9 +85,16 @@ version: "1.0"
 - `ThemeProviderContext` должен оставаться единственным экземпляром модуля: `useToken`
   импортирует его по пути пакета (`@sberbusiness/triplex-next/components/ThemeProvider/...`).
   Дублирование модуля через разные спецификаторы разорвёт связь провайдера и потребителей.
-- Компоненты, рендерящиеся в портал вне `scopeRef` (`Dropdown`, `ModalWindow`, `LightBox`,
-  `Tooltip`), сами добавляют `scopeClassName` из `useToken` на свой контейнер — иначе
-  css-переменные до них не доходят. Новые портальные компоненты должны делать так же.
+- Компоненты, рендерящиеся в портал вне `scopeRef`, сами переносят `scopeClassName`
+  из `useToken` на свой корневой узел — иначе css-переменные до них не доходят.
+  Новые портальные компоненты должны делать так же, и способ зависит от контейнера:
+  - **собственный контейнер** (`Dropdown`, `ModalWindow`, `LightBox`) — класс просто
+    добавляется в `clsx` корневого элемента;
+  - **общий контейнер, разделяемый несколькими экземплярами** (`Tooltip`,
+    см. `utils/useTooltipTheme.ts`) — класс навешивается через `classList` в эффекте
+    со счётчиком использований в data-атрибуте и снимается с задержкой после закрытия.
+    Без счётчика соседние экземпляры на том же контейнере затирали бы тему друг другу,
+    без задержки класс снимался бы до конца анимации закрытия.
 - При размонтировании и при смене `scopeClassName` тег стилей удаляется, а класс снимается
   с элемента — утечка стилей на страницу недопустима.
 

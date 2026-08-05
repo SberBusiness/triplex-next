@@ -42,8 +42,8 @@ export const RoundingSizesExample = () => {
     const [isSelectedLG, setIsSelectedLG] = useState(false);
 
     return (
-        <div style={{ width: "448px", display: "flex", flexWrap: "wrap", gap: "16px" }}>
-            <div style={{ width: "216px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <div style={{ width: "680px", display: "flex", gap: "16px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>
                 <CardAction
                     roundingSize={ECardRoundingSize.SM}
@@ -64,7 +64,7 @@ export const RoundingSizesExample = () => {
                     </CardAction.Content>
                 </CardAction>
             </div>
-            <div style={{ width: "216px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>MD</div>
                 <CardAction
                     roundingSize={ECardRoundingSize.MD}
@@ -85,7 +85,7 @@ export const RoundingSizesExample = () => {
                     </CardAction.Content>
                 </CardAction>
             </div>
-            <div style={{ width: "216px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LG</div>
                 <CardAction
                     roundingSize={ECardRoundingSize.LG}

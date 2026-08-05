@@ -3,6 +3,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { CardAction } from "@sberbusiness/triplex-next/components/Card";
 import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
+import {
+    mapCardRoundingSizeToCssClass,
+    mapCardThemeToCssClass,
+} from "@sberbusiness/triplex-next/components/Card/utils";
 
 const getCard = () => screen.getByRole("button");
 
@@ -20,39 +24,25 @@ describe("CardAction", () => {
         expect(card).toHaveAttribute("tabindex", "0");
     });
 
-    it("applies theme and rounding class mappings via props", () => {
-        const { rerender } = render(
-            <CardAction theme={ECardTheme.GENERAL} roundingSize={ECardRoundingSize.MD}>
-                card
-            </CardAction>,
-        );
+    it("applies theme class mapping", () => {
+        const { rerender } = render(<CardAction theme={ECardTheme.GENERAL}>card</CardAction>);
         const root = getCard();
-        expect(root.className).toMatch(/card/);
+        expect(root.className).toContain(mapCardThemeToCssClass[ECardTheme.GENERAL]);
 
-        rerender(
-            <CardAction theme={ECardTheme.SECONDARY} roundingSize={ECardRoundingSize.SM}>
-                card
-            </CardAction>,
-        );
-        expect(root.className).toContain("roundingSM");
+        rerender(<CardAction theme={ECardTheme.SECONDARY}>card</CardAction>);
+        expect(root.className).toContain(mapCardThemeToCssClass[ECardTheme.SECONDARY]);
     });
 
-    it("applies rounding class for each ECardRoundingSize value", () => {
-        const { rerender } = render(<CardAction roundingSize={ECardRoundingSize.SM}>card</CardAction>);
-        const root = getCard();
-        expect(root.className).toContain("roundingSM");
+    it.each(Object.values(ECardRoundingSize))("applies rounding class for %s", (roundingSize) => {
+        render(<CardAction roundingSize={roundingSize}>card</CardAction>);
 
-        rerender(<CardAction roundingSize={ECardRoundingSize.MD}>card</CardAction>);
-        expect(root.className).toContain("roundingMD");
-
-        rerender(<CardAction roundingSize={ECardRoundingSize.LG}>card</CardAction>);
-        expect(root.className).toContain("roundingLG");
+        expect(getCard().className).toContain(mapCardRoundingSizeToCssClass[roundingSize]);
     });
 
     it("applies rounding MD by default", () => {
         render(<CardAction>card</CardAction>);
 
-        expect(getCard().className).toContain("roundingMD");
+        expect(getCard().className).toContain(mapCardRoundingSizeToCssClass[ECardRoundingSize.MD]);
     });
 
     it("uncontrolled: toggles on click and space/enter, calls onToggle", () => {

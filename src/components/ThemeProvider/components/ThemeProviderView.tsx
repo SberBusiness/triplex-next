@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { defaultsDeep } from "lodash-es";
 import { TDesignTokens, TDesignTokensPartial } from "../../DesignTokens/types/DesignTokensTypes";
-// Импорт не должен быть относительным.
 import { ThemeProviderContext } from "../ThemeProviderContext";
 import { ETriplexNextTheme } from "../ETriplexNextTheme";
 import {

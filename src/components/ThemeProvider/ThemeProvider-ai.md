@@ -1,7 +1,7 @@
 ---
 component: ThemeProvider
 category: ThemeProvider
-related: [useToken, ETriplexNextTheme, ThemeProviderContext, DesignTokens, Portal, Dropdown, ModalWindow, LightBox, Tooltip]
+related: [useToken]
 tokens: []
 stories: stories/ThemeProvider/ThemeProvider.stories.tsx
 version: "1.0"
@@ -144,3 +144,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-08-05 | Создан документ. AI-рефакторинг: JSDoc на props и экспортах, ключ тега стилей вынесен в хелпер, упрощён эффект `ThemeProviderView`, добавлены unit-тесты `ThemeProviderView` и `useToken`, stories переведены на modern pattern |
+| 2026-08-05 | `related` сокращён до `useToken`. Удалён неактуальный комментарий про относительный импорт в `ThemeProviderView` |

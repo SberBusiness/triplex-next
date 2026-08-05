@@ -45,7 +45,6 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **ThemeProvider**
 
 - AI-рефакторинг: JSDoc на props, значениях `ETriplexNextTheme` и полях контекста темы, ключ тега стилей с css-переменными вынесен в отдельный хелпер (раньше строка собиралась в двух местах), упрощён эффект навешивания `scopeClassName` — убран дублирующий его ref. Добавлены unit-тесты на `ThemeProviderView` и `useToken`. Публичный API, DOM и поведение не изменены.
-- Stories переведены на modern pattern: примеры вынесены в `stories/ThemeProvider/examples/`, добавлена стори `Playground`. Идентификаторы существующих stories прежние.
 
 **Tooltip**
 

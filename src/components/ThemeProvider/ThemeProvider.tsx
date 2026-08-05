@@ -23,10 +23,7 @@ export interface IThemeProviderProps {
     scopeClassName?: string;
     /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. */
     scopeRef: React.RefObject<HTMLElement>;
-    /**
-     * Дизайн-тема Triplex Next.
-     * @default ETriplexNextTheme.LIGHT
-     */
+    /** Дизайн-тема Triplex Next. @default ETriplexNextTheme.LIGHT */
     theme?: ETriplexNextTheme;
     /** Переопределяемые токены. */
     tokens?: TDesignTokensPartial;

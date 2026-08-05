@@ -5,6 +5,8 @@ import {
     Button,
     EButtonTheme,
     EComponentSize,
+    CardStatic,
+    ECardContentPaddingSize,
     Text,
     ETextSize,
 } from "@sberbusiness/triplex-next";
@@ -21,11 +23,20 @@ export const ThemeSwitcher = () => {
 
     return (
         <ThemeProvider theme={theme} scopeRef={scopeRef}>
-            <div ref={scopeRef} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
-                <Text size={ETextSize.B1}>Текущая тема: {theme}</Text>
-                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleToggleClick}>
-                    Переключить тему
-                </Button>
+            {/* Подложку под тему даёт компонент с собственным токеном фона — ThemeProvider её не красит. */}
+            <div ref={scopeRef}>
+                <CardStatic>
+                    <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
+                            <Text size={ETextSize.B1}>
+                                Текущая тема: {theme === ETriplexNextTheme.LIGHT ? "светлая" : "тёмная"}
+                            </Text>
+                            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={handleToggleClick}>
+                                Переключить тему
+                            </Button>
+                        </div>
+                    </CardStatic.Content>
+                </CardStatic>
             </div>
         </ThemeProvider>
     );

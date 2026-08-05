@@ -5,6 +5,8 @@ import {
     Button,
     EButtonTheme,
     EComponentSize,
+    CardStatic,
+    ECardContentPaddingSize,
     Text,
     ETextSize,
 } from "@sberbusiness/triplex-next";
@@ -12,24 +14,27 @@ import {
 export const ScopedTheme = () => {
     const darkScopeRef = useRef<HTMLDivElement>(null);
 
-    return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
-                <Text size={ETextSize.B1}>Область вне ThemeProvider — тема приложения.</Text>
-                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
-                    Button text
-                </Button>
-            </div>
-
-            <ThemeProvider theme={ETriplexNextTheme.DARK} scopeRef={darkScopeRef}>
-                <div
-                    ref={darkScopeRef}
-                    style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}
-                >
-                    <Text size={ETextSize.B1}>Область с тёмной темой — css-переменные действуют только здесь.</Text>
-                    <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+    // Обе области — одинаковая разметка. Отличается только тема: вторая обёрнута в ThemeProvider.
+    const content = (label: string) => (
+        <CardStatic>
+            <CardStatic.Content paddingSize={ECardContentPaddingSize.MD}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
+                    <Text size={ETextSize.B1}>{label}</Text>
+                    <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
                         Button text
                     </Button>
+                </div>
+            </CardStatic.Content>
+        </CardStatic>
+    );
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            {content("Область вне ThemeProvider — тема приложения.")}
+
+            <ThemeProvider theme={ETriplexNextTheme.DARK} scopeRef={darkScopeRef}>
+                <div ref={darkScopeRef}>
+                    {content("Область с тёмной темой — css-переменные действуют только здесь.")}
                 </div>
             </ThemeProvider>
         </div>

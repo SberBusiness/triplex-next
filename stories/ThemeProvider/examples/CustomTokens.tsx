@@ -9,19 +9,18 @@ import {
     ETextSize,
 } from "@sberbusiness/triplex-next";
 
+// tokens сравнивается по ссылке — объект вынесен из рендера, чтобы style-тег не пересобирался.
+const CUSTOM_TOKENS = {
+    ColorBrand: {
+        50: { value: "blue" },
+    },
+};
+
 export const CustomTokens = () => {
     const scopeRef = useRef<HTMLDivElement>(null);
 
     return (
-        <ThemeProvider
-            theme={ETriplexNextTheme.LIGHT}
-            tokens={{
-                ColorBrand: {
-                    50: { value: "blue" },
-                },
-            }}
-            scopeRef={scopeRef}
-        >
+        <ThemeProvider theme={ETriplexNextTheme.LIGHT} tokens={CUSTOM_TOKENS} scopeRef={scopeRef}>
             <div ref={scopeRef} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
                 <Text size={ETextSize.B1}>Токен ColorBrand.50 переопределён — кнопка перекрашена.</Text>
                 <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>

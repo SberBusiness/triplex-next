@@ -132,6 +132,10 @@ export const ThemeSwitcher: StoryObj<typeof ThemeProvider> = {
             },
         },
     },
+    // Скриншот снимается после переключения — иначе baseline дублировал бы светлое состояние Default.
+    play: async ({ canvas, userEvent }) => {
+        await userEvent.click(await canvas.findByRole("button"));
+    },
 };
 
 export const ScopedTheme: StoryObj<typeof ThemeProvider> = {

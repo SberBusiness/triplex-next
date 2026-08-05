@@ -1,5 +1,4 @@
 export * from "./Playground";
-export { default as PlaygroundSource } from "./Playground?raw";
 export * from "./Default";
 export { default as DefaultSource } from "./Default?raw";
 export * from "./DarkTheme";

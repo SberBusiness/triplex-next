@@ -2,25 +2,25 @@ import React from "react";
 import { IKeyDownListenerProps, KeyDownListener } from "./KeyDownListener";
 
 /** Свойства компонента ComposedKeyDownListener. */
-interface IKeyDownListenerManagerProps {
+export interface IComposedKeyDownListenerProps {
+    /** Содержимое. Рендерится как есть, без обёртки и без собственной разметки. */
     children?: React.ReactNode;
-    /** Массив-конфигуратор keydown слушателей. */
+    /** Массив-конфигуратор keydown слушателей. Поле children каждого элемента не используется. */
     keyDownListeners: IKeyDownListenerProps[];
 }
 
-/** Композитор слушателей нажатия клавиш. */
-export const ComposedKeyDownListener: React.FC<IKeyDownListenerManagerProps> = ({ keyDownListeners, children }) => {
-    let accumulatedElement = children as JSX.Element;
+/** Композитор слушателей нажатия клавиш. Оборачивает children в KeyDownListener на каждый элемент keyDownListeners. */
+export const ComposedKeyDownListener: React.FC<IComposedKeyDownListenerProps> = ({ keyDownListeners, children }) => {
+    const composedChildren = keyDownListeners.reduce<React.ReactNode>(
+        (accumulatedChildren, { eventKeyCode, onMatch }) => (
+            <KeyDownListener eventKeyCode={eventKeyCode} onMatch={onMatch}>
+                {accumulatedChildren}
+            </KeyDownListener>
+        ),
+        children,
+    );
 
-    if (keyDownListeners.length) {
-        for (let i = 0; i < keyDownListeners.length; i++) {
-            accumulatedElement = (
-                <KeyDownListener onMatch={keyDownListeners[i].onMatch} eventKeyCode={keyDownListeners[i].eventKeyCode}>
-                    {accumulatedElement}
-                </KeyDownListener>
-            );
-        }
-    }
-
-    return accumulatedElement;
+    return <>{composedChildren}</>;
 };
+
+ComposedKeyDownListener.displayName = "ComposedKeyDownListener";

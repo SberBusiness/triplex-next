@@ -35,6 +35,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - AI-рефакторинг: JSDoc на props, расширены unit-тесты. Публичный API и поведение не изменены.
 
+**KeyDownListener**
+
+- AI-рефакторинг: JSDoc на props, обработчик нажатия сведён к одной проверке кода клавиши, в `ComposedKeyDownListener` убрано приведение типа `children` и добавлен `displayName`, добавлены unit-тесты и stories. Существующий публичный API не изменён (props, их типы, class-компонент `KeyDownListener` с публичным методом `handleKeyDown` — как были).
+- Интерфейс props `IComposedKeyDownListenerProps` теперь экспортируется из пакета — можно типизировать собственные обёртки над `ComposedKeyDownListener`.
+- Исправлено: `ComposedKeyDownListener` с пустым `keyDownListeners` и без `children` больше не возвращает `undefined` из рендера — на React 17 это приводило к ошибке «Nothing was returned from render».
+
 **StatusTracker**
 
 - Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.

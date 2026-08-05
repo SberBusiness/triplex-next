@@ -7,18 +7,33 @@ import { ThemeProviderView } from "./components/ThemeProviderView";
 import { uniqueId } from "../../../scripts/uniqueId";
 import { ETriplexNextTheme } from "./ETriplexNextTheme";
 
+/** Префикс автогенерируемого scopeClassName. */
+const SCOPE_CLASS_NAME_PREFIX = "triplex-next-theme-";
+
+/**
+ * Возвращает ключ тега style с css-переменными темы. По этому ключу стили обновляются
+ * и удаляются, поэтому ключ вычисляется в одном месте.
+ */
+const getStyleTagKey = (scopeClassName: string): string => `triplex-next-dynamic-tokens-${scopeClassName}`;
+
 export interface IThemeProviderProps {
+    /** Контент, внутри которого действуют тема и токены. */
     children: React.ReactNode;
     /** Classname, который добавлен к элементу из scopeRef для создания области видимости css-переменных. */
     scopeClassName?: string;
     /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. */
     scopeRef: React.RefObject<HTMLElement>;
-    /** Дизайн-тема Triplex Next. */
+    /** Дизайн-тема Triplex Next. @default ETriplexNextTheme.LIGHT */
     theme?: ETriplexNextTheme;
     /** Переопределяемые токены. */
     tokens?: TDesignTokensPartial;
 }
 
+/**
+ * Провайдер темы. Рендерит css-переменные дизайн-токенов выбранной темы в тег style,
+ * ограничивает их областью видимости элемента из scopeRef и передаёт тему и токены
+ * дочерним компонентам через контекст (см. useToken).
+ */
 export const ThemeProvider: React.FC<IThemeProviderProps> = ({
     children,
     scopeClassName,
@@ -27,20 +42,20 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({
     tokens,
 }) => {
     // ClassName, добавляемый к HTML элементу, для определения области видимости CSS-переменных.
-    const scopeCssClassName = useMemo(() => scopeClassName || uniqueId("triplex-next-theme-"), [scopeClassName]);
+    const scopeCssClassName = useMemo(() => scopeClassName || uniqueId(SCOPE_CLASS_NAME_PREFIX), [scopeClassName]);
 
     useLayoutEffect(() => {
         if (canUseDom()) {
             const style = `.${scopeCssClassName} {${DesignTokenUtils.getStyle(theme, tokens || {})}}`;
-            // Обновление мета тега со стилями темы. Обновляется тег с ключом triplex-next-dynamic-theme.
-            updateCSS(style, `triplex-next-dynamic-tokens-${scopeCssClassName}`);
+            // Создание или обновление тега style с css-переменными текущей темы.
+            updateCSS(style, getStyleTagKey(scopeCssClassName));
         } else {
             console.warn("ThemeProvider", "SSR do not support dynamic theme with css variables.");
         }
     }, [scopeCssClassName, theme, tokens]);
 
     // Удаляет стили при размонтировании компонента.
-    useLayoutEffect(() => () => removeCSS(`triplex-next-dynamic-tokens-${scopeCssClassName}`), [scopeCssClassName]);
+    useLayoutEffect(() => () => removeCSS(getStyleTagKey(scopeCssClassName)), [scopeCssClassName]);
 
     return (
         <ThemeProviderView scopeClassName={scopeCssClassName} scopeRef={scopeRef} theme={theme} tokens={tokens}>

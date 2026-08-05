@@ -52,6 +52,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменены цвета токенов `StatusTracker.Draft_Background`, `StatusTracker.Draft_Color`, `StatusTracker.Rejected_Color` в светлой и темной темах.
 - Минимальная высота изменена для десктоп экранов и удалена для мобильных экранов.
 
+**ThemeProvider**
+
+- AI-рефакторинг: JSDoc на props, значениях `ETriplexNextTheme` и полях контекста темы, ключ тега стилей с css-переменными вынесен в отдельный хелпер (раньше строка собиралась в двух местах), упрощён эффект навешивания `scopeClassName` — убран дублирующий его ref. Добавлены unit-тесты на `ThemeProviderView` и `useToken`. Публичный API, DOM и поведение не изменены.
+
 **Tooltip**
 
 - Исправлено: подсказка, смонтированная сразу открытой (управляемый режим `isOpen`), не закрывалась по действию мышью вне неё — при монтировании навешивался обработчик `click`, а снимался `mousedown`.

@@ -1,7 +1,8 @@
 import { EIslandType } from "./enums";
 import styles from "./styles/Island.module.less";
 
-export const mapTypeToClassName = (type: EIslandType) => {
+/** Возвращает CSS-класс острова, соответствующий его типу. */
+export const mapTypeToClassName = (type: EIslandType): string => {
     switch (type) {
         case EIslandType.TYPE_1:
             return styles.type1;

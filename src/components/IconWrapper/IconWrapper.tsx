@@ -4,6 +4,7 @@ import styles from "./styles/IconWrapper.module.less";
 
 /** Свойства компонента IconWrapper. */
 export interface IIconWrapperProps extends React.HTMLAttributes<HTMLSpanElement> {
+    /** Иконка (или произвольный контент), которую оборачивает компонент. */
     children: React.ReactNode;
     /** Активное состояние иконки. */
     active?: boolean;
@@ -22,14 +23,15 @@ export interface IIconWrapperProps extends React.HTMLAttributes<HTMLSpanElement>
 export const IconWrapper = React.forwardRef<HTMLSpanElement, IIconWrapperProps>(
     ({ children, className, active, disabled, disableInteraction, displayContents, ...props }, ref) => (
         <span
-            ref={ref}
-            className={clsx("hoverable", className, {
-                active: !!active,
-                disabled: !!disabled,
-                [styles.disableInteraction]: !!disableInteraction,
-                [styles.displayContents]: !!displayContents,
-            })}
             {...props}
+            ref={ref}
+            // Глобальные классы @sberbusiness/icons-next "hoverable", "active" и "disabled" — задают цвет иконки.
+            className={clsx("hoverable", className, {
+                active,
+                disabled,
+                [styles.disableInteraction]: disableInteraction,
+                [styles.displayContents]: displayContents,
+            })}
         >
             {children}
         </span>

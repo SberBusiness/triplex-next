@@ -105,6 +105,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
 | CollapsibleTreeExtended | ✅ | ✅ | ✅ |
+| ComposedKeyDownListener | ⬜ | ⬜ | ✅ |
 | Confirm | ⬜ | ⬜ | ⬜ |
 | DateField | ⬜ | ✅ | ⬜ |
 | DatePickerExtended | ⬜ | ⬜ | ⬜ |
@@ -123,13 +124,13 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Header | ⬜ | ⬜ | ⬜ |
 | HeaderPage | ✅ | ✅ | ✅ |
 | HelpBox | ✅ | ✅ | ⬜ |
-| IconWrapper | ⬜ | ✅ | ⬜ |
+| IconWrapper | ✅ | ✅ | ✅ |
 | ImageGallery | ✅ | ✅ | ✅ |
 | ImageGalleryExtended | ✅ | ✅ | ✅ |
-| Island | ⬜ | ✅ | ⬜ |
+| Island | ✅ | ✅ | ✅ |
 | IslandAccordion | ⬜ | ✅ | ⬜ |
 | IslandWidget | ⬜ | ✅ | ⬜ |
-| KeyDownListener | ⬜ | ⬜ | ⬜ |
+| KeyDownListener | ✅ | ✅ | ✅ |
 | LightBox | ✅ | ✅ | ✅ |
 | Link | ⬜ | ✅ | ⬜ |
 | List | ✅ | ✅ | ✅ |

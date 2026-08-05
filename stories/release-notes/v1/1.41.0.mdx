@@ -35,6 +35,17 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - AI-рефакторинг: JSDoc на props, расширены unit-тесты. Публичный API и поведение не изменены.
 
+**Island**
+
+- Исправлено: `className`, переданный в `IslandHeader` (`Island.Header`) или `IslandFooter` (`Island.Footer`), затирал базовый класс компонента вместо того, чтобы дополнять его. Теперь классы объединяются, как в `IslandBody` и у остальных компонентов библиотеки. Это влияет на любой код, передающий `className` в эти части: базовый класс остаётся на элементе, поэтому к нему снова применяются отступы `Island` и `position: relative` из стилей части. Последнее меняет containing block — абсолютно спозиционированные потомки внутри такой части теперь позиционируются относительно неё, а не относительно ближайшего внешнего positioned-предка. Компоненты самой библиотеки выглядят как прежде: единственный затронутый — `IslandAccordion`, в его стилях отступ Island погашен явно.
+- AI-рефакторинг: JSDoc на props, значениях `EIslandType` и субкомпонентах, `displayName` у `IslandHeader`, `IslandBody`, `IslandFooter`, добавлены unit-тесты. Публичный API не изменён (props, значения enum, barrel-экспорты, `forwardRef` — как были).
+
+**KeyDownListener**
+
+- AI-рефакторинг: JSDoc на props, обработчик нажатия сведён к одной проверке кода клавиши, в `ComposedKeyDownListener` убрано приведение типа `children` и добавлен `displayName`, добавлены unit-тесты и stories. Существующий публичный API не изменён (props, их типы, class-компонент `KeyDownListener` с публичным методом `handleKeyDown` — как были).
+- Интерфейс props `IComposedKeyDownListenerProps` теперь экспортируется из пакета — можно типизировать собственные обёртки над `ComposedKeyDownListener`.
+- Исправлено: `ComposedKeyDownListener` с пустым `keyDownListeners` и без `children` больше не возвращает `undefined` из рендера — на React 17 это приводило к ошибке «Nothing was returned from render».
+
 **LoaderMiddle**
 
 - AI-рефакторинг: JSDoc на компоненте, порядок импортов приведён к codestyle, в стилях объединены дублирующиеся базовые правила точек и обегающей линии, unit-тесты расширены с 1 до 2 кейсов, создан `LoaderMiddle-ai.md`. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API и поведение не изменены (props, DOM-разметка, `role="status"`, токены — как были).

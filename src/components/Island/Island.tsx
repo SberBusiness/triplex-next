@@ -9,21 +9,23 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/Island.module.less";
 
+/** Свойства компонента Island. */
 export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Тип компонента Island. Отличаются цвет и тень. */
+    /** Тип. Отличаются цвет фона и тень. По умолчанию EIslandType.TYPE_1. */
     type?: EIslandType;
-    /** Возможные размеры острова. */
+    /** Размер. Задаёт скругление, внутренние отступы и отступы между Header, Body и Footer. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
 }
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
+/** Контейнер-карточка. Составные части — Island.Header, Island.Body, Island.Footer. */
 export const Island = Object.assign(
     React.forwardRef<HTMLDivElement, IIslandProps>(
         ({ type = EIslandType.TYPE_1, size = EComponentSize.MD, className, children, ...rest }, ref) => {
             return (
                 <div
-                    className={clsx(styles.island, mapTypeToClassName(type), sizeToClassNameMap[size], className)}
+                    className={clsx(styles.island, mapTypeToClassName(type), SIZE_TO_CLASS_NAME_MAP[size], className)}
                     ref={ref}
                     {...rest}
                 >

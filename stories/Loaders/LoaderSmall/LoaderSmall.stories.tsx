@@ -75,13 +75,13 @@ export const Playground: Story = {
     },
 };
 
-export const Default: Story = {
-    name: "Default",
+export const Default: StoryObj<typeof LoaderSmall> = {
     render: DefaultExample,
     parameters: {
+        // Визуально дублирует MD-вариант из Visual tests — отдельный скриншот не нужен.
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
@@ -90,13 +90,13 @@ export const Default: Story = {
     },
 };
 
-export const Themes: Story = {
-    name: "Themes",
+export const Themes: StoryObj<typeof LoaderSmall> = {
     render: ThemesExample,
     parameters: {
+        // Обе темы сняты в Visual tests — отдельный скриншот не нужен.
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: ThemesExampleSource,
                 language: "tsx",
@@ -105,13 +105,13 @@ export const Themes: Story = {
     },
 };
 
-export const Sizes: Story = {
-    name: "Sizes",
+export const Sizes: StoryObj<typeof LoaderSmall> = {
     render: SizesExample,
     parameters: {
+        // Все размеры сняты в Visual tests — отдельный скриншот не нужен.
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: SizesExampleSource,
                 language: "tsx",
@@ -120,7 +120,7 @@ export const Sizes: Story = {
     },
 };
 
-export const VisualTests: Story = {
+export const VisualTests: StoryObj<typeof LoaderSmall> = {
     name: "Visual tests",
     tags: ["!autodocs", "!dev"],
     decorators: [

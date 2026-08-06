@@ -27,8 +27,10 @@ version: "1.0"
 - Нужен полноэкранный лоадер приложения — LoaderScreen перекрывает только своего позиционированного
   родителя, а не вьюпорт.
 - Нужно заблокировать взаимодействие со страницей — LoaderScreen не ловушка фокуса и не модальный
-  оверлей, см. «Accessibility». Для блокирующего сценария возьми `ModalWindow` / `LightBox`
-  с их встроенным `isLoading`.
+  оверлей, см. «Accessibility». Для блокирующего сценария возьми `ModalWindowContent` или
+  `LightBoxContent` с их встроенным `isLoading` — prop объявлен именно на контентных
+  субкомпонентах, а не на корневых `ModalWindow` / `LightBox`. У `LightBox` есть свой `isLoading`,
+  но он только отключает focus trap (`active={!isLoading}`) и лоадер не рендерит.
 
 ---
 
@@ -71,6 +73,13 @@ LoaderScreen и сами фиксируют `type="middle"`. Потребите�
 - **`z-index: @z-index-loader-screen`** (10100 из `src/helpers/less/z-indexes.less`). Значение выше
   тултипа; `ModalWindowClose` намеренно поднимается ещё выше (`@z-index-loader-screen + 50`), чтобы
   крестик оставался кликабельным поверх лоадера.
+  В обратную сторону: потребители `List` (`List.module.less`) и `TableBasic`
+  (`TableBasic.module.less`) **понижают** `z-index` до `@z-index-step` через собственный класс
+  (`.list .listLoaderScreen`, `.tableBasic .spinnerWrapper .tableLoaderScreen`), чтобы лоадер
+  перекрывал только своё содержимое, а не `LightBox` / `ModalWindow`. Держится это на специфичности
+  вложенного селектора (0,2,0 и выше против 0,1,0 у `.loaderScreen`) — **не повышай специфичность правил
+  `.loaderScreen`** в `LoaderScreen.module.less`, иначе оба потребителя молча сломаются, и
+  unit-тесты этого не поймают (ловит только visual regression).
 
 ---
 

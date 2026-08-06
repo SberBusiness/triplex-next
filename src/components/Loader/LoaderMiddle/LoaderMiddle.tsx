@@ -1,7 +1,11 @@
 import React from "react";
-import styles from "./styles/LoaderMiddle.module.less";
 import clsx from "clsx";
+import styles from "./styles/LoaderMiddle.module.less";
 
+/**
+ * Квадратный загрузчик с анимированными точками и обегающей их линией.
+ * Не имеет настраиваемых props, используется как индикатор загрузки области или страницы.
+ */
 export const LoaderMiddle: React.FC = () => {
     return (
         <div role="status" aria-label="loading" className={styles.loaderMiddle}>

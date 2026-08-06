@@ -3,12 +3,20 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { LoaderMiddle } from "../LoaderMiddle";
 
+const getLoaderMiddle = () => screen.getByRole("status", { name: "loading" });
+
 describe("LoaderMiddle", () => {
-    it("Should render with default props", () => {
+    it("Should render root element with status role", () => {
         render(<LoaderMiddle />);
 
-        const loader = screen.getByRole("status", { name: "loading" });
-        expect(loader).toBeInTheDocument();
-        expect(loader).toHaveClass("loaderMiddle");
+        expect(getLoaderMiddle()).toBeInTheDocument();
+    });
+
+    it("Should render four dots and a line", () => {
+        render(<LoaderMiddle />);
+
+        const loader = getLoaderMiddle();
+        expect(loader.querySelectorAll(".dot")).toHaveLength(4);
+        expect(loader.querySelectorAll(".line")).toHaveLength(1);
     });
 });

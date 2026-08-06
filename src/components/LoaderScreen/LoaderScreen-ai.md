@@ -169,4 +169,4 @@ breaking change для темизации), но опираться на нег�
 
 | Дата | Изменение |
 |---|---|
-| 2026-08-06 | Создан документ. AI-рефакторинг: порядок импортов по `codestyle.md`, JSDoc на компоненте, props и `ILoaderScreenMiddleProps` (включая `@default` для `size`), подложка вынесена в `TYPE_TO_BACKDROP_CLASS_NAME_MAP`, `className` в `clsx` перенесён в конец. Unit-тесты расширены: все значения `EComponentSize`, игнорирование `size` при `type="middle"`, класс подложки по типу, отсутствие `description` / `controls`, мердж `className`, spread rest-props, `forwardRef`. Публичный API, DOM и стили не изменены. |
+| 2026-08-06 | Создан документ. AI-рефакторинг: порядок импортов по `codestyle.md`, JSDoc на компоненте, props и `ILoaderScreenMiddleProps` (включая значение по умолчанию для `size`), подложка вынесена в `TYPE_TO_BACKDROP_CLASS_NAME_MAP`, `className` в `clsx` перенесён в конец. Unit-тесты расширены: все значения `EComponentSize`, игнорирование `size` при `type="middle"`, класс подложки по типу, отсутствие `description` / `controls`, мердж `className`, spread rest-props, `forwardRef`. Публичный API, DOM и стили не изменены. |

@@ -10,10 +10,7 @@ import styles from "./styles/LoaderScreen.module.less";
 export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Тип лоадера: `small` — компактный LoaderSmall, `middle` — крупный LoaderMiddle. */
     type: "small" | "middle";
-    /**
-     * Размер лоадера. Учитывается только при `type="small"`.
-     * @default EComponentSize.MD
-     */
+    /** Размер лоадера. Учитывается только при `type="small"`. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
     /** Текст, который будет отображаться под спиннером. */
     description?: React.ReactNode;

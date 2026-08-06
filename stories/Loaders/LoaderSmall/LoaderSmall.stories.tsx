@@ -38,7 +38,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof LoaderSmall>;
 
 export const Playground: Story = {
     tags: ["!autodocs"],
@@ -50,20 +50,10 @@ export const Playground: Story = {
         theme: {
             control: { type: "select" },
             options: Object.values(ELoaderSmallTheme),
-            description: "Тема",
-            table: {
-                type: { summary: "ELoaderSmallTheme" },
-                defaultValue: { summary: "ELoaderSmallTheme.BRAND" },
-            },
         },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.MD" },
-            },
         },
     },
     render: (args) => <LoaderSmall {...args} />,
@@ -76,12 +66,12 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
-    name: "Default",
     render: DefaultExample,
     parameters: {
+        // Визуально дублирует MD-вариант из Visual tests — отдельный скриншот не нужен.
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
@@ -91,12 +81,12 @@ export const Default: Story = {
 };
 
 export const Themes: Story = {
-    name: "Themes",
     render: ThemesExample,
     parameters: {
+        // Обе темы сняты в Visual tests — отдельный скриншот не нужен.
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: ThemesExampleSource,
                 language: "tsx",
@@ -106,12 +96,12 @@ export const Themes: Story = {
 };
 
 export const Sizes: Story = {
-    name: "Sizes",
     render: SizesExample,
     parameters: {
+        // Все размеры сняты в Visual tests — отдельный скриншот не нужен.
         testRunner: { skip: true },
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: SizesExampleSource,
                 language: "tsx",

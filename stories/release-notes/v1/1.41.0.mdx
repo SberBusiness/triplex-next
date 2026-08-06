@@ -45,6 +45,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Интерфейс props `IComposedKeyDownListenerProps` теперь экспортируется из пакета — можно типизировать собственные обёртки над `ComposedKeyDownListener`.
 - Исправлено: `ComposedKeyDownListener` с пустым `keyDownListeners` и без `children` больше не возвращает `undefined` из рендера — на React 17 это приводило к ошибке «Nothing was returned from render».
 
+**LoaderSmall**
+
+- AI-рефакторинг: JSDoc на компоненте, props и значениях `ELoaderSmallTheme`, порядок импортов приведён к codestyle, константы-маппинги переименованы в `THEME_TO_CLASS_NAME_MAP` / `SIZE_TO_CLASS_NAME_MAP` (внутренние, не экспортировались), в стилях объединено дублирующееся объявление анимации точек — сама анимация задана один раз на `.dot`, у точек осталась только `animation-delay`, unit-тесты расширены с 3 до 6 кейсов, создан `LoaderSmall-ai.md`. Экспортируемый, но неиспользуемый компонентом enum `ELoaderSmallSize` сохранён и помечен в документации как legacy — размер задаётся `EComponentSize`. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API и поведение не изменены (props, значения enum, barrel-экспорты, DOM-разметка, `role="status"`, токены — как были).
+
 **StatusTracker**
 
 - Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.

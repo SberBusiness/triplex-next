@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import { describe, it, expect, afterEach } from "vitest";
-import { ModalWindowBody } from "../components/ModalWindowBody";
+import { IModalWindowBodyProps, ModalWindowBody } from "../components/ModalWindowBody";
 
 afterEach(() => {
     cleanup();
@@ -16,6 +16,15 @@ describe("ModalWindowBody", () => {
         );
 
         expect(screen.getByTestId("body-child")).toBeInTheDocument();
+    });
+
+    it("does not expose Island loading props in its public type", () => {
+        // @ts-expect-error isLoading исключён из IModalWindowBodyProps через Omit.
+        const withIsLoading: IModalWindowBodyProps = { isLoading: true };
+        // @ts-expect-error loaderScreenProps исключён из IModalWindowBodyProps через Omit.
+        const withLoaderScreenProps: IModalWindowBodyProps = { loaderScreenProps: {} };
+
+        expect([withIsLoading, withLoaderScreenProps]).toHaveLength(2);
     });
 
     it("merges custom className with the default modalWindowBody class", () => {

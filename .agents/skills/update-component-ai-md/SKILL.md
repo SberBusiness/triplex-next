@@ -22,7 +22,7 @@ description: Создаёт или обновляет src/components/{Name}/{Nam
 | Секция | Откуда брать |
 |---|---|
 | `frontmatter.component, category` | Имя компонента и группа в barrel-структуре `src/components/` |
-| `frontmatter.related` | Сиблинги в той же папке + используемые публично через `index.ts` (Loader, IconWrapper и т.д.) |
+| `frontmatter.related` | По правилу `docs/ai/CONTEXT.md` → «Как заполнять `related` в AI.md» |
 | `frontmatter.tokens` | grep по `var(--triplex-next-{Name}-` в `styles/*.module.less` |
 | `frontmatter.stories` | Найти `*{Name}.stories.tsx` в `stories/` |
 | `frontmatter.version` | Текущая мажорная — `"1.0"` (минор обновляется при breaking change в API) |
@@ -31,7 +31,7 @@ description: Создаёт или обновляет src/components/{Name}/{Nam
 | Дизайн-токены | Полный список CSS-переменных из стилей |
 | Инварианты | `forwardRef`, имена публичных props/enum, корневой DOM-элемент, любые контракты, упомянутые в `docs/ai/CONTEXT.md` → «Инварианты» |
 | Accessibility | Из реализации: ARIA-атрибуты, фокус-менеджмент, keyboard-обработчики, aria-роль |
-| Связанные компоненты | Sibling-компоненты в той же папке, особенно тривиальные обёртки без своего AI.md |
+| Связанные компоненты | Каждое имя из `frontmatter.related` — любой папки, по тому же правилу `docs/ai/CONTEXT.md` — плюс тривиальные обёртки в своей папке, у которых нет отдельного AI.md. Обратное не требуется: описанное здесь не обязано попадать в `related` |
 | Stories | Файлы из `stories/{Group}/examples/{Name}/` — таблица с колонкой `Example file` |
 | История изменений | Дописывается при каждом обновлении документа |
 

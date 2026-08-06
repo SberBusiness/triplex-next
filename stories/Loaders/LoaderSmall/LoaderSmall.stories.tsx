@@ -38,7 +38,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof LoaderSmall>;
 
 export const Playground: Story = {
     tags: ["!autodocs"],
@@ -50,20 +50,10 @@ export const Playground: Story = {
         theme: {
             control: { type: "select" },
             options: Object.values(ELoaderSmallTheme),
-            description: "Тема",
-            table: {
-                type: { summary: "ELoaderSmallTheme" },
-                defaultValue: { summary: "ELoaderSmallTheme.BRAND" },
-            },
         },
         size: {
             control: { type: "select" },
             options: Object.values(EComponentSize),
-            description: "Размер",
-            table: {
-                type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.MD" },
-            },
         },
     },
     render: (args) => <LoaderSmall {...args} />,
@@ -75,7 +65,7 @@ export const Playground: Story = {
     },
 };
 
-export const Default: StoryObj<typeof LoaderSmall> = {
+export const Default: Story = {
     render: DefaultExample,
     parameters: {
         // Визуально дублирует MD-вариант из Visual tests — отдельный скриншот не нужен.
@@ -90,7 +80,7 @@ export const Default: StoryObj<typeof LoaderSmall> = {
     },
 };
 
-export const Themes: StoryObj<typeof LoaderSmall> = {
+export const Themes: Story = {
     render: ThemesExample,
     parameters: {
         // Обе темы сняты в Visual tests — отдельный скриншот не нужен.
@@ -105,7 +95,7 @@ export const Themes: StoryObj<typeof LoaderSmall> = {
     },
 };
 
-export const Sizes: StoryObj<typeof LoaderSmall> = {
+export const Sizes: Story = {
     render: SizesExample,
     parameters: {
         // Все размеры сняты в Visual tests — отдельный скриншот не нужен.
@@ -120,7 +110,7 @@ export const Sizes: StoryObj<typeof LoaderSmall> = {
     },
 };
 
-export const VisualTests: StoryObj<typeof LoaderSmall> = {
+export const VisualTests: Story = {
     name: "Visual tests",
     tags: ["!autodocs", "!dev"],
     decorators: [

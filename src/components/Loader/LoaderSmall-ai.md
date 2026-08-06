@@ -82,9 +82,9 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 - **Публичный контракт — `React.FC` без `forwardRef`.** Добавление ref-проброса расширяет
   публичный API и требует отдельной задачи и записи в release notes.
 - **Корневой элемент — `<span role="status" aria-label="loading">`.** На эту связку опираются
-  `LoaderSmall.test.tsx` и тесты потребителей: `LoaderScreen.test.tsx` и
-  `LightBoxContent.test.tsx` ищут лоадер через `getByRole("status", { name: "loading" })`,
-  `Button.test.tsx` — через `getByRole("status")` без фильтра по имени.
+  `LoaderSmall.test.tsx` и `LoaderScreen.test.tsx` (кейсы `type="small"`) через
+  `getByRole("status", { name: "loading" })`, а `Button.test.tsx` — через
+  `getByRole("status")` без фильтра по имени.
 - **Разметка внутренностей фиксирована:** ровно три `<span class="dot dot1|dot2|dot3">`.
   Порядок и количество завязаны на задержки анимации (`.dot2` — 0.15s, `.dot3` — 0.3s);
   удаление или перестановка ломают визуальную последовательность.
@@ -93,6 +93,10 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 - **`displayName = "LoaderSmall"`** — используется в React DevTools.
 - **Значения `ELoaderSmallTheme`** (`brand` / `neutral`) и наличие `ELoaderSmallSize` в barrel —
   часть публичного API, удаление или переименование — breaking change.
+- **`ILoaderSmallProps` — не только props этого компонента.** `DropdownMobileLoader` строит из
+  него свой публичный интерфейс: `IDropownMobileLoaderProps extends Omit<ILoaderSmallProps,
+  "theme" | "size">` (`src/components/Dropdown/mobile/DropdownMobileLoader.tsx:8`). Любое
+  изменение формы `ILoaderSmallProps` автоматически меняет публичный API и этого компонента.
 - **Токены `Loader-*` общие для семейства** — переименование ломает темизацию у потребителей
   и затрагивает `LoaderMiddle`.
 
@@ -120,8 +124,10 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
   вариант без props, из того же barrel `src/components/Loader/index.ts`.
 - `LoaderScreen` (`src/components/LoaderScreen/LoaderScreen.tsx`) — оверлей с лоадером,
   подписью и кнопками; при `type="small"` рендерит `LoaderSmall` с темой `BRAND`.
-- `Button` (`src/components/Button/Button.tsx`) — при `loading` показывает `LoaderSmall`
-  вместо содержимого; тему выбирает по теме кнопки (`SECONDARY` / `SECONDARY_LIGHT` → `BRAND`,
+- `Button` (`src/components/Button/Button.tsx`) — рендерит `LoaderSmall` **всегда**, а вне
+  состояния `loading` прячет обёртку классом (`Button.tsx:156`), поэтому `role="status"`
+  доступен и у обычной кнопки — не пиши тест вида `queryByRole("status")` → `null`.
+  Тему выбирает по теме кнопки (`SECONDARY` / `SECONDARY_LIGHT` → `BRAND`,
   остальные → `NEUTRAL`), размер — по размеру кнопки.
 - `Dropdown` (`DropdownList`, `DropdownMobileList`, `DropdownMobileLoader`), `SuggestField`,
   `ChipSuggest`, `SelectExtendedField`, `ListItemLoading` — показывают `LoaderSmall` с темой

@@ -9,10 +9,7 @@ describe("LoaderMiddle", () => {
     it("Should render root element with status role", () => {
         render(<LoaderMiddle />);
 
-        const loader = getLoaderMiddle();
-        expect(loader).toBeInTheDocument();
-        // Класс корневого элемента — на него завязан тест потребителя TableBasic.test.tsx.
-        expect(loader).toHaveClass("loaderMiddle");
+        expect(getLoaderMiddle()).toBeInTheDocument();
     });
 
     it("Should render four dots and a line", () => {

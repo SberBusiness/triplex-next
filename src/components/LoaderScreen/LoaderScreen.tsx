@@ -1,16 +1,19 @@
 import React from "react";
-import { LoaderSmall, ELoaderSmallTheme, LoaderMiddle } from "../Loader";
-import { Gap } from "../Gap";
-import { ETextSize, Text } from "../Typography";
 import clsx from "clsx";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { Gap } from "../Gap";
+import { LoaderSmall, ELoaderSmallTheme, LoaderMiddle } from "../Loader";
+import { ETextSize, Text } from "../Typography";
 import styles from "./styles/LoaderScreen.module.less";
 
 /** Свойства компонента LoaderScreen. */
 export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Тип лоадера. */
+    /** Тип лоадера: `small` — компактный LoaderSmall, `middle` — крупный LoaderMiddle. */
     type: "small" | "middle";
-    /** Размер лоадера для типа small. */
+    /**
+     * Размер лоадера. Учитывается только при `type="small"`.
+     * @default EComponentSize.MD
+     */
     size?: EComponentSize;
     /** Текст, который будет отображаться под спиннером. */
     description?: React.ReactNode;
@@ -18,14 +21,26 @@ export interface ILoaderScreenProps extends React.HTMLAttributes<HTMLDivElement>
     controls?: React.ReactNode;
 }
 
+/**
+ * Свойства LoaderScreen с предустановленным типом `middle`.
+ * Используется компонентами библиотеки, которые встраивают LoaderScreen и сами задают тип
+ * (ModalWindowContent, LightBoxContent, LightBoxSideOverlay).
+ */
 export interface ILoaderScreenMiddleProps extends Omit<ILoaderScreenProps, "type" | "size"> {}
 
+/** Соответствие типа лоадера имени класса подложки. */
+const TYPE_TO_BACKDROP_CLASS_NAME_MAP: Record<ILoaderScreenProps["type"], string> = {
+    small: styles.loaderSmallBackdrop,
+    middle: styles.loaderMiddleBackdrop,
+};
+
+/**
+ * Виджет-загрузчик. Перекрывает область ближайшего позиционированного родителя полупрозрачной
+ * подложкой и показывает по центру лоадер, опциональное описание и кнопки.
+ */
 export const LoaderScreen = React.forwardRef<HTMLDivElement, ILoaderScreenProps>(
     ({ className, size = EComponentSize.MD, type, description, controls, ...htmlDivAttributes }, ref) => {
-        const classNames = clsx(className, styles.loaderScreen, {
-            [styles.loaderSmallBackdrop]: type === "small",
-            [styles.loaderMiddleBackdrop]: type === "middle",
-        });
+        const classNames = clsx(styles.loaderScreen, TYPE_TO_BACKDROP_CLASS_NAME_MAP[type], className);
 
         return (
             <div ref={ref} className={classNames} {...htmlDivAttributes}>

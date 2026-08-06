@@ -45,6 +45,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Интерфейс props `IComposedKeyDownListenerProps` теперь экспортируется из пакета — можно типизировать собственные обёртки над `ComposedKeyDownListener`.
 - Исправлено: `ComposedKeyDownListener` с пустым `keyDownListeners` и без `children` больше не возвращает `undefined` из рендера — на React 17 это приводило к ошибке «Nothing was returned from render».
 
+**LoaderScreen**
+
+- AI-рефакторинг: JSDoc на компоненте, props и `ILoaderScreenMiddleProps` (у `size` указано значение по умолчанию), соответствие типа лоадера классу подложки вынесено в константу-маппинг, порядок импортов и позиция `className` в `clsx` приведены к общему стилю, unit-тесты расширены с 6 до 15 кейсов, создан `LoaderScreen-ai.md`. Публичный API, DOM и визуальное поведение не изменены — изменился только порядок классов внутри атрибута `class` корневого элемента (набор классов тот же, на каскад не влияет).
+
 **StatusTracker**
 
 - Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.

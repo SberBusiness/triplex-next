@@ -51,6 +51,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - AI-рефакторинг: JSDoc на компоненте, порядок импортов приведён к codestyle, в стилях объединены дублирующиеся базовые правила точек и обегающей линии, unit-тесты расширены с 1 до 2 кейсов, создан `LoaderMiddle-ai.md`. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API и поведение не изменены (props, DOM-разметка, `role="status"`, токены — как были).
 
+**Page**
+
+- `Page.Header` и `Page.Footer` со свойством `sticky` теперь прилипают и вне `LightBox` при ширине viewport от 992px. При высоте viewport до 800px включительно sticky-позиционирование не применяется.
+
 **StatusTracker**
 
 - Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.

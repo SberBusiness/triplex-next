@@ -172,6 +172,10 @@ breaking change для темизации), но опираться на нег�
 | `Types` | `TypesExample.tsx` | `small` и `middle` рядом |
 | `VisualTests` | — | Скриншот-состояния: `small` без текста, `middle` с описанием и кнопками, `middle` только с кнопками (анимации отключены) |
 
+`VisualTests` помечена `tags: ["!autodocs", "!dev"]` — скрыта из docs и из сайдбара, как у
+`LoaderMiddle` и `LoaderSmall`. Story ID (`loaders-loaderscreen--visual-tests`) при этом сохраняется,
+скриншот-регрессия по ней продолжает прогоняться.
+
 ---
 
 ## История изменений

@@ -10,8 +10,10 @@ import { TableBasic } from "@sberbusiness/triplex-next/components/Table/TableBas
 import { TableBasicSettings } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/TableBasicSettings";
 import { TableFooter } from "@sberbusiness/triplex-next/components/Table/TableFooter/TableFooter";
 import { PaginationPanel } from "@sberbusiness/triplex-next/components/Table/PaginationPanel";
+import { MasterTableContent } from "@sberbusiness/triplex-next/components/Table/MasterTableContent";
 
 interface IMasterTableFC extends React.FC<IMasterTableProps> {
+    Content: typeof MasterTableContent;
     NoColumns: typeof NoColumns;
     FilterPanel: typeof FilterPanel;
     ChipPanel: typeof ChipPanel;
@@ -21,14 +23,13 @@ interface IMasterTableFC extends React.FC<IMasterTableProps> {
     PaginationPanel: typeof PaginationPanel;
 }
 
-export const MasterTable: IMasterTableFC = ({ children, className, loading = false, ...htmlDivAttributes }) => {
+export const MasterTable: IMasterTableFC = ({ children, className, ...htmlDivAttributes }) => {
     const [columns, setColumns] = useState<ITableBasicColumn[]>([]);
 
     return (
         <MasterTableContext.Provider
             value={{
                 columns,
-                loading,
                 setColumns,
             }}
         >
@@ -44,6 +45,7 @@ export const MasterTable: IMasterTableFC = ({ children, className, loading = fal
 };
 
 MasterTable.displayName = "MasterTable";
+MasterTable.Content = MasterTableContent;
 MasterTable.NoColumns = NoColumns;
 MasterTable.FilterPanel = FilterPanel;
 MasterTable.ChipPanel = ChipPanel;

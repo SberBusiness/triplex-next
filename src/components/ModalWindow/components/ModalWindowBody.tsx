@@ -5,7 +5,13 @@ import { IIslandProps, Island } from "../../Island/Island";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { EIslandType } from "../../Island/enums";
 
-export interface IModalWindowBodyProps extends IIslandProps {}
+/**
+ * Свойства компонента ModalWindowBody.
+ * `isLoading` и `loaderScreenProps` от `Island` исключены: тело скроллируется, а `LoaderScreen`
+ * позиционируется абсолютно и уезжает вместе с контентом. Состояние загрузки модального окна
+ * задаётся через одноимённые props `ModalWindowContent`.
+ */
+export interface IModalWindowBodyProps extends Omit<IIslandProps, "isLoading" | "loaderScreenProps"> {}
 
 /**
  * Тело модального окна. Обёртка над `Island` с фиксированными `type` и `size`,

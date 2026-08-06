@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**Island**
+
+- Расширение API: свойства `isLoading` и `loaderScreenProps`. При `isLoading` поверх контента карточки показывается `LoaderScreen` типа `middle`, настраиваемый через `loaderScreenProps`.
+
 **SelectExtendedField**
 
 - Исправлено: `onOpen` / `onClose` ложно срабатывали при повторном маунте в React 18 StrictMode — эффект опирался на флаг «смонтирован». Теперь сравнивается предыдущее значение состояния открытости, поэтому колбэки вызываются только на реальную смену состояния и по-прежнему не вызываются на первом рендере.

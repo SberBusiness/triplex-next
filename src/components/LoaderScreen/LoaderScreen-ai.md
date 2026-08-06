@@ -107,9 +107,12 @@ breaking change для темизации), но опираться на нег�
   не нужно: `TYPE_TO_BACKDROP_CLASS_NAME_MAP` в `LoaderScreen.tsx` держит это соответствие в одном месте.
 - **Тема `LoaderSmall` захардкожена как `ELoaderSmallTheme.BRAND`** — `NEUTRAL` через LoaderScreen
   недоступна. Пробрасывание темы наружу — расширение публичного API.
-- **CSS-классы `loaderScreen`, `loaderSmallBackdrop`, `loaderMiddleBackdrop`, `loaderContent`,
-  `description`** используются в unit-тестах; `className` потребителя добавляется последним и
-  базовые классы не затирает.
+- **CSS-классы `loaderScreen`, `loaderSmallBackdrop`, `loaderMiddleBackdrop`** проверяются в
+  unit-тестах — переименование поймается прогоном. `loaderContent` и `description` тестами не
+  покрыты: они задают раскладку (ограничение ширины 380px и центрирование текста, см.
+  «Ограничения раскладки»), их переименование безопасно, но требует синхронной правки
+  `LoaderScreen.module.less`. `className` потребителя добавляется последним и базовые классы
+  не затирает.
 - **Корневой элемент — `<div>`**: смена тега ломает абсолютное позиционирование потребителей.
 
 ---

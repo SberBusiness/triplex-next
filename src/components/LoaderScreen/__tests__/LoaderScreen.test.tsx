@@ -24,16 +24,6 @@ describe("LoaderScreen", () => {
         expect(loader).toHaveClass("md");
     });
 
-    it("Should render LoaderSmall in different sizes", () => {
-        render(<LoaderScreen type="small" size={EComponentSize.SM} />);
-
-        const loader = getLoader();
-        expect(loader).toBeInTheDocument();
-        expect(loader).toHaveClass("loaderSmall");
-        expect(loader).toHaveClass("brand");
-        expect(loader).toHaveClass("sm");
-    });
-
     it.each([EComponentSize.SM, EComponentSize.MD, EComponentSize.LG])(
         "Should apply size class %s to LoaderSmall",
         (size) => {
@@ -59,17 +49,14 @@ describe("LoaderScreen", () => {
         expect(loader).not.toHaveClass("lg");
     });
 
-    it("Should apply backdrop class matching the type", () => {
-        const { unmount } = renderLoaderScreen({ type: "small" });
+    it.each([
+        ["small", "loaderSmallBackdrop", "loaderMiddleBackdrop"],
+        ["middle", "loaderMiddleBackdrop", "loaderSmallBackdrop"],
+    ] as const)("Should apply backdrop class for type %s", (type, expectedClass, unexpectedClass) => {
+        renderLoaderScreen({ type });
 
-        expect(getRoot()).toHaveClass("loaderScreen", "loaderSmallBackdrop");
-        expect(getRoot()).not.toHaveClass("loaderMiddleBackdrop");
-
-        unmount();
-        renderLoaderScreen({ type: "middle" });
-
-        expect(getRoot()).toHaveClass("loaderScreen", "loaderMiddleBackdrop");
-        expect(getRoot()).not.toHaveClass("loaderSmallBackdrop");
+        expect(getRoot()).toHaveClass("loaderScreen", expectedClass);
+        expect(getRoot()).not.toHaveClass(unexpectedClass);
     });
 
     it("Should render description when provided", () => {
@@ -105,6 +92,7 @@ describe("LoaderScreen", () => {
     });
 
     it("Should spread rest props to the root element", async () => {
+        const user = userEvent.setup();
         const onClick = vi.fn();
         renderLoaderScreen({ type: "small", id: "loader-screen-id", "aria-busy": true, onClick });
 
@@ -112,7 +100,7 @@ describe("LoaderScreen", () => {
         expect(root).toHaveAttribute("id", "loader-screen-id");
         expect(root).toHaveAttribute("aria-busy", "true");
 
-        await userEvent.click(root);
+        await user.click(root);
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 

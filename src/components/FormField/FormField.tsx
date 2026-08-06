@@ -10,20 +10,11 @@ import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends React.HTMLAttributes<HTMLDivElement>, DataAttributes {
-    /**
-     * Визуальное состояние поля. Значение DISABLED блокирует вложенные элементы ввода.
-     * @default EFormFieldStatus.DEFAULT
-     */
+    /** Визуальное состояние поля. Значение DISABLED блокирует вложенные элементы ввода. По умолчанию EFormFieldStatus.DEFAULT. */
     status?: EFormFieldStatus;
-    /**
-     * Размер поля. Прокидывается вложенным элементам через контекст.
-     * @default EComponentSize.LG
-     */
+    /** Размер поля. Прокидывается вложенным элементам через контекст. По умолчанию EComponentSize.LG. */
     size?: EComponentSize;
-    /**
-     * Принудительно активное состояние. Поле также становится активным, когда вложенный элемент ввода в фокусе.
-     * @default false
-     */
+    /** Принудительно активное состояние. Поле также становится активным, когда вложенный элемент ввода в фокусе. По умолчанию false. */
     active?: boolean;
 }
 

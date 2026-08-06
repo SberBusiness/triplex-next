@@ -6,6 +6,7 @@ export enum ECardContentPaddingSize {
 
 /** Возможные размеры скругления карточки. */
 export enum ECardRoundingSize {
+    LG = "lg",
     MD = "md",
     SM = "sm",
 }

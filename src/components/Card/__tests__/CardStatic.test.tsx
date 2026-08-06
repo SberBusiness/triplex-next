@@ -3,6 +3,10 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { CardStatic } from "@sberbusiness/triplex-next/components/Card";
 import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
+import {
+    mapCardRoundingSizeToCssClass,
+    mapCardThemeToCssClass,
+} from "@sberbusiness/triplex-next/components/Card/utils";
 
 describe("CardStatic", () => {
     it("renders container and children", () => {
@@ -16,22 +20,25 @@ describe("CardStatic", () => {
         expect(child).toBeInTheDocument();
     });
 
-    it("applies rounding class mapping and accepts theme prop (no class assertion)", () => {
-        const { rerender } = render(
-            <CardStatic theme={ECardTheme.GENERAL} roundingSize={ECardRoundingSize.MD}>
-                card
-            </CardStatic>,
-        );
+    it("applies theme class mapping", () => {
+        const { rerender } = render(<CardStatic theme={ECardTheme.GENERAL}>card</CardStatic>);
         const root = screen.getByText("card");
-        const classBefore = root.className;
+        expect(root.className).toContain(mapCardThemeToCssClass[ECardTheme.GENERAL]);
 
-        rerender(
-            <CardStatic theme={ECardTheme.SECONDARY} roundingSize={ECardRoundingSize.SM}>
-                card
-            </CardStatic>,
-        );
-        const classAfter = root.className;
-        expect(classAfter).not.toEqual(classBefore);
+        rerender(<CardStatic theme={ECardTheme.SECONDARY}>card</CardStatic>);
+        expect(root.className).toContain(mapCardThemeToCssClass[ECardTheme.SECONDARY]);
+    });
+
+    it.each(Object.values(ECardRoundingSize))("applies rounding class for %s", (roundingSize) => {
+        render(<CardStatic roundingSize={roundingSize}>card</CardStatic>);
+
+        expect(screen.getByText("card").className).toContain(mapCardRoundingSizeToCssClass[roundingSize]);
+    });
+
+    it("applies rounding MD by default", () => {
+        render(<CardStatic>card</CardStatic>);
+
+        expect(screen.getByText("card").className).toContain(mapCardRoundingSizeToCssClass[ECardRoundingSize.MD]);
     });
 
     it("merges className and forwards attributes", () => {

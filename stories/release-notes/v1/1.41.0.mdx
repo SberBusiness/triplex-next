@@ -63,6 +63,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - AI-рефакторинг: JSDoc на компоненте, props и `ILoaderScreenMiddleProps` (у `size` указано значение по умолчанию), соответствие типа лоадера классу подложки вынесено в константу-маппинг, порядок импортов и позиция `className` в `clsx` приведены к общему стилю, unit-тесты расширены с 6 до 15 кейсов, создан `LoaderScreen-ai.md`. Публичный API, DOM и визуальное поведение не изменены — изменился только порядок классов внутри атрибута `class` корневого элемента (набор классов тот же, на каскад не влияет).
 
+**Page**
+
+- `Page.Header` и `Page.Footer` со свойством `sticky` не прилипают при высоте viewport до 800px включительно. Sticky-позиционирование применяется начиная с 801px.
+
 **StatusTracker**
 
 - Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.

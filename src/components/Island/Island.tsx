@@ -5,6 +5,10 @@ import { IslandBody } from "./components/IslandBody";
 import { IslandHeader } from "./components/IslandHeader";
 import { IslandFooter } from "./components/IslandFooter";
 import { mapTypeToClassName } from "./utils";
+import {
+    ILoaderScreenMiddleProps,
+    LoaderScreen,
+} from "@sberbusiness/triplex-next/components/LoaderScreen/LoaderScreen";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/Island.module.less";
@@ -15,6 +19,10 @@ export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
     type?: EIslandType;
     /** Размер. Задаёт скругление, внутренние отступы и отступы между Header, Body и Footer. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
+    /** Флаг состояния загрузки. */
+    isLoading?: boolean;
+    /** Свойства компонента LoaderScreen. */
+    loaderScreenProps?: ILoaderScreenMiddleProps;
 }
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
@@ -22,7 +30,18 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 /** Контейнер-карточка. Составные части — Island.Header, Island.Body, Island.Footer. */
 export const Island = Object.assign(
     React.forwardRef<HTMLDivElement, IIslandProps>(
-        ({ type = EIslandType.TYPE_1, size = EComponentSize.MD, className, children, ...rest }, ref) => {
+        (
+            {
+                type = EIslandType.TYPE_1,
+                size = EComponentSize.MD,
+                isLoading,
+                loaderScreenProps,
+                className,
+                children,
+                ...rest
+            },
+            ref,
+        ) => {
             return (
                 <div
                     className={clsx(styles.island, mapTypeToClassName(type), SIZE_TO_CLASS_NAME_MAP[size], className)}
@@ -30,6 +49,14 @@ export const Island = Object.assign(
                     {...rest}
                 >
                     {children}
+
+                    {isLoading && (
+                        <LoaderScreen
+                            {...loaderScreenProps}
+                            className={clsx(styles.islandLoaderScreen, loaderScreenProps?.className)}
+                            type="middle"
+                        />
+                    )}
                 </div>
             );
         },

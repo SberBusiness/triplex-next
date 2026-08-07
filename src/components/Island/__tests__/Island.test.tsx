@@ -63,6 +63,47 @@ describe("Island", () => {
         expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
+    test("does not render loader screen by default", () => {
+        render(<Island data-testid="island">Island content</Island>);
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    test("renders loader screen over content when isLoading", () => {
+        const { rerender } = render(
+            <Island data-testid="island-loading" isLoading>
+                <Island.Body>Island Body</Island.Body>
+            </Island>,
+        );
+
+        const root = screen.getByTestId("island-loading");
+        // Лоадер лежит поверх контента — последним потомком карточки, контент при этом остаётся в DOM.
+        expect(root).toHaveTextContent("Island Body");
+        expect(root.lastElementChild).toContainElement(screen.getByRole("status"));
+
+        rerender(
+            <Island data-testid="island-loading">
+                <Island.Body>Island Body</Island.Body>
+            </Island>,
+        );
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    test("passes loaderScreenProps to loader screen and merges its className", () => {
+        render(
+            <Island
+                data-testid="island"
+                isLoading
+                loaderScreenProps={{ className: "custom", description: "Загрузка" }}
+            />,
+        );
+
+        const loaderScreen = screen.getByTestId("island").lastElementChild;
+        // Пользовательский класс добавляется к внутреннему, а не затирает его: на islandLoaderScreen
+        // держится локальный z-index, без которого лоадер уходит под глобальные оверлеи.
+        expect(loaderScreen).toHaveClass("islandLoaderScreen", "custom");
+        expect(loaderScreen).toHaveTextContent("Загрузка");
+    });
+
     test("renders composed Header, Body and Footer as adjacent children in order", () => {
         render(
             <Island data-testid="island">

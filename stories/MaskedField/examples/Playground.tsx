@@ -13,17 +13,13 @@ import {
 
 const { masks, placeholderMasks } = FormFieldMaskedInput.presets;
 
-/** Тип маски, доступный в Controls. */
-export type TMaskType =
-    "phone" | "date" | "time" | "cardNumber" | "account" | "inn" | "snils" | "swiftCode" | "passportSeries";
-
 interface IMaskPreset {
     mask: TFormFieldMaskedInputMask;
     placeholderMask?: string;
 }
 
 /** Маски пресетов FormFieldMaskedInput, доступные в Controls. */
-export const MASK_PRESETS: Record<TMaskType, IMaskPreset> = {
+export const MASK_PRESETS = {
     phone: { mask: masks.phone },
     date: { mask: masks.date, placeholderMask: placeholderMasks.date },
     time: { mask: masks.time, placeholderMask: placeholderMasks.time },
@@ -33,7 +29,10 @@ export const MASK_PRESETS: Record<TMaskType, IMaskPreset> = {
     snils: { mask: masks.snils },
     swiftCode: { mask: masks.swiftCode, placeholderMask: placeholderMasks.swiftCode },
     passportSeries: { mask: masks.passport.series },
-};
+} satisfies Record<string, IMaskPreset>;
+
+/** Тип маски, доступный в Controls. */
+export type TMaskType = keyof typeof MASK_PRESETS;
 
 export interface PlaygroundArgs {
     size: EComponentSize;

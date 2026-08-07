@@ -140,8 +140,6 @@ export const Default: StoryObj<typeof MaskedField> = {
                 language: "tsx",
             },
         },
-        // Визуально дублирует вариант LG из стори Sizes — отдельный скриншот не нужен.
-        testRunner: { skip: true },
     },
 };
 
@@ -194,7 +192,7 @@ export const PassRefToInput: StoryObj<typeof MaskedField> = {
                 language: "tsx",
             },
         },
-        // Визуально дублирует стори Default — отдельный скриншот не нужен.
+        // Визуально дублирует пустое поле из стори Default — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };

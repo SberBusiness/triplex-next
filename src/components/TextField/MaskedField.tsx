@@ -8,7 +8,13 @@ export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children">
      * Свойства поля ввода с маской: обязательные `mask` и `value`, опциональный `placeholderMask`
      * и остальные атрибуты input. Ссылка на элемент input передаётся через `forwardedRef`.
      */
-    maskedInputProps: IFormFieldMaskedInputProps & { ref?: React.RefObject<HTMLInputElement> };
+    maskedInputProps: IFormFieldMaskedInputProps & {
+        /**
+         * ВНИМАНИЕ: этот ref попадает на корневой div-обёртку FormFieldMaskedInput, а не на input,
+         * несмотря на тип. Для ссылки на элемент input используйте `forwardedRef`.
+         */
+        ref?: React.RefObject<HTMLInputElement>;
+    };
 }
 
 /**

@@ -6,12 +6,13 @@ import { MaskedField, FormFieldMaskedInput } from "@sberbusiness/triplex-next";
  * за введённым значением. Без него незаполненная часть заполняется символом placeholderChar.
  */
 export const WithPlaceholderMask = () => {
-    const [dateValue, setDateValue] = useState("12");
-    const [timeValue, setTimeValue] = useState("12");
+    const [valueWithMask, setValueWithMask] = useState("12");
+    const [valueWithoutMask, setValueWithoutMask] = useState("12");
 
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => setDateValue(event.target.value);
+    const handleWithMaskChange = (event: React.ChangeEvent<HTMLInputElement>) => setValueWithMask(event.target.value);
 
-    const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => setTimeValue(event.target.value);
+    const handleWithoutMaskChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+        setValueWithoutMask(event.target.value);
 
     return (
         <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -22,8 +23,8 @@ export const WithPlaceholderMask = () => {
                     maskedInputProps={{
                         mask: FormFieldMaskedInput.presets.masks.date,
                         placeholderMask: FormFieldMaskedInput.presets.placeholderMasks.date,
-                        value: dateValue,
-                        onChange: handleDateChange,
+                        value: valueWithMask,
+                        onChange: handleWithMaskChange,
                     }}
                 />
             </div>
@@ -31,11 +32,11 @@ export const WithPlaceholderMask = () => {
             <div>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>Без placeholderMask</div>
                 <MaskedField
-                    label="Время"
+                    label="Дата"
                     maskedInputProps={{
-                        mask: FormFieldMaskedInput.presets.masks.time,
-                        value: timeValue,
-                        onChange: handleTimeChange,
+                        mask: FormFieldMaskedInput.presets.masks.date,
+                        value: valueWithoutMask,
+                        onChange: handleWithoutMaskChange,
                     }}
                 />
             </div>

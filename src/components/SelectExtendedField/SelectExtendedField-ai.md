@@ -189,10 +189,11 @@ version: "1.0"
 | `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG |
 | `Statuses` | `Statuses.tsx` | Состояния поля: DEFAULT / DISABLED / ERROR / WARNING |
 | `Loading` | `Loading.tsx` | Состояние загрузки: лоадер вместо каретки, поле не открывается |
-| `WithClearButton` | `WithClearButton.tsx` | Кнопка очистки значения через `onClear` |
+| `WithClearButton` | `WithClearButton.tsx` | Кнопка очистки значения через `onClear`; видна пока поле под курсором или в фокусе |
 | `WithPrefixAndPostfix` | `WithPrefixAndPostfix.tsx` | Слоты `prefix` и `postfix` поля выбора |
 | `Example` | `Example.tsx` | Произвольный выпадающий блок: чекбоксы и кнопки вместо списка, значение подтверждается явно |
 | `VisualTests` | `VisualTests.tsx` | Раскрытый список (через `play`), длинное значение с кнопкой очистки, загрузка в размере SM |
+| `VisualTestsClearButton` | `WithClearButton.tsx` | Кнопка очистки в видимом состоянии: `play` наводит фокус на поле |
 
 ---
 

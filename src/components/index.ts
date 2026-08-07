@@ -96,5 +96,6 @@ export * from "./TreeView";
 export * from "./Triggers";
 export * from "./Typography";
 export * from "./UnorderedList";
+export * from "./UnorderedListExtended";
 export * from "./UploadZone";
 export * from "./WindowResizeListener";

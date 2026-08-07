@@ -1,6 +1,15 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
+import {
+    Title,
+    Description,
+    Primary,
+    Controls,
+    Stories,
+    ArgTypes,
+    Heading,
+    Subheading,
+} from "@storybook/addon-docs/blocks";
 import { EComponentSize, EFormFieldStatus, SelectExtendedField } from "@sberbusiness/triplex-next";
 import {
     Default as DefaultRender,
@@ -52,7 +61,12 @@ const meta = {
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
+                    <Subheading>SelectExtendedField</Subheading>
                     <ArgTypes of={SelectExtendedField} />
+                    <Subheading>SelectExtendedField.Target</Subheading>
+                    <ArgTypes of={SelectExtendedField.Target} />
+                    <Subheading>SelectExtendedField.Dropdown</Subheading>
+                    <ArgTypes of={SelectExtendedField.Dropdown} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />

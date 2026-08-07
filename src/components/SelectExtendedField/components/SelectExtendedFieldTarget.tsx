@@ -68,7 +68,6 @@ const OPEN_DROPDOWN_KEY_CODES = [
 export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelectExtendedFieldTargetProps>(
     (props, ref) => {
         const {
-            children,
             className,
             label,
             placeholder,
@@ -82,6 +81,9 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             loading,
             size = EComponentSize.MD,
             status,
+            // children и tabIndex намеренно не доходят до FormField: разметка поля фиксирована,
+            // а tabIndex выставляет сам FormFieldTarget (-1 в состоянии DISABLED, иначе 0).
+            children,
             tabIndex,
             fieldLabel,
             ...rest

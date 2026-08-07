@@ -269,6 +269,8 @@ export const VisualTests: StoryObj<typeof SelectExtendedField> = {
         },
     },
     play: async ({ canvas, userEvent }) => {
-        await userEvent.click(await canvas.findByText("Открыть список"));
+        // По fieldLabel кликнуть нельзя — у плавающего лейбла FormField pointer-events: none.
+        // Кликаем по значению выбранной опции: это FormFieldTarget, он кликабелен.
+        await userEvent.click(await canvas.findByText("Вторая опция"));
     },
 };

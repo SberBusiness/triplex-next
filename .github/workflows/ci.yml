@@ -3,6 +3,10 @@ name: CI
 on:
   pull_request:
     branches: [ '**' ]
+  # В release-0 мержат напрямую, без PR — иначе перелитие main остаётся непроверенным
+  # до момента релиза. Триггер валидирует ветку сразу после push.
+  push:
+    branches: [ release-0 ]
 
 jobs:
   build:

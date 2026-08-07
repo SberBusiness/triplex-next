@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { defaultsDeep } from "lodash-es";
 import { TDesignTokens, TDesignTokensPartial } from "../../DesignTokens/types/DesignTokensTypes";
-// Импорт не должен быть относительным.
 import { ThemeProviderContext } from "../ThemeProviderContext";
 import { ETriplexNextTheme } from "../ETriplexNextTheme";
 import {
@@ -12,19 +11,21 @@ import {
 } from "../../DesignTokens";
 
 interface IThemeProviderViewProps {
-    // Дизайн-тема Triplex Next.
+    /** Дизайн-тема Triplex Next. */
     theme: ETriplexNextTheme;
-    // Дизайн-токены Triplex.
+    /** Переопределяемые токены. */
     tokens?: TDesignTokensPartial;
-    // Classname, который добавлен к элементу из scopeRef для создания области видимости css-переменных.
+    /** Classname, который добавлен к элементу из scopeRef для создания области видимости css-переменных. */
     scopeClassName: string;
-    // Ref на HTML элемент, внутри которого будет действовать текущий конфиг. По-умолчанию - html.
+    /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. */
     scopeRef: React.RefObject<HTMLElement>;
+    /** Контент, внутри которого действуют тема и токены. */
     children?: React.ReactNode;
 }
 
 /**
- *  Создает провайдер темы и создает область видимости для css-переменных.
+ * Создаёт провайдер темы: навешивает scopeClassName на элемент из scopeRef (область видимости
+ * css-переменных) и отдаёт тему вместе с итоговыми токенами в контекст.
  */
 export const ThemeProviderView: React.FC<IThemeProviderViewProps> = ({
     children,
@@ -33,20 +34,17 @@ export const ThemeProviderView: React.FC<IThemeProviderViewProps> = ({
     theme,
     tokens: tokensProps,
 }) => {
-    const prevScopeClassName = useRef("");
-
     useEffect(() => {
-        const scopeRefCurrent = scopeRef.current;
+        const scopeElement = scopeRef.current;
 
-        if (scopeClassName) {
-            scopeRefCurrent?.classList.add(scopeClassName);
+        if (!scopeClassName) {
+            return;
         }
-        prevScopeClassName.current = scopeClassName;
+
+        scopeElement?.classList.add(scopeClassName);
 
         return () => {
-            if (prevScopeClassName.current) {
-                scopeRefCurrent?.classList.remove(prevScopeClassName.current);
-            }
+            scopeElement?.classList.remove(scopeClassName);
         };
     }, [scopeClassName, scopeRef]);
 

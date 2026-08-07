@@ -4,7 +4,14 @@ import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/To
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { ITooltipDesktopProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
-/** Десктоп версия компонента Tooltip. */
+/** Задержка закрытия подсказки после ухода курсора, мс. */
+const HOVER_CLOSE_DELAY_MS = 500;
+
+/**
+ * Десктоп версия компонента Tooltip.
+ * Отвечает за подписки на события документа и целевого элемента: закрытие по клику вне,
+ * по Escape и открытие/закрытие по наведению.
+ */
 export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
     public static displayName = "TooltipDesktop";
     public static contextType = TooltipContext;
@@ -15,17 +22,18 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
     private timeout?: number;
 
     public render(): JSX.Element {
+        // children и toggleType не должны попадать в DOM — исключаются из rest.
         const { children, toggleType, ...rest } = this.props;
 
         return <TooltipDesktopBase {...rest} setTooltipRef={this.setTooltipRef} />;
     }
 
     public componentDidMount(): void {
-        const { toggleType, targetRef } = this.props;
+        const { toggleType, targetRef, isOpen } = this.props;
 
         // Если Tooltip открывается по клику, то должен уметь закрываться по клику вне и по Esc.
-        if (this.props.isOpen) {
-            document.addEventListener("click", this.closeIfOuterAction);
+        if (isOpen) {
+            document.addEventListener("mousedown", this.closeIfOuterAction);
             document.addEventListener("keydown", this.closeIfEscapeKey);
         }
 
@@ -50,16 +58,20 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
             document.removeEventListener("mousedown", this.closeIfOuterAction);
             document.removeEventListener("keydown", this.closeIfEscapeKey);
 
-            if (this.props.toggleType === "hover") {
-                this.removeHoverListeners(this.tooltip!);
+            if (this.props.toggleType === "hover" && this.tooltip) {
+                this.removeHoverListeners(this.tooltip);
             }
         }
 
-        if (targetRef.current && prevProps.toggleType != this.props.toggleType) {
+        // Смена toggleType на лету: обработчики нужно синхронизировать и на целевом элементе,
+        // и на самой подсказке — на неё их вешает setTooltipRef, который повторно не вызывается.
+        if (prevProps.toggleType !== this.props.toggleType) {
+            const elements = [targetRef.current, this.tooltip];
+
             if (this.props.toggleType === "hover") {
-                this.addHoverListeners(targetRef.current);
+                elements.forEach((element) => element && this.addHoverListeners(element));
             } else if (prevProps.toggleType === "hover") {
-                this.removeHoverListeners(targetRef.current);
+                elements.forEach((element) => element && this.removeHoverListeners(element));
             }
         }
     }
@@ -70,13 +82,22 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
         document.removeEventListener("mousedown", this.closeIfOuterAction);
         document.removeEventListener("keydown", this.closeIfEscapeKey);
 
-        if (targetRef.current && toggleType === "hover") {
-            this.removeHoverListeners(targetRef.current);
+        if (toggleType === "hover") {
+            if (targetRef.current) {
+                this.removeHoverListeners(targetRef.current);
+            }
+
+            // На саму подсказку обработчики вешает setTooltipRef — снимаем их симметрично,
+            // иначе при размонтировании открытой подсказки они остаются на ноде.
+            if (this.tooltip) {
+                this.removeHoverListeners(this.tooltip);
+            }
         }
 
         clearTimeout(this.timeout);
     }
 
+    /** Сохранение ноды подсказки и подписка её на события наведения. */
     private setTooltipRef = (node: HTMLDivElement | null) => {
         const { toggleType } = this.props;
 
@@ -87,7 +108,7 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
         this.tooltip = node;
     };
 
-    // Закрываем Tooltip при клике за его пределами.
+    /** Закрытие подсказки при действии мышью за её пределами. */
     private closeIfOuterAction = (event: Event) => {
         const { targetRef } = this.props;
         const { setTooltipOpen } = this.context;
@@ -102,7 +123,7 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
         }
     };
 
-    // Закрываем Tooltip по нажатию Esc
+    /** Закрытие подсказки по нажатию Escape. */
     private closeIfEscapeKey = (event: KeyboardEvent) => {
         const key = event.code || event.keyCode;
 
@@ -111,16 +132,19 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
         }
     };
 
+    /** Подписка элемента на события наведения. */
     private addHoverListeners = (element: Element) => {
         element.addEventListener("mouseenter", this.handleMouseEnter);
         element.addEventListener("mouseleave", this.handleMouseLeave);
     };
 
+    /** Отписка элемента от событий наведения. */
     private removeHoverListeners = (element: Element) => {
         element.removeEventListener("mouseenter", this.handleMouseEnter);
         element.removeEventListener("mouseleave", this.handleMouseLeave);
     };
 
+    /** Обработчик наведения курсора на целевой элемент или на саму подсказку. */
     private handleMouseEnter = () => {
         const { tooltipOpen, targetHoveredRef, setTooltipOpen } = this.context;
 
@@ -131,11 +155,12 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
         clearTimeout(this.timeout);
     };
 
+    /** Обработчик ухода курсора: подсказка закрывается с задержкой, чтобы курсор успел дойти до неё. */
     private handleMouseLeave = () => {
         const { setTooltipOpen } = this.context;
 
         this.timeout = window.setTimeout(() => {
             setTooltipOpen(false);
-        }, 500);
+        }, HOVER_CLOSE_DELAY_MS);
     };
 }

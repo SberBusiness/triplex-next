@@ -38,12 +38,21 @@ describe("StatusTracker", () => {
 
     it("Should apply type classes correctly", () => {
         const { rerender } = render(
-            <StatusTracker type={EStatusTrackerType.WAITING} data-testid="status-tracker">
+            <StatusTracker type={EStatusTrackerType.DRAFT} data-testid="status-tracker">
                 Content
             </StatusTracker>,
         );
         let tracker = getStatusTracker();
         let background = tracker.querySelector('[class*="statusTrackerBackground"]');
+        expect(background).toHaveClass("draft");
+
+        rerender(
+            <StatusTracker type={EStatusTrackerType.WAITING} data-testid="status-tracker">
+                Content
+            </StatusTracker>,
+        );
+        tracker = getStatusTracker();
+        background = tracker.querySelector('[class*="statusTrackerBackground"]');
         expect(background).toHaveClass("waiting");
 
         rerender(

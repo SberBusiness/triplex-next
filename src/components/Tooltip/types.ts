@@ -92,12 +92,17 @@ export type TTooltipAxesCoordinates = ITooltipXCoordinates | ITooltipYCoordinate
 /** Тип взаимодействия с тултипом. */
 export type TTooltipToggleType = "click" | "hover";
 
-/** React-элементы Tooltip. */
+/** React-элементы Tooltip, разобранные из children по типу субкомпонента. */
 export interface ITooltipElements {
+    /** Целевой элемент (TooltipTarget), к которому привязана подсказка. */
     target: React.ReactElement<ITooltipTargetProps> | null;
+    /** Содержимое подсказки (TooltipBody). */
     body: React.ReactElement<ITooltipBodyProps> | null;
+    /** Гиперссылка в подсказке (TooltipLink). */
     link: React.ReactElement<ITooltipLinkProps> | null;
+    /** Кнопка закрытия (TooltipXButton). */
     closeButton: React.ReactElement<ITooltipXButtonProps> | null;
+    /** Заголовок мобильной версии (TooltipMobileHeader). */
     mobileHeader: React.ReactElement<ITooltipMobileHeaderProps> | null;
 }
 
@@ -116,8 +121,8 @@ export interface ITooltipXButtonProps extends React.ButtonHTMLAttributes<HTMLBut
     children?: never;
 }
 
-/** Свойства компонента TooltipMobileHeader. */
-export interface ITooltipMobileHeaderProps extends Omit<IDropdownMobileHeaderProps, "closeButton"> {}
+/** Свойства компонента TooltipMobileHeader. Кнопку закрытия шапка подставляет сама, из TooltipXButton. */
+export interface ITooltipMobileHeaderProps extends IDropdownMobileHeaderProps {}
 
 /** Свойства компонента DropdownMobileHeader. */
 export interface IDropdownMobileHeaderProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,5 +1,6 @@
 import moment from "moment";
 import { TPickedDate } from "../Calendar/types";
+import { isDateOutOfRange } from "../Calendar/utils";
 import { IDateLimitRange } from "../../types/DateTypes";
 import { inputMonthYearFormat } from "./constants";
 
@@ -39,6 +40,6 @@ export const MonthYearPickerUtils = {
 
     /** Является ли дата доступной. */
     isAvailableDate: (date: moment.Moment, value: string, limitRange: IDateLimitRange) => {
-        return !(date.isBefore(limitRange.dateFrom, "day") || date.isAfter(limitRange.dateTo, "day"));
+        return !isDateOutOfRange(date, limitRange, "day");
     },
 };

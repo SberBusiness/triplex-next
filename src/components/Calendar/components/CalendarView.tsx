@@ -35,3 +35,5 @@ export const CalendarView: React.FC<ICalendarViewProps> = ({
         </CalendarViewContext.Provider>
     );
 };
+
+CalendarView.displayName = "CalendarView";

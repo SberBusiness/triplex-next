@@ -5,9 +5,13 @@ import { Tooltip, ETooltipPreferPlace, ETooltipSize } from "@sberbusiness/triple
 
 const getTargetButton = (name = "Tooltip target") => screen.getByRole("button", { name });
 
+/** Корневой элемент открытой десктопной подсказки. */
+const getTooltipRoot = (body = "Tooltip text") => screen.getByText(body).closest(".tooltipDesktop");
+
 const renderDesktopTooltip = ({
     toggleType = "hover" as const,
     preferPlace = ETooltipPreferPlace.BELOW,
+    size = ETooltipSize.SM,
     isOpen,
     onShow,
     toggle,
@@ -18,6 +22,7 @@ const renderDesktopTooltip = ({
 }: {
     toggleType?: "hover" | "click";
     preferPlace?: ETooltipPreferPlace;
+    size?: ETooltipSize;
     isOpen?: boolean;
     onShow?: (node: HTMLDivElement) => void;
     toggle?: (open: boolean) => void;
@@ -32,7 +37,7 @@ const renderDesktopTooltip = ({
 
     render(
         <Tooltip
-            size={ETooltipSize.SM}
+            size={size}
             toggleType={toggleType}
             preferPlace={preferPlace}
             disableAdaptiveMode
@@ -50,14 +55,12 @@ const renderDesktopTooltip = ({
                     aria-label={label}
                 />
             </Tooltip.Target>
-            <Tooltip.Body>
-                {body}
-                {link ? (
-                    <Tooltip.Link href={link.href} target="_blank" rel="noopener noreferrer">
-                        {link.text}
-                    </Tooltip.Link>
-                ) : null}
-            </Tooltip.Body>
+            <Tooltip.Body>{body}</Tooltip.Body>
+            {link ? (
+                <Tooltip.Link href={link.href} target="_blank" rel="noopener noreferrer">
+                    {link.text}
+                </Tooltip.Link>
+            ) : null}
             {withClose ? <Tooltip.XButton aria-label="Close tooltip" /> : null}
         </Tooltip>,
     );
@@ -163,5 +166,96 @@ describe("Tooltip (desktop)", () => {
             vi.advanceTimersByTime(500);
         });
         expect(screen.queryByText("Tooltip text")).not.toBeInTheDocument();
+    });
+
+    it("should close by outside mousedown when mounted already opened", () => {
+        const toggle = vi.fn();
+        renderDesktopTooltip({ toggleType: "click", isOpen: true, toggle });
+
+        expect(screen.getByText("Tooltip text")).toBeInTheDocument();
+
+        fireEvent.mouseDown(document.body);
+
+        expect(toggle).toHaveBeenCalledWith(false);
+    });
+
+    it("should close by ESC when mounted already opened", () => {
+        const toggle = vi.fn();
+        renderDesktopTooltip({ toggleType: "click", isOpen: true, toggle });
+
+        fireEvent.keyDown(document, { key: "Escape", code: "Escape" });
+
+        expect(toggle).toHaveBeenCalledWith(false);
+    });
+
+    it("should not close by outside mousedown inside the tooltip itself", () => {
+        const toggle = vi.fn();
+        renderDesktopTooltip({ toggleType: "click", isOpen: true, toggle });
+
+        fireEvent.mouseDown(screen.getByText("Tooltip text"));
+
+        expect(toggle).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        [ETooltipSize.SM, "tooltipSM"],
+        [ETooltipSize.LG, "tooltipLG"],
+    ])("should apply the size class for %s", (size, expectedClass) => {
+        renderDesktopTooltip({ toggleType: "click", isOpen: true, size });
+
+        expect(getTooltipRoot()).toHaveClass(expectedClass);
+    });
+
+    it("should mark the tooltip as closable when the close button is passed", () => {
+        renderDesktopTooltip({ toggleType: "click", isOpen: true, withClose: true });
+
+        expect(getTooltipRoot()).toHaveClass("closable");
+    });
+
+    it("should not mark the tooltip as closable without the close button", () => {
+        renderDesktopTooltip({ toggleType: "click", isOpen: true });
+
+        expect(getTooltipRoot()).not.toHaveClass("closable");
+    });
+
+    it("should open by hover and stay opened while the cursor is over the target", () => {
+        const toggle = vi.fn();
+        renderDesktopTooltip({ toggleType: "hover", toggle });
+
+        fireEvent.mouseEnter(getTargetButton());
+
+        expect(toggle).toHaveBeenCalledWith(true);
+        expect(screen.getByText("Tooltip text")).toBeInTheDocument();
+    });
+
+    it("should close by hover leave after the delay", () => {
+        renderDesktopTooltip({ toggleType: "hover" });
+
+        const target = getTargetButton();
+        fireEvent.mouseEnter(target);
+        expect(screen.getByText("Tooltip text")).toBeInTheDocument();
+
+        fireEvent.mouseLeave(target);
+
+        // Подсказка закрывается не сразу: у пользователя есть время довести курсор до неё.
+        expect(screen.getByText("Tooltip text")).toBeInTheDocument();
+
+        act(() => {
+            // задержка закрытия по уходу курсора
+            vi.advanceTimersByTime(500);
+        });
+        act(() => {
+            // анимация исчезновения
+            vi.advanceTimersByTime(500);
+        });
+
+        expect(screen.queryByText("Tooltip text")).not.toBeInTheDocument();
+    });
+
+    it("should not render the tooltip content while closed", () => {
+        renderDesktopTooltip({ toggleType: "click", isOpen: false });
+
+        expect(screen.queryByText("Tooltip text")).not.toBeInTheDocument();
+        expect(getTargetButton()).toBeInTheDocument();
     });
 });

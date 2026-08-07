@@ -2,11 +2,13 @@ import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes
 
 // Название токенов компонента StatusTracker.
 export const designTokensComponentsStatusTrackerKeys = [
+    "Background",
     "Draft_Background",
     "Warning_Background",
     "Waiting_Background",
     "Rejected_Background",
     "Approved_Background",
+    "Draft_Color",
     "Waiting_Color",
     "Rejected_Color",
     "Approved_Color",
@@ -29,7 +31,9 @@ export type TDesignTokensComponentsStatusTracker = { StatusTracker: TDesignToken
 
 // Токены компонента StatusTracker в светлой и темной темах.
 export const StatusTracker_Tokens: TDesignTokensComponentsStatusTrackerValues = {
-    Draft_Background: [{ ref: "ColorNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.100" }], // var(--triplex-next-StatusTracker-Draft_Background)
+    Background: [{ ref: "ColorNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.100" }], // var(--triplex-next-StatusTracker-Background)
+
+    Draft_Background: [{ ref: "ColorSystem.80" }, { ref: "ColorNeutralAlpha.60" }], // var(--triplex-next-StatusTracker-Draft_Background)
 
     Warning_Background: [{ ref: "ColorWarning.60" }, { ref: "ColorWarning.20" }], // var(--triplex-next-StatusTracker-Warning_Background)
 
@@ -39,9 +43,11 @@ export const StatusTracker_Tokens: TDesignTokensComponentsStatusTrackerValues = 
 
     Approved_Background: [{ ref: "ColorSuccess.60" }, { ref: "ColorSuccess.50" }], // var(--triplex-next-StatusTracker-Approved_Background)
 
+    Draft_Color: [{ ref: "ColorSystem.70" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-StatusTracker-Draft_Color)
+
     Waiting_Color: [{ ref: "ColorSystem.70" }, { ref: "ColorNeutralAlpha.50" }], // var(--triplex-next-StatusTracker-Waiting_Color)
 
-    Rejected_Color: [{ ref: "ColorError.80" }, { ref: "ColorError.20" }], // var(--triplex-next-StatusTracker-Rejected_Color)
+    Rejected_Color: [{ ref: "ColorWarning.50" }, { ref: "ColorWarning.50" }], // var(--triplex-next-StatusTracker-Rejected_Color)
 
     Approved_Color: [{ ref: "ColorSuccess.60" }, { ref: "ColorSuccess.30" }], // var(--triplex-next-StatusTracker-Approved_Color)
 

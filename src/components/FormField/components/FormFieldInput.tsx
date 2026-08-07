@@ -9,22 +9,30 @@ import { DataAttributes } from "../../../types/CoreTypes";
 import { isFilled } from "./utils";
 import styles from "../styles/FormFieldInput.module.less";
 
-/** Свойства, передаваемые в рендер-функцию IFormFieldInputProps. */
+/** Свойства, передаваемые в рендер-функцию props.render компонента FormFieldInput. */
 export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
+    /** Размер поля из FormFieldContext. */
     size: EComponentSize;
 }
 
 /** Свойства компонента FormFieldInput. */
 export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement>, DataAttributes {
-    /** Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
-     *  Через аргументы props инпуту передастся нужная стилизация.
-     * */
+    /**
+     * Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
+     * Через аргумент props инпуту передаётся нужная стилизация, идентификатор и обработчики событий.
+     */
     render?: (props: IFormFieldInputProvideProps, ref?: React.Ref<HTMLInputElement>) => React.ReactElement | null;
 }
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+/** Соответствие размера имени класса. */
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Компонент, отображающий input. */
+/**
+ * Компонент, отображающий input.
+ *
+ * Синхронизирует с FormFieldContext идентификатор элемента ввода, состояния фокуса и заполненности,
+ * а также блокируется, когда поле имеет статус EFormFieldStatus.DISABLED.
+ */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>(
     (
         {
@@ -43,7 +51,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
     ) => {
         const { status, setFocused, setTargetId, setFilled, size } = useContext(FormFieldContext);
         const id = useMemo(() => (idProp === undefined ? uniqueId("input_") : idProp), [idProp]);
-        const classNames = clsx(styles.formFieldInput, sizeToClassNameMap[size], className);
+        const classNames = clsx(styles.formFieldInput, SIZE_TO_CLASS_NAME_MAP[size], className);
 
         const syncFilled = useCallback(
             (nextValue: IFormFieldInputProps["value"]) => {
@@ -56,6 +64,8 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             setTargetId(id);
         }, [id, setTargetId]);
 
+        // Начальная синхронизация заполненности: defaultValue учитывается только при монтировании,
+        // дальнейшие изменения value обрабатываются эффектом ниже.
         useLayoutEffect(() => {
             syncFilled(value ?? defaultValue);
             // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,10 +139,10 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
         if (render) {
             // Рендер инпута, переданного снаружи.
             return render({ ...commonProps, size }, ref);
-        } else {
-            // Рендер текстового инпута по-умолчанию.
-            return <input {...commonProps} ref={ref} />;
         }
+
+        // Рендер текстового инпута по умолчанию.
+        return <input {...commonProps} ref={ref} />;
     },
 );
 

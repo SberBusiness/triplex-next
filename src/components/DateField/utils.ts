@@ -2,7 +2,7 @@ import moment from "moment";
 import { TPickedDate } from "../Calendar/types";
 import { IDateLimitRange } from "../../types/DateTypes";
 import { inputDateFormat } from "./constants";
-import { isDayDisabled } from "../Calendar/utils";
+import { isDateOutOfRange, isDayDisabled } from "../Calendar/utils";
 
 /** Значения DatePicker. */
 interface IDatePickerValues {
@@ -45,10 +45,6 @@ export const DateFieldUtils = {
 
     /** Является ли дата доступной. */
     isAvailableDate: (date: moment.Moment, value: string, limitRange: IDateLimitRange, disabledDays?: string[]) => {
-        return !(
-            date.isBefore(limitRange.dateFrom, "day") ||
-            date.isAfter(limitRange.dateTo, "day") ||
-            isDayDisabled(value, disabledDays)
-        );
+        return !(isDateOutOfRange(date, limitRange, "day") || isDayDisabled(value, disabledDays));
     },
 };

@@ -1,8 +1,39 @@
 import moment from "moment";
-import { headerDateFormat, globalLimitRange } from "@sberbusiness/triplex-next/consts/DateConst";
-import { ECalendarViewMode } from "@sberbusiness/triplex-next/components/Calendar/enums";
-import { TPickedDate, TPickedDateProp } from "@sberbusiness/triplex-next/components/Calendar/types";
-import { IDateLimitRange } from "@sberbusiness/triplex-next/types/DateTypes";
+import { headerDateFormat, globalLimitRange } from "../../consts/DateConst";
+import { ECalendarViewMode } from "./enums";
+import { TPickedDate, TPickedDateProp } from "./types";
+import { IDateLimitRange } from "../../types/DateTypes";
+import { isKey } from "../../utils/keyboard";
+
+/** Направление сдвига даты. */
+export type TCalendarShiftOperation = "add" | "subtract";
+
+/** Единица измерения сдвига даты внутри календаря. */
+export type TCalendarShiftUnit = "day" | "week" | "month" | "year";
+
+/** Величина сдвига даты по одной из осей клавиатурной навигации. */
+export interface ICalendarNavigationStep {
+    /** Количество единиц сдвига. */
+    amount: number;
+    /** Единица измерения сдвига. */
+    unit: TCalendarShiftUnit;
+}
+
+/** Величины сдвига даты по всем осям клавиатурной навигации конкретного вида календаря. */
+export interface ICalendarNavigationSteps {
+    /** Шаг по горизонтали — соседняя ячейка строки (ArrowLeft / ArrowRight). */
+    horizontal: ICalendarNavigationStep;
+    /** Шаг по вертикали — соседняя строка сетки (ArrowUp / ArrowDown). */
+    vertical: ICalendarNavigationStep;
+    /** Шаг на страницу — соседняя страница календаря (PageUp / PageDown). */
+    page: ICalendarNavigationStep;
+}
+
+/** Сдвиг даты: направление и величина. */
+export interface ICalendarNavigationShift extends ICalendarNavigationStep {
+    /** Направление сдвига. */
+    operation: TCalendarShiftOperation;
+}
 
 /**
  * Приведение даты к типу Moment.
@@ -20,20 +51,11 @@ export function parsePickedDate(value: TPickedDateProp | undefined, format?: str
 }
 
 /**
- * Получить актуальный заголовок.
- * @param {TPickedDate} pickedDate Выбранная дата в формате Moment.
- * @param {Moment} [date] Дата для построения заголовка.
+ * Получить актуальный заголовок. Для пустой или невалидной даты используется текущая дата.
+ * @param {TPickedDate} date Дата для построения заголовка.
  */
-export function getHeader(pickedDate: TPickedDate, date?: moment.Moment): string {
-    let currentDate;
-
-    if (date && date.isValid()) {
-        currentDate = date;
-    } else if (pickedDate && pickedDate.isValid()) {
-        currentDate = pickedDate;
-    } else {
-        currentDate = moment();
-    }
+export function getHeader(date: TPickedDate): string {
+    const currentDate = date && date.isValid() ? date : moment();
 
     return currentDate.format(headerDateFormat);
 }
@@ -76,3 +98,87 @@ export function isDayDisabled(day: string, disabledDays: string[] | undefined) {
 
     return disabledDays.includes(day);
 }
+
+/**
+ * Сдвигает дату на указанную величину в указанном направлении. Мутирует переданную дату (как и методы moment).
+ * @param date Дата, которую нужно сдвинуть.
+ * @param shift Направление и величина сдвига.
+ */
+export function shiftDate(date: moment.Moment, shift: ICalendarNavigationShift): moment.Moment {
+    const { operation, amount, unit } = shift;
+
+    return operation === "add" ? date.add(amount, unit) : date.subtract(amount, unit);
+}
+
+/**
+ * Возвращает дату после сдвига. Если сдвинутая дата выходит за разрешённый период — возвращает исходную дату.
+ * @param date Исходная дата.
+ * @param shift Направление и величина сдвига.
+ * @param limitRange Ограничение выбираемого периода.
+ * @param limitUnit Единица сравнения даты с ограничением периода.
+ */
+export function getShiftedDateInRange(
+    date: moment.Moment,
+    shift: ICalendarNavigationShift,
+    limitRange: IDateLimitRange,
+    limitUnit: "day" | "month" | "year",
+): moment.Moment {
+    const shiftedDate = shiftDate(date.clone(), shift);
+
+    return isDateOutOfRange(shiftedDate, limitRange, limitUnit) ? date : shiftedDate;
+}
+
+/**
+ * Возвращает первую не отключённую дату среди `count` дат-кандидатов, начиная с `startDate`,
+ * с шагом в одну единицу `unit` между соседними кандидатами. Исходная дата не мутируется.
+ * Если все кандидаты отключены — возвращает undefined.
+ * @param startDate Первая дата-кандидат.
+ * @param count Количество проверяемых кандидатов.
+ * @param unit Единица измерения шага между кандидатами.
+ * @param isDateDisabled Предикат отключённой даты.
+ */
+export function getFirstEnabledDate(
+    startDate: moment.Moment,
+    count: number,
+    unit: TCalendarShiftUnit,
+    isDateDisabled: (date: moment.Moment) => boolean,
+): moment.Moment | undefined {
+    for (let i = 0; i < count; i++) {
+        const date = startDate.clone().add(i, unit);
+
+        if (!isDateDisabled(date)) {
+            return date;
+        }
+    }
+}
+
+/**
+ * Возвращает направление и величину сдвига даты для нажатой клавиши навигации.
+ * Для клавиш, не участвующих в навигации по сетке календаря, возвращает undefined.
+ * @param key Код нажатой клавиши.
+ * @param steps Величины сдвига по осям навигации для текущего вида календаря.
+ */
+export function getNavigationShift(
+    key: string | number,
+    steps: ICalendarNavigationSteps,
+): ICalendarNavigationShift | undefined {
+    if (isKey(key, "ARROW_RIGHT")) {
+        return { operation: "add", ...steps.horizontal };
+    } else if (isKey(key, "ARROW_LEFT")) {
+        return { operation: "subtract", ...steps.horizontal };
+    } else if (isKey(key, "ARROW_DOWN")) {
+        return { operation: "add", ...steps.vertical };
+    } else if (isKey(key, "ARROW_UP")) {
+        return { operation: "subtract", ...steps.vertical };
+    } else if (isKey(key, "PAGE_DOWN")) {
+        return { operation: "add", ...steps.page };
+    } else if (isKey(key, "PAGE_UP")) {
+        return { operation: "subtract", ...steps.page };
+    }
+}
+
+/** Строки сетки видов месяцев и годов. */
+export const VIEW_GRID_ROWS = [0, 1, 2, 3];
+
+/** Колонки сетки видов месяцев и годов. */
+export const VIEW_GRID_COLUMNS = [0, 1, 2];

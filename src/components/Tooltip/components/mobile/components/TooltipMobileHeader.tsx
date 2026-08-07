@@ -6,15 +6,18 @@ import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { EFontType, ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import { ITooltipMobileHeaderProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
 
-/** Заголовок компонента TooltipMobile. */
+/**
+ * Заголовок компонента TooltipMobile.
+ * Кнопку закрытия подставляет сам, наследуя props переданного в Tooltip TooltipXButton.
+ */
 export const TooltipMobileHeader: React.FC<ITooltipMobileHeaderProps> = ({ children, ...rest }) => {
     const { elements } = useContext(TooltipContext);
 
-    /** Рендер кнопки закрытия DropdownMobile. */
-    const renderCloseButton = <TooltipMobileCloseButton {...elements.closeButton?.props} />;
+    /** Кнопка закрытия мобильной версии подсказки. */
+    const closeButton = <TooltipMobileCloseButton {...elements.closeButton?.props} />;
 
     return (
-        <DropdownMobileHeader controlButtons={renderCloseButton} {...rest}>
+        <DropdownMobileHeader controlButtons={closeButton} {...rest}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY} tag="div">
                 {children}
             </Text>

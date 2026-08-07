@@ -1,51 +1,71 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import FocusTrap from "focus-trap-react";
 
 /** Свойства компонента FocusTrapExtended. */
 export interface IFocusTrapExtendedProps extends FocusTrap.Props {}
 
 /**
- * Обёртка над `FocusTrap`, которая управляет возвратом фокуса в зависимости от сценария закрытия.
+ * Расширенная обёртка над `FocusTrap`, управляющая возвратом фокуса в зависимости от сценария закрытия.
  *
  * **Ключевые особенности:**
- * - По умолчанию активирует опцию `clickOutsideDeactivates`.
- * - Если ловушка фокуса закрывается изнутри, фокус автоматически возвращается на элемент, который её активировал.
- * - Если деактивация происходит из-за клика снаружи, фокус не перехватывается.
+ * - По умолчанию обрабатывает внешний клик через `clickOutsideDeactivates` и переводит ловушку на паузу.
+ * - Автоматически возвращает фокус на триггер при закрытии изнутри, но не перехватывает его при клике снаружи.
+ * - Вместо полного уничтожения нативного инстанса ловушки при кликах снаружи, компонент переводит текущую ловушку на
+ *   паузу. Это изолирует стек ловушек и предотвращает ложный перехват фокуса предыдущими ловушками фокуса (ниже по
+ *   стеку).
  */
-export const FocusTrapExtended: React.FC<IFocusTrapExtendedProps> = ({ focusTrapOptions, ...restProps }) => {
+export const FocusTrapExtended: React.FC<IFocusTrapExtendedProps> = ({
+    paused: externalPaused,
+    focusTrapOptions,
+    ...restProps
+}) => {
+    const [paused, setPaused] = useState(false);
     const outsideClickRef = useRef(false);
 
     return (
         <FocusTrap
             {...restProps}
+            paused={externalPaused ?? paused}
             focusTrapOptions={{
                 ...focusTrapOptions,
+                onActivate: () => {
+                    outsideClickRef.current = false;
+                    // Сбрасываем паузу, так как при закрытии без unmount локальный стейт сохраняет true
+                    setPaused(false);
+                    focusTrapOptions?.onActivate?.();
+                },
                 clickOutsideDeactivates: (event) => {
-                    if (typeof focusTrapOptions?.clickOutsideDeactivates === "function") {
-                        const deactivates = focusTrapOptions.clickOutsideDeactivates(event);
+                    if (focusTrapOptions?.clickOutsideDeactivates !== undefined) {
+                        const deactivates =
+                            typeof focusTrapOptions.clickOutsideDeactivates === "function"
+                                ? focusTrapOptions.clickOutsideDeactivates(event)
+                                : focusTrapOptions.clickOutsideDeactivates;
+
                         if (deactivates) {
+                            // Фиксируем клик только если внешнее правило действительно разрешило деактивацию
                             outsideClickRef.current = true;
                         }
                         return deactivates;
                     }
 
                     outsideClickRef.current = true;
-                    return true;
+                    setPaused(true);
+                    return false;
                 },
                 setReturnFocus: (node) => {
                     const outsideClick = outsideClickRef.current;
                     outsideClickRef.current = false;
 
-                    if (typeof focusTrapOptions?.setReturnFocus === "function") {
-                        const userResult = focusTrapOptions.setReturnFocus(node);
-                        // Если был внешний клик и пользователь вернул node, подавляем возврат.
-                        return outsideClick && userResult === node ? false : userResult;
+                    if (focusTrapOptions?.setReturnFocus !== undefined) {
+                        return typeof focusTrapOptions.setReturnFocus === "function"
+                            ? focusTrapOptions.setReturnFocus(node)
+                            : focusTrapOptions.setReturnFocus;
                     }
 
+                    // Если клик был снаружи, возвращать фокус не нужно
                     if (outsideClick) {
                         return false;
                     }
-
                     return node;
                 },
             }}

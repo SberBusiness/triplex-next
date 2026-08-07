@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import clsx from "clsx";
-import { FormFieldContext } from "./FormFieldContext";
+import { FormFieldContext, IFormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
 import { EFormFieldStatus } from "./enums";
 import { EComponentSize } from "../../enums/EComponentSize";
@@ -10,24 +10,32 @@ import styles from "./styles/FormField.module.less";
 
 /** Свойства компонента FormField. */
 export interface IFormFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "placeholder">, DataAttributes {
-    /** Визуальное состояние. */
+    /** Визуальное состояние поля. Значение DISABLED блокирует вложенные элементы ввода. По умолчанию EFormFieldStatus.DEFAULT. */
     status?: EFormFieldStatus;
-    /** Размер. */
+    /** Размер поля. Прокидывается вложенным элементам через контекст. По умолчанию EComponentSize.LG. */
     size?: EComponentSize;
-    /** Активное состояние. */
+    /** Принудительно активное состояние. Поле также становится активным, когда вложенный элемент ввода в фокусе. По умолчанию false. */
     active?: boolean;
 }
 
-export const statusToClassNameMap = {
+/** Соответствие статуса имени класса. */
+const STATUS_TO_CLASS_NAME_MAP = {
     [EFormFieldStatus.DEFAULT]: styles.default,
     [EFormFieldStatus.DISABLED]: styles.disabled,
     [EFormFieldStatus.ERROR]: styles.error,
     [EFormFieldStatus.WARNING]: styles.warning,
 };
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+/** Соответствие размера имени класса. */
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Элемент, отображающий input/select/textarea + label. */
+/**
+ * Элемент, отображающий input/select/textarea + label.
+ *
+ * Является провайдером FormFieldContext: размер, статус и состояния поля (фокус, заполненность,
+ * идентификаторы элемента ввода и лейбла, ширины префикса и постфикса) распространяются
+ * на вложенные FormFieldLabel / FormFieldInput / FormFieldTarget и другие субкомпоненты.
+ */
 export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
     (
         {
@@ -48,7 +56,10 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
         const [filled, setFilled] = useState(false);
         const [focused, setFocused] = useState(false);
 
-        const contextValue = useMemo(
+        // Поле активно, если активность задана снаружи или вложенный элемент ввода в фокусе.
+        const isActive = active || focused;
+
+        const contextValue = useMemo<IFormFieldContext>(
             () => ({
                 size,
                 status,
@@ -58,7 +69,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                 prefixWidth,
                 filled,
                 focused,
-                active: active || focused,
+                active: isActive,
                 setTargetId,
                 setLabelId,
                 setPostfixWidth,
@@ -66,7 +77,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                 setFilled,
                 setFocused,
             }),
-            [size, status, targetId, labelId, postfixWidth, prefixWidth, filled, focused, active],
+            [size, status, targetId, labelId, postfixWidth, prefixWidth, filled, focused, isActive],
         );
 
         return (
@@ -74,11 +85,11 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                 <div
                     className={clsx(
                         styles.formField,
-                        sizeToClassNameMap[size],
-                        statusToClassNameMap[status],
+                        SIZE_TO_CLASS_NAME_MAP[size],
+                        STATUS_TO_CLASS_NAME_MAP[status],
                         {
                             [styles.filled]: filled,
-                            [styles.active]: active || focused,
+                            [styles.active]: isActive,
                         },
                         className,
                     )}

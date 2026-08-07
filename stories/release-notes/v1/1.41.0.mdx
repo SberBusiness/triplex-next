@@ -59,6 +59,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - AI-рефакторинг: JSDoc на компоненте, props и `ILoaderScreenMiddleProps` (у `size` указано значение по умолчанию), соответствие типа лоадера классу подложки вынесено в константу-маппинг, порядок импортов и позиция `className` в `clsx` приведены к общему стилю, unit-тесты расширены с 6 до 15 кейсов, создан `LoaderScreen-ai.md`. Публичный API, DOM и визуальное поведение не изменены — изменился только порядок классов внутри атрибута `class` корневого элемента (набор классов тот же, на каскад не влияет).
 
+**MaskedField**
+
+- AI-рефакторинг: расширены JSDoc на компоненте и на prop `maskedInputProps` (перечислены обязательные `mask` / `value`, `placeholderMask` и `forwardedRef` для ссылки на input), добавлены unit-тесты (13 кейсов: применение маски к значению, вызов `onChange` с отформатированным значением, отображение плейсхолдера маски, проброс ref, статусы, слоты), stories мигрированы на modern pattern с примерами в `stories/MaskedField/examples/` и добавлены стори `WithPlaceholderMask`, `PassRefToInput`, `VisualTests`, создан `MaskedField-ai.md`. Публичный API, DOM и визуальное поведение не изменены (props, их типы, barrel-экспорты, `forwardRef` — как были).
+
 **StatusTracker**
 
 - Добавлены токены `StatusTracker.Background` и `StatusTracker.Draft_Color`.

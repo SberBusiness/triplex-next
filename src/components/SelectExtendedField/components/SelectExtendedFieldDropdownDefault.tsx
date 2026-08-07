@@ -14,26 +14,27 @@ import {
 } from "../../Dropdown";
 import { Text, ETextSize } from "../../Typography";
 
+/** Свойства компонента SelectExtendedFieldDropdownDefault. */
 export interface ISelectExtendedFieldDropdownDefaultProps
     extends ISelectExtendedFieldDropdownProvideProps, Pick<IDropdownProps, "size" | "width"> {
-    /* ClassName для модификации SelectExtendedField.Dropdown.List.Item. */
+    /** ClassName для модификации SelectExtendedField.Dropdown.List.Item. */
     dropdownListItemClassName?: string;
-    /* Свойства, передающиеся в Dropdown. */
+    /** Свойства, передающиеся в Dropdown. */
     dropdownProps?: Omit<
         IDropdownProps,
         "children" | "opened" | "setOpened" | "targetRef" | "size" | "mobileViewProps"
     >;
-    /* Состояние загрузки. В этот момент Dropdown закрыт, Target отображает loader. */
+    /** Состояние загрузки. В этот момент Dropdown закрыт, Target отображает лоадер. По умолчанию false. */
     loading?: boolean;
-    /* Id SelectExtendedField.Dropdown.List. Нужен для связи с Target. */
+    /** Id SelectExtendedField.Dropdown.List. Нужен для связи с Target. */
     listId?: string;
-    /* Название Select отображающееся в мобильном режиме. */
+    /** Название Select, отображающееся в мобильном режиме. */
     mobileTitle?: React.ReactNode;
-    /* Список опций. */
+    /** Список опций. */
     options: ISelectExtendedFieldDefaultOption[];
-    /* Обработчик изменения значения. */
+    /** Обработчик изменения значения. Вызывается с выбранной опцией. */
     onChange: (option: ISelectExtendedFieldDefaultOption) => void;
-    /* Текущее выбранное значение. */
+    /** Текущее выбранное значение. Опция сопоставляется по полю id. */
     value?: ISelectExtendedFieldDefaultOption;
 }
 
@@ -56,72 +57,70 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
     setOpened,
     targetRef,
     value,
-}) => {
-    return (
-        <SelectExtendedField.Dropdown
-            opened={opened && !loading}
-            forwardedRef={dropdownRef}
-            width={width}
-            setOpened={setOpened}
-            targetRef={targetRef}
-            size={size}
-            {...dropdownProps}
-            mobileViewProps={{
-                children: (
-                    <>
-                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
-                            <Text tag="div" size={ETextSize.B3}>
-                                {mobileTitle}
-                            </Text>
-                        </DropdownMobileHeader>
-                        <DropdownMobileBody>
-                            <DropdownMobileList>
-                                {options.map((option) => {
-                                    const { label, ...restOption } = option;
+}) => (
+    <SelectExtendedField.Dropdown
+        opened={opened && !loading}
+        forwardedRef={dropdownRef}
+        width={width}
+        setOpened={setOpened}
+        targetRef={targetRef}
+        size={size}
+        {...dropdownProps}
+        mobileViewProps={{
+            children: (
+                <>
+                    <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
+                        <Text tag="div" size={ETextSize.B3}>
+                            {mobileTitle}
+                        </Text>
+                    </DropdownMobileHeader>
+                    <DropdownMobileBody>
+                        <DropdownMobileList>
+                            {options.map((option) => {
+                                const { label, ...restOption } = option;
 
-                                    return (
-                                        <DropdownMobileListItem
-                                            {...restOption}
-                                            className={dropdownListItemClassName}
-                                            id={option.id}
-                                            key={option.id}
-                                            selected={option.id === value?.id}
-                                            onSelect={() => {
-                                                onChange(option);
-                                                setOpened(false);
-                                            }}
-                                        >
-                                            {label}
-                                        </DropdownMobileListItem>
-                                    );
-                                })}
-                            </DropdownMobileList>
-                        </DropdownMobileBody>
-                    </>
-                ),
-            }}
-        >
-            <SelectExtendedField.Dropdown.List id={listId} dropdownOpened={opened} size={size}>
-                {options.map((option) => {
-                    const { label, ...restOption } = option;
+                                return (
+                                    <DropdownMobileListItem
+                                        {...restOption}
+                                        className={dropdownListItemClassName}
+                                        id={option.id}
+                                        key={option.id}
+                                        selected={option.id === value?.id}
+                                        onSelect={() => {
+                                            onChange(option);
+                                            setOpened(false);
+                                        }}
+                                    >
+                                        {label}
+                                    </DropdownMobileListItem>
+                                );
+                            })}
+                        </DropdownMobileList>
+                    </DropdownMobileBody>
+                </>
+            ),
+        }}
+    >
+        <SelectExtendedField.Dropdown.List id={listId} dropdownOpened={opened} size={size}>
+            {options.map((option) => {
+                const { label, ...restOption } = option;
 
-                    return (
-                        <SelectExtendedField.Dropdown.List.Item
-                            {...restOption}
-                            className={dropdownListItemClassName}
-                            id={option.id}
-                            key={option.id}
-                            selected={option.id === value?.id}
-                            onSelect={() => {
-                                onChange(option);
-                                setOpened(false);
-                            }}
-                        >
-                            {label}
-                        </SelectExtendedField.Dropdown.List.Item>
-                    );
-                })}
-            </SelectExtendedField.Dropdown.List>
-        </SelectExtendedField.Dropdown>
-    );
-};
+                return (
+                    <SelectExtendedField.Dropdown.List.Item
+                        {...restOption}
+                        className={dropdownListItemClassName}
+                        id={option.id}
+                        key={option.id}
+                        selected={option.id === value?.id}
+                        onSelect={() => {
+                            onChange(option);
+                            setOpened(false);
+                        }}
+                    >
+                        {label}
+                    </SelectExtendedField.Dropdown.List.Item>
+                );
+            })}
+        </SelectExtendedField.Dropdown.List>
+    </SelectExtendedField.Dropdown>
+);

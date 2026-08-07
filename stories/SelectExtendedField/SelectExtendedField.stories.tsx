@@ -227,6 +227,9 @@ export const WithClearButton: StoryObj<typeof SelectExtendedField> = {
     render: WithClearButtonRender,
     parameters: {
         controls: { disable: true },
+        // Кнопка очистки видна только под курсором или в фокусе, в статичном скриншоте её нет.
+        // Это состояние снимается в VisualTests, здесь скриншот ничего не добавляет.
+        testRunner: { skip: true },
         docs: {
             description: {
                 story: "Кнопка очистки рендерится, когда в SelectExtendedFieldTarget передан onClear. Видна она только пока поле заполнено и находится под курсором либо в фокусе — наведите курсор на поле.",
@@ -286,24 +289,14 @@ export const VisualTests: StoryObj<typeof SelectExtendedField> = {
         // По fieldLabel кликнуть нельзя — у плавающего лейбла FormField pointer-events: none.
         // Кликаем по значению выбранной опции: это FormFieldTarget, он кликабелен.
         await userEvent.click(await canvas.findByText("Вторая опция"));
-    },
-};
 
-export const VisualTestsClearButton: StoryObj<typeof SelectExtendedField> = {
-    tags: ["!autodocs", "!dev"],
-    render: WithClearButtonRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    play: async ({ canvasElement, userEvent }) => {
         // Кнопка очистки скрыта, пока поле не заполнено и не активно (в стилях FormField —
-        // .filled:hover и .filled.active). Наводим фокус: он ставит .active и, в отличие от
-        // синтетического hover из userEvent, является настоящим состоянием браузера и попадает в скриншот.
-        await userEvent.click(canvasElement);
-        await userEvent.tab();
+        // .filled:hover и .filled.active). Ставим фокус на соседнее поле: FormField считает
+        // isActive = active || focused, поэтому крестик становится виден, а выпадающий блок
+        // первого поля остаётся раскрытым. Синтетический hover из userEvent не подошёл бы —
+        // CSS-псевдокласс :hover от него не включается и в скриншот не попадает.
+        const longValueTarget = await canvas.findByText("Очень длинное название выбранной опции");
+
+        longValueTarget.focus();
     },
 };

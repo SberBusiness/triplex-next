@@ -59,7 +59,7 @@ version: "1.0"
 
 Собственных CSS-токенов и стилей у `MaskedField` нет. Внешний вид наследуется от семейства `FormField`; слой подсказки маски (`FormFieldMaskedInput`) использует единственный токен:
 
-```
+```css
 --triplex-next-FormField-Placeholder_Color
 ```
 

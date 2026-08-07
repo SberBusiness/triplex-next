@@ -64,23 +64,25 @@ describe("MaskedField", () => {
     });
 
     it("renders placeholderMask when field is focused", () => {
-        const { container } = renderComponent({
+        renderComponent({
             maskedInputProps: { mask: masks.date, placeholderMask: placeholderMasks.date, value: "" },
         });
 
-        expect(container.querySelector(".formFieldMaskedInputPlaceholder")).toBeNull();
+        expect(screen.queryByText("дд.мм.гггг")).not.toBeInTheDocument();
 
         fireEvent.focus(screen.getByRole("textbox"));
 
-        expect(container.querySelector(".formFieldMaskedInputPlaceholder")).toHaveTextContent("дд.мм.гггг");
+        expect(screen.getByText("дд.мм.гггг")).toBeInTheDocument();
     });
 
     it("renders remaining part of placeholderMask for filled value", () => {
-        const { container } = renderComponent({
+        renderComponent({
             maskedInputProps: { mask: masks.date, placeholderMask: placeholderMasks.date, value: "12" },
         });
 
-        expect(container.querySelector(".formFieldMaskedInputPlaceholder")).toHaveTextContent("12.мм.гггг");
+        // Подсказка разбита на две части: уже введённая (прозрачная) и оставшаяся.
+        expect(screen.getByText("12.")).toBeInTheDocument();
+        expect(screen.getByText("мм.гггг")).toBeInTheDocument();
     });
 
     it("forwards ref to FormField root element", () => {
@@ -116,7 +118,9 @@ describe("MaskedField", () => {
             prefix: "Prefix",
         });
 
-        expect(screen.getByText("Label").closest("label")).toHaveClass("formFieldLabel");
+        expect(screen.getByLabelText("Label")).toBe(screen.getByRole("textbox"));
+        // Классы слотов проверяются намеренно: именно они кодируют, в какую часть FormField
+        // попало содержимое prefix/postfix/description/counter — семантической альтернативы нет.
         expect(screen.getByText("Prefix")).toHaveClass("formFieldPrefix");
         expect(screen.getByText("Postfix")).toHaveClass("formFieldPostfix");
         expect(screen.getByText("Description")).toHaveClass("formFieldDescription");

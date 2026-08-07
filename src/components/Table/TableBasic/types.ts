@@ -96,8 +96,11 @@ export interface ITableBasicProps extends React.HTMLAttributes<HTMLTableElement>
 }
 
 /** Свойства компонента MasterTable. */
-export interface IMasterTableProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Состояние загрузки. */
+export interface IMasterTableProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+/** Свойства компонента MasterTableContent. */
+export interface IMasterTableContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Состояние загрузки. Во время загрузки содержимое перекрывается лоадером целиком. */
     loading?: boolean;
 }
 

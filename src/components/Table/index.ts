@@ -1,5 +1,6 @@
 export { MasterTable } from "./MasterTable";
 // Доступ к компонентам возможен напрямую или через MasterTable
+export { MasterTableContent } from "./MasterTableContent";
 export { TableBasic } from "./TableBasic/TableBasic";
 export { TableFooter } from "./TableFooter/TableFooter";
 export { NoColumns } from "./NoColumns";

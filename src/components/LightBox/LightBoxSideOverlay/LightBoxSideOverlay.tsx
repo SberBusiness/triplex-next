@@ -131,7 +131,6 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
                 active={opened && !opening && !closing}
                 {...focusTrapProps}
                 focusTrapOptions={{
-                    allowOutsideClick: true,
                     initialFocus: () => FocusTrapUtils.getFirstInteractionElementByDataAttr(contentRef.current),
                     preventScroll: true,
                     ...focusTrapProps?.focusTrapOptions,

@@ -94,6 +94,7 @@ version: "1.0"
 - `SelectExtendedFieldDropdown` — не `forwardRef`-компонент. Ссылка передаётся через `forwardedRef`.
 - Выпадающий блок компонент не рендерит сам и не знает, открыт ли он визуально: `opened` нужно передать в `SelectExtendedFieldDropdown` (или в свою разметку) самостоятельно.
 - Компонент не хранит выбранное значение и не знает про опции. Значение — целиком забота потребителя.
+- **Известное ограничение:** клик по кнопке очистки в `SelectExtendedFieldTarget` (prop `onClear`) заодно раскрывает выпадающий блок. `FormFieldClear` не останавливает всплытие, событие доходит до `onClick` на `FormField` и переключает `opened`. Поведение унаследованное и общее для всех, кто рендерит этот `Target`: `SelectField`, `MultiselectField.Target`, `Chip.Select`. Чинится добавлением `event.stopPropagation()` в обработчик `FormFieldClear` внутри `SelectExtendedFieldTarget`, но это меняет наблюдаемое поведение и требует отдельного решения.
 
 ---
 

@@ -57,70 +57,62 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
     setOpened,
     targetRef,
     value,
-}) => (
-    <SelectExtendedField.Dropdown
-        opened={opened && !loading}
-        forwardedRef={dropdownRef}
-        width={width}
-        setOpened={setOpened}
-        targetRef={targetRef}
-        size={size}
-        {...dropdownProps}
-        mobileViewProps={{
-            children: (
-                <>
-                    <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
-                        <Text tag="div" size={ETextSize.B3}>
-                            {mobileTitle}
-                        </Text>
-                    </DropdownMobileHeader>
-                    <DropdownMobileBody>
-                        <DropdownMobileList>
-                            {options.map((option) => {
-                                const { label, ...restOption } = option;
+}) => {
+    // Десктопный и мобильный списки различаются только компонентом элемента. Свойства опции
+    // считаются здесь один раз, чтобы поведение выбора не разъехалось между режимами.
+    // Компонент элемента в хелпер не выносится: у десктопного и мобильного разные типы props,
+    // а общий тип пришлось бы ослаблять до React.ElementType.
+    const getOptionProps = (option: ISelectExtendedFieldDefaultOption) => {
+        const { label, ...restOption } = option;
 
-                                return (
-                                    <DropdownMobileListItem
-                                        {...restOption}
-                                        className={dropdownListItemClassName}
-                                        id={option.id}
-                                        key={option.id}
-                                        selected={option.id === value?.id}
-                                        onSelect={() => {
-                                            onChange(option);
-                                            setOpened(false);
-                                        }}
-                                    >
-                                        {label}
-                                    </DropdownMobileListItem>
-                                );
-                            })}
-                        </DropdownMobileList>
-                    </DropdownMobileBody>
-                </>
-            ),
-        }}
-    >
-        <SelectExtendedField.Dropdown.List id={listId} dropdownOpened={opened} size={size}>
-            {options.map((option) => {
-                const { label, ...restOption } = option;
+        return {
+            ...restOption,
+            className: dropdownListItemClassName,
+            id: option.id,
+            selected: option.id === value?.id,
+            onSelect: () => {
+                onChange(option);
+                setOpened(false);
+            },
+            children: label,
+        };
+    };
 
-                return (
-                    <SelectExtendedField.Dropdown.List.Item
-                        {...restOption}
-                        className={dropdownListItemClassName}
-                        id={option.id}
-                        key={option.id}
-                        selected={option.id === value?.id}
-                        onSelect={() => {
-                            onChange(option);
-                            setOpened(false);
-                        }}
-                    >
-                        {label}
-                    </SelectExtendedField.Dropdown.List.Item>
-                );
-            })}
-        </SelectExtendedField.Dropdown.List>
-    </SelectExtendedField.Dropdown>
-);
+    return (
+        <SelectExtendedField.Dropdown
+            opened={opened && !loading}
+            forwardedRef={dropdownRef}
+            width={width}
+            setOpened={setOpened}
+            targetRef={targetRef}
+            size={size}
+            {...dropdownProps}
+            mobileViewProps={{
+                children: (
+                    <>
+                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
+                            <Text tag="div" size={ETextSize.B3}>
+                                {mobileTitle}
+                            </Text>
+                        </DropdownMobileHeader>
+                        <DropdownMobileBody>
+                            <DropdownMobileList>
+                                {options.map((option) => (
+                                    <DropdownMobileListItem key={option.id} {...getOptionProps(option)} />
+                                ))}
+                            </DropdownMobileList>
+                        </DropdownMobileBody>
+                    </>
+                ),
+            }}
+        >
+            <SelectExtendedField.Dropdown.List id={listId} dropdownOpened={opened} size={size}>
+                {options.map((option) => (
+                    <SelectExtendedField.Dropdown.List.Item key={option.id} {...getOptionProps(option)} />
+                ))}
+            </SelectExtendedField.Dropdown.List>
+        </SelectExtendedField.Dropdown>
+    );
+};
+
+SelectExtendedFieldDropdownDefault.displayName = "SelectExtendedFieldDropdownDefault";

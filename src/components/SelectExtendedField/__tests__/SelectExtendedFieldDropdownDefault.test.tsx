@@ -165,4 +165,8 @@ describe("SelectExtendedFieldDropdownDefault", () => {
             expect(mockOnChange).not.toHaveBeenCalled();
         });
     });
+
+    it("Should have displayName", () => {
+        expect(SelectExtendedFieldDropdownDefault.displayName).toBe("SelectExtendedFieldDropdownDefault");
+    });
 });

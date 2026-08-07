@@ -1,22 +1,19 @@
 import React from "react";
-import clsx from "clsx";
-import { IUnorderedListProps } from "@sberbusiness/triplex-next/components/UnorderedList/types";
-import { UnorderedListItem } from "@sberbusiness/triplex-next/components/UnorderedList/UnorderedListItem";
-import styles from "./styles/UnorderedList.module.less";
+import { IUnorderedListProps } from "./types";
+import { UnorderedListExtended } from "../UnorderedListExtended";
+import { UnorderedListItem } from "./UnorderedListItem";
+
+const UnorderedListRoot = React.forwardRef<HTMLUListElement, IUnorderedListProps>(({ items, ...restProps }, ref) => (
+    <UnorderedListExtended {...restProps} ref={ref}>
+        {items?.map(({ key, ...restItem }) => (
+            <UnorderedListItem key={key} {...restItem} />
+        ))}
+    </UnorderedListExtended>
+));
+
+UnorderedListRoot.displayName = "UnorderedList";
 
 /** Маркированный список. */
-export const UnorderedList = Object.assign(
-    React.forwardRef<HTMLUListElement, IUnorderedListProps>(({ className, ...restProps }, ref) => (
-        <ul
-            className={clsx(styles.unorderedList, className)}
-            {...restProps}
-            data-tx={process.env.npm_package_version}
-            ref={ref}
-        />
-    )),
-    {
-        Item: UnorderedListItem,
-    },
-);
-
-UnorderedList.displayName = "UnorderedList";
+export const UnorderedList = Object.assign(UnorderedListRoot, {
+    Item: UnorderedListItem,
+});

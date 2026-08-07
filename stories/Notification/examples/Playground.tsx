@@ -57,7 +57,15 @@ export const Playground = (args: INotificationPlaygroundProps) => {
         bodyChildren.push(<Notification.Body.Content key="content">{args.contentText}</Notification.Body.Content>);
     }
     if (args.showList && listValues.length > 0) {
-        bodyChildren.push(<Notification.Body.List key="list" values={listValues} />);
+        bodyChildren.push(
+            <Notification.Body.List
+                key="list"
+                items={listValues.map((item, index) => ({
+                    key: `list-item-${index}`,
+                    children: item,
+                }))}
+            />,
+        );
     }
     if (args.showFooter) {
         bodyChildren.push(<Notification.Body.Footer key="footer">Footer text</Notification.Body.Footer>);

@@ -252,6 +252,15 @@ describe("SelectExtendedFieldTarget", () => {
         expect(mockOnClear).toHaveBeenCalledTimes(1);
     });
 
+    it("Should not open dropdown on clear button click", () => {
+        renderTarget({ onClear: mockOnClear, label: "Выбранное значение" });
+
+        fireEvent.click(screen.getByRole("button"));
+
+        expect(mockOnClear).toHaveBeenCalledTimes(1);
+        expect(mockSetOpened).not.toHaveBeenCalled();
+    });
+
     it("Should not render clear button without onClear", () => {
         renderTarget({ label: "Выбранное значение" });
 

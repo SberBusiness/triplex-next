@@ -101,6 +101,14 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             onClick?.(event);
         };
 
+        const handleClearClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+            // Кнопка очистки лежит внутри поля, у которого клик переключает выпадающий блок.
+            // Без остановки всплытия очистка значения заодно раскрывала бы список.
+            // Так же сделано в Chip.Select и Chip.DatePicker.
+            event.stopPropagation();
+            onClear?.();
+        };
+
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
             if (interactionBlocked) {
                 return;
@@ -142,7 +150,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 </FormFieldTarget>
 
                 <FormFieldPostfix>
-                    {onClear && <FormFieldClear onClick={onClear} />}
+                    {onClear && <FormFieldClear onClick={handleClearClick} />}
                     {loading ? (
                         SIZE_TO_LOADER_MAP[size]
                     ) : (

@@ -20,7 +20,7 @@
 └── skills/                              # каноничное место для skills (runtime-neutral)
     ├── update-component-ai-md/SKILL.md
     ├── commit-component/SKILL.md
-    ├── release/SKILL.md                   # оркестратор релиза: 18-часть, затем 17-часть
+    ├── release/SKILL.md                   # оркестратор релиза: 17-часть, затем 18-часть
     ├── release-react17/SKILL.md           # 1-я половина: релиз 0.Y.0 из release-0
     ├── release-react18/SKILL.md           # 2-я половина: релиз 1.Y.0 из main
     ├── release-auto/SKILL.md              # предполёт + запуск релиза из еженедельной routine

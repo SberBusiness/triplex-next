@@ -84,7 +84,7 @@ git merge origin/main
 | `package.json` — React-зависимости | **Всегда из `release-0`**: `react`/`react-dom` `17.0.2`, `@types/react`/`@types/react-dom` `17.0.2`, `@testing-library/react` `12.1.5`, `focus-trap-react` `10.3.0`, `react-resize-detector` `9.1.0`, `@types/react-transition-group` `4.4.9`, `peerDependencies` — `^16.8.0 \|\| ^17.0.0` |
 | `package.json` — всё остальное | Из main (новые/обновлённые зависимости, скрипты, конфиги) |
 | `package-lock.json` | Руками не разрешать. Взять любую сторону, затем перегенерировать: `npm install` |
-| `.github/workflows/release.yml` | **Из main.** Версия на `release-0` устарела (`npm publish` без `--tag`); реально работает main-версия, потому что для события `release` GitHub берёт workflow из default-ветки. Брать main — значит сокращать расхождение |
+| `.github/workflows/release.yml` | **Из main.** Копия в `release-0` не используется ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, а при `workflow_dispatch` — из `--ref main`. Пока перелитие не сделано, в `release-0` лежит версия без `workflow_dispatch` — она просто мёртвая. Брать main — значит сокращать расхождение |
 | `stories/release-notes/v0/*` | Из `release-0` (в main их нет) |
 | `stories/release-notes/v1/*` | Из main |
 | `src/**` | По принципу выше — см. известные адаптации ниже |
@@ -378,16 +378,23 @@ npm view @sberbusiness/triplex-next dist-tags --json
 skill запускали отдельно). Тогда `npm install @sberbusiness/triplex-next`
 отдаёт всем React 17-сборку.
 
-Это авария, а не незавершённый релиз. В отчёте — первой строкой. Чинится
-довыпуском `1.Y.0` через [`release-react18`](../release-react18/SKILL.md);
-если это невозможно сейчас — вручную вернуть тег на предыдущую React
-18-версию:
+Это авария, а не незавершённый релиз. В отчёте — первой строкой.
+
+**Основной способ починки — довыпустить `1.Y.0`** через
+[`release-react18`](../release-react18/SKILL.md): тогда `latest` встаёт на неё
+сам, и потребители получают то, что должны.
+
+**Запасной, если выпустить `1.Y.0` сейчас нельзя** — вернуть тег на
+предыдущую React 18-версию:
 
 ```bash
 npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest
 ```
 
-Сам тег в unattended не трогай — сообщи и остановись.
+Это **единственный** случай, когда `dist-tags` правят руками, и только
+в интерактивном режиме, с явным подтверждением разработчика: команда
+затрагивает всех потребителей пакета. В unattended тег не трогай — сообщи
+и остановись, решение за человеком.
 
 ## Unattended-режим
 
@@ -424,8 +431,11 @@ npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest
 - Не менять смысл release notes при переносе v1 → v0 и не перезаписывать
   заполненный человеком `v0/<V0>.mdx`.
 - Не помечать `0.x` как Latest на GitHub.
-- Не трогать `dist-tags` руками: то, что `latest` временно на `0.x`, —
-  ожидаемое состояние, его снимает React 18-половина.
+- Не трогать `dist-tags` руками в штатном выпуске: то, что `latest` временно
+  на `0.x`, — ожидаемое состояние, его снимает React 18-половина. Ручной
+  `npm dist-tag add` допустим ровно в одном случае — восстановление зависшего
+  `latest`, интерактивно и с подтверждением разработчика (см. «Если `latest`
+  завис на 0.x»). В unattended — никогда.
 - Не запускаться после `1.Y.0` в unattended: `latest` уедет на `0.x`, а
   вернуть его будет некому.
 - Не форс-пушить в `release-0` и не переписывать её историю.

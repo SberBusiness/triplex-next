@@ -1,15 +1,42 @@
 name: Release, publish npm package & deploy Storybook
 
 on:
+  # Обычный путь: человек создаёт GitHub Release, workflow публикует.
   release:
     types: [published]
 
+  # Путь для облачной routine: ей запрещено создавать релизы напрямую
+  # (HTTP 403 «not permitted for this session type»), зато разрешён
+  # `gh workflow run`. Здесь релиз создаётся внутри прогона, после публикации.
+  #
+  # Почему не отдельный workflow «создать релиз»: релиз, созданный через
+  # GITHUB_TOKEN, по правилам GitHub не триггерит другие workflow — этот
+  # файл просто не запустился бы. Поэтому создание и публикация живут вместе.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Версия и тег релиза, например 1.41.0"
+        required: true
+      target:
+        description: "Ветка, на которую вешается тег"
+        required: true
+        default: main
+      make_latest:
+        description: "Пометить релиз как Latest (только для 1.x)"
+        type: boolean
+        default: false
+      notes:
+        description: "Текст release notes в markdown"
+        required: true
+
 permissions:
-  contents: write   # нужно для загрузки ассетов в релиз
+  contents: write   # нужно для создания релиза и загрузки ассетов
 
 env:
   STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
   STORYBOOK_URL_BASE: "https://storybook.triplex-dev.ru"
+  # Единый источник тега для обоих триггеров.
+  RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
 
 jobs:
   build-and-publish:
@@ -18,7 +45,13 @@ jobs:
       contents: write
 
     steps:
+      # При `release: published` GITHUB_SHA — коммит, на который повешен тег.
+      # При `workflow_dispatch` файл workflow всегда берётся из main (routine
+      # диспатчит с `--ref main`), поэтому ветку для сборки указываем явно —
+      # иначе для 0.x собрался бы main.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target || github.sha }}
 
       - uses: actions/setup-node@v4
         with:
@@ -39,27 +72,42 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
           cd dist
           PKG_VERSION=$(node -p "require('./package.json').version")
-          if [ "${PKG_VERSION}" != "${GITHUB_REF_NAME}" ]; then
-            echo "❌ dist/package.json version (${PKG_VERSION}) != release tag (${GITHUB_REF_NAME})"
+          if [ "${PKG_VERSION}" != "${RELEASE_TAG}" ]; then
+            echo "❌ dist/package.json version (${PKG_VERSION}) != release tag (${RELEASE_TAG})"
             exit 1
           fi
-          if [[ "${GITHUB_REF_NAME}" == 1.* ]]; then
-            echo "Publishing React 18 as latest"
-            npm publish --access public --tag latest
-          elif [[ "${GITHUB_REF_NAME}" == 0.* ]]; then
-            echo "Publishing React 17 as react17"
-            npm publish --access public --tag react17
-          else
-            echo "❌ Unknown version prefix: ${GITHUB_REF_NAME}. Expected 0.* (react17) or 1.* (latest)."
-            exit 1
-          fi
+          case "${RELEASE_TAG}" in
+            0.*|1.*) ;;
+            *) echo "❌ Unknown version prefix: ${RELEASE_TAG}. Expected 0.* or 1.*."; exit 1 ;;
+          esac
+          # dist-tag не указываем намеренно: теги не проносятся во внутренний
+          # registry, `--tag` там игнорируется, и `latest` всегда встаёт на
+          # последнюю опубликованную версию. Управляет этим порядок выпуска —
+          # сначала 0.Y.0, следом 1.Y.0 (см. .agents/skills/release/SKILL.md).
+          npm publish --access public
+
+      # Релиз создаётся только на пути workflow_dispatch и только после того,
+      # как пакет реально ушёл в npm: если сборка или публикация упали, релиза
+      # не появится вовсе. На пути `release: published` он уже существует.
+      #
+      # Значения идут через env, а не через ${{ }} прямо в run: их задаёт тот,
+      # кто запускает workflow, и подстановка в shell была бы точкой инъекции.
+      - name: Create GitHub Release
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET: ${{ inputs.target }}
+          NOTES: ${{ inputs.notes }}
+          MAKE_LATEST: ${{ inputs.make_latest }}
+        run: |
+          printf '%s' "$NOTES" > release-notes.md
+          if [ "${MAKE_LATEST}" = "true" ]; then LATEST_FLAG="--latest"; else LATEST_FLAG="--latest=false"; fi
+          gh release create "${RELEASE_TAG}" --target "${TARGET}" --title "${RELEASE_TAG}" \
+            "${LATEST_FLAG}" --notes-file release-notes.md
+          rm -f release-notes.md
 
       # Упаковать dist.zip как release asset.
-      # Тег приходит через env, а не через ${{ }} прямо в run: значение задаёт тот,
-      # кто создаёт релиз, и подстановка в shell была бы точкой инъекции.
       - name: Create dist.zip
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: zip -r "dist-${RELEASE_TAG}.zip" dist
 
       # MCP-бандл собирается только для стабильных релизов React 18 (ровно 1.Y.0):
@@ -71,8 +119,9 @@ jobs:
       - name: Detect MCP bundle eligibility
         id: mcp
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-          IS_PRERELEASE: ${{ github.event.release.prerelease }}
+          # На пути workflow_dispatch поля release нет — релиз мы создаём сами
+          # и всегда как стабильный, поэтому prerelease по умолчанию false.
+          IS_PRERELEASE: ${{ github.event.release.prerelease || false }}
         run: |
           if [[ "${IS_PRERELEASE}" == "false" && "${RELEASE_TAG}" =~ ^1\.[0-9]+\.0$ ]]; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
@@ -83,8 +132,6 @@ jobs:
 
       - name: Generate MCP bundle
         if: steps.mcp.outputs.eligible == 'true'
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: npm run generateMcpData -- --out "mcp-data-${RELEASE_TAG}.json"
 
       # fail_on_unmatched_files: по умолчанию action молча пропускает ненайденные
@@ -92,7 +139,7 @@ jobs:
       - name: Upload build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist-${{ github.event.release.tag_name }}.zip
+          files: dist-${{ env.RELEASE_TAG }}.zip
           fail_on_unmatched_files: true
 
       # Отдельным шагом: для 0.* бандла нет, и указывать его в files выше значило бы
@@ -102,7 +149,7 @@ jobs:
         if: steps.mcp.outputs.eligible == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          files: mcp-data-${{ github.event.release.tag_name }}.json
+          files: mcp-data-${{ env.RELEASE_TAG }}.json
           fail_on_unmatched_files: true
 
       # ---- Сборка и деплой Storybook ----
@@ -116,13 +163,10 @@ jobs:
 
       - name: Deploy Storybook to server
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
           SSH_USER: ${{ secrets.STORYBOOK_SSH_USER }}
         run: |
           ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}"
           rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}/"
 
       - name: Output Storybook URL
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: echo "Storybook deployed ${STORYBOOK_URL_BASE}/releases/${RELEASE_TAG}"

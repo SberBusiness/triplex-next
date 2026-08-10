@@ -5,3 +5,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v1.42.0</Title>
 
 <Heading>Изменения</Heading>
+
+**MobileView**
+
+- AI-рефакторинг: у `MobileView` появился `displayName`, у `useMobileView` — явный тип возвращаемого значения `boolean`, уточнён JSDoc компонента и хука. Добавлены unit-тесты (15 кейсов на компонент и хук) и stories по modern pattern, создан `MobileView-ai.md`. Публичный API и поведение не изменены: props `children` и `fallback`, сигнатура `useMobileView`, barrel-экспорты и граница мобильной ширины (`EScreenWidth.SM_MAX`, `max-width: 767px`) — как были.

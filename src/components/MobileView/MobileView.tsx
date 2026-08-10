@@ -13,9 +13,12 @@ export interface IMobileViewProps {
 /**
  * Компонент, который рендерит children в случае просмотра на мобильном устройстве.
  * В противном случае рендерится fallback.
+ * Сокращение над MediaWidth с maxWidth равным EScreenWidth.SM_MAX — собственной разметки не добавляет.
  */
 export const MobileView: React.FC<IMobileViewProps> = ({ children, fallback }) => (
     <MediaWidth maxWidth={EScreenWidth.SM_MAX} fallback={fallback}>
         {children}
     </MediaWidth>
 );
+
+MobileView.displayName = "MobileView";

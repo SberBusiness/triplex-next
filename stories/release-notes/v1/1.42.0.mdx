@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**MobileView**
+
+- AI-рефакторинг: добавлены unit-тесты (14 кейсов на компонент и хук `useMobileView`) и stories по modern pattern, создан `MobileView-ai.md`, у `MobileView` появился `displayName`, у `useMobileView` — явный тип возвращаемого значения `boolean`, файл хука переименован из `useMobileView.tsx` в `useMobileView.ts` (JSX в нём нет; путь в собранном пакете — `components/MobileView/useMobileView.js` — не изменился). Публичный API и поведение не изменены: props `children` и `fallback`, сигнатура `useMobileView`, barrel-экспорты и граница мобильной ширины (`EScreenWidth.SM_MAX`, `max-width: 767px`) — как были; `forwardRef` у компонента по-прежнему осознанно отсутствует, собственной разметки он не рендерит.
+
 **SelectExtendedField**
 
 - Исправлено: `onOpen` / `onClose` ложно срабатывали при повторном маунте в React 18 StrictMode — эффект опирался на флаг «смонтирован». Теперь сравнивается предыдущее значение состояния открытости, поэтому колбэки вызываются только на реальную смену состояния и по-прежнему не вызываются на первом рендере.

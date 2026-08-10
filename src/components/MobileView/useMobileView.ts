@@ -6,6 +6,7 @@ const MOBILE_QUERY = `(max-width: ${EScreenWidth.SM_MAX})`;
 
 /**
  * Хук для проверки, является ли устройство мобильным (экран <= SM_MAX).
+ * Условие совпадает с условием компонента MobileView.
  * @returns true, если ширина экрана соответствует мобильному устройству
  */
-export const useMobileView = () => useMatchMedia(MOBILE_QUERY);
+export const useMobileView = (): boolean => useMatchMedia(MOBILE_QUERY);

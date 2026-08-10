@@ -74,7 +74,7 @@ LESS-переменными в `styles/Page.module.less` (`@page-padding-*`, `@s
 - `Page` собран через `Object.assign(forwardRef(...), { Body, Header, Footer })` — статические
   свойства `Header` / `Body` / `Footer` должны сохраняться.
 - Корневые классы `page` и `global-page` на корневом `<div>` — не переименовывать (используются
-  в стилях, в т.ч. в sticky-селекторах `.global-LB-more-media-point-0`).
+  в стилях; sticky-стили частей задаются медиазапросом `min-width: 992px` и `min-height: 801px`).
 - Экспорты `Page`, `IPageProps` идут в barrel `src/components/Page/index.ts` — сохранять.
   Там же реэкспортируются части и их enum'ы (`EHeaderPageType`, `EFooterPageType`, `EBodyPageType`,
   `EBodyPageVerticalMargin`).

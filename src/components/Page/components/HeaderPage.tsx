@@ -23,7 +23,7 @@ export interface IHeaderPageTypeFirstProps extends IHeaderProps {
     children: React.ReactNode;
     /** Тип компонента HeaderPage. FIRST оборачивает заголовок в Island (карточку). */
     type: EHeaderPageType.FIRST;
-    /** Header прилипает к верхней границе экрана при скролле. Только для типа FIRST внутри LightBox. */
+    /** Header прилипает к верхней границе при скролле. Только для типа FIRST. */
     sticky?: boolean;
     /** Размер острова (Island). Доступен только для типа FIRST. */
     size?: EComponentSize;

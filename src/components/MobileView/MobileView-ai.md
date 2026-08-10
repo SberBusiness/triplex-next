@@ -172,4 +172,4 @@ viewport `xs` (575px) рендерится мобильный вариант, н
 
 | Дата | Изменение |
 |---|---|
-| 2026-08-10 | Создан документ. AI-рефакторинг (TRI-59): `useMobileView.tsx` → `useMobileView.ts` (в файле нет JSX), явный тип возврата у хука, `displayName` у `MobileView`, дополнен JSDoc, добавлены unit-тесты (14 кейсов) и stories по modern pattern. Публичный API не изменён (props, сигнатура хука, barrel-экспорты; `forwardRef` по-прежнему осознанно отсутствует). |
+| 2026-08-10 | Создан документ. AI-рефакторинг (TRI-59): `useMobileView.tsx` → `useMobileView.ts` (в файле нет JSX), явный тип возврата у хука, `displayName` у `MobileView`, дополнен JSDoc, добавлены unit-тесты (15 кейсов) и stories по modern pattern. Публичный API не изменён (props, сигнатура хука, barrel-экспорты; `forwardRef` по-прежнему осознанно отсутствует). |

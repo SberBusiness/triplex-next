@@ -8,10 +8,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **MobileView**
 
-- AI-рефакторинг: у `MobileView` появился `displayName`, у `useMobileView` — явный тип возвращаемого значения `boolean`, уточнён JSDoc компонента и хука.
-- Файл хука переименован из `useMobileView.tsx` в `useMobileView.ts` — JSX в нём нет. Путь в собранном пакете (`components/MobileView/useMobileView.js`) не изменился.
-- Добавлены unit-тесты (14 кейсов на компонент и хук) и stories по modern pattern, создан `MobileView-ai.md`.
-- Публичное поведение не изменилось: props `children` и `fallback`, сигнатура `useMobileView`, barrel-экспорты и граница мобильной ширины (`EScreenWidth.SM_MAX`, `max-width: 767px`) — как были. `forwardRef` у компонента по-прежнему осознанно отсутствует: собственной разметки он не рендерит.
+- AI-рефакторинг: у `MobileView` появился `displayName`, у `useMobileView` — явный тип возвращаемого значения `boolean`, уточнён JSDoc компонента и хука. Добавлены unit-тесты (15 кейсов на компонент и хук) и stories по modern pattern, создан `MobileView-ai.md`. Публичный API и поведение не изменены: props `children` и `fallback`, сигнатура `useMobileView`, barrel-экспорты и граница мобильной ширины (`EScreenWidth.SM_MAX`, `max-width: 767px`) — как были.
 
 **SelectExtendedField**
 

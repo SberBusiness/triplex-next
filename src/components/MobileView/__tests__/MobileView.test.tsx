@@ -59,6 +59,14 @@ describe("MobileView", () => {
             expect(container).toBeEmptyDOMElement();
         });
 
+        it("should render nothing when the matched fallback is null", () => {
+            setMatches(false);
+
+            const { container } = render(<MobileView fallback={null}>{mockChildren}</MobileView>);
+
+            expect(container).toBeEmptyDOMElement();
+        });
+
         it("should not wrap the rendered branch into its own markup", () => {
             setMatches(false);
 

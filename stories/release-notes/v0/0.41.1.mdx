@@ -1,0 +1,18 @@
+import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+<Meta title="release-notes/v0/0.41.1" />
+
+<Title>v0.41.1</Title>
+
+<Heading>Изменения</Heading>
+
+**Page**
+
+- `Page.Header` и `Page.Footer` со свойством `sticky` теперь прилипают и вне `LightBox` при ширине viewport от 992px. При высоте viewport до 800px включительно sticky-позиционирование не применяется.
+
+**SelectExtendedField**
+
+- Исправлено: `onOpen` / `onClose` ложно срабатывали при повторном маунте в React 18 StrictMode — эффект опирался на флаг «смонтирован». Теперь сравнивается предыдущее значение состояния открытости, поэтому колбэки вызываются только на реальную смену состояния и по-прежнему не вызываются на первом рендере.
+- Исправлено: клик по кнопке очистки (`onClear`) в `SelectExtendedFieldTarget` заодно раскрывал выпадающий блок — событие всплывало до обработчика клика по полю. Теперь всплытие останавливается, как это уже сделано в `Chip.Select` и `Chip.DatePicker`. Затрагивает также `SelectField` и `MultiselectField`, использующие тот же `Target`.
+- Исправлено: `SelectExtendedFieldTarget` подмешивал в атрибут `class` литерал `undefined` — в `clsx` попадали ключи `styles.loading`, `styles.placeholder` и `styles.label`, которых нет в LESS-модуле компонента. Стили этих классов никогда не существовали, поэтому визуально ничего не меняется. Затрагивает также `SelectField` и `MultiselectField.Target`, использующие тот же компонент.
+- AI-рефакторинг: JSDoc на всех props и рендер-функциях, константы-маппинги размера приведены к общему стилю именования, коды клавиш открытия вынесены в константу модуля, слушатель `mousedown` на документе навешивается только пока выпадающий блок открыт, callback-ref корневого элемента стабилизирован, в `SelectExtendedFieldTarget` убрана неиспользуемая внутренняя ссылка (ref по-прежнему указывает на элемент значения), в `SelectExtendedFieldDropdownDefault` дедуплицирован список опций десктопной и мобильной версий, у `SelectExtendedFieldDropdown` и `SelectExtendedFieldDropdownDefault` добавлен `displayName`. Unit-тесты разбиты по субкомпонентам и расширены с 42 до 69 кейсов, stories переведены на modern pattern, создан `SelectExtendedField-ai.md`. Публичный API не изменён (props, их типы, barrel-экспорты, `forwardRef` — как были).

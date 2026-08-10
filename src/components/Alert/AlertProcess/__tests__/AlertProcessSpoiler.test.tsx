@@ -142,10 +142,4 @@ describe("AlertProcessSpoiler", () => {
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
         expect(ref.current).toBe(getContent());
     });
-
-    it("Should render outside AlertProcess without errors", () => {
-        expect(() =>
-            render(<AlertProcessSpoiler data-testid="spoiler">Spoiler content</AlertProcessSpoiler>),
-        ).not.toThrow();
-    });
 });

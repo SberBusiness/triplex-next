@@ -62,15 +62,10 @@ describe("AlertProcess", () => {
         expect(screen.getByTestId("info-icon")).toBeInTheDocument();
     });
 
-    it("Should apply custom className", () => {
+    it("Should merge custom className into the base classes", () => {
         render(<AlertProcess type={EAlertType.INFO} className="custom-class" data-testid="alert" />);
         const alert = getAlert();
         expect(alert).toHaveClass("custom-class");
-    });
-
-    it("Should keep base classes when custom className is passed", () => {
-        render(<AlertProcess type={EAlertType.INFO} className="custom-class" data-testid="alert" />);
-        const alert = getAlert();
         expect(alert).toHaveClass("alertProcess");
         expect(alert).toHaveClass("alertTypeInfo");
     });

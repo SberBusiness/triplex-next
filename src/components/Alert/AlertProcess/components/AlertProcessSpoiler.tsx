@@ -20,6 +20,11 @@ export interface IAlertProcessSpoilerProps extends React.HTMLAttributes<HTMLDivE
  * Полностью управляемый: собственного состояния открытия не хранит, по клику на кнопку
  * вызывает `onOpen` со следующим значением. Пока смонтирован — сообщает об этом
  * родительскому `AlertProcess` через контекст, чтобы тот зарезервировал место под кнопку.
+ *
+ * Внешний div — служебная обёртка вокруг раскрываемого содержимого и кнопки раскрытия.
+ * `className`, `ref` и остальные props адресуются элементу содержимого, а не обёртке:
+ * так `...rest` приземлялся и до перевода компонента на `forwardRef`, поэтому цель
+ * сохранена ради обратной совместимости.
  */
 export const AlertProcessSpoiler = React.forwardRef<HTMLDivElement, IAlertProcessSpoilerProps>(
     ({ children, className, open, onOpen, ...rest }, ref) => {

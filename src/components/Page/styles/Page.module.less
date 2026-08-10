@@ -21,8 +21,8 @@
     }
 }
 
-// Breakpoint для экранов шире 1024px (> 1024px).
-.global-LB-more-media-point-0 {
+// Sticky применяется для экранов шириной от 992px и высотой от 801px.
+@media (min-width: @screen-lg) and (min-height: 801px) {
     .headerPageTypeFirst.sticky {
         z-index: @page-header-sticky-z-index;
         position: sticky;

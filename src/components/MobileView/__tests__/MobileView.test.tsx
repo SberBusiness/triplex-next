@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { MobileView } from "../MobileView";
 
 describe("MobileView", () => {
@@ -30,6 +30,10 @@ describe("MobileView", () => {
             writable: true,
             value: mockMatchMedia,
         });
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     describe("rendering", () => {

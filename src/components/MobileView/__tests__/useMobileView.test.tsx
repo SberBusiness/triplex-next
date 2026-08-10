@@ -1,6 +1,26 @@
-import { renderHook, act } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import React from "react";
+import { render, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useMobileView } from "../useMobileView";
+
+/**
+ * Рендерит компонент, вызывающий useMobileView, и отдаёт его результат наружу теста.
+ * Обёртка вместо renderHook: в release-0 (React 17) запинен @testing-library/react 12,
+ * где renderHook ещё не экспортируется.
+ */
+const renderUseMobileView = () => {
+    const results: boolean[] = [];
+
+    const MobileViewReader: React.FC = () => {
+        results.push(useMobileView());
+
+        return null;
+    };
+
+    const { unmount } = render(<MobileViewReader />);
+
+    return { unmount, getLastResult: () => results[results.length - 1] };
+};
 
 describe("useMobileView", () => {
     const mockMatchMedia = vi.fn();
@@ -28,26 +48,30 @@ describe("useMobileView", () => {
         });
     });
 
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it("should return true when screen width matches mobile", () => {
         setMatches(true);
 
-        const { result } = renderHook(() => useMobileView());
+        const { getLastResult } = renderUseMobileView();
 
-        expect(result.current).toBe(true);
+        expect(getLastResult()).toBe(true);
     });
 
     it("should return false when screen width does not match mobile", () => {
         setMatches(false);
 
-        const { result } = renderHook(() => useMobileView());
+        const { getLastResult } = renderUseMobileView();
 
-        expect(result.current).toBe(false);
+        expect(getLastResult()).toBe(false);
     });
 
     it("should use the same media query as MobileView", () => {
         setMatches(false);
 
-        renderHook(() => useMobileView());
+        renderUseMobileView();
 
         expect(mockMatchMedia).toHaveBeenCalledWith("(max-width: 767px)");
     });
@@ -55,25 +79,25 @@ describe("useMobileView", () => {
     it("should update the returned value on media query change", () => {
         setMatches(false);
 
-        const { result } = renderHook(() => useMobileView());
+        const { getLastResult } = renderUseMobileView();
 
         act(() => {
             getChangeHandler()({ matches: true });
         });
 
-        expect(result.current).toBe(true);
+        expect(getLastResult()).toBe(true);
 
         act(() => {
             getChangeHandler()({ matches: false });
         });
 
-        expect(result.current).toBe(false);
+        expect(getLastResult()).toBe(false);
     });
 
     it("should unsubscribe from the media query on unmount", () => {
         setMatches(true);
 
-        const { unmount } = renderHook(() => useMobileView());
+        const { unmount } = renderUseMobileView();
 
         unmount();
 

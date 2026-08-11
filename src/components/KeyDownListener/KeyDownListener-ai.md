@@ -108,36 +108,9 @@ version: "1.0"
 
 ### `ComposedKeyDownListener` (`src/components/KeyDownListener/ComposedKeyDownListener.tsx`)
 
-Композитор: оборачивает `children` в `KeyDownListener` по одному на каждый
-элемент `keyDownListeners`. Экспортируется из того же barrel вместе со своим
-интерфейсом props `IComposedKeyDownListenerProps` — публичное API, не менять.
-
-Собственного AI.md пока не имеет — вся его логика описана здесь. По правилу
-`docs/ai/CONTEXT.md` § «Когда создавать `{ComponentName}-ai.md`» он его
-заслуживает (оба условия выполнены: barrel-экспорт + собственный prop
-`keyDownListeners`), но по scope задачи TRI-48 соседние экспортируемые
-компоненты выносятся в отдельные задачи. Компонент добавлен отдельной строкой в
-`docs/ai/ROADMAP.md`, документ будет заведён своей задачей. Следствие, о котором
-нужно знать до тех пор: `scripts/generateMcpData.ts` собирает записи по файлам
-`src/components/*/*-ai.md`, поэтому отдельной записи в `mcp-data.json` у
-`ComposedKeyDownListener` нет — агент найдёт его только через этот документ.
-
-| Prop | Тип | Описание |
-|---|---|---|
-| `keyDownListeners` | `IKeyDownListenerProps[]` | Конфигурация слушателей. Используются только `eventKeyCode` и `onMatch`, поле `children` каждого элемента игнорируется |
-| `children` | `React.ReactNode` | Содержимое. Рендерится как есть; при пустом `keyDownListeners` — просто `children` |
-
-Первый элемент массива оказывается самым внутренним слушателем. На порядок
-срабатывания это влияет слабо — все слушатели подписаны на `window` независимо
-друг от друга, а порядок вызова совпадает с порядком элементов массива.
-
-**Ограничение: длина `keyDownListeners` должна быть стабильной между рендерами.**
-Глубина вложенности равна длине массива, поэтому при её изменении на позиции,
-где раньше были `children`, React монтирует новый `KeyDownListener`, а сами
-`children` уезжают на уровень ниже и перемонтируются: DOM-узлы пересоздаются,
-введённые значения инпутов, фокус и текущие анимации теряются. Если набор
-слушателей динамический — держи массив постоянной длины (например, с
-`onMatch`-заглушками) или используй `KeyDownListener` напрямую.
+Композитор: рендерит по одному `KeyDownListener` на элемент `keyDownListeners`.
+Используй, когда нужно несколько разных клавиш с разными обработчиками.
+Документация — `src/components/KeyDownListener/ComposedKeyDownListener-ai.md`.
 
 ### Потребители внутри библиотеки
 
@@ -159,8 +132,13 @@ version: "1.0"
 | `Playground` | `Playground.tsx` | Интерактивный выбор `eventKeyCode` и счётчик срабатываний `onMatch` |
 | `Default` | `Default.tsx` | Слушатель одной клавиши: панель скрывается по `Esc` |
 | `WithMultipleKeys` | `WithMultipleKeys.tsx` | Массив кодов в `eventKeyCode`; нажатая клавиша различается по `event.keyCode` |
-| `Example` | `Example.tsx` | `ComposedKeyDownListener`: `Enter` подтверждает, `Esc` отменяет |
-| `VisualTests` | — | Состояние после срабатывания слушателя: `play` диспатчит на `window` `keydown` с `keyCode` клавиши `Esc` |
+
+Набор целиком исключён из скриншот-тестов (`testRunner: { skip: true }` в `meta`):
+собственной разметки компонент не рендерит, на скриншот попадала бы только
+обвязка примеров. Поведение слушателя покрыто unit-тестами.
+
+Примеры `ComposedKeyDownListener` живут в собственном наборе stories —
+`stories/ComposedKeyDownListener/`.
 
 ---
 
@@ -168,5 +146,6 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-11 | TRI-112: у `ComposedKeyDownListener` появились собственный `ComposedKeyDownListener-ai.md` и набор stories `stories/ComposedKeyDownListener/`; раздел «Связанные компоненты» сокращён до ссылки, story `Example` (демонстрация композитора) перенесена в новый набор. Ограничение на стабильную длину `keyDownListeners` снято — композитор рендерит слушателей соседями к `children`. Набор stories `KeyDownListener` исключён из скриншот-тестов, story `VisualTests` и baseline удалены — визуального интерфейса у компонента нет. Реализация самого `KeyDownListener` не менялась. |
 | 2026-08-04 | По ревью PR #502: интерфейс props `IComposedKeyDownListenerProps` стал экспортируемым — публичная поверхность пакета расширена аддитивно. `ComposedKeyDownListener` добавлен отдельной строкой в `docs/ai/ROADMAP.md`, собственный AI.md вынесен в отдельную задачу. |
 | 2026-08-04 | Создан документ. AI-рефакторинг (TRI-48): JSDoc на props `IKeyDownListenerProps` и `ComposedKeyDownListener`, ветвление в `handleKeyDown` сведено к одной проверке (снят `eslint-disable`), в `ComposedKeyDownListener` убран `as JSX.Element` и добавлен `displayName`, unit-тесты (16 кейсов на оба компонента), stories по modern pattern. Публичный API не менялся; компонент остаётся class-компонентом, `forwardRef` осознанно отсутствует. |

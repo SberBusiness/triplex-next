@@ -1,56 +1,64 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import clsx from "clsx";
 import { isKey, EVENT_KEY_CODES } from "../../utils/keyboard";
 import { KeyDownListener } from "../KeyDownListener";
-import clsx from "clsx";
-import styles from "./styles/SelectExtendedField.module.less";
+import { IDropdownListItemProps } from "../Dropdown";
 import { SelectExtendedFieldTarget } from "./components/SelectExtendedFieldTarget";
 import { SelectExtendedFieldDropdown } from "./components/SelectExtendedFieldDropdown";
-import { IDropdownListItemProps } from "../Dropdown";
+import styles from "./styles/SelectExtendedField.module.less";
 
-/* Свойства опции списка. */
+/** Свойства опции списка. */
 export interface ISelectExtendedFieldDefaultOption extends Omit<
     IDropdownListItemProps,
     "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
 > {
-    /* Значение опции. */
+    /** Значение опции. */
     value: string;
-    /* Название опции. */
+    /** Название опции. */
     label: React.ReactNode;
 }
 
-/* Свойства, передаваемые из Select в функцию рендера target - renderTarget. */
+/** Свойства, передаваемые из SelectExtendedField в функцию рендера target - renderTarget. */
 export interface ISelectExtendedFieldTargetProvideProps {
-    /* Флаг открытости выпадающего списка. */
+    /** Флаг открытости выпадающего блока. */
     opened: boolean;
-    /* Функция открытия/закрытия Select. */
+    /** Функция открытия/закрытия выпадающего блока. */
     setOpened: (opened: boolean) => void;
 }
 
-/* Свойства, передаваемые из Select в функцию рендера dropdown - children. */
+/** Свойства, передаваемые из SelectExtendedField в функцию рендера dropdown - children. */
 export interface ISelectExtendedFieldDropdownProvideProps {
-    /* Флаг открытости выпадающего списка. */
+    /** Флаг открытости выпадающего блока. */
     opened: boolean;
-    /* Функция открытия/закрытия Select. */
+    /** Функция открытия/закрытия выпадающего блока. */
     setOpened: (opened: boolean) => void;
+    /** Ссылка на поле выбора. По ней выпадающий блок считает своё положение. */
     targetRef: React.RefObject<HTMLDivElement>;
+    /** Ссылка на выпадающий блок. Нужна, чтобы клик внутри него не закрывал список. */
     dropdownRef: React.RefObject<HTMLDivElement>;
 }
 
-/* Свойства компонента SelectExtendedField. */
+/** Свойства компонента SelectExtendedField. */
 export interface ISelectExtendedFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
     /** Рендер-функция поля выбора. */
     renderTarget: (props: ISelectExtendedFieldTargetProvideProps) => React.ReactNode;
     /** Рендер-функция выпадающего блока. */
     children: (props: ISelectExtendedFieldDropdownProvideProps) => React.ReactNode;
-    /** Функция, срабатывающая при закрытии выпадающего блока. */
+    /** Функция, срабатывающая при закрытии выпадающего блока. На первом рендере не вызывается. */
     onClose?: () => void;
-    /** Функция, срабатывающая при открытии выпадающего блока. */
+    /** Функция, срабатывающая при открытии выпадающего блока. На первом рендере не вызывается. */
     onOpen?: () => void;
-    /** Закрытие выпадающего блока при нажатии клавиши Tab. */
+    /** Закрытие выпадающего блока при нажатии клавиши Tab. По умолчанию false. */
     closeOnTab?: boolean;
 }
 
-/* Базовый компонент Select. На его основе могут строиться Selects с любыми value, options и target. */
+/**
+ * Базовый компонент Select. На его основе строятся Select'ы с любыми value, options и target.
+ *
+ * Владеет только состоянием открытости: разметку поля выбора отдаёт в renderTarget,
+ * разметку выпадающего блока — в children. Закрывает список по Escape, по клику вне
+ * поля и выпадающего блока, а при closeOnTab — ещё и по Tab.
+ */
 export const SelectExtendedField = Object.assign(
     React.forwardRef<HTMLDivElement, ISelectExtendedFieldProps>((props, ref) => {
         const { className, onKeyDown, children, renderTarget, closeOnTab, onClose, onOpen, ...htmlDivAttributes } =
@@ -59,58 +67,33 @@ export const SelectExtendedField = Object.assign(
         const [opened, setOpened] = useState(false);
         const targetRef = useRef<HTMLDivElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
-        // Stable event handler pattern: колбэки хранятся в рефах, чтобы эффект
-        // не перезапускался при смене ссылок на функции между рендерами.
-        const onOpenRef = useRef(onOpen);
-        const onCloseRef = useRef(onClose);
-        // Флаг для пропуска первого срабатывания эффекта при маунте.
-        const isMountedRef = useRef(false);
+        // Предыдущее состояние открытости. Сравнение со значением, а не флаг "смонтирован",
+        // делает эффект идемпотентным: повторный маунт в StrictMode не вызывает колбэки.
+        const prevOpenedRef = useRef(opened);
+        // Актуальные колбэки хранятся в ref, чтобы эффект зависел только от opened
+        // и не вызывал onOpen/onClose при смене идентичности колбэков между рендерами.
+        const callbacksRef = useRef({ onOpen, onClose });
 
-        // useLayoutEffect без зависимостей синхронизирует рефы после каждого коммита,
-        // гарантируя актуальность колбэков до запуска useEffect.
-        useLayoutEffect(() => {
-            onOpenRef.current = onOpen;
-            onCloseRef.current = onClose;
-        });
+        const setTargetRef = useCallback(
+            (instance: HTMLDivElement | null) => {
+                targetRef.current = instance;
 
-        const setRef = (instance: HTMLDivElement | null) => {
-            targetRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        };
-
-        const handleSetOpened = useCallback((newOpened: boolean) => {
-            setOpened(newOpened);
-        }, []);
-
-        const listenMouseDown = useCallback(
-            (event: Event) => {
-                if (opened) {
-                    if (
-                        !targetRef.current?.contains(event.target as Node) &&
-                        !dropdownRef.current?.contains(event.target as Node)
-                    ) {
-                        setOpened(false);
-                    }
+                if (typeof ref === "function") {
+                    ref(instance);
+                } else if (ref) {
+                    ref.current = instance;
                 }
             },
-            [opened],
+            [ref],
         );
 
         const closeDropdown = useCallback(() => {
-            if (opened) {
-                setOpened(false);
-            }
-        }, [opened]);
+            setOpened(false);
+        }, []);
 
         const handleKeyDown = useCallback(
             (event: React.KeyboardEvent<HTMLDivElement>) => {
-                const key = event.code || event.keyCode;
-
-                if (closeOnTab && isKey(key, "TAB")) {
+                if (closeOnTab && isKey(event.code || event.keyCode, "TAB")) {
                     closeDropdown();
                 }
 
@@ -119,25 +102,43 @@ export const SelectExtendedField = Object.assign(
             [closeOnTab, closeDropdown, onKeyDown],
         );
 
+        // Пока список открыт, клик вне поля и вне выпадающего блока закрывает его.
         useEffect(() => {
-            document.addEventListener("mousedown", listenMouseDown);
-            return () => {
-                document.removeEventListener("mousedown", listenMouseDown);
-            };
-        }, [listenMouseDown]);
-
-        // Вызываем onOpen/onClose только при реальных переходах opened,
-        // пропуская первое срабатывание при маунте (opened = false по умолчанию).
-        useEffect(() => {
-            if (!isMountedRef.current) {
-                isMountedRef.current = true;
+            if (!opened) {
                 return;
             }
 
+            const handleDocumentMouseDown = (event: MouseEvent) => {
+                const eventTarget = event.target as Node;
+
+                if (!targetRef.current?.contains(eventTarget) && !dropdownRef.current?.contains(eventTarget)) {
+                    setOpened(false);
+                }
+            };
+
+            document.addEventListener("mousedown", handleDocumentMouseDown);
+
+            return () => {
+                document.removeEventListener("mousedown", handleDocumentMouseDown);
+            };
+        }, [opened]);
+
+        useEffect(() => {
+            callbacksRef.current = { onOpen, onClose };
+        });
+
+        useEffect(() => {
+            // Колбэки вызываются только на смену состояния, но не на первом рендере.
+            if (prevOpenedRef.current === opened) {
+                return;
+            }
+
+            prevOpenedRef.current = opened;
+
             if (opened) {
-                onOpenRef.current?.();
+                callbacksRef.current.onOpen?.();
             } else {
-                onCloseRef.current?.();
+                callbacksRef.current.onClose?.();
             }
         }, [opened]);
 
@@ -146,14 +147,14 @@ export const SelectExtendedField = Object.assign(
                 <div
                     className={clsx(styles.selectExtendedField, className)}
                     onKeyDown={handleKeyDown}
-                    ref={setRef}
+                    ref={setTargetRef}
                     {...htmlDivAttributes}
                 >
-                    {renderTarget({ opened, setOpened: handleSetOpened })}
+                    {renderTarget({ opened, setOpened })}
                     {children({
                         dropdownRef,
                         opened,
-                        setOpened: handleSetOpened,
+                        setOpened,
                         targetRef,
                     })}
                 </div>

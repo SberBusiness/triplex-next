@@ -23,7 +23,7 @@ export interface IFooterPageTypeFirstProps extends IFooterProps {
     children: React.ReactNode;
     /** Тип компонента FooterPage. FIRST оборачивает футер в Island (карточку). */
     type: EFooterPageType.FIRST;
-    /** Footer прилипает к нижней границе экрана при скролле. Только для типа FIRST внутри LightBox. */
+    /** Footer прилипает к нижней границе при скролле. Только для типа FIRST. */
     sticky?: boolean;
     /** Размер острова (Island). Доступен только для типа FIRST. */
     size?: EComponentSize;

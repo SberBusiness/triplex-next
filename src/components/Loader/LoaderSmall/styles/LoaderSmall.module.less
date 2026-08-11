@@ -48,23 +48,26 @@
         }
     }
 
-    & .dot {
+    .dot {
         border-radius: 50%;
-    }
-
-    .dot1 {
         animation: dotCycleSmall 0.9s infinite;
     }
-    
-    .dot2 {
-        animation: dotCycleSmall 0.9s infinite 0.15s;
+
+    // Точки гаснут по очереди — фаза сдвигается задержкой анимации.
+    // Нулевая задержка задана явно: без правила класс .dot1 исчезнет из CSS-модуля,
+    // а вместе с ним — и из разметки компонента.
+    .dot1 {
+        animation-delay: 0s;
     }
-    
+
+    .dot2 {
+        animation-delay: 0.15s;
+    }
+
     .dot3 {
-        animation: dotCycleSmall 0.9s infinite 0.3s;
+        animation-delay: 0.3s;
     }
 }
-
 
 @keyframes dotCycleSmall {
     0% {

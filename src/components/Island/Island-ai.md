@@ -20,7 +20,7 @@ version: "1.0"
 Базовый контейнер-карточка библиотеки: `<div>` с фоном, тенью, скруглением и внутренними
 отступами. Собственной логики не имеет — задаёт поверхность, на которой лежит контент,
 вертикальные отступы между своими частями `Island.Header`, `Island.Body`, `Island.Footer` и
-состояние загрузки (`isLoading`), в котором поверх контента показывается `LoaderScreen`.
+состояние загрузки (`loading`), в котором поверх контента показывается `LoaderScreen`.
 
 Используй когда: контент нужно визуально выделить карточкой на фоне страницы — блок страницы
 (`BodyPage`, `HeaderPage`, `FooterPage`), диалог подтверждения (`Confirm`), элемент аккордеона
@@ -47,7 +47,7 @@ version: "1.0"
 |---|---|---|---|
 | `type` | `EIslandType` | `EIslandType.TYPE_1` | Визуальный тип. Влияет только на фон и тень, на размеры — нет |
 | `size` | `EComponentSize` | `EComponentSize.MD` | Скругление, внутренние отступы карточки и отступы между Header / Body / Footer |
-| `isLoading` | `boolean` | `false` | Показывает `LoaderScreen` поверх контента карточки |
+| `loading` | `boolean` | `false` | Показывает `LoaderScreen` поверх контента карточки |
 | `loaderScreenProps` | `ILoaderScreenMiddleProps` | `undefined` | Props лоадера: `description`, `controls`, `className` и остальные атрибуты `<div>`. `type` задаёт Island (`middle`) |
 
 Компонент расширяет `React.HTMLAttributes<HTMLDivElement>` — все стандартные атрибуты `<div>`
@@ -55,7 +55,7 @@ version: "1.0"
 
 ### Состояние загрузки
 
-При `isLoading` последним потомком карточки рендерится `<LoaderScreen type="middle">` — абсолютно
+При `loading` последним потомком карточки рендерится `<LoaderScreen type="middle">` — абсолютно
 спозиционированный по всей карточке (`inset: 0` от padding-box, то есть включая внутренние отступы)
 блок с полупрозрачной подложкой и спиннером по центру.
 
@@ -76,7 +76,7 @@ version: "1.0"
   вместе с контентом. Для скроллируемой области состояние загрузки вешают на нескроллируемого
   родителя.
 - **В `ModalWindowBody` этих props нет** — `IModalWindowBodyProps` объявлен как
-  `Omit<IIslandProps, "isLoading" | "loaderScreenProps">` ровно по причине выше: тело модалки
+  `Omit<IIslandProps, "loading" | "loaderScreenProps">` ровно по причине выше: тело модалки
   скроллируется (`overflow: auto`). Состояние загрузки модального окна задаётся одноимёнными props
   `ModalWindowContent` — он не скроллится и перекрывает окно целиком.
 
@@ -172,7 +172,7 @@ Island — неинтерактивный контейнер: не выстав�
 `role="dialog"` и `aria-modal="true"`, `IslandAccordion` кладёт внутрь `Island.Header` собственную
 `<button>` с `aria-expanded` / `aria-controls`.
 
-Состояние `isLoading` тоже не объявляется автоматически: `LoaderScreen` приносит внутрь только
+Состояние `loading` тоже не объявляется автоматически: `LoaderScreen` приносит внутрь только
 `role="status"` от `LoaderMiddle`. Если загрузку карточки должен озвучивать скринридер, потребитель
 передаёт `aria-busy="true"` в `Island` — как и у `Button` с prop `loading`.
 
@@ -195,10 +195,10 @@ Island — неинтерактивный контейнер: не выстав�
 
 ### Контракты (в `related`)
 
-- `LoaderScreen` — экран загрузки, который Island рендерит при `isLoading` (всегда `type="middle"`).
+- `LoaderScreen` — экран загрузки, который Island рендерит при `loading` (всегда `type="middle"`).
   Настраивается через `loaderScreenProps` (`ILoaderScreenMiddleProps`).
 - `ModalWindow` — `IModalWindowBodyProps` наследует `IIslandProps` через
-  `Omit<IIslandProps, "isLoading" | "loaderScreenProps">`, поэтому `type` и `size` в
+  `Omit<IIslandProps, "loading" | "loaderScreenProps">`, поэтому `type` и `size` в
   `ModalWindowBody` доступны, а состояние загрузки — нет: тело модалки скроллируется, лоадер
   задаётся на `ModalWindowContent`. Своего AI.md у `ModalWindowBody` нет — он описан в
   `ModalWindow-ai.md`. Он же — направление из «Не используй когда», если нужен overlay, а не
@@ -238,11 +238,11 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | — | Интерактивный контроль `type`, `size`, `isLoading` и состава (Header / Body / Footer) |
+| `Playground` | — | Интерактивный контроль `type`, `size`, `loading` и состава (Header / Body / Footer) |
 | `Default` | `DefaultExample.tsx` | Минимальная карточка: Header + Body + Footer |
 | `Types` | `TypesExample.tsx` | Все значения `EIslandType` рядом |
 | `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG: скругление, паддинги, отступы между частями |
-| `Loading` | `Loading.tsx` | `isLoading`: `LoaderScreen` поверх контента карточки |
+| `Loading` | `Loading.tsx` | `loading`: `LoaderScreen` поверх контента карточки |
 
 Файлы примеров с постфиксом `Example` — локальный legacy-паттерн папки; новые примеры называются
 по имени story (`Loading.tsx`).
@@ -253,5 +253,6 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-11 | Prop состояния загрузки переименован `isLoading` → `loading` — по преобладающей в библиотеке конвенции boolean-props без префикса `is` (`loading` у `Button`, `List`, `Dropdown`, `Suggest`, `Table`). Prop ещё не выпускался, поэтому breaking change нет; `Omit` в `IModalWindowBodyProps` обновлён на `"loading"`. Поведение не изменилось. |
 | 2026-08-06 | `related` приведён к правилу `docs/ai/CONTEXT.md` → «Как заполнять `related` в AI.md»: убраны потребители (`BodyPage`, `HeaderPage`, `FooterPage`, `Confirm`), `ModalWindowBody` заменён родителем `ModalWindow`, добавлен `LoaderScreen`. Раздел «Связанные компоненты» разбит по типам связи. Добавлено состояние загрузки: props `isLoading` и `loaderScreenProps` — при `isLoading` поверх контента карточки рендерится `LoaderScreen` типа `middle`. Подложка наследует скругление карточки, `z-index` понижен до локального. `ModalWindowBody` эти props не наследует (`Omit`) — его тело скроллируется, лоадер там задаётся на `ModalWindowContent`. Добавлены story `Loading` и unit-тесты. Остальной публичный API не изменён. |
 | 2026-08-04 | Создан документ. AI-рефакторинг: JSDoc на props, значениях `EIslandType` и субкомпонентах, `displayName` у `IslandHeader` / `IslandBody` / `IslandFooter`, unit-тесты на все типы и размеры, части острова и `mapTypeToClassName`. Исправлено: `className` в `IslandHeader` и `IslandFooter` больше не затирает базовый класс компонента; побочный отступ в `IslandAccordion` погашен в стилях аккордеона, вид библиотечных компонентов не изменился. Публичный API не изменён. |

@@ -68,9 +68,9 @@ describe("Island", () => {
         expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
-    test("renders loader screen over content when isLoading", () => {
+    test("renders loader screen over content when loading", () => {
         const { rerender } = render(
-            <Island data-testid="island-loading" isLoading>
+            <Island data-testid="island-loading" loading>
                 <Island.Body>Island Body</Island.Body>
             </Island>,
         );
@@ -92,7 +92,7 @@ describe("Island", () => {
         render(
             <Island
                 data-testid="island"
-                isLoading
+                loading
                 loaderScreenProps={{ className: "custom", description: "Загрузка" }}
             />,
         );

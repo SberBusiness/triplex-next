@@ -20,7 +20,7 @@ export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Размер. Задаёт скругление, внутренние отступы и отступы между Header, Body и Footer. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
     /** Флаг состояния загрузки. */
-    isLoading?: boolean;
+    loading?: boolean;
     /** Свойства компонента LoaderScreen. */
     loaderScreenProps?: ILoaderScreenMiddleProps;
 }
@@ -34,7 +34,7 @@ export const Island = Object.assign(
             {
                 type = EIslandType.TYPE_1,
                 size = EComponentSize.MD,
-                isLoading,
+                loading,
                 loaderScreenProps,
                 className,
                 children,
@@ -50,7 +50,7 @@ export const Island = Object.assign(
                 >
                     {children}
 
-                    {isLoading && (
+                    {loading && (
                         <LoaderScreen
                             {...loaderScreenProps}
                             className={clsx(styles.islandLoaderScreen, loaderScreenProps?.className)}

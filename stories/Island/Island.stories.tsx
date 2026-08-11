@@ -32,7 +32,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "Контейнерный компонент с визуальными вариациями: тип, скругление и внутренние отступы.\n\n- **Типы**: type1, type2, type3\n- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.\n- **Загрузка**: `isLoading` показывает `LoaderScreen` поверх контента карточки.\n\n**Состав:** Header, Body, Footer",
+                    "Контейнерный компонент с визуальными вариациями: тип, скругление и внутренние отступы.\n\n- **Типы**: type1, type2, type3\n- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.\n- **Загрузка**: `loading` показывает `LoaderScreen` поверх контента карточки.\n\n**Состав:** Header, Body, Footer",
             },
             page: () => (
                 <>
@@ -58,7 +58,7 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
     args: {
         type: EIslandType.TYPE_1,
         size: EComponentSize.MD,
-        isLoading: false,
+        loading: false,
         headerText: "Island Header",
         bodyText: "Island Body",
         footerText: "Island Footer",
@@ -85,7 +85,7 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
                 defaultValue: { summary: "EComponentSize.MD" },
             },
         },
-        isLoading: {
+        loading: {
             control: { type: "boolean" },
             description: "Показывать LoaderScreen поверх контента",
             table: {
@@ -130,7 +130,7 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
             include: [
                 "type",
                 "size",
-                "isLoading",
+                "loading",
                 "headerText",
                 "bodyText",
                 "footerText",

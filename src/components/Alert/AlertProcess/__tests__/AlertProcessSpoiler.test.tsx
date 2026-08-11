@@ -33,6 +33,30 @@ describe("AlertProcessSpoiler", () => {
         expect(content).not.toHaveClass("expanded");
     });
 
+    it("Should render content and toggle button as siblings, without a wrapper", () => {
+        const { container } = render(<AlertProcessSpoiler data-testid="spoiler">Spoiler content</AlertProcessSpoiler>);
+
+        expect(container.children).toHaveLength(2);
+        expect(container.children[0]).toBe(getContent());
+        expect(container.children[1]).toContainElement(getToggleButton());
+    });
+
+    it("Should report the collapsed state through aria-expanded", () => {
+        render(<AlertProcessSpoiler data-testid="spoiler">Spoiler content</AlertProcessSpoiler>);
+
+        expect(getToggleButton()).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("Should report the expanded state through aria-expanded", () => {
+        render(
+            <AlertProcessSpoiler open data-testid="spoiler">
+                Spoiler content
+            </AlertProcessSpoiler>,
+        );
+
+        expect(getToggleButton()).toHaveAttribute("aria-expanded", "true");
+    });
+
     it("Should mark content and toggle button as expanded when open is true", () => {
         render(
             <AlertProcessSpoiler open data-testid="spoiler">

@@ -24,17 +24,26 @@ describe("MediaWidth", () => {
     /** Возвращает обработчик change, переданный в addEventListener при подписке. */
     const getChangeHandler = (): ((event: { matches: boolean }) => void) => mockAddEventListener.mock.calls[0][1];
 
+    // Подмена делается через Object.defineProperty, а не vi.spyOn, поэтому vi.restoreAllMocks
+    // её не откатит — исходный дескриптор сохраняем и возвращаем вручную.
+    const originalMatchMedia = Object.getOwnPropertyDescriptor(window, "matchMedia");
+
     beforeEach(() => {
         vi.clearAllMocks();
 
         Object.defineProperty(window, "matchMedia", {
+            configurable: true,
             writable: true,
             value: mockMatchMedia,
         });
     });
 
     afterEach(() => {
-        vi.restoreAllMocks();
+        if (originalMatchMedia) {
+            Object.defineProperty(window, "matchMedia", originalMatchMedia);
+        } else {
+            delete (window as Partial<Window>).matchMedia;
+        }
     });
 
     describe("when both minWidth and maxWidth are provided", () => {
@@ -269,6 +278,9 @@ describe("MediaWidth", () => {
 
             expect(mockMatchMedia).toHaveBeenCalledWith("(max-width: 991px)");
             expect(mockRemoveEventListener).toHaveBeenCalledWith("change", expect.any(Function));
+            // Вызов matchMedia с новой строкой происходит и в render-фазе, поэтому именно
+            // вторая подписка доказывает, что эффект перезапустился.
+            expect(mockAddEventListener).toHaveBeenCalledTimes(2);
         });
 
         it("should unsubscribe from the media query on unmount", () => {

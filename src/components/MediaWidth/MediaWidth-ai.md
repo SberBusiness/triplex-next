@@ -123,8 +123,12 @@ version: "1.0"
   компонента и `useMatchMedia` — состав экспортов не сокращать.
 - Реализация остаётся React 17-совместимой (без `useId`,
   `useSyncExternalStore` и прочих React 18-only API): код синхронизируется
-  в `release-0`. В `useMatchMedia` по этой же причине сохранён fallback на
-  устаревшие `addListener` / `removeListener`.
+  в `release-0`.
+- **Fallback на устаревшие `addListener` / `removeListener`** в `useMatchMedia` —
+  это поддержка старых браузеров, где `MediaQueryList` не наследует `EventTarget`
+  и не имеет `addEventListener` (Safari < 14). К React 17 и синхронизации
+  в `release-0` он отношения не имеет: удалять его вместе с React 17-совместимостью
+  нельзя — это наблюдаемая регрессия у потребителей.
 
 ---
 
@@ -148,6 +152,12 @@ version: "1.0"
 
 Все три реализации живут в той же папке, экспортируются из того же barrel и
 собственного AI.md не имеют — их контракт описан здесь.
+
+> **Объём AI-рефакторинга.** В рамках TRI-58 отрефакторен только `MediaWidth.tsx`:
+> соседние реализации и `useMatchMedia` были вне scope задачи. В их JSDoc
+> остаются недочёты (опечатка «ширина экран» в `MediaMaxWidth` / `MediaMinWidth` /
+> `MediaBetweenWidth`, `@param initial` без соответствующего параметра
+> в `useMatchMedia`) — семейство ещё не вычищено целиком, это отдельная задача.
 
 - `MediaBetweenWidth` (`src/components/MediaWidth/MediaBetweenWidth.tsx`) —
   диапазон между двумя границами. Props: `minWidth` и `maxWidth` **обязательные**,

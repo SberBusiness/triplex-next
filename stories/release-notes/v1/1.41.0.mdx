@@ -61,7 +61,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **MaskedField**
 
-- AI-рефакторинг: расширены JSDoc на компоненте и на prop `maskedInputProps` (перечислены обязательные `mask` / `value`, `placeholderMask` и `forwardedRef` для ссылки на input), добавлены unit-тесты (13 кейсов: применение маски к значению, вызов `onChange` с отформатированным значением, отображение плейсхолдера маски, проброс ref, статусы, слоты), stories мигрированы на modern pattern с примерами в `stories/MaskedField/examples/` и добавлены стори `WithPlaceholderMask`, `PassRefToInput`, `VisualTests`, создан `MaskedField-ai.md`. Публичный API, DOM и визуальное поведение не изменены (props, их типы, barrel-экспорты, `forwardRef` — как были).
+- Тип `maskedInputProps.ref` исправлен с `React.RefObject<HTMLInputElement>` на `React.RefObject<HTMLDivElement>` — этот ref всегда попадал на корневой `<div>` обёртки `FormFieldMaskedInput`, а не на поле ввода, и прежний тип вводил в заблуждение. Существующий код продолжает компилироваться (`RefObject<HTMLInputElement>` присваивается в `RefObject<HTMLDivElement>`); ссылка на элемент input по-прежнему берётся через `maskedInputProps.forwardedRef`.
+- AI-рефакторинг: расширены JSDoc на компоненте и на prop `maskedInputProps` (перечислены обязательные `mask` / `value`, `placeholderMask` и `forwardedRef` для ссылки на input), добавлены unit-тесты (13 кейсов: применение маски к значению, вызов `onChange` с отформатированным значением, отображение плейсхолдера маски, проброс ref, статусы, слоты), stories мигрированы на modern pattern с примерами в `stories/MaskedField/examples/` и добавлены стори `WithPlaceholderMask`, `PassRefToInput`, `VisualTests`, создан `MaskedField-ai.md`. DOM и визуальное поведение не изменены; в публичном API поменялся только тип `maskedInputProps.ref` (см. выше) — состав props, barrel-экспорты и `forwardRef` как были.
 
 **StatusTracker**
 

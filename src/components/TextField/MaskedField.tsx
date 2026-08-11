@@ -10,10 +10,10 @@ export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children">
      */
     maskedInputProps: IFormFieldMaskedInputProps & {
         /**
-         * ВНИМАНИЕ: этот ref попадает на корневой div-обёртку FormFieldMaskedInput, а не на input,
-         * несмотря на тип. Для ссылки на элемент input используйте `forwardedRef`.
+         * Ссылка на корневой div-обёртку FormFieldMaskedInput.
+         * Для ссылки на элемент input используйте `forwardedRef`.
          */
-        ref?: React.RefObject<HTMLInputElement>;
+        ref?: React.RefObject<HTMLDivElement>;
     };
 }
 
@@ -22,8 +22,8 @@ export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children">
  * Отличается от TextField элементом ввода — вместо обычного input используется FormFieldMaskedInput.
  */
 export const MaskedField = React.forwardRef<HTMLDivElement, IMaskedFieldProps>(
-    ({ maskedInputProps, ...textFieldBaseProps }, ref) => (
-        <TextFieldBase {...textFieldBaseProps} ref={ref}>
+    ({ maskedInputProps, ...restProps }, ref) => (
+        <TextFieldBase {...restProps} ref={ref}>
             <FormFieldMaskedInput {...maskedInputProps} />
         </TextFieldBase>
     ),

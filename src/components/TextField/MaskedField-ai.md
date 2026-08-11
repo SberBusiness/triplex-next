@@ -27,7 +27,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `maskedInputProps` | `IFormFieldMaskedInputProps & { ref? }` | Свойства поля с маской. Обязательные внутри: `mask` (массив строк и регулярных выражений) и `value` (строка, поле контролируемое). Опционально: `placeholderMask` (текстовая подсказка формата, например `дд.мм.гггг`), `placeholderChar` (символ-заполнитель, по умолчанию `"0"`), `forwardedRef` (ссылка на input), `onChange` и остальные атрибуты `<input>`. |
+| `maskedInputProps` | `IFormFieldMaskedInputProps & { ref? }` | Свойства поля с маской. Обязательные внутри: `mask` (массив строк и регулярных выражений) и `value` (строка, поле контролируемое). Опционально: `placeholderMask` (текстовая подсказка формата, например `дд.мм.гггг`), `placeholderChar` (символ-заполнитель, по умолчанию `"0"`), `forwardedRef` (ссылка на input), `ref` (ссылка на div-обёртку), `onChange` и остальные атрибуты `<input>`. |
 
 ### Опциональные props
 
@@ -66,7 +66,7 @@ version: "1.0"
 - `forwardRef` на `MaskedField` — не убирать. Внешний `ref` указывает на корневой `<div>` `FormField`.
 - Публичный API (`IMaskedFieldProps`: `maskedInputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
 - Barrel `index.ts` экспортирует `TextField` и `MaskedField` — состав экспортов не менять. `TextFieldBase` намеренно НЕ экспортируется — приватная база.
-- Ссылка на элемент input передаётся только через `maskedInputProps.forwardedRef`. Объявленный в типе `maskedInputProps.ref` попадает на корневой `<div>` обёртки `FormFieldMaskedInput`, а не на input (тип проходит по структурной совместимости `HTMLInputElement` с `HTMLDivElement`). Исправление типа — breaking change, требует отдельной задачи.
+- Ссылка на элемент input передаётся только через `maskedInputProps.forwardedRef`. `maskedInputProps.ref` (`React.RefObject<HTMLDivElement>`) попадает на корневой `<div>` обёртки `FormFieldMaskedInput` — это ref самого `FormFieldMaskedInput`, а не поля ввода.
 - `maskedInputProps.value` обязателен: `FormFieldMaskedInput` — контролируемый компонент, `defaultValue` внутри зафиксирован пустой строкой (обход бага `react-text-mask`).
 - Маски и подсказки берутся из `FormFieldMaskedInput.presets` — состав пресетов и их значения часть публичного API.
 - Уникальный `id` для связки label↔input генерируется через `lodash uniqueId` в `FormFieldInput` — не заменять на `useId` (React 17 совместимость через release-0).
@@ -118,3 +118,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-08-07 | Создан документ (TRI-56). AI-рефакторинг MaskedField, unit-тесты, миграция stories на modern pattern |
+| 2026-08-11 | Тип `maskedInputProps.ref` исправлен на `React.RefObject<HTMLDivElement>` — соответствует фактическому ref-таргету (правки по ревью PR #515) |

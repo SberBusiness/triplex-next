@@ -5,7 +5,7 @@ import { MaskedField, EComponentSize, EFormFieldStatus } from "@sberbusiness/tri
 import {
     Playground as PlaygroundRender,
     PlaygroundArgs,
-    MASK_PRESETS,
+    MASK_TYPES,
     Default as DefaultRender,
     DefaultSource,
     Sizes as SizesRender,
@@ -105,7 +105,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         // Settings
         maskType: {
             control: { type: "select" },
-            options: Object.keys(MASK_PRESETS),
+            options: MASK_TYPES,
             description: "Маска из пресетов FormFieldMaskedInput.presets.",
             table: {
                 category: "Settings",

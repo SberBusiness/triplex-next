@@ -1,20 +1,11 @@
 import React, { useState } from "react";
-import {
-    MaskedField,
-    FormFieldMaskedInput,
-    Text,
-    EFormFieldStatus,
-    ETextSize,
-    EFontType,
-} from "@sberbusiness/triplex-next";
+import { MaskedField, FormFieldMaskedInput, EFormFieldStatus } from "@sberbusiness/triplex-next";
 
 interface IStatusItemProps {
     status: EFormFieldStatus;
-    description: string;
-    descriptionType: EFontType;
 }
 
-const StatusItem = ({ status, description, descriptionType }: IStatusItemProps) => {
+const StatusItem = ({ status }: IStatusItemProps) => {
     const [value, setValue] = useState("9012345678");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
@@ -25,11 +16,6 @@ const StatusItem = ({ status, description, descriptionType }: IStatusItemProps) 
             <MaskedField
                 status={status}
                 label="Label"
-                description={
-                    <Text tag="div" size={ETextSize.B4} type={descriptionType}>
-                        {description}
-                    </Text>
-                }
                 maskedInputProps={{
                     mask: FormFieldMaskedInput.presets.masks.phone,
                     value,
@@ -40,17 +26,12 @@ const StatusItem = ({ status, description, descriptionType }: IStatusItemProps) 
     );
 };
 
-const STATUSES: Array<IStatusItemProps> = [
-    { status: EFormFieldStatus.DEFAULT, description: "(21) Description", descriptionType: EFontType.SECONDARY },
-    { status: EFormFieldStatus.ERROR, description: "Error text", descriptionType: EFontType.ERROR },
-    { status: EFormFieldStatus.WARNING, description: "Warning text", descriptionType: EFontType.WARNING },
-    { status: EFormFieldStatus.DISABLED, description: "(21) Description", descriptionType: EFontType.SECONDARY },
-];
+const STATUSES = Object.values(EFormFieldStatus);
 
 export const Statuses = () => (
     <div style={{ maxWidth: "300px", display: "flex", flexDirection: "column", gap: "16px" }}>
-        {STATUSES.map((item) => (
-            <StatusItem key={item.status} {...item} />
+        {STATUSES.map((status) => (
+            <StatusItem key={status} status={status} />
         ))}
     </div>
 );

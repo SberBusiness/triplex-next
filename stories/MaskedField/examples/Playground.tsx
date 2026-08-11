@@ -18,8 +18,28 @@ interface IMaskPreset {
     placeholderMask?: string;
 }
 
+/**
+ * Типы масок, доступные в Controls.
+ * Список явный, а не `Object.keys(MASK_PRESETS)`: react-docgen-typescript добавляет к экспортируемому
+ * объекту служебные поля (`displayName`, `__docgenInfo`), и они попадают в options.
+ */
+export const MASK_TYPES = [
+    "phone",
+    "date",
+    "time",
+    "cardNumber",
+    "account",
+    "inn",
+    "snils",
+    "swiftCode",
+    "passportSeries",
+] as const;
+
+/** Тип маски, доступный в Controls. */
+export type TMaskType = (typeof MASK_TYPES)[number];
+
 /** Маски пресетов FormFieldMaskedInput, доступные в Controls. */
-export const MASK_PRESETS = {
+export const MASK_PRESETS: Record<TMaskType, IMaskPreset> = {
     phone: { mask: masks.phone },
     date: { mask: masks.date, placeholderMask: placeholderMasks.date },
     time: { mask: masks.time, placeholderMask: placeholderMasks.time },
@@ -29,10 +49,15 @@ export const MASK_PRESETS = {
     snils: { mask: masks.snils },
     swiftCode: { mask: masks.swiftCode, placeholderMask: placeholderMasks.swiftCode },
     passportSeries: { mask: masks.passport.series },
-} satisfies Record<string, IMaskPreset>;
+};
 
-/** Тип маски, доступный в Controls. */
-export type TMaskType = keyof typeof MASK_PRESETS;
+/** Соответствие статуса типу шрифта описания. */
+const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> = {
+    [EFormFieldStatus.DEFAULT]: EFontType.SECONDARY,
+    [EFormFieldStatus.DISABLED]: EFontType.SECONDARY,
+    [EFormFieldStatus.ERROR]: EFontType.ERROR,
+    [EFormFieldStatus.WARNING]: EFontType.WARNING,
+};
 
 export interface PlaygroundArgs {
     size: EComponentSize;
@@ -47,6 +72,7 @@ export interface PlaygroundArgs {
 }
 
 export const Playground = ({
+    status = EFormFieldStatus.DEFAULT,
     label,
     prefix,
     postfix,
@@ -67,12 +93,13 @@ export const Playground = ({
         <div style={{ maxWidth: "300px" }}>
             <MaskedField
                 {...props}
+                status={status}
                 label={label || undefined}
                 prefix={prefix || undefined}
                 postfix={postfix || undefined}
                 description={
                     description ? (
-                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                        <Text tag="div" size={ETextSize.B4} type={STATUS_TO_DESCRIPTION_FONT_TYPE_MAP[status]}>
                             {description}
                         </Text>
                     ) : undefined

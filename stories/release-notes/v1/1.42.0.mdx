@@ -6,6 +6,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**ComposedKeyDownListener**
+
+- Исправлено: смена набора горячих клавиш перемонтировала содержимое. Слушатели рендерятся соседями к `children`, а не оборачивают их — раньше глубина вложенности `KeyDownListener` равнялась длине `keyDownListeners`, поэтому при её изменении между рендерами `children` пересоздавались вместе с DOM-узлами и теряли введённые значения инпутов, фокус и текущие анимации. Теперь структура React-дерева не зависит от длины и порядка массива, содержимое остаётся смонтированным.
+- Публичный API не изменён: props и их типы, `IComposedKeyDownListenerProps`, barrel-экспорты — как были. Собственной разметки компонент как не рендерил, так и не рендерит, поэтому итоговый DOM не меняется. `onMatch` по-прежнему вызываются в порядке элементов `keyDownListeners`.
+- Изменился относительный порядок подписок на `window`: слушатели композитора теперь монтируются раньше `children`, а не после них. Если внутри `children` есть собственный глобальный `keydown`-обработчик той же клавиши, `onMatch` сработает раньше него, а не позже — важно для кода, который полагается на этот порядок или на `stopImmediatePropagation`.
+- Добавлены `ComposedKeyDownListener-ai.md` и собственный набор stories (`stories/ComposedKeyDownListener/`); демонстрационный пример переехал туда из stories `KeyDownListener`.
+
 **MobileView**
 
 - AI-рефакторинг: у `MobileView` появился `displayName`, у `useMobileView` — явный тип возвращаемого значения `boolean`, уточнён JSDoc компонента и хука. Добавлены unit-тесты (15 кейсов на компонент и хук) и stories по modern pattern, создан `MobileView-ai.md`. Публичный API и поведение не изменены: props `children` и `fallback`, сигнатура `useMobileView`, barrel-экспорты и граница мобильной ширины (`EScreenWidth.SM_MAX`, `max-width: 767px`) — как были.

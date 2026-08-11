@@ -105,7 +105,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
 | CollapsibleTreeExtended | ✅ | ✅ | ✅ |
-| ComposedKeyDownListener | ⬜ | ⬜ | ✅ |
+| ComposedKeyDownListener | ✅ | ✅ | ✅ |
 | Confirm | ⬜ | ⬜ | ⬜ |
 | DateField | ⬜ | ✅ | ⬜ |
 | DatePickerExtended | ⬜ | ⬜ | ⬜ |

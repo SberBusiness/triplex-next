@@ -55,7 +55,7 @@ describe("ComposedKeyDownListener", () => {
         expect(onSecond).toHaveBeenCalledTimes(1);
     });
 
-    it("nests the first listener of the array deepest, so it subscribes and reacts first", () => {
+    it("calls onMatch in the order of the keyDownListeners array", () => {
         const calls: string[] = [];
 
         render(
@@ -86,6 +86,72 @@ describe("ComposedKeyDownListener", () => {
         const { container } = render(<ComposedKeyDownListener keyDownListeners={[]} />);
 
         expect(container).toBeEmptyDOMElement();
+    });
+
+    it("keeps children mounted when the length of keyDownListeners changes", () => {
+        const onEscape = vi.fn();
+        const onEnter = vi.fn();
+
+        const { rerender } = render(
+            <ComposedKeyDownListener keyDownListeners={[{ eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: onEscape }]}>
+                <input defaultValue="" />
+            </ComposedKeyDownListener>,
+        );
+
+        const input = screen.getByRole("textbox");
+
+        input.focus();
+        fireEvent.change(input, { target: { value: "typed" } });
+
+        rerender(
+            <ComposedKeyDownListener
+                keyDownListeners={[
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: onEscape },
+                    { eventKeyCode: EVENT_KEY_CODES.ENTER, onMatch: onEnter },
+                ]}
+            >
+                <input defaultValue="" />
+            </ComposedKeyDownListener>,
+        );
+
+        // Тот же DOM-узел: children не перемонтируются, введённое значение и фокус сохраняются.
+        expect(screen.getByRole("textbox")).toBe(input);
+        expect((input as HTMLInputElement).value).toBe("typed");
+        expect(document.activeElement).toBe(input);
+    });
+
+    it("subscribes added listeners and unsubscribes removed ones on rerender", () => {
+        const onEscape = vi.fn();
+        const onEnter = vi.fn();
+
+        const { rerender } = render(
+            <ComposedKeyDownListener
+                keyDownListeners={[{ eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: onEscape }]}
+            />,
+        );
+
+        rerender(
+            <ComposedKeyDownListener
+                keyDownListeners={[
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: onEscape },
+                    { eventKeyCode: EVENT_KEY_CODES.ENTER, onMatch: onEnter },
+                ]}
+            />,
+        );
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
+
+        expect(onEnter).toHaveBeenCalledTimes(1);
+
+        rerender(
+            <ComposedKeyDownListener
+                keyDownListeners={[{ eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: onEscape }]}
+            />,
+        );
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE });
+
+        expect(onEnter).toHaveBeenCalledTimes(1);
+        expect(onEscape).toHaveBeenCalledTimes(1);
     });
 
     it("stops calling onMatch after unmount", () => {

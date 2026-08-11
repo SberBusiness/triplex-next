@@ -10,8 +10,6 @@ import {
     DefaultSource,
     WithMultipleKeys as WithMultipleKeysRender,
     WithMultipleKeysSource,
-    Example as ExampleRender,
-    ExampleSource,
 } from "./examples";
 
 const meta = {
@@ -116,23 +114,6 @@ export const WithMultipleKeys: StoryObj<typeof KeyDownListener> = {
             },
             source: {
                 code: WithMultipleKeysSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const Example: StoryObj<typeof KeyDownListener> = {
-    name: "Example: ComposedKeyDownListener",
-    render: ExampleRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "Несколько горячих клавиш с разными обработчиками задаются одним ComposedKeyDownListener — он оборачивает содержимое в KeyDownListener на каждый элемент keyDownListeners.",
-            },
-            source: {
-                code: ExampleSource,
                 language: "tsx",
             },
         },

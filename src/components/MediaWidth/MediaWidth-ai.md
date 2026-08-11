@@ -158,6 +158,9 @@ version: "1.0"
 > остаются недочёты (опечатка «ширина экран» в `MediaMaxWidth` / `MediaMinWidth` /
 > `MediaBetweenWidth`, `@param initial` без соответствующего параметра
 > в `useMatchMedia`) — семейство ещё не вычищено целиком, это отдельная задача.
+> Туда же — тест на fallback `addListener` / `removeListener`: инвариант ниже
+> запрещает его удалять, но ни один тест эту ветку не исполняет (во всех моках
+> `MediaQueryList` есть `addEventListener`).
 
 - `MediaBetweenWidth` (`src/components/MediaWidth/MediaBetweenWidth.tsx`) —
   диапазон между двумя границами. Props: `minWidth` и `maxWidth` **обязательные**,

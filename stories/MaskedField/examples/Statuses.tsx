@@ -6,7 +6,7 @@ interface IStatusItemProps {
 }
 
 const StatusItem = ({ status }: IStatusItemProps) => {
-    const [value, setValue] = useState("9012345678");
+    const [value, setValue] = useState("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 

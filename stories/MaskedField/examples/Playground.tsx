@@ -4,7 +4,6 @@ import {
     MaskedField,
     FormFieldMaskedInput,
     Text,
-    EComponentSize,
     EFormFieldStatus,
     ETextSize,
     EFontType,
@@ -59,14 +58,10 @@ const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> =
     [EFormFieldStatus.WARNING]: EFontType.WARNING,
 };
 
-export interface PlaygroundArgs {
-    size: EComponentSize;
-    status: EFormFieldStatus;
-    label: string;
-    prefix: string;
-    postfix: string;
-    description: string;
-    counter: string;
+export interface PlaygroundArgs extends Pick<
+    React.ComponentProps<typeof MaskedField>,
+    "size" | "status" | "label" | "prefix" | "postfix" | "description" | "counter"
+> {
     maskType: TMaskType;
     placeholder: string;
 }

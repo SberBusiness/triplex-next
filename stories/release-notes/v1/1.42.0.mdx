@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.42.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**MaskedField**
+
+- Тип `maskedInputProps.ref` изменён с `React.RefObject<HTMLInputElement>` на `React.RefObject<HTMLDivElement>`. Поведение прежнее: этот ref всегда указывал на корневой `<div>` обёртки `FormFieldMaskedInput` (`forwardRef<HTMLDivElement>`), а не на поле ввода — прежний тип вводил в заблуждение. Миграция: код, который читает `ref.current` как `HTMLInputElement`, нужно перевести на `maskedInputProps.forwardedRef` — это единственная ссылка на элемент `<input>`; для ссылки на обёртку смените тип на `HTMLDivElement`. Передача существующего `useRef<HTMLInputElement>(null)` в `maskedInputProps.ref` по-прежнему компилируется (`RefObject<HTMLInputElement>` присваивается в `RefObject<HTMLDivElement>`), но `ref.current` в рантайме, как и раньше, будет `HTMLDivElement`.
+
 <Heading>Изменения</Heading>
 
 **AlertProcess**
@@ -23,6 +29,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **LoaderSmall**
 
 - AI-рефакторинг: JSDoc на компоненте, props и значениях `ELoaderSmallTheme`, порядок импортов приведён к codestyle, константы-маппинги переименованы в `THEME_TO_CLASS_NAME_MAP` / `SIZE_TO_CLASS_NAME_MAP` (внутренние, не экспортировались), в стилях объединено дублирующееся объявление анимации точек — сама анимация задана один раз на `.dot`, у точек осталась только `animation-delay`, unit-тесты расширены с 3 до 6 кейсов, создан `LoaderSmall-ai.md`. Экспортируемый, но неиспользуемый компонентом enum `ELoaderSmallSize` сохранён и помечен в документации как legacy — размер задаётся `EComponentSize`. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API и поведение не изменены (props, значения enum, barrel-экспорты, DOM-разметка, `role="status"`, токены — как были).
+
+**MaskedField**
+
+- AI-рефакторинг: расширены JSDoc на компоненте и на prop `maskedInputProps` (перечислены обязательные `mask` / `value`, `placeholderMask` и `forwardedRef` для ссылки на input), добавлены unit-тесты (13 кейсов: применение маски к значению, вызов `onChange` с отформатированным значением, отображение плейсхолдера маски, проброс ref, статусы, слоты), stories мигрированы на modern pattern с примерами в `stories/MaskedField/examples/` и добавлены стори `WithPlaceholderMask`, `PassRefToInput`, `VisualTests`, создан `MaskedField-ai.md`. DOM и визуальное поведение не изменены; в публичном API поменялся только тип `maskedInputProps.ref` (см. «Ломающие изменения») — состав props, barrel-экспорты и `forwardRef` как были.
 
 **MobileView**
 

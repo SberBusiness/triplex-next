@@ -39,9 +39,10 @@ const CardBody = () => (
 export const RoundingSizesExample = () => {
     const [isSelectedSM, setIsSelectedSM] = useState(false);
     const [isSelectedMD, setIsSelectedMD] = useState(false);
+    const [isSelectedLG, setIsSelectedLG] = useState(false);
 
     return (
-        <div style={{ width: "448px", display: "flex", gap: "16px" }}>
+        <div style={{ width: "680px", display: "flex", gap: "16px" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>SM</div>
                 <CardAction
@@ -70,6 +71,27 @@ export const RoundingSizesExample = () => {
                     theme={ECardTheme.GENERAL}
                     selected={isSelectedMD}
                     toggle={setIsSelectedMD}
+                >
+                    <CardAction.Media
+                        style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}
+                    />
+                    <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
+                        <CardAction.Content.Header>
+                            <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+                                Title text
+                            </Title>
+                        </CardAction.Content.Header>
+                        <CardBody />
+                    </CardAction.Content>
+                </CardAction>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LG</div>
+                <CardAction
+                    roundingSize={ECardRoundingSize.LG}
+                    theme={ECardTheme.GENERAL}
+                    selected={isSelectedLG}
+                    toggle={setIsSelectedLG}
                 >
                     <CardAction.Media
                         style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }}

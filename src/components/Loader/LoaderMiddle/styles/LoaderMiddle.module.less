@@ -14,7 +14,9 @@
     width: 40px;
     height: 40px;
 
-    .dot {
+    // Базовая форма точки; .line стартует с неё и растягивается в lineCycle.
+    .dot,
+    .line {
         position: absolute;
         background-color: var(--triplex-next-Loader-Element_Background_Brand);
         width: 12px;
@@ -50,11 +52,6 @@
     }
 
     .line {
-        background-color: var(--triplex-next-Loader-Element_Background_Brand);
-        width: 12px;
-        height: 12px;
-        border-radius: 6px;
-        position: absolute;
         top: 0;
         opacity: 0;
         animation: lineCycle 3s infinite;

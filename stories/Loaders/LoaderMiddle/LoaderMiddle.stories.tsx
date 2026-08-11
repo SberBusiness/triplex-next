@@ -32,9 +32,10 @@ export const Default: Story = {
     name: "Default",
     render: DefaultExample,
     parameters: {
+        controls: { disable: true },
+        // Визуально идентична Visual tests — скриншот снимается только там.
         testRunner: { skip: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
@@ -46,9 +47,10 @@ export const Default: Story = {
 export const WithAnimation: Story = {
     render: WithAnimationExample,
     parameters: {
+        controls: { disable: true },
+        // Пример завязан на проигрывание Lottie — скриншот был бы нестабильным.
         testRunner: { skip: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: WithAnimationExampleSource,
                 language: "tsx",

@@ -145,15 +145,15 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ListMasterHeader | ✅ | ✅ | ✅ |
 | ListSortable | ✅ | ✅ | ✅ |
 | ListSortableItem | ✅ | ✅ | ✅ |
-| LoaderMiddle | ⬜ | ⬜ | ⬜ |
-| LoaderScreen | ⬜ | ✅ | ⬜ |
+| LoaderMiddle | ✅ | ✅ | ✅ |
+| LoaderScreen | ✅ | ✅ | ✅ |
 | LoaderSmall | ✅ | ✅ | ✅ |
 | Marker | ⬜ | ⬜ | ⬜ |
 | MarkerStatus | ⬜ | ✅ | ⬜ |
 | MaskedField | ⬜ | ⬜ | ⬜ |
 | MasterTable | ⬜ | ⬜ | ⬜ |
 | MediaWidth | ⬜ | ✅ | ⬜ |
-| MobileView | ⬜ | ⬜ | ⬜ |
+| MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |
 | MonthYearField | ✅ | ✅ | ✅ |
 | MonthYearRange | ⬜ | ✅ | ⬜ |
@@ -175,7 +175,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Row | ✅ | ✅ | ✅ |
 | SMSField | ⬜ | ⬜ | ⬜ |
 | SegmentedControl | ⬜ | ⬜ | ⬜ |
-| SelectExtendedField | ⬜ | ⬜ | ⬜ |
+| SelectExtendedField | ✅ | ✅ | ✅ |
 | SelectField | ⬜ | ⬜ | ⬜ |
 | Skeleton | ⬜ | ✅ | ⬜ |
 | Slider | ⬜ | ⬜ | ⬜ |

@@ -40,7 +40,7 @@ version: "1.0"
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `sticky` | `boolean` | `false` | Заголовок прилипает к верхней границе при скролле. **Только для `type=FIRST`** (внутри `LightBox`); для `type=SECOND` типизирован как `never`. |
+| `sticky` | `boolean` | `false` | Заголовок прилипает к верхней границе при скролле, если ширина viewport от 992px, а высота больше 800px. **Только для `type=FIRST`**; для `type=SECOND` типизирован как `never`. |
 | `size` | `EComponentSize` | — | Размер острова (Island). **Доступен только для `type=FIRST`**; для `type=SECOND` типизирован как `never`. |
 
 ### Ограничения по типам
@@ -114,4 +114,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-06 | Sticky-позиционирование доступно вне `LightBox` при ширине viewport от 992px и отключено при высоте viewport не больше 800px. |
 | 2026-06-23 | Создан документ. AI-рефакторинг (clsx order, JSDoc на props, displayName), unit-тесты, миграция stories на modern pattern. |

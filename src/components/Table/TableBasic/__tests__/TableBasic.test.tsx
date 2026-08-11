@@ -74,7 +74,7 @@ describe("TableBasic", () => {
         );
         expect(container.querySelector(".overlayCover")).toBeInTheDocument();
         // LoaderMiddle inside footer
-        expect(container.querySelector("[class*='loaderMiddle']")).toBeInTheDocument();
+        expect(screen.getByRole("status", { name: "loading" })).toBeInTheDocument();
     });
 
     it("Should render spinner wrapper when loading and has data", () => {

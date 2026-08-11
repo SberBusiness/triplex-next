@@ -3,6 +3,7 @@ import cardStyles from "./styles/Card.module.less";
 
 /** Соответствие типа скругления карточки стилевому классу. */
 export const mapCardRoundingSizeToCssClass = {
+    [ECardRoundingSize.LG]: cardStyles.roundingLG,
     [ECardRoundingSize.MD]: cardStyles.roundingMD,
     [ECardRoundingSize.SM]: cardStyles.roundingSM,
 };

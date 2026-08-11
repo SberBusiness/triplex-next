@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
-import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
+import React from "react";
 import clsx from "clsx";
+import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import {
     EFormFieldStatus,
     FormField,
@@ -13,52 +13,61 @@ import {
     IFormFieldProps,
 } from "../../FormField";
 import { FormFieldTarget } from "../../FormField/components/FormFieldTarget";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { IconWrapper } from "../../IconWrapper";
+import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import styles from "../styles/SelectExtendedFieldTarget.module.less";
 
-/* Свойства SelectExtendedFieldTarget. */
+/** Свойства компонента SelectExtendedFieldTarget. */
 export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
-    /**  Текст или компонент, отображающий выбранное значение. */
+    /** Текст или компонент, отображающий выбранное значение. */
     label?: React.ReactNode;
-    /** Текст или компонент, отображающий выбранное значение для Target. */
+    /** Текст или компонент заголовка поля. */
     fieldLabel: React.ReactNode;
-    /** Состояние загрузки. */
+    /** Состояние загрузки. Вместо каретки отображается лоадер, поле не реагирует на клик и клавиатуру. По умолчанию false. */
     loading?: boolean;
-    /** Состояние открытости выпадающего списка. */
+    /** Состояние открытости выпадающего блока. */
     opened: boolean;
-    /** Текст или компонент, отображающий выбранное placeholder. */
+    /** Текст или компонент, отображаемый вместо значения, пока значение не выбрано. */
     placeholder?: React.ReactNode;
-    /** Префикс поля ввода. */
+    /** Префикс поля. */
     prefix?: React.ReactNode;
-    /** Постфикс поля ввода. */
+    /** Постфикс поля. Отображается после каретки. */
     postfix?: React.ReactNode;
-    /** Функция открытия/закрытия выпадающего списка. */
+    /** Функция открытия/закрытия выпадающего блока. */
     setOpened: (opened: boolean) => void;
-    /** Функция очистки значения. */
+    /** Функция очистки значения. Если передана, в поле отображается кнопка очистки. */
     onClear?: () => void;
 }
 
-const sizeToCaretIconMap = {
+/** Соответствие размера поля иконке каретки. */
+const SIZE_TO_CARET_ICON_MAP = {
     [EComponentSize.SM]: <CaretdownStrokeSrvIcon16 paletteIndex={5} className={styles.caretIcon} />,
     [EComponentSize.MD]: <CaretdownStrokeSrvIcon20 paletteIndex={5} className={styles.caretIcon} />,
     [EComponentSize.LG]: <CaretdownStrokeSrvIcon24 paletteIndex={5} className={styles.caretIcon} />,
 };
 
-const sizeToLoaderSizeMap = {
+/** Соответствие размера поля лоадеру состояния загрузки. */
+const SIZE_TO_LOADER_MAP = {
     [EComponentSize.SM]: <LoaderSmall size={EComponentSize.SM} theme={ELoaderSmallTheme.BRAND} />,
     [EComponentSize.MD]: <LoaderSmall size={EComponentSize.MD} theme={ELoaderSmallTheme.BRAND} />,
     [EComponentSize.LG]: <LoaderSmall size={EComponentSize.LG} theme={ELoaderSmallTheme.BRAND} />,
 };
 
+/** Коды клавиш, открывающих выпадающий блок. */
+const OPEN_DROPDOWN_KEY_CODES = [
+    EVENT_KEY_CODES.SPACE,
+    EVENT_KEY_CODES.ENTER,
+    EVENT_KEY_CODES.ARROW_DOWN,
+    EVENT_KEY_CODES.ARROW_UP,
+];
+
 /**
- * Компонент SelectTarget.
- * Видимая часть Select, при нажатии на которую открывается выпадающий список.
+ * Поле выбора SelectExtendedField.
+ * Видимая часть Select, при нажатии на которую открывается выпадающий блок.
  */
 export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelectExtendedFieldTargetProps>(
     (props, ref) => {
         const {
-            children,
             className,
             label,
             placeholder,
@@ -72,63 +81,48 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             loading,
             size = EComponentSize.MD,
             status,
+            // children и tabIndex намеренно не доходят до FormField: разметка поля фиксирована,
+            // а tabIndex выставляет сам FormFieldTarget (-1 в состоянии DISABLED, иначе 0).
+            children,
             tabIndex,
             fieldLabel,
             ...rest
         } = props;
-        const targetRef = useRef<HTMLDivElement | null>(null);
-        const classNames = clsx(
-            styles.selectExtendedFieldTarget,
-            {
-                [styles.selectOpened]: opened,
-                [styles.loading]: loading,
-                [styles.disabled]: status === EFormFieldStatus.DISABLED,
-            },
-            className,
-        );
-        /* Обработчик клика. */
+        const disabled = status === EFormFieldStatus.DISABLED;
+        // В состоянии загрузки и в заблокированном поле выпадающий блок не открывается.
+        const interactionBlocked = Boolean(loading) || disabled;
+
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-            if (loading || status === EFormFieldStatus.DISABLED) {
-                return; // Не реагируем на клики в состоянии загрузки
+            if (interactionBlocked) {
+                return;
             }
+
             setOpened(!opened);
             onClick?.(event);
         };
 
-        /* Обработчик нажатия клавиши. */
+        const handleClearClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+            // Кнопка очистки лежит внутри поля, у которого клик переключает выпадающий блок.
+            // Без остановки всплытия очистка значения заодно раскрывала бы список.
+            // Так же сделано в Chip.Select и Chip.DatePicker.
+            event.stopPropagation();
+            onClear?.();
+        };
+
         const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-            if (loading || status === EFormFieldStatus.DISABLED) {
-                return; // Не реагируем на клавиши в состоянии загрузки или disabled
+            if (interactionBlocked) {
+                return;
             }
 
-            if (!opened) {
-                // При нажатии Enter, Space, ArrowUp или ArrowDown открывается выпадающий список.
-                if (
-                    [
-                        EVENT_KEY_CODES.SPACE,
-                        EVENT_KEY_CODES.ENTER,
-                        EVENT_KEY_CODES.ARROW_DOWN,
-                        EVENT_KEY_CODES.ARROW_UP,
-                    ].includes(event.keyCode)
-                ) {
-                    event.preventDefault();
-                    // Предотвращение срабатывания keydown при открытии Dropdown в document.addEventListener('keydown'...) в src/desktop/components/Dropdown/components/DropdownListItem.tsx.
-                    event.stopPropagation();
-                    setOpened(!opened);
-                }
+            if (!opened && OPEN_DROPDOWN_KEY_CODES.includes(event.keyCode)) {
+                event.preventDefault();
+                // Предотвращение срабатывания keydown при открытии Dropdown в
+                // document.addEventListener("keydown", ...) в DropdownListItem.
+                event.stopPropagation();
+                setOpened(true);
             }
 
             onKeyDown?.(event);
-        };
-
-        /* Функция для хранения ссылки. */
-        const setRef = (instance: HTMLDivElement | null) => {
-            targetRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
         };
 
         return (
@@ -137,7 +131,11 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 onKeyDown={handleKeyDown}
                 status={status}
                 size={size}
-                className={classNames}
+                className={clsx(
+                    styles.selectExtendedFieldTarget,
+                    { [styles.selectOpened]: opened, [styles.disabled]: disabled },
+                    className,
+                )}
                 aria-expanded={opened}
                 aria-haspopup="listbox"
                 data-tx={process.env.npm_package_version}
@@ -147,32 +145,25 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
 
                 <FormFieldLabel>{fieldLabel}</FormFieldLabel>
-                <FormFieldTarget
-                    ref={setRef}
-                    className={clsx(styles.target, {
-                        [styles.placeholder]: !!placeholder && !label,
-                        [styles.label]: !!label,
-                    })}
-                    placeholder={placeholder}
-                >
+                <FormFieldTarget ref={ref} className={styles.target} placeholder={placeholder}>
                     {label}
                 </FormFieldTarget>
 
                 <FormFieldPostfix>
-                    {onClear && <FormFieldClear onClick={onClear} />}
+                    {onClear && <FormFieldClear onClick={handleClearClick} />}
                     {loading ? (
-                        sizeToLoaderSizeMap[size]
+                        SIZE_TO_LOADER_MAP[size]
                     ) : (
                         <IconWrapper
                             className={styles.caretWrapper}
                             active={opened}
-                            disabled={status === EFormFieldStatus.DISABLED}
+                            disabled={disabled}
                             displayContents
                         >
-                            {sizeToCaretIconMap[size]}
+                            {SIZE_TO_CARET_ICON_MAP[size]}
                         </IconWrapper>
                     )}
-                    {postfix ? postfix : null}
+                    {postfix}
                 </FormFieldPostfix>
             </FormField>
         );

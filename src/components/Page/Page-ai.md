@@ -61,6 +61,7 @@ version: "1.0"
 Собственных CSS-переменных дизайн-токенов у `Page` нет. Внешние отступы и брейкпоинты заданы
 LESS-переменными в `styles/Page.module.less` (`@page-padding-*`, `@screen-sm-max`). Sticky-стили
 для прилипающих Header/Footer (классы `.headerPageTypeFirst.sticky`, `.footerPageTypeFirst.sticky`)
+применяются при ширине viewport от 992px (`@screen-lg`) и высоте от 801px и
 используют токены соответствующих компонентов (`--triplex-next-HeaderPage-StickyShadow`,
 `--triplex-next-FooterPage-StickyShadow`) — они описаны в AI.md этих компонентов.
 
@@ -73,7 +74,7 @@ LESS-переменными в `styles/Page.module.less` (`@page-padding-*`, `@s
 - `Page` собран через `Object.assign(forwardRef(...), { Body, Header, Footer })` — статические
   свойства `Header` / `Body` / `Footer` должны сохраняться.
 - Корневые классы `page` и `global-page` на корневом `<div>` — не переименовывать (используются
-  в стилях, в т.ч. в sticky-селекторах `.global-LB-more-media-point-0`).
+  в стилях; sticky-стили частей задаются медиазапросом `min-width: 992px` и `min-height: 801px`).
 - Экспорты `Page`, `IPageProps` идут в barrel `src/components/Page/index.ts` — сохранять.
   Там же реэкспортируются части и их enum'ы (`EHeaderPageType`, `EFooterPageType`, `EBodyPageType`,
   `EBodyPageVerticalMargin`).
@@ -120,5 +121,6 @@ aria-атрибутов. Семантику задаёт потребитель 
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-06 | Sticky-позиционирование Header/Footer доступно вне `LightBox` при ширине viewport от 992px и отключено при высоте viewport не больше 800px. |
 | 2026-07-20 | Вертикальные padding изменены: 24px (было 32px) для desktop, 8px (было 16px) для mobile — через `@page-padding-desktop-y` / `@page-padding-mobile-y`. |
 | 2026-06-24 | Создан документ. AI-рефакторинг (JSDoc на компоненте и `IPageProps`), unit-тесты (className-merge, статические части), миграция stories на modern pattern. |

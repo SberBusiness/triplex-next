@@ -56,7 +56,8 @@ description: Приводит один компонент triplex-next к ста
   3. {Name}-ai.md → skill update-component-ai-md (если ⬜)
   4. Ревью → change-reviewer
   5. ROADMAP — три ✅
-  6. Release notes — нужны/не нужны (зависит от breaking changes на шаге 1)
+  6. Release notes — нужны всегда, если был шаг 1 (объём: изменение публичного
+     API или поведения — по существу, чистый рефакторинг — одной строкой)
 
 Заметки/риски:
   - <если subagent должен будет затронуть публичный API>

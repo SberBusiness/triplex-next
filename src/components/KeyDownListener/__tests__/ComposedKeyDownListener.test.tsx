@@ -154,6 +154,58 @@ describe("ComposedKeyDownListener", () => {
         expect(onEscape).toHaveBeenCalledTimes(1);
     });
 
+    it("remaps props when the first listener is removed", () => {
+        const onEscape = vi.fn();
+        const onEnter = vi.fn();
+
+        const { rerender } = render(
+            <ComposedKeyDownListener
+                keyDownListeners={[
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: onEscape },
+                    { eventKeyCode: EVENT_KEY_CODES.ENTER, onMatch: onEnter },
+                ]}
+            />,
+        );
+
+        // Удаляется первый элемент: инстанс с индексом 0 переиспользуется и должен
+        // подхватить props бывшего второго элемента.
+        rerender(
+            <ComposedKeyDownListener keyDownListeners={[{ eventKeyCode: EVENT_KEY_CODES.ENTER, onMatch: onEnter }]} />,
+        );
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE });
+
+        expect(onEnter).toHaveBeenCalledTimes(1);
+        expect(onEscape).not.toHaveBeenCalled();
+    });
+
+    it("calls onMatch in the order of the keyDownListeners array after reorder", () => {
+        const calls: string[] = [];
+        const pushFirst = () => calls.push("first");
+        const pushSecond = () => calls.push("second");
+
+        const { rerender } = render(
+            <ComposedKeyDownListener
+                keyDownListeners={[
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: pushFirst },
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: pushSecond },
+                ]}
+            />,
+        );
+
+        rerender(
+            <ComposedKeyDownListener
+                keyDownListeners={[
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: pushSecond },
+                    { eventKeyCode: EVENT_KEY_CODES.ESCAPE, onMatch: pushFirst },
+                ]}
+            />,
+        );
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE });
+
+        expect(calls).toEqual(["second", "first"]);
+    });
+
     it("stops calling onMatch after unmount", () => {
         const onMatch = vi.fn();
 

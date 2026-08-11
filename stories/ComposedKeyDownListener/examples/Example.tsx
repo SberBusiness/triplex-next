@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     Button,
     ComposedKeyDownListener,
@@ -10,6 +10,7 @@ import {
 export const Example = () => {
     const [opened, setOpened] = useState(true);
     const [status, setStatus] = useState("Черновик не сохранён");
+    const panelRef = useRef<HTMLDivElement>(null);
 
     const handleSave = () => {
         setStatus("Черновик сохранён");
@@ -21,11 +22,11 @@ export const Example = () => {
         setOpened(false);
     };
 
-    // Слушатели глобальные, поэтому Enter на сфокусированной кнопке дошёл бы и до
-    // onMatch, и до её onClick. Отфильтровываем такие события по event.target —
+    // Слушатели глобальные, поэтому Enter на сфокусированной кнопке панели дошёл бы
+    // и до onMatch, и до её onClick. Отфильтровываем такие события по event.target —
     // действие кнопки должно выигрывать у горячей клавиши.
     const handleSaveOnEnter = (event: KeyboardEvent) => {
-        if (event.target instanceof HTMLButtonElement) {
+        if (event.target instanceof HTMLButtonElement && panelRef.current?.contains(event.target)) {
             return;
         }
 
@@ -53,6 +54,7 @@ export const Example = () => {
     return (
         <ComposedKeyDownListener keyDownListeners={keyDownListeners}>
             <div
+                ref={panelRef}
                 style={{
                     display: "flex",
                     flexDirection: "column",

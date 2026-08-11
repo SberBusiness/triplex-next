@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { action } from "storybook/actions";
@@ -17,6 +16,9 @@ const meta = {
     component: KeyDownListener,
     tags: ["autodocs"],
     parameters: {
+        // Компонент не имеет визуального интерфейса — собственной разметки он не рендерит,
+        // на скриншот попадает только обвязка примеров. Скриншот-тесты для набора не нужны.
+        testRunner: { skip: true },
         docs: {
             description: {
                 component:
@@ -44,22 +46,6 @@ const KEY_CODE_LABELS = Object.fromEntries(
     Object.entries(EVENT_KEY_CODES).map(([keyName, keyCode]) => [keyCode, keyName]),
 );
 
-/** Рендер VisualTests: состояние после срабатывания слушателя фиксируется play-функцией. */
-const VisualTestsRender = () => {
-    const [matched, setMatched] = useState(false);
-
-    return (
-        <KeyDownListener eventKeyCode={EVENT_KEY_CODES.ESCAPE} onMatch={() => setMatched(true)}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "320px" }}>
-                <div>Слушатель Esc</div>
-                <div style={{ border: "1px dashed rgb(125, 131, 138)", borderRadius: "4px", padding: "16px" }}>
-                    {matched ? "onMatch сработал" : "Ожидание нажатия Esc"}
-                </div>
-            </div>
-        </KeyDownListener>
-    );
-};
-
 export const Playground: StoryObj<IPlaygroundProps> = {
     tags: ["!autodocs"],
     args: {
@@ -85,7 +71,6 @@ export const Playground: StoryObj<IPlaygroundProps> = {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-        testRunner: { skip: true },
     },
     render: PlaygroundRender,
 };
@@ -117,26 +102,5 @@ export const WithMultipleKeys: StoryObj<typeof KeyDownListener> = {
                 language: "tsx",
             },
         },
-    },
-};
-
-export const VisualTests: StoryObj<typeof KeyDownListener> = {
-    tags: ["!autodocs", "!dev"],
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    render: () => <VisualTestsRender />,
-    play: async ({ canvas }) => {
-        // userEvent не проставляет legacy-поле keyCode в KeyboardEvent, а KeyDownListener сравнивает
-        // именно его, поэтому событие диспатчится напрямую на window с нужным кодом клавиши.
-        window.dispatchEvent(
-            new KeyboardEvent("keydown", { key: "Escape", keyCode: EVENT_KEY_CODES.ESCAPE, bubbles: true }),
-        );
-
-        await canvas.findByText("onMatch сработал");
     },
 };

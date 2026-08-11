@@ -132,7 +132,10 @@ version: "1.0"
 | `Playground` | `Playground.tsx` | Интерактивный выбор `eventKeyCode` и счётчик срабатываний `onMatch` |
 | `Default` | `Default.tsx` | Слушатель одной клавиши: панель скрывается по `Esc` |
 | `WithMultipleKeys` | `WithMultipleKeys.tsx` | Массив кодов в `eventKeyCode`; нажатая клавиша различается по `event.keyCode` |
-| `VisualTests` | — | Состояние после срабатывания слушателя: `play` диспатчит на `window` `keydown` с `keyCode` клавиши `Esc` |
+
+Набор целиком исключён из скриншот-тестов (`testRunner: { skip: true }` в `meta`):
+собственной разметки компонент не рендерит, на скриншот попадала бы только
+обвязка примеров. Поведение слушателя покрыто unit-тестами.
 
 Примеры `ComposedKeyDownListener` живут в собственном наборе stories —
 `stories/ComposedKeyDownListener/`.
@@ -143,6 +146,6 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-08-11 | TRI-112: у `ComposedKeyDownListener` появились собственный `ComposedKeyDownListener-ai.md` и набор stories `stories/ComposedKeyDownListener/`; раздел «Связанные компоненты» сокращён до ссылки, story `Example` (демонстрация композитора) перенесена в новый набор. Ограничение на стабильную длину `keyDownListeners` снято — композитор рендерит слушателей соседями к `children`. Сам `KeyDownListener` не менялся. |
+| 2026-08-11 | TRI-112: у `ComposedKeyDownListener` появились собственный `ComposedKeyDownListener-ai.md` и набор stories `stories/ComposedKeyDownListener/`; раздел «Связанные компоненты» сокращён до ссылки, story `Example` (демонстрация композитора) перенесена в новый набор. Ограничение на стабильную длину `keyDownListeners` снято — композитор рендерит слушателей соседями к `children`. Набор stories `KeyDownListener` исключён из скриншот-тестов, story `VisualTests` и baseline удалены — визуального интерфейса у компонента нет. Реализация самого `KeyDownListener` не менялась. |
 | 2026-08-04 | По ревью PR #502: интерфейс props `IComposedKeyDownListenerProps` стал экспортируемым — публичная поверхность пакета расширена аддитивно. `ComposedKeyDownListener` добавлен отдельной строкой в `docs/ai/ROADMAP.md`, собственный AI.md вынесен в отдельную задачу. |
 | 2026-08-04 | Создан документ. AI-рефакторинг (TRI-48): JSDoc на props `IKeyDownListenerProps` и `ComposedKeyDownListener`, ветвление в `handleKeyDown` сведено к одной проверке (снят `eslint-disable`), в `ComposedKeyDownListener` убран `as JSX.Element` и добавлен `displayName`, unit-тесты (16 кейсов на оба компонента), stories по modern pattern. Публичный API не менялся; компонент остаётся class-компонентом, `forwardRef` осознанно отсутствует. |

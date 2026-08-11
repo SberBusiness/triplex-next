@@ -26,7 +26,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **MediaWidth**
 
-- AI-рефакторинг: у `MediaWidth` появился `displayName`, исправлены опечатки и дополнен JSDoc props и самого компонента (описано делегирование в `MediaBetweenWidth` / `MediaMinWidth` / `MediaMaxWidth` и то, что без `minWidth` и `maxWidth` всегда рендерится `fallback`). Unit-тесты расширены с 7 до 19 кейсов: проверяются строки медиа-запросов, выбор реализации, `null`-ветки, переподписка при смене запроса и отписка при размонтировании. Создан `MediaWidth-ai.md`. Публичный API и поведение не изменены: props `children`, `minWidth`, `maxWidth`, `fallback`, интерфейс `IMediaProps`, barrel-экспорты и границы диапазонов — как были.
+- Проведён AI-рефакторинг, добавлен `displayName`.
 
 **MobileView**
 

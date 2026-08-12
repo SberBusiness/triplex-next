@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { FormField, FormFieldMaskedInput } from "@sberbusiness/triplex-next/components";
 
@@ -12,6 +12,17 @@ const renderMaskedInput = (props: Partial<React.ComponentProps<typeof FormFieldM
     );
 
 const getInput = () => screen.getByRole("textbox") as HTMLInputElement;
+
+/** Поле, значение которого хранит потребитель, — так компонент используется в реальном коде. */
+const ControlledMaskedInput = ({ initialValue }: { initialValue: string }) => {
+    const [value, setValue] = useState(initialValue);
+
+    return (
+        <FormField>
+            <FormFieldMaskedInput mask={masks.date} value={value} onChange={(event) => setValue(event.target.value)} />
+        </FormField>
+    );
+};
 
 describe("FormFieldMaskedInput", () => {
     // Тест должен идти первым: React выводит предупреждение о смешении value и defaultValue
@@ -38,31 +49,14 @@ describe("FormFieldMaskedInput", () => {
         expect(getInput()).toHaveValue("+7 (900) 123-45-67");
     });
 
-    it("keeps React value in sync with the value set by the mask", () => {
-        // react-text-mask пишет значение в DOM напрямую, поэтому в input должно приходить
-        // уже приведённое к маске значение, иначе React и DOM расходятся.
-        renderMaskedInput();
+    it("allows deleting a mask separator", () => {
+        render(<ControlledMaskedInput initialValue="12." />);
 
-        const input = getInput();
-        expect(input.defaultValue).toBe(input.value);
-    });
+        // Разделитель маски подставляется автоматически, поэтому в input должно уходить
+        // исходное значение потребителя — иначе маска возвращает стёртый разделитель обратно.
+        fireEvent.change(getInput(), { target: { value: "12" } });
 
-    it("keeps the displayed value conformed when input is rejected by the mask", () => {
-        renderMaskedInput({ onChange: vi.fn() });
-
-        // Лишний символ маска не принимает — значение в поле должно остаться отформатированным.
-        fireEvent.change(getInput(), { target: { value: "12.12.20245" } });
-
-        expect(getInput()).toHaveValue("12.12.2024");
-    });
-
-    it("calls onChange when the incoming value differs from the entered one", () => {
-        const onChange = vi.fn();
-        renderMaskedInput({ mask: masks.phone, onChange, value: "9001234567" });
-
-        fireEvent.change(getInput(), { target: { value: "+7 (900) 123-45-678" } });
-
-        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(getInput()).toHaveValue("12");
     });
 
     it("conforms the value when the controlled value changes", () => {

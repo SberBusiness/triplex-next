@@ -75,6 +75,13 @@ describe("Amount", () => {
         expect(getAmount().textContent).toBe("");
     });
 
+    it("Should still render currency for empty value", () => {
+        render(<Amount value="" currency="RUB" data-testid="amount" />);
+
+        // Ветка отрисовки валюты не зависит от того, пуста ли сумма.
+        expect(getAmount().textContent).toBe(`${NBSP}RUB`);
+    });
+
     it("Should render zero for non-numeric value", () => {
         render(<Amount value="abc" data-testid="amount" />);
 

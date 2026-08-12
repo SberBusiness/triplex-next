@@ -146,9 +146,12 @@ version: "1.0"
   вместе с текстом — например `role="img"` и `aria-label` (оба уйдут в `...rest`),
   — либо продублировать смысл текстом рядом. Если точка декоративна и дублирует
   видимый текст — передай `aria-hidden`.
-  Внутри библиотеки так и сделано: `Chip`, `DropdownListItem`,
-  `DropdownMobileListItem`, `TabsLineItem` и `TabsExtendedTabButton` показывают
-  точку рядом с собственной подписью.
+  **Внутри библиотеки этого пока нет:** `Chip`, `DropdownListItem`,
+  `DropdownMobileListItem`, `TabsLineItem` и `TabsExtendedTabButton` рендерят
+  `<Badge.Dot size={...} className={styles.notificationIcon} />` — без `aria-hidden`
+  и без роли с именем. Точка там означает «есть новые уведомления», и подписью
+  рядом этот смысл не дублируется, то есть для скринридера информация теряется.
+  Это известный пробел, а не образец для копирования.
 - Строки на конкретном языке компонент не хардкодит — весь текст приходит от
   потребителя.
 
@@ -194,7 +197,7 @@ version: "1.0"
 | `Sizes` | `SizesExample.tsx` | Размеры `SM` / `MD` / `LG` с подходящей типографикой |
 | `WithPrefixAndPostfix` | `WithPrefixAndPostfixExample.tsx` | Иконки слева и справа во всех трёх размерах |
 | `DotSizes` | `DotSizesExample.tsx` | Размеры `Badge.Dot` |
-| `Example` | `ProductionExample.tsx` | Продуктовые сценарии: только иконка, счётчик, цветные статусы через инлайновый `style` |
+| `Example` | `ProductionExample.tsx` | Продуктовые сценарии: только иконка, иконка с текстом (`prefix` / `postfix`), цветные статусы через инлайновый `style` |
 
 Скриншот-регрессия снимается со стори `Default`, `Sizes`, `WithPrefixAndPostfix`,
 `DotSizes` (`__screenshots__/badge--*--xs|xl.png`). `Playground` и `Example` исключены
@@ -207,4 +210,4 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-08-12 | Создан документ. AI-рефакторинг: JSDoc на всех props `IBadgeProps` / `IBadgeDotProps` / `IBadgeContentProps` с указанием размеров в px, в `IBadgeProps` добавлен явный `children` (тип совпадает с унаследованным из `React.HTMLAttributes`), расширены JSDoc компонентов и внутренних обёрток. Unit-тесты расширены с 12 до 37 кейсов: `Badge.test.tsx` вырос с 12 до 21 кейса, рядом добавлены `BadgeDot.test.tsx` (7) и `BadgeContent.test.tsx` (9) — покрыты логика снятия отступов контента, порядок частей разметки, проброс `...rest` и `ref`. Публичный API, DOM-разметка и визуальное поведение не изменены. |
+| 2026-08-12 | Создан документ. AI-рефакторинг: JSDoc на всех props `IBadgeProps` / `IBadgeDotProps` / `IBadgeContentProps` с указанием размеров в px, в `IBadgeProps` добавлен явный `children` (тип совпадает с унаследованным из `React.HTMLAttributes`), расширены JSDoc компонентов и внутренних обёрток. Unit-тесты расширены с 12 до 45 кейсов: `Badge.test.tsx` вырос с 12 до 23 кейсов, рядом добавлены `BadgeDot.test.tsx` (7), `BadgeContent.test.tsx` (9) и `BadgeAffixes.test.tsx` (6) — покрыты логика снятия отступов контента, нерендеринг частей с falsy-значением, порядок частей разметки, проброс `...rest` и `ref`. Публичный API, DOM-разметка и визуальное поведение не изменены. |

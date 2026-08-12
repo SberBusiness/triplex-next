@@ -13,10 +13,10 @@ describe("Badge", () => {
     });
 
     it("should render as a span element", () => {
-        render(<Badge size={EComponentSize.MD}>Badge Text</Badge>);
+        const { container } = render(<Badge size={EComponentSize.MD}>Badge Text</Badge>);
 
-        const badge = screen.getByText("Badge Text").closest("span");
-        expect(badge?.tagName).toBe("SPAN");
+        expect(container.firstChild).toHaveClass("badge");
+        expect((container.firstChild as HTMLElement).tagName).toBe("SPAN");
     });
 
     it("should apply correct size class from the map", () => {
@@ -149,6 +149,23 @@ describe("Badge", () => {
         const { container } = render(<Badge size={EComponentSize.MD} prefix={<span>Prefix</span>} />);
 
         expect(container.querySelector(".badgeContent")).not.toBeInTheDocument();
+    });
+
+    it("should not render the content wrapper for falsy children", () => {
+        const { container } = render(<Badge size={EComponentSize.MD}>{0}</Badge>);
+
+        expect(container.querySelector(".badgeContent")).not.toBeInTheDocument();
+    });
+
+    it("should not render the prefix and postfix wrappers for falsy values", () => {
+        const { container } = render(
+            <Badge size={EComponentSize.MD} prefix={false} postfix={null}>
+                Test
+            </Badge>,
+        );
+
+        expect(container.querySelector(".badgePrefix")).not.toBeInTheDocument();
+        expect(container.querySelector(".badgePostfix")).not.toBeInTheDocument();
     });
 
     it("should pass its size down to the content wrapper", () => {

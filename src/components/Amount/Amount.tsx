@@ -25,7 +25,7 @@ export interface IAmountProps extends React.HTMLAttributes<HTMLSpanElement> {
     currency?: string;
     /** Сообщение подсказки названия валюты. Попадает в атрибут title элемента с обозначением валюты. */
     currencyTitle?: string;
-    /** При длине форматированной суммы от ADAPTIVE_AMOUNT_LENGTH символов уменьшает размер шрифта. По умолчанию false. */
+    /** При длине форматированной суммы от 14 символов (ADAPTIVE_AMOUNT_LENGTH) уменьшает размер шрифта. По умолчанию false. */
     adaptive?: boolean;
     /** Тестовый атрибут. Используется как префикс: `${dataTestId}__amount` и `${dataTestId}__currencyName`. */
     dataTestId?: string;

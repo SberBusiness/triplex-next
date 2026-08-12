@@ -65,74 +65,26 @@ describe("TableBasic", () => {
         expect(screen.getByTestId("empty")).toBeInTheDocument();
     });
 
-    it("Should render loader instead of no-data footer when loading and empty", () => {
+    it("Should render overlay and spinner when loading and empty", () => {
         const columns = buildColumns();
         const { container } = render(
-            <MasterTable>
-                <MasterTable.Content loading>
-                    <TableBasic columns={columns} data={[]} renderNoData={() => <div data-testid="empty" />} />
-                </MasterTable.Content>
+            <MasterTable loading>
+                <TableBasic columns={columns} data={[]} renderNoData={() => <div />} />
             </MasterTable>,
         );
-        expect(screen.queryByTestId("empty")).not.toBeInTheDocument();
-        expect(container.querySelector("[class*='loaderMiddle']")).toBeInTheDocument();
+        expect(container.querySelector(".overlayCover")).toBeInTheDocument();
+        // LoaderMiddle inside footer
+        expect(screen.getByRole("status", { name: "loading" })).toBeInTheDocument();
     });
 
-    it("Should render no-data footer after loading ends with empty data", () => {
+    it("Should render spinner wrapper when loading and has data", () => {
         const columns = buildColumns();
-        const renderContent = (loading: boolean) => (
-            <MasterTable>
-                <MasterTable.Content loading={loading}>
-                    <TableBasic columns={columns} data={[]} renderNoData={() => <div data-testid="empty" />} />
-                </MasterTable.Content>
-            </MasterTable>
-        );
-        const { container, rerender } = render(renderContent(true));
-
-        expect(screen.queryByTestId("empty")).not.toBeInTheDocument();
-
-        rerender(renderContent(false));
-
-        // Лоадер снят, и на его месте появляется заглушка "нет данных".
-        expect(container.querySelector("[class*='loaderScreen']")).not.toBeInTheDocument();
-        expect(screen.getByTestId("empty")).toBeInTheDocument();
-    });
-
-    it("Should cover table and pagination, but not panels outside the content, when loading", () => {
-        const columns = buildColumns();
+        const data = buildRows(1);
         const { container } = render(
-            <MasterTable>
-                <MasterTable.FilterPanel>
-                    <div data-testid="filter" />
-                </MasterTable.FilterPanel>
-                <MasterTable.Content loading>
-                    <TableBasic columns={columns} data={buildRows(1)} renderNoData={() => <div />} />
-                    <MasterTable.PaginationPanel>
-                        <div data-testid="pagination" />
-                    </MasterTable.PaginationPanel>
-                </MasterTable.Content>
+            <MasterTable loading>
+                <TableBasic columns={columns} data={data} renderNoData={() => <div />} />
             </MasterTable>,
         );
-
-        const content = container.querySelector("[class*='masterTableContent']");
-
-        // Оверлей лежит в одном контейнере с таблицей и пагинацией, поэтому перекрывает их.
-        expect(content).toContainElement(container.querySelector("[class*='loaderScreen']"));
-        expect(content).toContainElement(container.querySelector("table"));
-        expect(content).toContainElement(screen.getByTestId("pagination"));
-        // Панель фильтров остаётся снаружи обёртки и не перекрывается.
-        expect(content).not.toContainElement(screen.getByTestId("filter"));
-    });
-
-    it("Should not render loader when content is not loading", () => {
-        const columns = buildColumns();
-        const { container } = render(
-            <MasterTable>
-                <MasterTable.Content>
-                    <TableBasic columns={columns} data={buildRows(1)} renderNoData={() => <div />} />
-                </MasterTable.Content>
-            </MasterTable>,
-        );
-        expect(container.querySelector("[class*='loaderScreen']")).not.toBeInTheDocument();
+        expect(container.querySelector(".spinnerWrapper")).toBeInTheDocument();
     });
 });

@@ -2,6 +2,8 @@
 
 @borderVerticalSpacing: 16px;
 
+.keyframes-fadeIn();
+
 .tableBasic {
     position: relative;
 
@@ -168,4 +170,26 @@
         padding: 64px 0;
     }
 
+    .spinnerWrapper {
+        position: absolute;
+        top: 16px;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 16px);
+
+        .tableLoaderScreen {
+            border-radius: 8px 8px 0 0;
+            z-index: @z-index-step;
+        }
+    }
+
+    .overlayCover {
+        position: absolute;
+        top: 16px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: @overlay-white-background-color;
+        animation: fadeIn 0.3s;
+    }
 }

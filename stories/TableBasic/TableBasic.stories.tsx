@@ -554,7 +554,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
 
         return (
             <div style={args.withHorizontalScroll ? { width: "100%" } : undefined}>
-                <MasterTable>
+                <MasterTable loading={args.isLoading}>
                     <MasterTable.ChipPanel>
                         <MasterTable.ChipPanel.Links>
                             {isSpoilerFilterChanged && <Link onClick={handleClickResetFilters}>Сбросить всё</Link>}
@@ -568,19 +568,17 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                         </MasterTable.ChipPanel.Links>
                     </MasterTable.ChipPanel>
                     {renderFilterPanel()}
-                    <MasterTable.Content loading={args.isLoading}>
-                        <div style={args.withHorizontalScroll ? { overflow: "auto hidden" } : undefined}>
-                            <MasterTable.TableBasic
-                                columns={columns}
-                                data={data}
-                                headless={args.isHeadless}
-                                highlightRowOnHover={args.withHighlightRowOnHover}
-                                renderNoData={() => renderNoData(isAnyFilterChanged)}
-                                onOrderBy={setOrder}
-                            />
-                        </div>
-                        {checkedRows.length > 0 && renderTableFooter()}
-                    </MasterTable.Content>
+                    <div style={args.withHorizontalScroll ? { overflow: "auto hidden" } : undefined}>
+                        <MasterTable.TableBasic
+                            columns={columns}
+                            data={data}
+                            headless={args.isHeadless}
+                            highlightRowOnHover={args.withHighlightRowOnHover}
+                            renderNoData={() => renderNoData(isAnyFilterChanged)}
+                            onOrderBy={setOrder}
+                        />
+                    </div>
+                    {checkedRows.length > 0 && renderTableFooter()}
                 </MasterTable>
             </div>
         );
@@ -1203,131 +1201,6 @@ export const TableWithPagination: StoryObj = {
         docs: {
             description: {
                 story: "Таблица с пагинацией, когда известно количество данных, в текущей реализации это 300 строк. Реализуется через компоненты PaginationPanel и Pagination.",
-            },
-        },
-        controls: { disable: true },
-    },
-};
-
-export const TableWithPaginationLoading: StoryObj = {
-    render: () => {
-        const columns: ITableBasicColumn[] = [
-            {
-                fieldKey: "number",
-                label: "Номер",
-            },
-            {
-                fieldKey: "value",
-                label: "Получатель",
-            },
-            {
-                fieldKey: "sum",
-                horizontalAlign: EHorizontalAlign.RIGHT,
-                label: "Сумма",
-                renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
-            },
-            {
-                fieldKey: "status",
-                label: "Статус",
-            },
-        ];
-
-        const data = Array.from({ length: 60 }, (_, index) => ({
-            rowData: {
-                number: 1000 + index,
-                status: "Исполнено",
-                sum: "1220000000",
-                value: renderCounterpartyDetails(
-                    "Платежное поручение ООО Ромашка",
-                    "40702 810 2 0527 5000000",
-                    "В том числе НДС 20%",
-                ),
-            },
-            rowKey: `table-basic-loading-row-${index}`,
-        }));
-
-        const [filters, setFilters] = useState(defaultTableFilters);
-        const [page, setPage] = useState(1);
-        const [pageSize, setPageSize] = useState(10);
-        const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
-
-        const options: ISelectExtendedFieldDefaultOption[] = [
-            { id: "0", value: "10", label: "10" },
-            { id: "1", value: "20", label: "20" },
-            { id: "2", value: "50", label: "50" },
-        ];
-
-        const selectedOption = options.find((option) => option.value === String(pageSize));
-
-        const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
-            setPage(1);
-            setPageSize(Number(option.value));
-        };
-
-        return (
-            <MasterTable>
-                <MasterTable.FilterPanel>
-                    <Row paddingBottom={false}>
-                        <Col size={6}>
-                            <TextField
-                                size={EComponentSize.MD}
-                                inputProps={{
-                                    value: filters.docNumber,
-                                    onChange: (event) =>
-                                        setFilters((prev) => ({ ...prev, docNumber: event.target.value })),
-                                    placeholder: "Введите номер документа",
-                                }}
-                                label="Номер документа"
-                            />
-                        </Col>
-                        <Col size={6}>
-                            <TextField
-                                size={EComponentSize.MD}
-                                inputProps={{
-                                    value: filters.counterparty,
-                                    onChange: (event) =>
-                                        setFilters((prev) => ({ ...prev, counterparty: event.target.value })),
-                                    placeholder: "Введите получателя",
-                                }}
-                                label="Получатель"
-                            />
-                        </Col>
-                    </Row>
-                </MasterTable.FilterPanel>
-                <MasterTable.Content loading={true}>
-                    <MasterTable.TableBasic
-                        columns={columns}
-                        data={data.slice((page - 1) * pageSize, page * pageSize)}
-                        renderNoData={() => renderNoData(false)}
-                    />
-                    <MasterTable.PaginationPanel>
-                        <Pagination
-                            paginationNavigationProps={{
-                                currentPage: page,
-                                totalPages,
-                                boundaryCount: 1,
-                                siblingCount: 1,
-                                onCurrentPageChange: setPage,
-                            }}
-                            paginationSelectProps={{
-                                paginationLabel: "Показать на странице:",
-                                options,
-                                value: selectedOption || options[0],
-                                onChange: handlePageSizeChange,
-                                targetProps: {
-                                    fieldLabel: "",
-                                },
-                            }}
-                        />
-                    </MasterTable.PaginationPanel>
-                </MasterTable.Content>
-            </MasterTable>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Состояние загрузки таблицы с пагинацией",
             },
         },
         controls: { disable: true },

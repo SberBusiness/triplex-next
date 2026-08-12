@@ -152,7 +152,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | MarkerStatus | ⬜ | ✅ | ⬜ |
 | MaskedField | ⬜ | ⬜ | ⬜ |
 | MasterTable | ⬜ | ⬜ | ⬜ |
-| MediaWidth | ⬜ | ✅ | ⬜ |
+| MediaWidth | ✅ | ✅ | ✅ |
 | MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |
 | MonthYearField | ✅ | ✅ | ✅ |

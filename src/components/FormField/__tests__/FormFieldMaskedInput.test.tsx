@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { FormField, FormFieldMaskedInput } from "@sberbusiness/triplex-next/components";
 
 const { masks } = FormFieldMaskedInput.presets;
@@ -14,12 +15,25 @@ const renderMaskedInput = (props: Partial<React.ComponentProps<typeof FormFieldM
 const getInput = () => screen.getByRole("textbox") as HTMLInputElement;
 
 /** Поле, значение которого хранит потребитель, — так компонент используется в реальном коде. */
-const ControlledMaskedInput = ({ initialValue }: { initialValue: string }) => {
+const ControlledMaskedInput = ({
+    initialValue,
+    onChange,
+}: {
+    initialValue: string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+}) => {
     const [value, setValue] = useState(initialValue);
 
     return (
         <FormField>
-            <FormFieldMaskedInput mask={masks.date} value={value} onChange={(event) => setValue(event.target.value)} />
+            <FormFieldMaskedInput
+                mask={masks.date}
+                value={value}
+                onChange={(event) => {
+                    onChange?.(event);
+                    setValue(event.target.value);
+                }}
+            />
         </FormField>
     );
 };
@@ -49,14 +63,24 @@ describe("FormFieldMaskedInput", () => {
         expect(getInput()).toHaveValue("+7 (900) 123-45-67");
     });
 
-    it("allows deleting a mask separator", () => {
-        render(<ControlledMaskedInput initialValue="12." />);
+    it("allows deleting a mask separator", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn<React.ChangeEventHandler<HTMLInputElement>>();
+        render(<ControlledMaskedInput initialValue="" onChange={onChange} />);
 
-        // Разделитель маски подставляется автоматически, поэтому в input должно уходить
-        // исходное значение потребителя — иначе маска возвращает стёртый разделитель обратно.
-        fireEvent.change(getInput(), { target: { value: "12" } });
+        await user.click(getInput());
+        await user.keyboard("12");
+        // Разделитель маска подставляет сама, как только заполнена группа символов.
+        expect(getInput()).toHaveValue("12.");
+
+        onChange.mockClear();
+        // Разделитель должен стираться: если в input уходит приведённое к маске значение,
+        // маска возвращает его обратно и удаление не работает.
+        await user.keyboard("{Backspace}");
 
         expect(getInput()).toHaveValue("12");
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value).toBe("12");
     });
 
     it("conforms the value when the controlled value changes", () => {

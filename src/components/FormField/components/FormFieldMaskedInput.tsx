@@ -165,15 +165,17 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             };
         };
 
-        // Возвращает value, для передачи в компоненты рендера. Для некоторых типов масок, value приходится модифицировать из-за багов.
+        // Возвращает value, приведённое к маске. Для некоторых типов масок, value приходится модифицировать из-за багов.
         const getValue = (): string => {
             if (mask === presets.masks.phone) {
-                value = phonePipe(value).value;
-                return value;
+                return phonePipe(value).value;
             }
 
             return conformToMask(value, mask, { guide: false, placeholderChar }).conformedValue;
         };
+
+        // Значение, приведённое к маске. Передаётся и в react-text-mask, и в input, чтобы они не расходились.
+        const maskedValue = getValue();
 
         /** Функция для хранения ссылки. */
         const setRef = (ref: (inputElement: HTMLElement) => void) => (instance: HTMLInputElement | null) => {
@@ -208,20 +210,26 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
 
                 {/* Input, отображающий введенное значение. */}
                 <MaskedInputTextMask
-                    // https://github.com/text-mask/text-mask/pull/993
-                    defaultValue=""
                     disabled={status === EFormFieldStatus.DISABLED}
                     /* Input отображает только введенное значение без маски, маска рисуется в inputPlaceholder. */
                     guide={false}
                     render={(ref, props) => (
-                        <FormFieldInput {...props} value={value} placeholder={placeholder || ""} ref={setRef(ref)} />
+                        <FormFieldInput
+                            {...props}
+                            // react-text-mask подставляет в props defaultValue, равное value (https://github.com/text-mask/text-mask/pull/993).
+                            // На контролируемом input это даёт предупреждение React «both value and defaultValue props».
+                            defaultValue={undefined}
+                            value={maskedValue}
+                            placeholder={placeholder || ""}
+                            ref={setRef(ref)}
+                        />
                     )}
                     mask={mask}
                     onChange={handleChange}
                     onPaste={handlePaste}
                     placeholderChar={placeholderChar}
                     // value={value} не используется т.к. возникает баг при передаче снаружи изначально пустого value, а затем не пустого.
-                    value={getValue()}
+                    value={maskedValue}
                     pipe={pipe}
                     type="text"
                     {...restProps}

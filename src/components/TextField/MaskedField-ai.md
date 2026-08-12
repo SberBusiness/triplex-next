@@ -67,7 +67,7 @@ version: "1.0"
 - Публичный API (`IMaskedFieldProps`: `maskedInputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
 - Barrel `index.ts` экспортирует `TextField` и `MaskedField` — состав экспортов не менять. `TextFieldBase` намеренно НЕ экспортируется — приватная база.
 - Ссылка на элемент input передаётся только через `maskedInputProps.forwardedRef`. `maskedInputProps.ref` (`React.RefObject<HTMLDivElement>`) попадает на корневой `<div>` обёртки `FormFieldMaskedInput` — это ref самого `FormFieldMaskedInput`, а не поля ввода.
-- `maskedInputProps.value` обязателен: `FormFieldMaskedInput` — контролируемый компонент, `defaultValue` внутри зафиксирован пустой строкой (обход бага `react-text-mask`).
+- `maskedInputProps.value` обязателен: `FormFieldMaskedInput` — контролируемый компонент. `defaultValue` внутрь `<input>` не передаётся: `react-text-mask` подставляет его равным `value`, а на контролируемом поле это даёт предупреждение React о смешении controlled и uncontrolled.
 - Маски и подсказки берутся из `FormFieldMaskedInput.presets` — состав пресетов и их значения часть публичного API.
 - Уникальный `id` для связки label↔input генерируется через `lodash uniqueId` в `FormFieldInput` — не заменять на `useId` (React 17 совместимость через release-0).
 
@@ -103,8 +103,8 @@ version: "1.0"
 |---|---|---|
 | `Playground` | `Playground.tsx` | Интерактивный контроль size / status / label / prefix / postfix / description / counter и выбор маски из пресетов |
 | `Default` | `Default.tsx` | Минимальное контролируемое поле с маской телефона |
-| `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG с заполненным значением |
-| `Statuses` | `Statuses.tsx` | Статусы default / error / warning / disabled с description соответствующего типа |
+| `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG на пустом поле |
+| `Statuses` | `Statuses.tsx` | Статусы default / error / warning / disabled на пустом поле |
 | `WithPlaceholderMask` | `WithPlaceholderMask.tsx` | Подсказка формата: поле с `placeholderMask` против поля без него |
 | `PassRefToInput` | `PassRefToInput.tsx` | Проброс ref на input через `maskedInputProps.forwardedRef` |
 | `AllMasks` | `AllMasks.tsx` | Все пресеты масок `FormFieldMaskedInput.presets.masks` с подписями |
@@ -119,3 +119,4 @@ version: "1.0"
 |---|---|
 | 2026-08-07 | Создан документ (TRI-56). AI-рефакторинг MaskedField, unit-тесты, миграция stories на modern pattern |
 | 2026-08-11 | Тип `maskedInputProps.ref` исправлен на `React.RefObject<HTMLDivElement>` — соответствует фактическому ref-таргету (правки по ревью PR #515) |
+| 2026-08-12 | Исправления в `FormFieldMaskedInput` по ревью PR #515: убрана мутация prop `value` в `getValue()`, `defaultValue` больше не уходит в `<input>` (предупреждение React о controlled/uncontrolled) |

@@ -10,7 +10,7 @@ import {
 
 const BORDER_RADIUSES = Object.values(EAlertProcessBorderRadius);
 
-export const BorderRadiusExample = () => (
+export const BorderRadius = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxWidth: "750px" }}>
         {BORDER_RADIUSES.map((borderRadius) => (
             <div key={borderRadius}>

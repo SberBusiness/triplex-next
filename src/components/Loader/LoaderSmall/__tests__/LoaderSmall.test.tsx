@@ -16,6 +16,17 @@ describe("LoaderSmall", () => {
         expect(loader).toHaveClass("loaderSmall");
     });
 
+    it("Should render three dots", () => {
+        render(<LoaderSmall theme={ELoaderSmallTheme.BRAND} size={EComponentSize.MD} />);
+
+        // Количество точек и их порядок завязаны на задержки анимации в стилях.
+        const dots = getLoaderSmall().querySelectorAll(".dot");
+        expect(dots).toHaveLength(3);
+        expect(dots[0]).toHaveClass("dot1");
+        expect(dots[1]).toHaveClass("dot2");
+        expect(dots[2]).toHaveClass("dot3");
+    });
+
     it("Should apply correct theme classes", () => {
         const { rerender } = render(<LoaderSmall theme={ELoaderSmallTheme.BRAND} size={EComponentSize.MD} />);
 
@@ -43,5 +54,23 @@ describe("LoaderSmall", () => {
 
         loader = getLoaderSmall();
         expect(loader).toHaveClass("lg");
+    });
+
+    it("Should merge custom className with base classes", () => {
+        render(<LoaderSmall theme={ELoaderSmallTheme.BRAND} size={EComponentSize.MD} className="customClassName" />);
+
+        const loader = getLoaderSmall();
+        expect(loader).toHaveClass("loaderSmall");
+        expect(loader).toHaveClass("brand");
+        expect(loader).toHaveClass("md");
+        expect(loader).toHaveClass("customClassName");
+    });
+
+    it("Should pass rest props to root element", () => {
+        render(<LoaderSmall theme={ELoaderSmallTheme.BRAND} size={EComponentSize.MD} id="loader" data-test="loader" />);
+
+        const loader = getLoaderSmall();
+        expect(loader).toHaveAttribute("id", "loader");
+        expect(loader).toHaveAttribute("data-test", "loader");
     });
 });

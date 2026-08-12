@@ -81,7 +81,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | AbstractTree | ⬜ | ⬜ | ⬜ |
 | AccordionBase | ⬜ | ⬜ | ⬜ |
 | AlertContext | ✅ | ✅ | ✅ |
-| AlertProcess | ⬜ | ⬜ | ⬜ |
+| AlertProcess | ✅ | ✅ | ✅ |
 | Amount | ⬜ | ✅ | ⬜ |
 | AmountField | ⬜ | ⬜ | ⬜ |
 | Avatar | ⬜ | ✅ | ⬜ |
@@ -105,7 +105,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
 | CollapsibleTreeExtended | ✅ | ✅ | ✅ |
-| ComposedKeyDownListener | ⬜ | ⬜ | ✅ |
+| ComposedKeyDownListener | ✅ | ✅ | ✅ |
 | Confirm | ⬜ | ⬜ | ⬜ |
 | DateField | ⬜ | ✅ | ⬜ |
 | DatePickerExtended | ⬜ | ⬜ | ⬜ |
@@ -147,12 +147,12 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ListSortableItem | ✅ | ✅ | ✅ |
 | LoaderMiddle | ✅ | ✅ | ✅ |
 | LoaderScreen | ✅ | ✅ | ✅ |
-| LoaderSmall | ⬜ | ⬜ | ⬜ |
+| LoaderSmall | ✅ | ✅ | ✅ |
 | Marker | ⬜ | ⬜ | ⬜ |
 | MarkerStatus | ⬜ | ✅ | ⬜ |
 | MaskedField | ⬜ | ⬜ | ⬜ |
 | MasterTable | ⬜ | ⬜ | ⬜ |
-| MediaWidth | ⬜ | ✅ | ⬜ |
+| MediaWidth | ✅ | ✅ | ✅ |
 | MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |
 | MonthYearField | ✅ | ✅ | ✅ |

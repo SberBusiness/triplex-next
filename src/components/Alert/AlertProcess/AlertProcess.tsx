@@ -1,11 +1,4 @@
 import React, { useState } from "react";
-import { EAlertType } from "../EAlertType";
-import { ALERT_TYPE_TO_CLASS_NAME_MAP } from "../AlertTypeUtils";
-import { ButtonIcon } from "../../Button/ButtonIcon";
-import { AlertProcessSpoiler } from "./components/AlertProcessSpoiler";
-import { AlertProcessContext } from "./AlertProcessContext";
-import { EAlertProcessBorderRadius } from "./enums";
-import styles from "./styles/AlertProcess.module.less";
 import {
     InfoStrokeStsIcon20,
     WarningStrokeStsIcon20,
@@ -15,21 +8,31 @@ import {
     CrossStrokeSrvIcon16,
 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
+import { EAlertType } from "../EAlertType";
+import { ALERT_TYPE_TO_CLASS_NAME_MAP } from "../AlertTypeUtils";
+import { ButtonIcon } from "../../Button/ButtonIcon";
+import { AlertProcessSpoiler } from "./components/AlertProcessSpoiler";
+import { AlertProcessContext } from "./AlertProcessContext";
+import { EAlertProcessBorderRadius } from "./enums";
+import styles from "./styles/AlertProcess.module.less";
 
 /** Свойства компонента AlertProcess. */
 export interface IAlertProcessProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Тип предупреждения. */
+    /** Тип предупреждения. Определяет фон блока и иконку по умолчанию. */
     type: EAlertType;
-    /** Модификатор возможности закрытия предупреждения. */
+    /** Модификатор возможности закрытия предупреждения. По умолчанию false. */
     closable?: boolean;
-    /** Функция обработки закрытия. */
+    /** Функция обработки закрытия. Вызывается после того, как компонент скрыл себя. */
     onClose?: () => void;
-    /** Отображаемая иконка. */
+    /** Отображаемая иконка. Заменяет иконку по умолчанию, выбранную по type. */
     renderIcon?: React.ReactNode;
-    /** Вариант скругления визуальной формы. */
+    /** Вариант скругления визуальной формы. По умолчанию EAlertProcessBorderRadius.MD. */
     borderRadius?: EAlertProcessBorderRadius;
+    /** Содержимое предупреждения. Размеры и цвет текста задаются компонентами Typography. */
+    children?: React.ReactNode;
 }
 
+/** Маппинг типов предупреждений к иконкам по умолчанию. */
 const TYPE_TO_DEFAULT_ICON_MAP: Record<EAlertType, React.ReactNode> = {
     [EAlertType.INFO]: <InfoStrokeStsIcon20 paletteIndex={3} />,
     [EAlertType.WARNING]: <WarningStrokeStsIcon20 paletteIndex={2} />,
@@ -38,12 +41,18 @@ const TYPE_TO_DEFAULT_ICON_MAP: Record<EAlertType, React.ReactNode> = {
     [EAlertType.FEATURE]: <DefaulticonStrokePrdIcon20 paletteIndex={0} />,
 };
 
+/** Маппинг вариантов скругления к CSS-классам. */
 const BORDER_RADIUS_TO_CLASS_NAME_MAP: Record<EAlertProcessBorderRadius, string> = {
     [EAlertProcessBorderRadius.MD]: styles.md,
     [EAlertProcessBorderRadius.LG]: styles.lg,
 };
 
-/** Компонент процессного предупреждения. */
+/**
+ * Компонент процессного предупреждения.
+ * Блочное уведомление с фоном и скруглением: иконка по `type`, произвольный контент,
+ * опциональная кнопка закрытия и раскрывающийся блок `AlertProcess.Spoiler`.
+ * Закрытие не управляется извне — компонент скрывает себя сам и затем вызывает `onClose`.
+ */
 export const AlertProcess = Object.assign(
     React.forwardRef<HTMLDivElement, IAlertProcessProps>(function AlertProcess(
         {
@@ -61,14 +70,14 @@ export const AlertProcess = Object.assign(
         const [closed, setClosed] = useState(false);
         const [hasSpoiler, setHasSpoiler] = useState(false);
 
-        if (closed) {
-            return null;
-        }
-
         const handleClose = () => {
             setClosed(true);
             onClose?.();
         };
+
+        if (closed) {
+            return null;
+        }
 
         return (
             <AlertProcessContext.Provider value={{ hasSpoiler, setHasSpoiler }}>
@@ -84,7 +93,7 @@ export const AlertProcess = Object.assign(
                     data-tx={process.env.npm_package_version}
                     ref={ref}
                 >
-                    <div className={styles.themeIcon}>{renderIcon ? renderIcon : TYPE_TO_DEFAULT_ICON_MAP[type]}</div>
+                    <div className={styles.themeIcon}>{renderIcon || TYPE_TO_DEFAULT_ICON_MAP[type]}</div>
 
                     <div className={styles.alertProcessContentBlock}>{children}</div>
 
@@ -105,4 +114,3 @@ export const AlertProcess = Object.assign(
 );
 
 AlertProcess.displayName = "AlertProcess";
-AlertProcess.Spoiler = AlertProcessSpoiler;

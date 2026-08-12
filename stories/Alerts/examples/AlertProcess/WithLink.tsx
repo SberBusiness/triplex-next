@@ -1,26 +1,18 @@
 import React from "react";
-import {
-    AlertProcess,
-    Button,
-    EAlertType,
-    EButtonTheme,
-    EComponentSize,
-    EFontType,
-    ETextSize,
-    Gap,
-    Text,
-} from "@sberbusiness/triplex-next";
+import { AlertProcess, EAlertType, EFontType, ETextSize, Gap, Link, Text } from "@sberbusiness/triplex-next";
 
-export const WithButtonLinkExample = () => (
+export const WithLink = () => (
     <div style={{ maxWidth: "750px" }}>
         <AlertProcess type={EAlertType.INFO}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
                 This message provides context or highlights important information to note.
             </Text>
             <Gap size={8} />
-            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM}>
-                Button link text
-            </Button>
+            <Text size={ETextSize.B3} type={EFontType.PRIMARY}>
+                <Link href="#" onClick={(event) => event.preventDefault()}>
+                    Link text
+                </Link>
+            </Text>
         </AlertProcess>
     </div>
 );

@@ -9,6 +9,8 @@ import {
     TypesExampleSource,
     SizesExample,
     SizesExampleSource,
+    Loading as LoadingRender,
+    LoadingSource,
 } from "./examples";
 
 interface IIslandPlaygroundProps extends React.ComponentProps<typeof Island> {
@@ -30,7 +32,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "Контейнерный компонент с визуальными вариациями: тип, скругление и внутренние отступы.\n\n- **Типы**: type1, type2, type3\n- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.\n\n**Состав:** Header, Body, Footer",
+                    "Контейнерный компонент с визуальными вариациями: тип, скругление и внутренние отступы.\n\n- **Типы**: type1, type2, type3\n- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.\n- **Загрузка**: `loading` показывает `LoaderScreen` поверх контента карточки.\n\n**Состав:** Header, Body, Footer",
             },
             page: () => (
                 <>
@@ -56,6 +58,7 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
     args: {
         type: EIslandType.TYPE_1,
         size: EComponentSize.MD,
+        loading: false,
         headerText: "Island Header",
         bodyText: "Island Body",
         footerText: "Island Footer",
@@ -80,6 +83,14 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
             table: {
                 type: { summary: "EComponentSize" },
                 defaultValue: { summary: "EComponentSize.MD" },
+            },
+        },
+        loading: {
+            control: { type: "boolean" },
+            description: "Показывать LoaderScreen поверх контента",
+            table: {
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
             },
         },
         headerText: {
@@ -116,7 +127,17 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
     parameters: {
         testRunner: { skip: true },
         controls: {
-            include: ["type", "size", "headerText", "bodyText", "footerText", "showHeader", "showBody", "showFooter"],
+            include: [
+                "type",
+                "size",
+                "loading",
+                "headerText",
+                "bodyText",
+                "footerText",
+                "showHeader",
+                "showBody",
+                "showFooter",
+            ],
         },
         docs: {
             canvas: { sourceState: "none" },
@@ -142,8 +163,8 @@ export const Default: StoryObj<typeof Island> = {
     name: "Default",
     render: DefaultExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: DefaultExampleSource,
                 language: "tsx",
@@ -156,8 +177,8 @@ export const Types: StoryObj<typeof Island> = {
     name: "Types",
     render: TypesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: TypesExampleSource,
                 language: "tsx",
@@ -170,10 +191,24 @@ export const Sizes: StoryObj<typeof Island> = {
     name: "Sizes",
     render: SizesExample,
     parameters: {
+        controls: { disable: true },
         docs: {
-            controls: { disable: true },
             source: {
                 code: SizesExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Loading: StoryObj<typeof Island> = {
+    name: "Loading",
+    render: LoadingRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: LoadingSource,
                 language: "tsx",
             },
         },

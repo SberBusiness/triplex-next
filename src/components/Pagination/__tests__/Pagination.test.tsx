@@ -8,6 +8,7 @@ import { PaginationPageEllipsis } from "../components/PaginationPageEllipsis";
 import { PaginationSelect } from "../components/PaginationSelect";
 import { EPaginationNavigationIconDirection } from "../enums";
 import { Pagination } from "../Pagination";
+import { MasterTable } from "../../Table/MasterTable";
 
 describe("Pagination", () => {
     const getPagination = () => screen.getByTestId("pagination");
@@ -168,6 +169,25 @@ describe("PaginationPageButton", () => {
         );
         expect(screen.getByTestId("page-btn")).toHaveClass("currentPage");
     });
+
+    it("Should keep disabled passed by the consumer outside MasterTable", () => {
+        render(
+            <PaginationPageButton onClick={() => {}} disabled data-testid="page-btn">
+                3
+            </PaginationPageButton>,
+        );
+        // Вне MasterTable контекст отдаёт loading: false — блокировку задаёт только prop.
+        expect(screen.getByTestId("page-btn")).toBeDisabled();
+    });
+
+    it("Should stay enabled outside MasterTable when disabled is not passed", () => {
+        render(
+            <PaginationPageButton onClick={() => {}} data-testid="page-btn">
+                4
+            </PaginationPageButton>,
+        );
+        expect(screen.getByTestId("page-btn")).toBeEnabled();
+    });
 });
 
 describe("PaginationPageEllipsis", () => {
@@ -189,5 +209,78 @@ describe("PaginationSelect", () => {
             />,
         );
         expect(screen.getByText("Items per page")).toBeInTheDocument();
+    });
+});
+
+describe("Pagination inside a loading MasterTable", () => {
+    const options = [
+        { id: "0", value: "10", label: "10" },
+        { id: "1", value: "20", label: "20" },
+    ];
+
+    const setup = (loading: boolean) => {
+        const onCurrentPageChange = vi.fn();
+
+        render(
+            <MasterTable loading={loading}>
+                <MasterTable.PaginationPanel>
+                    <Pagination
+                        paginationNavigationProps={{
+                            totalPages: 5,
+                            currentPage: 2,
+                            onCurrentPageChange,
+                            siblingCount: 1,
+                        }}
+                        paginationSelectProps={{
+                            paginationLabel: "Items per page",
+                            onChange: () => {},
+                            options,
+                            targetProps: { fieldLabel: "" },
+                            value: options[0],
+                        }}
+                    />
+                </MasterTable.PaginationPanel>
+            </MasterTable>,
+        );
+
+        return { onCurrentPageChange };
+    };
+
+    it("Should disable navigation and page buttons while loading", () => {
+        setup(true);
+
+        screen.getAllByRole("button").forEach((button) => expect(button).toBeDisabled());
+    });
+
+    it("Should keep buttons enabled when not loading", () => {
+        setup(false);
+
+        // Кнопка "Назад" на второй из пяти страниц активна — блокировка приходит только из состояния загрузки.
+        expect(screen.getAllByRole("button")[0]).toBeEnabled();
+        expect(screen.getByText("3").closest("button")).toBeEnabled();
+    });
+
+    it("Should not change page on click while loading", () => {
+        const { onCurrentPageChange } = setup(true);
+
+        fireEvent.click(screen.getByText("3").closest("button")!);
+
+        expect(onCurrentPageChange).not.toHaveBeenCalled();
+    });
+
+    it("Should not open the rows-per-page dropdown while loading", () => {
+        setup(true);
+
+        fireEvent.click(screen.getByText("10"));
+
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("Should open the rows-per-page dropdown when not loading", () => {
+        setup(false);
+
+        fireEvent.click(screen.getByText("10"));
+
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
     });
 });

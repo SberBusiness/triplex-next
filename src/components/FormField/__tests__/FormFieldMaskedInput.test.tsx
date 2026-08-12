@@ -65,6 +65,18 @@ describe("FormFieldMaskedInput", () => {
         expect(onChange).toHaveBeenCalledTimes(1);
     });
 
+    it("conforms the value when the controlled value changes", () => {
+        const { rerender } = renderMaskedInput({ value: "" });
+
+        rerender(
+            <FormField>
+                <FormFieldMaskedInput mask={masks.date} value="12122024" />
+            </FormField>,
+        );
+
+        expect(getInput()).toHaveValue("12.12.2024");
+    });
+
     it("keeps the conformed value stable across re-renders with the same props", () => {
         const { rerender } = renderMaskedInput({ mask: masks.phone, value: "9001234567" });
 

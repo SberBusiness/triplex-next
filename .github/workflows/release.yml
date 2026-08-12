@@ -49,22 +49,27 @@ jobs:
       # переданного ref и выполнение его npm-скриптов с npm-токеном и write-правами.
       # Поэтому пара «версия ↔ ветка» жёстко ограничена: 1.Y.0 только из main,
       # 0.Y.0 только из release-0. Проверка стоит до checkout намеренно.
-      - name: Validate dispatch inputs
-        if: github.event_name == 'workflow_dispatch'
+      #
+      # Гейт общий для обоих триггеров: на пути `release: published` ветку даёт
+      # `target_commitish`. Оба скила создают релиз на ещё не существующем теге
+      # и с явным `--target`, поэтому там всегда лежит имя ветки. Если же релиз
+      # повесить на уже существующий тег, GitHub подставит ветку по умолчанию —
+      # для 0.Y.0 это осознанный стоп: такой релиз надо пересоздать
+      # с `--target release-0`.
+      - name: Validate release inputs
         env:
-          TAG: ${{ inputs.tag }}
-          TARGET: ${{ inputs.target }}
+          TARGET: ${{ github.event.release.target_commitish || inputs.target }}
         run: |
-          if ! printf '%s' "${TAG}" | grep -qE '^[01]\.[0-9]+\.0$'; then
-            echo "❌ tag=${TAG}: ожидается ровно 0.Y.0 или 1.Y.0 (минорный релиз, без prerelease)."
+          if ! printf '%s' "${RELEASE_TAG}" | grep -qE '^[01]\.[0-9]+\.0$'; then
+            echo "❌ tag=${RELEASE_TAG}: ожидается ровно 0.Y.0 или 1.Y.0 (минорный релиз, без prerelease)."
             exit 1
           fi
-          case "${TAG}" in
+          case "${RELEASE_TAG}" in
             1.*) EXPECTED_TARGET=main ;;
             0.*) EXPECTED_TARGET=release-0 ;;
           esac
           if [ "${TARGET}" != "${EXPECTED_TARGET}" ]; then
-            echo "❌ tag=${TAG} должен выпускаться из ветки ${EXPECTED_TARGET}, а не из ${TARGET}."
+            echo "❌ tag=${RELEASE_TAG} должен выпускаться из ветки ${EXPECTED_TARGET}, а не из ${TARGET}."
             exit 1
           fi
 
@@ -118,6 +123,21 @@ jobs:
             echo "⚠️ ${RELEASE_TAG} уже опубликована в npm — публикацию пропускаем."
             exit 0
           fi
+          # Порядок половин — не только договорённость скилов: latest встаёт
+          # на последнюю опубликованную версию, поэтому 1.Y.0, вышедшая раньше
+          # парной 0.Y.0, гарантированно оставит latest на React 17-сборке.
+          # Гейт стоит после пропуска выше: повторный прогон по уже
+          # опубликованной версии до него не доходит и восстановление не ломает.
+          case "${RELEASE_TAG}" in
+            1.*)
+              PAIRED_V0="0.${RELEASE_TAG#1.}"
+              if ! npm view "@sberbusiness/triplex-next@${PAIRED_V0}" version >/dev/null 2>&1; then
+                echo "❌ Парная ${PAIRED_V0} не опубликована — React 17-половина обязана выйти первой."
+                echo "   Выпустите ${PAIRED_V0} из release-0 и повторите (см. .agents/skills/release/SKILL.md)."
+                exit 1
+              fi
+              ;;
+          esac
           # dist-tag не указываем намеренно: теги не проносятся во внутренний
           # registry, `--tag` там игнорируется, и `latest` всегда встаёт на
           # последнюю опубликованную версию. Управляет этим порядок выпуска —

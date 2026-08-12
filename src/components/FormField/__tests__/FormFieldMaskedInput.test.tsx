@@ -57,6 +57,23 @@ describe("FormFieldMaskedInput", () => {
         expect(getInput()).toHaveValue("12.12.2024");
     });
 
+    it("does not accept defaultValue and ignores it at runtime", () => {
+        const props: React.ComponentProps<typeof FormFieldMaskedInput> = {
+            mask: masks.date,
+            value: "",
+            // @ts-expect-error defaultValue исключён из props: поле контролируемое, начальное значение задаётся через value.
+            defaultValue: "12122024",
+        };
+
+        render(
+            <FormField>
+                <FormFieldMaskedInput {...props} />
+            </FormField>,
+        );
+
+        expect(getInput()).toHaveValue("");
+    });
+
     it("renders value conformed to the phone mask", () => {
         renderMaskedInput({ mask: masks.phone, value: "9001234567" });
 

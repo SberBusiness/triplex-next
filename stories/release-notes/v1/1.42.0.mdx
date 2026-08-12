@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Ломающие изменения</Heading>
 
+**FormFieldMaskedInput**
+
+- Prop `defaultValue` исключён из `IFormFieldMaskedInputProps`. Поле контролируемое (`value` обязателен), поэтому `defaultValue` никогда не влиял на отображаемое значение: на контролируемом `<input>` React всегда использует `value`. В типе prop присутствовал только потому, что наследовался от `React.InputHTMLAttributes` через `MaskedInputProps`. Изменение затрагивает и `MaskedField.maskedInputProps`, и `DropdownMobileMaskedInput`, которые расширяют этот интерфейс. Миграция: удалите `defaultValue` из props, начальное значение задавайте через `value`. Рантайм-поведение не меняется — значение `defaultValue` и раньше не доходило до отображения.
+
 **MaskedField**
 
 - Тип `maskedInputProps.ref` изменён с `React.RefObject<HTMLInputElement>` на `React.RefObject<HTMLDivElement>`. Поведение прежнее: этот ref всегда указывал на корневой `<div>` обёртки `FormFieldMaskedInput` (`forwardRef<HTMLDivElement>`), а не на поле ввода — прежний тип вводил в заблуждение. Миграция: код, который читает `ref.current` как `HTMLInputElement`, нужно перевести на `maskedInputProps.forwardedRef` — это единственная ссылка на элемент `<input>`; для ссылки на обёртку смените тип на `HTMLDivElement`. Передача существующего `useRef<HTMLInputElement>(null)` в `maskedInputProps.ref` по-прежнему компилируется (`RefObject<HTMLInputElement>` присваивается в `RefObject<HTMLDivElement>`), но `ref.current` в рантайме, как и раньше, будет `HTMLDivElement`.

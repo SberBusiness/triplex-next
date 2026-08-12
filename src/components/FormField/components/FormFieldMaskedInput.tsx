@@ -12,7 +12,8 @@ import styles from "../styles/FormFieldMaskedInput.module.less";
 
 /** Свойства компонента FormFieldMaskedInput. */
 export interface IFormFieldMaskedInputProps
-    extends Omit<MaskedInputProps, "guide" | "mask" | "render">, DataAttributes {
+    extends Omit<MaskedInputProps, "guide" | "mask" | "render" | "defaultValue">, DataAttributes {
+    /** Значение поля. Поле контролируемое, поэтому начальное значение задаётся через него, а не через defaultValue. */
     value: string;
     /** Ссылка на поле ввода. */
     forwardedRef?: React.Ref<HTMLInputElement>;

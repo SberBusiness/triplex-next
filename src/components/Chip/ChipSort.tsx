@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 import { ChipIcon } from "./ChipIcon";
 import { IChipSelectProps } from "./ChipSelect/ChipSelect";
 import { SortStrokeSrvIcon24 } from "@sberbusiness/icons-next";

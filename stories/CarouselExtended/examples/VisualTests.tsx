@@ -19,6 +19,11 @@ const MONTHS = [
 
 const SCROLL_STEP = 200;
 
+/** Прокрутка в середину ленты: обе кнопки активны. */
+const SCROLL_TO_MIDDLE = 300;
+/** Заведомо больше максимума — браузер обрежет до конца ленты при любой её ширине. */
+const SCROLL_TO_END = Number.MAX_SAFE_INTEGER;
+
 /** Позиция прокрутки ленты на момент снятия скриншота. */
 type TScrollPosition = "middle" | "end";
 
@@ -48,9 +53,13 @@ interface IScrolledCarouselProps {
  * в середину анимации. Ref компонента указывает на прокручиваемый контейнер, поэтому позиция
  * выставляется напрямую.
  *
- * Позиция ставится в эффекте, а не в `play`: так контейнер берётся из ref, а не поиском по DOM,
- * а test-runner перед скриншотом делает forceRemount и ждёт тишины DOM — эффект успевает
- * отработать на устоявшихся размерах. Это осознанный выбор, а не упущенный `play`.
+ * Позиция ставится в эффекте, а не в `play`: так контейнер берётся из ref, а не поиском по DOM.
+ * `play` в `stories-guide.md` описан для пользовательских взаимодействий (клик, ввод), здесь же
+ * это начальное состояние. Осознанный выбор, а не упущенный `play`.
+ *
+ * Обе позиции заданы константами и не вычисляются из измеренных ширин: измерение зависело бы от
+ * метрик шрифта на момент эффекта, и при поздней загрузке шрифтов скриншот «поплыл» бы. Значение
+ * для конца ленты браузер сам обрезает до максимума, поэтому оно точное при любой ширине контента.
  */
 const ScrolledCarousel = ({ position, label }: IScrolledCarouselProps) => {
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -62,9 +71,7 @@ const ScrolledCarousel = ({ position, label }: IScrolledCarouselProps) => {
             return;
         }
 
-        const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-
-        carousel.scrollLeft = position === "end" ? maxScrollLeft : Math.round(maxScrollLeft / 2);
+        carousel.scrollLeft = position === "end" ? SCROLL_TO_END : SCROLL_TO_MIDDLE;
         // Браузер рассылает scroll-событие асинхронно — дублируем его синхронно,
         // чтобы состояние кнопок пересчиталось сразу после прокрутки.
         carousel.dispatchEvent(new Event("scroll"));

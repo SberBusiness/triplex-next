@@ -38,17 +38,24 @@ const ControlledMaskedInput = ({
     );
 };
 
+/** Перехватывает предупреждения React, чтобы их можно было проверить в тесте. */
+const spyOnConsoleError = () => vi.spyOn(console, "error").mockImplementation(() => undefined);
+
 describe("FormFieldMaskedInput", () => {
+    // Восстановление в afterEach, а не по месту: иначе упавший expect оставил бы console.error
+    // застабленным для остальных тестов файла.
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     // Тест должен идти первым: React выводит предупреждение о смешении value и defaultValue
     // только один раз за время жизни модуля, поэтому в последующих тестах его уже не поймать.
     it("does not mix controlled and uncontrolled input props", () => {
-        const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+        const consoleError = spyOnConsoleError();
 
         renderMaskedInput();
 
         expect(consoleError).not.toHaveBeenCalled();
-
-        consoleError.mockRestore();
     });
 
     it("renders value conformed to the mask", () => {
@@ -58,6 +65,7 @@ describe("FormFieldMaskedInput", () => {
     });
 
     it("does not accept defaultValue and ignores it at runtime", () => {
+        const consoleError = spyOnConsoleError();
         const props: React.ComponentProps<typeof FormFieldMaskedInput> = {
             mask: masks.date,
             value: "",
@@ -71,7 +79,9 @@ describe("FormFieldMaskedInput", () => {
             </FormField>,
         );
 
+        // Значение из defaultValue не должно ни отобразиться, ни дойти до <input> в обход типа.
         expect(getInput()).toHaveValue("");
+        expect(consoleError).not.toHaveBeenCalled();
     });
 
     it("renders value conformed to the phone mask", () => {

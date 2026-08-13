@@ -4,3 +4,5 @@ export * from "./TypesExample";
 export { default as TypesExampleSource } from "./TypesExample?raw";
 export * from "./SizesExample";
 export { default as SizesExampleSource } from "./SizesExample?raw";
+export * from "./Loading";
+export { default as LoadingSource } from "./Loading?raw";

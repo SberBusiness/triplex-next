@@ -12,7 +12,8 @@ import styles from "../styles/FormFieldMaskedInput.module.less";
 
 /** Свойства компонента FormFieldMaskedInput. */
 export interface IFormFieldMaskedInputProps
-    extends Omit<MaskedInputProps, "guide" | "mask" | "render">, DataAttributes {
+    extends Omit<MaskedInputProps, "guide" | "mask" | "render" | "defaultValue">, DataAttributes {
+    /** Значение поля. Поле контролируемое, поэтому начальное значение задаётся через него, а не через defaultValue. */
     value: string;
     /** Ссылка на поле ввода. */
     forwardedRef?: React.Ref<HTMLInputElement>;
@@ -102,19 +103,6 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             setPlaceholderValue(calculatePlaceholderValue());
         }, [value, mask, placeholderChar, placeholderMask]);
 
-        const handleChange = useCallback(
-            (event: React.ChangeEvent<HTMLInputElement>) => {
-                const { value: nextValue } = event.target;
-
-                pasted.current = false;
-
-                if (value !== nextValue) {
-                    onChange?.(event);
-                }
-            },
-            [value, onChange],
-        );
-
         const handlePaste = () => {
             pasted.current = true;
         };
@@ -165,15 +153,39 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             };
         };
 
-        // Возвращает value, для передачи в компоненты рендера. Для некоторых типов масок, value приходится модифицировать из-за багов.
+        // Возвращает value, приведённое к маске. Для некоторых типов масок, value приходится модифицировать из-за багов.
         const getValue = (): string => {
             if (mask === presets.masks.phone) {
-                value = phonePipe(value).value;
-                return value;
+                return phonePipe(value).value;
             }
 
             return conformToMask(value, mask, { guide: false, placeholderChar }).conformedValue;
         };
+
+        // Значение, приведённое к маске, — уходит в react-text-mask.
+        const maskedValue = getValue();
+        /*
+         * Значение, отображаемое в input. Для маски телефона — приведённое к маске (телефон нормализует
+         * ввод с 7/8/+7 в начале, без этого react-text-mask форматирует номер неверно), для остальных масок —
+         * исходное: react-text-mask сам пишет отформатированное значение в DOM, а исходное значение нужно,
+         * чтобы можно было стереть символ-разделитель (иначе маска тут же возвращает его обратно).
+         */
+        const inputValue = mask === presets.masks.phone ? maskedValue : value;
+
+        const handleChange = useCallback(
+            (event: React.ChangeEvent<HTMLInputElement>) => {
+                const { value: nextValue } = event.target;
+
+                pasted.current = false;
+
+                // Сравнивается именно отображаемое значение: react-text-mask успевает отформатировать
+                // DOM до вызова обработчика, поэтому nextValue уже приведено к маске.
+                if (inputValue !== nextValue) {
+                    onChange?.(event);
+                }
+            },
+            [inputValue, onChange],
+        );
 
         /** Функция для хранения ссылки. */
         const setRef = (ref: (inputElement: HTMLElement) => void) => (instance: HTMLInputElement | null) => {
@@ -208,20 +220,26 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
 
                 {/* Input, отображающий введенное значение. */}
                 <MaskedInputTextMask
-                    // https://github.com/text-mask/text-mask/pull/993
-                    defaultValue=""
                     disabled={status === EFormFieldStatus.DISABLED}
                     /* Input отображает только введенное значение без маски, маска рисуется в inputPlaceholder. */
                     guide={false}
                     render={(ref, props) => (
-                        <FormFieldInput {...props} value={value} placeholder={placeholder || ""} ref={setRef(ref)} />
+                        <FormFieldInput
+                            {...props}
+                            // react-text-mask подставляет в props defaultValue, равное value (https://github.com/text-mask/text-mask/pull/993).
+                            // На контролируемом input это даёт предупреждение React «both value and defaultValue props».
+                            defaultValue={undefined}
+                            value={inputValue}
+                            placeholder={placeholder || ""}
+                            ref={setRef(ref)}
+                        />
                     )}
                     mask={mask}
                     onChange={handleChange}
                     onPaste={handlePaste}
                     placeholderChar={placeholderChar}
                     // value={value} не используется т.к. возникает баг при передаче снаружи изначально пустого value, а затем не пустого.
-                    value={getValue()}
+                    value={maskedValue}
                     pipe={pipe}
                     type="text"
                     {...restProps}

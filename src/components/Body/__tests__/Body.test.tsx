@@ -69,6 +69,6 @@ describe("Body", () => {
         const root = screen.getByTestId("body-root");
         expect(root).toHaveAttribute("aria-label", "body");
         expect(root).toHaveAttribute("title", "t");
-        expect(root.getAttribute("data-tx")).toBeDefined();
+        expect(root).toHaveAttribute("data-tx");
     });
 });

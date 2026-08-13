@@ -1,7 +1,7 @@
 ---
 component: Body
 category: Layout
-related: [BodyPage, Page]
+related: [BodyPage]
 tokens: []
 stories: stories/Body/Body.stories.tsx
 version: "1.0"

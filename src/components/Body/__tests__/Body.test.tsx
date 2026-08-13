@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Body } from "../../Body";
 
 describe("Body", () => {
-    it("renders root element and inner wrapper", () => {
+    it("renders root element and wraps children into inner element", () => {
         render(
             <Body data-testid="body-root">
                 <div data-testid="child">content</div>
@@ -11,20 +11,40 @@ describe("Body", () => {
         );
 
         const root = screen.getByTestId("body-root");
-        expect(root).toBeInTheDocument();
+        const inner = root.firstElementChild;
 
-        // inner wrapper exists and contains the child
-        const child = screen.getByTestId("child");
-        expect(child).toBeInTheDocument();
-        expect(root).toContainElement(child);
+        expect(root).toBeInTheDocument();
+        expect(root).toHaveClass("body");
+        expect(root.children).toHaveLength(1);
+        expect(inner).toHaveClass("bodyInner");
+        expect(inner).toContainElement(screen.getByTestId("child"));
+    });
+
+    it("renders without children", () => {
+        render(<Body data-testid="body-root" />);
+
+        const root = screen.getByTestId("body-root");
+
+        expect(root.children).toHaveLength(1);
+        expect(root.firstElementChild).toBeEmptyDOMElement();
+    });
+
+    it("merges custom className into the root element only", () => {
+        render(<Body className="custom" data-testid="body-root" />);
+
+        const root = screen.getByTestId("body-root");
+
+        expect(root).toHaveClass("body");
+        expect(root).toHaveClass("custom");
+        expect(root.firstElementChild).not.toHaveClass("custom");
     });
 
     it("forwards ref to root div", () => {
         const ref = React.createRef<HTMLDivElement>();
         render(<Body ref={ref}>content</Body>);
 
-        expect(ref.current).toBeDefined();
-        expect(ref.current?.tagName).toBe("DIV");
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toHaveClass("body");
         expect(ref.current?.textContent).toContain("content");
     });
 
@@ -34,6 +54,6 @@ describe("Body", () => {
         const root = screen.getByTestId("body-root");
         expect(root).toHaveAttribute("aria-label", "body");
         expect(root).toHaveAttribute("title", "t");
-        expect(root.getAttribute("data-tx")).toBeDefined();
+        expect(root).toHaveAttribute("data-tx");
     });
 });

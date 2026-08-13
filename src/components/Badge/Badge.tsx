@@ -12,8 +12,9 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
 /**
  * Индикатор статуса или уведомления.
- * Может содержать префикс, контент и постфикс.
- * Для отображения точки используется компонент BadgeDot.
+ * Рендерит inline-элемент из трёх необязательных частей в порядке prefix → children → postfix;
+ * части с falsy-значением не рендерятся. Собственного состояния нет, цвет фона задаётся токеном.
+ * Для отображения индикатора-точки используется компонент BadgeDot, доступный как Badge.Dot.
  * */
 export const Badge = Object.assign(
     React.forwardRef<HTMLSpanElement, IBadgeProps>(

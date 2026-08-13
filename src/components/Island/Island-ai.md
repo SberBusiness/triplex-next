@@ -1,7 +1,7 @@
 ---
 component: Island
 category: Layout
-related: [IslandAccordion, IslandWidget, BodyPage, HeaderPage, FooterPage, Confirm, ModalWindowBody]
+related: [IslandAccordion, IslandWidget, LoaderScreen, ModalWindow]
 tokens:
   - --triplex-next-Island-Type1_Background
   - --triplex-next-Island-Type1_Shadow
@@ -18,8 +18,9 @@ version: "1.0"
 ## Назначение
 
 Базовый контейнер-карточка библиотеки: `<div>` с фоном, тенью, скруглением и внутренними
-отступами. Собственной логики не имеет — задаёт поверхность, на которой лежит контент, и
-вертикальные отступы между своими частями `Island.Header`, `Island.Body`, `Island.Footer`.
+отступами. Собственной логики не имеет — задаёт поверхность, на которой лежит контент,
+вертикальные отступы между своими частями `Island.Header`, `Island.Body`, `Island.Footer` и
+состояние загрузки (`loading`), в котором поверх контента показывается `LoaderScreen`.
 
 Используй когда: контент нужно визуально выделить карточкой на фоне страницы — блок страницы
 (`BodyPage`, `HeaderPage`, `FooterPage`), диалог подтверждения (`Confirm`), элемент аккордеона
@@ -46,9 +47,38 @@ version: "1.0"
 |---|---|---|---|
 | `type` | `EIslandType` | `EIslandType.TYPE_1` | Визуальный тип. Влияет только на фон и тень, на размеры — нет |
 | `size` | `EComponentSize` | `EComponentSize.MD` | Скругление, внутренние отступы карточки и отступы между Header / Body / Footer |
+| `loading` | `boolean` | `false` | Показывает `LoaderScreen` поверх контента карточки |
+| `loaderScreenProps` | `ILoaderScreenMiddleProps` | `undefined` | Props лоадера: `description`, `controls`, `className` и остальные атрибуты `<div>`. `type` задаёт Island (`middle`) |
 
 Компонент расширяет `React.HTMLAttributes<HTMLDivElement>` — все стандартные атрибуты `<div>`
 (`className`, `style`, `role`, `aria-*`, `data-*`, обработчики событий) попадают на корневой элемент.
+
+### Состояние загрузки
+
+При `loading` последним потомком карточки рендерится `<LoaderScreen type="middle">` — абсолютно
+спозиционированный по всей карточке (`inset: 0` от padding-box, то есть включая внутренние отступы)
+блок с полупрозрачной подложкой и спиннером по центру.
+
+- **Контент остаётся в DOM** — он не размонтируется, только перекрывается подложкой. Форма под
+  лоадером остаётся заполненной и фокусируемой: лоадер не блокирует клавиатуру и не ставит
+  `inert`/`aria-hidden`. Если ввод нужно запретить, потребитель сам дизейблит контролы.
+- **Скругление подложки — `border-radius: inherit`**, поэтому лоадер повторяет скругление карточки
+  при любом `size` и в адаптиве. Дублировать значения по размерам не нужно.
+- **`z-index` лоадера внутри Island — `@z-index-step` (100), а не `@z-index-loader-screen` (10100)**
+  из его собственных стилей: правило `.island .islandLoaderScreen` перебивает базовое по
+  специфичности. Подложка перекрывает контент карточки, но не глобальные оверлеи (`Dropdown`,
+  `ModalWindow`, `Tooltip`), лежащие над ней. Тот же приём — у `List` и `TableBasic`.
+- **Лоадер идёт после `Island.Footer`**, поэтому селекторы отступов между частями
+  (`.islandBody + .islandFooter` и т.п.) он не ломает.
+- **Карточка не должна скроллиться.** Лоадер позиционируется абсолютно и растягивается по padding-box
+  карточки. Если потребитель задал Island `overflow: auto`/`scroll`, подложка окажется в
+  scrollable-overflow: она перекроет только область, видимую в начале прокрутки, и уедет вверх
+  вместе с контентом. Для скроллируемой области состояние загрузки вешают на нескроллируемого
+  родителя.
+- **В `ModalWindowBody` этих props нет** — `IModalWindowBodyProps` объявлен как
+  `Omit<IIslandProps, "loading" | "loaderScreenProps">` ровно по причине выше: тело модалки
+  скроллируется (`overflow: auto`). Состояние загрузки модального окна задаётся одноимёнными props
+  `ModalWindowContent` — он не скроллится и перекрывает окно целиком.
 
 ### Размеры
 
@@ -142,6 +172,10 @@ Island — неинтерактивный контейнер: не выстав�
 `role="dialog"` и `aria-modal="true"`, `IslandAccordion` кладёт внутрь `Island.Header` собственную
 `<button>` с `aria-expanded` / `aria-controls`.
 
+Состояние `loading` тоже не объявляется автоматически: `LoaderScreen` приносит внутрь только
+`role="status"` от `LoaderMiddle`. Если загрузку карточки должен озвучивать скринридер, потребитель
+передаёт `aria-busy="true"` в `Island` — как и у `Button` с prop `loading`.
+
 Важно: `Island.Header` — это `<div>`, а не заголовок. Если нужен семантический заголовок карточки,
 положи внутрь `Title` с нужным тегом или собственный `<h*>`. Текстовые строки компонент не
 хардкодит (библиотека мультиязычная).
@@ -150,21 +184,50 @@ Island — неинтерактивный контейнер: не выстав�
 
 ## Связанные компоненты
 
+### Альтернативы (в `related`)
+
+- `IslandAccordion` — раскрывающиеся элементы. Строит на Island; `IslandAccordionFooter`
+  оборачивает `Island.Footer` и передаёт в него свой `className`. Опирается на хрупкую деталь:
+  гасит отступ Island через `margin-top: 0 !important`, поэтому правка селекторов отступов ломает
+  его молча.
+- `IslandWidget` — виджет со сворачиванием в адаптиве; использует Island как контейнер, но своими
+  Header / Body / Footer, а не частями Island.
+
+### Контракты (в `related`)
+
+- `LoaderScreen` — экран загрузки, который Island рендерит при `loading` (всегда `type="middle"`).
+  Настраивается через `loaderScreenProps` (`ILoaderScreenMiddleProps`).
+- `ModalWindow` — `IModalWindowBodyProps` наследует `IIslandProps` через
+  `Omit<IIslandProps, "loading" | "loaderScreenProps">`, поэтому `type` и `size` в
+  `ModalWindowBody` доступны, а состояние загрузки — нет: тело модалки скроллируется, лоадер
+  задаётся на `ModalWindowContent`. Своего AI.md у `ModalWindowBody` нет — он описан в
+  `ModalWindow-ai.md`. Он же — направление из «Не используй когда», если нужен overlay, а не
+  карточка в потоке.
+
+### Другие направления из «Не используй когда» (в `related` не входят)
+
+Отводы в другой класс задач — промах такого масштаба виден из «Назначения», ссылка не нужна.
+
+- `LightBox`, `LightBoxSideOverlay` — если нужен overlay, а не карточка в потоке. У
+  `LightBoxSideOverlay` своего AI.md нет, смотри `LightBox`.
+- `Gap`, `Row`, `Col` — если нужен только отступ или сетка без визуальной карточки.
+
+### Части Island (своего AI.md не имеют)
+
 - `IslandHeader` (`components/IslandHeader.tsx`, он же `Island.Header`) — шапка карточки.
-  Тривиальная `<div>`-обёртка без собственных props; отдельного AI.md не имеет.
+  Тривиальная `<div>`-обёртка без собственных props.
 - `IslandBody` (`components/IslandBody.tsx`, он же `Island.Body`) — основное содержимое.
   Тривиальная `<div>`-обёртка без собственных props.
 - `IslandFooter` (`components/IslandFooter.tsx`, он же `Island.Footer`) — подвал карточки.
   Тривиальная `<div>`-обёртка без собственных props.
-- `IslandAccordion` — строит на Island раскрывающиеся элементы; `IslandAccordionFooter`
-  оборачивает `Island.Footer` и передаёт в него свой `className`.
-- `IslandWidget` — виджет со сворачиванием в адаптиве; использует Island как контейнер, но своими
-  Header / Body / Footer, а не частями Island.
+
+### Потребители (в `related` не входят — ссылка стоит с их стороны)
+
 - `BodyPage`, `HeaderPage`, `FooterPage` — оборачивают контент страницы в Island с `TYPE_1`, если
   их тип `FIRST`.
-- `Confirm` — диалог подтверждения на Island `TYPE_1` с `Island.Body` внутри.
-- `ModalWindowBody` — тело модального окна; `IModalWindowBodyProps` расширяет `IIslandProps`,
-  поэтому `type` и `size` Island доступны и там.
+- `Confirm` — диалог подтверждения на Island `TYPE_1` с `Island.Body` внутри. Наследует интерфейс:
+  `IConfirmProps extends IIslandProps` (`Confirm/Confirm.tsx:11`), поэтому добавление prop в Island
+  меняет публичный API `Confirm` без правок в его коде.
 
 ---
 
@@ -175,10 +238,14 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | — | Интерактивный контроль `type`, `size` и состава (Header / Body / Footer) |
+| `Playground` | — | Интерактивный контроль `type`, `size`, `loading` и состава (Header / Body / Footer) |
 | `Default` | `DefaultExample.tsx` | Минимальная карточка: Header + Body + Footer |
 | `Types` | `TypesExample.tsx` | Все значения `EIslandType` рядом |
 | `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG: скругление, паддинги, отступы между частями |
+| `Loading` | `Loading.tsx` | `loading`: `LoaderScreen` поверх контента карточки |
+
+Файлы примеров с постфиксом `Example` — локальный legacy-паттерн папки; новые примеры называются
+по имени story (`Loading.tsx`).
 
 ---
 
@@ -186,4 +253,6 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-11 | Prop состояния загрузки переименован `isLoading` → `loading` — по преобладающей в библиотеке конвенции boolean-props без префикса `is` (`loading` у `Button`, `List`, `Dropdown`, `Suggest`, `Table`). Prop ещё не выпускался, поэтому breaking change нет; `Omit` в `IModalWindowBodyProps` обновлён на `"loading"`. Поведение не изменилось. |
+| 2026-08-06 | `related` приведён к правилу `docs/ai/CONTEXT.md` → «Как заполнять `related` в AI.md»: убраны потребители (`BodyPage`, `HeaderPage`, `FooterPage`, `Confirm`), `ModalWindowBody` заменён родителем `ModalWindow`, добавлен `LoaderScreen`. Раздел «Связанные компоненты» разбит по типам связи. Добавлено состояние загрузки: props `isLoading` и `loaderScreenProps` — при `isLoading` поверх контента карточки рендерится `LoaderScreen` типа `middle`. Подложка наследует скругление карточки, `z-index` понижен до локального. `ModalWindowBody` эти props не наследует (`Omit`) — его тело скроллируется, лоадер там задаётся на `ModalWindowContent`. Добавлены story `Loading` и unit-тесты. Остальной публичный API не изменён. |
 | 2026-08-04 | Создан документ. AI-рефакторинг: JSDoc на props, значениях `EIslandType` и субкомпонентах, `displayName` у `IslandHeader` / `IslandBody` / `IslandFooter`, unit-тесты на все типы и размеры, части острова и `mapTypeToClassName`. Исправлено: `className` в `IslandHeader` и `IslandFooter` больше не затирает базовый класс компонента; побочный отступ в `IslandAccordion` погашен в стилях аккордеона, вид библиотечных компонентов не изменился. Публичный API не изменён. |

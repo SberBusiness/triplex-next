@@ -47,9 +47,9 @@ Each is a `SKILL.md` file describing a focused workflow. Read the relevant
 |---|---|
 | `.agents/skills/update-component-ai-md/SKILL.md` | Creating or updating `{Component}-ai.md` from current sources |
 | `.agents/skills/commit-component/SKILL.md` | Composing a commit message and staging changes per `docs/ai/commits.md` |
-| `.agents/skills/release/SKILL.md` | Releasing a new version: orchestrates the React 18 and React 17 halves |
-| `.agents/skills/release-react18/SKILL.md` | Releasing `1.Y.0` from `main` (npm tag `latest`) |
-| `.agents/skills/release-react17/SKILL.md` | Releasing the paired `0.Y.0` from `release-0` (npm tag `react17`); merging `main` into `release-0` is done by a human beforehand |
+| `.agents/skills/release/SKILL.md` | Releasing a new version: runs the React 17 half first, then the React 18 one, so that `latest` ends up on `1.Y.0` |
+| `.agents/skills/release-react17/SKILL.md` | First half: releasing `0.Y.0` from `release-0`; merging `main` into `release-0` is done by a human beforehand |
+| `.agents/skills/release-react18/SKILL.md` | Second half: releasing `1.Y.0` from `main`, which moves the npm `latest` tag onto it |
 | `.agents/skills/release-auto/SKILL.md` | Preflight checks and unattended release from the weekly routine; an unfilled release-notes stub means no release |
 | `.agents/skills/take-task/SKILL.md` | Picking up a Linear task `TRI-XXX` and starting work on it |
 | `.agents/skills/finish-task/SKILL.md` | Wrapping up a Linear task after the commit: summary comment, PR linkage |
@@ -75,7 +75,8 @@ same set.
 3. If present, read `src/components/{ComponentName}/{ComponentName}-ai.md`
 4. Read the component source code, stories, and tests
 5. Make changes: TSX → LESS → story → tests
-6. If `{ComponentName}-ai.md` exists, update the "История изменений" section
+6. Update release notes (`stories/release-notes/v1/<version>.mdx`): a public API or observable behaviour change gets a substantive entry, a refactoring with nothing new for the consumer gets a single line
+7. If `{ComponentName}-ai.md` exists, update the "История изменений" section
 
 ## Verification before finishing
 

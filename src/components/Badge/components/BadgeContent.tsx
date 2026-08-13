@@ -6,7 +6,10 @@ import styles from "./styles/BadgeContent.module.less";
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Контент Badge. */
+/**
+ * Обёртка содержимого Badge. Внутренний компонент, из barrel не экспортируется.
+ * Задаёт горизонтальные отступы по размеру и снимает их со стороны, где стоит prefix или postfix.
+ * */
 export const BadgeContent: React.FC<IBadgeContentProps> = ({
     children,
     size,

@@ -82,11 +82,11 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | AccordionBase | ⬜ | ⬜ | ⬜ |
 | AlertContext | ✅ | ✅ | ✅ |
 | AlertProcess | ✅ | ✅ | ✅ |
-| Amount | ⬜ | ✅ | ⬜ |
+| Amount | ✅ | ✅ | ✅ |
 | AmountField | ⬜ | ⬜ | ⬜ |
 | Avatar | ⬜ | ✅ | ⬜ |
-| Badge | ⬜ | ✅ | ⬜ |
-| Body | ⬜ | ⬜ | ⬜ |
+| Badge | ✅ | ✅ | ✅ |
+| Body | ✅ | ✅ | ✅ |
 | Button | ✅ | ✅ | ✅ |
 | ButtonDropdown | ✅ | ✅ | ✅ |
 | ButtonDropdownExtended | ✅ | ✅ | ✅ |
@@ -152,7 +152,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | MarkerStatus | ⬜ | ✅ | ⬜ |
 | MaskedField | ✅ | ✅ | ✅ |
 | MasterTable | ⬜ | ⬜ | ⬜ |
-| MediaWidth | ⬜ | ✅ | ⬜ |
+| MediaWidth | ✅ | ✅ | ✅ |
 | MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |
 | MonthYearField | ✅ | ✅ | ✅ |

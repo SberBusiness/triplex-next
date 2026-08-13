@@ -86,7 +86,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | AmountField | ⬜ | ⬜ | ⬜ |
 | Avatar | ⬜ | ✅ | ⬜ |
 | Badge | ⬜ | ✅ | ⬜ |
-| Body | ⬜ | ⬜ | ⬜ |
+| Body | ✅ | ✅ | ✅ |
 | Button | ✅ | ✅ | ✅ |
 | ButtonDropdown | ✅ | ✅ | ✅ |
 | ButtonDropdownExtended | ✅ | ✅ | ✅ |

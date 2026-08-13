@@ -3,24 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Body } from "../../Body";
 
 describe("Body", () => {
-    it("renders root element and inner wrapper", () => {
-        render(
-            <Body data-testid="body-root">
-                <div data-testid="child">content</div>
-            </Body>,
-        );
-
-        const root = screen.getByTestId("body-root");
-        expect(root).toBeInTheDocument();
-        expect(root).toHaveClass("body");
-
-        // inner wrapper exists and contains the child
-        const child = screen.getByTestId("child");
-        expect(child).toBeInTheDocument();
-        expect(root).toContainElement(child);
-    });
-
-    it("wraps children into inner element, not into the root", () => {
+    it("renders root element and wraps children into inner element", () => {
         render(
             <Body data-testid="body-root">
                 <div data-testid="child">content</div>
@@ -30,6 +13,8 @@ describe("Body", () => {
         const root = screen.getByTestId("body-root");
         const inner = root.firstElementChild;
 
+        expect(root).toBeInTheDocument();
+        expect(root).toHaveClass("body");
         expect(root.children).toHaveLength(1);
         expect(inner).toHaveClass("bodyInner");
         expect(inner).toContainElement(screen.getByTestId("child"));

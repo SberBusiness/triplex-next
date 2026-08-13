@@ -14,7 +14,11 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
         size,
         value,
         options,
+        prefix,
         label,
+        postfix,
+        description,
+        counter,
         placeholder,
         tooltipHint,
         loading,
@@ -23,6 +27,7 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
         clearInputOnFocus,
         onSelect,
         onFilter,
+        onClear,
         onScrollEnd,
         inputProps,
     } = props;
@@ -34,7 +39,11 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
                 size={size}
                 value={value}
                 options={options}
+                prefix={prefix}
                 label={label}
+                postfix={postfix}
+                description={description}
+                counter={counter}
                 placeholder={placeholder}
                 tooltipHint={tooltipHint}
                 loading={loading}
@@ -43,6 +52,7 @@ const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
                 clearInputOnFocus={clearInputOnFocus}
                 onSelect={onSelect}
                 onFilter={onFilter}
+                onClear={onClear}
                 onScrollEnd={onScrollEnd}
                 inputProps={inputProps}
             />

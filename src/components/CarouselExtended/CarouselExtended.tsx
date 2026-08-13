@@ -103,7 +103,11 @@ export const CarouselExtended = React.forwardRef<HTMLDivElement, ICarouselExtend
             }
         };
 
-        /** Сохраняет узел ленты локально и пробрасывает его во внешний ref. */
+        /**
+         * Сохраняет узел ленты локально и пробрасывает его во внешний ref.
+         * Идентичность колбэка сохраняется ровно настолько, насколько стабилен `ref` потребителя:
+         * при инлайновом колбэк-ref React по-прежнему отцепляет и заново прицепляет узел на каждом рендере.
+         */
         const setRef = useCallback(
             (instance: HTMLDivElement | null): void => {
                 carouselRef.current = instance;

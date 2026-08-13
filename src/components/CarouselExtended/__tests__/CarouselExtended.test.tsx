@@ -172,7 +172,7 @@ describe("CarouselExtended", () => {
             expect(ref.current).toContainElement(screen.getByTestId("content"));
         });
 
-        it("не вызывает колбэк-ref повторно при ре-рендере", () => {
+        it("не вызывает стабильный колбэк-ref повторно при ре-рендере", () => {
             const refCallback = vi.fn();
             const renderCarouselWithRef = (content: string) => (
                 <CarouselExtended
@@ -197,12 +197,27 @@ describe("CarouselExtended", () => {
         });
 
         it("прокидывает className и остальные атрибуты на корневой элемент", () => {
-            const { getScrollContainer } = renderCarousel({ className: "custom-class" });
+            render(
+                <CarouselExtended
+                    className="custom-class"
+                    id="carousel-root"
+                    title="Лента"
+                    buttonPrev={() => null}
+                    buttonNext={() => null}
+                    stepPrev={100}
+                    stepNext={100}
+                >
+                    <div data-testid="content">Контент</div>
+                </CarouselExtended>,
+            );
 
-            const root = getScrollContainer().parentElement;
+            const scrollContainer = screen.getByTestId("content").parentElement;
+            const root = scrollContainer?.parentElement;
 
             expect(root).toHaveClass("custom-class");
-            expect(getScrollContainer()).not.toHaveClass("custom-class");
+            expect(root).toHaveAttribute("id", "carousel-root");
+            expect(root).toHaveAttribute("title", "Лента");
+            expect(scrollContainer).not.toHaveClass("custom-class");
         });
     });
 
@@ -293,12 +308,19 @@ describe("CarouselExtended", () => {
             expect(getNextButton()).toHaveAttribute("data-hidden", "false");
         });
 
-        it("сохраняет состояние кнопок, если метрики ленты не изменились", () => {
-            renderCarousel();
+        it("не перерисовывает кнопки, если метрики ленты не изменились", () => {
+            const { buttonPrev, buttonNext } = renderCarousel();
+            const prevCalls = buttonPrev.mock.calls.length;
+            const nextCalls = buttonNext.mock.calls.length;
 
             fireEvent(window, new Event("resize"));
             fireEvent.scroll(document);
+            fireEvent(window, new Event("resize"));
 
+            // Короткое замыкание isEqual в updater'е: без него каждое из трёх событий давало бы новый
+            // объект состояния и свой рендер. С ним React делает максимум один рендер перед bail-out.
+            expect(buttonPrev.mock.calls.length).toBeLessThanOrEqual(prevCalls + 1);
+            expect(buttonNext.mock.calls.length).toBeLessThanOrEqual(nextCalls + 1);
             expect(getPrevButton()).toBeDisabled();
             expect(getNextButton()).toBeEnabled();
             expect(getNextButton()).toHaveAttribute("data-hidden", "false");

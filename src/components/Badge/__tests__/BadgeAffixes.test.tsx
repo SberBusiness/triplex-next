@@ -31,8 +31,9 @@ describe.each([
                 Affix
             </Affix>,
         );
-        const affix = screen.getByTestId("affix");
+        const affix = screen.getByText("Affix");
 
+        expect(affix).toHaveAttribute("data-testid", "affix");
         expect(affix).toHaveAttribute("id", "affix-id");
     });
 });

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ButtonIcon, IButtonIconProps } from "../../Button/ButtonIcon";
 import { EButtonIconShape } from "../../Button/enums";
 import { EPaginationNavigationIconDirection } from "../enums";
 import { CaretleftStrokeSrvIcon24 } from "@sberbusiness/icons-next";
+import { MasterTableContext } from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
 import styles from "../styles/PaginationNavigationButton.module.less";
 
 /** Свойства компонента PaginationNavigationButton. */
@@ -15,14 +16,16 @@ export interface IPaginationNavigationButtonProps extends Omit<IButtonIconProps,
 
 /** Кнопка навигации пагинации (переход к предыдущей или следующей странице). */
 export const PaginationNavigationButton = React.forwardRef<HTMLButtonElement, IPaginationNavigationButtonProps>(
-    ({ direction, ...rest }, ref) => {
+    ({ direction, disabled, ...rest }, ref) => {
         const isDirectionBack = direction === EPaginationNavigationIconDirection.BACK;
+        const { loading } = useContext(MasterTableContext);
 
         return (
             <ButtonIcon
                 className={styles.paginationNavigationButton}
                 shape={EButtonIconShape.SQUIRCLE}
                 {...rest}
+                disabled={loading || disabled}
                 ref={ref}
             >
                 {isDirectionBack ? (

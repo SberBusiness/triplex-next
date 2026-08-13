@@ -5,8 +5,6 @@ import { Body } from "@sberbusiness/triplex-next";
 import {
     Default as DefaultRender,
     DefaultSource,
-    WithFullWidthContent as WithFullWidthContentRender,
-    WithFullWidthContentSource,
     Example as ExampleRender,
     ExampleSource,
     VisualTests as VisualTestsRender,
@@ -45,19 +43,6 @@ export const Default: StoryObj<typeof Body> = {
         docs: {
             source: {
                 code: DefaultSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
-export const WithFullWidthContent: StoryObj<typeof Body> = {
-    render: WithFullWidthContentRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            source: {
-                code: WithFullWidthContentSource,
                 language: "tsx",
             },
         },

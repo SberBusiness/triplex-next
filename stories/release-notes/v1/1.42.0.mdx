@@ -8,11 +8,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **FormFieldMaskedInput**
 
-- Prop `defaultValue` исключён из `IFormFieldMaskedInputProps`. Поле контролируемое (`value` обязателен), поэтому `defaultValue` никогда не влиял на отображаемое значение: на контролируемом `<input>` React всегда использует `value`. В типе prop присутствовал только потому, что наследовался от `React.InputHTMLAttributes` через `MaskedInputProps`. Изменение затрагивает и `MaskedField.maskedInputProps`, и `DropdownMobileMaskedInput`, которые расширяют этот интерфейс. Миграция: удалите `defaultValue` из props, начальное значение задавайте через `value`. Рантайм-поведение не меняется — значение `defaultValue` и раньше не доходило до отображения.
+- Prop `defaultValue` исключён из `IFormFieldMaskedInputProps` — поле контролируемое, начальное значение задаётся через `value`. Затрагивает также `MaskedField.maskedInputProps` и `DropdownMobileMaskedInput`.
 
 **MaskedField**
 
-- Тип `maskedInputProps.ref` изменён с `React.RefObject<HTMLInputElement>` на `React.RefObject<HTMLDivElement>`. Поведение прежнее: этот ref всегда указывал на корневой `<div>` обёртки `FormFieldMaskedInput` (`forwardRef<HTMLDivElement>`), а не на поле ввода — прежний тип вводил в заблуждение. Миграция: код, который читает `ref.current` как `HTMLInputElement`, нужно перевести на `maskedInputProps.forwardedRef` — это единственная ссылка на элемент `<input>`; для ссылки на обёртку смените тип на `HTMLDivElement`. Передача существующего `useRef<HTMLInputElement>(null)` в `maskedInputProps.ref` по-прежнему компилируется (`RefObject<HTMLInputElement>` присваивается в `RefObject<HTMLDivElement>`), но `ref.current` в рантайме, как и раньше, будет `HTMLDivElement`.
+- Тип `maskedInputProps.ref` изменён с `React.RefObject<HTMLInputElement>` на `React.RefObject<HTMLDivElement>` — ref указывает на `<div>`-обёртку поля. Для ссылки на `<input>` используйте `maskedInputProps.forwardedRef`.
 
 <Heading>Изменения</Heading>
 
@@ -32,8 +32,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **FormFieldMaskedInput**
 
-- Исправлено: React на каждом рендере писал предупреждение «input contains both value and defaultValue props». `react-text-mask` подставляет в рендер-функцию `defaultValue`, равный `value`, и он уходил в контролируемый `<input>`. Теперь `defaultValue` в `<input>` не передаётся, обход из [text-mask#993](https://github.com/text-mask/text-mask/pull/993) (`defaultValue=""`) больше не нужен.
-- Внутренняя правка: `getValue()` больше не присваивает значение prop-параметру `value` — значение для `react-text-mask` и значение, отображаемое в `<input>`, вычисляются явно и с комментарием, почему они различаются для телефонной маски. Наблюдаемое поведение не изменилось: форматирование, удаление символов маски и вызовы `onChange` совпадают с прежними.
+- Исправлено: поле перестало писать в консоль предупреждение React «input contains both value and defaultValue props».
 
 **LoaderSmall**
 
@@ -41,7 +40,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **MaskedField**
 
-- AI-рефакторинг: расширены JSDoc на компоненте и на prop `maskedInputProps` (перечислены обязательные `mask` / `value`, `placeholderMask` и `forwardedRef` для ссылки на input), добавлены unit-тесты (13 кейсов: применение маски к значению, вызов `onChange` с отформатированным значением, отображение плейсхолдера маски, проброс ref, статусы, слоты), stories мигрированы на modern pattern с примерами в `stories/MaskedField/examples/` и добавлены стори `WithPlaceholderMask`, `PassRefToInput`, `VisualTests`, создан `MaskedField-ai.md`. Собственные DOM и визуальное поведение `MaskedField` не изменены — правки в поле ввода описаны выше, в **FormFieldMaskedInput**. В публичном API изменились тип `maskedInputProps.ref` и состав `IFormFieldMaskedInputProps`, из которого исключён `defaultValue` (оба — см. «Ломающие изменения»). Собственные props `MaskedField`, barrel-экспорты и `forwardRef` как были.
+- AI-рефакторинг: в Storybook добавлены примеры `WithPlaceholderMask` и `PassRefToInput`. Поведение и разметка компонента не изменились, изменения типов — см. «Ломающие изменения».
 
 **MobileView**
 

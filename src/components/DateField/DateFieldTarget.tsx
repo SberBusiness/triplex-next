@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import clsx from "clsx";
 import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20, CalendarStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExtendedContext";
 import { DateFieldContext } from "./DateFieldContext";
@@ -10,20 +11,29 @@ import { isKey } from "../../utils/keyboard";
 import { EComponentSize } from "../../enums";
 import { EFormFieldStatus } from "../FormField/enums";
 import { IDateFieldTargetProps } from "./types";
+import styles from "./styles/DateFieldTarget.module.less";
+
+/** Соответствие размера имени класса поля ввода. */
+const SIZE_TO_INPUT_CLASS_NAME_MAP = {
+    [EComponentSize.SM]: styles.minWidthSM,
+    [EComponentSize.MD]: styles.minWidthMD,
+    [EComponentSize.LG]: styles.minWidthLG,
+};
 
 /** Соответствие размера иконке календаря. */
-const sizeToCalendarIconMap = {
+const SIZE_TO_CALENDAR_ICON_MAP = {
     [EComponentSize.SM]: <CalendarStrokeSrvIcon16 paletteIndex={5} />,
     [EComponentSize.MD]: <CalendarStrokeSrvIcon20 paletteIndex={5} />,
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
 export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTargetProps>(
-    ({ size = EComponentSize.MD, postfix, maskedInputProps, onClear, ...restProps }, ref) => {
+    ({ className, size = EComponentSize.MD, postfix, maskedInputProps, onClear, ...restProps }, ref) => {
         const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
         const { inputFocusedRef, triggerChangeFromInput } = useContext(DateFieldContext);
         const { status } = restProps;
         const {
+            className: inputClassName,
             onFocus: onInputFocus,
             onBlur: onInputBlur,
             onKeyDown: onInputKeyDown,
@@ -77,7 +87,7 @@ export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTarget
             <>
                 {onClear && <FormFieldClear onClick={onClear} />}
                 <ButtonIcon active={dropdownOpen} disabled={disabled} onClick={handleButtonClick}>
-                    {sizeToCalendarIconMap[size]}
+                    {SIZE_TO_CALENDAR_ICON_MAP[size]}
                 </ButtonIcon>
                 {postfix}
             </>
@@ -85,9 +95,11 @@ export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTarget
 
         return (
             <MaskedField
+                className={clsx(styles.dateFieldTarget, className)}
                 size={size}
                 maskedInputProps={{
                     ...restInputProps,
+                    className: clsx(SIZE_TO_INPUT_CLASS_NAME_MAP[size], inputClassName),
                     disabled: disabled,
                     onFocus: handleInputFocus,
                     onBlur: handleInputBlur,

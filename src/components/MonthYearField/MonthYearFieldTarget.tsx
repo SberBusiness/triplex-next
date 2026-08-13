@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import clsx from "clsx";
 import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20, CalendarStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExtendedContext";
 import { TextField } from "../TextField/TextField";
@@ -9,18 +10,32 @@ import { isKey } from "../../utils/keyboard";
 import { EComponentSize } from "../../enums";
 import { EFormFieldStatus } from "../FormField/enums";
 import { IMonthYearFieldTargetProps } from "./types";
+import styles from "./styles/MonthYearFieldTarget.module.less";
 
-const sizeToCalendarIconMap = {
+/** Соответствие размера имени класса поля ввода. */
+const SIZE_TO_INPUT_CLASS_NAME_MAP = {
+    [EComponentSize.SM]: styles.minWidthSM,
+    [EComponentSize.MD]: styles.minWidthMD,
+    [EComponentSize.LG]: styles.minWidthLG,
+};
+
+/** Соответствие размера иконке календаря. */
+const SIZE_TO_CALENDAR_ICON_MAP = {
     [EComponentSize.SM]: <CalendarStrokeSrvIcon16 paletteIndex={5} />,
     [EComponentSize.MD]: <CalendarStrokeSrvIcon20 paletteIndex={5} />,
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
 export const MonthYearFieldTarget = React.forwardRef<HTMLDivElement, IMonthYearFieldTargetProps>(
-    ({ size = EComponentSize.MD, postfix, onClear, inputProps, ...restProps }, ref) => {
+    ({ className, size = EComponentSize.MD, postfix, onClear, inputProps, ...restProps }, ref) => {
         const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
         const { status } = restProps;
-        const { onKeyDown: onInputKeyDown, onMouseDown: onInputMouseDown, ...restInputProps } = inputProps;
+        const {
+            className: inputClassName,
+            onKeyDown: onInputKeyDown,
+            onMouseDown: onInputMouseDown,
+            ...restInputProps
+        } = inputProps;
         const adaptive = useMobileView();
         const disabled = status === EFormFieldStatus.DISABLED;
 
@@ -58,7 +73,7 @@ export const MonthYearFieldTarget = React.forwardRef<HTMLDivElement, IMonthYearF
                     disabled={disabled}
                     onClick={handleButtonClick}
                 >
-                    {sizeToCalendarIconMap[size]}
+                    {SIZE_TO_CALENDAR_ICON_MAP[size]}
                 </ButtonIcon>
                 {postfix}
             </>
@@ -66,9 +81,11 @@ export const MonthYearFieldTarget = React.forwardRef<HTMLDivElement, IMonthYearF
 
         return (
             <TextField
+                className={clsx(styles.monthYearFieldTarget, className)}
                 size={size}
                 inputProps={{
                     ...restInputProps,
+                    className: clsx(SIZE_TO_INPUT_CLASS_NAME_MAP[size], inputClassName),
                     readOnly: true,
                     disabled: disabled,
                     onMouseDown: handleMouseDown,

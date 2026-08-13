@@ -36,6 +36,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Расширение API: свойства `loading` и `loaderScreenProps`. При `loading` поверх контента карточки показывается `LoaderScreen` типа `middle`, настраиваемый через `loaderScreenProps`.
 
+**DateField / MonthYearField**
+
+- Добавлено ограничение по минимальной ширине.
+
 **LoaderSmall**
 
 - Проведён AI-рефакторинг; экспортируемый `ELoaderSmallSize` помечен как legacy — размер задаётся `EComponentSize`.
@@ -43,6 +47,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MediaWidth**
 
 - Проведён AI-рефакторинг, добавлен `displayName`.
+
+**FormFieldMaskedInput**
+
+- Исправлен выход подложки-плейсхолдера за границы контейнера при нехватке свободного места.
 
 **MobileView**
 

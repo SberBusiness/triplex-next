@@ -21,7 +21,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **Badge**
 
-- AI-рефакторинг: JSDoc на всех props `IBadgeProps`, `IBadgeDotProps` и `IBadgeContentProps` — с размерами в пикселях, пометкой, что `size` обязателен и значения по умолчанию не имеет, и пометкой, что части с falsy-значением не рендерятся; в `IBadgeProps` добавлен явный `children` (тип совпадает с унаследованным из `React.HTMLAttributes`, публичная сигнатура не меняется), уточнены JSDoc самих компонентов и внутренних обёрток `BadgeContent` / `BadgePrefix` / `BadgePostfix`. Unit-тесты расширены с 12 до 45 кейсов: `Badge.test.tsx` вырос с 12 до 23 кейсов, рядом добавлены `BadgeDot.test.tsx`, `BadgeContent.test.tsx` и `BadgeAffixes.test.tsx`; покрыты снятие отступов контента при `prefix` / `postfix`, нерендеринг частей с falsy-значением, порядок частей разметки, проброс `...rest`, `ref` и `className`. Создан `Badge-ai.md`. Публичный API и поведение не изменены (props и их типы, `Badge.Dot`, barrel-экспорты, DOM-разметка, классы и токен `--triplex-next-Badge-Background` — как были).
+- Проведён AI-рефакторинг.
 
 **ComposedKeyDownListener**
 

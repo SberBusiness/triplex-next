@@ -75,7 +75,7 @@ repos/{owner}/{repo}/pulls/<N>/reviews` (summary-тексты ревью в
 1. **Публичный API**: изменения props/enum/экспортов? Это breaking? Release
    notes обновлены?
 2. **Инварианты**: forwardRef на месте, clsx вместо конкатенации, нет
-   hardcoded цветов/размеров, React 17 совместимость (код, синхронизируемый
+   hardcoded цветов, React 17 совместимость (код, синхронизируемый
    в release-0, без React 18-only API).
 3. **Тесты**: покрывают ли новое/изменённое поведение; не удалены ли.
    **Блокер:** импорты `vitest` / `@testing-library/*` / `storybook/test` внутри

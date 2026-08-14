@@ -13,6 +13,7 @@ related:
   - SelectField
   - ButtonIcon
   - ButtonBase
+  - MasterTable
 tokens:
   - --triplex-next-Pagination-PageButton_Background_Hover
   - --triplex-next-Pagination-PageButton_Background_Active
@@ -63,6 +64,21 @@ version: "1.0"
 
 Расширяет `ISelectFieldProps` (без `size`, с обязательным `value`) и добавляет `paginationLabel: React.ReactNode` — текст лейбла перед селектом. Размер селекта зафиксирован как `EComponentSize.SM`. `value`, `options`, `onChange` — управляются потребителем.
 
+### Состояние загрузки внутри `MasterTable`
+
+Собственного prop загрузки у пагинации нет. Внутри `MasterTable` с `loading` элементы пагинации
+блокируются автоматически: `PaginationNavigationButton` и `PaginationPageButton` получают
+`disabled`, `PaginationSelect` — `status={EFormFieldStatus.DISABLED}`, из-за которого выпадающий
+список не открывается. Читается это из `MasterTableContext` (`loading`), поэтому работает и через
+`Pagination`, и через ручную компоновку на `PaginationExtended`.
+
+Лоадер при этом рисует `TableBasic` — он лежит в собственном `position: relative`-контейнере и
+перекрывает только таблицу. Пагинация в `MasterTable.PaginationPanel` остаётся видимой и читаемой.
+
+Вне `MasterTable` контекст отдаёт `loading: false`, поэтому автономная пагинация ведёт себя
+как раньше: блокировка приходит только из `disabled` на `buttonPrevProps`/`buttonNextProps` и из
+крайних страниц.
+
 ### Subкомпоненты для кастомной компоновки
 
 Для нестандартной раскладки используется `PaginationExtended` напрямую с вложенными `PaginationNavigation` и `PaginationSelect` (см. story `Extended`). Низкоуровневые части (`PaginationNavigationExtended`, `PaginationNavigationExtendedItem`, `PaginationPageButton`, `PaginationPageEllipsis`, `PaginationNavigationButton`) экспортируются для построения полностью кастомной навигации, но обычно используются неявно через `PaginationNavigation`.
@@ -92,6 +108,8 @@ version: "1.0"
 - Навигация рендерится только при `totalPages > 1` — поведение публичное, на него опираются потребители.
 - Логику `PaginationUtils.createPagesArray` / `generatePageRanges` / `generateRange` не менять без перегенерации `__tests__/paginationUtils.test.tsx` — там зафиксированы граничные случаи раскладки.
 - `PAGINATION_ELLIPSIS_VALUE = -1` — sentinel в массиве страниц, на него завязан рендер многоточия.
+- Блокировка по `MasterTableContext.loading` перекрывает `disabled`, пришедший из props: в состоянии загрузки кнопка заблокирована независимо от того, что передал потребитель. Обратное неверно — вне загрузки решает prop.
+- Импорт `MasterTableContext` в частях пагинации — абсолютный (`@sberbusiness/triplex-next/components/Table/MasterTableContext`), как в самом `Table`. Относительный путь сюда не ставить.
 
 ---
 
@@ -114,6 +132,7 @@ version: "1.0"
 - `PaginationPageButton` — кнопка-страница (поверх `ButtonBase`).
 - `PaginationPageEllipsis` — многоточие, заменяющее группу скрытых страниц.
 - `PaginationNavigationButton` — кнопка «Назад»/«Вперёд» (поверх `ButtonIcon`), направление задаётся `EPaginationNavigationIconDirection`.
+- `MasterTable` — таблица, в паре с которой пагинация обычно и используется (`MasterTable.PaginationPanel`). Её `loading` через `MasterTableContext` блокирует элементы пагинации.
 
 ---
 
@@ -137,3 +156,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-06-22 | Создан документ |
+| 2026-08-12 | В состоянии загрузки `MasterTable` элементы пагинации становятся `disabled` — читается из `MasterTableContext.loading`. Публичный API не изменился. Заодно `PaginationSelect` перестал молча терять переданный `status`. |

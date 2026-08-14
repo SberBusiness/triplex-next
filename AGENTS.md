@@ -97,6 +97,6 @@ React 18 + TypeScript strict + LESS Modules + Vite + Storybook 9
 - Public API (prop names, types, enum values) is a breaking change
 - All barrel exports in `index.ts` must remain
 - Use `clsx` for className merging, never string concatenation
-- No hardcoded colors/sizes — use CSS variables from design tokens
+- No hardcoded colors — use CSS variables from design tokens
 - New or fully rewritten stories should follow `docs/ai/stories-guide.md` modern pattern
 - Small changes in legacy stories/tests should preserve the local file pattern unless migration is part of the task

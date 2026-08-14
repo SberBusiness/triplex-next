@@ -4,6 +4,16 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.42.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**FormFieldMaskedInput**
+
+- Prop `defaultValue` исключён из `IFormFieldMaskedInputProps` — поле контролируемое, начальное значение задаётся через `value`. Затрагивает также `MaskedField.maskedInputProps` и `DropdownMobileMaskedInput`.
+
+**MaskedField**
+
+- Тип `maskedInputProps.ref` изменён с `React.RefObject<HTMLInputElement>` на `React.RefObject<HTMLDivElement>` — ref указывает на `<div>`-обёртку поля. Для ссылки на `<input>` используйте `maskedInputProps.forwardedRef`.
+
 <Heading>Изменения</Heading>
 
 **AlertProcess**
@@ -17,7 +27,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Amount**
 
 - Добавлено: `Amount` пробрасывает `ref` — компонент был объявлен как `React.FC`. Теперь это `forwardRef`, ref указывает на корневой `<span>`, то есть на тот же элемент, что получает `className` и `...rest`. Изменение аддитивное: форма `IAmountProps` не поменялась.
-- AI-рефакторинг: JSDoc props дополнен значениями по умолчанию, константа `adaptiveAmountLength` переименована в `ADAPTIVE_AMOUNT_LENGTH`, магические символы вынесены в именованные константы (`HYPHEN_MINUS`, `MINUS_SIGN`, `NON_BREAKING_SPACE`), нестрогое сравнение `==` заменено на `startsWith`, inline-функция `renderCurrencyName`, возвращавшая массив React-узлов, заменена на фрагмент прямо в JSX, `!important` в `.adaptive` получил комментарий-обоснование, порядок импортов приведён к codestyle. Unit-тесты расширены с 4 до 23 кейсов, создан `Amount-ai.md`. Кроме проброса `ref` публичный API не изменён (props, их типы, barrel-экспорты — как были), итоговая DOM-разметка и визуальное отображение компонента не изменились.
+- Проведён AI-рефакторинг.
 
 **Badge**
 
@@ -36,18 +46,39 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: смена набора горячих клавиш перемонтировала содержимое — `children` пересоздавались вместе с DOM-узлами и теряли введённые значения инпутов, фокус и текущие анимации. Теперь структура React-дерева не зависит от длины и порядка `keyDownListeners`, содержимое остаётся смонтированным.
 - Изменился относительный порядок подписок на `window`: слушатели композитора монтируются раньше `children`, а не после них. Если внутри `children` есть собственный глобальный `keydown`-обработчик той же клавиши, `onMatch` сработает раньше него, а не позже — важно для кода, который полагается на этот порядок или на `stopImmediatePropagation`. Итоговый DOM и порядок вызова `onMatch` внутри `keyDownListeners` прежние.
 
+**FormFieldMaskedInput**
+
+- Исправлено: поле перестало писать в консоль предупреждение React «input contains both value and defaultValue props».
+
 **Island**
 
 - Расширение API: свойства `loading` и `loaderScreenProps`. При `loading` поверх контента карточки показывается `LoaderScreen` типа `middle`, настраиваемый через `loaderScreenProps`.
+
+**DateField / MonthYearField**
+
+- Добавлено ограничение по минимальной ширине.
 
 **LoaderSmall**
 
 - Проведён AI-рефакторинг; экспортируемый `ELoaderSmallSize` помечен как legacy — размер задаётся `EComponentSize`.
 
+**MaskedField**
+
+- Проведён AI-рефакторинг. Поведение и разметка не изменились, изменения типов — см. «Ломающие изменения».
+
 **MediaWidth**
 
 - Проведён AI-рефакторинг, добавлен `displayName`.
 
+**FormFieldMaskedInput**
+
+- Исправлен выход подложки-плейсхолдера за границы контейнера при нехватке свободного места.
+
 **MobileView**
 
 - Проведён AI-рефакторинг, добавлен `displayName`.
+
+**Pagination**
+
+- Внутри `MasterTable` в состоянии `loading` элементы пагинации становятся неактивными - кнопки навигации и номера страниц получают `disabled`, селект количества строк не открывается.
+- Исправлена обработка `status` в `PaginationSelect`.

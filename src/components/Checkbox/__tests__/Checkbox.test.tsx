@@ -27,7 +27,7 @@ describe("Checkbox", () => {
         expect(getLabel()).not.toHaveClass("nonempty");
     });
 
-    it("Should apply size classes", () => {
+    it("Should apply size classes to label only", () => {
         const { rerender } = render(<Checkbox size={EComponentSize.SM} />);
         const label = getLabel();
         expect(label).toHaveClass("sm");
@@ -37,6 +37,9 @@ describe("Checkbox", () => {
 
         rerender(<Checkbox size={EComponentSize.LG} />);
         expect(label).toHaveClass("lg");
+
+        // Размерные правила в LESS написаны как .sm & — класс размера нужен на label, внутренние элементы берут его как потомки.
+        expect(getCheckbox()).not.toHaveClass("sm", "md", "lg");
     });
 
     it("Should apply md size class by default", () => {
@@ -88,6 +91,7 @@ describe("Checkbox", () => {
 
         expect(checkbox).toHaveAttribute("type", "checkbox");
         expect(checkbox).toHaveAttribute("name", "agreement");
+        expect(screen.getByRole("checkbox", { name: "Agreement" })).toBe(checkbox);
         expect(getLabel()).not.toHaveAttribute("name");
     });
 
@@ -156,7 +160,7 @@ describe("Checkbox", () => {
 
         expect(handleChange).toHaveBeenCalledTimes(1);
         expect(handleChange).toHaveBeenCalledWith(expect.objectContaining({ target: checkbox }));
-        expect(handleChange.mock.calls[0][0].target.checked).toBe(true);
+        expect(checkbox).toBeChecked();
     });
 
     it("Should forward ref correctly", () => {

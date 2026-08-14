@@ -9,9 +9,9 @@ import styles from "../styles/TabsExtendedTabButton.module.less";
 
 /** Свойства компонента TabsExtendedTabButton. */
 export interface ITabsExtendedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    /** Выбранное состояние. */
+    /** Выбранное состояние. Управляет классом selected и aria-selected. */
     selected?: boolean;
-    /** Размер компонента. */
+    /** Размер компонента. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
@@ -29,7 +29,7 @@ export const TabsExtendedTabButton = React.forwardRef<HTMLButtonElement, ITabsEx
             styles.tabsExtendedTabButton,
             styles[size],
             TABS_EXTENDED_TYPE_TO_CLASS_NAME_MAP[type],
-            { [styles.selected]: !!selected },
+            { [styles.selected]: selected },
             className,
         );
 

@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { StoryObj, ArgTypes } from "@storybook/react";
 import * as iconModule from "@sberbusiness/icons-next";
 
-const paletteIndexes = Array.from(Array(12).keys());
+const PALETTE_INDEXES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 
 export default {
     title: "Icons/Icons",
@@ -29,24 +29,27 @@ import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
     argTypes: {
         paletteIndex: {
             control: { type: "select" },
-            options: paletteIndexes,
+            options: PALETTE_INDEXES,
             description: "Индекс цветовой палитры для изменения заливки иконки.",
         },
     },
 };
 
-const iconCategoryMap: Record<string, string[]> = Object.keys(iconModule)
+type IconModuleKey = Extract<keyof typeof iconModule, `${string}Icon${number}`>;
+
+const iconCategoryMap = Object.keys(iconModule)
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-    .reduce((map, key) => {
+    .reduce<Record<string, IconModuleKey[]>>((map, key) => {
         const results = key.match(/(Brd|Map|Mrk|Mkr|Nav|Prd|Srv|Sts|Sys)Icon/);
 
         if (results) {
             const category = results[1];
+            const typedKey = key as IconModuleKey;
 
             if (category in map) {
-                map[category].push(key);
+                map[category].push(typedKey);
             } else {
-                map[category] = [key];
+                map[category] = [typedKey];
             }
         }
         return map;
@@ -88,7 +91,7 @@ const STORY_ARGS: StoryArgs = {
 const STORY_ARG_TYPES: ArgTypes<StoryArgs> = {
     // Props
     paletteIndex: {
-        control: { type: "number" },
+        options: Object.values(PALETTE_INDEXES),
         table: {
             category: "Props",
         },
@@ -149,7 +152,7 @@ export const Palettes: StoryObj<StoryArgs> = {
 
         return (
             <div>
-                {paletteIndexes.map((paletteIndex) => (
+                {PALETTE_INDEXES.map((paletteIndex) => (
                     <div key={paletteIndex} style={{ display: "inline-block" }}>
                         <div style={{ textAlign: "center" }}>{paletteIndex}</div>
                         <IconItem inverted={paletteIndex === 6} {...args}>
@@ -179,6 +182,13 @@ export const BrandIcons: StoryObj<StoryArgs> = {
         hoverable: true,
         disabled: false,
     },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
+    },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
             {iconCategoryMap["Brd"].map((key) => {
@@ -193,14 +203,6 @@ export const BrandIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const MapIcons: StoryObj<StoryArgs> = {
@@ -209,6 +211,13 @@ export const MapIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -224,14 +233,6 @@ export const MapIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const MarkerIcons: StoryObj<StoryArgs> = {
@@ -240,6 +241,13 @@ export const MarkerIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -255,14 +263,6 @@ export const MarkerIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const MarketingIcons: StoryObj<StoryArgs> = {
@@ -271,6 +271,13 @@ export const MarketingIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -286,14 +293,6 @@ export const MarketingIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const NavigationIcons: StoryObj<StoryArgs> = {
@@ -302,6 +301,13 @@ export const NavigationIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -317,13 +323,6 @@ export const NavigationIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const ProductIcons: StoryObj<StoryArgs> = {
@@ -332,6 +331,13 @@ export const ProductIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -347,13 +353,6 @@ export const ProductIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const ServiceIcons: StoryObj<StoryArgs> = {
@@ -362,6 +361,13 @@ export const ServiceIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -377,13 +383,6 @@ export const ServiceIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const StatusIcons: StoryObj<StoryArgs> = {
@@ -392,6 +391,13 @@ export const StatusIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -407,14 +413,6 @@ export const StatusIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };
 
 export const SystemIcons: StoryObj<StoryArgs> = {
@@ -423,6 +421,13 @@ export const SystemIcons: StoryObj<StoryArgs> = {
         paletteIndex: 0,
         hoverable: true,
         disabled: false,
+    },
+    parameters: {
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+        },
     },
     render: ({ paletteIndex, ...restArgs }) => (
         <div className="icon-gallery">
@@ -438,11 +443,4 @@ export const SystemIcons: StoryObj<StoryArgs> = {
             })}
         </div>
     ),
-    parameters: {
-        docs: {
-            canvas: {
-                sourceState: "none",
-            },
-        },
-    },
 };

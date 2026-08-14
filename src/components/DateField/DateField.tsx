@@ -32,7 +32,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         onDropdownClose,
         invalidDateHint,
         targetProps,
-        ...rest
+        ...restProps
     } = props;
     const [pickerValues, setPickerValues] = useState(
         DateFieldUtils.getPickerValues(value, format, limitRange, disabledDays),
@@ -199,7 +199,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
             onDropdownOpen={handleDropdownOpen}
             onDropdownClose={handleDropdownClose}
             onDateChange={handleDateChange}
-            {...rest}
+            {...restProps}
             ref={setRef}
         />
     );

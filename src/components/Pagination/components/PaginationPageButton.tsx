@@ -1,24 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
 import { Text, ETextSize } from "../../Typography";
 import { ButtonBase } from "../../Button/ButtonBase";
+import { MasterTableContext } from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
 import styles from "../styles/PaginationPageButton.module.less";
 
 /** Свойства компонента PaginationPageButton. */
-type TPaginationPageButtonProps = {
+export interface IPaginationPageButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
     /** Является ли страница текущей (активной). */
     isCurrent?: boolean;
-    /** Дополнительный CSS-класс. */
-    className?: string;
     /** Номер страницы. */
     children: React.ReactNode;
     /** Обработчик клика по странице. */
     onClick: () => void;
-};
+}
 
 /** Кнопка-страница пагинации. */
-export const PaginationPageButton = React.forwardRef<HTMLButtonElement, TPaginationPageButtonProps>(
-    ({ isCurrent = false, children, className, ...rest }, ref) => {
+export const PaginationPageButton = React.forwardRef<HTMLButtonElement, IPaginationPageButtonProps>(
+    ({ isCurrent = false, children, className, disabled, ...rest }, ref) => {
+        const { loading } = useContext(MasterTableContext);
+
         return (
             <ButtonBase
                 className={clsx(
@@ -30,6 +31,7 @@ export const PaginationPageButton = React.forwardRef<HTMLButtonElement, TPaginat
                 )}
                 aria-live={isCurrent ? "polite" : undefined}
                 {...rest}
+                disabled={loading || disabled}
                 ref={ref}
             >
                 <Text size={ETextSize.B3}>{children}</Text>

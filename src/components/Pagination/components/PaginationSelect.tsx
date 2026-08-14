@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { uniqueId } from "lodash-es";
 import clsx from "clsx";
 import styles from "../styles/PaginationSelect.module.less";
 import { ETextSize, Text } from "../../Typography";
 import { SelectField, ISelectFieldProps } from "../../SelectField";
+import { EFormFieldStatus } from "../../FormField/enums";
+import { MasterTableContext } from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства компонента PaginationSelect. */
@@ -15,8 +17,9 @@ export interface IPaginationSelectProps
 
 /** Выбор количества элементов на странице. */
 export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSelectProps>(
-    ({ paginationLabel, className, options, value, onChange }, ref) => {
+    ({ paginationLabel, className, options, value, onChange, status }, ref) => {
         const [instanceId] = useState(() => `Pagination-${uniqueId()}`);
+        const { loading } = useContext(MasterTableContext);
 
         return (
             <div className={clsx(styles.paginationSelect, className)} ref={ref}>
@@ -30,6 +33,7 @@ export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSele
                         mobileTitle={paginationLabel}
                         options={options}
                         onChange={onChange}
+                        status={loading ? EFormFieldStatus.DISABLED : status}
                         targetProps={{
                             fieldLabel: "",
                         }}

@@ -1,6 +1,6 @@
 ---
 name: release-react18
-description: React 18-релиз triplex-next (1.Y.0) — вторая половина выпуска: бамп версии в ветке prerelease-X.Y.0, заготовка release notes на следующую версию, PR в main, автомерж по зелёному CI, GitHub Release, публикация в npm, после которой dist-tags.latest встаёт на 1.Y.0. Под-skill для release; запускается ПОСЛЕ подтверждённой публикации 0.Y.0.
+description: React 18-релиз triplex-next (1.Y.0) — вторая половина выпуска: бамп версии в ветке prerelease-X.Y.0, заготовка release notes на следующую версию, PR в main, мерж по зелёному CI (с учётом branch protection), GitHub Release, публикация в npm, после которой dist-tags.latest встаёт на 1.Y.0. Под-skill для release; запускается ПОСЛЕ подтверждённой публикации 0.Y.0. В unattended (облако) публикация запрещена прокси — остановка с готовой командой для человека.
 ---
 
 # release-react18
@@ -189,11 +189,22 @@ gh pr merge <PR_NUMBER> --merge --delete-branch
 git checkout main && git pull origin main
 ```
 
+На `main` включена branch protection: пушить и мержить могут только
+аккаунты из списка restrictions, плюс требуется апрув code owner'а. Если
+мерж отклонён политикой (`base branch policy prohibits the merge` /
+`Merging into a protected base branch is not permitted`) — **не обходи**
+через прямые пуши. Интерактивно: мерж делает человек из списка,
+`gh pr merge <PR_NUMBER> --merge --delete-branch --admin`. Помни: к этому
+моменту `0.Y.0` уже опубликована и `latest` стоит на ней — тянуть с мержем
+нельзя (см. «Если `latest` завис на 0.x» в
+[`release-react17`](../release-react17/SKILL.md)).
+
 В unattended `--delete-branch` не сработает: удаление веток облачной сессии
 запрещено (`Write access to this GitHub API path is not permitted through
-this proxy`). Мерж при этом проходит. Не считай это провалом и не пытайся
-обойти — просто смержи без флага и упомяни в отчёте, что ветку
-`prerelease-<VERSION>` надо удалить вручную.
+this proxy`). Если сам мерж прошёл — не считай это провалом и не пытайся
+обойти: просто смержи без флага и упомяни в отчёте, что ветку
+`prerelease-<VERSION>` надо удалить вручную. Если мерж отклонён политикой
+ветки — остановись с отчётом и готовой командой для человека (см. выше).
 
 Убедись, что версия в main действительно обновилась:
 
@@ -216,26 +227,38 @@ node -p "require('./package.json').version"   # должно быть <VERSION>
 
 **Точка невозврата** — после этого шага пакет уедет в npm.
 
-**Интерактивно** — напрямую:
+**Интерактивно** — напрямую (скрипт
+[`scripts/releaseNotesMd.js`](../../../scripts/releaseNotesMd.js) —
+исполняемая форма канона преобразования из шага 7):
 
 ```bash
+node scripts/releaseNotesMd.js stories/release-notes/v1/<VERSION>.mdx > /tmp/notes-<VERSION>.md
 gh release create <VERSION> --target main --title "<VERSION>" --latest \
-  --notes-file <путь_к_временному_файлу>
+  --notes-file /tmp/notes-<VERSION>.md
 ```
 
-**В unattended** — через workflow: облачной сессии создавать релизы запрещено
-(`HTTP 403: Creating, editing, or deleting releases is not permitted for this
-session type`), а `gh workflow run` прокси пропускает:
+**В unattended публикация невозможна** — здесь skill останавливается.
+Прокси облачных сессий запрещает все пути запуска релиза: `gh release
+create`, `gh workflow run release.yml`, `repository_dispatch`, создание и
+push тегов (зонд TRI-117, 2026-08-14; диспатч нерелизных workflow, например
+`visual-update.yml`, проходит). Это ограничение типа сессии, а не прав токена —
+см. [`docs/ai/commits.md`](../../../docs/ai/commits.md), «Облачные сессии:
+подмена токена прокси». Остановка — штатный исход подготовки: в отчёт
+первой строкой «публикацию завершает человек» и готовая команда (подставь
+`<VERSION>`):
 
 ```bash
-gh workflow run release.yml --ref main \
-  -f tag=<VERSION> -f target=main -f make_latest=true \
-  -F notes=@<путь_к_временному_файлу>
+node scripts/releaseNotesMd.js stories/release-notes/v1/<VERSION>.mdx > /tmp/notes-<VERSION>.md && \
+  gh release create <VERSION> --target main --title "<VERSION>" --latest \
+  --notes-file /tmp/notes-<VERSION>.md
 ```
 
-В этом режиме [`release.yml`](../../../.github/workflows/release.yml) сам
-собирает пакет, публикует его и **только потом** создаёт GitHub Release: если
-сборка или публикация упадут, релиза не появится вовсе.
+Альтернатива для локальных агентов — `gh workflow run release.yml --ref main
+-f tag=<VERSION> -f target=main -f make_latest=true -F notes=@<файл>`:
+[`release.yml`](../../../.github/workflows/release.yml) сам собирает пакет,
+публикует его и **только потом** создаёт GitHub Release — если сборка или
+публикация упадут, релиза не появится вовсе. Требует `actions:write`
+у токена; из облака заблокирован.
 
 Флаг `--latest` / вход `make_latest=true` для `1.x` обязателен.
 
@@ -243,16 +266,17 @@ gh workflow run release.yml --ref main \
 
 `release.yml` делает всё остальное: сборку, `npm publish`, `dist-<VERSION>.zip`
 в ассеты, деплой Storybook. На пути `release: published` он запускается
-событием, в unattended — тем же `gh workflow run`, что создал релиз.
+событием; на альтернативном пути локального агента — тем же
+`gh workflow run`, что создал релиз. В unattended этот шаг не выполняется —
+публикации не было (см. шаг 8).
 
 ```bash
 gh run list --workflow=release.yml --limit 1
 gh run watch <RUN_ID> --exit-status
 ```
 
-В unattended — поллинг с таймаутом вместо `gh run watch`. По таймауту
-отчёт: «релиз создан, публикация не подтверждена» — сам релиз уже
-существует, отзывать его нельзя.
+Если `gh run watch` не дождался завершения — отчёт: «релиз создан,
+публикация не подтверждена». Сам релиз уже существует, отзывать его нельзя.
 
 После успешного run — проверь, что версия реально в реестре:
 
@@ -286,10 +310,11 @@ Storybook релиза: `https://storybook.triplex-dev.ru/releases/<VERSION>`.
 | Точка | Интерактивно | Unattended |
 |---|---|---|
 | Ожидание CI по PR (шаг 6) | `gh pr checks --watch` | Поллинг с таймаутом; таймаут → не мержить, отчёт |
-| Текст release notes перед релизом (шаг 7) | Показать, ждать подтверждения | Включить в отчёт, продолжить |
-| Создание релиза (шаг 8) | `gh release create` напрямую | `gh workflow run release.yml` — прямое создание запрещено (403) |
+| Мерж отклонён политикой ветки (шаг 6) | Мержит человек из restrictions: `gh pr merge --admin` | Остановиться с отчётом и готовой командой для человека |
+| Текст release notes перед релизом (шаг 7) | Показать, ждать подтверждения | Включить в отчёт |
+| Создание релиза (шаг 8) | `gh release create` напрямую | **Не выполняется** — публикация из облака запрещена прокси; штатная остановка с готовой командой в отчёте |
 | Удаление ветки при мерже (шаг 6) | `--delete-branch` | Не сработает (403) — смержить без флага, упомянуть в отчёте |
-| Ожидание `release.yml` (шаг 9) | `gh run watch` | Поллинг с таймаутом; таймаут → отчёт «релиз создан, публикация не подтверждена» |
+| Ожидание `release.yml` и проверка npm (шаг 9) | `gh run watch` + `npm view` | Не выполняется — публикации не было |
 | Отсутствует задача Linear для `TASK` | Завести через `create-task` | Не заводить: `TASK` приходит из [`release-auto`](../release-auto/SKILL.md); нет номера — стоп |
 | `latest` не встал на `VERSION` (шаг 9) | Предложить `npm dist-tag add` | Тег не трогать, вынести первой строкой отчёта |
 

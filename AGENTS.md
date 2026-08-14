@@ -50,7 +50,7 @@ Each is a `SKILL.md` file describing a focused workflow. Read the relevant
 | `.agents/skills/release/SKILL.md` | Releasing a new version: runs the React 17 half first, then the React 18 one, so that `latest` ends up on `1.Y.0` |
 | `.agents/skills/release-react17/SKILL.md` | First half: releasing `0.Y.0` from `release-0`; merging `main` into `release-0` is done by a human beforehand |
 | `.agents/skills/release-react18/SKILL.md` | Second half: releasing `1.Y.0` from `main`, which moves the npm `latest` tag onto it |
-| `.agents/skills/release-auto/SKILL.md` | Preflight checks and unattended release from the weekly routine; an unfilled release-notes stub means no release |
+| `.agents/skills/release-auto/SKILL.md` | Preflight checks and unattended release from the weekly routine; an unfilled release-notes stub means no release; in the cloud it prepares `0.Y.0` and hands publishing to a human |
 | `.agents/skills/take-task/SKILL.md` | Picking up a Linear task `TRI-XXX` and starting work on it |
 | `.agents/skills/finish-task/SKILL.md` | Wrapping up a Linear task after the commit: summary comment, PR linkage |
 | `.agents/skills/create-task/SKILL.md` | Creating a well-formed Linear task from a short description |

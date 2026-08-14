@@ -8,25 +8,31 @@ import styles from "./styles/Checkbox.module.less";
 
 /** Свойства компонента Checkbox. */
 export interface ICheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
-    /** Объект label-атрибутов. */
+    /** Атрибуты корневого label. Его className объединяется с className компонента. */
     labelAttributes?: React.LabelHTMLAttributes<HTMLLabelElement>;
-    /** Признак частичного типа выбора. */
+    /** Признак частичного типа выбора: вместо галочки используется bulk-иконка. Её видимость, как и у галочки, определяется checked. По умолчанию false. */
     bulk?: boolean;
-    /** Размер чекбокса. */
+    /** Размер чекбокса. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
     /** Контент лейбла чекбокса. */
     children?: React.ReactNode;
 }
 
+/** Соответствие размера чекбокса размеру текста лейбла. */
 const SIZE_TO_TEXT_SIZE_MAP: Record<EComponentSize, ETextSize> = {
     [EComponentSize.LG]: ETextSize.B2,
     [EComponentSize.MD]: ETextSize.B3,
     [EComponentSize.SM]: ETextSize.B4,
 };
 
+/** Соответствие размера чекбокса имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Чекбокс с описанием. */
+/**
+ * Чекбокс с описанием.
+ * Корневой элемент — label, внутри него нативный input[type="checkbox"], на который указывает ref.
+ * className применяется к корневому label, остальные props — к input.
+ */
 export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
     const {
         children,
@@ -37,31 +43,20 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
         size = EComponentSize.MD,
         ...inputAttributes
     } = props;
-    const classNames = clsx(styles.checkbox, SIZE_TO_CLASS_NAME_MAP[size]);
-    const classNamesLabel = clsx(
+    const labelClassName = clsx(
         styles.label,
         SIZE_TO_CLASS_NAME_MAP[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
         className,
         labelAttributes?.className,
     );
-
-    /** Отрисовка галочки чекбокса. */
-    const renderCheckmarkIcon = () => {
-        const className = styles.checkmarkIcon;
-
-        return bulk ? (
-            <CheckboxbulkStrokeSrvIcon24 className={className} paletteIndex={7} />
-        ) : (
-            <CheckboxtickStrokeSrvIcon24 className={className} paletteIndex={7} />
-        );
-    };
+    const CheckmarkIcon = bulk ? CheckboxbulkStrokeSrvIcon24 : CheckboxtickStrokeSrvIcon24;
 
     return (
-        <label {...labelAttributes} className={classNamesLabel} data-tx={process.env.npm_package_version}>
-            <input type="checkbox" className={classNames} disabled={disabled} {...inputAttributes} ref={ref} />
+        <label {...labelAttributes} className={labelClassName} data-tx={process.env.npm_package_version}>
+            <input type="checkbox" className={styles.checkbox} disabled={disabled} {...inputAttributes} ref={ref} />
             <span className={styles.checkboxIcon} />
-            {renderCheckmarkIcon()}
+            <CheckmarkIcon className={styles.checkmarkIcon} paletteIndex={7} />
             {children && (
                 <Text size={SIZE_TO_TEXT_SIZE_MAP[size]} tag="div">
                     {children}

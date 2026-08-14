@@ -6,6 +6,9 @@ import { TabsExtended } from "../TabsExtended";
 /** Правая граница скрытого контейнера с дубликатами табов. */
 const TABS_FAKE_RIGHT = 304;
 
+/** Правая граница постороннего узла: за границей контейнера, чтобы он попал в ветку overflow. */
+const STRAY_NODE_RIGHT = 400;
+
 /** Правая граница каждого таба внутри скрытого контейнера. */
 const TAB_RIGHT_BY_ID: Record<string, number> = {
     "tab-1": 100,
@@ -36,9 +39,19 @@ interface IRenderOptions {
     tabs?: Array<{ id: string; label: string }>;
     wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
     wrapperRef?: React.Ref<HTMLDivElement>;
+    /** Дополнительный дочерний узел контейнера табов, помимо самих табов. */
+    extraChild?: React.ReactNode;
+    /** Вызывается на каждый рендер render-prop'а Dropdown с полученными id. */
+    onRenderDropdown?: (dropdownItemsIds: string[]) => void;
 }
 
-const renderTabs = ({ tabs = TABS, wrapperProps = {}, wrapperRef }: IRenderOptions = {}) =>
+const renderTabs = ({
+    tabs = TABS,
+    wrapperProps = {},
+    wrapperRef,
+    extraChild,
+    onRenderDropdown,
+}: IRenderOptions = {}) =>
     render(
         <TabsExtended selectedId="tab-1" onSelectTab={() => {}}>
             <TabsExtended.Content>
@@ -52,9 +65,14 @@ const renderTabs = ({ tabs = TABS, wrapperProps = {}, wrapperRef }: IRenderOptio
                             )}
                         </TabsExtended.Content.Tab>
                     ))}
+                    {extraChild}
                 </TabsExtended.Content.TabsWrapper>
                 <TabsExtended.Content.DropdownWrapper data-testid="dropdown">
-                    {({ dropdownItemsIds }) => <button type="button">{dropdownItemsIds.join(",")}</button>}
+                    {({ dropdownItemsIds }) => {
+                        onRenderDropdown?.(dropdownItemsIds);
+
+                        return <button type="button">{dropdownItemsIds.join(",")}</button>;
+                    }}
                 </TabsExtended.Content.DropdownWrapper>
             </TabsExtended.Content>
         </TabsExtended>,
@@ -74,6 +92,11 @@ describe("TabsExtendedTabsWrapper", () => {
 
             if (tabId !== null && this.closest(".tabsFake") !== null) {
                 return createRect(TAB_RIGHT_BY_ID[tabId] ?? 0);
+            }
+
+            // Посторонний узел без атрибута таба: в скрытом контейнере он выходит за правую границу.
+            if (this.tagName === "BUTTON" && this.parentElement?.classList.contains("tabsFake")) {
+                return createRect(STRAY_NODE_RIGHT);
             }
 
             return createRect(0);
@@ -135,6 +158,23 @@ describe("TabsExtendedTabsWrapper", () => {
         expect(getByTestId("real-tab-1")).not.toHaveClass("hidden");
         expect(getByTestId("real-tab-2")).not.toHaveClass("hidden");
         expect(getByTestId("dropdown")).toHaveAttribute("hidden");
+    });
+
+    it("Should ignore child without tab attribute when measuring", () => {
+        const onRenderDropdown = vi.fn();
+        const { getByTestId } = renderTabs({
+            tabs: TABS.slice(0, 2),
+            // Кнопка положена в контейнер напрямую, без Tab, поэтому не получает data-tab-item-id.
+            extraChild: <TabsExtended.Content.TabButton selected={false}>Лишний узел</TabsExtended.Content.TabButton>,
+            onRenderDropdown,
+        });
+
+        // Табы помещаются, а посторонний узел не должен ни открыть Dropdown, ни попасть в него как null.
+        expect(getByTestId("dropdown")).toHaveAttribute("hidden");
+        expect(onRenderDropdown).toHaveBeenCalled();
+        onRenderDropdown.mock.calls.forEach(([dropdownItemsIds]) => {
+            expect(dropdownItemsIds).not.toContain(null);
+        });
     });
 
     it("Should show visible container after measuring container is mounted", () => {

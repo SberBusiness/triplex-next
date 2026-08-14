@@ -18,7 +18,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
         <div>
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{size.toUpperCase()}</div>
             <TabsExtended selectedId={selectedId} onSelectTab={setSelectedId}>
-                {/* Размер задаётся на TabsExtended.Content и наследуется кнопками таба. */}
+                {/* size задаётся отдельно: на Content — отступы и скругление контейнера, на TabButton — высота кнопки. */}
                 <TabsExtended.Content size={size}>
                     <TabsExtended.Content.TabsWrapper>
                         {TABS.map(({ id, label }) => (

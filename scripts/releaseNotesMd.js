@@ -18,13 +18,15 @@ import fs from "node:fs";
 const [, , mdxPath] = process.argv;
 
 if (!mdxPath) {
-    console.error("Usage: node scripts/releaseNotesMd.js <path-to-notes.mdx>");
+    console.error("Usage: node scripts/releaseNotesMd.js <path-to-notes.mdx | ->");
     process.exit(1);
 }
 
 let source;
 try {
-    source = fs.readFileSync(mdxPath, "utf8");
+    // «-» — чтение из stdin, для запуска без чекаута нужной ветки:
+    // git show origin/release-0:<путь>.mdx | node scripts/releaseNotesMd.js -
+    source = fs.readFileSync(mdxPath === "-" ? 0 : mdxPath, "utf8");
 } catch (error) {
     console.error(`Не удалось прочитать ${mdxPath}: ${error.message}`);
     process.exit(1);
@@ -32,23 +34,31 @@ try {
 
 const lines = [];
 let insideImport = false;
+let headerDone = false;
 for (const rawLine of source.split("\n")) {
     const line = rawLine.trimEnd();
     const trimmed = line.trim();
-    // import может быть отформатирован в несколько строк — пропускаем блок
-    // целиком, до завершающей `;`.
-    if (insideImport) {
-        if (trimmed.endsWith(";")) {
-            insideImport = false;
+    // Шапка (import / <Meta> / <Title>) вырезается только до первой
+    // содержательной строки — import внутри fenced-блока с примером кода
+    // дальше по тексту не пострадает. import может быть отформатирован
+    // в несколько строк — пропускаем блок целиком, до завершающей `;`.
+    if (!headerDone) {
+        if (insideImport) {
+            if (trimmed.endsWith(";")) {
+                insideImport = false;
+            }
+            continue;
         }
-        continue;
-    }
-    if (trimmed.startsWith("import ")) {
-        insideImport = !trimmed.endsWith(";");
-        continue;
-    }
-    if (trimmed.startsWith("<Meta") || trimmed.startsWith("<Title")) {
-        continue;
+        if (trimmed.startsWith("import ")) {
+            insideImport = !trimmed.endsWith(";");
+            continue;
+        }
+        if (trimmed.startsWith("<Meta") || trimmed.startsWith("<Title")) {
+            continue;
+        }
+        if (trimmed !== "") {
+            headerDone = true;
+        }
     }
     const heading = trimmed.match(/^<Heading>(.*)<\/Heading>$/);
     if (heading) {

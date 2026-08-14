@@ -40,6 +40,10 @@ description: React 17-релиз triplex-next (0.Y.0) — первая поло�
 - `UNATTENDED` — признак запуска из routine, без человека у клавиатуры.
   По умолчанию `false`. Влияет только на точки ожидания подтверждения —
   см. «Unattended-режим». Гейты и стоп-условия одинаковы в обоих режимах.
+- `PUBLISH_MODE` — режим публикации в unattended: `full` (право на диспатч
+  `release.yml` подтверждено зондом [`release-auto`](../release-auto/SKILL.md))
+  или `prepare` (по умолчанию; облако — публикация запрещена прокси,
+  подготовка передаётся человеку). В интерактивном режиме не используется.
 
 ## Ключевое отличие от [React 18-части](../release-react18/SKILL.md)
 
@@ -321,7 +325,9 @@ git push origin release-0
 [`release`](../release/SKILL.md), раздел «Преобразование MDX → release notes»
 (убрать `import` / `<Meta>` / `<Title>`, `<Heading>X</Heading>` → `## X`).
 
-Дальше два пути — они отличаются тем, кто создаёт релиз.
+Дальше — три ветки: интерактивная публикация, unattended с подтверждённым
+правом публикации (`PUBLISH_MODE=full`) и unattended без него
+(`PUBLISH_MODE=prepare`, облако).
 
 **Интерактивно** (человек за клавиатурой) — напрямую:
 
@@ -335,8 +341,21 @@ gh release create <V0> --target release-0 --title "<V0>" --latest=false \
 исполняемая форма канона «Преобразование MDX → release notes» из
 [`release`](../release/SKILL.md); ручная сборка текста эквивалентна.
 
-**В unattended публикация невозможна** — здесь skill останавливается.
-Прокси облачных сессий запрещает все пути запуска релиза: `gh release
+**В unattended при `PUBLISH_MODE=full`** (право на диспатч подтверждено
+зондом `release-auto` — например, локальный запуск с PAT) — через workflow:
+
+```bash
+gh workflow run release.yml --ref main \
+  -f tag=<V0> -f target=release-0 -f make_latest=false \
+  -F notes=@<путь_к_временному_файлу>
+```
+
+`--ref main` обязателен: workflow берётся из указанной ветки, а в
+`release-0` может лежать устаревшая копия. Ветку для сборки задаёт вход
+`target`. Workflow сам публикует пакет и только потом создаёт релиз.
+
+**В unattended при `PUBLISH_MODE=prepare`** (облако) публикация невозможна —
+здесь skill останавливается. Прокси облачных сессий запрещает все пути запуска релиза: `gh release
 create`, `gh workflow run release.yml`, `repository_dispatch`, создание и
 push тегов (проверено зондом TRI-117, 2026-08-14; все пути — 403 «not
 permitted for this session type / through this proxy»). Диспатч других
@@ -349,10 +368,13 @@ workflow (например, `visual-update.yml`) из облака проход�
 Остановка здесь — **штатный исход подготовки, а не ошибка**: всё, что до
 точки невозврата, уже сделано и запушено. В отчёт первой строкой — «релиз
 подготовлен, публикацию завершает человек» и готовая команда (подставь
-`<V0>` — команда должна копироваться как есть):
+`<V0>`; команда работает из любого чекаута — notes читаются прямо из
+`origin/release-0`, локально каталога `v0/` может не быть):
 
 ```bash
-node scripts/releaseNotesMd.js stories/release-notes/v0/<V0>.mdx > /tmp/notes-<V0>.md && \
+git fetch origin release-0 && \
+  git show origin/release-0:stories/release-notes/v0/<V0>.mdx | \
+  node scripts/releaseNotesMd.js - > /tmp/notes-<V0>.md && \
   gh release create <V0> --target release-0 --title "<V0>" --latest=false \
   --notes-file /tmp/notes-<V0>.md
 ```
@@ -360,11 +382,6 @@ node scripts/releaseNotesMd.js stories/release-notes/v0/<V0>.mdx > /tmp/notes-<V
 После неё человек продолжает React 18-половину — локально, через
 [`release-react18`](../release-react18/SKILL.md) или попросив локального
 агента довести релиз.
-
-Альтернативный путь для локальных агентов — `gh workflow run release.yml
---ref main -f tag=<V0> -f target=release-0 -f make_latest=false
--F notes=@<файл>`: workflow сам публикует и только потом создаёт релиз.
-Требует `actions:write` у токена; из облака заблокирован.
 
 `--latest=false` / `make_latest=false` обязательны в любом пути: пометка
 Latest на GitHub должна достаться `1.x`.
@@ -421,9 +438,9 @@ npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest
 |---|---|---|
 | Сводка diff перед push (шаг 4) | Показать, ждать подтверждения | Включить `--stat` и `--short` в отчёт, продолжить |
 | Текст release notes перед релизом (шаг 5) | Показать, ждать подтверждения | Включить в отчёт |
-| Создание релиза (шаг 5) | `gh release create` напрямую | **Не выполняется** — все пути публикации из облака запрещены прокси; штатная остановка «подготовлено, публикацию завершает человек» с готовой командой в отчёте |
+| Создание релиза (шаг 5) | `gh release create` напрямую | `PUBLISH_MODE=full` → `gh workflow run release.yml`; `PUBLISH_MODE=prepare` (облако) → **не выполняется**: штатная остановка «подготовлено, публикацию завершает человек» с готовой командой в отчёте |
 | Расхождение notes v1 для React 17 (шаг 3) | Спросить разработчика | Не спрашивать: предикат заготовки решает однозначно |
-| Ожидание `release.yml` и проверка npm (шаг 6) | `gh run watch` + `npm view` | Не выполняется — публикации не было |
+| Ожидание `release.yml` и проверка npm (шаг 6) | `gh run watch` + `npm view` | `full` → поллинг с таймаутом; таймаут → отчёт «релиз создан, публикация не подтверждена». `prepare` → не выполняется: публикации не было |
 | `V1` уже опубликована (шаг 1) | Предупредить и продолжить по решению человека | Остановиться: `latest` уедет на `0.x`, а чинить некому |
 
 **Что не меняется:** все предусловия шага 1, гейты шага 2 и стоп-условия

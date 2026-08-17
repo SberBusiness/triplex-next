@@ -1,59 +1,35 @@
+import React, { useEffect, useRef } from "react";
 import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
-import React from "react";
 import styles from "../styles/CheckboxTreeExtended.module.less";
 
-/**
- * Свойства CheckboxTreeExtendedArrow.
- *
- * @prop {boolean} active - Текущая нода является активной при перемещении с клавиатуры.
- * @prop {boolean} opened - Текущая нода раскрыта.
- * @prop {Function} toggle - Функция смены значения opened.
- */
+/** Свойства CheckboxTreeExtendedArrow. */
 interface ICheckboxTreeExtendedArrowProps {
+    /** Текущая нода является активной при перемещении с клавиатуры. */
     active: boolean;
+    /** Текущая нода раскрыта. */
     opened: boolean;
+    /** Функция смены значения opened. */
     toggle: (opened: boolean) => void;
 }
 
 /**
  * Стрелка раскрытия ветки CheckboxTreeExtended.
  */
-export class CheckboxTreeExtendedArrow extends React.Component<ICheckboxTreeExtendedArrowProps> {
-    private arrowNode?: HTMLSpanElement;
+export const CheckboxTreeExtendedArrow: React.FC<ICheckboxTreeExtendedArrowProps> = ({ active, opened, toggle }) => {
+    const arrowNode = useRef<HTMLSpanElement | null>(null);
+    const prevActive = useRef(active);
 
-    public componentDidUpdate(prevProps: ICheckboxTreeExtendedArrowProps): void {
-        const { active } = this.props;
-        const { active: prevActive } = prevProps;
-
-        // Триггер фокуса на стрелке при изменении флага активности при перемещении по дереву с клавиатуры.
-        if (active && !prevActive) {
-            this.arrowNode?.focus();
+    // Триггер фокуса на стрелке при изменении флага активности при перемещении по дереву с клавиатуры.
+    useEffect(() => {
+        if (active && !prevActive.current) {
+            arrowNode.current?.focus();
         }
-    }
 
-    public render(): JSX.Element {
-        return (
-            <span
-                className={styles.caretIconWrapper}
-                onClick={this.handleClick}
-                onKeyUp={this.handleKeyUp}
-                ref={this.setArrowNode}
-                role="button"
-                tabIndex={-1}
-            >
-                <CaretdownStrokeSrvIcon16 paletteIndex={0} />
-            </span>
-        );
-    }
+        prevActive.current = active;
+    }, [active]);
 
-    private setArrowNode = (DOMNode: HTMLSpanElement) => {
-        this.arrowNode = DOMNode;
-    };
-
-    private handleClick = () => {
-        const { opened, toggle } = this.props;
-
+    const handleClick = () => {
         toggle(!opened);
     };
 
@@ -62,9 +38,7 @@ export class CheckboxTreeExtendedArrow extends React.Component<ICheckboxTreeExte
      * Стрелка вправо - раскрыть, влево - свернуть.
      * Enter, space - изменить состояние на противоположное.
      */
-    private handleKeyUp = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-        const { opened, toggle } = this.props;
-
+    const handleKeyUp = (event: React.KeyboardEvent<HTMLSpanElement>) => {
         if (event.keyCode === EVENT_KEY_CODES.ARROW_RIGHT) {
             toggle(true);
         } else if (event.keyCode === EVENT_KEY_CODES.ARROW_LEFT) {
@@ -73,4 +47,19 @@ export class CheckboxTreeExtendedArrow extends React.Component<ICheckboxTreeExte
             toggle(!opened);
         }
     };
-}
+
+    return (
+        <span
+            className={styles.caretIconWrapper}
+            onClick={handleClick}
+            onKeyUp={handleKeyUp}
+            ref={arrowNode}
+            role="button"
+            tabIndex={-1}
+        >
+            <CaretdownStrokeSrvIcon16 paletteIndex={0} />
+        </span>
+    );
+};
+
+CheckboxTreeExtendedArrow.displayName = "CheckboxTreeExtendedArrow";

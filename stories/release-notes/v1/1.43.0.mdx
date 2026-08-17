@@ -10,6 +10,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Проведён AI-рефакторинг.
 
+**LightBox**
+
+- Исправлен баг, когда в состоянии `loading` `LightBox.TopOverlay` перекрывался `LoaderScreen`.
+
 **SliderExtended**
 
 - Добавлено: `SliderExtended` и его части (`Dot`, `Mark`, `Marks`, `Rail`, `Track`, `Tooltip`) пробрасывают `ref` на свой корневой элемент — тот же, что получает `className` и `...rest` (у `Tooltip` — обёртка подсказки).

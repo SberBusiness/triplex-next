@@ -69,18 +69,21 @@ describe("SliderExtendedRail", () => {
         expect(onChange).toHaveBeenCalledWith(75);
     });
 
-    it("calls onClick of the consumer", () => {
+    it("calls onClick of the consumer without cancelling the move", () => {
         const onClick = vi.fn();
+        const onChange = vi.fn();
         const { container } = render(
             <SliderExtended min={0} max={100} step={25} size={EComponentSize.MD}>
                 <SliderExtended.Rail onClick={onClick} />
-                <SliderExtended.Dot value={0} onChange={vi.fn()} />
+                <SliderExtended.Dot value={0} onChange={onChange} />
             </SliderExtended>,
         );
 
         fireEvent.click(getRail(container), { clientX: 60 });
 
         expect(onClick).toHaveBeenCalledTimes(1);
+        // Вызываются оба обработчика: пользовательский onClick не подменяет внутренний.
+        expect(onChange).toHaveBeenCalledWith(50);
     });
 
     it("does not throw when there are no dots", () => {

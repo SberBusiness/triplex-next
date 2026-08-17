@@ -64,6 +64,15 @@ describe("SliderExtendedUtils", () => {
 
             expect(SliderExtendedUtils.getNearestStep({ normalizedValue: 0, steps })).toBe(steps[0]);
         });
+
+        it("returns the edge step when the cursor is far outside the rail", () => {
+            const steps = createSteps([0, 25, 50, 75, 100]);
+
+            // getNormalizedCursorValue не зажимается по границам: курсор, ушедший больше чем
+            // на ширину полосы за её край, даёт дельты до всех шагов больше 100.
+            expect(SliderExtendedUtils.getNearestStep({ normalizedValue: 210, steps })).toBe(steps[4]);
+            expect(SliderExtendedUtils.getNearestStep({ normalizedValue: -110, steps })).toBe(steps[0]);
+        });
     });
 
     describe("getNearestDotByValue", () => {

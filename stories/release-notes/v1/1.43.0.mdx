@@ -5,3 +5,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v1.43.0</Title>
 
 <Heading>Изменения</Heading>
+
+**SliderExtended**
+
+- Добавлено: `SliderExtended` и его части (`Dot`, `Mark`, `Marks`, `Rail`, `Track`, `Tooltip`) пробрасывают `ref` — компоненты были объявлены как `React.FC`. Теперь это `forwardRef`, ref указывает на корневой элемент каждой части, то есть на тот же элемент, что получает `className` и `...rest` (у `Tooltip` — на обёртку подсказки). Изменение аддитивное: формы props не поменялись.
+- Исправлено: `className`, переданный в `SliderExtended` и `SliderExtended.Tooltip`, больше не затирает собственные классы элемента — раньше вместе с пользовательским классом пропадали размер и оформление. Затрагивает также `className` у `Slider` и `SliderRange`: он уходит на корневой элемент `SliderExtended`.
+- Исправлено: `style`, переданный в `SliderExtended.Dot`, `SliderExtended.Track` и `SliderExtended.Mark`, больше не отбрасывается. Внутреннее позиционирование (`left`, `right`) по-прежнему приоритетно.
+- Исправлено: `onClick`, переданный в `SliderExtended.Rail`, больше не отменяет перемещение ползунка по клику на полосу — вызываются оба обработчика.
+- Изменено: слайдер отрисовывается сразу на первом рендере. Раньше шаги вычислялись в layout-эффекте, и первый кадр был пустым.
+- Добавлено: `displayName` у `SliderExtended.Tooltip`.
+- Проведён AI-рефакторинг.

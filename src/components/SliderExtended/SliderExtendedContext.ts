@@ -1,57 +1,64 @@
 import React from "react";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
+/** Передвигаемая точка (ползунок) слайдера, зарегистрированная в контексте. */
 export interface ISliderExtendedDot {
-    // Функция изменения позиции точки, вызывается из любого компонента.
+    /** Функция изменения позиции точки, вызывается из любого компонента. */
     changeValue: (value: number) => void;
+    /** Идентификатор точки, генерируется SliderExtended.Dot. */
     id: string;
-    // Нормализованное значение позиции точки, устанавливает SliderExtendedDot.
+    /** Нормализованное (от 0 до 100) значение позиции точки, устанавливает SliderExtended.Dot. */
     normalizedValue: number;
-    // Индекс позиции точки в массиве steps.
+    /** Индекс позиции точки в массиве steps. */
     stepIndex: number;
-    // Значение позиции точки, устанавливает SliderExtended.Dot.
+    /** Значение позиции точки, устанавливает SliderExtended.Dot. */
     value: number;
 }
 
+/** Точка остановки при перемещении ползунка. */
 export interface ISliderExtendedStep {
-    // Значение.
+    /** Значение. */
     value: number;
-    // Нормализованное значение.
+    /** Нормализованное (от 0 до 100) значение. */
     normalizedValue: number;
 }
 
+/** Контекст SliderExtended. Через него субкомпоненты получают состояние слайдера и меняют его. */
 export interface ISliderExtendedContext {
-    // Добавляет точку.
+    /** Добавляет точку. */
     addDot: (dot: ISliderExtendedDot) => void;
-    // Массив передвигаемых точек.
+    /** Массив передвигаемых точек. */
     dots: ISliderExtendedDot[];
-    // Слайдер не активен.
+    /** Слайдер не активен. */
     disabled: boolean;
-    // Один из элементов слайдера(SliderExtendedDot или SliderExtendedTrack) в фокусе.
+    /** Один из элементов слайдера (SliderExtended.Dot или SliderExtended.Track) в фокусе. */
     focused: boolean;
-    // Track в текущий момент перетаскивается мышью или в состоянии hover. Флаг нужен для подсветки SliderExtendedDot в этот момент.
+    /**
+     * Track в текущий момент перетаскивается мышью или в состоянии hover.
+     * Флаг нужен для подсветки SliderExtended.Dot в этот момент.
+     */
     isHoverOrDragTrack: boolean;
-    // Максимальное значение слайдера.
+    /** Максимальное значение слайдера. */
     max: number;
-    // Минимальное значение слайдера.
+    /** Минимальное значение слайдера. */
     min: number;
-    // Элемент полосы слайдера.
+    /** Элемент полосы слайдера. */
     railNode: HTMLDivElement | null;
-    // Удаляет точку.
+    /** Удаляет точку. */
     removeDot: (dotId: string) => void;
-    // Реверсивный слайдер.
+    /** Реверсивный слайдер. */
     reverse: boolean;
-    // Устанавливает свойство focused;
+    /** Устанавливает свойство focused. */
     setFocused: (focused: boolean) => void;
-    // Устанавливает значение параметра isHoverOrDragTrack. Вызывается компонентом SliderExtendedTrack.
+    /** Устанавливает значение параметра isHoverOrDragTrack. Вызывается компонентом SliderExtended.Track. */
     setIsHoverOrDragTrack: (isHoverOrDragTrack: boolean) => void;
-    // Устанавливает элемент полосы слайдера.
-    setRailNode: (node: HTMLDivElement) => void;
-    // Массив точек остановки при перемещении Dot.
+    /** Устанавливает элемент полосы слайдера. Вызывается callback-ref'ом SliderExtended.Rail, поэтому принимает null. */
+    setRailNode: (node: HTMLDivElement | null) => void;
+    /** Массив точек остановки при перемещении Dot. Пока массив пуст, SliderExtended не рендерит содержимое. */
     steps: ISliderExtendedStep[];
-    // Обновляет данные точки.
+    /** Обновляет данные точки. */
     updateDot: (dot: Pick<ISliderExtendedDot, "id"> & Partial<ISliderExtendedDot>) => void;
-    // Размер компонента.
+    /** Размер компонента. */
     size: EComponentSize.MD | EComponentSize.LG;
 }
 

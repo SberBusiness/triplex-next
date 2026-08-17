@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { CheckboxTreeExtendedArrow } from "../components/CheckboxTreeExtendedArrow";
 
 const renderArrow = (props: Partial<React.ComponentProps<typeof CheckboxTreeExtendedArrow>> = {}) => {

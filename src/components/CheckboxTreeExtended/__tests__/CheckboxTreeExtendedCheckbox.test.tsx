@@ -70,10 +70,23 @@ describe("CheckboxTreeExtendedCheckbox", () => {
         expect(screen.getByRole("checkbox").closest("label")).toHaveClass("label-class");
     });
 
-    it("does not steal focus on mount", () => {
+    it("does not take focus when the current activeElement already contains the checkbox", () => {
+        // На маунте activeElement — <body>, а body.contains(input) === true, поэтому фокуса не происходит.
         renderCheckbox({ active: true });
 
+        expect(document.activeElement).toBe(document.body);
         expect(screen.getByRole("checkbox")).not.toHaveFocus();
+    });
+
+    it("takes focus right on mount when focus is outside the checkbox", () => {
+        // Mount-иммунитета у чекбокса нет (в отличие от стрелки): правило одно —
+        // active и activeElement вне поддерева чекбокса.
+        render(<button type="button">outside</button>);
+        screen.getByRole("button").focus();
+
+        renderCheckbox({ active: true });
+
+        expect(screen.getByRole("checkbox")).toHaveFocus();
     });
 
     it("takes focus when node becomes active and focus is outside", () => {

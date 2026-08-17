@@ -4,6 +4,7 @@ import { ISliderExtendedDot } from "../../SliderExtendedContext";
 interface ISliderExtendedMarkActions {
     /**
      * Возвращает стиль для правильного позиционирования метки.
+     * Метка на дальнем краю полосы прижимается к нему через right, чтобы не выходить за границы.
      */
     getStyle: (params: { min: number; max: number; reverse: boolean; value: number }) => {
         left?: string;
@@ -14,37 +15,26 @@ interface ISliderExtendedMarkActions {
      */
     isActive: (params: { dots: ISliderExtendedDot[]; value: number }) => boolean;
     /**
-     * Возвращает true, если метка входит в выбранный диапазон при двух SliderExtendedDots. Либо в диапазон от 0 до текущего значения при одном SliderExtendedDot.
+     * Возвращает true, если метка входит в выбранный диапазон при двух SliderExtendedDots. Либо в диапазон от min до текущего значения при одном SliderExtendedDot.
      */
     isInSelectedRange: (params: { dots: ISliderExtendedDot[]; min: number; value: number }) => boolean;
     /**
-     * Перемещает ближайшую SliderExtended.Dor на текущую позицию.
+     * Перемещает ближайшую SliderExtendedDot на позицию метки.
      */
     moveNearestDot: (params: { dots: ISliderExtendedDot[]; value: number }) => void;
 }
 
 export const SliderExtendedMarkActions: ISliderExtendedMarkActions = {
     getStyle: ({ min, max, reverse, value }) => {
-        let left: string | number | undefined = SliderExtendedUtils.getNormalizedValue({ max, min, value });
-        let right: number | undefined = undefined;
+        const normalizedValue = SliderExtendedUtils.getNormalizedValue({ max, min, value });
+        // Метка у дальнего края полосы: в обычном слайдере это 100%, в реверсивном — 0%.
+        const isAtFarEdge = reverse ? normalizedValue === 0 : normalizedValue === 100;
 
-        if (reverse) {
-            if (left === 0) {
-                left = undefined;
-                right = 0;
-            } else {
-                left = `${100 - left}%`;
-            }
-        } else {
-            if (left === 100) {
-                left = undefined;
-                right = 0;
-            } else {
-                left = `${left}%`;
-            }
+        if (isAtFarEdge) {
+            return { left: undefined, right: 0 };
         }
 
-        return { left, right };
+        return { left: `${reverse ? 100 - normalizedValue : normalizedValue}%`, right: undefined };
     },
     isActive: ({ dots, value }) => dots.some((dot) => dot.value === value),
     isInSelectedRange: ({ value, min, dots }) => {
@@ -70,7 +60,6 @@ export const SliderExtendedMarkActions: ISliderExtendedMarkActions = {
         return minValue <= value && value <= maxValue;
     },
     moveNearestDot: ({ value, dots }) => {
-        const nearestDot = SliderExtendedUtils.getNearestDotByValue({ dots, value });
-        nearestDot.changeValue(value);
+        SliderExtendedUtils.getNearestDotByValue({ dots, value })?.changeValue(value);
     },
 };

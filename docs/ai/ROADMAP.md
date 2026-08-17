@@ -179,7 +179,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SelectField | ⬜ | ⬜ | ⬜ |
 | Skeleton | ⬜ | ✅ | ⬜ |
 | Slider | ⬜ | ⬜ | ⬜ |
-| SliderExtended | ⬜ | ⬜ | ⬜ |
+| SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ⬜ | ⬜ | ⬜ |
 | SmallInput | ⬜ | ⬜ | ⬜ |
 | Spoiler | ⬜ | ⬜ | ⬜ |

@@ -4,6 +4,7 @@ import { SliderExtendedUtils } from "../../SliderExtendedUtils";
 interface ISliderExtendedTrackActions {
     /**
      * Перемещение SliderExtended.Dots, при перемещении SliderExtended.Track.
+     * Ничего не делает, пока трек не ограничен двумя точками и шагов меньше двух.
      */
     dragDots: (params: {
         cursorPrevNormalizedValue: React.MutableRefObject<number>;
@@ -29,7 +30,7 @@ interface ISliderExtendedTrackActions {
 
 export const SliderExtendedTrackActions: ISliderExtendedTrackActions = {
     dragDots: ({ cursorPrevNormalizedValue, cursorXPosition, dots, railNode, reverse, steps }) => {
-        if (railNode) {
+        if (railNode && dots.length > 1 && steps.length > 1) {
             /**
              * Текущая позиция курсора относительно слайдера, в процентах.
              */

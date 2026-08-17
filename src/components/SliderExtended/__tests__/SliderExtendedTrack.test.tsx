@@ -80,6 +80,8 @@ describe("SliderExtendedTrack", () => {
         renderRangeSlider({ trackProps: { draggable: false } });
 
         expect(screen.getByRole("button")).toHaveClass("staticSlider");
+        // Неперетаскиваемый трек выпадает из табуляции, даже когда слайдер сфокусирован.
+        expect(screen.getByRole("button")).toHaveAttribute("tabindex", "-1");
     });
 
     it("is not static with two dots", () => {

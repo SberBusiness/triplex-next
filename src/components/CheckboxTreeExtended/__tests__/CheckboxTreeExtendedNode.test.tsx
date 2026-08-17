@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { CheckboxTreeExtended } from "../CheckboxTreeExtended";
 import { ICheckboxTreeExtendedCheckboxProvideProps } from "../components/CheckboxTreeExtendedNode";
+import { ICheckboxTreeExtendedNodeProps } from "../index";
 import { EComponentSize } from "../../../enums/EComponentSize";
 
 /** Заголовок ноды, внутри которого отрисован чекбокс с переданной подписью. */
@@ -139,5 +140,26 @@ describe("CheckboxTreeExtendedNode", () => {
         // fireEvent возвращает false, если сработал preventDefault.
         expect(fireEvent.mouseDown(header as Element)).toBe(false);
         expect(fireEvent.mouseDown(label as Element)).toBe(true);
+    });
+
+    it("exposes ICheckboxTreeExtendedNodeProps through the barrel, so a wrapper can be typed with it", () => {
+        // Обёртка узла на стороне потребителя — то, ради чего тип экспортируется.
+        const NodeWrapper: React.FC<ICheckboxTreeExtendedNodeProps> = (props) => (
+            <CheckboxTreeExtended.Node {...props} />
+        );
+
+        render(
+            <CheckboxTreeExtended>
+                <NodeWrapper
+                    id="1"
+                    className="custom-node"
+                    checkbox={(props) => (
+                        <CheckboxTreeExtended.Checkbox {...props}>Группа 1</CheckboxTreeExtended.Checkbox>
+                    )}
+                />
+            </CheckboxTreeExtended>,
+        );
+
+        expect(screen.getByLabelText("Группа 1").closest("li")).toHaveClass("checkboxTreeExtendedNode", "custom-node");
     });
 });

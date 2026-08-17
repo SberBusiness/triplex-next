@@ -49,7 +49,9 @@ version: "1.0"
 ### `CheckboxTreeExtended.Node`
 
 Наследует `ICollapsibleTreeExtendedNodeProps` без `children`, `renderBody`,
-`renderHeader` — заголовок и тело узла формирует сам компонент.
+`renderHeader` — заголовок и тело узла формирует сам компонент. Тип props
+экспортируется как `ICheckboxTreeExtendedNodeProps` — им типизируют
+собственную обёртку узла.
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
@@ -116,6 +118,7 @@ render-функции узла.
   мейнтейнера, а не рефакторинг.
 - **Публичный API** — имена `ICheckboxTreeExtendedProps`,
   `ICheckboxTreeExtendedSFC`, `ICheckboxTreeExtendedCheckboxProvideProps`,
+  `ICheckboxTreeExtendedNodeProps`,
   статические `Checkbox` / `Node` и barrel-экспорты `index.ts` менять нельзя:
   на них опирается `CheckboxTree`, а также stories `Chips` и `MultiselectField`.
 - **`size` раздаётся только через контекст** `CheckboxTreeExtendedContext`. Не
@@ -134,11 +137,6 @@ render-функции узла.
 Найдено при AI-рефакторинге (TRI-23). Оставлено намеренно — не «чини» их
 походя, по каждому пункту есть решение.
 
-- **`ICheckboxTreeExtendedNodeProps` не экспортируется**, хотя сам
-  `CheckboxTreeExtendedNode` уходит в barrel. Потребитель не может
-  типизировать свою обёртку узла. Экспорт расширяет публичный API (barrel),
-  поэтому в TRI-23 не делался: ревьюер за экспорт, решение — за владельцем
-  библиотеки. Пока вопрос открыт, тип остаётся приватным.
 - **`CheckboxTreeExtendedArrow` разбирает клавиши через `event.keyCode`**
   (`EVENT_KEY_CODES`) — устаревший API. Миграция на `event.key` относится ко
   всему семейству `TreeView`.
@@ -221,3 +219,4 @@ render-функции узла.
 | 2026-08-17 | Создан документ. Проведён AI-рефакторинг: JSDoc на props, `CheckboxTreeExtendedArrow` переведён с class-компонента на FC, добавлен `displayName` у `CheckboxTreeExtendedNode`, класс состояния раскрытия узла берётся из CSS-модуля; добавлены unit-тесты на все части компонента |
 | 2026-08-17 | `className` у `CheckboxTreeExtended.Node` больше не затирает собственный класс узла — классы мерджатся через `clsx` (правка по ревью PR #535) |
 | 2026-08-17 | Убран мёртвый селектор `.checkboxTreeCheckbox` из мобильной медиа-выборки (рабочие `> span` и `> svg` оставлены), `.caretIconWrapper:focus` заменён на `:focus-visible` (правки по ревью PR #535) |
+| 2026-08-17 | `ICheckboxTreeExtendedNodeProps` экспортируется — тип уходит в barrel и становится частью публичного API (решение владельца по ревью PR #535) |

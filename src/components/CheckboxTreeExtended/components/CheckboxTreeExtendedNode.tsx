@@ -22,7 +22,7 @@ export interface ICheckboxTreeExtendedCheckboxProvideProps {
 }
 
 /** Свойства CheckboxTreeExtendedNode. */
-interface ICheckboxTreeExtendedNodeProps extends Omit<
+export interface ICheckboxTreeExtendedNodeProps extends Omit<
     ICollapsibleTreeExtendedNodeProps,
     "children" | "renderBody" | "renderHeader"
 > {

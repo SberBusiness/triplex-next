@@ -192,7 +192,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SwipeableArea | ⬜ | ⬜ | ⬜ |
 | TableBasic | ⬜ | ⬜ | ⬜ |
 | Tabs | ⬜ | ⬜ | ⬜ |
-| TabsExtended | ⬜ | ⬜ | ⬜ |
+| TabsExtended | ✅ | ✅ | ✅ |
 | TabsLine | ⬜ | ⬜ | ⬜ |
 | Tag | ⬜ | ⬜ | ⬜ |
 | TagColor | ⬜ | ⬜ | ⬜ |

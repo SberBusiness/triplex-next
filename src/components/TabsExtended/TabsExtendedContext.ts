@@ -1,21 +1,23 @@
-import React, { RefObject } from "react";
+import React, { MutableRefObject } from "react";
 import { ETabsExtendedType } from "./enums";
 
+/** Значение контекста TabsExtended, общее для всех частей компонента. */
 export interface ITabsExtendedContext {
-    // Массив id табов, передаваемых в Dropdown.
+    /** Массив id табов, передаваемых в Dropdown. */
     dropdownItemsIds: string[];
-    // Ref на TabsExtendedDropdownWrapper.
-    dropdownRef: RefObject<HTMLDivElement>;
-    // Массив id табов, отрендереных inline.
+    /** Ref на TabsExtendedDropdownWrapper. */
+    dropdownRef: MutableRefObject<HTMLDivElement | null>;
+    /** Массив id табов, отрендеренных inline. */
     inlineItemsIds: string[];
-    // Обработчик выбора таба.
+    /** Обработчик выбора таба. */
     onSelectTab: (selectedId: string) => void;
-    // Id выбранного таба.
+    /** Id выбранного таба. */
     selectedId: string;
-    // Определяет id табов, передаваемых в Dropdown.
+    /** Определяет id табов, передаваемых в Dropdown. */
     setDropdownItemsIds: (dropdownItemsIds: string[]) => void;
-    // Определяет id табов, отрендереных inline.
+    /** Определяет id табов, отрендеренных inline. */
     setInlineItemsIds: (inlineItemsIds: string[]) => void;
+    /** Тип компонента. */
     type: ETabsExtendedType;
 }
 

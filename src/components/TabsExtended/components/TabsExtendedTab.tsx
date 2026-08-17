@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import styles from "../styles/TabsExtended.module.less";
 import clsx from "clsx";
 import { TabsExtendedContext } from "../TabsExtendedContext";
 import { TabsExtendedTabContext } from "./TabsExtendedTabContext";
+import styles from "../styles/TabsExtended.module.less";
 
+/** Данные, передаваемые в render-prop TabsExtendedTab. */
 export interface ITabsExtendedItemProvideProps {
     /** Выбранное состояние. */
     selected: boolean;
@@ -15,7 +16,9 @@ export interface ITabsExtendedItemProvideProps {
 
 /** Свойства компонента TabsExtendedTab. */
 export interface ITabsExtendedTabProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+    /** Уникальный идентификатор таба. По нему таб сопоставляется с selectedId компонента TabsExtended. */
     id: string;
+    /** Render-prop, рендерящий содержимое таба. */
     children: (props: ITabsExtendedItemProvideProps) => React.ReactNode;
 }
 
@@ -28,6 +31,8 @@ export const TabsExtendedTab = React.forwardRef<HTMLSpanElement, ITabsExtendedTa
         const { dropdownItemsIds, inlineItemsIds, selectedId, onSelectTab } = useContext(TabsExtendedContext);
         const { isFakeTab } = useContext(TabsExtendedTabContext);
 
+        const isInDropdown = dropdownItemsIds.includes(id);
+
         const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
             onSelectTab(id);
             onClick?.(event);
@@ -35,16 +40,17 @@ export const TabsExtendedTab = React.forwardRef<HTMLSpanElement, ITabsExtendedTa
 
         // Возвращает id таба. Если таб отображается в Dropdown, или это fakeTab, возвращается undefined, чтобы не было 2-х элементов в DOM с одинаковыми ID.
         const getId = () => {
-            if (isFakeTab || dropdownItemsIds.includes(id)) {
+            if (isFakeTab || isInDropdown) {
                 return undefined;
             }
+
             return id;
         };
 
         return (
             <span
                 id={getId()}
-                className={clsx(styles.tabsExtendedTab, { [styles.hidden]: dropdownItemsIds.includes(id) }, className)}
+                className={clsx(styles.tabsExtendedTab, { [styles.hidden]: isInDropdown }, className)}
                 onClick={isFakeTab ? undefined : handleClick}
                 {...htmlSpanAttributes}
                 role="presentation"

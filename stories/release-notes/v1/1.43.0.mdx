@@ -9,3 +9,9 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Checkbox**
 
 - Проведён AI-рефакторинг.
+
+**TabsExtended**
+
+- Добавлено: `TabsExtended`, `TabsExtended.Content`, `TabsExtended.Content.TabsWrapper` и `TabsExtended.Content.DropdownWrapper` пробрасывают `ref` — раньше они были объявлены как `React.FC`. Ref указывает на тот же элемент, что получает `className` и `...rest`: у `TabsWrapper` это отображаемый контейнер табов, у `DropdownWrapper` — контейнер выпадающего списка.
+- Исправлено: в `dropdownItemsIds` больше не попадают `null`. Дочерний элемент `TabsWrapper` без атрибута таба — например, `TabButton`, положенный напрямую, без `Tab`, — при нехватке ширины уезжал в render-prop `DropdownWrapper` как `null` и в одиночку раскрывал пустой Dropdown.
+- Проведён AI-рефакторинг, добавлен `displayName`.

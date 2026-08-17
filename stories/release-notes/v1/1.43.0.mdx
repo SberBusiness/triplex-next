@@ -4,6 +4,22 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.43.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**UnorderedListExtended**
+
+- Расширенный маркированный список с типизированными элементами, пользовательскими маркерами, составным API и поддержкой `ref`.
+
+<Heading>Ломающие изменения</Heading>
+
+**Notification**
+
+- Body.List: Удалено свойство `values`, теперь элементы списка необходимо передавать через свойство `items`.
+
+**UnorderedList**
+
+- Компонент полностью переведен на data-driven подход и больше не принимает `children`, теперь элементы списка необходимо передавать через свойство `items`.
+
 <Heading>Изменения</Heading>
 
 **Checkbox**
@@ -14,6 +30,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлено: `className`, переданный в `CheckboxTreeExtended.Node`, больше не затирает собственный класс узла. Раньше вместе с ним пропадали отступы вложенной ветки — теперь классы объединяются.
 - Проведён AI-рефакторинг, добавлен `displayName` у `CheckboxTreeExtended.Node`. Из разметки заголовка узла пропал глобальный класс `opened` — внешний вид не изменился.
+
+**LightBox**
+
+- Исправлен баг, когда в состоянии `loading` `LightBox.TopOverlay` перекрывался `LoaderScreen`.
 
 **SliderExtended**
 
@@ -33,3 +53,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлено: `TabsExtended`, `TabsExtended.Content`, `TabsExtended.Content.TabsWrapper` и `TabsExtended.Content.DropdownWrapper` пробрасывают `ref` — раньше они были объявлены как `React.FC`. Ref указывает на тот же элемент, что получает `className` и `...rest`: у `TabsWrapper` это отображаемый контейнер табов, у `DropdownWrapper` — контейнер выпадающего списка.
 - Исправлено: в `dropdownItemsIds` больше не попадают `null`. Дочерний элемент `TabsWrapper` без атрибута таба — например, `TabButton`, положенный напрямую, без `Tab`, — при нехватке ширины уезжал в render-prop `DropdownWrapper` как `null` и в одиночку раскрывал пустой Dropdown.
 - Проведён AI-рефакторинг, добавлен `displayName`.
+
+**UnorderedList**
+
+- Элементы списка теперь поддерживают свойства `TTextProps` для гибкого управления стилями и параметрами текста.
+- Для элементов списка добавлено свойство `marker` для кастомного отображения иконок и произвольных маркеров.

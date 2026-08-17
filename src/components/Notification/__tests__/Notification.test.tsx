@@ -146,7 +146,9 @@ describe("Notification", () => {
             <Notification>
                 <Notification.Body>
                     <Notification.Body.Content>Test content</Notification.Body.Content>
-                    <Notification.Body.List values={["Item 1", "Item 2", "Item 3"]} />
+                    <Notification.Body.List
+                        items={[{ children: "Item 1" }, { children: "Item 2" }, { children: "Item 3" }]}
+                    />
                 </Notification.Body>
             </Notification>,
         );
@@ -250,7 +252,7 @@ describe("Notification", () => {
                 <Notification.Body>
                     <Notification.Body.Header>Header Text</Notification.Body.Header>
                     <Notification.Body.Content>Content Text</Notification.Body.Content>
-                    <Notification.Body.List values={["List Item 1"]} />
+                    <Notification.Body.List items={[{ children: "List Item 1" }]} />
                     <Notification.Body.Footer>Footer Text</Notification.Body.Footer>
                 </Notification.Body>
                 <Notification.Close onClick={handleClose} />

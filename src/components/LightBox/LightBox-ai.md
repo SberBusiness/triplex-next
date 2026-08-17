@@ -126,6 +126,11 @@ version: "1.0"
   последнего (при переключении роутов второй лайтбокс может смонтироваться раньше, чем
   размонтируется первый). Аналогичный счётчик в `LightBoxViewManager` управляет классами
   mount-ноды (`LightBoxMountNodeViewManager`, `LB-*`).
+- **Локальные z-index внутри лайтбокса** (стековый контекст создаёт `.lightBox`): контролы и
+  sticky-шапка/футер `Page` — 100/101, лоадеры `LightBox.Content` и `LightBox.SideOverlay` — 201,
+  `TopOverlay` — 500. `LoaderScreen` приходит с глобальным `@z-index-loader-screen` (10100), поэтому
+  обе обёртки лоадера обязаны переопределять его локальным значением — иначе лоадер перекрывает
+  `TopOverlay`.
 - Баррел `index.ts` реэкспортирует `LightBox`, `enums`, `LightBoxSideOverlay` — сохранять.
 - React 17 совместимость (синхронизация в release-0): React 18-only API не использовать.
 
@@ -194,3 +199,4 @@ version: "1.0"
 | 2026-07-22 | Создан документ (Phase 1 AI-Ready). В том же изменении — AI-рефакторинг: JSDoc на props, общий `LightBoxArrow` для Prev/Next, хук `useLightBoxSidebarVisibility` для сайдбаров, устранение eslint-подавлений; публичный API не менялся |
 | 2026-07-22 | Добавлен `export` к props-интерфейсам `ILightBoxControlsProps`, `ILightBoxCloseProps`, `ILightBoxPrevProps`, `ILightBoxNextProps`, `ILightBoxSideOverlayLoaderProps` (аддитивно, для консистентности с остальными интерфейсами компонента) |
 | 2026-07-22 | Багфиксы по ревью PR #474: клавиатурные триггеры контролов целятся в видимую кнопку (стрелки не работали на desktop, Esc — на mobile); таймер-хак блокировки скролла заменён счётчиком смонтированных лайтбоксов; `LightBoxViewManager` снимает классы mount-ноды при размонтировании последнего менеджера |
+| 2026-08-17 | Исправлено: `LightBox.TopOverlay` перекрывался лоадером `LightBox.Content`. У `.loadingContentOverlay` теперь локальный z-index (201) — выше sticky-шапки и футера `Page`, но ниже `TopOverlay` (500); раньше `LoaderScreen` шёл с глобальным `@z-index-loader-screen` (10100) |

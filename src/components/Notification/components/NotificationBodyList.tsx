@@ -1,21 +1,14 @@
 import React from "react";
-import { IUnorderedListProps, UnorderedList } from "@sberbusiness/triplex-next/components/UnorderedList";
-import styles from "../styles/Notification.module.less";
 import clsx from "clsx";
+import { UnorderedList, IUnorderedListProps } from "../../UnorderedList";
+import styles from "../styles/Notification.module.less";
 
 /** Свойства компонента NotificationBodyList. */
-export interface INotificationBodyListProps extends IUnorderedListProps {
-    /** Значения элементов списка. */
-    values: string[];
-}
+export interface INotificationBodyListProps extends IUnorderedListProps {}
 
 /** Список нотификации. */
-export const NotificationBodyList: React.FC<INotificationBodyListProps> = ({ className, ...props }) => (
-    <UnorderedList className={clsx(styles.notificationBodyList, className)} {...props}>
-        {props.values.map((el, index) => (
-            <UnorderedList.Item key={index}>{el}</UnorderedList.Item>
-        ))}
-    </UnorderedList>
+export const NotificationBodyList: React.FC<INotificationBodyListProps> = ({ className, ...restProps }) => (
+    <UnorderedList className={clsx(styles.notificationBodyList, className)} {...restProps} />
 );
 
 NotificationBodyList.displayName = "NotificationBodyList";

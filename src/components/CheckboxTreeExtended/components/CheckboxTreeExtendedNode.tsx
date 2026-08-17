@@ -42,6 +42,7 @@ interface ICheckboxTreeExtendedNodeProps extends Omit<
 export const CheckboxTreeExtendedNode: React.FC<ICheckboxTreeExtendedNodeProps> = ({
     children,
     checkbox,
+    className,
     opened,
     ...collapsibleTreeExtendedNodeProps
 }) => {
@@ -82,7 +83,7 @@ export const CheckboxTreeExtendedNode: React.FC<ICheckboxTreeExtendedNodeProps> 
 
     return (
         <CollapsibleTreeExtended.Node
-            className={styles.checkboxTreeExtendedNode}
+            className={clsx(styles.checkboxTreeExtendedNode, className)}
             opened={isStaticCheckboxTreeExtended ? true : opened}
             renderHeader={renderHeader}
             renderBody={renderBody}

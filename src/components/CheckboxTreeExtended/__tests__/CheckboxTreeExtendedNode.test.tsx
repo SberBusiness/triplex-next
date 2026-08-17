@@ -62,6 +62,23 @@ describe("CheckboxTreeExtendedNode", () => {
         expect(screen.getByLabelText("Значение 1-1")).toBeInTheDocument();
     });
 
+    it("merges className into the node, keeping its own class", () => {
+        render(
+            <CheckboxTreeExtended>
+                <CheckboxTreeExtended.Node
+                    id="1"
+                    className="custom-node"
+                    checkbox={(props) => (
+                        <CheckboxTreeExtended.Checkbox {...props}>Группа 1</CheckboxTreeExtended.Checkbox>
+                    )}
+                />
+            </CheckboxTreeExtended>,
+        );
+
+        // Собственный класс отвечает за отступы вложенной ветки — className потребителя не должен его затирать.
+        expect(getNodeHeader("Группа 1")?.closest("li")).toHaveClass("checkboxTreeExtendedNode", "custom-node");
+    });
+
     it("does not render the expand arrow while the tree is static", () => {
         render(
             <CheckboxTreeExtended>

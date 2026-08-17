@@ -8,6 +8,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **CheckboxTreeExtended**
 
+- Исправлено: `className`, переданный в `CheckboxTreeExtended.Node`, больше не затирает собственный класс узла. Раньше вместе с ним пропадали отступы вложенной ветки — теперь классы объединяются.
 - Проведён AI-рефакторинг, добавлен `displayName` у `CheckboxTreeExtended.Node`. Из разметки заголовка узла пропал глобальный класс `opened` — внешний вид не изменился.
 
 **TabsExtended**

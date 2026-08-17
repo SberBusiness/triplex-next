@@ -57,6 +57,7 @@ version: "1.0"
 | `checkbox` | `(props: ICheckboxTreeExtendedCheckboxProvideProps) => JSX.Element` | — | Render-функция чекбокса узла. Обязательна |
 | `children` | `React.ReactNode` | — | Вложенные `CheckboxTreeExtended.Node` |
 | `opened` | `boolean` | — | Игнорируется, пока дерево статично (см. «Инварианты») |
+| `className` | `string` | — | Мерджится с собственным классом узла `<li>` |
 | `prevNodeId` / `nextNodeId` | `string` | — | Порядок узлов для клавиатурной навигации `TreeView` |
 
 `ICheckboxTreeExtendedCheckboxProvideProps` — то, что узел передаёт в `checkbox`:
@@ -134,13 +135,6 @@ render-функции узла.
 меняет публичный API или наблюдаемое поведение и требует решения мейнтейнера.
 Не «чини» их походя.
 
-- **`className` у `CheckboxTreeExtended.Node` затирает внутренний класс.**
-  В `CheckboxTreeExtendedNode` собственный `className={styles.checkboxTreeExtendedNode}`
-  стоит до `{...collapsibleTreeExtendedNodeProps}`, а `className` входит в
-  публичный тип узла. Если потребитель его передаст, внутренний класс
-  исчезнет вместе с отступами вложенной ветки. Починка (`clsx(styles.checkboxTreeExtendedNode, className)`)
-  аддитивна по типам, но меняет наблюдаемую разметку у тех, кто уже передаёт
-  `className`, — отсюда отдельное решение и запись в release notes.
 - **`ICheckboxTreeExtendedNodeProps` не экспортируется**, хотя сам
   `CheckboxTreeExtendedNode` уходит в barrel. Потребитель не может
   типизировать свою обёртку узла. Экспорт расширяет публичный API.
@@ -226,3 +220,4 @@ render-функции узла.
 | Дата | Изменение |
 |---|---|
 | 2026-08-17 | Создан документ. Проведён AI-рефакторинг: JSDoc на props, `CheckboxTreeExtendedArrow` переведён с class-компонента на FC, добавлен `displayName` у `CheckboxTreeExtendedNode`, класс состояния раскрытия узла берётся из CSS-модуля; добавлены unit-тесты на все части компонента |
+| 2026-08-17 | `className` у `CheckboxTreeExtended.Node` больше не затирает собственный класс узла — классы мерджатся через `clsx` (правка по ревью PR #535) |

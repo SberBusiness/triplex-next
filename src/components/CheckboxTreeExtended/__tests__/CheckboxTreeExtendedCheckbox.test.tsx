@@ -30,7 +30,8 @@ describe("CheckboxTreeExtendedCheckbox", () => {
     ])("takes size %s from context", (size, expectedClass) => {
         renderCheckbox({}, size);
 
-        expect(screen.getByRole("checkbox")).toHaveClass(expectedClass);
+        // Размер Checkbox выставляет на корневом label, а не на input.
+        expect(screen.getByRole("checkbox").closest("label")).toHaveClass(expectedClass);
     });
 
     it("merges className and own classes into label", () => {

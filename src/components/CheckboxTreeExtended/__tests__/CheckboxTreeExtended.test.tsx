@@ -21,6 +21,9 @@ const setMobileView = (matches: boolean) => {
     );
 };
 
+/** Корневой label чекбокса с указанной подписью — размер Checkbox выставляет именно на нём. */
+const getCheckboxLabel = (label: string) => screen.getByLabelText(label).closest("label");
+
 const renderTree = (props: Partial<React.ComponentProps<typeof CheckboxTreeExtended>> = {}) =>
     render(
         <CheckboxTreeExtended {...props}>
@@ -66,29 +69,29 @@ describe("CheckboxTreeExtended", () => {
     ])("passes size %s to checkboxes through context", (size, expectedClass) => {
         renderTree({ size });
 
-        expect(screen.getByLabelText("Группа 1")).toHaveClass(expectedClass);
-        expect(screen.getByLabelText("Значение 1-1")).toHaveClass(expectedClass);
+        expect(getCheckboxLabel("Группа 1")).toHaveClass(expectedClass);
+        expect(getCheckboxLabel("Значение 1-1")).toHaveClass(expectedClass);
     });
 
     it("uses MD size by default", () => {
         renderTree();
 
-        expect(screen.getByLabelText("Группа 1")).toHaveClass("md");
+        expect(getCheckboxLabel("Группа 1")).toHaveClass("md");
     });
 
     it("forces MD size in mobile view", () => {
         setMobileView(true);
         renderTree({ size: EComponentSize.SM });
 
-        expect(screen.getByLabelText("Группа 1")).toHaveClass("md");
-        expect(screen.getByLabelText("Группа 1")).not.toHaveClass("sm");
+        expect(getCheckboxLabel("Группа 1")).toHaveClass("md");
+        expect(getCheckboxLabel("Группа 1")).not.toHaveClass("sm");
     });
 
     it("keeps requested size when view is not mobile", () => {
         setMobileView(false);
         renderTree({ size: EComponentSize.SM });
 
-        expect(screen.getByLabelText("Группа 1")).toHaveClass("sm");
+        expect(getCheckboxLabel("Группа 1")).toHaveClass("sm");
     });
 
     it("exposes compound parts", () => {

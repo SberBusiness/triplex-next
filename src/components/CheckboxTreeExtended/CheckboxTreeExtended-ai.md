@@ -131,26 +131,25 @@ render-функции узла.
 
 ## Известные ограничения
 
-Найдено при AI-рефакторинге (TRI-23), намеренно не исправлено — каждый пункт
-меняет публичный API или наблюдаемое поведение и требует решения мейнтейнера.
-Не «чини» их походя.
+Найдено при AI-рефакторинге (TRI-23). Оставлено намеренно — не «чини» их
+походя, по каждому пункту есть решение.
 
 - **`ICheckboxTreeExtendedNodeProps` не экспортируется**, хотя сам
   `CheckboxTreeExtendedNode` уходит в barrel. Потребитель не может
-  типизировать свою обёртку узла. Экспорт расширяет публичный API.
-- **Мёртвое правило в мобильной медиа-выборке:**
-  `.checkboxTreeCheckboxLabel .checkboxTreeCheckbox { top: 14px }` не
-  срабатывает — оба класса оказываются на одном `<label>` (`Checkbox` кладёт
-  `className` на label, а не на `<input>`). Похоже на pre-existing баг
-  позиционирования чекбокса в мобильном виде.
+  типизировать свою обёртку узла. Экспорт расширяет публичный API (barrel),
+  поэтому в TRI-23 не делался: ревьюер за экспорт, решение — за владельцем
+  библиотеки. Пока вопрос открыт, тип остаётся приватным.
 - **`CheckboxTreeExtendedArrow` разбирает клавиши через `event.keyCode`**
   (`EVENT_KEY_CODES`) — устаревший API. Миграция на `event.key` относится ко
   всему семейству `TreeView`.
-- **`.caretIconWrapper:focus` вместо `:focus-visible`** (`docs/ai/codestyle.md`
-  → Accessibility). Вероятно осознанно: фокус на стрелку ставится программно
-  при `tabIndex={-1}`.
 - **`<li> cannot appear as a descendant of <li>`** — предупреждение React на
-  первом рендере вложенных узлов, см. «Accessibility».
+  первом рендере вложенных узлов. `<ul role="group">` (`TreeViewGroup`)
+  отрисовывается только при `hasChildNodes`, а он берётся из
+  `abstractNode.getChildren()`, который наполняется, когда дочерние узлы уже
+  смонтировались. Лечится только в `TreeView` и задевает всё семейство
+  (`CollapsibleTree`, `CollapsibleTreeExtended`, `CheckboxTree`,
+  `CheckboxTreeExtended`), поэтому по решению ревьюера оставлено как есть.
+  См. «Accessibility».
 
 ---
 
@@ -221,3 +220,4 @@ render-функции узла.
 |---|---|
 | 2026-08-17 | Создан документ. Проведён AI-рефакторинг: JSDoc на props, `CheckboxTreeExtendedArrow` переведён с class-компонента на FC, добавлен `displayName` у `CheckboxTreeExtendedNode`, класс состояния раскрытия узла берётся из CSS-модуля; добавлены unit-тесты на все части компонента |
 | 2026-08-17 | `className` у `CheckboxTreeExtended.Node` больше не затирает собственный класс узла — классы мерджатся через `clsx` (правка по ревью PR #535) |
+| 2026-08-17 | Убран мёртвый селектор `.checkboxTreeCheckbox` из мобильной медиа-выборки (рабочие `> span` и `> svg` оставлены), `.caretIconWrapper:focus` заменён на `:focus-visible` (правки по ревью PR #535) |

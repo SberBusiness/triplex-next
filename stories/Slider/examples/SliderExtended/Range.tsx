@@ -11,9 +11,9 @@ export const Range = () => {
             <br />
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={firstValue} onChange={setFirstValue} />
+                <SliderExtended.Dot value={firstValue} onChange={setFirstValue} aria-label="Начальное значение" />
                 <SliderExtended.Track />
-                <SliderExtended.Dot value={secondValue} onChange={setSecondValue} />
+                <SliderExtended.Dot value={secondValue} onChange={setSecondValue} aria-label="Конечное значение" />
                 <SliderExtended.Marks>
                     <SliderExtended.Mark value={0}>0</SliderExtended.Mark>
                     <SliderExtended.Mark value={35}>35</SliderExtended.Mark>

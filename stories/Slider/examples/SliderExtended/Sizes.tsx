@@ -15,7 +15,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
             <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{size.toUpperCase()}</div>
             <SliderExtended min={0} max={100} step={1} size={size}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={value} onChange={setValue}>
+                <SliderExtended.Dot value={value} onChange={setValue} aria-label="Значение">
                     <SliderExtended.Tooltip value={value}>{value}</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Track />

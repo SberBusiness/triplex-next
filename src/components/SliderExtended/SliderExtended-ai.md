@@ -131,7 +131,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
+```text
 --triplex-next-Slider-Rail_Background
 --triplex-next-Slider-Rail_Background_Disabled
 --triplex-next-Slider-Track_Background_Default

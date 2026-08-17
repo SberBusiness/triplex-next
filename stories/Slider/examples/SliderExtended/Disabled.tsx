@@ -5,7 +5,7 @@ export const Disabled = () => (
     <div style={{ maxWidth: "750px", padding: "30px" }}>
         <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD} disabled>
             <SliderExtended.Rail />
-            <SliderExtended.Dot value={35} onChange={() => {}}>
+            <SliderExtended.Dot value={35} onChange={() => {}} aria-label="Значение">
                 <SliderExtended.Tooltip value={35}>35</SliderExtended.Tooltip>
             </SliderExtended.Dot>
             <SliderExtended.Track />

@@ -11,11 +11,11 @@ export const RangeWithTooltip = () => {
             <br />
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={firstValue} onChange={setFirstValue}>
+                <SliderExtended.Dot value={firstValue} onChange={setFirstValue} aria-label="Начальное значение">
                     <SliderExtended.Tooltip value={firstValue}>{firstValue}</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Track />
-                <SliderExtended.Dot value={secondValue} onChange={setSecondValue}>
+                <SliderExtended.Dot value={secondValue} onChange={setSecondValue} aria-label="Конечное значение">
                     <SliderExtended.Tooltip value={secondValue}>{secondValue}</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Marks>

@@ -10,7 +10,7 @@ export const WithoutTooltip = () => {
             <br />
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={value} onChange={setValue} />
+                <SliderExtended.Dot value={value} onChange={setValue} aria-label="Значение" />
                 <SliderExtended.Track />
                 <SliderExtended.Marks>
                     <SliderExtended.Mark value={0}>0</SliderExtended.Mark>

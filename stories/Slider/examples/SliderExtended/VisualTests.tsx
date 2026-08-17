@@ -30,7 +30,7 @@ export const VisualTests = () => (
         <Case title="MD, фокус на ползунке">
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={35} onChange={() => {}}>
+                <SliderExtended.Dot value={35} onChange={() => {}} aria-label="Значение">
                     <SliderExtended.Tooltip value={35}>35</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Track />
@@ -41,7 +41,7 @@ export const VisualTests = () => (
         <Case title="LG">
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.LG}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={66} onChange={() => {}}>
+                <SliderExtended.Dot value={66} onChange={() => {}} aria-label="Значение">
                     <SliderExtended.Tooltip value={66}>66</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Track />
@@ -52,9 +52,9 @@ export const VisualTests = () => (
         <Case title="Диапазон">
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={35} onChange={() => {}} />
+                <SliderExtended.Dot value={35} onChange={() => {}} aria-label="Начальное значение" />
                 <SliderExtended.Track />
-                <SliderExtended.Dot value={66} onChange={() => {}} />
+                <SliderExtended.Dot value={66} onChange={() => {}} aria-label="Конечное значение" />
                 <Marks />
             </SliderExtended>
         </Case>
@@ -62,7 +62,7 @@ export const VisualTests = () => (
         <Case title="Реверсивный">
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD} reverse>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={35} onChange={() => {}} />
+                <SliderExtended.Dot value={35} onChange={() => {}} aria-label="Значение" />
                 <SliderExtended.Track />
                 <Marks />
             </SliderExtended>
@@ -71,7 +71,7 @@ export const VisualTests = () => (
         <Case title="Неактивный">
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD} disabled>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={35} onChange={() => {}} />
+                <SliderExtended.Dot value={35} onChange={() => {}} aria-label="Значение" />
                 <SliderExtended.Track />
                 <Marks />
             </SliderExtended>

@@ -10,7 +10,7 @@ export const Reverse = () => {
             <br />
             <SliderExtended min={0} max={100} step={1} size={EComponentSize.MD} reverse>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={value} onChange={setValue}>
+                <SliderExtended.Dot value={value} onChange={setValue} aria-label="Значение">
                     <SliderExtended.Tooltip value={value}>{value}</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Track />

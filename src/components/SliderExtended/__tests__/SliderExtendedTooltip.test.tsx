@@ -79,6 +79,13 @@ describe("SliderExtendedTooltip", () => {
         expect(shiftAtStart).not.toBe("0px");
     });
 
+    it("shifts the tooltip body at the opposite rail edge", () => {
+        renderTooltip({ value: 100 });
+
+        // У правого края сдвиг меняет знак — проверяем, что он вообще есть.
+        expect(screen.getByText("Подсказка").style.left).not.toBe("0px");
+    });
+
     it("does not shift the tooltip body without value", () => {
         renderTooltip({ value: undefined });
 

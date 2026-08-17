@@ -13,7 +13,7 @@ export const WithCustomSteps = () => {
             <br />
             <SliderExtended min={0} max={100} step={STEPS} size={EComponentSize.MD}>
                 <SliderExtended.Rail />
-                <SliderExtended.Dot value={value} onChange={setValue}>
+                <SliderExtended.Dot value={value} onChange={setValue} aria-label="Значение">
                     <SliderExtended.Tooltip value={value}>{value}</SliderExtended.Tooltip>
                 </SliderExtended.Dot>
                 <SliderExtended.Track />

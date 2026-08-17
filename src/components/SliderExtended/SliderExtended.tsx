@@ -1,30 +1,29 @@
-import React from "react";
-import { useState, useLayoutEffect } from "react";
-import { range } from "lodash";
+import React, { useMemo, useState } from "react";
+import { range } from "lodash-es";
+import clsx from "clsx";
+import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import { SliderExtendedDot } from "./components/SliderExtendedDot/SliderExtendedDot";
 import { SliderExtendedMarks } from "./components/SliderExtendedMarks/SliderExtendedMarks";
 import { SliderExtendedMark } from "./components/SliderExtendedMarks/SliderExtendedMark";
 import { SliderExtendedRail } from "./components/SliderExtendedRail";
 import { SliderExtendedTrack } from "./components/SliderExtendedTrack/SliderExtendedTrack";
+import { SliderExtendedTooltip } from "./components/SliderExtendedTooltip/SliderExtendedTooltip";
 import { ISliderExtendedDot, ISliderExtendedStep, SliderExtendedContext } from "./SliderExtendedContext";
 import { SliderExtendedUtils } from "./SliderExtendedUtils";
-import { SliderExtendedTooltip } from "./components/SliderExtendedTooltip/SliderExtendedTooltip";
-import clsx from "clsx";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/SliderExtended.module.less";
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
 /** Свойства компонента SliderExtended. */
 export interface ISliderExtendedProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Слайдер не активен. */
+    /** Слайдер не активен. По умолчанию false. */
     disabled?: boolean;
     /** Максимальное значение слайдера. */
     max: number;
     /** Минимальное значение слайдера. */
     min: number;
-    /** Реверсивный слайдер. */
+    /** Реверсивный слайдер — значения возрастают справа налево. По умолчанию false. */
     reverse?: boolean;
     /**
      * Длина шага, например при длине шага 1, с min-0. max-100, слайдер будет разделен на 100 шагов.
@@ -35,129 +34,107 @@ export interface ISliderExtendedProps extends React.HTMLAttributes<HTMLDivElemen
     size: EComponentSize.MD | EComponentSize.LG;
 }
 
-const SliderExtendedBase: React.FC<ISliderExtendedProps> = ({
-    children,
-    disabled,
-    max,
-    min,
-    reverse = false,
-    step,
-    size,
-    ...htmlDivAttributes
-}) => {
-    const [dots, setDots] = useState<ISliderExtendedDot[]>([]);
-    const [focused, setFocused] = useState(false);
-    const [isHoverOrDragTrack, setIsHoverOrDragTrack] = useState(false);
-    const [railNode, setRailNode] = useState<HTMLDivElement | null>(null);
-    const [steps, setSteps] = useState<ISliderExtendedStep[]>([]);
+/**
+ * Слайдер, собираемый из субкомпонентов: Rail (полоса), Dot (ползунок), Track (заполненная часть),
+ * Marks/Mark (метки) и Tooltip (подсказка над ползунком). Значения ползунков контролирует потребитель.
+ */
+const SliderExtendedBase = React.forwardRef<HTMLDivElement, ISliderExtendedProps>(
+    ({ children, className, disabled, max, min, reverse = false, step, size, ...htmlDivAttributes }, ref) => {
+        const [dots, setDots] = useState<ISliderExtendedDot[]>([]);
+        const [focused, setFocused] = useState(false);
+        const [isHoverOrDragTrack, setIsHoverOrDragTrack] = useState(false);
+        const [railNode, setRailNode] = useState<HTMLDivElement | null>(null);
 
-    const addDot = (dot: ISliderExtendedDot) => {
-        setDots((prevDots) => {
-            const nextDots = [...prevDots];
-            nextDots.push(dot);
-
-            return nextDots;
-        });
-    };
-
-    const removeDot = (id: string) => {
-        setDots((prevDots) => [...prevDots.filter((dot) => dot.id !== id)]);
-    };
-
-    const updateDot = (dot: Pick<ISliderExtendedDot, "id"> & Partial<ISliderExtendedDot>) => {
-        setDots((prevDots) => {
-            const nextDots = [...prevDots];
-            nextDots.some((d) => {
-                if (d.id === dot.id) {
-                    d = Object.assign(d, dot);
-                    return true;
-                }
-            });
-
-            return nextDots;
-        });
-    };
-
-    useLayoutEffect(() => {
         /**
-         * Генерирует массив точек остановки при перемещении Dot.
+         * Массив точек остановки при перемещении Dot.
          * Для каждой точки указывается позиция на треке в % и value.
          */
-        const generateSteps = () => {
-            if (typeof step === "number") {
-                const values = [...range(min, max, step), max];
+        const steps = useMemo<ISliderExtendedStep[]>(() => {
+            const values = typeof step === "number" ? [...range(min, max, step), max] : step;
 
-                setSteps(
-                    values.map((value) => ({
-                        normalizedValue: SliderExtendedUtils.getNormalizedValue({ max, min, value }),
-                        value,
-                    })),
-                );
-            } else {
-                setSteps(
-                    step.map((val) => ({
-                        normalizedValue: SliderExtendedUtils.getNormalizedValue({ max, min, value: val }),
-                        value: val,
-                    })),
-                );
-            }
+            return values.map((value) => ({
+                normalizedValue: SliderExtendedUtils.getNormalizedValue({ max, min, value }),
+                value,
+            }));
+        }, [max, min, step]);
+
+        const addDot = (dot: ISliderExtendedDot) => {
+            setDots((prevDots) => [...prevDots, dot]);
         };
 
-        generateSteps();
-    }, [min, max, step]);
+        const removeDot = (id: string) => {
+            setDots((prevDots) => prevDots.filter((dot) => dot.id !== id));
+        };
 
-    if (!steps.length) {
-        return null;
-    }
+        /**
+         * Обновляет данные точки.
+         * Объект точки меняется на месте намеренно: обработчики перетаскивания подписываются на
+         * document в момент нажатия и до конца перетаскивания видят массив dots того рендера.
+         * Замена объекта на новый оставила бы их с устаревшими stepIndex и value.
+         */
+        const updateDot = (dot: Pick<ISliderExtendedDot, "id"> & Partial<ISliderExtendedDot>) => {
+            setDots((prevDots) => {
+                const prevDot = prevDots.find((d) => d.id === dot.id);
 
-    return (
-        <SliderExtendedContext.Provider
-            value={{
-                addDot,
-                disabled: Boolean(disabled),
-                dots,
-                focused,
-                isHoverOrDragTrack,
-                max,
-                min,
-                railNode,
-                removeDot,
-                reverse: Boolean(reverse),
-                setFocused,
-                setIsHoverOrDragTrack,
-                setRailNode,
-                steps,
-                updateDot,
-                size,
-            }}
-        >
-            <div
-                className={clsx(styles.sliderExtended, sizeToClassNameMap[size], {
-                    [styles.disabled]: Boolean(disabled),
-                })}
-                {...htmlDivAttributes}
-                data-tx={process.env.npm_package_version}
+                if (prevDot) {
+                    Object.assign(prevDot, dot);
+                }
+
+                return [...prevDots];
+            });
+        };
+
+        if (!steps.length) {
+            return null;
+        }
+
+        return (
+            <SliderExtendedContext.Provider
+                value={{
+                    addDot,
+                    disabled: Boolean(disabled),
+                    dots,
+                    focused,
+                    isHoverOrDragTrack,
+                    max,
+                    min,
+                    railNode,
+                    removeDot,
+                    reverse,
+                    setFocused,
+                    setIsHoverOrDragTrack,
+                    setRailNode,
+                    steps,
+                    updateDot,
+                    size,
+                }}
             >
-                {children}
-            </div>
-        </SliderExtendedContext.Provider>
-    );
-};
+                <div
+                    className={clsx(
+                        styles.sliderExtended,
+                        sizeToClassNameMap[size],
+                        { [styles.disabled]: disabled },
+                        className,
+                    )}
+                    {...htmlDivAttributes}
+                    data-tx={process.env.npm_package_version}
+                    ref={ref}
+                >
+                    {children}
+                </div>
+            </SliderExtendedContext.Provider>
+        );
+    },
+);
+
+SliderExtendedBase.displayName = "SliderExtended";
 
 /** Компонент SliderExtended. */
-export const SliderExtended = SliderExtendedBase as typeof SliderExtendedBase & {
-    Dot: typeof SliderExtendedDot;
-    Mark: typeof SliderExtendedMark;
-    Marks: typeof SliderExtendedMarks;
-    Rail: typeof SliderExtendedRail;
-    Track: typeof SliderExtendedTrack;
-    Tooltip: typeof SliderExtendedTooltip;
-};
-
-SliderExtended.displayName = "SliderExtended";
-SliderExtended.Dot = SliderExtendedDot;
-SliderExtended.Mark = SliderExtendedMark;
-SliderExtended.Marks = SliderExtendedMarks;
-SliderExtended.Rail = SliderExtendedRail;
-SliderExtended.Track = SliderExtendedTrack;
-SliderExtended.Tooltip = SliderExtendedTooltip;
+export const SliderExtended = Object.assign(SliderExtendedBase, {
+    Dot: SliderExtendedDot,
+    Mark: SliderExtendedMark,
+    Marks: SliderExtendedMarks,
+    Rail: SliderExtendedRail,
+    Track: SliderExtendedTrack,
+    Tooltip: SliderExtendedTooltip,
+});

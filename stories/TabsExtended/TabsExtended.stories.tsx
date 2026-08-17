@@ -180,6 +180,8 @@ export const WithNotificationIcon: StoryObj<typeof TabsExtended> = {
 export const WithDropdown: StoryObj<typeof TabsExtended> = {
     render: WithDropdownRender,
     parameters: {
+        // Раскрытый Dropdown снимается в VisualTests, отдельный baseline здесь дублировал бы покрытие.
+        testRunner: { skip: true },
         controls: { disable: true },
         docs: {
             source: {

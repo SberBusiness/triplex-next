@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from "react";
 import { WindowResizeListener } from "@sberbusiness/triplex-next";
 
+const getWindowSize = () =>
+    typeof window === "undefined" ? { width: 0, height: 0 } : { width: window.innerWidth, height: window.innerHeight };
+
 export const Default = () => {
-    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    // При рендере на сервере window недоступен — стартовое значение берётся только в браузере.
+    const [windowSize, setWindowSize] = useState(getWindowSize);
 
     // Стабильная ссылка на обработчик: при её смене слушатель переподписывается заново.
     const handleResize = useCallback(() => {
-        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        setWindowSize(getWindowSize());
     }, []);
 
     return (

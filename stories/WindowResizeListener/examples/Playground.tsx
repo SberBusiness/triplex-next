@@ -11,7 +11,8 @@ export interface IPlaygroundProps {
 
 export const Playground = ({ onResize, throttleDelay }: IPlaygroundProps) => {
     const [resizeCount, setResizeCount] = useState(0);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    // При рендере на сервере window недоступен — стартовое значение берётся только в браузере.
+    const [windowWidth, setWindowWidth] = useState(() => (typeof window === "undefined" ? 0 : window.innerWidth));
 
     const handleResize = useCallback(
         (event: UIEvent) => {

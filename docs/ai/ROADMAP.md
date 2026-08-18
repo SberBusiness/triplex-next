@@ -210,7 +210,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TriggerClickOnKeyDownEvent | ⬜ | ⬜ | ⬜ |
 | UnorderedList | ⬜ | ⬜ | ⬜ |
 | UploadZone | ⬜ | ⬜ | ⬜ |
-| WindowResizeListener | ⬜ | ⬜ | ⬜ |
+| WindowResizeListener | ✅ | ✅ | ✅ |
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

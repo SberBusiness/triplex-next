@@ -1,5 +1,8 @@
 @indent: 12, 16, 20, 24, 28, 32;
 
+// Вложенный .label ниже — класс корневого элемента Checkbox из Checkbox.module.less.
+// Имя класса CSS-модуля хешируется по имени папки компонента, имени класса и версии библиотеки,
+// поэтому внутри src/components/Checkbox класс .label из обоих файлов получает одно и то же имя.
 .checkboxXGroup {
     display: inline-flex;
     flex-flow: row wrap;
@@ -9,7 +12,7 @@
         &.indent-@{n} {
             margin-left: -(@n / 2px);
             margin-right: -(@n / 2px);
-    
+
             .label {
                 margin-left: (@n / 2px);
                 margin-right: (@n / 2px);

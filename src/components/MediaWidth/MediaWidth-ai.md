@@ -1,7 +1,7 @@
 ---
 component: MediaWidth
 category: MediaWidth
-related: [MediaMinWidth, MediaMaxWidth, MediaBetweenWidth, useMatchMedia, MobileView]
+related: [MediaMinWidth, MediaMaxWidth, MediaBetweenWidth, useMatchMedia, MobileView, WindowResizeListener]
 tokens: []
 stories: stories/MediaWidth/MediaWidth.stories.tsx
 version: "1.0"
@@ -176,6 +176,11 @@ version: "1.0"
 - `MobileView` (`src/components/MobileView/`) — частный случай `MediaWidth` с
   `maxWidth={EScreenWidth.SM_MAX}`, со своим AI.md. Для мобильной границы
   используется он, а не `MediaWidth` напрямую.
+- `WindowResizeListener` (`src/components/WindowResizeListener/`) — альтернатива
+  для императивного случая: даёт колбэк на поток событий `resize`, а не рендерит
+  ветку по медиа-запросу. Правило выбора: нужно **что-то показать** на
+  определённой ширине — `MediaWidth`; нужно **что-то посчитать/сделать** на
+  ресайз — `WindowResizeListener`.
 
 Разница между `MediaWidth` и тремя реализациями: у `MediaWidth` обе границы
 опциональны и выбор реализации делается за потребителя; у реализаций
@@ -220,4 +225,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-18 | TRI-104: в `related` и «Связанные компоненты» добавлен `WindowResizeListener` — обратная сторона симметричной связи-альтернативы. Код и публичный API не затронуты. |
 | 2026-08-11 | Создан документ. AI-рефакторинг (TRI-58): `displayName` у `MediaWidth`, исправлены опечатки и дополнен JSDoc props и компонента, unit-тесты расширены с 7 до 19 кейсов (проверяются строки медиа-запросов, выбор реализации, `null`-ветки, переподписка и отписка). Публичный API не изменён (props, `IMediaProps`, barrel-экспорты; `forwardRef` по-прежнему осознанно отсутствует). |

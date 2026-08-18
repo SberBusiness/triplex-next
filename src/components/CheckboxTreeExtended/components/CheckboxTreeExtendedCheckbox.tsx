@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Checkbox, ICheckboxProps } from "../../Checkbox/Checkbox";
 import clsx from "clsx";
+import { Checkbox, ICheckboxProps } from "../../Checkbox/Checkbox";
+import { CheckboxTreeExtendedContext } from "../CheckboxTreeExtendedContext";
 import { isStaticCheckboxTreeExtended } from "../isStaticCheckboxTreeExtended";
 import styles from "../styles/CheckboxTreeExtended.module.less";
-import { CheckboxTreeExtendedContext } from "../CheckboxTreeExtendedContext";
 
-/**
- * Свойства CheckboxTreeExtendedCheckbox.
- */
+/** Свойства CheckboxTreeExtendedCheckbox. */
 interface ICheckboxTreeExtendedCheckboxProps extends ICheckboxProps {
-    // Текущая нода является активной при перемещении с клавиатуры.
+    /** Текущая нода является активной при перемещении с клавиатуры. */
     active?: boolean;
-    // Текущая нода раскрыта.
+    /** Текущая нода раскрыта. Не влияет на отрисовку, принимается из render-функции ноды. */
     opened?: boolean;
 }
 
@@ -22,6 +20,7 @@ interface ICheckboxTreeExtendedCheckboxProps extends ICheckboxProps {
 export const CheckboxTreeExtendedCheckbox: React.FC<ICheckboxTreeExtendedCheckboxProps> = ({
     active,
     className,
+    // Исключается из checkboxProps, чтобы не попасть в атрибуты input.
     opened,
     labelAttributes,
     ...checkboxProps
@@ -37,26 +36,24 @@ export const CheckboxTreeExtendedCheckbox: React.FC<ICheckboxTreeExtendedCheckbo
         }
 
         // При взаимодействии мышью триггер фокуса не нужен.
-        if (!document.activeElement?.contains(checkboxNode.current as Node)) {
+        if (!document.activeElement?.contains(checkboxNode.current)) {
             checkboxNode.current?.focus();
         }
     }, [active]);
 
     const handleLabelFocus = (event: React.FocusEvent<HTMLLabelElement>) => {
         // Предотвращает всплытие до ноды дерева.
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        !isStaticCheckboxTreeExtended && event.stopPropagation();
-        labelAttributes?.onFocus?.(event);
-    };
+        if (!isStaticCheckboxTreeExtended) {
+            event.stopPropagation();
+        }
 
-    const setCheckboxNode = (DOMNode: HTMLInputElement) => {
-        checkboxNode.current = DOMNode;
+        labelAttributes?.onFocus?.(event);
     };
 
     return (
         <Checkbox
             className={clsx(styles.checkboxTreeCheckbox, className)}
-            ref={setCheckboxNode}
+            ref={checkboxNode}
             labelAttributes={{
                 ...labelAttributes,
                 className: classNamesLabel,

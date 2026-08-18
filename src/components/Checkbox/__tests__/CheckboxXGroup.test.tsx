@@ -1,8 +1,9 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Checkbox, CheckboxXGroup } from "@sberbusiness/triplex-next/components";
-import { TIndentSize } from "@sberbusiness/triplex-next/consts/IndentConst";
+import { Checkbox } from "../Checkbox";
+import { CheckboxXGroup } from "../CheckboxXGroup";
+import type { TIndentSize } from "../../../consts/IndentConst";
 
 const getGroup = () => screen.getByRole("group");
 
@@ -63,6 +64,14 @@ describe("CheckboxXGroup", () => {
         fireEvent.click(group);
         expect(handleClick).toHaveBeenCalledTimes(1);
         expect(handleClick).toHaveBeenCalledWith(expect.objectContaining({ target: group }));
+    });
+
+    it("Should keep group role when role comes with rest props", () => {
+        const rest: React.HTMLAttributes<HTMLDivElement> = { role: "list" };
+        render(<CheckboxXGroup {...rest} />);
+
+        expect(getGroup()).toBeInTheDocument();
+        expect(screen.queryByRole("list")).not.toBeInTheDocument();
     });
 
     it("Should forward ref to root element", () => {

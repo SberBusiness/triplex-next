@@ -7,7 +7,10 @@ import styles from "./styles/CheckboxXGroup.module.less";
 export interface ICheckboxXGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "role"> {
     /** Содержимое группы, обычно набор Checkbox. */
     children?: React.ReactNode;
-    /** Размер горизонтального отступа между чекбоксами, в пикселях. По умолчанию 12. */
+    /**
+     * Размер горизонтального отступа между чекбоксами, в пикселях. По умолчанию 12.
+     * Отступ получают только потомки-Checkbox: маргины вешаются на корневой label компонента Checkbox.
+     */
     indent?: TIndentSize;
 }
 

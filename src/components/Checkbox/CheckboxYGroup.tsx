@@ -6,7 +6,8 @@ import styles from "./styles/CheckboxYGroup.module.less";
 export interface ICheckboxYGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "role"> {
     /**
      * Содержимое группы, обычно набор Checkbox.
-     * Вертикальный отступ получают только соседние потомки-Checkbox одного размера: маргины вешаются на корневой label компонента Checkbox.
+     * Вертикальный отступ получают только соседние label-элементы Checkbox одного размера:
+     * маргины вешаются на корневой label компонента Checkbox, а обёртка вокруг каждого Checkbox разрывает соседство.
      */
     children?: React.ReactNode;
 }

@@ -91,6 +91,14 @@ describe("ChipGroup", () => {
         expect(handleClick).toHaveBeenCalledWith(expect.objectContaining({ target: root }));
     });
 
+    it("Should set data-tx attribute and not let rest props override it", () => {
+        render(<ChipGroup data-testid="chipGroup" data-tx="overridden" />);
+        const root = screen.getByTestId("chipGroup");
+
+        expect(root).not.toHaveAttribute("data-tx", "overridden");
+        expect(root).toHaveAttribute("data-tx", process.env.npm_package_version);
+    });
+
     it("Should forward ref to root element", () => {
         const ref = React.createRef<HTMLDivElement>();
         render(<ChipGroup data-testid="chipGroup" ref={ref} />);

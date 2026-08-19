@@ -99,7 +99,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CheckboxTree | ⬜ | ✅ | ⬜ |
 | CheckboxTreeExtended | ✅ | ✅ | ✅ |
 | CheckboxXGroup | ✅ | ✅ | ✅ |
-| CheckboxYGroup | ✅ | ✅ | ⬜ |
+| CheckboxYGroup | ✅ | ✅ | ✅ |
 | Chip | ✅ | ✅ | ✅ |
 | ChipGroup | ✅ | ✅ | ✅ |
 | Col | ✅ | ✅ | ✅ |

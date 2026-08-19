@@ -1,5 +1,8 @@
 @import "src/styles/style";
 
+// Вложенные .label, .sm, .md и .lg ниже — классы корневого элемента Checkbox из Checkbox.module.less.
+// Имя класса CSS-модуля хешируется по имени папки компонента, имени класса и версии библиотеки,
+// поэтому внутри src/components/Checkbox эти классы из обоих файлов получают одно и то же имя.
 .checkboxYGroup {
     display: inline-flex;
     flex-flow: column wrap;
@@ -8,12 +11,12 @@
         margin-top: 8px;
     }
 
-    .label.lg + .label.lg {
-        margin-top: 20px;
-    }
-
     .label.md + .label.md {
         margin-top: 16px;
+    }
+
+    .label.lg + .label.lg {
+        margin-top: 20px;
     }
 }
 

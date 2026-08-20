@@ -147,6 +147,8 @@ export const Sizes: StoryObj<typeof UnorderedList> = {
                 language: "tsx",
             },
         },
+        // Визуально идентична UnorderedListExtended → Sizes, скриншот не дублируем.
+        testRunner: { skip: true },
     },
     render: SizesRender,
 };

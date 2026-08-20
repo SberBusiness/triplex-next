@@ -31,6 +31,11 @@ const TYPE_TO_BUTTON_DOTS_THEME_MAP: Record<ETabsExtendedType, EButtonDotsTheme>
     [ETabsExtendedType.TYPE_2]: EButtonDotsTheme.DOTS_SECONDARY_LIGHT,
 };
 
+const TYPE_TO_CLASS_NAME_MAP: Record<ETabsExtendedType, string> = {
+    [ETabsExtendedType.TYPE_1]: styles.type1,
+    [ETabsExtendedType.TYPE_2]: styles.type2,
+};
+
 /** Компонент Tabs. */
 export const Tabs: React.FC<ITabsProps> = ({
     buttonDropdownAttributes,
@@ -133,7 +138,9 @@ export const Tabs: React.FC<ITabsProps> = ({
                             selected={tabs.filter((tab) => tab.id === selectedId)[0]}
                             buttonAttributes={{
                                 ...buttonDropdownAttributes,
-                                className: clsx(styles.tabButtonDropdown, styles[size]),
+                                className: clsx(styles.tabButtonDropdown, styles[size], TYPE_TO_CLASS_NAME_MAP[type], {
+                                    [styles.selected]: dropdownItemsIds.includes(selectedId),
+                                }),
                             }}
                         />
                     )}

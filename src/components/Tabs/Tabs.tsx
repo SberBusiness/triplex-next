@@ -138,9 +138,13 @@ export const Tabs: React.FC<ITabsProps> = ({
                             selected={tabs.filter((tab) => tab.id === selectedId)[0]}
                             buttonAttributes={{
                                 ...buttonDropdownAttributes,
-                                className: clsx(styles.tabButtonDropdown, styles[size], TYPE_TO_CLASS_NAME_MAP[type], {
-                                    [styles.selected]: dropdownItemsIds.includes(selectedId),
-                                }),
+                                className: clsx(
+                                    styles.tabButtonDropdown,
+                                    styles[size],
+                                    TYPE_TO_CLASS_NAME_MAP[type],
+                                    { [styles.selected]: dropdownItemsIds.includes(selectedId) },
+                                    buttonDropdownAttributes?.className,
+                                ),
                             }}
                         />
                     )}

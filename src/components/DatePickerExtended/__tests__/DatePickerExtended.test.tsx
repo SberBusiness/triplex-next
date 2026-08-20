@@ -97,6 +97,18 @@ describe("DatePickerExtended", () => {
         expect(onDropdownClose).toHaveBeenCalledTimes(1);
     });
 
+    it("opens the calendar with the mouse without breaking the dropdown", () => {
+        renderDatePicker();
+
+        // mousedown по корневому элементу выставляет mouseUsedRef — от него зависят опции FocusTrap.
+        // Сам перенос фокуса в jsdom не проверить: без layout focus-trap не находит tabbable-узлов.
+        fireEvent.mouseDown(screen.getByTestId("date-picker"));
+        fireEvent.click(getTarget());
+
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
+        expect(screen.getByRole("grid")).toBeInTheDocument();
+    });
+
     it("closes the calendar on Escape", () => {
         renderDatePicker();
         openDropdown();
@@ -199,15 +211,43 @@ describe("DatePickerExtended", () => {
     });
 
     it("does not leak calendar props to the root element", () => {
+        // Все props календаря разом: если из деструктуризации выпадет любой из них, он осядет атрибутом на корне.
         renderDatePicker({
+            pickType: ECalendarPickType.DATE,
+            format: dateFormatYYYYMMDD,
+            defaultViewDate: PICKED_DATE,
+            limitRange: {
+                dateFrom: moment("19700101", dateFormatYYYYMMDD),
+                dateTo: moment("19701231", dateFormatYYYYMMDD),
+            },
+            markedDays: ["19700121"],
+            disabledDays: ["19700122"],
+            reversedPick: true,
             adaptiveMode: true,
+            onPageChange: vi.fn(),
+            onViewChange: vi.fn(),
+            dayHtmlAttributes: { "data-day": "day" },
+            monthHtmlAttributes: { "data-month": "month" },
+            yearHtmlAttributes: { "data-year": "year" },
+            prevButtonProps: { children: "Prev" },
+            nextButtonProps: { children: "Next" },
+            viewButtonProps: { children: "View" },
             yesterdayButtonProps: { children: "Yesterday" },
+            todayButtonProps: { children: "Today" },
             tomorrowButtonProps: { children: "Tomorrow" },
         });
 
         const root = screen.getByTestId("date-picker");
-        expect(root).not.toHaveAttribute("yesterdaybuttonprops");
-        expect(root).not.toHaveAttribute("tomorrowbuttonprops");
+        expect(root.getAttributeNames().sort()).toEqual(["data-testid", "data-tx"]);
+    });
+
+    it("does not warn about unrecognized props on the root element", () => {
+        // Единственный наблюдаемый для потребителя эффект от adaptiveMode: пропало предупреждение React.
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+
+        renderDatePicker({ adaptiveMode: true, onPageChange: vi.fn(), onViewChange: vi.fn() });
+
+        expect(consoleError).not.toHaveBeenCalled();
     });
 
     it("renders the mobile dropdown header target in mobile view", () => {

@@ -52,6 +52,8 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
                     focusTrapOptions={{
                         clickOutsideDeactivates: true,
                         // Функция, а не элемент: targetRef на момент рендера может быть ещё не заполнен.
+                        // document.body здесь означает «фокус остаётся снаружи ловушки», а не «фокус на body»:
+                        // body не фокусируем, но focus-trap нужен непустой fallback, иначе он бросает исключение.
                         fallbackFocus: () => targetRef.current ?? document.body,
                         // false — не переводить фокус внутрь ловушки при открытии мышью.
                         initialFocus: mouseUsedRef.current ? false : undefined,

@@ -11,7 +11,7 @@ import { EComponentSize } from "../../enums";
 /** Свойства компонента DatePickerExtended. */
 export interface IDatePickerExtendedProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">, Pick<IDropdownProps, "alignment">, ICalendarProps {
-    /** Ссылка на целевой элемент для Dropdown. */
+    /** Ссылка на целевой элемент для Dropdown. По умолчанию — корневой элемент компонента. */
     dropdownTargetRef?: React.RefObject<HTMLElement>;
     /** Рендер-функция целевого элемента. */
     renderTarget: () => React.ReactNode;
@@ -25,14 +25,18 @@ export interface IDatePickerExtendedProps
     focusTrapProps?: FocusTrapProps;
 }
 
-/** База для компонента DatePicker. */
+/**
+ * База для компонентов выбора даты (DateField, MonthYearField, ChipDatePicker).
+ * Рендерит переданный целевым элемент и выпадающий Calendar, хранит состояние открытости
+ * дропдауна и отдаёт его целевому элементу через DatePickerExtendedContext.
+ */
 export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerExtendedProps>((props, ref) => {
     const {
         // Dropdown props
         dropdownTargetRef,
         alignment = EDropdownAlignment.LEFT,
         focusTrapProps,
-        // Calendar props
+        // Calendar props — перечислены явно, иначе они попадут в restProps и осядут на корневом div.
         pickType,
         format,
         defaultViewDate,
@@ -49,8 +53,13 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
         prevButtonProps,
         nextButtonProps,
         viewButtonProps,
+        yesterdayButtonProps,
         todayButtonProps,
+        tomorrowButtonProps,
         onDateChange,
+        // Адаптивным режимом календаря управляет сам компонент (десктопный или мобильный дропдаун),
+        // одноимённый prop календаря не используется и в DOM не пробрасывается.
+        adaptiveMode,
         // Other
         renderTarget,
         renderDropdownHeaderTarget,
@@ -67,6 +76,12 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
     const mouseUsedRef = useRef(false);
 
     useEffect(() => {
+        if (!dropdownOpen) {
+            mouseUsedRef.current = false;
+
+            return;
+        }
+
         /** Обработчик нажатия мыши вне компонента. */
         const handleOutsideMouseDown = (event: MouseEvent) => {
             if (
@@ -77,25 +92,19 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
             }
         };
 
-        if (dropdownOpen) {
-            document.addEventListener("mousedown", handleOutsideMouseDown);
+        document.addEventListener("mousedown", handleOutsideMouseDown);
 
-            return () => {
-                document.removeEventListener("mousedown", handleOutsideMouseDown);
-            };
-        } else {
-            mouseUsedRef.current = false;
-        }
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideMouseDown);
+        };
     }, [dropdownOpen]);
 
     /** Обработчик нажатия клавиши. */
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         const key = event.code || event.keyCode;
 
-        if (isKey(key, "ESCAPE")) {
-            if (dropdownOpen) {
-                setDropdownOpen(false);
-            }
+        if (dropdownOpen && isKey(key, "ESCAPE")) {
+            setDropdownOpen(false);
         }
 
         onKeyDown?.(event);
@@ -108,8 +117,15 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
         onMouseDown?.(event);
     };
 
-    /** Рендер календаря. */
-    const renderCalendar = (adaptiveMode: boolean) => (
+    /** Обработчик изменения даты. Выбор даты закрывает дропдаун. */
+    const handleDateChange = (date: moment.Moment) => {
+        setDropdownOpen(false);
+
+        onDateChange(date);
+    };
+
+    /** Рендер календаря. Адаптивный режим включает мобильная версия дропдауна. */
+    const renderCalendar = (adaptive: boolean) => (
         <Calendar
             defaultViewDate={defaultViewDate}
             pickedDate={pickedDate}
@@ -119,8 +135,8 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
             markedDays={markedDays}
             disabledDays={disabledDays}
             reversedPick={reversedPick}
-            adaptiveMode={adaptiveMode}
-            onDateChange={handleChangeDate}
+            adaptiveMode={adaptive}
+            onDateChange={handleDateChange}
             onPageChange={onPageChange}
             onViewChange={onViewChange}
             dayHtmlAttributes={dayHtmlAttributes}
@@ -129,20 +145,15 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
             prevButtonProps={prevButtonProps}
             nextButtonProps={nextButtonProps}
             viewButtonProps={viewButtonProps}
+            yesterdayButtonProps={yesterdayButtonProps}
             todayButtonProps={todayButtonProps}
+            tomorrowButtonProps={tomorrowButtonProps}
         />
     );
 
-    /** Обработчик изменения даты. */
-    const handleChangeDate = (date: moment.Moment) => {
-        setDropdownOpen(false);
-
-        onDateChange(date);
-    };
-
-    /** Функция для хранения ссылки. */
     const setRef = (node: HTMLDivElement | null) => {
         containerRef.current = node;
+
         if (typeof ref === "function") {
             ref(node);
         } else if (ref) {

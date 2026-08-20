@@ -100,6 +100,8 @@ const EXCLUDED_STORIES = new Set([
     "VisualTestsOpen",
     "VisualTestsSquircle",
     "VisualTestsCircle",
+    "VisualTestsMonthYear",
+    "VisualTestsAlignmentRight",
 ]);
 
 /**

@@ -48,6 +48,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Изменен цвет токена `Chip.Background_Disabled` в темной теме.
 
+**DatePickerExtended**
+
+- Исправлено: `yesterdayButtonProps` и `tomorrowButtonProps` доходят до календаря — раньше кнопки «Вчера» и «Завтра» не появлялись, а сами свойства оседали атрибутами на корневом элементе. Это же исправление действует в `DateField`, `MonthYearField` и `ChipDatePicker`.
+- Исправлено: `adaptiveMode` больше не уходит на корневой элемент — React перестал предупреждать в консоли о нераспознанном свойстве. Адаптивный режим календаря компонент по-прежнему определяет сам.
+- Проведён AI-рефакторинг.
+
 **LightBox**
 
 - Исправлен баг, когда в состоянии `loading` `LightBox.TopOverlay` перекрывался `LoaderScreen`.

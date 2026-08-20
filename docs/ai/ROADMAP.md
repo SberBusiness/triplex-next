@@ -108,7 +108,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ComposedKeyDownListener | ✅ | ✅ | ✅ |
 | Confirm | ⬜ | ⬜ | ⬜ |
 | DateField | ⬜ | ✅ | ⬜ |
-| DatePickerExtended | ⬜ | ⬜ | ⬜ |
+| DatePickerExtended | ✅ | ✅ | ✅ |
 | DateRange | ⬜ | ✅ | ⬜ |
 | Divider | ⬜ | ✅ | ⬜ |
 | DocumentNumberEdit | ⬜ | ✅ | ⬜ |

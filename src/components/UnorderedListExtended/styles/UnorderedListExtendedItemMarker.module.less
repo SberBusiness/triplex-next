@@ -4,13 +4,18 @@
     justify-content: center;
     flex-shrink: 0;
     user-select: none;
+    // Обёртка занимает высоту строки текста элемента, поэтому маркер центрируется по первой строке
+    // при любом размере типографики. Фолбэк 20px — строка B2/B3 — для браузеров без единицы lh.
+    min-height: 20px;
+    min-height: 1lh;
 }
 
 .marker {
     display: inline-block;
     width: 4px;
     height: 4px;
-    margin: 8px 5px 8px 1px;
+    margin-right: 5px;
+    margin-left: 1px;
     background-color: currentcolor;
     border-radius: 50%;
 }

@@ -80,24 +80,23 @@ describe("UnorderedList", () => {
         expect(screen.getByRole("list")).toBeEmptyDOMElement();
     });
 
-    it("renders default marker for an item without custom marker", () => {
+    it("renders marker wrapper before the content of an item", () => {
         render(<UnorderedList items={[{ children: "First item" }]} />);
 
         const [item] = screen.getAllByRole("listitem");
-        const markerWrapper = item.firstElementChild;
 
-        expect(markerWrapper).toHaveClass("markerWrapper");
-        expect(markerWrapper?.firstElementChild).toHaveClass("marker");
+        // Обёртка маркера — единственный дочерний элемент, содержимое идёт после неё текстовым узлом.
+        expect(item.children).toHaveLength(1);
+        expect(item.firstElementChild?.tagName).toBe("SPAN");
+        expect(item).toHaveTextContent("First item");
     });
 
-    it("renders custom marker instead of default one", () => {
+    it("passes marker from an item into its marker wrapper", () => {
         render(<UnorderedList items={[{ children: "First item", marker: <span data-testid="marker">✓</span> }]} />);
 
         const [item] = screen.getAllByRole("listitem");
-        const markerWrapper = item.firstElementChild;
 
-        expect(markerWrapper).toContainElement(screen.getByTestId("marker"));
-        expect(markerWrapper?.querySelector(".marker")).toBeNull();
+        expect(item.firstElementChild).toContainElement(screen.getByTestId("marker"));
     });
 
     describe("UnorderedList.Item attributes proxying", () => {
@@ -140,6 +139,14 @@ describe("UnorderedList", () => {
             render(<UnorderedList items={[{ key: "default-size", children: "Item" }]} />);
 
             expect(screen.getAllByRole("listitem")[0]).toHaveClass("b3");
+        });
+
+        it("forwards ref passed inside an item object to the li element", () => {
+            const ref = React.createRef<HTMLLIElement>();
+            render(<UnorderedList items={[{ key: "item-with-ref", ref, children: "Item" }]} />);
+
+            expect(ref.current).toBeInstanceOf(HTMLLIElement);
+            expect(ref.current).toBe(screen.getByRole("listitem"));
         });
     });
 

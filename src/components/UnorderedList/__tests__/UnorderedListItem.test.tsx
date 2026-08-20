@@ -20,8 +20,10 @@ describe("UnorderedListItem", () => {
 
         expect(item.tagName).toBe("LI");
         expect(item).toHaveTextContent("Item text");
-        expect(markerWrapper).toHaveClass("markerWrapper");
-        expect(markerWrapper?.firstElementChild).toHaveClass("marker");
+        // Маркер по умолчанию — пустой узел внутри обёртки, его рисует UnorderedListExtended.Item.Marker.
+        expect(markerWrapper?.tagName).toBe("SPAN");
+        expect(markerWrapper?.children).toHaveLength(1);
+        expect(markerWrapper?.firstElementChild).toBeEmptyDOMElement();
     });
 
     it("renders custom marker instead of default one", () => {
@@ -29,8 +31,9 @@ describe("UnorderedListItem", () => {
 
         const markerWrapper = screen.getByRole("listitem").firstElementChild;
 
-        expect(markerWrapper).toContainElement(screen.getByTestId("custom-marker"));
-        expect(markerWrapper?.querySelector(".marker")).toBeNull();
+        // Переданный маркер занимает место маркера по умолчанию, а не добавляется к нему.
+        expect(markerWrapper?.children).toHaveLength(1);
+        expect(markerWrapper?.firstElementChild).toBe(screen.getByTestId("custom-marker"));
     });
 
     it("renders without content", () => {
@@ -39,7 +42,7 @@ describe("UnorderedListItem", () => {
         const item = screen.getByRole("listitem");
 
         expect(item.children).toHaveLength(1);
-        expect(item.firstElementChild).toHaveClass("markerWrapper");
+        expect(item.firstElementChild?.tagName).toBe("SPAN");
     });
 
     it("merges custom className into the li element", () => {
@@ -47,8 +50,9 @@ describe("UnorderedListItem", () => {
 
         const item = screen.getByRole("listitem");
 
-        expect(item).toHaveClass("unorderedListExtendedItem");
+        // Пользовательский класс добавляется к собственным классам элемента, а не заменяет их.
         expect(item).toHaveClass("custom-item");
+        expect(item).toHaveClass("b3");
     });
 
     it("applies the default B3 size", () => {
@@ -89,6 +93,6 @@ describe("UnorderedListItem", () => {
         render(<UnorderedListItem ref={ref}>Item text</UnorderedListItem>);
 
         expect(ref.current).toBeInstanceOf(HTMLLIElement);
-        expect(ref.current).toHaveClass("unorderedListExtendedItem");
+        expect(ref.current).toBe(screen.getByRole("listitem"));
     });
 });

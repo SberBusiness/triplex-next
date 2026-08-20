@@ -97,8 +97,11 @@
 
 .checkbox:enabled {
     cursor: pointer;
+}
 
-    &:hover+.checkboxIcon {
+// Ховер применяется только на устройствах, с которых можно реально навестись на элемент.
+@media (hover: hover) {
+    .checkbox:enabled:hover+.checkboxIcon {
         box-shadow: var(--triplex-next-Checkbox-BorderColor_Hover);
         background-color: var(--triplex-next-Checkbox-Background_Hover);
     }
@@ -138,6 +141,8 @@
     box-shadow: var(--triplex-next-Checkbox-BorderColor_Focus);
 }
 
-.checkbox:checked:enabled:hover+.checkboxIcon {
-    background-color: var(--triplex-next-Checkbox-Background_Checked_Hover);
+@media (hover: hover) {
+    .checkbox:checked:enabled:hover+.checkboxIcon {
+        background-color: var(--triplex-next-Checkbox-Background_Checked_Hover);
+    }
 }

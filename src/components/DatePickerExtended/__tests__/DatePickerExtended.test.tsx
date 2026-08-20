@@ -186,6 +186,7 @@ describe("DatePickerExtended", () => {
 
         expect(onDateChange).toHaveBeenCalledTimes(1);
         expect(onDateChange.mock.calls[0][0].format("YYYYMM")).toBe("197003");
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
     it("passes disabledDays to the calendar", () => {

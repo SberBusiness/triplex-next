@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { UnorderedList } from "../UnorderedList";
-import { IUnorderedListItemProps } from "../types";
 import { EFontType, EFontWeightText, ETextSize } from "../../Typography";
 
 beforeAll(() => {
@@ -145,34 +144,70 @@ describe("UnorderedList", () => {
     });
 
     describe("React keys of items", () => {
-        const renderAndCollectKeyWarnings = (items: IUnorderedListItemProps[]) => {
-            const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-
-            render(<UnorderedList items={items} />);
-
-            const warnings = consoleError.mock.calls.filter(([message]) => String(message).includes('unique "key"'));
-            consoleError.mockRestore();
-
-            return warnings;
-        };
-
-        it("falls back to item index when neither key nor id is passed", () => {
-            expect(renderAndCollectKeyWarnings([{ children: "First item" }, { children: "Second item" }])).toHaveLength(
-                0,
+        // Ключ элемента напрямую не наблюдаем, поэтому проверяется его следствие: при перестановке
+        // элементов React переиспользует DOM-узел того элемента, чей ключ совпал.
+        it("falls back to item id when key is not passed and keeps id as an attribute", () => {
+            const { rerender } = render(
+                <UnorderedList
+                    items={[
+                        { id: "first", children: "First item" },
+                        { id: "second", children: "Second item" },
+                    ]}
+                />,
             );
+            const [firstItem] = screen.getAllByRole("listitem");
+            expect(firstItem).toHaveAttribute("id", "first");
+
+            rerender(
+                <UnorderedList
+                    items={[
+                        { id: "second", children: "Second item" },
+                        { id: "first", children: "First item" },
+                    ]}
+                />,
+            );
+
+            // Узел переехал вместе со своим элементом — значит ключом был id, а не индекс.
+            expect(screen.getAllByRole("listitem")[1]).toBe(firstItem);
         });
 
-        it("falls back to item id when key is not passed and keeps id as an attribute", () => {
-            expect(
-                renderAndCollectKeyWarnings([
-                    { id: "first", children: "First item" },
-                    { id: "second", children: "Second item" },
-                ]),
-            ).toHaveLength(0);
+        it("prefers explicit key over id", () => {
+            const { rerender } = render(
+                <UnorderedList
+                    items={[
+                        { key: "one", id: "first", children: "First item" },
+                        { key: "two", id: "second", children: "Second item" },
+                    ]}
+                />,
+            );
+            const [firstItem] = screen.getAllByRole("listitem");
 
-            const items = screen.getAllByRole("listitem");
-            expect(items[0]).toHaveAttribute("id", "first");
-            expect(items[1]).toHaveAttribute("id", "second");
+            // Порядок ключей прежний, а id переставлены местами.
+            rerender(
+                <UnorderedList
+                    items={[
+                        { key: "one", id: "second", children: "First item" },
+                        { key: "two", id: "first", children: "Second item" },
+                    ]}
+                />,
+            );
+
+            // Узел остался на месте вслед за ключом, id при этом обновился.
+            expect(screen.getAllByRole("listitem")[0]).toBe(firstItem);
+            expect(firstItem).toHaveAttribute("id", "second");
+        });
+
+        it("falls back to item index when neither key nor id is passed", () => {
+            const { rerender } = render(
+                <UnorderedList items={[{ children: "First item" }, { children: "Second item" }]} />,
+            );
+            const [firstItem] = screen.getAllByRole("listitem");
+
+            rerender(<UnorderedList items={[{ children: "Second item" }, { children: "First item" }]} />);
+
+            // Ключом остался индекс, поэтому узел не переехал, а сменил содержимое.
+            expect(screen.getAllByRole("listitem")[0]).toBe(firstItem);
+            expect(firstItem).toHaveTextContent("Second item");
         });
     });
 });

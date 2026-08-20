@@ -17,12 +17,11 @@ export interface PlaygroundArgs {
 export const Playground = ({ items, size, type, withCustomMarker }: PlaygroundArgs) => (
     <div style={{ maxWidth: "400px" }}>
         <UnorderedList
-            items={items?.map((item, index) => ({
-                key: index,
+            items={items?.map((item) => ({
                 ...item,
                 size,
                 type,
-                marker: withCustomMarker ? <CheckboxtickStrokeSrvIcon20 paletteIndex={0} /> : undefined,
+                marker: withCustomMarker ? <CheckboxtickStrokeSrvIcon20 paletteIndex={0} /> : item.marker,
             }))}
         />
     </div>

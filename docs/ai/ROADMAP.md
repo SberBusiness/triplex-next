@@ -208,7 +208,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Caption | ✅ | ✅ | ✅ |
 | CodeText | ✅ | ✅ | ✅ |
 | TriggerClickOnKeyDownEvent | ⬜ | ⬜ | ⬜ |
-| UnorderedList | ⬜ | ⬜ | ⬜ |
+| UnorderedList | ✅ | ✅ | ✅ |
 | UploadZone | ⬜ | ⬜ | ⬜ |
 | WindowResizeListener | ✅ | ✅ | ✅ |
 

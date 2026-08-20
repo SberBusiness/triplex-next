@@ -29,6 +29,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Checkbox**
 
 - Проведён AI-рефакторинг.
+- Исправлен баг, когда на тач-устройствах чекбокс залипал в состоянии ховера после тапа.
 
 **CheckboxTreeExtended**
 
@@ -48,11 +49,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Изменен цвет токена `Chip.Background_Disabled` в темной теме.
 
+**ChipGroup**
+
+- Проведён AI-рефакторинг.
+
 **DatePickerExtended**
 
 - Исправлено: `yesterdayButtonProps` и `tomorrowButtonProps` доходят до календаря — раньше кнопки «Вчера» и «Завтра» не появлялись, а сами свойства оседали атрибутами на корневом элементе. Это же исправление действует в `DateField`, `MonthYearField` и `ChipDatePicker`.
 - Исправлено: React больше не предупреждает в консоли о нераспознанном свойстве `adaptiveMode` — оно перестало пробрасываться на корневой элемент. Адаптивный режим календаря компонент по-прежнему определяет сам.
-- Проведён AI-рефакторинг.
 
 **LightBox**
 
@@ -70,6 +74,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: при `min`, равном `max`, позиция ползунка больше не вычисляется как `NaN`.
 - Добавлено: `displayName` у `SliderExtended.Tooltip`.
 - Проведён AI-рефакторинг.
+
+**StatusTracker**
+
+- Минимальная высота изменена для десктоп экранов и добавлена для мобильных экранов.
 
 **TabsExtended**
 

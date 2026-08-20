@@ -73,8 +73,8 @@ export const Playground: StoryObj<typeof StatusTracker> = {
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum amountProps={{ value: "123747.123", currency: "₽" }} />
                     <StatusTracker.Header.Title>Заголовок документа</StatusTracker.Header.Title>
+                    <StatusTracker.Header.Sum amountProps={{ value: "123747.123", currency: "₽" }} />
                     <StatusTracker.Header.Description>
                         Это сообщение предоставляет дополнительный контекст или выделяет важную информацию для
                         ознакомления.
@@ -115,8 +115,8 @@ export const Draft: StoryObj<typeof StatusTracker> = {
         <div className="status-tracker-wrapper">
             <StatusTracker type={EStatusTrackerType.DRAFT} verticalAlign={EStatusTrackerVerticalAlign.MIDDLE}>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum amountProps={{ value: "50000.00", currency: "₽" }} />
                     <StatusTracker.Header.Title>Черновик документа</StatusTracker.Header.Title>
+                    <StatusTracker.Header.Sum amountProps={{ value: "50000.00", currency: "₽" }} />
                     <StatusTracker.Header.Description>
                         Документ создан без ошибок и еще не отправлен в банк.
                     </StatusTracker.Header.Description>
@@ -143,8 +143,8 @@ export const Waiting: StoryObj<typeof StatusTracker> = {
                     <WaitStsIcon84 />
                 </StatusTracker.Media>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum amountProps={{ value: "123747.123", currency: "₽" }} />
                     <StatusTracker.Header.Title>Документ в обработке</StatusTracker.Header.Title>
+                    <StatusTracker.Header.Sum amountProps={{ value: "123747.123", currency: "₽" }} />
                     <StatusTracker.Header.Description>
                         Документ ожидает ответ от банка. Обычно обработка занимает несколько минут.
                     </StatusTracker.Header.Description>
@@ -323,8 +323,8 @@ export const WideParent: StoryObj<typeof StatusTracker> = {
                     <SuccessStsIcon84 />
                 </StatusTracker.Media>
                 <StatusTracker.Header>
-                    <StatusTracker.Header.Sum amountProps={{ value: "250000.75", currency: "₽" }} />
                     <StatusTracker.Header.Title>Документ исполнен</StatusTracker.Header.Title>
+                    <StatusTracker.Header.Sum amountProps={{ value: "250000.75", currency: "₽" }} />
                     <StatusTracker.Header.Description>
                         Документ успешно исполнен банком. Операция завершена.
                     </StatusTracker.Header.Description>

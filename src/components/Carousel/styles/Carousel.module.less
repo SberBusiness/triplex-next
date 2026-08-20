@@ -127,24 +127,23 @@
 .indicators {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 
     .horizontal & {
         margin-top: 16px;
         flex-direction: row;
-        width: fit-content;
     }
 
     .vertical & {
         margin-left: 16px;
         flex-direction: column;
-        width: fit-content;
     }
 }
 
 .indicator {
     width: 16px;
     height: 16px;
+    padding: 0;
     flex-shrink: 0;
     border: none;
     border-radius: 2px;
@@ -162,11 +161,36 @@
         }
     }
 
+    &.startEdge {
+        .horizontal & {
+            width: 8px;
+            margin-left: 8px;
+        }
+
+        .vertical & {
+            height: 8px;
+            margin-top: 8px;
+        }
+    }
+
+    &.endEdge {
+        .horizontal & {
+            width: 8px;
+            margin-right: 8px;
+        }
+
+        .vertical & {
+            height: 8px;
+            margin-bottom: 8px;
+        }
+    }
+
     &::after {
         content: "";
         position: absolute;
         background-color: var(--triplex-next-Carousel-Indicator_Inactive_BackgroundColor_Default);
         border-radius: 2px;
+        transition: background-color 0.3s ease-in;
 
         .horizontal & {
             bottom: 0;
@@ -208,6 +232,7 @@
     &.active {
         &::after {
             background-color: var(--triplex-next-Carousel-Indicator_Active_BackgroundColor_Default);
+            transition: background-color 0.3s ease-out;
         }
 
         &:hover::after {
@@ -221,6 +246,14 @@
         &:disabled::after {
             background-color: var(--triplex-next-Carousel-Indicator_Active_BackgroundColor_Disabled);
         }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .indicator,
+    .indicator::after,
+    .indicator.active::after {
+        transition: none;
     }
 }
 

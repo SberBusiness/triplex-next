@@ -180,7 +180,7 @@ Playground показывает только те props, которые реал
 
 ### Когда не создавать Playground
 
-Если у компонента нет настраиваемых props (только `children` и стандартные HTML-атрибуты), Playground не создаётся — нечего класть в Controls. Типичный случай: контейнер-обёртка вроде `ListItem`, `ListItemControls`, `ChipGroup`.
+Если у компонента нет настраиваемых props (только `children` и стандартные HTML-атрибуты), Playground не создаётся — нечего класть в Controls. Типичный случай: контейнер-обёртка вроде `ListItem`, `ListItemControls`.
 
 В этом случае:
 

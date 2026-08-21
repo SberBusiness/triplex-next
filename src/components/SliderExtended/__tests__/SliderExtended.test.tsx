@@ -63,4 +63,92 @@ describe("SliderExtended", () => {
         const dot = await screen.findByRole("slider");
         await waitFor(() => expect(dot).toHaveStyle({ left: "80%" }));
     });
+
+    it("applies size class for LG size", () => {
+        const { container } = renderSliderExtended({ size: EComponentSize.LG });
+
+        expect(container.querySelector("[data-tx]")).toHaveClass("sliderExtended", "lg");
+    });
+
+    it("does not apply LG class for MD size", () => {
+        const { container } = renderSliderExtended({ size: EComponentSize.MD });
+
+        expect(container.querySelector("[data-tx]")).not.toHaveClass("lg");
+    });
+
+    it("applies disabled class to the slider and its parts", () => {
+        const { container } = renderSliderExtended({ disabled: true });
+
+        expect(container.querySelector("[data-tx]")).toHaveClass("disabled");
+        expect(screen.getByRole("slider")).toHaveClass("disabled");
+        expect(screen.getByRole("button")).toHaveClass("disabled");
+    });
+
+    it("merges className into the root element", () => {
+        const { container } = renderSliderExtended({ className: "custom-slider" });
+
+        expect(container.querySelector("[data-tx]")).toHaveClass("sliderExtended", "custom-slider");
+    });
+
+    it("passes rest attributes to the root element", () => {
+        const { container } = renderSliderExtended({ id: "slider-id", "aria-label": "Сумма" });
+        const sliderRoot = container.querySelector("[data-tx]");
+
+        expect(sliderRoot).toHaveAttribute("id", "slider-id");
+        expect(sliderRoot).toHaveAttribute("aria-label", "Сумма");
+    });
+
+    it("forwards ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        render(
+            <SliderExtended min={0} max={10} step={1} size={EComponentSize.MD} ref={ref}>
+                <SliderExtended.Rail />
+                <SliderExtended.Dot value={2} onChange={vi.fn()} />
+            </SliderExtended>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toHaveClass("sliderExtended");
+    });
+
+    it("renders nothing when step array is empty", () => {
+        const { container } = renderSliderExtended({ step: [] });
+
+        expect(container).toBeEmptyDOMElement();
+    });
+
+    it("builds steps from the step array", () => {
+        render(
+            <SliderExtended min={0} max={100} step={[0, 25, 50, 75, 100]} size={EComponentSize.MD}>
+                <SliderExtended.Rail />
+                <SliderExtended.Dot value={50} onChange={vi.fn()} />
+            </SliderExtended>,
+        );
+
+        expect(screen.getByRole("slider")).toHaveStyle({ left: "50%" });
+    });
+
+    it("removes unmounted dot from the slider state", () => {
+        const { rerender, container } = render(
+            <SliderExtended min={0} max={10} step={1} size={EComponentSize.MD}>
+                <SliderExtended.Rail />
+                <SliderExtended.Dot value={2} onChange={vi.fn()} />
+                <SliderExtended.Track />
+            </SliderExtended>,
+        );
+
+        expect(screen.getByRole("button")).toBeInTheDocument();
+
+        rerender(
+            <SliderExtended min={0} max={10} step={1} size={EComponentSize.MD}>
+                <SliderExtended.Rail />
+                <SliderExtended.Track />
+            </SliderExtended>,
+        );
+
+        // Track не рендерится, пока в слайдере нет ни одного ползунка.
+        expect(screen.queryByRole("button")).not.toBeInTheDocument();
+        expect(container.querySelector("[data-tx]")).toBeInTheDocument();
+    });
 });

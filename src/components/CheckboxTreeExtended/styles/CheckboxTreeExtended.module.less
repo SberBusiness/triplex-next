@@ -48,7 +48,7 @@
         transition: transform 0.3s ease;
         transform: rotate(0);
 
-        &:focus {
+        &:focus-visible {
             outline: 1px solid var(--triplex-next-Checkbox-BorderColor_Focus);
         }
     }
@@ -75,8 +75,7 @@
                 // .checkmarkIcon
                 & > span,
                 // .checkboxIcon
-                & > svg,
-                .checkboxTreeCheckbox {
+                & > svg {
                     top: 14px;
                 }
             }

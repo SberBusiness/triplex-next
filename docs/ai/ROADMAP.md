@@ -95,13 +95,13 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CardAction | ⬜ | ⬜ | ⬜ |
 | CardStatic | ⬜ | ⬜ | ⬜ |
 | CarouselExtended | ✅ | ✅ | ✅ |
-| Checkbox | ✅ | ✅ | ⬜ |
+| Checkbox | ✅ | ✅ | ✅ |
 | CheckboxTree | ⬜ | ✅ | ⬜ |
-| CheckboxTreeExtended | ⬜ | ✅ | ⬜ |
-| CheckboxXGroup | ✅ | ✅ | ⬜ |
-| CheckboxYGroup | ✅ | ✅ | ⬜ |
+| CheckboxTreeExtended | ✅ | ✅ | ✅ |
+| CheckboxXGroup | ✅ | ✅ | ✅ |
+| CheckboxYGroup | ✅ | ✅ | ✅ |
 | Chip | ✅ | ✅ | ✅ |
-| ChipGroup | ⬜ | ✅ | ⬜ |
+| ChipGroup | ✅ | ✅ | ✅ |
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
 | CollapsibleTreeExtended | ✅ | ✅ | ✅ |
@@ -179,7 +179,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SelectField | ⬜ | ⬜ | ⬜ |
 | Skeleton | ⬜ | ✅ | ⬜ |
 | Slider | ⬜ | ⬜ | ⬜ |
-| SliderExtended | ⬜ | ⬜ | ⬜ |
+| SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ⬜ | ⬜ | ⬜ |
 | SmallInput | ⬜ | ⬜ | ⬜ |
 | Spoiler | ⬜ | ⬜ | ⬜ |
@@ -192,7 +192,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SwipeableArea | ⬜ | ⬜ | ⬜ |
 | TableBasic | ⬜ | ⬜ | ⬜ |
 | Tabs | ⬜ | ⬜ | ⬜ |
-| TabsExtended | ⬜ | ⬜ | ⬜ |
+| TabsExtended | ✅ | ✅ | ✅ |
 | TabsLine | ⬜ | ⬜ | ⬜ |
 | Tag | ⬜ | ⬜ | ⬜ |
 | TagColor | ⬜ | ⬜ | ⬜ |
@@ -208,9 +208,10 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Caption | ✅ | ✅ | ✅ |
 | CodeText | ✅ | ✅ | ✅ |
 | TriggerClickOnKeyDownEvent | ⬜ | ⬜ | ⬜ |
-| UnorderedList | ⬜ | ⬜ | ⬜ |
+| UnorderedList | ✅ | ✅ | ✅ |
+| UnorderedListExtended | ✅ | ✅ | ✅ |
 | UploadZone | ⬜ | ⬜ | ⬜ |
-| WindowResizeListener | ⬜ | ⬜ | ⬜ |
+| WindowResizeListener | ✅ | ✅ | ✅ |
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

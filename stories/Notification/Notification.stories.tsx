@@ -60,7 +60,7 @@ export const Playground: StoryObj<INotificationPlaygroundProps> = {
         showContent: true,
         contentText: "This message provides context or highlights important information to note.",
         showList: false,
-        listItems: "List item text 1;List item text 2;List item text 3",
+        listItems: "List item text;List item text;List item text",
         showFooter: false,
         showClose: true,
         showTime: false,

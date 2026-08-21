@@ -1,20 +1,14 @@
 import React from "react";
-import clsx from "clsx";
-import { IUnorderedListItemProps } from "@sberbusiness/triplex-next/components/UnorderedList/types";
-import { Text, ETextSize } from "@sberbusiness/triplex-next/components/Typography";
-import styles from "./styles/UnorderedListItem.module.less";
+import { IUnorderedListItemProps } from "./types";
+import { UnorderedListExtended } from "../UnorderedListExtended";
 
-/** Элемент маркированного списка. */
+/** Элемент маркированного списка. Маркер рендерится перед содержимым элемента. */
 export const UnorderedListItem = React.forwardRef<HTMLLIElement, IUnorderedListItemProps>(
-    ({ className, ...restProps }, ref) => (
-        <Text
-            className={clsx(styles.unorderedListItem, className)}
-            size={ETextSize.B3}
-            tag="li"
-            {...restProps}
-            data-tx={process.env.npm_package_version}
-            ref={ref}
-        />
+    ({ children, marker, ...restProps }, ref) => (
+        <UnorderedListExtended.Item {...restProps} ref={ref}>
+            <UnorderedListExtended.Item.Marker>{marker}</UnorderedListExtended.Item.Marker>
+            {children}
+        </UnorderedListExtended.Item>
     ),
 );
 

@@ -48,13 +48,15 @@ version: "1.0"
 | `bulk` | `boolean` | `false` | Влияет на отображаемую иконку (используется bulk-иконка). Видимость checkmark всё равно определяется состоянием `checked`. |
 | `size` | `EComponentSize` | `EComponentSize.MD` | Размер: `SM` / `MD` / `LG`. |
 | `children` | `React.ReactNode` | — | Контент лейбла рядом с чекбоксом. Если `children` нет — класс `.nonempty` не применяется. |
-| `labelAttributes` | `React.LabelHTMLAttributes<HTMLLabelElement>` | — | Дополнительные HTML-атрибуты для корневого `<label>` (например, `className`, `onFocus`). |
+| `labelAttributes` | `React.LabelHTMLAttributes<HTMLLabelElement>` | — | Дополнительные HTML-атрибуты для корневого `<label>` (например, `className`, `onFocus`). `labelAttributes.className` объединяется с `className` компонента, а не заменяет его. |
 | `...inputAttributes` | `Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" \| "size">` | — | Все стандартные атрибуты `<input type="checkbox">` (включая `name`, `onChange`, `aria-label` и т.д.). |
 
 ### Ограничения использования
 
 - DOM-структура фиксирована: корневой `<label>` → `<input type="checkbox">` → декоративные `<span>` / `<svg>` для отрисовки фона и галочки.
 - `ref` прокидывается на внутренний `<input type="checkbox">`.
+- `className` попадает на корневой `<label>`, все остальные props (`...inputAttributes`) — на `<input>`.
+- Размер задаёт классы только на `<label>`: внутренние элементы (`input`, фон, галочка) стилизуются от него как потомки.
 
 ---
 
@@ -84,6 +86,7 @@ version: "1.0"
 - `forwardRef` на компоненте обязателен и должен указывать на `<input>`.
 - Корневой DOM-элемент компонента — `<label>`, внутри которого находится `<input>`.
 - `className` и `size` — публичные части внешнего контрактного API: не менять семантику без согласования.
+- Ховер-стили объявляются только внутри `@media (hover: hover)`: на тач-устройствах браузер эмулирует `:hover` при тапе и не снимает его, из-за чего чекбокс залипал бы в состоянии ховера.
 
 ---
 
@@ -113,6 +116,7 @@ version: "1.0"
 | `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль основных props |
 | `Default` | `DefaultExample.tsx` | Минимальное использование |
 | `Sizes` | `SizesExample.tsx` | Размеры `SM` / `MD` / `LG` |
+| `VisualTests` | `VisualTestsExample.tsx` | Состояния для visual regression: размеры `SM` / `MD` / `LG` в `checked` и `checked bulk` |
 
 ---
 
@@ -122,3 +126,5 @@ version: "1.0"
 |---|---|
 | 2026-04-16 | Приведение `Checkbox` к AI-ready: соблюдены правила `docs/ai/codestyle.md`, добавлена AI-документация и unit-тест на передачу `className` корневому `label`. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убрана секция «Ключевые особенности реализации» (содержимое перенесено в `Ограничения использования`), переставлены секции (Accessibility после Инвариантов), добавлена колонка `Example file`. |
+| 2026-08-14 | AI-рефакторинг: выбор иконки галочки через компонент-переменную вместо render-функции, с `<input>` убран не влияющий на стили класс размера, JSDoc на props дополнен дефолтами, расширено unit-покрытие (размеры, `bulk`, `labelAttributes`, `onChange`, `disabled`). |
+| 2026-08-20 | Исправлено залипание ховера на тач-устройствах: правила `:hover` в `Checkbox.module.less` обёрнуты в `@media (hover: hover)`. |

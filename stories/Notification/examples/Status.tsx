@@ -14,7 +14,13 @@ export const Status = () => (
                     <Notification.Body.Content>
                         This message provides context or highlights important information to note.
                     </Notification.Body.Content>
-                    <Notification.Body.List values={Array.from({ length: 3 }, () => "List item text;")} />
+                    <Notification.Body.List
+                        items={[
+                            { key: "1", children: "List item text" },
+                            { key: "2", children: "List item text" },
+                            { key: "3", children: "List item text" },
+                        ]}
+                    />
                 </Notification.Body>
                 <Notification.Close onClick={() => {}} />
             </Notification>
@@ -30,7 +36,13 @@ export const Status = () => (
                     <Notification.Body.Content>
                         This message provides context or highlights important information to note.
                     </Notification.Body.Content>
-                    <Notification.Body.List values={Array.from({ length: 3 }, () => "List item text;")} />
+                    <Notification.Body.List
+                        items={[
+                            { key: "1", children: "List item text" },
+                            { key: "2", children: "List item text" },
+                            { key: "3", children: "List item text" },
+                        ]}
+                    />
                 </Notification.Body>
                 <Notification.Close onClick={() => {}} />
             </Notification>
@@ -46,7 +58,13 @@ export const Status = () => (
                     <Notification.Body.Content>
                         This message provides context or highlights important information to note.
                     </Notification.Body.Content>
-                    <Notification.Body.List values={Array.from({ length: 3 }, () => "List item text;")} />
+                    <Notification.Body.List
+                        items={[
+                            { key: "1", children: "List item text" },
+                            { key: "2", children: "List item text" },
+                            { key: "3", children: "List item text" },
+                        ]}
+                    />
                 </Notification.Body>
                 <Notification.Close onClick={() => {}} />
             </Notification>

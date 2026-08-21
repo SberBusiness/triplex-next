@@ -5,7 +5,7 @@ export const OneLineExample = () => {
     const [selected, setSelected] = useState<number | null>(null);
     const chips = Array.from({ length: 20 }, (_, i) => `Item ${i + 1}`);
     return (
-        <ChipGroup oneLine style={{ maxWidth: 360, whiteSpace: "nowrap", overflowX: "auto" }}>
+        <ChipGroup oneLine style={{ maxWidth: 360 }}>
             {chips.map((label, index) => (
                 <Chip
                     key={label}

@@ -15,7 +15,10 @@ export interface IDatePickerExtendedDropdownProps extends IDropdownProps {
     focusTrapProps?: FocusTrapProps;
 }
 
-/** Выпадающее меню компонента DatePickerExtended. */
+/**
+ * Выпадающее меню компонента DatePickerExtended.
+ * Внутренний компонент, не экспортируется через barrel.
+ */
 export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDatePickerExtendedDropdownProps>(
     (props, ref) => {
         const { children, targetRef, setOpened, renderHeaderTarget, renderCalendar, focusTrapProps, ...rest } = props;
@@ -48,8 +51,12 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
                     {...focusTrapProps}
                     focusTrapOptions={{
                         clickOutsideDeactivates: true,
-                        fallbackFocus: targetRef.current!,
-                        initialFocus: !mouseUsedRef.current && undefined,
+                        // Функция, а не элемент: targetRef на момент рендера может быть ещё не заполнен.
+                        // document.body здесь означает «фокус остаётся снаружи ловушки», а не «фокус на body»:
+                        // body не фокусируем, но focus-trap нужен непустой fallback, иначе он бросает исключение.
+                        fallbackFocus: () => targetRef.current ?? document.body,
+                        // false — не переводить фокус внутрь ловушки при открытии мышью.
+                        initialFocus: mouseUsedRef.current ? false : undefined,
                         returnFocusOnDeactivate: !mouseUsedRef.current,
                         ...focusTrapProps?.focusTrapOptions,
                     }}

@@ -54,6 +54,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Проведён AI-рефакторинг.
 
+**DatePickerExtended**
+
+- Исправлено: `yesterdayButtonProps` и `tomorrowButtonProps` доходят до календаря — раньше кнопки «Вчера» и «Завтра» не появлялись, а сами свойства оседали атрибутами на корневом элементе. Это же исправление действует в `DateField`, `MonthYearField` и `ChipDatePicker`.
+- Исправлено: React больше не предупреждает в консоли о нераспознанном свойстве `adaptiveMode` — оно перестало пробрасываться на корневой элемент. Адаптивный режим календаря компонент по-прежнему определяет сам.
+
 **LightBox**
 
 - Исправлен баг, когда в состоянии `loading` `LightBox.TopOverlay` перекрывался `LoaderScreen`.

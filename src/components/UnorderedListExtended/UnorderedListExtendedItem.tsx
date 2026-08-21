@@ -20,7 +20,11 @@ const UnorderedListExtendedItemRoot = React.forwardRef<HTMLLIElement, IUnordered
 
 UnorderedListExtendedItemRoot.displayName = "UnorderedListExtendedItem";
 
-/** Элемент расширенного маркированного списка. */
+/**
+ * Элемент расширенного маркированного списка. Рендерится как Text с tag="li",
+ * размер текста по умолчанию — ETextSize.B3. Маркер добавляется явно,
+ * первым потомком — UnorderedListExtended.Item.Marker.
+ */
 export const UnorderedListExtendedItem = Object.assign(UnorderedListExtendedItemRoot, {
     Marker: UnorderedListExtendedItemMarker,
 });

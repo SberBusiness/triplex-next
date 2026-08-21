@@ -1,4 +1,4 @@
-import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
+import { Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { TreeView } from "@sberbusiness/triplex-next";
@@ -28,8 +28,9 @@ const meta = {
                 <>
                     <Title />
                     <Description />
-                    <Heading>Props</Heading>
-                    <ArgTypes of={TreeView} />
+                    {/* Блок Props + ArgTypes опущен: у TreeView нет собственных props, кроме children
+                        и стандартных HTML-атрибутов (docs/ai/stories-guide.md, «Исключение для компонентов без props»).
+                        Playground при этом оставлен — он показывает композицию и вложенность, чего статичные примеры не дают. */}
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -122,7 +123,7 @@ export const KeyboardNavigation: Story = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Перемещение активной ноды стрелками вверх/вниз. Активной нода становится по фокусу, дальше стрелки двигают `activeNode` по дереву и спускаются только в раскрытые ветки. Подсветку активной ноды рисует потребитель по provide-prop `activeNode`.",
+                story: "Перемещение активной ноды стрелками вверх/вниз. Активной нода становится по фокусу, дальше стрелки двигают `activeNode` по дереву и спускаются только в раскрытые ветки. Исключение: `ArrowUp` с самой первой ноды уходит на последнего потомка последней ветки независимо от её состояния — известное pre-existing отклонение, описано в `TreeView-ai.md`. Подсветку активной ноды рисует потребитель по provide-prop `activeNode`.",
             },
             source: { code: KeyboardNavigationSource, language: "tsx" },
         },

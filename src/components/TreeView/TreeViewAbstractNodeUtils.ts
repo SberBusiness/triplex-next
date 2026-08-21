@@ -160,6 +160,8 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
             else {
                 let lastChild = getLastChildNode(parentNode);
 
+                // Отклонение (pre-existing): спуск идет без проверки getOpened(), в отличие от цикла ниже,
+                // поэтому активной может стать нода внутри свернутой ветки. Подробности - в TreeView-ai.md.
                 while (lastChild.getChildren().length > 0) {
                     lastChild = getLastChildNode(lastChild);
                 }

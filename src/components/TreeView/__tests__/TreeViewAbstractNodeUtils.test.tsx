@@ -32,6 +32,15 @@ const createTree = () => {
     return { root, a, a1, a2, b, c, c1 };
 };
 
+/** Нода, которая знает про родителя, но в его children не попала - fallback-ветка поиска индекса среди сиблингов. */
+const createDetachedNode = (parentNode: TreeViewAbstractNode) => {
+    const detached = new TreeViewAbstractNode({ id: "detached" });
+
+    detached.setParent(parentNode);
+
+    return detached;
+};
+
 describe("TreeViewAbstractNodeUtils", () => {
     describe("getNode", () => {
         it("Находит ноду по id на любом уровне вложенности", () => {
@@ -91,17 +100,18 @@ describe("TreeViewAbstractNodeUtils", () => {
 
         it("Ноду, которой нет среди детей родителя, трактует как первую", () => {
             const { a, a2 } = createTree();
-            const detached = new TreeViewAbstractNode({ id: "detached" });
 
-            // Нода знает про родителя, но в его children не попала.
-            detached.setParent(a);
-
-            expect(TreeViewAbstractNodeUtils.getNextSiblingNode(detached)).toBe(a2);
-            expect(TreeViewAbstractNodeUtils.getPrevSiblingNode(detached)).toBeUndefined();
+            expect(TreeViewAbstractNodeUtils.getNextSiblingNode(createDetachedNode(a))).toBe(a2);
         });
     });
 
     describe("getPrevSiblingNode", () => {
+        it("Ноду, которой нет среди детей родителя, трактует как первую", () => {
+            const { a } = createTree();
+
+            expect(TreeViewAbstractNodeUtils.getPrevSiblingNode(createDetachedNode(a))).toBeUndefined();
+        });
+
         it("Возвращает предыдущую ноду того же уровня", () => {
             const { b, c } = createTree();
 
@@ -181,6 +191,8 @@ describe("TreeViewAbstractNodeUtils", () => {
         it("Первая нода дерева: предыдущая - последняя нода дерева", () => {
             const { a, c1 } = createTree();
 
+            // Известное pre-existing отклонение: эта ветка спускается к последнему потомку, не проверяя opened
+            // (c свёрнута, но возвращается c1). Тест фиксирует текущее поведение, а не желаемое, - см. TreeView-ai.md.
             expect(TreeViewAbstractNodeUtils.getPrevNode(a)).toBe(c1);
         });
     });

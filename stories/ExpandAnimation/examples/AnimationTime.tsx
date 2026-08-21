@@ -9,6 +9,7 @@ interface IAnimationTimeItemProps {
 
 const AnimationTimeItem = ({ animationTime }: IAnimationTimeItemProps) => {
     const [expanded, setExpanded] = useState(true);
+    const contentId = `expand-animation-time-${animationTime}`;
 
     return (
         <div style={{ maxWidth: 480 }}>
@@ -17,12 +18,14 @@ const AnimationTimeItem = ({ animationTime }: IAnimationTimeItemProps) => {
             <Button
                 theme={EButtonTheme.SECONDARY}
                 size={EComponentSize.MD}
+                aria-expanded={expanded}
+                aria-controls={contentId}
                 onClick={() => setExpanded((prev) => !prev)}
             >
                 {expanded ? "Свернуть" : "Развернуть"}
             </Button>
 
-            <ExpandAnimation expanded={expanded} animationTime={animationTime}>
+            <ExpandAnimation id={contentId} expanded={expanded} animationTime={animationTime}>
                 <Text tag="div" size={ETextSize.B1} style={{ paddingTop: 16 }}>
                     Скорость раскрытия задаётся свойством animationTime.
                 </Text>

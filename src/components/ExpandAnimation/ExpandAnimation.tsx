@@ -52,13 +52,21 @@ export const ExpandAnimation = React.forwardRef<HTMLDivElement, IExpandAnimation
         },
         ref,
     ) => {
-        const transitionStylesRef = useRef(createTransitionStyles());
+        // Ленивая инициализация: карта создаётся один раз и дальше мутируется, поэтому
+        // пересоздавать её на каждом рендере нельзя — потерялась бы измеренная высота.
+        const transitionStylesRef = useRef<Record<TransitionStatus, React.CSSProperties> | null>(null);
+
+        if (transitionStylesRef.current === null) {
+            transitionStylesRef.current = createTransitionStyles();
+        }
+
+        const transitionStyles = transitionStylesRef.current;
         const nodeRef = useRef<HTMLDivElement | null>(null);
 
         const handleEnter = (appearing: boolean) => {
             if (nodeRef.current) {
                 // Высота контента измеряется до отрисовки фазы entering — иначе анимировать не от чего.
-                transitionStylesRef.current.entering.height = nodeRef.current.scrollHeight;
+                transitionStyles.entering.height = nodeRef.current.scrollHeight;
             }
 
             onStart?.();
@@ -114,7 +122,7 @@ export const ExpandAnimation = React.forwardRef<HTMLDivElement, IExpandAnimation
                         className={clsx(styles.expandAnimation, className)}
                         style={{
                             transitionDuration: animationTime + "ms",
-                            ...transitionStylesRef.current[state],
+                            ...transitionStyles[state],
                             ...style,
                         }}
                         {...rest}

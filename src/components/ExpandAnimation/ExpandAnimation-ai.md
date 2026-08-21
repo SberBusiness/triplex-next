@@ -183,7 +183,7 @@ Tab и не читается скринридером. Во время аним�
 | `Default` | `Default.tsx` | Управляемое раскрытие кнопкой со связкой `aria-expanded` / `aria-controls` |
 | `Animation time` | `AnimationTime.tsx` | Длительности 100 / 300 / 1000 мс |
 | `Callbacks` | `Callbacks.tsx` | `onStart` / `onEnd` как индикатор идущей анимации |
-| `VisualTests` | `VisualTestsExample.tsx` | Развёрнутое и свёрнутое состояние в одном кадре — для baseline-скриншотов |
+| `VisualTests` | `VisualTests.tsx` | Развёрнутое и свёрнутое состояние в одном кадре — для baseline-скриншотов |
 
 ---
 

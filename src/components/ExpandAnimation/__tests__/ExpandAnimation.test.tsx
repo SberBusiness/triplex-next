@@ -376,4 +376,41 @@ describe("ExpandAnimation", () => {
             expect(onExited).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe("Фиксация высоты перед сворачиванием", () => {
+        it("Should pin the current height in pixels before the collapse starts", () => {
+            // handleExit пишет высоту в DOM до вызова пользовательского onExit,
+            // поэтому спай видит уже зафиксированное значение. Без этой фиксации
+            // высота осталась бы auto и переход к 0 схлопнулся бы в один кадр.
+            let heightOnExit: string | undefined;
+            const onExit = vi.fn(() => {
+                heightOnExit = getContainer().style.height;
+            });
+
+            const { rerender } = render(
+                <ExpandAnimation
+                    expanded
+                    transitionProps={asTransitionProps({ onExit })}
+                    data-testid="expand-animation"
+                >
+                    Content
+                </ExpandAnimation>,
+            );
+
+            act(() => {
+                rerender(
+                    <ExpandAnimation
+                        expanded={false}
+                        transitionProps={asTransitionProps({ onExit })}
+                        data-testid="expand-animation"
+                    >
+                        Content
+                    </ExpandAnimation>,
+                );
+            });
+
+            expect(onExit).toHaveBeenCalledTimes(1);
+            expect(heightOnExit).toBe(`${CONTENT_HEIGHT}px`);
+        });
+    });
 });

@@ -21,7 +21,7 @@ const VisualTestCase = ({ title, expanded }: IVisualTestCaseProps) => (
     </div>
 );
 
-export const VisualTestsExample = () => (
+export const VisualTests = () => (
     <div style={{ display: "flex", alignItems: "flex-start", gap: 50, flexWrap: "wrap" }}>
         <VisualTestCase title="Развёрнут" expanded={true} />
         <VisualTestCase title="Свёрнут" expanded={false} />

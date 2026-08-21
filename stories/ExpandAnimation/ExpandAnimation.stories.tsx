@@ -10,7 +10,7 @@ import {
     Default as DefaultRender,
     DefaultSource,
     Playground as PlaygroundRender,
-    VisualTestsExample,
+    VisualTests as VisualTestsRender,
 } from "./examples";
 
 const meta = {
@@ -120,7 +120,7 @@ export const Callbacks: StoryObj<typeof ExpandAnimation> = {
 
 export const VisualTests: StoryObj<typeof ExpandAnimation> = {
     tags: ["!autodocs"],
-    render: VisualTestsExample,
+    render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
         docs: {

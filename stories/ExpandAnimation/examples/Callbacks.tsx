@@ -10,6 +10,8 @@ export const Callbacks = () => {
             <Button
                 theme={EButtonTheme.SECONDARY}
                 size={EComponentSize.MD}
+                aria-expanded={expanded}
+                aria-controls="expand-animation-callbacks"
                 onClick={() => setExpanded((prev) => !prev)}
             >
                 {expanded ? "Свернуть" : "Развернуть"}
@@ -19,7 +21,12 @@ export const Callbacks = () => {
                 Состояние: {animating ? "анимация идёт" : "анимация завершена"}
             </Text>
 
-            <ExpandAnimation expanded={expanded} onStart={() => setAnimating(true)} onEnd={() => setAnimating(false)}>
+            <ExpandAnimation
+                id="expand-animation-callbacks"
+                expanded={expanded}
+                onStart={() => setAnimating(true)}
+                onEnd={() => setAnimating(false)}
+            >
                 <Text tag="div" size={ETextSize.B1} style={{ paddingTop: 16 }}>
                     onStart вызывается в начале анимации, onEnd — в конце. Оба коллбэка срабатывают и при
                     разворачивании, и при сворачивании.

@@ -1,0 +1,18 @@
+.tree-view-default-example {
+    [role="treeitem"] {
+        cursor: default;
+    }
+
+    [role="treeitem"]:focus-visible > .tree-view-default-example-row {
+        box-shadow: var(--triplex-next-CollapsibleTree-Header_Shadow_Focus);
+    }
+
+    &-row {
+        padding: 12px;
+        border-radius: 8px;
+
+        &:hover {
+            background: var(--triplex-next-CollapsibleTree-Header_Background_Hover);
+        }
+    }
+}

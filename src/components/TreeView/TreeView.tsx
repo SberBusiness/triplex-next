@@ -17,6 +17,7 @@ import styles from "./styles/TreeView.module.less";
 
 /** Свойства TreeView. */
 export interface ITreeViewProps extends React.HTMLAttributes<HTMLUListElement> {
+    /** Ноды дерева — TreeView.Node (напрямую или через компоненты-обёртки над ним). */
     children: React.ReactNode;
 }
 
@@ -24,7 +25,7 @@ export interface ITreeViewProps extends React.HTMLAttributes<HTMLUListElement> {
 interface ITreeViewState {
     /**
      * Число обновлений абстрактного дерева.
-     * Используется для индикации изменения дереве т.к. изменение мутируемого объекта rootNode не вызывает триггер изменения контекста.
+     * Используется для индикации изменения дерева т.к. изменение мутируемого объекта rootNode не вызывает триггер изменения контекста.
      */
     updateCount: number;
 }
@@ -48,7 +49,6 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
     public static Group = TreeViewGroup;
 
     private readonly abstractRootNode: TreeViewAbstractNode;
-    private treeNode: HTMLUListElement | null = null;
 
     constructor(props: ITreeViewProps) {
         super(props);
@@ -85,12 +85,20 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
                     updateCount,
                 }}
             >
-                <ul className={clsx(styles.treeView, className)} role="tree" {...props} ref={this.setTreeDOMNode}>
+                <ul className={clsx(styles.treeView, className)} role="tree" {...props}>
                     {children}
                 </ul>
             </TreeViewContext.Provider>
         );
     }
+
+    /**
+     * Увеличивает счетчик обновлений абстрактного дерева.
+     * Значение попадает в контекст и сигнализирует дочерним нодам, что мутируемое дерево изменилось.
+     */
+    private incrementUpdateCount = () => {
+        this.setState(({ updateCount }) => ({ updateCount: updateCount + 1 }));
+    };
 
     /**
      * Обработка изменения контекста.
@@ -112,7 +120,7 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
         });
 
         if (isContextChanged) {
-            this.setState(({ updateCount: prevCount }) => ({ updateCount: prevCount++ }));
+            this.incrementUpdateCount();
         }
     };
 
@@ -120,32 +128,32 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
     private registerNode: TTreeViewContextRegisterNode = (node, parentNode, prevNode, nextNode) => {
         parentNode.addChild(node, prevNode, nextNode);
         this.updateTabIndexNodes();
-        this.setState(({ updateCount: prevCount }) => ({ updateCount: prevCount++ }));
+        this.incrementUpdateCount();
     };
 
     /** Удаляет ноду из родительской ноды. */
     private removeNode: TTreeViewContextRemoveNode = (node) => {
         node.getParent()?.removeChild(node);
         this.updateTabIndexNodes();
+        // Соседние ноды должны перерисоваться: после удаления у них могли измениться hasChildNodes и isLastNode.
+        this.incrementUpdateCount();
     };
 
     /** Установка флага активности ноды. */
     private setActiveNode: TTreeViewContextSetActiveNode = (node, active) => {
         TreeViewAbstractNodeUtils.setActiveNode(node, this.abstractRootNode, active);
-        this.setState(({ updateCount: prevCount }) => ({ updateCount: prevCount++ }));
+        this.incrementUpdateCount();
     };
 
     /** Установка флага opened ноды. */
     private setOpenedNode: TTreeViewContextSetOpenedNode = (node, opened) => {
         node.setOpened(opened);
-        this.setState(({ updateCount: prevCount }) => ({ updateCount: prevCount++ }));
+        this.incrementUpdateCount();
     };
 
     /** Возвращает AbstractNode по id. */
     private getNode: TTreeViewContextGetNode = (nodeId) =>
         TreeViewAbstractNodeUtils.getNode(nodeId, this.abstractRootNode);
-
-    private setTreeDOMNode = (DOMNode: HTMLUListElement) => (this.treeNode = DOMNode);
 
     /** Обработка нажатия на клавиш для навигации с клавиатуры. */
     private handleKeyDown = (event: KeyboardEvent) => {
@@ -157,15 +165,15 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
         if (EVENT_KEY_CODES.ARROW_DOWN === event.keyCode) {
             // Устанавливает активность следующей ноды.
             TreeViewAbstractNodeUtils.setActiveNextNode(this.abstractRootNode);
-            // Предотвращает скролл страницы.
-            event.preventDefault();
-            this.setState(({ updateCount: prevCount }) => ({ updateCount: prevCount++ }));
         } else if (EVENT_KEY_CODES.ARROW_UP === event.keyCode) {
             // Устанавливает активность предыдущей ноды.
             TreeViewAbstractNodeUtils.setActivePrevNode(this.abstractRootNode);
-            // Предотвращает скролл страницы.
-            event.preventDefault();
-            this.setState(({ updateCount: prevCount }) => ({ updateCount: prevCount++ }));
+        } else {
+            return;
         }
+
+        // Предотвращает скролл страницы.
+        event.preventDefault();
+        this.incrementUpdateCount();
     };
 }

@@ -1,0 +1,21 @@
+.tree-view-keyboard-example {
+    [role="group"] {
+        padding-left: 24px;
+    }
+
+    &-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 8px;
+
+        &.active {
+            background: var(--triplex-next-CollapsibleTree-Header_Background_Hover);
+        }
+    }
+
+    [role="treeitem"]:focus-visible > .tree-view-keyboard-example-row {
+        box-shadow: var(--triplex-next-CollapsibleTree-Header_Shadow_Focus);
+    }
+}

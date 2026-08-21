@@ -1,14 +1,10 @@
 import React from "react";
 import { TreeViewAbstractNode } from "./TreeViewAbstractNode";
 
-/**
- * Возвращаем AbstractNode по id.
- */
+/** Возвращает AbstractNode по id. */
 export type TTreeViewContextGetNode = (nodeId: string) => TreeViewAbstractNode | undefined;
 
-/**
- * Добавляем AbstractNode в AbstractTree. AbstractTree является AbstractNode.
- */
+/** Добавляет AbstractNode в AbstractTree. AbstractTree является AbstractNode. */
 export type TTreeViewContextRegisterNode = (
     node: TreeViewAbstractNode,
     parentNode: TreeViewAbstractNode,
@@ -16,69 +12,62 @@ export type TTreeViewContextRegisterNode = (
     nextNode?: TreeViewAbstractNode,
 ) => void;
 
-/**
- * Удаляет AbstractNode из AbstractTree.
- */
+/** Удаляет AbstractNode из AbstractTree. */
 export type TTreeViewContextRemoveNode = (node: TreeViewAbstractNode) => void;
 
-/**
- * Устанавливает флаг активности AbstractNode.
- */
+/** Устанавливает флаг активности AbstractNode. */
 export type TTreeViewContextSetActiveNode = (node: TreeViewAbstractNode, active: boolean) => void;
 
-/**
- * Устанавливает флаг opened AbstractNode.
- */
+/** Устанавливает флаг opened AbstractNode. */
 export type TTreeViewContextSetOpenedNode = (node: TreeViewAbstractNode, opened: boolean) => void;
 
-/**
- * Контекст TreeView.
- *
- * @param {number} updateCount - Число обновлений абстрактного дерева. Используется для индикации изменения дерева т.к. изменение мутируемого объекта rootNode не вызывает триггер изменения контекста.
- * @param {TTreeViewContextGetNode} getNode - Возвращает TreeViewAbstractNode по id.
- * @param {TreeViewAbstractNode} parentNode - Родительская TreeViewAbstractNode.
- * @param {TreeViewAbstractNode | null} rootNode - Рутовая нода абстрактного дерева.
- * @param {TTreeViewContextRegisterNode} registerNode - Добавляет TreeViewAbstractNode в AbstractTree. AbstractTree также является AbstractNode.
- * @param {TTreeViewContextSetActiveNode} setActiveNode - Устанавливает флаг активности AbstractNode.
- * @param {TTreeViewContextSetOpenedNode} setOpenedNode - Устанавливает флаг раскрытости AbstractNode.
- */
+/** Контекст TreeView. */
 export interface ITreeViewContext {
+    /**
+     * Число обновлений абстрактного дерева.
+     * Используется для индикации изменения дерева т.к. изменение мутируемого объекта rootNode не вызывает триггер изменения контекста.
+     */
     updateCount: number;
+    /** Возвращает TreeViewAbstractNode по id. */
     getNode: TTreeViewContextGetNode;
+    /** Родительская TreeViewAbstractNode. Каждая нода переопределяет ее для своих детей. */
     parentNode: TreeViewAbstractNode;
+    /** Рутовая нода абстрактного дерева. */
     rootNode: TreeViewAbstractNode | null;
+    /** Добавляет TreeViewAbstractNode в AbstractTree. AbstractTree также является AbstractNode. */
     registerNode: TTreeViewContextRegisterNode;
+    /** Удаляет TreeViewAbstractNode из AbstractTree. */
     removeNode: TTreeViewContextRemoveNode;
+    /** Устанавливает флаг активности AbstractNode. */
     setActiveNode: TTreeViewContextSetActiveNode;
+    /** Устанавливает флаг раскрытости AbstractNode. */
     setOpenedNode: TTreeViewContextSetOpenedNode;
 }
 
-// Начальное значение контекста. Здесь нужно только для типизации и будет заполнено в @sber-business/triplex/components/TreeView/TreeView.tsx
-export const initialTreeContext = {
-    /** eslint-disable @typescript-eslint/no-empty-function */
-    getNode: (): TreeViewAbstractNode | undefined => undefined,
+/**
+ * Начальное значение контекста.
+ * Используется только для типизации createContext, реальные значения устанавливает TreeView.
+ */
+export const initialTreeContext: ITreeViewContext = {
+    getNode: () => undefined,
     parentNode: new TreeViewAbstractNode({ id: "contextNode" }),
-    registerNode: (): void => {},
-    removeNode: (): void => {},
+    registerNode: () => {},
+    removeNode: () => {},
     rootNode: null,
-    setActiveNode: (): void => {},
-    setOpenedNode: (): void => {},
+    setActiveNode: () => {},
+    setOpenedNode: () => {},
     updateCount: 0,
-    /** eslint-enable @typescript-eslint/no-empty-function */
 };
 
 export const TreeViewContext = React.createContext<ITreeViewContext>(initialTreeContext);
 
-/**
- * Свойства контекста, добавляемые WithTreeViewContext.
- */
+/** Свойства контекста, добавляемые withTreeViewContext. */
 export interface IWithTreeViewContextProps {
+    /** Контекст TreeView. Подставляется HOC-ом withTreeViewContext, снаружи передавать не нужно. */
     treeViewContext: ITreeViewContext;
 }
 
-/**
- * HOC, предоставляющий TreeViewContext.
- */
+/** HOC, предоставляющий TreeViewContext через prop treeViewContext. */
 export function withTreeViewContext<T extends IWithTreeViewContextProps>(
     WrapperComponent: React.ComponentType<T>,
 ): React.ComponentType<Omit<T, keyof IWithTreeViewContextProps>> {

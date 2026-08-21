@@ -234,6 +234,10 @@ jobs:
             git diff --cached --name-only
             exit 1
           fi
+          # Без префикса TRI-XXX: у Actions нет доступа к Linear, номер задачи
+          # взять неоткуда, а выдумывать нельзя. Исключение зафиксировано
+          # в docs/ai/commits.md; связь с трекером даёт skill release-auto,
+          # он заводит задачу по итогам прогона.
           git commit -m "Подготовка релиза ${V0}"
           git push origin HEAD:release-0
 

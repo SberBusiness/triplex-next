@@ -17,6 +17,11 @@ const meta = {
     component: ExpandAnimation,
     parameters: {
         layout: "padded",
+        // Компонент не имеет собственного визуального интерфейса: его LESS — это только
+        // transition по height, а свёрнутое состояние имеет нулевую высоту и visibility: hidden.
+        // На скриншот попадает лишь обвязка примеров, поэтому скриншот-тесты для набора не нужны —
+        // поведение покрыто unit-тестами.
+        testRunner: { skip: true },
         docs: {
             description: {
                 component:
@@ -65,7 +70,6 @@ export const Playground: StoryObj<typeof ExpandAnimation> = {
         },
     },
     parameters: {
-        testRunner: { skip: true },
         controls: { include: ["expanded", "animationTime"] },
         docs: {
             canvas: { sourceState: "none" },

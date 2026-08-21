@@ -7,16 +7,6 @@ on:
 
   # Путь для локальных агентов и CLI: тот же прогон, но релиз создаётся
   # внутри workflow, после успешной публикации.
-  #
-  # Из облачной routine этот путь НЕ работает: прокси облачных сессий
-  # запрещает любые триггеры релиза — `gh release create`, диспатч этого
-  # workflow, repository_dispatch, создание/push тегов (TRI-117, зонд
-  # 2026-08-14; диспатч нерелизных workflow проходит). Облако готовит
-  # релиз и передаёт публикацию человеку.
-  #
-  # Почему не отдельный workflow «создать релиз»: релиз, созданный через
-  # GITHUB_TOKEN, по правилам GitHub не триггерит другие workflow — этот
-  # файл просто не запустился бы. Поэтому создание и публикация живут вместе.
   workflow_dispatch:
     inputs:
       tag:
@@ -31,8 +21,39 @@ on:
         type: boolean
         default: false
       notes:
-        description: "Текст release notes в markdown"
+        description: "Текст release notes; пусто — собрать из MDX в репозитории"
+        required: false
+
+  # Автоматический путь: вызывается из release-weekly.yml как reusable workflow.
+  #
+  # Почему вызов, а не создание релиза снаружи: событие `release: published`,
+  # порождённое GITHUB_TOKEN, по правилам GitHub не запускает другие workflow —
+  # цепочка «создать релиз → опубликовать» молча оборвалась бы. Здесь публикация
+  # и создание релиза живут в одном прогоне, поэтому от события ничего не зависит.
+  #
+  # Из облачной сессии Claude этот workflow не запустить: прокси режет write-пути
+  # api.github.com (`gh release create`, `gh workflow run`, push тегов) — см.
+  # TRI-119. Поэтому расписание держит сам GitHub, а не routine.
+  workflow_call:
+    inputs:
+      tag:
+        description: "Версия и тег релиза"
         required: true
+        type: string
+      target:
+        description: "Ветка, на которую вешается тег"
+        required: true
+        type: string
+      make_latest:
+        description: "Пометить релиз как Latest (только для 1.x)"
+        required: false
+        default: false
+        type: boolean
+      notes:
+        description: "Текст release notes; пусто — собрать из MDX в репозитории"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write   # нужно для создания релиза и загрузки ассетов
@@ -80,13 +101,12 @@ jobs:
 
       # При `release: published` GITHUB_SHA — коммит, на который повешен тег,
       # и checkout по умолчанию взял бы именно его.
-      # При `workflow_dispatch` диспатч идёт с `--ref main`, поэтому ветку
-      # для сборки надо задать явно — иначе для 0.x собрался бы main.
+      # При `workflow_dispatch` и `workflow_call` ветку для сборки задаёт вход
+      # `target` — иначе для 0.x собрался бы main.
       #
-      # Важно: определение workflow при dispatch берётся из `--ref`, а на пути
-      # `release: published` — из ветки по умолчанию. Копия этого файла
-      # в `release-0` устаревшая и в обоих путях не используется; она подтянется
-      # при следующем перелитии.
+      # Определение самого workflow при вызове берётся из ветки вызывающего,
+      # то есть из main. Копия этого файла в `release-0` не используется ни на
+      # одном пути и подтянется при следующем перелитии.
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.target || github.sha }}
@@ -149,7 +169,7 @@ jobs:
           # сначала 0.Y.0, следом 1.Y.0 (см. .agents/skills/release/SKILL.md).
           npm publish --access public
 
-      # Релиз создаётся только на пути workflow_dispatch и только после того,
+      # Релиз создаётся на путях workflow_dispatch и workflow_call — и только после того,
       # как пакет реально ушёл в npm: упавшая сборка или публикация не оставят
       # висящего релиза. Обратное не гарантируется — заливка ассетов и деплой
       # идут уже после создания, и их падение оставит релиз без dist.zip; такой
@@ -159,14 +179,33 @@ jobs:
       # Значения идут через env, а не через ${{ }} прямо в run: их задаёт тот,
       # кто запускает workflow, и подстановка в shell была бы точкой инъекции.
       - name: Create GitHub Release
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name != 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TARGET: ${{ inputs.target }}
           NOTES: ${{ inputs.notes }}
           MAKE_LATEST: ${{ inputs.make_latest }}
         run: |
-          printf '%s' "$NOTES" > release-notes.md
+          # Пустой notes — собрать из MDX рядом, по канону
+          # .agents/skills/release/SKILL.md § «Преобразование MDX → release notes».
+          # Так вызывающему не нужно тащить многокилобайтный текст через входы.
+          if [ -n "${NOTES}" ]; then
+            printf '%s' "${NOTES}" > release-notes.md
+          else
+            case "${RELEASE_TAG}" in
+              0.*) MDX="stories/release-notes/v0/${RELEASE_TAG}.mdx" ;;
+              1.*) MDX="stories/release-notes/v1/${RELEASE_TAG}.mdx" ;;
+            esac
+            if [ ! -f "${MDX}" ]; then
+              echo "❌ notes не переданы, а ${MDX} не найден — release notes собрать не из чего."
+              exit 1
+            fi
+            node scripts/releaseNotesMd.js "${MDX}" > release-notes.md
+          fi
+          if [ ! -s release-notes.md ]; then
+            echo "❌ release notes пустые — публиковать релиз с пустым описанием нельзя."
+            exit 1
+          fi
           if [ "${MAKE_LATEST}" = "true" ]; then LATEST_FLAG="--latest"; else LATEST_FLAG="--latest=false"; fi
           gh release create "${RELEASE_TAG}" --target "${TARGET}" --title "${RELEASE_TAG}" \
             "${LATEST_FLAG}" --notes-file release-notes.md

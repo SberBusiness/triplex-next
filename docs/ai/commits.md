@@ -56,11 +56,14 @@ TRI-21-alert-ai-ready
 `docs/human/release.md`. Прямой push в `release-0` проверяется CI:
 `ci.yml` триггерится на `push: branches: [release-0]`.
 
-**Единственное исключение для агента** — релизный коммит `release-react17`
-(бамп версии + release notes): он тоже пушится в `release-0` напрямую, без
-PR. Прогон CI на него стартует, но дождаться его нельзя — GitHub Release
-создаётся сразу после push. Поэтому исключение компенсируется обязательными
-локальными гейтами (`tsc`, `test-unit`, `build`).
+**Единственное исключение** — релизный коммит (бамп версии + release notes):
+он тоже попадает в `release-0` напрямую, без PR. В еженедельном релизе его
+делает [`release-weekly.yml`](../../.github/workflows/release-weekly.yml),
+при ручном выпуске — skill `release-react17`. Прогон CI на этот коммит
+стартует, но дождаться его нельзя: релиз создаётся сразу после push. Поэтому
+исключение компенсируется гейтами перед пушем — `npm run test-unit`
+и `npm run build` (последний в `prebuild` гоняет `tsc -p tsconfig.build.json`;
+полный `tsc` гейтом быть не может — он даёт давние ошибки в `stories/`).
 
 ---
 
@@ -217,17 +220,30 @@ fi
   permitted for this session type / through this proxy» (у fine-grained
   PAT было бы «…by personal access token»).
 
-Что прокси **разрешает** из облака: push в ветки, создание и мерж PR,
-комментарии, чтение Actions, диспатч нерелизных workflow (например,
-`visual-update.yml` — подтверждено прогонами). Что **запрещает** (зонд
-TRI-117, 2026-08-14): создание релизов, диспатч `release.yml`,
-`repository_dispatch`, создание, push и удаление тегов, удаление веток —
-блокируется публикация релизов любым маршрутом. Поэтому публикация релизов из
-облака невозможна — облачный прогон готовит релиз и передаёт публикацию
-человеку (см. `.agents/skills/release-auto/SKILL.md`). Диагностический
-зонд права на диспатч: POST на
-`actions/workflows/release.yml/dispatches` с несуществующим `ref` —
-`422 No ref found` означает «право есть», `403` — «нет».
+Что доступно из облака — проверено зондами TRI-117 (2026-08-14) и TRI-119
+(2026-08-21):
+
+| Операция | Из облака |
+|---|---|
+| `git push` ветки, включая защищённый `main` | ✅ |
+| Создание и мерж PR, комментарии | ✅ |
+| Чтение REST и Actions | ✅ |
+| Диспатч нерелизных workflow (`visual-update.yml`) | ✅ |
+| `git push` тега | ❌ `RPC failed; HTTP 403` |
+| `POST /git/refs`, `PATCH /git/refs/heads/*` | ❌ |
+| `gh release create` | ❌ |
+| `gh workflow run release.yml`, `repository_dispatch` | ❌ |
+| Удаление веток и тегов | ❌ |
+
+Отказы приходят с текстом `Write access to this GitHub API path is not
+permitted through this proxy` — это ограничение прокси, а не прав токена
+и не настроек репозитория. Менять branch protection бесполезно.
+
+**Следствие для релиза:** выпустить его из облачной сессии нельзя ни одним
+маршрутом. Поэтому механика релиза живёт в GitHub Actions
+(`.github/workflows/release-weekly.yml`), расписание держит сам GitHub, а
+за облачной routine остаётся отчёт — см.
+`.agents/skills/release-auto/SKILL.md`.
 
 ---
 

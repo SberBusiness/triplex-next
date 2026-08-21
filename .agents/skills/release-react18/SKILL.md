@@ -1,6 +1,6 @@
 ---
 name: release-react18
-description: React 18-релиз triplex-next (1.Y.0) — вторая половина выпуска: бамп версии в ветке prerelease-X.Y.0, заготовка release notes на следующую версию, PR в main, мерж по зелёному CI (с учётом branch protection), GitHub Release, публикация в npm, после которой dist-tags.latest встаёт на 1.Y.0. Под-skill для release; запускается ПОСЛЕ подтверждённой публикации 0.Y.0. В unattended (облако) публикация запрещена прокси — остановка с готовой командой для человека.
+description: React 18-релиз triplex-next (1.Y.0) — вторая половина выпуска: бамп версии в ветке prerelease-X.Y.0, заготовка release notes на следующую версию, PR в main, мерж по зелёному CI (с учётом branch protection), GitHub Release, публикация в npm, после которой dist-tags.latest встаёт на 1.Y.0. Под-skill для release; запускается ПОСЛЕ подтверждённой публикации 0.Y.0. Ручной путь — еженедельный релиз делает release-weekly.yml по расписанию GitHub.
 ---
 
 # release-react18
@@ -40,13 +40,8 @@ description: React 18-релиз triplex-next (1.Y.0) — вторая поло�
 - `V0` — парная React 17-версия `0.Y.0`, выпущенная первой половиной.
   Нужна для гейта шага 1: без подтверждённой публикации `V0` релиз `1.Y.0`
   не создаётся.
-- `UNATTENDED` — признак запуска из routine, без человека у клавиатуры.
-  По умолчанию `false`. Влияет только на точки ожидания подтверждения —
-  см. «Unattended-режим». Гейты и стоп-условия одинаковы в обоих режимах.
-- `PUBLISH_MODE` — режим публикации в unattended: `full` (право на диспатч
-  `release.yml` подтверждено зондом [`release-auto`](../release-auto/SKILL.md))
-  или `prepare` (по умолчанию; облако — публикация запрещена прокси).
-  В интерактивном режиме не используется.
+
+
 
 ## 1. Валидация
 
@@ -65,13 +60,12 @@ npm view @sberbusiness/triplex-next@<V0> version
 - `VERSION` — валидный semver вида `1.Y.0`, минор ровно на 1 больше версии
   **в `origin/main`**. Сравнивать нужно именно с ней, а не с рабочей копией
   (`node -p "require('./package.json').version"`): на этом шаге чекаут ещё
-  не переключён и может стоять на произвольной ветке — в unattended-прогоне
-  это дало бы ложный стоп.
+  не переключён и может стоять на произвольной ветке.
 - Релиза/тега `VERSION` ещё нет (`gh release view` отвечает `release not found`).
 - **Парная `V0` уже опубликована в npm** — `npm view @sberbusiness/triplex-next@<V0> version`
   резолвится. Это гейт порядка: React 17-половина обязана выйти первой, иначе
-  `dist-tags.latest` останется на ней. **Исключений нет ни в одном режиме:**
-  нет `V0` в реестре — остановись.
+  `dist-tags.latest` останется на ней. **Исключений нет:** нет `V0`
+  в реестре — остановись.
 
   Отдельный запуск ради починки зависшего `latest` этому не противоречит:
   `latest` может застрять на `0.x` только после публикации `V0`, то есть гейт
@@ -180,9 +174,6 @@ gh pr create --base main --head prerelease-<VERSION> --title "New release <VERSI
 gh pr checks <PR_NUMBER> --watch
 ```
 
-В unattended вместо `--watch` — поллинг с таймаутом (`gh pr checks
-<PR_NUMBER>` раз в минуту, потолок ~30 минут). По таймауту **не мержить**:
-завершиться с отчётом «CI не дошёл до результата», PR остаётся открытым.
 
 **Гейт.** Мержить можно только при полностью зелёных проверках. Красный CI —
 остановись, покажи разработчику лог упавшей проверки и **не мержь**. Не
@@ -194,24 +185,24 @@ git checkout main && git pull origin main
 ```
 
 На `main` включена branch protection: пушить и мержить могут только
-аккаунты из списка restrictions, плюс требуется апрув code owner'а. Если
-мерж отклонён политикой (`base branch policy prohibits the merge` /
-`Merging into a protected base branch is not permitted`) — **не обходи**
-через прямые пуши. Интерактивно: мерж делает человек с правами
-администратора репозитория —
-`gh pr merge <PR_NUMBER> --merge --delete-branch --admin` (флаг обходит
-требования защиты, включая апрув code owner'а; без админ-прав не
-сработает). Помни: к этому
-моменту `0.Y.0` уже опубликована и `latest` стоит на ней — тянуть с мержем
-нельзя (см. «Если `latest` завис на 0.x» в
-[`release-react17`](../release-react17/SKILL.md)).
+аккаунты из списка restrictions, плюс требуется апрув code owner'а. PR,
+созданный ботом, апрува не получит — бот не может апрувить сам себя.
 
-В unattended `--delete-branch` не сработает: удаление веток облачной сессии
-запрещено (`Write access to this GitHub API path is not permitted through
-this proxy`). Если сам мерж прошёл — не считай это провалом и не пытайся
-обойти: просто смержи без флага и упомяни в отчёте, что ветку
-`prerelease-<VERSION>` надо удалить вручную. Если мерж отклонён политикой
-ветки — остановись с отчётом и готовой командой для человека (см. выше).
+Если мерж отклонён политикой (`base branch policy prohibits the merge` /
+`Merging into a protected base branch is not permitted`) — **не обходи**
+через прямые пуши. Мерж делает человек с правами администратора:
+
+```bash
+gh pr merge <PR_NUMBER> --merge --delete-branch --admin
+```
+
+Флаг `--admin` обходит требования защиты, включая апрув code owner'а; без
+админ-прав он не сработает. Если прав нет — остановись и отдай эту команду
+человеку в отчёте.
+
+Тянуть с мержем нельзя: к этому моменту `0.Y.0` уже опубликована и `latest`
+стоит на ней (см. «Если `latest` завис на 0.x» в
+[`release-react17`](../release-react17/SKILL.md)).
 
 Убедись, что версия в main действительно обновилась:
 
@@ -226,17 +217,17 @@ node -p "require('./package.json').version"   # должно быть <VERSION>
 убрать `import` / `<Meta>` / `<Title>`, `<Heading>X</Heading>` → `## X`.
 Результат — во временный файл в скретчпаде, не в репозиторий.
 
-Покажи готовый текст разработчику перед созданием релиза; в unattended —
-включи его в отчёт и продолжай, содержимое notes писал человек по ходу
-разработки, и проверять его нечем.
+Покажи готовый текст разработчику перед созданием релиза.
 
 ## 8. Создать GitHub Release
 
 **Точка невозврата** — после этого шага пакет уедет в npm.
 
-**Интерактивно** — напрямую (скрипт
-[`scripts/releaseNotesMd.js`](../../../scripts/releaseNotesMd.js) —
-исполняемая форма канона преобразования из шага 7):
+Этот skill — **ручной путь**. Еженедельный релиз целиком делает
+[`release-weekly.yml`](../../../.github/workflows/release-weekly.yml) по
+расписанию GitHub: из облачной сессии релиз не выпустить, прокси режет
+`gh release create`, `gh workflow run` и push тегов (см.
+[`docs/ai/commits.md`](../../../docs/ai/commits.md), «Облачные сессии»).
 
 ```bash
 node scripts/releaseNotesMd.js stories/release-notes/v1/<VERSION>.mdx > /tmp/notes-<VERSION>.md
@@ -244,47 +235,15 @@ gh release create <VERSION> --target main --title "<VERSION>" --latest \
   --notes-file /tmp/notes-<VERSION>.md
 ```
 
-**В unattended при `PUBLISH_MODE=full`** (право на диспатч подтверждено
-зондом `release-auto` — например, локальный запуск с PAT) — через workflow:
+Флаг `--latest` для `1.x` обязателен: именно он возвращает пометку Latest
+с React 17-сборки, на которой она стоит с публикации `0.Y.0`.
 
-```bash
-gh workflow run release.yml --ref main \
-  -f tag=<VERSION> -f target=main -f make_latest=true \
-  -F notes=@<путь_к_временному_файлу>
-```
-
-[`release.yml`](../../../.github/workflows/release.yml) сам собирает пакет,
-публикует его и **только потом** создаёт GitHub Release — если сборка или
-публикация упадут, релиза не появится вовсе.
-
-**В unattended при `PUBLISH_MODE=prepare`** (облако) публикация невозможна —
-здесь skill останавливается. Прокси облачных сессий запрещает все пути
-запуска релиза: `gh release create`, `gh workflow run release.yml`,
-`repository_dispatch`, создание и push тегов (зонд TRI-117, 2026-08-14;
-диспатч нерелизных workflow, например `visual-update.yml`, проходит). Это
-ограничение типа сессии, а не прав токена — см.
-[`docs/ai/commits.md`](../../../docs/ai/commits.md), «Облачные сессии:
-подмена токена прокси». Остановка — штатный исход подготовки: в отчёт
-первой строкой «публикацию завершает человек» и готовая команда (подставь
-`<VERSION>`; работает из любого чекаута):
-
-```bash
-git fetch origin main && \
-  git show origin/main:stories/release-notes/v1/<VERSION>.mdx | \
-  node scripts/releaseNotesMd.js - > /tmp/notes-<VERSION>.md && \
-  gh release create <VERSION> --target main --title "<VERSION>" --latest \
-  --notes-file /tmp/notes-<VERSION>.md
-```
-
-Флаг `--latest` / вход `make_latest=true` для `1.x` обязателен.
 
 ## 9. Дождаться публикации и проверить npm
 
-`release.yml` делает всё остальное: сборку, `npm publish`, `dist-<VERSION>.zip`
-в ассеты, деплой Storybook. На пути `release: published` он запускается
-событием; на пути `PUBLISH_MODE=full` — тем же `gh workflow run`, что
-создал релиз. В unattended при `PUBLISH_MODE=prepare` этот шаг не
-выполняется — публикации не было (см. шаг 8).
+[`release.yml`](../../../.github/workflows/release.yml) делает всё остальное:
+сборку, `npm publish`, `dist-<VERSION>.zip` в ассеты, деплой Storybook.
+Запускается событием `release: published` от созданного тобой релиза.
 
 ```bash
 gh run list --workflow=release.yml --limit 1
@@ -306,9 +265,15 @@ npm view @sberbusiness/triplex-next dist-tags --json
 именно этот шаг возвращает его на React 18-сборку.
 
 Если `latest` не встал на `<VERSION>` — сообщи немедленно и не считай релиз
-завершённым: `npm install` продолжает отдавать React 17-версию. Починка —
-`npm dist-tag add @sberbusiness/triplex-next@<VERSION> latest`; в unattended
-тег не трогай, а вынеси проблему первой строкой отчёта.
+завершённым: `npm install` продолжает отдавать React 17-версию. Починка:
+
+```bash
+npm dist-tag add @sberbusiness/triplex-next@<VERSION> latest
+```
+
+Команду выполняй **только с явным подтверждением разработчика** — она меняет
+`latest` для всех потребителей пакета. То же правило в
+[`release-react17`](../release-react17/SKILL.md), «Если `latest` завис на 0.x».
 
 `dist-tags.react17` не проверяй: тег не поддерживается, теги не проносятся
 во внутренний registry.
@@ -318,25 +283,6 @@ npm view @sberbusiness/triplex-next dist-tags --json
 несовпадение версии в `dist/package.json` и тега; workflow проверяет это явно.
 
 Storybook релиза: `https://storybook.triplex-dev.ru/releases/<VERSION>`.
-
-## Unattended-режим
-
-При `UNATTENDED=true` меняется только поведение в точках ожидания:
-
-| Точка | Интерактивно | Unattended |
-|---|---|---|
-| Ожидание CI по PR (шаг 6) | `gh pr checks --watch` | Поллинг с таймаутом; таймаут → не мержить, отчёт |
-| Мерж отклонён политикой ветки (шаг 6) | Мержит человек с админ-правами: `gh pr merge --admin` | Остановиться с отчётом и готовой командой для человека |
-| Текст release notes перед релизом (шаг 7) | Показать, ждать подтверждения | Включить в отчёт |
-| Создание релиза (шаг 8) | `gh release create` напрямую | `PUBLISH_MODE=full` → `gh workflow run release.yml`; `PUBLISH_MODE=prepare` (облако) → **не выполняется**: штатная остановка с готовой командой в отчёте |
-| Удаление ветки при мерже (шаг 6) | `--delete-branch` | Не сработает (403) — смержить без флага, упомянуть в отчёте |
-| Ожидание `release.yml` и проверка npm (шаг 9) | `gh run watch` + `npm view` | `full` → поллинг с таймаутом; таймаут → отчёт «релиз создан, публикация не подтверждена». `prepare` → не выполняется: публикации не было |
-| Отсутствует задача Linear для `TASK` | Завести через `create-task` | Не заводить: `TASK` приходит из [`release-auto`](../release-auto/SKILL.md); нет номера — стоп |
-| `latest` не встал на `VERSION` (шаг 9) | Предложить `npm dist-tag add` | Тег не трогать, вынести первой строкой отчёта |
-
-**Что не меняется:** валидация шага 1, гейт зелёного CI перед мержем и все
-жёсткие ограничения. Провал любого из них останавливает релиз в обоих
-режимах — unattended не означает «продолжать несмотря на».
 
 ## Итог
 

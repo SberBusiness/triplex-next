@@ -1,0 +1,354 @@
+name: Weekly release
+
+# Еженедельный релиз целиком: предполёт → 0.Y.0 из release-0 → 1.Y.0 из main.
+#
+# Почему это workflow, а не облачная routine: прокси облачных сессий Claude
+# режет write-пути api.github.com — `gh release create`, `gh workflow run`,
+# создание и push тегов (TRI-119, зонд 2026-08-21). Изнутри Actions таких
+# ограничений нет, поэтому расписание держит сам GitHub. За Claude остаётся
+# чтение результата и отчёт в Linear.
+#
+# Что делает человек до запуска (docs/human/release.md):
+#   1. домержить задачи спринта в main, дальше main заморожен;
+#   2. пункты в stories/release-notes/v1/<VERSION>.mdx (пишутся по ходу спринта);
+#   3. перелить main в release-0, разрешить конфликты React 17, запушить,
+#      дождаться зелёного ci.yml.
+# Всё остальное ниже.
+
+on:
+  schedule:
+    - cron: "0 10 * * 5" # пятница 13:00 МСК
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Только предполёт, без публикации"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Два релиза одновременно — гарантированная путаница с dist-tags.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  # ------------------------------------------------------------------
+  # Предполёт. Только чтения: ни одного коммита, ни одной публикации.
+  # Не сошлось — тихий выход, а не падение: незавершённая подготовка это
+  # штатный исход недели, а не поломка.
+  # ------------------------------------------------------------------
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+      version: ${{ steps.check.outputs.version }}
+      v0: ${{ steps.check.outputs.v0 }}
+      next: ${{ steps.check.outputs.next }}
+      next0: ${{ steps.check.outputs.next0 }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Preflight checks
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -u
+          fail() { echo "⏭️ Релиза не будет: $1"; { echo "## Релиза не будет"; echo ""; echo "$1"; } >> "$GITHUB_STEP_SUMMARY"; echo "ready=false" >> "$GITHUB_OUTPUT"; exit 0; }
+
+          git fetch origin main release-0 --quiet
+
+          CURRENT=$(git show origin/main:package.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version")
+          MINOR=$(printf '%s' "${CURRENT}" | cut -d. -f2)
+          case "${CURRENT}" in
+            1.*.0) ;;
+            *) fail "версия в main = \`${CURRENT}\`, ожидался формат 1.Y.0" ;;
+          esac
+
+          VERSION="1.$((MINOR + 1)).0"
+          V0="0.$((MINOR + 1)).0"
+          NEXT="1.$((MINOR + 2)).0"
+          NEXT0="0.$((MINOR + 2)).0"
+          echo "Кандидат: ${VERSION} / ${V0}"
+
+          # Миноры веток должны совпадать — иначе ветки разъехались.
+          R0=$(git show origin/release-0:package.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version")
+          if [ "$(printf '%s' "${R0}" | cut -d. -f2)" != "${MINOR}" ]; then
+            fail "миноры разъехались: main \`${CURRENT}\`, release-0 \`${R0}\`"
+          fi
+
+          # Триггер релиза — заполненные release notes. Файл существует всегда:
+          # заготовку создаёт предыдущий релиз. Значение имеет содержимое.
+          MDX="stories/release-notes/v1/${VERSION}.mdx"
+          git show "origin/main:${MDX}" > /tmp/notes.mdx 2>/dev/null \
+            || fail "\`${MDX}\` нет в main — предыдущий релиз не создал заготовку, это аномалия"
+          if [ "$(grep -vcE '^[[:space:]]*$|^import |^<Meta |^<Title>|^<Heading>.*</Heading>$' /tmp/notes.mdx)" -eq 0 ]; then
+            fail "\`${MDX}\` — пустая заготовка, с прошлого релиза ничего не приехало"
+          fi
+
+          # Релизов ещё нет.
+          for T in "${VERSION}" "${V0}"; do
+            if gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${T}" >/dev/null 2>&1; then
+              fail "релиз \`${T}\` уже существует"
+            fi
+          done
+
+          # Перелитие сделано человеком. Список недостающих коммитов пишем
+          # в summary отдельно: без него сообщение об отказе бесполезно.
+          if ! git merge-base --is-ancestor origin/main origin/release-0; then
+            {
+              echo "## Релиза не будет"
+              echo ""
+              echo "Перелитие main → release-0 не сделано или устарело. Не хватает коммитов:"
+              echo ""
+              echo '```'
+              git log origin/main --not origin/release-0 --oneline | head -20
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "⏭️ Релиза не будет: перелитие main → release-0 не сделано"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # CI зелёный ровно на вершине release-0.
+          TIP=$(git rev-parse origin/release-0)
+          RUN=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs?branch=release-0&per_page=1" \
+            --jq '.workflow_runs[0] | "\(.head_sha) \(.status) \(.conclusion)"' 2>/dev/null || echo "")
+          if [ -z "${RUN}" ]; then fail "на release-0 нет прогонов ci.yml"; fi
+          set -- ${RUN}
+          if [ "$1" != "${TIP}" ]; then
+            fail "последний прогон ci.yml на release-0 — коммит \`${1:0:8}\`, а вершина \`${TIP:0:8}\`: проверялось не то состояние"
+          fi
+          if [ "$2" != "completed" ] || [ "$3" != "success" ]; then
+            fail "CI на вершине release-0 не зелёный: \`$2/$3\`"
+          fi
+
+          {
+            echo "## Предполёт пройден"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Выпускаем | \`${V0}\`, затем \`${VERSION}\` |"
+            echo "| main | \`${CURRENT}\` |"
+            echo "| release-0 | \`${R0}\`, CI зелёный на \`${TIP:0:8}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          {
+            echo "ready=true"
+            echo "version=${VERSION}"
+            echo "v0=${V0}"
+            echo "next=${NEXT}"
+            echo "next0=${NEXT0}"
+          } >> "$GITHUB_OUTPUT"
+
+  # ------------------------------------------------------------------
+  # React 17-половина готовится первой. Порядок обратен номерам версий
+  # намеренно: теги не проносятся во внутренний npm registry, `latest`
+  # встаёт на последнюю публикацию. Значит 1.Y.0 обязана выйти второй.
+  # ------------------------------------------------------------------
+  prepare-react17:
+    needs: preflight
+    if: needs.preflight.outputs.ready == 'true' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+
+    steps:
+      # persist-credentials: false — принципиально. Иначе actions/checkout
+      # положил бы PAT в .git/config, а ниже выполняются `npm ci` (lifecycle-
+      # скрипты полутора тысяч зависимостей), тесты и сборка. Любой из этих
+      # скриптов смог бы прочитать токен с правом прямого push в main.
+      # Токен подставляется точечно, только в момент push.
+      - uses: actions/checkout@v4
+        with:
+          ref: release-0
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      # Гейты. CI на вершине release-0 проверял состояние ДО релизного коммита,
+      # а он меняет версию и notes — поэтому прогон здесь обязателен.
+      # `npm run build` в prebuild гоняет tsc по tsconfig.build.json; полный
+      # tsc гейтом быть не может — он даёт давние ошибки в stories/.
+      - run: npm run test-unit
+      - run: npm run build
+
+      - name: Transfer release notes v1 → v0
+        env:
+          VERSION: ${{ needs.preflight.outputs.version }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+          NEXT0: ${{ needs.preflight.outputs.next0 }}
+        run: |
+          set -eu
+          SRC="stories/release-notes/v1/${VERSION}.mdx"
+          DST="stories/release-notes/v0/${V0}.mdx"
+
+          # Заполненный человеком v0 не трогаем: он мог осознанно разойтись
+          # с v1 там, где формулировка для React 17-сборки иная.
+          if [ -f "${DST}" ] \
+            && [ "$(grep -vcE '^[[:space:]]*$|^import |^<Meta |^<Title>|^<Heading>.*</Heading>$' "${DST}")" -ne 0 ]; then
+            echo "ℹ️ ${DST} заполнен вручную — оставляем как есть."
+          else
+            sed -e "s|<Meta title=\"release-notes/v1/${VERSION}\" />|<Meta title=\"release-notes/v0/${V0}\" />|" \
+                -e "s|<Title>v${VERSION}</Title>|<Title>v${V0}</Title>|" \
+                "${SRC}" > "${DST}"
+            grep -q "release-notes/v0/${V0}" "${DST}" || { echo "❌ подмена <Meta> не сработала"; exit 1; }
+            grep -q "<Title>v${V0}</Title>" "${DST}" || { echo "❌ подмена <Title> не сработала"; exit 1; }
+            echo "✅ notes перенесены из ${SRC}"
+          fi
+
+          cat > "stories/release-notes/v0/${NEXT0}.mdx" <<EOF
+          import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+          <Meta title="release-notes/v0/${NEXT0}" />
+
+          <Title>v${NEXT0}</Title>
+
+          <Heading>Изменения</Heading>
+          EOF
+
+      - name: Bump, commit and push
+        env:
+          V0: ${{ needs.preflight.outputs.v0 }}
+          NEXT0: ${{ needs.preflight.outputs.next0 }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          set -eu
+          npm version "${V0}" --no-git-tag-version
+          git config user.name "dudim-ai"
+          git config user.email "dudim-ai@users.noreply.github.com"
+          git add package.json package-lock.json \
+            "stories/release-notes/v0/${V0}.mdx" "stories/release-notes/v0/${NEXT0}.mdx"
+          # Точный список путей: `git add stories/release-notes/v0/` затянул бы
+          # в релизный коммит любой посторонний файл в каталоге.
+          COUNT=$(git diff --cached --name-only | wc -l)
+          if [ "${COUNT}" -ne 4 ]; then
+            echo "❌ в релизном коммите ${COUNT} файлов вместо 4:"
+            git diff --cached --name-only
+            exit 1
+          fi
+          # Без префикса TRI-XXX: у Actions нет доступа к Linear, номер задачи
+          # взять неоткуда, а выдумывать нельзя. Исключение зафиксировано
+          # в docs/ai/commits.md; связь с трекером даёт skill release-auto,
+          # он заводит задачу по итогам прогона.
+          git commit -m "Подготовка релиза ${V0}"
+          # Токен только здесь и только в URL push: в .git/config он не оседает.
+          # GITHUB_TOKEN не годится — он не входит в списки branch protection
+          # на main, и его пуши не запускают другие workflow.
+          git push "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:release-0
+
+  publish-react17:
+    needs: [preflight, prepare-react17]
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.preflight.outputs.v0 }}
+      target: release-0
+      make_latest: false
+    secrets: inherit
+
+  # ------------------------------------------------------------------
+  # React 18-половина. Стартует только после подтверждённой публикации
+  # 0.Y.0 — иначе `latest` остался бы на React 17-сборке.
+  # ------------------------------------------------------------------
+  prepare-react18:
+    needs: [preflight, publish-react17]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Bump, commit and push
+        env:
+          VERSION: ${{ needs.preflight.outputs.version }}
+          NEXT: ${{ needs.preflight.outputs.next }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          set -eu
+          npm version "${VERSION}" --no-git-tag-version
+
+          cat > "stories/release-notes/v1/${NEXT}.mdx" <<EOF
+          import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+          <Meta title="release-notes/v1/${NEXT}" />
+
+          <Title>v${NEXT}</Title>
+
+          <Heading>Изменения</Heading>
+          EOF
+
+          git config user.name "dudim-ai"
+          git config user.email "dudim-ai@users.noreply.github.com"
+          git add package.json package-lock.json "stories/release-notes/v1/${NEXT}.mdx"
+          COUNT=$(git diff --cached --name-only | wc -l)
+          if [ "${COUNT}" -ne 3 ]; then
+            echo "❌ в релизном коммите ${COUNT} файлов вместо 3:"
+            git diff --cached --name-only
+            exit 1
+          fi
+          git commit -m "Подготовка релиза ${VERSION}"
+          # Прямой push, без PR: настройка «bypass required pull requests»
+          # разрешает именно пушить без PR. Вариант с PR упёрся бы в апрув
+          # code owner'а, который бот сам себе поставить не может.
+          git push "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+  publish-react18:
+    needs: [preflight, prepare-react18]
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.preflight.outputs.version }}
+      target: main
+      make_latest: true
+    secrets: inherit
+
+  # ------------------------------------------------------------------
+  # Финальная проверка. Между публикациями latest стоит на 0.Y.0 —
+  # это ожидаемое промежуточное состояние. Здесь оно обязано быть снято.
+  # ------------------------------------------------------------------
+  verify:
+    needs: [preflight, publish-react18]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check dist-tags
+        env:
+          VERSION: ${{ needs.preflight.outputs.version }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+        run: |
+          set -eu
+          LATEST=$(npm view @sberbusiness/triplex-next dist-tags.latest)
+          echo "dist-tags.latest = ${LATEST}"
+          {
+            echo "## Релиз выпущен"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| \`${V0}\` | опубликована |"
+            echo "| \`${VERSION}\` | опубликована |"
+            echo "| \`dist-tags.latest\` | \`${LATEST}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${LATEST}" != "${VERSION}" ]; then
+            echo "❌ latest = ${LATEST}, ожидалось ${VERSION}."
+            echo "   npm install отдаёт потребителям не ту сборку — почини немедленно:"
+            echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest"
+            exit 1
+          fi
+          echo "✅ latest на React 18-сборке"

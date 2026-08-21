@@ -265,8 +265,15 @@ npm view @sberbusiness/triplex-next dist-tags --json
 именно этот шаг возвращает его на React 18-сборку.
 
 Если `latest` не встал на `<VERSION>` — сообщи немедленно и не считай релиз
-завершённым: `npm install` продолжает отдавать React 17-версию. Починка —
-`npm dist-tag add @sberbusiness/triplex-next@<VERSION> latest`.
+завершённым: `npm install` продолжает отдавать React 17-версию. Починка:
+
+```bash
+npm dist-tag add @sberbusiness/triplex-next@<VERSION> latest
+```
+
+Команду выполняй **только с явным подтверждением разработчика** — она меняет
+`latest` для всех потребителей пакета. То же правило в
+[`release-react17`](../release-react17/SKILL.md), «Если `latest` завис на 0.x».
 
 `dist-tags.react17` не проверяй: тег не поддерживается, теги не проносятся
 во внутренний registry.

@@ -27,9 +27,14 @@ description: Отчёт о еженедельном релизе triplex-next �
 ### 1. Найти прогон
 
 ```bash
-gh run list --workflow=release-weekly.yml --limit 1 \
+gh run list --workflow=release-weekly.yml --event=schedule --limit 1 \
   --json databaseId,status,conclusion,createdAt,url
 ```
+
+`--event=schedule` обязателен. Без него можно поймать более поздний ручной
+прогон — в частности `dry_run`, у которого `preflight` успешен, а остальные
+джобы `skipped`. Это выглядит один в один как «релиза не было штатно», и
+отчёт получился бы неверным.
 
 Прогона за сегодня нет — так и скажи: расписание не сработало, это повод
 проверить `release-weekly.yml`, а не выпускать релиз руками.

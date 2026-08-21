@@ -115,7 +115,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Dropdown | ✅ | ✅ | ✅ |
 | Ellipsis | ⬜ | ✅ | ⬜ |
 | EmptyView | ✅ | ✅ | ⬜ |
-| ExpandAnimation | ⬜ | ⬜ | ⬜ |
+| ExpandAnimation | ✅ | ✅ | ✅ |
 | Footer | ⬜ | ⬜ | ⬜ |
 | FooterPage | ✅ | ✅ | ✅ |
 | FormField | ✅ | ✅ | ✅ |

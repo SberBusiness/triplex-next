@@ -202,7 +202,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ThemeProvider | ✅ | ✅ | ✅ |
 | Tooltip | ✅ | ✅ | ✅ |
 | TopOverlay | ⬜ | ⬜ | ⬜ |
-| TreeView | ⬜ | ⬜ | ⬜ |
+| TreeView | ✅ | ✅ | ✅ |
 | Text | ✅ | ✅ | ✅ |
 | Title | ✅ | ✅ | ✅ |
 | Caption | ✅ | ✅ | ✅ |

@@ -8,3 +8,5 @@ export { Orientations as OrientationsRender } from "./Orientations";
 export { default as OrientationsSource } from "./Orientations?raw";
 export { Production as ProductionRender } from "./Production";
 export { default as ProductionSource } from "./Production?raw";
+export { DynamicIndicators as DynamicIndicatorsRender } from "./DynamicIndicators";
+export { default as DynamicIndicatorsSource } from "./DynamicIndicators?raw";

@@ -108,14 +108,14 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ComposedKeyDownListener | ✅ | ✅ | ✅ |
 | Confirm | ⬜ | ⬜ | ⬜ |
 | DateField | ⬜ | ✅ | ⬜ |
-| DatePickerExtended | ⬜ | ⬜ | ⬜ |
+| DatePickerExtended | ✅ | ✅ | ✅ |
 | DateRange | ⬜ | ✅ | ⬜ |
 | Divider | ⬜ | ✅ | ⬜ |
 | DocumentNumberEdit | ⬜ | ✅ | ⬜ |
 | Dropdown | ✅ | ✅ | ✅ |
 | Ellipsis | ⬜ | ✅ | ⬜ |
 | EmptyView | ✅ | ✅ | ⬜ |
-| ExpandAnimation | ⬜ | ⬜ | ⬜ |
+| ExpandAnimation | ✅ | ✅ | ✅ |
 | Footer | ⬜ | ⬜ | ⬜ |
 | FooterPage | ✅ | ✅ | ✅ |
 | FormField | ✅ | ✅ | ✅ |
@@ -208,7 +208,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Caption | ✅ | ✅ | ✅ |
 | CodeText | ✅ | ✅ | ✅ |
 | TriggerClickOnKeyDownEvent | ⬜ | ⬜ | ⬜ |
-| UnorderedList | ⬜ | ⬜ | ⬜ |
+| UnorderedList | ✅ | ✅ | ✅ |
+| UnorderedListExtended | ✅ | ✅ | ✅ |
 | UploadZone | ⬜ | ⬜ | ⬜ |
 | WindowResizeListener | ✅ | ✅ | ✅ |
 

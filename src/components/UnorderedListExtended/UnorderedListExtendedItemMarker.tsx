@@ -3,7 +3,10 @@ import clsx from "clsx";
 import { IUnorderedListExtendedItemMarkerProps } from "./types";
 import styles from "./styles/UnorderedListExtendedItemMarker.module.less";
 
-/** Обертка для маркера элемента списка. */
+/**
+ * Обёртка для маркера элемента списка. Без children рисует маркер-точку.
+ * Высота обёртки равна строке текста элемента, поэтому маркер центрируется по первой строке.
+ */
 export const UnorderedListExtendedItemMarker = React.forwardRef<HTMLSpanElement, IUnorderedListExtendedItemMarkerProps>(
     ({ children, className, ...restProps }, ref) => (
         <span

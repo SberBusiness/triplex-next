@@ -71,6 +71,7 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
                 // Безопасно: запись выше гарантирует наличие ключа в кэше.
                 return clickHandlersCache.current.get(slideIndex)!;
             },
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             [goToSlide],
         );
 
@@ -90,9 +91,9 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
 
                         let nextIndexInArray = currentIndexInArray;
                         if (nextKeyMatched) {
-                            nextIndexInArray = (currentIndexInArray + 1) % totalPages;
+                            nextIndexInArray = Math.min(currentIndexInArray + 1, totalPages - 1);
                         } else if (prevKeyMatched) {
-                            nextIndexInArray = (currentIndexInArray - 1 + totalPages) % totalPages;
+                            nextIndexInArray = Math.max(currentIndexInArray - 1, 0);
                         } else if (homeKeyMatched) {
                             nextIndexInArray = 0;
                         } else if (endKeyMatched) {
@@ -106,6 +107,7 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
 
                 onKeyDown?.(event);
             },
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             [activeIndices, totalPages, goToSlide, onKeyDown],
         );
 
@@ -135,9 +137,19 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
             });
 
             return () => cancelAnimationFrame(rafId);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [currentIndex]);
 
         if (scrollMode === ECarouselScrollMode.ITEM || totalPages < 1) return null;
+
+        const currentIndexInArray = activeIndices.indexOf(currentIndex);
+
+        let startWindowIndex = 0;
+        if (totalPages > 5) {
+            startWindowIndex = currentIndexInArray - Math.floor(5 / 2);
+            startWindowIndex = Math.max(0, Math.min(startWindowIndex, totalPages - 5));
+        }
+        const endWindowIndex = startWindowIndex + 5;
 
         return (
             <div
@@ -149,8 +161,14 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
                 ref={combinedRef}
             >
                 {activeIndices.map((slideIndex, index) => {
+                    const visible = index >= startWindowIndex && index < endWindowIndex;
+                    if (!visible) return null;
+
                     const selected = currentIndex === slideIndex;
                     const page = index + 1;
+
+                    const startEdge = index === startWindowIndex && startWindowIndex > 0;
+                    const endEdge = index === endWindowIndex - 1 && endWindowIndex < totalPages;
 
                     const resolvedIndicatorProps =
                         typeof indicatorProps === "function"
@@ -164,7 +182,11 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
                         ...resolvedIndicatorProps,
                         className: clsx(
                             styles.indicator,
-                            { [styles.active]: selected },
+                            {
+                                [styles.active]: selected,
+                                [styles.startEdge]: startEdge,
+                                [styles.endEdge]: endEdge,
+                            },
                             resolvedIndicatorProps?.className,
                         ),
                         role: "tab",

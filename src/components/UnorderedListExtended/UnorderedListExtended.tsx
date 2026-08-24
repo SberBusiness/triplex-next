@@ -17,7 +17,7 @@ const UnorderedListExtendedRoot = React.forwardRef<HTMLUListElement, IUnorderedL
 
 UnorderedListExtendedRoot.displayName = "UnorderedListExtended";
 
-/** Расширенный маркированный список. */
+/** Расширенный маркированный список. Элементы собираются JSX-ом через UnorderedListExtended.Item. */
 export const UnorderedListExtended = Object.assign(UnorderedListExtendedRoot, {
     Item: UnorderedListExtendedItem,
 });

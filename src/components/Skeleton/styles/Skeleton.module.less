@@ -1,38 +1,54 @@
-@import 'src/styles/style';
+@import "src/styles/style";
 
 .skeleton {
     border-radius: 16px;
     flex-grow: 1;
 
-    &.light {
-        animation: skeleton-light-pulse 2s ease-in-out infinite;
+    &.type1 {
+        animation: skeleton-type1-pulse 2s ease-in-out infinite;
     }
 
-    &.dark {
-        animation: skeleton-dark-pulse 2s ease-in-out infinite;
+    &.type2 {
+        animation: skeleton-type2-pulse 2s ease-in-out infinite;
+    }
+
+    &.type3 {
+        animation: skeleton-type3-pulse 2s ease-in-out infinite;
     }
 }
 
-@keyframes skeleton-light-pulse {
+@keyframes skeleton-type1-pulse {
     0% {
-        background-color: var(--triplex-next-Skeleton-BackgroundColor_Light_Start);
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type1_Start);
     }
     50% {
-        background-color: var(--triplex-next-Skeleton-BackgroundColor_Light_End);
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type1_End);
     }
     100% {
-        background-color: var(--triplex-next-Skeleton-BackgroundColor_Light_Start);
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type1_Start);
     }
 }
 
-@keyframes skeleton-dark-pulse {
+@keyframes skeleton-type2-pulse {
     0% {
-        background-color: var(--triplex-next-Skeleton-BackgroundColor_Dark_Start);
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type2_Start);
     }
     50% {
-        background-color: var(--triplex-next-Skeleton-BackgroundColor_Dark_End);
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type2_End);
     }
     100% {
-        background-color: var(--triplex-next-Skeleton-BackgroundColor_Dark_Start);
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type2_Start);
+    }
+}
+
+@keyframes skeleton-type3-pulse {
+    0% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type3_Start);
+    }
+    50% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type3_End);
+    }
+    100% {
+        background-color: var(--triplex-next-Skeleton-BackgroundColor_Type3_Start);
     }
 }

@@ -3,12 +3,12 @@ import moment from "moment";
 import {
     Button,
     DatePickerExtended,
+    DatePickerExtendedContext,
     DropdownMobileInput,
     ECalendarDateMarkType,
     EButtonTheme,
     EComponentSize,
 } from "@sberbusiness/triplex-next";
-import { DatePickerExtendedContext } from "../../../src/components/DatePickerExtended/DatePickerExtendedContext";
 
 // Данные захардкожены: календарь всегда открывается на январе 1970 года,
 // иначе скриншот менялся бы вместе с текущей датой.

@@ -1,7 +1,7 @@
 import React from "react";
 
 /** Свойства контекста компонента DatePickerExtended. */
-interface IDatePickerExtendedContext {
+export interface IDatePickerExtendedContext {
     /** Выпадающий календарь открыт. */
     dropdownOpen: boolean;
     /** Флаг взаимодействия пользователя мышью. Управляет поведением FocusTrap выпадающего календаря. */

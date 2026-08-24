@@ -21,7 +21,7 @@ version: "1.0"
 
 ## Варианты и props
 
-`IDatePickerExtendedProps` собирается из трёх источников: собственные props (ниже), все props календаря (`ICalendarProps`, включая `ICalendarNestedProps`) и `alignment` из `IDropdownProps`. Плюс `React.HTMLAttributes<HTMLDivElement>` без `onChange` — они уходят на корневой `div`.
+`IDatePickerExtendedProps` собирается из трёх источников: собственные props (ниже), props календаря (`ICalendarProps` без `adaptiveMode`, включая `ICalendarNestedProps`) и `alignment` из `IDropdownProps`. Плюс `React.HTMLAttributes<HTMLDivElement>` без `onChange` — они уходят на корневой `div`.
 
 ### Обязательные props
 
@@ -46,7 +46,7 @@ version: "1.0"
 
 Пробрасываются в `Calendar` как есть: `pickType`, `format`, `defaultViewDate`, `limitRange`, `markedDays`, `disabledDays`, `reversedPick`, `onPageChange`, `onViewChange`, `dayHtmlAttributes`, `monthHtmlAttributes`, `yearHtmlAttributes`, `prevButtonProps`, `nextButtonProps`, `viewButtonProps`, `yesterdayButtonProps`, `todayButtonProps`, `tomorrowButtonProps`. Семантика — в `Calendar-ai.md`.
 
-Исключение — `adaptiveMode`: он входит в `ICalendarProps`, но компонент вычисляет его сам (десктопный дропдаун — `false`, мобильный — `true`), переданное значение игнорируется и на корневой элемент не уходит.
+Исключение — `adaptiveMode`: он входит в `ICalendarProps`, но исключён из `IDatePickerExtendedProps` через `Omit`. Режим определяет версия дропдауна (десктопный — `false`, мобильный — `true`), задать его снаружи нельзя.
 
 Футер календаря (`yesterdayButtonProps`, `todayButtonProps`, `tomorrowButtonProps`) рендерится только при переданном `todayButtonProps` — без него «Вчера» и «Завтра» не появятся. «Вчера» и «Завтра» дополнительно требуют открытой страницы текущего месяца в режиме `DAYS`.
 
@@ -65,11 +65,11 @@ version: "1.0"
 ## Инварианты
 
 - `forwardRef` на компоненте — не убирать. Ref ведёт на корневой `div` и одновременно используется внутри как `containerRef` (позиционирование дропдауна и определение кликов «снаружи»), поэтому менять ref-target нельзя.
-- Публичный API (`DatePickerExtended`, `IDatePickerExtendedProps`) экспортируется через `src/components/DatePickerExtended/index.ts` — переименования props и смена их типов недопустимы.
-- **Открыть календарь снаружи можно только через `DatePickerExtendedContext`**, а он в barrel не экспортируется. Поэтому сегодня компонент реально применим только внутри библиотеки (`DateField`, `MonthYearField`, `ChipDatePicker` импортируют контекст по относительному пути). Публиковать контекст или добавлять управляемый prop открытости — отдельное решение по API.
-- `DatePickerExtendedContext` — приватная деталь реализации, но у неё три внутренних потребителя. Изменение формы контекста (`dropdownOpen`, `mouseUsedRef`, `setDropdownOpen`) ломает `DateFieldTarget`, `MonthYearFieldTarget` и `ChipDatePickerTarget` — править только вместе с ними.
+- Публичный API (`DatePickerExtended`, `IDatePickerExtendedProps`, `DatePickerExtendedContext`, `IDatePickerExtendedContext`) экспортируется через `src/components/DatePickerExtended/index.ts` — переименования props и смена их типов недопустимы.
+- **Открыть календарь снаружи можно только через `DatePickerExtendedContext`** — управляемого prop открытости у компонента нет. Контекст экспортируется из barrel, поэтому целевой элемент пишется и внутри библиотеки (`DateField`, `MonthYearField`, `ChipDatePicker`), и в коде потребителя.
+- Форма контекста (`dropdownOpen`, `mouseUsedRef`, `setDropdownOpen`) — часть публичного API и одновременно контракт трёх внутренних потребителей. Её изменение ломает `DateFieldTarget`, `MonthYearFieldTarget` и `ChipDatePickerTarget` — править только вместе с ними.
 - `mouseUsedRef` — флаг «взаимодействие было мышью». Он выставляется на `mousedown` по корневому элементу и сбрасывается при закрытии дропдауна; от него зависят `initialFocus` и `returnFocusOnDeactivate` у `FocusTrap`. Не заменять на state: значение читается во время рендера дропдауна и не должно вызывать перерисовку.
-- `DatePickerExtendedDropdown` и `DatePickerExtendedContext` в barrel не экспортируются.
+- `DatePickerExtendedDropdown` в barrel не экспортируется.
 - Размер дропдауна зафиксирован (`EComponentSize.MD`) и наружу не выведен.
 - Компонент не хардкодит текст: подписи кнопок календаря и `aria-label` целевого элемента задаёт потребитель. Библиотека мультиязычная.
 - React 17-совместимость (ветка `release-0`): не переводить на `useId` и другие React 18-only API.
@@ -92,16 +92,16 @@ version: "1.0"
 
 ## Связанные компоненты
 
-- `Calendar` — календарная сетка, рендерится внутри дропдауна; все её props входят в `IDatePickerExtendedProps`.
+- `Calendar` — календарная сетка, рендерится внутри дропдауна; её props входят в `IDatePickerExtendedProps`, кроме `adaptiveMode`.
 - `Dropdown` — выпадающее меню; из его props наружу выведен только `alignment`, мобильная версия конфигурируется внутри.
 - `DateField` — поле ввода даты; передаёт `dropdownTargetRef` и открывает календарь из `DateFieldTarget` через контекст.
 - `MonthYearField` — выбор месяца и года; конфигурирует `pickType={ECalendarPickType.MONTH_YEAR}`.
 - `ChipDatePicker` — чип-фильтр с календарём; открывает дропдаун из `ChipDatePickerTarget` через контекст.
+- `DatePickerExtendedContext` — контекст открытости дропдауна для целевого элемента. Экспортируется из barrel вместе с типом `IDatePickerExtendedContext`, отдельного AI.md не имеет.
 
 Внутренние части (в barrel не экспортируются, отдельного AI.md не имеют):
 
 - `DatePickerExtendedDropdown` — дропдаун с `FocusTrap` вокруг календаря и мобильной версткой (`DropdownMobileHeader` + `DropdownMobileBody`).
-- `DatePickerExtendedContext` — контекст открытости дропдауна для целевого элемента.
 
 ---
 
@@ -122,7 +122,7 @@ version: "1.0"
 | `VisualTestsMonthYear` | `VisualTestsMonthYear.tsx` | Скриншот-регрессия: раскрытый календарь в режиме MONTH_YEAR |
 | `VisualTestsAlignmentRight` | `VisualTestsAlignmentRight.tsx` | Скриншот-регрессия: раскрытый календарь с выравниванием RIGHT |
 
-Примеры импортируют `DatePickerExtendedContext` из исходников (`src/components/DatePickerExtended/DatePickerExtendedContext`) — иначе целевой элемент не может открыть календарь, см. «Инварианты».
+Примеры импортируют `DatePickerExtendedContext` из `@sberbusiness/triplex-next` наравне с самим компонентом — без контекста целевой элемент не может открыть календарь, см. «Инварианты».
 
 ---
 
@@ -130,4 +130,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`) |
 | 2026-08-20 | Создан документ. AI-рефакторинг, unit-тесты (`__tests__/DatePickerExtended.test.tsx`), stories по modern pattern. Исправлено: `yesterdayButtonProps` / `tomorrowButtonProps` пробрасываются в `Calendar`, `adaptiveMode` больше не попадает в DOM |

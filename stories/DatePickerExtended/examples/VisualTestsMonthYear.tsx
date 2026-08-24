@@ -2,12 +2,12 @@ import React from "react";
 import {
     Button,
     DatePickerExtended,
+    DatePickerExtendedContext,
     DropdownMobileInput,
     ECalendarPickType,
     EButtonTheme,
     EComponentSize,
 } from "@sberbusiness/triplex-next";
-import { DatePickerExtendedContext } from "../../../src/components/DatePickerExtended/DatePickerExtendedContext";
 
 // Данные захардкожены: календарь всегда открывается на 1970 годе,
 // иначе скриншот менялся бы вместе с текущей датой.

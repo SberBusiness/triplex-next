@@ -6,6 +6,7 @@ import { DatePickerExtended, IDatePickerExtendedProps } from "../DatePickerExten
 import { DatePickerExtendedContext } from "../DatePickerExtendedContext";
 import { ECalendarPickType } from "../../Calendar/enums";
 import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
+import calendarStyles from "../../Calendar/styles/Calendar.module.less";
 
 const PICKED_DATE = "19700115";
 
@@ -52,6 +53,9 @@ const renderDatePicker = (props: TRenderProps = {}) =>
 const getTarget = () => screen.getByRole("button", { name: "Target" });
 
 const openDropdown = () => fireEvent.click(getTarget());
+
+/** Корневой элемент календаря. Класс adaptive показывает, в каком режиме компонент его отрисовал. */
+const getCalendar = () => document.querySelector(`.${calendarStyles.calendar}`);
 
 describe("DatePickerExtended", () => {
     beforeEach(() => {
@@ -236,7 +240,6 @@ describe("DatePickerExtended", () => {
             markedDays: ["19700121"],
             disabledDays: ["19700122"],
             reversedPick: true,
-            adaptiveMode: true,
             onPageChange: vi.fn(),
             onViewChange: vi.fn(),
             dayHtmlAttributes: { "data-day": "day" },
@@ -254,13 +257,22 @@ describe("DatePickerExtended", () => {
         expect(root.getAttributeNames().sort()).toEqual(["data-testid", "data-tx"]);
     });
 
-    it("does not warn about unrecognized props on the root element", () => {
-        // Единственный наблюдаемый для потребителя эффект от adaptiveMode: пропало предупреждение React.
-        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    it("computes the calendar adaptive mode from the dropdown version", () => {
+        // adaptiveMode исключён из props компонента: режим определяет версия дропдауна, а не потребитель.
+        renderDatePicker();
+        openDropdown();
 
-        renderDatePicker({ adaptiveMode: true, onPageChange: vi.fn(), onViewChange: vi.fn() });
+        expect(getCalendar()).toBeInTheDocument();
+        expect(getCalendar()).not.toHaveClass("adaptive");
+    });
 
-        expect(consoleError).not.toHaveBeenCalled();
+    it("renders the calendar in adaptive mode in mobile view", () => {
+        setMobileView(true);
+        renderDatePicker();
+
+        openDropdown();
+
+        expect(getCalendar()).toHaveClass("adaptive");
     });
 
     it("renders the mobile dropdown header target in mobile view", () => {

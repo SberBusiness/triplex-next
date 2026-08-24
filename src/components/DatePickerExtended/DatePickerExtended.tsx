@@ -8,9 +8,15 @@ import { DatePickerExtendedContext } from "./DatePickerExtendedContext";
 import { DatePickerExtendedDropdown } from "./DatePickerExtendedDropdown";
 import { EComponentSize } from "../../enums";
 
-/** Свойства компонента DatePickerExtended. */
+/**
+ * Свойства компонента DatePickerExtended.
+ * adaptiveMode исключён из props календаря: адаптивный режим компонент определяет сам по версии дропдауна.
+ */
 export interface IDatePickerExtendedProps
-    extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">, Pick<IDropdownProps, "alignment">, ICalendarProps {
+    extends
+        Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
+        Pick<IDropdownProps, "alignment">,
+        Omit<ICalendarProps, "adaptiveMode"> {
     /** Ссылка на целевой элемент для Dropdown. По умолчанию — корневой элемент компонента. */
     dropdownTargetRef?: React.RefObject<HTMLElement>;
     /** Рендер-функция целевого элемента. */
@@ -57,9 +63,6 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
         todayButtonProps,
         tomorrowButtonProps,
         onDateChange,
-        // Адаптивным режимом календаря управляет сам компонент (десктопный или мобильный дропдаун),
-        // одноимённый prop календаря не используется и в DOM не пробрасывается.
-        adaptiveMode,
         // Other
         renderTarget,
         renderDropdownHeaderTarget,

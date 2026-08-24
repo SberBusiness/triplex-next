@@ -4,13 +4,13 @@ import { action } from "storybook/actions";
 import {
     Button,
     DatePickerExtended,
+    DatePickerExtendedContext,
     DropdownMobileInput,
     ECalendarPickType,
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
 } from "@sberbusiness/triplex-next";
-import { DatePickerExtendedContext } from "../../../src/components/DatePickerExtended/DatePickerExtendedContext";
 
 const DATE_FORMAT = "YYYYMMDD";
 const DISPLAY_FORMAT = "DD.MM.YYYY";

@@ -3,13 +3,11 @@ import moment from "moment";
 import {
     Button,
     DatePickerExtended,
+    DatePickerExtendedContext,
     DropdownMobileInput,
     EButtonTheme,
     EComponentSize,
 } from "@sberbusiness/triplex-next";
-// Целевой элемент открывает календарь через контекст DatePickerExtended.
-// Контекст пока не входит в публичный barrel библиотеки, поэтому импортируется из исходников.
-import { DatePickerExtendedContext } from "../../../src/components/DatePickerExtended/DatePickerExtendedContext";
 
 const DATE_FORMAT = "YYYYMMDD";
 const DISPLAY_FORMAT = "DD.MM.YYYY";

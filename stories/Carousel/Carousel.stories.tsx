@@ -3,6 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Carousel, ECarouselOrientation, ECarouselScrollMode } from "@sberbusiness/triplex-next";
 import {
+    type PlaygroundArgs,
     PlaygroundRender,
     PlaygroundSource,
     DefaultRender,
@@ -13,7 +14,8 @@ import {
     OrientationsRender,
     ProductionRender,
     ProductionSource,
-    type PlaygroundArgs,
+    DynamicIndicatorsRender,
+    DynamicIndicatorsSource,
 } from "./examples";
 
 export default {
@@ -134,4 +136,19 @@ export const Production: StoryObj<typeof Carousel> = {
         testRunner: { skip: true },
     },
     render: ProductionRender,
+};
+
+export const DynamicIndicators: StoryObj<typeof Carousel> = {
+    name: "Example: dynamic indicators",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DynamicIndicatorsSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
+    },
+    render: DynamicIndicatorsRender,
 };

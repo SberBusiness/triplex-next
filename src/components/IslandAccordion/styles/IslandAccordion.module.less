@@ -85,8 +85,6 @@
 
         .caretWrapper {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -109,6 +107,12 @@
                 border-radius: 16px;
             }
 
+            &.opened {
+                .header {
+                    padding-bottom: 12px;
+                }
+            }
+
             .title {
                 padding-right: 42px;
             }
@@ -119,6 +123,7 @@
             }
 
             .caretWrapper {
+                top: 18px;
                 right: 10px;
             }
 
@@ -138,6 +143,12 @@
                 border-radius: 24px;
             }
 
+            &.opened {
+                .header {
+                    padding-bottom: 16px;
+                }
+            }
+
             .title {
                 padding-right: 42px;
             }
@@ -148,6 +159,7 @@
             }
 
             .caretWrapper {
+                top: 26px;
                 right: 18px;
             }
 
@@ -167,6 +179,12 @@
                 border-radius: 32px;
             }
 
+            &.opened {
+                .header {
+                    padding-bottom: 24px;
+                }
+            }
+
             .title {
                 padding-right: 44px;
             }
@@ -177,7 +195,8 @@
             }
 
             .caretWrapper {
-                right: 24px;
+                top: 36px;
+                right: 28px;
             }
 
             .remove {
@@ -218,17 +237,15 @@
                 }
             }
 
-            .caretWrapper {
-                transform: none;
-            }
-
             &.sm {
                 .title {
                     padding-right: 34px;
                 }
 
-                .caretWrapper {
-                    top: 18px;
+                &.opened {
+                    .header {
+                        padding-bottom: 16px;
+                    }
                 }
             }
 
@@ -248,8 +265,8 @@
                 }
 
                 .caretWrapper {
-                    right: 10px;
                     top: 18px;
+                    right: 10px;
                 }
 
                 .remove {

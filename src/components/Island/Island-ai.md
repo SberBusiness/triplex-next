@@ -49,6 +49,7 @@ version: "1.0"
 | `size` | `EComponentSize` | `EComponentSize.MD` | Скругление, внутренние отступы карточки и отступы между Header / Body / Footer |
 | `loading` | `boolean` | `false` | Показывает `LoaderScreen` поверх контента карточки |
 | `loaderScreenProps` | `ILoaderScreenMiddleProps` | `undefined` | Props лоадера: `description`, `controls`, `className` и остальные атрибуты `<div>`. `type` задаёт Island (`middle`) |
+| `withoutPaddings` | `boolean` | `false` | Убирает внутренние отступы карточки. Скругление и отступы между Header / Body / Footer от `size` сохраняются |
 
 Компонент расширяет `React.HTMLAttributes<HTMLDivElement>` — все стандартные атрибуты `<div>`
 (`className`, `style`, `role`, `aria-*`, `data-*`, обработчики событий) попадают на корневой элемент.
@@ -238,11 +239,12 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | — | Интерактивный контроль `type`, `size`, `loading` и состава (Header / Body / Footer) |
+| `Playground` | — | Интерактивный контроль `type`, `size`, `loading`, `withoutPaddings` и состава (Header / Body / Footer) |
 | `Default` | `DefaultExample.tsx` | Минимальная карточка: Header + Body + Footer |
 | `Types` | `TypesExample.tsx` | Все значения `EIslandType` рядом |
 | `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG: скругление, паддинги, отступы между частями |
 | `Loading` | `Loading.tsx` | `loading`: `LoaderScreen` поверх контента карточки |
+| `WithoutPaddings` | `WithoutPaddings.tsx` | `withoutPaddings` во всех размерах: внутренние отступы убраны, скругление и отступы между Header / Body / Footer сохраняются |
 
 Файлы примеров с постфиксом `Example` — локальный legacy-паттерн папки; новые примеры называются
 по имени story (`Loading.tsx`).
@@ -253,6 +255,7 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-24 | Добавлено свойство `withoutPaddings` — отключает внутренние отступы карточки. Добавлена story `WithoutPaddings`. |
 | 2026-08-11 | Prop состояния загрузки переименован `isLoading` → `loading` — по преобладающей в библиотеке конвенции boolean-props без префикса `is` (`loading` у `Button`, `List`, `Dropdown`, `Suggest`, `Table`). Prop ещё не выпускался, поэтому breaking change нет; `Omit` в `IModalWindowBodyProps` обновлён на `"loading"`. Поведение не изменилось. |
 | 2026-08-06 | `related` приведён к правилу `docs/ai/CONTEXT.md` → «Как заполнять `related` в AI.md»: убраны потребители (`BodyPage`, `HeaderPage`, `FooterPage`, `Confirm`), `ModalWindowBody` заменён родителем `ModalWindow`, добавлен `LoaderScreen`. Раздел «Связанные компоненты» разбит по типам связи. Добавлено состояние загрузки: props `isLoading` и `loaderScreenProps` — при `isLoading` поверх контента карточки рендерится `LoaderScreen` типа `middle`. Подложка наследует скругление карточки, `z-index` понижен до локального. `ModalWindowBody` эти props не наследует (`Omit`) — его тело скроллируется, лоадер там задаётся на `ModalWindowContent`. Добавлены story `Loading` и unit-тесты. Остальной публичный API не изменён. |
 | 2026-08-04 | Создан документ. AI-рефакторинг: JSDoc на props, значениях `EIslandType` и субкомпонентах, `displayName` у `IslandHeader` / `IslandBody` / `IslandFooter`, unit-тесты на все типы и размеры, части острова и `mapTypeToClassName`. Исправлено: `className` в `IslandHeader` и `IslandFooter` больше не затирает базовый класс компонента; побочный отступ в `IslandAccordion` погашен в стилях аккордеона, вид библиотечных компонентов не изменился. Публичный API не изменён. |

@@ -1,12 +1,10 @@
-@import "src/styles/style";
-
 .islandWidget {
     flex: 1 1 auto;
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    
+
     > * {
         height: 100%;
     }
@@ -14,7 +12,7 @@
 
 .islandWidgetWithExtraFooter {
     &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         left: 0;
@@ -22,12 +20,5 @@
         height: 32px;
         border-radius: 0 0 24px 24px;
         box-shadow: var(--triplex-next-IslandWidget-ExtraFooter_Shadow) !important;
-    }
-}
-
-@media (max-width: @screen-sm-max) {
-    .islandWidgetHeaderWrapperAdaptive {
-        margin: -16px -16px 0 -16px;
-        padding: 16px 16px 0 16px;
     }
 }

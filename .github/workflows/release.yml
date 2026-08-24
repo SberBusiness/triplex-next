@@ -207,8 +207,16 @@ jobs:
             exit 1
           fi
           if [ "${MAKE_LATEST}" = "true" ]; then LATEST_FLAG="--latest"; else LATEST_FLAG="--latest=false"; fi
-          gh release create "${RELEASE_TAG}" --target "${TARGET}" --title "${RELEASE_TAG}" \
-            "${LATEST_FLAG}" --notes-file release-notes.md
+          # Повторный прогон после падения на заливке ассетов или деплое: релиз
+          # уже создан, и `gh release create` на нём упал бы, оборвав
+          # восстановление. Пропускаем только создание — ассеты и деплой ниже
+          # доедут до конца.
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            echo "⚠️ Release ${RELEASE_TAG} уже существует — создание пропускаем."
+          else
+            gh release create "${RELEASE_TAG}" --target "${TARGET}" --title "${RELEASE_TAG}" \
+              "${LATEST_FLAG}" --notes-file release-notes.md
+          fi
           rm -f release-notes.md
 
       # Упаковать dist.zip как release asset.

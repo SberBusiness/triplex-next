@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
 import { Dropdown, IDropdownProps } from "../Dropdown/Dropdown";
 import { DatePickerExtendedContext } from "./DatePickerExtendedContext";
@@ -23,6 +23,7 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
     (props, ref) => {
         const { children, targetRef, setOpened, renderHeaderTarget, renderCalendar, focusTrapProps, ...rest } = props;
         const { mouseUsedRef, setDropdownOpen } = useContext(DatePickerExtendedContext);
+        const calendarRef = useRef<HTMLDivElement>(null);
 
         /** Отрисовка содержимого в мобильном режиме. */
         const renderMobileContent = () => (
@@ -51,17 +52,26 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
                     {...focusTrapProps}
                     focusTrapOptions={{
                         clickOutsideDeactivates: true,
-                        // Функция, а не элемент: targetRef на момент рендера может быть ещё не заполнен.
-                        // document.body здесь означает «фокус остаётся снаружи ловушки», а не «фокус на body»:
-                        // body не фокусируем, но focus-trap нужен непустой fallback, иначе он бросает исключение.
-                        fallbackFocus: () => targetRef.current ?? document.body,
+                        // Контейнер календаря: если внутри ловушки нет ни одного tabbable-элемента
+                        // (например, страница лет с отключёнными prev/next и недоступными датами),
+                        // фокус остаётся внутри aria-modal диалога, а не уходит на целевой элемент.
+                        // Функция, а не элемент: ref на момент рендера может быть ещё не заполнен.
+                        // targetRef и document.body — страховка: focus-trap бросает исключение на пустом fallback.
+                        fallbackFocus: () => calendarRef.current ?? targetRef.current ?? document.body,
                         // false — не переводить фокус внутрь ловушки при открытии мышью.
                         initialFocus: mouseUsedRef.current ? false : undefined,
                         returnFocusOnDeactivate: !mouseUsedRef.current,
                         ...focusTrapProps?.focusTrapOptions,
                     }}
                 >
-                    <div role="presentation">{renderCalendar(false)}</div>
+                    {/*
+                     * tabIndex={-1} — чтобы контейнер мог принять fallback-фокус, не попадая в таб-порядок.
+                     * role="presentation" здесь не ставится: по спецификации ARIA он игнорируется
+                     * на фокусируемом элементе, и рядом с tabIndex только вводил бы в заблуждение.
+                     */}
+                    <div ref={calendarRef} tabIndex={-1}>
+                        {renderCalendar(false)}
+                    </div>
                 </FocusTrap>
             </Dropdown>
         );

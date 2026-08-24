@@ -84,6 +84,18 @@ describe("DatePickerExtended", () => {
         expect(screen.getByRole("grid")).toBeInTheDocument();
     });
 
+    it("keeps a focusable fallback container inside the modal dialog", () => {
+        renderDatePicker();
+        openDropdown();
+
+        // Контейнер календаря принимает fallback-фокус FocusTrap, когда внутри нет tabbable-элементов,
+        // поэтому он обязан быть фокусируемым и лежать внутри aria-modal диалога.
+        const container = screen.getByRole("grid").closest("div[tabindex='-1']");
+
+        expect(container).not.toBeNull();
+        expect(screen.getByRole("dialog")).toContainElement(container as HTMLElement);
+    });
+
     it("calls onDropdownOpen and onDropdownClose on state change", () => {
         const onDropdownOpen = vi.fn();
         const onDropdownClose = vi.fn();

@@ -12,6 +12,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**Button**
+
+- Изменен цвет токена `Button.SecondaryLight_Background_Active` в светлой и темной темах.
+
 **Carousel**
 
 - Indicators: добавлено ограничение в максимум 5 индикаторов, при большем количестве страниц крайние элементы сжимаются в компактный edge-индикатор.
@@ -28,6 +32,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Проведён AI-рефакторинг.
 
+**IslandAccordion**
+
+- Исправлены нижние отступы у `IslandAccordionHeader` и выравнивание иконки каретки.
+
 **Island**
 
 - Добавлено свойство `withoutPaddings` для отображения компонента без отступов.
@@ -35,6 +43,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **IslandWidget**
 
 - Внутренние отступы Header, Body и Footer теперь задаёт сам виджет, а не `Island`: размер передаётся субкомпонентам через контекст.
+
+**Tabs**
+
+- Добавлен фон для `TabButtonDropdown`, когда внутри дропдауна выбран элемент.
+- Исправлено: `className`, переданный в `buttonDropdownAttributes`, больше не затирается собственными классами dropdown-кнопки — классы объединяются.
 
 **TreeView**
 

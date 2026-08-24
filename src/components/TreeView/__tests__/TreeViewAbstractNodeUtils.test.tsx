@@ -189,11 +189,27 @@ describe("TreeViewAbstractNodeUtils", () => {
         });
 
         it("Первая нода дерева: предыдущая - последняя нода дерева", () => {
-            const { a, c1 } = createTree();
+            const { a, c } = createTree();
 
-            // Известное pre-existing отклонение: эта ветка спускается к последнему потомку, не проверяя opened
-            // (c свёрнута, но возвращается c1). Тест фиксирует текущее поведение, а не желаемое, - см. TreeView-ai.md.
+            // c свернута, поэтому спуск в ее детей не идет - предыдущей становится сама c.
+            expect(TreeViewAbstractNodeUtils.getPrevNode(a)).toBe(c);
+        });
+
+        it("Первая нода дерева при раскрытой последней ветке: предыдущая - последняя видимая нода дерева", () => {
+            const { a, c, c1 } = createTree();
+
+            c.setOpened(true);
+
             expect(TreeViewAbstractNodeUtils.getPrevNode(a)).toBe(c1);
+        });
+
+        it("Свернутая соседняя нода с детьми: спуск в свернутую ветку не идет", () => {
+            const { a, a2, b } = createTree();
+
+            a.setOpened(true);
+            a2.addChild(new TreeViewAbstractNode({ id: "a21" }));
+
+            expect(TreeViewAbstractNodeUtils.getPrevNode(b)).toBe(a2);
         });
     });
 

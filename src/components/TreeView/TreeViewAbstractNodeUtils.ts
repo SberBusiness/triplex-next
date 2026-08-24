@@ -18,7 +18,7 @@ interface ITreeViewAbstractNodeUtils {
     /**
      * Возвращает предыдущую ноду текущего уровня дерева. Если предыдущая нода имеет детей и она раскрыта, будет возвращена
      * последняя ее дочерняя нода. Если nextNode - первая нода, будет возвращена родительская нода. Если верхний
-     * уровень - rootNode, будет возвращена последняя дочерняя нода rootNode.
+     * уровень - rootNode, будет возвращена последняя видимая нода дерева - ноды внутри свернутых веток пропускаются.
      */
     getPrevNode: (nextNode: TreeViewAbstractNode) => TreeViewAbstractNode;
     /** Возвращает предыдущую ноду текущего уровня дерева. В случае если nextNode - первая нода, будет возвращено undefined. */
@@ -41,6 +41,20 @@ const getLastChildNode = (node: TreeViewAbstractNode): TreeViewAbstractNode => {
     const children = node.getChildren();
 
     return children[children.length - 1];
+};
+
+/**
+ * Спускается от ноды к последней видимой дочерней ноде: пока нода раскрыта и имеет детей,
+ * переходит к последнему ребенку. Ноды внутри свернутых веток пропускаются.
+ */
+const getDeepestVisibleLastChildNode = (node: TreeViewAbstractNode): TreeViewAbstractNode => {
+    let lastNode = node;
+
+    while (lastNode.getOpened() && lastNode.getChildren().length) {
+        lastNode = getLastChildNode(lastNode);
+    }
+
+    return lastNode;
 };
 
 /**
@@ -158,31 +172,13 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
             }
             // Если parentNode является rootNode.
             else {
-                let lastChild = getLastChildNode(parentNode);
-
-                // Отклонение (pre-existing): спуск идет без проверки getOpened(), в отличие от цикла ниже,
-                // поэтому активной может стать нода внутри свернутой ветки. Подробности - в TreeView-ai.md.
-                while (lastChild.getChildren().length > 0) {
-                    lastChild = getLastChildNode(lastChild);
-                }
-
-                // Предыдущая нода - последняя нода дерева.
-                return lastChild;
+                // Предыдущая нода - последняя видимая нода дерева.
+                return getDeepestVisibleLastChildNode(getLastChildNode(parentNode));
             }
         }
 
-        let prevNode = prevSiblingNode;
-
-        while (true) {
-            // Предыдущая нода раскрыта и имеет дочерние ноды. Предыдущей станет последняя ее дочерняя нода.
-            if (prevNode.getOpened() && prevNode.getChildren().length) {
-                prevNode = getLastChildNode(prevNode);
-            } else {
-                break;
-            }
-        }
-
-        return prevNode;
+        // Предыдущая нода раскрыта и имеет дочерние ноды. Предыдущей станет последняя ее видимая дочерняя нода.
+        return getDeepestVisibleLastChildNode(prevSiblingNode);
     },
     getPrevSiblingNode: (node) => {
         const parentNode = node.getParent();

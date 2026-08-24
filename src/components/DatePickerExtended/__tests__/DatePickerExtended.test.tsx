@@ -257,6 +257,17 @@ describe("DatePickerExtended", () => {
         expect(root.getAttributeNames().sort()).toEqual(["data-testid", "data-tx"]);
     });
 
+    it("does not leak adaptiveMode passed at runtime to the root element", () => {
+        // adaptiveMode убран из публичного типа, но JS-потребитель и старый скомпилированный код
+        // всё ещё могут его передать. Значение должно быть отброшено, а не уйти на корневой div.
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+
+        renderDatePicker({ adaptiveMode: true } as unknown as TRenderProps);
+
+        expect(screen.getByTestId("date-picker").getAttributeNames().sort()).toEqual(["data-testid", "data-tx"]);
+        expect(consoleError).not.toHaveBeenCalled();
+    });
+
     it("computes the calendar adaptive mode from the dropdown version", () => {
         // adaptiveMode исключён из props компонента: режим определяет версия дропдауна, а не потребитель.
         renderDatePicker();

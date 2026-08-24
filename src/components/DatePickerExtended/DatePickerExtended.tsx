@@ -70,8 +70,11 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
         onMouseDown,
         onDropdownOpen,
         onDropdownClose,
+        // adaptiveMode исключён из публичного типа, но JS-потребитель и старый скомпилированный код
+        // всё ещё могут его передать. Снимаем значение здесь, иначе оно уйдёт на корневой div.
+        adaptiveMode,
         ...restProps
-    } = props;
+    } = props as IDatePickerExtendedProps & Pick<ICalendarProps, "adaptiveMode">;
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);

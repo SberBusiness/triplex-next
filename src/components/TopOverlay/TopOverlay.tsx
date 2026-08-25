@@ -27,6 +27,9 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
     opened,
     onClose,
     onOpen,
+    // По типам restProps пуст — все ключи ITopOverlayProps деструктурированы выше. Спред ниже сохранён ради
+    // нетипизированных потребителей: Overlay кладёт неизвестные props на свой корневой div, и, например,
+    // data-атрибуты доезжают до DOM. className и direction намеренно стоят после спреда — перекрыть их нельзя.
     ...restProps
 }) => {
     // Флаг, в текущий момент оверлей закрывается.

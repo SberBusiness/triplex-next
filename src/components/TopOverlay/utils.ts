@@ -15,6 +15,10 @@ export const getLightBoxScreenTop = (element: HTMLElement): number =>
  * зависит от прокрутки родителя. Смещение считается инкрементально: к текущему `topPosition` добавляется разница
  * между желаемой верхней границей экрана LightBox и фактическим положением обёртки.
  *
+ * Накопленное смещение усекается до целого перед каждым пересчётом — так же, как это делал `parseInt` до вынесения
+ * формулы в отдельную функцию. Пересчёт при открытии происходит дважды, и без усечения второй проход дал бы
+ * субпиксельный `top`, то есть сдвиг панели относительно прежнего поведения.
+ *
  * @param topPosition Текущее смещение обёртки, px.
  * @param elementTopPosition Фактическая верхняя граница обёртки во вьюпорте (`getBoundingClientRect().top`), px.
  * @param lightBoxScreenTop Верхняя граница экрана LightBox, px.
@@ -23,4 +27,4 @@ export const getNextTopPosition = (
     topPosition: number,
     elementTopPosition: number,
     lightBoxScreenTop: number,
-): number => topPosition - elementTopPosition + lightBoxScreenTop;
+): number => Math.trunc(topPosition) - elementTopPosition + lightBoxScreenTop;

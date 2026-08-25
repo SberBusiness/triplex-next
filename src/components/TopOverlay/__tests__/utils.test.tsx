@@ -44,5 +44,10 @@ describe("TopOverlay utils", () => {
         it("should accumulate correction on top of the current position", () => {
             expect(getNextTopPosition(10, -20, 40)).toBe(70);
         });
+
+        it("should truncate the accumulated position before recalculating", () => {
+            // Прежняя реализация усекала накопленное значение через parseInt — поведение сохранено.
+            expect(getNextTopPosition(10.7, -20, 40)).toBe(70);
+        });
     });
 });

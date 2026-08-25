@@ -1,7 +1,8 @@
 import React from "react";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { FocusTrapProps } from "focus-trap-react";
+import { EOverlayDirection } from "../../Overlay/OverlayBase";
 import { TopOverlay } from "../TopOverlay";
 
 const focusTrapMock = vi.fn<(props: FocusTrapProps) => void>();
@@ -21,10 +22,12 @@ interface IOverlayChildrenProvidePropsMock {
 interface IOverlayMockProps {
     children: React.ReactNode | ((props: IOverlayChildrenProvidePropsMock) => React.ReactNode);
     className?: string;
+    direction?: string;
     opened: boolean;
     onClose?: () => void;
     onClosing?: () => void;
     onOpen?: () => void;
+    setOpened?: (opened: boolean) => void;
 }
 
 interface IOverlayPartMockProps {
@@ -37,8 +40,21 @@ vi.mock("../../Overlay/Overlay", () => {
     /**
      * Мок Overlay, повторяющий контракт OverlayBase: колбэки вызываются только на переходах opened,
      * на маунте — нет. Иначе тесты ловят поведение мока, а не компонента.
+     *
+     * Фазы закрытия разнесены так же, как в реальном OverlayBase: переход opened → false вызывает только
+     * onClosing, а onClose срабатывает по transitionend панели. В моке за transitionend отвечает кнопка
+     * overlay-finish-closing — без этого закрытие схлопывалось бы в один тик и класс closing не рендерился.
      */
-    const OverlayMock = ({ children, className, opened, onClose, onClosing, onOpen }: IOverlayMockProps) => {
+    const OverlayMock = ({
+        children,
+        className,
+        direction,
+        opened,
+        onClose,
+        onClosing,
+        onOpen,
+        setOpened,
+    }: IOverlayMockProps) => {
         const callbacks = React.useRef({ onClose, onClosing, onOpen });
         const isFirstRender = React.useRef(true);
 
@@ -56,12 +72,19 @@ vi.mock("../../Overlay/Overlay", () => {
                 callbacks.current.onOpen?.();
             } else {
                 callbacks.current.onClosing?.();
-                callbacks.current.onClose?.();
             }
         }, [opened]);
 
         return (
-            <div data-testid="overlay" className={className} data-opened={opened}>
+            <div data-testid="overlay" className={className} data-opened={opened} data-direction={direction}>
+                {/* Завершение анимации закрытия — в реальном OverlayBase это transitionend панели. */}
+                <button
+                    data-testid="overlay-finish-closing"
+                    onClick={() => callbacks.current.onClose?.()}
+                    type="button"
+                />
+                {/* Overlay зовёт setOpened при закрытии по клику вне панели — у TopOverlay это no-op. */}
+                <button data-testid="overlay-set-opened" onClick={() => setOpened?.(false)} type="button" />
                 {typeof children === "function" ? children({ closing: false, opened }) : children}
             </div>
         );
@@ -80,15 +103,6 @@ vi.mock("../../Overlay/Overlay", () => {
         }),
     };
 });
-
-vi.mock("../../Overlay/OverlayBase", () => ({
-    EOverlayDirection: {
-        TOP: "top",
-        BOTTOM: "bottom",
-        LEFT: "left",
-        RIGHT: "right",
-    },
-}));
 
 const TestContent = () => <div data-testid="test-content">TopOverlay Content</div>;
 
@@ -353,8 +367,33 @@ describe("TopOverlay", () => {
                 </TopOverlay>,
             );
 
+            // Переход opened → false запускает только анимацию закрытия, onClose ждёт её завершения.
+            expect(handleClose).not.toHaveBeenCalled();
+
+            fireEvent.click(screen.getByTestId("overlay-finish-closing"));
+
             expect(handleClose).toHaveBeenCalledTimes(1);
             expect(handleClose).toHaveBeenCalledWith();
+        });
+
+        it("should pass TOP direction down to Overlay", () => {
+            render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(screen.getByTestId("overlay")).toHaveAttribute("data-direction", EOverlayDirection.TOP);
+        });
+
+        it("should pass a safe no-op setOpened to Overlay", () => {
+            render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(() => fireEvent.click(screen.getByTestId("overlay-set-opened"))).not.toThrow();
         });
 
         it("should not call onOpen when opened is false", () => {
@@ -422,41 +461,55 @@ describe("TopOverlay", () => {
                 </TopOverlay>,
             );
 
-            expect(wrapper.style.top).not.toBe("");
+            // Пересчёт при открытии идёт дважды: из onOpen и из собственного эффекта по opened.
+            // При top = -40 и --lightBox-screen-top = 0px это даёт 0 + 40, затем 40 + 40.
+            expect(wrapper.style.top).toBe("80px");
 
             rerender(
                 <TopOverlay opened={false}>
                     <TestContent />
                 </TopOverlay>,
             );
+            fireEvent.click(screen.getByTestId("overlay-finish-closing"));
 
             expect(wrapper.style.top).toBe("");
         });
     });
 
     describe("Closing State", () => {
-        it("should set closing state when opened changes from true to false", () => {
-            // Тестируем через проверку, что компонент отрабатывает смену состояния opened
+        it("should apply closing class while the overlay is closing and drop it when closing is done", () => {
             const { container, rerender } = render(
                 <TopOverlay opened={true}>
                     <TestContent />
                 </TopOverlay>,
             );
 
-            // Изначально opened
-            let wrapper = container.querySelector(".topOverlayWrapper");
-            expect(wrapper?.className).toContain("opened");
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.className).not.toContain("closing");
 
-            // Закрываем - проверяем что компонент рендерится корректно
             rerender(
                 <TopOverlay opened={false}>
                     <TestContent />
                 </TopOverlay>,
             );
 
-            wrapper = container.querySelector(".topOverlayWrapper");
-            // После закрытия не должен быть opened
-            expect(wrapper?.className).not.toContain("opened");
+            // Анимация закрытия ещё идёт — обёртка должна остаться раскрытой вниз.
+            expect(wrapper.className).toContain("closing");
+
+            fireEvent.click(screen.getByTestId("overlay-finish-closing"));
+
+            expect(wrapper.className).not.toContain("closing");
+        });
+
+        it("should not apply closing class on the first render when opened is false", () => {
+            const { container } = render(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.className).not.toContain("closing");
         });
     });
 });

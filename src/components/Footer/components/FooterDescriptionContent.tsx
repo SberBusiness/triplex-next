@@ -3,7 +3,10 @@ import clsx from "clsx";
 import styles from "../styles/Footer.module.less";
 
 /** Свойства компонента FooterDescriptionContent. */
-export interface IFooterDescriptionContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IFooterDescriptionContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Контент основной части футера — текст, ссылки, произвольная разметка. */
+    children?: React.ReactNode;
+}
 
 /** Футер, контент основной части. */
 export const FooterDescriptionContent = React.forwardRef<HTMLDivElement, IFooterDescriptionContentProps>(

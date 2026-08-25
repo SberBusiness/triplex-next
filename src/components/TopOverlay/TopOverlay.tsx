@@ -3,61 +3,57 @@ import clsx from "clsx";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { Overlay, IOverlayProps } from "../Overlay/Overlay";
 import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
+import { getLightBoxScreenTop, getNextTopPosition } from "./utils";
 import styles from "./styles/TopOverlay.module.less";
 
 /** Свойства компонента TopOverlay. */
 export interface ITopOverlayProps extends Pick<IOverlayProps, "opened" | "onOpen" | "onClose"> {
+    /** Содержимое верхней панели. */
     children?: React.ReactNode;
     /** Свойства компонента FocusTrapExtended. */
     focusTrapProps?: IFocusTrapExtendedProps;
 }
 
+// Overlay требует setOpened, но TopOverlay полностью управляется свойством opened и наружу состояние не поднимает.
+const noopSetOpened = () => {};
+
+/**
+ * Верхняя панель поверх контента LightBox: затемняющая маска на всю ширину экрана и выезжающая сверху панель.
+ * Открытием управляет свойство `opened`, на время открытия фокус удерживается внутри панели.
+ */
 export const TopOverlay: React.FC<ITopOverlayProps> = ({
     children,
     focusTrapProps,
     opened,
     onClose,
     onOpen,
-    ...OverlayBaseProps
+    ...restProps
 }) => {
     // Флаг, в текущий момент оверлей закрывается.
     const [closing, setClosing] = useState(false);
     // FocusTrap активен.
     const [activeFocusTrap, setActiveFocusTrap] = useState(false);
-    // Позиция top для lightBoxTopOverlayWrapper, высчитывается исходя из scrollTop родителя.
-    const [overlayWrapperTopPosition, setOverlayWrapperTopPosition] = useState<number | string>(0);
+    // Позиция top обёртки оверлея, высчитывается исходя из scrollTop родителя.
+    const [overlayWrapperTopPosition, setOverlayWrapperTopPosition] = useState(0);
     // Предыдущее состояние открыт/закрыт.
     const prevOpened = useRef(opened);
     // Ref контейнера.
     const overlayWrapperRef = useRef<HTMLDivElement | null>(null);
 
-    // Пересчет позиционирования оверлея. Бывает неверная позиция, например, при открытии во время скролла.
+    // Пересчет позиционирования оверлея. Бывает неверная позиция, например, при открытии во время скролла родителя.
     const updateTopPosition = () => {
-        // Перерасчет позиционирования оверлея, если он был открыт во время скролла родителя.
-        if (overlayWrapperRef.current) {
-            // Верхняя позиция LightBox.
-            const lightBoxTopPosition =
-                getComputedStyle(overlayWrapperRef.current).getPropertyValue("--lightBox-screen-top") || "0";
-            // Текущее положение оверлея.
-            const position = overlayWrapperRef.current.getBoundingClientRect();
-            // Оверлей расположен выше, чем нужно.
-            if (position.top < 0) {
-                setOverlayWrapperTopPosition(
-                    (overlayWrapperTopPositionPrev) =>
-                        parseInt(overlayWrapperTopPositionPrev as string, 10) +
-                        Math.abs(position.top) +
-                        parseInt(lightBoxTopPosition, 10),
-                );
-            } else {
-                setOverlayWrapperTopPosition(
-                    // Оверлей расположен ниже, чем нужно.
-                    (overlayWrapperTopPositionPrev) =>
-                        parseInt(overlayWrapperTopPositionPrev as string, 10) -
-                        position.top +
-                        parseInt(lightBoxTopPosition, 10),
-                );
-            }
+        const overlayWrapper = overlayWrapperRef.current;
+
+        if (!overlayWrapper) {
+            return;
         }
+
+        // Верхняя граница экрана LightBox.
+        const lightBoxScreenTop = getLightBoxScreenTop(overlayWrapper);
+        // Текущее положение оверлея во вьюпорте.
+        const { top } = overlayWrapper.getBoundingClientRect();
+
+        setOverlayWrapperTopPosition((topPosition) => getNextTopPosition(topPosition, top, lightBoxScreenTop));
     };
 
     const handleOpen = () => {
@@ -96,8 +92,6 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
         </>
     );
 
-    const setOpened = () => {};
-
     const classNameOverlayWrapper = clsx(styles.topOverlayWrapper, {
         [styles.closing]: closing,
         [styles.opened]: opened,
@@ -122,8 +116,8 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
                     onClosing={handleClosing}
                     onOpen={handleOpen}
                     opened={opened}
-                    setOpened={setOpened}
-                    {...OverlayBaseProps}
+                    setOpened={noopSetOpened}
+                    {...restProps}
                     className={styles.topOverlay}
                     direction={EOverlayDirection.TOP}
                 >
@@ -133,3 +127,5 @@ export const TopOverlay: React.FC<ITopOverlayProps> = ({
         </FocusTrapExtended>
     );
 };
+
+TopOverlay.displayName = "TopOverlay";

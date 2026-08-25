@@ -1,54 +1,85 @@
 import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import type { FocusTrapProps } from "focus-trap-react";
 import { TopOverlay } from "../TopOverlay";
 
-const focusTrapMock = vi.fn();
+const focusTrapMock = vi.fn<(props: FocusTrapProps) => void>();
 
 vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: any) => {
+    FocusTrap: (props: FocusTrapProps) => {
         focusTrapMock(props);
         return <div data-testid="focus-trap">{props.children}</div>;
     },
 }));
 
-vi.mock("../../Overlay/Overlay", () => ({
-    Overlay: Object.assign(
-        (props: any) => {
-            const { children, opened, onOpen, onClose, onClosing, className } = props;
-            // Вызываем onOpen при монтировании, если opened=true
-            React.useEffect(() => {
-                if (opened) {
-                    onOpen?.();
-                }
-            }, [opened, onOpen]);
+interface IOverlayChildrenProvidePropsMock {
+    closing: boolean;
+    opened: boolean;
+}
 
-            // Вызываем onClosing и затем onClose при закрытии
-            React.useEffect(() => {
-                if (!opened) {
-                    onClosing?.();
-                    onClose?.();
-                }
-            }, [opened, onClose, onClosing]);
+interface IOverlayMockProps {
+    children: React.ReactNode | ((props: IOverlayChildrenProvidePropsMock) => React.ReactNode);
+    className?: string;
+    opened: boolean;
+    onClose?: () => void;
+    onClosing?: () => void;
+    onOpen?: () => void;
+}
 
-            return (
-                <div data-testid="overlay" className={className} data-opened={opened}>
-                    {typeof children === "function" ? children({ opened }) : children}
-                </div>
-            );
-        },
-        {
-            Mask: ({ opened, className }: any) => (
+interface IOverlayPartMockProps {
+    children?: React.ReactNode;
+    className?: string;
+    opened?: boolean;
+}
+
+vi.mock("../../Overlay/Overlay", () => {
+    /**
+     * Мок Overlay, повторяющий контракт OverlayBase: колбэки вызываются только на переходах opened,
+     * на маунте — нет. Иначе тесты ловят поведение мока, а не компонента.
+     */
+    const OverlayMock = ({ children, className, opened, onClose, onClosing, onOpen }: IOverlayMockProps) => {
+        const callbacks = React.useRef({ onClose, onClosing, onOpen });
+        const isFirstRender = React.useRef(true);
+
+        React.useLayoutEffect(() => {
+            callbacks.current = { onClose, onClosing, onOpen };
+        });
+
+        React.useEffect(() => {
+            if (isFirstRender.current) {
+                isFirstRender.current = false;
+                return;
+            }
+
+            if (opened) {
+                callbacks.current.onOpen?.();
+            } else {
+                callbacks.current.onClosing?.();
+                callbacks.current.onClose?.();
+            }
+        }, [opened]);
+
+        return (
+            <div data-testid="overlay" className={className} data-opened={opened}>
+                {typeof children === "function" ? children({ closing: false, opened }) : children}
+            </div>
+        );
+    };
+
+    return {
+        Overlay: Object.assign(OverlayMock, {
+            Mask: ({ opened, className }: IOverlayPartMockProps) => (
                 <div data-testid="overlay-mask" data-opened={opened} className={className} />
             ),
-            Panel: ({ children, className }: any) => (
+            Panel: ({ children, className }: IOverlayPartMockProps) => (
                 <div data-testid="overlay-panel" className={className}>
                     {children}
                 </div>
             ),
-        },
-    ),
-}));
+        }),
+    };
+});
 
 vi.mock("../../Overlay/OverlayBase", () => ({
     EOverlayDirection: {
@@ -61,6 +92,9 @@ vi.mock("../../Overlay/OverlayBase", () => ({
 
 const TestContent = () => <div data-testid="test-content">TopOverlay Content</div>;
 
+/** Последние свойства, с которыми был отрисован FocusTrap. */
+const getLastFocusTrapProps = () => focusTrapMock.mock.calls[focusTrapMock.mock.calls.length - 1][0];
+
 describe("TopOverlay", () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -68,6 +102,7 @@ describe("TopOverlay", () => {
 
     afterEach(() => {
         cleanup();
+        vi.restoreAllMocks();
     });
 
     describe("Basic Rendering", () => {
@@ -167,6 +202,27 @@ describe("TopOverlay", () => {
             const wrapper = container.querySelector(".topOverlayWrapper");
             expect(wrapper?.className).not.toContain("opened");
         });
+
+        it("should apply topOverlay class to Overlay", () => {
+            render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(screen.getByTestId("overlay")).toHaveClass("topOverlay");
+        });
+
+        it("should apply own classes to Overlay.Mask and Overlay.Panel", () => {
+            render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(screen.getByTestId("overlay-mask")).toHaveClass("topOverlayMask");
+            expect(screen.getByTestId("overlay-panel")).toHaveClass("topOverlayPanel");
+        });
     });
 
     describe("Focus Trap", () => {
@@ -179,7 +235,7 @@ describe("TopOverlay", () => {
 
             expect(focusTrapMock).toHaveBeenCalled();
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBeInstanceOf(Function);
+            expect(focusTrapProps.focusTrapOptions?.clickOutsideDeactivates).toBeInstanceOf(Function);
         });
 
         it("should configure FocusTrap with preventScroll option", () => {
@@ -190,7 +246,7 @@ describe("TopOverlay", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
+            expect(focusTrapProps.focusTrapOptions?.preventScroll).toBe(true);
         });
 
         it("should merge custom focusTrapProps with defaults", () => {
@@ -206,10 +262,10 @@ describe("TopOverlay", () => {
             );
 
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
-            expect(focusTrapProps.focusTrapOptions.clickOutsideDeactivates).toBeInstanceOf(Function);
-            expect(focusTrapProps.focusTrapOptions.preventScroll).toBe(true);
-            expect(focusTrapProps.focusTrapOptions.allowOutsideClick).toBe(true);
-            expect(focusTrapProps.focusTrapOptions.returnFocusOnDeactivate).toBe(true);
+            expect(focusTrapProps.focusTrapOptions?.clickOutsideDeactivates).toBeInstanceOf(Function);
+            expect(focusTrapProps.focusTrapOptions?.preventScroll).toBe(true);
+            expect(focusTrapProps.focusTrapOptions?.allowOutsideClick).toBe(true);
+            expect(focusTrapProps.focusTrapOptions?.returnFocusOnDeactivate).toBe(true);
         });
 
         it("should pass additional focusTrapProps", () => {
@@ -222,19 +278,62 @@ describe("TopOverlay", () => {
             const focusTrapProps = focusTrapMock.mock.calls[0][0];
             expect(focusTrapProps.paused).toBe(true);
         });
+
+        it("should keep FocusTrap inactive until overlay is opened", () => {
+            render(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(getLastFocusTrapProps().active).toBe(false);
+        });
+
+        it("should activate FocusTrap after overlay is opened and deactivate on closing", () => {
+            const { rerender } = render(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            rerender(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(getLastFocusTrapProps().active).toBe(true);
+
+            rerender(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(getLastFocusTrapProps().active).toBe(false);
+        });
     });
 
     describe("Callbacks", () => {
         it("should call onOpen when overlay opens", () => {
             const handleOpen = vi.fn();
 
-            render(
+            const { rerender } = render(
+                <TopOverlay opened={false} onOpen={handleOpen}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(handleOpen).not.toHaveBeenCalled();
+
+            rerender(
                 <TopOverlay opened={true} onOpen={handleOpen}>
                     <TestContent />
                 </TopOverlay>,
             );
 
-            expect(handleOpen).toHaveBeenCalled();
+            expect(handleOpen).toHaveBeenCalledTimes(1);
+            expect(handleOpen).toHaveBeenCalledWith();
         });
 
         it("should call onClose when overlay closes", () => {
@@ -254,7 +353,8 @@ describe("TopOverlay", () => {
                 </TopOverlay>,
             );
 
-            expect(handleClose).toHaveBeenCalled();
+            expect(handleClose).toHaveBeenCalledTimes(1);
+            expect(handleClose).toHaveBeenCalledWith();
         });
 
         it("should not call onOpen when opened is false", () => {
@@ -268,6 +368,22 @@ describe("TopOverlay", () => {
 
             expect(handleOpen).not.toHaveBeenCalled();
         });
+
+        it("should work without callbacks", () => {
+            const { rerender } = render(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(() =>
+                rerender(
+                    <TopOverlay opened={true}>
+                        <TestContent />
+                    </TopOverlay>,
+                ),
+            ).not.toThrow();
+        });
     });
 
     describe("Wrapper Styles", () => {
@@ -279,6 +395,41 @@ describe("TopOverlay", () => {
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.style.top).toBe("");
+        });
+
+        it("should recalculate inline top style on open and reset it on close", () => {
+            vi.spyOn(window, "getComputedStyle").mockReturnValue({
+                getPropertyValue: () => "0px",
+            } as unknown as CSSStyleDeclaration);
+            // Обёртка отрисована выше вьюпорта — позиционирование должно быть скорректировано.
+            vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
+                top: -40,
+            } as DOMRect);
+
+            const { container, rerender } = render(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.style.top).toBe("");
+
+            rerender(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(wrapper.style.top).not.toBe("");
+
+            rerender(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
             expect(wrapper.style.top).toBe("");
         });
     });
@@ -309,4 +460,3 @@ describe("TopOverlay", () => {
         });
     });
 });
-

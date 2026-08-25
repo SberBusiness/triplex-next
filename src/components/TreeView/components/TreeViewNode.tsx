@@ -98,11 +98,13 @@ export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsW
         return (
             <TreeViewContext.Provider value={{ ...treeViewContext, parentNode: this.abstractNode }}>
                 <li
-                    role="treeitem"
                     tabIndex={this.abstractNode.getTabIndex()}
-                    aria-expanded={this.abstractNode.getOpened()}
                     className={clsx(styles.treeViewNode, className)}
                     {...props}
+                    // role и aria-expanded после {...props}: семантика узла - контракт компонента,
+                    // потребитель ее не переопределяет.
+                    role="treeitem"
+                    aria-expanded={this.abstractNode.getOpened()}
                     onBlur={this.handleBlur}
                     onFocus={this.handleFocus}
                 >

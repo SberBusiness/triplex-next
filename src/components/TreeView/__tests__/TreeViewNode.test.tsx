@@ -33,6 +33,18 @@ describe("TreeViewNode", () => {
             expect(item.tagName).toBe("LI");
         });
 
+        it("Не дает переопределить role и aria-expanded", () => {
+            render(
+                <TreeView aria-label="Tree">
+                    <TreeView.Node id="a" role="none" aria-expanded opened={false}>
+                        {renderNodeContent("a")}
+                    </TreeView.Node>
+                </TreeView>,
+            );
+
+            expect(screen.getByRole("treeitem")).toHaveAttribute("aria-expanded", "false");
+        });
+
         it("Мерджит className с собственным классом", () => {
             render(
                 <TreeView aria-label="Tree">

@@ -239,6 +239,17 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
             });
         } else {
             node.setActive(false);
+
+            // Активность снимается со всего дерева: стрелки могли увести ее на другую ноду, пока DOM-фокус
+            // оставался на этой. Иначе после ухода фокуса дерево продолжало бы забирать стрелки у страницы.
+            traverseAbstractTree(rootNode, (n) => {
+                if (n.getActive()) {
+                    n.setActive(false);
+                }
+
+                // Продолжить обход дерева.
+                return true;
+            });
         }
     },
     setActivePrevNode: (rootNode) => {

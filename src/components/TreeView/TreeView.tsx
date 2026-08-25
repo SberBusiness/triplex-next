@@ -49,6 +49,8 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
     public static Group = TreeViewGroup;
 
     private readonly abstractRootNode: TreeViewAbstractNode;
+    /** Глобальный слушатель keydown подписан. Он нужен только пока в дереве есть активная нода. */
+    private keyDownListenerAttached = false;
 
     constructor(props: ITreeViewProps) {
         super(props);
@@ -60,12 +62,8 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
         };
     }
 
-    public componentDidMount(): void {
-        window.addEventListener("keydown", this.handleKeyDown);
-    }
-
     public componentWillUnmount(): void {
-        window.removeEventListener("keydown", this.handleKeyDown);
+        this.detachKeyDownListener();
     }
 
     public render(): JSX.Element {
@@ -85,7 +83,8 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
                     updateCount,
                 }}
             >
-                <ul className={clsx(styles.treeView, className)} role="tree" {...props}>
+                {/* role после {...props}: семантика дерева - контракт компонента, потребитель ее не переопределяет. */}
+                <ul className={clsx(styles.treeView, className)} {...props} role="tree">
                     {children}
                 </ul>
             </TreeViewContext.Provider>
@@ -135,6 +134,8 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
     private removeNode: TTreeViewContextRemoveNode = (node) => {
         node.getParent()?.removeChild(node);
         this.updateTabIndexNodes();
+        // Удалена могла быть активная нода - тогда слушатель стрелок больше не нужен.
+        this.syncKeyDownListener();
         // Соседние ноды должны перерисоваться: после удаления у них могли измениться hasChildNodes и isLastNode.
         this.incrementUpdateCount();
     };
@@ -142,7 +143,29 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
     /** Установка флага активности ноды. */
     private setActiveNode: TTreeViewContextSetActiveNode = (node, active) => {
         TreeViewAbstractNodeUtils.setActiveNode(node, this.abstractRootNode, active);
+        this.syncKeyDownListener();
         this.incrementUpdateCount();
+    };
+
+    /**
+     * Подписывает и отписывает глобальный слушатель keydown по наличию активной ноды.
+     * Пока активной ноды нет, дерево не обрабатывает стрелки и не отменяет скролл страницы.
+     */
+    private syncKeyDownListener = () => {
+        const hasActiveNode = Boolean(TreeViewAbstractNodeUtils.getActiveNode(this.abstractRootNode));
+
+        if (hasActiveNode && !this.keyDownListenerAttached) {
+            window.addEventListener("keydown", this.handleKeyDown);
+            this.keyDownListenerAttached = true;
+        } else if (!hasActiveNode && this.keyDownListenerAttached) {
+            this.detachKeyDownListener();
+        }
+    };
+
+    /** Отписывает глобальный слушатель keydown. */
+    private detachKeyDownListener = () => {
+        window.removeEventListener("keydown", this.handleKeyDown);
+        this.keyDownListenerAttached = false;
     };
 
     /** Установка флага opened ноды. */

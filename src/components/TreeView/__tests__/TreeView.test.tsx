@@ -64,6 +64,16 @@ describe("TreeView", () => {
             expect(ref.current).toBeInstanceOf(TreeView);
         });
 
+        it("Не дает переопределить role на корневом ul", () => {
+            render(
+                <TreeView aria-label="Tree" role="presentation">
+                    <TreeView.Node id="a">{renderNodeContent("a")}</TreeView.Node>
+                </TreeView>,
+            );
+
+            expect(screen.getByRole("tree")).toBeInTheDocument();
+        });
+
         it("Мерджит className с собственным классом", () => {
             renderFlatTree({ className: "custom-class" });
 
@@ -112,6 +122,22 @@ describe("TreeView", () => {
 
             fireEvent.focus(second);
             fireEvent.blur(second);
+
+            expect(getActiveLabel()).toBeUndefined();
+        });
+
+        it("Blur снимает активность, уведенную стрелками на другую ноду", () => {
+            renderFlatTree();
+
+            const [first] = screen.getAllByRole("treeitem");
+
+            // Фокус остается на первой ноде, а активность стрелкой уходит на вторую.
+            fireEvent.focus(first);
+            fireWindowKeyDown(EVENT_KEY_CODES.ARROW_DOWN);
+
+            expect(getActiveLabel()).toBe("b");
+
+            fireEvent.blur(first);
 
             expect(getActiveLabel()).toBeUndefined();
         });
@@ -174,6 +200,34 @@ describe("TreeView", () => {
 
         it("Не реагирует на стрелки, когда активной ноды нет", () => {
             renderFlatTree();
+
+            const event = fireWindowKeyDown(EVENT_KEY_CODES.ARROW_DOWN);
+
+            expect(getActiveLabel()).toBeUndefined();
+            expect(event.defaultPrevented).toBe(false);
+        });
+
+        it("Не подписывается на keydown, пока в дереве нет активной ноды", () => {
+            const addEventListener = vi.spyOn(window, "addEventListener");
+
+            renderFlatTree();
+
+            expect(addEventListener).not.toHaveBeenCalledWith("keydown", expect.any(Function));
+
+            fireEvent.focus(screen.getAllByRole("treeitem")[0]);
+
+            expect(addEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
+
+            addEventListener.mockRestore();
+        });
+
+        it("После ухода фокуса из дерева стрелки снова достаются странице", () => {
+            renderFlatTree();
+
+            const [first] = screen.getAllByRole("treeitem");
+
+            fireEvent.focus(first);
+            fireEvent.blur(first);
 
             const event = fireWindowKeyDown(EVENT_KEY_CODES.ARROW_DOWN);
 

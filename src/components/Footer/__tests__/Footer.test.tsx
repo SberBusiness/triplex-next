@@ -38,10 +38,12 @@ describe("Footer", () => {
             expect(root).toHaveAttribute("aria-label", "Footer");
         });
 
-        it("Should set data-tx attribute on the root element", () => {
-            render(<Footer data-testid="footer" />);
+        it("Should set data-tx attribute and not let rest props override it", () => {
+            render(<Footer data-testid="footer" data-tx="overridden" />);
 
-            expect(getRoot()).toHaveAttribute("data-tx");
+            const root = getRoot();
+            expect(root).not.toHaveAttribute("data-tx", "overridden");
+            expect(root).toHaveAttribute("data-tx", process.env.npm_package_version);
         });
 
         it("Should forward object ref to the root div", () => {

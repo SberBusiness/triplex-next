@@ -10,6 +10,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Удалено свойство `adaptiveMode`: адаптивный режим календаря компонент определяет сам по версии выпадающего меню, переданное значение и раньше игнорировалось. Свойство пропало также из `DateField`, `MonthYearField` и `ChipDatePicker` — они наследуют свойства `DatePickerExtended`.
 
+**Skeleton**
+
+- Изменены названия типов: `ESkeletonType.LIGHT` стал `ESkeletonType.TYPE_1`, `ESkeletonType.DARK` стал `ESkeletonType.TYPE_2`.
+- Изменены названия токенов: `Skeleton.BackgroundColor_Light_Start` стал `Skeleton.BackgroundColor_Type1_Start`, `Skeleton.BackgroundColor_Light_End` стал `Skeleton.BackgroundColor_Type1_End`, `Skeleton.BackgroundColor_Dark_Start` стал `Skeleton.BackgroundColor_Type2_Start`, `Skeleton.BackgroundColor_Dark_End` стал `Skeleton.BackgroundColor_Type2_End`.
+
 **TreeView**
 
 - `role` и `aria-expanded` больше нельзя переопределить через props: `TreeView` всегда рендерит `role="tree"`, `TreeView.Node` — `role="treeitem"` с собственным `aria-expanded`, `TreeView.Group` — `role="group"`. Если вы передавали свой `role`, он теперь игнорируется — семантика дерева задаётся компонентом.
@@ -56,6 +61,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлен фон для `TabButtonDropdown`, когда внутри дропдауна выбран элемент.
 - Исправлено: `className`, переданный в `buttonDropdownAttributes`, больше не затирается собственными классами dropdown-кнопки — классы объединяются.
+
+**Skeleton**
+
+- Добавлен новый тип `ESkeletonType.TYPE_3`.
+- Изменены цвета токенов `Skeleton.BackgroundColor_Type2_Start` и `Skeleton.BackgroundColor_Type2_End` в темной теме.
 
 **TreeView**
 

@@ -3,6 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Skeleton, ESkeletonType } from "@sberbusiness/triplex-next";
 import { DefaultExample, DefaultExampleSource, TypesExample, TypesExampleSource } from "./examples";
+import "./Skeleton.less";
 
 const meta = {
     title: "Components/Loaders/Skeleton",
@@ -36,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
     tags: ["!autodocs"],
     args: {
-        type: ESkeletonType.DARK,
+        type: ESkeletonType.TYPE_2,
     },
     argTypes: {
         type: {
@@ -45,7 +46,7 @@ export const Playground: Story = {
             description: "Тип скелетона",
             table: {
                 type: { summary: "ESkeletonType" },
-                defaultValue: { summary: "ESkeletonType.DARK" },
+                defaultValue: { summary: "ESkeletonType.TYPE_2" },
             },
         },
     },
@@ -127,28 +128,52 @@ export const VisualTests: Story = {
     render: () => (
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
             <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>DARK</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px" }}>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>TYPE_1</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px", background: "#EEF0F4" }}>
                     <Skeleton
-                        type={ESkeletonType.DARK}
-                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "rgba(31, 31, 34, 0.10)" }}
+                        type={ESkeletonType.TYPE_1}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "#F2F4F7" }}
                     />
                     <Skeleton
-                        type={ESkeletonType.DARK}
-                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "rgba(31, 31, 34, 0.10)" }}
+                        type={ESkeletonType.TYPE_1}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "#F2F4F7" }}
                     />
                 </div>
             </div>
             <div>
-                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>LIGHT</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px", background: "#EEF0F4" }}>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>TYPE_2</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px" }}>
                     <Skeleton
-                        type={ESkeletonType.LIGHT}
-                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "#F2F4F7" }}
+                        type={ESkeletonType.TYPE_2}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "rgba(31, 31, 34, 0.05)" }}
                     />
                     <Skeleton
-                        type={ESkeletonType.LIGHT}
-                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "#F2F4F7" }}
+                        type={ESkeletonType.TYPE_2}
+                        style={{ height: "80px", width: "calc(50% - 12px)", backgroundColor: "rgba(31, 31, 34, 0.05)" }}
+                    />
+                </div>
+            </div>
+            <div>
+                <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>TYPE_3</div>
+                <div
+                    className="skeleton-type3-background"
+                    style={{ display: "flex", flexWrap: "wrap", gap: "24px", padding: "24px" }}
+                >
+                    <Skeleton
+                        type={ESkeletonType.TYPE_3}
+                        style={{
+                            height: "80px",
+                            width: "calc(50% - 12px)",
+                            backgroundColor: "rgba(255, 255, 255, 0.35)",
+                        }}
+                    />
+                    <Skeleton
+                        type={ESkeletonType.TYPE_3}
+                        style={{
+                            height: "80px",
+                            width: "calc(50% - 12px)",
+                            backgroundColor: "rgba(255, 255, 255, 0.35)",
+                        }}
                     />
                 </div>
             </div>

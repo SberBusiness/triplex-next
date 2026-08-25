@@ -10,6 +10,15 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Удалено свойство `adaptiveMode`: адаптивный режим календаря компонент определяет сам по версии выпадающего меню, переданное значение и раньше игнорировалось. Свойство пропало также из `DateField`, `MonthYearField` и `ChipDatePicker` — они наследуют свойства `DatePickerExtended`.
 
+**Skeleton**
+
+- Изменены названия типов: `ESkeletonType.LIGHT` стал `ESkeletonType.TYPE_1`, `ESkeletonType.DARK` стал `ESkeletonType.TYPE_2`.
+- Изменены названия токенов: `Skeleton.BackgroundColor_Light_Start` стал `Skeleton.BackgroundColor_Type1_Start`, `Skeleton.BackgroundColor_Light_End` стал `Skeleton.BackgroundColor_Type1_End`, `Skeleton.BackgroundColor_Dark_Start` стал `Skeleton.BackgroundColor_Type2_Start`, `Skeleton.BackgroundColor_Dark_End` стал `Skeleton.BackgroundColor_Type2_End`.
+
+**TreeView**
+
+- `role` и `aria-expanded` больше нельзя переопределить через props: `TreeView` всегда рендерит `role="tree"`, `TreeView.Node` — `role="treeitem"` с собственным `aria-expanded`, `TreeView.Group` — `role="group"`. Если вы передавали свой `role`, он теперь игнорируется — семантика дерева задаётся компонентом.
+
 <Heading>Изменения</Heading>
 
 **Button**
@@ -32,6 +41,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Проведён AI-рефакторинг.
 
+**Footer**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет.
+
 **IslandAccordion**
 
 - Исправлены нижние отступы у `IslandAccordionHeader` и выравнивание иконки каретки.
@@ -49,6 +62,20 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлен фон для `TabButtonDropdown`, когда внутри дропдауна выбран элемент.
 - Исправлено: `className`, переданный в `buttonDropdownAttributes`, больше не затирается собственными классами dropdown-кнопки — классы объединяются.
 
+**Skeleton**
+
+- Добавлен новый тип `ESkeletonType.TYPE_3`.
+- Изменены цвета токенов `Skeleton.BackgroundColor_Type2_Start` и `Skeleton.BackgroundColor_Type2_End` в темной теме.
+
 **TopOverlay**
 
 - Проведён AI-рефакторинг, добавлен `displayName`.
+
+**TreeView**
+
+- Добавлено: `TreeView.Group` пробрасывает `ref` на свой корневой `<ul>` — раньше компонент был объявлен как `React.FC`.
+- Исправлено: `className`, переданный в `TreeView.Group`, больше не затирает собственный класс элемента — раньше вместе с пользовательским классом пропадал сброс отступов и маркеров списка.
+- Исправлено: после удаления ноды из дерева соседние ноды перерисовываются — `hasChildNodes` и `isLastNode` в render-функции ноды больше не остаются устаревшими.
+- Исправлено: `ArrowUp` с первой ноды дерева больше не делает активной скрытую ноду внутри свёрнутой последней ветки — активной становится последняя видимая нода.
+- Исправлено: после ухода фокуса из дерева стрелки вверх/вниз снова достаются странице. Раньше, если активную ноду перед этим увели стрелками, дерево продолжало перехватывать их и отменять скролл страницы.
+- Проведён AI-рефакторинг.

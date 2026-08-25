@@ -116,7 +116,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Ellipsis | ⬜ | ✅ | ⬜ |
 | EmptyView | ✅ | ✅ | ⬜ |
 | ExpandAnimation | ✅ | ✅ | ✅ |
-| Footer | ⬜ | ⬜ | ⬜ |
+| Footer | ✅ | ✅ | ✅ |
 | FooterPage | ✅ | ✅ | ✅ |
 | FormField | ✅ | ✅ | ✅ |
 | FormGroup | ⬜ | ⬜ | ⬜ |
@@ -202,7 +202,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ThemeProvider | ✅ | ✅ | ✅ |
 | Tooltip | ✅ | ✅ | ✅ |
 | TopOverlay | ✅ | ✅ | ✅ |
-| TreeView | ⬜ | ⬜ | ⬜ |
+| TreeView | ✅ | ✅ | ✅ |
 | Text | ✅ | ✅ | ✅ |
 | Title | ✅ | ✅ | ✅ |
 | Caption | ✅ | ✅ | ✅ |

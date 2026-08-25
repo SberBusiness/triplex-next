@@ -8,7 +8,8 @@ export interface ITreeViewGroupProps extends React.HTMLAttributes<HTMLUListEleme
 /** Обертка для вложенных TreeViewNode. Задает семантику группы дочерних нод (role="group"). */
 export const TreeViewGroup = React.forwardRef<HTMLUListElement, ITreeViewGroupProps>(
     ({ children, className, ...props }, ref) => (
-        <ul role="group" className={clsx(styles.treeViewGroup, className)} {...props} ref={ref}>
+        // role после {...props}: семантика группы - контракт компонента, потребитель ее не переопределяет.
+        <ul className={clsx(styles.treeViewGroup, className)} {...props} role="group" ref={ref}>
             {children}
         </ul>
     ),

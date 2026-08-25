@@ -17,6 +17,16 @@ describe("TreeViewGroup", () => {
         expect(group).toHaveTextContent("Item");
     });
 
+    it("Не дает переопределить role", () => {
+        render(
+            <TreeViewGroup role="presentation">
+                <li>Item</li>
+            </TreeViewGroup>,
+        );
+
+        expect(screen.getByRole("group")).toBeInTheDocument();
+    });
+
     it("Мерджит className с собственным классом", () => {
         render(<TreeViewGroup className="custom-class" />);
 

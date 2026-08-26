@@ -158,6 +158,7 @@ const LightBoxBase: React.FC<ILightBoxProps> = ({
         styles.lightBox,
         styles[size],
         {
+            [styles.isLoading]: Boolean(isLoading),
             [styles.lightBoxSideOverlayActive]: Boolean(isSideOverlayOpened),
             [styles.lightBoxTopOverlayActive]: Boolean(isTopOverlayOpened),
         },

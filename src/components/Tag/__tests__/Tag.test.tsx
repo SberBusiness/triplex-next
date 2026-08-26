@@ -137,4 +137,80 @@ describe("Tag", () => {
         expect(screen.getByTestId("edit-icon-24")).toBeInTheDocument();
         expect(screen.getByTestId("cross-icon-24")).toBeInTheDocument();
     });
+
+    it.each([
+        [EComponentSize.SM, "sm", "b4"],
+        [EComponentSize.MD, "md", "b3"],
+        [EComponentSize.LG, "lg", "b2"],
+    ])("maps size %s to root class and text size", (size, rootClassName, textClassName) => {
+        const { container } = render(<Tag {...defaultProps} size={size} />);
+
+        expect(container.firstChild).toHaveClass("tag", rootClassName);
+        expect(screen.getByText("Test Tag")).toHaveClass(textClassName);
+    });
+
+    it("switches text font type between primary and disabled", () => {
+        const { rerender } = render(<Tag {...defaultProps} />);
+        expect(screen.getByText("Test Tag")).toHaveClass("primary");
+
+        rerender(<Tag {...defaultProps} disabled />);
+        expect(screen.getByText("Test Tag")).toHaveClass("disabled");
+    });
+
+    it("does not render id as an attribute on the root element", () => {
+        const { container } = render(<Tag {...defaultProps} />);
+
+        expect(container.firstChild).not.toHaveAttribute("id");
+    });
+
+    it("spreads rest props to the root element", () => {
+        const { container } = render(<Tag {...defaultProps} data-test-attr="value" title="Tag title" />);
+
+        expect(container.firstChild).toHaveAttribute("data-test-attr", "value");
+        expect(container.firstChild).toHaveAttribute("title", "Tag title");
+    });
+
+    it("renders the remove button even without onRemove and does not throw on click", () => {
+        render(<Tag {...defaultProps} />);
+
+        const removeButton = screen.getByRole("button");
+
+        expect(() => fireEvent.click(removeButton)).not.toThrow();
+    });
+
+    it("does not call callbacks when disabled", () => {
+        const onRemove = vi.fn();
+        const onEdit = vi.fn();
+
+        render(<Tag {...defaultProps} disabled onEdit={onEdit} onRemove={onRemove} />);
+
+        screen.getAllByRole("button").forEach((button) => fireEvent.click(button));
+
+        expect(onEdit).not.toHaveBeenCalled();
+        expect(onRemove).not.toHaveBeenCalled();
+    });
+
+    it("calls the tag callback before the consumer onClick", () => {
+        const callOrder: string[] = [];
+        const onRemove = vi.fn(() => callOrder.push("onRemove"));
+        const handleRemoveClick = vi.fn(() => callOrder.push("removeButtonProps.onClick"));
+
+        render(<Tag {...defaultProps} onRemove={onRemove} removeButtonProps={{ onClick: handleRemoveClick }} />);
+
+        fireEvent.click(screen.getByRole("button"));
+
+        expect(callOrder).toEqual(["onRemove", "removeButtonProps.onClick"]);
+    });
+
+    it("keeps the tag callback when removeButtonProps has its own onClick", () => {
+        const onRemove = vi.fn();
+        const handleRemoveClick = vi.fn();
+
+        render(<Tag {...defaultProps} onRemove={onRemove} removeButtonProps={{ onClick: handleRemoveClick }} />);
+
+        fireEvent.click(screen.getByRole("button"));
+
+        expect(onRemove).toHaveBeenCalledWith("test-id");
+        expect(handleRemoveClick).toHaveBeenCalledTimes(1);
+    });
 });

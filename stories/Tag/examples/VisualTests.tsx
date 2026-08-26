@@ -3,14 +3,14 @@ import { Tag, EComponentSize } from "@sberbusiness/triplex-next";
 
 const SIZES = Object.values(EComponentSize);
 
-const editButtonProps = { "aria-label": "Редактировать" };
-const removeButtonProps = { "aria-label": "Удалить" };
+const EDIT_BUTTON_PROPS = { "aria-label": "Редактировать" };
+const REMOVE_BUTTON_PROPS = { "aria-label": "Удалить" };
 
 export const VisualTests = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {SIZES.map((size) => (
             <div key={size} style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                <Tag id={`${size}-default`} size={size} onRemove={() => {}} removeButtonProps={removeButtonProps}>
+                <Tag id={`${size}-default`} size={size} onRemove={() => {}} removeButtonProps={REMOVE_BUTTON_PROPS}>
                     {size.toUpperCase()}
                 </Tag>
                 <Tag
@@ -18,8 +18,8 @@ export const VisualTests = () => (
                     size={size}
                     onEdit={() => {}}
                     onRemove={() => {}}
-                    editButtonProps={editButtonProps}
-                    removeButtonProps={removeButtonProps}
+                    editButtonProps={EDIT_BUTTON_PROPS}
+                    removeButtonProps={REMOVE_BUTTON_PROPS}
                 >
                     {size.toUpperCase()} editable
                 </Tag>
@@ -29,8 +29,8 @@ export const VisualTests = () => (
                     disabled
                     onEdit={() => {}}
                     onRemove={() => {}}
-                    editButtonProps={editButtonProps}
-                    removeButtonProps={removeButtonProps}
+                    editButtonProps={EDIT_BUTTON_PROPS}
+                    removeButtonProps={REMOVE_BUTTON_PROPS}
                 >
                     {size.toUpperCase()} disabled
                 </Tag>
@@ -42,8 +42,8 @@ export const VisualTests = () => (
                 size={EComponentSize.LG}
                 onEdit={() => {}}
                 onRemove={() => {}}
-                editButtonProps={editButtonProps}
-                removeButtonProps={removeButtonProps}
+                editButtonProps={EDIT_BUTTON_PROPS}
+                removeButtonProps={REMOVE_BUTTON_PROPS}
             >
                 Very long tag text that should be truncated with ellipsis
             </Tag>

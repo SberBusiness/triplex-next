@@ -202,15 +202,13 @@ describe("Tag", () => {
         expect(callOrder).toEqual(["onRemove", "removeButtonProps.onClick"]);
     });
 
-    it("keeps the tag callback when removeButtonProps has its own onClick", () => {
-        const onRemove = vi.fn();
-        const handleRemoveClick = vi.fn();
+    it("lets removeButtonProps override the disabled state of the tag", () => {
+        render(<Tag {...defaultProps} disabled removeButtonProps={{ disabled: false }} />);
 
-        render(<Tag {...defaultProps} onRemove={onRemove} removeButtonProps={{ onClick: handleRemoveClick }} />);
+        expect(screen.getByRole("button")).toBeEnabled();
+    });
 
-        fireEvent.click(screen.getByRole("button"));
-
-        expect(onRemove).toHaveBeenCalledWith("test-id");
-        expect(handleRemoveClick).toHaveBeenCalledTimes(1);
+    it("exposes displayName", () => {
+        expect(Tag.displayName).toBe("Tag");
     });
 });

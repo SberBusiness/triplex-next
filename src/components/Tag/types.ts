@@ -12,7 +12,10 @@ export interface ITagProps extends React.HTMLAttributes<HTMLSpanElement> {
     id: string;
     /** Размер. Влияет на высоту тега, размер текста и размер иконок в кнопках. */
     size: EComponentSize;
-    /** Отключенное состояние: текст приглушается, обе кнопки блокируются. По умолчанию false. */
+    /**
+     * Отключенное состояние: текст приглушается, обе кнопки блокируются. По умолчанию false.
+     * Собственный disabled в editButtonProps или removeButtonProps перекрывает это значение.
+     */
     disabled?: boolean;
     /** Колбэк-функция при редактировании. Получает id тега. Кнопка редактирования рендерится, только если колбэк передан. */
     onEdit?: (id: string) => void;

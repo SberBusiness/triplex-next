@@ -1,7 +1,7 @@
 ---
 component: TreeViewNode
 category: TreeView
-related: [TreeView, CollapsibleTreeExtended]
+related: [TreeView]
 tokens: []
 stories: stories/TreeView/TreeView.stories.tsx
 version: "1.0"
@@ -71,7 +71,7 @@ render-функцию `children`.
 | `openedNode` | Нода раскрыта — значение из абстрактного дерева, а не из prop `opened` |
 | `hasChildNodes` | У ноды есть **зарегистрированные** дочерние ноды |
 | `isLastNode` | Нода последняя в дереве целиком (последняя на своём уровне и все её предки — последние). Используется для линий-коннекторов |
-| `setOpenedNode(opened)` | Меняет состояние раскрытия во внутреннем состоянии `TreeView`. Uncontrolled-путь: prop `opened` при этом не меняется |
+| `setOpenedNode(opened)` | Пишет флаг раскрытия в абстрактную ноду и инкрементит `updateCount` в `TreeView` для перерендера. Uncontrolled-путь: prop `opened` при этом не меняется |
 
 ### Порядок нод и `prevNodeId` / `nextNodeId`
 
@@ -79,18 +79,20 @@ render-функцию `children`.
 рендера. `prevNodeId` / `nextNodeId` позволяют вставить ноду в произвольное
 место уровня: порядок в абстрактном дереве (а значит `isLastNode` и порядок
 обхода стрелками) может отличаться от порядка в разметке. Ссылаться можно
-только на **уже зарегистрированную** ноду — на момент конструктора текущей ноды
-она должна быть смонтирована. Id соседей выводят из массива данных
+только на **уже зарегистрированную** ноду: к моменту конструктора текущей ноды
+конструктор соседа должен был отработать — монтирование при этом не требуется,
+оно происходит позже. Id соседей выводят из массива данных
 `CollapsibleTree` и `CheckboxTree`; `CollapsibleTreeExtended` своего массива не
 имеет и пробрасывает `prevNodeId` / `nextNodeId` как есть от потребителя.
 
-Промаха по id компонент не сигнализирует — оба prop'а деградируют молча:
-
-- ноду с указанным id ищут **в поддереве текущего родителя**, а не по всему
-  дереву;
-- id не найден — нода уходит в конец своего уровня;
-- id найден, но это не прямой ребёнок того же родителя — `prevNodeId` ставит
-  ноду в начало уровня, `nextNodeId` — перед последней нодой уровня.
+Промаха по id компонент не сигнализирует — оба prop'а деградируют молча. Ноду с
+указанным id ищут **в поддереве текущего родителя**, а не по всему дереву;
+если она там не нашлась или не является прямым ребёнком того же родителя,
+позиция вставки получается непредсказуемой. Конкретное место при промахе —
+**деталь текущей реализации `AbstractTreeNode.addChild`, а не контракт**
+(индексная арифметика `splice` в классе, общем для всех абстрактных деревьев),
+тестами не закреплена и полагаться на неё нельзя. Правильное употребление одно:
+ссылаться только на существующую соседнюю ноду того же уровня.
 
 ### Раскрытие и регистрация детей
 
@@ -131,9 +133,12 @@ render-функцию `children`.
 - **`children` — функция, а не `ReactNode`.** Смена сигнатуры — breaking change
   для всех потребителей (`CollapsibleTree`, `CheckboxTree`,
   `CollapsibleTreeExtended`).
-- **Barrel `src/components/TreeView/index.ts`** экспортирует `TreeViewNode` и
-  типы `ITreeViewNodeProps`, `ITreeViewNodeProvideProps`,
-  `ITreeViewNodePropsWithContext`. Состав и имена менять нельзя.
+- **Barrel `src/components/TreeView/index.ts`** реэкспортирует модуль ноды
+  целиком (`export * from "./components/TreeViewNode"`), поэтому публичны и
+  `TreeViewNode`, и класс `TreeViewNodeWithContext`, и типы
+  `ITreeViewNodeProps`, `ITreeViewNodeProvideProps`,
+  `ITreeViewNodePropsWithContext` — всё это через `src/components/index.ts`
+  доходит до корня пакета. Состав и имена менять нельзя.
 - **`displayName` класса — `"TreeViewNodeWithContext"`**, у экспортируемой
   обёртки — `"WithTreeViewContext(TreeViewNodeWithContext)"` (добавляет HOC).
   Значения видны в React DevTools и в snapshot-тестах.
@@ -195,15 +200,15 @@ render-функцию `children`.
 ## Stories
 
 Отдельных stories у ноды нет: без `TreeView` она не рендерится, а собственного
-оформления у неё нет — все её состояния показаны в stories родителя.
+оформления у неё нет — все её состояния показаны в stories родителя. Ниже —
+только те, что демонстрируют API самой ноды; полный список историй семейства
+(`Playground`, `Default`) — в [TreeView-ai.md](./TreeView-ai.md).
 
 Основные истории: `stories/TreeView/TreeView.stories.tsx`
 Файлы примеров: `stories/TreeView/examples/`
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | `Playground.tsx` | Интерактивный контроль `defaultOpened` и глубины вложенности |
-| `Default` | `Default.tsx` | Плоский список нод: минимальная render-функция, `id`, семантика `<li>` |
 | `Nested` | `Nested.tsx` | Вложенность через `TreeView.Group`, prop `opened`, provide-props `openedNode` и `hasChildNodes` |
 | `Keyboard navigation` | `KeyboardNavigation.tsx` | Перемещение `activeNode` стрелками, подсветка активной ноды, `isLastNode` |
 | `VisualTests` | `VisualTests.tsx` | Свёрнутая и раскрытая нода, узел с детьми и лист, `isLastNode`; активная нода снимается через `play` |

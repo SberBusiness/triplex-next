@@ -70,7 +70,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 **Что значат колонки (definition of done):**
 
 - **AI.md** — у компонента есть `{ComponentName}-ai.md`, заполненный по `docs/ai/template-ai.md`: frontmatter (component, category, related, tokens, stories, version), Назначение, Варианты и props, Инварианты, Связанные компоненты, Stories с колонкой `Example file`, История изменений. Accessibility — обязательно для интерактивных компонентов.
-- **Storybook examples** — есть `.stories.tsx` в modern pattern (`docs/ai/stories-guide.md`): директория `stories/{Category}/examples/{Component}/` с отдельным файлом примера на каждую story (кроме `Playground` / `VisualTests`).
+- **Storybook examples** — есть `.stories.tsx` в modern pattern (`docs/ai/stories-guide.md`): примеры вынесены в подпапку `examples/` рядом со stories-файлом, по отдельному файлу на каждую story (кроме `Playground` / `VisualTests`), и реэкспортированы через `examples/index.ts`. Обычная раскладка — `stories/{Component}/examples/`; если в одной папке лежит несколько `.stories.tsx`, примеры дополнительно разложены по подпапкам компонентов: `stories/{Category}/examples/{Component}/`.
 - **AI refactoring** — компонент проведён через `docs/ai/ai-refactoring.md`: codestyle-чистка, structural-упрощение, AI-friendliness (JSDoc на всех props), unit-тесты на ключевую логику.
 
 Какие компоненты заслуживают отдельного `*-ai.md` (а какие описываются в родителе)

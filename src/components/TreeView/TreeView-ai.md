@@ -72,11 +72,13 @@ render-prop `children` с пятью provide-props, контракт по `focus
   зафиксированный публичным API: `ref` на `TreeView` отдаёт инстанс класса.
   Перевод на функциональные компоненты и добавление `forwardRef` — breaking
   change поведения `ref`. Не мигрировать без отдельного решения мейнтейнера.
-- **Barrel `src/components/TreeView/index.ts`** экспортирует `TreeView`,
-  `TreeViewNode`, `TreeViewGroup` и их типы (`ITreeViewProps`,
-  `ITreeViewNodeProps`, `ITreeViewNodeProvideProps`,
-  `ITreeViewNodePropsWithContext`, `ITreeViewGroupProps`). Состав и имена менять
-  нельзя — от них зависят `CollapsibleTreeExtended` и `CollapsibleTree`.
+- **Barrel `src/components/TreeView/index.ts`** реэкспортирует модули семейства
+  целиком (`export * from ...`), поэтому публично всё, что они экспортируют:
+  `TreeView` и `ITreeViewProps`, `TreeViewGroup` и `ITreeViewGroupProps`, а от
+  ноды — состав, перечисленный в
+  [TreeViewNode-ai.md](./TreeViewNode-ai.md) (там же и класс
+  `TreeViewNodeWithContext`). Состав и имена менять нельзя — от них зависят
+  `CollapsibleTreeExtended` и `CollapsibleTree`.
 - **`TreeViewContext` не экспортируется из barrel**, но `ITreeViewContext`
   транзитивно виден через `ITreeViewNodePropsWithContext`. Поле `updateCount`
   из контекста убирать нельзя без breaking change типа.

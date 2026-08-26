@@ -199,6 +199,8 @@ describe("TreeViewNode", () => {
             // Порядок в абстрактном дереве: a, c, b — последней считается b, а не отрисованная последней c.
             expect(screen.getByTestId("content-b")).toHaveAttribute("data-last", "true");
             expect(screen.getByTestId("content-c")).toHaveAttribute("data-last", "false");
+            // tabIndex=0 получает только первая нода уровня - значит c встала после a, а не перед ней.
+            expect(screen.getByTestId("content-a").closest("li")).toHaveAttribute("tabindex", "0");
         });
     });
 

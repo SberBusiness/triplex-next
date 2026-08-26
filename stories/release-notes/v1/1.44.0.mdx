@@ -21,6 +21,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**BodyPage**
+
+- Добавлено значение `EBodyPageVerticalMargin.NONE` — тело страницы без вертикальных отступов.
+- Свойство `verticalMargin` теперь принимает и объект `{top, bottom}`: отступы сверху и снизу задаются независимо, незаданная сторона остаётся `LARGE`. Прежняя форма с одним значением работает как раньше.
+
 **Button**
 
 - Изменен цвет токена `Button.SecondaryLight_Background_Active` в светлой и темной темах.

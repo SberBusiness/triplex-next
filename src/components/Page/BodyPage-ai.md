@@ -35,8 +35,26 @@ version: "1.0"
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `verticalMargin` | `EBodyPageVerticalMargin` | `LARGE` | Вертикальные отступы: `LARGE` = 24px (16px на узких экранах), `SMALL` = 16px (8px на узких). В LightBox используется `SMALL`. |
+| `verticalMargin` | `TBodyPageVerticalMargin` | `LARGE` | Вертикальные отступы: `LARGE` = 24px (16px на узких экранах), `SMALL` = 16px (8px на узких), `NONE` = 0. Одно значение задаёт обе стороны; объект `{top, bottom}` — каждую отдельно, незаданная сторона получает `LARGE`. В LightBox используется `SMALL`. |
 | `size` | `EComponentSize` | — | Размер острова (Island). **Доступен только для `type=FIRST`**; для `type=SECOND` типизирован как `never`. |
+
+### Тип verticalMargin
+
+```ts
+interface IBodyPageVerticalMarginSides {
+    top?: EBodyPageVerticalMargin;
+    bottom?: EBodyPageVerticalMargin;
+}
+
+type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMarginSides;
+```
+
+```tsx
+<Page.Body type={EBodyPageType.FIRST} verticalMargin={EBodyPageVerticalMargin.NONE}>…</Page.Body>
+<Page.Body type={EBodyPageType.FIRST} verticalMargin={{top: EBodyPageVerticalMargin.NONE}}>…</Page.Body>
+```
+
+Второй пример даёт 0 сверху и 24px снизу: незаданная сторона объекта падает в дефолт `LARGE`.
 
 ### Ограничения по типам
 
@@ -48,7 +66,8 @@ version: "1.0"
 
 Собственных CSS-переменных нет. Внешний вид карточки наследуется от `Island` (`EIslandType.TYPE_1`).
 Вертикальные отступы заданы фиксированными значениями в `styles/BodyPage.module.less`
-(24/16px и адаптив 16/8px на `@screen-sm-max`).
+односторонними классами `marginTop{Large,Small,None}` / `marginBottom{Large,Small,None}`
+(24/16/0px и адаптив 16/8/0px на `@screen-sm-max`).
 
 ---
 
@@ -59,9 +78,13 @@ version: "1.0"
 - `displayName = "BodyPage"` — не менять.
 - Discriminated union по `type` и значения `EBodyPageType` / `EBodyPageVerticalMargin` — часть
   публичного API, менять нельзя.
-- Экспорты `BodyPage`, `IBodyPageTypeFirstProps`, `IBodyPageTypeSecondProps` идут в barrel
+- Экспорты `BodyPage`, `IBodyPageTypeFirstProps`, `IBodyPageTypeSecondProps`,
+  `IBodyPageVerticalMarginSides`, `TBodyPageVerticalMargin` идут в barrel
   `src/components/Page/index.ts` — сохранять.
-- `verticalMargin` по умолчанию `LARGE` — менять дефолт нельзя без обсуждения.
+- `verticalMargin` по умолчанию `LARGE` — и как дефолт prop'а, и как дефолт незаданной стороны
+  в объектной форме. Менять нельзя без обсуждения.
+- Скалярная форма `verticalMargin` должна и дальше работать как раньше — это обратная
+  совместимость публичного API.
 
 ---
 
@@ -92,7 +115,7 @@ version: "1.0"
 | `Playground` | `Playground.tsx` | Интерактивный контроль `type` и `verticalMargin` |
 | `Default` | `Default.tsx` | Минимальный пример (FIRST, контент в карточке) |
 | `Types` | `Types.tsx` | Сравнение типов FIRST и SECOND |
-| `VerticalMargins` | `VerticalMargins.tsx` | Отступы LARGE (24px) и SMALL (16px) |
+| `VerticalMargins` | `VerticalMargins.tsx` | Отступы LARGE (24px), SMALL (16px), NONE (0) и асимметричные комбинации |
 | `VisualTests` | `VisualTests.tsx` | Матрица type × verticalMargin для скриншот-регрессии |
 
 ---
@@ -102,3 +125,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-06-18 | Создан документ. AI-рефакторинг (clsx order, JSDoc), unit-тесты, миграция stories на modern pattern. |
+| 2026-08-26 | TRI-121: добавлено `EBodyPageVerticalMargin.NONE`; `verticalMargin` принимает объект `{top, bottom}` для независимых отступов сверху и снизу. LESS переразбит на односторонние классы. |

@@ -27,14 +27,15 @@ describe("BodyPage", () => {
         expect(screen.getByText("content")).toBeInTheDocument();
     });
 
-    it("verticalMargin по умолчанию LARGE → класс отступа 24px", () => {
+    it("verticalMargin по умолчанию LARGE → классы отступа 24px сверху и снизу", () => {
         const { container } = render(<BodyPage type={EBodyPageType.SECOND}>content</BodyPage>);
 
         const root = container.firstElementChild as HTMLElement;
-        expect(root).toHaveClass("verticalMargin24");
+        expect(root).toHaveClass("marginTopLarge");
+        expect(root).toHaveClass("marginBottomLarge");
     });
 
-    it("verticalMargin SMALL → класс отступа 16px", () => {
+    it("verticalMargin SMALL → классы отступа 16px сверху и снизу", () => {
         const { container } = render(
             <BodyPage type={EBodyPageType.SECOND} verticalMargin={EBodyPageVerticalMargin.SMALL}>
                 content
@@ -42,7 +43,84 @@ describe("BodyPage", () => {
         );
 
         const root = container.firstElementChild as HTMLElement;
-        expect(root).toHaveClass("verticalMargin16");
+        expect(root).toHaveClass("marginTopSmall");
+        expect(root).toHaveClass("marginBottomSmall");
+    });
+
+    it("verticalMargin NONE → нулевые отступы с обеих сторон", () => {
+        const { container } = render(
+            <BodyPage type={EBodyPageType.SECOND} verticalMargin={EBodyPageVerticalMargin.NONE}>
+                content
+            </BodyPage>,
+        );
+
+        const root = container.firstElementChild as HTMLElement;
+        expect(root).toHaveClass("marginTopNone");
+        expect(root).toHaveClass("marginBottomNone");
+    });
+
+    it("verticalMargin объектом задаёт стороны независимо", () => {
+        const { container } = render(
+            <BodyPage
+                type={EBodyPageType.SECOND}
+                verticalMargin={{ top: EBodyPageVerticalMargin.NONE, bottom: EBodyPageVerticalMargin.SMALL }}
+            >
+                content
+            </BodyPage>,
+        );
+
+        const root = container.firstElementChild as HTMLElement;
+        expect(root).toHaveClass("marginTopNone");
+        expect(root).toHaveClass("marginBottomSmall");
+    });
+
+    it("незаданная сторона объекта получает значение по умолчанию LARGE", () => {
+        const { container } = render(
+            <BodyPage type={EBodyPageType.SECOND} verticalMargin={{ top: EBodyPageVerticalMargin.NONE }}>
+                content
+            </BodyPage>,
+        );
+
+        const root = container.firstElementChild as HTMLElement;
+        expect(root).toHaveClass("marginTopNone");
+        expect(root).toHaveClass("marginBottomLarge");
+    });
+
+    it("незаданная сторона объекта получает значение по умолчанию LARGE (зеркальный случай)", () => {
+        const { container } = render(
+            <BodyPage type={EBodyPageType.SECOND} verticalMargin={{ bottom: EBodyPageVerticalMargin.NONE }}>
+                content
+            </BodyPage>,
+        );
+
+        const root = container.firstElementChild as HTMLElement;
+        expect(root).toHaveClass("marginTopLarge");
+        expect(root).toHaveClass("marginBottomNone");
+    });
+
+    it("пустой объект verticalMargin → LARGE с обеих сторон", () => {
+        const { container } = render(
+            <BodyPage type={EBodyPageType.SECOND} verticalMargin={{}}>
+                content
+            </BodyPage>,
+        );
+
+        const root = container.firstElementChild as HTMLElement;
+        expect(root).toHaveClass("marginTopLarge");
+        expect(root).toHaveClass("marginBottomLarge");
+    });
+
+    it("verticalMargin применяется к Island при type FIRST", () => {
+        const { container } = render(
+            <BodyPage type={EBodyPageType.FIRST} verticalMargin={{ top: EBodyPageVerticalMargin.NONE }}>
+                content
+            </BodyPage>,
+        );
+
+        const island = container.firstElementChild as HTMLElement;
+        expect(island.className).toMatch(/island/i);
+        expect(island).toHaveClass("marginTopNone");
+        expect(island).toHaveClass("marginBottomLarge");
     });
 
     it("мёрджит пользовательский className на корневой элемент", () => {

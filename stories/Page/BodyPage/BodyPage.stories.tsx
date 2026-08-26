@@ -25,7 +25,9 @@ const meta = {
                 component:
                     "BodyPage — тело страницы Page (доступен как `Page.Body`). Контейнер для основного контента. " +
                     "Тип `FIRST` оборачивает контент в Island (карточку), тип `SECOND` рендерит контент без карточки. " +
-                    "Поддерживает вертикальные отступы через `verticalMargin`.",
+                    "Вертикальные отступы задаются через `verticalMargin`: одно значение `EBodyPageVerticalMargin` " +
+                    "применяется к обеим сторонам, объект `{top, bottom}` задаёт верхний и нижний отступы независимо " +
+                    "(незаданная сторона получает значение по умолчанию `LARGE`).",
             },
             page: () => (
                 <>
@@ -49,7 +51,8 @@ export default meta;
 interface IPlaygroundArgs {
     type: EBodyPageType;
     size?: EComponentSize;
-    verticalMargin: EBodyPageVerticalMargin;
+    verticalMarginTop: EBodyPageVerticalMargin;
+    verticalMarginBottom: EBodyPageVerticalMargin;
 }
 
 export const Playground: StoryObj<IPlaygroundArgs> = {
@@ -57,7 +60,8 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     args: {
         type: EBodyPageType.FIRST,
         size: EComponentSize.MD,
-        verticalMargin: EBodyPageVerticalMargin.LARGE,
+        verticalMarginTop: EBodyPageVerticalMargin.LARGE,
+        verticalMarginBottom: EBodyPageVerticalMargin.LARGE,
     },
     render: PlaygroundRender,
     argTypes: {
@@ -80,11 +84,22 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
                 defaultValue: { summary: "EComponentSize.MD" },
             },
         },
-        verticalMargin: {
+        verticalMarginTop: {
             control: { type: "select" },
             options: Object.values(EBodyPageVerticalMargin),
-            description: "Вертикальные отступы сверху и снизу.",
+            description: "Верхний вертикальный отступ. Передаётся как `verticalMargin={{ top, bottom }}`.",
             table: {
+                category: "Settings",
+                type: { summary: "EBodyPageVerticalMargin" },
+                defaultValue: { summary: "EBodyPageVerticalMargin.LARGE" },
+            },
+        },
+        verticalMarginBottom: {
+            control: { type: "select" },
+            options: Object.values(EBodyPageVerticalMargin),
+            description: "Нижний вертикальный отступ. Передаётся как `verticalMargin={{ top, bottom }}`.",
+            table: {
+                category: "Settings",
                 type: { summary: "EBodyPageVerticalMargin" },
                 defaultValue: { summary: "EBodyPageVerticalMargin.LARGE" },
             },
@@ -92,7 +107,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     },
     parameters: {
         controls: {
-            include: ["type", "size", "verticalMargin"],
+            include: ["type", "size", "verticalMarginTop", "verticalMarginBottom"],
         },
         testRunner: { skip: true },
         docs: {

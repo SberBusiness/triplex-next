@@ -7,10 +7,39 @@ import { Island } from "@sberbusiness/triplex-next/components/Island/Island";
 import { EIslandType } from "@sberbusiness/triplex-next/components/Island/enums";
 import styles from "../styles/BodyPage.module.less";
 
-const verticalMarginToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
-    [EBodyPageVerticalMargin.LARGE]: styles.verticalMargin24,
-    [EBodyPageVerticalMargin.SMALL]: styles.verticalMargin16,
+const verticalMarginTopToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
+    [EBodyPageVerticalMargin.LARGE]: styles.marginTopLarge,
+    [EBodyPageVerticalMargin.SMALL]: styles.marginTopSmall,
+    [EBodyPageVerticalMargin.NONE]: styles.marginTopNone,
 };
+
+const verticalMarginBottomToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
+    [EBodyPageVerticalMargin.LARGE]: styles.marginBottomLarge,
+    [EBodyPageVerticalMargin.SMALL]: styles.marginBottomSmall,
+    [EBodyPageVerticalMargin.NONE]: styles.marginBottomNone,
+};
+
+/** Вертикальные отступы BodyPage, заданные раздельно сверху и снизу. */
+export interface IBodyPageVerticalMarginSides {
+    /** Отступ сверху. По умолчанию LARGE. */
+    top?: EBodyPageVerticalMargin;
+    /** Отступ снизу. По умолчанию LARGE. */
+    bottom?: EBodyPageVerticalMargin;
+}
+
+/** Вертикальные отступы BodyPage: одно значение на обе стороны либо раздельные значения для верха и низа. */
+export type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMarginSides;
+
+/** Приводит значение verticalMargin к паре отступов. Незаданная сторона получает значение по умолчанию LARGE. */
+const resolveVerticalMargin = (
+    verticalMargin: TBodyPageVerticalMargin,
+): { top: EBodyPageVerticalMargin; bottom: EBodyPageVerticalMargin } =>
+    typeof verticalMargin === "object"
+        ? {
+              top: verticalMargin.top ?? EBodyPageVerticalMargin.LARGE,
+              bottom: verticalMargin.bottom ?? EBodyPageVerticalMargin.LARGE,
+          }
+        : { top: verticalMargin, bottom: verticalMargin };
 
 export interface IBodyPageTypeFirstProps extends IBodyProps {
     /** Контент тела страницы. */
@@ -21,9 +50,11 @@ export interface IBodyPageTypeFirstProps extends IBodyProps {
     size?: EComponentSize;
     /**
      * Вертикальные отступы (сверху и снизу).
-     * По умолчанию LARGE (24px); в LightBox следует использовать SMALL (16px).
+     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно;
+     * незаданная сторона объекта получает значение по умолчанию LARGE.
+     * LARGE — 24px, SMALL — 16px, NONE — 0; в LightBox следует использовать SMALL.
      */
-    verticalMargin?: EBodyPageVerticalMargin;
+    verticalMargin?: TBodyPageVerticalMargin;
 }
 
 export interface IBodyPageTypeSecondProps extends IBodyProps {
@@ -35,15 +66,23 @@ export interface IBodyPageTypeSecondProps extends IBodyProps {
     size?: never;
     /**
      * Вертикальные отступы (сверху и снизу).
-     * По умолчанию LARGE (24px); в LightBox следует использовать SMALL (16px).
+     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно;
+     * незаданная сторона объекта получает значение по умолчанию LARGE.
+     * LARGE — 24px, SMALL — 16px, NONE — 0; в LightBox следует использовать SMALL.
      */
-    verticalMargin?: EBodyPageVerticalMargin;
+    verticalMargin?: TBodyPageVerticalMargin;
 }
 
 /** Тело компонента Page. Контейнер для основного контента страницы. */
 export const BodyPage = React.forwardRef<HTMLDivElement, IBodyPageTypeFirstProps | IBodyPageTypeSecondProps>(
     ({ className, type, size, verticalMargin = EBodyPageVerticalMargin.LARGE, ...rest }, ref) => {
-        const bodyPageClassNames = clsx(styles.bodyPage, verticalMarginToClassNameMap[verticalMargin], className);
+        const { top, bottom } = resolveVerticalMargin(verticalMargin);
+        const bodyPageClassNames = clsx(
+            styles.bodyPage,
+            verticalMarginTopToClassNameMap[top],
+            verticalMarginBottomToClassNameMap[bottom],
+            className,
+        );
 
         return type === EBodyPageType.FIRST ? (
             <Island className={bodyPageClassNames} type={EIslandType.TYPE_1} ref={ref} size={size}>

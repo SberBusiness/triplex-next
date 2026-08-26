@@ -74,45 +74,12 @@ describe("BodyPage", () => {
         expect(root).toHaveClass("marginBottomSmall");
     });
 
-    it("незаданная сторона объекта получает значение по умолчанию LARGE", () => {
-        const { container } = render(
-            <BodyPage type={EBodyPageType.SECOND} verticalMargin={{ top: EBodyPageVerticalMargin.NONE }}>
-                content
-            </BodyPage>,
-        );
-
-        const root = container.firstElementChild as HTMLElement;
-        expect(root).toHaveClass("marginTopNone");
-        expect(root).toHaveClass("marginBottomLarge");
-    });
-
-    it("незаданная сторона объекта получает значение по умолчанию LARGE (зеркальный случай)", () => {
-        const { container } = render(
-            <BodyPage type={EBodyPageType.SECOND} verticalMargin={{ bottom: EBodyPageVerticalMargin.NONE }}>
-                content
-            </BodyPage>,
-        );
-
-        const root = container.firstElementChild as HTMLElement;
-        expect(root).toHaveClass("marginTopLarge");
-        expect(root).toHaveClass("marginBottomNone");
-    });
-
-    it("пустой объект verticalMargin → LARGE с обеих сторон", () => {
-        const { container } = render(
-            <BodyPage type={EBodyPageType.SECOND} verticalMargin={{}}>
-                content
-            </BodyPage>,
-        );
-
-        const root = container.firstElementChild as HTMLElement;
-        expect(root).toHaveClass("marginTopLarge");
-        expect(root).toHaveClass("marginBottomLarge");
-    });
-
     it("verticalMargin применяется к Island при type FIRST", () => {
         const { container } = render(
-            <BodyPage type={EBodyPageType.FIRST} verticalMargin={{ top: EBodyPageVerticalMargin.NONE }}>
+            <BodyPage
+                type={EBodyPageType.FIRST}
+                verticalMargin={{ top: EBodyPageVerticalMargin.NONE, bottom: EBodyPageVerticalMargin.LARGE }}
+            >
                 content
             </BodyPage>,
         );

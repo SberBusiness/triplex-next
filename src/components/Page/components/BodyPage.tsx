@@ -19,27 +19,29 @@ const verticalMarginBottomToClassNameMap: Record<EBodyPageVerticalMargin, string
     [EBodyPageVerticalMargin.NONE]: styles.marginBottomNone,
 };
 
-/** Вертикальные отступы BodyPage, заданные раздельно сверху и снизу. */
+/** Вертикальные отступы BodyPage, заданные раздельно сверху и снизу. Обе стороны указываются явно. */
 export interface IBodyPageVerticalMarginSides {
-    /** Отступ сверху. По умолчанию LARGE. */
-    top?: EBodyPageVerticalMargin;
-    /** Отступ снизу. По умолчанию LARGE. */
-    bottom?: EBodyPageVerticalMargin;
+    /** Отступ сверху. */
+    top: EBodyPageVerticalMargin;
+    /** Отступ снизу. */
+    bottom: EBodyPageVerticalMargin;
 }
 
 /** Вертикальные отступы BodyPage: одно значение на обе стороны либо раздельные значения для верха и низа. */
 export type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMarginSides;
 
-/** Приводит значение verticalMargin к паре отступов. Незаданная сторона получает значение по умолчанию LARGE. */
-const resolveVerticalMargin = (
-    verticalMargin: TBodyPageVerticalMargin,
-): { top: EBodyPageVerticalMargin; bottom: EBodyPageVerticalMargin } =>
-    typeof verticalMargin === "object"
-        ? {
-              top: verticalMargin.top ?? EBodyPageVerticalMargin.LARGE,
-              bottom: verticalMargin.bottom ?? EBodyPageVerticalMargin.LARGE,
-          }
-        : { top: verticalMargin, bottom: verticalMargin };
+/** Приводит значение verticalMargin к паре отступов: одно значение применяется к обеим сторонам. */
+const resolveVerticalMargin = (verticalMargin: TBodyPageVerticalMargin): IBodyPageVerticalMarginSides => {
+    // Проверка на null, а не только typeof: библиотеку зовут и из нетипизированного кода,
+    // а падать в рантайме у потребителя нельзя.
+    if (verticalMargin && typeof verticalMargin === "object") {
+        return verticalMargin;
+    }
+
+    const side = verticalMargin || EBodyPageVerticalMargin.LARGE;
+
+    return { top: side, bottom: side };
+};
 
 export interface IBodyPageTypeFirstProps extends IBodyProps {
     /** Контент тела страницы. */
@@ -50,8 +52,7 @@ export interface IBodyPageTypeFirstProps extends IBodyProps {
     size?: EComponentSize;
     /**
      * Вертикальные отступы (сверху и снизу).
-     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно;
-     * незаданная сторона объекта получает значение по умолчанию LARGE.
+     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно.
      * LARGE — 24px, SMALL — 16px, NONE — 0; в LightBox следует использовать SMALL.
      */
     verticalMargin?: TBodyPageVerticalMargin;
@@ -66,8 +67,7 @@ export interface IBodyPageTypeSecondProps extends IBodyProps {
     size?: never;
     /**
      * Вертикальные отступы (сверху и снизу).
-     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно;
-     * незаданная сторона объекта получает значение по умолчанию LARGE.
+     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно.
      * LARGE — 24px, SMALL — 16px, NONE — 0; в LightBox следует использовать SMALL.
      */
     verticalMargin?: TBodyPageVerticalMargin;

@@ -35,15 +35,15 @@ version: "1.0"
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `verticalMargin` | `TBodyPageVerticalMargin` | `LARGE` | Вертикальные отступы: `LARGE` = 24px (16px на узких экранах), `SMALL` = 16px (8px на узких), `NONE` = 0. Одно значение задаёт обе стороны; объект `{top, bottom}` — каждую отдельно, незаданная сторона получает `LARGE`. В LightBox используется `SMALL`. |
+| `verticalMargin` | `TBodyPageVerticalMargin` | `LARGE` | Вертикальные отступы: `LARGE` = 24px (16px на узких экранах), `SMALL` = 16px (8px на узких), `NONE` = 0. Одно значение задаёт обе стороны; объект `{top, bottom}` — каждую отдельно, обе стороны указываются явно. В LightBox используется `SMALL`. |
 | `size` | `EComponentSize` | — | Размер острова (Island). **Доступен только для `type=FIRST`**; для `type=SECOND` типизирован как `never`. |
 
 ### Тип verticalMargin
 
 ```ts
 interface IBodyPageVerticalMarginSides {
-    top?: EBodyPageVerticalMargin;
-    bottom?: EBodyPageVerticalMargin;
+    top: EBodyPageVerticalMargin;
+    bottom: EBodyPageVerticalMargin;
 }
 
 type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMarginSides;
@@ -51,10 +51,14 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 
 ```tsx
 <Page.Body type={EBodyPageType.FIRST} verticalMargin={EBodyPageVerticalMargin.NONE}>…</Page.Body>
-<Page.Body type={EBodyPageType.FIRST} verticalMargin={{top: EBodyPageVerticalMargin.NONE}}>…</Page.Body>
+<Page.Body
+    type={EBodyPageType.FIRST}
+    verticalMargin={{top: EBodyPageVerticalMargin.NONE, bottom: EBodyPageVerticalMargin.LARGE}}
+>…</Page.Body>
 ```
 
-Второй пример даёт 0 сверху и 24px снизу: незаданная сторона объекта падает в дефолт `LARGE`.
+`top` и `bottom` в объектной форме обязательны: скрытого дефолта у стороны нет, отступ виден
+прямо в месте вызова. Частичный объект (`{top}`) и пустой (`{}`) — ошибка компиляции.
 
 ### Ограничения по типам
 
@@ -81,8 +85,9 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 - Экспорты `BodyPage`, `IBodyPageTypeFirstProps`, `IBodyPageTypeSecondProps`,
   `IBodyPageVerticalMarginSides`, `TBodyPageVerticalMargin` идут в barrel
   `src/components/Page/index.ts` — сохранять.
-- `verticalMargin` по умолчанию `LARGE` — и как дефолт prop'а, и как дефолт незаданной стороны
-  в объектной форме. Менять нельзя без обсуждения.
+- `verticalMargin` по умолчанию `LARGE` — менять дефолт нельзя без обсуждения.
+- В объектной форме `top` и `bottom` обязательны — не делать их опциональными: дефолт стороны
+  вернул бы скрытое поведение, которого здесь сознательно нет.
 - Скалярная форма `verticalMargin` должна и дальше работать как раньше — это обратная
   совместимость публичного API.
 
@@ -125,4 +130,4 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 | Дата | Изменение |
 |---|---|
 | 2026-06-18 | Создан документ. AI-рефакторинг (clsx order, JSDoc), unit-тесты, миграция stories на modern pattern. |
-| 2026-08-26 | TRI-121: добавлено `EBodyPageVerticalMargin.NONE`; `verticalMargin` принимает объект `{top, bottom}` для независимых отступов сверху и снизу. LESS переразбит на односторонние классы. |
+| 2026-08-26 | TRI-121: добавлено `EBodyPageVerticalMargin.NONE`; `verticalMargin` принимает объект `{top, bottom}` (обе стороны обязательны) для независимых отступов сверху и снизу. LESS переразбит на односторонние классы. |

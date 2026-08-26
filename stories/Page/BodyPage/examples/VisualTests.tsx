@@ -59,10 +59,13 @@ export const VisualTests = () => (
                 </Text>
             </Page.Body>
         </Case>
-        <Case label="FIRST + { top: SMALL }">
-            <Page.Body type={EBodyPageType.FIRST} verticalMargin={{ top: EBodyPageVerticalMargin.SMALL }}>
+        <Case label="FIRST + { top: SMALL, bottom: LARGE }">
+            <Page.Body
+                type={EBodyPageType.FIRST}
+                verticalMargin={{ top: EBodyPageVerticalMargin.SMALL, bottom: EBodyPageVerticalMargin.LARGE }}
+            >
                 <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
-                    FIRST + сверху 16px, снизу значение по умолчанию 24px.
+                    FIRST + сверху 16px, снизу 24px.
                 </Text>
             </Page.Body>
         </Case>

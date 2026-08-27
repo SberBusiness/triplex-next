@@ -15,10 +15,26 @@ import { TableFooter } from "@sberbusiness/triplex-next/components/Table/TableFo
 import { PaginationPanel } from "@sberbusiness/triplex-next/components/Table/PaginationPanel";
 
 /**
+ * Статические субкомпоненты MasterTable. Тип задан через typeof-запросы, а не выведен:
+ * TableBasicSettings и TableFooter типизированы неэкспортируемыми интерфейсами, и выведенный
+ * тип Object.assign невозможно сгенерировать в d.ts (TS4023) — declaration emit падает.
+ */
+interface IMasterTableStatics {
+    NoColumns: typeof NoColumns;
+    FilterPanel: typeof FilterPanel;
+    ChipPanel: typeof ChipPanel;
+    TableBasic: typeof TableBasic;
+    TableBasicSettings: typeof TableBasicSettings;
+    TableFooter: typeof TableFooter;
+    PaginationPanel: typeof PaginationPanel;
+}
+
+/**
  * Контейнер таблицы. Объединяет панели фильтров, саму таблицу, подвал и пагинацию,
  * раздавая им общее состояние (колонки и признак загрузки) через MasterTableContext.
  */
-export const MasterTable = Object.assign(
+export const MasterTable: React.ForwardRefExoticComponent<IMasterTableProps & React.RefAttributes<HTMLDivElement>> &
+    IMasterTableStatics = Object.assign(
     React.forwardRef<HTMLDivElement, IMasterTableProps>(function MasterTable(
         { children, className, loading = false, ...htmlDivAttributes },
         ref,

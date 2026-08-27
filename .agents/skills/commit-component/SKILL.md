@@ -177,12 +177,13 @@ for i in $(seq 1 12); do
 done
 ```
 
-Если PR не появился за ~2 минуты — проверь прогон
-(`gh run list --workflow=auto-pr.yml --branch TRI-XXX-... --limit 1`);
-при упавшем или отсутствующем прогоне — fallback: `gh pr create` с
-паттерном bot-токена (гонки нет, раз workflow PR не создал). Успешный
-прогон без PR = сработал guard workflow (см. `docs/ai/commits.md`
-§ «PR-воркфлоу») — штатное завершение без PR, fallback не применяй.
+Если PR не появился за ~2 минуты — проверь прогон текущего коммита
+(`gh run list --workflow=auto-pr.yml --commit $(git rev-parse HEAD) --limit 1`).
+`queued`/`in_progress` — жди дальше; `completed`+`success` без PR =
+сработал guard workflow (см. `docs/ai/commits.md` § «PR-воркфлоу») —
+штатное завершение без PR, fallback не применяй; только при
+`completed`+`failure` или отсутствии прогона — fallback: `gh pr create`
+с паттерном bot-токена (гонки нет, раз workflow PR не создал).
 
 Покажи пользователю ссылку на PR. Дальше финал продолжается автоматически:
 skill `update-visual-baselines` (если менялись stories/визуал) и skill

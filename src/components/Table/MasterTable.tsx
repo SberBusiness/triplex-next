@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { MasterTableContext } from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
+import React, { useMemo, useState } from "react";
+import {
+    IMasterTableContextContext,
+    MasterTableContext,
+} from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
 import styles from "./styles/MasterTable.module.less";
 import { clsx } from "clsx";
 import { NoColumns } from "@sberbusiness/triplex-next/components/Table/NoColumns";
@@ -11,43 +14,44 @@ import { TableBasicSettings } from "@sberbusiness/triplex-next/components/Table/
 import { TableFooter } from "@sberbusiness/triplex-next/components/Table/TableFooter/TableFooter";
 import { PaginationPanel } from "@sberbusiness/triplex-next/components/Table/PaginationPanel";
 
-interface IMasterTableFC extends React.FC<IMasterTableProps> {
-    NoColumns: typeof NoColumns;
-    FilterPanel: typeof FilterPanel;
-    ChipPanel: typeof ChipPanel;
-    TableBasic: typeof TableBasic;
-    TableBasicSettings: typeof TableBasicSettings;
-    TableFooter: typeof TableFooter;
-    PaginationPanel: typeof PaginationPanel;
-}
+/**
+ * Контейнер таблицы. Объединяет панели фильтров, саму таблицу, подвал и пагинацию,
+ * раздавая им общее состояние (колонки и признак загрузки) через MasterTableContext.
+ */
+export const MasterTable = Object.assign(
+    React.forwardRef<HTMLDivElement, IMasterTableProps>(function MasterTable(
+        { children, className, loading = false, ...htmlDivAttributes },
+        ref,
+    ) {
+        const [columns, setColumns] = useState<ITableBasicColumn[]>([]);
 
-export const MasterTable: IMasterTableFC = ({ children, className, loading = false, ...htmlDivAttributes }) => {
-    const [columns, setColumns] = useState<ITableBasicColumn[]>([]);
+        const contextValue = useMemo<IMasterTableContextContext>(
+            () => ({ columns, loading, setColumns }),
+            [columns, loading],
+        );
 
-    return (
-        <MasterTableContext.Provider
-            value={{
-                columns,
-                loading,
-                setColumns,
-            }}
-        >
-            <div
-                className={clsx(styles.masterTable, className)}
-                {...htmlDivAttributes}
-                data-tx={process.env.npm_package_version}
-            >
-                {children}
-            </div>
-        </MasterTableContext.Provider>
-    );
-};
+        return (
+            <MasterTableContext.Provider value={contextValue}>
+                <div
+                    className={clsx(styles.masterTable, className)}
+                    {...htmlDivAttributes}
+                    data-tx={process.env.npm_package_version}
+                    ref={ref}
+                >
+                    {children}
+                </div>
+            </MasterTableContext.Provider>
+        );
+    }),
+    {
+        NoColumns,
+        FilterPanel,
+        ChipPanel,
+        TableBasic,
+        TableBasicSettings,
+        TableFooter,
+        PaginationPanel,
+    },
+);
 
 MasterTable.displayName = "MasterTable";
-MasterTable.NoColumns = NoColumns;
-MasterTable.FilterPanel = FilterPanel;
-MasterTable.ChipPanel = ChipPanel;
-MasterTable.TableBasic = TableBasic;
-MasterTable.TableBasicSettings = TableBasicSettings;
-MasterTable.TableFooter = TableFooter;
-MasterTable.PaginationPanel = PaginationPanel;

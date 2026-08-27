@@ -456,7 +456,7 @@ describe("TopOverlay", () => {
     });
 
     describe("Wrapper Styles", () => {
-        it("should not set inline top style when overlayWrapperTopPosition is 0", () => {
+        it("should not set inline top style until the position is calculated", () => {
             const { container } = render(
                 <TopOverlay opened={false}>
                     <TestContent />
@@ -465,6 +465,31 @@ describe("TopOverlay", () => {
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
             expect(wrapper.style.top).toBe("");
+        });
+
+        it("should apply calculated zero position over the consumer top", () => {
+            vi.spyOn(window, "getComputedStyle").mockReturnValue({
+                getPropertyValue: () => "0px",
+            } as unknown as CSSStyleDeclaration);
+            // Обёртка уже стоит ровно на верхней границе экрана — расчёт даёт 0, и это полноценный результат.
+            vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 0 } as DOMRect);
+
+            const { container, rerender } = render(
+                <TopOverlay opened={false} style={{ top: "auto" }}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.style.top).toBe("auto");
+
+            rerender(
+                <TopOverlay opened={true} style={{ top: "auto" }}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(wrapper.style.top).toBe("0px");
         });
 
         it("should recalculate inline top style on open and reset it on close", () => {

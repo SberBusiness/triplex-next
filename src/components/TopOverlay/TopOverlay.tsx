@@ -30,8 +30,8 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
         const [closing, setClosing] = useState(false);
         // FocusTrap активен.
         const [activeFocusTrap, setActiveFocusTrap] = useState(false);
-        // Позиция top обёртки оверлея, высчитывается исходя из scrollTop родителя.
-        const [overlayWrapperTopPosition, setOverlayWrapperTopPosition] = useState(0);
+        // Позиция top обёртки оверлея, высчитывается исходя из scrollTop родителя. undefined — ещё не рассчитана.
+        const [overlayWrapperTopPosition, setOverlayWrapperTopPosition] = useState<number | undefined>(undefined);
         // Предыдущее состояние открыт/закрыт.
         const prevOpened = useRef(opened);
         // Флаг первого рендера. Отличает открытие на маунте от открытия переходом.
@@ -52,7 +52,7 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
             // Текущее положение оверлея во вьюпорте.
             const { top } = overlayWrapper.getBoundingClientRect();
 
-            setOverlayWrapperTopPosition((topPosition) => getNextTopPosition(topPosition, top, lightBoxScreenTop));
+            setOverlayWrapperTopPosition((topPosition) => getNextTopPosition(topPosition ?? 0, top, lightBoxScreenTop));
         };
 
         const handleOpen = () => {
@@ -87,7 +87,7 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
 
         const handleClose = () => {
             setClosing(false);
-            setOverlayWrapperTopPosition(0);
+            setOverlayWrapperTopPosition(undefined);
             onClose?.();
         };
 
@@ -133,8 +133,14 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
                 <div
                     className={classNameOverlayWrapper}
                     {...htmlDivAttributes}
-                    // Вычисленный top перекрывает пользовательский: на нём держится позиционирование панели.
-                    style={overlayWrapperTopPosition ? { ...style, top: `${overlayWrapperTopPosition}px` } : style}
+                    // Рассчитанный top перекрывает пользовательский — на нём держится позиционирование панели.
+                    // Ноль здесь такой же результат расчёта, как и любой другой, поэтому признак «не рассчитано» —
+                    // undefined, а не 0.
+                    style={
+                        overlayWrapperTopPosition === undefined
+                            ? style
+                            : { ...style, top: `${overlayWrapperTopPosition}px` }
+                    }
                     ref={setOverlayWrapperRef}
                 >
                     <Overlay

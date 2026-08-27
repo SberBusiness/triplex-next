@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { Overlay, IOverlayProps } from "../Overlay/Overlay";
@@ -34,6 +34,8 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
         const [overlayWrapperTopPosition, setOverlayWrapperTopPosition] = useState(0);
         // Предыдущее состояние открыт/закрыт.
         const prevOpened = useRef(opened);
+        // Флаг первого рендера. Отличает открытие на маунте от открытия переходом.
+        const isFirstRender = useRef(true);
         // Ref контейнера.
         const overlayWrapperRef = useRef<HTMLDivElement | null>(null);
 
@@ -54,19 +56,20 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
         };
 
         const handleOpen = () => {
-            updateTopPosition();
+            // При открытии на маунте позиция не пересчитывается: лайтбокс в этот момент ещё не на своём месте
+            // (у него собственная анимация появления), а getBoundingClientRect учитывает transform родителей —
+            // измерение дало бы смещение в никуда. Позиция остаётся заданной стилями, коррекция применяется
+            // при следующем открытии переходом false → true.
+            if (!isFirstRender.current) {
+                updateTopPosition();
+            }
+
             setActiveFocusTrap(true);
             onOpen?.();
         };
 
-        // Монтирование сразу с opened={true}: анимации открытия нет, поэтому позицию нужно посчитать до первой
-        // отрисовки — в пассивном эффекте кадр с неверным top успел бы попасть на экран.
-        useLayoutEffect(() => {
-            if (opened) {
-                updateTopPosition();
-            }
-            // Эффект только на маунте: переходы opened обрабатывает эффект ниже.
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+        useEffect(() => {
+            isFirstRender.current = false;
         }, []);
 
         useEffect(() => {

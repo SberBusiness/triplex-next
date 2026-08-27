@@ -24,7 +24,7 @@ afterEach(() => {
 });
 
 describe("TopOverlay + Overlay", () => {
-    it("runs the whole open cycle when mounted already opened", () => {
+    it("activates the focus trap and reports onOpen when mounted already opened", () => {
         vi.spyOn(window, "getComputedStyle").mockReturnValue({
             getPropertyValue: () => "0px",
         } as unknown as CSSStyleDeclaration);
@@ -42,9 +42,9 @@ describe("TopOverlay + Overlay", () => {
         expect(handleOpen).toHaveBeenCalledTimes(1);
         expect(getLastFocusTrapProps().active).toBe(true);
 
+        // Позицию на маунте не трогаем — её задают стили, измерять в этот момент нечего.
         const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-        // Пересчёт идёт дважды: из layout-эффекта на маунте и из onOpen.
-        expect(wrapper.style.top).toBe("80px");
+        expect(wrapper.style.top).toBe("");
     });
 
     it("does not start the open cycle when mounted closed", () => {

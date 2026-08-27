@@ -507,11 +507,10 @@ describe("TopOverlay", () => {
     });
 
     describe("Wrapper Styles on mount", () => {
-        it("should calculate inline top style when mounted already opened", () => {
+        it("should not correct inline top style when mounted already opened", () => {
             vi.spyOn(window, "getComputedStyle").mockReturnValue({
                 getPropertyValue: () => "0px",
             } as unknown as CSSStyleDeclaration);
-            // Обёртка отрисована выше вьюпорта — позиционирование должно быть скорректировано уже на маунте.
             vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: -40 } as DOMRect);
 
             const { container } = render(
@@ -520,8 +519,36 @@ describe("TopOverlay", () => {
                 </TopOverlay>,
             );
 
+            // На маунте лайтбокс ещё не на своём месте, измерять нечего — позицию задают стили.
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            // Пересчёт на маунте идёт дважды, как и при переходе: из layout-эффекта и из onOpen.
+            expect(wrapper.style.top).toBe("");
+        });
+
+        it("should correct inline top style on the first open after mounting already opened", () => {
+            vi.spyOn(window, "getComputedStyle").mockReturnValue({
+                getPropertyValue: () => "0px",
+            } as unknown as CSSStyleDeclaration);
+            vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: -40 } as DOMRect);
+
+            const { container, rerender } = render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            rerender(
+                <TopOverlay opened={false}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+            fireEvent.click(screen.getByTestId("overlay-finish-closing"));
+            rerender(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
             expect(wrapper.style.top).toBe("80px");
         });
     });
@@ -572,13 +599,21 @@ describe("TopOverlay", () => {
             } as unknown as CSSStyleDeclaration);
             vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: -40 } as DOMRect);
 
-            const { container } = render(
-                <TopOverlay opened={true} style={{ top: "10px", zIndex: 5 }}>
+            const { container, rerender } = render(
+                <TopOverlay opened={false} style={{ top: "10px", zIndex: 5 }}>
                     <TestContent />
                 </TopOverlay>,
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.style.top).toBe("10px");
+
+            rerender(
+                <TopOverlay opened={true} style={{ top: "10px", zIndex: 5 }}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
             expect(wrapper.style.zIndex).toBe("5");
             expect(wrapper.style.top).toBe("80px");
         });

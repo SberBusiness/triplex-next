@@ -34,4 +34,3 @@ export { default as TableWithPaginationExtendedSource } from "./TableWithPaginat
 export * from "./TableWithPaginationLoading";
 export { default as TableWithPaginationLoadingSource } from "./TableWithPaginationLoading?raw";
 export * from "./VisualTests";
-export * from "./VisualTestsHover";

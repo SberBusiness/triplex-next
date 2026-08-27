@@ -40,7 +40,6 @@ import {
     TableWithPaginationLoadingSource,
     TableWithPaginationSource,
     VisualTests as VisualTestsRender,
-    VisualTestsHover as VisualTestsHoverRender,
 } from "./examples";
 
 const meta = {
@@ -371,34 +370,5 @@ export const VisualTests: Story = {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
-    },
-};
-
-export const VisualTestsHover: Story = {
-    tags: ["!autodocs"],
-    render: VisualTestsHoverRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    play: async ({ canvasElement, userEvent }) => {
-        const [sortableTable, hoverableTable] = Array.from(canvasElement.querySelectorAll("table"));
-
-        // Иконка сортировки в состоянии NONE показывается селектором .thBlock.order:hover.
-        // .thBlock — это <span> внутри <th>, а не сам <th>: :hover распространяется вверх по дереву,
-        // поэтому наведение на <th> состояние вложенного .thBlock не включает.
-        const sortableHeaderBlock = sortableTable?.querySelector<HTMLElement>('thead th [class*="thBlock"]');
-        // Подсветка строки задана селектором .hoverable > tr:hover > td во второй таблице.
-        const hoverableRow = hoverableTable?.querySelector<HTMLElement>("tbody tr");
-
-        if (!sortableHeaderBlock || !hoverableRow) {
-            throw new Error("VisualTestsHover: не найдены элементы для наведения курсора");
-        }
-
-        await userEvent.hover(sortableHeaderBlock);
-        await userEvent.hover(hoverableRow);
     },
 };

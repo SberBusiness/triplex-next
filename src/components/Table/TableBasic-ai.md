@@ -197,7 +197,6 @@ version: "1.0"
 | `TableWithPaginationExtended` | `TableWithPaginationExtended.tsx` | Таблица с `PaginationExtended` при неизвестном количестве данных |
 | `Example: production` | `ExampleProduction.tsx` | Композиция, приближённая к production: чипы-сегменты, фильтры, теги |
 | `VisualTests` | `VisualTests.tsx` | Статичные визуальные состояния в одном кадре |
-| `VisualTestsHover` | `VisualTestsHover.tsx` | Наведение на заголовок с сортировкой через `play` |
 
 ---
 

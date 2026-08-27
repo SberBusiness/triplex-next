@@ -194,7 +194,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Tabs | ⬜ | ⬜ | ⬜ |
 | TabsExtended | ✅ | ✅ | ✅ |
 | TabsLine | ⬜ | ⬜ | ⬜ |
-| Tag | ⬜ | ⬜ | ⬜ |
+| Tag | ✅ | ✅ | ✅ |
 | TagColor | ⬜ | ⬜ | ⬜ |
 | TagGroup | ⬜ | ⬜ | ⬜ |
 | TextField | ✅ | ✅ | ✅ |

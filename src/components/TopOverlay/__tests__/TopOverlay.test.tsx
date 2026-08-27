@@ -38,8 +38,9 @@ interface IOverlayPartMockProps {
 
 vi.mock("../../Overlay/Overlay", () => {
     /**
-     * Мок Overlay, повторяющий контракт OverlayBase: колбэки вызываются только на переходах opened,
-     * на маунте — нет. Иначе тесты ловят поведение мока, а не компонента.
+     * Мок Overlay, повторяющий контракт OverlayBase: на переходах opened вызываются колбэки, а на маунте —
+     * только onOpen и только если оверлей смонтирован уже открытым. Иначе тесты ловят поведение мока,
+     * а не компонента.
      *
      * Фазы закрытия разнесены так же, как в реальном OverlayBase: переход opened → false вызывает только
      * onClosing, а onClose срабатывает по transitionend панели. В моке за transitionend отвечает кнопка
@@ -65,6 +66,12 @@ vi.mock("../../Overlay/Overlay", () => {
         React.useEffect(() => {
             if (isFirstRender.current) {
                 isFirstRender.current = false;
+
+                // Монтирование сразу открытым: анимации открытия не было, цикл открытия завершён сразу.
+                if (opened) {
+                    callbacks.current.onOpen?.();
+                }
+
                 return;
             }
 
@@ -303,6 +310,16 @@ describe("TopOverlay", () => {
             expect(getLastFocusTrapProps().active).toBe(false);
         });
 
+        it("should activate FocusTrap when mounted already opened", () => {
+            render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(getLastFocusTrapProps().active).toBe(true);
+        });
+
         it("should activate FocusTrap after overlay is opened and deactivate on closing", () => {
             const { rerender } = render(
                 <TopOverlay opened={false}>
@@ -341,6 +358,19 @@ describe("TopOverlay", () => {
             expect(handleOpen).not.toHaveBeenCalled();
 
             rerender(
+                <TopOverlay opened={true} onOpen={handleOpen}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(handleOpen).toHaveBeenCalledTimes(1);
+            expect(handleOpen).toHaveBeenCalledWith();
+        });
+
+        it("should call onOpen when mounted already opened", () => {
+            const handleOpen = vi.fn();
+
+            render(
                 <TopOverlay opened={true} onOpen={handleOpen}>
                     <TestContent />
                 </TopOverlay>,
@@ -473,6 +503,84 @@ describe("TopOverlay", () => {
             fireEvent.click(screen.getByTestId("overlay-finish-closing"));
 
             expect(wrapper.style.top).toBe("");
+        });
+    });
+
+    describe("Wrapper Styles on mount", () => {
+        it("should calculate inline top style when mounted already opened", () => {
+            vi.spyOn(window, "getComputedStyle").mockReturnValue({
+                getPropertyValue: () => "0px",
+            } as unknown as CSSStyleDeclaration);
+            // Обёртка отрисована выше вьюпорта — позиционирование должно быть скорректировано уже на маунте.
+            vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: -40 } as DOMRect);
+
+            const { container } = render(
+                <TopOverlay opened={true}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            // Пересчёт на маунте идёт дважды, как и при переходе: из layout-эффекта и из onOpen.
+            expect(wrapper.style.top).toBe("80px");
+        });
+    });
+
+    describe("Props Forwarding", () => {
+        it("should forward ref to the wrapper element", () => {
+            const ref = React.createRef<HTMLDivElement>();
+
+            const { container } = render(
+                <TopOverlay opened={false} ref={ref}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            expect(ref.current).toBe(container.querySelector(".topOverlayWrapper"));
+        });
+
+        it("should merge consumer className with own wrapper classes", () => {
+            const { container } = render(
+                <TopOverlay opened={true} className="custom-class">
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.className).toContain("custom-class");
+            expect(wrapper.className).toContain("opened");
+        });
+
+        it("should put html attributes on the wrapper element", () => {
+            const { container } = render(
+                <TopOverlay opened={false} id="top-overlay" aria-label="Верхняя панель" data-test-id="top-overlay">
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper).toHaveAttribute("id", "top-overlay");
+            expect(wrapper).toHaveAttribute("aria-label", "Верхняя панель");
+            expect(wrapper).toHaveAttribute("data-test-id", "top-overlay");
+            // Атрибуты остаются на обёртке и не уезжают во вложенный Overlay.
+            expect(screen.getByTestId("overlay")).not.toHaveAttribute("id");
+        });
+
+        it("should keep consumer style but override top with the calculated position", () => {
+            vi.spyOn(window, "getComputedStyle").mockReturnValue({
+                getPropertyValue: () => "0px",
+            } as unknown as CSSStyleDeclaration);
+            vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: -40 } as DOMRect);
+
+            const { container } = render(
+                <TopOverlay opened={true} style={{ top: "10px", zIndex: 5 }}>
+                    <TestContent />
+                </TopOverlay>,
+            );
+
+            const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+            expect(wrapper.style.zIndex).toBe("5");
+            expect(wrapper.style.top).toBe("80px");
         });
     });
 

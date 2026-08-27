@@ -20,6 +20,8 @@ import { action } from "storybook/actions";
 /**
  * Открытая верхняя панель поверх контента лайтбокса.
  * Панель отрисована открытой с самого начала — скриншот не зависит от анимации открытия.
+ * Цикл открытия при этом отрабатывает полностью: onOpen приходит на маунте, ловушка фокуса
+ * включается, позиция панели пересчитывается.
  */
 export const VisualTests = () => (
     <LightBox isLoading={false} isSideOverlayOpened={false} isTopOverlayOpened>

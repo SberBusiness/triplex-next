@@ -4,16 +4,15 @@ import { TableBasicRow } from "@sberbusiness/triplex-next/components/Table/Table
 import { clsx } from "clsx";
 import styles from "../styles/TableBasic.module.less";
 
-/**
- * @prop {ITableBasicColumn} columns Структура заголовков таблицы.
- * @prop {ITableBasicRow[]} data Массив значений для вывода в теле таблицы.
- * @prop {boolean} [highlightRowOnHover] Подсветка строк при наведении мышки.
- * @prop {Function} [onClickRow] Функция обработки клика по строке таблицы.
- */
+/** Свойства компонента TableBasicBody. */
 export interface ITableBasicBodyProps {
+    /** Структура заголовков таблицы. */
     columns: ITableBasicColumn[];
+    /** Массив значений для вывода в теле таблицы. */
     data: ITableBasicRow[];
+    /** Подсветка строк при наведении мышки. */
     highlightRowOnHover?: boolean;
+    /** Функция обработки клика по строке таблицы. */
     onClickRow?: (rowKey: string) => void;
 }
 
@@ -24,16 +23,20 @@ export const TableBasicBody = ({ columns, data, highlightRowOnHover, onClickRow 
     }
 
     const clickEnabled = Boolean(onClickRow);
+    // Кликабельные строки подсвечиваются при наведении всегда, без отдельного highlightRowOnHover.
     const hoverable = clickEnabled || Boolean(highlightRowOnHover);
     const className = clsx({
         [styles.clickable]: clickEnabled,
         [styles.hoverable]: hoverable,
     });
 
-    const rows = data.map((rowData) => (
-        <TableBasicRow columns={columns} data={rowData} onClickRow={onClickRow} key={rowData.rowKey} />
-    ));
-    return <tbody className={className}>{rows}</tbody>;
+    return (
+        <tbody className={className}>
+            {data.map((rowData) => (
+                <TableBasicRow columns={columns} data={rowData} onClickRow={onClickRow} key={rowData.rowKey} />
+            ))}
+        </tbody>
+    );
 };
 
 TableBasicBody.displayName = "TableBasicBody";

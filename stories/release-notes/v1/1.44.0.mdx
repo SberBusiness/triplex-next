@@ -76,6 +76,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлен новый тип `ESkeletonType.TYPE_3`.
 - Изменены цвета токенов `Skeleton.BackgroundColor_Type2_Start` и `Skeleton.BackgroundColor_Type2_End` в темной теме.
 
+**TableBasic**
+
+- Добавлено: `TableBasic` пробрасывает `ref` на свой элемент `table` — туда же, куда уходят остальные HTML-атрибуты. Раньше компонент был объявлен обычной функцией без `forwardRef`.
+- Проведён AI-рефакторинг.
+
 **TopOverlay**
 
 - Добавлено: компонент пробрасывает `ref` на корневую обёртку панели и принимает `className`, `style` и остальные атрибуты `<div>`.

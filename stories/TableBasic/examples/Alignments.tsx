@@ -18,12 +18,6 @@ const columns: ITableBasicColumn[] = [
         fieldKey: "center",
         label: "По центру",
         horizontalAlign: EHorizontalAlign.CENTER,
-        verticalAlign: EVerticalAlign.MIDDLE,
-    },
-    {
-        fieldKey: "right",
-        label: "Справа",
-        horizontalAlign: EHorizontalAlign.RIGHT,
         verticalAlign: EVerticalAlign.BOTTOM,
     },
 ];
@@ -33,16 +27,14 @@ const data: ITableBasicRow[] = [
         rowKey: "1",
         rowData: {
             left: "Выравнивание по верхнему краю ячейки. Текст занимает несколько строк, чтобы разница по вертикали была видна.",
-            center: "По центру ячейки",
-            right: "9 450,00",
+            center: "По нижнему краю ячейки",
         },
     },
     {
         rowKey: "2",
         rowData: {
             left: "Ещё одна многострочная ячейка, задающая высоту строки таблицы для наглядности примера.",
-            center: "По центру ячейки",
-            right: "18 914,00",
+            center: "По нижнему краю ячейки",
         },
     },
 ];

@@ -17,6 +17,11 @@ export interface ITopOverlayProps
     focusTrapProps?: IFocusTrapExtendedProps;
 }
 
+/** Inline-стиль обёртки: рассчитанная позиция уходит в runtime-переменную, а не в свойство top. */
+interface ITopOverlayWrapperStyle extends React.CSSProperties {
+    "--triplex-next-runtime-TopOverlay-Top"?: string;
+}
+
 // Overlay требует setOpened, но TopOverlay полностью управляется свойством opened и наружу состояние не поднимает.
 const noopSetOpened = () => {};
 
@@ -112,6 +117,14 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
             </>
         );
 
+        // Рассчитанная позиция публикуется runtime-переменной, которую читает .topOverlayWrapper в LESS: inline
+        // styles в компонентах запрещены (docs/ai/codestyle.md). Ноль здесь такой же результат расчёта, как любой
+        // другой, поэтому признак «не рассчитано» — undefined, а не 0.
+        const wrapperStyle: ITopOverlayWrapperStyle | undefined =
+            overlayWrapperTopPosition === undefined
+                ? style
+                : { ...style, "--triplex-next-runtime-TopOverlay-Top": `${overlayWrapperTopPosition}px` };
+
         const classNameOverlayWrapper = clsx(
             styles.topOverlayWrapper,
             {
@@ -133,14 +146,7 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
                 <div
                     className={classNameOverlayWrapper}
                     {...htmlDivAttributes}
-                    // Рассчитанный top перекрывает пользовательский — на нём держится позиционирование панели.
-                    // Ноль здесь такой же результат расчёта, как и любой другой, поэтому признак «не рассчитано» —
-                    // undefined, а не 0.
-                    style={
-                        overlayWrapperTopPosition === undefined
-                            ? style
-                            : { ...style, top: `${overlayWrapperTopPosition}px` }
-                    }
+                    style={wrapperStyle}
                     ref={setOverlayWrapperRef}
                 >
                     <Overlay

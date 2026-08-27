@@ -44,7 +44,7 @@ describe("TopOverlay + Overlay", () => {
 
         // Позицию на маунте не трогаем — её задают стили, измерять в этот момент нечего.
         const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-        expect(wrapper.style.top).toBe("");
+        expect(wrapper.style.getPropertyValue("--triplex-next-runtime-TopOverlay-Top")).toBe("");
     });
 
     it("does not start the open cycle when mounted closed", () => {
@@ -58,6 +58,7 @@ describe("TopOverlay + Overlay", () => {
 
         expect(handleOpen).not.toHaveBeenCalled();
         expect(getLastFocusTrapProps().active).toBe(false);
-        expect((container.querySelector(".topOverlayWrapper") as HTMLElement).style.top).toBe("");
+        const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
+        expect(wrapper.style.getPropertyValue("--triplex-next-runtime-TopOverlay-Top")).toBe("");
     });
 });

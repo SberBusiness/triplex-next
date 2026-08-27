@@ -116,6 +116,9 @@ const TestContent = () => <div data-testid="test-content">TopOverlay Content</di
 /** Последние свойства, с которыми был отрисован FocusTrap. */
 const getLastFocusTrapProps = () => focusTrapMock.mock.calls[focusTrapMock.mock.calls.length - 1][0];
 
+/** Рассчитанная позиция обёртки: компонент публикует её runtime-переменной, а не свойством top. */
+const getRuntimeTop = (element: HTMLElement) => element.style.getPropertyValue("--triplex-next-runtime-TopOverlay-Top");
+
 describe("TopOverlay", () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -456,7 +459,7 @@ describe("TopOverlay", () => {
     });
 
     describe("Wrapper Styles", () => {
-        it("should not set inline top style until the position is calculated", () => {
+        it("should not set the position variable until the position is calculated", () => {
             const { container } = render(
                 <TopOverlay opened={false}>
                     <TestContent />
@@ -464,10 +467,10 @@ describe("TopOverlay", () => {
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            expect(wrapper.style.top).toBe("");
+            expect(getRuntimeTop(wrapper)).toBe("");
         });
 
-        it("should apply calculated zero position over the consumer top", () => {
+        it("should publish a calculated zero position as a real result", () => {
             vi.spyOn(window, "getComputedStyle").mockReturnValue({
                 getPropertyValue: () => "0px",
             } as unknown as CSSStyleDeclaration);
@@ -475,21 +478,21 @@ describe("TopOverlay", () => {
             vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 0 } as DOMRect);
 
             const { container, rerender } = render(
-                <TopOverlay opened={false} style={{ top: "auto" }}>
+                <TopOverlay opened={false}>
                     <TestContent />
                 </TopOverlay>,
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            expect(wrapper.style.top).toBe("auto");
+            expect(getRuntimeTop(wrapper)).toBe("");
 
             rerender(
-                <TopOverlay opened={true} style={{ top: "auto" }}>
+                <TopOverlay opened={true}>
                     <TestContent />
                 </TopOverlay>,
             );
 
-            expect(wrapper.style.top).toBe("0px");
+            expect(getRuntimeTop(wrapper)).toBe("0px");
         });
 
         it("should recalculate inline top style on open and reset it on close", () => {
@@ -508,7 +511,7 @@ describe("TopOverlay", () => {
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            expect(wrapper.style.top).toBe("");
+            expect(getRuntimeTop(wrapper)).toBe("");
 
             rerender(
                 <TopOverlay opened={true}>
@@ -518,7 +521,7 @@ describe("TopOverlay", () => {
 
             // Пересчёт при открытии идёт дважды: из onOpen и из собственного эффекта по opened.
             // При top = -40 и --lightBox-screen-top = 0px это даёт 0 + 40, затем 40 + 40.
-            expect(wrapper.style.top).toBe("80px");
+            expect(getRuntimeTop(wrapper)).toBe("80px");
 
             rerender(
                 <TopOverlay opened={false}>
@@ -527,12 +530,12 @@ describe("TopOverlay", () => {
             );
             fireEvent.click(screen.getByTestId("overlay-finish-closing"));
 
-            expect(wrapper.style.top).toBe("");
+            expect(getRuntimeTop(wrapper)).toBe("");
         });
     });
 
     describe("Wrapper Styles on mount", () => {
-        it("should not correct inline top style when mounted already opened", () => {
+        it("should not correct the position when mounted already opened", () => {
             vi.spyOn(window, "getComputedStyle").mockReturnValue({
                 getPropertyValue: () => "0px",
             } as unknown as CSSStyleDeclaration);
@@ -546,10 +549,10 @@ describe("TopOverlay", () => {
 
             // На маунте лайтбокс ещё не на своём месте, измерять нечего — позицию задают стили.
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            expect(wrapper.style.top).toBe("");
+            expect(getRuntimeTop(wrapper)).toBe("");
         });
 
-        it("should correct inline top style on the first open after mounting already opened", () => {
+        it("should correct the position on the first open after mounting already opened", () => {
             vi.spyOn(window, "getComputedStyle").mockReturnValue({
                 getPropertyValue: () => "0px",
             } as unknown as CSSStyleDeclaration);
@@ -574,7 +577,7 @@ describe("TopOverlay", () => {
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            expect(wrapper.style.top).toBe("80px");
+            expect(getRuntimeTop(wrapper)).toBe("80px");
         });
     });
 
@@ -618,29 +621,29 @@ describe("TopOverlay", () => {
             expect(screen.getByTestId("overlay")).not.toHaveAttribute("id");
         });
 
-        it("should keep consumer style but override top with the calculated position", () => {
+        it("should keep consumer style next to the calculated position", () => {
             vi.spyOn(window, "getComputedStyle").mockReturnValue({
                 getPropertyValue: () => "0px",
             } as unknown as CSSStyleDeclaration);
             vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: -40 } as DOMRect);
 
             const { container, rerender } = render(
-                <TopOverlay opened={false} style={{ top: "10px", zIndex: 5 }}>
+                <TopOverlay opened={false} style={{ zIndex: 5 }}>
                     <TestContent />
                 </TopOverlay>,
             );
 
             const wrapper = container.querySelector(".topOverlayWrapper") as HTMLElement;
-            expect(wrapper.style.top).toBe("10px");
+            expect(wrapper.style.zIndex).toBe("5");
 
             rerender(
-                <TopOverlay opened={true} style={{ top: "10px", zIndex: 5 }}>
+                <TopOverlay opened={true} style={{ zIndex: 5 }}>
                     <TestContent />
                 </TopOverlay>,
             );
 
             expect(wrapper.style.zIndex).toBe("5");
-            expect(wrapper.style.top).toBe("80px");
+            expect(getRuntimeTop(wrapper)).toBe("80px");
         });
     });
 

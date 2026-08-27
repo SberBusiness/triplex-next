@@ -40,15 +40,17 @@ export const PaginationNavigation = React.forwardRef<HTMLUListElement, IPaginati
         },
         ref,
     ) => {
+        const pagesCount = Math.max(totalPages, 1);
+
         const pageNumbers = PaginationUtils.createPagesArray({
             boundaryCount,
             currentPage,
             siblingCount,
-            totalPages,
+            totalPages: pagesCount,
         });
 
-        const isFirstPage = currentPage === 1;
-        const isLastPage = currentPage === totalPages;
+        const isFirstPage = currentPage <= 1;
+        const isLastPage = currentPage >= pagesCount;
 
         const handlePrevClick = () => {
             onCurrentPageChange(currentPage - 1);

@@ -23,3 +23,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлено: `MasterTable` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`.
 - Добавлено: `ref` пробрасывают и обёртки семейства — `MasterTable.FilterPanel`, `MasterTable.ChipPanel` (и `.Links`), `MasterTable.NoColumns`, `MasterTable.PaginationPanel`, `MasterTable.TableFooter`, `MasterTable.TableBasicSettings`. Раньше все они были объявлены как `React.FC`.
 - Проведён AI-рефакторинг.
+
+**Pagination**
+
+- Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).

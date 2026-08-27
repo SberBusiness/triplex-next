@@ -295,8 +295,8 @@ describe("PaginationSelect", () => {
         const combobox = screen.getByRole("combobox");
 
         expect(combobox).toHaveClass("custom-target");
-        // Заголовок поля пуст: лейбл рисует сам PaginationSelect.
-        expect(combobox.querySelector("label")).toHaveTextContent("");
+        // Заголовок поля пуст: доступное имя даёт лейбл, который рисует сам PaginationSelect.
+        expect(combobox).toHaveAccessibleName("Items per page");
     });
 
     it("Should let the consumer override the internal fieldLabel", () => {
@@ -310,7 +310,7 @@ describe("PaginationSelect", () => {
             />,
         );
 
-        expect(screen.getByRole("combobox").querySelector("label")).toHaveTextContent("Page size");
+        expect(screen.getByText("Page size")).toBeInTheDocument();
     });
 
     // В мобильном режиме выпадающий список рендерит заголовок mobileTitle. Мобильность определяется

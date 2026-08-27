@@ -131,8 +131,18 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
         }
     }, [opening]);
 
+    // Монтирование сразу с opened={true}: анимации открытия нет, оверлей уже в открытом состоянии, поэтому цикл
+    // открытия считается завершённым и onOpen вызывается на маунте — так же, как после анимации при переходе
+    // false → true. Эффект пассивный (а не layout): к этому моменту refs уже проставлены, и потребитель может
+    // измерить DOM в onOpen. onOpening при этом не вызывается — анимации, о начале которой нужно сообщать, не было.
     useEffect(() => {
+        if (opened) {
+            callbacks.current.onOpen?.();
+        }
+
         isFirstRender.current = false;
+        // Эффект только на маунте: дальнейшие переходы обрабатывают эффекты по closing/opening.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return children({ closing, direction, opened, opening, setClosing, setOpened, setOpening });

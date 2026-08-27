@@ -158,7 +158,7 @@ export const PlaygroundExample = ({
                 {selectedOptions.map((opt) => (
                     <Tag
                         key={opt.id}
-                        id={opt.id}
+                        id={`tag-${opt.id}`}
                         size={EComponentSize.SM}
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}

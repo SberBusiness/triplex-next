@@ -1,4 +1,4 @@
-import { ISelectFieldOption } from "../../src";
+import { ISelectFieldOption } from "@sberbusiness/triplex-next";
 import { ITableFilters } from "./types";
 
 export const counterpartyExampleOptions: ISelectFieldOption[] = [
@@ -23,7 +23,7 @@ export const dataSetForTest = [
         },
         purpose: "Платёжное поручение ИП Иванов Иван Иванович за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (1350 * 100 * Math.random()).toFixed(2),
+        sum: "9450.00",
         status: "Создан",
     },
     {
@@ -34,7 +34,7 @@ export const dataSetForTest = [
         },
         purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (1351 * 100 * Math.random()).toFixed(2),
+        sum: "18914.00",
         status: "Создан",
     },
     {
@@ -45,7 +45,7 @@ export const dataSetForTest = [
         },
         purpose: "Платёжное поручение ИП Иванов Иван Иванович за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (1352 * 100 * Math.random()).toFixed(2),
+        sum: "28392.00",
         status: "Подписан",
     },
     {
@@ -56,7 +56,7 @@ export const dataSetForTest = [
         },
         purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (1353 * 100 * Math.random()).toFixed(2),
+        sum: "37884.00",
         status: "Подписан",
     },
     {
@@ -67,7 +67,7 @@ export const dataSetForTest = [
         },
         purpose: "Платёжное поручение ИП Иванов Иван Иванович за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (1354 * 100 * Math.random()).toFixed(2),
+        sum: "47390.00",
         status: "Оплачен",
     },
     {
@@ -78,7 +78,7 @@ export const dataSetForTest = [
         },
         purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
         tax: "В том числе НДС 20%",
-        sum: (1355 * 100 * Math.random()).toFixed(2),
+        sum: "56910.00",
         status: "Оплачен",
     },
 ];

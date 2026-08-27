@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { TAriaHTMLAttributes } from "@sberbusiness/triplex-next/utils/html/AriaAttributes";
 import { TDataHTMLAttributes } from "@sberbusiness/triplex-next/utils/html/DataAttributes";
@@ -15,25 +14,27 @@ import { IListSortableProps } from "@sberbusiness/triplex-next/components/List/L
 
 /** Интерфейс колонки. */
 export interface ITableBasicColumn {
-    /** По какому столбцу производить сортировку. */
+    /** Ключ поля в rowData, значение которого выводится в ячейках этого столбца. */
     fieldKey: string;
     /** Контент заголовка столбца. */
     label?: string | React.JSX.Element;
     /** Заголовок столбца при наведении указателя. */
     title?: string;
-    /** Порядок сортировки. */
+    /** Текущее направление сортировки. Наличие значения включает кнопку сортировки, если передан onOrderBy. */
     orderDirection?: EOrderDirection;
-    /** Горизонтальное выравнивание. */
+    /** Горизонтальное выравнивание. По умолчанию EHorizontalAlign.LEFT. */
     horizontalAlign?: EHorizontalAlign;
-    /** Вертикальное выравнивание. */
+    /** Вертикальное выравнивание. По умолчанию BASELINE для ECellType.TEXT и TOP для остальных типов. */
     verticalAlign?: EVerticalAlign;
-    /** Тип ячейки. */
+    /** Тип ячейки, задаёт внутренние отступы и обёртку контента. По умолчанию ECellType.TEXT. */
     cellType?: ECellType;
     /** Ширина колонки (включая боковые внутренние отступы), пример значений 10|'10%'. */
     width?: string | number;
     /** Столбец скрыт. */
     hidden?: boolean;
-    /** Функция рендера ячейки. */
+    /** Функция рендера ячейки. Получает значение поля fieldKey из rowData текущей строки. */
+    // Тип значения ячейки задаёт потребитель в rowData, библиотека его не знает. Сужение до unknown — breaking change.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     renderCell?: (param: any) => React.ReactNode;
     /** Data-атрибуты. */
     dataAttributes?: TDataHTMLAttributes;
@@ -59,20 +60,23 @@ export interface ITableRowCellSpanProps {
 
 /** Интерфейс данных для строки. */
 export interface ITableBasicRow {
-    /** Идентификатор сортировки. */
+    /** Уникальный ключ строки. Передаётся в onClickRow и используется как React-key. */
     rowKey: string;
-    /** Данные строки в виде объекта. */
-    rowData: any; // TODO пока нет архитектурного понимания о его структуре/типизации.
-    /** Информация об объединенных ячейках в виде объекта. */
+    /** Данные строки в виде объекта: ключ — fieldKey колонки, значение — содержимое ячейки. */
+    // TODO пока нет архитектурного понимания о его структуре/типизации.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rowData: any;
+    /** Информация об объединенных ячейках в виде объекта. Ключ — fieldKey колонки. */
     rowLayout?: Record<string, ITableRowCellSpanProps>;
     /** Выбрана ли строка для массового действия. */
     selected?: boolean;
-    /** Aria-атрибуты. */
+    /** Data-атрибуты строки. */
     dataAttributes?: TDataHTMLAttributes;
-    /** Data-атрибуты. */
+    /** Aria-атрибуты строки. */
     ariaAttributes?: TAriaHTMLAttributes;
 }
 
+/** Свойства компонента TableBasic. Остальные HTML-атрибуты попадают на элемент table. */
 export interface ITableBasicProps extends React.HTMLAttributes<HTMLTableElement> {
     /** Структура заголовков таблицы. */
     columns: ITableBasicColumn[];
@@ -82,16 +86,16 @@ export interface ITableBasicProps extends React.HTMLAttributes<HTMLTableElement>
     renderNoData: () => React.JSX.Element;
     /**
      * Функция рендера при скрытии пользователем всех колонок в таблице.
-     * Вызывается, когда каждый элемент columns имеет свойство hidden.
+     * Вызывается вместо таблицы, когда каждый элемент columns имеет свойство hidden.
      * */
     renderNoColumns?: () => React.ReactNode;
-    /** Подсветка строк при наведении мышки. */
+    /** Подсветка строк при наведении мышки. По умолчанию false; при заданном onClickRow подсветка включена всегда. */
     highlightRowOnHover?: boolean;
-    /** Обработчик сортировки. */
+    /** Обработчик сортировки. Вызывается со следующим направлением сортировки по циклу none → asc → desc → none. */
     onOrderBy?: (order: ISortOrder) => void;
-    /** Функция обработки клика по строке таблицы. */
+    /** Функция обработки клика по строке таблицы. Получает rowKey строки. */
     onClickRow?: (rowKey: string) => void;
-    /** Скрытие шапки. */
+    /** Скрытие шапки таблицы. По умолчанию false. */
     headless?: boolean;
 }
 

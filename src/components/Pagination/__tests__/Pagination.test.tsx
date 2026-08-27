@@ -31,7 +31,7 @@ describe("Pagination", () => {
         expect(pagination).toBeInTheDocument();
     });
 
-    it("Should not render PaginationNavigation when totalPages is 1", () => {
+    it("Should render PaginationNavigation with single disabled page when totalPages is 1", () => {
         render(
             <Pagination
                 paginationNavigationProps={{ totalPages: 1, currentPage: 1, onCurrentPageChange: () => {} }}
@@ -46,10 +46,13 @@ describe("Pagination", () => {
             />,
         );
         const pagination = getPagination();
-        expect(pagination).toBeInTheDocument();
 
-        const paginationNavigation = pagination.querySelector("PaginationNavigationExtended");
-        expect(paginationNavigation).not.toBeInTheDocument();
+        expect(pagination.querySelector("ul")).toBeInTheDocument();
+        expect(screen.getByText("1")).toBeInTheDocument();
+
+        const buttons = screen.getAllByRole("button");
+        expect(buttons[0]).toBeDisabled();
+        expect(buttons[buttons.length - 1]).toBeDisabled();
     });
 
     it("Should not render PaginationSelect when paginationSelectProps is not provided", () => {
@@ -124,6 +127,15 @@ describe("PaginationNavigation", () => {
         const buttons = screen.getAllByRole("button");
         const nextBtn = buttons[buttons.length - 1];
         expect(nextBtn).toBeDisabled();
+    });
+
+    it("Should render single page with both arrows disabled when there are no pages", () => {
+        setup({ currentPage: 1, totalPages: 0 });
+        const buttons = screen.getAllByRole("button");
+
+        expect(screen.getByText("1")).toBeInTheDocument();
+        expect(buttons[0]).toBeDisabled();
+        expect(buttons[buttons.length - 1]).toBeDisabled();
     });
 });
 

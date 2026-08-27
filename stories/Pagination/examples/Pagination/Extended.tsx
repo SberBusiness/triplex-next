@@ -30,15 +30,13 @@ export const Extended = () => {
 
     return (
         <PaginationExtended>
-            {totalPages > 1 && (
-                <PaginationNavigation
-                    currentPage={page}
-                    totalPages={totalPages}
-                    boundaryCount={1}
-                    siblingCount={1}
-                    onCurrentPageChange={setPage}
-                />
-            )}
+            <PaginationNavigation
+                currentPage={page}
+                totalPages={totalPages}
+                boundaryCount={1}
+                siblingCount={1}
+                onCurrentPageChange={setPage}
+            />
             <PaginationSelect
                 paginationLabel="Показать на странице:"
                 value={selectedOption || options[0]}

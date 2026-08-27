@@ -75,6 +75,17 @@ export default meta;
 
 type Story = StoryObj<typeof TableBasic>;
 
+// Состояние загрузки рисует LoaderMiddle с бесконечной анимацией и подложку с fadeIn.
+// Test-runner ждёт тишины DOM, а CSS-анимация DOM не мутирует — кадр снялся бы в случайной фазе цикла.
+const freezeAnimations: NonNullable<Story["decorators"]> = [
+    (Story) => (
+        <>
+            <style>{`* { animation: none !important; }`}</style>
+            <Story />
+        </>
+    ),
+];
+
 const PLAYGROUND_ARGS: IPlaygroundArgs = {
     isLoading: false,
     isHeadless: false,
@@ -248,6 +259,7 @@ export const NoColumns: Story = {
 
 export const Loading: Story = {
     render: LoadingRender,
+    decorators: freezeAnimations,
     parameters: {
         controls: { disable: true },
         docs: {
@@ -311,6 +323,7 @@ export const TableWithPagination: Story = {
 
 export const TableWithPaginationLoading: Story = {
     render: TableWithPaginationLoadingRender,
+    decorators: freezeAnimations,
     parameters: {
         docs: {
             description: {

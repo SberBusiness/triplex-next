@@ -71,7 +71,7 @@ version: "1.0"
 | `width` | `string \| number` | — | У `<th>` задаёт `min/max/width`, у `<td>` — только `width` |
 | `hidden` | `boolean` | `false` | Столбец не рендерится ни в шапке, ни в строках |
 | `renderCell` | `(param: any) => React.ReactNode` | — | Кастомный рендер значения ячейки |
-| `dataAttributes` / `ariaAttributes` | `Record<string, string>` | — | Ключи без префикса: `{label: "..."}` → `aria-label="..."` |
+| `dataAttributes` / `ariaAttributes` | `TDataHTMLAttributes` / `TAriaHTMLAttributes` | — | Ключи без префикса: `{label: "..."}` → `aria-label="..."` |
 
 ### `ITableBasicRow`
 
@@ -81,7 +81,7 @@ version: "1.0"
 | `rowData` | `any` | — | Объект «ключ колонки → значение ячейки» |
 | `rowLayout` | `Record<string, ITableRowCellSpanProps>` | — | `rowSpan` / `colSpan` по ключу колонки |
 | `selected` | `boolean` | `false` | Подсветка выбранной строки. Компонент сам флаг не проставляет |
-| `dataAttributes` / `ariaAttributes` | `Record<string, string>` | — | Атрибуты `<tr>`; `test-id` дополнительно строит `data-test-id` ячеек |
+| `dataAttributes` / `ariaAttributes` | `TDataHTMLAttributes` / `TAriaHTMLAttributes` | — | Атрибуты `<tr>`; `test-id` дополнительно строит `data-test-id` ячеек |
 
 ### Ограничения по типам ячеек
 
@@ -205,4 +205,4 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-08-27 | Создан документ. AI-рефакторинг: `TableBasic` получил `forwardRef` на `<table>`, JSDoc на всех публичных полях, разбор подвала по состояниям, удалён неиспользуемый `TableBasicAdaptive.module.less`. Stories переведены на modern pattern, добавлены unit-тесты (42) |
+| 2026-08-27 | Создан документ. AI-рефакторинг: `TableBasic` получил `forwardRef` на `<table>`, JSDoc на всех публичных полях, разбор подвала по состояниям, удалён неиспользуемый `TableBasicAdaptive.module.less`. Stories переведены на modern pattern, добавлены unit-тесты (46) |

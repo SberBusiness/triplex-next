@@ -18,6 +18,10 @@ import { PaginationPanel } from "@sberbusiness/triplex-next/components/Table/Pag
  * Статические субкомпоненты MasterTable. Тип задан через typeof-запросы, а не выведен:
  * TableBasicSettings и TableFooter типизированы неэкспортируемыми интерфейсами, и выведенный
  * тип Object.assign невозможно сгенерировать в d.ts (TS4023) — declaration emit падает.
+ *
+ * Явная аннотация снимает проверку лишних свойств у Object.assign, поэтому при добавлении
+ * или удалении статики этот интерфейс нужно править синхронно: иначе новая статика окажется
+ * в рантайме, но не попадёт в публичный тип, и TypeScript промолчит.
  */
 interface IMasterTableStatics {
     NoColumns: typeof NoColumns;

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { MasterTable } from "../MasterTable";
-import { MasterTableContext } from "../MasterTableContext";
+import { IMasterTableContextContext, MasterTableContext } from "../MasterTableContext";
 import { NoColumns } from "../NoColumns";
 import { FilterPanel } from "../FilterPanel";
 import { ChipPanel } from "../ChipPanel";
@@ -156,6 +156,28 @@ describe("MasterTable", () => {
             );
 
             expect(await screen.findByTestId("columns")).toHaveTextContent("docNumber,sum");
+        });
+
+        it("Should keep context value referentially stable between re-renders", () => {
+            const values: IMasterTableContextContext[] = [];
+            const ContextValueProbe = () => {
+                values.push(useContext(MasterTableContext));
+
+                return null;
+            };
+
+            const { rerender } = render(
+                <MasterTable data-testid="master-table">
+                    <ContextValueProbe />
+                </MasterTable>,
+            );
+            rerender(
+                <MasterTable data-testid="master-table">
+                    <ContextValueProbe />
+                </MasterTable>,
+            );
+
+            expect(values[1]).toBe(values[0]);
         });
     });
 

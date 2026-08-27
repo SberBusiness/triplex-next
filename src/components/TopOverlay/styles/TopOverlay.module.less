@@ -13,7 +13,8 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: 0;
+    // Коррекция позиции при открытии на прокрученном контенте лайтбокса, значение задаёт TopOverlay.tsx.
+    top: var(--triplex-next-runtime-TopOverlay-Top, 0);
 
     &.closing,
     &.opened {

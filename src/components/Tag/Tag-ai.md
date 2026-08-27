@@ -64,7 +64,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
+```text
 --triplex-next-Tag-Background
 ```
 

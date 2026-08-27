@@ -171,7 +171,7 @@ git push -u origin TRI-XXX-...
 ```bash
 if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
 for i in $(seq 1 12); do
-  pr_url=$(gh pr list --head "TRI-XXX-..." --state open \
+  pr_url=$(gh pr list --head "TRI-XXX-..." --base main --state open \
     --json url --jq '.[0].url // empty') && [ -n "$pr_url" ] && break
   sleep 10
 done
@@ -180,7 +180,9 @@ done
 Если PR не появился за ~2 минуты — проверь прогон
 (`gh run list --workflow=auto-pr.yml --branch TRI-XXX-... --limit 1`);
 при упавшем или отсутствующем прогоне — fallback: `gh pr create` с
-паттерном bot-токена (гонки нет, раз workflow PR не создал).
+паттерном bot-токена (гонки нет, раз workflow PR не создал). Успешный
+прогон без PR = сработал guard workflow (см. `docs/ai/commits.md`
+§ «PR-воркфлоу») — штатное завершение без PR, fallback не применяй.
 
 Покажи пользователю ссылку на PR. Дальше финал продолжается автоматически:
 skill `update-visual-baselines` (если менялись stories/визуал) и skill

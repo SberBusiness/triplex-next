@@ -258,7 +258,7 @@ PR от `claude[bot]` раньше workflow.
 git push -u origin TRI-XXX-feature-name
 # PR создаст auto-pr.yml через ~20–60 с; дождись его появления:
 for i in $(seq 1 12); do
-  pr_url=$(gh pr list --head "TRI-XXX-feature-name" --state open \
+  pr_url=$(gh pr list --head "TRI-XXX-feature-name" --base main --state open \
     --json url --jq '.[0].url // empty') && [ -n "$pr_url" ] && break
   sleep 10
 done
@@ -267,6 +267,9 @@ echo "${pr_url:-PR не появился}"
 
 Если PR не появился за ~2 минуты — проверь прогон workflow:
 `gh run list --workflow=auto-pr.yml --branch TRI-XXX-... --limit 1`.
+**Успешный** прогон без PR означает, что сработал guard (маркер `[no-pr]`,
+subject не по формату `TRI-XXX ...` или ветка без новых коммитов
+относительно `main`) — это штатное завершение без PR, fallback не нужен.
 Упавший или отсутствующий прогон (например, протух secret) — fallback на
 прежнюю схему: `gh pr create` с паттерном bot-токена из раздела выше.
 Fallback безопасен: раз workflow PR не создал, гонки нет. В облачной

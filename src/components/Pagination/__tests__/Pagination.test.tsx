@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { PaginationNavigation } from "../components/PaginationNavigation";
 import { PaginationNavigationButton } from "../components/PaginationNavigationButton";
 import { PaginationPageButton } from "../components/PaginationPageButton";
@@ -9,6 +9,7 @@ import { PaginationSelect } from "../components/PaginationSelect";
 import { EPaginationNavigationIconDirection } from "../enums";
 import { Pagination } from "../Pagination";
 import { MasterTable } from "../../Table/MasterTable";
+import { EScreenWidth } from "../../../helpers/breakpoints";
 
 describe("Pagination", () => {
     const getPagination = () => screen.getByTestId("pagination");
@@ -210,16 +211,19 @@ describe("PaginationPageEllipsis", () => {
 });
 
 describe("PaginationSelect", () => {
+    const options = [{ id: "0", value: "10", label: "10" }];
+
     it("Should render with label", () => {
         render(
             <PaginationSelect
                 paginationLabel="Items per page"
                 onChange={() => {}}
-                options={[]}
+                options={options}
                 targetProps={{ fieldLabel: "" }}
-                value={{ id: "0", value: "10", label: "10" }}
+                value={options[0]}
             />,
         );
+
         expect(screen.getByText("Items per page")).toBeInTheDocument();
     });
 
@@ -228,9 +232,10 @@ describe("PaginationSelect", () => {
             <PaginationSelect
                 paginationLabel="Items per page"
                 onChange={() => {}}
-                options={[]}
-                value={{ id: "0", value: "10", label: "10" }}
+                options={options}
+                value={options[0]}
                 data-testid="pagination-select"
+                data-test-id="page-size-select"
                 id="page-size"
             />,
         );
@@ -238,6 +243,7 @@ describe("PaginationSelect", () => {
         const select = screen.getByTestId("pagination-select");
 
         expect(select).toHaveAttribute("id", "page-size");
+        expect(select).toHaveAttribute("data-test-id", "page-size-select");
         expect(select).toContainElement(screen.getByRole("combobox"));
     });
 
@@ -246,16 +252,130 @@ describe("PaginationSelect", () => {
             <PaginationSelect
                 paginationLabel="Items per page"
                 onChange={() => {}}
-                options={[]}
-                value={{ id: "0", value: "10", label: "10" }}
+                options={options}
+                value={options[0]}
                 data-testid="pagination-select"
             />,
         );
 
-        const labelId = screen.getByRole("combobox").getAttribute("aria-labelledby");
+        const label = screen.getByText("Items per page");
 
-        expect(labelId).toBeTruthy();
-        expect(document.getElementById(labelId!)).toHaveTextContent("Items per page");
+        expect(label.id).toBeTruthy();
+        expect(screen.getByRole("combobox")).toHaveAttribute("aria-labelledby", label.id);
+    });
+
+    it("Should let the consumer override the generated aria-labelledby", () => {
+        render(
+            <>
+                <span id="custom-label">Page size</span>
+                <PaginationSelect
+                    paginationLabel="Items per page"
+                    onChange={() => {}}
+                    options={options}
+                    value={options[0]}
+                    aria-labelledby="custom-label"
+                />
+            </>,
+        );
+
+        expect(screen.getByRole("combobox")).toHaveAttribute("aria-labelledby", "custom-label");
+    });
+
+    it("Should forward targetProps to the select target", () => {
+        render(
+            <PaginationSelect
+                paginationLabel="Items per page"
+                onChange={() => {}}
+                options={options}
+                value={options[0]}
+                targetProps={{ fieldLabel: "", className: "custom-target" }}
+            />,
+        );
+
+        const combobox = screen.getByRole("combobox");
+
+        expect(combobox).toHaveClass("custom-target");
+        // Заголовок поля пуст: лейбл рисует сам PaginationSelect.
+        expect(combobox.querySelector("label")).toHaveTextContent("");
+    });
+
+    it("Should let the consumer override the internal fieldLabel", () => {
+        render(
+            <PaginationSelect
+                paginationLabel="Items per page"
+                onChange={() => {}}
+                options={options}
+                value={options[0]}
+                targetProps={{ fieldLabel: "Page size" }}
+            />,
+        );
+
+        expect(screen.getByRole("combobox").querySelector("label")).toHaveTextContent("Page size");
+    });
+
+    // В мобильном режиме выпадающий список рендерит заголовок mobileTitle. Мобильность определяется
+    // через window.matchMedia (MobileView → MediaMaxWidth → useMatchMedia), поэтому мокаем matchMedia.
+    describe("mobile view", () => {
+        const originalMatchMedia = window.matchMedia;
+
+        beforeEach(() => {
+            Object.defineProperty(window, "matchMedia", {
+                configurable: true,
+                writable: true,
+                value: (query: string) =>
+                    ({
+                        matches: query === `(max-width: ${EScreenWidth.SM_MAX})`,
+                        media: query,
+                        onchange: null,
+                        addEventListener: () => {},
+                        removeEventListener: () => {},
+                        addListener: () => {},
+                        removeListener: () => {},
+                        dispatchEvent: () => false,
+                    }) as unknown as MediaQueryList,
+            });
+        });
+
+        afterEach(() => {
+            Object.defineProperty(window, "matchMedia", {
+                configurable: true,
+                writable: true,
+                value: originalMatchMedia,
+            });
+        });
+
+        it("Should use paginationLabel as mobileTitle by default", () => {
+            render(
+                <PaginationSelect
+                    paginationLabel="Items per page"
+                    onChange={() => {}}
+                    options={options}
+                    value={options[0]}
+                />,
+            );
+
+            fireEvent.click(screen.getByRole("combobox"));
+
+            // Два вхождения: лейбл рядом с селектом и заголовок мобильного выпадающего списка.
+            expect(screen.getAllByText("Items per page")).toHaveLength(2);
+        });
+
+        it("Should let the consumer override mobileTitle", () => {
+            render(
+                <PaginationSelect
+                    paginationLabel="Items per page"
+                    onChange={() => {}}
+                    options={options}
+                    value={options[0]}
+                    mobileTitle="Page size"
+                />,
+            );
+
+            fireEvent.click(screen.getByRole("combobox"));
+
+            expect(screen.getByText("Page size")).toBeInTheDocument();
+            expect(screen.getAllByText("Items per page")).toHaveLength(1);
+        });
     });
 });
 

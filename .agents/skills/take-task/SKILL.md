@@ -81,9 +81,13 @@ git checkout -b TRI-XXX-короткое-описание
 пользователя** (см. `docs/ai/commits.md` § «Когда коммитить и пушить»).
 После того как исполнитель закончил и `change-reviewer` дал зелёный свет:
 
-1. Коммит по конвенциям — skill `commit-component`.
+1. Коммит по конвенциям — skill `commit-component` (в автофинале тело
+   коммита обязательно — из него workflow возьмёт описание PR).
 2. `git push -u origin TRI-XXX-...`
-3. `gh pr create --title "TRI-XXX Краткое описание" ...`
+3. PR создаёт workflow `auto-pr.yml` от аккаунта бота — **сам `gh pr create`
+   не вызывай**; дождись появления PR с ретраем
+   (`gh pr list --head TRI-XXX-...`, ~20–60 с; сниппет и fallback при
+   упавшем workflow — `docs/ai/commits.md` § «PR-воркфлоу»).
 4. Если менялись stories или визуал компонентов — skill
    `update-visual-baselines`: запуск CI-workflow «Update Visual Snapshots»,
    ожидание, pull коммита со скриншотами, удаление orphan-скриншотов.

@@ -68,6 +68,12 @@
         }
     }
 
+    &.isLoading:not(.lightBoxSideOverlayActive) {
+        .lightBoxControls {
+            z-index: @page-header-sticky-z-index + @z-index-step + 1;
+        }
+    }
+
     .loadingContentOverlay {
         z-index: @page-header-sticky-z-index + @z-index-step;
         border-top-left-radius: 32px;

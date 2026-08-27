@@ -140,7 +140,8 @@ npx prettier --write src/components/Button/Button.tsx
 
 1. делает коммит по конвенциям этого файла (skill `commit-component`);
 2. пушит ветку;
-3. создаёт PR (см. «PR-воркфлоу»);
+3. дожидается PR от workflow `auto-pr.yml` (см. «PR-воркфлоу»; сам
+   `gh pr create` в ветках `TRI-*` не вызывает);
 4. если менялись stories или визуал компонентов — обновляет baseline-скриншоты
    через skill `update-visual-baselines` (CI-workflow «Update Visual
    Snapshots» + чистка orphan-скриншотов);
@@ -161,9 +162,9 @@ npx prettier --write src/components/Button/Button.tsx
 
 ## GitHub-операции от аккаунта бота
 
-Автоматические GitHub-операции (создание PR, комментарии в PR, запуск
-workflow, авторство коммитов автофинала) выполняются от отдельного
-machine-аккаунта, если у разработчика задан его токен:
+Автоматические GitHub-операции (комментарии в PR, запуск workflow,
+авторство коммитов автофинала) выполняются от отдельного machine-аккаунта,
+если у разработчика задан его токен:
 
 ```bash
 # fine-grained PAT бота: contents:write, pull-requests:write, actions:write
@@ -171,11 +172,18 @@ export TRIPLEX_BOT_GH_TOKEN=...   # в ~/.zshenv (не ~/.zshrc — агент �
                                   # в неинтерактивном shell), НЕ в репозитории
 ```
 
+Тот же PAT хранится как repository secret `DUDIM_AI_GH_TOKEN` — его
+использует workflow `auto-pr.yml`, который создаёт PR для веток `TRI-*`
+(см. «PR-воркфлоу»). Благодаря этому автор PR один и тот же независимо от
+того, где шла сессия агента — локально или в облаке. При ротации PAT
+обнови оба места: `~/.zshenv` и secret
+(`gh secret set DUDIM_AI_GH_TOKEN --body "$TRIPLEX_BOT_GH_TOKEN"`).
+
 **Паттерн для агентов** — в начале Bash-вызова с командами `gh`:
 
 ```bash
 if [ -n "$TRIPLEX_BOT_GH_TOKEN" ]; then export GH_TOKEN="$TRIPLEX_BOT_GH_TOKEN"; fi
-gh pr create ...   # выполнится от бота; без токена — от разработчика (fallback)
+gh pr comment ...  # выполнится от бота; без токена — от разработчика (fallback)
 ```
 
 **Авторство коммитов автофинала** (identity бота выводится из токена,
@@ -233,16 +241,54 @@ TRI-117, 2026-08-14): создание релизов, диспатч `release.y
 
 ## PR-воркфлоу
 
-**Работа по задаче Linear:** после коммита агент сам пушит ветку и создаёт PR:
+**Работа по задаче Linear:** PR для веток `TRI-*` создаёт workflow
+`auto-pr.yml` (триггер `on: push`) от аккаунта бота — secret
+`DUDIM_AI_GH_TOKEN`. Так автор PR не зависит от среды сессии: локальный
+`gh pr create` шёл бы от PAT бота, а облачный — от GitHub App `claude`
+(прокси подменяет авторизацию, см. «Облачные сессии»). Агент **не вызывает
+`gh pr create` в ветках `TRI-*`** — иначе облачная сессия успеет создать
+PR от `claude[bot]` раньше workflow.
+
+Финальный коммит — это и есть источник PR: заголовок берётся из первой
+строки (`TRI-XXX Краткое описание`), описание — из тела коммита. Поэтому
+в автофинале тело коммита обязательно и содержит описание PR
+(«Что сделано» / «Как проверить»).
 
 ```bash
 git push -u origin TRI-XXX-feature-name
-gh pr create \
-  --title "TRI-XXX Краткое описание" \
-  --body "## Что сделано\n- ...\n\n## Как проверить\n- ..."
+# PR создаст auto-pr.yml через ~20–60 с; дождись его появления:
+for i in $(seq 1 12); do
+  pr_url=$(gh pr list --head "TRI-XXX-feature-name" --base main --state open \
+    --json url --jq '.[0].url // empty') && [ -n "$pr_url" ] && break
+  sleep 10
+done
+echo "${pr_url:-PR не появился}"
 ```
 
-После создания PR финал продолжается автоматически: skill
+Если PR не появился за ~2 минуты — проверь прогон workflow именно для
+текущего коммита (не по ветке: `--limit 1` по ветке может показать прогон
+предыдущего пуша):
+`gh run list --workflow=auto-pr.yml --commit $(git rev-parse HEAD) --limit 1`.
+Дальше по статусу:
+
+- `queued` / `in_progress` — прогон ещё идёт, продолжай ждать;
+- `completed` + `success` без PR — сработал guard (маркер `[no-pr]`,
+  subject не по формату `TRI-XXX ...` или ветка без новых коммитов
+  относительно `main`) — штатное завершение без PR, fallback не нужен;
+- `completed` + `failure` или прогона нет (например, протух secret) —
+  fallback.
+Fallback — прежняя схема: `gh pr create` с паттерном bot-токена из
+раздела выше.
+Fallback безопасен: раз workflow PR не создал, гонки нет. В облачной
+сессии fallback-PR будет от `claude[bot]` (прокси подменит PAT — см.
+«Облачные сессии») — это осознанная деградация, лучше PR от app'а, чем
+отсутствие PR.
+
+Обход автосоздания (WIP-пуш ветки `TRI-*` без PR): добавь маркер `[no-pr]`
+в первую строку HEAD-коммита. Коммиты не по формату `TRI-XXX ...`
+(например, `chore: ...`) PR также не создают.
+
+После появления PR финал продолжается автоматически: skill
 `update-visual-baselines` (если менялись stories/визуал) и skill
 `finish-task` — комментарий-резюме в задаче Linear и проверка линковки PR
 (GitHub-интеграция Linear подхватит PR по `TRI-XXX` в имени ветки).

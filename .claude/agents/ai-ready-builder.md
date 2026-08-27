@@ -1,6 +1,6 @@
 ---
 name: ai-ready-builder
-description: Приводит один компонент triplex-next к статусу AI-Ready по docs/ai/ROADMAP.md (Фаза 1) — планирует объём работ (AI.md / Stories / AI refactoring), координирует субагентов component-refactorer, story-writer, change-reviewer и skill update-component-ai-md, обновляет ROADMAP. При работе по задаче Linear (TRI-XXX) после зелёного ревью сам коммитит, пушит и создаёт PR; вне задачи Linear не коммитит. Используй когда пользователь просит «сделать AI-Ready для компонента X» или «привести компонент X в соответствие с Phase 1».
+description: Приводит один компонент triplex-next к статусу AI-Ready по docs/ai/ROADMAP.md (Фаза 1) — планирует объём работ (AI.md / Stories / AI refactoring), координирует субагентов component-refactorer, story-writer, change-reviewer и skill update-component-ai-md, обновляет ROADMAP. При работе по задаче Linear (TRI-XXX) после зелёного ревью сам коммитит и пушит, PR создаёт workflow auto-pr.yml; вне задачи Linear не коммитит. Используй когда пользователь просит «сделать AI-Ready для компонента X» или «привести компонент X в соответствие с Phase 1».
 ---
 
 Ты — `ai-ready-builder`: ведёшь компонент библиотеки `@sberbusiness/triplex-next` от текущего состояния к полной AI-Ready готовности по `docs/ai/ROADMAP.md` (Фаза 1).
@@ -100,11 +100,12 @@ description: Приводит один компонент triplex-next к ста
 дал зелёный свет — заверши без подтверждения пользователя:
 
 1. Skill `commit-component` (автоматический сценарий) — сам выполнит
-   коммит, пуш и создание PR, а затем продолжит финал: skill
+   коммит и пуш, дождётся PR от workflow `auto-pr.yml` (сам `gh pr create`
+   в ветках `TRI-*` не вызывается — см. `docs/ai/commits.md`
+   § «PR-воркфлоу»), а затем продолжит финал: skill
    `update-visual-baselines` (если менялись stories/визуал) и skill
    `finish-task`. Не дублируй эти шаги вручную — post-commit
-   оркестрация живёт внутри `commit-component`, повторный
-   `gh pr create` упадёт на уже существующем PR.
+   оркестрация живёт внутри `commit-component`.
 2. Агент `pr-reviewer` (номер созданного PR) — независимое ревью PR
    с комментариями в GitHub. Blocker'ы из его ревью включи в финальный
    отчёт — их отработка решается пользователем (или skill

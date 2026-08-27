@@ -184,6 +184,24 @@ describe("TreeViewNode", () => {
             expect(screen.getByTestId("content-b")).toHaveAttribute("data-last", "true");
             expect(screen.getByTestId("content-c")).toHaveAttribute("data-last", "false");
         });
+
+        it("prevNodeId задает позицию ноды в абстрактном дереве независимо от порядка в разметке", () => {
+            render(
+                <TreeView aria-label="Tree">
+                    <TreeView.Node id="a">{renderNodeContent("a")}</TreeView.Node>
+                    <TreeView.Node id="b">{renderNodeContent("b")}</TreeView.Node>
+                    <TreeView.Node id="c" prevNodeId="a">
+                        {renderNodeContent("c")}
+                    </TreeView.Node>
+                </TreeView>,
+            );
+
+            // Порядок в абстрактном дереве: a, c, b — последней считается b, а не отрисованная последней c.
+            expect(screen.getByTestId("content-b")).toHaveAttribute("data-last", "true");
+            expect(screen.getByTestId("content-c")).toHaveAttribute("data-last", "false");
+            // tabIndex=0 получает только первая нода уровня - значит c встала после a, а не перед ней.
+            expect(screen.getByTestId("content-a").closest("li")).toHaveAttribute("tabindex", "0");
+        });
     });
 
     describe("Фокус", () => {

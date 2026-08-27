@@ -371,10 +371,21 @@ export const VisualTestsHover: Story = {
             codePanel: false,
         },
     },
-    play: async ({ canvas, userEvent }) => {
-        // Кнопка сортировки в состоянии NONE и подсветка строки видны только при наведении.
-        const [sortableHeader] = await canvas.findAllByTitle("Номер");
+    play: async ({ canvasElement, userEvent }) => {
+        const [sortableTable, hoverableTable] = Array.from(canvasElement.querySelectorAll("table"));
 
-        await userEvent.hover(sortableHeader);
+        // Иконка сортировки в состоянии NONE показывается селектором .thBlock.order:hover.
+        // .thBlock — это <span> внутри <th>, а не сам <th>: :hover распространяется вверх по дереву,
+        // поэтому наведение на <th> состояние вложенного .thBlock не включает.
+        const sortableHeaderBlock = sortableTable?.querySelector<HTMLElement>('thead th [class*="thBlock"]');
+        // Подсветка строки задана селектором .hoverable > tr:hover > td во второй таблице.
+        const hoverableRow = hoverableTable?.querySelector<HTMLElement>("tbody tr");
+
+        if (!sortableHeaderBlock || !hoverableRow) {
+            throw new Error("VisualTestsHover: не найдены элементы для наведения курсора");
+        }
+
+        await userEvent.hover(sortableHeaderBlock);
+        await userEvent.hover(hoverableRow);
     },
 };

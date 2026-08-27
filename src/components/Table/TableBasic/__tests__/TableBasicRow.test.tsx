@@ -48,10 +48,29 @@ describe("TableBasicRow", () => {
         expect(tds[0].textContent).toContain("1");
     });
 
-    it("Should render a placeholder for an empty cell value", () => {
+    it.each([
+        ["undefined", undefined],
+        ["null", null],
+    ])("Should render a placeholder when the cell value is %s", (_name, value) => {
         const { container } = renderRow([{ fieldKey: "name", label: "Название" }], {
             rowKey: "1",
-            rowData: { name: "" },
+            rowData: { name: value },
+        });
+
+        expect(container.querySelector("td")).toHaveTextContent("---");
+    });
+
+    // Известное поведение: плейсхолдер подставляется по проверке на falsy, поэтому 0, "" и false
+    // тоже показываются как "---". Это pre-existing и зафиксировано в TableBasic-ai.md → Инварианты.
+    // Когда поведение починят, этот тест станет красным ожидаемо — это не регрессия.
+    it.each([
+        ["an empty string", ""],
+        ["zero", 0],
+        ["false", false],
+    ])("Should also render a placeholder for %s (known behaviour)", (_name, value) => {
+        const { container } = renderRow([{ fieldKey: "name", label: "Название" }], {
+            rowKey: "1",
+            rowData: { name: value },
         });
 
         expect(container.querySelector("td")).toHaveTextContent("---");

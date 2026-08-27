@@ -12,6 +12,8 @@ import { LoaderScreen } from "@sberbusiness/triplex-next/components/LoaderScreen
  * Компонент обычной таблицы.
  * Состояние загрузки и общий для таблицы набор колонок берутся из контекста MasterTable.
  * Ref пробрасывается на элемент table — туда же, куда попадают остальные HTML-атрибуты.
+ * Если все колонки скрыты и задан renderNoColumns, вместо таблицы рендерится заглушка,
+ * и ref остаётся пустым — элемента table в этот момент нет.
  */
 export const TableBasic = React.forwardRef<HTMLTableElement, ITableBasicProps>(
     (
@@ -44,7 +46,7 @@ export const TableBasic = React.forwardRef<HTMLTableElement, ITableBasicProps>(
             }
 
             return (
-                <table key="table" {...htmlTableAttributes} ref={ref}>
+                <table {...htmlTableAttributes} ref={ref}>
                     {headless || <TableBasicHeader columns={columns} onOrderBy={onOrderBy} />}
                     <TableBasicBody
                         columns={columns}

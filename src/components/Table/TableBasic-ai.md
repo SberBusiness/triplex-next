@@ -55,7 +55,7 @@ version: "1.0"
 | `onOrderBy` | `(order: ISortOrder) => void` | — | Обработчик сортировки. Включает кнопку сортировки у колонок с `orderDirection` |
 | `onClickRow` | `(rowKey: string) => void` | — | Клик по строке. Включает `cursor: pointer` и подсветку при наведении |
 | `headless` | `boolean` | `false` | Скрыть шапку таблицы |
-| `...HTMLTableElementAttributes` | — | — | Стандартные атрибуты `<table>`, включая `className`; `ref` — на `<table>` |
+| `...HTMLTableElementAttributes` | — | — | Стандартные атрибуты `<table>`, включая `className`; `ref` — на `<table>` (в ветке `renderNoColumns` таблицы нет, ref пустой) |
 
 ### `ITableBasicColumn`
 
@@ -110,7 +110,9 @@ version: "1.0"
 - **Корневой DOM — `<div>` со стилями таблицы, а `ref` и остальные HTML-атрибуты
   идут на вложенный `<table>`.** Так исторически ведёт себя `className`, и
   `forwardRef` добавлен туда же. Переносить их на корневой `<div>` — breaking
-  change.
+  change. Проброс не безусловный: когда все колонки скрыты и задан
+  `renderNoColumns`, вместо таблицы рендерится заглушка и `ref.current` остаётся
+  `null` — измерять таблицу по ref в этом состоянии нельзя.
 - **`renderNoData` обязателен.** Сделать его опциональным можно только вместе с
   решением, что рендерится при пустых данных без него.
 - **Ячейка рендерится, только если ключ колонки есть в `rowData`.** Колонка без

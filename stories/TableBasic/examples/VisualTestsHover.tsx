@@ -9,8 +9,9 @@ import {
     Text,
 } from "@sberbusiness/triplex-next";
 
-// Кнопка сортировки в состоянии NONE видна только при наведении на заголовок,
-// а подсветка строки — только при наведении на строку. Оба состояния снимаются через play-функцию.
+// Кнопка сортировки в состоянии NONE видна только при наведении на .thBlock внутри заголовка,
+// а подсветка строки — только при наведении на <tr>. Курсор на эти элементы наводит
+// play-функция story VisualTestsHover: сначала заголовок первой таблицы, затем строка второй.
 const columns: ITableBasicColumn[] = [
     { fieldKey: "number", label: "Номер", title: "Номер", width: 120, orderDirection: EOrderDirection.NONE },
     { fieldKey: "recipient", label: "Получатель", title: "Получатель" },

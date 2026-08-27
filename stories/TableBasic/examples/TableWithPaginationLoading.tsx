@@ -1,18 +1,86 @@
 import React, { useState } from "react";
+import { EmptytableSysIcon96, NotfoundSysIcon96 } from "@sberbusiness/icons-next";
 import {
     Amount,
+    Button,
     Col,
+    EButtonTheme,
     EComponentSize,
+    EFontType,
+    EFontWeightTitle,
     EHorizontalAlign,
+    ETextSize,
+    ETitleSize,
+    Gap,
     MasterTable,
     Pagination,
     Row,
+    Text,
     TextField,
+    Title,
     ISelectExtendedFieldDefaultOption,
     ITableBasicColumn,
     ITableBasicRow,
 } from "@sberbusiness/triplex-next";
-import { renderCounterpartyDetails, renderNoData } from "../utils";
+
+const renderCounterpartyDetails = (purpose: string, account: string, tax: string) => (
+    <>
+        <div>
+            {purpose}
+            <br />
+            {account}
+        </div>
+        <Gap size={4} />
+        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+            {tax}
+        </Text>
+    </>
+);
+
+const renderNoData = (isFiltered: boolean) => (
+    <>
+        {isFiltered ? <NotfoundSysIcon96 /> : <EmptytableSysIcon96 />}
+        <Gap size={8} />
+        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+            Текст заголовка
+        </Title>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            Нет данных, но можно предложить какие-то действия для заполнения таблицы
+        </Text>
+        <Gap size={24} />
+        <div>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                Button text
+            </Button>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                Button text
+            </Button>
+        </div>
+    </>
+);
+
+// Колонки собираются вне рендера, чтобы таблица не обновляла контекст MasterTable на каждый рендер.
+const columns: ITableBasicColumn[] = [
+    {
+        fieldKey: "number",
+        label: "Номер",
+    },
+    {
+        fieldKey: "value",
+        label: "Получатель",
+    },
+    {
+        fieldKey: "sum",
+        horizontalAlign: EHorizontalAlign.RIGHT,
+        label: "Сумма",
+        renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
+    },
+    {
+        fieldKey: "status",
+        label: "Статус",
+    },
+];
 
 const filtersAndPaginationRows = Array.from({ length: 30 }, (_, index) => ({
     docNumber: String(1000 + index),
@@ -21,32 +89,17 @@ const filtersAndPaginationRows = Array.from({ length: 30 }, (_, index) => ({
     sum: String((index + 1) * 10000),
 }));
 
+const pageSizeOptions: ISelectExtendedFieldDefaultOption[] = [
+    { id: "0", value: "10", label: "10" },
+    { id: "1", value: "20", label: "20" },
+    { id: "2", value: "50", label: "50" },
+];
+
 export const TableWithPaginationLoading = () => {
     const [docNumberFilter, setDocNumberFilter] = useState("");
     const [recipientFilter, setRecipientFilter] = useState("");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-
-    const columns: ITableBasicColumn[] = [
-        {
-            fieldKey: "number",
-            label: "Номер",
-        },
-        {
-            fieldKey: "value",
-            label: "Получатель",
-        },
-        {
-            fieldKey: "sum",
-            horizontalAlign: EHorizontalAlign.RIGHT,
-            label: "Сумма",
-            renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
-        },
-        {
-            fieldKey: "status",
-            label: "Статус",
-        },
-    ];
 
     const isFiltered = docNumberFilter !== "" || recipientFilter !== "";
 
@@ -75,12 +128,6 @@ export const TableWithPaginationLoading = () => {
             },
             rowKey: `table-with-filters-row-${row.docNumber}`,
         }));
-
-    const pageSizeOptions: ISelectExtendedFieldDefaultOption[] = [
-        { id: "0", value: "10", label: "10" },
-        { id: "1", value: "20", label: "20" },
-        { id: "2", value: "50", label: "50" },
-    ];
 
     const handleChangeDocNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDocNumberFilter(event.target.value);

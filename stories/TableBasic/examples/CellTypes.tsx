@@ -15,19 +15,20 @@ const rows = [
     { rowKey: "1351", number: "1351", recipient: "ИП Иванов И. И." },
 ];
 
+// Колонки собираются вне рендера, чтобы таблица не обновляла контекст MasterTable на каждый рендер.
+const columns: ITableBasicColumn[] = [
+    { fieldKey: "checkbox", cellType: ECellType.CHECKBOX, label: "", width: 48 },
+    { fieldKey: "number", cellType: ECellType.TEXT, label: "Номер (text)", width: 120 },
+    { fieldKey: "recipient", cellType: ECellType.TEXT, label: "Получатель (text)" },
+    { fieldKey: "action", cellType: ECellType.COMPONENTS, label: "Действие (components)", width: 180 },
+];
+
 export const CellTypes = () => {
     const [checkedRows, setCheckedRows] = useState<string[]>([]);
 
     const toggleRow = (rowKey: string, checked: boolean) => {
         setCheckedRows((prev) => (checked ? [...prev, rowKey] : prev.filter((key) => key !== rowKey)));
     };
-
-    const columns: ITableBasicColumn[] = [
-        { fieldKey: "checkbox", cellType: ECellType.CHECKBOX, label: "", width: 48 },
-        { fieldKey: "number", cellType: ECellType.TEXT, label: "Номер (text)", width: 120 },
-        { fieldKey: "recipient", cellType: ECellType.TEXT, label: "Получатель (text)" },
-        { fieldKey: "action", cellType: ECellType.COMPONENTS, label: "Действие (components)", width: 180 },
-    ];
 
     const data: ITableBasicRow[] = rows.map((row) => ({
         rowKey: row.rowKey,

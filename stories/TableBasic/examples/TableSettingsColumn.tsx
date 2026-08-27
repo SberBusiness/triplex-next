@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { EmptytableSysIcon96 } from "@sberbusiness/icons-next";
 import {
     Amount,
     Button,
@@ -6,48 +7,109 @@ import {
     ColumnSettings,
     EButtonTheme,
     EComponentSize,
+    EFontType,
+    EFontWeightTitle,
     EHorizontalAlign,
+    ETextSize,
+    ETitleSize,
+    Gap,
     MasterTable,
+    Text,
+    Title,
     ITableBasicColumn,
+    ITableBasicRow,
 } from "@sberbusiness/triplex-next";
-import { renderCounterpartyDetails, renderNoColumns, renderNoData } from "../utils";
+
+const renderCounterpartyDetails = (purpose: string, account: string, tax: string) => (
+    <>
+        <div>
+            {purpose}
+            <br />
+            {account}
+        </div>
+        <Gap size={4} />
+        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+            {tax}
+        </Text>
+    </>
+);
+
+const renderNoData = () => (
+    <>
+        <EmptytableSysIcon96 />
+        <Gap size={8} />
+        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+            Текст заголовка
+        </Title>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            Нет данных, но можно предложить какие-то действия для заполнения таблицы
+        </Text>
+        <Gap size={24} />
+        <div>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                Button text
+            </Button>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                Button text
+            </Button>
+        </div>
+    </>
+);
+
+const renderNoColumns = (onReset: () => void) => (
+    <MasterTable.NoColumns>
+        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+            Все колонки таблицы скрыты
+        </Title>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            Выберите нужные вам для отображения колонки в настройках таблицы.
+        </Text>
+        <Gap size={24} />
+        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={onReset}>
+            Сбросить настройки
+        </Button>
+    </MasterTable.NoColumns>
+);
+
+// Колонки и данные собираются вне рендера, чтобы таблица не обновляла контекст MasterTable на каждый рендер.
+const defaultColumns: ITableBasicColumn[] = [
+    {
+        fieldKey: "number",
+        label: "Номер",
+    },
+    {
+        fieldKey: "value",
+        label: "Получатель",
+    },
+    {
+        fieldKey: "sum",
+        horizontalAlign: EHorizontalAlign.RIGHT,
+        label: "Сумма",
+        renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
+    },
+    {
+        fieldKey: "status",
+        label: "Статус",
+    },
+];
+
+const data: ITableBasicRow[] = Array.from({ length: 5 }, (_, index) => ({
+    rowData: {
+        number: 1397450 + index,
+        status: "Исполнено",
+        sum: "1220000000",
+        value: renderCounterpartyDetails(
+            "Платежное поручение ООО Ромашка",
+            "40702 810 2 0527 5000000",
+            "В том числе НДС 20%",
+        ),
+    },
+    rowKey: `table-basic-row-${index}`,
+}));
 
 export const TableSettingsColumn = () => {
-    const defaultColumns: ITableBasicColumn[] = [
-        {
-            fieldKey: "number",
-            label: "Номер",
-        },
-        {
-            fieldKey: "value",
-            label: "Получатель",
-        },
-        {
-            fieldKey: "sum",
-            horizontalAlign: EHorizontalAlign.RIGHT,
-            label: "Сумма",
-            renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
-        },
-        {
-            fieldKey: "status",
-            label: "Статус",
-        },
-    ];
-
-    const data = Array.from({ length: 5 }, (_, index) => ({
-        rowData: {
-            number: 1397450 + index,
-            status: "Исполнено",
-            sum: "1220000000",
-            value: renderCounterpartyDetails(
-                "Платежное поручение ООО Ромашка",
-                "40702 810 2 0527 5000000",
-                "В том числе НДС 20%",
-            ),
-        },
-        rowKey: `table-basic-row-${index}`,
-    }));
-
     const [columns, setColumns] = useState(defaultColumns);
     const [settingsDropdownOpened, setSettingsDropdownOpened] = useState(false);
 

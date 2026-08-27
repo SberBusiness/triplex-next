@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { EmptytableSysIcon96, NotfoundSysIcon96 } from "@sberbusiness/icons-next";
 import {
     Amount,
     Button,
@@ -16,9 +17,12 @@ import {
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
+    EFontType,
+    EFontWeightTitle,
     EHorizontalAlign,
     EMarkerStatus,
     ETextSize,
+    ETitleSize,
     FormField,
     FormFieldClear,
     FormFieldInput,
@@ -35,41 +39,165 @@ import {
     TagGroup,
     Text,
     TextField,
+    Title,
     ISelectFieldOption,
     ITableBasicColumn,
     ITableBasicRow,
 } from "@sberbusiness/triplex-next";
-import { counterpartyExampleOptions, dataSetForTest } from "../const";
-import { ETableField } from "../enums";
-import { renderCounterpartyDetails, renderNoData } from "../utils";
+
+/** Ключи полей таблицы. */
+enum ETableField {
+    Number = "Number",
+    Recipient = "Recipient",
+    Sum = "Sum",
+    Status = "Status",
+}
 
 interface IExampleExtraFilters {
     recipientOption: ISelectFieldOption | undefined;
     docNumber: string;
 }
 
+const renderCounterpartyDetails = (purpose: string, account: string, tax: string) => (
+    <>
+        <div>
+            {purpose}
+            <br />
+            {account}
+        </div>
+        <Gap size={4} />
+        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+            {tax}
+        </Text>
+    </>
+);
+
+const renderNoData = (isFiltered: boolean) => (
+    <>
+        {isFiltered ? <NotfoundSysIcon96 /> : <EmptytableSysIcon96 />}
+        <Gap size={8} />
+        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+            Текст заголовка
+        </Title>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            Нет данных, но можно предложить какие-то действия для заполнения таблицы
+        </Text>
+        <Gap size={24} />
+        <div>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                Button text
+            </Button>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                Button text
+            </Button>
+        </div>
+    </>
+);
+
+const segments: { id: string; label: string; status: string | null; withNotification?: boolean }[] = [
+    { id: "all", label: "Все", status: null },
+    { id: "drafts", label: "Черновики", status: "Создан" },
+    { id: "toSign", label: "На подпись и отправку", status: "Подписан", withNotification: true },
+    { id: "executed", label: "Исполненные", status: "Оплачен" },
+];
+
+const statusFilterOptions = [
+    { id: "created", label: "Создан" },
+    { id: "signed", label: "Подписан" },
+    { id: "paid", label: "Оплачен" },
+];
+
+const statusToMarker: Record<string, EMarkerStatus> = {
+    Создан: EMarkerStatus.WAITING,
+    Подписан: EMarkerStatus.WARNING,
+    Оплачен: EMarkerStatus.SUCCESS,
+};
+
+const counterpartyOptions: ISelectFieldOption[] = [
+    { id: "0", value: "", label: "Не указан" },
+    { id: "1", value: "ООО Ромашка", label: "ООО Ромашка" },
+    { id: "2", value: "ИП Иванов Иван Иванович", label: "ИП Иванов Иван Иванович" },
+];
+
+const documents = [
+    {
+        docNumber: "1350",
+        recipient: { account: "40702 810 2 9045 8100009", name: "ИП Иванов Иван Иванович" },
+        purpose: "Платёжное поручение ИП Иванов Иван Иванович за оказание услуг по акту №67834259-ТНГК2356-345",
+        tax: "В том числе НДС 20%",
+        sum: "9450.00",
+        status: "Создан",
+    },
+    {
+        docNumber: "1351",
+        recipient: { account: "40702 810 2 0527 5520080", name: "ООО Ромашка" },
+        purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
+        tax: "В том числе НДС 20%",
+        sum: "18914.00",
+        status: "Создан",
+    },
+    {
+        docNumber: "1352",
+        recipient: { account: "40702 810 2 2581 6403700", name: "ИП Иванов Иван Иванович" },
+        purpose: "Платёжное поручение ИП Иванов Иван Иванович за оказание услуг по акту №67834259-ТНГК2356-345",
+        tax: "В том числе НДС 20%",
+        sum: "28392.00",
+        status: "Подписан",
+    },
+    {
+        docNumber: "1353",
+        recipient: { account: "40702 810 2 8302 7306400", name: "ООО Ромашка" },
+        purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
+        tax: "В том числе НДС 20%",
+        sum: "37884.00",
+        status: "Подписан",
+    },
+    {
+        docNumber: "1354",
+        recipient: { account: "40702 810 2 9947 8250050", name: "ИП Иванов Иван Иванович" },
+        purpose: "Платёжное поручение ИП Иванов Иван Иванович за оказание услуг по акту №67834259-ТНГК2356-345",
+        tax: "В том числе НДС 20%",
+        sum: "47390.00",
+        status: "Оплачен",
+    },
+    {
+        docNumber: "1355",
+        recipient: { account: "40702 810 2 0290 9100406", name: "ООО Ромашка" },
+        purpose: "Платёжное поручение ООО Ромашка за оказание услуг по акту №67834259-ТНГК2356-345",
+        tax: "В том числе НДС 20%",
+        sum: "56910.00",
+        status: "Оплачен",
+    },
+];
+
+// Колонки собираются вне рендера, чтобы таблица не обновляла контекст MasterTable на каждый рендер.
+const columns: ITableBasicColumn[] = [
+    { fieldKey: ETableField.Number, label: "Номер", title: "Номер", width: 100 },
+    { fieldKey: ETableField.Recipient, label: "Получатель", title: "Получатель", width: 320 },
+    {
+        fieldKey: ETableField.Sum,
+        label: "Сумма",
+        title: "Сумма",
+        horizontalAlign: EHorizontalAlign.RIGHT,
+        renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
+    },
+    {
+        fieldKey: ETableField.Status,
+        label: "Статус",
+        title: "Статус",
+        width: 140,
+        renderCell: (status: string) => (
+            <MarkerStatus size={EComponentSize.LG} status={statusToMarker[status] ?? EMarkerStatus.WAITING}>
+                {status}
+            </MarkerStatus>
+        ),
+    },
+];
+
+const defaultExtraFilters: IExampleExtraFilters = { recipientOption: undefined, docNumber: "" };
+
 export const ExampleProduction = () => {
-    const segments: { id: string; label: string; status: string | null; withNotification?: boolean }[] = [
-        { id: "all", label: "Все", status: null },
-        { id: "drafts", label: "Черновики", status: "Создан" },
-        { id: "toSign", label: "На подпись и отправку", status: "Подписан", withNotification: true },
-        { id: "executed", label: "Исполненные", status: "Оплачен" },
-    ];
-
-    const statusFilterOptions = [
-        { id: "created", label: "Создан" },
-        { id: "signed", label: "Подписан" },
-        { id: "paid", label: "Оплачен" },
-    ];
-
-    const statusToMarker: Record<string, EMarkerStatus> = {
-        Создан: EMarkerStatus.WAITING,
-        Подписан: EMarkerStatus.WARNING,
-        Оплачен: EMarkerStatus.SUCCESS,
-    };
-
-    const defaultExtraFilters: IExampleExtraFilters = { recipientOption: undefined, docNumber: "" };
-
     const [activeSegment, setActiveSegment] = useState("all");
     const [selectedStatusIds, setSelectedStatusIds] = useState<string[]>([]);
     const [statusFilter, setStatusFilter] = useState("");
@@ -89,7 +217,7 @@ export const ExampleProduction = () => {
 
     const isAnyFilterApplied = selectedStatusLabels.length > 0 || Boolean(recipientQuery) || isExtraFilterApplied;
 
-    const filteredData = dataSetForTest.filter((doc) => {
+    const filteredData = documents.filter((doc) => {
         if (segmentStatus && doc.status !== segmentStatus) {
             return false;
         }
@@ -110,29 +238,6 @@ export const ExampleProduction = () => {
         }
         return true;
     });
-
-    const columns: ITableBasicColumn[] = [
-        { fieldKey: ETableField.Number, label: "Номер", title: "Номер", width: 100 },
-        { fieldKey: ETableField.Recipient, label: "Получатель", title: "Получатель", width: 320 },
-        {
-            fieldKey: ETableField.Sum,
-            label: "Сумма",
-            title: "Сумма",
-            horizontalAlign: EHorizontalAlign.RIGHT,
-            renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
-        },
-        {
-            fieldKey: ETableField.Status,
-            label: "Статус",
-            title: "Статус",
-            width: 140,
-            renderCell: (status: string) => (
-                <MarkerStatus size={EComponentSize.LG} status={statusToMarker[status] ?? EMarkerStatus.WAITING}>
-                    {status}
-                </MarkerStatus>
-            ),
-        },
-    ];
 
     const data: ITableBasicRow[] = filteredData.map((doc) => ({
         rowKey: doc.docNumber,
@@ -302,7 +407,7 @@ export const ExampleProduction = () => {
                     <SelectField
                         size={EComponentSize.MD}
                         value={tempExtraFilters.recipientOption}
-                        options={counterpartyExampleOptions}
+                        options={counterpartyOptions}
                         onChange={(option) =>
                             setTempExtraFilters((prev) => ({
                                 ...prev,

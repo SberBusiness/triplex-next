@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { EmptytableSysIcon96 } from "@sberbusiness/icons-next";
 import {
     Amount,
     Button,
@@ -7,161 +8,195 @@ import {
     EButtonTheme,
     EComponentSize,
     EFontType,
+    EFontWeightTitle,
     EHorizontalAlign,
     ETextSize,
+    ETitleSize,
     Gap,
     MasterTable,
     Text,
+    Title,
     ITableBasicColumn,
+    ITableBasicRow,
 } from "@sberbusiness/triplex-next";
-import { renderNoColumns, renderNoData } from "../utils";
 
-export const TableSettingsColumnExtended = () => {
-    const defaultColumns: ITableBasicColumn[] = [
-        {
-            fieldKey: "number",
-            label: "Номер",
+const renderNoData = () => (
+    <>
+        <EmptytableSysIcon96 />
+        <Gap size={8} />
+        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+            Текст заголовка
+        </Title>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            Нет данных, но можно предложить какие-то действия для заполнения таблицы
+        </Text>
+        <Gap size={24} />
+        <div>
+            <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.MD}>
+                Button text
+            </Button>
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                Button text
+            </Button>
+        </div>
+    </>
+);
+
+const renderNoColumns = (onReset: () => void) => (
+    <MasterTable.NoColumns>
+        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
+            Все колонки таблицы скрыты
+        </Title>
+        <Gap size={12} />
+        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+            Выберите нужные вам для отображения колонки в настройках таблицы.
+        </Text>
+        <Gap size={24} />
+        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={onReset}>
+            Сбросить настройки
+        </Button>
+    </MasterTable.NoColumns>
+);
+
+// Колонки собираются вне рендера, чтобы таблица не обновляла контекст MasterTable на каждый рендер.
+const defaultColumns: ITableBasicColumn[] = [
+    {
+        fieldKey: "number",
+        label: "Номер",
+    },
+    {
+        fieldKey: "value",
+        label: "Получатель",
+    },
+    {
+        fieldKey: "sum",
+        horizontalAlign: EHorizontalAlign.RIGHT,
+        label: "Сумма",
+        renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
+    },
+    {
+        fieldKey: "status",
+        label: "Статус",
+    },
+];
+
+interface IValueColumnOptions {
+    showCounterparty: boolean;
+    showNumber: boolean;
+    showNDS: boolean;
+}
+
+const initiateValueColumnOptions = (defaultChecked: boolean): IValueColumnOptions => ({
+    showCounterparty: defaultChecked,
+    showNumber: defaultChecked,
+    showNDS: defaultChecked,
+});
+
+const defaultValueColumnOptions = initiateValueColumnOptions(true);
+
+const mapValueColumnOptionKeyToName: Record<string, string> = {
+    showCounterparty: "Получатель",
+    showNumber: "Номер счета",
+    showNDS: "НДС",
+};
+
+/**
+ * Возвращает данные для таблицы.
+ * @param showCounterparty - показать блок Получатель в столбце Значение.
+ * @param showNumber - показать блок Номер счета в столбце Значение.
+ * @param showNDS - показать блок НДС счета в столбце Значение.
+ */
+const getData = ({ showCounterparty, showNumber, showNDS }: IValueColumnOptions): ITableBasicRow[] =>
+    Array.from({ length: 5 }, (_, index) => ({
+        rowData: {
+            number: 1397450 + index,
+            status: "Исполнено",
+            sum: "1220000000",
+            value: (
+                <>
+                    {(showCounterparty || showNumber) && (
+                        <>
+                            <div>
+                                {showCounterparty && (
+                                    <>
+                                        Платежное поручение ООО Ромашка <br />
+                                    </>
+                                )}
+                                {showNumber && "40702 810 2 0527 5000000"}
+                            </div>
+                            <Gap size={4} />
+                        </>
+                    )}
+
+                    {showNDS && (
+                        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+                            В том числе НДС 20%
+                        </Text>
+                    )}
+                </>
+            ),
         },
-        {
-            fieldKey: "value",
-            label: "Получатель",
-        },
-        {
-            fieldKey: "sum",
-            horizontalAlign: EHorizontalAlign.RIGHT,
-            label: "Сумма",
-            renderCell: (fieldValue) => fieldValue && <Amount value={fieldValue} currency="RUB" />,
-        },
-        {
-            fieldKey: "status",
-            label: "Статус",
-        },
-    ];
+        rowKey: `table-basic-row-${index}`,
+    }));
 
-    interface IValueColumnOptions {
-        showCounterparty: boolean;
-        showNumber: boolean;
-        showNDS: boolean;
-    }
+interface IValueColumnSettingsProps {
+    column: ITableBasicColumn;
+    options: IValueColumnOptions;
+    setColumn: (checked: boolean) => void;
+    setOptions: (option: IValueColumnOptions) => void;
+}
 
-    const initiateValueColumnOptions = (defaultChecked: boolean): IValueColumnOptions => ({
-        showCounterparty: defaultChecked,
-        showNumber: defaultChecked,
-        showNDS: defaultChecked,
-    });
+const ValueColumnSettings = ({ column, options, setColumn, setOptions }: IValueColumnSettingsProps) => {
+    const handleChildCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, columnKey: string) => {
+        const newOptions = { ...options, [columnKey]: event.target.checked };
 
-    const defaultValueColumnOptions = initiateValueColumnOptions(true);
-
-    const mapValueColumnOptionKeyToName: Record<string, string> = {
-        showCounterparty: "Получатель",
-        showNumber: "Номер счета",
-        showNDS: "НДС",
-    };
-
-    /**
-     * Возвращает данные для таблицы.
-     * @param showCounterparty - показать блок Получатель в столбце Значение.
-     * @param showNumber - показать блок Номер счета в столбце Значение.
-     * @param showNDS - показать блок НДС счета в столбце Значение.
-     */
-    const getData = ({ showCounterparty, showNumber, showNDS }: typeof defaultValueColumnOptions) => {
-        return Array.from({ length: 5 }, (_, index) => ({
-            rowData: {
-                number: 1397450 + index,
-                status: "Исполнено",
-                sum: "1220000000",
-                value: (
-                    <>
-                        {(showCounterparty || showNumber) && (
-                            <>
-                                <div>
-                                    {showCounterparty && (
-                                        <>
-                                            Платежное поручение ООО Ромашка <br />
-                                        </>
-                                    )}
-                                    {showNumber && "40702 810 2 0527 5000000"}
-                                </div>
-                                <Gap size={4} />
-                            </>
-                        )}
-
-                        {showNDS && (
-                            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                                В том числе НДС 20%
-                            </Text>
-                        )}
-                    </>
-                ),
-            },
-            rowKey: `table-basic-row-${index}`,
-        }));
-    };
-
-    const ValueColumnSettings = ({
-        column,
-        options,
-        setColumn,
-        setOptions,
-    }: {
-        column: ITableBasicColumn;
-        options: IValueColumnOptions;
-        setColumn: (checked: boolean) => void;
-        setOptions: (option: IValueColumnOptions) => void;
-    }) => {
-        const renderOptions = () => {
-            return (
-                <ColumnSettings.StaticList depth={1}>
-                    {Object.entries(options).map(([key, value], index) => (
-                        <ColumnSettings.StaticList.Item key={index}>
-                            <Checkbox
-                                checked={Boolean(value)}
-                                onChange={(event) => handleChildCheckboxChange(event, key)}
-                            >
-                                {mapValueColumnOptionKeyToName[key]}
-                            </Checkbox>
-                        </ColumnSettings.StaticList.Item>
-                    ))}
-                </ColumnSettings.StaticList>
-            );
-        };
-
-        const handleChildCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, columnKey: string) => {
-            const newOptions = { ...options, [columnKey]: event.target.checked };
-
-            if (event.target.checked !== !column.hidden) {
-                if (event.target.checked) {
-                    if (Object.values(options).every((value) => value === false)) {
-                        setColumn(event.target.checked);
-                    }
-                } else {
-                    if (Object.values(newOptions).every((value) => value === false)) {
-                        setColumn(event.target.checked);
-                    }
+        if (event.target.checked !== !column.hidden) {
+            if (event.target.checked) {
+                if (Object.values(options).every((value) => value === false)) {
+                    setColumn(event.target.checked);
+                }
+            } else {
+                if (Object.values(newOptions).every((value) => value === false)) {
+                    setColumn(event.target.checked);
                 }
             }
+        }
 
-            setOptions(newOptions);
-        };
-
-        const handleParentCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            setOptions(initiateValueColumnOptions(event.target.checked));
-            setColumn(event.target.checked);
-        };
-
-        return (
-            <ColumnSettings.SortableList.Item id={column.fieldKey} staticContent={renderOptions()}>
-                <Checkbox
-                    checked={!column.hidden}
-                    bulk={Object.values(options).some((value) => value !== !column.hidden)}
-                    onChange={handleParentCheckboxChange}
-                >
-                    {column.label}
-                </Checkbox>
-            </ColumnSettings.SortableList.Item>
-        );
+        setOptions(newOptions);
     };
 
+    const handleParentCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOptions(initiateValueColumnOptions(event.target.checked));
+        setColumn(event.target.checked);
+    };
+
+    const renderOptions = () => (
+        <ColumnSettings.StaticList depth={1}>
+            {Object.entries(options).map(([key, value], index) => (
+                <ColumnSettings.StaticList.Item key={index}>
+                    <Checkbox checked={Boolean(value)} onChange={(event) => handleChildCheckboxChange(event, key)}>
+                        {mapValueColumnOptionKeyToName[key]}
+                    </Checkbox>
+                </ColumnSettings.StaticList.Item>
+            ))}
+        </ColumnSettings.StaticList>
+    );
+
+    return (
+        <ColumnSettings.SortableList.Item id={column.fieldKey} staticContent={renderOptions()}>
+            <Checkbox
+                checked={!column.hidden}
+                bulk={Object.values(options).some((value) => value !== !column.hidden)}
+                onChange={handleParentCheckboxChange}
+            >
+                {column.label}
+            </Checkbox>
+        </ColumnSettings.SortableList.Item>
+    );
+};
+
+export const TableSettingsColumnExtended = () => {
     const [columns, setColumns] = useState(defaultColumns);
     const [valueColumnOptions, setValueColumnOptions] = useState(defaultValueColumnOptions);
     const [settingsDropdownOpened, setSettingsDropdownOpened] = useState(false);

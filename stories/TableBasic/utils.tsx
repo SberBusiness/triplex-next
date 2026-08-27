@@ -9,7 +9,6 @@ import {
     ETextSize,
     ETitleSize,
     Gap,
-    MasterTable,
     Text,
     Title,
 } from "@sberbusiness/triplex-next";
@@ -35,22 +34,6 @@ export const renderNoData = (isFiltered = false) => (
             </Button>
         </div>
     </>
-);
-
-export const renderNoColumns = (onClick: () => void) => (
-    <MasterTable.NoColumns>
-        <Title size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-            Все колонки таблицы скрыты
-        </Title>
-        <Gap size={12} />
-        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-            Выберите нужные вам для отображения колонки в настройках таблицы.
-        </Text>
-        <Gap size={24} />
-        <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} onClick={onClick}>
-            Сбросить настройки
-        </Button>
-    </MasterTable.NoColumns>
 );
 
 export const renderCounterpartyDetails = (purpose: string, account: string, tax: string) => (

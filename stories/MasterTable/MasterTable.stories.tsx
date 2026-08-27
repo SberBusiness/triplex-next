@@ -130,7 +130,7 @@ export const Loading: StoryObj<typeof MasterTable> = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Свойство `loading` включает лоадер поверх таблицы и блокирует элементы пагинации внутри `MasterTable`.",
+                story: "Свойство `loading` включает лоадер поверх таблицы. Оно раздаётся через `MasterTableContext` и всем дочерним компонентам — например, элементы пагинации становятся недоступны; это видно в story `Visual tests`.",
             },
             source: {
                 code: LoadingSource,

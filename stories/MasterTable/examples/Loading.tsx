@@ -25,7 +25,7 @@ const data: ITableBasicRow[] = [
 
 /**
  * Свойство loading раздаётся дочерним компонентам через MasterTableContext:
- * таблица закрывается лоадером, элементы пагинации становятся недоступны.
+ * таблица закрывается лоадером.
  */
 export const Loading = () => (
     <MasterTable loading>

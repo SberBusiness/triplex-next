@@ -157,10 +157,10 @@ describe("Tag", () => {
         expect(screen.getByText("Test Tag")).toHaveClass("disabled");
     });
 
-    it("does not render id as an attribute on the root element", () => {
+    it("renders id as an attribute on the root element", () => {
         const { container } = render(<Tag {...defaultProps} />);
 
-        expect(container.firstChild).not.toHaveAttribute("id");
+        expect(container.firstChild).toHaveAttribute("id", "test-id");
     });
 
     it("spreads rest props to the root element", () => {

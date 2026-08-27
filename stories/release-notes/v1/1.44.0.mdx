@@ -15,6 +15,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменены названия типов: `ESkeletonType.LIGHT` стал `ESkeletonType.TYPE_1`, `ESkeletonType.DARK` стал `ESkeletonType.TYPE_2`.
 - Изменены названия токенов: `Skeleton.BackgroundColor_Light_Start` стал `Skeleton.BackgroundColor_Type1_Start`, `Skeleton.BackgroundColor_Light_End` стал `Skeleton.BackgroundColor_Type1_End`, `Skeleton.BackgroundColor_Dark_Start` стал `Skeleton.BackgroundColor_Type2_Start`, `Skeleton.BackgroundColor_Dark_End` стал `Skeleton.BackgroundColor_Type2_End`.
 
+**Tag**
+
+- Свойство `id` теперь рендерится атрибутом `id` на корневом `<span>` — раньше оно использовалось только как аргумент `onEdit` и `onRemove` и в DOM не попадало. Свойство обязательное, поэтому идентификатор появится в разметке у всех потребителей: проверьте, что его значение уникально в пределах документа, иначе получите дубликаты `id`.
+
 **TreeView**
 
 - `role` и `aria-expanded` больше нельзя переопределить через props: `TreeView` всегда рендерит `role="tree"`, `TreeView.Node` — `role="treeitem"` с собственным `aria-expanded`, `TreeView.Group` — `role="group"`. Если вы передавали свой `role`, он теперь игнорируется — семантика дерева задаётся компонентом.

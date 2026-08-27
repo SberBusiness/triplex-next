@@ -70,7 +70,12 @@ export const Tag = React.forwardRef<HTMLSpanElement, ITagProps>(
         };
 
         return (
-            <span className={clsx(styles.tag, SIZE_TO_CLASS_NAME_MAP[size], className)} {...restProps} ref={ref}>
+            <span
+                id={id}
+                className={clsx(styles.tag, SIZE_TO_CLASS_NAME_MAP[size], className)}
+                {...restProps}
+                ref={ref}
+            >
                 <Text
                     className={styles.content}
                     type={disabled ? EFontType.DISABLED : EFontType.PRIMARY}

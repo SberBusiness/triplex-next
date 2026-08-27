@@ -222,6 +222,41 @@ describe("PaginationSelect", () => {
         );
         expect(screen.getByText("Items per page")).toBeInTheDocument();
     });
+
+    it("Should forward rest props to SelectField", () => {
+        render(
+            <PaginationSelect
+                paginationLabel="Items per page"
+                onChange={() => {}}
+                options={[]}
+                value={{ id: "0", value: "10", label: "10" }}
+                data-testid="pagination-select"
+                id="page-size"
+            />,
+        );
+
+        const select = screen.getByTestId("pagination-select");
+
+        expect(select).toHaveAttribute("id", "page-size");
+        expect(select).toContainElement(screen.getByRole("combobox"));
+    });
+
+    it("Should keep the label linked with the select when rest props are passed", () => {
+        render(
+            <PaginationSelect
+                paginationLabel="Items per page"
+                onChange={() => {}}
+                options={[]}
+                value={{ id: "0", value: "10", label: "10" }}
+                data-testid="pagination-select"
+            />,
+        );
+
+        const labelId = screen.getByRole("combobox").getAttribute("aria-labelledby");
+
+        expect(labelId).toBeTruthy();
+        expect(document.getElementById(labelId!)).toHaveTextContent("Items per page");
+    });
 });
 
 describe("Pagination inside a loading MasterTable", () => {

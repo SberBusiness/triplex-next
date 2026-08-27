@@ -4,7 +4,6 @@ import {
     SortincreaseStrokeSrvIcon16,
     SortStrokeSrvIcon16,
 } from "@sberbusiness/icons-next";
-import { isNullOrUndefined } from "@sberbusiness/triplex-next/utils/isNullOrUndefined";
 import { getAriaHTMLAttributes } from "@sberbusiness/triplex-next/utils/html/AriaAttributes";
 import { getDataHTMLAttributes } from "@sberbusiness/triplex-next/utils/html/DataAttributes";
 import {
@@ -19,6 +18,7 @@ import { mapHorizontalAlignToClassName } from "@sberbusiness/triplex-next/compon
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 
+/** Свойства компонента TableBasicHeader. */
 export interface ITableBasicHeaderProps {
     /** Структура заголовков таблицы. */
     columns: ITableBasicColumn[];
@@ -26,84 +26,98 @@ export interface ITableBasicHeaderProps {
     onOrderBy?: (order: ISortOrder) => void;
 }
 
+/** Следующее направление сортировки при клике по заголовку: none → asc → desc → none. */
+const getNextOrderDirection = (currentDirection: EOrderDirection): EOrderDirection => {
+    switch (currentDirection) {
+        case EOrderDirection.NONE:
+            return EOrderDirection.ASC;
+        case EOrderDirection.ASC:
+            return EOrderDirection.DESC;
+        case EOrderDirection.DESC:
+            return EOrderDirection.NONE;
+    }
+};
+
+/** Иконка, соответствующая текущему направлению сортировки. */
+const getOrderIcon = (orderDirection: EOrderDirection): React.JSX.Element => {
+    switch (orderDirection) {
+        case EOrderDirection.NONE:
+            return <SortStrokeSrvIcon16 paletteIndex={5} />;
+        case EOrderDirection.ASC:
+            return <SortincreaseStrokeSrvIcon16 paletteIndex={5} />;
+        case EOrderDirection.DESC:
+            return <SortdecreaseStrokeSrvIcon16 paletteIndex={5} />;
+    }
+};
+
 /** Компонент заголовка таблицы. */
 export const TableBasicHeader = ({ columns, onOrderBy }: ITableBasicHeaderProps) => {
-    const hasOrderFunc = !isNullOrUndefined(onOrderBy);
+    const hasOrderFunc = onOrderBy != null;
 
-    const renderOrderIcon = (c: ITableBasicColumn) => {
-        let icon;
-        switch (c.orderDirection) {
-            case EOrderDirection.NONE: {
-                icon = <SortStrokeSrvIcon16 paletteIndex={5} />;
-                break;
-            }
-            case EOrderDirection.ASC: {
-                icon = <SortincreaseStrokeSrvIcon16 paletteIndex={5} />;
-                break;
-            }
-            case EOrderDirection.DESC: {
-                icon = <SortdecreaseStrokeSrvIcon16 paletteIndex={5} />;
-                break;
-            }
-        }
-
-        const orderButtonClassName = clsx(styles.orderButton, {
-            [styles.alignLeft]: c.horizontalAlign === EHorizontalAlign.RIGHT,
-            [styles.alignRight]: c.horizontalAlign !== EHorizontalAlign.RIGHT,
-            [styles.sorted]: c.orderDirection !== EOrderDirection.NONE,
-        });
-
-        return <span className={orderButtonClassName}>{icon}</span>;
+    /** Обработчик клика сортировки столбца. */
+    const handleClickOrder = (fieldKey: string, currentDirection: EOrderDirection) => {
+        onOrderBy?.({ direction: getNextOrderDirection(currentDirection), fieldKey });
     };
 
-    /** Рендер заголовка таблицы. */
-    const renderTh = (c: ITableBasicColumn, hasOrderFunc: boolean) => {
+    /** Рендер кнопки сортировки столбца. */
+    const renderOrderButton = (column: ITableBasicColumn, orderDirection: EOrderDirection) => {
+        const orderButtonClassName = clsx(styles.orderButton, {
+            [styles.alignLeft]: column.horizontalAlign === EHorizontalAlign.RIGHT,
+            [styles.alignRight]: column.horizontalAlign !== EHorizontalAlign.RIGHT,
+            [styles.sorted]: orderDirection !== EOrderDirection.NONE,
+        });
+
+        return <span className={orderButtonClassName}>{getOrderIcon(orderDirection)}</span>;
+    };
+
+    /** Рендер заголовка столбца. */
+    const renderTh = (column: ITableBasicColumn) => {
         // Столбец скрыт.
-        if (c.hidden) {
+        if (column.hidden) {
             return null;
         }
 
-        const styleTh = c.width ? { maxWidth: c.width, minWidth: c.width, width: c.width } : undefined;
-        const orderEnabled = hasOrderFunc && !isNullOrUndefined(c.orderDirection);
-        const handleClickOrderFunc = orderEnabled
-            ? () => {
-                  handleClickOrder(c.fieldKey, c.orderDirection!);
-              }
+        const { ariaAttributes, cellType, dataAttributes, fieldKey, horizontalAlign, label, orderDirection, title } =
+            column;
+        const styleTh = column.width
+            ? { maxWidth: column.width, minWidth: column.width, width: column.width }
             : undefined;
-        const orderIcon = orderEnabled && renderOrderIcon(c);
-        const classNameTh = clsx(mapHorizontalAlignToClassName(c.horizontalAlign), {
-            [styles.checkboxType]: c.cellType === ECellType.CHECKBOX,
+        // Сортировка доступна, только если задан обработчик и у столбца есть текущее направление сортировки.
+        const orderEnabled = hasOrderFunc && orderDirection != null;
+        const classNameTh = clsx(mapHorizontalAlignToClassName(horizontalAlign), {
+            [styles.checkboxType]: cellType === ECellType.CHECKBOX,
         });
         const classNameThBlock = clsx(styles.thBlock, "hoverable", {
             [styles.order]: orderEnabled,
         });
 
-        const labelElement = [ECellType.TEXT, undefined].includes(c.cellType) ? (
-            <Text size={ETextSize.B3}>{c.label}</Text>
+        const labelElement = [ECellType.TEXT, undefined].includes(cellType) ? (
+            <Text size={ETextSize.B3}>{label}</Text>
         ) : (
-            c.label
+            label
         );
+        const orderButton = orderEnabled ? renderOrderButton(column, orderDirection) : null;
 
         const content =
-            c.horizontalAlign === EHorizontalAlign.RIGHT ? (
+            horizontalAlign === EHorizontalAlign.RIGHT ? (
                 <>
-                    {orderIcon}
+                    {orderButton}
                     {labelElement}
                 </>
             ) : (
                 <>
                     {labelElement}
-                    {orderIcon}
+                    {orderButton}
                 </>
             );
 
         return (
-            <th className={classNameTh} title={c.title} key={c.fieldKey} style={styleTh}>
+            <th className={classNameTh} title={title} key={fieldKey} style={styleTh}>
                 <span
                     className={classNameThBlock}
-                    onClick={handleClickOrderFunc}
-                    {...(Boolean(c.ariaAttributes) && getAriaHTMLAttributes(c.ariaAttributes!))}
-                    {...(Boolean(c.dataAttributes) && getDataHTMLAttributes(c.dataAttributes!))}
+                    onClick={orderEnabled ? () => handleClickOrder(fieldKey, orderDirection) : undefined}
+                    {...(ariaAttributes && getAriaHTMLAttributes(ariaAttributes))}
+                    {...(dataAttributes && getDataHTMLAttributes(dataAttributes))}
                 >
                     {content}
                 </span>
@@ -111,35 +125,9 @@ export const TableBasicHeader = ({ columns, onOrderBy }: ITableBasicHeaderProps)
         );
     };
 
-    /** Обработчик клика сортировки столбца. */
-    const handleClickOrder = (fieldKey: string, currentDirection: EOrderDirection) => {
-        let nextDirection;
-        switch (currentDirection) {
-            case EOrderDirection.NONE: {
-                nextDirection = EOrderDirection.ASC;
-                break;
-            }
-            case EOrderDirection.ASC: {
-                nextDirection = EOrderDirection.DESC;
-                break;
-            }
-            case EOrderDirection.DESC: {
-                nextDirection = EOrderDirection.NONE;
-                break;
-            }
-        }
-
-        if (onOrderBy) {
-            const OrderObj: ISortOrder = { direction: nextDirection, fieldKey };
-            onOrderBy(OrderObj);
-        }
-    };
-
-    const thList = columns.map((c) => renderTh(c, hasOrderFunc));
-
     return (
         <thead>
-            <tr>{thList}</tr>
+            <tr>{columns.map((column) => renderTh(column))}</tr>
         </thead>
     );
 };

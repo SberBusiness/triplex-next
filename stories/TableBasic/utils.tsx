@@ -1,15 +1,20 @@
-import { EmptytableSysIcon96, NotfoundSysIcon96 } from "@sberbusiness/icons-next";
-import { Button } from "../../src/components/Button/Button";
 import React from "react";
-import { Title } from "../../src/components/Typography/Title";
-import { EFontType, EFontWeightTitle, ETextSize, ETitleSize } from "../../src/components/Typography/enums";
-import { Gap } from "../../src/components/Gap/Gap";
-import { EButtonTheme } from "../../src/components/Button/enums";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { Text } from "../../src/components/Typography/Text";
-import { MasterTable } from "../../src/components/Table/MasterTable";
+import { EmptytableSysIcon96, NotfoundSysIcon96 } from "@sberbusiness/icons-next";
+import {
+    Button,
+    EButtonTheme,
+    EComponentSize,
+    EFontType,
+    EFontWeightTitle,
+    ETextSize,
+    ETitleSize,
+    Gap,
+    MasterTable,
+    Text,
+    Title,
+} from "@sberbusiness/triplex-next";
 
-export const renderNoData = (isFiltered: boolean) => (
+export const renderNoData = (isFiltered = false) => (
     <>
         {isFiltered ? <NotfoundSysIcon96 /> : <EmptytableSysIcon96 />}
         <Gap size={8} />
@@ -48,18 +53,16 @@ export const renderNoColumns = (onClick: () => void) => (
     </MasterTable.NoColumns>
 );
 
-export const renderCounterpartyDetails = (purpose: string, account: string, tax: string) => {
-    return (
-        <>
-            <div>
-                {purpose}
-                <br />
-                {account}
-            </div>
-            <Gap size={4} />
-            <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
-                {tax}
-            </Text>
-        </>
-    );
-};
+export const renderCounterpartyDetails = (purpose: string, account: string, tax: string) => (
+    <>
+        <div>
+            {purpose}
+            <br />
+            {account}
+        </div>
+        <Gap size={4} />
+        <Text tag="div" size={ETextSize.B4} type={EFontType.SECONDARY}>
+            {tax}
+        </Text>
+    </>
+);

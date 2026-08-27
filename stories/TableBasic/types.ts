@@ -1,4 +1,4 @@
-import { ISelectFieldOption } from "../../src";
+import { ISelectFieldOption } from "@sberbusiness/triplex-next";
 
 export interface ITableFilters {
     counterparty: string;

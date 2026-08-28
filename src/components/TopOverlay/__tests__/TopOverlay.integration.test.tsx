@@ -1,14 +1,14 @@
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
-import type { FocusTrapProps } from "focus-trap-react";
+import FocusTrap from "focus-trap-react";
 import { TopOverlay } from "../TopOverlay";
 
-const focusTrapMock = vi.fn<(props: FocusTrapProps) => void>();
+const focusTrapMock = vi.fn<(props: FocusTrap.Props) => void>();
 
 // Мокается только focus-trap-react: Overlay и OverlayBase здесь настоящие — тест проверяет их связку.
 vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: FocusTrapProps) => {
+    FocusTrap: (props: FocusTrap.Props) => {
         focusTrapMock(props);
         return <div data-testid="focus-trap">{props.children}</div>;
     },

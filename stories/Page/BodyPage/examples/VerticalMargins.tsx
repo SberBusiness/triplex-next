@@ -20,7 +20,9 @@ export const VerticalMargins = () => (
             </Page.Body>
         </div>
         <div>
-            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: 700 }}>NONE (0)</div>
+            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: 700 }}>
+                NONE (0) — собственных отступов нет
+            </div>
             <Page.Body type={EBodyPageType.FIRST} verticalMargin={EBodyPageVerticalMargin.NONE}>
                 <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
                     Без вертикальных отступов сверху и снизу.

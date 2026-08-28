@@ -1,5 +1,5 @@
 import React from "react";
-import { render, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { OverlayBase, EOverlayDirection, IOverlayChildrenProvideProps } from "../OverlayBase";
 
@@ -56,6 +56,60 @@ describe("OverlayBase", () => {
         );
 
         expect(getByTestId("rendered-content")).toBeInTheDocument();
+    });
+
+    it("calls onOpen on initial mount when opened is true", () => {
+        const onOpen = vi.fn();
+        const onOpening = vi.fn();
+        const onClose = vi.fn();
+        const onClosing = vi.fn();
+
+        render(
+            <OverlayBase
+                direction={EOverlayDirection.RIGHT}
+                opened
+                setOpened={vi.fn()}
+                onOpen={onOpen}
+                onOpening={onOpening}
+                onClose={onClose}
+                onClosing={onClosing}
+            >
+                {() => <div />}
+            </OverlayBase>,
+        );
+
+        // Оверлей смонтирован уже открытым: анимации открытия не было, цикл открытия завершён сразу.
+        expect(onOpen).toHaveBeenCalledTimes(1);
+        expect(onOpening).not.toHaveBeenCalled();
+        expect(onClose).not.toHaveBeenCalled();
+        expect(onClosing).not.toHaveBeenCalled();
+    });
+
+    it("calls onOpen only once when a mounted-open overlay is closed and opened again", () => {
+        const onOpen = vi.fn();
+        const renderOverlay = (opened: boolean) => (
+            <OverlayBase direction={EOverlayDirection.RIGHT} opened={opened} setOpened={vi.fn()} onOpen={onOpen}>
+                {(props) => (
+                    <div data-testid="panel" onTransitionEnd={() => props.setOpening(false)}>
+                        content
+                    </div>
+                )}
+            </OverlayBase>
+        );
+
+        const { rerender } = render(renderOverlay(true));
+
+        expect(onOpen).toHaveBeenCalledTimes(1);
+
+        // Закрытие и повторное открытие идут обычным путём: onOpen приходит по завершении анимации открытия.
+        rerender(renderOverlay(false));
+        rerender(renderOverlay(true));
+
+        expect(onOpen).toHaveBeenCalledTimes(1);
+
+        fireEvent.transitionEnd(screen.getByTestId("panel"));
+
+        expect(onOpen).toHaveBeenCalledTimes(2);
     });
 
     it("does not call lifecycle callbacks on initial mount when opened is false", () => {

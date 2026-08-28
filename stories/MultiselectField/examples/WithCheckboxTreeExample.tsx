@@ -151,7 +151,7 @@ export const WithCheckboxTreeExample = () => {
                 {selectedLeafNodes.map((node) => (
                     <Tag
                         key={node.id}
-                        id={node.id}
+                        id={`tag-${node.id}`}
                         size={EComponentSize.SM}
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}

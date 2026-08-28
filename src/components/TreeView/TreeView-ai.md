@@ -1,7 +1,7 @@
 ---
 component: TreeView
 category: TreeView
-related: [CollapsibleTreeExtended, CollapsibleTree]
+related: [TreeViewNode, CollapsibleTreeExtended, CollapsibleTree]
 tokens: []
 stories: stories/TreeView/TreeView.stories.tsx
 version: "1.0"
@@ -45,54 +45,16 @@ Class-компонент. Собственных props, кроме `children`, �
 
 ### `TreeView.Node` (`TreeViewNode`)
 
-Экспортируемый `TreeViewNode` — это `withTreeViewContext(TreeViewNodeWithContext)`,
-то есть class-компонент, обёрнутый HOC-ом контекста.
-
-Обязательные props:
-
-| Prop | Тип | Описание |
-|---|---|---|
-| `id` | `string` | Идентификатор ноды, уникальный в пределах дерева. Используется абстрактным деревом для поиска и связывания нод |
-| `children` | `(props: ITreeViewNodeProvideProps) => JSX.Element` | Render-функция разметки узла |
-
-Опциональные props:
-
-| Prop | Тип | По умолчанию | Описание |
-|---|---|---|---|
-| `opened` | `boolean` | `false` | Состояние раскрытия. При смене синхронизируется в абстрактное дерево через `componentDidUpdate` |
-| `prevNodeId` | `string` | — | Id ноды, после которой вставить текущую в абстрактное дерево |
-| `nextNodeId` | `string` | — | Id ноды, перед которой вставить текущую в абстрактное дерево |
-| `...HTMLAttributes` | — | — | Уходят на `<li>`; `className` мерджится, `onFocus`/`onBlur` вызываются после внутренних обработчиков |
-
-### Provide-props render-функции (`ITreeViewNodeProvideProps`)
-
-| Поле | Описание |
-|---|---|
-| `activeNode` | Нода активна при перемещении с клавиатуры |
-| `openedNode` | Нода раскрыта (значение из абстрактного дерева) |
-| `hasChildNodes` | У ноды есть **зарегистрированные** дочерние ноды |
-| `isLastNode` | Нода последняя в дереве целиком (последняя на своём уровне и все её предки — последние). Используется для линий-коннекторов |
-| `setOpenedNode(opened)` | Меняет состояние раскрытия во внутреннем состоянии `TreeView` |
+Узел дерева со своим API: `id`, `opened`, `prevNodeId` / `nextNodeId`,
+render-prop `children` с пятью provide-props, контракт по `focus` / `blur` и
+`aria-expanded`. Props, инварианты, порядок регистрации нод и правила
+раскрытия описаны в отдельном документе —
+[`TreeViewNode-ai.md`](./TreeViewNode-ai.md).
 
 ### `TreeView.Group` (`TreeViewGroup`)
 
 `<ul role="group">` — обёртка вложенных нод. `forwardRef` на `<ul>`,
 `className` мерджится, остальные атрибуты пробрасываются. Собственных props нет.
-
-### Порядок нод и `prevNodeId` / `nextNodeId`
-
-Абстрактное дерево заполняется в **конструкторах** нод, то есть в порядке
-рендера. `prevNodeId` / `nextNodeId` позволяют вставить ноду в произвольное
-место уровня: порядок в абстрактном дереве (а значит и `isLastNode`, и порядок
-обхода стрелками) может отличаться от порядка в разметке.
-
-### Раскрытие и регистрация детей
-
-`hasChildNodes` вычисляется по абстрактному дереву, поэтому дочерние ноды
-должны быть **смонтированы**. Если размонтировать `TreeView.Group` в свёрнутом
-состоянии, родитель узнает `hasChildNodes === false` и, например, не отрисует
-шеврон. Рабочий приём (используется в stories и в `CollapsibleTreeExtended`) —
-держать группу в разметке всегда, скрывая её стилями.
 
 ---
 
@@ -110,11 +72,13 @@ Class-компонент. Собственных props, кроме `children`, �
   зафиксированный публичным API: `ref` на `TreeView` отдаёт инстанс класса.
   Перевод на функциональные компоненты и добавление `forwardRef` — breaking
   change поведения `ref`. Не мигрировать без отдельного решения мейнтейнера.
-- **Barrel `src/components/TreeView/index.ts`** экспортирует `TreeView`,
-  `TreeViewNode`, `TreeViewGroup` и их типы (`ITreeViewProps`,
-  `ITreeViewNodeProps`, `ITreeViewNodeProvideProps`,
-  `ITreeViewNodePropsWithContext`, `ITreeViewGroupProps`). Состав и имена менять
-  нельзя — от них зависят `CollapsibleTreeExtended` и `CollapsibleTree`.
+- **Barrel `src/components/TreeView/index.ts`** реэкспортирует модули семейства
+  целиком (`export * from ...`), поэтому публично всё, что они экспортируют:
+  `TreeView` и `ITreeViewProps`, `TreeViewGroup` и `ITreeViewGroupProps`, а от
+  ноды — состав, перечисленный в
+  [TreeViewNode-ai.md](./TreeViewNode-ai.md) (там же и класс
+  `TreeViewNodeWithContext`). Состав и имена менять нельзя — от них зависят
+  `CollapsibleTreeExtended` и `CollapsibleTree`.
 - **`TreeViewContext` не экспортируется из barrel**, но `ITreeViewContext`
   транзитивно виден через `ITreeViewNodePropsWithContext`. Поле `updateCount`
   из контекста убирать нельзя без breaking change типа.
@@ -165,6 +129,9 @@ Class-компонент. Собственных props, кроме `children`, �
 
 ## Связанные компоненты
 
+- `TreeViewNode` (`TreeView.Node`) — узел дерева, единственная часть семейства
+  со своим API: render-prop `children`, регистрация в абстрактном дереве,
+  focus/blur-контракт. См. [`TreeViewNode-ai.md`](./TreeViewNode-ai.md).
 - `CollapsibleTreeExtended` (`src/components/CollapsibleTreeExtended`) — обёртка
   над `TreeView`, добавляющая каждой ноде accordion-логику: анимацию раскрытия
   и controlled/uncontrolled состояние.
@@ -196,6 +163,7 @@ Class-компонент. Собственных props, кроме `children`, �
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-26 | Описание `TreeView.Node` вынесено в отдельный `TreeViewNode-ai.md`, здесь оставлена ссылка |
 | 2026-08-25 | Слушатель `keydown` подписан только пока в дереве есть активная нода: после ухода фокуса из дерева стрелки снова достаются странице. `role` и `aria-expanded` перенесены после `{...props}` — потребитель больше не может их переопределить |
 | 2026-08-24 | `ArrowUp` с первой ноды дерева больше не заходит внутрь свёрнутой последней ветки — активной становится последняя видимая нода (`TreeViewAbstractNodeUtils.getPrevNode`) |
 | 2026-08-21 | Создан документ. AI-рефакторинг: починен счётчик `updateCount` (постфиксный инкремент не увеличивал значение), удалён мёртвый код, добавлены unit-тесты и stories. `TreeView.Group` получил `forwardRef` и перестал затирать собственный класс переданным `className`; после удаления ноды соседние ноды теперь перерисовываются (актуальные `hasChildNodes` / `isLastNode`) |

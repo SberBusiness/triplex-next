@@ -17,7 +17,7 @@ export const Pagination = React.forwardRef<HTMLSpanElement, IPaginationProps>(
         return (
             <PaginationExtended {...rest} ref={ref}>
                 {paginationSelectProps && <PaginationSelect {...paginationSelectProps} />}
-                {paginationNavigationProps.totalPages > 1 && <PaginationNavigation {...paginationNavigationProps} />}
+                <PaginationNavigation {...paginationNavigationProps} />
             </PaginationExtended>
         );
     },

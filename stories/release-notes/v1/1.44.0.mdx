@@ -15,11 +15,19 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменены названия типов: `ESkeletonType.LIGHT` стал `ESkeletonType.TYPE_1`, `ESkeletonType.DARK` стал `ESkeletonType.TYPE_2`.
 - Изменены названия токенов: `Skeleton.BackgroundColor_Light_Start` стал `Skeleton.BackgroundColor_Type1_Start`, `Skeleton.BackgroundColor_Light_End` стал `Skeleton.BackgroundColor_Type1_End`, `Skeleton.BackgroundColor_Dark_Start` стал `Skeleton.BackgroundColor_Type2_Start`, `Skeleton.BackgroundColor_Dark_End` стал `Skeleton.BackgroundColor_Type2_End`.
 
+**Tag**
+
+- Свойство `id` теперь рендерится атрибутом `id` на корневом `<span>` — раньше оно использовалось только как аргумент `onEdit` и `onRemove` и в DOM не попадало. Свойство обязательное, поэтому идентификатор появится в разметке у всех потребителей: проверьте, что его значение уникально в пределах документа, иначе получите дубликаты `id`.
+
 **TreeView**
 
 - `role` и `aria-expanded` больше нельзя переопределить через props: `TreeView` всегда рендерит `role="tree"`, `TreeView.Node` — `role="treeitem"` с собственным `aria-expanded`, `TreeView.Group` — `role="group"`. Если вы передавали свой `role`, он теперь игнорируется — семантика дерева задаётся компонентом.
 
 <Heading>Изменения</Heading>
+
+**AlertProcess**
+
+- Изменен border-radius в размере `MD`.
 
 **BodyPage**
 
@@ -32,6 +40,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **Carousel**
 
+- Исправлено отображение направления стрелок навигации при изменении `orientation`.
 - Indicators: добавлено ограничение в максимум 5 индикаторов, при большем количестве страниц крайние элементы сжимаются в компактный edge-индикатор.
 - Indicators: увеличен отступ между индикаторами c 4px до 8px.
 - Indicators: переходы ограничены первой и последней страницами.
@@ -62,15 +71,44 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Внутренние отступы Header, Body и Footer теперь задаёт сам виджет, а не `Island`: размер передаётся субкомпонентам через контекст.
 
+**LightBox**
+
+- Исправлен баг, когда в состоянии `loading` кнопка закрытия была недоступна для нажатия.
+- Исправлен баг, когда в состоянии `loading` кнопки «вперёд»/«назад» отставались видимыми, но недоступными для клика.
+
+**Overlay**
+
+- Исправлено: оверлей, смонтированный сразу с `opened={true}`, вызывает `onOpen`. Раньше на первом рендере колбэк не приходил, поэтому обёртки, которые в нём включают ловушку фокуса или считают позицию, оставались недоинициализированными.
+
+**Pagination**
+
+- Добавлено отображение `PaginationNavigation` с заблокированными стрелками в случае, когда страница единственная.
+
 **Tabs**
 
 - Добавлен фон для `TabButtonDropdown`, когда внутри дропдауна выбран элемент.
 - Исправлено: `className`, переданный в `buttonDropdownAttributes`, больше не затирается собственными классами dropdown-кнопки — классы объединяются.
 
+**Tag**
+
+- Проведён AI-рефакторинг, добавлен `displayName`.
+
 **Skeleton**
 
 - Добавлен новый тип `ESkeletonType.TYPE_3`.
 - Изменены цвета токенов `Skeleton.BackgroundColor_Type2_Start` и `Skeleton.BackgroundColor_Type2_End` в темной теме.
+
+**TableBasic**
+
+- Добавлено: `TableBasic` пробрасывает `ref` на свой элемент `table` — туда же, куда уходят остальные HTML-атрибуты. Раньше компонент был объявлен обычной функцией без `forwardRef`.
+- Проведён AI-рефакторинг.
+
+**TopOverlay**
+
+- Добавлено: компонент пробрасывает `ref` на корневую обёртку панели и принимает `className`, `style` и остальные атрибуты `<div>`.
+- Изменено: props, не входящие в `ITopOverlayProps`, больше не уходят во вложенный `Overlay`, а остаются на корневой обёртке. Если вы полагались на то, что `data`-атрибуты оседали на внутреннем элементе, проверьте селекторы.
+- Исправлено: у панели, смонтированной сразу с `opened={true}`, включается ловушка фокуса и вызывается `onOpen`. Раньше открытая с самого начала панель не удерживала фокус внутри себя.
+- Проведён AI-рефакторинг, добавлен `displayName`.
 
 **TreeView**
 

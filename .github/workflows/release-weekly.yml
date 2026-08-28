@@ -184,6 +184,7 @@ jobs:
       - run: npm run build
 
       - name: Transfer release notes v1 → v0
+        id: notes
         env:
           VERSION: ${{ needs.preflight.outputs.version }}
           V0: ${{ needs.preflight.outputs.v0 }}
@@ -198,6 +199,8 @@ jobs:
           if [ -f "${DST}" ] \
             && [ "$(grep -vcE '^[[:space:]]*$|^import |^<Meta |^<Title>|^<Heading>.*</Heading>$' "${DST}")" -ne 0 ]; then
             echo "ℹ️ ${DST} заполнен вручную — оставляем как есть."
+            # Ниже шаг коммита ждёт на один изменённый файл меньше.
+            echo "v0_written=false" >> "${GITHUB_OUTPUT}"
           else
             sed -e "s|<Meta title=\"release-notes/v1/${VERSION}\" />|<Meta title=\"release-notes/v0/${V0}\" />|" \
                 -e "s|<Title>v${VERSION}</Title>|<Title>v${V0}</Title>|" \
@@ -205,6 +208,7 @@ jobs:
             grep -q "release-notes/v0/${V0}" "${DST}" || { echo "❌ подмена <Meta> не сработала"; exit 1; }
             grep -q "<Title>v${V0}</Title>" "${DST}" || { echo "❌ подмена <Title> не сработала"; exit 1; }
             echo "✅ notes перенесены из ${SRC}"
+            echo "v0_written=true" >> "${GITHUB_OUTPUT}"
           fi
 
           cat > "stories/release-notes/v0/${NEXT0}.mdx" <<EOF
@@ -221,6 +225,7 @@ jobs:
         env:
           V0: ${{ needs.preflight.outputs.v0 }}
           NEXT0: ${{ needs.preflight.outputs.next0 }}
+          V0_WRITTEN: ${{ steps.notes.outputs.v0_written }}
           DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
         run: |
           set -eu
@@ -231,10 +236,28 @@ jobs:
             "stories/release-notes/v0/${V0}.mdx" "stories/release-notes/v0/${NEXT0}.mdx"
           # Точный список путей: `git add stories/release-notes/v0/` затянул бы
           # в релизный коммит любой посторонний файл в каталоге.
-          COUNT=$(git diff --cached --name-only | wc -l)
-          if [ "${COUNT}" -ne 4 ]; then
-            echo "❌ в релизном коммите ${COUNT} файлов вместо 4:"
-            git diff --cached --name-only
+          #
+          # Проверяем состав, а не количество. Файлов бывает и 4, и 3:
+          # заполненный человеком `${V0}.mdx` шаг переноса оставляет как есть
+          # (docs/human/release.md, шаг 5), и тогда в staged diff его нет.
+          # Жёсткое `-ne 4` роняло бы ровно этот поддержанный сценарий.
+          REQUIRED="package.json package-lock.json stories/release-notes/v0/${NEXT0}.mdx"
+          if [ "${V0_WRITTEN}" = "true" ]; then
+            REQUIRED="${REQUIRED} stories/release-notes/v0/${V0}.mdx"
+          fi
+          STAGED=$(git diff --cached --name-only)
+          for f in ${REQUIRED}; do
+            printf '%s\n' "${STAGED}" | grep -qxF "${f}" || {
+              echo "❌ ожидали изменение ${f}, а его нет в релизном коммите:"
+              printf '%s\n' "${STAGED}"
+              exit 1
+            }
+          done
+          COUNT=$(printf '%s\n' "${STAGED}" | grep -c . || true)
+          EXPECTED=$(printf '%s\n' ${REQUIRED} | grep -c .)
+          if [ "${COUNT}" -ne "${EXPECTED}" ]; then
+            echo "❌ в релизном коммите ${COUNT} файлов вместо ${EXPECTED}:"
+            printf '%s\n' "${STAGED}"
             exit 1
           fi
           # Без префикса TRI-XXX: у Actions нет доступа к Linear, номер задачи

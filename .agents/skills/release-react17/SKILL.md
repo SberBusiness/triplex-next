@@ -370,8 +370,14 @@ skill запускали отдельно). Тогда `npm install @sberbusines
 предыдущую React 18-версию:
 
 ```bash
-npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest
+npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest \
+  --@sberbusiness:registry=https://registry.npmjs.org/ \
+  --registry=https://registry.npmjs.org/
 ```
+
+Оба флага обязательны: пакет лежит в `registry.npmjs.org`, а локальный
+`@sberbusiness:registry` смотрит во внутренний registry и перебивает одиночный
+`--registry`.
 
 Это **единственный** случай, когда `dist-tags` правят руками, и только
 с явным подтверждением разработчика: команда затрагивает всех потребителей

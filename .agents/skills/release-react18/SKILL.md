@@ -268,7 +268,18 @@ npm view @sberbusiness/triplex-next dist-tags --json
 завершённым: `npm install` продолжает отдавать React 17-версию. Починка:
 
 ```bash
-npm dist-tag add @sberbusiness/triplex-next@<VERSION> latest
+npm dist-tag add @sberbusiness/triplex-next@<VERSION> latest \
+  --@sberbusiness:registry=https://registry.npmjs.org/ \
+  --registry=https://registry.npmjs.org/
+```
+
+Оба флага обязательны: пакет публикуется в `registry.npmjs.org`, а локальный
+`@sberbusiness:registry` у разработчика смотрит во внутренний registry.
+Scoped-настройка приоритетнее, и одного `--registry` не хватит — тег уехал бы
+не туда. Сверься с эффективным конфигом перед запуском:
+
+```bash
+npm config get @sberbusiness:registry
 ```
 
 Команду выполняй **только с явным подтверждением разработчика** — она меняет

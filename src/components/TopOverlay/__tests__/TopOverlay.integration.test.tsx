@@ -7,12 +7,13 @@ import { TopOverlay } from "../TopOverlay";
 const focusTrapMock = vi.fn<(props: FocusTrap.Props) => void>();
 
 // Мокается только focus-trap-react: Overlay и OverlayBase здесь настоящие — тест проверяет их связку.
-vi.mock("focus-trap-react", () => ({
-    FocusTrap: (props: FocusTrap.Props) => {
+vi.mock("focus-trap-react", () => {
+    const FocusTrapMock = (props: FocusTrap.Props) => {
         focusTrapMock(props);
         return <div data-testid="focus-trap">{props.children}</div>;
-    },
-}));
+    };
+    return { default: FocusTrapMock, FocusTrap: FocusTrapMock };
+});
 
 /** Последние свойства, с которыми был отрисован FocusTrap. */
 const getLastFocusTrapProps = () => focusTrapMock.mock.calls[focusTrapMock.mock.calls.length - 1][0];

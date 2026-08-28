@@ -23,6 +23,8 @@ export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
     loading?: boolean;
     /** Свойства компонента LoaderScreen. */
     loaderScreenProps?: ILoaderScreenMiddleProps;
+    /** Свойство, отключающее внутренние отступы. */
+    withoutPaddings?: boolean;
 }
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
@@ -38,13 +40,20 @@ export const Island = Object.assign(
                 loaderScreenProps,
                 className,
                 children,
+                withoutPaddings,
                 ...rest
             },
             ref,
         ) => {
             return (
                 <div
-                    className={clsx(styles.island, mapTypeToClassName(type), SIZE_TO_CLASS_NAME_MAP[size], className)}
+                    className={clsx(
+                        styles.island,
+                        { [styles.withoutPaddings]: Boolean(withoutPaddings) },
+                        mapTypeToClassName(type),
+                        SIZE_TO_CLASS_NAME_MAP[size],
+                        className,
+                    )}
                     ref={ref}
                     {...rest}
                 >

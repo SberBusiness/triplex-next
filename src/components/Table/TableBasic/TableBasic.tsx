@@ -8,75 +8,89 @@ import { ITableBasicProps } from "@sberbusiness/triplex-next/components/Table/Ta
 import { LoaderMiddle } from "@sberbusiness/triplex-next/components/Loader/LoaderMiddle/LoaderMiddle";
 import { LoaderScreen } from "@sberbusiness/triplex-next/components/LoaderScreen/LoaderScreen";
 
-/** Компонент обычной таблицы. */
-export const TableBasic = ({
-    columns,
-    data,
-    highlightRowOnHover,
-    onOrderBy,
-    onClickRow,
-    renderNoColumns,
-    renderNoData,
-    headless,
-    ...htmlTableAttributes
-}: ITableBasicProps) => {
-    const context = useContext(MasterTableContext);
-    const isEmptyData = data.length === 0;
+/**
+ * Компонент обычной таблицы.
+ * Состояние загрузки и общий для таблицы набор колонок берутся из контекста MasterTable.
+ * Ref пробрасывается на элемент table — туда же, куда попадают остальные HTML-атрибуты.
+ * Если все колонки скрыты и задан renderNoColumns, вместо таблицы рендерится заглушка,
+ * и ref остаётся пустым — элемента table в этот момент нет.
+ */
+export const TableBasic = React.forwardRef<HTMLTableElement, ITableBasicProps>(
+    (
+        {
+            columns,
+            data,
+            highlightRowOnHover,
+            onOrderBy,
+            onClickRow,
+            renderNoColumns,
+            renderNoData,
+            headless,
+            ...htmlTableAttributes
+        },
+        ref,
+    ) => {
+        const { columns: contextColumns, loading, setColumns } = useContext(MasterTableContext);
+        const isEmptyData = data.length === 0;
 
-    useEffect(() => {
-        if (!isEqual(columns, context.columns)) {
-            context.setColumns(columns);
-        }
-    }, [columns, context]);
+        useEffect(() => {
+            if (!isEqual(columns, contextColumns)) {
+                setColumns(columns);
+            }
+        }, [columns, contextColumns, setColumns]);
 
-    const renderTable = () => {
-        if (columns.every((c) => c.hidden) && renderNoColumns) {
-            return renderNoColumns();
-        }
+        /** Рендер таблицы или заглушки, если пользователь скрыл все колонки. */
+        const renderTable = () => {
+            if (columns.every((column) => column.hidden) && renderNoColumns) {
+                return renderNoColumns();
+            }
+
+            return (
+                <table {...htmlTableAttributes} ref={ref}>
+                    {headless || <TableBasicHeader columns={columns} onOrderBy={onOrderBy} />}
+                    <TableBasicBody
+                        columns={columns}
+                        data={data}
+                        onClickRow={onClickRow}
+                        highlightRowOnHover={highlightRowOnHover}
+                    />
+                </table>
+            );
+        };
+
+        /** Рендер подвала: заглушка при отсутствии данных и индикаторы загрузки. */
+        const renderFooter = () => {
+            if (loading && isEmptyData) {
+                return (
+                    <div className={styles.footerEmptyData}>
+                        <div className={styles.overlayCover} />
+                        <LoaderMiddle />
+                    </div>
+                );
+            }
+
+            if (isEmptyData) {
+                return <div className={styles.footerEmptyData}>{renderNoData()}</div>;
+            }
+
+            if (loading) {
+                return (
+                    <div className={styles.spinnerWrapper}>
+                        <LoaderScreen type="middle" className={styles.tableLoaderScreen} />
+                    </div>
+                );
+            }
+
+            return null;
+        };
 
         return (
-            <table key="table" {...htmlTableAttributes}>
-                {headless || <TableBasicHeader columns={columns} onOrderBy={onOrderBy} />}
-                <TableBasicBody
-                    columns={columns}
-                    data={data}
-                    onClickRow={onClickRow}
-                    highlightRowOnHover={highlightRowOnHover}
-                />
-            </table>
+            <div className={styles.tableBasic}>
+                {renderTable()}
+                {renderFooter()}
+            </div>
         );
-    };
-
-    const renderFooter = (isEmptyData: boolean) => {
-        const { loading } = context;
-
-        if (loading && isEmptyData) {
-            return renderFooterEmptyData(renderNoDataLoading());
-        } else if (!loading && isEmptyData) {
-            return renderFooterEmptyData(renderNoData());
-        } else if (loading && !isEmptyData) {
-            return (
-                <div className={styles.spinnerWrapper}>
-                    <LoaderScreen type="middle" className={styles.tableLoaderScreen} />
-                </div>
-            );
-        } else {
-            return null;
-        }
-    };
-
-    const renderFooterEmptyData = (content: React.ReactNode) => <div className={styles.footerEmptyData}>{content}</div>;
-    const renderNoDataLoading = () => [
-        <div className={styles.overlayCover} key="overlay" />,
-        <LoaderMiddle key="spinner" />,
-    ];
-
-    return (
-        <div className={styles.tableBasic}>
-            {renderTable()}
-            {renderFooter(isEmptyData)}
-        </div>
-    );
-};
+    },
+);
 
 TableBasic.displayName = "TableBasic";

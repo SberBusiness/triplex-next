@@ -136,6 +136,34 @@ describe("LightBox", () => {
         expect(focusTrapProps.active).toBe(false);
     });
 
+    it("applies loading state class to the dialog element", () => {
+        // По классу состояния загрузки контролы поднимаются над лоадером контента,
+        // иначе кнопка закрытия перекрыта и недоступна для клика.
+        const { rerender } = render(
+            <LightBox isLoading>
+                {[
+                    <LightBox.Content key="content">
+                        <div>content</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        expect(screen.getByRole("dialog")).toHaveClass(styles.isLoading);
+
+        rerender(
+            <LightBox>
+                {[
+                    <LightBox.Content key="content">
+                        <div>content</div>
+                    </LightBox.Content>,
+                ]}
+            </LightBox>,
+        );
+
+        expect(screen.getByRole("dialog")).not.toHaveClass(styles.isLoading);
+    });
+
     it("applies size class to the dialog element", () => {
         render(
             <LightBox size={ELightBoxSize.LG}>

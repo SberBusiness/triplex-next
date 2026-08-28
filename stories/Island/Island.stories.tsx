@@ -11,6 +11,8 @@ import {
     SizesExampleSource,
     Loading as LoadingRender,
     LoadingSource,
+    WithoutPaddings as WithoutPaddingsRender,
+    WithoutPaddingsSource,
 } from "./examples";
 
 interface IIslandPlaygroundProps extends React.ComponentProps<typeof Island> {
@@ -32,7 +34,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "Контейнерный компонент с визуальными вариациями: тип, скругление и внутренние отступы.\n\n- **Типы**: type1, type2, type3\n- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.\n- **Загрузка**: `loading` показывает `LoaderScreen` поверх контента карточки.\n\n**Состав:** Header, Body, Footer",
+                    "Контейнерный компонент с визуальными вариациями: тип, скругление и внутренние отступы.\n\n- **Типы**: type1, type2, type3\n- **Размеры**: SM, MD, LG. От размера зависит скругление и внутренние отступы.\n- **Загрузка**: `loading` показывает `LoaderScreen` поверх контента карточки.\n- **Без отступов**: `withoutPaddings` убирает внутренние отступы карточки, скругление сохраняется.\n\n**Состав:** Header, Body, Footer",
             },
             page: () => (
                 <>
@@ -65,6 +67,7 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
         showHeader: true,
         showBody: true,
         showFooter: true,
+        withoutPaddings: false,
     },
     argTypes: {
         type: {
@@ -88,6 +91,14 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
         loading: {
             control: { type: "boolean" },
             description: "Показывать LoaderScreen поверх контента",
+            table: {
+                type: { summary: "boolean" },
+                defaultValue: { summary: "false" },
+            },
+        },
+        withoutPaddings: {
+            control: { type: "boolean" },
+            description: "Отключить padding",
             table: {
                 type: { summary: "boolean" },
                 defaultValue: { summary: "false" },
@@ -137,6 +148,7 @@ export const Playground: StoryObj<IIslandPlaygroundProps> = {
                 "showHeader",
                 "showBody",
                 "showFooter",
+                "withoutPaddings",
             ],
         },
         docs: {
@@ -209,6 +221,20 @@ export const Loading: StoryObj<typeof Island> = {
         docs: {
             source: {
                 code: LoadingSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const WithoutPaddings: StoryObj<typeof Island> = {
+    name: "WithoutPaddings",
+    render: WithoutPaddingsRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: WithoutPaddingsSource,
                 language: "tsx",
             },
         },

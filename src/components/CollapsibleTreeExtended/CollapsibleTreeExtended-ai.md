@@ -1,7 +1,7 @@
 ---
 component: CollapsibleTreeExtended
 category: CollapsibleTree
-related: [CollapsibleTree, TreeView, AccordionBase]
+related: [CollapsibleTree, TreeView, TreeViewNode, AccordionBase]
 tokens: []
 stories: stories/CollapsibleTreeExtended/CollapsibleTreeExtended.stories.tsx
 version: "1.0"
@@ -161,6 +161,10 @@ FC-обёртка над `TreeView` без собственных props.
   нестандартный UI узла не нужен — используй её.
 - `TreeView` (`src/components/TreeView`) — нижний слой: семантика дерева,
   абстрактное дерево нод, фокус, активная нода, клавиатурная навигация.
+- `TreeViewNode` (`TreeView.Node`) — узел, который оборачивает каждая нода
+  `CollapsibleTreeExtended`: `ICollapsibleTreeExtendedNodeProps` наследует
+  `Omit<ITreeViewNodeProps, "children">`, поэтому `id`, `opened`, `prevNodeId`,
+  `nextNodeId` и остальные props узла работают здесь так же, как у голой ноды.
 - `AccordionBase` (`src/components/AccordionBase`) — анимация раскрытия и
   `onToggle` после завершения анимации. Используется внутри каждой ноды.
 
@@ -187,3 +191,4 @@ FC-обёртка над `TreeView` без собственных props.
 | 2026-05-15 | Создан документ. Зафиксирован фикс controlled-инварианта (режим вычисляется на каждом рендере) и пополнение stories (`Playground`, `VisualTests`) |
 | 2026-07-06 | В story-примерах шеврон открытого узла теперь указывает вверх (`rotate(-90deg)`), а не вниз — синхронно с `CollapsibleTree` |
 | 2026-07-14 | В story-примерах на кнопку заголовка добавлены глобальные классы icons-next: `hoverable` всегда и `active` при `opened` — цвет иконки раскрытия, синхронно с `CollapsibleTreeNodeHeader` |
+| 2026-08-26 | В `related` добавлен `TreeViewNode` — у узла появился собственный AI.md, и он точный адресат наследования `ICollapsibleTreeExtendedNodeProps` |

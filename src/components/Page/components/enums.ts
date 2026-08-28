@@ -18,4 +18,6 @@ export enum EBodyPageVerticalMargin {
     LARGE = "large",
     /** Маленькие вертикальные отступы: 16px (8px на узких экранах). Используется в LightBox. */
     SMALL = "small",
+    /** Без вертикальных отступов: 0. */
+    NONE = "none",
 }

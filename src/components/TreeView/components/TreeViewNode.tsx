@@ -23,19 +23,19 @@ export interface ITreeViewNodeProvideProps {
 export interface ITreeViewNodeProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
     /** Render-функция дочерних элементов. */
     children: (props: ITreeViewNodeProvideProps) => JSX.Element;
-    /** Идентификатор ноды.   */
+    /** Идентификатор ноды. Должен быть уникальным в пределах дерева. */
     id: string;
-    /** Состояние ноды - свернута/раскрыта. */
+    /** Состояние ноды - свернута/раскрыта. По умолчанию false. */
     opened?: boolean;
-    /** Идентификатор следующей ноды. */
+    /** Идентификатор следующей ноды. Задает позицию ноды в дереве при вставке между уже зарегистрированными нодами. */
     nextNodeId?: string;
-    /** Идентификатор предыдущей ноды. */
+    /** Идентификатор предыдущей ноды. Задает позицию ноды в дереве при вставке между уже зарегистрированными нодами. */
     prevNodeId?: string;
 }
 
 /**
  * Свойства TreeViewNodeWithContext.
- * iTreeViewNodeProps - передаются родительским компонентам.
+ * ITreeViewNodeProps - передаются родительским компонентам.
  * IWithTreeViewContextProps - добавляются из withTreeViewContext.
  */
 export interface ITreeViewNodePropsWithContext extends ITreeViewNodeProps, IWithTreeViewContextProps {}
@@ -47,8 +47,9 @@ export interface ITreeViewNodePropsWithContext extends ITreeViewNodeProps, IWith
  * Обрабатывает события focus/blur для дальнейшего перемещения с клавиатуры по дереву.
  */
 export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsWithContext> {
-    private containerDOMNode?: HTMLLIElement;
-    // Абстрактная нода текущей ViewNode.
+    public static displayName = "TreeViewNodeWithContext";
+
+    /** Абстрактная нода текущей ViewNode. */
     private readonly abstractNode: TreeViewAbstractNode;
 
     constructor(props: ITreeViewNodePropsWithContext) {
@@ -97,21 +98,22 @@ export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsW
         return (
             <TreeViewContext.Provider value={{ ...treeViewContext, parentNode: this.abstractNode }}>
                 <li
-                    role="treeitem"
                     tabIndex={this.abstractNode.getTabIndex()}
-                    aria-expanded={this.abstractNode.getOpened()}
                     className={clsx(styles.treeViewNode, className)}
                     {...props}
+                    // role и aria-expanded после {...props}: семантика узла - контракт компонента,
+                    // потребитель ее не переопределяет.
+                    role="treeitem"
+                    aria-expanded={this.abstractNode.getOpened()}
                     onBlur={this.handleBlur}
                     onFocus={this.handleFocus}
-                    ref={this.setContainerDOMNode}
                 >
                     {children({
                         activeNode: this.abstractNode.getActive(),
                         hasChildNodes: Boolean(this.abstractNode.getChildren().length),
                         isLastNode: TreeViewAbstractNodeUtils.isLastNode(this.abstractNode),
                         openedNode: this.abstractNode.getOpened(),
-                        setOpenedNode: this.setOpenedNode(),
+                        setOpenedNode: this.setOpenedNode,
                     })}
                 </li>
             </TreeViewContext.Provider>
@@ -144,10 +146,8 @@ export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsW
         onFocus?.(event);
     };
 
-    private setContainerDOMNode = (DOMNode: HTMLLIElement) => (this.containerDOMNode = DOMNode);
-
-    /** Устанавливает флаг opened ноды. */
-    private setOpenedNode = () => (opened: boolean) => {
+    /** Устанавливает флаг opened ноды. Передается в render-функцию children. */
+    private setOpenedNode = (opened: boolean) => {
         this.props.treeViewContext.setOpenedNode(this.abstractNode, opened);
     };
 }

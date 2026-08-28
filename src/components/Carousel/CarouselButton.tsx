@@ -19,7 +19,7 @@ const ORIENTATION_TO_PREV_ICON_MAP: Record<ECarouselOrientation, React.ReactElem
 
 export const CarouselPrevButton = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ children, className, onClick, ...restProps }, ref) => {
-        const { atStart, prevSlide, orientationRef } = useContext(CarouselContext);
+        const { orientation, atStart, prevSlide } = useContext(CarouselContext);
         const touchDevice = useMatchMedia("(pointer: coarse)");
 
         const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
@@ -42,7 +42,7 @@ export const CarouselPrevButton = React.forwardRef<HTMLButtonElement, IButtonIco
                 onClick={handleClick}
                 ref={ref}
             >
-                {children || ORIENTATION_TO_PREV_ICON_MAP[orientationRef.current]}
+                {children || ORIENTATION_TO_PREV_ICON_MAP[orientation]}
             </ButtonIcon>
         );
     },
@@ -57,7 +57,7 @@ const ORIENTATION_TO_NEXT_ICON_MAP: Record<ECarouselOrientation, React.ReactElem
 
 export const CarouselNextButton = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ children, className, onClick, ...restProps }, ref) => {
-        const { atEnd, nextSlide, orientationRef } = useContext(CarouselContext);
+        const { orientation, atEnd, nextSlide } = useContext(CarouselContext);
         const touchDevice = useMatchMedia("(pointer: coarse)");
 
         const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
@@ -80,7 +80,7 @@ export const CarouselNextButton = React.forwardRef<HTMLButtonElement, IButtonIco
                 onClick={handleClick}
                 ref={ref}
             >
-                {children || ORIENTATION_TO_NEXT_ICON_MAP[orientationRef.current]}
+                {children || ORIENTATION_TO_NEXT_ICON_MAP[orientation]}
             </ButtonIcon>
         );
     },

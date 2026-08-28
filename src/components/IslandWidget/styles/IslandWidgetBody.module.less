@@ -1,3 +1,47 @@
+@import "src/styles/style";
+
 .islandWidgetBody {
-    padding-top: 16px;
+    &.sm {
+        padding: 0 16px;
+
+        &:last-child {
+            padding-bottom: 16px;
+        }
+    }
+
+    &.md {
+        padding: 0 24px;
+
+        &:last-child {
+            padding-bottom: 24px;
+        }
+    }
+
+    &.lg {
+        padding: 0 32px;
+
+        &:last-child {
+            padding-bottom: 32px;
+        }
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .islandWidgetBody {
+        &.md {
+            padding: 0 16px;
+
+            &:last-child {
+                padding-bottom: 16px;
+            }
+        }
+
+        &.lg {
+            padding: 0 24px;
+
+            &:last-child {
+                padding-bottom: 24px;
+            }
+        }
+    }
 }

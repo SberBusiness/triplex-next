@@ -1,6 +1,6 @@
 ---
 name: release-react17
-description: React 17-релиз triplex-next (0.Y.0) — первая половина выпуска: предусловия на уже перелитую человеком ветку release-0, локальные гейты (сборка, unit-тесты), перенос release notes v1 → v0, бамп версии, прямой push в release-0 и GitHub Release без пометки latest. Под-skill для release; выпускается ДО React 18-половины. В unattended (облако) публикация запрещена прокси — готовит до точки невозврата и отдаёт человеку готовую команду.
+description: React 17-релиз triplex-next (0.Y.0) — первая половина выпуска: предусловия на уже перелитую человеком ветку release-0, локальные гейты (сборка, unit-тесты), перенос release notes v1 → v0, бамп версии, прямой push в release-0 и GitHub Release без пометки latest. Под-skill для release; выпускается ДО React 18-половины. Ручной путь — еженедельный релиз делает release-weekly.yml по расписанию GitHub.
 ---
 
 # release-react17
@@ -37,13 +37,8 @@ description: React 17-релиз triplex-next (0.Y.0) — первая поло�
 - `TASK` — номер задачи Linear на релиз, формат `TRI-XXX`; тот же, что и в
   React 18-части. Идёт префиксом в коммит по
   [`docs/ai/commits.md`](../../../docs/ai/commits.md).
-- `UNATTENDED` — признак запуска из routine, без человека у клавиатуры.
-  По умолчанию `false`. Влияет только на точки ожидания подтверждения —
-  см. «Unattended-режим». Гейты и стоп-условия одинаковы в обоих режимах.
-- `PUBLISH_MODE` — режим публикации в unattended: `full` (право на диспатч
-  `release.yml` подтверждено зондом [`release-auto`](../release-auto/SKILL.md))
-  или `prepare` (по умолчанию; облако — публикация запрещена прокси,
-  подготовка передаётся человеку). В интерактивном режиме не используется.
+
+
 
 ## Ключевое отличие от [React 18-части](../release-react18/SKILL.md)
 
@@ -88,7 +83,7 @@ git merge origin/main
 | `package.json` — React-зависимости | **Всегда из `release-0`**: `react`/`react-dom` `17.0.2`, `@types/react`/`@types/react-dom` `17.0.2`, `@testing-library/react` `12.1.5`, `focus-trap-react` `10.3.0`, `react-resize-detector` `9.1.0`, `@types/react-transition-group` `4.4.9`, `peerDependencies` — `^16.8.0 \|\| ^17.0.0` |
 | `package.json` — всё остальное | Из main (новые/обновлённые зависимости, скрипты, конфиги) |
 | `package-lock.json` | Руками не разрешать. Взять любую сторону, затем перегенерировать: `npm install` |
-| `.github/workflows/release.yml` | **Из main.** Копия в `release-0` не используется ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, а при `workflow_dispatch` — из `--ref main`. Пока перелитие не сделано, в `release-0` лежит версия без `workflow_dispatch` — она просто мёртвая. Брать main — значит сокращать расхождение |
+| `.github/workflows/release.yml`, `release-weekly.yml` | **Из main.** Копии в `release-0` не используются ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, при `workflow_call` — из ветки вызывающего, а расписание живёт только в main. Брать main — значит сокращать расхождение |
 | `stories/release-notes/v0/*` | Из `release-0` (в main их нет) |
 | `stories/release-notes/v1/*` | Из main |
 | `src/**` | По принципу выше — см. известные адаптации ниже |
@@ -140,14 +135,13 @@ git show origin/release-0:package.json | grep -m1 '"version"'
 git merge-base --is-ancestor origin/main origin/release-0
 ```
 
-Проверки — при провале остановись и сообщи (в unattended — заверши с отчётом):
+Проверки — при провале остановись и сообщи разработчику:
 
 - Релиза/тега `V0` ещё нет.
 - Релиза `V1` тоже ещё нет — React 18-половина идёт после этой. Если `V1`
   уже выпущена, ты запущен отдельно, вне обычного цикла: это допустимо, но
   `latest` после публикации `V0` уедет на `0.x` и потребует починки
-  (см. «Если `latest` завис на 0.x»). В unattended в такой ситуации
-  **остановись** — чинить `latest` будет некому.
+  (см. «Если `latest` завис на 0.x»).
 - Версия в `origin/release-0` — `0.(Y-1).0`, то есть минор ровно на 1 меньше
   выпускаемого.
 - Файл `stories/release-notes/v1/<V1>.mdx` существует и заполнен — из него
@@ -295,17 +289,13 @@ git diff -- package.json "stories/release-notes/v0/<V0>.mdx"
 `v0/*.mdx`. Что-то ещё — стоп: в дерево попало постороннее.
 
 Считай по `git status --short`: `<NEXT0>.mdx` ты только что создал, он
-untracked, и в `git diff --stat` его не будет. По той же причине в
-unattended-отчёт кроме `--stat` включи и `--short` — иначе созданная
-заготовка в отчёте не появится вовсе.
+untracked, и в `git diff --stat` его не будет.
 
 Что именно приехало перелитием, при необходимости смотрится отдельно —
 `git diff --stat origin/main..origin/release-0`, — но это работа человека,
 сделанная до релиза, и повторно её здесь не ревьюят.
 
-В интерактивном режиме покажи сводку разработчику и дождись подтверждения.
-В unattended — включи `git diff --stat` в отчёт и продолжай: содержимое
-ветки уже проверено зелёным CI и гейтами шага 2, подтверждать некому.
+Покажи сводку разработчику и дождись подтверждения.
 
 ```bash
 git add package.json package-lock.json \
@@ -325,11 +315,11 @@ git push origin release-0
 [`release`](../release/SKILL.md), раздел «Преобразование MDX → release notes»
 (убрать `import` / `<Meta>` / `<Title>`, `<Heading>X</Heading>` → `## X`).
 
-Дальше — три ветки: интерактивная публикация, unattended с подтверждённым
-правом публикации (`PUBLISH_MODE=full`) и unattended без него
-(`PUBLISH_MODE=prepare`, облако).
-
-**Интерактивно** (человек за клавиатурой) — напрямую:
+Этот skill — **ручной путь**. Еженедельный релиз целиком делает
+[`release-weekly.yml`](../../../.github/workflows/release-weekly.yml) по
+расписанию GitHub, и сюда он не заходит: из облачной сессии релиз выпустить
+нельзя (прокси режет `gh release create`, `gh workflow run` и push тегов —
+см. [`docs/ai/commits.md`](../../../docs/ai/commits.md), «Облачные сессии»).
 
 ```bash
 node scripts/releaseNotesMd.js stories/release-notes/v0/<V0>.mdx > /tmp/notes-<V0>.md
@@ -341,50 +331,8 @@ gh release create <V0> --target release-0 --title "<V0>" --latest=false \
 исполняемая форма канона «Преобразование MDX → release notes» из
 [`release`](../release/SKILL.md); ручная сборка текста эквивалентна.
 
-**В unattended при `PUBLISH_MODE=full`** (право на диспатч подтверждено
-зондом `release-auto` — например, локальный запуск с PAT) — через workflow:
+`--latest=false` обязателен: пометка Latest на GitHub должна достаться `1.x`.
 
-```bash
-gh workflow run release.yml --ref main \
-  -f tag=<V0> -f target=release-0 -f make_latest=false \
-  -F notes=@<путь_к_временному_файлу>
-```
-
-`--ref main` обязателен: workflow берётся из указанной ветки, а в
-`release-0` может лежать устаревшая копия. Ветку для сборки задаёт вход
-`target`. Workflow сам публикует пакет и только потом создаёт релиз.
-
-**В unattended при `PUBLISH_MODE=prepare`** (облако) публикация невозможна —
-здесь skill останавливается. Прокси облачных сессий запрещает все пути запуска релиза: `gh release
-create`, `gh workflow run release.yml`, `repository_dispatch`, создание и
-push тегов (проверено зондом TRI-117, 2026-08-14; все пути — 403 «not
-permitted for this session type / through this proxy»). Диспатч других
-workflow (например, `visual-update.yml`) из облака проходит — блокируется
-именно публикация релизов, любым маршрутом. Это ограничение типа сессии,
-а не прав токена: `TRIPLEX_BOT_GH_TOKEN` до `api.github.com` из облака
-вообще не доходит — см. [`docs/ai/commits.md`](../../../docs/ai/commits.md),
-«Облачные сессии: подмена токена прокси».
-
-Остановка здесь — **штатный исход подготовки, а не ошибка**: всё, что до
-точки невозврата, уже сделано и запушено. В отчёт первой строкой — «релиз
-подготовлен, публикацию завершает человек» и готовая команда (подставь
-`<V0>`; команда работает из любого чекаута — notes читаются прямо из
-`origin/release-0`, локально каталога `v0/` может не быть):
-
-```bash
-git fetch origin release-0 && \
-  git show origin/release-0:stories/release-notes/v0/<V0>.mdx | \
-  node scripts/releaseNotesMd.js - > /tmp/notes-<V0>.md && \
-  gh release create <V0> --target release-0 --title "<V0>" --latest=false \
-  --notes-file /tmp/notes-<V0>.md
-```
-
-После неё человек продолжает React 18-половину — локально, через
-[`release-react18`](../release-react18/SKILL.md) или попросив локального
-агента довести релиз.
-
-`--latest=false` / `make_latest=false` обязательны в любом пути: пометка
-Latest на GitHub должна достаться `1.x`.
 
 ## 6. Дождаться публикации и проверить npm
 
@@ -422,30 +370,18 @@ skill запускали отдельно). Тогда `npm install @sberbusines
 предыдущую React 18-версию:
 
 ```bash
-npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest
+npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest \
+  --@sberbusiness:registry=https://registry.npmjs.org/ \
+  --registry=https://registry.npmjs.org/
 ```
 
+Оба флага обязательны: пакет лежит в `registry.npmjs.org`, а локальный
+`@sberbusiness:registry` смотрит во внутренний registry и перебивает одиночный
+`--registry`.
+
 Это **единственный** случай, когда `dist-tags` правят руками, и только
-в интерактивном режиме, с явным подтверждением разработчика: команда
-затрагивает всех потребителей пакета. В unattended тег не трогай — сообщи
-и остановись, решение за человеком.
-
-## Unattended-режим
-
-При `UNATTENDED=true` меняется только поведение в точках ожидания:
-
-| Точка | Интерактивно | Unattended |
-|---|---|---|
-| Сводка diff перед push (шаг 4) | Показать, ждать подтверждения | Включить `--stat` и `--short` в отчёт, продолжить |
-| Текст release notes перед релизом (шаг 5) | Показать, ждать подтверждения | Включить в отчёт |
-| Создание релиза (шаг 5) | `gh release create` напрямую | `PUBLISH_MODE=full` → `gh workflow run release.yml`; `PUBLISH_MODE=prepare` (облако) → **не выполняется**: штатная остановка «подготовлено, публикацию завершает человек» с готовой командой в отчёте |
-| Расхождение notes v1 для React 17 (шаг 3) | Спросить разработчика | Не спрашивать: предикат заготовки решает однозначно |
-| Ожидание `release.yml` и проверка npm (шаг 6) | `gh run watch` + `npm view` | `full` → поллинг с таймаутом; таймаут → отчёт «релиз создан, публикация не подтверждена». `prepare` → не выполняется: публикации не было |
-| `V1` уже опубликована (шаг 1) | Предупредить и продолжить по решению человека | Остановиться: `latest` уедет на `0.x`, а чинить некому |
-
-**Что не меняется:** все предусловия шага 1, гейты шага 2 и стоп-условия
-шага 3. Провал любого из них останавливает релиз в обоих режимах — unattended
-не означает «продолжать несмотря на». Никакой шаг не «чинится» автоматически.
+с явным подтверждением разработчика: команда затрагивает всех потребителей
+пакета.
 
 ## Итог для разработчика
 
@@ -468,9 +404,7 @@ npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest
 - Не трогать `dist-tags` руками в штатном выпуске: то, что `latest` временно
   на `0.x`, — ожидаемое состояние, его снимает React 18-половина. Ручной
   `npm dist-tag add` допустим ровно в одном случае — восстановление зависшего
-  `latest`, интерактивно и с подтверждением разработчика (см. «Если `latest`
-  завис на 0.x»). В unattended — никогда.
-- Не запускаться после `1.Y.0` в unattended: `latest` уедет на `0.x`, а
+  `latest`, с подтверждением разработчика (см. «Если `latest` завис на 0.x»).
   вернуть его будет некому.
 - Не форс-пушить в `release-0` и не переписывать её историю.
 - Не «чинить» React 17-адаптации в сторону main — они намеренные.

@@ -85,7 +85,13 @@ export const VisualTests = () => (
                     <FormFieldLabel>Название поля</FormFieldLabel>
                     <FormFieldInput defaultValue="Значение" />
                     <FormFieldPostfix>
-                        <HelpBox tooltipSize={ETooltipSize.SM}>Подсказка к полю.</HelpBox>
+                        <HelpBox
+                            tooltipSize={ETooltipSize.SM}
+                            aria-label="Подсказка"
+                            tooltipXButtonProps={{ "aria-label": "Закрыть" }}
+                        >
+                            Подсказка к полю.
+                        </HelpBox>
                     </FormFieldPostfix>
                 </FormField>
             </FormGroup>

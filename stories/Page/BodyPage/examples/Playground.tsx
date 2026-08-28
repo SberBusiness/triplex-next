@@ -12,10 +12,12 @@ import {
 interface IPlaygroundArgs {
     type: EBodyPageType;
     size?: EComponentSize;
-    verticalMargin: EBodyPageVerticalMargin;
+    verticalMarginTop: EBodyPageVerticalMargin;
+    verticalMarginBottom: EBodyPageVerticalMargin;
 }
 
-export const Playground = ({ type, size, verticalMargin }: IPlaygroundArgs) => {
+export const Playground = ({ type, size, verticalMarginTop, verticalMarginBottom }: IPlaygroundArgs) => {
+    const verticalMargin = { top: verticalMarginTop, bottom: verticalMarginBottom };
     const content = (
         <Text tag="div" size={ETextSize.B2} type={EFontType.PRIMARY}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et

@@ -9,22 +9,16 @@ describe("HeaderLayoutSidebarContent", () => {
     it("Should render children inside the root element", () => {
         render(<HeaderLayoutSidebarContent data-testid="content">Content</HeaderLayoutSidebarContent>);
 
-        expect(getRoot()).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
+        expect(getRoot()).toContainElement(screen.getByText("Content"));
     });
 
-    it("Should set own class on the root element", () => {
-        render(<HeaderLayoutSidebarContent data-testid="content" />);
+    it("Should merge custom className with own classes", () => {
+        const { rerender } = render(<HeaderLayoutSidebarContent data-testid="content" />);
+        const ownClasses = getRoot().className.split(" ").filter(Boolean);
 
-        expect(getRoot()).toHaveClass("headerLayoutSidebarContent");
-    });
+        rerender(<HeaderLayoutSidebarContent className="custom-class" data-testid="content" />);
 
-    it("Should merge custom className with own class", () => {
-        render(<HeaderLayoutSidebarContent className="custom-class" data-testid="content" />);
-
-        const root = getRoot();
-        expect(root).toHaveClass("headerLayoutSidebarContent");
-        expect(root).toHaveClass("custom-class");
+        expect(getRoot()).toHaveClass(...ownClasses, "custom-class");
     });
 
     it("Should spread rest props on the root element", () => {

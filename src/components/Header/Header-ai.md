@@ -31,8 +31,8 @@ version: "1.0"
 
 Используй когда: нужен верхний блок с заголовком, действиями и табами внутри своего
 контейнера (`Island`, карточка, произвольный блок), и оформление задаёт этот контейнер.
-Не используй когда: нужен заголовок страницы — там `Page.Header` (`HeaderPage`), он по
-обязательному `type` либо оборачивает заголовок в карточку (`Island`) и умеет прилипать
+Не используй когда: нужен заголовок страницы — там `Page.Header` (`HeaderPage`), который в
+зависимости от обязательного `type` либо оборачивает заголовок в карточку (`Island`) и умеет прилипать
 к верхней границе экрана (`EHeaderPageType.FIRST`), либо рендерит голый `Header`
 (`EHeaderPageType.SECOND`).
 
@@ -69,8 +69,9 @@ version: "1.0"
 - Корневой `<div>` у `Header` не получает собственного класса — фон, рамку и внешние отступы
   задаёт контейнер-родитель либо переданный `className`.
 - `Header.LayoutSidebar.Sidebar` не задаёт себе горизонтального отступа от контента: расстояние
-  между колонками добавляет потребитель (`className` или `style`). Сама раскладка — только
-  `display: flex` + `justify-content: space-between` у родителя и `flex-grow: 1` у `Content`.
+  между колонками добавляет потребитель (`className` или `style`). Сама раскладка —
+  `display: flex` + `justify-content: space-between` у родителя, `flex-grow: 1` и
+  `min-width: 1px` у `Content`.
 - Кнопки действий внутри `Header.Title.Controls` на мобильных отступают от левого края через
   отрицательный `margin-left: -16px` у контейнера и `margin-left: 16px` у прямых потомков
   `> button` и `> [class*="buttonDropdown"]`. Другие обёртки вокруг кнопок этот отступ не получат.
@@ -87,6 +88,8 @@ version: "1.0"
 Раскладка задаётся литеральными значениями в `styles/`: `margin-top: 8px` у `HeaderTabs`,
 `padding: 24px 0` у `HeaderSubheader`, `padding-left: 24px` у обоих блоков `Controls`
 на десктопе и компенсирующие отступы 16px между кнопками при переносе на мобильных.
+На мобильных (до `@screen-sm-max`) у `HeaderTabs` другие значения: `margin-top: 16px`
+и `gap: 16px`.
 
 ---
 
@@ -108,6 +111,9 @@ version: "1.0"
   выставляются в дополнение к основным классам на `HeaderTitleContent` и `HeaderTitleControls`.
   Не удалять: они гасят `min-width: auto` у flex-элементов, без них длинный заголовок
   перестаёт сжиматься и ломает строку.
+- `min-width: 1px` у `.headerTabsContent` и `.headerLayoutSidebarContent` — тот же обход
+  `min-width: auto` у flex-элементов. Не удалять: у `.headerTabsContent` это ещё и фикс бага
+  с компонентом `Tabs` внутри `HeaderTabs`.
 - `displayName` — `"Header"`, `"HeaderTitle"`, `"HeaderTitleContent"`, `"HeaderTitleControls"`,
   `"HeaderTabs"`, `"HeaderTabsContent"`, `"HeaderTabsControls"`, `"HeaderSubheader"`,
   `"HeaderLayoutSidebar"`, `"HeaderLayoutSidebarContent"`, `"HeaderLayoutSidebarSidebar"`.

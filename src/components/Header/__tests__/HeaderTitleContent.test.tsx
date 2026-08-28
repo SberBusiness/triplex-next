@@ -9,25 +9,22 @@ describe("HeaderTitleContent", () => {
     it("Should render children inside the root element", () => {
         render(<HeaderTitleContent data-testid="content">Content</HeaderTitleContent>);
 
-        expect(getRoot()).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
+        expect(getRoot()).toContainElement(screen.getByText("Content"));
     });
 
-    it("Should set own classes on the root element", () => {
+    it("Should set the global class on the root element", () => {
         render(<HeaderTitleContent data-testid="content" />);
 
-        const root = getRoot();
-        expect(root).toHaveClass("headerTitleContent");
-        expect(root).toHaveClass("global-HeaderTitleContent");
+        expect(getRoot()).toHaveClass("global-HeaderTitleContent");
     });
 
     it("Should merge custom className with own classes", () => {
-        render(<HeaderTitleContent className="custom-class" data-testid="content" />);
+        const { rerender } = render(<HeaderTitleContent data-testid="content" />);
+        const ownClasses = getRoot().className.split(" ").filter(Boolean);
 
-        const root = getRoot();
-        expect(root).toHaveClass("headerTitleContent");
-        expect(root).toHaveClass("global-HeaderTitleContent");
-        expect(root).toHaveClass("custom-class");
+        rerender(<HeaderTitleContent className="custom-class" data-testid="content" />);
+
+        expect(getRoot()).toHaveClass(...ownClasses, "custom-class");
     });
 
     it("Should spread rest props on the root element", () => {

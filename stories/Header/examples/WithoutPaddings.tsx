@@ -15,11 +15,14 @@ export const WithoutPaddings = () => (
                         </Title>
                     </Header.Title.Content>
                 </Header.Title>
-                <Header.Subhead style={{ outline: "1px dashed currentColor" }}>
-                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                        Произвольный контент третьего уровня
-                    </Text>
-                </Header.Subhead>
+                {/* Пунктир на обёртке — только для наглядности границ отступов. */}
+                <div style={{ outline: "1px dashed currentColor" }}>
+                    <Header.Subhead>
+                        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                            Произвольный контент третьего уровня
+                        </Text>
+                    </Header.Subhead>
+                </div>
             </Header>
         </div>
         <div>
@@ -34,11 +37,14 @@ export const WithoutPaddings = () => (
                         </Title>
                     </Header.Title.Content>
                 </Header.Title>
-                <Header.Subhead withoutPaddings style={{ outline: "1px dashed currentColor" }}>
-                    <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                        Произвольный контент третьего уровня
-                    </Text>
-                </Header.Subhead>
+                {/* Пунктир на обёртке — только для наглядности границ отступов. */}
+                <div style={{ outline: "1px dashed currentColor" }}>
+                    <Header.Subhead withoutPaddings>
+                        <Text tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
+                            Произвольный контент третьего уровня
+                        </Text>
+                    </Header.Subhead>
+                </div>
             </Header>
         </div>
     </div>

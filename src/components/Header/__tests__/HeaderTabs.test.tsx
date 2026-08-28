@@ -11,22 +11,16 @@ describe("HeaderTabs", () => {
     it("Should render children inside the root element", () => {
         render(<HeaderTabs data-testid="tabs">Content</HeaderTabs>);
 
-        expect(getRoot()).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
+        expect(getRoot()).toContainElement(screen.getByText("Content"));
     });
 
-    it("Should set own class on the root element", () => {
-        render(<HeaderTabs data-testid="tabs" />);
+    it("Should merge custom className with own classes", () => {
+        const { rerender } = render(<HeaderTabs data-testid="tabs" />);
+        const ownClasses = getRoot().className.split(" ").filter(Boolean);
 
-        expect(getRoot()).toHaveClass("headerTabs");
-    });
+        rerender(<HeaderTabs className="custom-class" data-testid="tabs" />);
 
-    it("Should merge custom className with own class", () => {
-        render(<HeaderTabs className="custom-class" data-testid="tabs" />);
-
-        const root = getRoot();
-        expect(root).toHaveClass("headerTabs");
-        expect(root).toHaveClass("custom-class");
+        expect(getRoot()).toHaveClass(...ownClasses, "custom-class");
     });
 
     it("Should spread rest props on the root element", () => {

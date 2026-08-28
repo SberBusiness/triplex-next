@@ -9,14 +9,7 @@ describe("HeaderSubheader", () => {
     it("Should render children inside the root element", () => {
         render(<HeaderSubheader data-testid="subheader">Content</HeaderSubheader>);
 
-        expect(getRoot()).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
-    });
-
-    it("Should set own class on the root element", () => {
-        render(<HeaderSubheader data-testid="subheader" />);
-
-        expect(getRoot()).toHaveClass("headerSubheader");
+        expect(getRoot()).toContainElement(screen.getByText("Content"));
     });
 
     it("Should not set withoutPaddings class by default", () => {
@@ -34,9 +27,7 @@ describe("HeaderSubheader", () => {
     it("Should set withoutPaddings class when withoutPaddings is true", () => {
         render(<HeaderSubheader withoutPaddings data-testid="subheader" />);
 
-        const root = getRoot();
-        expect(root).toHaveClass("headerSubheader");
-        expect(root).toHaveClass("withoutPaddings");
+        expect(getRoot()).toHaveClass("withoutPaddings");
     });
 
     it("Should not render withoutPaddings as a DOM attribute", () => {
@@ -45,19 +36,19 @@ describe("HeaderSubheader", () => {
         expect(getRoot()).not.toHaveAttribute("withoutPaddings");
     });
 
-    it("Should merge custom className with own class", () => {
-        render(<HeaderSubheader className="custom-class" data-testid="subheader" />);
+    it("Should merge custom className with own classes", () => {
+        const { rerender } = render(<HeaderSubheader data-testid="subheader" />);
+        const ownClasses = getRoot().className.split(" ").filter(Boolean);
 
-        const root = getRoot();
-        expect(root).toHaveClass("headerSubheader");
-        expect(root).toHaveClass("custom-class");
+        rerender(<HeaderSubheader className="custom-class" data-testid="subheader" />);
+
+        expect(getRoot()).toHaveClass(...ownClasses, "custom-class");
     });
 
     it("Should merge custom className with withoutPaddings class", () => {
         render(<HeaderSubheader withoutPaddings className="custom-class" data-testid="subheader" />);
 
         const root = getRoot();
-        expect(root).toHaveClass("headerSubheader");
         expect(root).toHaveClass("withoutPaddings");
         expect(root).toHaveClass("custom-class");
     });

@@ -21,8 +21,7 @@ describe("Header", () => {
     it("Should render children inside the root element", () => {
         render(<Header data-testid="header">Content</Header>);
 
-        expect(getRoot()).toBeInTheDocument();
-        expect(screen.getByText("Content")).toBeInTheDocument();
+        expect(getRoot()).toContainElement(screen.getByText("Content"));
     });
 
     it("Should render a div as the root element", () => {

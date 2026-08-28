@@ -5,11 +5,14 @@ import {
     EFontType,
     EFormFieldStatus,
     ETextSize,
+    ETooltipSize,
     FormField,
     FormFieldDescription,
     FormFieldInput,
     FormFieldLabel,
+    FormFieldPostfix,
     FormGroup,
+    HelpBox,
     Text,
 } from "@sberbusiness/triplex-next";
 
@@ -76,8 +79,16 @@ export const VisualTests = () => (
         </div>
 
         <div style={columnStyle}>
-            <div style={captionStyle}>Пустая группа</div>
-            <FormGroup />
+            <div style={captionStyle}>Поле с подсказкой</div>
+            <FormGroup>
+                <FormField>
+                    <FormFieldLabel>Название поля</FormFieldLabel>
+                    <FormFieldInput defaultValue="Значение" />
+                    <FormFieldPostfix>
+                        <HelpBox tooltipSize={ETooltipSize.SM}>Подсказка к полю.</HelpBox>
+                    </FormFieldPostfix>
+                </FormField>
+            </FormGroup>
         </div>
     </div>
 );

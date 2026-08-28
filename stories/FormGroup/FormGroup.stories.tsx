@@ -19,7 +19,7 @@ const meta = {
             description: {
                 component:
                     "FormGroup — контейнер формы, объединяющий поле ввода с относящимися к нему элементами: " +
-                    "`FormField`, `FormFieldDescription`, `HelpBox`, `Alert`. Части передаются декларативно " +
+                    "`FormField`, `FormFieldDescription`, `HelpBox`, `AlertContext`. Части передаются декларативно " +
                     "через `children`, поэтому каждой можно задать свои props и data-атрибуты. " +
                     "Настраиваемых props нет — принимает `children` и стандартные HTML-атрибуты `div`. " +
                     "Собственных стилей и отступов не задаёт: расстояния между частями задают сами части.",

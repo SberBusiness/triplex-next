@@ -28,7 +28,7 @@ describe("FormGroup", () => {
     it("applies custom className to the root element", () => {
         render(<FormGroup className="custom" data-testid="form-group" />);
 
-        expect(screen.getByTestId("form-group")).toHaveClass("custom");
+        expect(screen.getByTestId("form-group").getAttribute("class")).toBe("custom");
     });
 
     it("forwards ref to the root div", () => {

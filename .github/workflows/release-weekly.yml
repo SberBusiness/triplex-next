@@ -221,7 +221,7 @@ jobs:
         env:
           V0: ${{ needs.preflight.outputs.v0 }}
           NEXT0: ${{ needs.preflight.outputs.next0 }}
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
         run: |
           set -eu
           npm version "${V0}" --no-git-tag-version
@@ -245,7 +245,7 @@ jobs:
           # Токен только здесь и только в URL push: в .git/config он не оседает.
           # GITHUB_TOKEN не годится — он не входит в списки branch protection
           # на main, и его пуши не запускают другие workflow.
-          git push "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:release-0
+          git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:release-0
 
   publish-react17:
     needs: [preflight, prepare-react17]
@@ -279,7 +279,7 @@ jobs:
         env:
           VERSION: ${{ needs.preflight.outputs.version }}
           NEXT: ${{ needs.preflight.outputs.next }}
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
         run: |
           set -eu
           npm version "${VERSION}" --no-git-tag-version
@@ -307,7 +307,7 @@ jobs:
           # Прямой push, без PR: настройка «bypass required pull requests»
           # разрешает именно пушить без PR. Вариант с PR упёрся бы в апрув
           # code owner'а, который бот сам себе поставить не может.
-          git push "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+          git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
 
   publish-react18:
     needs: [preflight, prepare-react18]

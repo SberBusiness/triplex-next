@@ -57,7 +57,7 @@ Storybook. Обратная сторона: **опубликованную ве�
 
 | Настройка | Где | Зачем |
 |---|---|---|
-| Секрет `RELEASE_TOKEN` | Settings → Secrets and variables → Actions | PAT `dudim-ai` (`contents: write`, `pull-requests: write`) — под ним workflow пушит бамп версии |
+| Секрет `DUDIM_AI_GH_TOKEN` | Settings → Secrets and variables → Actions | PAT `dudim-ai` (`contents: write`, `pull-requests: write`) — под ним workflow пушит бамп версии |
 | `dudim-ai` в push restrictions и в bypass required pull requests | Settings → Branches → правило для `main` | иначе прямой push бампа в защищённый `main` не пройдёт |
 
 `github-actions[bot]` в эти списки добавить нельзя — пикер показывает только

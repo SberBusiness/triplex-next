@@ -1,0 +1,49 @@
+// Оформление узла целиком на стороне потребителя: у TreeView нет собственных дизайн-токенов.
+// Токены CollapsibleTree переиспользованы здесь только для наглядности примера - это иллюстрация,
+// а не контракт TreeView. В своем коде задавайте оформление узла собственными стилями.
+
+.tree-view-nested-example {
+    &-group {
+        padding-left: 24px;
+
+        &.collapsed {
+            display: none;
+        }
+    }
+
+    &-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 8px;
+
+        &.branch {
+            cursor: pointer;
+        }
+
+        &:hover {
+            background: var(--triplex-next-CollapsibleTree-Header_Background_Hover);
+        }
+    }
+
+    [role="treeitem"]:focus-visible > .tree-view-nested-example-row {
+        box-shadow: var(--triplex-next-CollapsibleTree-Header_Shadow_Focus);
+    }
+
+    &-chevron {
+        flex: 0 0 auto;
+        transition: transform 200ms ease;
+        transform: rotate(0deg);
+
+        &.opened {
+            transform: rotate(-90deg);
+        }
+    }
+
+    &-chevron-placeholder {
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+    }
+}

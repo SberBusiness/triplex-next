@@ -82,7 +82,7 @@ export const Button_Tokens: TDesignTokensComponentsButtonValues = {
     Secondary_Color_Hover: [{ ref: "ColorBrand.50" }, { ref: "ColorBrand.70" }], // var(--triplex-next-Button-Secondary_Color_Hover)
     Secondary_Shadow_Focus: [{ value: "0 0 0 1px #FFD169 inset" }, { value: "0 0 0 1px #FFD169 inset" }], // var(--triplex-next-Button-Secondary_Shadow_Focus)
 
-    SecondaryLight_Background_Active: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Button-SecondaryLight_Background_Active)
+    SecondaryLight_Background_Active: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Button-SecondaryLight_Background_Active)
     SecondaryLight_Background_Default: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Button-SecondaryLight_Background_Default)
     SecondaryLight_Background_Disabled: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-SecondaryLight_Background_Disabled)
     SecondaryLight_Background_Hover: [{ ref: "ColorNeutral.80" }, { ref: "ColorDarkNeutral.60" }], // var(--triplex-next-Button-SecondaryLight_Background_Hover)

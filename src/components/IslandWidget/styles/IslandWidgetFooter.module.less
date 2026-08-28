@@ -4,7 +4,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 16px;
+
+    &.sm {
+        padding: 16px;
+    }
+
+    &.md {
+        padding: 24px;
+    }
+
+    &.lg {
+        padding: 32px;
+    }
 }
 
 .islandWidgetFooterContent {
@@ -17,11 +28,18 @@
     white-space: nowrap;
 }
 
-
 @media (max-width: @screen-sm-max) {
     .islandWidgetFooter {
         flex-direction: column;
         gap: 16px;
+
+        &.md {
+            padding: 16px;
+        }
+
+        &.lg {
+            padding: 24px;
+        }
     }
 
     .islandWidgetFooterControls {

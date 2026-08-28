@@ -64,6 +64,7 @@ export const IslandWidget = Object.assign(
                         adaptive,
                         disableAdaptiveCollapsing,
                         open,
+                        size,
                     }}
                 >
                     <div
@@ -74,15 +75,8 @@ export const IslandWidget = Object.assign(
                         {...rest}
                         ref={ref}
                     >
-                        <Island type={EIslandType.TYPE_1} size={size}>
-                            <div
-                                className={clsx({
-                                    [styles.islandWidgetHeaderWrapperAdaptive]: adaptive,
-                                })}
-                                onClick={adaptive ? handleHeaderClick : undefined}
-                            >
-                                {renderHeader({})}
-                            </div>
+                        <Island type={EIslandType.TYPE_1} size={size} withoutPaddings={true}>
+                            <div onClick={adaptive ? handleHeaderClick : undefined}>{renderHeader({})}</div>
                             {expandableContent ? (
                                 <ExpandAnimation expanded={open}>{renderContent()}</ExpandAnimation>
                             ) : (

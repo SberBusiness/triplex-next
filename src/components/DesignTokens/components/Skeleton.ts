@@ -2,10 +2,12 @@ import { TDesignTokenValue, TDesignTokenValues } from "../types/DesignTokenTypes
 
 // Название токенов компонента Skeleton.
 export const designTokensComponentsSkeletonKeys = [
-    "BackgroundColor_Light_Start",
-    "BackgroundColor_Light_End",
-    "BackgroundColor_Dark_Start",
-    "BackgroundColor_Dark_End",
+    "BackgroundColor_Type1_Start",
+    "BackgroundColor_Type1_End",
+    "BackgroundColor_Type2_Start",
+    "BackgroundColor_Type2_End",
+    "BackgroundColor_Type3_Start",
+    "BackgroundColor_Type3_End",
 ] as const;
 // Тип, содержащий названия токенов компонента Skeleton.
 export type TDesignTokensComponentsSkeletonKeys = (typeof designTokensComponentsSkeletonKeys)[number];
@@ -18,9 +20,12 @@ export type TDesignTokensComponentsSkeleton = { Skeleton: TDesignTokensComponent
 
 // Токены компонента Skeleton в светлой и темной темах.
 export const Skeleton_Tokens: TDesignTokensComponentsSkeletonValues = {
-    BackgroundColor_Light_Start: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Skeleton-BackgroundColor_Light_Start)
-    BackgroundColor_Light_End: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Skeleton-BackgroundColor_Light_End)
+    BackgroundColor_Type1_Start: [{ ref: "ColorNeutral.90" }, { ref: "ColorDarkNeutral.50" }], // var(--triplex-next-Skeleton-BackgroundColor_Type1_Start)
+    BackgroundColor_Type1_End: [{ ref: "ColorNeutral.40" }, { ref: "ColorDarkNeutral.70" }], // var(--triplex-next-Skeleton-BackgroundColor_Type1_End)
 
-    BackgroundColor_Dark_Start: [{ ref: "ColorDarkNeutralAlpha.100" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Skeleton-BackgroundColor_Dark_Start)
-    BackgroundColor_Dark_End: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.80" }], // var(--triplex-next-Skeleton-BackgroundColor_Dark_End)
+    BackgroundColor_Type2_Start: [{ ref: "ColorDarkNeutralAlpha.100" }, { ref: "ColorNeutralAlpha.100" }], // var(--triplex-next-Skeleton-BackgroundColor_Type2_Start)
+    BackgroundColor_Type2_End: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Skeleton-BackgroundColor_Type2_End)
+
+    BackgroundColor_Type3_Start: [{ ref: "ColorNeutralAlpha.70" }, { ref: "ColorDarkNeutralAlpha.80" }], // var(--triplex-next-Skeleton-BackgroundColor_Type3_Start)
+    BackgroundColor_Type3_End: [{ ref: "ColorNeutralAlpha.90" }, { ref: "ColorDarkNeutralAlpha.70" }], // var(--triplex-next-Skeleton-BackgroundColor_Type3_End)
 };

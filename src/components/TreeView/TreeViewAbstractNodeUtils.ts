@@ -3,29 +3,69 @@ import { TreeViewAbstractNode } from "./TreeViewAbstractNode";
 
 /** Утилиты для работы с AbstractNode. */
 interface ITreeViewAbstractNodeUtils {
-    // Возвращает активную ноду в случае ее наличия.
+    /** Возвращает активную ноду в случае ее наличия. */
     getActiveNode: (node: TreeViewAbstractNode) => TreeViewAbstractNode | undefined;
-    // Возвращает следующую ноду текущего уровня. Если prevNode имеет дочерние ноды, и prevNode.getOpened() === true будет возвращена первая дочерняя нода. Если prevNode - последняя нода текущего уровня, будет возвращена следующая нода
-    // верхнего уровня. Если верхний уровень - rootNode, будет возвращена первая дочерняя нода rootNode.
+    /**
+     * Возвращает следующую ноду текущего уровня. Если prevNode имеет дочерние ноды, и prevNode.getOpened() === true будет
+     * возвращена первая дочерняя нода. Если prevNode - последняя нода текущего уровня, будет возвращена следующая нода
+     * верхнего уровня. Если верхний уровень - rootNode, будет возвращена первая дочерняя нода rootNode.
+     */
     getNextNode: (prevNode: TreeViewAbstractNode) => TreeViewAbstractNode;
-    // Возвращает следующую ноду ткущего уровня. Если prevNode - последняя нода, будет возвращено undefined.
+    /** Возвращает следующую ноду текущего уровня. Если prevNode - последняя нода, будет возвращено undefined. */
     getNextSiblingNode: (prevNode: TreeViewAbstractNode) => TreeViewAbstractNode | undefined;
-    // Возвращает AbstractNode по id.
+    /** Возвращает AbstractNode по id. */
     getNode: (nodeId: string, rootNode: TreeViewAbstractNode) => TreeViewAbstractNode | undefined;
-    // Возвращает предыдущую ноду текущего уровня дерева. Если предыдущая нода имеет детей и она раскрыта, будет возвращена последняя ее дочерняя нода. Если nextNode - первая нода, будет возвращена родительская нода. Если верхний
-    // уровень - rootNode, будет возвращена последняя дочерняя нода rootNode.
+    /**
+     * Возвращает предыдущую ноду текущего уровня дерева. Если предыдущая нода имеет детей и она раскрыта, будет возвращена
+     * последняя ее дочерняя нода. Если nextNode - первая нода, будет возвращена родительская нода. Если верхний
+     * уровень - rootNode, будет возвращена последняя видимая нода дерева - ноды внутри свернутых веток пропускаются.
+     */
     getPrevNode: (nextNode: TreeViewAbstractNode) => TreeViewAbstractNode;
-    // Возвращает предыдущую ноду текущего уровня дерева. В случае если nextNode - первая нода, будет возвращено undefined.
+    /** Возвращает предыдущую ноду текущего уровня дерева. В случае если nextNode - первая нода, будет возвращено undefined. */
     getPrevSiblingNode: (nextNode: TreeViewAbstractNode) => TreeViewAbstractNode | undefined;
-    // Возвращает true если нода - последняя в дереве.
+    /** Возвращает true если нода - последняя в дереве. */
     isLastNode: (node: TreeViewAbstractNode) => boolean;
-    // Устанавливает флаг активности AbstractNode для следующей ноды дерева. Если нода раскрыта, будет активна первая дочерняя нода, если нода закрыта - будет активирована следующая нода этого же уровня.
+    /**
+     * Устанавливает флаг активности AbstractNode для следующей ноды дерева. Если нода раскрыта, будет активна первая
+     * дочерняя нода, если нода закрыта - будет активирована следующая нода этого же уровня.
+     */
     setActiveNextNode: (rootNode: TreeViewAbstractNode) => void;
-    // Устанавливает флаг активности AbstractNode.
+    /** Устанавливает флаг активности AbstractNode. */
     setActiveNode: (node: TreeViewAbstractNode, rootNode: TreeViewAbstractNode, isActive: boolean) => void;
-    // Устанавливает флаг активности AbstractNode для предыдущей ноды дерева.
+    /** Устанавливает флаг активности AbstractNode для предыдущей ноды дерева. */
     setActivePrevNode: (rootNode: TreeViewAbstractNode) => void;
 }
+
+/** Возвращает последнюю дочернюю ноду. Вызывается только для нод, у которых есть дочерние ноды. */
+const getLastChildNode = (node: TreeViewAbstractNode): TreeViewAbstractNode => {
+    const children = node.getChildren();
+
+    return children[children.length - 1];
+};
+
+/**
+ * Спускается от ноды к последней видимой дочерней ноде: пока нода раскрыта и имеет детей,
+ * переходит к последнему ребенку. Ноды внутри свернутых веток пропускаются.
+ */
+const getDeepestVisibleLastChildNode = (node: TreeViewAbstractNode): TreeViewAbstractNode => {
+    let lastNode = node;
+
+    while (lastNode.getOpened() && lastNode.getChildren().length) {
+        lastNode = getLastChildNode(lastNode);
+    }
+
+    return lastNode;
+};
+
+/**
+ * Возвращает индекс ноды среди дочерних нод родителя.
+ * Если нода среди них не найдена, возвращает 0 - нода трактуется как первая.
+ */
+const getNodeIndexInParent = (node: TreeViewAbstractNode, parentNodeChildren: TreeViewAbstractNode[]): number => {
+    const index = parentNodeChildren.findIndex((n) => n.getId() === node.getId());
+
+    return index === -1 ? 0 : index;
+};
 
 /** Утилиты для работы с AbstractNode. */
 export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
@@ -35,7 +75,7 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
         traverseAbstractTree(node, (n) => {
             if (n.getActive()) {
                 activeNode = n;
-                // Прервать обход дерева.
+                // Не углубляться в дочерние ноды.
                 return false;
             }
 
@@ -92,32 +132,27 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
         }
 
         const parentNodeChildren = parentNode.getChildren();
-        // Индекс текущей активной ноды в parentNodeChildren.
-        let currentActiveNodeIndex = 0;
-        // Поиск индекса текущей активной ноды в parentNodeChildren.
-        parentNodeChildren.some((n, index) => {
-            if (n.getId() === node.getId()) {
-                currentActiveNodeIndex = index;
-                return true;
-            }
-        });
+        // Индекс текущей ноды среди дочерних нод родителя.
+        const currentNodeIndex = getNodeIndexInParent(node, parentNodeChildren);
 
-        // Текущая активная нода - последняя.
-        if (currentActiveNodeIndex === parentNodeChildren.length - 1) {
+        // Текущая нода - последняя.
+        if (currentNodeIndex === parentNodeChildren.length - 1) {
             return undefined;
         }
 
         // Возвращается следующая нода.
-        return parentNodeChildren[currentActiveNodeIndex + 1];
+        return parentNodeChildren[currentNodeIndex + 1];
     },
     getNode: (nodeId, rootNode) => {
-        let result;
+        let result: TreeViewAbstractNode | undefined;
+
         traverseAbstractTree(rootNode, (node) => {
             if (node.getId() === nodeId) {
                 result = node;
-                // Прервать обход дерева.
+                // Не углубляться в дочерние ноды.
                 return false;
             }
+
             // Продолжить обход дерева.
             return true;
         });
@@ -135,31 +170,15 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
             if (parentNode.getParent()) {
                 return parentNode;
             }
-            // Если patentNode является rootNode.
+            // Если parentNode является rootNode.
             else {
-                let lastChild = parentNode.getChildren()[parentNode.getChildren().length - 1];
-
-                while (lastChild.getChildren().length > 0) {
-                    lastChild = lastChild.getChildren()[lastChild.getChildren().length - 1];
-                }
-                // Предыдущая нода - последняя нода дерева.
-                return lastChild;
+                // Предыдущая нода - последняя видимая нода дерева.
+                return getDeepestVisibleLastChildNode(getLastChildNode(parentNode));
             }
         }
 
-        let prevNode = prevSiblingNode;
-
-        while (true) {
-            const prevNodeChildren = prevNode.getChildren();
-            // Предыдущая нода раскрыта и имеет дочерние ноды. Предыдущей станет последняя ее дочерняя нода.
-            if (prevNode.getOpened() && prevNodeChildren.length) {
-                prevNode = prevNode.getChildren()[prevNode.getChildren().length - 1];
-            } else {
-                break;
-            }
-        }
-
-        return prevNode;
+        // Предыдущая нода раскрыта и имеет дочерние ноды. Предыдущей станет последняя ее видимая дочерняя нода.
+        return getDeepestVisibleLastChildNode(prevSiblingNode);
     },
     getPrevSiblingNode: (node) => {
         const parentNode = node.getParent();
@@ -169,30 +188,23 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
         }
 
         const parentNodeChildren = parentNode.getChildren();
-        // Индекс текущей активной ноды в массиве parentNode.getChildren().
-        let currentActiveNodeIndex = 0;
-        // Поиск индекса текущей активной ноды в массиве parentNode.getChildren().
-        parentNodeChildren.some((n, index) => {
-            if (n.getId() === node.getId()) {
-                currentActiveNodeIndex = index;
-                return true;
-            }
-        });
+        // Индекс текущей ноды среди дочерних нод родителя.
+        const currentNodeIndex = getNodeIndexInParent(node, parentNodeChildren);
 
-        // Текущая активная нода - первая.
-        if (currentActiveNodeIndex === 0) {
+        // Текущая нода - первая.
+        if (currentNodeIndex === 0) {
             return undefined;
         }
 
         // Возвращается предыдущая нода.
-        return parentNodeChildren[currentActiveNodeIndex - 1];
+        return parentNodeChildren[currentNodeIndex - 1];
     },
     isLastNode: (node) => {
         const parentNode = node.getParent();
 
         if (parentNode) {
             // Если нода является последней на текущем уровне.
-            if (parentNode.getChildren()[parentNode.getChildren().length - 1] == node) {
+            if (getLastChildNode(parentNode) === node) {
                 return TreeViewAbstractNodeUtils.isLastNode(parentNode);
             }
         }
@@ -227,6 +239,17 @@ export const TreeViewAbstractNodeUtils: ITreeViewAbstractNodeUtils = {
             });
         } else {
             node.setActive(false);
+
+            // Активность снимается со всего дерева: стрелки могли увести ее на другую ноду, пока DOM-фокус
+            // оставался на этой. Иначе после ухода фокуса дерево продолжало бы забирать стрелки у страницы.
+            traverseAbstractTree(rootNode, (n) => {
+                if (n.getActive()) {
+                    n.setActive(false);
+                }
+
+                // Продолжить обход дерева.
+                return true;
+            });
         }
     },
     setActivePrevNode: (rootNode) => {

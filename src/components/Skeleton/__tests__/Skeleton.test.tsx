@@ -13,25 +13,37 @@ describe("Skeleton", () => {
         const skeleton = getSkeleton();
         expect(skeleton).toBeInTheDocument();
         expect(skeleton).toHaveClass("skeleton");
-        expect(skeleton).toHaveClass("dark");
+        expect(skeleton).toHaveClass("type2");
     });
 
-    it("Should apply DARK type class correctly", () => {
-        render(<Skeleton type={ESkeletonType.DARK} data-testid="skeleton" />);
+    it("Should apply TYPE_1 type class correctly", () => {
+        render(<Skeleton type={ESkeletonType.TYPE_1} data-testid="skeleton" />);
 
         const skeleton = getSkeleton();
         expect(skeleton).toHaveClass("skeleton");
-        expect(skeleton).toHaveClass("dark");
-        expect(skeleton).not.toHaveClass("light");
+        expect(skeleton).toHaveClass("type1");
+        expect(skeleton).not.toHaveClass("type2");
+        expect(skeleton).not.toHaveClass("type3");
     });
 
-    it("Should apply LIGHT type class correctly", () => {
-        render(<Skeleton type={ESkeletonType.LIGHT} data-testid="skeleton" />);
+    it("Should apply TYPE_2 type class correctly", () => {
+        render(<Skeleton type={ESkeletonType.TYPE_2} data-testid="skeleton" />);
 
         const skeleton = getSkeleton();
         expect(skeleton).toHaveClass("skeleton");
-        expect(skeleton).toHaveClass("light");
-        expect(skeleton).not.toHaveClass("dark");
+        expect(skeleton).toHaveClass("type2");
+        expect(skeleton).not.toHaveClass("type1");
+        expect(skeleton).not.toHaveClass("type3");
+    });
+
+    it("Should apply TYPE_3 type class correctly", () => {
+        render(<Skeleton type={ESkeletonType.TYPE_3} data-testid="skeleton" />);
+
+        const skeleton = getSkeleton();
+        expect(skeleton).toHaveClass("skeleton");
+        expect(skeleton).toHaveClass("type3");
+        expect(skeleton).not.toHaveClass("type1");
+        expect(skeleton).not.toHaveClass("type2");
     });
 
     it("Should merge custom className with default classes", () => {
@@ -39,7 +51,7 @@ describe("Skeleton", () => {
 
         const skeleton = getSkeleton();
         expect(skeleton).toHaveClass("skeleton");
-        expect(skeleton).toHaveClass("dark");
+        expect(skeleton).toHaveClass("type2");
         expect(skeleton).toHaveClass("custom-skeleton");
     });
 });

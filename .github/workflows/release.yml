@@ -17,7 +17,7 @@ on:
         required: true
         default: main
       make_latest:
-        description: "Пометить релиз как Latest (только для 1.x)"
+        description: "Пометить релиз как Latest — обязательно для 1.Y.0, запрещено для 0.Y.0"
         type: boolean
         default: false
       notes:
@@ -85,6 +85,8 @@ jobs:
       - name: Validate release inputs
         env:
           TARGET: ${{ github.event.release.target_commitish || inputs.target }}
+          MAKE_LATEST: ${{ inputs.make_latest }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           if ! printf '%s' "${RELEASE_TAG}" | grep -qE '^[01]\.[0-9]+\.0$'; then
             echo "❌ tag=${RELEASE_TAG}: ожидается ровно 0.Y.0 или 1.Y.0 (минорный релиз, без prerelease)."
@@ -97,6 +99,26 @@ jobs:
           if [ "${TARGET}" != "${EXPECTED_TARGET}" ]; then
             echo "❌ tag=${RELEASE_TAG} должен выпускаться из ветки ${EXPECTED_TARGET}, а не из ${TARGET}."
             exit 1
+          fi
+
+          # make_latest не свободный параметр: его однозначно задаёт тег.
+          # `release-weekly.yml` передаёт правильные значения, но на пути
+          # `workflow_dispatch` галку ставит человек, и ошибка там тихая:
+          # 1.Y.0 с make_latest=false опубликуется в npm, а `latest` останется
+          # на React 17-сборке. Отказ до публикации дешевле разбирательства
+          # после неё — релиз отозвать нельзя.
+          #
+          # На пути `release: published` значения нет и шаг создания релиза
+          # не выполняется: релиз уже создал человек, проверять нечего.
+          if [ "${EVENT_NAME}" != "release" ]; then
+            case "${RELEASE_TAG}" in
+              1.*) EXPECTED_LATEST=true ;;
+              0.*) EXPECTED_LATEST=false ;;
+            esac
+            if [ "${MAKE_LATEST}" != "${EXPECTED_LATEST}" ]; then
+              echo "❌ tag=${RELEASE_TAG} требует make_latest=${EXPECTED_LATEST}, а передан '${MAKE_LATEST}'."
+              exit 1
+            fi
           fi
 
       # При `release: published` GITHUB_SHA — коммит, на который повешен тег,

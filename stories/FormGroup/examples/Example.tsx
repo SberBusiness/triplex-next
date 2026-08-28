@@ -37,9 +37,14 @@ export const Example = () => {
             <FormGroup>
                 <FormField status={EFormFieldStatus.ERROR}>
                     <FormFieldLabel>Сумма платежа</FormFieldLabel>
-                    <FormFieldInput value={amount} onChange={(event) => setAmount(event.target.value)} />
+                    <FormFieldInput
+                        value={amount}
+                        onChange={(event) => setAmount(event.target.value)}
+                        aria-invalid
+                        aria-describedby="amount-error"
+                    />
                 </FormField>
-                <FormFieldDescription>
+                <FormFieldDescription id="amount-error">
                     <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
                         Укажите сумму платежа
                     </Text>

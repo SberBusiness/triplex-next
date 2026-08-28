@@ -12,6 +12,7 @@ import {
     FormFieldLabel,
     FormFieldPostfix,
     FormGroup,
+    Gap,
     HelpBox,
     Text,
 } from "@sberbusiness/triplex-next";
@@ -74,6 +75,9 @@ export const VisualTests = () => (
                         Описание поля
                     </Text>
                 </FormFieldDescription>
+
+                <Gap size={8} />
+
                 <AlertContext type={EAlertType.INFO}>Сообщение, относящееся к полю.</AlertContext>
             </FormGroup>
         </div>

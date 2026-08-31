@@ -7,9 +7,40 @@ import { Island } from "@sberbusiness/triplex-next/components/Island/Island";
 import { EIslandType } from "@sberbusiness/triplex-next/components/Island/enums";
 import styles from "../styles/BodyPage.module.less";
 
-const verticalMarginToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
-    [EBodyPageVerticalMargin.LARGE]: styles.verticalMargin24,
-    [EBodyPageVerticalMargin.SMALL]: styles.verticalMargin16,
+const verticalMarginTopToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
+    [EBodyPageVerticalMargin.LARGE]: styles.marginTopLarge,
+    [EBodyPageVerticalMargin.SMALL]: styles.marginTopSmall,
+    [EBodyPageVerticalMargin.NONE]: styles.marginTopNone,
+};
+
+const verticalMarginBottomToClassNameMap: Record<EBodyPageVerticalMargin, string> = {
+    [EBodyPageVerticalMargin.LARGE]: styles.marginBottomLarge,
+    [EBodyPageVerticalMargin.SMALL]: styles.marginBottomSmall,
+    [EBodyPageVerticalMargin.NONE]: styles.marginBottomNone,
+};
+
+/** Вертикальные отступы BodyPage, заданные раздельно сверху и снизу. Обе стороны указываются явно. */
+export interface IBodyPageVerticalMarginSides {
+    /** Отступ сверху. */
+    top: EBodyPageVerticalMargin;
+    /** Отступ снизу. */
+    bottom: EBodyPageVerticalMargin;
+}
+
+/** Вертикальные отступы BodyPage: одно значение на обе стороны либо раздельные значения для верха и низа. */
+export type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMarginSides;
+
+/** Приводит значение verticalMargin к паре отступов: одно значение применяется к обеим сторонам. */
+const resolveVerticalMargin = (verticalMargin: TBodyPageVerticalMargin): IBodyPageVerticalMarginSides => {
+    // Проверка на null, а не только typeof: библиотеку зовут и из нетипизированного кода,
+    // а падать в рантайме у потребителя нельзя.
+    if (verticalMargin && typeof verticalMargin === "object") {
+        return verticalMargin;
+    }
+
+    const side = verticalMargin || EBodyPageVerticalMargin.LARGE;
+
+    return { top: side, bottom: side };
 };
 
 export interface IBodyPageTypeFirstProps extends IBodyProps {
@@ -21,9 +52,10 @@ export interface IBodyPageTypeFirstProps extends IBodyProps {
     size?: EComponentSize;
     /**
      * Вертикальные отступы (сверху и снизу).
-     * По умолчанию LARGE (24px); в LightBox следует использовать SMALL (16px).
+     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно.
+     * LARGE — 24px, SMALL — 16px, NONE — 0; в LightBox следует использовать SMALL.
      */
-    verticalMargin?: EBodyPageVerticalMargin;
+    verticalMargin?: TBodyPageVerticalMargin;
 }
 
 export interface IBodyPageTypeSecondProps extends IBodyProps {
@@ -35,15 +67,22 @@ export interface IBodyPageTypeSecondProps extends IBodyProps {
     size?: never;
     /**
      * Вертикальные отступы (сверху и снизу).
-     * По умолчанию LARGE (24px); в LightBox следует использовать SMALL (16px).
+     * Одно значение задаёт обе стороны, объект `{top, bottom}` — каждую отдельно.
+     * LARGE — 24px, SMALL — 16px, NONE — 0; в LightBox следует использовать SMALL.
      */
-    verticalMargin?: EBodyPageVerticalMargin;
+    verticalMargin?: TBodyPageVerticalMargin;
 }
 
 /** Тело компонента Page. Контейнер для основного контента страницы. */
 export const BodyPage = React.forwardRef<HTMLDivElement, IBodyPageTypeFirstProps | IBodyPageTypeSecondProps>(
     ({ className, type, size, verticalMargin = EBodyPageVerticalMargin.LARGE, ...rest }, ref) => {
-        const bodyPageClassNames = clsx(styles.bodyPage, verticalMarginToClassNameMap[verticalMargin], className);
+        const { top, bottom } = resolveVerticalMargin(verticalMargin);
+        const bodyPageClassNames = clsx(
+            styles.bodyPage,
+            verticalMarginTopToClassNameMap[top],
+            verticalMarginBottomToClassNameMap[bottom],
+            className,
+        );
 
         return type === EBodyPageType.FIRST ? (
             <Island className={bodyPageClassNames} type={EIslandType.TYPE_1} ref={ref} size={size}>

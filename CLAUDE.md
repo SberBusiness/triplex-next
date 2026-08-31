@@ -59,7 +59,7 @@ React 17 совместимость, modern story pattern, формат комм
 | `release` | skill | Оркестратор релиза: запускает `release-react17`, затем `release-react18` — порядок обратен номерам версий, чтобы `latest` остался на `1.Y.0` |
 | `release-react17` | skill | Первая половина: релиз `0.Y.0` из `release-0`; перелитие `main` → `release-0` делает человек заранее |
 | `release-react18` | skill | Вторая половина: релиз `1.Y.0` из `main` — версия, PR из `prerelease-X.Y.0`, мерж, GitHub Release, публикация, `latest` встаёт на `1.Y.0` |
-| `release-auto` | skill | Предполёт + запуск релиза из еженедельной routine; пустая заготовка release notes — релиза нет; в облаке готовит `0.Y.0`, публикацию завершает человек |
+| `release-auto` | skill | Отчёт по итогам еженедельного релиза: читает прогон `release-weekly.yml`, пишет резюме в Linear. Сам релиз делает GitHub Actions |
 | `update-visual-baselines` | skill | Baseline-скриншоты через CI-workflow + чистка orphan (автоматически в финале задач Linear) |
 | `address-pr-feedback` | skill | Отработка комментариев ревьюеров в PR: триаж → план → правки → ответы → резолв тредов |
 | `take-task` | skill | Взять задачу `TRI-XXX` из Linear: план → In Progress → ветка → агент → автокоммит + PR |

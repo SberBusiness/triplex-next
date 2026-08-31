@@ -3,12 +3,12 @@ component: Island
 category: Layout
 related: [IslandAccordion, IslandWidget, LoaderScreen, ModalWindow]
 tokens:
-  - --triplex-next-Island-Type1_Background
-  - --triplex-next-Island-Type1_Shadow
-  - --triplex-next-Island-Type2_Background
-  - --triplex-next-Island-Type2_Shadow
-  - --triplex-next-Island-Type3_Background
-  - --triplex-next-Island-Type3_Shadow
+  - Island.Type1_Background
+  - Island.Type1_Shadow
+  - Island.Type2_Background
+  - Island.Type2_Shadow
+  - Island.Type3_Background
+  - Island.Type3_Shadow
 stories: stories/Island/Island.stories.tsx
 version: "1.0"
 ---
@@ -126,13 +126,16 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-Island-Type1_Background
---triplex-next-Island-Type1_Shadow
---triplex-next-Island-Type2_Background
---triplex-next-Island-Type2_Shadow
---triplex-next-Island-Type3_Background
---triplex-next-Island-Type3_Shadow
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Island.ts`.
+
+```text
+Island.Type1_Background
+Island.Type1_Shadow
+Island.Type2_Background
+Island.Type2_Shadow
+Island.Type3_Background
+Island.Type3_Shadow
 ```
 
 Значения задаются в `src/components/DesignTokens/components/Island.ts`. `Type1_Shadow` и

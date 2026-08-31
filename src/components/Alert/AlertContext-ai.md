@@ -3,10 +3,10 @@ component: AlertContext
 category: Alert
 related: [AlertProcess]
 tokens:
-    - --triplex-next-AlertContext-Info_Color
-    - --triplex-next-AlertContext-Warning_Color
-    - --triplex-next-AlertContext-Error_Color
-    - --triplex-next-AlertContext-System_Color
+  - AlertContext.Info_Color
+  - AlertContext.Warning_Color
+  - AlertContext.Error_Color
+  - AlertContext.System_Color
 stories: stories/Alerts/AlertContext.stories.tsx
 version: "1.0"
 ---
@@ -61,11 +61,14 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/AlertContext.ts`.
+
 ```text
---triplex-next-AlertContext-Info_Color     // цвет текста для type=INFO
---triplex-next-AlertContext-Warning_Color  // цвет текста для type=WARNING
---triplex-next-AlertContext-Error_Color    // цвет текста для type=ERROR
---triplex-next-AlertContext-System_Color   // цвет текста для type=SYSTEM
+AlertContext.Info_Color     // цвет текста для type=INFO
+AlertContext.Warning_Color  // цвет текста для type=WARNING
+AlertContext.Error_Color    // цвет текста для type=ERROR
+AlertContext.System_Color   // цвет текста для type=SYSTEM
 ```
 
 Значения — в `src/components/DesignTokens/components/AlertContext.ts`. Обрати

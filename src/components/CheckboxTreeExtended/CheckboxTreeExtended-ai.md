@@ -3,7 +3,7 @@ component: CheckboxTreeExtended
 category: Inputs
 related: [CheckboxTree, CollapsibleTreeExtended, Checkbox]
 tokens:
-  - --triplex-next-Checkbox-BorderColor_Focus
+  - Checkbox.BorderColor_Focus
 stories: stories/CheckboxTreeExtended/CheckboxTreeExtended.stories.tsx
 version: "1.0"
 ---
@@ -88,11 +88,14 @@ render-функции узла.
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Checkbox.ts`.
+
 Собственных токенов компонент не вводит. Единственная CSS-переменная в стилях —
 у стрелки раскрытия (см. «Инварианты», сейчас не отрисовывается):
 
-```
---triplex-next-Checkbox-BorderColor_Focus
+```text
+Checkbox.BorderColor_Focus
 ```
 
 Размеры и цвета самих чекбоксов приходят из `Checkbox`, вертикальные отступы

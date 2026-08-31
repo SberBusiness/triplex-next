@@ -3,8 +3,8 @@ component: ModalWindow
 category: ModalWindow
 related: [ModalWindowContent, ModalWindowHeader, ModalWindowBody, ModalWindowFooter, ModalWindowClose, ModalWindowViewManager, Portal, FocusTrap, Page, HeaderPage, FooterPage, Island, LoaderScreen]
 tokens:
-  - --triplex-next-ModalWindow-Backdrop_Background
-  - --triplex-next-ModalWindow-Background
+  - ModalWindow.Backdrop_Background
+  - ModalWindow.Background
 stories: stories/ModalWindow/ModalWindow.stories.tsx
 version: "1.0"
 ---
@@ -53,9 +53,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ModalWindow.ts`.
+
 ```text
---triplex-next-ModalWindow-Backdrop_Background
---triplex-next-ModalWindow-Background
+ModalWindow.Backdrop_Background
+ModalWindow.Background
 ```
 
 Помимо токенов, компонент инжектит и читает несколько runtime CSS-переменных, не относящихся к дизайн-системе:

@@ -2,7 +2,9 @@
 component: Overlay
 category: Overlay
 related: [OverlayBase, OverlayMask, OverlayPanel, LightBox, TopOverlay, ModalWindow, DropdownMobile]
-tokens: [--triplex-next-Overlay-Background, --triplex-next-Overlay-Panel_Background]
+tokens:
+  - Overlay.Background
+  - Overlay.Panel_Background
 stories: stories/Overlay/Overlay.stories.tsx
 version: "1.34.0"
 ---
@@ -90,9 +92,12 @@ off-canvas) над контейнером или страницей.
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Overlay.ts`.
+
 ```
---triplex-next-Overlay-Background        // фон маски (OverlayMask)
---triplex-next-Overlay-Panel_Background  // фон панели (OverlayPanel)
+Overlay.Background        // фон маски (OverlayMask)
+Overlay.Panel_Background  // фон панели (OverlayPanel)
 ```
 
 Box-shadow панели и тайминги transition (`0.3s ease-in-out`) заданы константами в

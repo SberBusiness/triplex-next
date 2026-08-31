@@ -3,8 +3,8 @@ component: LoaderScreen
 category: Loaders
 related: [LoaderSmall, LoaderMiddle, Gap, Text, ModalWindowContent, LightBoxContent, LightBoxSideOverlay, List, TableBasic, MultiselectField]
 tokens:
-  - --triplex-next-LoaderScreen-Small_Backdrop_Default
-  - --triplex-next-LoaderScreen-Middle_Backdrop_Default
+  - LoaderScreen.Small_Backdrop_Default
+  - LoaderScreen.Middle_Backdrop_Default
 stories: stories/Loaders/LoaderScreen/LoaderScreen.stories.tsx
 version: "1.0"
 ---
@@ -85,19 +85,22 @@ LoaderScreen и сами фиксируют `type="middle"`. Потребите�
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/LoaderScreen.ts`.
+
 ```
---triplex-next-LoaderScreen-Small_Backdrop_Default    (подложка при type="small")
---triplex-next-LoaderScreen-Middle_Backdrop_Default   (подложка при type="middle")
+LoaderScreen.Small_Backdrop_Default    (подложка при type="small")
+LoaderScreen.Middle_Backdrop_Default   (подложка при type="middle")
 ```
 
 Определены в `src/components/DesignTokens/components/LoaderScreen.ts`. Оба ссылаются на
 `ColorNeutralAlpha.30` (в тёмной теме — `ColorDarkNeutralAlpha.30`), то есть визуально совпадают, но
 разведены по типам намеренно — чтобы дизайн мог развести их независимо.
 
-Там же объявлен третий токен `--triplex-next-LoaderScreen-Middle_Background_Default`, который стилями
+Там же объявлен третий токен `LoaderScreen.Middle_Background_Default`, который стилями
 LoaderScreen **не используется**: фон плашки `LoaderMiddle` берётся из
-`--triplex-next-Loader-Middle_Background_Default`, а точки — из
-`--triplex-next-Loader-Element_Background_Brand`. Токен остаётся в публичном наборе (его удаление —
+`Loader.Middle_Background_Default`, а точки — из
+`Loader.Element_Background_Brand`. Токен остаётся в публичном наборе (его удаление —
 breaking change для темизации), но опираться на него не нужно.
 
 Собственных цветов текста у компонента нет — они приходят из `Text` (`Typography`).

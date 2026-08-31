@@ -3,8 +3,8 @@ component: ListMasterFooter
 category: List
 related: [ListMaster, ListMasterFooterDescription, ListMasterFooterControls]
 tokens:
-  - --triplex-next-ListMaster-Footer_Background
-  - --triplex-next-ListMaster-Footer_Shadow
+  - ListMaster.Footer_Background
+  - ListMaster.Footer_Shadow
 stories: stories/ListMaster/ListMaster.stories.tsx
 version: "1.0"
 ---
@@ -37,9 +37,12 @@ align-items: center` — слева текст (`FooterDescription`), справ
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListMaster.ts`.
+
 ```
---triplex-next-ListMaster-Footer_Background  // фон футера
---triplex-next-ListMaster-Footer_Shadow      // тень сверху
+ListMaster.Footer_Background  // фон футера
+ListMaster.Footer_Shadow      // тень сверху
 ```
 
 ---

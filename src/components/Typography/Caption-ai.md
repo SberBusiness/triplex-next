@@ -3,28 +3,28 @@ component: Caption
 category: Typography
 related: [Text, Title, CodeText]
 tokens:
-  - --triplex-next-Typography-Primary_Color
-  - --triplex-next-Typography-PrimaryInvert_Color
-  - --triplex-next-Typography-Complementary_Color
-  - --triplex-next-Typography-ComplementaryInvert_Color
-  - --triplex-next-Typography-Secondary_Color
-  - --triplex-next-Typography-SecondaryInvert_Color
-  - --triplex-next-Typography-Tertiary_Color
-  - --triplex-next-Typography-TertiaryInvert_Color
-  - --triplex-next-Typography-Disabled_Color
-  - --triplex-next-Typography-DisabledInvert_Color
-  - --triplex-next-Typography-Brand_Color
-  - --triplex-next-Typography-BrandInvert_Color
-  - --triplex-next-Typography-Info_Color
-  - --triplex-next-Typography-InfoInvert_Color
-  - --triplex-next-Typography-Success_Color
-  - --triplex-next-Typography-SuccessInvert_Color
-  - --triplex-next-Typography-Warning_Color
-  - --triplex-next-Typography-WarningInvert_Color
-  - --triplex-next-Typography-Error_Color
-  - --triplex-next-Typography-ErrorInvert_Color
-  - --triplex-next-Typography-System_Color
-  - --triplex-next-Typography-SystemInvert_Color
+  - Typography.Primary_Color
+  - Typography.PrimaryInvert_Color
+  - Typography.Complementary_Color
+  - Typography.ComplementaryInvert_Color
+  - Typography.Secondary_Color
+  - Typography.SecondaryInvert_Color
+  - Typography.Tertiary_Color
+  - Typography.TertiaryInvert_Color
+  - Typography.Disabled_Color
+  - Typography.DisabledInvert_Color
+  - Typography.Brand_Color
+  - Typography.BrandInvert_Color
+  - Typography.Info_Color
+  - Typography.InfoInvert_Color
+  - Typography.Success_Color
+  - Typography.SuccessInvert_Color
+  - Typography.Warning_Color
+  - Typography.WarningInvert_Color
+  - Typography.Error_Color
+  - Typography.ErrorInvert_Color
+  - Typography.System_Color
+  - Typography.SystemInvert_Color
 stories: stories/Typography/Caption.stories.tsx
 version: "1.0"
 ---
@@ -73,7 +73,10 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Цвета — общие CSS-переменные семейства Typography (см. frontmatter): `--triplex-next-Typography-{Type}_Color` и `--triplex-next-Typography-{Type}Invert_Color`.
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Typography.ts`.
+
+Цвета — общие CSS-переменные семейства Typography (см. frontmatter): `Typography.{Type}_Color` и `Typography.{Type}Invert_Color`.
 
 Размеры шрифта и line-height — фиксированные пиксельные значения в `styles/Caption.module.less` (токенов для них нет).
 

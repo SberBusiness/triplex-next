@@ -55,11 +55,8 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm ci
-      # Пока *-ai.md не переведены на пути токенов, проверка красная по построению —
-      # поэтому она не блокирует PR. Блокирующей станет вместе с миграцией AI.md.
       - name: Check design tokens in AI.md
         run: npm run syncAiMdTokens -- --check
-        continue-on-error: true
 
   e2e:
     name: E2E tests

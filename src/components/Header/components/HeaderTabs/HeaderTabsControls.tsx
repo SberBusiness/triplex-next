@@ -3,9 +3,12 @@ import clsx from "clsx";
 import styles from "../../styles/HeaderTabs.module.less";
 
 /** Свойства компонента HeaderTabsControls. */
-export interface IHeaderTabsControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IHeaderTabsControlsProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Кнопки действий. */
+    children?: React.ReactNode;
+}
 
-/** Блок с кнопками действий HeaderTabs. */
+/** Блок с кнопками действий HeaderTabs. Прижат вправо, не сжимается. */
 export const HeaderTabsControls = React.forwardRef<HTMLDivElement, IHeaderTabsControlsProps>(
     ({ children, className, ...rest }, ref) => (
         <div className={clsx(styles.headerTabsControls, className)} {...rest} ref={ref}>

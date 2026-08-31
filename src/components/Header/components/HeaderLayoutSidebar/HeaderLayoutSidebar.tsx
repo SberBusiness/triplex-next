@@ -5,9 +5,15 @@ import { HeaderLayoutSidebarSidebar } from "./HeaderLayoutSidebarSidebar";
 import styles from "../../styles/HeaderLayoutSidebar.module.less";
 
 /** Свойства компонента HeaderLayoutSidebar. */
-export interface IHeaderLayoutSidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IHeaderLayoutSidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое раскладки. Обычно составные HeaderLayoutSidebar.Content и HeaderLayoutSidebar.Sidebar. */
+    children?: React.ReactNode;
+}
 
-/** Layout для Header с sidebar. */
+/**
+ * Layout для Header с sidebar. Раскладывает `HeaderLayoutSidebar.Content`
+ * и `HeaderLayoutSidebar.Sidebar` в строку; на ширине экрана до 767px sidebar скрывается.
+ */
 export const HeaderLayoutSidebar = Object.assign(
     React.forwardRef<HTMLDivElement, IHeaderLayoutSidebarProps>(function HeaderLayoutSidebar(
         { children, className, ...rest },

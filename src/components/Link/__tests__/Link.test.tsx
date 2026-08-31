@@ -189,6 +189,8 @@ describe("Link", () => {
 
             expect(container.querySelectorAll(".wordWithContent")).toHaveLength(1);
             expect(getWordWithContent("before-content")).toHaveTextContent("One Two");
+            // Ключевое: оба контента внутри одного блока — ради этого в isSingleBlock живёт второе условие.
+            expect(getWordWithContent("after-content")).toBe(getWordWithContent("before-content"));
         });
 
         it("Should glue contentBefore to first word and contentAfter to last word for three words", () => {

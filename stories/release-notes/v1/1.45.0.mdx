@@ -104,3 +104,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено свойство `errorText` для отображения текста ошибки внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`.
 - Исправлены цвета фона поля и иконки `SMSFieldRefresh` в состоянии `error` `disabled`.
+
+**Pagination**
+
+- Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).

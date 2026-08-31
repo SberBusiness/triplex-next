@@ -26,12 +26,12 @@
     align-items: center;
 }
 
-// Отступ между contentBefore и словом.
+// Отступ между contentBefore и словом. Селектор потомковый: 2px получает каждый первый потомок, включая вложенные.
 .before :first-child {
     margin-right: 2px;
 }
 
-// Отступ между словом и contentAfter.
+// Отступ между словом и contentAfter. Селектор потомковый: 2px получает каждый последний потомок, включая вложенные.
 .after :last-child {
     margin-left: 2px;
 }

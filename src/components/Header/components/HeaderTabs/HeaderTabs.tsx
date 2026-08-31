@@ -5,9 +5,16 @@ import clsx from "clsx";
 import styles from "../../styles/HeaderTabs.module.less";
 
 /** Свойства компонента HeaderTabs. */
-export interface IHeaderTabsProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IHeaderTabsProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое уровня. Обычно составные HeaderTabs.Content и HeaderTabs.Controls. */
+    children?: React.ReactNode;
+}
 
-/** Второй уровень Header. Содержит в себе табы и кнопки действий. */
+/**
+ * Второй уровень Header. Содержит в себе табы и кнопки действий.
+ * Раскладывает `HeaderTabs.Content` и `HeaderTabs.Controls` в строку,
+ * на ширине экрана до 767px кнопки переносятся под табы.
+ */
 export const HeaderTabs = Object.assign(
     React.forwardRef<HTMLDivElement, IHeaderTabsProps>(function HeaderTabs({ children, className, ...rest }, ref) {
         return (

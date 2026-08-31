@@ -64,6 +64,8 @@ version: "1.0"
 
 Расширяет `ISelectFieldProps` (без `size`, с обязательным `value`) и добавляет `paginationLabel: React.ReactNode` — текст лейбла перед селектом. Размер селекта зафиксирован как `EComponentSize.SM`. `value`, `options`, `onChange` — управляются потребителем.
 
+Распределение свойств по DOM: `className` идёт на корневой `<div>` (он задаёт раскладку лейбла и селекта), все остальные свойства (`data`-атрибуты, `id`, `aria`-атрибуты, `targetProps`, `dropdownProps`, `mobileTitle`, `placeholder` и прочие свойства `SelectField`) прокидываются в `SelectField`. `mobileTitle` по умолчанию равен `paginationLabel`, `targetProps` мержится с внутренним `fieldLabel: ""`, `aria-labelledby` по умолчанию указывает на лейбл, но переопределяется потребителем.
+
 ### Состояние загрузки внутри `MasterTable`
 
 Собственного prop загрузки у пагинации нет. Внутри `MasterTable` с `loading` элементы пагинации
@@ -109,6 +111,7 @@ version: "1.0"
 - Логику `PaginationUtils.createPagesArray` / `generatePageRanges` / `generateRange` не менять без перегенерации `__tests__/paginationUtils.test.tsx` — там зафиксированы граничные случаи раскладки.
 - `PAGINATION_ELLIPSIS_VALUE = -1` — sentinel в массиве страниц, на него завязан рендер многоточия.
 - Блокировка по `MasterTableContext.loading` перекрывает `disabled`, пришедший из props: в состоянии загрузки кнопка заблокирована независимо от того, что передал потребитель. Обратное неверно — вне загрузки решает prop.
+- `PaginationSelect` не должен терять свойства: его публичный тип — свойства `SelectField`, поэтому всё, что не разобрано явно, обязано уходить в `SelectField`. Точечные перечисления props вместо `...rest` здесь уже приводили к молчаливой потере `status`, `targetProps` и `data`-атрибутов.
 - Импорт `MasterTableContext` в частях пагинации — абсолютный (`@sberbusiness/triplex-next/components/Table/MasterTableContext`), как в самом `Table`. Относительный путь сюда не ставить.
 
 ---
@@ -156,5 +159,6 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-06-22 | Создан документ |
+| 2026-08-26 | `PaginationSelect` прокидывает в `SelectField` все свойства, которые не разбирает сам: `data`-атрибуты, `id`, `aria`-атрибуты, `targetProps`, `dropdownProps`, `mobileTitle` и т.д. Публичный API не изменился. |
 | 2026-08-12 | В состоянии загрузки `MasterTable` элементы пагинации становятся `disabled` — читается из `MasterTableContext.loading`. Публичный API не изменился. Заодно `PaginationSelect` перестал молча терять переданный `status`. |
 | 2026-08-27 | Навигация больше не скрывается при `totalPages <= 1`: отрисовывается одна страница с заблокированными стрелками, высота панели пагинации не схлопывается. Публичный API не изменился. |

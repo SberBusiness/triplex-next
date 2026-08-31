@@ -3,35 +3,35 @@ component: Calendar
 category: Date components
 related: [DatePickerExtended, DateField, DateRange, MonthYearField, MonthYearRange, ChipDatePicker]
 tokens:
-  - --triplex-next-Calendar-Background
-  - --triplex-next-Calendar-View_Header_Color
-  - --triplex-next-Calendar-View_Item_Background_Default
-  - --triplex-next-Calendar-View_Item_Background_Hover
-  - --triplex-next-Calendar-View_Item_Background_Selected_Default
-  - --triplex-next-Calendar-View_Item_Background_Selected_Hover
-  - --triplex-next-Calendar-View_Item_Background_Selected_Muted_Default
-  - --triplex-next-Calendar-View_Item_Background_Selected_Muted_Hover
-  - --triplex-next-Calendar-View_Item_BorderColor_Default
-  - --triplex-next-Calendar-View_Item_BorderColor_Focus
-  - --triplex-next-Calendar-View_Item_Color_Default
-  - --triplex-next-Calendar-View_Item_Color_Disabled
-  - --triplex-next-Calendar-View_Item_Color_Hover
-  - --triplex-next-Calendar-View_Item_Color_Muted
-  - --triplex-next-Calendar-View_Item_Color_Selected
-  - --triplex-next-Calendar-View_Item_Color_Selected_Muted_Default
-  - --triplex-next-Calendar-View_Item_Color_Selected_Muted_Hover
-  - --triplex-next-Calendar-View_Item_Mark_Basic_Background_Default
-  - --triplex-next-Calendar-View_Item_Mark_Basic_Background_Selected_Default
-  - --triplex-next-Calendar-View_Item_Mark_Basic_Background_Selected_Hover
-  - --triplex-next-Calendar-View_Item_Mark_Standard_Background_Default
-  - --triplex-next-Calendar-View_Item_Mark_Standard_Background_Selected_Default
-  - --triplex-next-Calendar-View_Item_Mark_Standard_Background_Selected_Hover
-  - --triplex-next-Calendar-View_Item_Mark_Attention_Background_Default
-  - --triplex-next-Calendar-View_Item_Mark_Attention_Background_Selected_Default
-  - --triplex-next-Calendar-View_Item_Mark_Attention_Background_Selected_Hover
-  - --triplex-next-Calendar-View_Item_Mark_Critical_Background_Default
-  - --triplex-next-Calendar-View_Item_Mark_Critical_Background_Selected_Default
-  - --triplex-next-Calendar-View_Item_Mark_Critical_Background_Selected_Hover
+  - Calendar.Background
+  - Calendar.View_Header_Color
+  - Calendar.View_Item_Background_Default
+  - Calendar.View_Item_Background_Hover
+  - Calendar.View_Item_Background_Selected_Default
+  - Calendar.View_Item_Background_Selected_Hover
+  - Calendar.View_Item_Background_Selected_Muted_Default
+  - Calendar.View_Item_Background_Selected_Muted_Hover
+  - Calendar.View_Item_BorderColor_Default
+  - Calendar.View_Item_BorderColor_Focus
+  - Calendar.View_Item_Color_Default
+  - Calendar.View_Item_Color_Disabled
+  - Calendar.View_Item_Color_Hover
+  - Calendar.View_Item_Color_Muted
+  - Calendar.View_Item_Color_Selected
+  - Calendar.View_Item_Color_Selected_Muted_Default
+  - Calendar.View_Item_Color_Selected_Muted_Hover
+  - Calendar.View_Item_Mark_Basic_Background_Default
+  - Calendar.View_Item_Mark_Basic_Background_Selected_Default
+  - Calendar.View_Item_Mark_Basic_Background_Selected_Hover
+  - Calendar.View_Item_Mark_Standard_Background_Default
+  - Calendar.View_Item_Mark_Standard_Background_Selected_Default
+  - Calendar.View_Item_Mark_Standard_Background_Selected_Hover
+  - Calendar.View_Item_Mark_Attention_Background_Default
+  - Calendar.View_Item_Mark_Attention_Background_Selected_Default
+  - Calendar.View_Item_Mark_Attention_Background_Selected_Hover
+  - Calendar.View_Item_Mark_Critical_Background_Default
+  - Calendar.View_Item_Mark_Critical_Background_Selected_Default
+  - Calendar.View_Item_Mark_Critical_Background_Selected_Hover
 stories: stories/Calendar/Calendar.stories.tsx
 version: "1.0"
 ---
@@ -92,36 +92,39 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-Calendar-Background
---triplex-next-Calendar-View_Header_Color
---triplex-next-Calendar-View_Item_Background_Default
---triplex-next-Calendar-View_Item_Background_Hover
---triplex-next-Calendar-View_Item_Background_Selected_Default
---triplex-next-Calendar-View_Item_Background_Selected_Hover
---triplex-next-Calendar-View_Item_Background_Selected_Muted_Default
---triplex-next-Calendar-View_Item_Background_Selected_Muted_Hover
---triplex-next-Calendar-View_Item_BorderColor_Default
---triplex-next-Calendar-View_Item_BorderColor_Focus
---triplex-next-Calendar-View_Item_Color_Default
---triplex-next-Calendar-View_Item_Color_Disabled
---triplex-next-Calendar-View_Item_Color_Hover
---triplex-next-Calendar-View_Item_Color_Muted
---triplex-next-Calendar-View_Item_Color_Selected
---triplex-next-Calendar-View_Item_Color_Selected_Muted_Default
---triplex-next-Calendar-View_Item_Color_Selected_Muted_Hover
---triplex-next-Calendar-View_Item_Mark_Basic_Background_Default
---triplex-next-Calendar-View_Item_Mark_Basic_Background_Selected_Default
---triplex-next-Calendar-View_Item_Mark_Basic_Background_Selected_Hover
---triplex-next-Calendar-View_Item_Mark_Standard_Background_Default
---triplex-next-Calendar-View_Item_Mark_Standard_Background_Selected_Default
---triplex-next-Calendar-View_Item_Mark_Standard_Background_Selected_Hover
---triplex-next-Calendar-View_Item_Mark_Attention_Background_Default
---triplex-next-Calendar-View_Item_Mark_Attention_Background_Selected_Default
---triplex-next-Calendar-View_Item_Mark_Attention_Background_Selected_Hover
---triplex-next-Calendar-View_Item_Mark_Critical_Background_Default
---triplex-next-Calendar-View_Item_Mark_Critical_Background_Selected_Default
---triplex-next-Calendar-View_Item_Mark_Critical_Background_Selected_Hover
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Calendar.ts`.
+
+```text
+Calendar.Background
+Calendar.View_Header_Color
+Calendar.View_Item_Background_Default
+Calendar.View_Item_Background_Hover
+Calendar.View_Item_Background_Selected_Default
+Calendar.View_Item_Background_Selected_Hover
+Calendar.View_Item_Background_Selected_Muted_Default
+Calendar.View_Item_Background_Selected_Muted_Hover
+Calendar.View_Item_BorderColor_Default
+Calendar.View_Item_BorderColor_Focus
+Calendar.View_Item_Color_Default
+Calendar.View_Item_Color_Disabled
+Calendar.View_Item_Color_Hover
+Calendar.View_Item_Color_Muted
+Calendar.View_Item_Color_Selected
+Calendar.View_Item_Color_Selected_Muted_Default
+Calendar.View_Item_Color_Selected_Muted_Hover
+Calendar.View_Item_Mark_Basic_Background_Default
+Calendar.View_Item_Mark_Basic_Background_Selected_Default
+Calendar.View_Item_Mark_Basic_Background_Selected_Hover
+Calendar.View_Item_Mark_Standard_Background_Default
+Calendar.View_Item_Mark_Standard_Background_Selected_Default
+Calendar.View_Item_Mark_Standard_Background_Selected_Hover
+Calendar.View_Item_Mark_Attention_Background_Default
+Calendar.View_Item_Mark_Attention_Background_Selected_Default
+Calendar.View_Item_Mark_Attention_Background_Selected_Hover
+Calendar.View_Item_Mark_Critical_Background_Default
+Calendar.View_Item_Mark_Critical_Background_Selected_Default
+Calendar.View_Item_Mark_Critical_Background_Selected_Hover
 ```
 
 Кнопки заголовка и футера используют токены `Button` / `ButtonIcon`.

@@ -2,7 +2,8 @@
 component: FooterPage
 category: Page
 related: [Page, HeaderPage, BodyPage, Footer, Island, LightBox]
-tokens: [--triplex-next-FooterPage-StickyShadow]
+tokens:
+  - FooterPage.StickyShadow
 stories: stories/Page/FooterPage/FooterPage.stories.tsx
 version: "1.0"
 ---
@@ -51,9 +52,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/FooterPage.ts`.
+
 | Токен | Назначение |
 |---|---|
-| `--triplex-next-FooterPage-StickyShadow` | Тень прилипшего футера (когда `sticky` и футер коснулся нижней границы, `data-stuck="true"`). |
+| `FooterPage.StickyShadow` | Тень прилипшего футера (когда `sticky` и футер коснулся нижней границы, `data-stuck="true"`). |
 
 Внешний вид карточки наследуется от `Island` (`EIslandType.TYPE_1`). Радиус нижних углов при
 прилипании плавно обнуляется через CSS-переменную `--r-bottom` (управляется хуком

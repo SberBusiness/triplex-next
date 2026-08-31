@@ -3,8 +3,8 @@ component: ListItemSelectable
 category: List
 related: [ListItem, ListItemContent, Checkbox]
 tokens:
-  - --triplex-next-ListItem-Background
-  - --triplex-next-ListItem-Background_Selected
+  - ListItem.Background
+  - ListItem.Background_Selected
 stories: stories/List/ListItem.stories.tsx
 version: "1.0"
 ---
@@ -45,9 +45,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItem.ts`.
+
 ```text
---triplex-next-ListItem-Background          // фон по умолчанию
---triplex-next-ListItem-Background_Selected // фон, когда selected=true
+ListItem.Background          // фон по умолчанию
+ListItem.Background_Selected // фон, когда selected=true
 ```
 
 ---

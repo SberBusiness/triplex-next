@@ -3,10 +3,10 @@ component: ListSortableItem
 category: List
 related: [ListSortable, ListSortableItemTarget, ListSortableItemControls, ListItem]
 tokens:
-  - --triplex-next-ListItem-Background
-  - --triplex-next-ListItem-Background_Selected
-  - --triplex-next-ListItem-Background_Dragging
-  - --triplex-next-ListItem-Shadow_Dragging
+  - ListItem.Background
+  - ListItem.Background_Hover
+  - ListItem.Background_Dragging
+  - ListItem.Shadow_Dragging
 stories: stories/List/List.stories.tsx
 version: "1.0"
 ---
@@ -54,14 +54,17 @@ drag-handle нужно вынести в отдельный элемент.
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItem.ts`.
+
 Сам `ListSortableItem` не использует токены (только z-index при `dragging`).
 Токены применяются в `ListSortableItem.Target`:
 
 ```text
---triplex-next-ListItem-Background           // фон по умолчанию
---triplex-next-ListItem-Background_Selected  // фон при hover
---triplex-next-ListItem-Background_Dragging  // фон во время drag
---triplex-next-ListItem-Shadow_Dragging      // тень во время drag
+ListItem.Background           // фон по умолчанию
+ListItem.Background_Hover     // фон при hover
+ListItem.Background_Dragging  // фон во время drag
+ListItem.Shadow_Dragging      // тень во время drag
 ```
 
 ---

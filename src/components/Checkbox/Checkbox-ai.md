@@ -3,20 +3,20 @@ component: Checkbox
 category: Inputs
 related: [CheckboxXGroup, CheckboxYGroup, CheckboxTree, CheckboxTreeExtended]
 tokens:
-  - --triplex-next-Checkbox-Background_Default
-  - --triplex-next-Checkbox-BorderColor_Default
-  - --triplex-next-Checkbox-Checkmark_Fill_Default
-  - --triplex-next-Checkbox-Background_Hover
-  - --triplex-next-Checkbox-BorderColor_Hover
-  - --triplex-next-Checkbox-Background_Checked_Default
-  - --triplex-next-Checkbox-BorderColor_Checked_Default
-  - --triplex-next-Checkbox-Background_Disabled
-  - --triplex-next-Checkbox-BorderColor_Disabled
-  - --triplex-next-Checkbox-Background_Checked_Disabled
-  - --triplex-next-Checkbox-BorderColor_Checked_Disabled
-  - --triplex-next-Checkbox-Checkmark_Fill_Disabled
-  - --triplex-next-Checkbox-BorderColor_Focus
-  - --triplex-next-Checkbox-Background_Checked_Hover
+  - Checkbox.Background_Default
+  - Checkbox.BorderColor_Default
+  - Checkbox.Checkmark_Fill_Default
+  - Checkbox.Background_Hover
+  - Checkbox.BorderColor_Hover
+  - Checkbox.Background_Checked_Default
+  - Checkbox.BorderColor_Checked_Default
+  - Checkbox.Background_Disabled
+  - Checkbox.BorderColor_Disabled
+  - Checkbox.Background_Checked_Disabled
+  - Checkbox.BorderColor_Checked_Disabled
+  - Checkbox.Checkmark_Fill_Disabled
+  - Checkbox.BorderColor_Focus
+  - Checkbox.Background_Checked_Hover
 stories: stories/Checkbox/Checkbox.stories.tsx
 version: "1.0"
 ---
@@ -62,21 +62,24 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-Checkbox-Background_Default
---triplex-next-Checkbox-BorderColor_Default
---triplex-next-Checkbox-Checkmark_Fill_Default
---triplex-next-Checkbox-Background_Hover
---triplex-next-Checkbox-BorderColor_Hover
---triplex-next-Checkbox-Background_Checked_Default
---triplex-next-Checkbox-BorderColor_Checked_Default
---triplex-next-Checkbox-Background_Disabled
---triplex-next-Checkbox-BorderColor_Disabled
---triplex-next-Checkbox-Background_Checked_Disabled
---triplex-next-Checkbox-BorderColor_Checked_Disabled
---triplex-next-Checkbox-Checkmark_Fill_Disabled
---triplex-next-Checkbox-BorderColor_Focus
---triplex-next-Checkbox-Background_Checked_Hover
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Checkbox.ts`.
+
+```text
+Checkbox.Background_Default
+Checkbox.BorderColor_Default
+Checkbox.Checkmark_Fill_Default
+Checkbox.Background_Hover
+Checkbox.BorderColor_Hover
+Checkbox.Background_Checked_Default
+Checkbox.BorderColor_Checked_Default
+Checkbox.Background_Disabled
+Checkbox.BorderColor_Disabled
+Checkbox.Background_Checked_Disabled
+Checkbox.BorderColor_Checked_Disabled
+Checkbox.Checkmark_Fill_Disabled
+Checkbox.BorderColor_Focus
+Checkbox.Background_Checked_Hover
 ```
 
 ---

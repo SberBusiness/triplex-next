@@ -15,10 +15,10 @@ related:
   - ButtonBase
   - MasterTable
 tokens:
-  - --triplex-next-Pagination-PageButton_Background_Hover
-  - --triplex-next-Pagination-PageButton_Background_Active
-  - --triplex-next-Pagination-PageButton_Background_Selected
-  - --triplex-next-Pagination-PageButton_BorderColor_Focus
+  - Pagination.PageButton_Background_Hover
+  - Pagination.PageButton_Background_Active
+  - Pagination.PageButton_Background_Selected
+  - Pagination.PageButton_BorderColor_Focus
 stories: stories/Pagination/Pagination.stories.tsx
 version: "1.0"
 ---
@@ -89,13 +89,16 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Pagination.ts`.
+
 Собственные токены использует только `PaginationPageButton`:
 
 ```text
---triplex-next-Pagination-PageButton_Background_Hover
---triplex-next-Pagination-PageButton_Background_Active
---triplex-next-Pagination-PageButton_Background_Selected
---triplex-next-Pagination-PageButton_BorderColor_Focus
+Pagination.PageButton_Background_Hover
+Pagination.PageButton_Background_Active
+Pagination.PageButton_Background_Selected
+Pagination.PageButton_BorderColor_Focus
 ```
 
 Остальные части наследуют визуал от переиспользуемых компонентов: кнопки навигации — от `ButtonIcon`, кнопка-страница — от `ButtonBase`, селект — от `SelectField`, текст — от `Typography` (`Text`).

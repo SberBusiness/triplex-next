@@ -3,8 +3,8 @@ component: LoaderMiddle
 category: Loaders
 related: [LoaderSmall, LoaderScreen, TableBasic]
 tokens:
-  - --triplex-next-Loader-Middle_Background_Default
-  - --triplex-next-Loader-Element_Background_Brand
+  - Loader.Middle_Background_Default
+  - Loader.Element_Background_Brand
 stories: stories/Loaders/LoaderMiddle/LoaderMiddle.stories.tsx
 version: "1.0"
 ---
@@ -48,9 +48,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Loader.ts`.
+
 ```text
---triplex-next-Loader-Middle_Background_Default
---triplex-next-Loader-Element_Background_Brand
+Loader.Middle_Background_Default
+Loader.Element_Background_Brand
 ```
 
 - `Middle_Background_Default` — фон квадратной подложки (`ColorNeutral.80` в светлой теме,

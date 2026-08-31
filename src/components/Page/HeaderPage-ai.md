@@ -2,7 +2,8 @@
 component: HeaderPage
 category: Page
 related: [Page, BodyPage, FooterPage, Header, Island, LightBox]
-tokens: [--triplex-next-HeaderPage-StickyShadow]
+tokens:
+  - HeaderPage.StickyShadow
 stories: stories/Page/HeaderPage/HeaderPage.stories.tsx
 version: "1.0"
 ---
@@ -52,9 +53,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/HeaderPage.ts`.
+
 | Токен | Назначение |
 |---|---|
-| `--triplex-next-HeaderPage-StickyShadow` | Тень прилипшего заголовка (когда `sticky` и заголовок коснулся верхней границы, `data-stuck="true"`). |
+| `HeaderPage.StickyShadow` | Тень прилипшего заголовка (когда `sticky` и заголовок коснулся верхней границы, `data-stuck="true"`). |
 
 Внешний вид карточки наследуется от `Island` (`EIslandType.TYPE_1`). Радиус верхних углов при
 прилипании плавно обнуляется через CSS-переменную `--r-top` (управляется хуком

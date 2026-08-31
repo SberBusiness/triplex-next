@@ -3,10 +3,10 @@ component: TableBasic
 category: Table
 related: [MasterTable, ListTableItem, LoaderScreen, LoaderMiddle, Text]
 tokens:
-  - --triplex-next-TableBasic-Header_Background
-  - --triplex-next-TableBasic-Color
-  - --triplex-next-TableBasic-Background_Hover
-  - --triplex-next-TableBasic-Background_Selected
+  - TableBasic.Header_Background
+  - TableBasic.Color
+  - TableBasic.Background_Hover
+  - TableBasic.Background_Selected
 stories: stories/TableBasic/TableBasic.stories.tsx
 version: "1.0"
 ---
@@ -93,15 +93,23 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-TableBasic-Header_Background
---triplex-next-TableBasic-Color
---triplex-next-TableBasic-Background_Hover
---triplex-next-TableBasic-Background_Selected
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/TableBasic.ts`.
+
+```text
+TableBasic.Header_Background
+TableBasic.Color
+TableBasic.Background_Hover
+TableBasic.Background_Selected
 ```
 
-Остальные токены группы `TableBasic-*` (`TableFooter_*`, `TableBasicSettings_*`)
-принадлежат соседним компонентам семейства, а не самому `TableBasic`.
+В группе `TableBasic` лежат и токены соседних компонентов семейства —
+`TableFooter_*` применяются в `TableFooter`, `TableBasicSettings_*` — в
+`TableBasicSettings`. Переопределяются они там же, в группе `TableBasic`:
+имя группы — не имя компонента. Здесь они не перечислены, потому что сам
+`TableBasic` их не использует, а собственных AI.md у этих компонентов пока нет —
+поэтому `syncAiMdTokens` и предупреждает, что токены есть в LESS директории,
+но не описаны ни в одном документе.
 
 ---
 

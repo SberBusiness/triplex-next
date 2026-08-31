@@ -18,10 +18,10 @@ export interface ISMSFieldRefreshProps extends React.ButtonHTMLAttributes<HTMLBu
 
 export const SMSFieldRefresh = forwardRef<HTMLButtonElement, ISMSFieldRefreshProps>(
     ({ className, disabled, countdownTime, countdownTimeLeft, onClick, onRefresh, ...restProps }, ref) => {
-        const { disabled: allDisabled, error, size, sizeClassName, tooltipId } = useContext(SMSFieldContext);
+        const { disabled: allDisabled, size, sizeClassName, tooltipId } = useContext(SMSFieldContext);
 
         const isSmsCountdownTicking = countdownTimeLeft > 0;
-        const refreshDisabled = (allDisabled && !error) || disabled || isSmsCountdownTicking;
+        const refreshDisabled = allDisabled || disabled || isSmsCountdownTicking;
         const refreshClassName = clsx(styles.btnRefresh, sizeClassName, className, {
             [styles.disabled]: refreshDisabled,
         });

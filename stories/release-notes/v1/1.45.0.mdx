@@ -99,3 +99,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MCP (mcp-data.json)**
 
 - В секцию `guides` добавлен топик `guidelines` (`docs/mcp/guidelines.md`) — правила кодогенерации на Triplex для ИИ-агентов; будет отдаваться инструментом `get_guidelines` MCP-сервера.
+
+**SMSField**
+
+- Добавлено свойство `errorText` для отображения текста ошибки внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`.
+- Исправлены цвета фона поля и иконки `SMSFieldRefresh` в состоянии `error` `disabled`.

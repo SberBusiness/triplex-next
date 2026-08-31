@@ -18,6 +18,14 @@
             }
         }
 
+        &.errorPlaceholder {
+            text-overflow: ellipsis;
+
+            &::placeholder {
+                color: var(--triplex-next-Typography-Error_Color);
+            }
+        }
+
         &.lg {
             padding: 18px 40px;
         }
@@ -61,6 +69,11 @@
 
         .empty {
             fill: var(--triplex-next-SMSField-Refresh_Fill_Empty);
+        }
+
+        &.disabled,
+        .disabled {
+            fill: var(--triplex-next-SMSField-Refresh_Disabled);
         }
 
         &:disabled {

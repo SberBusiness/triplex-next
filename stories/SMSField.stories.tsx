@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { EComponentSize } from "../src";
 import { SMSField } from "../src/components/SMSField";
-import { EFontType, ETextSize, Text } from "../src/components/Typography";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
 export default {
@@ -31,7 +30,10 @@ export default {
     ],
 } satisfies Meta<typeof SMSField>;
 
-type ISMSFieldProps = Partial<React.ComponentProps<typeof SMSField>>;
+type ISMSFieldProps = Partial<React.ComponentProps<typeof SMSField>> &
+    Partial<
+        Pick<React.ComponentProps<typeof SMSField.Input>, "description" | "errorText" | "maxLength" | "placeholder">
+    >;
 
 // Базовая логика для переиспользования.
 const useSMSFieldLogic = (value: string) => {
@@ -71,8 +73,9 @@ const useSMSFieldLogic = (value: string) => {
 export const Playground: StoryObj<ISMSFieldProps> = {
     name: "Playground",
     args: {
-        description: "Перейдите по",
         disabled: false,
+        error: false,
+        errorText: "Неверный код",
         maxLength: 8,
         placeholder: "Введите код",
         size: EComponentSize.MD,
@@ -85,6 +88,14 @@ export const Playground: StoryObj<ISMSFieldProps> = {
         disabled: {
             control: { type: "boolean" },
             description: "Признак блокировки компонента",
+        },
+        error: {
+            control: { type: "boolean" },
+            description: "Признак наличия ошибки",
+        },
+        errorText: {
+            control: { type: "text" },
+            description: "Текст ошибки, отображается вместо плейсхолдера",
         },
         maxLength: {
             control: { type: "number", min: 1 },
@@ -102,22 +113,22 @@ export const Playground: StoryObj<ISMSFieldProps> = {
     },
     parameters: {
         controls: {
-            include: ["description", "disabled", "maxLength", "placeholder", "size"],
+            include: ["description", "disabled", "error", "errorText", "maxLength", "placeholder", "size"],
         },
         testRunner: { skip: true },
     },
     render: (args: ISMSFieldProps) => {
-        const { disabled, maxLength, placeholder, size } = args;
+        const { description, disabled, error, errorText, maxLength, placeholder, size } = args;
         const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("");
 
         return (
             <SMSField
                 code={code}
                 disabled={disabled}
-                maxLength={maxLength}
+                error={error}
                 onChangeCode={onChange}
                 onSubmitCode={onSubmit}
-                size={size}
+                size={size ?? EComponentSize.MD}
             >
                 <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
                     <SMSField.Refresh
@@ -127,7 +138,12 @@ export const Playground: StoryObj<ISMSFieldProps> = {
                         ref={(el: HTMLButtonElement) => (targetRef.current = el)}
                     />
                 </SMSField.Tooltip>
-                <SMSField.Input placeholder={placeholder} />
+                <SMSField.Input
+                    description={description}
+                    errorText={errorText}
+                    maxLength={maxLength}
+                    placeholder={placeholder}
+                />
                 <SMSField.Submit />
             </SMSField>
         );
@@ -152,7 +168,6 @@ export const Error: StoryObj<ISMSFieldProps> = {
                             key={size}
                             code={code}
                             error={true}
-                            maxLength={8}
                             onChangeCode={onChange}
                             onSubmitCode={onSubmit}
                             size={size}
@@ -165,14 +180,7 @@ export const Error: StoryObj<ISMSFieldProps> = {
                                     ref={(el: HTMLButtonElement) => (targetRef.current = el)}
                                 />
                             </SMSField.Tooltip>
-                            <SMSField.Input
-                                description={
-                                    <Text tag="div" size={ETextSize.B4} type={EFontType.ERROR}>
-                                        Текст ошибки
-                                    </Text>
-                                }
-                                placeholder="Введите код"
-                            />
+                            <SMSField.Input errorText="Неверный код" maxLength={8} placeholder="Введите код" />
                             <SMSField.Submit />
                         </SMSField>
                     );
@@ -280,27 +288,70 @@ export const VisualTests: StoryObj<ISMSFieldProps> = {
         controls: { disable: true },
     },
     render: () => {
-        const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("12345678");
+        const filled = useSMSFieldLogic("12345678");
+        const errored = useSMSFieldLogic("");
+        const erroredDisabled = useSMSFieldLogic("");
 
         return (
-            <SMSField
-                code={code}
-                disabled={true}
-                onChangeCode={onChange}
-                onSubmitCode={onSubmit}
-                size={EComponentSize.MD}
-            >
-                <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
-                    <SMSField.Refresh
-                        countdownTime={5}
-                        countdownTimeLeft={timeLeft}
-                        onRefresh={onRefresh}
-                        ref={(el: HTMLButtonElement) => (targetRef.current = el)}
-                    />
-                </SMSField.Tooltip>
-                <SMSField.Input placeholder="Введите код" />
-                <SMSField.Submit />
-            </SMSField>
+            <>
+                <SMSField
+                    code={filled.code}
+                    disabled={true}
+                    onChangeCode={filled.onChange}
+                    onSubmitCode={filled.onSubmit}
+                    size={EComponentSize.MD}
+                >
+                    <SMSField.Tooltip targetRef={filled.targetRef} message="Текст подсказки">
+                        <SMSField.Refresh
+                            countdownTime={5}
+                            countdownTimeLeft={filled.timeLeft}
+                            onRefresh={filled.onRefresh}
+                            ref={(el: HTMLButtonElement) => (filled.targetRef.current = el)}
+                        />
+                    </SMSField.Tooltip>
+                    <SMSField.Input placeholder="Введите код" />
+                    <SMSField.Submit />
+                </SMSField>
+
+                <SMSField
+                    code={errored.code}
+                    error={true}
+                    onChangeCode={errored.onChange}
+                    onSubmitCode={errored.onSubmit}
+                    size={EComponentSize.MD}
+                >
+                    <SMSField.Tooltip targetRef={errored.targetRef} message="Текст подсказки">
+                        <SMSField.Refresh
+                            countdownTime={5}
+                            countdownTimeLeft={errored.timeLeft}
+                            onRefresh={errored.onRefresh}
+                            ref={(el: HTMLButtonElement) => (errored.targetRef.current = el)}
+                        />
+                    </SMSField.Tooltip>
+                    <SMSField.Input errorText="Неверный код" placeholder="Введите код" />
+                    <SMSField.Submit />
+                </SMSField>
+
+                <SMSField
+                    code={erroredDisabled.code}
+                    disabled={true}
+                    error={true}
+                    onChangeCode={erroredDisabled.onChange}
+                    onSubmitCode={erroredDisabled.onSubmit}
+                    size={EComponentSize.MD}
+                >
+                    <SMSField.Tooltip targetRef={erroredDisabled.targetRef} message="Текст подсказки">
+                        <SMSField.Refresh
+                            countdownTime={5}
+                            countdownTimeLeft={erroredDisabled.timeLeft}
+                            onRefresh={erroredDisabled.onRefresh}
+                            ref={(el: HTMLButtonElement) => (erroredDisabled.targetRef.current = el)}
+                        />
+                    </SMSField.Tooltip>
+                    <SMSField.Input errorText="Неверный код" placeholder="Введите код" />
+                    <SMSField.Submit />
+                </SMSField>
+            </>
         );
     },
 };

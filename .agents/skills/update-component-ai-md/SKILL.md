@@ -23,7 +23,7 @@ description: Создаёт или обновляет src/components/{Name}/{Nam
 |---|---|
 | `frontmatter.component, category` | Имя компонента и группа в barrel-структуре `src/components/` |
 | `frontmatter.related` | По правилу `docs/ai/CONTEXT.md` → «Как заполнять `related` в AI.md» |
-| `frontmatter.tokens` | Пути токенов `{Группа}.{Токен}`: grep по `var(--triplex-next-` в стилях компонента, css-имя переводится в путь (`--triplex-next-Button-General_Background_Default` → `Button.General_Background_Default`). Формат нормализует `npm run syncAiMdTokens` |
+| `frontmatter.tokens` | Пути токенов `{Группа}.{Токен}`: grep по `var(--triplex-next-` в стилях компонента, **исключая `--triplex-next-runtime-*`** (это не токены), css-имя переводится в путь (`--triplex-next-Button-General_Background_Default` → `Button.General_Background_Default`). Формат нормализует `npm run syncAiMdTokens` |
 | `frontmatter.stories` | Найти `*{Name}.stories.tsx` в `stories/` |
 | `frontmatter.version` | Текущая мажорная — `"1.0"` (минор обновляется при breaking change в API) |
 | Назначение | Из исходников + JSDoc на компоненте + название и роль в семействе |

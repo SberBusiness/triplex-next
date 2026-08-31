@@ -1,11 +1,16 @@
-import { describe, expect, it } from "vitest";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
     buildTokenRegistry,
     extractTokensFromLess,
     findForbiddenBodyMentions,
     findGroupCollisions,
+    isTokensBlockBroken,
     normalizeTokenEntry,
     readTokensBlock,
+    run,
     writeTokensBlock,
 } from "../syncAiMdTokens";
 
@@ -143,6 +148,13 @@ describe("writeTokensBlock", () => {
         expect(next).toContain('version: "1.0"');
     });
 
+    it("не трогает файл с незакрытым flow-списком", () => {
+        const markdown = aiMd(["tokens: [", '  "Calendar.Background",'].join("\n"));
+
+        expect(isTokensBlockBroken(markdown)).toBe(true);
+        expect(writeTokensBlock(markdown, ["Calendar.Background"])).toBe(markdown);
+    });
+
     it("идемпотентен", () => {
         const markdown = aiMd(["tokens:", "  - --triplex-next-Calendar-Background"].join("\n"));
         const once = writeTokensBlock(markdown, ["Calendar.Background"]);
@@ -205,5 +217,92 @@ describe("extractTokensFromLess", () => {
             "a { color: var(--triplex-next-Link-Text_Color_Default); } b { color: var(--triplex-next-Link-Text_Color_Default); }";
 
         expect(extractTokensFromLess(less)).toEqual(["Link.Text_Color_Default"]);
+    });
+});
+
+describe("run по конкретным файлам", () => {
+    let directory: string;
+
+    beforeEach(() => {
+        directory = mkdtempSync(join(tmpdir(), "sync-ai-md-tokens-"));
+    });
+
+    afterEach(() => {
+        rmSync(directory, { force: true, recursive: true });
+    });
+
+    const write = (content: string): string => {
+        const file = join(directory, "Component-ai.md");
+
+        writeFileSync(file, content);
+
+        return file;
+    };
+
+    it("нормализует переданный файл", () => {
+        const file = write(aiMd(["tokens:", "  - --triplex-next-Calendar-Background"].join("\n")));
+        const result = run(false, [file]);
+
+        expect(result.errors).toEqual([]);
+        expect(result.changed).toEqual([file]);
+        expect(readFileSync(file, "utf8")).toContain("tokens:\n  - Calendar.Background\n");
+    });
+
+    it("не переписывает файл с несуществующим токеном", () => {
+        const markdown = aiMd(
+            ["tokens:", "  - --triplex-next-Calendar-Background", "  - --triplex-next-scroll-width"].join("\n"),
+        );
+        const file = write(markdown);
+        const result = run(false, [file]);
+
+        expect(result.errors).toHaveLength(1);
+        expect(result.changed).toEqual([]);
+        expect(readFileSync(file, "utf8")).toBe(markdown);
+    });
+
+    it("не переписывает файл с незакрытым flow-списком", () => {
+        const markdown = aiMd(["tokens: [", '  "--triplex-next-Calendar-Background",'].join("\n"));
+        const file = write(markdown);
+        const result = run(false, [file]);
+
+        expect(result.errors).toHaveLength(1);
+        expect(result.changed).toEqual([]);
+        expect(readFileSync(file, "utf8")).toBe(markdown);
+    });
+
+    it("не сверяет с LESS при частичном прогоне", () => {
+        const file = write(aiMd(["tokens:", "  - Calendar.Background"].join("\n")));
+
+        expect(run(true, [file]).warnings).toEqual([]);
+    });
+});
+
+describe("run: ошибки в тексте не мешают нормализации frontmatter", () => {
+    let directory: string;
+
+    beforeEach(() => {
+        directory = mkdtempSync(join(tmpdir(), "sync-ai-md-tokens-body-"));
+    });
+
+    afterEach(() => {
+        rmSync(directory, { force: true, recursive: true });
+    });
+
+    it("нормализует блок и всё равно сообщает про css-переменную в тексте", () => {
+        const file = join(directory, "Component-ai.md");
+
+        writeFileSync(
+            file,
+            aiMd(
+                ["tokens:", "  - --triplex-next-Calendar-Background"].join("\n"),
+                "\nФон — `--triplex-next-Calendar-Background`.\n",
+            ),
+        );
+
+        const result = run(false, [file]);
+
+        expect(result.errors).toHaveLength(1);
+        expect(result.changed).toEqual([file]);
+        expect(readFileSync(file, "utf8")).toContain("tokens:\n  - Calendar.Background\n");
     });
 });

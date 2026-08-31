@@ -81,7 +81,7 @@ src/components/Button/
 10 групп) и `src/components/DesignTokens/components/{Group}.ts` (токены
 компонентов, 56 групп). Путь токена — `{Группа}.{Токен}`:
 
-```
+```text
 ColorBrand.50
 Button.General_Background_Default
 Calendar.View_Item_Background_Selected_Hover
@@ -156,11 +156,13 @@ tokens:
 ```bash
 npm run syncAiMdTokens            # нормализовать блоки tokens:
 npm run syncAiMdTokens -- --check # проверить, ничего не записывая
+npm run syncAiMdTokens -- --check src/components/Badge/Badge-ai.md # только эти файлы
 ```
 
 Скрипт не определяет состав токенов за автора (в одной директории живёт
 несколько компонентов с разными наборами) — он нормализует и проверяет то, что
-перечислено, а расхождения с LESS показывает предупреждениями.
+перечислено, а расхождения с LESS показывает предупреждениями. Файл, по которому
+нашлись ошибки, скрипт не переписывает — чинит автор.
 
 ---
 

@@ -75,6 +75,7 @@ version: "1.0"
 уровне, вложенности `core` / `components` в API нет.
 
 ```tsx
+import {useRef} from "react";
 import {ThemeProvider, ETriplexNextTheme} from "@sberbusiness/triplex-next";
 
 // tokens сравнивается по ссылке — объект вынесен из рендера, иначе <style> пересобирается

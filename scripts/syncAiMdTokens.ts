@@ -23,9 +23,15 @@
  * проверяет то, что перечислил автор, а расхождения с LESS показывает
  * предупреждениями.
  *
+ * Файл с нераспознанной или несуществующей записью в `tokens:` скрипт не переписывает:
+ * иначе он и ругался бы на запись, и молча удалял её из документа. Чинит автор.
+ * Ошибки в тексте документа нормализации frontmatter не мешают.
+ *
  * Запуск:
- *   npm run syncAiMdTokens            — нормализует файлы
+ *   npm run syncAiMdTokens            — нормализует все AI.md
  *   npm run syncAiMdTokens -- --check — только проверка, ничего не пишет
+ *   npm run syncAiMdTokens -- --check src/components/Badge/Badge-ai.md — по конкретным
+ *     файлам; сверка с LESS при этом не выполняется, она осмысленна только на полном прогоне
  */
 import { readFileSync, writeFileSync } from "fs";
 import { dirname } from "path";
@@ -145,6 +151,8 @@ interface ITokensBlock {
     /** Индекс первой строки после блока. */
     blockEnd: number;
     entries: string[];
+    /** Блок не разобран (например, незакрытый flow-список) — переписывать файл нельзя. */
+    broken?: boolean;
 }
 
 /**
@@ -183,8 +191,8 @@ const findTokensBlock = (markdown: string): ITokensBlock | null => {
         }
 
         if (!flow.includes("]")) {
-            // Незакрытый flow-список: не трогаем файл, пусть чинит автор.
-            return { line, blockEnd: line + 1, entries: [] };
+            // Незакрытый flow-список: границы блока неизвестны, переписывать файл нельзя.
+            return { line, blockEnd: line + 1, entries: [], broken: true };
         }
 
         const entries = flow
@@ -216,11 +224,17 @@ const findTokensBlock = (markdown: string): ITokensBlock | null => {
 /** Читает записи блока `tokens:` из frontmatter. */
 export const readTokensBlock = (markdown: string): string[] => findTokensBlock(markdown)?.entries ?? [];
 
-/** Переписывает блок `tokens:` во frontmatter. Пустой список пишется как `tokens: []`. */
+/** Сообщает, что блок `tokens:` не разобран и файл трогать нельзя. */
+export const isTokensBlockBroken = (markdown: string): boolean => findTokensBlock(markdown)?.broken === true;
+
+/**
+ * Переписывает блок `tokens:` во frontmatter. Пустой список пишется как `tokens: []`.
+ * Неразобранный блок возвращается без изменений — иначе от него остался бы хвост.
+ */
 export const writeTokensBlock = (markdown: string, tokens: string[]): string => {
     const block = findTokensBlock(markdown);
 
-    if (!block) {
+    if (!block || block.broken) {
         return markdown;
     }
 
@@ -293,7 +307,7 @@ interface IRunResult {
 }
 
 /** Нормализует и проверяет все AI.md. В режиме check ничего не пишет на диск. */
-export const run = (check: boolean): IRunResult => {
+export const run = (check: boolean, paths: string[] = []): IRunResult => {
     const registry = buildTokenRegistry();
     const collisions = findGroupCollisions(registry.coreGroups, registry.componentGroups);
     const result: IRunResult = { changed: [], errors: [], warnings: [] };
@@ -307,7 +321,10 @@ export const run = (check: boolean): IRunResult => {
         return result;
     }
 
-    const files = globSync(AI_MD_GLOB).sort();
+    // Сверка с LESS осмысленна только на полном прогоне: в директории несколько AI.md,
+    // и по одному файлу нельзя сказать, покрыт ли токен соседним документом.
+    const partial = paths.length > 0;
+    const files = (partial ? paths : globSync(AI_MD_GLOB)).sort();
     // Токены из LESS считаются один раз на директорию: в ней может быть несколько AI.md.
     const lessTokensByDirectory = new Map<string, Set<string>>();
     const declaredByDirectory = new Map<string, Set<string>>();
@@ -316,17 +333,27 @@ export const run = (check: boolean): IRunResult => {
         const markdown = readFileSync(file, "utf8");
         const entries = readTokensBlock(markdown);
         const normalized: string[] = [];
+        // Ошибки самого блока tokens: — при них файл не переписываем, иначе запись,
+        // на которую ругаемся, была бы молча удалена. Ошибки в тексте документа
+        // нормализации frontmatter не мешают.
+        let blockBroken = isTokensBlockBroken(markdown);
+
+        if (blockBroken) {
+            result.errors.push({ file, message: "Блок tokens: не разобран — незакрытый список." });
+        }
 
         entries.forEach((entry) => {
             const path = normalizeTokenEntry(entry);
 
             if (!path) {
                 result.errors.push({ file, message: `Запись "${entry}" не является путём токена.` });
+                blockBroken = true;
                 return;
             }
 
             if (!registry.paths.has(path)) {
                 result.errors.push({ file, message: `Токена "${path}" нет в дизайн-токенах.` });
+                blockBroken = true;
                 return;
             }
 
@@ -342,14 +369,20 @@ export const run = (check: boolean): IRunResult => {
             });
         });
 
-        const directory = dirname(file);
+        if (!partial) {
+            const directory = dirname(file);
 
-        if (!lessTokensByDirectory.has(directory)) {
-            lessTokensByDirectory.set(directory, readDirectoryLessTokens(directory));
-            declaredByDirectory.set(directory, new Set());
+            if (!lessTokensByDirectory.has(directory)) {
+                lessTokensByDirectory.set(directory, readDirectoryLessTokens(directory));
+                declaredByDirectory.set(directory, new Set());
+            }
+
+            normalized.forEach((path) => declaredByDirectory.get(directory)!.add(path));
         }
 
-        normalized.forEach((path) => declaredByDirectory.get(directory)!.add(path));
+        if (blockBroken) {
+            return;
+        }
 
         const next = writeTokensBlock(markdown, normalized);
 
@@ -386,8 +419,11 @@ export const run = (check: boolean): IRunResult => {
 };
 
 const main = (): void => {
-    const check = process.argv.includes("--check");
-    const { changed, errors, warnings } = run(check);
+    const args = process.argv.slice(2);
+    const check = args.includes("--check");
+    // Остальные аргументы — пути к конкретным AI.md; без них проверяются все.
+    const paths = args.filter((arg) => !arg.startsWith("--"));
+    const { changed, errors, warnings } = run(check, paths);
 
     warnings.forEach(({ file, message }) => console.warn(`warning ${file}: ${message}`));
     errors.forEach(({ file, message }) => console.error(`error ${file}: ${message}`));

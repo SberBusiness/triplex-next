@@ -95,7 +95,7 @@ off-canvas) над контейнером или страницей.
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Overlay.ts`.
 
-```
+```text
 Overlay.Background        // фон маски (OverlayMask)
 Overlay.Panel_Background  // фон панели (OverlayPanel)
 ```

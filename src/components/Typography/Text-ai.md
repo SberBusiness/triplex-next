@@ -77,7 +77,7 @@ version: "1.0"
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Typography.ts`.
 
-Цвета — только через CSS-переменные группы Typography (общие для всего семейства, см. frontmatter):
+Цвета — только через токены группы `Typography` (общие для всего семейства, см. frontmatter):
 
 ```text
 Typography.{Type}_Color

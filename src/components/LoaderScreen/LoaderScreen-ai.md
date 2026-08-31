@@ -88,7 +88,7 @@ LoaderScreen и сами фиксируют `type="middle"`. Потребите�
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/LoaderScreen.ts`.
 
-```
+```text
 LoaderScreen.Small_Backdrop_Default    (подложка при type="small")
 LoaderScreen.Middle_Backdrop_Default   (подложка при type="middle")
 ```

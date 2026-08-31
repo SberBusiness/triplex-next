@@ -4,7 +4,7 @@ category: List
 related: [ListSortable, ListSortableItemTarget, ListSortableItemControls, ListItem]
 tokens:
   - ListItem.Background
-  - ListItem.Background_Selected
+  - ListItem.Background_Hover
   - ListItem.Background_Dragging
   - ListItem.Shadow_Dragging
 stories: stories/List/List.stories.tsx
@@ -62,7 +62,7 @@ drag-handle нужно вынести в отдельный элемент.
 
 ```text
 ListItem.Background           // фон по умолчанию
-ListItem.Background_Selected  // фон при hover
+ListItem.Background_Hover     // фон при hover
 ListItem.Background_Dragging  // фон во время drag
 ListItem.Shadow_Dragging      // тень во время drag
 ```

@@ -94,7 +94,7 @@ Notification
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Notification.ts`.
 
-```
+```text
 Notification.Background   (фон уведомления)
 Notification.Color        (цвет текста)
 Notification.Shadow       (тень карточки)

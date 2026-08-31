@@ -40,7 +40,7 @@ Sticky-шапка `ListMaster`. Показывается обычно при в�
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListMaster.ts`.
 
-```
+```text
 ListMaster.Header_Background  // фон шапки
 ListMaster.Header_Shadow      // тень снизу
 ```

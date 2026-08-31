@@ -71,7 +71,7 @@ version: "1.0"
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Typography.ts`.
 
-Цвета — общие CSS-переменные семейства Typography (см. frontmatter): `Typography.{Type}_Color` и `Typography.{Type}Invert_Color`.
+Цвета — общие токены группы `Typography` (см. frontmatter): `Typography.{Type}_Color` и `Typography.{Type}Invert_Color`.
 
 Шрифт и размер — фиксированные значения в `styles/CodeText.module.less` (токенов для них нет).
 

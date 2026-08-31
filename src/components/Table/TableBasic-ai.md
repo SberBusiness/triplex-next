@@ -103,10 +103,13 @@ TableBasic.Background_Hover
 TableBasic.Background_Selected
 ```
 
-Остальные токены группы `TableBasic` (`TableFooter_*`, `TableBasicSettings_*`)
-принадлежат соседним компонентам семейства — `TableFooter` и `TableBasicSettings`,
-у которых пока нет собственных AI.md. Поэтому `syncAiMdTokens` предупреждает,
-что эти токены есть в LESS директории, но не перечислены ни в одном документе.
+В группе `TableBasic` лежат и токены соседних компонентов семейства —
+`TableFooter_*` применяются в `TableFooter`, `TableBasicSettings_*` — в
+`TableBasicSettings`. Переопределяются они там же, в группе `TableBasic`:
+имя группы — не имя компонента. Здесь они не перечислены, потому что сам
+`TableBasic` их не использует, а собственных AI.md у этих компонентов пока нет —
+поэтому `syncAiMdTokens` и предупреждает, что токены есть в LESS директории,
+но не описаны ни в одном документе.
 
 ---
 

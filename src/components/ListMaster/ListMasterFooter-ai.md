@@ -40,7 +40,7 @@ align-items: center` — слева текст (`FooterDescription`), справ
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListMaster.ts`.
 
-```
+```text
 ListMaster.Footer_Background  // фон футера
 ListMaster.Footer_Shadow      // тень сверху
 ```

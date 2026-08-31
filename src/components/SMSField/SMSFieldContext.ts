@@ -8,8 +8,6 @@ export interface ISMSFieldContext {
     disabled: boolean;
     /** Отключённое состояние кнопки Submit. */
     disabledSubmit: boolean;
-    /** Признак наличия ошибки. */
-    error: boolean;
     /** Обработчик изменения кода. */
     onChangeCode: (code: string) => void;
     /** Обработчик отправки кода. */
@@ -30,7 +28,6 @@ const contextInitial: ISMSFieldContext = {
     code: "",
     disabled: false,
     disabledSubmit: true,
-    error: false,
     onChangeCode: () => {},
     onSubmitCode: () => {},
     setDisabledSubmit: () => {},

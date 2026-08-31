@@ -22,8 +22,7 @@ interface ISMSFieldComposition {
 
 /** Компонент для ввода СМС. */
 export const SMSField: React.FC<ISMSFieldProps> & ISMSFieldComposition = (props) => {
-    const { children, className, code, disabled, error, onChangeCode, onSubmitCode, size, ...htmlDivAttributes } =
-        props;
+    const { children, className, code, disabled, onChangeCode, onSubmitCode, size, ...htmlDivAttributes } = props;
 
     const [disabledSubmit, setDisabledSubmit] = useState(true);
     const [tooltipId, setTooltipId] = useState<string>();
@@ -35,7 +34,6 @@ export const SMSField: React.FC<ISMSFieldProps> & ISMSFieldComposition = (props)
                 code,
                 disabled: !!disabled,
                 disabledSubmit,
-                error: !!error,
                 onChangeCode,
                 onSubmitCode,
                 setDisabledSubmit,

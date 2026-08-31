@@ -8,8 +8,6 @@ export interface ISMSFieldProps extends React.HTMLAttributes<HTMLDivElement>, Te
     code: string;
     /** Признак блокировки компонента. */
     disabled?: boolean;
-    /** Признак наличия ошибки. */
-    error?: boolean;
     /** Обработчик изменения кода. */
     onChangeCode: (code: string) => void;
     /** Обработчик отправки кода. */

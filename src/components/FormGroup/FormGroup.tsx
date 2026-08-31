@@ -1,16 +1,21 @@
-import React from 'react';
+import React from "react";
 
 /** Свойства компонента FormGroup. */
-interface IFormGroupProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface IFormGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Части группы: поле ввода и относящиеся к нему подсказки и сообщения. */
+    children?: React.ReactNode;
+}
 
 /**
- * Элемент, объединяющий FormField, HelpBox, Alert, Description.
- * Дочерние элементы, передаются декларативно, это позволяет их кастомизировать и передавать data-атрибуты.
+ * Контейнер формы, объединяющий поле ввода с относящимися к нему элементами — `FormField`,
+ * `FormFieldDescription`, `HelpBox`, `AlertContext`. Части передаются декларативно через `children`,
+ * поэтому каждой можно задать свои props и data-атрибуты. Собственной разметки и стилей не
+ * добавляет: рендерит один `div` с переданными атрибутами.
  */
-export const FormGroup = React.forwardRef<HTMLDivElement, IFormGroupProps>(({children, ...rest}, ref) => (
+export const FormGroup = React.forwardRef<HTMLDivElement, IFormGroupProps>(({ children, ...rest }, ref) => (
     <div ref={ref} {...rest}>
         {children}
     </div>
 ));
 
-FormGroup.displayName = 'FormGroup';
+FormGroup.displayName = "FormGroup";

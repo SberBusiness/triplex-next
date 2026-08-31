@@ -257,6 +257,42 @@ describe("SwipeableArea", () => {
         expect(getContent().style.transform).toBe("translateX(0px)");
     });
 
+    it("disables pointer events on the content while an area is opened", () => {
+        const ref = React.createRef<ISwipeableAreaRef>();
+
+        renderSwipeableArea({}, ref);
+
+        expect(getContent()).not.toHaveClass("disablePointerEvents");
+
+        act(() => ref.current?.swipeLeft());
+        expect(getContent()).toHaveClass("disablePointerEvents");
+
+        act(() => ref.current?.closeSwipe());
+        expect(getContent()).not.toHaveClass("disablePointerEvents");
+    });
+
+    it("shows the side area proportionally to the content shift", () => {
+        const ref = React.createRef<ISwipeableAreaRef>();
+
+        renderSwipeableArea({}, ref);
+
+        const rightArea = getParent(screen.getByTestId("right-area"));
+
+        // Область открыта полностью — сдвиг контента равен её ширине.
+        act(() => ref.current?.swipeLeft());
+        expect(rightArea.style.opacity).toBe("1");
+
+        // Закрытая область не проявлена.
+        act(() => ref.current?.closeSwipe());
+        expect(rightArea.style.opacity).toBe("0");
+
+        // На середине жеста область проявлена наполовину.
+        touchStart(200);
+        touchMove(150);
+        touchMove(150);
+        expect(rightArea.style.opacity).toBe("0.5");
+    });
+
     it("removes the animation class when the swipe animation is finished", () => {
         const ref = React.createRef<ISwipeableAreaRef>();
 
@@ -271,16 +307,25 @@ describe("SwipeableArea", () => {
     });
 
     it("removes document listeners on unmount", () => {
+        const addEventListener = vi.spyOn(document, "addEventListener");
         const removeEventListener = vi.spyOn(document, "removeEventListener");
 
         const { unmount } = renderSwipeableArea();
 
         touchStart(200);
+
+        // Слушатель touchend вешается только на время жеста, поэтому его ссылку нужно запомнить.
+        const touchEndHandler = addEventListener.mock.calls.find(([type]) => type === "touchend")?.[1];
+
+        expect(touchEndHandler).toBeDefined();
+
         unmount();
 
         expect(removeEventListener).toHaveBeenCalledWith("touchstart", expect.any(Function));
-        expect(removeEventListener).toHaveBeenCalledWith("touchend", expect.any(Function));
+        // Снимается ровно тот слушатель, который был повешен на старте жеста.
+        expect(removeEventListener).toHaveBeenCalledWith("touchend", touchEndHandler);
 
+        addEventListener.mockRestore();
         removeEventListener.mockRestore();
     });
 });

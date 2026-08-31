@@ -3,8 +3,8 @@ export const SWIPE_MIN_DISTANCE = 24;
 
 /** Направление завершённого свайпа. */
 export enum ESwipeDirection {
-    left = "left",
-    right = "right",
+    LEFT = "left",
+    RIGHT = "right",
 }
 
 /** Ширина элемента. Если элемента нет — 0. */
@@ -87,6 +87,10 @@ export interface IResolveSwipeEndResult {
  * Возвращает итоговую координату контента при отпускании пальца и направление открывшего свайпа.
  * Область открывается или закрывается, только если длина свайпа превысила SWIPE_MIN_DISTANCE,
  * иначе контент возвращается в положение, которое занимал на старте свайпа.
+ *
+ * Предусловие: ширина области, в сторону которой шёл свайп, больше нуля. Отсутствующая область
+ * отсеивается раньше — resolveSwipeMove не даёт сдвинуть контент в её сторону, поэтому до
+ * отпускания пальца дело не доходит.
  */
 export const resolveSwipeEnd = ({
     translateX,
@@ -105,8 +109,8 @@ export const resolveSwipeEnd = ({
         }
 
         return deltaTranslateX > 0
-            ? { translateX: -rightAreaWidth, direction: ESwipeDirection.left }
-            : { translateX: leftAreaWidth, direction: ESwipeDirection.right };
+            ? { translateX: -rightAreaWidth, direction: ESwipeDirection.LEFT }
+            : { translateX: leftAreaWidth, direction: ESwipeDirection.RIGHT };
     }
 
     // Свайп закрытия левой области — закрывает только движение влево.

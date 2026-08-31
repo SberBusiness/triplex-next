@@ -66,14 +66,14 @@ describe("SwipeableArea utils", () => {
         it("opens the right area when swipe left is longer than the threshold", () => {
             expect(resolveSwipeEnd({ ...params, translateX: -(SWIPE_MIN_DISTANCE + 1) })).toEqual({
                 translateX: -100,
-                direction: ESwipeDirection.left,
+                direction: ESwipeDirection.LEFT,
             });
         });
 
         it("opens the left area when swipe right is longer than the threshold", () => {
             expect(resolveSwipeEnd({ ...params, translateX: SWIPE_MIN_DISTANCE + 1 })).toEqual({
                 translateX: 80,
-                direction: ESwipeDirection.right,
+                direction: ESwipeDirection.RIGHT,
             });
         });
 

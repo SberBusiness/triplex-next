@@ -80,9 +80,9 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
 
             setContentTranslateX(translateX);
 
-            if (direction === ESwipeDirection.left) {
+            if (direction === ESwipeDirection.LEFT) {
                 onSwipeLeft?.();
-            } else if (direction === ESwipeDirection.right) {
+            } else if (direction === ESwipeDirection.RIGHT) {
                 onSwipeRight?.();
             }
         };

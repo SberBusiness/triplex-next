@@ -5,9 +5,17 @@ import { HeaderSubheader } from "./components/HeaderSubheader/HeaderSubheader";
 import { HeaderLayoutSidebar } from "./components/HeaderLayoutSidebar/HeaderLayoutSidebar";
 
 /** Свойства компонента Header. */
-export interface IHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое заголовка. Обычно составные Header.Title, Header.Tabs и Header.Subhead. */
+    children?: React.ReactNode;
+}
 
-/** Заголовок. */
+/**
+ * Заголовок. Контейнер верхнего блока, собирающий уровни заголовка:
+ * `Header.Title` (заголовок и кнопки действий), `Header.Tabs` (табы и кнопки действий)
+ * и `Header.Subhead` (произвольный контент). Собственной визуальной оболочки не имеет —
+ * фон, рамку и отступы задаёт контейнер-родитель.
+ */
 export const Header = Object.assign(
     React.forwardRef<HTMLDivElement, IHeaderProps>(function Header({ children, ...rest }, ref) {
         return (

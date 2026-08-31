@@ -119,9 +119,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Footer | ✅ | ✅ | ✅ |
 | FooterPage | ✅ | ✅ | ✅ |
 | FormField | ✅ | ✅ | ✅ |
-| FormGroup | ⬜ | ⬜ | ⬜ |
+| FormGroup | ✅ | ✅ | ✅ |
 | Gap | ✅ | ✅ | ✅ |
-| Header | ⬜ | ⬜ | ⬜ |
+| Header | ✅ | ✅ | ✅ |
 | HeaderPage | ✅ | ✅ | ✅ |
 | HelpBox | ✅ | ✅ | ⬜ |
 | IconWrapper | ✅ | ✅ | ✅ |
@@ -151,7 +151,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Marker | ⬜ | ⬜ | ⬜ |
 | MarkerStatus | ⬜ | ✅ | ⬜ |
 | MaskedField | ✅ | ✅ | ✅ |
-| MasterTable | ⬜ | ⬜ | ⬜ |
+| MasterTable | ✅ | ✅ | ✅ |
 | MediaWidth | ✅ | ✅ | ✅ |
 | MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |

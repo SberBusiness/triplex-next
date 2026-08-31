@@ -39,8 +39,16 @@ export interface IButtonDropdownExtendedProps extends React.HTMLAttributes<HTMLD
     closeOnTab?: boolean;
 }
 
-/** Тип компонента "Кнопка с выпадающим блоком" со статическими субкомпонентами. */
-export interface IButtonDropdownExtendedComponent extends React.FC<IButtonDropdownExtendedProps> {
+/**
+ * Тип компонента "Кнопка с выпадающим блоком" со статическими субкомпонентами.
+ *
+ * Явная аннотация снимает проверку лишних свойств у Object.assign, поэтому при добавлении
+ * или удалении статики этот интерфейс нужно править синхронно: иначе новая статика окажется
+ * в рантайме, но не попадёт в публичный тип, и TypeScript промолчит.
+ */
+export interface IButtonDropdownExtendedComponent extends React.ForwardRefExoticComponent<
+    IButtonDropdownExtendedProps & React.RefAttributes<HTMLDivElement>
+> {
     /** Выпадающий блок. */
     Dropdown: typeof Dropdown;
     /** Список опций для выпадающего блока. */
@@ -53,74 +61,94 @@ export interface IButtonDropdownExtendedComponent extends React.FC<IButtonDropdo
  * Пока блок открыт, слушает документ и закрывает его по Escape, по Tab (при closeOnTab)
  * и по клику вне кнопки и вне выпадающего блока.
  */
-export const ButtonDropdownExtended: IButtonDropdownExtendedComponent = (props) => {
-    const { className, opened, setOpened, renderButton, renderDropdown, dropdownRef, closeOnTab, ...rest } = props;
+export const ButtonDropdownExtended: IButtonDropdownExtendedComponent = Object.assign(
+    React.forwardRef<HTMLDivElement, IButtonDropdownExtendedProps>(function ButtonDropdownExtended(props, ref) {
+        const { className, opened, setOpened, renderButton, renderDropdown, dropdownRef, closeOnTab, ...rest } = props;
 
-    const containerRef = useRef<HTMLDivElement>(null);
-    // Режим управления фиксируется на монтировании и дальше не меняется.
-    const [isControlled] = useState<boolean>(() => opened !== undefined);
-    const [uncontrolledOpened, setUncontrolledOpened] = useState<boolean>(false);
+        // Корневой элемент нужен самому компоненту (клик снаружи) и потребителю через forwarded ref.
+        const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const computedOpened = isControlled ? !!opened : uncontrolledOpened;
+        const setContainerRef = useCallback(
+            (instance: HTMLDivElement | null) => {
+                containerRef.current = instance;
 
-    const handleOpenedChange = useCallback(
-        (nextOpened: boolean) => {
-            if (isControlled) {
-                setOpened?.(nextOpened);
+                if (typeof ref === "function") {
+                    ref(instance);
+                } else if (ref) {
+                    ref.current = instance;
+                }
+            },
+            [ref],
+        );
+
+        // Режим управления фиксируется на монтировании и дальше не меняется.
+        const [isControlled] = useState<boolean>(() => opened !== undefined);
+        const [uncontrolledOpened, setUncontrolledOpened] = useState<boolean>(false);
+
+        const computedOpened = isControlled ? !!opened : uncontrolledOpened;
+
+        const handleOpenedChange = useCallback(
+            (nextOpened: boolean) => {
+                if (isControlled) {
+                    setOpened?.(nextOpened);
+                    return;
+                }
+                setUncontrolledOpened(nextOpened);
+            },
+            [isControlled, setOpened],
+        );
+
+        useEffect(() => {
+            if (!computedOpened) {
                 return;
             }
-            setUncontrolledOpened(nextOpened);
-        },
-        [isControlled, setOpened],
-    );
 
-    useEffect(() => {
-        if (!computedOpened) {
-            return;
-        }
+            const handleKeyDown = (event: KeyboardEvent) => {
+                const key: string | number = event.code || event.keyCode;
 
-        const handleKeyDown = (event: KeyboardEvent) => {
-            const key: string | number = event.code || event.keyCode;
+                if (isKey(key, "ESCAPE") || (closeOnTab && isKey(key, "TAB"))) {
+                    handleOpenedChange(false);
+                }
+            };
 
-            if (isKey(key, "ESCAPE") || (closeOnTab && isKey(key, "TAB"))) {
-                handleOpenedChange(false);
-            }
-        };
+            const handleClickOutside = (event: Event) => {
+                const button = containerRef.current;
+                const dropdown = dropdownRef.current;
+                const targetNode = event.target as Node | null;
 
-        const handleClickOutside = (event: Event) => {
-            const button = containerRef.current;
-            const dropdown = dropdownRef.current;
-            const targetNode = event.target as Node | null;
+                if (targetNode && !button?.contains(targetNode) && !dropdown?.contains(targetNode)) {
+                    handleOpenedChange(false);
+                }
+            };
 
-            if (targetNode && !button?.contains(targetNode) && !dropdown?.contains(targetNode)) {
-                handleOpenedChange(false);
-            }
-        };
+            document.addEventListener("keydown", handleKeyDown);
+            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("touchstart", handleClickOutside);
 
-        document.addEventListener("keydown", handleKeyDown);
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("touchstart", handleClickOutside);
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+                document.removeEventListener("mousedown", handleClickOutside);
+                document.removeEventListener("touchstart", handleClickOutside);
+            };
+        }, [computedOpened, closeOnTab, dropdownRef, handleOpenedChange]);
 
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-            document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("touchstart", handleClickOutside);
-        };
-    }, [computedOpened, closeOnTab, dropdownRef, handleOpenedChange]);
+        const classNames = clsx(styles.buttonDropdownExtended, className);
 
-    const classNames = clsx(styles.buttonDropdownExtended, className);
+        return (
+            <div className={classNames} ref={setContainerRef} {...rest}>
+                {renderButton({ opened: computedOpened, setOpened: handleOpenedChange })}
+                {renderDropdown({
+                    className: styles.buttonDropdownExtendedBlock,
+                    opened: computedOpened,
+                    setOpened: handleOpenedChange,
+                })}
+            </div>
+        );
+    }),
+    {
+        Dropdown,
+        DropdownList,
+    },
+);
 
-    return (
-        <div className={classNames} ref={containerRef} {...rest}>
-            {renderButton({ opened: computedOpened, setOpened: handleOpenedChange })}
-            {renderDropdown({
-                className: styles.buttonDropdownExtendedBlock,
-                opened: computedOpened,
-                setOpened: handleOpenedChange,
-            })}
-        </div>
-    );
-};
-
-ButtonDropdownExtended.Dropdown = Dropdown;
-ButtonDropdownExtended.DropdownList = DropdownList;
+ButtonDropdownExtended.displayName = "ButtonDropdownExtended";

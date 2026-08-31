@@ -132,7 +132,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | IslandWidget | ⬜ | ✅ | ⬜ |
 | KeyDownListener | ✅ | ✅ | ✅ |
 | LightBox | ✅ | ✅ | ✅ |
-| Link | ⬜ | ✅ | ⬜ |
+| Link | ✅ | ✅ | ✅ |
 | List | ✅ | ✅ | ✅ |
 | ListItem | ✅ | ✅ | ✅ |
 | ListItemControlsButton | ✅ | ✅ | ✅ |

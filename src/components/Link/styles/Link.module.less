@@ -19,16 +19,19 @@
     }
 }
 
+// Слово вместе с contentBefore/contentAfter — неразрывный блок, чтобы контент не отрывался от слова при переносе строки.
 .wordWithContent {
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
 }
 
+// Отступ между contentBefore и словом.
 .before :first-child {
     margin-right: 2px;
 }
 
+// Отступ между словом и contentAfter.
 .after :last-child {
     margin-left: 2px;
 }

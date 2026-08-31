@@ -111,7 +111,7 @@ AI-рефакторинге — при правках их стоит держа
 
 Токенов нет. `SwipeableArea.module.less` содержит только позиционирование,
 `transition` сдвига и `touch-action`. Цвета и фон приходят от контента —
-например, `--triplex-next-ListItem-Background` у `ListItemContent`.
+например, `ListItem.Background` у `ListItemContent`.
 
 ---
 

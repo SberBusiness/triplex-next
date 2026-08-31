@@ -114,10 +114,6 @@ Runtime CSS-переменная высоты крупной картинки
 (`--triplex-next-runtime-ImageGalleryExtended-Main_Height`) задаётся частью
 `.Main`, а не самой обёрткой — см. `ImageGalleryExtended-ai.md`.
 
-Токены `Arrow_Background_Disabled` и `Arrow_BorderColor_Disabled` объявлены в группе
-`ImageGallery`, но ни в стилях, ни в коде не используются: disabled-состояние стрелок
-не реализовано. Поэтому в списке их нет.
-
 ---
 
 ## Инварианты
@@ -197,3 +193,4 @@ Runtime CSS-переменная высоты крупной картинки
 | Дата | Изменение |
 |---|---|
 | 2026-05-28 | Создан документ |
+| 2026-08-31 | Удалены неиспользуемые токены `Arrow_Background_Disabled` и `Arrow_BorderColor_Disabled`: неактивная стрелка скрывается (`display: none`), красить нечем |

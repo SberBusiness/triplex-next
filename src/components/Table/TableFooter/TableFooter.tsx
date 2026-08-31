@@ -6,21 +6,36 @@ import { FooterDescriptionControls } from "@sberbusiness/triplex-next/components
 import { TableFooterSummary } from "@sberbusiness/triplex-next/components/Table/TableFooter/components/TableFooterSummary";
 import { ITableFooterProps } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
 
-interface ITableFooterFC extends React.FC<ITableFooterProps> {
+/**
+ * Статические субкомпоненты TableFooter.
+ *
+ * Явная аннотация снимает проверку лишних свойств у Object.assign, поэтому при добавлении
+ * или удалении статики этот интерфейс нужно править синхронно: иначе новая статика окажется
+ * в рантайме, но не попадёт в публичный тип, и TypeScript промолчит.
+ */
+interface ITableFooterComposition extends React.ForwardRefExoticComponent<
+    ITableFooterProps & React.RefAttributes<HTMLDivElement>
+> {
+    /** Блок с итоговыми значениями по таблице. */
     Summary: typeof TableFooterSummary;
+    /** Блок с кнопками действий над выбранными строками. */
     Controls: typeof FooterDescriptionControls;
 }
 
 /** Компонент подвала таблицы. */
-export const TableFooter: ITableFooterFC = ({ children, className, ...rest }) => (
-    <div className={clsx(styles.tableFooterWrapper, className)} {...rest}>
-        <div className={styles.tableFooterShadow} />
-        <div className={styles.tableFooter}>
-            <FooterDescription>{children}</FooterDescription>
+export const TableFooter: ITableFooterComposition = Object.assign(
+    React.forwardRef<HTMLDivElement, ITableFooterProps>(({ children, className, ...rest }, ref) => (
+        <div className={clsx(styles.tableFooterWrapper, className)} {...rest} ref={ref}>
+            <div className={styles.tableFooterShadow} />
+            <div className={styles.tableFooter}>
+                <FooterDescription>{children}</FooterDescription>
+            </div>
         </div>
-    </div>
+    )),
+    {
+        Summary: TableFooterSummary,
+        Controls: FooterDescriptionControls,
+    },
 );
 
 TableFooter.displayName = "TableFooter";
-TableFooter.Summary = TableFooterSummary;
-TableFooter.Controls = FooterDescriptionControls;

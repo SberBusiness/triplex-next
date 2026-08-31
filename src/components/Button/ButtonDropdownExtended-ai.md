@@ -61,12 +61,12 @@ version: "1.0"
 
 ## Инварианты
 
-- Компонент объявлен как `IButtonDropdownExtendedComponent extends React.FC<IButtonDropdownExtendedProps>`, `forwardRef` **не используется**: ref на корневой `<div>` не пробрасывается. Добавление `forwardRef` меняет базовый тип экспортируемого интерфейса — это breaking change, требует отдельного решения.
+- `forwardRef` на компоненте — не убирать. Ref идёт на корневой `<div>` (`HTMLDivElement`) и мерджится с внутренним `containerRef` через callback-ref: `containerRef` отвечает за определение «клик внутри триггера», поэтому подменять его форвардом нельзя — нужны оба.
 - Публичные имена `ButtonDropdownExtended`, `IButtonDropdownExtendedProps`, `IButtonDropdownExtendedButtonProvideProps`, `IButtonDropdownExtendedDropdownProvideProps`, `IButtonDropdownExtendedComponent` экспортируются из `src/components/Button/index.ts` — сохранять.
 - Статические свойства `Dropdown` и `DropdownList` — часть публичного API.
 - Фиксация режима управления на монтировании — наблюдаемое поведение, на него опираются потребители. Менять только осознанно.
 - `renderDropdown` обязан применить переданный `className` к выпадающему блоку. Но не считай, что на нём держится раскладка: стили этого класса объявлены вложенным селектором внутри `.buttonDropdownExtended` и при рендере блока в портале (штатный путь через `ButtonDropdownExtended.Dropdown`) не применяются — см. раздел «Дизайн-токены».
-- Корневой DOM-элемент — `<div>` с классом `buttonDropdownExtended`; на нём же живёт `containerRef`, по которому определяется «клик внутри триггера».
+- Корневой DOM-элемент — `<div>` с классом `buttonDropdownExtended`; на нём же живут `containerRef` и forwarded ref.
 - Слушатели `keydown` / `mousedown` / `touchstart` вешаются на `document` только пока блок открыт.
 
 ---
@@ -115,4 +115,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-31 | Компонент переведён с `React.FC` на `Object.assign(forwardRef(...), {...})` — теперь пробрасывает `ref` на корневой `<div>`, форвард мерджится с внутренним `containerRef`. Базовый тип `IButtonDropdownExtendedComponent` изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props, статики и DOM не изменились. Понадобилось для `TableBasicSettings`, который рендерит `ButtonDropdownExtended` корнем. |
 | 2026-07-29 | Создан документ AI-ready для `ButtonDropdownExtended`. AI-рефакторинг без изменения публичного API: режим управления переведён с ref на `useState` (устранены ошибки `react-hooks/refs`), убраны вырожденный тернарник в `useState` и мёртвые проверки `opened` внутри обработчиков, `setOpened && setOpened(...)` заменён на опциональный вызов, добавлены JSDoc. Добавлены unit-тесты и stories по modern pattern. |

@@ -289,4 +289,63 @@ describe("ButtonDropdownExtended", () => {
             expect(setOpened).not.toHaveBeenCalled();
         });
     });
+    describe("forwardRef", () => {
+        const renderWithRef = (ref: React.Ref<HTMLDivElement>) =>
+            render(
+                <ButtonDropdownExtended
+                    ref={ref}
+                    data-testid="root"
+                    dropdownRef={{ current: null }}
+                    renderButton={() => <button type="button">inside</button>}
+                    renderDropdown={() => null}
+                />,
+            );
+
+        it("forwards object ref to the root element", () => {
+            const ref = React.createRef<HTMLDivElement>();
+
+            renderWithRef(ref);
+
+            expect(ref.current).toBeInstanceOf(HTMLDivElement);
+            expect(ref.current).toBe(screen.getByTestId("root"));
+        });
+
+        it("forwards callback ref to the root element", () => {
+            const ref = vi.fn();
+
+            renderWithRef(ref);
+
+            expect(ref).toHaveBeenCalledWith(screen.getByTestId("root"));
+        });
+
+        it("keeps the internal container ref working while ref is forwarded", () => {
+            const setOpened = vi.fn();
+            const ref = React.createRef<HTMLDivElement>();
+
+            render(
+                <>
+                    <ButtonDropdownExtended
+                        ref={ref}
+                        opened
+                        setOpened={setOpened}
+                        dropdownRef={{ current: null }}
+                        renderButton={() => <button type="button">inside</button>}
+                        renderDropdown={() => null}
+                    />
+                    <div data-testid="outside" />
+                </>,
+            );
+
+            // Клик внутри корневого элемента не считается кликом снаружи — за это отвечает containerRef.
+            fireEvent.mouseDown(screen.getByRole("button", { name: "inside" }));
+            expect(setOpened).not.toHaveBeenCalled();
+
+            fireEvent.mouseDown(screen.getByTestId("outside"));
+            expect(setOpened).toHaveBeenCalledWith(false);
+        });
+
+        it("has displayName", () => {
+            expect(ButtonDropdownExtended.displayName).toBe("ButtonDropdownExtended");
+        });
+    });
 });

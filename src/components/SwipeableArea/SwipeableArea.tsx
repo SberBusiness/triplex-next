@@ -1,5 +1,6 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import clsx from "clsx";
+import { ESwipeDirection, getElementWidth, resolveSwipeEnd, resolveSwipeMove } from "./utils";
 import styles from "./styles/SwipeableArea.module.less";
 
 export interface ISwipeableAreaProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,8 +16,6 @@ export interface ISwipeableAreaProps extends React.HTMLAttributes<HTMLDivElement
     onSwipeRight?: () => void;
 }
 
-// Минимальная ширина свайпа в px, при котором откроется боковая панель.
-const SWIPE_MIN_DISTANCE = 24;
 // Css-класс, задающий завершение анимации движения свайпа и изменение opacity leftSwipeableArea и rightSwipeableArea.
 const SWIPE_ANIMATION_CLASSNAME = styles.swipeAnimationFinish;
 // Css-класс, предотвращающий скролл при свайпе.
@@ -33,11 +32,11 @@ enum EDragType {
 }
 
 export interface ISwipeableAreaRef {
-    /** Закрывает leftSwipeableAreaRef или rightSwipeableArea. */
+    /** Закрывает leftSwipeableArea или rightSwipeableArea. */
     closeSwipe: () => void;
     /** Открывает rightSwipeableArea. */
     swipeLeft: () => void;
-    /** Открывает leftSwipeableAreaRef. */
+    /** Открывает leftSwipeableArea. */
     swipeRight: () => void;
 }
 
@@ -62,6 +61,8 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
         const startCoordinates = useRef(START_COORDINATES_INITIAL);
         // Ссылка на контейнер.
         const containerRef = useRef<HTMLDivElement | null>(null);
+        const hasLeftSwipeableArea = leftSwipeableArea !== undefined;
+        const hasRightSwipeableArea = rightSwipeableArea !== undefined;
 
         /**
          * Обработчик свайпа, срабатывает при отпускании пальца.
@@ -70,58 +71,28 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
             // Установка анимации завершения свайпа.
             setAnimating(true);
 
-            const deltaContentTranslateX = contentTranslateXOnStartRef.current - contentTranslateX;
+            const { translateX, direction } = resolveSwipeEnd({
+                translateX: contentTranslateX,
+                translateXOnStart: contentTranslateXOnStartRef.current,
+                leftAreaWidth: getElementWidth(leftSwipeableAreaRef.current),
+                rightAreaWidth: getElementWidth(rightSwipeableAreaRef.current),
+            });
 
-            // Свайп отктырия левой или правой области.
-            if (contentTranslateXOnStartRef.current === 0) {
-                // Свайп влево.
-                if (deltaContentTranslateX > 0) {
-                    // Если сдвиг слишком короткий - возврат на прежнее положение, или открытие левого контента.
-                    if (deltaContentTranslateX > SWIPE_MIN_DISTANCE) {
-                        setContentTranslateX(-rightSwipeableAreaRef.current!.getBoundingClientRect().width);
-                        onSwipeLeft?.();
-                    } else {
-                        setContentTranslateX(0);
-                    }
-                } else {
-                    // Свайп вправо.
-                    if (Math.abs(deltaContentTranslateX) > SWIPE_MIN_DISTANCE) {
-                        setContentTranslateX(leftSwipeableAreaRef.current!.getBoundingClientRect().width);
-                        onSwipeRight?.();
-                    } else {
-                        setContentTranslateX(0);
-                    }
-                }
-            } else if (contentTranslateXOnStartRef.current > 0) {
-                // Свайп закрытия левой области.
-                // Свайп влево.
-                if (deltaContentTranslateX > 0) {
-                    setContentTranslateX(
-                        deltaContentTranslateX > SWIPE_MIN_DISTANCE
-                            ? 0
-                            : leftSwipeableAreaRef.current!.getBoundingClientRect().width,
-                    );
-                }
-            } else if (contentTranslateXOnStartRef.current < 0) {
-                // Свайп закрытия правой области.
-                // Свайп вправо.
-                if (deltaContentTranslateX < 0) {
-                    setContentTranslateX(
-                        Math.abs(deltaContentTranslateX) > SWIPE_MIN_DISTANCE
-                            ? 0
-                            : -rightSwipeableAreaRef.current!.getBoundingClientRect().width,
-                    );
-                }
+            setContentTranslateX(translateX);
+
+            if (direction === ESwipeDirection.left) {
+                onSwipeLeft?.();
+            } else if (direction === ESwipeDirection.right) {
+                onSwipeRight?.();
             }
         };
 
-        const handleDocumentTouchEnd = () => {
+        // Обработчик отпускания пальца. Слушатель вешается на документ, чтобы поймать отпускание за пределами карточки.
+        const handleDocumentTouchEnd = useCallback(() => {
             startCoordinates.current = START_COORDINATES_INITIAL;
 
             setDragType(undefined);
-
-            document.removeEventListener("touchend", handleDocumentTouchEnd);
-        };
+        }, []);
 
         useEffect(() => {
             // contentTranslateX !== contentTranslateXOnStartRef.current - был свайп, а не скролл.
@@ -135,11 +106,12 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
         const handleTouchStart = (event: React.TouchEvent) => {
             startCoordinates.current = { clientX: event.touches[0].clientX, clientY: event.touches[0].clientY };
             contentTranslateXOnStartRef.current = contentTranslateX;
-            document.addEventListener("touchend", handleDocumentTouchEnd);
+            // once - слушатель снимается сам после отпускания пальца.
+            document.addEventListener("touchend", handleDocumentTouchEnd, { once: true });
         };
 
         const handleTouchMove = (event: React.TouchEvent) => {
-            if (event.touches.length != 1) {
+            if (event.touches.length !== 1) {
                 return;
             }
 
@@ -148,12 +120,8 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
             const deltaY = event.touches[0].clientY - startCoordinates.current.clientY;
 
             if (!dragType) {
-                // Это скролл, а не свайп.
-                if (Math.abs(deltaY) > Math.abs(deltaX)) {
-                    setDragType(EDragType.vertical);
-                } else {
-                    setDragType(EDragType.horizontal);
-                }
+                // Вертикальное перемещение пальца - скролл, горизонтальное - свайп.
+                setDragType(Math.abs(deltaY) > Math.abs(deltaX) ? EDragType.vertical : EDragType.horizontal);
 
                 return;
             }
@@ -163,57 +131,27 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 return;
             }
 
-            // Координата X контента карточки.
-            const contentTranslateXNext = contentTranslateXOnStartRef.current + deltaX;
-
-            // Свайп открытия левой или правой области.
-            if (contentTranslateXOnStartRef.current === 0) {
-                // Свайп вправо и есть контент слева.
-                if (deltaX > 0 && leftSwipeableArea) {
-                    setContentTranslateX(
-                        Math.min(contentTranslateXNext, leftSwipeableAreaRef.current!.getBoundingClientRect().width),
-                    );
-                } else if (deltaX < 0 && rightSwipeableArea) {
-                    // Свайп влево и есть контент справа.
-                    setContentTranslateX(
-                        Math.max(contentTranslateXNext, -rightSwipeableAreaRef.current!.getBoundingClientRect().width),
-                    );
-                }
-            } else if (contentTranslateXOnStartRef.current > 0) {
-                // Свайп закрытия левой области.
-                if (deltaX < 0) {
-                    setContentTranslateX(Math.max(0, contentTranslateXNext));
-                }
-            } else if (contentTranslateXOnStartRef.current < 0) {
-                // Свайп закрытия правой области.
-                if (deltaX > 0) {
-                    setContentTranslateX(Math.min(0, contentTranslateXNext));
-                }
-            }
+            setContentTranslateX(
+                resolveSwipeMove({
+                    translateX: contentTranslateX,
+                    translateXOnStart: contentTranslateXOnStartRef.current,
+                    deltaX,
+                    leftAreaWidth: hasLeftSwipeableArea ? getElementWidth(leftSwipeableAreaRef.current) : null,
+                    rightAreaWidth: hasRightSwipeableArea ? getElementWidth(rightSwipeableAreaRef.current) : null,
+                }),
+            );
         };
 
         const handleTransitionEnd = () => setAnimating(false);
 
-        const getOpacityRightContent = (): number => {
-            if (rightSwipeableAreaRef.current) {
-                return Math.abs(contentTranslateX) / rightSwipeableAreaRef.current.getBoundingClientRect().width;
-            }
-
-            return 1;
-        };
-
-        const getOpacityLeftContent = (): number => {
-            if (leftSwipeableAreaRef.current) {
-                return Math.abs(contentTranslateX) / leftSwipeableAreaRef.current.getBoundingClientRect().width;
-            }
-
-            return 1;
-        };
+        // Прозрачность боковой области пропорциональна тому, насколько она открыта.
+        const getSwipeableAreaOpacity = (element: HTMLDivElement | null): number =>
+            element ? Math.abs(contentTranslateX) / element.getBoundingClientRect().width : 1;
 
         // Обработчик тапа за пределами элемента(outside).
         useEffect(() => {
             const handleDocumentTouchStart = (event: TouchEvent) => {
-                if (event.touches.length != 1) {
+                if (event.touches.length !== 1) {
                     return;
                 }
 
@@ -227,50 +165,39 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
 
             document.addEventListener("touchstart", handleDocumentTouchStart);
 
-            return () => document.removeEventListener("touchstart", handleDocumentTouchStart);
-        }, []);
-
-        // Открывает leftSwipeableAreaRef.
-        const openLeftSwipeableArea = () => {
-            if (leftSwipeableAreaRef.current) {
-                // Установка анимации завершения свайпа.
-                setAnimating(true);
-                setContentTranslateX(leftSwipeableAreaRef.current.getBoundingClientRect().width);
-            }
-        };
-
-        // Открывает rightSwipeableArea.
-        const openRightSwipeableArea = () => {
-            if (rightSwipeableAreaRef.current) {
-                // Установка анимации завершения свайпа.
-                setAnimating(true);
-                setContentTranslateX(-rightSwipeableAreaRef.current.getBoundingClientRect().width);
-            }
-        };
-
-        // Закрывает leftSwipeableAreaRef или rightSwipeableArea.
-        const closeSwipeableArea = () => {
-            if (rightSwipeableAreaRef.current || leftSwipeableAreaRef.current) {
-                // Установка анимации завершения свайпа.
-                setAnimating(true);
-                setContentTranslateX(0);
-            }
-        };
+            return () => {
+                document.removeEventListener("touchstart", handleDocumentTouchStart);
+                // Слушатель остаётся висеть, если компонент размонтирован между началом и концом свайпа.
+                document.removeEventListener("touchend", handleDocumentTouchEnd);
+            };
+        }, [handleDocumentTouchEnd]);
 
         useImperativeHandle(
             ref,
             () => ({
                 closeSwipe: () => {
-                    closeSwipeableArea();
+                    if (leftSwipeableAreaRef.current || rightSwipeableAreaRef.current) {
+                        // Установка анимации завершения свайпа.
+                        setAnimating(true);
+                        setContentTranslateX(0);
+                    }
                 },
                 swipeLeft: () => {
-                    openRightSwipeableArea();
+                    if (rightSwipeableAreaRef.current) {
+                        // Установка анимации завершения свайпа.
+                        setAnimating(true);
+                        setContentTranslateX(-getElementWidth(rightSwipeableAreaRef.current));
+                    }
                 },
                 swipeRight: () => {
-                    openLeftSwipeableArea();
+                    if (leftSwipeableAreaRef.current) {
+                        // Установка анимации завершения свайпа.
+                        setAnimating(true);
+                        setContentTranslateX(getElementWidth(leftSwipeableAreaRef.current));
+                    }
                 },
             }),
-            [closeSwipeableArea, openRightSwipeableArea, openLeftSwipeableArea],
+            [],
         );
 
         return (
@@ -280,27 +207,27 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                 data-tx={process.env.npm_package_version}
                 ref={containerRef}
             >
-                {typeof leftSwipeableArea !== "undefined" ? (
+                {hasLeftSwipeableArea ? (
                     <div
                         className={clsx(styles.leftContent, {
                             [SWIPE_ANIMATION_CLASSNAME]: animating,
                         })}
                         ref={leftSwipeableAreaRef}
                         /* Плавное появление контента при свайпе. */
-                        style={{ opacity: getOpacityLeftContent() }}
+                        style={{ opacity: getSwipeableAreaOpacity(leftSwipeableAreaRef.current) }}
                     >
                         {leftSwipeableArea}
                     </div>
                 ) : null}
 
-                {typeof rightSwipeableArea !== "undefined" ? (
+                {hasRightSwipeableArea ? (
                     <div
                         className={clsx(styles.rightContent, {
                             [SWIPE_ANIMATION_CLASSNAME]: animating,
                         })}
                         ref={rightSwipeableAreaRef}
                         /* Плавное появление контента при свайпе. */
-                        style={{ opacity: getOpacityRightContent() }}
+                        style={{ opacity: getSwipeableAreaOpacity(rightSwipeableAreaRef.current) }}
                     >
                         {rightSwipeableArea}
                     </div>

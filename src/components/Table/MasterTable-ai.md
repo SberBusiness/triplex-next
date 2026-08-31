@@ -75,6 +75,7 @@ version: "1.0"
 - Все семь статических субкомпонентов (`NoColumns`, `FilterPanel`, `ChipPanel`, `TableBasic`, `TableBasicSettings`, `TableFooter`, `PaginationPanel`) — часть публичного API. Ни переименовывать, ни удалять, ни менять их набор.
 - `displayName` — `"MasterTable"`.
 - Корневой элемент — `<div>`. `data-tx` выставляется **после** спреда `...rest`, поэтому потребитель не может его переопределить — это осознанное поведение, общее для семейства (`FilterPanel`, `PaginationPanel`).
+- Все обёртки семейства (`FilterPanel`, `ChipPanel`, `ChipPanelLinks`, `NoColumns`, `PaginationPanel`, `TableFooter`, `TableBasicSettings`) пробрасывают `ref` на свой корневой элемент — не убирать. У составных (`ChipPanel`, `TableFooter`, `TableBasicSettings`) статики объявлены через `Object.assign` с явным интерфейсом: при добавлении или удалении статики интерфейс нужно править синхронно, иначе TypeScript промолчит.
 - Собственный класс `styles.masterTable` объединяется с пользовательским `className` через `clsx`, а не затирается им.
 - Значение контекста мемоизировано (`useMemo` по `columns` и `loading`) — не откатывать: возврат к новому объекту на каждый рендер снова заставит `useEffect` в `TableBasic` перезапускаться на каждый рендер контейнера.
 - Колонки потребитель обязан заменять иммутабельно (`map`/спред, а не мутация на месте): эффект в `TableBasic` сравнивает `isEqual(columns, context.columns)`, а после первой синхронизации в контексте лежит **та же ссылка**, что пришла в props, — поэтому мутация на месте до `ColumnSettings` не доходит. К мемоизации это отношения не имеет, ограничение существовало и до неё; откат `useMemo` мутации не «починит».
@@ -99,9 +100,9 @@ version: "1.0"
 
 - `TableBasic` — сама таблица; единственная часть, которая пишет в контекст (`columns`). Работает и вне `MasterTable`, но тогда `loading` всегда `false`.
 - `Pagination` — обычно кладётся в `MasterTable.PaginationPanel`. Её кнопки и селект читают `MasterTableContext.loading` и блокируются в загрузке; это опора на деталь `MasterTable`, поэтому связь зафиксирована с обеих сторон.
-- `FilterPanel`, `ChipPanel` (`.Links`), `PaginationPanel`, `NoColumns` — тривиальные обёртки: `clsx(className)` + спред + собственный класс, без своей логики. Отличаются только стилями и тем, что `FilterPanel` и `PaginationPanel` выставляют `data-tx`.
+- `FilterPanel`, `ChipPanel` (`.Links`), `PaginationPanel`, `NoColumns` — тривиальные обёртки: `clsx(className)` + спред + собственный класс, без своей логики. Отличаются только стилями и тем, что `FilterPanel` и `PaginationPanel` выставляют `data-tx`. Все пробрасывают `ref` на свой корневой `<div>`; отдельных строк в `docs/ai/ROADMAP.md` у них нет — состояние учитывается здесь.
 - `TableFooter` — подвал поверх `FooterDescription`; `.Summary` даёт `.SelectedCount`, `.SelectAllButton` и `.Amount`, `.Controls` — это `FooterDescriptionControls` из семейства `Footer`.
-- `TableBasicSettings` — выпадающие настройки поверх `ButtonDropdownExtended`; внутри `ColumnSettings` читает `columns` из контекста и поддерживает children-функцию `({ columns }) => ...`.
+- `TableBasicSettings` — выпадающие настройки поверх `ButtonDropdownExtended`; внутри `ColumnSettings` читает `columns` из контекста и поддерживает children-функцию `({ columns }) => ...`. Его `ref` идёт на корневой `<div>`, который рисует `ButtonDropdownExtended`, — поэтому `forwardRef` пришлось добавить и туда.
 
 ---
 
@@ -126,4 +127,5 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-08-31 | Обёртки семейства (`FilterPanel`, `ChipPanel` + `.Links`, `NoColumns`, `PaginationPanel`, `TableFooter`, `TableBasicSettings`) переведены с `React.FC` на `forwardRef`, у составных статики — через `Object.assign`. Добавлены smoke-тесты на каждую. Ради `TableBasicSettings` `forwardRef` добавлен и в `ButtonDropdownExtended`. Набор props и DOM не изменились. |
 | 2026-08-27 | Создан документ. Компонент переведён с `React.FC` на `Object.assign(forwardRef(...), {...})` — теперь пробрасывает `ref` на корневой `<div>`; значение контекста мемоизировано. Публичный API не изменился. |

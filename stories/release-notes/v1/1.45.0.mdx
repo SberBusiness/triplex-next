@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**ButtonDropdownExtended**
+
+- Добавлено: `ButtonDropdownExtended` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`. Базовый тип `IButtonDropdownExtendedComponent` изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props, статики и разметка прежние.
+
 **FormGroup**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
@@ -13,4 +17,5 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MasterTable**
 
 - Добавлено: `MasterTable` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`.
+- Добавлено: `ref` пробрасывают и обёртки семейства — `MasterTable.FilterPanel`, `MasterTable.ChipPanel` (и `.Links`), `MasterTable.NoColumns`, `MasterTable.PaginationPanel`, `MasterTable.TableFooter`, `MasterTable.TableBasicSettings`. Раньше все они были объявлены как `React.FC`.
 - Проведён AI-рефакторинг.

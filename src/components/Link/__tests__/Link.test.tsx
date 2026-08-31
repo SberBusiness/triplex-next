@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Link } from "../Link";
 
@@ -59,6 +59,26 @@ describe("Link", () => {
 
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
+    });
+
+    // onBlur и onMouseDown раньше изымались из props и вешались на <a> вручную. Теперь они
+    // доезжают в составе ...rest — тесты фиксируют, что обработчики не потерялись.
+    it("Should call onBlur with blur event", () => {
+        const onBlur = vi.fn();
+        render(<Link onBlur={onBlur}>Link text</Link>);
+        fireEvent.blur(getLink());
+
+        expect(onBlur).toHaveBeenCalledTimes(1);
+        expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur" }));
+    });
+
+    it("Should call onMouseDown with mousedown event", () => {
+        const onMouseDown = vi.fn();
+        render(<Link onMouseDown={onMouseDown}>Link text</Link>);
+        fireEvent.mouseDown(getLink());
+
+        expect(onMouseDown).toHaveBeenCalledTimes(1);
+        expect(onMouseDown).toHaveBeenCalledWith(expect.objectContaining({ type: "mousedown" }));
     });
 
     describe("rel", () => {

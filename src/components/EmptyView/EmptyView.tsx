@@ -13,11 +13,6 @@ const SIZE_CLASS_MAP: Record<EEmptyViewSize, string> = {
     [EEmptyViewSize.MD]: styles.md,
 };
 
-const TITLE_CONFIG: Record<EEmptyViewSize, { size: ETitleSize; weight: EFontWeightTitle }> = {
-    [EEmptyViewSize.SM]: { size: ETitleSize.H3, weight: EFontWeightTitle.MEDIUM },
-    [EEmptyViewSize.MD]: { size: ETitleSize.H2, weight: EFontWeightTitle.SEMIBOLD },
-};
-
 const TEXT_SIZE_MAP: Record<EEmptyViewSize, ETextSize> = {
     [EEmptyViewSize.SM]: ETextSize.B3,
     [EEmptyViewSize.MD]: ETextSize.B2,
@@ -45,7 +40,11 @@ export const EmptyView = React.forwardRef<HTMLDivElement, IEmptyViewProps>(
 
                     {(title || hasDescription) && (
                         <div className={styles.textBlock}>
-                            {title && <Title {...TITLE_CONFIG[size]}>{title}</Title>}
+                            {title && (
+                                <Title size={ETitleSize.H3} weight={EFontWeightTitle.MEDIUM}>
+                                    {title}
+                                </Title>
+                            )}
                             {title && hasDescription && <Gap size={12} />}
 
                             {hasDescription && (

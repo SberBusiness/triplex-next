@@ -102,3 +102,4 @@ Typography.Secondary_Color  (description с title, caption)
 |---|---|
 | 2026-04-09 | Создан компонент и документ. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: добавлена колонка `Example file`, переименована подсекция «Поведение описания» в «Ограничения по темам». |
+| 2026-08-31 | Заголовок всегда рендерится как `Title` с `ETitleSize.H3` и `EFontWeightTitle.MEDIUM`: убран `TITLE_CONFIG`, типографика `title` больше не зависит от `size`. |

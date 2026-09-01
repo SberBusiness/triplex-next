@@ -94,7 +94,10 @@ export const Default: Story = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Минимальный вызов: оба props обязательны, значений по умолчанию у них нет.",
+                story:
+                    "Минимальный вызов: оба props обязательны, значений по умолчанию у них нет. " +
+                    "Сам по себе `Marker` ничего не сообщает скринридеру — решение о доступном имени " +
+                    "остаётся за потребителем, см. `With accessible name`.",
             },
             source: { code: DefaultSource, language: "tsx" },
         },

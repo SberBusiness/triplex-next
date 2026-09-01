@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EFormFieldStatus } from "../../FormField";
 import { FormFieldMaskedInput } from "../../FormField/components/FormFieldMaskedInput";
-import { IMaskedFieldProps, MaskedField } from "../MaskedField";
+import { MaskedField, IMaskedFieldProps } from "../MaskedField";
 
 const { masks, placeholderMasks } = FormFieldMaskedInput.presets;
 

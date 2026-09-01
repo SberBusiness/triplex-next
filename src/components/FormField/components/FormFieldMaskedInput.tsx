@@ -7,12 +7,12 @@ import { FormFieldInput } from "./FormFieldInput";
 import { FormFieldContext } from "../FormFieldContext";
 import { TFormFieldMaskedInputMask } from "../types";
 import { EFormFieldStatus } from "../enums";
-import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import { createSizeToClassNameMap } from "../../../utils";
 import styles from "../styles/FormFieldMaskedInput.module.less";
 
 /** Свойства компонента FormFieldMaskedInput. */
 export interface IFormFieldMaskedInputProps
-    extends Omit<MaskedInputProps, "guide" | "mask" | "render" | "defaultValue">, DataAttributes {
+    extends Omit<MaskedInputProps, "disabled" | "guide" | "mask" | "render" | "defaultValue">, DataAttributes {
     /** Значение поля. Поле контролируемое, поэтому начальное значение задаётся через него, а не через defaultValue. */
     value: string;
     /** Ссылка на поле ввода. */
@@ -209,12 +209,15 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
         return (
             <div className={clsx(styles.formFieldMaskedInputWrapper, className)} ref={ref}>
                 {getPlaceholderValue() && (
-                    <div
-                        className={clsx(styles.formFieldMaskedInputPlaceholder, SIZE_TO_CLASS_NAME_MAP[size])}
-                        aria-hidden="true"
-                    >
-                        <span className={styles.transparentText}>{placeholderValue.slice(0, filledLength)}</span>
-                        <span>{placeholderValue.slice(filledLength)}</span>
+                    <div className={clsx(styles.maskLayout, SIZE_TO_CLASS_NAME_MAP[size])} aria-hidden="true">
+                        <span className={styles.valueMirror}>{placeholderValue.slice(0, filledLength)}</span>
+                        <span
+                            className={clsx(styles.placeholderMask, {
+                                [styles.disabled]: status === EFormFieldStatus.DISABLED,
+                            })}
+                        >
+                            {placeholderValue.slice(filledLength)}
+                        </span>
                     </div>
                 )}
 

@@ -1,11 +1,11 @@
-@import "./mixins";
+@import "src/components/FormField/styles/mixins";
 
-.formFieldMaskedInputWrapper {
+.amountFieldInputWrapper {
     position: relative;
     overflow: hidden;
 }
 
-.maskLayout {
+.currencyLayout {
     .form-field-input-mirror-layer();
     .form-field-input-sizes();
 }
@@ -14,8 +14,8 @@
     color: transparent;
 }
 
-.placeholderMask {
-    color: var(--triplex-next-FormField-Placeholder_Color);
+.currencyUnit {
+    color: var(--triplex-next-FormField-Input_Color_Default);
 
     &.disabled {
         color: var(--triplex-next-FormField-Input_Color_Disabled);

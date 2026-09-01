@@ -2,7 +2,8 @@
 component: Tag
 category: Tag
 related: [TagGroup, TagColor, ButtonIcon, Text]
-tokens: [--triplex-next-Tag-Background]
+tokens:
+  - Tag.Background
 stories: stories/Tag/Tag.stories.tsx
 version: "1.0"
 ---
@@ -64,8 +65,11 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Tag.ts`.
+
 ```text
---triplex-next-Tag-Background
+Tag.Background
 ```
 
 Единственный собственный токен — фон плашки. Цвет текста задаёт `Text` через токены типографики

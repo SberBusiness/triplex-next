@@ -45,7 +45,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Компонент не использует CSS-переменных `--triplex-next-*`. Размеры берутся из LESS-переменных сетки в `src/styles/components/grid.less`:
+Компонент не использует дизайн-токенов. Размеры берутся из LESS-переменных сетки в `src/styles/components/grid.less`:
 
 ```less
 @row-bottom-padding: 16px

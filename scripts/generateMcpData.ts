@@ -21,6 +21,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import { basename, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { glob } from "glob";
+import { collectDesignTokens, type TokensSection } from "./collectDesignTokens";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -55,12 +56,17 @@ interface ReleaseNoteEntry {
 }
 
 interface Bundle {
-    schemaVersion: 1;
+    /**
+     * 2 — добавлена секция `tokens` с деревом дизайн-токенов. Бандлы версии 1
+     * её не содержат, поэтому mcp-server читает секцию опционально.
+     */
+    schemaVersion: 2;
     triplexVersion: string;
     generatedAt: string;
     components: ComponentEntry[];
     guides: GuideEntry[];
     releaseNotes: ReleaseNoteEntry[];
+    tokens: TokensSection;
 }
 
 const GUIDE_TOPICS: { topic: string; file: string }[] = [
@@ -262,12 +268,13 @@ function main(): void {
     const releaseNotes = collectReleaseNotes();
 
     const bundle: Bundle = {
-        schemaVersion: 1,
+        schemaVersion: 2,
         triplexVersion,
         generatedAt: new Date().toISOString(),
         components,
         guides,
         releaseNotes,
+        tokens: collectDesignTokens(triplexVersion),
     };
 
     mkdirSync(dirname(out), { recursive: true });
@@ -276,6 +283,10 @@ function main(): void {
     const aiReady = components.filter((c) => c.raw !== null).length;
     const fallback = components.length - aiReady;
     const totalExamples = components.reduce((sum, c) => sum + c.examples.length, 0);
+    const tokenCount = Object.values(bundle.tokens.groups).reduce(
+        (sum, group) => sum + Object.keys(group.tokens).length,
+        0,
+    );
     process.stdout.write(
         [
             `Wrote ${out}`,
@@ -284,6 +295,7 @@ function main(): void {
             `  examples: ${totalExamples}`,
             `  guides: ${guides.length}`,
             `  releaseNotes: ${releaseNotes.length}`,
+            `  tokens: ${tokenCount} in ${Object.keys(bundle.tokens.groups).length} groups`,
             "",
         ].join("\n"),
     );

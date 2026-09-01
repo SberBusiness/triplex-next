@@ -3,16 +3,16 @@ component: TabsExtended
 category: Tabs
 related: [Tabs, TabsLine, Badge, Text]
 tokens:
-  - --triplex-next-Tabs-Type1_Background
-  - --triplex-next-Tabs-Type2_Background
-  - --triplex-next-Tabs-Type1_Tab_Background_Default
-  - --triplex-next-Tabs-Type2_Tab_Background_Default
-  - --triplex-next-Tabs-Type1_Tab_Background_Hover
-  - --triplex-next-Tabs-Type2_Tab_Background_Hover
-  - --triplex-next-Tabs-Type1_Tab_Background_Selected
-  - --triplex-next-Tabs-Type2_Tab_Background_Selected
-  - --triplex-next-Tabs-Tab_BorderColor_Default
-  - --triplex-next-Tabs-Tab_BorderColor_Focus
+  - Tabs.Type1_Background
+  - Tabs.Type2_Background
+  - Tabs.Type1_Tab_Background_Default
+  - Tabs.Type2_Tab_Background_Default
+  - Tabs.Type1_Tab_Background_Hover
+  - Tabs.Type2_Tab_Background_Hover
+  - Tabs.Type1_Tab_Background_Selected
+  - Tabs.Type2_Tab_Background_Selected
+  - Tabs.Tab_BorderColor_Default
+  - Tabs.Tab_BorderColor_Focus
 stories: stories/TabsExtended/TabsExtended.stories.tsx
 version: "1.0"
 ---
@@ -88,22 +88,25 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Tabs.ts`.
+
 Компонент использует токены семейства `Tabs` — они общие с `Tabs`:
 
 ```text
---triplex-next-Tabs-Type1_Background
---triplex-next-Tabs-Type2_Background
---triplex-next-Tabs-Type1_Tab_Background_Default
---triplex-next-Tabs-Type2_Tab_Background_Default
---triplex-next-Tabs-Type1_Tab_Background_Hover
---triplex-next-Tabs-Type2_Tab_Background_Hover
---triplex-next-Tabs-Type1_Tab_Background_Selected
---triplex-next-Tabs-Type2_Tab_Background_Selected
---triplex-next-Tabs-Tab_BorderColor_Default
---triplex-next-Tabs-Tab_BorderColor_Focus
+Tabs.Type1_Background
+Tabs.Type2_Background
+Tabs.Type1_Tab_Background_Default
+Tabs.Type2_Tab_Background_Default
+Tabs.Type1_Tab_Background_Hover
+Tabs.Type2_Tab_Background_Hover
+Tabs.Type1_Tab_Background_Selected
+Tabs.Type2_Tab_Background_Selected
+Tabs.Tab_BorderColor_Default
+Tabs.Tab_BorderColor_Focus
 ```
 
-Собственного префикса `--triplex-next-TabsExtended-*` у компонента нет: переименование токенов `Tabs` ломает оба компонента сразу.
+Собственной группы токенов `TabsExtended` нет: переименование токенов группы `Tabs` ломает оба компонента сразу.
 
 ---
 

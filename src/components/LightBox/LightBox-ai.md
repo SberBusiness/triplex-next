@@ -3,10 +3,9 @@ component: LightBox
 category: LightBox
 related: [Page, TopOverlay, Portal, FocusTrapExtended, LoaderScreen, Button, ModalWindow]
 tokens:
-  - --triplex-next-LightBox-Backdrop_Background
-  - --triplex-next-LightBox-Content_Background
-  - --triplex-next-LightBox-SideOverlay_Background
-  - --triplex-next-scroll-width
+  - LightBox.Backdrop_Background
+  - LightBox.Content_Background
+  - LightBox.SideOverlay_Background
 stories: stories/LightBox/LightBox.stories.tsx
 version: "1.0"
 ---
@@ -88,16 +87,19 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```css
---triplex-next-LightBox-Backdrop_Background
---triplex-next-LightBox-Content_Background
---triplex-next-LightBox-SideOverlay_Background
---triplex-next-scroll-width
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/LightBox.ts`.
+
+```text
+LightBox.Backdrop_Background
+LightBox.Content_Background
+LightBox.SideOverlay_Background
 ```
 
-`--triplex-next-scroll-width` — глобальная переменная ширины скроллбара, проставляется утилитой
-`addClassNameWithScrollbarWidth` при открытии лайтбокса. Ширины размеров (`664/864/1064/1264`)
-заданы LESS-константами `@lightBox-content-max-width-*`.
+Ширина скроллбара — не токен: `addClassNameWithScrollbarWidth` вешает на `<html>` класс
+`scroll-{0|15|16|17}`, а `styles/LightBoxScroll.module.less` объявляет по нему локальную
+css-переменную `--lightBox-scroll-width`, которую вычитают из ширины оверлеев. Ширины размеров
+(`664/864/1064/1264`) заданы LESS-константами `@lightBox-content-max-width-*`.
 
 ---
 

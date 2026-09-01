@@ -3,7 +3,7 @@ component: ButtonIcon
 category: Buttons
 related: [Button]
 tokens:
-  - --triplex-next-Button-Icon_Shadow_Focus
+  - Button.Icon_Shadow_Focus
 stories: stories/Buttons/ButtonIcon.stories.tsx
 version: "1.0"
 ---
@@ -46,8 +46,11 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-Button-Icon_Shadow_Focus
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Button.ts`.
+
+```text
+Button.Icon_Shadow_Focus
 ```
 
 ---
@@ -65,7 +68,7 @@ version: "1.0"
 
 - Компонент рендерит нативный `<button>`, поэтому базовая keyboard-навигация доступна из коробки.
 - Компонент **не хардкодит** `aria-label` (библиотека мультиязычная). Для иконки без текста потребитель **обязан** передать `aria-label` через `...rest`.
-- Фокусное состояние реализовано через `:focus-visible` и токен `--triplex-next-Button-Icon_Shadow_Focus`.
+- Фокусное состояние реализовано через `:focus-visible` и токен `Button.Icon_Shadow_Focus`.
 
 ---
 

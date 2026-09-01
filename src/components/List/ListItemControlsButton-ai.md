@@ -3,12 +3,12 @@ component: ListItemControlsButton
 category: List
 related: [ListItemControls, ListItemControlsButtonDropdown, IconWrapper]
 tokens:
-  - --triplex-next-ListItemControlsButton-Background_Default
-  - --triplex-next-ListItemControlsButton-Background_Hover
-  - --triplex-next-ListItemControlsButton-Background_Active
-  - --triplex-next-ListItemControlsButton-Color_Default
-  - --triplex-next-ListItemControlsButton-Color_Hover
-  - --triplex-next-ListItemControlsButton-Color_Active
+  - ListItemControlsButton.Background_Default
+  - ListItemControlsButton.Background_Hover
+  - ListItemControlsButton.Background_Active
+  - ListItemControlsButton.Color_Default
+  - ListItemControlsButton.Color_Hover
+  - ListItemControlsButton.Color_Active
 stories: stories/List/ListItemControls.stories.tsx
 version: "1.0"
 ---
@@ -43,15 +43,18 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Паттерн: `--triplex-next-ListItemControlsButton-{Property}_{State}`
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItemControlsButton.ts`.
+
+Паттерн: `ListItemControlsButton.{Property}_{State}`
 
 ```text
---triplex-next-ListItemControlsButton-Background_Default
---triplex-next-ListItemControlsButton-Background_Hover
---triplex-next-ListItemControlsButton-Background_Active   // применяется при :active или классе .expanded (если выставлен снаружи)
---triplex-next-ListItemControlsButton-Color_Default
---triplex-next-ListItemControlsButton-Color_Hover
---triplex-next-ListItemControlsButton-Color_Active
+ListItemControlsButton.Background_Default
+ListItemControlsButton.Background_Hover
+ListItemControlsButton.Background_Active   // применяется при :active или классе .expanded (если выставлен снаружи)
+ListItemControlsButton.Color_Default
+ListItemControlsButton.Color_Hover
+ListItemControlsButton.Color_Active
 ```
 
 Цвет лейбла переопределяет токен `Color_*` через `!important`, потому что

@@ -57,7 +57,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Собственных CSS-токенов и стилей у `MaskedField` нет — поэтому `tokens` во frontmatter пустой. Внешний вид наследуется от семейства `FormField`; слой подсказки маски рисует `FormFieldMaskedInput` своим токеном `--triplex-next-FormField-Placeholder_Color`.
+Собственных CSS-токенов и стилей у `MaskedField` нет — поэтому `tokens` во frontmatter пустой. Внешний вид наследуется от семейства `FormField`; слой подсказки маски рисует `FormFieldMaskedInput` своим токеном `FormField.Placeholder_Color`.
 
 ---
 

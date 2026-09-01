@@ -62,8 +62,8 @@ version: "1.0"
 LESS-переменными в `styles/Page.module.less` (`@page-padding-*`, `@screen-sm-max`). Sticky-стили
 для прилипающих Header/Footer (классы `.headerPageTypeFirst.sticky`, `.footerPageTypeFirst.sticky`)
 применяются при ширине viewport от 992px (`@screen-lg`) и высоте от 801px и
-используют токены соответствующих компонентов (`--triplex-next-HeaderPage-StickyShadow`,
-`--triplex-next-FooterPage-StickyShadow`) — они описаны в AI.md этих компонентов.
+используют токены соответствующих компонентов (`HeaderPage.StickyShadow`,
+`FooterPage.StickyShadow`) — они описаны в AI.md этих компонентов.
 
 ---
 

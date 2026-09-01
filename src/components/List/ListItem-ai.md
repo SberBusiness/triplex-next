@@ -3,10 +3,10 @@ component: ListItem
 category: List
 related: [List, ListItemContent, ListActionItem, ListItemSelectable, ListTableItem, ListSortableItem]
 tokens:
-  - --triplex-next-ListItem-Background
-  - --triplex-next-ListItem-Background_Selected
-  - --triplex-next-ListItem-Background_Hover
-  - --triplex-next-ListItem-BorderColor_Focus
+  - ListItem.Background
+  - ListItem.Background_Selected
+  - ListItem.Background_Hover
+  - ListItem.BorderColor_Focus
 stories: stories/List/ListItem.stories.tsx
 version: "1.0"
 ---
@@ -41,14 +41,17 @@ swipe-actions и selectable.
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItem.ts`.
+
 Сами стили `ListItem.tsx` пустые — токены применяются в подкомпонентах
 (`ListItemContent`, `ListItemSelectable`, `ListActionItem`):
 
 ```text
---triplex-next-ListItem-Background          // фон по умолчанию (ListItemContent)
---triplex-next-ListItem-Background_Selected // фон, когда selected=true (ListItemContent)
---triplex-next-ListItem-Background_Hover    // фон при hover на desktop (ListActionItem на ListItemContent)
---triplex-next-ListItem-BorderColor_Focus   // цвет focus-обводки на desktop (ListActionItem)
+ListItem.Background          // фон по умолчанию (ListItemContent)
+ListItem.Background_Selected // фон, когда selected=true (ListItemContent)
+ListItem.Background_Hover    // фон при hover на desktop (ListActionItem на ListItemContent)
+ListItem.BorderColor_Focus   // цвет focus-обводки на desktop (ListActionItem)
 ```
 
 ---

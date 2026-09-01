@@ -3,26 +3,26 @@ component: FormField
 category: FormField
 related: [FormFieldLabel, FormFieldInput, FormFieldTextarea, FormFieldTarget, FormFieldMaskedInput, FormFieldPrefix, FormFieldPostfix, FormFieldClear, FormFieldDescription, FormFieldCounter, FormGroup, TextField, TextareaField, MaskedField, SelectField, SuggestField, DateField]
 tokens:
-  - --triplex-next-FormField-Background_Default
-  - --triplex-next-FormField-Background_Hover
-  - --triplex-next-FormField-Background_Active
-  - --triplex-next-FormField-Background_Disabled
-  - --triplex-next-FormField-Background_Error
-  - --triplex-next-FormField-Background_Error_Hover
-  - --triplex-next-FormField-Background_Warning
-  - --triplex-next-FormField-Background_Warning_Hover
-  - --triplex-next-FormField-Shadow_Default
-  - --triplex-next-FormField-Shadow_Active
-  - --triplex-next-FormField-Shadow_Error_Active
-  - --triplex-next-FormField-Shadow_Warning_Active
-  - --triplex-next-FormField-Input_Color_Default
-  - --triplex-next-FormField-Input_Color_Disabled
-  - --triplex-next-FormField-Label_Color_Default
-  - --triplex-next-FormField-Label_Color_Disabled
-  - --triplex-next-FormField-Placeholder_Color
-  - --triplex-next-FormField-Target_Color_Default
-  - --triplex-next-FormField-Target_Color_Disabled
-  - --triplex-next-FormField-Target_PlaceholderColor_Default
+  - FormField.Background_Default
+  - FormField.Background_Hover
+  - FormField.Background_Active
+  - FormField.Background_Disabled
+  - FormField.Background_Error
+  - FormField.Background_Error_Hover
+  - FormField.Background_Warning
+  - FormField.Background_Warning_Hover
+  - FormField.Shadow_Default
+  - FormField.Shadow_Active
+  - FormField.Shadow_Error_Active
+  - FormField.Shadow_Warning_Active
+  - FormField.Input_Color_Default
+  - FormField.Input_Color_Disabled
+  - FormField.Label_Color_Default
+  - FormField.Label_Color_Disabled
+  - FormField.Placeholder_Color
+  - FormField.Target_Color_Default
+  - FormField.Target_Color_Disabled
+  - FormField.Target_PlaceholderColor_Default
 stories: stories/FormField/FormField.stories.tsx
 version: "1.0"
 ---
@@ -69,27 +69,30 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-FormField-Background_Default
---triplex-next-FormField-Background_Hover
---triplex-next-FormField-Background_Active
---triplex-next-FormField-Background_Disabled
---triplex-next-FormField-Background_Error
---triplex-next-FormField-Background_Error_Hover
---triplex-next-FormField-Background_Warning
---triplex-next-FormField-Background_Warning_Hover
---triplex-next-FormField-Shadow_Default
---triplex-next-FormField-Shadow_Active
---triplex-next-FormField-Shadow_Error_Active
---triplex-next-FormField-Shadow_Warning_Active
---triplex-next-FormField-Input_Color_Default
---triplex-next-FormField-Input_Color_Disabled
---triplex-next-FormField-Label_Color_Default
---triplex-next-FormField-Label_Color_Disabled
---triplex-next-FormField-Placeholder_Color
---triplex-next-FormField-Target_Color_Default
---triplex-next-FormField-Target_Color_Disabled
---triplex-next-FormField-Target_PlaceholderColor_Default
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/FormField.ts`.
+
+```text
+FormField.Background_Default
+FormField.Background_Hover
+FormField.Background_Active
+FormField.Background_Disabled
+FormField.Background_Error
+FormField.Background_Error_Hover
+FormField.Background_Warning
+FormField.Background_Warning_Hover
+FormField.Shadow_Default
+FormField.Shadow_Active
+FormField.Shadow_Error_Active
+FormField.Shadow_Warning_Active
+FormField.Input_Color_Default
+FormField.Input_Color_Disabled
+FormField.Label_Color_Default
+FormField.Label_Color_Disabled
+FormField.Placeholder_Color
+FormField.Target_Color_Default
+FormField.Target_Color_Disabled
+FormField.Target_PlaceholderColor_Default
 ```
 
 ---

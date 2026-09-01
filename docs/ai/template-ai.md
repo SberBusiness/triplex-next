@@ -74,24 +74,19 @@ CSS-переменные `--triplex-next-*` здесь не пишем — эт�
 на сборке к ним дописывается версия пакета. См. docs/ai/CONTEXT.md → «Дизайн-токены».
 -->
 
-Значения токенов — `src/components/DesignTokens/components/ComponentName.ts`
-(пара «светлая / тёмная тема»). Переопределяются через `ThemeProvider`:
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ComponentName.ts`.
 
-```tsx
-const TOKENS = {ComponentName: {Variant_Background_Default: {value: "#FFFFFF"}}};
-
-<ThemeProvider tokens={TOKENS} scopeRef={scopeRef}>…</ThemeProvider>
+```text
+ComponentName.Variant_Background_Default
+ComponentName.Variant_Color_Hover
+ComponentName.Variant_Shadow_Focus
 ```
 
-| Токен | Что задаёт |
-|---|---|
-| `ComponentName.Variant_Background_Default` | фон в обычном состоянии |
-| `ComponentName.Variant_Color_Hover` | цвет текста при наведении |
-| `ComponentName.Variant_Shadow_Focus` | обводка фокуса |
-
-Внутри библиотеки токены доступны как css-переменные вида
-`--triplex-next-{Группа}-{Токен}-{версия}`; напрямую в коде потребителя
-использовать их нельзя.
+<!--
+Пример кода с ThemeProvider здесь не дублируем — он живёт в ThemeProvider-ai.md,
+иначе те же строки расползаются по всем AI.md и устаревают.
+-->
 
 ---
 

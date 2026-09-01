@@ -3,8 +3,8 @@ component: ListMasterHeader
 category: List
 related: [ListMaster, SelectionControls]
 tokens:
-  - --triplex-next-ListMaster-Header_Background
-  - --triplex-next-ListMaster-Header_Shadow
+  - ListMaster.Header_Background
+  - ListMaster.Header_Shadow
 stories: stories/ListMaster/ListMaster.stories.tsx
 version: "1.0"
 ---
@@ -37,9 +37,12 @@ Sticky-шапка `ListMaster`. Показывается обычно при в�
 
 ## Дизайн-токены
 
-```
---triplex-next-ListMaster-Header_Background  // фон шапки
---triplex-next-ListMaster-Header_Shadow      // тень снизу
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListMaster.ts`.
+
+```text
+ListMaster.Header_Background  // фон шапки
+ListMaster.Header_Shadow      // тень снизу
 ```
 
 ---

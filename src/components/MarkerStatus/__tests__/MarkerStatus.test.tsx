@@ -15,10 +15,10 @@ afterAll(() => {
 
 const getMarkerStatus = () => screen.getByTestId("marker-status");
 const getDescription = () => screen.getByText("Test description");
-// MarkerStatus не пробрасывает props во вложенный Marker, а сам Marker — декоративная
-// точка без текста и роли. Достучаться до неё можно только по классу CSS-модуля Marker;
-// при рефакторинге Marker.module.less этот запрос придётся обновить.
-const getMarker = () => getMarkerStatus().querySelector(".marker");
+// Marker — декоративная точка без текста, роли и aria, поэтому семантического запроса
+// к ней не существует. Ищем её как единственного потомка собственного контейнера
+// MarkerStatus, чтобы не завязываться на класс CSS-модуля соседнего компонента.
+const getMarker = () => getMarkerStatus().querySelector(".markerContainer")?.firstElementChild;
 
 describe("MarkerStatus", () => {
     it("Should render correctly with default props", () => {

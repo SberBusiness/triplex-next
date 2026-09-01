@@ -15,7 +15,6 @@ export interface PlaygroundArgs extends Pick<
     React.ComponentProps<typeof NumberField>,
     "size" | "status" | "label" | "active" | "inputProps"
 > {
-    placeholder: string;
     withPostfix: boolean;
     withDescription: boolean;
 }
@@ -34,10 +33,9 @@ const STATUS_TO_DESCRIPTION_FONT_TYPE_MAP: Record<EFormFieldStatus, EFontType> =
     [EFormFieldStatus.WARNING]: EFontType.WARNING,
 };
 
-export const PlaygroundExample = ({
+export const Playground = ({
     status = EFormFieldStatus.DEFAULT,
     inputProps,
-    placeholder,
     withPostfix,
     withDescription,
     ...restArgs
@@ -66,7 +64,6 @@ export const PlaygroundExample = ({
                 inputProps={{
                     ...inputProps,
                     value,
-                    placeholder,
                     onChange: handleInputChange,
                     ref: inputRef,
                 }}

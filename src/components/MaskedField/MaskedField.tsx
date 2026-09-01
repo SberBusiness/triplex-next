@@ -1,6 +1,6 @@
 import React from "react";
 import { FormFieldMaskedInput, IFormFieldMaskedInputProps } from "../FormField/components/FormFieldMaskedInput";
-import { ITextFieldBaseProps, TextFieldBase } from "./TextFieldBase";
+import { ITextFieldBaseProps, TextFieldBase } from "../TextField/TextFieldBase";
 
 /** Свойства компонента MaskedField. */
 export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children"> {

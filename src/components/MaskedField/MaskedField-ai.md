@@ -65,7 +65,6 @@ version: "1.0"
 
 - `forwardRef` на `MaskedField` — не убирать. Внешний `ref` указывает на корневой `<div>` `FormField`.
 - Публичный API (`IMaskedFieldProps`: `maskedInputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
-- Barrel `index.ts` экспортирует `TextField` и `MaskedField` — состав экспортов не менять. `TextFieldBase` намеренно НЕ экспортируется — приватная база.
 - Ссылка на элемент input передаётся только через `maskedInputProps.forwardedRef`. `maskedInputProps.ref` (`React.RefObject<HTMLDivElement>`) попадает на корневой `<div>` обёртки `FormFieldMaskedInput` — это ref самого `FormFieldMaskedInput`, а не поля ввода.
 - `maskedInputProps.value` обязателен: `FormFieldMaskedInput` — контролируемый компонент. `defaultValue` исключён из props (`Omit<MaskedInputProps, ... | "defaultValue">`) и не передаётся внутрь `<input>`: `react-text-mask` подставляет его равным `value`, а на контролируемом поле это даёт предупреждение React о смешении controlled и uncontrolled.
 - Маски и подсказки берутся из `FormFieldMaskedInput.presets` — состав пресетов и их значения часть публичного API.
@@ -85,8 +84,7 @@ version: "1.0"
 
 ## Связанные компоненты
 
-- `TextField` — сосед по папке: то же поле, но с обычным `FormFieldInput`. Документируется отдельно.
-- `TextFieldBase` (внутренний, не в barrel) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. На нём построены `TextField` и `MaskedField`. Описан в `TextField-ai.md`.
+- `TextFieldBase` — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`.
 - `FormFieldMaskedInput` — сам элемент ввода с маской и статическим свойством `presets` (`masks`, `placeholderMasks`). Используется напрямую, когда нужна нестандартная композиция поля.
 - `FormFieldClear` — кнопка очистки, передаётся в `postfix`.
 - `FormGroup` / `FormField` — контейнеры раскладки поля и описания.

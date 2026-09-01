@@ -3,10 +3,10 @@ component: Link
 category: Link
 related: [IconWrapper]
 tokens:
-  - --triplex-next-Link-Text_Color_Default
-  - --triplex-next-Link-Text_Color_Hover
-  - --triplex-next-Link-Text_Color_Active
-  - --triplex-next-Link-BorderColor_Focus
+  - Link.Text_Color_Default
+  - Link.Text_Color_Hover
+  - Link.Text_Color_Active
+  - Link.BorderColor_Focus
 stories: stories/Link/Link.stories.tsx
 version: "1.0"
 ---
@@ -106,14 +106,17 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Link.ts`.
+
 ```text
---triplex-next-Link-Text_Color_Default
---triplex-next-Link-Text_Color_Hover
---triplex-next-Link-Text_Color_Active
---triplex-next-Link-BorderColor_Focus
+Link.Text_Color_Default
+Link.Text_Color_Hover
+Link.Text_Color_Active
+Link.BorderColor_Focus
 ```
 
-Только цвет текста по состояниям и кольцо фокуса. `BorderColor_Focus` подставляется
+Только цвет текста по состояниям и кольцо фокуса. `Link.BorderColor_Focus` подставляется
 в `box-shadow` (не в `border-color`) — имя токена историческое, менять его нельзя.
 
 Размер и начертание текста компонент не задаёт вовсе — их даёт родительский `Text`

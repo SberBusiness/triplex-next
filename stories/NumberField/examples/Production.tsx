@@ -12,8 +12,8 @@ import {
     ETooltipSize,
 } from "@sberbusiness/triplex-next";
 
-export const ProductionExample = () => {
-    const [value, setValue] = useState("");
+export const Production = () => {
+    const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {

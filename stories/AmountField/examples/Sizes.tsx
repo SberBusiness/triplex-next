@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { AmountField, EComponentSize } from "@sberbusiness/triplex-next";
 
 interface ISizeItemProps {
     size: EComponentSize;
@@ -8,22 +8,18 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState<string>("");
 
-    const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setValue(event.target.value);
-    };
-
     return (
         <div style={{ maxWidth: 300 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
-            <NumberField
+            <AmountField
                 size={size}
-                status={EFormFieldStatus.DEFAULT}
+                label="Label"
                 inputProps={{
                     value,
-                    placeholder: "0",
-                    onChange: handleInputChange,
+                    placeholder: "0,00 ₽",
+                    onChange: setValue,
                 }}
-                label="Label"
+                currency="₽"
             />
         </div>
     );
@@ -31,7 +27,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 
 const SIZES = Object.values(EComponentSize);
 
-export const SizesExample = () => (
+export const Sizes = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />

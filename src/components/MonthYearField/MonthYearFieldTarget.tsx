@@ -87,7 +87,6 @@ export const MonthYearFieldTarget = React.forwardRef<HTMLDivElement, IMonthYearF
                     ...restInputProps,
                     className: clsx(SIZE_TO_INPUT_CLASS_NAME_MAP[size], inputClassName),
                     readOnly: true,
-                    disabled: disabled,
                     onMouseDown: handleMouseDown,
                     onKeyDown: handleInputKeyDown,
                 }}

@@ -4,11 +4,32 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.45.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**AmountField**
+
+- Свойство `currency` теперь находится не в `postfix`, а рядом с суммой. На пустом значении валюта не отображается — при необходимости укажите её в `inputProps.placeholder`.
+- Внешний `ref` компонента теперь прокидывается на родительский контейнер, а не на внутренний инпут. Для работы с инпутом используйте `inputProps.ref`.
+- Тип `ref` компонента изменён с `HTMLInputElement` на `HTMLDivElement`.
+
+**FormFieldInput / FormFieldMaskedInput**
+
+- Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`.
+- В интерфейсе `IFormFieldInputProvideProps` изменён тип `size` на нативный.
+
 <Heading>Изменения</Heading>
+
+**AmountField**
+
+- Добавлено свойство `ref` в `inputProps`.
 
 **ButtonDropdownExtended**
 
 - Добавлено: `ButtonDropdownExtended` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`. Базовый тип `IButtonDropdownExtendedComponent` изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props, статики и разметка прежние.
+
+**EmptyView**
+
+- Изменены размер и начертание шрифта `Title` в размере `MD`.
 
 **FormGroup**
 
@@ -22,10 +43,18 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Удалены неиспользуемые токены `ImageGallery.Arrow_Background_Disabled` и `ImageGallery.Arrow_BorderColor_Disabled` вместе с их css-переменными. Токены остались от прежнего дизайна: сейчас неактивная стрелка галереи не приглушается, а скрывается (`display: none`), поэтому красить ими было нечего и их переопределение ни на что не влияло. Если вы переопределяли их через `ThemeProvider`, удалите эти ключи — визуально ничего не изменится.
 
+**Link**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет.
+
 **Marker**
 
 - Добавлено: `Marker` пробрасывает `ref` на свой корневой `<span>` — раньше компонент был объявлен как `React.FC`. Тип компонента изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props и разметка прежние.
 - Проведён AI-рефакторинг.
+
+**MaskedField**
+
+- Исправлен цвет `placeholderMask` в состоянии `disabled`.
 
 **MasterTable**
 
@@ -36,3 +65,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Pagination**
 
 - Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).
+
+**TextField**
+
+- Тип свойства `ref` в `inputProps` расширен с `React.RefObject` до `React.Ref`.
+
+**MCP (mcp-data.json)**
+
+- В секцию `guides` добавлен топик `guidelines` (`docs/mcp/guidelines.md`) — правила кодогенерации на Triplex для ИИ-агентов; будет отдаваться инструментом `get_guidelines` MCP-сервера.

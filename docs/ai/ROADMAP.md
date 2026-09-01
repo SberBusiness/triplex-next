@@ -148,7 +148,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | LoaderMiddle | ✅ | ✅ | ✅ |
 | LoaderScreen | ✅ | ✅ | ✅ |
 | LoaderSmall | ✅ | ✅ | ✅ |
-| Marker | ⬜ | ⬜ | ⬜ |
+| Marker | ✅ | ✅ | ✅ |
 | MarkerStatus | ⬜ | ✅ | ⬜ |
 | MaskedField | ✅ | ✅ | ✅ |
 | MasterTable | ✅ | ✅ | ✅ |

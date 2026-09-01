@@ -1,12 +1,15 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useRef, useLayoutEffect, useMemo } from "react";
+import clsx from "clsx";
 import { TextFieldBase, ITextFieldBaseProps } from "../TextField/TextFieldBase";
 import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
-import { Text, ETextSize, EFontType } from "../Typography";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
-import { setCaretPosition } from "../../utils/inputUtils";
+import { setCaretPosition, createSizeToClassNameMap } from "../../utils";
 import { createPlaceholder, setFallbackCaret } from "./utils";
+import { EComponentSize } from "../../enums";
+import styles from "./styles/AmountField.module.less";
 
+/** Свойства компонента AmountField. */
 export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
     inputProps: Omit<IFormFieldInputProps, "type" | "maxLength" | "onChange" | "inputMode" | "autoComplete"> & {
@@ -14,6 +17,8 @@ export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children">
         value: string;
         /** Обработчик изменения значения. */
         onChange: (value: string) => void;
+        /** Ссылка на HTML-элемент поля ввода. */
+        ref?: React.Ref<HTMLInputElement>;
     };
     /** Наименование валюты. */
     currency?: string;
@@ -25,18 +30,33 @@ export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children">
     onClear?: () => void;
 }
 
-export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>(
-    ({ inputProps, currency, postfix, maxIntegerDigits = 16, fractionDigits = 2, onClear, ...restProps }, ref) => {
+/** Соответствие размера имени класса. */
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
+
+export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
+    (
+        {
+            size = EComponentSize.LG,
+            postfix,
+            inputProps,
+            currency,
+            maxIntegerDigits = 16,
+            fractionDigits = 2,
+            onClear,
+            ...restProps
+        },
+        ref,
+    ) => {
         const { status, "data-test-id": dataTestId } = restProps;
         const placeholder = inputProps.placeholder || createPlaceholder(fractionDigits);
 
-        const refInput = useRef<HTMLInputElement | null>(null);
+        const inputRef = useRef<HTMLInputElement | null>(null);
         const core = useRef<AmountBaseInputCore>();
         if (core.current === undefined) core.current = new AmountBaseInputCore(maxIntegerDigits, fractionDigits);
 
         useLayoutEffect(() => {
-            if (core.current && refInput.current == document.activeElement)
-                setCaretPosition(refInput.current, Math.max(core.current.caret, 0));
+            if (core.current && inputRef.current == document.activeElement)
+                setCaretPosition(inputRef.current, Math.max(core.current.caret, 0));
         }, [inputProps.value]);
 
         /** Функция, возвращающая отформатированное значение. */
@@ -57,6 +77,8 @@ export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>
 
             return core.current.formattedValue;
         };
+
+        const formattedValue = getFormattedValue();
 
         /** Обработчик изменения значения. */
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,49 +114,70 @@ export const AmountField = React.forwardRef<HTMLInputElement, IAmountFieldProps>
             inputProps.onSelect?.(event);
         };
 
-        /** Функция для хранения ссылки. */
-        const setRef = (instance: HTMLInputElement | null) => {
-            refInput.current = instance;
+        const mergedInputRef = useMemo(() => {
+            const externalRef = inputProps.ref;
 
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
+            if (externalRef === undefined) {
+                return (instance: HTMLInputElement | null) => {
+                    inputRef.current = instance;
+                };
             }
+
+            return (instance: HTMLInputElement | null) => {
+                inputRef.current = instance;
+                if (typeof externalRef === "function") {
+                    externalRef(instance);
+                } else {
+                    (externalRef as React.MutableRefObject<HTMLInputElement | null>).current = instance;
+                }
+            };
+        }, [inputProps.ref]);
+
+        const renderPostfix = () => {
+            if (onClear !== undefined) {
+                return (
+                    <>
+                        <FormFieldClear onClick={onClear} />
+                        {postfix}
+                    </>
+                );
+            }
+            return postfix;
         };
 
+        const showCurrency = currency !== undefined && formattedValue.length > 0;
+
         return (
-            <TextFieldBase
-                postfix={
-                    <React.Fragment>
-                        {onClear !== undefined && <FormFieldClear onClick={onClear} />}
-                        {currency !== undefined && (
-                            <Text
-                                size={ETextSize.B2}
-                                type={status !== EFormFieldStatus.DISABLED ? EFontType.SECONDARY : EFontType.DISABLED}
+            <TextFieldBase size={size} postfix={renderPostfix()} {...restProps} ref={ref}>
+                <div className={styles.amountFieldInputWrapper}>
+                    {showCurrency && (
+                        <div className={clsx(styles.currencyLayout, SIZE_TO_CLASS_NAME_MAP[size])}>
+                            <span className={styles.valueMirror} aria-hidden="true">
+                                {`${formattedValue} `}
+                            </span>
+                            <span
+                                className={clsx(styles.currencyUnit, {
+                                    [styles.disabled]: status === EFormFieldStatus.DISABLED,
+                                })}
                                 data-test-id={dataTestId && `${dataTestId}__unit`}
                             >
                                 {currency}
-                            </Text>
-                        )}
-                        {postfix}
-                    </React.Fragment>
-                }
-                {...restProps}
-            >
-                <FormFieldInput
-                    {...inputProps}
-                    // eslint-disable-next-line react-hooks/refs
-                    value={getFormattedValue()}
-                    placeholder={placeholder}
-                    autoComplete="off"
-                    inputMode="decimal"
-                    data-test-id={dataTestId && `${dataTestId}__input`}
-                    onKeyDown={handleKeyDown}
-                    onSelect={handleSelect}
-                    onChange={handleChange}
-                    ref={setRef}
-                />
+                            </span>
+                        </div>
+                    )}
+                    <FormFieldInput
+                        {...inputProps}
+                        value={formattedValue}
+                        placeholder={placeholder}
+                        autoComplete="off"
+                        inputMode="decimal"
+                        data-test-id={dataTestId && `${dataTestId}__input`}
+                        onKeyDown={handleKeyDown}
+                        onSelect={handleSelect}
+                        onChange={handleChange}
+                        ref={mergedInputRef}
+                    />
+                </div>
             </TextFieldBase>
         );
     },

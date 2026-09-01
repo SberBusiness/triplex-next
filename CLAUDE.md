@@ -101,6 +101,6 @@ React 18 + TypeScript strict + LESS Modules + Vite + Storybook 9
 - Публичный API (имена props, типы, значения enum) — это breaking change
 - Все barrel-экспорты в `index.ts` должны сохраняться
 - Используй `clsx` для className — никогда не конкатенировать строки
-- Нет hardcoded цветов — только CSS-переменные из дизайн-токенов
+- Нет hardcoded цветов — только CSS-переменные из дизайн-токенов (за исключением `transparent` для элементов-зеркал и масок)
 - Новые или полностью переписанные stories следуют modern pattern из `docs/ai/stories-guide.md`
 - Небольшие правки в legacy stories/тестах сохраняют локальный паттерн файла, если миграция не часть задачи

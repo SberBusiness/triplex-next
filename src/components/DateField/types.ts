@@ -1,5 +1,5 @@
 import { IDatePickerExtendedProps } from "../DatePickerExtended/DatePickerExtended";
-import { IMaskedFieldProps } from "../TextField";
+import { IMaskedFieldProps } from "../MaskedField";
 import { DeepPartial } from "../../types/CoreTypes";
 
 /** Свойства компонента DateField. */

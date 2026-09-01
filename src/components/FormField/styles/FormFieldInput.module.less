@@ -1,3 +1,5 @@
+@import "./mixins";
+
 .formFieldInput {
     padding: 0;
     width: 100%;
@@ -8,26 +10,7 @@
     appearance: none;
     color: var(--triplex-next-FormField-Input_Color_Default);
 
-    &.sm {
-        padding-top: 6px;
-        padding-bottom: 6px;
-        font-size: 12px;
-        line-height: 16px;
-    }
-
-    &.md {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-size: 14px;
-        line-height: 20px;
-    }
-
-    &.lg {
-        padding-top: 26px;
-        padding-bottom: 10px;
-        line-height: 20px;
-        font-size: 16px;
-    }
+    .form-field-input-sizes();
 
     &:disabled {
         color: var(--triplex-next-FormField-Input_Color_Disabled);
@@ -36,7 +19,7 @@
     &::placeholder {
         color: var(--triplex-next-FormField-Placeholder_Color);
         opacity: 0;
-        transition: opacity .3s ease-out;
+        transition: opacity 0.3s ease-out;
     }
 
     &:focus {

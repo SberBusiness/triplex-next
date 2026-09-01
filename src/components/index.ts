@@ -49,6 +49,7 @@ export * from "./Loader";
 export * from "./LoaderScreen";
 export * from "./Marker";
 export * from "./MarkerStatus";
+export * from "./MaskedField";
 export * from "./MediaWidth";
 export * from "./MobileView";
 export * from "./ModalWindow";

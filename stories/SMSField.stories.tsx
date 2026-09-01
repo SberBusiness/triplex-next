@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { EComponentSize } from "../src";
+import { EComponentSize, EFormFieldStatus } from "../src";
 import { SMSField } from "../src/components/SMSField";
 import { Title, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 
@@ -73,23 +73,19 @@ const useSMSFieldLogic = (value: string) => {
 export const Playground: StoryObj<ISMSFieldProps> = {
     name: "Playground",
     args: {
-        disabled: false,
         maxLength: 8,
         placeholder: "Введите код",
         size: EComponentSize.MD,
+        status: EFormFieldStatus.DEFAULT,
     },
     argTypes: {
         description: {
             control: { type: "text" },
             description: "Описание поля ввода",
         },
-        disabled: {
-            control: { type: "boolean" },
-            description: "Признак блокировки компонента",
-        },
         errorText: {
             control: { type: "text" },
-            description: "Текст ошибки, отображается вместо плейсхолдера вне фокуса",
+            description: "Текст ошибки, отображается вместо плейсхолдера вне фокуса в статусах error и disabled",
         },
         maxLength: {
             control: { type: "number", min: 1 },
@@ -104,24 +100,29 @@ export const Playground: StoryObj<ISMSFieldProps> = {
             options: Object.values(EComponentSize),
             description: "Размер поля",
         },
+        status: {
+            control: { type: "select" },
+            options: Object.values(EFormFieldStatus).filter((status) => status !== EFormFieldStatus.WARNING),
+            description: "Визуальное состояние компонента",
+        },
     },
     parameters: {
         controls: {
-            include: ["description", "disabled", "errorText", "maxLength", "placeholder", "size"],
+            include: ["description", "errorText", "maxLength", "placeholder", "size", "status"],
         },
         testRunner: { skip: true },
     },
     render: (args: ISMSFieldProps) => {
-        const { description, disabled, errorText, maxLength, placeholder, size } = args;
+        const { description, errorText, maxLength, placeholder, size, status } = args;
         const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("");
 
         return (
             <SMSField
                 code={code}
-                disabled={disabled}
                 onChangeCode={onChange}
                 onSubmitCode={onSubmit}
                 size={size ?? EComponentSize.MD}
+                status={status}
             >
                 <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
                     <SMSField.Refresh
@@ -157,7 +158,14 @@ export const Error: StoryObj<ISMSFieldProps> = {
                     const { code, timeLeft, targetRef, onChange, onSubmit, onRefresh } = useSMSFieldLogic("");
 
                     return (
-                        <SMSField key={size} code={code} onChangeCode={onChange} onSubmitCode={onSubmit} size={size}>
+                        <SMSField
+                            key={size}
+                            code={code}
+                            onChangeCode={onChange}
+                            onSubmitCode={onSubmit}
+                            size={size}
+                            status={EFormFieldStatus.ERROR}
+                        >
                             <SMSField.Tooltip targetRef={targetRef} message="Текст подсказки">
                                 <SMSField.Refresh
                                     countdownTime={10}
@@ -196,10 +204,10 @@ export const Disabled: StoryObj<ISMSFieldProps> = {
             <>
                 <SMSField
                     code="12345678"
-                    disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
                     size={EComponentSize.MD}
+                    status={EFormFieldStatus.DISABLED}
                 >
                     <SMSField.Tooltip targetRef={targetRefFull} message="Текст подсказки">
                         <SMSField.Refresh
@@ -215,10 +223,10 @@ export const Disabled: StoryObj<ISMSFieldProps> = {
 
                 <SMSField
                     code=""
-                    disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
                     size={EComponentSize.MD}
+                    status={EFormFieldStatus.DISABLED}
                 >
                     <SMSField.Tooltip targetRef={targetRefEmpty} message="Текст подсказки">
                         <SMSField.Refresh
@@ -234,10 +242,10 @@ export const Disabled: StoryObj<ISMSFieldProps> = {
 
                 <SMSField
                     code=""
-                    disabled={true}
                     onChangeCode={handleChange}
                     onSubmitCode={handleSubmit}
                     size={EComponentSize.MD}
+                    status={EFormFieldStatus.DISABLED}
                 >
                     <SMSField.Tooltip targetRef={targetRefError} message="Текст подсказки">
                         <SMSField.Refresh
@@ -301,10 +309,10 @@ export const VisualTests: StoryObj<ISMSFieldProps> = {
             <>
                 <SMSField
                     code={filled.code}
-                    disabled={true}
                     onChangeCode={filled.onChange}
                     onSubmitCode={filled.onSubmit}
                     size={EComponentSize.MD}
+                    status={EFormFieldStatus.DISABLED}
                 >
                     <SMSField.Tooltip targetRef={filled.targetRef} message="Текст подсказки">
                         <SMSField.Refresh
@@ -323,6 +331,7 @@ export const VisualTests: StoryObj<ISMSFieldProps> = {
                     onChangeCode={errored.onChange}
                     onSubmitCode={errored.onSubmit}
                     size={EComponentSize.MD}
+                    status={EFormFieldStatus.ERROR}
                 >
                     <SMSField.Tooltip targetRef={errored.targetRef} message="Текст подсказки">
                         <SMSField.Refresh

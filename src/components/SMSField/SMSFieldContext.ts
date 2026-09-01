@@ -1,11 +1,10 @@
 import React from "react";
+import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 export interface ISMSFieldContext {
     /** Значение кода. */
     code: string;
-    /** Признак блокировки компонента. */
-    disabled: boolean;
     /** Отключённое состояние кнопки Submit. */
     disabledSubmit: boolean;
     /** Обработчик изменения кода. */
@@ -20,13 +19,14 @@ export interface ISMSFieldContext {
     size: EComponentSize;
     /** CSS класс размера. */
     sizeClassName: string;
+    /** Визуальное состояние компонента. */
+    status: Exclude<EFormFieldStatus, EFormFieldStatus.WARNING>;
     /** Уникальный идентификатор Tooltip. */
     tooltipId?: string;
 }
 
 const contextInitial: ISMSFieldContext = {
     code: "",
-    disabled: false,
     disabledSubmit: true,
     onChangeCode: () => {},
     onSubmitCode: () => {},
@@ -34,6 +34,7 @@ const contextInitial: ISMSFieldContext = {
     setTooltipId: () => {},
     size: EComponentSize.LG,
     sizeClassName: "",
+    status: EFormFieldStatus.DEFAULT,
     tooltipId: undefined,
 };
 

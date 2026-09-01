@@ -2,17 +2,20 @@ import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { SMSField } from "@sberbusiness/triplex-next/components/SMSField";
+import { ISMSFieldProps } from "@sberbusiness/triplex-next/components/SMSField/types";
 import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
 import { RefreshIcon } from "@sberbusiness/triplex-next/components/SMSField/components/RefreshIcon";
 import { SubmitIcon } from "@sberbusiness/triplex-next/components/SMSField/components/SubmitIcon";
+import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
 import smsFieldStyles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
-const createDefaultSMSFieldProps = () => ({
+const createDefaultSMSFieldProps = (status?: ISMSFieldProps["status"]) => ({
     code: "",
     onChangeCode: vi.fn(),
     onSubmitCode: vi.fn(),
     size: EComponentSize.MD,
+    status,
 });
 
 describe("SMSField", () => {
@@ -128,8 +131,8 @@ describe("SMSField.Input", () => {
         expect(screen.getByTestId("sms-counter")).toHaveTextContent("4 / 8");
     });
 
-    it("shows error text instead of placeholder when errorText is set", () => {
-        const props = createDefaultSMSFieldProps();
+    it("shows error text instead of placeholder in error status", () => {
+        const props = createDefaultSMSFieldProps(EFormFieldStatus.ERROR);
 
         render(
             <SMSField {...props}>
@@ -144,7 +147,7 @@ describe("SMSField.Input", () => {
     });
 
     it("returns own placeholder on focus and restores error text on blur", () => {
-        const props = createDefaultSMSFieldProps();
+        const props = createDefaultSMSFieldProps(EFormFieldStatus.ERROR);
 
         render(
             <SMSField {...props}>
@@ -163,11 +166,8 @@ describe("SMSField.Input", () => {
         expect(input).toHaveClass(smsFieldStyles.errorPlaceholder);
     });
 
-    it("prefers disabled status over error when both are set", () => {
-        const props = {
-            ...createDefaultSMSFieldProps(),
-            disabled: true,
-        };
+    it("keeps error text visible in disabled status", () => {
+        const props = createDefaultSMSFieldProps(EFormFieldStatus.DISABLED);
 
         render(
             <SMSField {...props}>
@@ -178,10 +178,11 @@ describe("SMSField.Input", () => {
         const input = screen.getByRole("textbox", { name: "SMS code" });
         expect(input).toBeDisabled();
         expect(input).toHaveAttribute("placeholder", "Неверный код");
+        expect(input).toHaveClass(smsFieldStyles.errorPlaceholder);
     });
 
-    it("keeps error status editable and enabled without disabled", () => {
-        const props = createDefaultSMSFieldProps();
+    it("keeps error status editable and enabled", () => {
+        const props = createDefaultSMSFieldProps(EFormFieldStatus.ERROR);
 
         render(
             <SMSField {...props}>
@@ -190,6 +191,36 @@ describe("SMSField.Input", () => {
         );
 
         expect(screen.getByRole("textbox", { name: "SMS code" })).not.toBeDisabled();
+    });
+
+    it("shows own placeholder and error status when errorText is not set", () => {
+        const props = createDefaultSMSFieldProps(EFormFieldStatus.ERROR);
+
+        render(
+            <SMSField {...props}>
+                <SMSField.Input aria-label="SMS code" placeholder="Введите код" />
+            </SMSField>,
+        );
+
+        const input = screen.getByRole("textbox", { name: "SMS code" });
+        expect(input).toHaveAttribute("placeholder", "Введите код");
+        expect(input).toHaveAttribute("aria-invalid", "true");
+        expect(input).not.toHaveClass(smsFieldStyles.errorPlaceholder);
+    });
+
+    it("ignores errorText without error status", () => {
+        const props = createDefaultSMSFieldProps();
+
+        render(
+            <SMSField {...props}>
+                <SMSField.Input aria-label="SMS code" errorText="Неверный код" placeholder="Введите код" />
+            </SMSField>,
+        );
+
+        const input = screen.getByRole("textbox", { name: "SMS code" });
+        expect(input).toHaveAttribute("placeholder", "Введите код");
+        expect(input).not.toHaveAttribute("aria-invalid");
+        expect(input).not.toHaveClass(smsFieldStyles.errorPlaceholder);
     });
 
     it("keeps own placeholder and default status without errorText", () => {
@@ -351,10 +382,7 @@ describe("SMSField.Refresh", () => {
     });
 
     it("disables refresh when the whole field is disabled", () => {
-        const props = {
-            ...createDefaultSMSFieldProps(),
-            disabled: true,
-        };
+        const props = createDefaultSMSFieldProps(EFormFieldStatus.DISABLED);
         const handleRefresh = vi.fn();
 
         render(

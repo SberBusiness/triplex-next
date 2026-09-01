@@ -23,7 +23,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **SMSField**
 
-- Удалено свойство `error`. Состояние ошибки включает свойство `errorText` компонента `SMSField.Input`.
+- Удалены свойства `error` и `disabled`. Состояние задаётся свойством `status`.
 
 <Heading>Изменения</Heading>
 
@@ -93,7 +93,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **SMSField**
 
-- Добавлено свойство `errorText` компонента `SMSField.Input`: текст ошибки отображается внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`.
+- Добавлено свойство `status`.
+- У компонента `SMSField.Input` добавлено свойство `errorText`: текст ошибки отображается внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`. В заблокированном поле фон и рамка остаются как в `DISABLED`, а текст ошибки — красный.
 - Исправлены цвета фона поля и иконки `SMSFieldRefresh` в состояниях `error` и `disabled`.
 
 **SwipeableArea**
@@ -108,12 +109,3 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MCP (mcp-data.json)**
 
 - В секцию `guides` добавлен топик `guidelines` (`docs/mcp/guidelines.md`) — правила кодогенерации на Triplex для ИИ-агентов; будет отдаваться инструментом `get_guidelines` MCP-сервера.
-
-**SMSField**
-
-- Добавлено свойство `errorText` для отображения текста ошибки внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`.
-- Исправлены цвета фона поля и иконки `SMSFieldRefresh` в состоянии `error` `disabled`.
-
-**Pagination**
-
-- Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).

@@ -1,7 +1,7 @@
 ---
 component: MarkerStatus
 category: MarkerStatus
-related: [Badge, TagColor, Marker, Text, Caption]
+related: [TagColor, Marker, Text, Caption]
 tokens: []
 stories: stories/MarkerStatus/MarkerStatus.stories.tsx
 version: "1.0"
@@ -156,8 +156,9 @@ Typography.Secondary_Color
   для корневого элемента.
 - `Text`, `Caption` — типографика наименования и описания; размеры и `EFontType`
   выбираются по `size`.
-- `Badge` — альтернатива, когда нужен статус на цветной подложке или счётчик;
-  `Marker` построен на `Badge.Dot`.
+- `Badge` — не альтернатива и не прямая зависимость `MarkerStatus`: он решает другой
+  класс задач (статус на цветной подложке, счётчик), а в цепочку рендера попадает
+  через `Marker`, который построен на `Badge.Dot`. Поэтому во `related` не вынесен.
 - `TagColor` — альтернатива, когда статус показывается цветным тегом.
 - `StatusTracker` — потребитель: `StatusTracker.Body.Status` (`StatusTrackerStatus`)
   оборачивает `MarkerStatus`, добавляя свой класс, и переиспользует `IMarkerStatusProps`.

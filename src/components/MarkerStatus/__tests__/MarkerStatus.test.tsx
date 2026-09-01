@@ -15,7 +15,10 @@ afterAll(() => {
 
 const getMarkerStatus = () => screen.getByTestId("marker-status");
 const getDescription = () => screen.getByText("Test description");
-const getMarker = () => document.querySelector(".marker");
+// MarkerStatus не пробрасывает props во вложенный Marker, а сам Marker — декоративная
+// точка без текста и роли. Достучаться до неё можно только по классу CSS-модуля Marker;
+// при рефакторинге Marker.module.less этот запрос придётся обновить.
+const getMarker = () => getMarkerStatus().querySelector(".marker");
 
 describe("MarkerStatus", () => {
     it("Should render correctly with default props", () => {
@@ -242,7 +245,7 @@ describe("MarkerStatus", () => {
         const markerStatus = getMarkerStatus();
 
         expect(markerStatus).not.toHaveAttribute("data-tx", "overridden");
-        expect(markerStatus).toHaveAttribute("data-tx", process.env.npm_package_version);
+        expect(markerStatus).toHaveAttribute("data-tx", "1.0.0-test");
     });
 
     it("Should forward object ref to the root div", () => {

@@ -17,7 +17,20 @@ export interface IPaginationSelectProps
 
 /** Выбор количества элементов на странице. */
 export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSelectProps>(
-    ({ paginationLabel, className, options, value, onChange, status }, ref) => {
+    (
+        {
+            paginationLabel,
+            className,
+            options,
+            value,
+            onChange,
+            status,
+            targetProps,
+            mobileTitle = paginationLabel,
+            ...rest
+        },
+        ref,
+    ) => {
         const [instanceId] = useState(() => `Pagination-${uniqueId()}`);
         const { loading } = useContext(MasterTableContext);
 
@@ -30,14 +43,13 @@ export const PaginationSelect = React.forwardRef<HTMLDivElement, IPaginationSele
                     <SelectField
                         size={EComponentSize.SM}
                         value={value}
-                        mobileTitle={paginationLabel}
+                        mobileTitle={mobileTitle}
                         options={options}
                         onChange={onChange}
                         status={loading ? EFormFieldStatus.DISABLED : status}
-                        targetProps={{
-                            fieldLabel: "",
-                        }}
                         aria-labelledby={instanceId}
+                        {...rest}
+                        targetProps={{ fieldLabel: "", ...targetProps }}
                     />
                 </div>
             </div>

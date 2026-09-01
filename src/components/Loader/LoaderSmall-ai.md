@@ -3,8 +3,8 @@ component: LoaderSmall
 category: Loaders
 related: [LoaderMiddle, LoaderScreen, Button, Dropdown, ListItemLoading, SuggestField, SelectExtendedField]
 tokens:
-  - --triplex-next-Loader-Element_Background_Brand
-  - --triplex-next-Loader-Element_Background_Neutral
+  - Loader.Element_Background_Brand
+  - Loader.Element_Background_Neutral
 stories: stories/Loaders/LoaderSmall/LoaderSmall.stories.tsx
 version: "1.0"
 ---
@@ -62,9 +62,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Loader.ts`.
+
 ```text
---triplex-next-Loader-Element_Background_Brand
---triplex-next-Loader-Element_Background_Neutral
+Loader.Element_Background_Brand
+Loader.Element_Background_Neutral
 ```
 
 - `Element_Background_Brand` — цвет точек темы `BRAND` (`ColorBrand.50` в обеих темах).

@@ -3,10 +3,10 @@ component: Notification
 category: Feedback
 related: [NotificationGrouped, Button, AlertContext, UnorderedList]
 tokens:
-  - --triplex-next-Notification-Background
-  - --triplex-next-Notification-Color
-  - --triplex-next-Notification-Shadow
-  - --triplex-next-Notification-TimeColor
+  - Notification.Background
+  - Notification.Color
+  - Notification.Shadow
+  - Notification.TimeColor
 stories: stories/Notification/Notification.stories.tsx
 version: "1.0"
 ---
@@ -91,11 +91,14 @@ Notification
 
 ## Дизайн-токены
 
-```
---triplex-next-Notification-Background   (фон уведомления)
---triplex-next-Notification-Color        (цвет текста)
---triplex-next-Notification-Shadow       (тень карточки)
---triplex-next-Notification-TimeColor    (цвет времени)
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Notification.ts`.
+
+```text
+Notification.Background   (фон уведомления)
+Notification.Color        (цвет текста)
+Notification.Shadow       (тень карточки)
+Notification.TimeColor    (цвет времени)
 ```
 
 ---

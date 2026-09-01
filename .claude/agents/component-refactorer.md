@@ -34,7 +34,7 @@ tools:
 
 ## Жёсткие ограничения
 
-- **НЕ меняй публичный API без подтверждения.** Имена интерфейсов/типов/enum'ов/компонентов/props, значения enum, barrel exports, CSS-переменные токенов — всё это breaking change. См. раздел «Изменения публичного API» в ai-refactoring.md.
+- **НЕ меняй публичный API без подтверждения.** Имена интерфейсов/типов/enum'ов/компонентов/props, значения enum, barrel exports, дизайн-токены (и путь `{Группа}.{Токен}`, и css-переменная `--triplex-next-...`) — всё это breaking change. См. раздел «Изменения публичного API» в ai-refactoring.md.
 - **НЕ используй React 18-only API** (`useId`, `useSyncExternalStore`, `useInsertionEffect`, `useTransition`, `useDeferredValue`). Ветка `release-0` синхронизируется с main и поддерживает React 17. Для уникальных id используй `lodash-es/uniqueId` или `scripts/uniqueId`.
 - **`forwardRef` обязателен** на всех публичных компонентах — никогда не убирай.
 - **НЕ мигрируй legacy stories/tests** на modern pattern в рамках рефакторинга — это отдельная задача.

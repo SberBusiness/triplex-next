@@ -3,25 +3,25 @@ component: Chip
 category: Chips
 related: [ChipGroup, ChipIcon, ChipOptions, ChipSelect, ChipMultiselect, ChipSort, ChipSuggest, ChipDatePicker, ChipClearButton, ChipDropdownArrow, Badge, IconWrapper]
 tokens:
-  - --triplex-next-Chip-Background_Type1_Default
-  - --triplex-next-Chip-Background_Type1_Hover
-  - --triplex-next-Chip-Background_Type2_Default
-  - --triplex-next-Chip-Background_Type2_Hover
-  - --triplex-next-Chip-Background_Active
-  - --triplex-next-Chip-Background_Disabled
-  - --triplex-next-Chip-Background_Selected_Default
-  - --triplex-next-Chip-Background_Selected_Hover
-  - --triplex-next-Chip-Background_Selected_Active
-  - --triplex-next-Chip-Background_Selected_Disabled
-  - --triplex-next-Chip-Color_Default
-  - --triplex-next-Chip-Color_Hover
-  - --triplex-next-Chip-Color_Active
-  - --triplex-next-Chip-Color_Disabled
-  - --triplex-next-Chip-Color_Selected_Default
-  - --triplex-next-Chip-Color_Selected_Hover
-  - --triplex-next-Chip-Color_Selected_Active
-  - --triplex-next-Chip-Color_Selected_Disabled
-  - --triplex-next-Chip-Shadow_Focus
+  - Chip.Background_Type1_Default
+  - Chip.Background_Type1_Hover
+  - Chip.Background_Type2_Default
+  - Chip.Background_Type2_Hover
+  - Chip.Background_Active
+  - Chip.Background_Disabled
+  - Chip.Background_Selected_Default
+  - Chip.Background_Selected_Hover
+  - Chip.Background_Selected_Active
+  - Chip.Background_Selected_Disabled
+  - Chip.Color_Default
+  - Chip.Color_Hover
+  - Chip.Color_Active
+  - Chip.Color_Disabled
+  - Chip.Color_Selected_Default
+  - Chip.Color_Selected_Hover
+  - Chip.Color_Selected_Active
+  - Chip.Color_Selected_Disabled
+  - Chip.Shadow_Focus
 stories: stories/Chips/Chip.stories.tsx
 version: "1.0"
 ---
@@ -99,7 +99,7 @@ version: "1.0"
   вызовут `onClick` / `onKeyDown`. Не полагайся на `disabled` как на защиту в логике —
   проверяй флаг в самом обработчике, если это критично.
 - **`selected` и `disabled` совместимы** — есть отдельные токены
-  `--triplex-next-Chip-*_Selected_Disabled`.
+  `Chip.*_Selected_Disabled`.
 - Ширина ограничена: `min-width: 40px`, `max-width: 264px`. Длинный `children`
   обрезается многоточием, а не переносится.
 
@@ -107,28 +107,31 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Паттерн: `--triplex-next-Chip-{Property}_{Modifier}_{State}`
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Chip.ts`.
+
+Паттерн: `Chip.{Property}_{Modifier}_{State}`
 
 ```text
---triplex-next-Chip-Background_Type1_Default
---triplex-next-Chip-Background_Type1_Hover
---triplex-next-Chip-Background_Type2_Default
---triplex-next-Chip-Background_Type2_Hover
---triplex-next-Chip-Background_Active
---triplex-next-Chip-Background_Disabled
---triplex-next-Chip-Background_Selected_Default
---triplex-next-Chip-Background_Selected_Hover
---triplex-next-Chip-Background_Selected_Active
---triplex-next-Chip-Background_Selected_Disabled
---triplex-next-Chip-Color_Default
---triplex-next-Chip-Color_Hover
---triplex-next-Chip-Color_Active
---triplex-next-Chip-Color_Disabled
---triplex-next-Chip-Color_Selected_Default
---triplex-next-Chip-Color_Selected_Hover
---triplex-next-Chip-Color_Selected_Active
---triplex-next-Chip-Color_Selected_Disabled
---triplex-next-Chip-Shadow_Focus
+Chip.Background_Type1_Default
+Chip.Background_Type1_Hover
+Chip.Background_Type2_Default
+Chip.Background_Type2_Hover
+Chip.Background_Active
+Chip.Background_Disabled
+Chip.Background_Selected_Default
+Chip.Background_Selected_Hover
+Chip.Background_Selected_Active
+Chip.Background_Selected_Disabled
+Chip.Color_Default
+Chip.Color_Hover
+Chip.Color_Active
+Chip.Color_Disabled
+Chip.Color_Selected_Default
+Chip.Color_Selected_Hover
+Chip.Color_Selected_Active
+Chip.Color_Selected_Disabled
+Chip.Shadow_Focus
 ```
 
 Токены `_Type1_` / `_Type2_` существуют только для `Background` в состояниях
@@ -175,7 +178,7 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
   внешний `onKeyDown` вызывается всегда и после `preventDefault`. Если чипс должен
   срабатывать с клавиатуры, потребитель обрабатывает Enter/Space сам через `onKeyDown`.
   Обёртки семейства (`ChipSelect`, `ChipSuggest`, `ChipDatePicker`) делают это на своём уровне.
-- Фокус-стиль через `:focus-visible` (`--triplex-next-Chip-Shadow_Focus`) — виден только
+- Фокус-стиль через `:focus-visible` (`Chip.Shadow_Focus`) — виден только
   при клавиатурной навигации. Нативная обводка на корневом элементе намеренно отключена
   (`outline: none` в LESS) в пользу `box-shadow` — убирать правило нельзя, иначе фокус
   отрисуется дважды.

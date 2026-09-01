@@ -17,7 +17,10 @@ version: "1.0"
 Описывай намерения и ограничения, которые не видны из кода.
 
 Frontmatter:
-- tokens: список CSS-переменных, которые компонент использует
+- tokens: пути дизайн-токенов, которые использует компонент, в формате
+  `{Группа}.{Токен}` (например `Button.General_Background_Default`).
+  Не css-переменные: они внутренние и версионируются на сборке.
+  Нормализуется и проверяется скриптом `npm run syncAiMdTokens`.
 - related: индекс переходов для агента. Полное правило: docs/ai/CONTEXT.md → «Как заполнять related в AI.md».
 
 Таблица Stories: колонка `Example file` обязательна — её читает сборщик
@@ -64,19 +67,26 @@ mcp-data.json, чтобы инлайнить код примера. См. раз
 
 ## Дизайн-токены
 
-<!-- Только те CSS-переменные, которые непосредственно используются в стилях компонента. -->
+<!--
+Только те токены, которые используются в стилях компонента. Путь токена —
+`{Группа}.{Токен}`: ровно в этом виде он передаётся в ThemeProvider.
+CSS-переменные `--triplex-next-*` здесь не пишем — это внутренний слой,
+на сборке к ним дописывается версия пакета. См. docs/ai/CONTEXT.md → «Дизайн-токены».
+-->
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ComponentName.ts`.
+
+```text
+ComponentName.Variant_Background_Default
+ComponentName.Variant_Color_Hover
+ComponentName.Variant_Shadow_Focus
 ```
---triplex-next-ComponentName-Variant_Background_Default
---triplex-next-ComponentName-Variant_Color_Default
---triplex-next-ComponentName-Variant_Background_Hover
---triplex-next-ComponentName-Variant_Color_Hover
---triplex-next-ComponentName-Variant_Background_Active
---triplex-next-ComponentName-Variant_Color_Active
---triplex-next-ComponentName-Variant_Shadow_Focus
---triplex-next-ComponentName-Variant_Background_Disabled
---triplex-next-ComponentName-Variant_Color_Disabled
-```
+
+<!--
+Пример кода с ThemeProvider здесь не дублируем — он живёт в ThemeProvider-ai.md,
+иначе те же строки расползаются по всем AI.md и устаревают.
+-->
 
 ---
 

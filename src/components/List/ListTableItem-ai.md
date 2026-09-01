@@ -3,8 +3,8 @@ component: ListTableItem
 category: List
 related: [ListItem, ListItemSelectable, ListItemControls, ListItemControlsButton, SwipeableArea]
 tokens:
-  - --triplex-next-ListItem-Background
-  - --triplex-next-ListItem-Background_Selected
+  - ListItem.Background
+  - ListItem.Background_Selected
 stories: stories/List/ListTableItem.stories.tsx
 version: "1.0"
 ---
@@ -50,9 +50,12 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItem.ts`.
+
 ```text
---triplex-next-ListItem-Background          // фон строки
---triplex-next-ListItem-Background_Selected // фон выбранной строки (через ListItemSelectable + ListItemContent)
+ListItem.Background          // фон строки
+ListItem.Background_Selected // фон выбранной строки (через ListItemSelectable + ListItemContent)
 ```
 
 Применяются в подкомпонентах `ListItemContent`/`ListItemSelectable`. Сам

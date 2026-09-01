@@ -105,9 +105,9 @@ version: "1.0"
 каретки и блокировку указателя в `disabled`. Цвета, фон, границы и тени приходят из
 компонентов, на которых построено поле:
 
-- `FormField` и его части (`FormFieldLabel`, `FormFieldTarget`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`) — `--triplex-next-FormField-*`;
-- `Dropdown` и `DropdownList` — `--triplex-next-Dropdown-*`, `--triplex-next-DropdownList-*`;
-- `IconWrapper` вокруг каретки — `--triplex-next-IconWrapper-*`;
+- `FormField` и его части (`FormFieldLabel`, `FormFieldTarget`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`) — группа `FormField`;
+- `Dropdown` и `DropdownList` — группы `Dropdown` и `DropdownList`;
+- `IconWrapper` вокруг каретки — группа `IconWrapper`;
 - `LoaderSmall` в состоянии загрузки — токены лоадера.
 
 Если понадобится собственное визуальное состояние поля выбора — токен заводится

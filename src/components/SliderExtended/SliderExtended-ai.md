@@ -3,23 +3,23 @@ component: SliderExtended
 category: Slider
 related: [Slider, SliderRange, KeyDownListener, Text]
 tokens:
-    - --triplex-next-Slider-Rail_Background
-    - --triplex-next-Slider-Rail_Background_Disabled
-    - --triplex-next-Slider-Track_Background_Default
-    - --triplex-next-Slider-Track_Background_Hover
-    - --triplex-next-Slider-Track_Background_Disabled
-    - --triplex-next-Slider-Dot_Background_Default
-    - --triplex-next-Slider-Dot_Background_Hover
-    - --triplex-next-Slider-Dot_Background_Select
-    - --triplex-next-Slider-Dot_Background_Disabled
-    - --triplex-next-Slider-Dot_Inner_Background
-    - --triplex-next-Slider-Dot_Inner_Background_Disabled
-    - --triplex-next-Slider-Dot_Focus
-    - --triplex-next-Slider-Mark_Dot_Background_Default
-    - --triplex-next-Slider-Mark_Dot_Background_Selected
-    - --triplex-next-Slider-Mark_Dot_Background_Selected_Disabled
-    - --triplex-next-Slider-Tooltip_Background
-    - --triplex-next-Slider-Tooltip_Color
+  - Slider.Rail_Background
+  - Slider.Rail_Background_Disabled
+  - Slider.Track_Background_Default
+  - Slider.Track_Background_Hover
+  - Slider.Track_Background_Disabled
+  - Slider.Dot_Background_Default
+  - Slider.Dot_Background_Hover
+  - Slider.Dot_Background_Select
+  - Slider.Dot_Background_Disabled
+  - Slider.Dot_Inner_Background
+  - Slider.Dot_Inner_Background_Disabled
+  - Slider.Dot_Focus
+  - Slider.Mark_Dot_Background_Default
+  - Slider.Mark_Dot_Background_Selected
+  - Slider.Mark_Dot_Background_Selected_Disabled
+  - Slider.Tooltip_Background
+  - Slider.Tooltip_Color
 stories: stories/Slider/SliderExtended.stories.tsx
 version: "1.0"
 ---
@@ -131,28 +131,31 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Slider.ts`.
+
 ```text
---triplex-next-Slider-Rail_Background
---triplex-next-Slider-Rail_Background_Disabled
---triplex-next-Slider-Track_Background_Default
---triplex-next-Slider-Track_Background_Hover
---triplex-next-Slider-Track_Background_Disabled
---triplex-next-Slider-Dot_Background_Default
---triplex-next-Slider-Dot_Background_Hover
---triplex-next-Slider-Dot_Background_Select
---triplex-next-Slider-Dot_Background_Disabled
---triplex-next-Slider-Dot_Inner_Background
---triplex-next-Slider-Dot_Inner_Background_Disabled
---triplex-next-Slider-Dot_Focus
---triplex-next-Slider-Mark_Dot_Background_Default
---triplex-next-Slider-Mark_Dot_Background_Selected
---triplex-next-Slider-Mark_Dot_Background_Selected_Disabled
---triplex-next-Slider-Tooltip_Background
---triplex-next-Slider-Tooltip_Color
+Slider.Rail_Background
+Slider.Rail_Background_Disabled
+Slider.Track_Background_Default
+Slider.Track_Background_Hover
+Slider.Track_Background_Disabled
+Slider.Dot_Background_Default
+Slider.Dot_Background_Hover
+Slider.Dot_Background_Select
+Slider.Dot_Background_Disabled
+Slider.Dot_Inner_Background
+Slider.Dot_Inner_Background_Disabled
+Slider.Dot_Focus
+Slider.Mark_Dot_Background_Default
+Slider.Mark_Dot_Background_Selected
+Slider.Mark_Dot_Background_Selected_Disabled
+Slider.Tooltip_Background
+Slider.Tooltip_Color
 ```
 
-Токены общие для всего семейства слайдеров и названы с префиксом `Slider-`, а не
-`SliderExtended-`: `Slider` и `SliderRange` — это тот же `SliderExtended` внутри.
+Токены общие для всего семейства слайдеров и лежат в группе `Slider`, а не
+`SliderExtended`: `Slider` и `SliderRange` — это тот же `SliderExtended` внутри.
 Размеры (высота полосы, диаметры ползунка и точек меток) заданы литералами в
 `.module.less`, z-index'ы — LESS-переменными `@slider-dot-z-index` и
 `@slider-track-z-index` из `src/helpers/less/z-indexes.less`.

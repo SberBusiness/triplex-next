@@ -54,7 +54,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Собственных CSS-токенов и стилей нет. Внешний вид полностью наследуется от семейства `FormField` (токены `--triplex-next-FormField-*` описаны в стилях `src/components/FormField/styles/`).
+Собственных токенов и стилей нет. Внешний вид полностью наследуется от семейства `FormField` (группа токенов `FormField`, стили — `src/components/FormField/styles/`).
 
 ---
 

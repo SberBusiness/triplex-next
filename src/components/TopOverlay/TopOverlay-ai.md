@@ -3,7 +3,7 @@ component: TopOverlay
 category: TopOverlay
 related: [LightBox, Overlay]
 tokens:
-  - --triplex-next-TopOverlay-Background
+  - TopOverlay.Background
 stories: stories/TopOverlay/TopOverlay.stories.tsx
 version: "1.0"
 ---
@@ -89,13 +89,16 @@ LESS: `top: var(--triplex-next-runtime-TopOverlay-Top, 0)` — inline-стили
 
 ## Дизайн-токены
 
-```css
---triplex-next-TopOverlay-Background
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/TopOverlay.ts`.
+
+```text
+TopOverlay.Background
 ```
 
 Токен задаёт цвет маски. Панель намеренно рисуется без фона и тени
 (`background: none`, `box-shadow: none`) — фон даёт контент, который в неё кладут
-(обычно `Confirm`), поэтому токен `--triplex-next-Overlay-Panel_Background`
+(обычно `Confirm`), поэтому токен `Overlay.Panel_Background`
 здесь не действует.
 
 Runtime CSS-переменная (задаётся компонентом через `style`, **не** дизайн-токен,

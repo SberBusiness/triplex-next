@@ -3,12 +3,12 @@ component: ListItemControlsButtonDropdown
 category: List
 related: [ListItemControlsButton, ButtonDropdownExtended, Dropdown]
 tokens:
-  - --triplex-next-ListItemControlsButton-Background_Default
-  - --triplex-next-ListItemControlsButton-Background_Hover
-  - --triplex-next-ListItemControlsButton-Background_Active
-  - --triplex-next-ListItemControlsButton-Color_Default
-  - --triplex-next-ListItemControlsButton-Color_Hover
-  - --triplex-next-ListItemControlsButton-Color_Active
+  - ListItemControlsButton.Background_Default
+  - ListItemControlsButton.Background_Hover
+  - ListItemControlsButton.Background_Active
+  - ListItemControlsButton.Color_Default
+  - ListItemControlsButton.Color_Hover
+  - ListItemControlsButton.Color_Active
 stories: stories/List/ListItemControls.stories.tsx
 version: "1.0"
 ---
@@ -51,6 +51,9 @@ dropdown.
 ---
 
 ## Дизайн-токены
+
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItemControlsButton.ts`.
 
 Использует те же токены, что и `ListItemControlsButton`. Дополнительно — стиль
 `.buttonDropdownMenuItem` для опций dropdown (ellipsis для длинных лейблов).

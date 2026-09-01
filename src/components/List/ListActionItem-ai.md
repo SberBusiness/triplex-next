@@ -3,8 +3,8 @@ component: ListActionItem
 category: List
 related: [ListItem, ListItemContent, ListSortableItem]
 tokens:
-  - --triplex-next-ListItem-Background_Hover
-  - --triplex-next-ListItem-BorderColor_Focus
+  - ListItem.Background_Hover
+  - ListItem.BorderColor_Focus
 stories: stories/List/ListItem.stories.tsx
 version: "1.0"
 ---
@@ -70,9 +70,12 @@ hover-подсветку, focus-обводку по Tab и активацию п
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ListItem.ts`.
+
 ```text
---triplex-next-ListItem-Background_Hover    // фон при hover (desktop)
---triplex-next-ListItem-BorderColor_Focus   // цвет focus-обводки (:focus-visible)
+ListItem.Background_Hover    // фон при hover (desktop)
+ListItem.BorderColor_Focus   // цвет focus-обводки (:focus-visible)
 ```
 
 Класс `styles.listActionItem` навешивается на сам `ListItemContent`, поэтому весь

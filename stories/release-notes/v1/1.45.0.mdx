@@ -4,7 +4,24 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.45.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**AmountField**
+
+- Свойство `currency` теперь находится не в `postfix`, а рядом с суммой. На пустом значении валюта не отображается — при необходимости укажите её в `inputProps.placeholder`.
+- Внешний `ref` компонента теперь прокидывается на родительский контейнер, а не на внутренний инпут. Для работы с инпутом используйте `inputProps.ref`.
+- Тип `ref` компонента изменён с `HTMLInputElement` на `HTMLDivElement`.
+
+**FormFieldInput / FormFieldMaskedInput**
+
+- Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`.
+- В интерфейсе `IFormFieldInputProvideProps` изменён тип `size` на нативный.
+
 <Heading>Изменения</Heading>
+
+**AmountField**
+
+- Добавлено свойство `ref` в `inputProps`.
 
 **ButtonDropdownExtended**
 
@@ -26,6 +43,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
 
+**MaskedField**
+
+- Исправлен цвет `placeholderMask` в состоянии `disabled`.
+
 **MasterTable**
 
 - Добавлено: `MasterTable` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`.
@@ -35,3 +56,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Pagination**
 
 - Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).
+
+**TextField**
+
+- Тип свойства `ref` в `inputProps` расширен с `React.RefObject` до `React.Ref`.

@@ -219,7 +219,6 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                     aria-controls={dropdownListId}
                     aria-activedescendant={activeDescendant}
                     aria-expanded={dropdownActuallyOpen}
-                    disabled={status === EFormFieldStatus.DISABLED}
                     onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
                     onKeyDown={handleInputKeyDown}

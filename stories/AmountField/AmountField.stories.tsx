@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
+import { AmountField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
     PlaygroundRender,
     PlaygroundSource,
@@ -13,12 +13,14 @@ import {
     StatusesSource,
     ProductionRender,
     ProductionSource,
+    VisualTestsRender,
+    VisualTestsSource,
     type PlaygroundArgs,
 } from "./examples";
 
 export default {
-    title: "Components/NumberField",
-    component: NumberField,
+    title: "Components/TextFields/AmountField",
+    component: AmountField,
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -27,7 +29,7 @@ export default {
                     <Title />
                     <Description />
                     <Heading>Props</Heading>
-                    <ArgTypes of={NumberField} />
+                    <ArgTypes of={AmountField} />
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
@@ -36,7 +38,7 @@ export default {
             ),
         },
     },
-} satisfies Meta<typeof NumberField>;
+} satisfies Meta<typeof AmountField>;
 
 const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
@@ -44,9 +46,13 @@ const PLAYGROUND_ARGS: PlaygroundArgs = {
     status: EFormFieldStatus.DEFAULT,
     label: "Label",
     active: false,
-    inputProps: { placeholder: "0" },
+    inputProps: { placeholder: "0,00 ₽" },
+    currency: "₽",
+    maxIntegerDigits: 16,
+    fractionDigits: 2,
     // Settings
-    withPostfix: false,
+    withClear: false,
+    withHelpBox: false,
     withDescription: false,
 };
 
@@ -55,14 +61,14 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     args: PLAYGROUND_ARGS,
     argTypes: {
         // Props
-        size: {
-            control: "select",
-            options: Object.values(EComponentSize),
-            table: { category: "Props" },
-        },
         status: {
             control: "select",
             options: Object.values(EFormFieldStatus),
+            table: { category: "Props" },
+        },
+        size: {
+            control: "select",
+            options: Object.values(EComponentSize),
             table: { category: "Props" },
         },
         label: {
@@ -77,10 +83,30 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             control: "object",
             table: { category: "Props" },
         },
+        currency: {
+            control: "text",
+            table: { category: "Props" },
+        },
+        maxIntegerDigits: {
+            control: "number",
+            table: { category: "Props" },
+        },
+        fractionDigits: {
+            control: "number",
+            table: { category: "Props" },
+        },
         // Settings
-        withPostfix: {
+        withClear: {
             control: "boolean",
-            description: "С постфиксом.",
+            description: "С кнопкой очистки.",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "false" },
+            },
+        },
+        withHelpBox: {
+            control: "boolean",
+            description: "С подсказкой.",
             table: {
                 category: "Settings",
                 defaultValue: { summary: "false" },
@@ -110,7 +136,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     render: PlaygroundRender,
 };
 
-export const Default: StoryObj<typeof NumberField> = {
+export const Default: StoryObj<typeof AmountField> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -124,7 +150,7 @@ export const Default: StoryObj<typeof NumberField> = {
     render: DefaultRender,
 };
 
-export const Sizes: StoryObj<typeof NumberField> = {
+export const Sizes: StoryObj<typeof AmountField> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -137,7 +163,7 @@ export const Sizes: StoryObj<typeof NumberField> = {
     render: SizesRender,
 };
 
-export const Statuses: StoryObj<typeof NumberField> = {
+export const Statuses: StoryObj<typeof AmountField> = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -150,7 +176,7 @@ export const Statuses: StoryObj<typeof NumberField> = {
     render: StatusesRender,
 };
 
-export const Production: StoryObj<typeof NumberField> = {
+export const Production: StoryObj<typeof AmountField> = {
     name: "Example: production",
     parameters: {
         controls: { disable: true },
@@ -163,4 +189,24 @@ export const Production: StoryObj<typeof NumberField> = {
         testRunner: { skip: true },
     },
     render: ProductionRender,
+};
+
+export const VisualTests: StoryObj<typeof AmountField> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: VisualTestsSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: VisualTestsRender,
+    play: async ({ canvas, userEvent }) => {
+        const inputs = await canvas.findAllByRole("textbox");
+
+        // Фокус на первом поле (вариант "CURRENCY | FOCUSED") — показывает плейсхолдер маски.
+        await userEvent.click(inputs[0]);
+    },
 };

@@ -8,3 +8,5 @@ export { Statuses as StatusesRender } from "./Statuses";
 export { default as StatusesSource } from "./Statuses?raw";
 export { Production as ProductionRender } from "./Production";
 export { default as ProductionSource } from "./Production?raw";
+export { VisualTests as VisualTestsRender } from "./VisualTests";
+export { default as VisualTestsSource } from "./VisualTests?raw";

@@ -69,13 +69,15 @@ interface Bundle {
     tokens: TokensSection;
 }
 
-const GUIDE_TOPICS: { topic: string; file: string }[] = [
-    { topic: "context", file: "CONTEXT.md" },
-    { topic: "codestyle", file: "codestyle.md" },
-    { topic: "tests", file: "tests.md" },
-    { topic: "stories", file: "stories-guide.md" },
-    { topic: "commits", file: "commits.md" },
-    { topic: "template", file: "template-ai.md" },
+const GUIDE_TOPICS: { topic: string; path: string }[] = [
+    { topic: "context", path: "docs/ai/CONTEXT.md" },
+    { topic: "codestyle", path: "docs/ai/codestyle.md" },
+    { topic: "tests", path: "docs/ai/tests.md" },
+    { topic: "stories", path: "docs/ai/stories-guide.md" },
+    { topic: "commits", path: "docs/ai/commits.md" },
+    { topic: "template", path: "docs/ai/template-ai.md" },
+    // Гайды вне docs/ai/ — для потребителей дизайн-системы через MCP, а не контрибьюторов пакета.
+    { topic: "guidelines", path: "docs/mcp/guidelines.md" },
 ];
 
 function parseArgs(): { out: string } {
@@ -235,8 +237,7 @@ function collectComponents(): ComponentEntry[] {
 
 function collectGuides(): GuideEntry[] {
     const guides: GuideEntry[] = [];
-    for (const { topic, file } of GUIDE_TOPICS) {
-        const relPath = `docs/ai/${file}`;
+    for (const { topic, path: relPath } of GUIDE_TOPICS) {
         const absPath = resolve(ROOT, relPath);
         if (!existsSync(absPath)) {
             continue;

@@ -17,7 +17,7 @@ export const Playground = (args: PlaygroundArgs) => {
 
     return (
         <div style={{ width: "120px" }}>
-            <SmallInput {...args} value={value} onChange={handleChange} />
+            <SmallInput {...args} value={value} aria-label="Номер документа" onChange={handleChange} />
         </div>
     );
 };

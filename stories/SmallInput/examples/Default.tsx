@@ -10,7 +10,7 @@ export const Default = () => {
 
     return (
         <div style={{ width: "120px" }}>
-            <SmallInput value={value} placeholder="000000" onChange={handleChange} />
+            <SmallInput value={value} placeholder="000000" aria-label="Номер документа" onChange={handleChange} />
         </div>
     );
 };

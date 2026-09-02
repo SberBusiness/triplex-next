@@ -8,6 +8,7 @@ export interface ISmallInputProps extends React.InputHTMLAttributes<HTMLInputEle
 /**
  * Компактное однострочное поле ввода высотой 20px без лейбла, статусов и обвязки FormField.
  * Рассчитано на инлайн-редактирование в плотной вёрстке — например, номера документа в DocumentNumberEdit.
+ * Всегда рендерит `type="text"`: переданный извне `type` не применяется.
  */
 export const SmallInput = React.forwardRef<HTMLInputElement, ISmallInputProps>(({ className, ...rest }, ref) => (
     // type стоит после ...rest: компонент всегда рендерит текстовое поле, переданный извне type не применяется.

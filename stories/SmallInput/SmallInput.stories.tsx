@@ -17,7 +17,7 @@ import {
 } from "./examples";
 
 export default {
-    title: "Components/SmallInput",
+    title: "Components/TextFields/SmallInput",
     component: SmallInput,
     tags: ["autodocs"],
     parameters: {
@@ -33,6 +33,11 @@ export default {
                 <>
                     <Title />
                     <Description />
+                    {/* Блок Props + ArgTypes опущен: собственных props у SmallInput нет — ISmallInputProps
+                        расширяет React.InputHTMLAttributes без своих полей, и таблица вышла бы пустой
+                        (docs/ai/stories-guide.md, «Исключение для компонентов без props»).
+                        Playground при этом оставлен: placeholder, maxLength, disabled и readOnly дают
+                        видимый эффект и объявлены в argTypes вручную. */}
                     <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />

@@ -6,22 +6,6 @@ import { EMarkerStatus } from "../enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
 
 describe("Marker", () => {
-    it("should render as an empty span element", () => {
-        const { container } = render(<Marker status={EMarkerStatus.SUCCESS} size={EComponentSize.MD} />);
-        const marker = container.firstChild;
-
-        expect(marker).toBeInTheDocument();
-        expect(marker?.nodeName).toBe("SPAN");
-        expect(marker?.childNodes).toHaveLength(0);
-    });
-
-    it("should apply base classes of Marker and Badge.Dot", () => {
-        const { container } = render(<Marker status={EMarkerStatus.SUCCESS} size={EComponentSize.MD} />);
-
-        expect(container.firstChild).toHaveClass("marker");
-        expect(container.firstChild).toHaveClass("badgeDot");
-    });
-
     it.each([
         [EMarkerStatus.SUCCESS, "success"],
         [EMarkerStatus.ERROR, "error"],
@@ -33,14 +17,13 @@ describe("Marker", () => {
         expect(container.firstChild).toHaveClass(className);
     });
 
+    // Разметку и полную матрицу размеров покрывает BadgeDot.test.tsx — здесь только то,
+    // что Marker не съедает size по дороге в Badge.Dot и не подменяет его разметку.
     it("should pass size through to Badge.Dot", () => {
-        const { container: sm } = render(<Marker status={EMarkerStatus.SUCCESS} size={EComponentSize.SM} />);
-        const { container: md } = render(<Marker status={EMarkerStatus.SUCCESS} size={EComponentSize.MD} />);
-        const { container: lg } = render(<Marker status={EMarkerStatus.SUCCESS} size={EComponentSize.LG} />);
+        const { container } = render(<Marker status={EMarkerStatus.SUCCESS} size={EComponentSize.SM} />);
 
-        expect(sm.firstChild).toHaveClass("sm");
-        expect(md.firstChild).toHaveClass("md");
-        expect(lg.firstChild).toHaveClass("lg");
+        expect(container.firstChild).toHaveClass("badgeDot");
+        expect(container.firstChild).toHaveClass("sm");
     });
 
     it("should merge custom className with the base classes", () => {

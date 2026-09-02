@@ -149,7 +149,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | LoaderScreen | ✅ | ✅ | ✅ |
 | LoaderSmall | ✅ | ✅ | ✅ |
 | Marker | ✅ | ✅ | ✅ |
-| MarkerStatus | ⬜ | ✅ | ⬜ |
+| MarkerStatus | ✅ | ✅ | ✅ |
 | MaskedField | ✅ | ✅ | ✅ |
 | MasterTable | ✅ | ✅ | ✅ |
 | MediaWidth | ✅ | ✅ | ✅ |
@@ -189,7 +189,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | StepperExtended | ⬜ | ⬜ | ⬜ |
 | Suggest | ⬜ | ⬜ | ⬜ |
 | SuggestField | ⬜ | ✅ | ⬜ |
-| SwipeableArea | ⬜ | ⬜ | ⬜ |
+| SwipeableArea | ✅ | ✅ | ✅ |
 | TableBasic | ✅ | ✅ | ✅ |
 | Tabs | ⬜ | ⬜ | ⬜ |
 | TabsExtended | ✅ | ✅ | ✅ |

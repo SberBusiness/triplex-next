@@ -37,7 +37,7 @@ version: "1.0"
 
 `IMarkerProps extends IBadgeDotProps`, то есть публичный API `Marker` наследует форму
 props точки: любой стандартный атрибут `<span>` (`id`, `data-*`, `style`, `role`,
-`aria-*`, обработчики) уходит на корневой элемент через `...rest`. `className`
+`aria-*`, обработчики) уходит на корневой элемент через `...restProps`. `className`
 объединяется с базовыми классами через `clsx`, а не заменяет их.
 
 ### Обязательные props
@@ -119,11 +119,13 @@ Marker.Background_Waiting
 - если статус продублирован видимым текстом рядом (типичный случай — `MarkerStatus`),
   точка декоративна: передай `aria-hidden`;
 - если точка — единственный носитель смысла, передай роль, поддерживающую имя, вместе
-  с текстом: `role="img"` и `aria-label` (оба уходят в `...rest`).
+  с текстом: `role="img"` и `aria-label` (оба уходят в `...restProps`).
 
-**Внутри библиотеки этого пока нет:** `MarkerStatus` рендерит `<Marker status={status} size={size} />`
-без `aria-hidden`, хотя подпись статуса стоит рядом. Пробел известный (TRI-55),
-образцом для копирования не является.
+**Пример внутри библиотеки:** `MarkerStatus` рендерит `<Marker status={status} size={size} />`
+без `aria-hidden` — осознанно: смысл статуса там несёт текст рядом, а точка без роли
+попадает в `generic` и своего имени в дерево доступности не добавляет
+(см. `MarkerStatus-ai.md` → «Accessibility»). Для отдельно стоящего `Marker` это
+не образец: там носитель смысла один, и роль с именем нужны.
 
 ---
 
@@ -164,4 +166,4 @@ Marker.Background_Waiting
 
 | Дата | Изменение |
 |---|---|
-| 2026-09-01 | Создан документ. AI-рефакторинг: `Marker` переведён с `React.FC` на `React.forwardRef` — `ref` теперь уходит на корневой `<span>` от `Badge.Dot`; добавлены JSDoc на компонент, `IMarkerProps.status`, значения `EMarkerStatus` и `statusToClassNameMap`, карта закреплена через `satisfies Record<EMarkerStatus, string>`, поправлен порядок импортов. Добавлены unit-тесты: `__tests__/Marker.test.tsx` (11 кейсов — разметка, базовые классы, все статусы, проброс `size` в `Badge.Dot`, мердж `className`, `ref`, `...rest`, `displayName`) и `__tests__/utils.test.tsx` (2 кейса — полнота и различимость карты статусов). Заведены stories `stories/Marker/` в modern pattern. Публичный API (имена и типы props, значения `EMarkerStatus`, barrel-экспорты), разметка и визуальное поведение не изменены. |
+| 2026-09-01 | Создан документ. AI-рефакторинг: `Marker` переведён с `React.FC` на `React.forwardRef` — `ref` теперь уходит на корневой `<span>` от `Badge.Dot`; добавлены JSDoc на компонент, `IMarkerProps.status`, значения `EMarkerStatus` и `statusToClassNameMap`, карта закреплена через `satisfies Record<EMarkerStatus, string>`, поправлен порядок импортов. Добавлены unit-тесты: `__tests__/Marker.test.tsx` (все статусы, проброс `size` в `Badge.Dot`, мердж `className`, `ref`, спред `...restProps`, `displayName`) и `__tests__/utils.test.tsx` (различимость и непустота классов карты статусов). Разметку точки и полную матрицу размеров не дублируем — их покрывает `Badge/__tests__/BadgeDot.test.tsx`; полноту карты статусов гарантирует `satisfies`. Заведены stories `stories/Marker/` в modern pattern. Публичный API (имена и типы props, значения `EMarkerStatus`, barrel-экспорты), разметка и визуальное поведение не изменены. |

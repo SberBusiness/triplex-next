@@ -181,7 +181,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Slider | ⬜ | ⬜ | ⬜ |
 | SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ⬜ | ⬜ | ⬜ |
-| SmallInput | ⬜ | ⬜ | ⬜ |
+| SmallInput | ✅ | ✅ | ✅ |
 | Spoiler | ⬜ | ⬜ | ⬜ |
 | StatusTracker | ⬜ | ⬜ | ⬜ |
 | Step | ⬜ | ⬜ | ⬜ |

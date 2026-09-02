@@ -1,6 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { mockElementSize } from "../../../../test-utils/dom";
-import { ESwipeDirection, getElementWidth, resolveSwipeEnd, resolveSwipeMove, SWIPE_MIN_DISTANCE } from "../utils";
+import {
+    ESwipeDirection,
+    getElementWidth,
+    getSwipeableAreaOpacity,
+    resolveSwipeEnd,
+    resolveSwipeMove,
+    SWIPE_MIN_DISTANCE,
+} from "../utils";
 
 describe("SwipeableArea utils", () => {
     describe("getElementWidth", () => {
@@ -120,6 +127,20 @@ describe("SwipeableArea utils", () => {
                 translateX: -120,
                 direction: null,
             });
+        });
+    });
+
+    describe("getSwipeableAreaOpacity", () => {
+        it("returns the ratio of the open part of the area", () => {
+            expect(getSwipeableAreaOpacity(0, 80)).toBe(0);
+            expect(getSwipeableAreaOpacity(40, 80)).toBe(0.5);
+            // Свайп влево — координата отрицательная, прозрачность считается по модулю.
+            expect(getSwipeableAreaOpacity(-80, 80)).toBe(1);
+        });
+
+        it("returns 1 instead of NaN when the area width is zero", () => {
+            expect(getSwipeableAreaOpacity(0, 0)).toBe(1);
+            expect(getSwipeableAreaOpacity(40, 0)).toBe(1);
         });
     });
 });

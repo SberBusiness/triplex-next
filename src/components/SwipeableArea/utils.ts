@@ -129,3 +129,11 @@ export const resolveSwipeEnd = ({
 
     return { translateX: passedMinDistance ? 0 : -rightAreaWidth, direction: null };
 };
+
+/**
+ * Возвращает прозрачность боковой области — она пропорциональна тому, насколько область открыта.
+ * Если ширина области равна нулю (элемент ещё не смонтирован либо область скрыта), возвращается 1,
+ * как в состоянии покоя, когда область целиком закрыта контентом.
+ */
+export const getSwipeableAreaOpacity = (translateX: number, areaWidth: number): number =>
+    areaWidth > 0 ? Math.abs(translateX) / areaWidth : 1;

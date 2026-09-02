@@ -293,6 +293,21 @@ describe("SwipeableArea", () => {
         expect(rightArea.style.opacity).toBe("0.5");
     });
 
+    it("keeps the side area opacity valid when its width is zero", () => {
+        const ref = React.createRef<ISwipeableAreaRef>();
+
+        renderSwipeableArea({}, ref);
+
+        const rightArea = getParent(screen.getByTestId("right-area"));
+
+        // Область отрисована, но не занимает места — деление на её ширину не должно давать NaN.
+        mockElementSize(rightArea, { width: 0 });
+
+        act(() => ref.current?.swipeLeft());
+
+        expect(rightArea.style.opacity).toBe("1");
+    });
+
     it("removes the animation class when the swipe animation is finished", () => {
         const ref = React.createRef<ISwipeableAreaRef>();
 

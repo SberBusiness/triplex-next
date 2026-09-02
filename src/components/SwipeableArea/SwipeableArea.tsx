@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import clsx from "clsx";
-import { ESwipeDirection, getElementWidth, resolveSwipeEnd, resolveSwipeMove } from "./utils";
+import { ESwipeDirection, getElementWidth, getSwipeableAreaOpacity, resolveSwipeEnd, resolveSwipeMove } from "./utils";
 import styles from "./styles/SwipeableArea.module.less";
 
 export interface ISwipeableAreaProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -144,10 +144,6 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
 
         const handleTransitionEnd = () => setAnimating(false);
 
-        // Прозрачность боковой области пропорциональна тому, насколько она открыта.
-        const getSwipeableAreaOpacity = (element: HTMLDivElement | null): number =>
-            element ? Math.abs(contentTranslateX) / element.getBoundingClientRect().width : 1;
-
         // Обработчик тапа за пределами элемента(outside).
         useEffect(() => {
             const handleDocumentTouchStart = (event: TouchEvent) => {
@@ -214,7 +210,12 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                         })}
                         ref={leftSwipeableAreaRef}
                         /* Плавное появление контента при свайпе. */
-                        style={{ opacity: getSwipeableAreaOpacity(leftSwipeableAreaRef.current) }}
+                        style={{
+                            opacity: getSwipeableAreaOpacity(
+                                contentTranslateX,
+                                getElementWidth(leftSwipeableAreaRef.current),
+                            ),
+                        }}
                     >
                         {leftSwipeableArea}
                     </div>
@@ -227,7 +228,12 @@ export const SwipeableArea = React.forwardRef<ISwipeableAreaRef, ISwipeableAreaP
                         })}
                         ref={rightSwipeableAreaRef}
                         /* Плавное появление контента при свайпе. */
-                        style={{ opacity: getSwipeableAreaOpacity(rightSwipeableAreaRef.current) }}
+                        style={{
+                            opacity: getSwipeableAreaOpacity(
+                                contentTranslateX,
+                                getElementWidth(rightSwipeableAreaRef.current),
+                            ),
+                        }}
                     >
                         {rightSwipeableArea}
                     </div>

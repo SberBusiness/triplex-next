@@ -7,6 +7,7 @@ import { IIslandWidgetHeaderProps } from "../components/IslandWidgetHeader";
 import { IIslandWidgetFooterProps } from "../components/IslandWidgetFooter";
 import { IslandWidgetWrapper } from "../components/IslandWidgetWrapper";
 import { useMatchMedia } from "../../MediaWidth/useMatchMedia";
+import { EComponentSize } from "../../../enums/EComponentSize";
 import type { MockedFunction } from "vitest";
 
 const mockedUseMatchMedia = useMatchMedia as MockedFunction<typeof useMatchMedia>;
@@ -119,5 +120,32 @@ describe("IslandWidget", () => {
         expect(screen.getByText("Header content")).toBeVisible();
         expect(screen.getByText("Header description")).toBeVisible();
         expect(screen.getByText("Footer content")).toBeVisible();
+    });
+
+    it.each(Object.values(EComponentSize))("Should render description with B4 size on desktop in %s", (size) => {
+        render(<IslandWidget size={size} renderBody={defaultRenderBody} renderHeader={defaultRenderHeader} />);
+
+        expect(screen.getByText("Header description")).toHaveClass("b4");
+    });
+
+    it.each([EComponentSize.MD, EComponentSize.LG])(
+        "Should render description with B3 size in adaptive in %s",
+        (size) => {
+            mockedUseMatchMedia.mockReturnValue(true);
+
+            render(<IslandWidget size={size} renderBody={defaultRenderBody} renderHeader={defaultRenderHeader} />);
+
+            expect(screen.getByText("Header description")).toHaveClass("b3");
+        },
+    );
+
+    it("Should keep description B4 size in adaptive for sm", () => {
+        mockedUseMatchMedia.mockReturnValue(true);
+
+        render(
+            <IslandWidget size={EComponentSize.SM} renderBody={defaultRenderBody} renderHeader={defaultRenderHeader} />,
+        );
+
+        expect(screen.getByText("Header description")).toHaveClass("b4");
     });
 });

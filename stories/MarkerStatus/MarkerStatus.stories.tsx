@@ -75,7 +75,7 @@ export const Playground: Story = {
         },
         children: {
             control: { type: "text" },
-            description: "Заголовок статуса",
+            description: "Наименование статуса",
             table: {
                 type: { summary: "React.ReactNode" },
             },

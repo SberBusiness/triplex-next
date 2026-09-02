@@ -17,6 +17,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`.
 - В интерфейсе `IFormFieldInputProvideProps` изменён тип `size` на нативный.
 
+**MarkerStatus**
+
+- Атрибут `data-tx` теперь выставляется после пользовательских props, поэтому переданное через props значение `data-tx` больше не применяется — на корневом элементе всегда версия пакета.
+
 <Heading>Изменения</Heading>
 
 **AmountField**
@@ -46,6 +50,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Link**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
+
+**MarkerStatus**
+
+- Проведён AI-рефакторинг, добавлен `displayName`.
 
 **MaskedField**
 

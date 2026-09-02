@@ -17,6 +17,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`.
 - В интерфейсе `IFormFieldInputProvideProps` изменён тип `size` на нативный.
 
+**MarkerStatus**
+
+- Атрибут `data-tx` теперь выставляется после пользовательских props, поэтому переданное через props значение `data-tx` больше не применяется — на корневом элементе всегда версия пакета.
+
 <Heading>Изменения</Heading>
 
 **AmountField**
@@ -43,9 +47,18 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Удалены неиспользуемые токены `ImageGallery.Arrow_Background_Disabled` и `ImageGallery.Arrow_BorderColor_Disabled` вместе с их css-переменными. Токены остались от прежнего дизайна: сейчас неактивная стрелка галереи не приглушается, а скрывается (`display: none`), поэтому красить ими было нечего и их переопределение ни на что не влияло. Если вы переопределяли их через `ThemeProvider`, удалите эти ключи — визуально ничего не изменится.
 
+**IslandWidget**
+
+- Изменена высота `IslandWidget.Header` на десктоп экранах.
+- Изменен размер текста `IslandWidget.Header.Description` в размерах `MD` и `LG` в адаптиве.
+
 **Link**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
+
+**MarkerStatus**
+
+- Проведён AI-рефакторинг, добавлен `displayName`.
 
 **MaskedField**
 
@@ -64,6 +77,15 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **SmallInput**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
+
+**Suggest**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет.
+
+**SwipeableArea**
+
+- Исправлен баг: боковая область нулевой ширины давала невалидный `opacity` (`NaN`) — теперь в этом случае используется значение `1`, как у закрытой области. Визуально ничего не меняется: область нулевой ширины не видна.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
 
 **TextField**
 

@@ -21,7 +21,7 @@ interface ISizeItemProps {
 const SizeItem = ({ size }: ISizeItemProps) => {
     const [value, setValue] = useState("");
 
-    const buttonSize = size === EComponentSize.SM ? EComponentSize.SM : EComponentSize.MD;
+    const controlSize = size === EComponentSize.SM ? EComponentSize.SM : EComponentSize.MD;
 
     return (
         <IslandWidget
@@ -39,10 +39,10 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                         </Text>
                     </IslandWidget.Footer.Content>
                     <IslandWidget.Footer.Controls>
-                        <Button theme={EButtonTheme.SECONDARY} size={buttonSize}>
+                        <Button theme={EButtonTheme.SECONDARY} size={controlSize}>
                             Button text
                         </Button>
-                        <Button theme={EButtonTheme.GENERAL} size={buttonSize}>
+                        <Button theme={EButtonTheme.GENERAL} size={controlSize}>
                             Button text
                         </Button>
                     </IslandWidget.Footer.Controls>
@@ -62,7 +62,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                             placeholderMask="дд.мм.гггг"
                             label="дд.мм.гггг"
                             invalidDateHint="Указана недоступная для выбора дата."
-                            size={EComponentSize.SM}
+                            size={controlSize}
                             status={EFormFieldStatus.DEFAULT}
                         />
                     </IslandWidget.Header.Controls>

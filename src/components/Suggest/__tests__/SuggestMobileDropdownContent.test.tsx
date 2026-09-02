@@ -26,6 +26,17 @@ const renderContent = (props: Partial<ISuggestProps> = {}) =>
         </Suggest>,
     );
 
+/** Прокручиваемый контейнер списка — DropdownMobileBody, непосредственный родитель listbox. */
+const getScrollableBody = () => {
+    const body = screen.getByRole("listbox").parentElement;
+
+    if (body === null) {
+        throw new Error("DropdownMobileBody не найден: у listbox нет родительского элемента");
+    }
+
+    return body;
+};
+
 describe("SuggestMobileDropdownContent", () => {
     test("renders every option as a list item", () => {
         renderContent();
@@ -127,7 +138,7 @@ describe("SuggestMobileDropdownContent", () => {
     test("renders the loader only when loading is set", () => {
         const { rerender } = renderContent();
 
-        expect(document.querySelector(".dropdownMobileLoader")).toBeNull();
+        expect(screen.queryByRole("status", { name: "loading" })).not.toBeInTheDocument();
 
         rerender(
             <Suggest
@@ -142,7 +153,7 @@ describe("SuggestMobileDropdownContent", () => {
             </Suggest>,
         );
 
-        expect(document.querySelector(".dropdownMobileLoader")).not.toBeNull();
+        expect(screen.getByRole("status", { name: "loading" })).toBeInTheDocument();
     });
 
     test("calls onScrollEnd only when the list is scrolled to the bottom", () => {
@@ -150,7 +161,7 @@ describe("SuggestMobileDropdownContent", () => {
 
         renderContent({ onScrollEnd });
 
-        const body = document.querySelector(".suggestDropdownMobileBody")!;
+        const body = getScrollableBody();
         const setScroll = (scrollTop: number) => {
             Object.defineProperty(body, "scrollHeight", { value: 300, configurable: true });
             Object.defineProperty(body, "clientHeight", { value: 100, configurable: true });
@@ -169,7 +180,7 @@ describe("SuggestMobileDropdownContent", () => {
     test("does not call onScrollEnd when the handler is not passed", () => {
         renderContent();
 
-        const body = document.querySelector(".suggestDropdownMobileBody")!;
+        const body = getScrollableBody();
         Object.defineProperty(body, "scrollHeight", { value: 300, configurable: true });
         Object.defineProperty(body, "clientHeight", { value: 100, configurable: true });
         Object.defineProperty(body, "scrollTop", { value: 200, configurable: true });

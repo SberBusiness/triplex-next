@@ -72,7 +72,11 @@ const SuggestDropdown = ({ size }: ISuggestPartProps) => {
             setOpened={(opened) => (opened ? setDropdownOpen(true) : closeDropdown())}
         >
             {options.length === 0 ? (
-                <div style={{ padding: "12px 16px" }}>{noOptionsText}</div>
+                // id остаётся на контейнере и в пустом состоянии — иначе aria-controls
+                // управляющего элемента ссылается на несуществующий элемент.
+                <div id={dropdownListId} style={{ padding: "12px 16px" }}>
+                    {noOptionsText}
+                </div>
             ) : (
                 <DropdownList id={dropdownListId} size={size} dropdownOpened={dropdownOpen}>
                     {options.map((option) => (

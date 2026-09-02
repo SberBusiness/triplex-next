@@ -69,7 +69,7 @@ Headless-основа выпадающего списка с фильтраци�
 | `inputValue` / `setInputValue` | Текущий текст поля ввода. `setInputValue` не вызывает `onFilter` |
 | `dropdownOpen` / `setDropdownOpen` | Видимость списка. `setDropdownOpen(false)` не сбрасывает поле ввода |
 | `closeDropdown(newInputValue?)` | Закрывает список и возвращает в поле `newInputValue` либо `label` текущего `value` |
-| `activeDescendant` / `setActiveDescendant` | Идентификатор элемента, выделенного клавиатурой, для `aria-activedescendant`. Библиотека его не выставляет — клавиатурную навигацию по списку реализует потребитель |
+| `activeDescendant` / `setActiveDescendant` | Идентификатор элемента, выделенного клавиатурой, для `aria-activedescendant`. Библиотека его не выставляет — клавиатурную навигацию по списку реализует потребитель. `setActiveDescendant` приходит в контекст из `useSuggest` в рантайме, но в типе значения контекста не объявлен — типизация поля меняет публичный тип `SuggestContext`, решение за мейнтейнером |
 | `dropdownListId` | Сгенерированный `dropdown-list-{n}` для `id` списка и `aria-controls` на управляющем элементе |
 | `suggestRef` | Ссылка на корневой `<div>`. Годится как `targetRef` для `Dropdown` |
 | `dropdownRef` | Ссылку **обязан заполнить потребитель**, повесив её на выпадающий список. По ней Suggest отличает клик внутри списка от клика вне компонента |
@@ -166,7 +166,7 @@ Headless-основа выпадающего списка с фильтраци�
 | `Default` | `Default.tsx` | Минимальная композиция: Suggest + управляющий элемент на `TextField` + список на `Dropdown` |
 | `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG — размер раздаётся потребителем |
 | `DropdownListLoading` | `DropdownListLoading.tsx` | Догрузка опций: лоадер под уже загруженным списком |
-| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: размеры, заполненное значение, пустой список, открытый дропдаун |
+| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: размеры, заполненное значение, открытый дропдаун. Пустой список в кадр не попадает — открыт может быть только один дропдаун |
 | `VisualTestsDropdownListLoading` | `VisualTestsDropdownListLoading.tsx` | Скриншот-регрессия: открытый дропдаун с лоадером догрузки. Отдельная стори — два Suggest'а не могут быть открыты одновременно |
 
 ---

@@ -82,6 +82,21 @@ describe("useSuggest", () => {
         expect(onSelect).toHaveBeenCalledWith(OPTION_B);
     });
 
+    test("onSelect(undefined) keeps the label of the current value in the input", () => {
+        const onSelect = vi.fn();
+        const { result } = renderUseSuggest({ value: OPTION_A, onSelect });
+
+        act(() => result.current.onFilter("фильтр"));
+        expect(result.current.inputValue).toBe("фильтр");
+
+        act(() => result.current.onSelect(undefined));
+
+        // Поле не очищается: closeDropdown получает undefined и откатывается к label текущего value.
+        expect(result.current.inputValue).toBe(OPTION_A.label);
+        expect(result.current.dropdownOpen).toBe(false);
+        expect(onSelect).toHaveBeenCalledWith(undefined);
+    });
+
     test("closeDropdown restores label of the current value when called without argument", () => {
         const { result } = renderUseSuggest({ value: OPTION_A });
 

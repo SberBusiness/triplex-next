@@ -22,8 +22,6 @@ interface ISuggestContext<T extends ISuggestOption> extends Pick<
     setInputValue: React.Dispatch<React.SetStateAction<string>>;
     /** Идентификатор элемента списка, выделенного клавиатурой. Для aria-activedescendant. */
     activeDescendant: string | undefined;
-    /** Сеттер идентификатора элемента списка, выделенного клавиатурой. */
-    setActiveDescendant: React.Dispatch<React.SetStateAction<string | undefined>>;
     /** Выпадающий список открыт. */
     dropdownOpen: boolean;
     /** Сеттер видимости выпадающего списка. Не сбрасывает поле ввода — для закрытия используй closeDropdown. */
@@ -51,7 +49,6 @@ export const SuggestContext = React.createContext<ISuggestContext<any>>({
     onFilter: () => {},
     setInputValue: () => {},
     activeDescendant: undefined,
-    setActiveDescendant: () => {},
     dropdownOpen: false,
     setDropdownOpen: () => {},
     closeDropdown: () => {},

@@ -11,7 +11,7 @@ export interface ISuggestProps<T extends ISuggestOption = ISuggestOption> extend
     value: T | undefined;
     /** Список значений. */
     options: T[];
-    /** Размер. */
+    /** Размер. Suggest его не отображает — свойство раздаётся управляющему элементу и выпадающему списку. */
     size: EComponentSize;
     /** Текст подсказки. */
     placeholder?: string;
@@ -21,7 +21,7 @@ export interface ISuggestProps<T extends ISuggestOption = ISuggestOption> extend
     loading?: boolean;
     /** Флаг управления видимостью Tooltip. */
     tooltipOpen?: boolean;
-    /** Флаг состояния загрукзи DropdownList. */
+    /** Флаг состояния загрузки DropdownList. */
     dropdownListLoading?: boolean;
     /** Определяет, нужно ли очищать поле ввода при получении фокуса. */
     clearInputOnFocus?: boolean;

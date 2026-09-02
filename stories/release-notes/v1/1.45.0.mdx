@@ -69,6 +69,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).
 
+**SwipeableArea**
+
+- Исправлен баг: боковая область нулевой ширины давала невалидный `opacity` (`NaN`) — теперь в этом случае используется значение `1`, как у закрытой области. Визуально ничего не меняется: область нулевой ширины не видна.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
 **TextField**
 
 - Тип свойства `ref` в `inputProps` расширен с `React.RefObject` до `React.Ref`.

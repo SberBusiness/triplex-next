@@ -166,7 +166,7 @@ describe("SMSField.Input", () => {
         expect(input).toHaveClass(smsFieldStyles.errorPlaceholder);
     });
 
-    it("keeps error text visible in disabled status", () => {
+    it("ignores errorText in disabled status", () => {
         const props = createDefaultSMSFieldProps(EFormFieldStatus.DISABLED);
 
         render(
@@ -177,8 +177,9 @@ describe("SMSField.Input", () => {
 
         const input = screen.getByRole("textbox", { name: "SMS code" });
         expect(input).toBeDisabled();
-        expect(input).toHaveAttribute("placeholder", "Неверный код");
-        expect(input).toHaveClass(smsFieldStyles.errorPlaceholder);
+        expect(input).toHaveAttribute("placeholder", "Введите код");
+        expect(input).not.toHaveClass(smsFieldStyles.errorPlaceholder);
+        expect(input).not.toHaveAttribute("aria-invalid");
     });
 
     it("keeps error status editable and enabled", () => {

@@ -85,7 +85,7 @@ export const Playground: StoryObj<ISMSFieldProps> = {
         },
         errorText: {
             control: { type: "text" },
-            description: "Текст ошибки, отображается вместо плейсхолдера вне фокуса в статусах error и disabled",
+            description: "Текст ошибки, отображается вместо плейсхолдера вне фокуса в статусе error",
         },
         maxLength: {
             control: { type: "number", min: 1 },
@@ -191,7 +191,6 @@ export const Disabled: StoryObj<ISMSFieldProps> = {
     },
     render: () => {
         const targetRefEmpty = useRef<HTMLElement | null>(null);
-        const targetRefError = useRef<HTMLElement | null>(null);
         const targetRefFull = useRef<HTMLElement | null>(null);
 
         const handleChange = () => {};
@@ -237,25 +236,6 @@ export const Disabled: StoryObj<ISMSFieldProps> = {
                         />
                     </SMSField.Tooltip>
                     <SMSField.Input placeholder="Введите код" />
-                    <SMSField.Submit />
-                </SMSField>
-
-                <SMSField
-                    code=""
-                    onChangeCode={handleChange}
-                    onSubmitCode={handleSubmit}
-                    size={EComponentSize.MD}
-                    status={EFormFieldStatus.DISABLED}
-                >
-                    <SMSField.Tooltip targetRef={targetRefError} message="Текст подсказки">
-                        <SMSField.Refresh
-                            countdownTime={5}
-                            countdownTimeLeft={2}
-                            onRefresh={handleRefresh}
-                            ref={(el: HTMLButtonElement) => (targetRefError.current = el)}
-                        />
-                    </SMSField.Tooltip>
-                    <SMSField.Input errorText="Неверный код" placeholder="Введите код" />
                     <SMSField.Submit />
                 </SMSField>
             </>
@@ -346,5 +326,41 @@ export const VisualTests: StoryObj<ISMSFieldProps> = {
                 </SMSField>
             </>
         );
+    },
+};
+
+export const VisualTestsErrorFocused: StoryObj<ISMSFieldProps> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+    },
+    render: () => {
+        const errored = useSMSFieldLogic("");
+
+        return (
+            <SMSField
+                code={errored.code}
+                onChangeCode={errored.onChange}
+                onSubmitCode={errored.onSubmit}
+                size={EComponentSize.MD}
+                status={EFormFieldStatus.ERROR}
+            >
+                <SMSField.Tooltip targetRef={errored.targetRef} message="Текст подсказки">
+                    <SMSField.Refresh
+                        countdownTime={5}
+                        countdownTimeLeft={errored.timeLeft}
+                        onRefresh={errored.onRefresh}
+                        ref={(el: HTMLButtonElement) => (errored.targetRef.current = el)}
+                    />
+                </SMSField.Tooltip>
+                <SMSField.Input errorText="Неверный код" placeholder="Введите код" />
+                <SMSField.Submit />
+            </SMSField>
+        );
+    },
+    play: async ({ canvas, userEvent }) => {
+        const input = await canvas.findByRole("textbox");
+
+        await userEvent.click(input);
     },
 };

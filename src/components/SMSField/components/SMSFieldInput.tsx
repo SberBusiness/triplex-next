@@ -18,7 +18,7 @@ export interface ISMSFieldInputProps extends Omit<React.InputHTMLAttributes<HTML
     counter?: React.ReactNode;
     /** Описание поля ввода */
     description?: React.ReactNode;
-    /** Текст ошибки. Отображается вместо placeholder в статусах EFormFieldStatus.ERROR и EFormFieldStatus.DISABLED, пока поле не в фокусе. */
+    /** Текст ошибки. Отображается вместо placeholder в статусе EFormFieldStatus.ERROR, пока поле не в фокусе. */
     errorText?: string;
 }
 
@@ -47,9 +47,8 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
         const [focused, setFocused] = useState(false);
 
         const error = status === EFormFieldStatus.ERROR;
-        const disabled = status === EFormFieldStatus.DISABLED;
 
-        const showErrorText = (error || disabled) && !focused && Boolean(errorText);
+        const showErrorText = error && !focused && Boolean(errorText);
 
         const inputClassName = clsx(
             styles.input,
@@ -102,7 +101,7 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
                         ref={ref}
                         value={code}
                         {...restProps}
-                        aria-invalid={error || showErrorText || undefined}
+                        aria-invalid={error || undefined}
                     />
                 </FormField>
 

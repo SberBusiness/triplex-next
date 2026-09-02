@@ -86,8 +86,10 @@ describe("useSuggest", () => {
         const onSelect = vi.fn();
         const { result } = renderUseSuggest({ value: OPTION_A, onSelect });
 
+        act(() => result.current.setDropdownOpen(true));
         act(() => result.current.onFilter("фильтр"));
         expect(result.current.inputValue).toBe("фильтр");
+        expect(result.current.dropdownOpen).toBe(true);
 
         act(() => result.current.onSelect(undefined));
 

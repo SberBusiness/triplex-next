@@ -20,6 +20,10 @@ export default {
     component: Suggest,
     tags: ["autodocs"],
     parameters: {
+        // Suggest headless: собственной разметки он не рендерит, поэтому в кадре закрытых
+        // стори — только обвязка примеров (TextField, Dropdown) с собственным покрытием.
+        // Скриншоты включаются обратно точечно, у стори, где play-функция открывает список.
+        testRunner: { skip: true },
         docs: {
             description: {
                 component:
@@ -76,7 +80,6 @@ export const Playground: StoryObj<TPlaygroundArgs> = {
     },
     parameters: {
         controls: { include: Object.keys(PLAYGROUND_ARGS) },
-        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
         },
@@ -132,16 +135,20 @@ export const DropdownListLoading: StoryObj<typeof Suggest> = {
     },
 };
 
+// Скриншот-стори возвращаются в прогон точечно: набор исключён на уровне meta.
+const visualTestsStoryParameters = {
+    testRunner: { skip: false },
+    controls: { disable: true },
+    docs: {
+        canvas: { sourceState: "none" as const },
+        codePanel: false,
+    },
+};
+
 export const VisualTests: StoryObj<typeof Suggest> = {
     tags: ["!autodocs"],
     render: VisualTestsRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
+    parameters: visualTestsStoryParameters,
     play: async ({ canvas, userEvent }) => {
         const inputs = await canvas.findAllByRole("combobox");
 
@@ -153,13 +160,7 @@ export const VisualTests: StoryObj<typeof Suggest> = {
 export const VisualTestsDropdownListLoading: StoryObj<typeof Suggest> = {
     tags: ["!autodocs"],
     render: VisualTestsDropdownListLoadingRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
+    parameters: visualTestsStoryParameters,
     play: async ({ canvas, userEvent }) => {
         await userEvent.click(await canvas.findByRole("combobox"));
     },

@@ -148,20 +148,27 @@ Id зарезервирован и отменён до публикации (к�
 
 ## TPX-G-13 — Вес Typography — из суффикса текст-стиля макета
 
-Суффикс имени текст-стиля макета задаёт начертание: `-M` (`Header/H3-M`) →
-`weight={EFontWeightTitle.MEDIUM}` — дефолт `Title` semibold, без явного
-`weight` текст будет жирнее макета; `-S` (`Header/H1-S`) → semibold,
-`weight` не пишется (дефолт). Аналогично для `Text` (`EFontWeightText`).
-Проверять текст-стиль узла макета, а не полагаться на визуальную оценку.
+Суффикс имени текст-стиля макета задаёт начертание. Для `Title`
+(`EFontWeightTitle`: REGULAR / MEDIUM / SEMIBOLD / BOLD, дефолт —
+semibold): `-M` (`Header/H3-M`) → `weight={EFontWeightTitle.MEDIUM}` —
+без явного `weight` текст будет жирнее макета; `-S` (`Header/H1-S`) →
+semibold, `weight` не пишется (дефолт). Для `Text` (`EFontWeightText`)
+доступны только REGULAR (дефолт) и SEMIBOLD — веса MEDIUM у `Text` нет:
+стили с суффиксом полужирного начертания (`-S`/`-Sb`) →
+`weight={EFontWeightText.SEMIBOLD}`, прочие — дефолт REGULAR, `weight`
+не пишется. Проверять текст-стиль узла макета, а не полагаться на
+визуальную оценку.
 
 ```tsx
 <Title size={ETitleSize.H3} weight={EFontWeightTitle.MEDIUM}>…</Title> // стиль макета Header/H3-M
 <Title tag="h1" size={ETitleSize.H1}>…</Title> // стиль Header/H1-S: semibold — дефолт
+<Text size={ETextSize.B3} weight={EFontWeightText.SEMIBOLD}>…</Text> // полужирный Body-стиль
+<Text size={ETextSize.B3}>…</Text> // обычный Body-стиль: REGULAR — дефолт
 ```
 
 ## TPX-G-14 — HelpBox и тултипы — без preferPlace
 
-У `HelpBox` (и тултипов) `preferPlace` как правило не указывается — логики
+У `HelpBox` (и тултипов) `preferPlace`, как правило, не указывается — логики
 компонента хватает, чтобы позиционировать тултип правильно; явный prop
 ничего не ломает, но избыточен. Вариант `Position=Top/Left/…` из макета в
 prop не переносится.
@@ -217,7 +224,9 @@ size SM `oneLine`), правая часть строки чипов — `MasterT
 
 Варианты кнопок макета `Type=Icon*` (`IconSecondary`, `IconSecondaryLight`,
 …) — это `Button` с prop `icon` и соответствующей темой, БЕЗ children (плюс
-`aria-label`). `ButtonIcon` — только для «голой» иконки-кнопки без подложки.
+`aria-label`). `ButtonIcon` — только для «голой» иконки-кнопки без подложки;
+это нативный `<button>` без видимого текста, поэтому `aria-label` для него
+обязателен так же, как для icon-`Button`.
 В ячейках таблиц и шапках страниц кнопки с серой/светлой подложкой —
 `Button` с `icon`. Размер иконки — из макета (MD-кнопка → 20, LG → 24).
 

@@ -4,7 +4,7 @@ import { EComponentSize } from "../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 import { Marker } from "../Marker";
 import { EMarkerStatus } from "../Marker/enums";
-import { statusToClassNameMap } from "../Marker/utils";
+import { STATUS_TO_CLASS_NAME_MAP } from "../Marker/utils";
 import { ETextSize, ECaptionSize, Caption, Text, EFontType } from "../Typography";
 import styles from "./styles/MarkerStatus.module.less";
 
@@ -35,7 +35,7 @@ export const MarkerStatus = React.forwardRef<HTMLDivElement, IMarkerStatusProps>
         const classNames = clsx(
             styles.markerStatus,
             SIZE_TO_CLASS_NAME_MAP[size],
-            statusToClassNameMap[status],
+            STATUS_TO_CLASS_NAME_MAP[status],
             className,
         );
 

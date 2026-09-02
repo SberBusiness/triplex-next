@@ -54,7 +54,7 @@ props точки: любой стандартный атрибут `<span>` (`id
 ### Статусы и цвета
 
 Каждому значению `EMarkerStatus` соответствует один css-класс и один токен фона —
-соответствие задано таблицей `statusToClassNameMap` в `src/components/Marker/utils.ts`.
+соответствие задано таблицей `STATUS_TO_CLASS_NAME_MAP` в `src/components/Marker/utils.ts`.
 Другой палитры и других вариантов оформления у компонента нет: чтобы добавить статус,
 нужно добавить и значение enum (breaking change), и класс, и токен.
 
@@ -88,8 +88,8 @@ Marker.Background_Waiting
 - **Значения `EMarkerStatus`** (`"success"`, `"error"`, `"warning"`, `"waiting"`) —
   часть публичного API. Совпадают с именами css-классов в `Marker.module.less`, но это
   совпадение, а не контракт: связь между статусом и классом идёт только через
-  `statusToClassNameMap`.
-- **`statusToClassNameMap` — внутренняя утилита, но с внешним потребителем.**
+  `STATUS_TO_CLASS_NAME_MAP`.
+- **`STATUS_TO_CLASS_NAME_MAP` — внутренняя утилита, но с внешним потребителем.**
   Через barrel не экспортируется, однако `MarkerStatus` импортирует её напрямую
   (`src/components/MarkerStatus/MarkerStatus.tsx`) и вешает те же классы на свой
   корневой `<div>`; на них опирается `MarkerStatus.test.tsx`. Переименование карты
@@ -136,7 +136,7 @@ Marker.Background_Waiting
   (размеры, разметка, `ref`, ограничение `children: never`), задаётся там.
 - `MarkerStatus` (`src/components/MarkerStatus/MarkerStatus.tsx`) — готовая композиция
   «точка + заголовок статуса + описание». Единственный внутренний потребитель `Marker`,
-  и при этом он опирается на внутреннюю карту `statusToClassNameMap` — см. «Инварианты».
+  и при этом он опирается на внутреннюю карту `STATUS_TO_CLASS_NAME_MAP` — см. «Инварианты».
 
 ---
 
@@ -166,4 +166,4 @@ Marker.Background_Waiting
 
 | Дата | Изменение |
 |---|---|
-| 2026-09-01 | Создан документ. AI-рефакторинг: `Marker` переведён с `React.FC` на `React.forwardRef` — `ref` теперь уходит на корневой `<span>` от `Badge.Dot`; добавлены JSDoc на компонент, `IMarkerProps.status`, значения `EMarkerStatus` и `statusToClassNameMap`, карта закреплена через `satisfies Record<EMarkerStatus, string>`, поправлен порядок импортов. Добавлены unit-тесты: `__tests__/Marker.test.tsx` (все статусы, проброс `size` в `Badge.Dot`, мердж `className`, `ref`, спред `...restProps`, `displayName`) и `__tests__/utils.test.tsx` (различимость и непустота классов карты статусов). Разметку точки и полную матрицу размеров не дублируем — их покрывает `Badge/__tests__/BadgeDot.test.tsx`; полноту карты статусов гарантирует `satisfies`. Заведены stories `stories/Marker/` в modern pattern. Публичный API (имена и типы props, значения `EMarkerStatus`, barrel-экспорты), разметка и визуальное поведение не изменены. |
+| 2026-09-01 | Создан документ. AI-рефакторинг: `Marker` переведён с `React.FC` на `React.forwardRef` — `ref` теперь уходит на корневой `<span>` от `Badge.Dot`; добавлены JSDoc на компонент, `IMarkerProps.status`, значения `EMarkerStatus` и `STATUS_TO_CLASS_NAME_MAP`, карта закреплена через `satisfies Record<EMarkerStatus, string>`, поправлен порядок импортов. Карта переименована `statusToClassNameMap` → `STATUS_TO_CLASS_NAME_MAP` по `codestyle.md` (константа модульного уровня — UPPER_SNAKE_CASE); переименование внутреннее, `utils.ts` не входит ни в один barrel, синхронно обновлён импорт в `MarkerStatus.tsx`. Добавлены unit-тесты: `__tests__/Marker.test.tsx` (все статусы, проброс `size` в `Badge.Dot`, мердж `className`, `ref`, спред `...restProps`, `displayName`) и `__tests__/utils.test.tsx` (различимость и непустота классов карты статусов). Разметку точки и полную матрицу размеров не дублируем — их покрывает `Badge/__tests__/BadgeDot.test.tsx`; полноту карты статусов гарантирует `satisfies`. Заведены stories `stories/Marker/` в modern pattern. Публичный API (имена и типы props, значения `EMarkerStatus`, barrel-экспорты), разметка и визуальное поведение не изменены. |

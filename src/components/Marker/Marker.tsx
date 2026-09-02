@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Badge } from "../Badge";
 import { IBadgeDotProps } from "../Badge/types";
 import { EMarkerStatus } from "./enums";
-import { statusToClassNameMap } from "./utils";
+import { STATUS_TO_CLASS_NAME_MAP } from "./utils";
 import styles from "./styles/Marker.module.less";
 
 /** Свойства компонента Marker. */
@@ -17,7 +17,7 @@ export interface IMarkerProps extends IBadgeDotProps {
  * Обёртка над Badge.Dot: добавляет цвет по статусу, всё остальное (размер, разметка, ref) — от Badge.Dot.
  * */
 export const Marker = React.forwardRef<HTMLSpanElement, IMarkerProps>(({ className, status, ...restProps }, ref) => (
-    <Badge.Dot className={clsx(styles.marker, statusToClassNameMap[status], className)} {...restProps} ref={ref} />
+    <Badge.Dot className={clsx(styles.marker, STATUS_TO_CLASS_NAME_MAP[status], className)} {...restProps} ref={ref} />
 ));
 
 Marker.displayName = "Marker";

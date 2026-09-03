@@ -7,11 +7,16 @@ import { LoaderScreen } from "../../../components/LoaderScreen";
 
 /** Свойства компонента MultiselectFieldDropdownContent. */
 export interface IMultiselectFieldDropdownContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Показать лоадер поверх содержимого. По умолчанию false. */
     loading?: boolean;
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
+/**
+ * Прокручиваемое содержимое выпадающего блока мульти-списка.
+ * Максимальную высоту задаёт размер из MultiselectFieldContext.
+ */
 export const MultiselectFieldDropdownContent: React.FC<IMultiselectFieldDropdownContentProps> = ({
     children,
     className,

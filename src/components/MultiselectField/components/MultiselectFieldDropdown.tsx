@@ -12,7 +12,12 @@ export interface IMultiselectFieldDropdownProps extends IDropdownProps {
     focusTrapProps?: FocusTrapProps;
 }
 
-/** Компонент выпадающего блока мильти-списка. */
+/**
+ * Компонент выпадающего блока мульти-списка.
+ *
+ * Оборачивает Dropdown в FocusTrap, поэтому фокус не уходит за пределы блока,
+ * пока он открыт. Размер берёт из MultiselectFieldContext.
+ */
 export const MultiselectFieldDropdown = Object.assign(
     React.forwardRef<HTMLDivElement, IMultiselectFieldDropdownProps>(
         ({ children, focusTrapProps, opened, targetRef, mobileViewProps, ...rest }, ref) => {
@@ -27,10 +32,10 @@ export const MultiselectFieldDropdown = Object.assign(
             return (
                 <Dropdown
                     width={EDropdownWidth.MIN_TARGET}
-                    mobileViewProps={{
-                        ...mobileViewProps,
-                        className: mobileViewProps?.className,
-                    }}
+                    // Объект передаётся всегда, даже когда потребитель не передал mobileViewProps:
+                    // Dropdown выбирает мобильную версию по truthiness этого prop'а, и без объекта
+                    // на мобильной ширине рендерился бы десктопный выпадающий блок.
+                    mobileViewProps={{ ...mobileViewProps }}
                     targetRef={targetRef}
                     opened={opened}
                     size={size}
@@ -42,6 +47,8 @@ export const MultiselectFieldDropdown = Object.assign(
                         focusTrapOptions={{
                             clickOutsideDeactivates: true,
                             preventScroll: true,
+                            // После открытия мышью фокус на поле не возвращается — иначе клик
+                            // вне блока снова подсветил бы поле выбора.
                             returnFocusOnDeactivate: !mouseUsedRef.current,
                             ...focusTrapProps?.focusTrapOptions,
                         }}

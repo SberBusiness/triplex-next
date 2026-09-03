@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { MultiselectFieldDropdownContent } from "../components/MultiselectFieldDropdownContent";
 import { MultiselectFieldContext } from "../MultiselectFieldContext";
@@ -74,13 +74,13 @@ describe("MultiselectFieldDropdownContent", () => {
     it("Should not render the loader by default", () => {
         renderContent();
 
-        expect(screen.getByTestId("content").querySelector(".loaderScreen")).toBeNull();
+        expect(within(screen.getByTestId("content")).queryByRole("status", { name: "loading" })).toBeNull();
     });
 
     it("Should render the loader over the content when loading", () => {
         renderContent({ loading: true, children: <span data-testid="option">Option</span> });
 
         expect(screen.getByTestId("option")).toBeInTheDocument();
-        expect(screen.getByTestId("content").querySelector(".loaderScreen")).not.toBeNull();
+        expect(within(screen.getByTestId("content")).getByRole("status", { name: "loading" })).toBeInTheDocument();
     });
 });

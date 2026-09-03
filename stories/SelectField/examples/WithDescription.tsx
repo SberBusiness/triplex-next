@@ -19,8 +19,10 @@ const OPTIONS: ISelectFieldOption[] = [
 
 export const WithDescription = () => {
     const [value, setValue] = useState<ISelectFieldOption>();
+    // Поле считается тронутым после первого закрытия списка: до взаимодействия ошибку не показываем.
+    const [touched, setTouched] = useState(false);
 
-    const status = value ? EFormFieldStatus.DEFAULT : EFormFieldStatus.ERROR;
+    const status = touched && !value ? EFormFieldStatus.ERROR : EFormFieldStatus.DEFAULT;
 
     return (
         <div style={{ maxWidth: "300px" }}>
@@ -31,6 +33,7 @@ export const WithDescription = () => {
                     value={value}
                     options={OPTIONS}
                     onChange={setValue}
+                    onClose={() => setTouched(true)}
                     placeholder="Не выбрано"
                     targetProps={{ fieldLabel: "Выберите опцию" }}
                     mobileTitle="Выберите опцию"

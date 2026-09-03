@@ -190,6 +190,7 @@ version: "1.0"
 | `Statuses` | `Statuses.tsx` | Состояния поля: DEFAULT / DISABLED / ERROR / WARNING |
 | `Loading` | `Loading.tsx` | Состояние загрузки: лоадер вместо каретки, список не раскрывается |
 | `WithDescription` | `WithDescription.tsx` | Композиция с `FormGroup` и `FormFieldDescription`: описание и текст ошибки под полем |
+| `Example` | `Example.tsx` | Production-like композиция: зависимые списки «Организация» → «Счёт списания» |
 | `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: раскрытый список с подсвеченной опцией (через `play`), длинное значение, загрузка в размере SM, пустое заблокированное поле |
 
 `Playground` исключён из скриншот-тестов, `WithDescription` — тоже: поле в нём повторяет

@@ -5,6 +5,8 @@ import { EComponentSize, EFormFieldStatus, SelectField } from "@sberbusiness/tri
 import {
     Default as DefaultRender,
     DefaultSource,
+    Example as ExampleRender,
+    ExampleSource,
     IPlaygroundProps,
     Loading as LoadingRender,
     LoadingSource,
@@ -210,6 +212,23 @@ export const WithDescription: StoryObj<typeof SelectField> = {
             },
             source: {
                 code: WithDescriptionSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Example: StoryObj<typeof SelectField> = {
+    name: "Example: зависимые списки",
+    render: ExampleRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Production-like композиция: выбор организации и зависящий от него список счетов. Смена организации сбрасывает счёт, до её выбора второе поле заблокировано.",
+            },
+            source: {
+                code: ExampleSource,
                 language: "tsx",
             },
         },

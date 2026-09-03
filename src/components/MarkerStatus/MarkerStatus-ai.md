@@ -116,7 +116,7 @@ Typography.Secondary_Color
   описание). На эту структуру опираются unit-тесты; `StatusTrackerStatus` дописывает
   корневому элементу свой класс `statusTrackerStatus`.
 - **Классы статуса на корне приходят из CSS-модуля `Marker`** —
-  `statusToClassNameMap` импортируется из `src/components/Marker/utils.ts`, где
+  `STATUS_TO_CLASS_NAME_MAP` импортируется из `src/components/Marker/utils.ts`, где
   правила объявлены как `.marker.success` и т.п. На корне `MarkerStatus` эти классы
   визуального эффекта не дают, но присутствуют в разметке и проверяются unit-тестами
   (`toHaveClass("success")`). Не удалять без согласования: класс виден потребителю в
@@ -152,7 +152,7 @@ Typography.Secondary_Color
 ## Связанные компоненты
 
 - `Marker` (`src/components/Marker/Marker.tsx`) — точка со статусной палитрой,
-  рендерится внутри `MarkerStatus`; из его CSS-модуля берётся и `statusToClassNameMap`
+  рендерится внутри `MarkerStatus`; из его CSS-модуля берётся и `STATUS_TO_CLASS_NAME_MAP`
   для корневого элемента.
 - `Text`, `Caption` — типографика наименования и описания; размеры и `EFontType`
   выбираются по `size`.

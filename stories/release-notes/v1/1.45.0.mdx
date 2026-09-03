@@ -74,6 +74,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).
 
+**SelectField**
+
+- Внешний `ref` больше не пересоздаётся на каждый рендер: callback-`ref` вызывается только при монтировании и размонтировании. Элемент, на который указывает `ref`, прежний.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
 **SmallInput**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.

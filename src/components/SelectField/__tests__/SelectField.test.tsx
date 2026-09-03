@@ -61,10 +61,11 @@ vi.mock("../../SelectExtendedField", () => {
             onClick?.();
         };
 
+        // Разметка повторяет настоящий Target: rest (role, aria-*) уходит на корневой FormField,
+        // а ref — на вложенный FormFieldTarget. Это разные узлы, и тесты опираются на это.
         return (
             <div
                 data-testid="select-extended-field-target"
-                ref={ref}
                 data-label={label ? String(label) : undefined}
                 data-placeholder={placeholder ? String(placeholder) : undefined}
                 data-loading={loading}
@@ -74,7 +75,9 @@ vi.mock("../../SelectExtendedField", () => {
                 onClick={handleClick}
                 {...props}
             >
-                {label || placeholder}
+                <div data-testid="form-field-target" ref={ref}>
+                    {label || placeholder}
+                </div>
             </div>
         );
     });
@@ -122,12 +125,16 @@ vi.mock("../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault
         // Настоящий DropdownList поднимает активную опцию наверх через этот контекст —
         // мок повторяет ту же связку, чтобы проверить aria-activedescendant поля выбора.
         const { setActiveDescendant } = React.useContext(DropdownListContext);
+        // Настоящий компонент отдаёт в Dropdown opened && !loading, а Dropdown при !opened
+        // возвращает null: в закрытом состоянии и во время загрузки опций в DOM нет.
+        const optionsRendered = opened && !loading;
 
+        // Обёртка рендерится всегда: на ней проверяется контракт SelectField —
+        // что он прокидывает вниз listId, size, width, loading, mobileTitle и dropdownProps.
         return (
             <div
                 data-testid="select-extended-field-dropdown-default"
                 {...dropdownProps}
-                data-opened={String(opened)}
                 data-list-id={listId}
                 data-size={size}
                 data-width={width}
@@ -135,21 +142,23 @@ vi.mock("../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault
                 data-mobile-title={mobileTitle ? String(mobileTitle) : undefined}
                 data-dropdown-list-item-class-name={dropdownListItemClassName || undefined}
             >
-                {options.map((option) => (
-                    <button
-                        key={option.id}
-                        type="button"
-                        data-testid={`option-${option.id}`}
-                        data-selected={String(option.id === value?.id)}
-                        onFocus={() => setActiveDescendant(option.id)}
-                        onClick={() => {
-                            onChange(option);
-                            setOpened(false);
-                        }}
-                    >
-                        {option.label}
-                    </button>
-                ))}
+                {optionsRendered
+                    ? options.map((option) => (
+                          <button
+                              key={option.id}
+                              type="button"
+                              data-testid={`option-${option.id}`}
+                              data-selected={String(option.id === value?.id)}
+                              onFocus={() => setActiveDescendant(option.id)}
+                              onClick={() => {
+                                  onChange(option);
+                                  setOpened(false);
+                              }}
+                          >
+                              {option.label}
+                          </button>
+                      ))
+                    : null}
             </div>
         );
     },
@@ -272,12 +281,18 @@ describe("SelectField", () => {
         expect(target).toHaveAttribute("data-status", EFormFieldStatus.DISABLED);
     });
 
-    it("Should forward ref to target element", () => {
+    it("Should forward ref to FormFieldTarget inside the target, not to its root element", () => {
         const ref = React.createRef<HTMLDivElement>();
         render(<SelectField {...defaultProps} ref={ref} data-testid="select-field" />);
 
+        const targetRoot = screen.getByTestId("select-extended-field-target");
+        const formFieldTarget = screen.getByTestId("form-field-target");
+
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
-        expect(ref.current).toBe(screen.getByTestId("select-extended-field-target"));
+        expect(ref.current).toBe(formFieldTarget);
+        expect(ref.current).not.toBe(targetRoot);
+        expect(ref.current).not.toBe(screen.getByTestId("select-field"));
+        expect(targetRoot).toContainElement(formFieldTarget);
     });
 
     it("Should not reattach callback ref on rerender", () => {
@@ -318,6 +333,8 @@ describe("SelectField", () => {
         const target = screen.getByTestId("select-extended-field-target");
         expect(target).toHaveAttribute("role", "combobox");
         expect(target).not.toHaveAttribute("aria-activedescendant");
+        // role и aria-* адресованы корневому элементу поля выбора, а не вложенному ref-таргету.
+        expect(screen.getByTestId("form-field-target")).not.toHaveAttribute("role");
 
         fireEvent.click(target);
 
@@ -363,6 +380,7 @@ describe("SelectField", () => {
         const target = screen.getByTestId("select-extended-field-target");
         expect(target).not.toHaveAttribute("aria-activedescendant");
 
+        fireEvent.click(target);
         fireEvent.focus(screen.getByTestId("option-2"));
 
         await waitFor(() => {
@@ -370,8 +388,20 @@ describe("SelectField", () => {
         });
     });
 
+    it("Should render no options until the dropdown is opened", () => {
+        render(<SelectField {...defaultProps} data-testid="select-field" />);
+
+        expect(screen.queryByTestId("option-1")).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId("select-extended-field-target"));
+
+        expect(screen.getByTestId("option-1")).toBeInTheDocument();
+    });
+
     it("Should pass options and selected value to dropdown", () => {
         render(<SelectField {...defaultProps} value={mockOptions[1]} data-testid="select-field" />);
+
+        fireEvent.click(screen.getByTestId("select-extended-field-target"));
 
         expect(screen.getByTestId("option-1")).toHaveAttribute("data-selected", "false");
         expect(screen.getByTestId("option-2")).toHaveAttribute("data-selected", "true");
@@ -382,6 +412,7 @@ describe("SelectField", () => {
         const onChange = vi.fn();
         render(<SelectField {...defaultProps} onChange={onChange} data-testid="select-field" />);
 
+        fireEvent.click(screen.getByTestId("select-extended-field-target"));
         fireEvent.click(screen.getByTestId("option-3"));
 
         expect(onChange).toHaveBeenCalledTimes(1);
@@ -446,15 +477,26 @@ describe("SelectField", () => {
         });
     });
 
-    it("Should pass loading to dropdown", async () => {
-        render(<SelectField {...defaultProps} loading data-testid="select-field" />);
+    it("Should pass loading to dropdown", () => {
+        const { rerender } = render(<SelectField {...defaultProps} loading data-testid="select-field" />);
+
+        expect(screen.getByTestId("select-extended-field-dropdown-default")).toHaveAttribute("data-loading", "true");
+
+        rerender(<SelectField {...defaultProps} data-testid="select-field" />);
+
+        expect(screen.getByTestId("select-extended-field-dropdown-default")).toHaveAttribute("data-loading", "false");
+    });
+
+    it("Should keep options unreachable while loading", () => {
+        const { rerender } = render(<SelectField {...defaultProps} loading data-testid="select-field" />);
 
         fireEvent.click(screen.getByTestId("select-extended-field-target"));
 
-        await waitFor(() => {
-            const dropdown = screen.getByTestId("select-extended-field-dropdown-default");
-            expect(dropdown).toHaveAttribute("data-loading", "true");
-            expect(dropdown).toHaveAttribute("data-opened", "false");
-        });
+        expect(screen.queryByTestId("option-1")).not.toBeInTheDocument();
+
+        rerender(<SelectField {...defaultProps} data-testid="select-field" />);
+        fireEvent.click(screen.getByTestId("select-extended-field-target"));
+
+        expect(screen.getByTestId("option-1")).toBeInTheDocument();
     });
 });

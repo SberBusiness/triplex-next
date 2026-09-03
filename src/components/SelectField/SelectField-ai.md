@@ -111,7 +111,7 @@ version: "1.0"
   Корневой `<div>` — это `SelectExtendedField`, и своей ссылки на него `SelectField` наружу не отдаёт.
 - **Имена `SelectField`, `ISelectFieldProps`, `ISelectFieldOption`** и `displayName` — публичный API:
   экспортируются из barrel `src/components/SelectField/index.ts` и из `src/components/index.ts`.
-  `ISelectFieldProps` наследует `IChipSelectProps` (`Chip.Select`) и `IPaginationSelectProps`
+  От `ISelectFieldProps` строятся `IChipSelectProps` (`Chip.Select`) и `IPaginationSelectProps`
   (`Pagination`), `ISelectFieldOption` используется в тестах и stories `Chip` — переименование
   ломает их.
 - **`ISelectFieldOption` — пустой `extends ISelectExtendedFieldDefaultOption`.** Это осознанный

@@ -1,7 +1,7 @@
 ---
 component: SelectField
 category: SelectField
-related: [SelectExtendedField, MultiselectField, SuggestField, Chip, Dropdown]
+related: [SelectExtendedField, MultiselectField, SuggestField, Chip, Dropdown, Pagination]
 tokens: []
 stories: stories/SelectField/SelectField.stories.tsx
 version: "1.0"
@@ -138,7 +138,10 @@ version: "1.0"
 
 - Поле выбора получает `role="combobox"` и `aria-controls` с идентификатором списка опций.
   Идентификатор генерируется компонентом и передаётся в `SelectExtendedFieldDropdownDefault`
-  как `listId` — то есть в `id` реального `DropdownList`.
+  как `listId` — то есть в `id` реального `DropdownList`. Пока список закрыт (а также при
+  `loading`), выпадающего блока в DOM нет, поэтому `aria-controls` указывает на несуществующий
+  `id` — так же было и до появления этого документа. Скринридеры такую ссылку игнорируют,
+  а `aria-expanded` при этом корректно сообщает, что список свёрнут.
 - `aria-activedescendant` отражает опцию, подсвеченную с клавиатуры. Значение поднимается снизу:
   `DropdownList` кладёт `id` активного элемента в `DropdownListContext`, провайдер которого
   `SelectField` рендерит вокруг выпадающего блока. Без этого провайдера связка не работает.

@@ -13,6 +13,13 @@ export interface IMultiselectFieldDropdownProps extends IDropdownProps {
 }
 
 /**
+ * Заглушка на случай, когда потребитель не передал mobileViewProps: Dropdown включает
+ * мобильную версию по truthiness этого prop'а, поэтому непустой объект нужен всегда —
+ * без него на мобильной ширине отрендерился бы десктопный выпадающий блок.
+ */
+const ALWAYS_MOBILE_VIEW_PROPS: NonNullable<IDropdownProps["mobileViewProps"]> = {};
+
+/**
  * Компонент выпадающего блока мульти-списка.
  *
  * Оборачивает Dropdown в FocusTrap, поэтому фокус не уходит за пределы блока,
@@ -32,10 +39,7 @@ export const MultiselectFieldDropdown = Object.assign(
             return (
                 <Dropdown
                     width={EDropdownWidth.MIN_TARGET}
-                    // Объект передаётся всегда, даже когда потребитель не передал mobileViewProps:
-                    // Dropdown выбирает мобильную версию по truthiness этого prop'а, и без объекта
-                    // на мобильной ширине рендерился бы десктопный выпадающий блок.
-                    mobileViewProps={{ ...mobileViewProps }}
+                    mobileViewProps={mobileViewProps ?? ALWAYS_MOBILE_VIEW_PROPS}
                     targetRef={targetRef}
                     opened={opened}
                     size={size}

@@ -119,14 +119,13 @@ describe("MultiselectField", () => {
             expect(screen.getByTestId("content")).toHaveClass("md");
         });
 
-        it.each([
-            [EComponentSize.SM, "sm"],
-            [EComponentSize.MD, "md"],
-            [EComponentSize.LG, "lg"],
-        ])("Should share %s size with dropdown parts", (size, expectedClassName) => {
-            renderWithContent(size);
+        // Здесь проверяется только то, что MultiselectField кладёт свой size в контекст
+        // и части его видят. Полный перебор размеров — в тестах Content, где живёт
+        // соответствие «размер → класс».
+        it("Should share the passed size with dropdown parts", () => {
+            renderWithContent(EComponentSize.SM);
 
-            expect(screen.getByTestId("content")).toHaveClass(expectedClassName);
+            expect(screen.getByTestId("content")).toHaveClass("sm");
         });
     });
 

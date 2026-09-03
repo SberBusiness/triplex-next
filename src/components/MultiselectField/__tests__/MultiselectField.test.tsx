@@ -105,18 +105,14 @@ describe("MultiselectField", () => {
         const renderWithContent = (size?: EComponentSize) =>
             render(
                 <MultiselectField renderTarget={mockRenderTarget} size={size}>
-                    {() => (
-                        <MultiselectField.Dropdown.Content data-testid="content">
-                            Content
-                        </MultiselectField.Dropdown.Content>
-                    )}
+                    {() => <MultiselectField.Dropdown.Content>Content</MultiselectField.Dropdown.Content>}
                 </MultiselectField>,
             );
 
         it("Should share MD size with dropdown parts by default", () => {
             renderWithContent();
 
-            expect(screen.getByTestId("content")).toHaveClass("md");
+            expect(screen.getByText("Content")).toHaveClass("md");
         });
 
         // Здесь проверяется только то, что MultiselectField кладёт свой size в контекст
@@ -125,7 +121,7 @@ describe("MultiselectField", () => {
         it("Should share the passed size with dropdown parts", () => {
             renderWithContent(EComponentSize.SM);
 
-            expect(screen.getByTestId("content")).toHaveClass("sm");
+            expect(screen.getByText("Content")).toHaveClass("sm");
         });
     });
 

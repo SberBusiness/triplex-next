@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React, { useState } from "react";
+import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
 import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
 import { ISMSFieldProps } from "@sberbusiness/triplex-next/components/SMSField/types";
 import { SMSFieldInput } from "@sberbusiness/triplex-next/components/SMSField/components/SMSFieldInput";
@@ -22,8 +23,16 @@ interface ISMSFieldComposition {
 
 /** Компонент для ввода СМС. */
 export const SMSField: React.FC<ISMSFieldProps> & ISMSFieldComposition = (props) => {
-    const { children, className, code, disabled, error, onChangeCode, onSubmitCode, size, ...htmlDivAttributes } =
-        props;
+    const {
+        children,
+        className,
+        code,
+        onChangeCode,
+        onSubmitCode,
+        size,
+        status = EFormFieldStatus.DEFAULT,
+        ...htmlDivAttributes
+    } = props;
 
     const [disabledSubmit, setDisabledSubmit] = useState(true);
     const [tooltipId, setTooltipId] = useState<string>();
@@ -33,15 +42,14 @@ export const SMSField: React.FC<ISMSFieldProps> & ISMSFieldComposition = (props)
         <SMSFieldContext.Provider
             value={{
                 code,
-                disabled: !!disabled,
                 disabledSubmit,
-                error: !!error,
                 onChangeCode,
                 onSubmitCode,
                 setDisabledSubmit,
                 setTooltipId,
                 size,
                 sizeClassName: sizeToClassNameMap[size],
+                status,
                 tooltipId,
             }}
         >

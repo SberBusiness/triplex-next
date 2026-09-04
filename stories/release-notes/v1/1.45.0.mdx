@@ -25,6 +25,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Атрибут `data-tx` теперь выставляется после пользовательских props, поэтому переданное через props значение `data-tx` больше не применяется — на корневом элементе всегда версия пакета.
 
+**SMSField**
+
+- Удалены свойства `error` и `disabled`. Состояние задаётся свойством `status`.
+
 <Heading>Изменения</Heading>
 
 **AmountField**
@@ -99,6 +103,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Suggest**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
+
+**SMSField**
+
+- Добавлено свойство `status`.
+- У компонента `SMSField.Input` добавлено свойство `errorText`: в статусе `ERROR` текст ошибки отображается внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`.
+- Исправлены цвета фона поля и иконки `SMSFieldRefresh` в состояниях `error` и `disabled`.
 
 **SwipeableArea**
 

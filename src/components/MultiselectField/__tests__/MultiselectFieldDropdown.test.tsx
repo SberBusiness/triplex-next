@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import type { FocusTrapProps } from "focus-trap-react";
 import { MultiselectField } from "../MultiselectField";
 import { MultiselectFieldDropdown } from "../components/MultiselectFieldDropdown";
 import { MultiselectFieldDropdownHeader } from "../components/MultiselectFieldDropdownHeader";
@@ -10,15 +9,29 @@ import { MultiselectFieldDropdownFooter } from "../components/MultiselectFieldDr
 import { MultiselectFieldContext, IMultiselectFieldContext } from "../MultiselectFieldContext";
 import { EComponentSize } from "../../../enums/EComponentSize";
 
+/**
+ * Минимальный контракт FocusTrap, нужный тесту. Тип объявляется локально, а не берётся из
+ * focus-trap-react: в main (v11) он экспортируется как FocusTrapProps, в release-0 (v10) —
+ * как FocusTrap.Props.
+ */
+interface IFocusTrapMockProps {
+    children?: React.ReactNode;
+    focusTrapOptions?: Record<string, unknown>;
+}
+
 // FocusTrap подменяется, чтобы проверить именно то, что вычисляет компонент — focusTrapOptions.
 // Настоящий перехват фокуса — интеграция стороннего пакета, unit-тестами не покрывается.
-vi.mock("focus-trap-react", () => ({
-    FocusTrap: ({ children, focusTrapOptions }: FocusTrapProps) => (
+// Мок отдаёт и named, и default экспорт: в main компонент импортирует { FocusTrap } (v11),
+// в release-0 — default-импортом (v10).
+vi.mock("focus-trap-react", () => {
+    const FocusTrap = ({ children, focusTrapOptions }: IFocusTrapMockProps) => (
         <div data-testid="focus-trap" data-focus-trap-options={JSON.stringify(focusTrapOptions)}>
             {children}
         </div>
-    ),
-}));
+    );
+
+    return { FocusTrap, default: FocusTrap };
+});
 
 /** Опции focus-trap, с которыми отрендерился выпадающий блок. */
 const getFocusTrapOptions = (): Record<string, unknown> =>

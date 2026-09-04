@@ -25,10 +25,10 @@ const renderUseSuggest = (props: Partial<TUseSuggestProps> = {}) => {
 
     const initialProps = {
         value: undefined,
-        onSelect: vi.fn(),
-        onFilter: vi.fn(),
+        onSelect: vi.fn<(value: ISuggestOption | undefined) => void>(),
+        onFilter: vi.fn<(value: string) => void>(),
         ...props,
-    } as TUseSuggestProps;
+    } satisfies TUseSuggestProps;
 
     const { rerender } = render(<SuggestReader hookProps={initialProps} />);
 

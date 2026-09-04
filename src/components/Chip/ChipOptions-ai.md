@@ -44,7 +44,7 @@ version: "1.0"
 | `children` | `React.ReactNode` | — | Обычно число выбранных опций; оборачивается в `.chipOptionsContent` |
 | `size` | `EComponentSize` | `MD` | Размер чипса; тем же размером рисуется кнопка сброса (иконка-крестик 16 / 20 / 24px) |
 | `type` | `EChipType` | `TYPE_1` | Визуальный тип фона, как у `Chip` |
-| `disabled` | `boolean` | `false` | Визуальная блокировка, `tabIndex={-1}` (ограничения — в `Chip-ai.md`) |
+| `disabled` | `boolean` | `false` | Визуальная блокировка, `tabIndex={-1}`. Кнопку сброса не отключает — см. Accessibility (прочие ограничения — в `Chip-ai.md`) |
 | `showNotificationIcon` | `boolean` | `false` | Значок новых уведомлений, как у `Chip` |
 | `...HTMLSpanAttributes` | — | — | Все атрибуты `<span>` кроме `prefix`, включая `onClick`, `aria-label`, `data-*` |
 
@@ -88,8 +88,10 @@ version: "1.0"
 - **Палитра иконки опций переключается по `selected`** (`paletteIndex` 6 в выбранном
   состоянии, 5 в обычном) — так иконка остаётся читаемой на контрастном фоне
   выбранного чипса.
-- **Класс `.chipOptionsContent`** (`min-width: 14px`, `text-align: center`) удерживает
-  ширину чипса при смене однозначного счётчика — не удалять.
+- **Класс `.chipOptionsContent`** (`min-width: 14px`, `text-align: center`, `display: block`)
+  удерживает ширину чипса при смене однозначного счётчика — не удалять. `display: block`
+  здесь не декоративен: родительский `.content` не флекс-контейнер, и на inline-`<span>`
+  `min-width` не подействует.
 - **Barrel-экспорты** `ChipOptions` и `IChipOptionsProps` из `src/components/Chip/index.ts` —
   сохранять.
 - **Story ids `chips-chipoptions--*`** завязаны на baseline-скриншоты в `__screenshots__/` —
@@ -105,6 +107,12 @@ version: "1.0"
   иконкой `aria-hidden`, а её props наружу не выведены, поэтому передать `aria-label`
   потребитель не может. Если сброс должен быть доступен ассистивным технологиям, собери
   чипс из `Chip` + `ChipClearButton` вручную.
+- **`disabled` не отключает кнопку сброса.** `ChipOptions` рендерит `ChipClearButton`
+  без `disabled`, а `Chip` применяет `disabled` только к корневому `<span>`
+  (`tabIndex={-1}`) и к CSS-классам `IconWrapper`. В состоянии `disabled selected`
+  крестик остаётся в таб-порядке и кликабельным, то есть `clearSelected` отработает на
+  заблокированном чипсе. Если это недопустимо — не рендери `ChipOptions` в `selected`
+  вместе с `disabled` либо собирай чипс из `Chip` + `ChipClearButton` вручную.
 - **Пробел на сфокусированной кнопке сброса не срабатывает.** `keydown` всплывает до
   `Chip`, тот вызывает `preventDefault()` на `Space` (гасит прокрутку страницы) и заодно
   отменяет нативную активацию кнопки. Enter работает. `ChipMultiselect` эту ситуацию

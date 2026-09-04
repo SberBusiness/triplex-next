@@ -1,6 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
+import { OptionsStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ChipOptions } from "../ChipOptions";
 import { EChipType } from "../enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
@@ -18,6 +19,16 @@ const getClearButton = () => getChipOptions().querySelector<HTMLButtonElement>("
  * поэтому сравниваем палитры состояний между собой, а не с конкретным именем класса.
  */
 const getPrefixIconPaletteClassName = () => getPrefixIcon()?.querySelector("path")?.getAttribute("class");
+
+/** Тот же класс палитры, снятый с эталонного рендера иконки с заданным paletteIndex. */
+const getReferencePaletteClassName = (paletteIndex: number) => {
+    const { container, unmount } = render(<OptionsStrokeSrvIcon24 paletteIndex={paletteIndex} />);
+    const className = container.querySelector("path")?.getAttribute("class");
+
+    unmount();
+
+    return className;
+};
 
 describe("ChipOptions", () => {
     const defaultProps = {
@@ -160,6 +171,10 @@ describe("ChipOptions", () => {
             expect(defaultPaletteClassName).toBeTruthy();
             expect(selectedPaletteClassName).toBeTruthy();
             expect(selectedPaletteClassName).not.toBe(defaultPaletteClassName);
+            // Сверка с эталонным рендером ловит инверсию палитр, которую сравнение
+            // состояний между собой пропускает.
+            expect(defaultPaletteClassName).toBe(getReferencePaletteClassName(5));
+            expect(selectedPaletteClassName).toBe(getReferencePaletteClassName(6));
         });
     });
 

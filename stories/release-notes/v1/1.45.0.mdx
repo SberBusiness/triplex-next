@@ -12,6 +12,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Внешний `ref` компонента теперь прокидывается на родительский контейнер, а не на внутренний инпут. Для работы с инпутом используйте `inputProps.ref`.
 - Тип `ref` компонента изменён с `HTMLInputElement` на `HTMLDivElement`.
 
+**Carousel**
+
+- Исправлена ошибка, из-за которой компонент не попадал в сборку.
+
 **FormFieldInput / FormFieldMaskedInput**
 
 - Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`.

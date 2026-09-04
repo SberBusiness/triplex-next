@@ -14,9 +14,21 @@ const getPrefixIcon = () => getChipOptions().querySelector(".prefix svg");
 /** Кнопка сброса выбора, отрисованная в postfix. */
 const getClearButton = () => getChipOptions().querySelector<HTMLButtonElement>(".postfix button");
 
+/** Кнопка сброса, когда тест рассчитывает на её присутствие: сужает тип без non-null assertion. */
+const getExistingClearButton = () => {
+    const clearButton = getClearButton();
+
+    if (!clearButton) {
+        throw new Error("Кнопка сброса не отрисована — ожидалось состояние selected.");
+    }
+
+    return clearButton;
+};
+
 /**
  * Класс палитры на path иконки опций. Иконки кодируют paletteIndex хешированным классом,
- * поэтому сравниваем палитры состояний между собой, а не с конкретным именем класса.
+ * поэтому имя класса не хардкодим, а сверяем с эталонным рендером той же иконки
+ * (getReferencePaletteClassName) — тест не зависит от схемы хеширования в пакете иконок.
  */
 const getPrefixIconPaletteClassName = () => getPrefixIcon()?.querySelector("path")?.getAttribute("class");
 
@@ -216,7 +228,7 @@ describe("ChipOptions", () => {
 
             render(<ChipOptions clearSelected={clearSelected} selected data-testid="chip-options" />);
 
-            fireEvent.click(getClearButton()!);
+            fireEvent.click(getExistingClearButton());
 
             expect(clearSelected).toHaveBeenCalledTimes(1);
             expect(clearSelected).toHaveBeenCalledWith();
@@ -228,7 +240,7 @@ describe("ChipOptions", () => {
 
             render(<ChipOptions clearSelected={clearSelected} onClick={onClick} selected data-testid="chip-options" />);
 
-            fireEvent.click(getClearButton()!);
+            fireEvent.click(getExistingClearButton());
 
             expect(clearSelected).toHaveBeenCalledTimes(1);
             expect(onClick).not.toHaveBeenCalled();

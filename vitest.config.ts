@@ -10,7 +10,7 @@ export default defineConfig({
             include: ["src/**/*.{js,ts,jsx,tsx}"],
             exclude: ["src/components/DesignTokens/*", "src/generated/*"],
         },
-        include: ["src/**/*.test.{ts,tsx}"],
+        include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.ts"],
         environment: "jsdom",
         globals: true,
         setupFiles: "vitest.setup.ts",

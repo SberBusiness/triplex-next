@@ -466,10 +466,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
 
 CarouselRoot.displayName = "Carousel";
 
-/**
- * Карусель.
- * @beta
- */
+/** Карусель. */
 export const Carousel = Object.assign(CarouselRoot, {
     Viewport: CarouselViewport,
     Track: CarouselTrack,

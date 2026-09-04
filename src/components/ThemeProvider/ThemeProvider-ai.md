@@ -65,7 +65,55 @@ version: "1.0"
 ```
 
 Версия в имени переменной — версия пакета с точками, заменёнными на дефисы
-(см. `DesignTokenUtils.getCSSVariableByTokenGroup`).
+(см. `DesignTokenUtils.getCSSVariableByTokenGroup`). Из-за версии эти имена нельзя
+использовать в коде потребителя — они меняются каждый релиз. Публичный способ
+поменять оформление — prop `tokens`.
+
+### Как переопределять токены
+
+Путь токена — `{Группа}.{Токен}`. Объект `tokens` плоский: группы лежат на верхнем
+уровне, вложенности `core` / `components` в API нет.
+
+```tsx
+import {useRef} from "react";
+import {ThemeProvider, ETriplexNextTheme} from "@sberbusiness/triplex-next";
+
+// tokens сравнивается по ссылке — объект вынесен из рендера, иначе <style> пересобирается
+// на каждый рендер.
+const TOKENS = {
+    // core-токен: палитра, меняется сразу для всех компонентов, которые на неё ссылаются
+    ColorBrand: {50: {value: "#1D6BF3"}},
+    // компонентный токен: значением или ссылкой на core-токен
+    Calendar: {
+        Background: {value: "#FFFFFF"},
+        View_Item_Background_Selected_Default: {ref: "ColorBrand.50"},
+    },
+};
+
+const App = () => {
+    const scopeRef = useRef<HTMLDivElement>(null);
+
+    return (
+        <ThemeProvider theme={ETriplexNextTheme.LIGHT} tokens={TOKENS} scopeRef={scopeRef}>
+            <div ref={scopeRef}>…</div>
+        </ThemeProvider>
+    );
+};
+```
+
+Правила:
+
+- значение задаётся либо `{value: "<css>"}`, либо `{ref: "<Группа>.<Токен>"}`;
+- `ref` указывает **только на core-токен**: тип ссылок генерируется из `DesignTokensCore`
+  (`scripts/generateRefTokensTypes.ts`), ссылка на компонентный токен не скомпилируется;
+- одним объектом можно переопределить сколько угодно групп — и core, и компонентные;
+- переопределения мерджатся поверх токенов темы (`defaultsDeep`), тема при этом
+  продолжает действовать: то, что не переопределено, берётся из неё;
+- действуют внутри `scopeRef`; вложенные `ThemeProvider` переопределяют друг друга.
+
+Где смотреть значения по умолчанию: `src/components/DesignTokens/DesignTokensCore.ts`
+(палитра) и `src/components/DesignTokens/components/{Группа}.ts` (пара «светлая /
+тёмная тема» для каждого компонентного токена).
 
 ---
 
@@ -145,3 +193,4 @@ version: "1.0"
 |---|---|
 | 2026-08-05 | Создан документ. AI-рефакторинг: JSDoc на props и экспортах, ключ тега стилей вынесен в хелпер, упрощён эффект `ThemeProviderView`, добавлены unit-тесты `ThemeProviderView` и `useToken`, stories переведены на modern pattern |
 | 2026-08-05 | `related` сокращён до `useToken`. Удалён неактуальный комментарий про относительный импорт в `ThemeProviderView` |
+| 2026-08-31 | Добавлен раздел «Как переопределять токены»: путь `{Группа}.{Токен}`, плоская форма prop `tokens`, `value` / `ref` |

@@ -4,15 +4,20 @@ import styles from "../../styles/HeaderSubheader.module.less";
 
 /** Свойства компонента HeaderSubheader. */
 export interface IHeaderSubheaderProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Свойство отключающее padding. */
+    /** Произвольный контент третьего уровня заголовка. */
+    children?: React.ReactNode;
+    /** Свойство отключающее padding. По умолчанию false. */
     withoutPaddings?: boolean;
 }
 
-/** Третий уровень Header. Содержит в себе произвольный контент. */
+/**
+ * Третий уровень Header. Содержит в себе произвольный контент.
+ * По умолчанию имеет вертикальные отступы 24px, которые снимаются свойством `withoutPaddings`.
+ */
 export const HeaderSubheader = React.forwardRef<HTMLDivElement, IHeaderSubheaderProps>(
     ({ children, className, withoutPaddings, ...rest }, ref) => (
         <div
-            className={clsx(styles.headerSubheader, { [styles.withoutPaddings]: Boolean(withoutPaddings) }, className)}
+            className={clsx(styles.headerSubheader, { [styles.withoutPaddings]: withoutPaddings }, className)}
             {...rest}
             ref={ref}
         >

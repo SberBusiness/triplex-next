@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import { uniqueId } from "lodash-es";
 import {
     ISelectExtendedFieldDefaultOption,
     ISelectExtendedFieldDropdownProvideProps,
@@ -11,26 +12,27 @@ import {
     ISelectExtendedFieldDropdownDefaultProps,
     SelectExtendedFieldDropdownDefault,
 } from "@sberbusiness/triplex-next/components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
+import { EDropdownWidth } from "@sberbusiness/triplex-next/components/Dropdown";
 import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
-import { uniqueId } from "lodash-es";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { EDropdownWidth } from "../Dropdown";
 
-/* Свойства опции списка. */
+/** Свойства опции списка. */
 export interface ISelectFieldOption extends ISelectExtendedFieldDefaultOption {}
 
+/** Свойства компонента SelectField. */
 export interface ISelectFieldProps
     extends
         Omit<ISelectExtendedFieldProps, "children" | "onChange" | "renderTarget" | "placeholder">,
         Pick<ISelectExtendedFieldTargetProps, "loading" | "status" | "placeholder"> {
     /** Размер компонента. */
     size: EComponentSize;
+    /** Выпадающий блок компонент рендерит сам, поэтому children не принимаются. */
     children?: never;
-    /** Текущее выбранное значение. */
+    /** Текущее выбранное значение. С опцией списка сопоставляется по полю id. */
     value?: ISelectFieldOption;
     /** Список опций. */
     options: ISelectFieldOption[];
-    /** Обработчик изменения значения. */
+    /** Обработчик изменения значения. Вызывается с выбранной опцией, список при этом закрывается. */
     onChange: (option: ISelectFieldOption) => void;
     /** Свойства, передающиеся в SelectExtendedField.Target. */
     targetProps?: Omit<ISelectExtendedFieldTargetProps, "opened" | "setOpened" | "size">;
@@ -42,9 +44,15 @@ export interface ISelectFieldProps
     mobileTitle?: React.ReactNode;
 }
 
-/* Базовый компонент SelectField. */
+/**
+ * Базовый компонент SelectField.
+ * Готовый Select со списком опций: поле выбора и выпадающий блок собраны заранее, состоянием
+ * открытости владеет SelectExtendedField. Сам компонент отвечает только за связку поля со списком
+ * (aria-controls, aria-activedescendant) и за прокидывание опций в выпадающий блок.
+ */
 export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((props, ref) => {
     const {
+        // children в разметку не попадают — выпадающий блок рендерит сам компонент (children?: never).
         children,
         className,
         value,
@@ -54,6 +62,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
         placeholder,
         loading,
         status,
+        // aria-labelledby адресован полю выбора, а не корневому <div>, поэтому не уходит в rest.
         "aria-labelledby": ariaLabelledby,
         dropdownListItemClassName,
         mobileTitle,
@@ -62,47 +71,44 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
         ...rest
     } = props;
 
+    // Идентификатор активной (подсвеченной с клавиатуры) опции. Его выставляет DropdownList
+    // через DropdownListContext, а поле выбора отдаёт в aria-activedescendant.
     const [activeDescendant, setActiveDescendant] = useState<string>();
-    const targetRef = useRef<HTMLDivElement | null>(null);
-    const instanceId = useRef(uniqueId());
+    // Идентификатор списка опций. Должен быть стабилен на всё время жизни компонента:
+    // на него ссылается aria-controls поля выбора.
+    const [listId] = useState(() => uniqueId());
 
-    const setRef = (node: HTMLInputElement | null) => {
-        targetRef.current = node;
-        if (typeof ref === "function") {
-            ref(node);
-        } else if (ref) {
-            ref.current = node;
-        }
-    };
-
-    const renderTarget = (props: ISelectExtendedFieldTargetProvideProps) => (
+    const renderTarget = (targetProvideProps: ISelectExtendedFieldTargetProvideProps) => (
         <SelectExtendedField.Target
             label={value?.label}
             placeholder={placeholder}
             loading={loading}
             status={status}
             role="combobox"
-            aria-controls={instanceId.current}
+            aria-controls={listId}
             aria-activedescendant={activeDescendant}
             aria-labelledby={ariaLabelledby}
-            ref={setRef}
+            ref={ref}
             size={size}
+            // fieldLabel обязателен в Target, но у SelectField его нет: заголовок задаётся
+            // только через targetProps, поэтому здесь стоит заглушка, которую спред перекрывает.
             fieldLabel={undefined}
             {...targetProps}
-            {...props}
+            // Состояние открытости приходит от SelectExtendedField и перекрывает targetProps.
+            {...targetProvideProps}
         />
     );
 
-    const renderDropdown = (props: ISelectExtendedFieldDropdownProvideProps) => (
+    const renderDropdown = (dropdownProvideProps: ISelectExtendedFieldDropdownProvideProps) => (
         <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
             <SelectExtendedFieldDropdownDefault
-                {...props}
+                {...dropdownProvideProps}
                 size={size}
                 width={EDropdownWidth.TARGET}
                 dropdownProps={dropdownProps}
                 dropdownListItemClassName={dropdownListItemClassName}
                 loading={loading}
-                listId={instanceId.current}
+                listId={listId}
                 mobileTitle={mobileTitle}
                 onChange={onChange}
                 options={options}

@@ -5,7 +5,7 @@ import { ITextFieldBaseProps, TextFieldBase } from "./TextFieldBase";
 /** Свойства компонента TextField. */
 export interface ITextFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
-    inputProps: IFormFieldInputProps & { ref?: React.RefObject<HTMLInputElement> };
+    inputProps: IFormFieldInputProps & { ref?: React.Ref<HTMLInputElement> };
 }
 
 /**

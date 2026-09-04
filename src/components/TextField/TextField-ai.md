@@ -54,7 +54,7 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Собственных CSS-токенов и стилей нет. Внешний вид полностью наследуется от семейства `FormField` (токены `--triplex-next-FormField-*` описаны в стилях `src/components/FormField/styles/`).
+Собственных токенов и стилей нет. Внешний вид полностью наследуется от семейства `FormField` (группа токенов `FormField`, стили — `src/components/FormField/styles/`).
 
 ---
 
@@ -62,7 +62,7 @@ version: "1.0"
 
 - `forwardRef` на `TextField` и `TextFieldBase` — не убирать. Внешний `ref` указывает на корневой `<div>` `FormField`; ref на сам input — только через `inputProps.ref`.
 - Публичный API (`ITextFieldProps`: `inputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
-- Barrel `index.ts` экспортирует `TextField` и `MaskedField` — состав экспортов не менять. `TextFieldBase` намеренно НЕ экспортируется — приватная база.
+- `TextFieldBase` намеренно НЕ экспортируется — приватная база.
 - Известное ограничение контракта: `inputProps.ref` типизирован как `React.RefObject<HTMLInputElement>` (не `React.Ref`), callback-ref формально не проходит по типам. Исправление — breaking change, требует отдельной задачи.
 - Уникальный `id` для связки label↔input генерируется через `lodash uniqueId` в `FormFieldInput` — не заменять на `useId` (React 17 совместимость через release-0).
 - `description || counter` рендерятся в общем блоке `FormFieldDescription` — не разносить по отдельным блокам (изменит DOM и скриншоты).
@@ -80,8 +80,7 @@ version: "1.0"
 
 ## Связанные компоненты
 
-- `TextFieldBase` (внутренний, не в barrel) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. На нём построены `TextField` и `MaskedField`. Описан здесь, отдельного AI.md не имеет.
-- `MaskedField` — сосед по папке: то же самое, но с `FormFieldMaskedInput` (ввод по маске) через prop `maskedInputProps`. Документируется отдельно.
+- `TextFieldBase` (внутренний, не в barrel) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. Описан здесь, отдельного AI.md не имеет.
 - `FormField` / `FormFieldInput` и слоты семейства — низкоуровневые строительные блоки; используются напрямую, когда нужна нестандартная композиция.
 - `FormGroup` — контейнер вертикальной раскладки поля и описания.
 - `FormFieldClear` — кнопка очистки, передаётся в `postfix`.

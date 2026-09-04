@@ -3,11 +3,11 @@ component: AlertProcess
 category: Alert
 related: [AlertContext]
 tokens:
-    - --triplex-next-AlertProcess-Info_Background
-    - --triplex-next-AlertProcess-Warning_Background
-    - --triplex-next-AlertProcess-Error_Background
-    - --triplex-next-AlertProcess-System_Background
-    - --triplex-next-AlertProcess-Feature_Background
+  - AlertProcess.Info_Background
+  - AlertProcess.Warning_Background
+  - AlertProcess.Error_Background
+  - AlertProcess.System_Background
+  - AlertProcess.Feature_Background
 stories: stories/Alerts/AlertProcess.stories.tsx
 version: "1.0"
 ---
@@ -69,12 +69,15 @@ ARIA-роли не выставляет.
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/AlertProcess.ts`.
+
 ```text
---triplex-next-AlertProcess-Info_Background     // фон для type=INFO
---triplex-next-AlertProcess-Warning_Background  // фон для type=WARNING
---triplex-next-AlertProcess-Error_Background    // фон для type=ERROR
---triplex-next-AlertProcess-System_Background   // фон для type=SYSTEM
---triplex-next-AlertProcess-Feature_Background  // фон для type=FEATURE
+AlertProcess.Info_Background     // фон для type=INFO
+AlertProcess.Warning_Background  // фон для type=WARNING
+AlertProcess.Error_Background    // фон для type=ERROR
+AlertProcess.System_Background   // фон для type=SYSTEM
+AlertProcess.Feature_Background  // фон для type=FEATURE
 ```
 
 Значения — в `src/components/DesignTokens/components/AlertProcess.ts`. Компонент

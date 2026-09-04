@@ -11,17 +11,19 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
         children,
         value,
         options,
-        size,
         placeholder,
         noOptionsText,
         loading,
         dropdownListLoading,
         tooltipOpen,
         clearInputOnFocus,
-        onKeyDown: onKeyDownProp,
-        onSelect,
-        onFilter,
         onScrollEnd,
+        // Свойства ниже раздаются потомкам через контекст либо обрабатываются useSuggest,
+        // поэтому в restProps (и на корневой div) они попасть не должны.
+        size: _size,
+        onKeyDown: _onKeyDown,
+        onSelect: _onSelect,
+        onFilter: _onFilter,
         ...restProps
     } = props;
     const suggest = useSuggest(props);
@@ -83,6 +85,12 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
     );
 };
 
+/**
+ * Headless-основа выпадающего списка с фильтрацией по введённому значению.
+ * Собственной разметки не добавляет: рендерит div-обёртку и раздаёт потомкам через SuggestContext
+ * состояние поля ввода, видимость выпадающего списка и обработчики выбора и фильтрации.
+ * Управляющий элемент и выпадающий список пишет потребитель — как это делает ChipSuggest.
+ */
 export const Suggest = React.forwardRef(SuggestBase) as <T extends ISuggestOption = ISuggestOption>(
     props: ISuggestProps<T> & React.RefAttributes<HTMLDivElement>,
 ) => JSX.Element;

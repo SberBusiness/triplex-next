@@ -3,16 +3,17 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { NumberField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
-    PlaygroundArgs,
-    PlaygroundExample,
-    DefaultExample,
-    DefaultExampleSource,
-    SizesExample,
-    SizesExampleSource,
-    StatusesExample,
-    StatusesExampleSource,
-    ProductionExample,
-    ProductionExampleSource,
+    PlaygroundRender,
+    PlaygroundSource,
+    DefaultRender,
+    DefaultSource,
+    SizesRender,
+    SizesSource,
+    StatusesRender,
+    StatusesSource,
+    ProductionRender,
+    ProductionSource,
+    type PlaygroundArgs,
 } from "./examples";
 
 export default {
@@ -43,9 +44,8 @@ const PLAYGROUND_ARGS: PlaygroundArgs = {
     status: EFormFieldStatus.DEFAULT,
     label: "Label",
     active: false,
-    inputProps: {},
+    inputProps: { placeholder: "0" },
     // Settings
-    placeholder: "0",
     withPostfix: false,
     withDescription: false,
 };
@@ -56,15 +56,17 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     argTypes: {
         // Props
         size: {
+            control: "select",
             options: Object.values(EComponentSize),
             table: { category: "Props" },
         },
         status: {
+            control: "select",
             options: Object.values(EFormFieldStatus),
             table: { category: "Props" },
         },
         label: {
-            control: { type: "text" },
+            control: "text",
             table: { category: "Props" },
         },
         active: {
@@ -76,25 +78,17 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             table: { category: "Props" },
         },
         // Settings
-        placeholder: {
-            description: "Текст-заполнитель в поле ввода.",
-            control: "text",
-            table: {
-                category: "Settings",
-                defaultValue: { summary: "0" },
-            },
-        },
         withPostfix: {
-            description: "С постфиксом.",
             control: "boolean",
+            description: "С постфиксом.",
             table: {
                 category: "Settings",
                 defaultValue: { summary: "false" },
             },
         },
         withDescription: {
-            description: "С описанием.",
             control: "boolean",
+            description: "С описанием.",
             table: {
                 category: "Settings",
                 defaultValue: { summary: "false" },
@@ -106,10 +100,14 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
+            source: {
+                code: PlaygroundSource,
+                language: "tsx",
+            },
         },
         testRunner: { skip: true },
     },
-    render: PlaygroundExample,
+    render: PlaygroundRender,
 };
 
 export const Default: StoryObj<typeof NumberField> = {
@@ -117,13 +115,13 @@ export const Default: StoryObj<typeof NumberField> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: DefaultExampleSource,
+                code: DefaultSource,
                 language: "tsx",
             },
         },
         testRunner: { skip: true },
     },
-    render: DefaultExample,
+    render: DefaultRender,
 };
 
 export const Sizes: StoryObj<typeof NumberField> = {
@@ -131,12 +129,12 @@ export const Sizes: StoryObj<typeof NumberField> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: SizesExampleSource,
+                code: SizesSource,
                 language: "tsx",
             },
         },
     },
-    render: SizesExample,
+    render: SizesRender,
 };
 
 export const Statuses: StoryObj<typeof NumberField> = {
@@ -144,12 +142,12 @@ export const Statuses: StoryObj<typeof NumberField> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: StatusesExampleSource,
+                code: StatusesSource,
                 language: "tsx",
             },
         },
     },
-    render: StatusesExample,
+    render: StatusesRender,
 };
 
 export const Production: StoryObj<typeof NumberField> = {
@@ -158,11 +156,11 @@ export const Production: StoryObj<typeof NumberField> = {
         controls: { disable: true },
         docs: {
             source: {
-                code: ProductionExampleSource,
+                code: ProductionSource,
                 language: "tsx",
             },
         },
         testRunner: { skip: true },
     },
-    render: ProductionExample,
+    render: ProductionRender,
 };

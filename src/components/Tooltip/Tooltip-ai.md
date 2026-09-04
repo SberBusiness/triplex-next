@@ -3,16 +3,16 @@ component: Tooltip
 category: Tooltip
 related: [HelpBox, SMSField, Dropdown, DropdownMobile, Portal, MobileView, ThemeProvider, ButtonIcon]
 tokens:
-  - --triplex-next-Tooltip-Background
-  - --triplex-next-Tooltip-Color
-  - --triplex-next-Tooltip-Link_Desktop_Color_Default
-  - --triplex-next-Tooltip-Link_Desktop_Color_Hover
-  - --triplex-next-Tooltip-Link_Desktop_Color_Active
-  - --triplex-next-Tooltip-Link_Desktop_Shadow_Focus
-  - --triplex-next-Tooltip-Link_Mobile_Color_Default
-  - --triplex-next-Tooltip-Link_Mobile_Color_Hover
-  - --triplex-next-Tooltip-Link_Mobile_Color_Active
-  - --triplex-next-Tooltip-Link_Mobile_Shadow_Focus
+  - Tooltip.Background
+  - Tooltip.Color
+  - Tooltip.Link_Desktop_Color_Default
+  - Tooltip.Link_Desktop_Color_Hover
+  - Tooltip.Link_Desktop_Color_Active
+  - Tooltip.Link_Desktop_Shadow_Focus
+  - Tooltip.Link_Mobile_Color_Default
+  - Tooltip.Link_Mobile_Color_Hover
+  - Tooltip.Link_Mobile_Color_Active
+  - Tooltip.Link_Mobile_Shadow_Focus
 stories: stories/Tooltip/Tooltip.stories.tsx
 version: "1.0"
 ---
@@ -85,20 +85,23 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Tooltip.ts`.
+
 ```text
---triplex-next-Tooltip-Background
---triplex-next-Tooltip-Color
---triplex-next-Tooltip-Link_Desktop_Color_Default
---triplex-next-Tooltip-Link_Desktop_Color_Hover
---triplex-next-Tooltip-Link_Desktop_Color_Active
---triplex-next-Tooltip-Link_Desktop_Shadow_Focus
---triplex-next-Tooltip-Link_Mobile_Color_Default
---triplex-next-Tooltip-Link_Mobile_Color_Hover
---triplex-next-Tooltip-Link_Mobile_Color_Active
---triplex-next-Tooltip-Link_Mobile_Shadow_Focus
+Tooltip.Background
+Tooltip.Color
+Tooltip.Link_Desktop_Color_Default
+Tooltip.Link_Desktop_Color_Hover
+Tooltip.Link_Desktop_Color_Active
+Tooltip.Link_Desktop_Shadow_Focus
+Tooltip.Link_Mobile_Color_Default
+Tooltip.Link_Mobile_Color_Hover
+Tooltip.Link_Mobile_Color_Active
+Tooltip.Link_Mobile_Shadow_Focus
 ```
 
-Мобильная версия дополнительно наследует токены `DropdownMobile` (`--triplex-next-DropdownMobile-*`), так как построена на его субкомпонентах.
+Мобильная версия дополнительно наследует токены группы `DropdownMobile`, так как построена на его субкомпонентах.
 
 ---
 

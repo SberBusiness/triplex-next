@@ -3,48 +3,48 @@ component: Button
 category: Buttons
 related: [ButtonIcon, ButtonDropdown, ButtonDropdownExtended]
 tokens:
-  - --triplex-next-Button-General_Background_Default
-  - --triplex-next-Button-General_Color_Default
-  - --triplex-next-Button-General_Background_Hover
-  - --triplex-next-Button-General_Color_Hover
-  - --triplex-next-Button-General_Background_Active
-  - --triplex-next-Button-General_Color_Active
-  - --triplex-next-Button-General_Shadow_Focus
-  - --triplex-next-Button-General_Background_Disabled
-  - --triplex-next-Button-General_Color_Disabled
-  - --triplex-next-Button-Secondary_Background_Default
-  - --triplex-next-Button-Secondary_Color_Default
-  - --triplex-next-Button-Secondary_Background_Hover
-  - --triplex-next-Button-Secondary_Color_Hover
-  - --triplex-next-Button-Secondary_Background_Active
-  - --triplex-next-Button-Secondary_Color_Active
-  - --triplex-next-Button-Secondary_Shadow_Focus
-  - --triplex-next-Button-Secondary_Background_Disabled
-  - --triplex-next-Button-Secondary_Color_Disabled
-  - --triplex-next-Button-SecondaryLight_Background_Default
-  - --triplex-next-Button-SecondaryLight_Color_Default
-  - --triplex-next-Button-SecondaryLight_Background_Hover
-  - --triplex-next-Button-SecondaryLight_Color_Hover
-  - --triplex-next-Button-SecondaryLight_Background_Active
-  - --triplex-next-Button-SecondaryLight_Color_Active
-  - --triplex-next-Button-SecondaryLight_Shadow_Focus
-  - --triplex-next-Button-SecondaryLight_Background_Disabled
-  - --triplex-next-Button-SecondaryLight_Color_Disabled
-  - --triplex-next-Button-Danger_Background_Default
-  - --triplex-next-Button-Danger_Color_Default
-  - --triplex-next-Button-Danger_Background_Hover
-  - --triplex-next-Button-Danger_Color_Hover
-  - --triplex-next-Button-Danger_Background_Active
-  - --triplex-next-Button-Danger_Color_Active
-  - --triplex-next-Button-Danger_Shadow_Focus
-  - --triplex-next-Button-Danger_Background_Disabled
-  - --triplex-next-Button-Danger_Color_Disabled
-  - --triplex-next-Button-Link_Color_Default
-  - --triplex-next-Button-Link_Color_Hover
-  - --triplex-next-Button-Link_Color_Active
-  - --triplex-next-Button-Link_Shadow_Focus
-  - --triplex-next-Button-Link_Color_Disabled
-  - --triplex-next-Button-Icon_Shadow_Focus
+  - Button.General_Background_Default
+  - Button.General_Color_Default
+  - Button.General_Background_Hover
+  - Button.General_Color_Hover
+  - Button.General_Background_Active
+  - Button.General_Color_Active
+  - Button.General_Shadow_Focus
+  - Button.General_Background_Disabled
+  - Button.General_Color_Disabled
+  - Button.Secondary_Background_Default
+  - Button.Secondary_Color_Default
+  - Button.Secondary_Background_Hover
+  - Button.Secondary_Color_Hover
+  - Button.Secondary_Background_Active
+  - Button.Secondary_Color_Active
+  - Button.Secondary_Shadow_Focus
+  - Button.Secondary_Background_Disabled
+  - Button.Secondary_Color_Disabled
+  - Button.SecondaryLight_Background_Default
+  - Button.SecondaryLight_Color_Default
+  - Button.SecondaryLight_Background_Hover
+  - Button.SecondaryLight_Color_Hover
+  - Button.SecondaryLight_Background_Active
+  - Button.SecondaryLight_Color_Active
+  - Button.SecondaryLight_Shadow_Focus
+  - Button.SecondaryLight_Background_Disabled
+  - Button.SecondaryLight_Color_Disabled
+  - Button.Danger_Background_Default
+  - Button.Danger_Color_Default
+  - Button.Danger_Background_Hover
+  - Button.Danger_Color_Hover
+  - Button.Danger_Background_Active
+  - Button.Danger_Color_Active
+  - Button.Danger_Shadow_Focus
+  - Button.Danger_Background_Disabled
+  - Button.Danger_Color_Disabled
+  - Button.Link_Color_Default
+  - Button.Link_Color_Hover
+  - Button.Link_Color_Active
+  - Button.Link_Shadow_Focus
+  - Button.Link_Color_Disabled
+  - Button.Icon_Shadow_Focus
 stories: stories/Buttons/Button.stories.tsx
 version: "1.0"
 ---
@@ -117,7 +117,10 @@ version: "1.0"
 
 ## Дизайн-токены
 
-Паттерн: `--triplex-next-Button-{Theme}_{Property}_{State}`
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Button.ts`.
+
+Паттерн: `Button.{Theme}_{Property}_{State}`
 
 Каждая тема (кроме `LINK`) имеет полный набор:
 - `_Background_Default/Hover/Active/Disabled`

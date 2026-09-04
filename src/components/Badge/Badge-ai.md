@@ -3,7 +3,7 @@ component: Badge
 category: Badge
 related: [Marker, Chip, DropdownListItem, DropdownMobileListItem, TabsLineItem, TabsExtendedTabButton, Text, Caption]
 tokens:
-  - --triplex-next-Badge-Background
+  - Badge.Background
 stories: stories/Badge/Badge.stories.tsx
 version: "1.0"
 ---
@@ -77,7 +77,7 @@ version: "1.0"
 
 ### Цвет и текст
 
-- Фон обоих компонентов — единственный токен `--triplex-next-Badge-Background`
+- Фон обоих компонентов — единственный токен `Badge.Background`
   (`ColorWarning.70` в обеих темах). Вариантов/статусов у компонента нет.
 - Цвет и размер текста задаёт потребитель, вкладывая внутрь `Text` / `Caption`
   с нужным `type` (в примерах — `EFontType.PRIMARY_INVERT`). Своей типографики
@@ -90,8 +90,11 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Badge.ts`.
+
 ```text
---triplex-next-Badge-Background
+Badge.Background
 ```
 
 Один токен на всё семейство: фон `Badge` (`styles/Badge.module.less`) и цвет точки

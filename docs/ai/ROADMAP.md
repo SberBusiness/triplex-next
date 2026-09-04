@@ -101,7 +101,13 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CheckboxXGroup | ✅ | ✅ | ✅ |
 | CheckboxYGroup | ✅ | ✅ | ✅ |
 | Chip | ✅ | ✅ | ✅ |
+| ChipDatePicker | ⬜ | ✅ | ⬜ |
 | ChipGroup | ✅ | ✅ | ✅ |
+| ChipMultiselect | ⬜ | ✅ | ⬜ |
+| ChipOptions | ⬜ | ✅ | ⬜ |
+| ChipSelect | ⬜ | ✅ | ⬜ |
+| ChipSort | ⬜ | ✅ | ⬜ |
+| ChipSuggest | ⬜ | ✅ | ⬜ |
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
 | CollapsibleTreeExtended | ✅ | ✅ | ✅ |
@@ -119,9 +125,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Footer | ✅ | ✅ | ✅ |
 | FooterPage | ✅ | ✅ | ✅ |
 | FormField | ✅ | ✅ | ✅ |
-| FormGroup | ⬜ | ⬜ | ⬜ |
+| FormGroup | ✅ | ✅ | ✅ |
 | Gap | ✅ | ✅ | ✅ |
-| Header | ⬜ | ⬜ | ⬜ |
+| Header | ✅ | ✅ | ✅ |
 | HeaderPage | ✅ | ✅ | ✅ |
 | HelpBox | ✅ | ✅ | ⬜ |
 | IconWrapper | ✅ | ✅ | ✅ |
@@ -132,7 +138,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | IslandWidget | ⬜ | ✅ | ⬜ |
 | KeyDownListener | ✅ | ✅ | ✅ |
 | LightBox | ✅ | ✅ | ✅ |
-| Link | ⬜ | ✅ | ⬜ |
+| Link | ✅ | ✅ | ✅ |
 | List | ✅ | ✅ | ✅ |
 | ListItem | ✅ | ✅ | ✅ |
 | ListItemControlsButton | ✅ | ✅ | ✅ |
@@ -148,16 +154,16 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | LoaderMiddle | ✅ | ✅ | ✅ |
 | LoaderScreen | ✅ | ✅ | ✅ |
 | LoaderSmall | ✅ | ✅ | ✅ |
-| Marker | ⬜ | ⬜ | ⬜ |
-| MarkerStatus | ⬜ | ✅ | ⬜ |
+| Marker | ✅ | ✅ | ✅ |
+| MarkerStatus | ✅ | ✅ | ✅ |
 | MaskedField | ✅ | ✅ | ✅ |
-| MasterTable | ⬜ | ⬜ | ⬜ |
+| MasterTable | ✅ | ✅ | ✅ |
 | MediaWidth | ✅ | ✅ | ✅ |
 | MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |
 | MonthYearField | ✅ | ✅ | ✅ |
 | MonthYearRange | ⬜ | ✅ | ⬜ |
-| MultiselectField | ⬜ | ✅ | ⬜ |
+| MultiselectField | ✅ | ✅ | ✅ |
 | Notification | ✅ | ✅ | ✅ |
 | NotificationGrouped | ⬜ | ⬜ | ⬜ |
 | NumberField | ⬜ | ✅ | ⬜ |
@@ -176,20 +182,20 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SMSField | ⬜ | ⬜ | ⬜ |
 | SegmentedControl | ⬜ | ⬜ | ⬜ |
 | SelectExtendedField | ✅ | ✅ | ✅ |
-| SelectField | ⬜ | ⬜ | ⬜ |
+| SelectField | ✅ | ✅ | ✅ |
 | Skeleton | ⬜ | ✅ | ⬜ |
 | Slider | ⬜ | ⬜ | ⬜ |
 | SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ⬜ | ⬜ | ⬜ |
-| SmallInput | ⬜ | ⬜ | ⬜ |
+| SmallInput | ✅ | ✅ | ✅ |
 | Spoiler | ⬜ | ⬜ | ⬜ |
 | StatusTracker | ⬜ | ⬜ | ⬜ |
 | Step | ⬜ | ⬜ | ⬜ |
 | Stepper | ⬜ | ⬜ | ⬜ |
 | StepperExtended | ⬜ | ⬜ | ⬜ |
-| Suggest | ⬜ | ⬜ | ⬜ |
+| Suggest | ✅ | ✅ | ✅ |
 | SuggestField | ⬜ | ✅ | ⬜ |
-| SwipeableArea | ⬜ | ⬜ | ⬜ |
+| SwipeableArea | ✅ | ✅ | ✅ |
 | TableBasic | ✅ | ✅ | ✅ |
 | Tabs | ⬜ | ⬜ | ⬜ |
 | TabsExtended | ✅ | ✅ | ✅ |
@@ -227,12 +233,15 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 - [x] Публикация bundle как GitHub Release asset (`.github/workflows/release.yml`)
 - [x] Beta-публикация npm-пакета `@sberbusiness/triplex-next-mcp-server`
 - [x] Автоматизация обновления bundle на релиз библиотеки (workflow `sync-bundle.yml` в репозитории mcp-server)
+- [x] Дизайн-токены в bundle: секция `tokens` из TS-дерева (`schemaVersion: 2`) — пути
+      `{Группа}.{Токен}`, значения светлой и тёмной темы, ссылки на палитру
 - [ ] Stable-релиз npm-пакета (после стабилизации API tools)
 - [ ] Расширенные tools: `search_components`, `get_props`, `get_invariants`, `get_release_notes`, MCP Prompts/Resources и др. — отслеживается в собственном ROADMAP репозитория mcp-server
 
 **Как это работает:**
 1. На релиз triplex-next workflow генерирует `mcp-data-<версия>.json` (плоский JSON
-   со всеми `*-ai.md`, `docs/ai/*.md`, release notes в поле `raw`) и прикладывает
+   со всеми `*-ai.md`, `docs/ai/*.md`, release notes в поле `raw` и секцией
+   `tokens` с деревом дизайн-токенов) и прикладывает
    к GitHub Release. Только для `1.*`: документация в `0.*` идентична, а два
    одинаковых бандла сделали бы неоднозначным выбор источника.
 2. `fetch-bundle.ts` в mcp-server скачивает asset и раскладывает в дерево

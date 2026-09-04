@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { CalendarStrokeSrvIcon16, CalendarStrokeSrvIcon20, CalendarStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { DatePickerExtendedContext } from "../DatePickerExtended/DatePickerExtendedContext";
 import { DateFieldContext } from "./DateFieldContext";
-import { MaskedField } from "../TextField/MaskedField";
+import { MaskedField } from "../MaskedField/MaskedField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { useMobileView } from "../MobileView";
@@ -100,7 +100,6 @@ export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTarget
                 maskedInputProps={{
                     ...restInputProps,
                     className: clsx(SIZE_TO_INPUT_CLASS_NAME_MAP[size], inputClassName),
-                    disabled: disabled,
                     onFocus: handleInputFocus,
                     onBlur: handleInputBlur,
                     onMouseDown: handleMouseDown,

@@ -21,6 +21,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import { basename, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { glob } from "glob";
+import { collectDesignTokens, type TokensSection } from "./collectDesignTokens";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -55,21 +56,28 @@ interface ReleaseNoteEntry {
 }
 
 interface Bundle {
-    schemaVersion: 1;
+    /**
+     * 2 — добавлена секция `tokens` с деревом дизайн-токенов. Бандлы версии 1
+     * её не содержат, поэтому mcp-server читает секцию опционально.
+     */
+    schemaVersion: 2;
     triplexVersion: string;
     generatedAt: string;
     components: ComponentEntry[];
     guides: GuideEntry[];
     releaseNotes: ReleaseNoteEntry[];
+    tokens: TokensSection;
 }
 
-const GUIDE_TOPICS: { topic: string; file: string }[] = [
-    { topic: "context", file: "CONTEXT.md" },
-    { topic: "codestyle", file: "codestyle.md" },
-    { topic: "tests", file: "tests.md" },
-    { topic: "stories", file: "stories-guide.md" },
-    { topic: "commits", file: "commits.md" },
-    { topic: "template", file: "template-ai.md" },
+const GUIDE_TOPICS: { topic: string; path: string }[] = [
+    { topic: "context", path: "docs/ai/CONTEXT.md" },
+    { topic: "codestyle", path: "docs/ai/codestyle.md" },
+    { topic: "tests", path: "docs/ai/tests.md" },
+    { topic: "stories", path: "docs/ai/stories-guide.md" },
+    { topic: "commits", path: "docs/ai/commits.md" },
+    { topic: "template", path: "docs/ai/template-ai.md" },
+    // Гайды вне docs/ai/ — для потребителей дизайн-системы через MCP, а не контрибьюторов пакета.
+    { topic: "guidelines", path: "docs/mcp/guidelines.md" },
 ];
 
 function parseArgs(): { out: string } {
@@ -101,7 +109,9 @@ const EXCLUDED_STORIES = new Set([
     "VisualTestsSquircle",
     "VisualTestsCircle",
     "VisualTestsMonthYear",
+    "VisualTestsNotFound",
     "VisualTestsAlignmentRight",
+    "VisualTestsDropdownListLoading",
 ]);
 
 /**
@@ -229,8 +239,7 @@ function collectComponents(): ComponentEntry[] {
 
 function collectGuides(): GuideEntry[] {
     const guides: GuideEntry[] = [];
-    for (const { topic, file } of GUIDE_TOPICS) {
-        const relPath = `docs/ai/${file}`;
+    for (const { topic, path: relPath } of GUIDE_TOPICS) {
         const absPath = resolve(ROOT, relPath);
         if (!existsSync(absPath)) {
             continue;
@@ -262,12 +271,13 @@ function main(): void {
     const releaseNotes = collectReleaseNotes();
 
     const bundle: Bundle = {
-        schemaVersion: 1,
+        schemaVersion: 2,
         triplexVersion,
         generatedAt: new Date().toISOString(),
         components,
         guides,
         releaseNotes,
+        tokens: collectDesignTokens(triplexVersion),
     };
 
     mkdirSync(dirname(out), { recursive: true });
@@ -276,6 +286,10 @@ function main(): void {
     const aiReady = components.filter((c) => c.raw !== null).length;
     const fallback = components.length - aiReady;
     const totalExamples = components.reduce((sum, c) => sum + c.examples.length, 0);
+    const tokenCount = Object.values(bundle.tokens.groups).reduce(
+        (sum, group) => sum + Object.keys(group.tokens).length,
+        0,
+    );
     process.stdout.write(
         [
             `Wrote ${out}`,
@@ -284,6 +298,7 @@ function main(): void {
             `  examples: ${totalExamples}`,
             `  guides: ${guides.length}`,
             `  releaseNotes: ${releaseNotes.length}`,
+            `  tokens: ${tokenCount} in ${Object.keys(bundle.tokens.groups).length} groups`,
             "",
         ].join("\n"),
     );

@@ -1,0 +1,23 @@
+@import "src/components/FormField/styles/mixins";
+
+.amountFieldInputWrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.currencyLayout {
+    .form-field-input-mirror-layer();
+    .form-field-input-sizes();
+}
+
+.valueMirror {
+    color: transparent;
+}
+
+.currencyUnit {
+    color: var(--triplex-next-FormField-Input_Color_Default);
+
+    &.disabled {
+        color: var(--triplex-next-FormField-Input_Color_Disabled);
+    }
+}

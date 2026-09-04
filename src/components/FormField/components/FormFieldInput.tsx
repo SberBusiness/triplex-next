@@ -3,20 +3,16 @@ import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { FormFieldContext } from "../FormFieldContext";
 import { EFormFieldStatus } from "../enums";
-import { EComponentSize } from "../../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { DataAttributes } from "../../../types/CoreTypes";
 import { isFilled } from "./utils";
 import styles from "../styles/FormFieldInput.module.less";
 
-/** Свойства, передаваемые в рендер-функцию props.render компонента FormFieldInput. */
-export interface IFormFieldInputProvideProps extends Omit<IFormFieldInputProps, "render" | "size"> {
-    /** Размер поля из FormFieldContext. */
-    size: EComponentSize;
-}
+/** Свойства, передаваемые в рендер-функцию компонента FormFieldInput. */
+export interface IFormFieldInputProvideProps extends React.InputHTMLAttributes<HTMLInputElement>, DataAttributes {}
 
 /** Свойства компонента FormFieldInput. */
-export interface IFormFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement>, DataAttributes {
+export interface IFormFieldInputProps extends Omit<IFormFieldInputProvideProps, "disabled"> {
     /**
      * Рендер-функция, в которую можно передать любой инпут с нужным функционалом (валидация ввода, маска).
      * Через аргумент props инпуту передаётся нужная стилизация, идентификатор и обработчики событий.
@@ -31,7 +27,7 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
  * Компонент, отображающий input.
  *
  * Синхронизирует с FormFieldContext идентификатор элемента ввода, состояния фокуса и заполненности,
- * а также блокируется, когда поле имеет статус EFormFieldStatus.DISABLED.
+ * а также блокируется, когда поле имеет статус `EFormFieldStatus.DISABLED`.
  */
 export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>(
     (
@@ -49,7 +45,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
         },
         ref,
     ) => {
-        const { status, setFocused, setTargetId, setFilled, size } = useContext(FormFieldContext);
+        const { size, status, setFocused, setTargetId, setFilled } = useContext(FormFieldContext);
         const id = useMemo(() => (idProp === undefined ? uniqueId("input_") : idProp), [idProp]);
         const classNames = clsx(styles.formFieldInput, SIZE_TO_CLASS_NAME_MAP[size], className);
 
@@ -123,7 +119,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
             [syncFilled, onChange],
         );
 
-        const commonProps = {
+        const commonProps: IFormFieldInputProvideProps = {
             ...restProps,
             id,
             className: classNames,
@@ -138,7 +134,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
 
         if (render) {
             // Рендер инпута, переданного снаружи.
-            return render({ ...commonProps, size }, ref);
+            return render(commonProps, ref);
         }
 
         // Рендер текстового инпута по умолчанию.

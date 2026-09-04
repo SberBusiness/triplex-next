@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useCallback } from "react";
 import { ISuggestOption } from "./types";
 import { useSuggestContext } from "./SuggestContext";
 import {
@@ -13,6 +13,10 @@ import {
 import { Text, EFontType, ETextSize } from "@sberbusiness/triplex-next/components/Typography";
 import styles from "./styles/SuggestDropdown.module.less";
 
+/**
+ * Наполнение полноэкранного мобильного Dropdown внутри Suggest.
+ * Данные и обработчики берёт из SuggestContext, поэтому рендерится только внутри Suggest.
+ */
 export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
     const {
         value,
@@ -28,7 +32,6 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
         onScrollEnd,
         closeDropdown,
     } = useSuggestContext<T>();
-    const listRef = useRef(null);
 
     const handleDropdownScroll = useCallback<React.UIEventHandler<HTMLDivElement>>(
         (event) => {
@@ -55,7 +58,7 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
     );
 
     const handleInputFocus = useCallback(() => {
-        if (inputValue.length !== 0 && clearInputOnFocus === true) {
+        if (inputValue.length !== 0 && clearInputOnFocus) {
             onFilter("");
         }
     }, [inputValue.length, clearInputOnFocus, onFilter]);
@@ -90,7 +93,7 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
                         {noOptionsText}
                     </Text>
                 ) : (
-                    <DropdownMobileList loading={dropdownListLoading} ref={listRef}>
+                    <DropdownMobileList loading={dropdownListLoading}>
                         {options.map((option) => (
                             <DropdownMobileListItem
                                 key={option.id}

@@ -70,27 +70,99 @@ src/components/Button/
 
 ---
 
-## Дизайн-токены (CSS-переменные)
+## Дизайн-токены
 
-Паттерн именования:
-```
---triplex-next-{Component}-{Variant}_{Property}_{State}
+У токенов два слоя. Не путай их: в документации для потребителя описывается
+только первый.
+
+### Публичный слой — токены в TypeScript
+
+Источник значений: `src/components/DesignTokens/DesignTokensCore.ts` (палитра,
+10 групп) и `src/components/DesignTokens/components/{Group}.ts` (токены
+компонентов, 56 групп). Путь токена — `{Группа}.{Токен}`:
+
+```text
+ColorBrand.50
+Button.General_Background_Default
+Calendar.View_Item_Background_Selected_Hover
 ```
 
-Примеры:
+Ровно в этом виде токен переопределяется потребителем через `ThemeProvider`:
+
+```tsx
+// tokens сравнивается по ссылке — объект выносится из рендера.
+const TOKENS = {
+    ColorBrand: {50: {value: "blue"}},
+    Calendar: {Background: {ref: "ColorNeutral.100"}},
+};
+
+<ThemeProvider tokens={TOKENS} scopeRef={scopeRef}>…</ThemeProvider>
 ```
---triplex-next-Button-General_Background_Default
---triplex-next-Button-General_Color_Hover
---triplex-next-Button-Secondary_Shadow_Focus
---triplex-next-Button-Danger_Background_Disabled
-```
+
+Правила слоя:
+
+- объект токенов **плоский** — группы лежат на верхнем уровне
+  (`TDesignTokens = TDesignTokensCore & TDesignTokensComponents`). Вложенности
+  `core` / `components` в API нет, она есть только в раскладке исходников;
+- значение токена — либо `{value: "<css>"}`, либо `{ref: "<Группа>.<Токен>"}`;
+- `ref` указывает **только на core-токены**: тип `designTokensRefs` генерируется
+  из `DesignTokensCore` (`scripts/generateRefTokensTypes.ts`), ссылка на
+  компонентный токен не скомпилируется;
+- у компонентного токена всегда пара значений — `[светлая, тёмная]` тема;
+- имена core-групп и групп компонентов не должны пересекаться: в одном плоском
+  неймспейсе они схлопнутся. Проверяется гардом в `scripts/syncAiMdTokens.ts`.
 
 **Состояния:** `Default`, `Hover`, `Active`, `Focus`, `Disabled`
 **Свойства:** `Background`, `Color`, `Shadow`, `Border`
 
-Токены генерируются в `src/generated/themesCssVariables.css`. Не редактируй этот файл вручную.
+Если добавляешь новое визуальное состояние — нужен новый токен. Имя токена
+согласуй с дизайнером.
 
-Если добавляешь новое визуальное состояние — нужен новый токен. Имя токена согласуй с дизайнером.
+### Внутренний слой — CSS-переменные
+
+В LESS токен читается как css-переменная:
+
+```less
+background: var(--triplex-next-Button-General_Background_Default);
+```
+
+Это внутренняя реализация, а не публичное имя: на сборке
+`scripts/replaceDesignTokenVersion.js` дописывает к переменной версию пакета,
+и в опубликованном коде она выглядит как
+`--triplex-next-{Группа}-{Токен}-{версия}`. Имя меняется каждый релиз, поэтому
+потребитель не может на него опереться.
+
+Отсюда правило: **в стилях библиотеки пиши `var(--triplex-next-...)`, а в
+документации (`*-ai.md`, описания в Storybook) указывай путь токена
+`{Группа}.{Токен}`.** Переименование css-переменной остаётся breaking change —
+её видят потребители, дотянувшиеся до внутреннего слоя.
+
+Полный набор переменных генерируется в `src/generated/themesCssVariables.css`.
+Не редактируй этот файл вручную.
+
+### Токены в AI-документации
+
+Frontmatter `{Component}-ai.md` перечисляет пути токенов:
+
+```yaml
+tokens:
+  - Calendar.Background
+  - Calendar.View_Header_Color
+```
+
+Этот список читает MCP-сервер (`get_tokens`), поэтому формат обязателен.
+Проверяется и нормализуется скриптом:
+
+```bash
+npm run syncAiMdTokens            # нормализовать блоки tokens:
+npm run syncAiMdTokens -- --check # проверить, ничего не записывая
+npm run syncAiMdTokens -- --check src/components/Badge/Badge-ai.md # только эти файлы
+```
+
+Скрипт не определяет состав токенов за автора (в одной директории живёт
+несколько компонентов с разными наборами) — он нормализует и проверяет то, что
+перечислено, а расхождения с LESS показывает предупреждениями. Файл, по которому
+нашлись ошибки, скрипт не переписывает — чинит автор.
 
 ---
 

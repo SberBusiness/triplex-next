@@ -8,16 +8,15 @@ import styles from "./styles/Link.module.less";
 export interface ILinkCommonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     /** Тело гиперссылки. */
     children: React.ReactNode;
-    /** Рендер функция предшествующего контента. */
+    /** Рендер-функция контента перед телом гиперссылки. Для строкового children приклеивается к первому слову. */
     contentBefore?: () => React.ReactElement;
-    /** Рендер функция последующего контента. */
+    /** Рендер-функция контента после тела гиперссылки. Для строкового children приклеивается к последнему слову. */
     contentAfter?: () => React.ReactElement;
 }
 
 /** Гиперссылка. */
 export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
-    ({ children, className, onBlur, onMouseDown, contentAfter, contentBefore, target, rel, ...rest }, ref) => {
-        /** Рендер функция предшествующего контента. */
+    ({ children, className, contentAfter, contentBefore, target, rel, ...rest }, ref) => {
         const renderContentBefore = () =>
             contentBefore ? (
                 <>
@@ -27,19 +26,27 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
                 </>
             ) : null;
 
-        /** Рендер функция последующего контента. */
         const renderContentAfter = () => (contentAfter ? contentAfter() : null);
 
+        /**
+         * Рендерит строковый children, приклеивая contentBefore к первому слову, а contentAfter — к последнему.
+         * Слово вместе с контентом оборачивается в неразрывный inline-flex, чтобы контент не отрывался от слова
+         * при переносе строки.
+         */
         const renderAsSimpleText = (text: string) => {
             const words = text.split(" ");
+            // Слов не хватает, чтобы развести contentBefore и contentAfter по разным словам, — текст идёт одним блоком.
+            const isSingleBlock =
+                words.length < 2 || (words.length < 3 && Boolean(contentBefore) && Boolean(contentAfter));
 
-            if (words.length < 2 || (words.length < 3 && contentBefore && contentAfter)) {
-                const className = clsx(styles.wordWithContent, {
-                    [styles.after]: Boolean(contentAfter),
-                    [styles.before]: Boolean(contentBefore),
-                });
+            if (isSingleBlock) {
                 return (
-                    <span className={className}>
+                    <span
+                        className={clsx(styles.wordWithContent, {
+                            [styles.before]: Boolean(contentBefore),
+                            [styles.after]: Boolean(contentAfter),
+                        })}
+                    >
                         {renderContentBefore()}
                         {text}
                         {renderContentAfter()}
@@ -49,14 +56,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
 
             const firstWord = words[0];
             const lastWord = words[words.length - 1];
-            const restWords = words.slice(1, -1).join(" ");
-
-            const classNameBefore = clsx(styles.wordWithContent, {
-                [styles.before]: Boolean(contentBefore),
-            });
+            const middleWords = words.slice(1, -1).join(" ");
 
             const firstNode = contentBefore ? (
-                <span className={classNameBefore}>
+                <span className={clsx(styles.wordWithContent, styles.before)}>
                     {renderContentBefore()}
                     {firstWord}
                 </span>
@@ -64,11 +67,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
                 firstWord
             );
 
-            const classNameAfter = clsx(styles.wordWithContent, {
-                [styles.after]: Boolean(contentAfter),
-            });
             const lastNode = contentAfter ? (
-                <span className={classNameAfter}>
+                <span className={clsx(styles.wordWithContent, styles.after)}>
                     {lastWord}
                     {renderContentAfter()}
                 </span>
@@ -78,28 +78,27 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
 
             return (
                 <>
-                    {firstNode} {restWords} {lastNode}
+                    {firstNode} {middleWords} {lastNode}
                 </>
             );
         };
 
-        /** Рендерит как React Nodes. */
-        const renderAsReactNode = (node: React.ReactNode) => {
-            const firstNode = contentBefore ? contentBefore() : null;
-            const lastNode = contentAfter ? contentAfter() : null;
-            return (
-                <>
-                    {firstNode}
-                    {node}
-                    {lastNode}
-                </>
-            );
+        /** Рендерит нестроковый children, размещая contentBefore и contentAfter по краям. */
+        const renderAsReactNode = () => (
+            <>
+                {contentBefore ? contentBefore() : null}
+                {children}
+                {contentAfter ? contentAfter() : null}
+            </>
+        );
+
+        const renderChildren = () => {
+            if (!contentBefore && !contentAfter) {
+                return children;
+            }
+
+            return typeof children === "string" ? renderAsSimpleText(children) : renderAsReactNode();
         };
-
-        const renderContent = (children: React.ReactNode) =>
-            typeof children === "string" ? renderAsSimpleText(children) : renderAsReactNode(children);
-
-        const content = contentBefore || contentAfter ? renderContent(children) : children;
 
         return (
             <a
@@ -108,13 +107,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, ILinkCommonProps>(
                 target={target}
                 // Защита от reverse tabnabbing при target="_blank".
                 rel={getSafeRel(target, rel)}
-                className={clsx(className, styles.link)}
-                onBlur={onBlur}
-                onMouseDown={onMouseDown}
+                className={clsx(styles.link, className)}
                 data-tx={process.env.npm_package_version}
                 ref={ref}
             >
-                <IconWrapper displayContents>{content}</IconWrapper>
+                <IconWrapper displayContents>{renderChildren()}</IconWrapper>
             </a>
         );
     },

@@ -3,8 +3,8 @@ component: CollapsibleTree
 category: CollapsibleTree
 related: [CollapsibleTreeExtended, CollapsibleTreeNodeHeader, CollapsibleTreeNodeLabel, TreeView, AccordionBase]
 tokens:
-  - --triplex-next-CollapsibleTree-Header_Background_Hover
-  - --triplex-next-CollapsibleTree-Header_Shadow_Focus
+  - CollapsibleTree.Header_Background_Hover
+  - CollapsibleTree.Header_Shadow_Focus
 stories: stories/CollapsibleTree/CollapsibleTree.stories.tsx
 version: "1.0"
 ---
@@ -102,9 +102,12 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/CollapsibleTree.ts`.
+
 ```text
---triplex-next-CollapsibleTree-Header_Background_Hover
---triplex-next-CollapsibleTree-Header_Shadow_Focus
+CollapsibleTree.Header_Background_Hover
+CollapsibleTree.Header_Shadow_Focus
 ```
 
 Цвета disabled-состояния задаются без собственных токенов: шеврон — глобальным
@@ -177,7 +180,7 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 - Свёрнутая ветка получает `visibility: hidden` на body через
   `CollapsibleTreeExtended` — Tab не уходит в скрытое содержимое.
 - Фокус-стиль — `:focus-visible` через токен
-  `--triplex-next-CollapsibleTree-Header_Shadow_Focus`.
+  `CollapsibleTree.Header_Shadow_Focus`.
 
 ---
 

@@ -3,8 +3,8 @@ component: EmptyView
 category: Feedback
 related: [Button]
 tokens:
-  - --triplex-next-Typography-Primary_Color
-  - --triplex-next-Typography-Secondary_Color
+  - Typography.Primary_Color
+  - Typography.Secondary_Color
 stories: stories/EmptyView/EmptyView.stories.tsx
 version: "1.0"
 ---
@@ -47,10 +47,16 @@ version: "1.0"
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Typography.ts`.
+
+```text
+Typography.Primary_Color    (title, description без title)
+Typography.Secondary_Color  (description с title, caption)
 ```
---triplex-next-Typography-Primary_Color    (title, description без title)
---triplex-next-Typography-Secondary_Color  (description с title, caption)
-```
+
+Собственных токенов у компонента нет: цвета приходят от вложенных `Title` и `Text`,
+в `styles/EmptyView.module.less` заданы только отступы и выравнивание.
 
 ---
 
@@ -96,3 +102,4 @@ version: "1.0"
 |---|---|
 | 2026-04-09 | Создан компонент и документ. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: добавлена колонка `Example file`, переименована подсекция «Поведение описания» в «Ограничения по темам». |
+| 2026-08-31 | Заголовок всегда рендерится как `Title` с `ETitleSize.H3` и `EFontWeightTitle.MEDIUM`: убран `TITLE_CONFIG`, типографика `title` больше не зависит от `size`. |

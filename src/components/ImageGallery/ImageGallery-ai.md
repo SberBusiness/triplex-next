@@ -2,21 +2,18 @@
 component: ImageGallery
 category: ImageGallery
 related: [ImageGalleryExtended, MobileView, LightBox]
-tokens: [
-  "--triplex-next-ImageGallery-Accent_Color",
-  "--triplex-next-ImageGallery-Arrow_Background_Default",
-  "--triplex-next-ImageGallery-Arrow_Background_Hover",
-  "--triplex-next-ImageGallery-Arrow_Background_Active",
-  "--triplex-next-ImageGallery-Arrow_Background_Disabled",
-  "--triplex-next-ImageGallery-Arrow_BorderColor_Default",
-  "--triplex-next-ImageGallery-Arrow_BorderColor_Hover",
-  "--triplex-next-ImageGallery-Arrow_BorderColor_Active",
-  "--triplex-next-ImageGallery-Arrow_BorderColor_Disabled",
-  "--triplex-next-ImageGallery-Dot_Background_Default",
-  "--triplex-next-ImageGallery-Dot_Background_Hover",
-  "--triplex-next-ImageGallery-Dot_Background_Active",
-  "--triplex-next-ImageGallery-Thumb_Mask_Background"
-]
+tokens:
+  - ImageGallery.Accent_Color
+  - ImageGallery.Arrow_Background_Default
+  - ImageGallery.Arrow_Background_Hover
+  - ImageGallery.Arrow_Background_Active
+  - ImageGallery.Arrow_BorderColor_Default
+  - ImageGallery.Arrow_BorderColor_Hover
+  - ImageGallery.Arrow_BorderColor_Active
+  - ImageGallery.Dot_Background_Default
+  - ImageGallery.Dot_Background_Hover
+  - ImageGallery.Dot_Background_Active
+  - ImageGallery.Thumb_Mask_Background
 stories: stories/ImageGallery/ImageGallery.stories.tsx
 version: "1.0"
 ---
@@ -88,28 +85,29 @@ controlled-only контейнера `ImageGalleryExtended`. Изображен�
 
 ## Дизайн-токены
 
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ImageGallery.ts`.
+
 Собственных стилей и `.less`-файлов у `ImageGallery` нет — вся отрисовка
 делегируется частям `ImageGalleryExtended`. Перечисленные токены принадлежат
-семейству и используются через эти части (общий префикс
-`--triplex-next-ImageGallery-` намеренно делится обоими семействами).
+семейству и используются через эти части — группа `ImageGallery` намеренно
+делится обоими семействами.
 
-```
---triplex-next-ImageGallery-Accent_Color
+```text
+ImageGallery.Accent_Color
 
---triplex-next-ImageGallery-Arrow_Background_Default
---triplex-next-ImageGallery-Arrow_Background_Hover
---triplex-next-ImageGallery-Arrow_Background_Active
---triplex-next-ImageGallery-Arrow_Background_Disabled
---triplex-next-ImageGallery-Arrow_BorderColor_Default
---triplex-next-ImageGallery-Arrow_BorderColor_Hover
---triplex-next-ImageGallery-Arrow_BorderColor_Active
---triplex-next-ImageGallery-Arrow_BorderColor_Disabled
+ImageGallery.Arrow_Background_Default
+ImageGallery.Arrow_Background_Hover
+ImageGallery.Arrow_Background_Active
+ImageGallery.Arrow_BorderColor_Default
+ImageGallery.Arrow_BorderColor_Hover
+ImageGallery.Arrow_BorderColor_Active
 
---triplex-next-ImageGallery-Dot_Background_Default
---triplex-next-ImageGallery-Dot_Background_Hover
---triplex-next-ImageGallery-Dot_Background_Active
+ImageGallery.Dot_Background_Default
+ImageGallery.Dot_Background_Hover
+ImageGallery.Dot_Background_Active
 
---triplex-next-ImageGallery-Thumb_Mask_Background
+ImageGallery.Thumb_Mask_Background
 ```
 
 Runtime CSS-переменная высоты крупной картинки
@@ -195,3 +193,4 @@ Runtime CSS-переменная высоты крупной картинки
 | Дата | Изменение |
 |---|---|
 | 2026-05-28 | Создан документ |
+| 2026-08-31 | Удалены неиспользуемые токены `Arrow_Background_Disabled` и `Arrow_BorderColor_Disabled`: неактивная стрелка скрывается (`display: none`), красить нечем |

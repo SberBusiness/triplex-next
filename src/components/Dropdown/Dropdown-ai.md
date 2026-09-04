@@ -3,19 +3,21 @@ component: Dropdown
 category: Dropdown
 related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, OverlayBase, SelectField, SelectExtendedField, SuggestField, MultiselectField, TabsLine]
 tokens:
-  - --triplex-next-Dropdown-Background
-  - --triplex-next-Dropdown-Shadow
-  - --triplex-next-DropdownList-Color
-  - --triplex-next-DropdownList-Background_Default
-  - --triplex-next-DropdownList-Background_Active
-  - --triplex-next-DropdownList-Background_Selected
-  - --triplex-next-DropdownMobile-Backdrop
-  - --triplex-next-DropdownMobile-Header_Background
-  - --triplex-next-DropdownMobile-Content_Background
-  - --triplex-next-DropdownMobile-Footer_Background
-  - --triplex-next-DropdownMobile-Border_Color
-  - --triplex-next-DropdownMobileList-Active_Background
-  - --triplex-next-DropdownMobileList-Selected_Background
+  - Dropdown.Background
+  - Dropdown.Shadow
+  - DropdownList.Color
+  - DropdownList.Background_Default
+  - DropdownList.Background_Active
+  - DropdownList.Background_Selected
+  - DropdownMobile.Backdrop
+  - DropdownMobile.Header_Background
+  - DropdownMobile.Content_Background
+  - DropdownMobile.Footer_Background
+  - DropdownMobile.Border_Color
+  - DropdownMobileList.Active_Background
+  - DropdownMobileList.Selected_Background
+  - FormField.Input_Color_Default
+  - FormField.Placeholder_Color
 stories: stories/Dropdown/Dropdown.stories.tsx
 version: "1.0"
 ---
@@ -92,23 +94,26 @@ version: "1.0"
 
 ## Дизайн-токены
 
-```
---triplex-next-Dropdown-Background
---triplex-next-Dropdown-Shadow
---triplex-next-DropdownList-Color
---triplex-next-DropdownList-Background_Default
---triplex-next-DropdownList-Background_Active
---triplex-next-DropdownList-Background_Selected
---triplex-next-DropdownMobile-Backdrop
---triplex-next-DropdownMobile-Header_Background
---triplex-next-DropdownMobile-Content_Background
---triplex-next-DropdownMobile-Footer_Background
---triplex-next-DropdownMobile-Border_Color
---triplex-next-DropdownMobileList-Active_Background
---triplex-next-DropdownMobileList-Selected_Background
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — файлы групп `Dropdown`, `DropdownList`, `DropdownMobile`, `DropdownMobileList` в `src/components/DesignTokens/components/`.
+
+```text
+Dropdown.Background
+Dropdown.Shadow
+DropdownList.Color
+DropdownList.Background_Default
+DropdownList.Background_Active
+DropdownList.Background_Selected
+DropdownMobile.Backdrop
+DropdownMobile.Header_Background
+DropdownMobile.Content_Background
+DropdownMobile.Footer_Background
+DropdownMobile.Border_Color
+DropdownMobileList.Active_Background
+DropdownMobileList.Selected_Background
 ```
 
-`DropdownMobileInput` дополнительно использует токены поля ввода: `--triplex-next-FormField-Input_Color_Default`, `--triplex-next-FormField-Placeholder_Color`.
+`DropdownMobileInput` дополнительно использует токены поля ввода: `FormField.Input_Color_Default`, `FormField.Placeholder_Color`.
 
 ---
 

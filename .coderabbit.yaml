@@ -60,7 +60,7 @@ reviews:
     - path: "src/components/**/styles/*.module.less"
       instructions: |
         Проверь по docs/ai/codestyle.md:
-        - Все цветовые значения через CSS-переменные токенов (--triplex-next-*)
+        - Все цветовые значения через CSS-переменные токенов (--triplex-next-*), кроме `transparent` в элементах-зеркалах и масках.
         - Нет !important без комментария с объяснением
         - Классы в camelCase
         - Нет hardcoded hex/rgb значений

@@ -32,8 +32,10 @@ const getExistingClearButton = () => {
  */
 const getPrefixIconPaletteClassName = () => getPrefixIcon()?.querySelector("path")?.getAttribute("class");
 
+type TOptionsIconPaletteIndex = React.ComponentProps<typeof OptionsStrokeSrvIcon24>["paletteIndex"];
+
 /** Тот же класс палитры, снятый с эталонного рендера иконки с заданным paletteIndex. */
-const getReferencePaletteClassName = (paletteIndex: number) => {
+const getReferencePaletteClassName = (paletteIndex: TOptionsIconPaletteIndex) => {
     const { container, unmount } = render(<OptionsStrokeSrvIcon24 paletteIndex={paletteIndex} />);
     const className = container.querySelector("path")?.getAttribute("class");
 

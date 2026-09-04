@@ -1,4 +1,5 @@
-import { act, renderHook } from "@testing-library/react";
+import React from "react";
+import { act, render } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { useSuggest } from "../useSuggest";
 import { ISuggestOption } from "../types";
@@ -6,15 +7,36 @@ import { ISuggestOption } from "../types";
 const OPTION_A: ISuggestOption = { id: "a", label: "Первая опция" };
 const OPTION_B: ISuggestOption = { id: "b", label: "Вторая опция" };
 
-const renderUseSuggest = (props: Partial<Parameters<typeof useSuggest>[0]> = {}) =>
-    renderHook((hookProps: Parameters<typeof useSuggest>[0]) => useSuggest(hookProps), {
-        initialProps: {
-            value: undefined,
-            onSelect: vi.fn(),
-            onFilter: vi.fn(),
-            ...props,
-        } as Parameters<typeof useSuggest>[0],
-    });
+type TUseSuggestProps = Parameters<typeof useSuggest>[0];
+
+/**
+ * Рендерит useSuggest внутри компонента-обёртки и отдаёт наружу его последний результат.
+ * Обёртка вместо renderHook: в release-0 (React 17) запинен @testing-library/react 12,
+ * где renderHook ещё не экспортируется.
+ */
+const renderUseSuggest = (props: Partial<TUseSuggestProps> = {}) => {
+    const result = {} as { current: ReturnType<typeof useSuggest> };
+
+    const SuggestReader: React.FC<{ hookProps: TUseSuggestProps }> = ({ hookProps }) => {
+        result.current = useSuggest(hookProps);
+
+        return null;
+    };
+
+    const initialProps = {
+        value: undefined,
+        onSelect: vi.fn(),
+        onFilter: vi.fn(),
+        ...props,
+    } as TUseSuggestProps;
+
+    const { rerender } = render(<SuggestReader hookProps={initialProps} />);
+
+    return {
+        result,
+        rerender: (nextProps: TUseSuggestProps) => rerender(<SuggestReader hookProps={nextProps} />),
+    };
+};
 
 describe("useSuggest", () => {
     test("initializes inputValue from value label", () => {

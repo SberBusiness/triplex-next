@@ -38,7 +38,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
         // Id списка дропдауна. Через него target связывается со списком по aria-controls.
         const instanceId = useRef(uniqueId());
         // Чипс подсвечен, только если значение выбрано и отличается от дефолтного:
-        // сортировка по умолчанию — это не изменение фильтра, подсвечивать её нечем.
+        // сортировка по умолчанию — это не изменение фильтра, подсвечивать нечего.
         const selected = value != null && !isEqual(defaultValue, value);
 
         const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => {

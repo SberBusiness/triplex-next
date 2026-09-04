@@ -56,24 +56,23 @@ describe("ChipSort", () => {
         expect(ref.current).toBe(getTarget());
     });
 
-    test("Should apply size and type props to target chip", () => {
-        const { rerender } = renderChipSort({ size: EComponentSize.SM, type: EChipType.TYPE_2 });
+    test.each([
+        [EComponentSize.SM, "sm"],
+        [EComponentSize.MD, "md"],
+        [EComponentSize.LG, "lg"],
+    ])("Should apply %s size class to target chip", (size, className) => {
+        renderChipSort({ size });
 
-        expect(getTarget()).toHaveClass("sm");
-        expect(getTarget()).toHaveClass("type2");
+        expect(getTarget()).toHaveClass(className);
+    });
 
-        rerender(
-            <ChipSort
-                options={options}
-                size={EComponentSize.LG}
-                type={EChipType.TYPE_1}
-                onChange={handleChange}
-                data-testid="chip-sort"
-            />,
-        );
+    test.each([
+        [EChipType.TYPE_1, "type1"],
+        [EChipType.TYPE_2, "type2"],
+    ])("Should apply %s type class to target chip", (type, className) => {
+        renderChipSort({ type });
 
-        expect(getTarget()).toHaveClass("lg");
-        expect(getTarget()).toHaveClass("type1");
+        expect(getTarget()).toHaveClass(className);
     });
 
     test("Should mark target as disabled when disabled prop is set", () => {
@@ -145,10 +144,7 @@ describe("ChipSort", () => {
     });
 
     describe("keyboard", () => {
-        test.each([
-            ["Enter", "Enter"],
-            ["Space", "Space"],
-        ])("Should open dropdown on %s and prevent default", (_name, code) => {
+        test.each(["Enter", "Space"])("Should open dropdown on %s and prevent default", (code) => {
             renderChipSort();
 
             const target = getTarget();

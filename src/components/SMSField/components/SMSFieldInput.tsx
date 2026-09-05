@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
     EFormFieldStatus,
     FormField,
@@ -13,43 +13,49 @@ import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSFie
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 
 /** Свойства SMSField.Input. */
-export interface ISMSFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface ISMSFieldInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "disabled"> {
     /** Счётчик символов */
     counter?: React.ReactNode;
     /** Описание поля ввода */
     description?: React.ReactNode;
+    /** Текст ошибки. Отображается вместо placeholder в статусе EFormFieldStatus.ERROR, пока поле не в фокусе. */
+    errorText?: string;
 }
 
 const regExp = new RegExp(/^[0-9]*$/);
 
 export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputProps>(
     (
-        { className, counter, description, disabled, maxLength = 8, onChange, onKeyDown, placeholder, ...restProps },
+        {
+            className,
+            counter,
+            description,
+            errorText,
+            maxLength = 8,
+            onBlur,
+            onChange,
+            onFocus,
+            onKeyDown,
+            placeholder,
+            ...restProps
+        },
         ref,
     ) => {
-        const {
-            code,
-            disabled: allDisabled,
-            disabledSubmit,
-            error,
-            onChangeCode,
-            onSubmitCode,
-            size,
+        const { code, disabledSubmit, onChangeCode, onSubmitCode, size, sizeClassName, status } =
+            useContext(SMSFieldContext);
+
+        const [focused, setFocused] = useState(false);
+
+        const error = status === EFormFieldStatus.ERROR;
+
+        const showErrorText = error && !focused && Boolean(errorText);
+
+        const inputClassName = clsx(
+            styles.input,
             sizeClassName,
-        } = useContext(SMSFieldContext);
-
-        const inputDisabled = allDisabled || disabled;
-        const inputClassName = clsx(styles.input, sizeClassName, className);
-
-        let status = EFormFieldStatus.DEFAULT;
-
-        if (inputDisabled) {
-            status = EFormFieldStatus.DISABLED;
-        }
-
-        if (error) {
-            status = EFormFieldStatus.ERROR;
-        }
+            { [styles.errorPlaceholder]: showErrorText },
+            className,
+        );
 
         /** Обработчик ввода sms-кода. */
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +65,18 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
             }
             onChangeCode(value);
             onChange?.(e);
+        };
+
+        /** Обработчик получения фокуса. */
+        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+            setFocused(true);
+            onFocus?.(e);
+        };
+
+        /** Обработчик потери фокуса. */
+        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+            setFocused(false);
+            onBlur?.(e);
         };
 
         /** Обработчик нажатия клавиши Enter (для отправки sms-кода). */
@@ -76,11 +94,14 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
                         autoComplete="off"
                         className={inputClassName}
                         maxLength={maxLength}
+                        onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder={placeholder}
+                        onFocus={handleFocus}
+                        placeholder={showErrorText ? errorText : placeholder}
                         ref={ref}
                         value={code}
                         {...restProps}
+                        aria-invalid={error || undefined}
                     />
                 </FormField>
 

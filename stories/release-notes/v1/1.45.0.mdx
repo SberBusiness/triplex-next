@@ -12,6 +12,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Внешний `ref` компонента теперь прокидывается на родительский контейнер, а не на внутренний инпут. Для работы с инпутом используйте `inputProps.ref`.
 - Тип `ref` компонента изменён с `HTMLInputElement` на `HTMLDivElement`.
 
+**Carousel**
+
+- Исправлена ошибка, из-за которой компонент не попадал в сборку.
+
 **FormFieldInput / FormFieldMaskedInput**
 
 - Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`.
@@ -20,6 +24,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MarkerStatus**
 
 - Атрибут `data-tx` теперь выставляется после пользовательских props, поэтому переданное через props значение `data-tx` больше не применяется — на корневом элементе всегда версия пакета.
+
+**SMSField**
+
+- Удалены свойства `error` и `disabled`. Состояние задаётся свойством `status`.
 
 <Heading>Изменения</Heading>
 
@@ -87,6 +95,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда компонент `PaginationSelect` не передавал в `SelectField` `data`-атрибуты, `id`, `aria`-атрибуты и остальные свойства `SelectField` (`targetProps`, `dropdownProps`, `mobileTitle` и другие).
 
+**SelectField**
+
+- `SelectField` больше не оборачивает переданный `ref` в новую функцию на каждый рендер, поэтому стабильный callback-`ref` перестал переприкрепляться. Элемент, на который указывает `ref`, прежний.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
 **SmallInput**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
@@ -94,6 +107,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Suggest**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
+
+**SMSField**
+
+- Добавлено свойство `status`.
+- У компонента `SMSField.Input` добавлено свойство `errorText`: в статусе `ERROR` текст ошибки отображается внутри поля, пока поле не в фокусе. В фокусе отображается `placeholder`.
+- Исправлены цвета фона поля и иконки `SMSFieldRefresh` в состояниях `error` и `disabled`.
 
 **SwipeableArea**
 

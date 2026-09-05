@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React, { useEffect, useContext } from "react";
 import { EButtonIconShape } from "@sberbusiness/triplex-next/components/Button";
 import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
+import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
 import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
 import { SubmitIcon } from "@sberbusiness/triplex-next/components/SMSField/components/SubmitIcon";
 import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
@@ -10,16 +11,10 @@ import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSFie
 export interface ISMSFieldSubmitProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const SMSFieldSubmit: React.FC<ISMSFieldSubmitProps> = ({ className, disabled, onClick, ...restProps }) => {
-    const {
-        code,
-        disabled: allDisabled,
-        onSubmitCode,
-        setDisabledSubmit,
-        size,
-        sizeClassName,
-    } = useContext(SMSFieldContext);
+    const { code, onSubmitCode, setDisabledSubmit, size, sizeClassName, status } = useContext(SMSFieldContext);
 
-    const submitDisabled = allDisabled || disabled || code === "";
+    const fieldDisabled = status === EFormFieldStatus.DISABLED;
+    const submitDisabled = fieldDisabled || disabled || code === "";
     const submitClassName = clsx(styles.btnSubmit, { [styles.active]: !!code }, sizeClassName, className);
 
     useEffect(() => {

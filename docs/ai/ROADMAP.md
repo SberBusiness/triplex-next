@@ -106,7 +106,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ChipMultiselect | ⬜ | ✅ | ⬜ |
 | ChipOptions | ⬜ | ✅ | ⬜ |
 | ChipSelect | ⬜ | ✅ | ⬜ |
-| ChipSort | ⬜ | ✅ | ⬜ |
+| ChipSort | ✅ | ✅ | ✅ |
 | ChipSuggest | ⬜ | ✅ | ⬜ |
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |

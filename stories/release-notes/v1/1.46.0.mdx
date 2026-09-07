@@ -5,3 +5,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v1.46.0</Title>
 
 <Heading>Изменения</Heading>
+
+**ChipSuggest**
+
+- `ChipSuggest` больше не оборачивает переданный `ref` в новую функцию на каждый рендер, поэтому стабильный callback-`ref` перестал переприкрепляться. Элемент, на который указывает `ref`, прежний.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.

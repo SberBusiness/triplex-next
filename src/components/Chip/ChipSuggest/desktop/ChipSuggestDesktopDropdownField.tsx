@@ -6,17 +6,28 @@ import { Tooltip, ETooltipSize } from "../../../Tooltip";
 import { LoaderSmall, ELoaderSmallTheme } from "../../../Loader";
 import styles from "../../styles/ChipSuggest.module.less";
 
+/** Свойства компонента ChipSuggestDesktopDropdownField. */
 interface IChipSuggestDesktopDropdownFieldProps {
+    /** Название поля, отображается лейблом над полем ввода. */
     children?: React.ReactNode;
+    /** Размер. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
 }
 
+/** Соответствие размера ChipSuggest размеру лоадера. */
 const SIZE_TO_LOADER_SIZE_MAP: Record<EComponentSize, EComponentSize> = {
     [EComponentSize.SM]: EComponentSize.SM,
     [EComponentSize.MD]: EComponentSize.SM,
     [EComponentSize.LG]: EComponentSize.MD,
 };
 
+/** Tooltip требует обязательный toggle, но открытием управляет prop tooltipOpen из SuggestContext. */
+const noop = () => {};
+
+/**
+ * Десктопное поле фильтрации в выпадающем списке ChipSuggest.
+ * Значение поля, подсказки и флаг загрузки берёт из SuggestContext, поэтому рендерится только внутри Suggest.
+ */
 export const ChipSuggestDesktopDropdownField: React.FC<IChipSuggestDesktopDropdownFieldProps> = ({
     children,
     size = EComponentSize.MD,
@@ -62,7 +73,7 @@ export const ChipSuggestDesktopDropdownField: React.FC<IChipSuggestDesktopDropdo
             <Tooltip
                 size={ETooltipSize.SM}
                 isOpen={!!tooltipOpen && inputFocused}
-                toggle={() => {}}
+                toggle={noop}
                 targetRef={inputRef}
                 disableAdaptiveMode
             >

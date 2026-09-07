@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import { ChipMultiselect } from "../ChipMultiselect";
@@ -191,6 +192,22 @@ describe("ChipMultiselect", () => {
             render(<ChipMultiselect {...defaultProps} selected={true} />);
 
             fireEvent.click(getClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
+            expect(screen.queryByTestId("dropdown")).not.toBeInTheDocument();
+        });
+
+        it.each([
+            ["Enter", "{Enter}"],
+            ["Space", " "],
+        ])("Should call clearSelected on %s without opening the dropdown", async (_code, key) => {
+            const user = userEvent.setup();
+            render(<ChipMultiselect {...defaultProps} selected={true} />);
+
+            // Кнопка сброса — нативный button, поэтому Enter/Space активируют её кликом.
+            getClearButton().focus();
+            await user.keyboard(key);
 
             expect(clearSelected).toHaveBeenCalledTimes(1);
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");

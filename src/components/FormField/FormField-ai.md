@@ -126,7 +126,7 @@ FormField.Target_PlaceholderColor_Default
 
 - `FormFieldLabel` — плавающий лейбл; поднимается над полем, когда поле заполнено или активно (можно форсировать props `floating`).
 - `FormFieldInput` — однострочный ввод; поддерживает render-prop `render` для подмены инпута с сохранением стилизации.
-- `FormFieldTextarea` — многострочный ввод.
+- `FormFieldTextarea` — многострочный ввод. Высота по размеру задана как `min-height`.
 - `FormFieldMaskedInput` — маскированный ввод на базе `react-text-mask`; содержит пресеты масок (`FormFieldMaskedInput.presets`).
 - `FormFieldTarget` — нередактируемое значение с `placeholder`, используется select-подобными полями.
 - `FormFieldPrefix` / `FormFieldPostfix` — контейнеры слева/справа; их измеренная ширина становится внутренним отступом поля. Общая логика измерения и проброса ref вынесена во внутренний хук `components/useFormFieldAffixWidth.ts` (в barrel не экспортируется).
@@ -166,3 +166,4 @@ FormField.Target_PlaceholderColor_Default
 | 2026-07-31 | AI-рефакторинг распространён на субкомпоненты `FormFieldInput`, `FormFieldLabel`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`: JSDoc с указанием значений по умолчанию, дедупликация `FormFieldPrefix` / `FormFieldPostfix` через внутренний хук `useFormFieldAffixWidth`, общий `setForwardedRef` в `components/utils.ts`, unit-тесты. Публичный API не изменён. `FormFieldTextarea`, `FormFieldTarget` и `FormFieldMaskedInput` намеренно не затронуты — их покрывают задачи `TextareaField`, `SelectField` и `MaskedField`. |
 | 2026-07-31 | Исправлено: `className` у `FormFieldDescription` и `FormFieldCounter` затирал базовый класс — теперь объединяется через `clsx`. Изменение наблюдаемого поведения, зафиксировано в release notes 1.41.0. |
 | 2026-08-03 | Ломающее изменение: `statusToClassNameMap` убран из публичного barrel и переименован во внутреннюю константу `STATUS_TO_CLASS_NAME_MAP`. Зафиксировано в release notes 1.41.0. |
+| 2026-09-04 | Исправлено: у `FormFieldTextarea` фиксированная `height` для размеров `sm` / `md` / `lg` заменена на `min-height`. |

@@ -149,7 +149,18 @@ version: "1.0"
 - Target — `Chip`, то есть `<span role="button">` с `tabIndex` `0` (или `-1` при
   `disabled`), а не нативная кнопка. `aria-expanded` на нём отражает видимость списка.
 - Кнопка очистки — вложенная нативная `<button>` (`ChipClearButton`), поэтому внутри
-  чипса два элемента с ролью `button`. В тестах ищи target по `data-testid`, а не по роли.
+  чипса два элемента с ролью `button`. В тестах ищи target по `data-testid`, а не по роли;
+  саму кнопку очистки, наоборот, можно брать семантически — `within(target).getByRole("button")`
+  матчит только её, потому что сам чипс служит контейнером поиска.
+- **Известное ограничение, а не проектное решение:** у кнопки очистки нет доступного
+  имени. `ChipClearButton` рендерит `ButtonIcon` без `aria-label`, а иконка внутри —
+  `aria-hidden`, поэтому скринридер объявит её просто «кнопка». Пробросить имя снаружи
+  сейчас нельзя: `targetProps` доходит только до `Chip`, до `ChipClearButton` — нет.
+  Это расходится с TPX-G-18 (`docs/mcp/guidelines.md`: у `ButtonIcon` `aria-label`
+  обязателен). Баг общий для семейства — `ChipSelect`, `ChipMultiselect`, `ChipOptions`
+  и `ChipDatePicker` зовут `ChipClearButton` так же. В отличие от двух ограничений в
+  «Инвариантах», починка здесь **не** breaking: достаточно добавить `aria-label`
+  (и при необходимости prop для его переопределения). Отдельная задача — TRI-139.
 - При открытии списка фокус уходит в поле фильтрации (`autoFocus`), содержимое обёрнуто в
   `FocusTrap` с `clickOutsideDeactivates` и `returnFocusOnDeactivate` — при закрытии фокус
   возвращается на чипс. Опции `FocusTrap` дополняются через `dropdownProps.focusTrapProps`

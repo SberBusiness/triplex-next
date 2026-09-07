@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { Suggest } from "@sberbusiness/triplex-next/components/Suggest/Suggest";
 import { ChipSuggestTarget } from "@sberbusiness/triplex-next/components/Chip/ChipSuggest/ChipSuggestTarget";
@@ -34,6 +34,13 @@ const renderTarget = (
 /** У кнопки очистки такая же role="button", как у самого Chip, поэтому target ищется по data-testid. */
 const getTarget = () => screen.getByTestId(TARGET_TEST_ID);
 
+/**
+ * Кнопка очистки — единственный role="button" ВНУТРИ чипса: сам чипс служит контейнером
+ * поиска и в результат within() не попадает, поэтому семантический запрос однозначен.
+ */
+const getClearButton = () => within(getTarget()).getByRole("button");
+const queryClearButton = () => within(getTarget()).queryByRole("button");
+
 describe("ChipSuggestTarget", () => {
     test("renders children and is collapsed by default", () => {
         renderTarget();
@@ -50,29 +57,20 @@ describe("ChipSuggestTarget", () => {
         expect(getTarget()).toHaveClass("selected");
     });
 
+    // Стрелка выпадающего списка — <span> без семантики, отдельным unit-тестом не покрывается:
+    // её видимое состояние держит скриншот-регрессия (story VisualTests), а факт раскрытия
+    // списка проверяется ниже по aria-expanded в блоке «dropdown toggling».
     describe("postfix", () => {
-        test("renders dropdown arrow while value is not selected", () => {
-            const { container } = renderTarget();
+        test("renders no clear button while value is not selected", () => {
+            renderTarget();
 
-            expect(container.querySelector(".chipDropdownArrow")).toBeInTheDocument();
-            expect(container.querySelector(".chipClearButton")).not.toBeInTheDocument();
+            expect(queryClearButton()).not.toBeInTheDocument();
         });
 
-        test("rotates dropdown arrow when dropdown is opened", () => {
-            const { container } = renderTarget();
+        test("renders clear button when value is selected", () => {
+            renderTarget({}, OPTIONS[0]);
 
-            expect(container.querySelector(".chipDropdownArrow")).not.toHaveClass("rotated");
-
-            fireEvent.click(getTarget());
-
-            expect(container.querySelector(".chipDropdownArrow")).toHaveClass("rotated");
-        });
-
-        test("renders clear button instead of arrow when value is selected", () => {
-            const { container } = renderTarget({}, OPTIONS[0]);
-
-            expect(container.querySelector(".chipClearButton")).toBeInTheDocument();
-            expect(container.querySelector(".chipDropdownArrow")).not.toBeInTheDocument();
+            expect(getClearButton()).toBeInTheDocument();
         });
     });
 
@@ -119,18 +117,18 @@ describe("ChipSuggestTarget", () => {
     describe("clear button", () => {
         test("click calls clearSelected and does not toggle dropdown", () => {
             const clearSelected = vi.fn();
-            const { container } = renderTarget({ clearSelected }, OPTIONS[0]);
+            renderTarget({ clearSelected }, OPTIONS[0]);
 
-            fireEvent.click(container.querySelector(".chipClearButton") as HTMLElement);
+            fireEvent.click(getClearButton());
 
             expect(clearSelected).toHaveBeenCalledTimes(1);
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });
 
         test.each([["Enter"], ["Space"]])("%s key on clear button does not toggle dropdown", (code) => {
-            const { container } = renderTarget({ clearSelected: () => {} }, OPTIONS[0]);
+            renderTarget({ clearSelected: () => {} }, OPTIONS[0]);
 
-            fireEvent.keyDown(container.querySelector(".chipClearButton") as HTMLElement, { code });
+            fireEvent.keyDown(getClearButton(), { code });
 
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });

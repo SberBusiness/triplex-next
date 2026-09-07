@@ -57,7 +57,7 @@ version: "1.0"
 |---|---|---|---|
 | `type` | `EChipType` | `EChipType.TYPE_1` (дефолт `Chip`) | Тип чипса. Задавать только здесь: `targetProps.type` не работает — см. «Инварианты» |
 | `displayedValue` | `React.ReactNode` | — | Что показать на чипсе вместо `value.label`. Учитывается только при выбранном `value` |
-| `targetProps` | `IChipSuggestTargetProps<T>` | — | Props target-элемента. Через него передаётся `clearSelected`, а также любые props `Chip` (`disabled`, `className`, `data-*`, `onClick`, `onKeyDown`) |
+| `targetProps` | `IChipSuggestTargetProps<T>` | — | Props target-элемента. Через него передаётся `clearSelected`, а также props `Chip` (`disabled`, `className`, `data-*`, `onClick`, `size`). Два исключения — см. «Инварианты»: `targetProps.type` не применяется никогда, `targetProps.onKeyDown` вызывается только на `Enter`/`Space` |
 | `dropdownProps` | `Omit<IChipSuggestDropdownProps<T>, "targetRef">` | — | Props выпадающего списка: props `Dropdown` (`onOpen`, `onClose`, `mobileViewProps`, …) плюс `focusTrapProps`. `targetRef` проставляет сам `ChipSuggest` |
 
 `className` попадает на корневой `<div>` (рядом с внутренним классом `chipGroupItem`),
@@ -107,10 +107,22 @@ version: "1.0"
   **после** спреда `targetProps`, поэтому `targetProps.type` не применяется никогда — даже
   когда сам `type` не задан (тогда `Chip` уходит в свой дефолт). Тип чипса задавай prop'ом
   `type` на самом `ChipSuggest`. Починка меняет наблюдаемое поведение, поэтому делается
-  отдельной задачей и с записью в release notes; текущее поведение зафиксировано тестом
-  `current behavior: targetProps.type is ignored…`.
-- `prefix` намеренно вырезается из props и не доходит до корневого `<div>`: он приходит из
-  `React.HTMLAttributes`, а префикс чипса занят внутренней разметкой.
+  отдельной задачей и с записью в release notes; тестом это поведение намеренно не
+  зафиксировано, чтобы падающий тест не выглядел поломкой контракта при починке.
+  Обрати внимание на асимметрию: `size` передаётся **до** спреда `targetProps`,
+  поэтому `targetProps.size` как раз работает.
+- **Известное ограничение, а не проектное решение:** `ChipSuggestTarget.handleKeyDown`
+  вызывает `targetProps.onKeyDown` только внутри ветки `Enter`/`Space`, поэтому на всех
+  остальных клавишах (стрелки, `Tab`, печатные символы) обработчик потребителя не
+  вызывается. Не рассчитывай на `targetProps.onKeyDown` для навигации по стрелкам.
+  Починка меняет наблюдаемое поведение → отдельная задача с записью в release notes.
+- `prefix` намеренно вырезается из props и не доходит до корневого `<div>`: он приходит
+  из `React.HTMLAttributes` как RDFa-атрибут (то есть на `<div>` был бы валиден), но
+  `ChipSuggest` его не поддерживает — `ChipSuggestTarget` задаёт только `postfix`.
+- `ChipSuggestDesktopDropdownField` — единственный компонент папки, оставленный
+  `React.FC` без `forwardRef`: он не экспортируется из barrel, а очевидного ref-таргета
+  у него нет (корень — `FormField`). Осознанное исключение из общего правила
+  `docs/ai/codestyle.md`, а не недосмотр; менять — отдельной задачей.
 - `dropdownProps.targetRef` исключён из типа: ссылку на корневой `<div>` подставляет сам
   `ChipSuggest`, иначе список потеряет привязку к чипсу.
 - `ChipSuggestDropdown` обязан класть ссылку на себя в `dropdownRef` из `SuggestContext` —
@@ -122,7 +134,11 @@ version: "1.0"
 - Корневой `<div>` всегда получает класс `chipGroupItem` — на нём держатся отступы внутри
   `ChipGroup`.
 - `setForwardedRef` из `ChipSuggest/utils.ts` — внутренний хелпер, из barrel не
-  экспортируется и в публичные `src/utils` не переносится.
+  экспортируется и в публичные `src/utils` не переносится. Это **не** конечное
+  состояние: точно такая же функция уже лежит в `src/components/List/utils.ts`, и та же
+  пятистрочка инлайнится ещё в полутора десятках компонентов (включая `Suggest.tsx`).
+  Консолидация во внутренний shared-модуль — отдельная задача; не плоди третью копию,
+  а при случае сошлись на неё.
 
 ---
 
@@ -163,7 +179,8 @@ version: "1.0"
 
 - `Chip` — target-элемент `ChipSuggest`; отсюда `type`, `size`, `disabled`, `selected`,
   фокус и клавиатура чипса. `IChipSuggestTargetProps` наследует `IChipProps` без `prefix`
-  и `postfix` — оба заняты внутренней разметкой.
+  и `postfix`: `postfix` занят внутренней разметкой (стрелка или кнопка очистки),
+  `prefix` в этой композиции просто не используется.
 - `ChipSelect` — тот же выбор одного значения чипсом, но без фильтрации ввода (построен на
   `SelectExtendedField`). Основная альтернатива при коротком списке.
 - `ChipMultiselect` — выбор нескольких значений чипсом.

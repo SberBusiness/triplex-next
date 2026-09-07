@@ -15,8 +15,9 @@ const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
         label,
         targetProps,
         dropdownProps,
-        // prefix приходит из React.HTMLAttributes и намеренно не попадает в restProps:
-        // target-элемент ChipSuggest занимает префикс сам, а на корневом div атрибут невалиден.
+        // prefix приходит из React.HTMLAttributes как RDFa-атрибут и намеренно не попадает
+        // в restProps: ChipSuggest его не поддерживает (ChipSuggestTarget задаёт только postfix),
+        // поэтому проп отбрасывается, а не уезжает на корневой div.
         prefix: _prefix,
         ...restProps
     }: IChipSuggestProps<T>,

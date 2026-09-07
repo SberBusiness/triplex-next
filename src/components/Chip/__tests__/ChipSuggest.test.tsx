@@ -68,6 +68,30 @@ describe("ChipSuggest", () => {
             expect(ref.current).toContainElement(getTarget());
         });
 
+        // Фиксирует изменение из release notes 1.46.0: setRef обёрнут в useCallback,
+        // поэтому стабильный callback-ref не отцепляется и не прицепляется заново на ререндере.
+        test("does not reattach callback ref on rerender", () => {
+            const ref = vi.fn();
+            const { rerender } = renderChipSuggest({}, ref);
+
+            expect(ref).toHaveBeenCalledTimes(1);
+
+            rerender(
+                <ChipSuggest
+                    value={undefined}
+                    options={options}
+                    size={EComponentSize.MD}
+                    onSelect={() => {}}
+                    onFilter={() => {}}
+                    label="Выберите опцию"
+                    targetProps={{ clearSelected: () => {}, "data-testid": TARGET_TEST_ID }}
+                    ref={ref}
+                />,
+            );
+
+            expect(ref).toHaveBeenCalledTimes(1);
+        });
+
         test("merges className with the chip group class on the root element", () => {
             const ref = React.createRef<HTMLDivElement>();
             renderChipSuggest({ className: "custom-root" }, ref);
@@ -84,11 +108,12 @@ describe("ChipSuggest", () => {
             expect(chip).toHaveClass("chip", "custom-target", "disabled");
         });
 
-        // Известное ограничение, а не проектное решение: type применяется после спреда
-        // targetProps, поэтому targetProps.type не работает. Тест фиксирует текущее
-        // поведение, чтобы починка была осознанной и попала в release notes.
-        test("current behavior: targetProps.type is ignored, type from ChipSuggest wins", () => {
-            renderChipSuggest({ type: EChipType.TYPE_2, targetProps: { type: EChipType.TYPE_1 } });
+        // Проверяется только то, что type с самого ChipSuggest доезжает до чипса.
+        // Взаимодействие с targetProps.type намеренно не фиксируется тестом: сейчас
+        // targetProps.type не работает, и это известный баг, а не контракт
+        // (см. «Инварианты» в ChipSuggest-ai.md).
+        test("applies type to the target chip", () => {
+            renderChipSuggest({ type: EChipType.TYPE_2 });
 
             expect(getTarget()).toHaveClass("type2");
         });

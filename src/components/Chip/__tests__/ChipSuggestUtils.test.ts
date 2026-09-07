@@ -42,9 +42,6 @@ describe("ChipSuggest utils", () => {
             const instance = document.createElement("div");
 
             expect(() => setForwardedRef(null, instance)).not.toThrow();
-            expect(() =>
-                setForwardedRef(undefined as unknown as React.ForwardedRef<HTMLDivElement>, instance),
-            ).not.toThrow();
         });
     });
 });

@@ -4,6 +4,7 @@ export * from "./ChipDatePicker";
 export * from "./ChipClearButton";
 export * from "./ChipDropdownArrow";
 export * from "./ChipIcon";
+export * from "./ChipMonthYearPicker";
 export * from "./ChipMultiselect";
 export * from "./ChipOptions";
 export * from "./ChipSelect";

@@ -32,7 +32,7 @@ export interface IDatePickerExtendedProps
 }
 
 /**
- * База для компонентов выбора даты (DateField, MonthYearField, ChipDatePicker).
+ * База для компонентов выбора даты (DateField, MonthYearField, ChipDatePicker, ChipMonthYearPicker).
  * Рендерит переданный целевым элемент и выпадающий Calendar, хранит состояние открытости
  * дропдауна и отдаёт его целевому элементу через DatePickerExtendedContext.
  */

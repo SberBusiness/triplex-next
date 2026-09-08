@@ -5,7 +5,12 @@ export const DefaultExample = () => {
     const [count, setCount] = useState(0);
 
     return (
-        <ChipOptions selected={count > 0} onClick={() => setCount((c) => c + 1)} clearSelected={() => setCount(0)}>
+        <ChipOptions
+            selected={count > 0}
+            onClick={() => setCount((c) => c + 1)}
+            clearSelected={() => setCount(0)}
+            clearButtonProps={{ "aria-label": "Сбросить выбранные опции" }}
+        >
             {count > 0 ? count : undefined}
         </ChipOptions>
     );

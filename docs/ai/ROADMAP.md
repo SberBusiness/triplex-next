@@ -129,7 +129,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Gap | ✅ | ✅ | ✅ |
 | Header | ✅ | ✅ | ✅ |
 | HeaderPage | ✅ | ✅ | ✅ |
-| HelpBox | ✅ | ✅ | ⬜ |
+| HelpBox | ✅ | ✅ | ✅ |
 | IconWrapper | ✅ | ✅ | ✅ |
 | ImageGallery | ✅ | ✅ | ✅ |
 | ImageGalleryExtended | ✅ | ✅ | ✅ |

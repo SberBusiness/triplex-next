@@ -1,7 +1,7 @@
 ---
 component: DateField
 category: Date components
-related: [DatePickerExtended, MonthYearField, MaskedField, Calendar, Tooltip]
+related: [DatePickerExtended, MonthYearField, ChipDatePicker, MaskedField, Calendar, Tooltip]
 tokens: []
 stories: stories/DateField/DateField.stories.tsx
 version: "1.0"
@@ -44,7 +44,7 @@ version: "1.0"
 | `disabledDays` | `string[]` | — | Недоступные для выбора дни. **Строки должны быть в формате `format`**, а не в формате отображения. |
 | `onClear` | `MouseEventHandler<HTMLButtonElement>` | — | Если передан — в постфиксе появляется кнопка очистки. Реальную очистку значения выполняет потребитель. |
 | `onDropdownOpen` / `onDropdownClose` | `() => void` | — | Колбэки открытия/закрытия выпадающего календаря. Вызываются после внутренней обработки: при закрытии `onChange` (фиксация введённого значения) может сработать раньше `onDropdownClose`. |
-| `targetProps` | `DeepPartial<IMaskedFieldProps>` | — | Дополнительные props внутреннего `MaskedField` (`postfix`, `description`, `maskedInputProps` и т.д.). Значения `maskedInputProps.value`, `mask`, `placeholderMask`, `aria-label`, `aria-labelledby` задаются компонентом **по умолчанию** — переданные в `targetProps.maskedInputProps` одноимённые ключи их переопределяют (`...restMaskedInputProps` разворачивается последним). Исключение — `maskedInputProps.onChange`: он не переопределяет внутренний обработчик, а вызывается ПОСЛЕ него. |
+| `targetProps` | `DeepPartial<IMaskedFieldProps>` | — | Дополнительные props внутреннего `MaskedField` (`postfix`, `description`, `maskedInputProps` и т.д.). Приоритет: верхнеуровневые ключи `targetProps` **переопределяют** заданные компонентом `size` / `status` / `label` / `onClear` (`{...restTargetProps}` разворачивается после них). Значения `maskedInputProps.value`, `mask`, `placeholderMask`, `aria-label`, `aria-labelledby` — тоже лишь **значения по умолчанию**, переданные одноимённые ключи их переопределяют. **Но обработчики не переопределяются, а дополняются:** `onChange`, `onFocus`, `onBlur`, `onKeyDown`, `onMouseDown` из `maskedInputProps` вызываются ПОСЛЕ внутренних, поэтому свой `onBlur` не отключает фиксацию значения. `className` не переопределяется, а мержится через `clsx`. |
 
 ### Логика фиксации значения
 
@@ -75,6 +75,7 @@ version: "1.0"
 - `disabledDays` сравниваются со строкой даты в формате `format` (`isDayDisabled` делает `includes`) — не менять формат сравнения без обновления документации потребителя.
 - Sync-эффект в `DateField.tsx` (`useEffect` по `[value, format, limitRange, disabledDays]` с `eslint-disable react-hooks/exhaustive-deps`) — намеренная синхронизация derived-стейта `pickerValues` с внешним `value`. `pickerValues` намеренно не в зависимостях: иначе эффект затирал бы промежуточный ввод пользователя. Сравнение идёт по `inputString`.
 - Внутренние символы `DateFieldUtils` (`utils.ts`), `DateFieldContext`, `DateFieldTarget`, `inputDateFormat` не экспортируются через barrel — это приватные детали реализации. **Исключение — тип `IDateFieldTargetProps`:** он лежит в `types.ts`, а `index.ts` делает `export * from "./types"`, поэтому тип уходит в публичный API пакета. Переименование или изменение его полей — breaking change.
+- **`isOpen={tooltipOpenedRef.current}` читает ref во время рендера** (`DateField.tsx`, ветка `MobileView.fallback`). Это работает только потому, что `handleInputChange` в том же вызове делает `setPickerValues` и тем самым провоцирует ре-рендер. Любая «оптимизация» вида «не вызывать `setPickerValues`, если строка не изменилась» тихо сломает показ `invalidDateHint`, при этом тесты на ввод останутся зелёными. Трогать эту пару (ref + `setPickerValues`) только вместе.
 - **`DateFieldUtils` и `inputDateFormat` переиспользует `ChipDatePicker`** (`src/components/Chip/ChipDatePicker/ChipDatePicker.tsx`), который повторяет ту же логику ввода даты. Переименование или изменение сигнатур этих символов ломает `ChipDatePicker` — правь их только синхронно с ним.
 
 ---
@@ -95,6 +96,7 @@ version: "1.0"
 
 - `DatePickerExtended` — база выпадающего календаря; `DateField` конфигурирует её через render-props (`renderTarget`, `renderDropdownHeaderTarget`) и наследует её props.
 - `MonthYearField` — альтернатива для выбора только месяца и года; устроен по той же схеме, но поле read-only.
+- `ChipDatePicker` — выбор даты в виде чипа-фильтра, а не поля формы; альтернатива, когда дата задаётся в панели фильтров. Одновременно единственный потребитель, опирающийся на приватные детали `DateField` — импортирует `DateFieldUtils` и `inputDateFormat` (см. «Инварианты»), поэтому правки этих символов проверяй и на нём.
 - `MaskedField` — внутреннее поле-триггер; его props частично входят в публичный API (`size`, `status`, `label`, `targetProps`).
 - `Calendar` — календарь внутри дропдауна; его props (`limitRange`, `disabledDays`, `markedDays`, `format`) входят в публичный API через `DatePickerExtended`.
 - `Tooltip` — показывает `invalidDateHint` при вводе недоступной даты (только desktop-ветка).

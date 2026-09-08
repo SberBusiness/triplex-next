@@ -65,6 +65,8 @@ version: "1.0"
 - **`tooltipSize` prop** — обязательный, не делать optional.
 - **Barrel export в `index.ts`** — не удалять.
 - **`toggleType="hover"`** — Tooltip реагирует на наведение, не менять без согласования.
+- **`uniqueId()` из `lodash-es`, а не `React.useId`** — код должен собираться в ветке
+  `release-0` под React 17.
 
 ---
 

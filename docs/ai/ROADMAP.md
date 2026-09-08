@@ -103,11 +103,11 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Chip | ✅ | ✅ | ✅ |
 | ChipDatePicker | ⬜ | ✅ | ⬜ |
 | ChipGroup | ✅ | ✅ | ✅ |
-| ChipMultiselect | ⬜ | ✅ | ⬜ |
+| ChipMultiselect | ✅ | ✅ | ✅ |
 | ChipOptions | ✅ | ✅ | ✅ |
 | ChipSelect | ⬜ | ✅ | ⬜ |
-| ChipSort | ⬜ | ✅ | ⬜ |
-| ChipSuggest | ⬜ | ✅ | ⬜ |
+| ChipSort | ✅ | ✅ | ✅ |
+| ChipSuggest | ✅ | ✅ | ✅ |
 | Col | ✅ | ✅ | ✅ |
 | CollapsibleTree | ✅ | ✅ | ✅ |
 | CollapsibleTreeExtended | ✅ | ✅ | ✅ |

@@ -12,7 +12,9 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **ChipOptions**
 
-- Проведён AI-рефакторинг: изменений для потребителя нет.
+- Добавлен prop `clearButtonProps` — props кнопки сброса выбора (`aria-label`, `disabled`, `className`, `data-*`). Размер кнопки по-прежнему задаётся `size` чипса, а `onClick` и `onKeyDown` принадлежат компоненту и в тип не входят.
+- `Enter` и `Space`, нажатые на кнопке сброса, больше не всплывают до чипса: `Space` теперь активирует кнопку, а внешний `onKeyDown` чипса не срабатывает заодно со сбросом.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
 
 **ChipSort**
 

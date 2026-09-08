@@ -261,6 +261,93 @@ describe("ChipOptions", () => {
         });
     });
 
+    describe("clear button keyboard", () => {
+        it.each([["Enter"], ["Space"]])("Should stop %s from propagating out of the clear button", (code) => {
+            const onKeyDown = vi.fn();
+
+            render(<ChipOptions {...defaultProps} selected onKeyDown={onKeyDown} data-testid="chip-options" />);
+
+            fireEvent.keyDown(getExistingClearButton(), { code });
+
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
+        it("Should let other keys propagate out of the clear button", () => {
+            const onKeyDown = vi.fn();
+
+            render(<ChipOptions {...defaultProps} selected onKeyDown={onKeyDown} data-testid="chip-options" />);
+
+            fireEvent.keyDown(getExistingClearButton(), { code: "KeyA" });
+
+            expect(onKeyDown).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("clearButtonProps", () => {
+        it("Should pass clearButtonProps to the clear button", () => {
+            render(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    clearButtonProps={{ "aria-label": "Сбросить выбор", id: "clear-button" }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            const clearButton = getExistingClearButton();
+            expect(clearButton).toHaveAttribute("aria-label", "Сбросить выбор");
+            expect(clearButton).toHaveAttribute("id", "clear-button");
+        });
+
+        it("Should merge className from clearButtonProps with the own one", () => {
+            render(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    clearButtonProps={{ className: "custom-clear-button" }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            expect(getExistingClearButton()).toHaveClass("chipClearButton", "custom-clear-button");
+        });
+
+        it("Should keep clearSelected working with clearButtonProps passed", () => {
+            const clearSelected = vi.fn();
+
+            render(
+                <ChipOptions
+                    clearSelected={clearSelected}
+                    selected
+                    clearButtonProps={{ "aria-label": "Сбросить выбор" }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            fireEvent.click(getExistingClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+        });
+
+        it("Should not disable the clear button unless asked through clearButtonProps", () => {
+            const { rerender } = render(<ChipOptions {...defaultProps} selected disabled data-testid="chip-options" />);
+
+            expect(getExistingClearButton()).toBeEnabled();
+
+            rerender(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    disabled
+                    clearButtonProps={{ disabled: true }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            expect(getExistingClearButton()).toBeDisabled();
+        });
+    });
+
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLSpanElement>();
 

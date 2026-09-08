@@ -93,14 +93,13 @@ describe("DateField", () => {
         const calendarIcon = screen.getByTestId("calendar-icon");
         const calendarButton = calendarIcon.closest("button");
 
-        if (calendarButton) {
-            fireEvent.click(calendarButton);
-
-            await waitFor(() => {
-                const dialog = screen.getByRole("dialog");
-                expect(dialog).toBeInTheDocument();
-            });
+        if (calendarButton === null) {
+            throw new Error("Calendar button not found");
         }
+
+        fireEvent.click(calendarButton);
+
+        expect(await screen.findByRole("dialog")).toBeInTheDocument();
     });
 
     it("applies custom className", () => {
@@ -340,7 +339,17 @@ describe("DateField", () => {
             fireEvent.keyDown(screen.getByRole("textbox"), { code: "Enter" });
             const dialog = await screen.findByRole("dialog");
 
-            fireEvent.click(within(dialog).getByText("15"));
+            // В сетке календаря дни соседних месяцев тоже отрисованы, но помечены `muted`,
+            // поэтому берём именно день текущего месяца — запрос не сломается при смене value.
+            const day = within(dialog)
+                .getAllByText("15")
+                .find((element) => !element.classList.contains("muted"));
+
+            if (day === undefined) {
+                throw new Error("Day 15 of the current month not found");
+            }
+
+            fireEvent.click(day);
 
             // handleDateChange фиксирует дату сразу и через dropdownClosedByCalendarRef
             // гасит повторную фиксацию на закрытии дропдауна.

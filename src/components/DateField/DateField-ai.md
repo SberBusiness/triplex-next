@@ -87,7 +87,6 @@ version: "1.0"
 - Состояние `disabled` (`status === EFormFieldStatus.DISABLED`) блокирует и поле, и кнопку календаря.
 - Тултип с `invalidDateHint` показывается только в desktop-ветке (`MobileView.fallback`); в мобильном представлении ввод идёт через `DropdownMobileMaskedInput` в заголовке дропдауна.
 - ARIA-роль выпадающего календаря (`dialog`) и навигация по нему — на стороне `DatePickerExtended` / `Calendar`.
-- **Известный пробел (тесты):** у `DateFieldTarget` нет отдельного `__tests__/DateFieldTarget.test.tsx`, хотя логика нетривиальна (открытие по `mousedown` с `setTimeout`, `preventDefault` в adaptive-ветке, проброс фокуса в `DateFieldContext`). Сейчас она покрыта только косвенно — через тесты `DateField`.
 - **Известный пробел:** кнопка-иконка календаря (`ButtonIcon` в `DateFieldTarget`) фокусируема и не имеет `aria-label` — скринридер объявит её без имени. В `MonthYearFieldTarget` аналогичная кнопка выведена из таб-обхода (`role="presentation"`, `tabIndex={-1}`). Приведение к общему поведению требует изменения публичного API (новый prop для локализованного лейбла) и вынесено за рамки AI-рефакторинга.
 
 ---
@@ -100,7 +99,7 @@ version: "1.0"
 - `MaskedField` — внутреннее поле-триггер; его props частично входят в публичный API (`size`, `status`, `label`, `targetProps`).
 - `Calendar` — календарь внутри дропдауна; его props (`limitRange`, `disabledDays`, `markedDays`, `format`) входят в публичный API через `DatePickerExtended`.
 - `Tooltip` — показывает `invalidDateHint` при вводе недоступной даты (только desktop-ветка).
-- `DateFieldTarget` (внутренний, не в barrel) — рендерит `MaskedField` с иконкой календаря и кнопкой очистки, обрабатывает клик/клавиатуру/фокус. Описан здесь, отдельного AI.md не имеет.
+- `DateFieldTarget` (внутренний, не в barrel) — рендерит `MaskedField` с иконкой календаря и кнопкой очистки, обрабатывает клик/клавиатуру/фокус. Описан здесь, отдельного AI.md не имеет. Покрыт `__tests__/DateFieldTarget.test.tsx`.
 - `DateFieldContext` (внутренний, не в barrel) — прокидывает `onChange`, `inputFocusedRef` и `triggerChangeFromInput` в target.
 - `DateFieldUtils` (`utils.ts`, внутренний) — чистые функции парсинга/валидации даты (`getPickerValues`, `getCalendarDate`, `isAvailableDate`). Покрыты `__tests__/utils.test.tsx`.
 
@@ -126,4 +125,4 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-09-08 | Создан документ. AI-рефакторинг (JSDoc-фиксы, `displayName` у `DateFieldTarget`), unit-тесты для `utils.ts` и поведения поля (ввод, blur, клавиатура, колбэки дропдауна) |
+| 2026-09-08 | Создан документ. AI-рефакторинг (JSDoc-фиксы, `displayName` у `DateFieldTarget`), unit-тесты для `utils.ts`, поведения поля (ввод, blur, клавиатура, колбэки дропдауна) и `DateFieldTarget` (фокус, mousedown, клавиатура, проброс обработчиков) |

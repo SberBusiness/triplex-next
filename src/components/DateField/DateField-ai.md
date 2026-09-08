@@ -43,7 +43,7 @@ version: "1.0"
 | `limitRange` | `IDateLimitRange` | `globalLimitRange` | Допустимый диапазон дат. Значение вне диапазона трактуется как пустое и не фиксируется через `onChange`. |
 | `disabledDays` | `string[]` | — | Недоступные для выбора дни. **Строки должны быть в формате `format`**, а не в формате отображения. |
 | `onClear` | `MouseEventHandler<HTMLButtonElement>` | — | Если передан — в постфиксе появляется кнопка очистки. Реальную очистку значения выполняет потребитель. |
-| `onDropdownOpen` / `onDropdownClose` | `() => void` | — | Колбэки открытия/закрытия выпадающего календаря (проброс в `DatePickerExtended`). |
+| `onDropdownOpen` / `onDropdownClose` | `() => void` | — | Колбэки открытия/закрытия выпадающего календаря. Вызываются после внутренней обработки: при закрытии `onChange` (фиксация введённого значения) может сработать раньше `onDropdownClose`. |
 | `targetProps` | `DeepPartial<IMaskedFieldProps>` | — | Дополнительные props внутреннего `MaskedField` (`postfix`, `description`, `maskedInputProps` и т.д.). Значения `maskedInputProps.value`, `mask`, `placeholderMask`, `aria-label`, `aria-labelledby` устанавливаются компонентом; переданный `maskedInputProps.onChange` вызывается ПОСЛЕ внутреннего обработчика, остальные ключи переопределяют внутренние. |
 
 ### Логика фиксации значения
@@ -74,7 +74,7 @@ version: "1.0"
 - Отображаемый формат ввода зафиксирован константой `inputDateFormat = "DD.MM.YYYY"` (`constants.ts`) и связан с маской `FormFieldMaskedInput.presets.masks.date`. Менять его нужно синхронно с маской — иначе разъедутся длина ввода (`event.target.value.length === inputDateFormat.length`) и парсинг.
 - `disabledDays` сравниваются со строкой даты в формате `format` (`isDayDisabled` делает `includes`) — не менять формат сравнения без обновления документации потребителя.
 - Sync-эффект в `DateField.tsx` (`useEffect` по `[value, format, limitRange, disabledDays]` с `eslint-disable react-hooks/exhaustive-deps`) — намеренная синхронизация derived-стейта `pickerValues` с внешним `value`. `pickerValues` намеренно не в зависимостях: иначе эффект затирал бы промежуточный ввод пользователя. Сравнение идёт по `inputString`.
-- Внутренние символы `DateFieldUtils` (`utils.ts`), `DateFieldContext`, `DateFieldTarget`, `inputDateFormat` не экспортируются через barrel — это приватные детали реализации.
+- Внутренние символы `DateFieldUtils` (`utils.ts`), `DateFieldContext`, `DateFieldTarget`, `inputDateFormat` не экспортируются через barrel — это приватные детали реализации. **Исключение — тип `IDateFieldTargetProps`:** он лежит в `types.ts`, а `index.ts` делает `export * from "./types"`, поэтому тип уходит в публичный API пакета. Переименование или изменение его полей — breaking change.
 - **`DateFieldUtils` и `inputDateFormat` переиспользует `ChipDatePicker`** (`src/components/Chip/ChipDatePicker/ChipDatePicker.tsx`), который повторяет ту же логику ввода даты. Переименование или изменение сигнатур этих символов ломает `ChipDatePicker` — правь их только синхронно с ним.
 
 ---
@@ -86,6 +86,7 @@ version: "1.0"
 - Состояние `disabled` (`status === EFormFieldStatus.DISABLED`) блокирует и поле, и кнопку календаря.
 - Тултип с `invalidDateHint` показывается только в desktop-ветке (`MobileView.fallback`); в мобильном представлении ввод идёт через `DropdownMobileMaskedInput` в заголовке дропдауна.
 - ARIA-роль выпадающего календаря (`dialog`) и навигация по нему — на стороне `DatePickerExtended` / `Calendar`.
+- **Известный пробел (тесты):** у `DateFieldTarget` нет отдельного `__tests__/DateFieldTarget.test.tsx`, хотя логика нетривиальна (открытие по `mousedown` с `setTimeout`, `preventDefault` в adaptive-ветке, проброс фокуса в `DateFieldContext`). Сейчас она покрыта только косвенно — через тесты `DateField`.
 - **Известный пробел:** кнопка-иконка календаря (`ButtonIcon` в `DateFieldTarget`) фокусируема и не имеет `aria-label` — скринридер объявит её без имени. В `MonthYearFieldTarget` аналогичная кнопка выведена из таб-обхода (`role="presentation"`, `tabIndex={-1}`). Приведение к общему поведению требует изменения публичного API (новый prop для локализованного лейбла) и вынесено за рамки AI-рефакторинга.
 
 ---
@@ -114,7 +115,7 @@ version: "1.0"
 | `Default` | `DefaultExample.tsx` | Минимальное поле с label и маской-плейсхолдером |
 | `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG |
 | `Statuses` | `StatusesExample.tsx` | Статусы default / disabled / error / warning |
-| `Production` (`Example: production`) | `ProductionExample.tsx` | Production-композиция: postfix `HelpBox`, description со ссылкой, кнопка очистки и возврат фокуса на input |
+| `Production` | `ProductionExample.tsx` | Production-композиция (`Example: production`): postfix `HelpBox`, description со ссылкой, кнопка очистки и возврат фокуса на input |
 | `VisualTests` | `VisualTestsExample.tsx` | Скриншот-регрессия: заполненные поля всех размеров; `play` кликает по последнему полю, раскрывая календарь |
 
 ---

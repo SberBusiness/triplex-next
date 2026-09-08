@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { DateField } from "../DateField";
 import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
@@ -286,9 +286,8 @@ describe("DateField", () => {
             render(<DateField {...defaultProps} />);
             const input = screen.getByRole("textbox");
 
-            const notPrevented = fireEvent.keyDown(input, { code: "Space" });
-
-            expect(notPrevented).toBe(false);
+            // fireEvent возвращает результат dispatchEvent: false — значит был preventDefault.
+            expect(fireEvent.keyDown(input, { code: "Space" })).toBe(false);
             expect(await screen.findByRole("dialog")).toBeInTheDocument();
         });
 
@@ -332,6 +331,38 @@ describe("DateField", () => {
             await waitFor(() => {
                 expect(handleDropdownClose).toHaveBeenCalledTimes(1);
             });
+        });
+
+        it("calls onChange once when a day is picked in the calendar", async () => {
+            const handleChange = vi.fn();
+            render(<DateField {...defaultProps} value="19700601" onChange={handleChange} />);
+
+            fireEvent.keyDown(screen.getByRole("textbox"), { code: "Enter" });
+            const dialog = await screen.findByRole("dialog");
+
+            fireEvent.click(within(dialog).getByText("15"));
+
+            // handleDateChange фиксирует дату сразу и через dropdownClosedByCalendarRef
+            // гасит повторную фиксацию на закрытии дропдауна.
+            await waitFor(() => expect(handleChange).toHaveBeenCalledWith("19700615"));
+            expect(handleChange).toHaveBeenCalledTimes(1);
+        });
+
+        it("fixes the typed value when the dropdown closes and the input is not focused", async () => {
+            const handleChange = vi.fn();
+            render(<DateField {...defaultProps} value="" onChange={handleChange} />);
+            const input = screen.getByRole("textbox");
+
+            fireEvent.change(input, { target: { value: "15.06.1970" } });
+            expect(handleChange).not.toHaveBeenCalled();
+
+            fireEvent.keyDown(input, { code: "Enter" });
+            expect(await screen.findByRole("dialog")).toBeInTheDocument();
+
+            fireEvent.keyDown(input, { code: "Enter" });
+
+            await waitFor(() => expect(handleChange).toHaveBeenCalledWith("19700615"));
+            expect(handleChange).toHaveBeenCalledTimes(1);
         });
     });
 });

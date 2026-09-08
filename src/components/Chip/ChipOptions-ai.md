@@ -45,7 +45,7 @@ version: "1.0"
 | `size` | `EComponentSize` | `MD` | Размер чипса; тем же размером рисуется кнопка сброса (иконка-крестик 16 / 20 / 24px) |
 | `type` | `EChipType` | `TYPE_1` | Визуальный тип фона, как у `Chip` |
 | `disabled` | `boolean` | `false` | Визуальная блокировка, `tabIndex={-1}`. Кнопку сброса сам по себе не отключает — см. Accessibility (прочие ограничения — в `Chip-ai.md`) |
-| `clearButtonProps` | `Omit<IChipClearButtonProps, "size" \| "onClick" \| "onKeyDown">` | — | Props кнопки сброса: `aria-label` для её доступного имени, `disabled`, `className`, `data-*`. `size` берётся из `size` чипса, а `onClick` / `onKeyDown` принадлежат самому компоненту и в тип не входят |
+| `clearButtonProps` | `Omit<IChipClearButtonProps, "size">` | — | Props кнопки сброса: `aria-label` для её доступного имени, `disabled`, `className`, `data-*`, собственные `onClick` / `onKeyDown`. `size` берётся из `size` чипса и в тип не входит |
 | `showNotificationIcon` | `boolean` | `false` | Значок новых уведомлений, как у `Chip` |
 | `...HTMLSpanAttributes` | — | — | Все атрибуты `<span>` кроме `prefix`, включая `onClick`, `aria-label`, `data-*` |
 
@@ -63,10 +63,13 @@ version: "1.0"
 - **`prefix` / `postfix` недоступны** — исключены из типа props. Нужен свой postfix —
   собирай чипс из `Chip` напрямую.
 - **Кнопкой сброса управляют только через `clearButtonProps`** — сам `ChipClearButton`
-  наружу не выведен. `size`, `onClick` и `onKeyDown` из типа исключены: размер задаёт
-  `size` чипса, а клик и клавиатура — контракт компонента (`clearSelected` + гашение
-  всплытия). Нужен свой обработчик клика по крестику — собирай чипс из `Chip` +
-  `ChipClearButton` вручную.
+  наружу не выведен. Из типа исключён единственный prop — `size`: размер кнопки задаёт
+  `size` чипса.
+- **`onClick` и `onKeyDown` из `clearButtonProps` не заменяют обработчики компонента,
+  а вызываются после них** — сначала `event.stopPropagation()` и `clearSelected()`,
+  затем внешний обработчик. Отменить сброс или разрешить всплытие через них нельзя:
+  гашение всплытия уже произошло. Нужен полный контроль над кнопкой — собирай чипс из
+  `Chip` + `ChipClearButton` вручную.
 
 ---
 
@@ -167,4 +170,4 @@ version: "1.0"
 |---|---|
 | 2026-09-04 | Создан документ (TRI-133, AI-Ready Phase 1) |
 | 2026-09-04 | AI-рефакторинг (TRI-133): JSDoc на интерфейсе, `size` разобран из props явно, иконка опций собрана в один элемент со сменой `paletteIndex`, `typeof children !== "undefined"` → `children !== undefined`, комментарий про `<span />`-заглушку в `postfix`; unit-тесты расширены с 3 до 19 кейсов. Публичный API, DOM и визуал не изменены |
-| 2026-09-08 | Добавлен prop `clearButtonProps` (TRI-133): кнопке сброса можно задать `aria-label`, `disabled` и прочие props `ChipClearButton`. `Enter` / `Space` на кнопке сброса больше не всплывают до `Chip` — `Space` активирует кнопку, внешний `onKeyDown` чипса не срабатывает заодно со сбросом |
+| 2026-09-08 | Добавлен prop `clearButtonProps` (TRI-133): кнопке сброса можно задать `aria-label`, `disabled` и прочие props `ChipClearButton`; переданные `onClick` / `onKeyDown` вызываются после собственных обработчиков компонента. `Enter` / `Space` на кнопке сброса больше не всплывают до `Chip` — `Space` активирует кнопку, внешний `onKeyDown` чипса не срабатывает заодно со сбросом |

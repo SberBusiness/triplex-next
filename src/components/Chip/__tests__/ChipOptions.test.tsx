@@ -350,6 +350,50 @@ describe("ChipOptions", () => {
             expect(clearSelected).toHaveBeenCalledTimes(1);
         });
 
+        it("Should call onClick from clearButtonProps along with clearSelected", () => {
+            const clearSelected = vi.fn();
+            const onClickClearButton = vi.fn();
+            const onClick = vi.fn();
+
+            render(
+                <ChipOptions
+                    clearSelected={clearSelected}
+                    selected
+                    onClick={onClick}
+                    clearButtonProps={{ onClick: onClickClearButton }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            fireEvent.click(getExistingClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(onClickClearButton).toHaveBeenCalledTimes(1);
+            // Собственный обработчик компонента не отменяется внешним: клик по-прежнему
+            // не всплывает до чипса.
+            expect(onClick).not.toHaveBeenCalled();
+        });
+
+        it("Should call onKeyDown from clearButtonProps without letting Enter and Space bubble", () => {
+            const onKeyDownClearButton = vi.fn();
+            const onKeyDown = vi.fn();
+
+            render(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    onKeyDown={onKeyDown}
+                    clearButtonProps={{ onKeyDown: onKeyDownClearButton }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            fireEvent.keyDown(getExistingClearButton(), { code: "Space" });
+
+            expect(onKeyDownClearButton).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
         it("Should not disable the clear button unless asked through clearButtonProps", () => {
             const { rerender } = render(<ChipOptions {...defaultProps} selected disabled data-testid="chip-options" />);
 

@@ -11,9 +11,10 @@ export interface IChipOptionsProps extends Omit<IChipProps, "prefix" | "postfix"
     clearSelected: () => void;
     /**
      * Свойства кнопки сброса выбора, например aria-label для её доступного имени.
-     * Размер задаётся размером чипса, а onClick и onKeyDown принадлежат самому компоненту.
+     * Размер задаётся размером чипса. Переданные onClick и onKeyDown не заменяют
+     * собственные обработчики компонента, а вызываются после них.
      */
-    clearButtonProps?: Omit<IChipClearButtonProps, "size" | "onClick" | "onKeyDown">;
+    clearButtonProps?: Omit<IChipClearButtonProps, "size">;
 }
 
 /**
@@ -22,11 +23,18 @@ export interface IChipOptionsProps extends Omit<IChipProps, "prefix" | "postfix"
  */
 export const ChipOptions = React.forwardRef<HTMLSpanElement, IChipOptionsProps>(
     ({ children, clearButtonProps, clearSelected, selected, size, ...restProps }, ref) => {
+        const {
+            onClick: onClickClearButton,
+            onKeyDown: onKeyDownClearButton,
+            ...restClearButtonProps
+        } = clearButtonProps ?? {};
+
         const handleClickClearButton = (event: React.MouseEvent<HTMLButtonElement>) => {
             // Предотвращение нажатия на родительский элемент Chip.
             event.stopPropagation();
 
             clearSelected();
+            onClickClearButton?.(event);
         };
 
         const handleKeyDownClearButton = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -36,6 +44,8 @@ export const ChipOptions = React.forwardRef<HTMLSpanElement, IChipOptionsProps>(
                 // потребительский onKeyDown чипса одновременно со сбросом.
                 event.stopPropagation();
             }
+
+            onKeyDownClearButton?.(event);
         };
 
         return (
@@ -48,7 +58,7 @@ export const ChipOptions = React.forwardRef<HTMLSpanElement, IChipOptionsProps>(
                 postfix={
                     selected ? (
                         <ChipClearButton
-                            {...clearButtonProps}
+                            {...restClearButtonProps}
                             size={size}
                             onClick={handleClickClearButton}
                             onKeyDown={handleKeyDownClearButton}

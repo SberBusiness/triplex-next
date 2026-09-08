@@ -1,5 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { OptionsStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ChipOptions } from "../ChipOptions";
@@ -262,6 +263,26 @@ describe("ChipOptions", () => {
     });
 
     describe("clear button keyboard", () => {
+        it.each([
+            ["Enter", "{Enter}"],
+            ["Space", " "],
+        ])("Should call clearSelected on %s over the clear button", async (_code, key) => {
+            const user = userEvent.setup();
+            const clearSelected = vi.fn();
+            const onKeyDown = vi.fn();
+
+            render(
+                <ChipOptions clearSelected={clearSelected} selected onKeyDown={onKeyDown} data-testid="chip-options" />,
+            );
+
+            // Кнопка сброса — нативный button, поэтому Enter/Space активируют её кликом.
+            getExistingClearButton().focus();
+            await user.keyboard(key);
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
         it.each([["Enter"], ["Space"]])("Should stop %s from propagating out of the clear button", (code) => {
             const onKeyDown = vi.fn();
 

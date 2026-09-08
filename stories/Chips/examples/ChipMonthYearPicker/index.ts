@@ -7,6 +7,5 @@ export { default as SizesExampleSource } from "./SizesExample?raw";
 export { TypesExample } from "./TypesExample";
 export { default as TypesExampleSource } from "./TypesExample?raw";
 export { VisualTestsExample } from "./VisualTestsExample";
-export { default as VisualTestsExampleSource } from "./VisualTestsExample?raw";
 export { WithCustomDisplayedValueExample } from "./WithCustomDisplayedValueExample";
 export { default as WithCustomDisplayedValueExampleSource } from "./WithCustomDisplayedValueExample?raw";

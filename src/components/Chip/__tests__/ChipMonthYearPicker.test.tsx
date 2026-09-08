@@ -9,7 +9,8 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 import { dateFormatYYYYMMDD } from "../../../consts/DateConst";
 
 const getChipMonthYearPicker = () => screen.getByTestId("chip-month-year-picker");
-const getChip = () => within(getChipMonthYearPicker()).getAllByRole("button")[0];
+const getChip = (name: string | RegExp = "Выберите месяц") =>
+    within(getChipMonthYearPicker()).getByRole("button", { name });
 const getClearButton = () => screen.getByRole("button", { name: "Очистить" });
 
 describe("ChipMonthYearPicker", () => {
@@ -109,12 +110,24 @@ describe("ChipMonthYearPicker", () => {
         expect(getChip()).toHaveAttribute("aria-expanded", "true");
     });
 
+    it("Should call onKeyDown on any key press", async () => {
+        const onKeyDown = vi.fn();
+
+        render(<ChipMonthYearPicker {...defaultProps} onKeyDown={onKeyDown} />);
+
+        getChip().focus();
+        await userEvent.keyboard("{ArrowDown}");
+
+        expect(onKeyDown).toHaveBeenCalled();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+
     it("Should call onChange with selected month in given format", async () => {
         const onChange = vi.fn();
 
         render(<ChipMonthYearPicker {...defaultProps} value="01/2024" format="MM/YYYY" onChange={onChange} />);
 
-        await userEvent.click(getChip());
+        await userEvent.click(getChip("Jan 2024"));
         await userEvent.click(screen.getByText("Feb"));
 
         expect(onChange).toHaveBeenCalledWith("02/2024");

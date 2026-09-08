@@ -24,8 +24,9 @@ export const ChipMonthYearPickerTarget = React.forwardRef<HTMLSpanElement, IChip
             if (!disabled && (isKey(event.code, "ENTER") || isKey(event.code, "SPACE"))) {
                 event.preventDefault();
                 setDropdownOpen(!dropdownOpen);
-                onKeyDown?.(event);
             }
+
+            onKeyDown?.(event);
         };
 
         const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {

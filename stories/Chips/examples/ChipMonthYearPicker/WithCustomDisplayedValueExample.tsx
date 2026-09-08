@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ChipMonthYearPicker, EComponentSize, EDropdownAlignment } from "@sberbusiness/triplex-next";
 
 export const WithCustomDisplayedValueExample = () => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState("19700101");
     return (
         <ChipMonthYearPicker
             value={value}

@@ -13,7 +13,6 @@ import {
     WithCustomDisplayedValueExample,
     WithCustomDisplayedValueExampleSource,
     VisualTestsExample,
-    VisualTestsExampleSource,
 } from "./examples/ChipMonthYearPicker";
 
 const meta = {
@@ -130,7 +129,6 @@ export const VisualTests: Story = {
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
-            source: { code: VisualTestsExampleSource, language: "tsx" },
         },
     },
     render: VisualTestsExample,

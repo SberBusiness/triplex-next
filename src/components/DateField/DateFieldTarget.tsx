@@ -27,6 +27,11 @@ const SIZE_TO_CALENDAR_ICON_MAP = {
     [EComponentSize.LG]: <CalendarStrokeSrvIcon24 paletteIndex={5} />,
 };
 
+/**
+ * Управляющий элемент DateField — поле ввода даты с маской.
+ * Кнопка-иконка календаря и клавиши Enter/Space открывают и закрывают выпадающий календарь,
+ * потеря фокуса при закрытом календаре фиксирует введённое значение.
+ */
 export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTargetProps>(
     ({ className, size = EComponentSize.MD, postfix, maskedInputProps, onClear, ...restProps }, ref) => {
         const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);
@@ -112,3 +117,5 @@ export const DateFieldTarget = React.forwardRef<HTMLDivElement, IDateFieldTarget
         );
     },
 );
+
+DateFieldTarget.displayName = "DateFieldTarget";

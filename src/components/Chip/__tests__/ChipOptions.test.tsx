@@ -369,6 +369,10 @@ describe("ChipOptions", () => {
 
             expect(clearSelected).toHaveBeenCalledTimes(1);
             expect(onClickClearButton).toHaveBeenCalledTimes(1);
+            // Внешний обработчик вызывается последним — порядок задокументирован в AI.md.
+            expect(clearSelected.mock.invocationCallOrder[0]).toBeLessThan(
+                onClickClearButton.mock.invocationCallOrder[0],
+            );
             // Собственный обработчик компонента не отменяется внешним: клик по-прежнему
             // не всплывает до чипса.
             expect(onClick).not.toHaveBeenCalled();
@@ -391,6 +395,34 @@ describe("ChipOptions", () => {
             fireEvent.keyDown(getExistingClearButton(), { code: "Space" });
 
             expect(onKeyDownClearButton).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
+        it.each([
+            ["Enter", "{Enter}"],
+            ["Space", " "],
+        ])("Should let onKeyDown from clearButtonProps suppress the reset on %s", async (_code, key) => {
+            const user = userEvent.setup();
+            const clearSelected = vi.fn();
+            const onKeyDown = vi.fn();
+
+            render(
+                <ChipOptions
+                    clearSelected={clearSelected}
+                    selected
+                    onKeyDown={onKeyDown}
+                    clearButtonProps={{ onKeyDown: (event) => event.preventDefault() }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            getExistingClearButton().focus();
+            await user.keyboard(key);
+
+            // Нативная семантика button: preventDefault() на keydown отменяет активацию,
+            // а вместе с ней и клик, из которого приходит сброс. Поведение осознанное —
+            // компонент не перехватывает у потребителя эту возможность.
+            expect(clearSelected).not.toHaveBeenCalled();
             expect(onKeyDown).not.toHaveBeenCalled();
         });
 

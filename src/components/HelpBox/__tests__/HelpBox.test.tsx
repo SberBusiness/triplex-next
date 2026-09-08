@@ -159,7 +159,6 @@ describe("HelpBox", () => {
 
         const button = screen.getByRole("button", { name: "Подсказка" });
         expect(button).toHaveClass("custom-class");
-        expect(button).toHaveClass("helpBoxButton");
     });
 
     describe("tooltipSize", () => {

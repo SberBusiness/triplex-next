@@ -44,7 +44,7 @@ version: "1.0"
 | `disabledDays` | `string[]` | — | Недоступные для выбора дни. **Строки должны быть в формате `format`**, а не в формате отображения. |
 | `onClear` | `MouseEventHandler<HTMLButtonElement>` | — | Если передан — в постфиксе появляется кнопка очистки. Реальную очистку значения выполняет потребитель. |
 | `onDropdownOpen` / `onDropdownClose` | `() => void` | — | Колбэки открытия/закрытия выпадающего календаря. Вызываются после внутренней обработки: при закрытии `onChange` (фиксация введённого значения) может сработать раньше `onDropdownClose`. |
-| `targetProps` | `DeepPartial<IMaskedFieldProps>` | — | Дополнительные props внутреннего `MaskedField` (`postfix`, `description`, `maskedInputProps` и т.д.). Значения `maskedInputProps.value`, `mask`, `placeholderMask`, `aria-label`, `aria-labelledby` устанавливаются компонентом; переданный `maskedInputProps.onChange` вызывается ПОСЛЕ внутреннего обработчика, остальные ключи переопределяют внутренние. |
+| `targetProps` | `DeepPartial<IMaskedFieldProps>` | — | Дополнительные props внутреннего `MaskedField` (`postfix`, `description`, `maskedInputProps` и т.д.). Значения `maskedInputProps.value`, `mask`, `placeholderMask`, `aria-label`, `aria-labelledby` задаются компонентом **по умолчанию** — переданные в `targetProps.maskedInputProps` одноимённые ключи их переопределяют (`...restMaskedInputProps` разворачивается последним). Исключение — `maskedInputProps.onChange`: он не переопределяет внутренний обработчик, а вызывается ПОСЛЕ него. |
 
 ### Логика фиксации значения
 

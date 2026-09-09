@@ -102,9 +102,6 @@ export const IslandAccordionItem = Object.assign(
             }
 
             const handleHeaderClick = (): void => {
-                if (disabled) {
-                    return;
-                }
                 const newOpened = !isOpen;
                 onToggle?.(newOpened, id);
 
@@ -114,9 +111,6 @@ export const IslandAccordionItem = Object.assign(
             };
 
             const handleRemoveClick = (): void => {
-                if (disabled) {
-                    return;
-                }
                 onRemove?.(id);
             };
 

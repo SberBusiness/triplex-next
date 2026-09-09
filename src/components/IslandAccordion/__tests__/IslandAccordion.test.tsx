@@ -81,7 +81,7 @@ describe("IslandAccordion", () => {
         expect(ref.current).toBeInstanceOf(HTMLUListElement);
     });
 
-    it("Should merge custom className with base class", () => {
+    it("Should apply custom className to root ul", () => {
         render(<IslandAccordion className="custom-class" />);
 
         expect(getIslandAccordion()).toHaveClass("custom-class");
@@ -152,7 +152,7 @@ describe("IslandAccordionContent", () => {
 });
 
 describe("IslandAccordionFooter", () => {
-    it("Should merge custom className with base classes", () => {
+    it("Should apply custom className to footer", () => {
         render(
             <IslandAccordion>
                 <IslandAccordion.Item title="First item" id="first-item">

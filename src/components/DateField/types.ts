@@ -7,17 +7,17 @@ export interface IDateFieldProps
     extends
         Omit<IDatePickerExtendedProps, "pickedDate" | "onDateChange" | "renderTarget" | "renderDropdownHeaderTarget">,
         Pick<IMaskedFieldProps, "size" | "status" | "label"> {
-    /** Значение даты. */
+    /** Значение даты в формате `format`. Пустая строка — значение не выбрано. */
     value: string;
     /** Символы для заполнения пустых редактируемых позиций в маске (например, строка вида "дд.мм.гггг"). */
     placeholderMask?: string;
-    /** Текст подсказки в тултипе. */
+    /** Текст подсказки в тултипе. Показывается, когда в поле введена полная, но недоступная для выбора дата. */
     invalidDateHint: React.ReactNode;
-    /** Функция, вызывающаяся при изменении значения. */
+    /** Функция, вызывающаяся при изменении значения. Аргумент — дата в формате `format` либо пустая строка при очистке. */
     onChange: (value: string) => void;
-    /** Обработчик очищения значения. */
+    /** Обработчик очищения значения. Кнопка очистки рендерится, только если обработчик передан. */
     onClear?: React.MouseEventHandler<HTMLButtonElement>;
-    /** Свойства MaskedField. */
+    /** Свойства MaskedField — управляющего элемента поля. */
     targetProps?: DeepPartial<IMaskedFieldProps>;
 }
 

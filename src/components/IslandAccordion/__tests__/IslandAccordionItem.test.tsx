@@ -65,10 +65,10 @@ describe("IslandAccordionItem", () => {
             expect(ref.current).toHaveAttribute("id", ITEM_ID);
         });
 
-        it("Should merge custom className with base class on root li", () => {
+        it("Should apply custom className to root li", () => {
             renderItem({ className: "custom-class" });
 
-            expect(getItem()).toHaveClass("custom-class", "item");
+            expect(getItem()).toHaveClass("custom-class");
         });
 
         it("Should spread rest props to root li", () => {

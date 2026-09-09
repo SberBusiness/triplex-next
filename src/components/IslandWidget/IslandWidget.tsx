@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
+import clsx from "clsx";
+import { EComponentSize } from "../../enums/EComponentSize";
 import { Island, EIslandType } from "../Island";
+import { ExpandAnimation } from "../ExpandAnimation/ExpandAnimation";
+import { useMobileView } from "../MobileView";
 import { IIslandWidgetHeaderProps, IslandWidgetHeader } from "./components/IslandWidgetHeader";
 import { IIslandWidgetBodyProps, IslandWidgetBody } from "./components/IslandWidgetBody";
 import { IIslandWidgetFooterProps, IslandWidgetFooter } from "./components/IslandWidgetFooter";
 import { IslandWidgetExtraFooter } from "./components/IslandWidgetExtraFooter";
-import { EComponentSize } from "../../enums/EComponentSize";
-import clsx from "clsx";
-import styles from "./styles/IslandWidget.module.less";
 import { IslandWidgetLayoutContext } from "./IslandWidgetLayoutContext";
 import { IslandWidgetContext } from "./IslandWidgetContext";
-import { ExpandAnimation } from "../ExpandAnimation/ExpandAnimation";
-import { useMobileView } from "../MobileView";
+import styles from "./styles/IslandWidget.module.less";
 
 /** Свойства компонента IslandWidget. */
 export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -72,9 +72,13 @@ export const IslandWidget = Object.assign(
                     }}
                 >
                     <div
-                        className={clsx(styles.islandWidget, className, {
-                            [styles.islandWidgetWithExtraFooter]: hasExtraFooter,
-                        })}
+                        className={clsx(
+                            styles.islandWidget,
+                            {
+                                [styles.islandWidgetWithExtraFooter]: hasExtraFooter,
+                            },
+                            className,
+                        )}
                         {...rest}
                         data-tx={process.env.npm_package_version}
                         ref={ref}

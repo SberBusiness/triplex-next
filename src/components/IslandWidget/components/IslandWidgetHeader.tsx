@@ -29,10 +29,15 @@ export const IslandWidgetHeader: TIslandWidgetHeader = ({ children, className, .
     return (
         <div
             {...htmlDivAttributes}
-            className={clsx(styles.islandWidgetHeader, SIZE_TO_CLASS_NAME_MAP[size], className, {
-                [styles.open]: open,
-                [styles.disableAdaptiveCollapsing]: adaptive && disableAdaptiveCollapsing,
-            })}
+            className={clsx(
+                styles.islandWidgetHeader,
+                SIZE_TO_CLASS_NAME_MAP[size],
+                {
+                    [styles.open]: open,
+                    [styles.disableAdaptiveCollapsing]: adaptive && disableAdaptiveCollapsing,
+                },
+                className,
+            )}
         >
             {children}
             {adaptive && !disableAdaptiveCollapsing && (

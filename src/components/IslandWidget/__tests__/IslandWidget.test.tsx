@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll } from "vitest";
 import { IslandWidget } from "../IslandWidget";
 import { IIslandWidgetBodyProps } from "../components/IslandWidgetBody";
 import { IIslandWidgetHeaderProps } from "../components/IslandWidgetHeader";
@@ -69,7 +69,7 @@ describe("IslandWidget", () => {
         expect(screen.getByText("Footer content")).toBeInTheDocument();
     });
 
-    it("Should render extra footer when renderExtraFooter is provided", () => {
+    it("Should render extra footer placed next to the widget inside the wrapper", () => {
         render(
             <IslandWidgetWrapper>
                 <IslandWidget renderBody={defaultRenderBody} renderHeader={defaultRenderHeader} />

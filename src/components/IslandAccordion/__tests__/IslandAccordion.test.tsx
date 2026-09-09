@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { IslandAccordion } from "../IslandAccordion";
 import { EComponentSize } from "../../../enums/EComponentSize";
+import { EIslandType } from "../../Island";
 
 const getIslandAccordion = () => screen.getByRole("list");
 
@@ -52,5 +53,133 @@ describe("IslandAccordion", () => {
 
         expect(screen.getByText("Content")).toHaveClass("islandBody", "body");
         expect(screen.getByText("Footer")).toHaveClass("islandFooter", "footer");
+    });
+
+    it("Should render root ul element", () => {
+        render(
+            <IslandAccordion>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    First content
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(getIslandAccordion().tagName).toBe("UL");
+    });
+
+    it("Should forward ref to root ul element", () => {
+        const ref = React.createRef<HTMLUListElement>();
+
+        render(
+            <IslandAccordion ref={ref}>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    First content
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLUListElement);
+        expect(ref.current).toHaveClass("islandAccordion");
+    });
+
+    it("Should merge custom className with base class", () => {
+        render(<IslandAccordion className="custom-class" />);
+
+        expect(getIslandAccordion()).toHaveClass("custom-class", "islandAccordion");
+    });
+
+    it("Should spread rest props to root ul", () => {
+        render(<IslandAccordion aria-label="Accordion" data-test="island-accordion" />);
+
+        const islandAccordion = getIslandAccordion();
+
+        expect(islandAccordion).toHaveAttribute("aria-label", "Accordion");
+        expect(islandAccordion).toHaveAttribute("data-test", "island-accordion");
+    });
+
+    it.each([
+        [EComponentSize.SM, "sm"],
+        [EComponentSize.MD, "md"],
+        [EComponentSize.LG, "lg"],
+    ])("Should pass size %s to items through context", (size, expectedClassName) => {
+        render(
+            <IslandAccordion size={size}>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    First content
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(screen.getByRole("listitem")).toHaveClass(expectedClassName);
+    });
+
+    it.each([
+        [EIslandType.TYPE_1, "type1"],
+        [EIslandType.TYPE_2, "type2"],
+        [EIslandType.TYPE_3, "type3"],
+    ])("Should pass type %s to items through context", (type, expectedClassName) => {
+        render(
+            <IslandAccordion type={type}>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    First content
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(screen.getByRole("listitem")).toHaveClass(expectedClassName);
+    });
+
+    it("Should have displayName", () => {
+        expect(IslandAccordion.displayName).toBe("IslandAccordion");
+    });
+});
+
+describe("IslandAccordionContent", () => {
+    it("Should render children inside Island body", () => {
+        render(
+            <IslandAccordion>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    <IslandAccordion.Item.Content>Content</IslandAccordion.Item.Content>
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(screen.getByText("Content")).toHaveClass("islandBody", "body");
+    });
+
+    it("Should have displayName", () => {
+        expect(IslandAccordion.Item.Content.displayName).toBe("IslandAccordionContent");
+    });
+});
+
+describe("IslandAccordionFooter", () => {
+    it("Should merge custom className with base classes", () => {
+        render(
+            <IslandAccordion>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    <IslandAccordion.Item.Footer className="custom-class">Footer</IslandAccordion.Item.Footer>
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(screen.getByText("Footer")).toHaveClass("custom-class", "islandFooter", "footer");
+    });
+
+    it("Should spread rest props", () => {
+        render(
+            <IslandAccordion>
+                <IslandAccordion.Item title="First item" id="first-item">
+                    <IslandAccordion.Item.Footer data-test="island-accordion-footer">
+                        Footer
+                    </IslandAccordion.Item.Footer>
+                </IslandAccordion.Item>
+            </IslandAccordion>,
+        );
+
+        expect(screen.getByText("Footer")).toHaveAttribute("data-test", "island-accordion-footer");
+    });
+
+    it("Should have displayName", () => {
+        expect(IslandAccordion.Item.Footer.displayName).toBe("IslandAccordionFooter");
     });
 });

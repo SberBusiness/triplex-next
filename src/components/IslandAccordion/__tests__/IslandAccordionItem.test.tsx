@@ -296,7 +296,10 @@ describe("IslandAccordionItem", () => {
             expect(screen.queryByText("Step hint")).not.toBeInTheDocument();
         });
 
-        it("Should not render anything for num 0", () => {
+        // Фиксация текущего поведения, а не желаемого контракта: ноль выглядит валидным номером
+        // шага, но исторически кружок для него не рендерится. Тест защищает от возврата текстового
+        // узла «0» в заголовке; сам пропуск кружка меняется отдельной задачей.
+        it("Should keep inherited behavior: no step circle and no zero text for num 0", () => {
             renderItem({ num: 0, status: EStepStatus.ACTIVE });
 
             expect(getHeader().textContent).toBe("Title");

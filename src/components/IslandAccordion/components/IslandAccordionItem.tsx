@@ -145,8 +145,13 @@ export const IslandAccordionItem = Object.assign(
                                 disabled={disabled}
                                 data-tx={process.env.npm_package_version}
                             >
-                                {/* Тернарник, а не `&&`: при num === 0 выражение `status && num` вернуло бы 0, и React отрисовал бы «0». */}
-                                {status && num ? (
+                                {/*
+                                    Тернарник, а не `&&`: при num === 0 выражение `status && num` вернуло бы 0,
+                                    и React отрисовал бы текст «0». Сам пропуск кружка при num === 0 —
+                                    унаследованная особенность, а не осознанный контракт; чинится отдельной
+                                    задачей, потому что это изменение наблюдаемого поведения.
+                                */}
+                                {status && num !== undefined && num !== 0 ? (
                                     <div className={styles.step}>
                                         <Step step={num} status={status} position={EStepPosition.XFirst} size={size}>
                                             {disabled ? undefined : stepHint}

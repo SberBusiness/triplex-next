@@ -135,7 +135,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ImageGalleryExtended | ✅ | ✅ | ✅ |
 | Island | ✅ | ✅ | ✅ |
 | IslandAccordion | ⬜ | ✅ | ⬜ |
-| IslandWidget | ⬜ | ✅ | ⬜ |
+| IslandWidget | ✅ | ✅ | ✅ |
 | KeyDownListener | ✅ | ✅ | ✅ |
 | LightBox | ✅ | ✅ | ✅ |
 | Link | ✅ | ✅ | ✅ |

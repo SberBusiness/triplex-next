@@ -19,6 +19,10 @@ export type TIslandWidgetHeader = React.FC<IIslandWidgetHeaderProps> & {
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
+/**
+ * Шапка виджета. В адаптиве, если сворачивание не отключено, дополняется индикатором раскрытия.
+ * Клик по шапке обрабатывает IslandWidget — сама шапка обработчик не вешает.
+ */
 export const IslandWidgetHeader: TIslandWidgetHeader = ({ children, className, ...htmlDivAttributes }) => {
     const { adaptive, disableAdaptiveCollapsing, open, size } = useContext(IslandWidgetContext);
 
@@ -32,7 +36,7 @@ export const IslandWidgetHeader: TIslandWidgetHeader = ({ children, className, .
         >
             {children}
             {adaptive && !disableAdaptiveCollapsing && (
-                <span className={clsx(styles.caretWrapper)}>
+                <span className={styles.caretWrapper}>
                     <CaretdownStrokeSrvIcon24 className={styles.caretIcon} aria-hidden="true" paletteIndex={5} />
                 </span>
             )}

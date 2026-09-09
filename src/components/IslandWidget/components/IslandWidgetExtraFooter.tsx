@@ -6,10 +6,14 @@ import { IslandWidgetLayoutContext } from "../IslandWidgetLayoutContext";
 
 /** Свойства компонента IslandWidgetExtraFooter. */
 export interface IIslandWidgetExtraFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Контролируемое состояние открытости. */
+    /** Контролируемое состояние открытости. По умолчанию false. */
     open?: boolean;
 }
 
+/**
+ * Дополнительный подвал виджета, раскрывающийся под карточкой.
+ * Рендерится вне IslandWidget — внутри общего IslandWidgetWrapper, через который сообщает виджету о своём состоянии.
+ */
 export const IslandWidgetExtraFooter: React.FC<IIslandWidgetExtraFooterProps> = ({
     children,
     className,
@@ -20,10 +24,10 @@ export const IslandWidgetExtraFooter: React.FC<IIslandWidgetExtraFooterProps> = 
 
     useEffect(() => {
         setHasExtraFooter(open);
-    }, [open]);
+    }, [open, setHasExtraFooter]);
 
     return (
-        <div {...htmlDivAttributes} className={clsx(className, styles.islandWidgetExtraFooter)}>
+        <div {...htmlDivAttributes} className={clsx(styles.islandWidgetExtraFooter, className)}>
             <ExpandAnimation expanded={open}>{children}</ExpandAnimation>
         </div>
     );

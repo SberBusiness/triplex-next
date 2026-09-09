@@ -12,8 +12,9 @@ import { IslandWidgetContext } from "./IslandWidgetContext";
 import { ExpandAnimation } from "../ExpandAnimation/ExpandAnimation";
 import { useMobileView } from "../MobileView";
 
+/** Свойства компонента IslandWidget. */
 export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Размер компонента. */
+    /** Размер компонента. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
     /** Рендер-функция Body. */
     renderBody: (props: IIslandWidgetBodyProps) => React.ReactNode;
@@ -21,10 +22,14 @@ export interface IIslandWidgetProps extends React.HTMLAttributes<HTMLDivElement>
     renderFooter?: (props: IIslandWidgetFooterProps) => React.ReactNode;
     /** Рендер-функция Header. */
     renderHeader: (props: IIslandWidgetHeaderProps) => React.ReactNode;
-    /** Отключение возможности сворачивания контента в адаптиве. */
+    /** Отключение возможности сворачивания контента в адаптиве. По умолчанию false. */
     disableAdaptiveCollapsing?: boolean;
 }
 
+/**
+ * Виджет — карточка со сгруппированной информацией, набором связанных действий или отдельной функциональностью.
+ * В адаптиве контент сворачивается по клику на шапку, если не передан disableAdaptiveCollapsing.
+ */
 export const IslandWidget = Object.assign(
     React.forwardRef<HTMLDivElement, IIslandWidgetProps>(
         (
@@ -45,8 +50,7 @@ export const IslandWidget = Object.assign(
             const adaptive = useMobileView();
 
             const handleHeaderClick = (): void => {
-                const newOpen = !open;
-                setOpen(newOpen);
+                setOpen((prevOpen) => !prevOpen);
             };
 
             const expandableContent = adaptive && !disableAdaptiveCollapsing;
@@ -71,8 +75,8 @@ export const IslandWidget = Object.assign(
                         className={clsx(styles.islandWidget, className, {
                             [styles.islandWidgetWithExtraFooter]: hasExtraFooter,
                         })}
-                        data-tx={process.env.npm_package_version}
                         {...rest}
+                        data-tx={process.env.npm_package_version}
                         ref={ref}
                     >
                         <Island type={EIslandType.TYPE_1} size={size} withoutPaddings={true}>
@@ -80,7 +84,7 @@ export const IslandWidget = Object.assign(
                             {expandableContent ? (
                                 <ExpandAnimation expanded={open}>{renderContent()}</ExpandAnimation>
                             ) : (
-                                <>{renderContent()}</>
+                                renderContent()
                             )}
                         </Island>
                     </div>

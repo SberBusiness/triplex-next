@@ -5,6 +5,10 @@ import styles from "../styles/IslandWidgetHeader.module.less";
 /** Свойства компонента IslandWidgetHeaderControls. */
 interface IIslandWidgetHeaderControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+/**
+ * Блок управления в шапке виджета.
+ * Гасит всплытие клика, чтобы взаимодействие с контролами не сворачивало виджет в адаптиве.
+ */
 export const IslandWidgetHeaderControls: React.FC<IIslandWidgetHeaderControlsProps> = ({
     children,
     className,

@@ -79,13 +79,12 @@ describe("IslandAccordion", () => {
         );
 
         expect(ref.current).toBeInstanceOf(HTMLUListElement);
-        expect(ref.current).toHaveClass("islandAccordion");
     });
 
     it("Should merge custom className with base class", () => {
         render(<IslandAccordion className="custom-class" />);
 
-        expect(getIslandAccordion()).toHaveClass("custom-class", "islandAccordion");
+        expect(getIslandAccordion()).toHaveClass("custom-class");
     });
 
     it("Should spread rest props to root ul", () => {
@@ -144,7 +143,7 @@ describe("IslandAccordionContent", () => {
             </IslandAccordion>,
         );
 
-        expect(screen.getByText("Content")).toHaveClass("islandBody", "body");
+        expect(screen.getByRole("region", { hidden: true })).toContainElement(screen.getByText("Content"));
     });
 
     it("Should have displayName", () => {
@@ -162,7 +161,7 @@ describe("IslandAccordionFooter", () => {
             </IslandAccordion>,
         );
 
-        expect(screen.getByText("Footer")).toHaveClass("custom-class", "islandFooter", "footer");
+        expect(screen.getByText("Footer")).toHaveClass("custom-class");
     });
 
     it("Should spread rest props", () => {

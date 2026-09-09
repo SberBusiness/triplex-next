@@ -197,6 +197,16 @@ describe("IslandAccordionItem", () => {
             );
 
             expect(getHeader()).toHaveAttribute("aria-expanded", "true");
+
+            rerender(
+                <IslandAccordion>
+                    <IslandAccordion.Item id={ITEM_ID} title="Title" opened={false}>
+                        Content
+                    </IslandAccordion.Item>
+                </IslandAccordion>,
+            );
+
+            expect(getHeader()).toHaveAttribute("aria-expanded", "false");
         });
 
         it("Should keep last state when opened becomes undefined", () => {
@@ -242,9 +252,10 @@ describe("IslandAccordionItem", () => {
         it("Should keep content collapsed even when opened is true", () => {
             renderItem({ disabled: true, opened: true });
 
-            // aria-expanded отражает opened, но содержимое остаётся свёрнутым.
+            // aria-expanded отражает opened, но содержимое остаётся свёрнутым:
+            // область есть в DOM и скрыта от accessibility tree.
             expect(getHeader()).toHaveAttribute("aria-expanded", "true");
-            expect(getRegion()).toHaveStyle({ visibility: "hidden" });
+            expect(screen.queryByRole("region")).not.toBeInTheDocument();
         });
     });
 
@@ -265,6 +276,24 @@ describe("IslandAccordionItem", () => {
             renderItem({ status: EStepStatus.ACTIVE });
 
             expect(getHeader().textContent).toBe("Title");
+        });
+
+        it("Should show stepHint in tooltip on step hover", async () => {
+            const user = userEvent.setup();
+
+            renderItem({ num: 3, status: EStepStatus.ACTIVE, stepHint: "Step hint" });
+            await user.hover(screen.getByText("3"));
+
+            expect(await screen.findByText("Step hint")).toBeInTheDocument();
+        });
+
+        it("Should not show stepHint when item is disabled", async () => {
+            const user = userEvent.setup();
+
+            renderItem({ num: 3, status: EStepStatus.ACTIVE, stepHint: "Step hint", disabled: true });
+            await user.hover(screen.getByText("3"));
+
+            expect(screen.queryByText("Step hint")).not.toBeInTheDocument();
         });
 
         it("Should not render anything for num 0", () => {
@@ -326,7 +355,8 @@ describe("IslandAccordionItem", () => {
                 </IslandAccordion>,
             );
 
-            const [firstHeader, secondHeader] = Array.from(document.querySelectorAll("button[aria-expanded]"));
+            const firstHeader = screen.getByRole("button", { name: "First" });
+            const secondHeader = screen.getByRole("button", { name: "Second" });
 
             expect(firstHeader.id).not.toBe(secondHeader.id);
         });

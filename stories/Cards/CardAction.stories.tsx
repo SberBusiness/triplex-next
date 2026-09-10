@@ -53,7 +53,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof CardAction>;
+type Story = StoryObj<typeof meta>;
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],

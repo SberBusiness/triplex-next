@@ -190,8 +190,9 @@ describe("CardAction", () => {
 
     it("controlled: selected class follows the selected prop and does not change on click", () => {
         const onToggle = vi.fn();
+        const toggle = vi.fn();
         const { rerender } = render(
-            <CardAction selected={false} toggle={vi.fn()} onToggle={onToggle}>
+            <CardAction selected={false} toggle={toggle} onToggle={onToggle}>
                 card
             </CardAction>,
         );
@@ -201,14 +202,19 @@ describe("CardAction", () => {
 
         fireEvent.click(card);
         expect(card).not.toHaveClass("selected");
+        expect(toggle).toHaveBeenLastCalledWith(true);
         expect(onToggle).not.toHaveBeenCalled();
 
         rerender(
-            <CardAction selected={true} toggle={vi.fn()} onToggle={onToggle}>
+            <CardAction selected={true} toggle={toggle} onToggle={onToggle}>
                 card
             </CardAction>,
         );
         expect(card).toHaveClass("selected");
+
+        // toggle получает значение, обратное текущему selected, а не всегда true.
+        fireEvent.click(card);
+        expect(toggle).toHaveBeenLastCalledWith(false);
     });
 
     it("marks focus as keyboard when it is not preceded by mouse down", () => {

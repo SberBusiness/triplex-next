@@ -16,6 +16,8 @@ tokens:
   - Card.Shadow_Selected
   - Card.Shadow_Selected_Hover
   - Card.Shadow_Focus
+  - Card.Static_General_Background
+  - Card.Static_Secondary_Background
 stories: stories/Cards/CardAction.stories.tsx
 version: "1.0"
 ---
@@ -88,7 +90,7 @@ version: "1.0"
 
 | Часть | Назначение |
 |---|---|
-| `CardAction.Media` | Медийная область в верху карточки. Собственных props нет: изображение задаётся через `style`/`className`, высота — потребителем |
+| `CardAction.Media` | Медийная область вверху карточки. Собственных props нет: изображение задаётся через `style`/`className`, высота — потребителем |
 | `CardAction.Content` | Контентная область; prop `paddingSize` (`ECardContentPaddingSize`: `SM` — 16px, `MD` — 24px, по умолчанию `MD`) |
 | `CardAction.Content.Header` | Заголовок, отступ 16px снизу |
 | `CardAction.Content.Body` | Тело, растягивается на свободную высоту |
@@ -123,8 +125,10 @@ Card.Shadow_Focus
 ```
 
 Тени выбора и фокуса рисуются не на самом элементе, а на псевдоэлементе `::before` через
-внутреннюю CSS-переменную `--card-inner-shadow` — так внутренняя обводка не обрезается
-`overflow: hidden` корневого элемента. Корневой элемент интерактивной карточки дополнительно несёт общий класс из
+внутреннюю CSS-переменную `--card-inner-shadow`. У `::before` стоит `z-index: 10`, чтобы
+внутренняя обводка ложилась поверх фона `CardAction.Media`: inset-тень на самом корне была бы
+перекрыта фонами дочерних элементов. `pointer-events: none` там же не даёт псевдоэлементу
+перехватывать клики. Корневой элемент интерактивной карточки дополнительно несёт общий класс из
 `styles/Card.module.less` (лейаут, скругление), а её собственные состояния — выбор, hover и
 фокус — задаются токенами `Card.Action_*` и `Card.Shadow_*`.
 
@@ -141,6 +145,9 @@ Card.Shadow_Focus
 - `CardAction` — **классовый компонент без `forwardRef`**. `ref` на нём даёт экземпляр класса,
   а не DOM-элемент. Это часть публичного API: перевод на функциональный компонент
   с `forwardRef` сменит ref-target и является breaking change.
+  Все `handle*`-методы (`handleClick`, `handleMouseDown`, `handleKeyDown`, `handleFocus`,
+  `handleBlur`, `handleToggle`) объявлены `public` и вместе с ref-экземпляром входят
+  в наблюдаемую поверхность API — сужение до `private` тоже breaking change.
 - Корневой элемент — `<div>` с `role="button"` и `tabIndex={0}`. И роль, и `tabIndex`
   выставляются до `...attributes`, поэтому потребитель может их переопределить.
 - Имена props (`selected`, `toggle`, `onToggle`, `theme`, `roundingSize`), значения

@@ -62,6 +62,9 @@ const VisualTestsCard = ({ theme, title }: IVisualTestsCardProps) => {
     );
 };
 
+// Фокус может быть только у одного элемента, поэтому в одной story клавиатурная обводка
+// снимается лишь для темы GENERAL. Ветка `.secondary:focus.focusVisible` (своя реализация
+// в Action.module.less) скриншотами не покрыта — осознанный компромисс, а не упущение.
 export const VisualTestsExample = () => (
     <div style={{ width: "448px", display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "16px" }}>
         <VisualTestsCard theme={ECardTheme.GENERAL} title="General selected" />

@@ -35,29 +35,24 @@ const CardBody = () => (
     </CardAction.Content.Body>
 );
 
-export const VisualTestsExample = () => {
-    const [isSelectedFirst, setIsSelectedFirst] = useState(false);
-    const [isSelectedSecond, setIsSelectedSecond] = useState(false);
+interface IVisualTestsCardProps {
+    /** Тема карточки. */
+    theme: ECardTheme;
+    /** Подпись состояния карточки. */
+    title: string;
+}
+
+const VisualTestsCard = ({ theme, title }: IVisualTestsCardProps) => {
+    const [isSelected, setIsSelected] = useState(false);
 
     return (
-        <div style={{ width: "448px", display: "flex", gap: "16px" }}>
-            <CardAction theme={ECardTheme.GENERAL} selected={isSelectedFirst} toggle={setIsSelectedFirst}>
+        <div style={{ width: "216px" }}>
+            <CardAction theme={theme} selected={isSelected} toggle={setIsSelected}>
                 <CardAction.Media style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }} />
                 <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
                     <CardAction.Content.Header>
                         <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                            Title text
-                        </Title>
-                    </CardAction.Content.Header>
-                    <CardBody />
-                </CardAction.Content>
-            </CardAction>
-            <CardAction theme={ECardTheme.GENERAL} selected={isSelectedSecond} toggle={setIsSelectedSecond}>
-                <CardAction.Media style={{ backgroundImage: "url(assets/images/evotor.png)", height: MEDIA_HEIGHT }} />
-                <CardAction.Content paddingSize={ECardContentPaddingSize.MD}>
-                    <CardAction.Content.Header>
-                        <Title tag="div" size={ETitleSize.H3} weight={EFontWeightTitle.REGULAR}>
-                            Title text
+                            {title}
                         </Title>
                     </CardAction.Content.Header>
                     <CardBody />
@@ -66,3 +61,15 @@ export const VisualTestsExample = () => {
         </div>
     );
 };
+
+// Фокус может быть только у одного элемента, поэтому в одной story клавиатурная обводка
+// снимается лишь для темы GENERAL. Ветка `.secondary:focus.focusVisible` (своя реализация
+// в Action.module.less) скриншотами не покрыта — осознанный компромисс, а не упущение.
+export const VisualTestsExample = () => (
+    <div style={{ width: "448px", display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "16px" }}>
+        <VisualTestsCard theme={ECardTheme.GENERAL} title="General selected" />
+        <VisualTestsCard theme={ECardTheme.GENERAL} title="General focused" />
+        <VisualTestsCard theme={ECardTheme.SECONDARY} title="Secondary selected" />
+        <VisualTestsCard theme={ECardTheme.SECONDARY} title="Secondary default" />
+    </div>
+);

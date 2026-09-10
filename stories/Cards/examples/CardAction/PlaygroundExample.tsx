@@ -21,14 +21,12 @@ import { DefaulticonStrokePrdIcon20 } from "@sberbusiness/icons-next";
 
 const MEDIA_HEIGHT = "129px";
 
-type TCardActionPlaygroundProps = Pick<
-    ICardActionProps,
-    "roundingSize" | "theme" | "selected" | "onToggle" | "toggle"
-> & {
+export type PlaygroundArgs = Pick<ICardActionProps, "roundingSize" | "theme" | "selected" | "onToggle" | "toggle"> & {
+    /** Размер внутреннего отступа контента карточки (prop CardAction.Content). */
     paddingSize: ECardContentPaddingSize;
 };
 
-export const PlaygroundExample = (args: TCardActionPlaygroundProps) => {
+export const PlaygroundExample = (args: PlaygroundArgs) => {
     const { paddingSize, theme, ...cardArgs } = args;
     const [isSelected, setIsSelected] = useState(args?.selected ?? false);
 

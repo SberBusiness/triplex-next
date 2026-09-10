@@ -9,4 +9,3 @@ export { default as RoundingSizesExampleSource } from "./RoundingSizesExample?ra
 export * from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
 export * from "./VisualTests";
-export { default as VisualTestsExampleSource } from "./VisualTests?raw";

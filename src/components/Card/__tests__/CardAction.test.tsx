@@ -1,8 +1,12 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { CardAction } from "@sberbusiness/triplex-next/components/Card";
-import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
+import {
+    ECardContentPaddingSize,
+    ECardRoundingSize,
+    ECardTheme,
+} from "@sberbusiness/triplex-next/components/Card/enums";
 import {
     mapCardRoundingSizeToCssClass,
     mapCardThemeToCssClass,
@@ -135,5 +139,200 @@ describe("CardAction", () => {
         expect(onKeyDown).toHaveBeenCalledTimes(1);
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledTimes(1);
+    });
+
+    it("merges className and spreads rest attributes to the root element", () => {
+        render(
+            <CardAction className="customClassName" aria-label="Card label" data-test="card">
+                card
+            </CardAction>,
+        );
+
+        const card = getCard();
+        expect(card).toHaveClass("card", "action", "customClassName");
+        expect(card).toHaveAttribute("aria-label", "Card label");
+        expect(card).toHaveAttribute("data-test", "card");
+    });
+
+    it("allows overriding role and tabIndex through rest attributes", () => {
+        render(
+            <CardAction role="checkbox" tabIndex={-1}>
+                card
+            </CardAction>,
+        );
+
+        const card = screen.getByRole("checkbox");
+        expect(card).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("renders compound subcomponents", () => {
+        render(
+            <CardAction>
+                <CardAction.Media data-testid="media" />
+                <CardAction.Content paddingSize={ECardContentPaddingSize.SM} data-testid="content">
+                    <CardAction.Content.Header>header</CardAction.Content.Header>
+                    <CardAction.Content.Body>body</CardAction.Content.Body>
+                    <CardAction.Content.Footer>footer</CardAction.Content.Footer>
+                </CardAction.Content>
+            </CardAction>,
+        );
+
+        expect(screen.getByTestId("media")).toHaveClass("cardMedia");
+        expect(screen.getByTestId("content")).toHaveClass("cardContent", "paddingSM");
+        expect(screen.getByText("header")).toHaveClass("cardContentHeader");
+        expect(screen.getByText("body")).toHaveClass("cardContentBody");
+        expect(screen.getByText("footer")).toHaveClass("cardContentFooter");
+    });
+
+    it("applies the default padding size and merges className on compound subcomponents", () => {
+        render(
+            <CardAction>
+                <CardAction.Media className="customMediaClassName" data-testid="media" />
+                <CardAction.Content className="customContentClassName" data-testid="content">
+                    content
+                </CardAction.Content>
+            </CardAction>,
+        );
+
+        expect(screen.getByTestId("media")).toHaveClass("cardMedia", "customMediaClassName");
+        expect(screen.getByTestId("content")).toHaveClass("cardContent", "paddingMD", "customContentClassName");
+    });
+
+    it("uncontrolled: toggles selected class and does not call toggle", () => {
+        const toggle = vi.fn();
+        render(<CardAction toggle={toggle}>card</CardAction>);
+
+        const card = getCard();
+        expect(card).not.toHaveClass("selected");
+
+        fireEvent.click(card);
+        expect(card).toHaveClass("selected");
+
+        fireEvent.click(card);
+        expect(card).not.toHaveClass("selected");
+        expect(toggle).not.toHaveBeenCalled();
+    });
+
+    it("treats an explicit selected={undefined} as uncontrolled", () => {
+        const toggle = vi.fn();
+        const onToggle = vi.fn();
+        render(
+            <CardAction selected={undefined} toggle={toggle} onToggle={onToggle}>
+                card
+            </CardAction>,
+        );
+
+        const card = getCard();
+        fireEvent.click(card);
+
+        expect(card).toHaveClass("selected");
+        expect(toggle).not.toHaveBeenCalled();
+        expect(onToggle).toHaveBeenCalledWith(true);
+    });
+
+    it("controlled: selected class follows the selected prop and does not change on click", () => {
+        const onToggle = vi.fn();
+        const toggle = vi.fn();
+        const { rerender } = render(
+            <CardAction selected={false} toggle={toggle} onToggle={onToggle}>
+                card
+            </CardAction>,
+        );
+
+        const card = getCard();
+        expect(card).not.toHaveClass("selected");
+
+        fireEvent.click(card);
+        expect(card).not.toHaveClass("selected");
+        expect(toggle).toHaveBeenLastCalledWith(true);
+        expect(onToggle).not.toHaveBeenCalled();
+
+        rerender(
+            <CardAction selected={true} toggle={toggle} onToggle={onToggle}>
+                card
+            </CardAction>,
+        );
+        expect(card).toHaveClass("selected");
+
+        // toggle получает значение, обратное текущему selected, а не всегда true.
+        fireEvent.click(card);
+        expect(toggle).toHaveBeenLastCalledWith(false);
+    });
+
+    it("marks focus as keyboard when it is not preceded by mouse down", () => {
+        render(<CardAction>card</CardAction>);
+
+        const card = getCard();
+        fireEvent.focus(card);
+        expect(card).toHaveClass("focusVisible");
+
+        fireEvent.blur(card);
+        expect(card).not.toHaveClass("focusVisible");
+    });
+
+    it("does not mark focus as keyboard when it follows mouse down", () => {
+        render(<CardAction>card</CardAction>);
+
+        const card = getCard();
+        fireEvent.mouseDown(card);
+        fireEvent.focus(card);
+
+        expect(card).not.toHaveClass("focusVisible");
+    });
+
+    it("prevents default on Space and keeps it on Enter", () => {
+        render(<CardAction>card</CardAction>);
+
+        const card = getCard();
+        expect(fireEvent.keyDown(card, { key: " ", keyCode: 32 })).toBe(false);
+        expect(fireEvent.keyDown(card, { key: "Enter", keyCode: 13 })).toBe(true);
+    });
+
+    it("does not toggle on keys other than Space and Enter", () => {
+        const onToggle = vi.fn();
+        render(<CardAction onToggle={onToggle}>card</CardAction>);
+
+        const card = getCard();
+        fireEvent.keyDown(card, { key: "a", keyCode: 65 });
+
+        expect(onToggle).not.toHaveBeenCalled();
+        expect(card).not.toHaveClass("selected");
+    });
+
+    it("exposes displayName and compound components", () => {
+        expect(CardAction.displayName).toBe("CardAction");
+        expect(CardAction.Content.displayName).toBe("CardContent");
+        expect(CardAction.Media.displayName).toBe("CardMedia");
+    });
+
+    // Оба вызова внутри одного act: именно батчинг ловит регрессию. Со снимком состояния,
+    // взятым до setState, оба колбэка получали бы true при итоговом состоянии «не выбрана».
+    // Если разнести вызовы по отдельным act, обновления флашатся поштучно и результат
+    // одинаков и для снимка, и для актуального состояния — такой тест регрессию не поймает.
+    it("reports the actual state to onToggle when two handleToggle calls are batched", () => {
+        const onToggle = vi.fn();
+        const ref = React.createRef<CardAction>();
+        render(
+            <CardAction ref={ref} onToggle={onToggle}>
+                card
+            </CardAction>,
+        );
+
+        act(() => {
+            ref.current?.handleToggle();
+            ref.current?.handleToggle();
+        });
+
+        expect(onToggle.mock.calls.map(([value]) => value)).toEqual([false, false]);
+        expect(getCard()).not.toHaveClass("selected");
+    });
+
+    // Инвариант публичного API: ref даёт экземпляр класса, а не DOM-элемент.
+    // Перевод на функциональный компонент с forwardRef сменил бы ref-target — это breaking change.
+    it("exposes the class instance through ref", () => {
+        const ref = React.createRef<CardAction>();
+        render(<CardAction ref={ref}>card</CardAction>);
+
+        expect(ref.current).toBeInstanceOf(CardAction);
     });
 });

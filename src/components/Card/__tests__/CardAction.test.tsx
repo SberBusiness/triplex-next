@@ -213,6 +213,23 @@ describe("CardAction", () => {
         expect(toggle).not.toHaveBeenCalled();
     });
 
+    it("treats an explicit selected={undefined} as uncontrolled", () => {
+        const toggle = vi.fn();
+        const onToggle = vi.fn();
+        render(
+            <CardAction selected={undefined} toggle={toggle} onToggle={onToggle}>
+                card
+            </CardAction>,
+        );
+
+        const card = getCard();
+        fireEvent.click(card);
+
+        expect(card).toHaveClass("selected");
+        expect(toggle).not.toHaveBeenCalled();
+        expect(onToggle).toHaveBeenCalledWith(true);
+    });
+
     it("controlled: selected class follows the selected prop and does not change on click", () => {
         const onToggle = vi.fn();
         const toggle = vi.fn();

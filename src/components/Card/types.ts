@@ -13,7 +13,7 @@ export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface ICardActionProps extends ICardProps {
     /** Обработчик изменения состояния выбора. Вызывается с новым значением selected. */
     onToggle?: (selected: boolean) => void;
-    /** Состояние выбора в контролируемом режиме. Если prop не передан при монтировании, карточка работает в неконтролируемом режиме. */
+    /** Состояние выбора в контролируемом режиме. Режим определяется при монтировании по условию selected !== undefined: при selected === undefined (в том числе явном) карточка работает в неконтролируемом режиме. */
     selected?: boolean;
     /** Запрос на смену состояния выбора в контролируемом режиме. Вызывается со следующим значением selected. */
     toggle?: (selected: boolean) => void;

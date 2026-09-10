@@ -1,11 +1,11 @@
-import React, { useRef, useLayoutEffect, useMemo } from "react";
+import React, { useRef, useLayoutEffect, useCallback } from "react";
 import clsx from "clsx";
 import { TextFieldBase, ITextFieldBaseProps } from "../TextField/TextFieldBase";
 import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormField";
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition, createSizeToClassNameMap } from "../../utils";
-import { createPlaceholder, setFallbackCaret } from "./utils";
+import { createPlaceholder, getFormattedValue, setFallbackCaret, setForwardedRef } from "./utils";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/AmountField.module.less";
 
@@ -13,26 +13,32 @@ import styles from "./styles/AmountField.module.less";
 export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children"> {
     /** Свойства поля ввода. */
     inputProps: Omit<IFormFieldInputProps, "type" | "maxLength" | "onChange" | "inputMode" | "autoComplete"> & {
-        /** Значение. */
+        /** Значение. Хранится без разделителей разрядов, с точкой в роли десятичного разделителя ("1234.56"). */
         value: string;
-        /** Обработчик изменения значения. */
+        /** Обработчик изменения значения. Получает нормализованное значение, а не то, что видно в поле. */
         onChange: (value: string) => void;
         /** Ссылка на HTML-элемент поля ввода. */
         ref?: React.Ref<HTMLInputElement>;
     };
-    /** Наименование валюты. */
+    /** Наименование валюты. Отображается справа от значения, пока значение не пустое. */
     currency?: string;
-    /** Максимальное количество знаков перед запятой. */
+    /** Максимальное количество знаков перед запятой. По умолчанию 16. */
     maxIntegerDigits?: number;
-    /** Количество знаков после запятой. */
+    /** Количество знаков после запятой. По умолчанию 2. */
     fractionDigits?: number;
-    /** Обработчик очищения значения. */
+    /** Обработчик очищения значения. Если передан, в постфиксе поля отображается кнопка очистки. */
     onClear?: () => void;
 }
 
 /** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
+/**
+ * Поле ввода денежной суммы.
+ *
+ * Форматирует значение во время ввода (разряды через пробел, запятая в роли десятичного разделителя)
+ * и удерживает каретку в осмысленной позиции, а наружу отдаёт нормализованное значение вида "1234.56".
+ */
 export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
     (
         {
@@ -51,87 +57,56 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
         const placeholder = inputProps.placeholder || createPlaceholder(fractionDigits);
 
         const inputRef = useRef<HTMLInputElement | null>(null);
-        const core = useRef<AmountBaseInputCore>();
-        if (core.current === undefined) core.current = new AmountBaseInputCore(maxIntegerDigits, fractionDigits);
+        const coreRef = useRef<AmountBaseInputCore | null>(null);
 
+        if (coreRef.current === null) {
+            coreRef.current = new AmountBaseInputCore(maxIntegerDigits, fractionDigits);
+        }
+
+        const core = coreRef.current;
+        const formattedValue = getFormattedValue(core, inputProps.value, maxIntegerDigits, fractionDigits);
+
+        // Возвращаем каретку в рассчитанную ядром позицию: React после перерисовки ставит её в конец значения.
+        // setCaretPosition ничего не делает, если поле не в фокусе.
         useLayoutEffect(() => {
-            if (core.current && inputRef.current == document.activeElement)
-                setCaretPosition(inputRef.current, Math.max(core.current.caret, 0));
-        }, [inputProps.value]);
-
-        /** Функция, возвращающая отформатированное значение. */
-        const getFormattedValue = () => {
-            if (!core.current) return "";
-
-            if (
-                inputProps.value != core.current.value ||
-                maxIntegerDigits != core.current.maxIntegerDigits ||
-                fractionDigits != core.current.fractionDigits
-            ) {
-                core.current.maxIntegerDigits = maxIntegerDigits;
-                core.current.fractionDigits = fractionDigits;
-                core.current.apply(inputProps.value, inputProps.value.length);
-            }
-
-            core.current.cache.formattedValue = core.current.formattedValue;
-
-            return core.current.formattedValue;
-        };
-
-        const formattedValue = getFormattedValue();
+            setCaretPosition(inputRef.current, Math.max(core.caret, 0));
+        }, [inputProps.value, core]);
 
         /** Обработчик изменения значения. */
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            if (!core.current) return;
-
             const caret = event.target.selectionStart ?? event.target.value.length;
 
-            core.current.apply(event.target.value, caret);
+            core.apply(event.target.value, caret);
 
-            setFallbackCaret(event.target, core.current, fractionDigits);
+            setFallbackCaret(event.target, core, fractionDigits);
 
-            inputProps.onChange(core.current.value);
+            inputProps.onChange(core.value);
         };
 
         /** Обработчик нажатия клавиши. */
         const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-            if (!core.current) return;
-
-            core.current.cache.key = event.key;
+            core.cache.key = event.key;
 
             inputProps.onKeyDown?.(event);
         };
 
         /** Обработчик выбора текста. */
         const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
-            if (!core.current) return;
-
-            core.current.cache.key = "";
-            core.current.cache.selectionStart = event.currentTarget.selectionStart;
-            core.current.cache.selectionEnd = event.currentTarget.selectionEnd;
-            core.current.cache.selectionDirection = event.currentTarget.selectionDirection;
+            core.cache.key = "";
+            core.cache.selectionStart = event.currentTarget.selectionStart;
+            core.cache.selectionEnd = event.currentTarget.selectionEnd;
+            core.cache.selectionDirection = event.currentTarget.selectionDirection;
 
             inputProps.onSelect?.(event);
         };
 
-        const mergedInputRef = useMemo(() => {
-            const externalRef = inputProps.ref;
-
-            if (externalRef === undefined) {
-                return (instance: HTMLInputElement | null) => {
-                    inputRef.current = instance;
-                };
-            }
-
-            return (instance: HTMLInputElement | null) => {
+        const setInputRef = useCallback(
+            (instance: HTMLInputElement | null) => {
                 inputRef.current = instance;
-                if (typeof externalRef === "function") {
-                    externalRef(instance);
-                } else {
-                    (externalRef as React.MutableRefObject<HTMLInputElement | null>).current = instance;
-                }
-            };
-        }, [inputProps.ref]);
+                setForwardedRef(inputProps.ref, instance);
+            },
+            [inputProps.ref],
+        );
 
         const renderPostfix = () => {
             if (onClear !== undefined) {
@@ -175,10 +150,12 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
                         onKeyDown={handleKeyDown}
                         onSelect={handleSelect}
                         onChange={handleChange}
-                        ref={mergedInputRef}
+                        ref={setInputRef}
                     />
                 </div>
             </TextFieldBase>
         );
     },
 );
+
+AmountField.displayName = "AmountField";

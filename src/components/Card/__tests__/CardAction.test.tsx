@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { CardAction } from "@sberbusiness/triplex-next/components/Card";
 import {
@@ -303,6 +303,28 @@ describe("CardAction", () => {
         expect(CardAction.displayName).toBe("CardAction");
         expect(CardAction.Content.displayName).toBe("CardContent");
         expect(CardAction.Media.displayName).toBe("CardMedia");
+    });
+
+    // Оба вызова внутри одного act: именно батчинг ловит регрессию. Со снимком состояния,
+    // взятым до setState, оба колбэка получали бы true при итоговом состоянии «не выбрана».
+    // Если разнести вызовы по отдельным act, обновления флашатся поштучно и результат
+    // одинаков и для снимка, и для актуального состояния — такой тест регрессию не поймает.
+    it("reports the actual state to onToggle when two handleToggle calls are batched", () => {
+        const onToggle = vi.fn();
+        const ref = React.createRef<CardAction>();
+        render(
+            <CardAction ref={ref} onToggle={onToggle}>
+                card
+            </CardAction>,
+        );
+
+        act(() => {
+            ref.current?.handleToggle();
+            ref.current?.handleToggle();
+        });
+
+        expect(onToggle.mock.calls.map(([value]) => value)).toEqual([false, false]);
+        expect(getCard()).not.toHaveClass("selected");
     });
 
     // Инвариант публичного API: ref даёт экземпляр класса, а не DOM-элемент.

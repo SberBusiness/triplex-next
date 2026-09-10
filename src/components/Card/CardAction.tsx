@@ -165,14 +165,16 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
      */
     public handleToggle = (): void => {
         const { toggle, selected, onToggle } = this.props;
-        const { isControlled, isSelected } = this.state;
+        const { isControlled } = this.state;
 
         if (isControlled) {
             toggle?.(!selected);
         } else {
+            // Колбэк setState выполняется после применения обновления, поэтому onToggle
+            // получает актуальное состояние, а не снимок, сделанный до вызова.
             this.setState(
                 (prevState) => ({ isSelected: !prevState.isSelected }),
-                () => onToggle?.(!isSelected),
+                () => onToggle?.(this.state.isSelected),
             );
         }
     };

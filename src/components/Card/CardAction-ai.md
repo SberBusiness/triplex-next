@@ -195,8 +195,8 @@ Card.Shadow_Focus
   состояния выбора, роли `button` и клавиатурной активации.
 - `CardContent` (`CardAction.Content`) — контентная область карточки с `paddingSize`;
   отдельного AI.md нет, описана выше в «Составных частях».
-- `CardMedia` (`CardAction.Media`) — медийная область; тривиальная обёртка `className +
-  ...rest`, отдельного AI.md нет.
+- `CardMedia` (`CardAction.Media`) — медийная область; принимает `className` и `...rest`,
+  но **не `ref`** (см. «Инварианты»), отдельного AI.md нет.
 
 ---
 

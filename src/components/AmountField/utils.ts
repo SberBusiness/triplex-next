@@ -51,7 +51,7 @@ export function setForwardedRef<T>(ref: React.Ref<T> | undefined, instance: T | 
  * @param maxIntegerDigits Максимальное количество знаков перед запятой.
  * @param fractionDigits Количество знаков после запятой.
  */
-export function getFormattedValue(
+export function syncCoreAndGetFormattedValue(
     core: AmountBaseInputCore,
     value: string,
     maxIntegerDigits: number,

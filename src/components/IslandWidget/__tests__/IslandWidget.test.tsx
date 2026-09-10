@@ -204,6 +204,32 @@ describe("IslandWidget", () => {
         expect(screen.getByText("Body content")).toBeVisible();
     });
 
+    it("Should not toggle the header open state on click when adaptive collapsing is disabled", async () => {
+        const user = userEvent.setup();
+
+        mockedUseMatchMedia.mockReturnValue(true);
+
+        render(
+            <IslandWidget
+                renderBody={defaultRenderBody}
+                renderHeader={(props) => (
+                    <IslandWidget.Header {...props} data-testid="header">
+                        Header content
+                    </IslandWidget.Header>
+                )}
+                disableAdaptiveCollapsing={true}
+            />,
+        );
+
+        const header = screen.getByTestId("header");
+        const classNameBefore = header.className;
+
+        await user.click(header);
+
+        // Обработчик не навешивается вовсе, поэтому набор классов шапки не меняется.
+        expect(header.className).toBe(classNameBefore);
+    });
+
     it("Should keep content visible on header click on desktop", async () => {
         const user = userEvent.setup();
 

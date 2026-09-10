@@ -19,9 +19,6 @@
         right: 0;
         height: 32px;
         border-radius: 0 0 24px 24px;
-        // !important достался от первоначальной реализации: конкурирующего правила на этот
-        // псевдоэлемент внутри библиотеки нет, поэтому помета выглядит защитой от
-        // переопределения снаружи. Снятие не проверено визуально — трогать отдельной задачей.
-        box-shadow: var(--triplex-next-IslandWidget-ExtraFooter_Shadow) !important;
+        box-shadow: var(--triplex-next-IslandWidget-ExtraFooter_Shadow);
     }
 }

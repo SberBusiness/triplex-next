@@ -84,7 +84,7 @@ export const IslandWidget = Object.assign(
                         ref={ref}
                     >
                         <Island type={EIslandType.TYPE_1} size={size} withoutPaddings={true}>
-                            <div onClick={adaptive ? handleHeaderClick : undefined}>{renderHeader({})}</div>
+                            <div onClick={expandableContent ? handleHeaderClick : undefined}>{renderHeader({})}</div>
                             {expandableContent ? (
                                 <ExpandAnimation expanded={open}>{renderContent()}</ExpandAnimation>
                             ) : (

@@ -7,13 +7,28 @@ import { ECarouselScrollMode, ECarouselOrientation } from "./enums";
 import { ButtonBase } from "../Button/ButtonBase";
 import styles from "./styles/Carousel.module.less";
 
+interface ICarouselIndicatorsStyle extends React.CSSProperties {
+    "--triplex-next-runtime-carousel-indicators-size": string;
+}
+
+interface ICarouselIndicatorsIndicatorStyle extends React.CSSProperties {
+    "--triplex-next-runtime-carousel-indicators-indicator-scale": number;
+    "--triplex-next-runtime-carousel-indicators-indicator-translate": string;
+}
+
 const ORIENTATION_TO_NAVIGATION_KEYS = {
     [ECarouselOrientation.HORIZONTAL]: ["ArrowRight", "ArrowLeft"],
     [ECarouselOrientation.VERTICAL]: ["ArrowDown", "ArrowUp"],
 } as const;
 
+const WINDOW_SIZE = 5;
+const GAP = 8;
+const SIZE_NORMAL = 16;
+const SIZE_ACTIVE = 24;
+const SIZE_EDGE = 8;
+
 export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndicatorsProps>(
-    ({ className, onKeyDown, indicatorProps, renderIndicator, ...restProps }, ref) => {
+    ({ className, onKeyDown, indicatorProps, ...restProps }, ref) => {
         const { currentIndex, orientation, scrollMode, activeIndices, goToSlide, orientationRef, currentIndexRef } =
             useContext(CarouselContext);
         const containerRef = useRef<HTMLDivElement | null>(null);
@@ -140,16 +155,67 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [currentIndex]);
 
-        if (scrollMode === ECarouselScrollMode.ITEM || totalPages < 1) return null;
+        if (scrollMode === ECarouselScrollMode.ITEM || totalPages < 1) {
+            return null;
+        }
 
         const currentIndexInArray = activeIndices.indexOf(currentIndex);
 
         let startWindowIndex = 0;
-        if (totalPages > 5) {
-            startWindowIndex = currentIndexInArray - Math.floor(5 / 2);
-            startWindowIndex = Math.max(0, Math.min(startWindowIndex, totalPages - 5));
+        if (totalPages > WINDOW_SIZE) {
+            startWindowIndex = currentIndexInArray - Math.floor(WINDOW_SIZE / 2);
+            startWindowIndex = Math.max(0, Math.min(startWindowIndex, totalPages - WINDOW_SIZE));
         }
-        const endWindowIndex = startWindowIndex + 5;
+        const endWindowIndex = startWindowIndex + WINDOW_SIZE;
+
+        const startWindowOffset = startWindowIndex * (SIZE_EDGE + GAP);
+
+        let currentOffset = 0;
+
+        const indicatorsData = activeIndices.map((slideIndex, index) => {
+            const page = index + 1;
+            const hidden = index < startWindowIndex || index >= endWindowIndex;
+            const selected = currentIndex === slideIndex;
+
+            const startEdge = index === startWindowIndex && startWindowIndex > 0;
+            const endEdge = index === endWindowIndex - 1 && endWindowIndex < totalPages;
+
+            let size = SIZE_NORMAL;
+            let scale = SIZE_NORMAL / SIZE_ACTIVE;
+
+            if (selected) {
+                size = SIZE_ACTIVE;
+                scale = 1;
+            } else if (startEdge || endEdge || hidden) {
+                size = SIZE_EDGE;
+                scale = SIZE_EDGE / SIZE_ACTIVE;
+            }
+
+            const rawOffset = currentOffset;
+            currentOffset += size + GAP;
+
+            const translate = rawOffset - startWindowOffset;
+
+            return {
+                slideIndex,
+                index,
+                page,
+                selected,
+                hidden,
+                size,
+                scale,
+                translate,
+            };
+        });
+
+        const lastVisibleIndex = Math.min(endWindowIndex - 1, totalPages - 1);
+        const lastVisibleItem = indicatorsData[lastVisibleIndex];
+        const containerSize = lastVisibleItem ? lastVisibleItem.translate + lastVisibleItem.size : 0;
+
+        const style: ICarouselIndicatorsStyle = {
+            ...restProps.style,
+            "--triplex-next-runtime-carousel-indicators-size": `${containerSize}px`,
+        };
 
         return (
             <div
@@ -159,16 +225,10 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
                 aria-orientation={orientation}
                 onKeyDown={handleKeyDown}
                 ref={combinedRef}
+                style={style}
             >
-                {activeIndices.map((slideIndex, index) => {
-                    const visible = index >= startWindowIndex && index < endWindowIndex;
-                    if (!visible) return null;
-
-                    const selected = currentIndex === slideIndex;
-                    const page = index + 1;
-
-                    const startEdge = index === startWindowIndex && startWindowIndex > 0;
-                    const endEdge = index === endWindowIndex - 1 && endWindowIndex < totalPages;
+                {indicatorsData.map((item) => {
+                    const { slideIndex, index, page, selected, hidden, scale, translate } = item;
 
                     const resolvedIndicatorProps =
                         typeof indicatorProps === "function"
@@ -178,36 +238,26 @@ export const CarouselIndicators = React.forwardRef<HTMLDivElement, ICarouselIndi
                     const indicatorRef = getIndicatorRef(slideIndex);
                     const indicatorClickHandler = getIndicatorClickHandler(slideIndex);
 
+                    const indicatorStyle: ICarouselIndicatorsIndicatorStyle = {
+                        ...resolvedIndicatorProps?.style,
+                        "--triplex-next-runtime-carousel-indicators-indicator-scale": scale,
+                        "--triplex-next-runtime-carousel-indicators-indicator-translate": `${translate}px`,
+                    };
+
                     const providedIndicatorProps: TCarouselIndicatorProps = {
                         ...resolvedIndicatorProps,
                         className: clsx(
                             styles.indicator,
-                            {
-                                [styles.active]: selected,
-                                [styles.startEdge]: startEdge,
-                                [styles.endEdge]: endEdge,
-                            },
+                            { [styles.active]: selected },
                             resolvedIndicatorProps?.className,
                         ),
                         role: "tab",
                         tabIndex: selected ? 0 : -1,
                         "aria-selected": selected,
+                        "aria-hidden": hidden ? true : undefined,
                         onClick: indicatorClickHandler,
+                        style: indicatorStyle,
                     };
-
-                    if (renderIndicator) {
-                        return (
-                            <React.Fragment key={slideIndex}>
-                                {renderIndicator({
-                                    index,
-                                    page,
-                                    selected,
-                                    props: providedIndicatorProps,
-                                    ref: indicatorRef,
-                                })}
-                            </React.Fragment>
-                        );
-                    }
 
                     return <ButtonBase key={slideIndex} {...providedIndicatorProps} ref={indicatorRef} />;
                 })}

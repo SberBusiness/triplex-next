@@ -120,6 +120,45 @@ describe("AmountField", () => {
         expect(inputRef).toHaveBeenCalledWith(screen.getByRole("textbox"));
     });
 
+    test("restores caret position after rerender while the field is focused", () => {
+        const Wrapper = () => {
+            const [value, setValue] = useState("");
+            return <AmountField label="Label" inputProps={{ value, onChange: setValue }} />;
+        };
+
+        render(<Wrapper />);
+        const input = screen.getByRole("textbox") as HTMLInputElement;
+        act(() => {
+            input.focus();
+        });
+
+        act(() => {
+            fireEvent.change(input, { target: { value: "1234", selectionStart: 4, selectionEnd: 4 } });
+        });
+
+        expect(input.value).toBe("1 234,00");
+        // React после перерисовки ставит каретку в конец значения — эффект возвращает её в позицию,
+        // рассчитанную ядром: после введённых цифр, а не после дописанных нулей.
+        expect(input.selectionStart).toBe(5);
+    });
+
+    test("does not move the caret while the field is not focused", () => {
+        const setSelectionRange = vi.spyOn(HTMLInputElement.prototype, "setSelectionRange");
+        const Test = ({ value }: { value: string }) => (
+            <AmountField label="Label" inputProps={{ value, onChange: vi.fn() }} />
+        );
+
+        const { rerender } = render(<Test value="1234.56" />);
+        setSelectionRange.mockClear();
+
+        rerender(<Test value="7654.32" />);
+
+        // Поле не в фокусе — setCaretPosition обязан быть no-op, иначе перерисовка украдёт каретку
+        // у элемента, с которым сейчас работает пользователь.
+        expect(setSelectionRange).not.toHaveBeenCalled();
+        setSelectionRange.mockRestore();
+    });
+
     test("does not reattach a stable callback inputProps.ref on rerender", () => {
         const inputRef = vi.fn();
         const { rerender } = render(

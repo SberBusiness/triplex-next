@@ -9,7 +9,6 @@ import { getResizeCallback, resetResizeCallback, mockElementSize } from "../../.
 interface IWrapperProps {
     scrollMode?: ECarouselScrollMode;
     orientation?: ECarouselOrientation;
-    renderIndicator?: ICarouselIndicatorsProps["renderIndicator"];
     indicatorProps?: ICarouselIndicatorsProps["indicatorProps"];
     viewportPadding?: TCarouselViewportPadding;
     onKeyDown?: ICarouselIndicatorsProps["onKeyDown"];
@@ -18,7 +17,6 @@ interface IWrapperProps {
 const StandardCarouselWrapper: React.FC<IWrapperProps> = ({
     scrollMode = ECarouselScrollMode.PAGE,
     orientation = ECarouselOrientation.HORIZONTAL,
-    renderIndicator,
     indicatorProps,
     viewportPadding,
     onKeyDown,
@@ -31,7 +29,7 @@ const StandardCarouselWrapper: React.FC<IWrapperProps> = ({
                 ))}
             </Carousel.Track>
         </Carousel.Viewport>
-        <Carousel.Indicators renderIndicator={renderIndicator} indicatorProps={indicatorProps} onKeyDown={onKeyDown} />
+        <Carousel.Indicators indicatorProps={indicatorProps} onKeyDown={onKeyDown} />
     </Carousel>
 );
 
@@ -147,22 +145,6 @@ describe("CarouselIndicators Component", () => {
             expect(mockFactory).toHaveBeenCalled();
             expect(indicators.at(0)).toHaveAttribute("data-custom", "test-attr");
             expect(indicators.at(0)).toHaveClass("custom-class");
-        });
-
-        it("should support structured layout customisation through renderIndicator prop", () => {
-            const spyRender = vi.fn(({ page, props, ref }) => (
-                <button {...props} ref={ref}>
-                    Page {page}
-                </button>
-            ));
-            render(<StandardCarouselWrapper renderIndicator={spyRender} />);
-            act(() => getResizeCallback()?.());
-
-            expect(spyRender).toHaveBeenCalled();
-
-            const tabs = screen.getAllByRole("tab");
-            expect(tabs.at(0)).toBeInTheDocument();
-            expect(tabs.at(0)).toHaveTextContent("Page 1");
         });
     });
 

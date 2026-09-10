@@ -73,10 +73,18 @@ describe("AmountBaseInputCore", () => {
         const core = new AmountBaseInputCore(16, 2);
 
         core.apply("1234,56", "1234,56".length);
+
         core.fractionDigits = 0;
         core.apply("1234", 4);
 
         expect(core.value).toBe("1234");
         expect(core.formattedValue).toBe("1 234");
+
+        core.maxIntegerDigits = 3;
+        core.apply("1234", 4);
+
+        // Лишняя цифра за пределами maxIntegerDigits отбрасывается.
+        expect(core.value).toBe("123");
+        expect(core.formattedValue).toBe("123");
     });
 });

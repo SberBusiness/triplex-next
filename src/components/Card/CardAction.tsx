@@ -13,21 +13,28 @@ import clsx from "clsx";
 import actionStyles from "./styles/Action.module.less";
 import cardStyles from "./styles/Card.module.less";
 
-/** Состояния интерактивной карточки. */
+/** Состояние интерактивной карточки. */
 interface ICardActionState {
-    /** Выбрана или нет. */
+    /** Выбрана карточка или нет. Используется только в неконтролируемом режиме. */
     isSelected: boolean;
-    /** Контролируемая или нет. */
+    /** Контролируется ли состояние выбора извне. Определяется один раз при монтировании по наличию prop selected. */
     isControlled: boolean;
-    /** Источник фокуса. */
+    /** Источник фокуса. Обводка фокуса показывается только для EFocusSource.KEYBOARD. */
     focusSource: EFocusSource;
 }
 
-/** Компонент "Интерактивная карточка". */
+/**
+ * Компонент "Интерактивная карточка".
+ * Работает в двух режимах: неконтролируемом — состояние выбора хранится внутри компонента, и
+ * контролируемом (передан prop selected) — состояние задаётся снаружи, а компонент сообщает о
+ * запросе на его смену через prop toggle.
+ */
 export class CardAction extends React.Component<ICardActionProps, ICardActionState> {
     public static displayName = "CardAction";
 
+    /** Контент карточки. */
     public static Content = CardContent;
+    /** Медийный элемент карточки. */
     public static Media = CardMedia;
 
     public state = {
@@ -35,6 +42,9 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         isControlled: this.props.selected !== undefined,
         isSelected: !!this.props.selected,
     };
+
+    /** Ссылка на корневой элемент карточки. */
+    private ref = React.createRef<HTMLDivElement>();
 
     public componentDidUpdate(prevProps: Readonly<ICardActionProps>): void {
         const { selected, onToggle } = this.props;
@@ -44,18 +54,18 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         }
     }
 
-    private ref = React.createRef<HTMLDivElement>();
-
     public render(): JSX.Element {
         const {
             children,
             className,
+            // Обработчики вызываются из собственных handle*-методов, поэтому не попадают в attributes напрямую.
             onClick,
             onMouseDown,
             onKeyDown,
             onFocus,
             onBlur,
             roundingSize = ECardRoundingSize.MD,
+            // onToggle и toggle не являются DOM-атрибутами и исключаются из attributes.
             onToggle,
             selected,
             toggle,
@@ -94,6 +104,7 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         );
     }
 
+    /** Обработчик клика по карточке. Переключает состояние выбора. */
     public handleClick = (event: React.MouseEvent<HTMLDivElement>): void => {
         const { onClick } = this.props;
 
@@ -101,16 +112,18 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         this.handleToggle();
     };
 
+    /** Обработчик нажатия мышью. Запоминает источник фокуса, чтобы не показывать обводку фокуса. */
     public handleMouseDown = (event: React.MouseEvent<HTMLDivElement>): void => {
         const { onMouseDown } = this.props;
         const { focusSource } = this.state;
 
         onMouseDown?.(event);
-        if (!focusSource) {
+        if (focusSource === EFocusSource.NONE) {
             this.setState({ focusSource: EFocusSource.MOUSE });
         }
     };
 
+    /** Обработчик нажатия клавиши. Space и Enter переключают состояние выбора, Space гасит прокрутку страницы. */
     public handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         const { onKeyDown } = this.props;
 
@@ -123,17 +136,19 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         }
     };
 
+    /** Обработчик получения фокуса. Фокус на самой карточке без предшествующего клика считается клавиатурным. */
     public handleFocus = (event: React.FocusEvent<HTMLDivElement>): void => {
         const { onFocus } = this.props;
         const { focusSource } = this.state;
         const { current } = this.ref;
 
         onFocus?.(event);
-        if (!focusSource && current === event.target) {
+        if (focusSource === EFocusSource.NONE && current === event.target) {
             this.setState({ focusSource: EFocusSource.KEYBOARD });
         }
     };
 
+    /** Обработчик потери фокуса. Сбрасывает источник фокуса, когда карточка перестала быть активным элементом. */
     public handleBlur = (event: React.FocusEvent<HTMLDivElement>): void => {
         const { onBlur } = this.props;
         const { current } = this.ref;
@@ -144,6 +159,10 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         }
     };
 
+    /**
+     * Переключает состояние выбора. В контролируемом режиме только вызывает toggle со следующим значением,
+     * в неконтролируемом — меняет внутреннее состояние и вызывает onToggle.
+     */
     public handleToggle = (): void => {
         const { toggle, selected, onToggle } = this.props;
         const { isControlled, isSelected } = this.state;

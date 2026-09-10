@@ -1,12 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-    CardAction,
-    ICardActionProps,
-    ECardTheme,
-    ECardRoundingSize,
-    ECardContentPaddingSize,
-} from "@sberbusiness/triplex-next";
+import { CardAction, ECardTheme, ECardRoundingSize, ECardContentPaddingSize } from "@sberbusiness/triplex-next";
 import {
     Title as DocsTitle,
     Description,
@@ -21,21 +15,14 @@ import {
     DefaultExampleSource,
     PaddingSizesExample,
     PaddingSizesExampleSource,
+    type PlaygroundArgs,
     PlaygroundExample,
     RoundingSizesExample,
     RoundingSizesExampleSource,
     ThemesExample,
     ThemesExampleSource,
     VisualTestsExample,
-    VisualTestsExampleSource,
 } from "./examples/CardAction";
-
-type TCardActionPlaygroundProps = Pick<
-    ICardActionProps,
-    "roundingSize" | "theme" | "selected" | "onToggle" | "toggle"
-> & {
-    paddingSize: ECardContentPaddingSize;
-};
 
 const meta = {
     title: "Components/Cards/CardAction",
@@ -62,35 +49,52 @@ const meta = {
             ),
         },
     },
+} satisfies Meta<typeof CardAction>;
+
+export default meta;
+
+type Story = StoryObj<typeof CardAction>;
+
+export const Playground: StoryObj<PlaygroundArgs> = {
+    tags: ["!autodocs"],
+    args: {
+        paddingSize: ECardContentPaddingSize.MD,
+        roundingSize: ECardRoundingSize.MD,
+        theme: ECardTheme.GENERAL,
+        selected: false,
+    },
     argTypes: {
-        paddingSize: {
-            control: { type: "select" },
-            options: Object.values(ECardContentPaddingSize),
-            desciption: "Возможные размеры внутреннего отступа",
-            table: { defaultValue: { summary: ECardContentPaddingSize.MD } },
-        },
         roundingSize: {
             control: { type: "select" },
             options: Object.values(ECardRoundingSize),
             description: "Размер скругления карточки",
-            table: { defaultValue: { summary: ECardRoundingSize.MD } },
+            table: {
+                category: "Props",
+                type: { summary: "ECardRoundingSize" },
+                defaultValue: { summary: ECardRoundingSize.MD },
+            },
         },
         theme: {
             control: { type: "select" },
             options: Object.values(ECardTheme),
             description: "Тема карточки",
-            table: { defaultValue: { summary: ECardTheme.GENERAL } },
+            table: {
+                category: "Props",
+                type: { summary: "ECardTheme" },
+                defaultValue: { summary: ECardTheme.GENERAL },
+            },
         },
-        selected: { table: { disable: true } },
-        onToggle: { table: { disable: true } },
-        toggle: { table: { disable: true } },
+        paddingSize: {
+            control: { type: "select" },
+            options: Object.values(ECardContentPaddingSize),
+            description: "Размер внутреннего отступа контента карточки (prop CardAction.Content)",
+            table: {
+                category: "Settings",
+                type: { summary: "ECardContentPaddingSize" },
+                defaultValue: { summary: ECardContentPaddingSize.MD },
+            },
+        },
     },
-} satisfies Meta<TCardActionPlaygroundProps>;
-
-export default meta;
-
-export const Playground: StoryObj<TCardActionPlaygroundProps> = {
-    tags: ["!autodocs"],
     parameters: {
         controls: {
             include: ["paddingSize", "roundingSize", "theme"],
@@ -103,16 +107,10 @@ export const Playground: StoryObj<TCardActionPlaygroundProps> = {
         },
         testRunner: { skip: true },
     },
-    args: {
-        paddingSize: ECardContentPaddingSize.MD,
-        roundingSize: ECardRoundingSize.MD,
-        theme: ECardTheme.GENERAL,
-        selected: false,
-    },
     render: PlaygroundExample,
 };
 
-export const Default: StoryObj<TCardActionPlaygroundProps> = {
+export const Default: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -125,7 +123,7 @@ export const Default: StoryObj<TCardActionPlaygroundProps> = {
     render: DefaultExample,
 };
 
-export const Themes: StoryObj<TCardActionPlaygroundProps> = {
+export const Themes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -138,7 +136,7 @@ export const Themes: StoryObj<TCardActionPlaygroundProps> = {
     render: ThemesExample,
 };
 
-export const PaddingSizes: StoryObj<TCardActionPlaygroundProps> = {
+export const PaddingSizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -151,7 +149,7 @@ export const PaddingSizes: StoryObj<TCardActionPlaygroundProps> = {
     render: PaddingSizesExample,
 };
 
-export const RoundingSizes: StoryObj<TCardActionPlaygroundProps> = {
+export const RoundingSizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -164,22 +162,24 @@ export const RoundingSizes: StoryObj<TCardActionPlaygroundProps> = {
     render: RoundingSizesExample,
 };
 
-export const VisualTests: StoryObj<TCardActionPlaygroundProps> = {
+export const VisualTests: Story = {
     tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
-            source: {
-                code: VisualTestsExampleSource,
-                language: "tsx",
+            canvas: {
+                sourceState: "none",
             },
+            codePanel: false,
         },
     },
     render: VisualTestsExample,
     play: async ({ canvas, userEvent }) => {
         const cards = await canvas.findAllByRole("button");
 
+        // Выбранное состояние в обеих темах и клавиатурный фокус на невыбранной карточке.
         await userEvent.click(cards[0]);
+        await userEvent.click(cards[2]);
         cards[1].focus();
     },
 };

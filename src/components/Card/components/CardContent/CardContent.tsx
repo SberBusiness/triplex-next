@@ -24,7 +24,7 @@ const mapCardContentPaddingSizeToCssClass = {
 
 /** Свойства компонента CardContent. */
 export interface ICardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Размер внутреннего отступа контента карточки. */
+    /** Размер внутреннего отступа контента карточки. По умолчанию ECardContentPaddingSize.MD. */
     paddingSize?: ECardContentPaddingSize;
 }
 

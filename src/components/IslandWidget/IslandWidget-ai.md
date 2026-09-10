@@ -137,9 +137,9 @@ render-функции.
   умолчанию содержит no-op сеттер, тень не появится.
 - `ExtraFooter` подтягивается под карточку отрицательным `margin-top: -24px` и компенсирующим
   `padding-top`, поэтому визуально выглядит продолжением карточки.
-- Флаг `hasExtraFooter` сбрасывается только сменой `open` на `false`. Размонтирование
-  `ExtraFooter` в раскрытом состоянии оставляет тень на виджете — закрывай его через `open`,
-  а не условным рендерингом.
+- Флаг `hasExtraFooter` сбрасывается и сменой `open` на `false`, и размонтированием
+  `ExtraFooter`: эффект возвращает cleanup, поэтому условный рендеринг подвала так же
+  корректен, как управление через `open` — тень на виджете не залипает.
 - Если виджету нужна фиксированная высота, задавай её на `IslandWidgetWrapper`, а не на
   `IslandWidget` (story `Example: ExtraFooter with wrapper height`).
 
@@ -202,10 +202,11 @@ IslandWidget.ExtraFooter_Shadow
   `Header` и `UnorderedListExtended`.
 - **`renderHeader` / `renderBody` / `renderFooter` вызываются с пустым объектом.** Не удаляй
   параметр из сигнатуры и не заменяй render-функции на `children` — это breaking change.
-- **`IslandWidgetHeaderContent` не имеет своих стилей:** класс `islandWidgetHeaderContent` в
-  `styles/IslandWidgetHeader.module.less` не объявлен, поэтому `styles.islandWidgetHeaderContent`
-  равен `undefined` и на элемент попадает только `className` потребителя. Компонент
-  экспортируется из barrel и к `IslandWidget.Header` не привязан.
+- **`IslandWidgetHeaderContent` не имеет своих стилей:** на элемент попадает только `className`
+  потребителя, раскладку задаёт родительская шапка. Компонент экспортируется из barrel и
+  к `IslandWidget.Header` не привязан. Если понадобится собственное оформление — объявляй
+  класс в `styles/IslandWidgetHeader.module.less` и подключай его явно, а не рассчитывай
+  на ранее ссылавшийся здесь несуществующий `styles.islandWidgetHeaderContent`.
 - **`box-shadow` тени `ExtraFooter` помечен `!important`** в `styles/IslandWidget.module.less`.
   Конкурирующего правила в библиотеке нет — вероятно, это защита от переопределения снаружи.
   Снимать помету без визуальной регрессии не стоит.

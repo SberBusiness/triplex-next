@@ -101,4 +101,18 @@ describe("IslandWidgetExtraFooter", () => {
 
         expect(getWidget()).toHaveClass("islandWidgetWithExtraFooter");
     });
+
+    it("Should clear the widget shadow when an open extra footer unmounts", () => {
+        const { rerender } = renderWithWidget(true);
+
+        expect(getWidget()).toHaveClass("islandWidgetWithExtraFooter");
+
+        rerender(
+            <IslandWidgetWrapper>
+                <IslandWidget data-testid="widget" renderBody={renderBody} renderHeader={renderHeader} />
+            </IslandWidgetWrapper>,
+        );
+
+        expect(getWidget()).not.toHaveClass("islandWidgetWithExtraFooter");
+    });
 });

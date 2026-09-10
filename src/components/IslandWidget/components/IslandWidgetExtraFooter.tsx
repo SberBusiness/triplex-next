@@ -24,6 +24,9 @@ export const IslandWidgetExtraFooter: React.FC<IIslandWidgetExtraFooterProps> = 
 
     useEffect(() => {
         setHasExtraFooter(open);
+
+        // Сброс на размонтировании: иначе виджет остаётся с отступом и тенью под уже убранный подвал.
+        return () => setHasExtraFooter(false);
     }, [open, setHasExtraFooter]);
 
     return (

@@ -38,7 +38,9 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **IslandWidget**
 
-- Проведён AI-рефакторинг: `className`, переданный в `IslandWidget.Footer.Content` и `IslandWidget.Footer.Controls`, больше не затирается базовым классом компонента, а дополняет его. Атрибут `data-tx` теперь проставляется после остальных props и потребителем не переопределяется. Других изменений для потребителя нет.
+- Исправлено: размонтирование раскрытого `IslandWidget.ExtraFooter` больше не оставляет на виджете тень и отступ под уже убранный подвал. Раньше флаг сбрасывался только сменой `open` на `false`, поэтому условный рендеринг подвала оставлял виджет в состоянии «подвал раскрыт».
+- Проведён AI-рефакторинг: `className`, переданный в `IslandWidget.Footer.Content` и `IslandWidget.Footer.Controls`, больше не затирается базовым классом компонента, а дополняет его. Атрибут `data-tx` теперь проставляется после остальных props и потребителем не переопределяется.
+- Экспортирован интерфейс `IIslandWidgetHeaderDescriptionProps` — стало возможно типизировать обёртки над `IslandWidget.Header.Description`.
 
 **TextareaField**
 

@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "../styles/IslandWidgetFooter.module.less";
 
 /** Свойства компонента IslandWidgetFooterContent. */
-interface IIslandWidgetFooterContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IIslandWidgetFooterContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Содержимое подвала виджета — занимает свободное место слева от блока управления. */
 export const IslandWidgetFooterContent: React.FC<IIslandWidgetFooterContentProps> = ({

@@ -13,7 +13,7 @@ const SIZE_TO_ADAPTIVE_TEXT_SIZE_MAP: Record<EComponentSize, ETextSize> = {
 };
 
 /** Свойства компонента IslandWidgetHeaderDescription. */
-interface IIslandWidgetHeaderDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IIslandWidgetHeaderDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /**
  * Описание в шапке виджета. Прижимается к правому краю на десктопе и переносится на свою строку в адаптиве.

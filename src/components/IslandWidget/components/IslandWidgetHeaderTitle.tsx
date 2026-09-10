@@ -5,7 +5,7 @@ import { ETitleSize, EFontWeightTitle } from "@sberbusiness/triplex-next/compone
 import styles from "../styles/IslandWidgetHeader.module.less";
 
 /** Свойства компонента IslandWidgetHeaderTitle. */
-interface IIslandWidgetHeaderTitleProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IIslandWidgetHeaderTitleProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /** Заголовок шапки виджета. Однострочный на десктопе, с переносом в адаптиве. */
 export const IslandWidgetHeaderTitle: React.FC<IIslandWidgetHeaderTitleProps> = ({

@@ -1,18 +1,20 @@
 import React from "react";
 import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
+
+/** Свойства карточки. */
 export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Возможные размеры скругления карточки. */
+    /** Размер скругления карточки. По умолчанию ECardRoundingSize.MD. */
     roundingSize?: ECardRoundingSize;
-    /** Возможные темы оформления карточки. */
+    /** Тема оформления карточки. По умолчанию ECardTheme.GENERAL. */
     theme?: ECardTheme;
 }
 
 /** Свойства интерактивной карточки. */
 export interface ICardActionProps extends ICardProps {
-    /** Обработчик переключения выбора карточки. */
+    /** Обработчик изменения состояния выбора. Вызывается с новым значением selected. */
     onToggle?: (selected: boolean) => void;
-    /** Контролируемое состояние выбрана/не выбрана. */
+    /** Состояние выбора в контролируемом режиме. Режим определяется при монтировании по условию selected !== undefined: при selected === undefined (в том числе явном) карточка работает в неконтролируемом режиме. */
     selected?: boolean;
-    /** Контролирующая функция состояние выбрана/не выбрана. */
+    /** Запрос на смену состояния выбора в контролируемом режиме. Вызывается со следующим значением selected. */
     toggle?: (selected: boolean) => void;
 }

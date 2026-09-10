@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
@@ -17,6 +17,14 @@ import styles from "./styles/HelpBox.module.less";
 const DEFAULT_ICON_PALETTE_INDEX = 5;
 /** Префикс идентификатора Tooltip. */
 const TOOLTIP_ID_PREFIX = "HelpBox-";
+
+/**
+ * Открытая мышью подсказка фокус не забирает, поэтому ловушка нужна, только если кнопка-триггер
+ * держит фокус (клавиатура) либо курсора над ней нет (программное открытие через isOpen).
+ */
+const needFocusTrap = (button: HTMLButtonElement | null): boolean => {
+    return button === null || button === document.activeElement || !button.matches(":hover");
+};
 
 /** Свойства компонента HelpBox. */
 export interface IHelpBoxProps
@@ -82,22 +90,24 @@ export const HelpBox = React.forwardRef<HTMLButtonElement, IHelpBoxProps>(
             [ref],
         );
 
+        useEffect(() => {
+            if (!open) {
+                setFocusTrapNode(null);
+            }
+        }, [open]);
+
         /** Обработчик закрытия/открытия Tooltip. */
         const handleTooltipToggle = (nextOpen: boolean) => {
             if (openProp === undefined) {
                 setOpenState(nextOpen);
             }
 
-            if (!nextOpen) {
-                setFocusTrapNode(null);
-            }
-
             toggle?.(nextOpen);
         };
 
-        /** Обработчик появления Tooltip. Сохраняет его ноду для ловушки фокуса. */
+        /** Обработчик появления Tooltip. Сохраняет его ноду, если подсказке нужна ловушка фокуса. */
         const handleTooltipShow = (node: HTMLDivElement) => {
-            setFocusTrapNode(node);
+            setFocusTrapNode(needFocusTrap(buttonRef.current) ? node : null);
             onShow?.(node);
         };
 
@@ -131,7 +141,7 @@ export const HelpBox = React.forwardRef<HTMLButtonElement, IHelpBoxProps>(
                     <Tooltip.Body>{children}</Tooltip.Body>
                     <Tooltip.XButton {...tooltipXButtonProps} />
                 </Tooltip>
-                {/* Ловушка фокуса нужна только на desktop и только когда Tooltip уже появился в DOM. */}
+                {/* Ловушка фокуса нужна только на desktop, только когда Tooltip уже появился в DOM и только если подсказку открыли не наведением мыши. */}
                 {open && focusTrapNode && (
                     <MobileView
                         fallback={

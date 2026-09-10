@@ -1,29 +1,42 @@
 import React from "react";
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { HelpBox } from "../HelpBox";
 import { ETooltipSize, ETooltipPreferPlace } from "../../Tooltip/enums";
+
+/** Монтирования FocusTrap: id ноды-контейнера и была ли она в DOM. Ловит ловушку на промежуточных кадрах. */
+const { focusTrapMounts } = vi.hoisted(() => ({ focusTrapMounts: [] as string[] }));
 
 vi.mock("focus-trap-react", () => {
     const FocusTrap = ({
         active,
         children,
+        containerElements,
         focusTrapOptions,
     }: {
         active?: boolean;
         children?: React.ReactNode;
+        containerElements?: (HTMLElement | null)[];
         focusTrapOptions?: { clickOutsideDeactivates?: boolean; initialFocus?: string; preventScroll?: boolean };
-    }) => (
-        <div
-            data-testid="focus-trap"
-            data-active={String(active)}
-            data-initial-focus={String(focusTrapOptions?.initialFocus)}
-            data-prevent-scroll={String(focusTrapOptions?.preventScroll)}
-            data-click-outside-deactivates={String(focusTrapOptions?.clickOutsideDeactivates)}
-        >
-            {children}
-        </div>
-    );
+    }) => {
+        const node = containerElements?.[0];
+
+        React.useEffect(() => {
+            focusTrapMounts.push(`${node ? node.id : "null"}:${node ? String(document.contains(node)) : "-"}`);
+        }, [node]);
+
+        return (
+            <div
+                data-testid="focus-trap"
+                data-active={String(active)}
+                data-initial-focus={String(focusTrapOptions?.initialFocus)}
+                data-prevent-scroll={String(focusTrapOptions?.preventScroll)}
+                data-click-outside-deactivates={String(focusTrapOptions?.clickOutsideDeactivates)}
+            >
+                {children}
+            </div>
+        );
+    };
     return { FocusTrap, default: FocusTrap };
 });
 
@@ -39,6 +52,15 @@ vi.mock("@sberbusiness/icons-next", () => ({
         </div>
     ),
 }));
+
+/** Эмуляция наведения курсора: jsdom всегда отвечает false на matches(":hover"). */
+const mockHover = (element: HTMLElement) => {
+    const originalMatches = element.matches.bind(element);
+
+    vi.spyOn(element, "matches").mockImplementation((selector: string) =>
+        selector === ":hover" ? true : originalMatches(selector),
+    );
+};
 
 describe("HelpBox", () => {
     it("renders target button with aria-label passed via rest props", () => {
@@ -303,6 +325,96 @@ describe("HelpBox", () => {
             expect(focusTrap).toHaveAttribute("data-initial-focus", `[id='${dialog.id}']`);
             expect(focusTrap).toHaveAttribute("data-prevent-scroll", "true");
             expect(focusTrap).toHaveAttribute("data-click-outside-deactivates", "true");
+        });
+
+        it("is not rendered when tooltip is opened by mouse hover over the trigger", () => {
+            render(
+                <div>
+                    <input data-testid="field" />
+                    <HelpBox tooltipSize={ETooltipSize.LG} aria-label="Подсказка">
+                        Контент
+                    </HelpBox>
+                </div>,
+            );
+
+            const field = screen.getByTestId("field");
+            const button = screen.getByRole("button", { name: "Подсказка" });
+
+            field.focus();
+            // jsdom не отслеживает :hover — эмулируем наведение курсора на кнопку-триггер.
+            mockHover(button);
+            fireEvent.mouseEnter(button);
+
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            expect(screen.queryByTestId("focus-trap")).not.toBeInTheDocument();
+            expect(document.activeElement).toBe(field);
+        });
+
+        it("is rendered when tooltip is opened from the focused trigger under the cursor", () => {
+            render(
+                <HelpBox tooltipSize={ETooltipSize.LG} aria-label="Подсказка">
+                    Контент
+                </HelpBox>,
+            );
+
+            const button = screen.getByRole("button", { name: "Подсказка" });
+
+            // Курсор над кнопкой: ловушку оправдывает только фокус на триггере, а не отсутствие hover.
+            mockHover(button);
+            button.focus();
+            fireEvent.click(button);
+
+            expect(screen.getByTestId("focus-trap")).toBeInTheDocument();
+        });
+
+        it("is not rendered again after hover open, close and repeated hover open", async () => {
+            render(
+                <HelpBox tooltipSize={ETooltipSize.LG} aria-label="Подсказка">
+                    Контент
+                </HelpBox>,
+            );
+
+            const button = screen.getByRole("button", { name: "Подсказка" });
+
+            mockHover(button);
+            fireEvent.mouseEnter(button);
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            expect(screen.queryByTestId("focus-trap")).not.toBeInTheDocument();
+
+            // Закрытие и повторное открытие наведением: признак пересчитывается, ловушка не появляется.
+            // Подсказка уходит из DOM не сразу — после анимации исчезновения.
+            fireEvent.keyDown(button, { code: "Tab" });
+            await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+
+            fireEvent.mouseEnter(button);
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            expect(screen.queryByTestId("focus-trap")).not.toBeInTheDocument();
+        });
+
+        it("does not mount with a stale tooltip node after controlled close", async () => {
+            const renderHelpBox = (isOpen: boolean) => (
+                <HelpBox tooltipSize={ETooltipSize.LG} isOpen={isOpen} toggle={() => undefined} aria-label="Подсказка">
+                    Контент
+                </HelpBox>
+            );
+            const { rerender } = render(renderHelpBox(false));
+            const button = screen.getByRole("button", { name: "Подсказка" });
+
+            // Открытие извне при отсутствии курсора над кнопкой — ловушка нужна.
+            rerender(renderHelpBox(true));
+            await waitFor(() => expect(screen.getByTestId("focus-trap")).toBeInTheDocument());
+
+            // Закрытие через isOpen идёт мимо toggle, поэтому нода подсказки может остаться в состоянии.
+            rerender(renderHelpBox(false));
+            await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+
+            // Следующее открытие наведением не должно смонтировать ловушку даже на один кадр.
+            focusTrapMounts.length = 0;
+            mockHover(button);
+            rerender(renderHelpBox(true));
+
+            expect(focusTrapMounts).toEqual([]);
+            expect(screen.queryByTestId("focus-trap")).not.toBeInTheDocument();
         });
 
         it("merges consumer focusTrapOptions over defaults", () => {

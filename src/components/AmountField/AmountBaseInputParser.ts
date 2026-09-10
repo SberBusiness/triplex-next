@@ -12,7 +12,7 @@ export class AmountBaseInputParser {
     private key: string;
     /** Максимальное количество знаков перед запятой. */
     private readonly maxIntegerDigits: number;
-    /** Количество чисел после запятой. */
+    /** Количество знаков после запятой. */
     private readonly fractionDigits: number;
 
     constructor(maxIntegerDigits: number, fractionDigits: number) {
@@ -40,28 +40,23 @@ export class AmountBaseInputParser {
         this.key = key;
 
         if (this.maxIntegerDigits > 0) {
-            if (this.fractionDigits == 0) {
-                return this.parseInteger(value, caret, length);
+            if (this.fractionDigits === 0) {
+                return this.parseIntegerPart(value, caret, length);
             } else if (this.fractionDigits > 0) {
                 return this.parseDecimal(value, caret, length);
             }
         }
 
-        // Fallback
+        // Fallback: без знаков перед запятой значение не имеет смысла — очищаем его целиком.
         this.value = "";
         this.caretOffset -= length;
-    }
-
-    /** Обработка значения в виде целого числа. */
-    private parseInteger(value: string, caret: number, length: number): void {
-        this.parseIntegerPart(value, caret, length);
     }
 
     /** Обработка значения в виде десятичной дроби. */
     private parseDecimal(value: string, caret: number, length: number): void {
         const separatorIndex = this.findSeparatorIndex(value, caret, length);
         const [integerEnd, fractionalStart] =
-            separatorIndex != -1 ? [separatorIndex, separatorIndex + 1] : [caret, caret];
+            separatorIndex !== -1 ? [separatorIndex, separatorIndex + 1] : [caret, caret];
         const [integerPart, fractionalPart] = [value.substring(0, integerEnd), value.substring(fractionalStart)];
 
         this.parseIntegerPart(integerPart, Math.min(caret, integerEnd), integerEnd);
@@ -81,7 +76,7 @@ export class AmountBaseInputParser {
                 for (let i = 0, n = 0; i < caret; i++) {
                     if (StringUtils.isDigit(value[i])) {
                         buffer.push(value[i]);
-                        if (++n == maxDigitsBeforeCaret) {
+                        if (++n === maxDigitsBeforeCaret) {
                             break;
                         }
                     }
@@ -116,7 +111,7 @@ export class AmountBaseInputParser {
             for (let i = 0, n = 0; i < caret; i++) {
                 if (StringUtils.isDigit(value[i])) {
                     buffer.push(value[i]);
-                    if (++n == maxDigitsBeforeCaret) {
+                    if (++n === maxDigitsBeforeCaret) {
                         break;
                     }
                 } else {
@@ -140,9 +135,9 @@ export class AmountBaseInputParser {
         }
 
         // Если целая часть отсутствует.
-        if (this.value.length == 0) {
+        if (this.value.length === 0) {
             // При ненулевой дробной части, восстанавливаем целый ноль.
-            if (buffer.some((digit) => digit != "0")) {
+            if (buffer.some((digit) => digit !== "0")) {
                 this.value = "0";
                 this.caretOffset++;
             }
@@ -163,7 +158,7 @@ export class AmountBaseInputParser {
         for (let i = 0; i < length; i++) {
             if (StringUtils.isDigit(value[i])) {
                 start = i;
-                if (value[i] != "0") {
+                if (value[i] !== "0") {
                     break;
                 }
             }

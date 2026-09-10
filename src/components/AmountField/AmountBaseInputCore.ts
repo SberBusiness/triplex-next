@@ -25,7 +25,7 @@ export class AmountBaseInputCore {
     public caret: number;
     /** Максимальное количество знаков перед запятой. */
     public maxIntegerDigits: number;
-    /** Количество чисел после запятой. */
+    /** Количество знаков после запятой. */
     public fractionDigits: number;
     /** Кэш для хранения значений. */
     public cache: IAmountBaseInputCoreCache;
@@ -63,7 +63,7 @@ export class AmountBaseInputCore {
 
     /** Форматирование значения. */
     private format(value: string): void {
-        const formatter = new AmountBaseInputFormatter(this.maxIntegerDigits, this.fractionDigits);
+        const formatter = new AmountBaseInputFormatter(this.fractionDigits);
 
         formatter.apply(value);
 

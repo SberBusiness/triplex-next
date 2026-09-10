@@ -59,7 +59,7 @@ describe("AmountBaseInputCore", () => {
         expect(core.caret).toBe(1);
     });
 
-    test("apply reuses the same instance for consecutive values", () => {
+    test("apply clears value and formattedValue for an empty input", () => {
         const core = new AmountBaseInputCore(16, 2);
 
         core.apply("1234,56", "1234,56".length);

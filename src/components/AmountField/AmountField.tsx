@@ -5,7 +5,7 @@ import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormF
 import { FormFieldClear } from "../FormField/components/FormFieldClear";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition, createSizeToClassNameMap } from "../../utils";
-import { createPlaceholder, getFormattedValue, setFallbackCaret, setForwardedRef } from "./utils";
+import { createPlaceholder, syncCoreAndGetFormattedValue, setFallbackCaret, setForwardedRef } from "./utils";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/AmountField.module.less";
 
@@ -64,7 +64,7 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
         }
 
         const core = coreRef.current;
-        const formattedValue = getFormattedValue(core, inputProps.value, maxIntegerDigits, fractionDigits);
+        const formattedValue = syncCoreAndGetFormattedValue(core, inputProps.value, maxIntegerDigits, fractionDigits);
 
         // Возвращаем каретку в рассчитанную ядром позицию: React после перерисовки ставит её в конец значения.
         // setCaretPosition ничего не делает, если поле не в фокусе.

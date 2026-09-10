@@ -154,6 +154,12 @@ Card.Shadow_Focus
   `ECardTheme` / `ECardRoundingSize` / `ECardContentPaddingSize` и barrel-экспорты
   `src/components/Card/index.ts` — публичный API, не переименовывать.
 - Статические свойства `CardAction.Content` и `CardAction.Media` — часть публичного API.
+- Составные части (`CardMedia`, `CardContent`, `CardContent.Header/Body/Footer`) объявлены
+  как `React.FC` и **`ref` не пробрасывают** — переданный им `ref` молча теряется, DOM-узел
+  через него не получить. Не пиши на них тест вида
+  `expect(ref.current).toBeInstanceOf(HTMLDivElement)` — он упадёт. Файлы частей общие
+  с `CardStatic`, поэтому добавление им `forwardRef` — отдельная задача на семейство Card,
+  а не правка в рамках `CardAction`.
 - CSS-классы `selected` и `focusVisible` используются unit-тестами — не переименовывать
   без синхронной правки тестов.
 - Режим (контролируемый / неконтролируемый) фиксируется при монтировании — не превращать

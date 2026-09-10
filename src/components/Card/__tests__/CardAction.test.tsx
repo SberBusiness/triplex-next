@@ -154,6 +154,17 @@ describe("CardAction", () => {
         expect(card).toHaveAttribute("data-test", "card");
     });
 
+    it("allows overriding role and tabIndex through rest attributes", () => {
+        render(
+            <CardAction role="checkbox" tabIndex={-1}>
+                card
+            </CardAction>,
+        );
+
+        const card = screen.getByRole("checkbox");
+        expect(card).toHaveAttribute("tabindex", "-1");
+    });
+
     it("renders compound subcomponents", () => {
         render(
             <CardAction>
@@ -171,6 +182,20 @@ describe("CardAction", () => {
         expect(screen.getByText("header")).toHaveClass("cardContentHeader");
         expect(screen.getByText("body")).toHaveClass("cardContentBody");
         expect(screen.getByText("footer")).toHaveClass("cardContentFooter");
+    });
+
+    it("applies the default padding size and merges className on compound subcomponents", () => {
+        render(
+            <CardAction>
+                <CardAction.Media className="customMediaClassName" data-testid="media" />
+                <CardAction.Content className="customContentClassName" data-testid="content">
+                    content
+                </CardAction.Content>
+            </CardAction>,
+        );
+
+        expect(screen.getByTestId("media")).toHaveClass("cardMedia", "customMediaClassName");
+        expect(screen.getByTestId("content")).toHaveClass("cardContent", "paddingMD", "customContentClassName");
     });
 
     it("uncontrolled: toggles selected class and does not call toggle", () => {

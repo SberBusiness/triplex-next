@@ -16,6 +16,7 @@ export type TIslandWidgetFooter = React.FC<IIslandWidgetFooterProps> & {
     Controls: typeof IslandWidgetFooterControls;
 };
 
+/** Подвал виджета. Отступы берутся из размера виджета, в адаптиве части подвала выстраиваются в колонку. */
 export const IslandWidgetFooter: TIslandWidgetFooter = ({ children, className, ...htmlDivAttributes }) => {
     const { size } = useContext(IslandWidgetContext);
 

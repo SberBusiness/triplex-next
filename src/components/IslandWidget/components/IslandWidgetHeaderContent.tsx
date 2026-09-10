@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 
 /** Свойства компонента IslandWidgetHeaderContent. */
-interface IIslandWidgetHeaderContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IIslandWidgetHeaderContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /**
  * Обёртка содержимого шапки виджета.

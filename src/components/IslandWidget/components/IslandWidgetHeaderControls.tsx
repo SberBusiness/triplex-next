@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "../styles/IslandWidgetHeader.module.less";
 
 /** Свойства компонента IslandWidgetHeaderControls. */
-interface IIslandWidgetHeaderControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IIslandWidgetHeaderControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 /**
  * Блок управления в шапке виджета.

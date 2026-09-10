@@ -20,14 +20,19 @@ export const IslandWidgetExtraFooter: React.FC<IIslandWidgetExtraFooterProps> = 
     open = false,
     ...htmlDivAttributes
 }) => {
-    const { setHasExtraFooter } = useContext(IslandWidgetLayoutContext);
+    const { addOpenExtraFooter, removeOpenExtraFooter } = useContext(IslandWidgetLayoutContext);
 
     useEffect(() => {
-        setHasExtraFooter(open);
+        if (!open) {
+            return;
+        }
 
-        // Сброс на размонтировании: иначе виджет остаётся с отступом и тенью под уже убранный подвал.
-        return () => setHasExtraFooter(false);
-    }, [open, setHasExtraFooter]);
+        // Регистрируемся в обёртке на всё время, пока подвал раскрыт. Cleanup срабатывает
+        // и на закрытии, и на размонтировании — иначе виджет остаётся с тенью под убранным подвалом.
+        addOpenExtraFooter();
+
+        return removeOpenExtraFooter;
+    }, [open, addOpenExtraFooter, removeOpenExtraFooter]);
 
     return (
         <div {...htmlDivAttributes} className={clsx(styles.islandWidgetExtraFooter, className)}>

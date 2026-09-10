@@ -102,6 +102,47 @@ describe("IslandWidgetExtraFooter", () => {
         expect(getWidget()).toHaveClass("islandWidgetWithExtraFooter");
     });
 
+    it("Should keep the widget shadow while another extra footer stays open after one unmounts", () => {
+        const { rerender } = render(
+            <IslandWidgetWrapper>
+                <IslandWidget data-testid="widget" renderBody={renderBody} renderHeader={renderHeader} />
+                <IslandWidgetExtraFooter open={true}>First extra footer</IslandWidgetExtraFooter>
+                <IslandWidgetExtraFooter open={true}>Second extra footer</IslandWidgetExtraFooter>
+            </IslandWidgetWrapper>,
+        );
+
+        expect(getWidget()).toHaveClass("islandWidgetWithExtraFooter");
+
+        rerender(
+            <IslandWidgetWrapper>
+                <IslandWidget data-testid="widget" renderBody={renderBody} renderHeader={renderHeader} />
+                <IslandWidgetExtraFooter open={true}>First extra footer</IslandWidgetExtraFooter>
+            </IslandWidgetWrapper>,
+        );
+
+        expect(getWidget()).toHaveClass("islandWidgetWithExtraFooter");
+    });
+
+    it("Should keep the widget shadow while another extra footer stays open after one closes", () => {
+        const { rerender } = render(
+            <IslandWidgetWrapper>
+                <IslandWidget data-testid="widget" renderBody={renderBody} renderHeader={renderHeader} />
+                <IslandWidgetExtraFooter open={true}>First extra footer</IslandWidgetExtraFooter>
+                <IslandWidgetExtraFooter open={true}>Second extra footer</IslandWidgetExtraFooter>
+            </IslandWidgetWrapper>,
+        );
+
+        rerender(
+            <IslandWidgetWrapper>
+                <IslandWidget data-testid="widget" renderBody={renderBody} renderHeader={renderHeader} />
+                <IslandWidgetExtraFooter open={true}>First extra footer</IslandWidgetExtraFooter>
+                <IslandWidgetExtraFooter open={false}>Second extra footer</IslandWidgetExtraFooter>
+            </IslandWidgetWrapper>,
+        );
+
+        expect(getWidget()).toHaveClass("islandWidgetWithExtraFooter");
+    });
+
     it("Should clear the widget shadow when an open extra footer unmounts", () => {
         const { rerender } = renderWithWidget(true);
 

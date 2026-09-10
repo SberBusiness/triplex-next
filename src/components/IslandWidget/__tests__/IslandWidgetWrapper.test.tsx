@@ -8,10 +8,10 @@ import { IslandWidgetLayoutContext } from "../IslandWidgetLayoutContext";
 const getWrapper = () => screen.getByTestId("wrapper");
 
 const LayoutContextProbe: React.FC = () => {
-    const { hasExtraFooter, setHasExtraFooter } = useContext(IslandWidgetLayoutContext);
+    const { hasExtraFooter, addOpenExtraFooter, removeOpenExtraFooter } = useContext(IslandWidgetLayoutContext);
 
     return (
-        <button type="button" onClick={() => setHasExtraFooter(!hasExtraFooter)}>
+        <button type="button" onClick={hasExtraFooter ? removeOpenExtraFooter : addOpenExtraFooter}>
             {String(hasExtraFooter)}
         </button>
     );
@@ -71,7 +71,7 @@ describe("IslandWidgetWrapper", () => {
         expect(screen.getByRole("button")).toHaveTextContent("false");
     });
 
-    it("Should update hasExtraFooter through the layout context setter", async () => {
+    it("Should update hasExtraFooter through the layout context counter", async () => {
         const user = userEvent.setup();
 
         render(

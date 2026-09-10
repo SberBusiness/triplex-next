@@ -1,16 +1,19 @@
 import React from "react";
 
-/** Значение контекста IslandWidgetWrapper — связь виджета с его дополнительным подвалом. */
+/** Значение контекста IslandWidgetWrapper — связь виджета с его дополнительными подвалами. */
 export interface IIslandWidgetLayoutContext {
-    /** Дополнительный подвал раскрыт — виджет рисует под собой тень. */
+    /** Хотя бы один дополнительный подвал раскрыт — виджет рисует под собой тень. */
     hasExtraFooter: boolean;
-    /** Сообщить обёртке о состоянии дополнительного подвала. */
-    setHasExtraFooter: (has: boolean) => void;
+    /** Сообщить обёртке, что подвал раскрылся. Считается по экземплярам, а не флагом. */
+    addOpenExtraFooter: () => void;
+    /** Сообщить обёртке, что подвал закрылся или размонтирован. */
+    removeOpenExtraFooter: () => void;
 }
 
 const contextInitial: IIslandWidgetLayoutContext = {
     hasExtraFooter: false,
-    setHasExtraFooter: () => {},
+    addOpenExtraFooter: () => {},
+    removeOpenExtraFooter: () => {},
 };
 
 /** Контекст IslandWidgetWrapper. Внутренний: в публичный barrel не экспортируется. */

@@ -13,7 +13,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **CardStatic**
 
-- Добавлено: `CardStatic` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`. Тип компонента изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props, статики и разметка прежние.
+- Добавлено: `CardStatic` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
 
 **ChipMultiselect**

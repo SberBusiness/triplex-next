@@ -14,6 +14,13 @@ const renderMaskedInput = (props: Partial<React.ComponentProps<typeof FormFieldM
 
 const getInput = () => screen.getByRole("textbox") as HTMLInputElement;
 
+/** Слой с подсказкой маски: зеркало введённого значения и оставшаяся часть маски. */
+const getMaskLayer = (container: HTMLElement) => {
+    const layer = container.querySelector('[aria-hidden="true"]');
+
+    return { mirror: layer?.children[0]?.textContent, rest: layer?.children[1]?.textContent };
+};
+
 /** Поле, значение которого хранит потребитель, — так компонент используется в реальном коде. */
 const ControlledMaskedInput = ({
     initialValue,
@@ -88,6 +95,27 @@ describe("FormFieldMaskedInput", () => {
         renderMaskedInput({ mask: masks.phone, value: "9001234567" });
 
         expect(getInput()).toHaveValue("+7 (900) 123-45-67");
+    });
+
+    it.each([
+        ["79984903284", "+7 (998) 490-32-84"],
+        ["89984903284", "+7 (998) 490-32-84"],
+        ["+79984903284", "+7 (998) 490-32-84"],
+        ["9984903284", "+7 (998) 490-32-84"],
+        ["9701234567", "+7 (970) 123-45-67"],
+    ])("renders phone value %s in full", (value, expected) => {
+        renderMaskedInput({ mask: masks.phone, value });
+
+        expect(getInput()).toHaveValue(expected);
+    });
+
+    // Слой с маской считается по тому же нормализованному значению, что и инпут: иначе на
+    // частично заполненном номере зеркало под введённым текстом разъезжается с самим текстом.
+    it("keeps the mask layer aligned with a partially filled phone value", () => {
+        const { container } = renderMaskedInput({ mask: masks.phone, value: "7998" });
+
+        expect(getInput()).toHaveValue("+7 (998) ");
+        expect(getMaskLayer(container)).toEqual({ mirror: "+7 (998) ", rest: "000-00-00" });
     });
 
     it("allows deleting a mask separator", async () => {

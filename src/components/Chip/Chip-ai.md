@@ -1,7 +1,7 @@
 ---
 component: Chip
 category: Chips
-related: [ChipGroup, ChipIcon, ChipOptions, ChipSelect, ChipMultiselect, ChipSort, ChipSuggest, ChipDatePicker, ChipClearButton, ChipDropdownArrow, Badge, IconWrapper]
+related: [ChipGroup, ChipIcon, ChipOptions, ChipSelect, ChipMultiselect, ChipSort, ChipSuggest, ChipDatePicker, ChipMonthYearPicker, ChipClearButton, ChipDropdownArrow, Badge, IconWrapper]
 tokens:
   - Chip.Background_Type1_Default
   - Chip.Background_Type1_Hover
@@ -33,7 +33,7 @@ version: "1.0"
 Компактный интерактивный элемент-«чипс»: выполняет действие по нажатию и отображает
 выбранное (`selected`) состояние. Одновременно служит базой для всего семейства Chip*
 — поверх него построены `ChipIcon`, `ChipOptions`, а также target-элементы
-`ChipSelect`, `ChipMultiselect`, `ChipSuggest`, `ChipDatePicker`.
+`ChipSelect`, `ChipMultiselect`, `ChipSuggest`, `ChipDatePicker`, `ChipMonthYearPicker`.
 
 Используй когда: нужен переключаемый фильтр, тег или компактная кнопка-действие
 в ряду однотипных элементов.
@@ -152,7 +152,7 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 - **Класс `.chipGroupItem`** выставляется всегда, наравне с `.chip`. Объявлен
   в `styles/Chip.module.less` и служит общим маркером «элемент верхнего уровня
   в ряду чипсов»: его проставляют себе все члены семейства — `Chip`, `ChipSort`,
-  `ChipMultiselect`, `ChipSelect`, `ChipDatePicker`, `ChipSuggest`. Причём
+  `ChipMultiselect`, `ChipSelect`, `ChipDatePicker`, `ChipMonthYearPicker`, `ChipSuggest`. Причём
   `.chipGroupItem` не всегда совпадает с `.chip`: в `ChipSelect` / `ChipMultiselect`
   `.chip` лежит внутри элемента с `.chipGroupItem`. Раскладка `ChipGroup` на этот
   класс не опирается — в её стилях он не встречается. Не удалять и не переименовывать.
@@ -177,7 +177,7 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
   компонент не генерирует (у `<span role="button">` нет нативного поведения кнопки),
   внешний `onKeyDown` вызывается всегда и после `preventDefault`. Если чипс должен
   срабатывать с клавиатуры, потребитель обрабатывает Enter/Space сам через `onKeyDown`.
-  Обёртки семейства (`ChipSelect`, `ChipSuggest`, `ChipDatePicker`) делают это на своём уровне.
+  Обёртки семейства (`ChipSelect`, `ChipSuggest`, `ChipDatePicker`, `ChipMonthYearPicker`) делают это на своём уровне.
 - Фокус-стиль через `:focus-visible` (`Chip.Shadow_Focus`) — виден только
   при клавиатурной навигации. Нативная обводка на корневом элементе намеренно отключена
   (`outline: none` в LESS) в пользу `box-shadow` — убирать правило нельзя, иначе фокус
@@ -206,8 +206,8 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 - `ChipDropdownArrow` — стрелка дропдауна для `postfix`; объявлена как `React.FC`
   (не `forwardRef`), собственных обработчиков не имеет. Props: **обязательный**
   `rotated: boolean` (даёт класс `.rotated`) и `size?: EComponentSize`
-- `ChipSelect`, `ChipMultiselect`, `ChipSuggest`, `ChipDatePicker`, `ChipSort` —
-  составные компоненты, использующие `Chip` как target-элемент дропдауна
+- `ChipSelect`, `ChipMultiselect`, `ChipSuggest`, `ChipDatePicker`, `ChipMonthYearPicker`,
+  `ChipSort` — составные компоненты, использующие `Chip` как target-элемент дропдауна
 - `Badge` (`Badge.Dot`) — значок уведомлений при `showNotificationIcon`
 - `IconWrapper` — обёртка `prefix` / `postfix`, добавляет классы `hoverable` / `disabled`,
   управляющие цветом иконки при взаимодействии
@@ -239,3 +239,4 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 | 2026-07-29 | Создан документ (TRI-26, AI-Ready Phase 1) |
 | 2026-07-29 | AI-рефакторинг (TRI-26): codestyle-чистка `Chip.tsx` (константы-маппинги в UPPER_SNAKE_CASE, эквивалентные упрощения в `clsx`, JSDoc на `children` и `handleKeyDown`), unit-тесты расширены с 5 до 22 кейсов; публичный API, DOM и визуал не изменены |
 | 2026-07-29 | Правки по ревью PR #487: уточнена атрибуция класса `.chipGroupItem` (его проставляет семейство Chip*, а не раскладка `ChipGroup`) и описание API `ChipClearButton` / `ChipDropdownArrow` |
+| 2026-09-07 | В семейство добавлен `ChipMonthYearPicker` — упомянут в списках потребителей `Chip` и `.chipGroupItem` |

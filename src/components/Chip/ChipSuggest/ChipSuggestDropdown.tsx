@@ -7,6 +7,7 @@ import { useSuggestContext } from "../../Suggest/SuggestContext";
 import { Dropdown, DropdownList, DropdownListItem } from "../../Dropdown";
 import { ChipSuggestDesktopDropdownField } from "./desktop/ChipSuggestDesktopDropdownField";
 import { SuggestMobileDropdownContent } from "../../Suggest/SuggestMobileDropdownContent";
+import { setForwardedRef } from "./utils";
 
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
@@ -26,15 +27,14 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
         setDropdownOpen,
     } = useSuggestContext<T>();
 
-    const setRef = (instance: HTMLDivElement | null) => {
-        dropdownRef.current = instance;
-
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
+    const setRef = useCallback(
+        (instance: HTMLDivElement | null) => {
+            // Suggest отличает клик внутри списка от клика вне компонента по dropdownRef из контекста.
+            dropdownRef.current = instance;
+            setForwardedRef(ref, instance);
+        },
+        [dropdownRef, ref],
+    );
 
     const handleDropdownOpen = useCallback(
         (open: boolean) => {
@@ -47,7 +47,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
         [setDropdownOpen, closeDropdown],
     );
 
-    const renderDesktopDropdownContent = () => (
+    const desktopDropdownContent = (
         <FocusTrap
             {...focusTrapProps}
             focusTrapOptions={{
@@ -94,11 +94,15 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
             {...restProps}
             ref={setRef}
         >
-            {renderDesktopDropdownContent()}
+            {desktopDropdownContent}
         </Dropdown>
     );
 };
 
+/**
+ * Выпадающий список ChipSuggest: поле фильтрации и список опций из SuggestContext.
+ * На десктопе содержимое обёрнуто в FocusTrap, на мобильных — заменяется полноэкранным наполнением Suggest.
+ */
 export const ChipSuggestDropdown = React.forwardRef(ChipSuggestDropdownBase) as <T extends ISuggestOption>(
     props: IChipSuggestDropdownProps<T> & React.RefAttributes<HTMLDivElement>,
 ) => JSX.Element;

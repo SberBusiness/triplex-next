@@ -1,10 +1,49 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
+import { OptionsStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ChipOptions } from "../ChipOptions";
+import { EChipType } from "../enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 
 const getChipOptions = () => screen.getByTestId("chip-options");
+
+/** Иконка опций, отрисованная в prefix. */
+const getPrefixIcon = () => getChipOptions().querySelector(".prefix svg");
+
+/** Кнопка сброса выбора, отрисованная в postfix. */
+const getClearButton = () => getChipOptions().querySelector<HTMLButtonElement>(".postfix button");
+
+/** Кнопка сброса, когда тест рассчитывает на её присутствие: сужает тип без non-null assertion. */
+const getExistingClearButton = () => {
+    const clearButton = getClearButton();
+
+    if (!clearButton) {
+        throw new Error("Кнопка сброса не отрисована — ожидалось состояние selected.");
+    }
+
+    return clearButton;
+};
+
+/**
+ * Класс палитры на path иконки опций. Иконки кодируют paletteIndex хешированным классом,
+ * поэтому имя класса не хардкодим, а сверяем с эталонным рендером той же иконки
+ * (getReferencePaletteClassName) — тест не зависит от схемы хеширования в пакете иконок.
+ */
+const getPrefixIconPaletteClassName = () => getPrefixIcon()?.querySelector("path")?.getAttribute("class");
+
+type TOptionsIconPaletteIndex = React.ComponentProps<typeof OptionsStrokeSrvIcon24>["paletteIndex"];
+
+/** Тот же класс палитры, снятый с эталонного рендера иконки с заданным paletteIndex. */
+const getReferencePaletteClassName = (paletteIndex: TOptionsIconPaletteIndex) => {
+    const { container, unmount } = render(<OptionsStrokeSrvIcon24 paletteIndex={paletteIndex} />);
+    const className = container.querySelector("path")?.getAttribute("class");
+
+    unmount();
+
+    return className;
+};
 
 describe("ChipOptions", () => {
     const defaultProps = {
@@ -50,6 +89,360 @@ describe("ChipOptions", () => {
 
         chipOptions = getChipOptions();
         expect(chipOptions).toHaveClass("lg");
+    });
+
+    it("Should apply type prop correctly", () => {
+        const { rerender } = render(
+            <ChipOptions {...defaultProps} type={EChipType.TYPE_1} data-testid="chip-options">
+                Options
+            </ChipOptions>,
+        );
+
+        expect(getChipOptions()).toHaveClass("type1");
+
+        rerender(
+            <ChipOptions {...defaultProps} type={EChipType.TYPE_2} data-testid="chip-options">
+                Options
+            </ChipOptions>,
+        );
+
+        expect(getChipOptions()).toHaveClass("type2");
+    });
+
+    it("Should merge custom className and pass rest props to the root element", () => {
+        render(
+            <ChipOptions {...defaultProps} className="custom-class" id="chip-id" data-testid="chip-options">
+                Options
+            </ChipOptions>,
+        );
+
+        const chipOptions = getChipOptions();
+        expect(chipOptions).toHaveClass("custom-class", "chip");
+        expect(chipOptions).toHaveAttribute("id", "chip-id");
+    });
+
+    it("Should mark chip as selected and disabled", () => {
+        render(<ChipOptions {...defaultProps} selected disabled data-testid="chip-options" />);
+
+        const chipOptions = getChipOptions();
+        expect(chipOptions).toHaveClass("selected", "disabled");
+        expect(chipOptions).toHaveAttribute("tabindex", "-1");
+    });
+
+    describe("content", () => {
+        it("Should wrap children into content element", () => {
+            render(
+                <ChipOptions {...defaultProps} data-testid="chip-options">
+                    Options
+                </ChipOptions>,
+            );
+
+            const content = getChipOptions().querySelector(".chipOptionsContent");
+            expect(content).toBeInTheDocument();
+            expect(content).toHaveTextContent("Options");
+        });
+
+        it("Should wrap zero children into content element", () => {
+            render(
+                <ChipOptions {...defaultProps} data-testid="chip-options">
+                    {0}
+                </ChipOptions>,
+            );
+
+            const content = getChipOptions().querySelector(".chipOptionsContent");
+            expect(content).toBeInTheDocument();
+            expect(content).toHaveTextContent("0");
+        });
+
+        it("Should not render content element without children", () => {
+            render(<ChipOptions {...defaultProps} data-testid="chip-options" />);
+
+            expect(getChipOptions().querySelector(".chipOptionsContent")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("prefix", () => {
+        it("Should always render options icon", () => {
+            const { rerender } = render(<ChipOptions {...defaultProps} data-testid="chip-options" />);
+
+            expect(getPrefixIcon()).toBeInTheDocument();
+            expect(getChipOptions()).toHaveClass("withPrefix");
+
+            rerender(<ChipOptions {...defaultProps} selected data-testid="chip-options" />);
+
+            expect(getPrefixIcon()).toBeInTheDocument();
+            expect(getChipOptions()).toHaveClass("withPrefix");
+        });
+
+        it("Should use different icon palette in selected state", () => {
+            const { rerender } = render(<ChipOptions {...defaultProps} data-testid="chip-options" />);
+
+            const defaultPaletteClassName = getPrefixIconPaletteClassName();
+
+            rerender(<ChipOptions {...defaultProps} selected data-testid="chip-options" />);
+
+            const selectedPaletteClassName = getPrefixIconPaletteClassName();
+
+            expect(defaultPaletteClassName).toBeTruthy();
+            expect(selectedPaletteClassName).toBeTruthy();
+            expect(selectedPaletteClassName).not.toBe(defaultPaletteClassName);
+            // Сверка с эталонным рендером ловит инверсию палитр, которую сравнение
+            // состояний между собой пропускает.
+            expect(defaultPaletteClassName).toBe(getReferencePaletteClassName(5));
+            expect(selectedPaletteClassName).toBe(getReferencePaletteClassName(6));
+        });
+    });
+
+    describe("postfix", () => {
+        it("Should render clear button only in selected state", () => {
+            const { rerender } = render(<ChipOptions {...defaultProps} data-testid="chip-options" />);
+
+            expect(getClearButton()).not.toBeInTheDocument();
+
+            rerender(<ChipOptions {...defaultProps} selected data-testid="chip-options" />);
+
+            expect(getClearButton()).toBeInTheDocument();
+        });
+
+        it("Should keep withPostfix class in both states to preserve paddings", () => {
+            const { rerender } = render(<ChipOptions {...defaultProps} data-testid="chip-options" />);
+
+            expect(getChipOptions()).toHaveClass("withPostfix");
+
+            rerender(<ChipOptions {...defaultProps} selected data-testid="chip-options" />);
+
+            expect(getChipOptions()).toHaveClass("withPostfix");
+        });
+
+        it.each([
+            [EComponentSize.SM, "CrossStrokeSrvIcon16"],
+            [EComponentSize.MD, "CrossStrokeSrvIcon20"],
+            [EComponentSize.LG, "CrossStrokeSrvIcon24"],
+        ])("Should render clear button icon matching size %s", (size, iconName) => {
+            render(<ChipOptions {...defaultProps} selected size={size} data-testid="chip-options" />);
+
+            expect(getClearButton()?.querySelector("svg")).toHaveAttribute("name", iconName);
+        });
+    });
+
+    describe("clearSelected", () => {
+        it("Should call clearSelected on clear button click", () => {
+            const clearSelected = vi.fn();
+
+            render(<ChipOptions clearSelected={clearSelected} selected data-testid="chip-options" />);
+
+            fireEvent.click(getExistingClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(clearSelected).toHaveBeenCalledWith();
+        });
+
+        it("Should not trigger chip onClick on clear button click", () => {
+            const clearSelected = vi.fn();
+            const onClick = vi.fn();
+
+            render(<ChipOptions clearSelected={clearSelected} onClick={onClick} selected data-testid="chip-options" />);
+
+            fireEvent.click(getExistingClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(onClick).not.toHaveBeenCalled();
+        });
+
+        it("Should not call clearSelected on chip click", () => {
+            const clearSelected = vi.fn();
+            const onClick = vi.fn();
+
+            render(<ChipOptions clearSelected={clearSelected} onClick={onClick} selected data-testid="chip-options" />);
+
+            fireEvent.click(getChipOptions());
+
+            expect(onClick).toHaveBeenCalledTimes(1);
+            expect(clearSelected).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("clear button keyboard", () => {
+        it.each([
+            ["Enter", "{Enter}"],
+            ["Space", " "],
+        ])("Should call clearSelected on %s over the clear button", async (_code, key) => {
+            const user = userEvent.setup();
+            const clearSelected = vi.fn();
+            const onKeyDown = vi.fn();
+
+            render(
+                <ChipOptions clearSelected={clearSelected} selected onKeyDown={onKeyDown} data-testid="chip-options" />,
+            );
+
+            // Кнопка сброса — нативный button, поэтому Enter/Space активируют её кликом.
+            getExistingClearButton().focus();
+            await user.keyboard(key);
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
+        it.each([["Enter"], ["Space"]])("Should stop %s from propagating out of the clear button", (code) => {
+            const onKeyDown = vi.fn();
+
+            render(<ChipOptions {...defaultProps} selected onKeyDown={onKeyDown} data-testid="chip-options" />);
+
+            fireEvent.keyDown(getExistingClearButton(), { code });
+
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
+        it("Should let other keys propagate out of the clear button", () => {
+            const onKeyDown = vi.fn();
+
+            render(<ChipOptions {...defaultProps} selected onKeyDown={onKeyDown} data-testid="chip-options" />);
+
+            fireEvent.keyDown(getExistingClearButton(), { code: "KeyA" });
+
+            expect(onKeyDown).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("clearButtonProps", () => {
+        it("Should pass clearButtonProps to the clear button", () => {
+            render(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    clearButtonProps={{ "aria-label": "Сбросить выбор", id: "clear-button" }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            const clearButton = getExistingClearButton();
+            expect(clearButton).toHaveAttribute("aria-label", "Сбросить выбор");
+            expect(clearButton).toHaveAttribute("id", "clear-button");
+        });
+
+        it("Should merge className from clearButtonProps with the own one", () => {
+            render(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    clearButtonProps={{ className: "custom-clear-button" }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            expect(getExistingClearButton()).toHaveClass("chipClearButton", "custom-clear-button");
+        });
+
+        it("Should keep clearSelected working with clearButtonProps passed", () => {
+            const clearSelected = vi.fn();
+
+            render(
+                <ChipOptions
+                    clearSelected={clearSelected}
+                    selected
+                    clearButtonProps={{ "aria-label": "Сбросить выбор" }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            fireEvent.click(getExistingClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+        });
+
+        it("Should call onClick from clearButtonProps along with clearSelected", () => {
+            const clearSelected = vi.fn();
+            const onClickClearButton = vi.fn();
+            const onClick = vi.fn();
+
+            render(
+                <ChipOptions
+                    clearSelected={clearSelected}
+                    selected
+                    onClick={onClick}
+                    clearButtonProps={{ onClick: onClickClearButton }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            fireEvent.click(getExistingClearButton());
+
+            expect(clearSelected).toHaveBeenCalledTimes(1);
+            expect(onClickClearButton).toHaveBeenCalledTimes(1);
+            // Внешний обработчик вызывается последним — порядок задокументирован в AI.md.
+            expect(clearSelected.mock.invocationCallOrder[0]).toBeLessThan(
+                onClickClearButton.mock.invocationCallOrder[0],
+            );
+            // Собственный обработчик компонента не отменяется внешним: клик по-прежнему
+            // не всплывает до чипса.
+            expect(onClick).not.toHaveBeenCalled();
+        });
+
+        it("Should call onKeyDown from clearButtonProps without letting Enter and Space bubble", () => {
+            const onKeyDownClearButton = vi.fn();
+            const onKeyDown = vi.fn();
+
+            render(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    onKeyDown={onKeyDown}
+                    clearButtonProps={{ onKeyDown: onKeyDownClearButton }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            fireEvent.keyDown(getExistingClearButton(), { code: "Space" });
+
+            expect(onKeyDownClearButton).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
+        it.each([
+            ["Enter", "{Enter}"],
+            ["Space", " "],
+        ])("Should let onKeyDown from clearButtonProps suppress the reset on %s", async (_code, key) => {
+            const user = userEvent.setup();
+            const clearSelected = vi.fn();
+            const onKeyDown = vi.fn();
+
+            render(
+                <ChipOptions
+                    clearSelected={clearSelected}
+                    selected
+                    onKeyDown={onKeyDown}
+                    clearButtonProps={{ onKeyDown: (event) => event.preventDefault() }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            getExistingClearButton().focus();
+            await user.keyboard(key);
+
+            // Нативная семантика button: preventDefault() на keydown отменяет активацию,
+            // а вместе с ней и клик, из которого приходит сброс. Поведение осознанное —
+            // компонент не перехватывает у потребителя эту возможность.
+            expect(clearSelected).not.toHaveBeenCalled();
+            expect(onKeyDown).not.toHaveBeenCalled();
+        });
+
+        it("Should not disable the clear button unless asked through clearButtonProps", () => {
+            const { rerender } = render(<ChipOptions {...defaultProps} selected disabled data-testid="chip-options" />);
+
+            expect(getExistingClearButton()).toBeEnabled();
+
+            rerender(
+                <ChipOptions
+                    {...defaultProps}
+                    selected
+                    disabled
+                    clearButtonProps={{ disabled: true }}
+                    data-testid="chip-options"
+                />,
+            );
+
+            expect(getExistingClearButton()).toBeDisabled();
+        });
     });
 
     it("Should forward ref correctly", () => {

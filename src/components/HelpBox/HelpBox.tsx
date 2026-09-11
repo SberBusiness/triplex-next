@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import FocusTrap from "focus-trap-react";
 import { ISingleColorIconProps, QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
@@ -7,12 +8,23 @@ import { EButtonIconShape } from "../Button/enums";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { ITooltipProps, ITooltipXButtonProps } from "../Tooltip/types";
 import { ETooltipSize } from "../Tooltip/enums";
-import { TooltipMobileHeader } from "../Tooltip/components/mobile/components/TooltipMobileHeader";
 import { MobileView } from "../MobileView/MobileView";
 import { getDataHTMLAttributes, TDataHTMLAttributes } from "../../utils/html/DataAttributes";
 import { getAriaHTMLAttributes, TAriaHTMLAttributes } from "../../utils/html/AriaAttributes";
 import styles from "./styles/HelpBox.module.less";
-import clsx from "clsx";
+
+/** Индекс палитры иконки "?" по умолчанию. Переопределяется через iconProps. */
+const DEFAULT_ICON_PALETTE_INDEX = 5;
+/** Префикс идентификатора Tooltip. */
+const TOOLTIP_ID_PREFIX = "HelpBox-";
+
+/**
+ * Открытая мышью подсказка фокус не забирает, поэтому ловушка нужна, только если кнопка-триггер
+ * держит фокус (клавиатура) либо курсора над ней нет (программное открытие через isOpen).
+ */
+const needFocusTrap = (button: HTMLButtonElement | null): boolean => {
+    return button === null || button === document.activeElement || !button.matches(":hover");
+};
 
 /** Свойства компонента HelpBox. */
 export interface IHelpBoxProps
@@ -27,9 +39,9 @@ export interface IHelpBoxProps
     tooltipDataAttributes?: TDataHTMLAttributes;
     /** Размер Tooltip. */
     tooltipSize: ETooltipSize;
-    /** Контент заголовка TooltipMobile. */
+    /** Контент заголовка TooltipMobile. Отображается только в мобильной версии. */
     mobileHeaderContent?: React.ReactNode;
-    /** Свойства иконки. */
+    /** Свойства иконки. По умолчанию paletteIndex равен 5. */
     iconProps?: ISingleColorIconProps;
     /** Свойства кнопки закрытия Tooltip. */
     tooltipXButtonProps?: ITooltipXButtonProps;
@@ -57,60 +69,47 @@ export const HelpBox = React.forwardRef<HTMLButtonElement, IHelpBoxProps>(
         ref,
     ) => {
         const buttonRef = useRef<HTMLButtonElement | null>(null);
+        // Внутреннее состояние открытия используется, только когда isOpen не передан (uncontrolled-режим).
         const [openState, setOpenState] = useState(Boolean(openProp));
+        // Нода открытого Tooltip, в которую монтируется ловушка фокуса. Приходит из onShow.
         const [focusTrapNode, setFocusTrapNode] = useState<HTMLDivElement | null>(null);
-        const [tooltipId] = useState<string>(uniqueId());
+        const [tooltipId] = useState(() => uniqueId(TOOLTIP_ID_PREFIX));
         const open = openProp ?? openState;
 
-        /** Функция для хранения ссылки. */
-        const setRef = (instance: HTMLButtonElement | null) => {
-            buttonRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                (ref as React.MutableRefObject<HTMLButtonElement | null>).current = instance;
-            }
-        };
+        /** Установка ссылки на кнопку-триггер: во внутренний ref (для позиционирования) и во внешний forwarded ref. */
+        const setButtonRef = useCallback(
+            (instance: HTMLButtonElement | null) => {
+                buttonRef.current = instance;
 
-        /** Обработчик закрытия/открытия Tooltip. */
-        const handleTooltipToggle = (open: boolean) => {
-            if (openProp === undefined) {
-                setOpenState(open);
-            }
+                if (typeof ref === "function") {
+                    ref(instance);
+                } else if (ref) {
+                    ref.current = instance;
+                }
+            },
+            [ref],
+        );
 
+        useEffect(() => {
             if (!open) {
                 setFocusTrapNode(null);
             }
+        }, [open]);
 
-            toggle?.(open);
+        /** Обработчик закрытия/открытия Tooltip. */
+        const handleTooltipToggle = (nextOpen: boolean) => {
+            if (openProp === undefined) {
+                setOpenState(nextOpen);
+            }
+
+            toggle?.(nextOpen);
         };
 
-        /** Обработчик появления Tooltip. */
+        /** Обработчик появления Tooltip. Сохраняет его ноду, если подсказке нужна ловушка фокуса. */
         const handleTooltipShow = (node: HTMLDivElement) => {
-            setFocusTrapNode(node);
+            setFocusTrapNode(needFocusTrap(buttonRef.current) ? node : null);
             onShow?.(node);
         };
-
-        /** Рендер ловушки фокуса. */
-        const renderFocusTrap = (node: HTMLDivElement) => (
-            <MobileView
-                fallback={
-                    <FocusTrap
-                        active={open}
-                        {...focusTrapProps}
-                        focusTrapOptions={{
-                            clickOutsideDeactivates: true,
-                            initialFocus: `[id='${tooltipId}']`,
-                            preventScroll: true,
-                            ...focusTrapProps?.focusTrapOptions,
-                        }}
-                        containerElements={[node]}
-                    />
-                }
-            >
-                {null}
-            </MobileView>
-        );
 
         return (
             <>
@@ -125,24 +124,43 @@ export const HelpBox = React.forwardRef<HTMLButtonElement, IHelpBoxProps>(
                     toggle={handleTooltipToggle}
                     onShow={handleTooltipShow}
                     targetRef={buttonRef}
-                    {...(Boolean(tooltipAriaAttributes) && getAriaHTMLAttributes(tooltipAriaAttributes!))}
-                    {...(Boolean(tooltipDataAttributes) && getDataHTMLAttributes(tooltipDataAttributes!))}
+                    {...(tooltipAriaAttributes && getAriaHTMLAttributes(tooltipAriaAttributes))}
+                    {...(tooltipDataAttributes && getDataHTMLAttributes(tooltipDataAttributes))}
                 >
                     <Tooltip.Target>
                         <ButtonIcon
                             className={clsx(styles.helpBoxButton, className)}
                             shape={EButtonIconShape.CIRCLE}
-                            ref={setRef}
+                            ref={setButtonRef}
                             {...targetHtmlAttrs}
                         >
-                            <QuestioncircleFilledSrvIcon16 paletteIndex={5} {...iconProps} />
+                            <QuestioncircleFilledSrvIcon16 paletteIndex={DEFAULT_ICON_PALETTE_INDEX} {...iconProps} />
                         </ButtonIcon>
                     </Tooltip.Target>
-                    {mobileHeaderContent && <TooltipMobileHeader>{mobileHeaderContent}</TooltipMobileHeader>}
+                    {mobileHeaderContent && <Tooltip.MobileHeader>{mobileHeaderContent}</Tooltip.MobileHeader>}
                     <Tooltip.Body>{children}</Tooltip.Body>
                     <Tooltip.XButton {...tooltipXButtonProps} />
                 </Tooltip>
-                {open && focusTrapNode && renderFocusTrap(focusTrapNode)}
+                {/* Ловушка фокуса нужна только на desktop, только когда Tooltip уже появился в DOM и только если подсказку открыли не наведением мыши. */}
+                {open && focusTrapNode && (
+                    <MobileView
+                        fallback={
+                            <FocusTrap
+                                active={open}
+                                {...focusTrapProps}
+                                focusTrapOptions={{
+                                    clickOutsideDeactivates: true,
+                                    initialFocus: `[id='${tooltipId}']`,
+                                    preventScroll: true,
+                                    ...focusTrapProps?.focusTrapOptions,
+                                }}
+                                containerElements={[focusTrapNode]}
+                            />
+                        }
+                    >
+                        {null}
+                    </MobileView>
+                )}
             </>
         );
     },

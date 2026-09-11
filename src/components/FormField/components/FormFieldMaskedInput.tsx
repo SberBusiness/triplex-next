@@ -26,6 +26,29 @@ export interface IFormFieldMaskedInputProps
     placeholderMask?: string;
 }
 
+const PHONE_PREFIX = "+7 (";
+
+/**
+ * Приводит произвольный номер к виду, который корректно раскладывается по маске телефона.
+ * Ведущий код страны 7 или 8 заменяется на "+7 (", а номер, у которого вторая цифра 7,
+ * дополняется этим же префиксом — иначе conformToMask примет первую цифру номера
+ * за литерал "7" из маски и потеряет последнюю цифру.
+ */
+const normalizePhoneText = (text: string): { indexesOfPipedChars: number[]; text: string } => {
+    let indexesOfPipedChars: number[] = [];
+
+    // Поиск числа из 1 цифры и более, начинающегося с 7 или 8.
+    let nextText = text.replace(/^[78]((\D*\d)*)/, `${PHONE_PREFIX}$1`);
+
+    // Поиск числа вида {любая цифра}7, например 87, 971 и т.д., и добавление +7 перед ним.
+    nextText = nextText.replace(/^\d7/, (match) => {
+        indexesOfPipedChars = Array.from(PHONE_PREFIX).map((_, i) => i);
+        return `${PHONE_PREFIX}${match}`;
+    });
+
+    return { indexesOfPipedChars, text: nextText };
+};
+
 /** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
@@ -50,6 +73,14 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
         const pasted = useRef(false);
         const { filled, focused, size, status } = useContext(FormFieldContext);
 
+        /*
+         * Для маски телефона значение приводится к виду с префиксом "+7 (" — см. normalizePhoneText,
+         * для остальных масок используется как есть. Приведение выполняется один раз здесь, потому что
+         * одно и то же значение нужно и инпуту, и слою с маской: посчитанные по разным значениям,
+         * введённый текст и маска под ним разъезжаются.
+         */
+        const normalizedValue = mask === presets.masks.phone ? normalizePhoneText(value).text : value;
+
         useEffect(() => {
             /** Возвращает значение placeholderValue. */
             const calculatePlaceholderValue = (): string => {
@@ -57,7 +88,7 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
                 let nextPlaceholderValue: string[] = [];
 
                 // Значение инпута остутствует.
-                if (!value) {
+                if (!normalizedValue) {
                     // Передан props placeholderMask, например дд.мм.гггг
                     if (placeholderMask) {
                         // При наличии маски плейсхолдера, placeholderValue равен маски плейсхолдера.
@@ -72,9 +103,9 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
                 // Инпут имеет value.
                 else {
                     // Value с маской, например: 22.00.00
-                    const { conformedValue } = conformToMask(value.toString(), mask, { guide: true, placeholderChar });
+                    const { conformedValue } = conformToMask(normalizedValue, mask, { guide: true, placeholderChar });
                     // Нам нужна точная длина того, что уже ввел пользователь
-                    const conformed = conformToMask(value.toString(), mask, {
+                    const conformed = conformToMask(normalizedValue, mask, {
                         guide: false,
                         placeholderChar,
                     }).conformedValue;
@@ -88,7 +119,7 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
                             nextPlaceholderValue[i] = conformedValue[i];
                         } else {
                             // Не введенный пользователем символ заполняется символом placeholderMask или placeholderChar.
-                            if (conformedValue[i] === placeholderChar && !value.toString()[i]) {
+                            if (conformedValue[i] === placeholderChar && !normalizedValue[i]) {
                                 nextPlaceholderValue[i] = placeholderMask?.[i] || placeholderChar;
                             } else {
                                 nextPlaceholderValue[i] = conformedValue[i];
@@ -101,7 +132,7 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             };
 
             setPlaceholderValue(calculatePlaceholderValue());
-        }, [value, mask, placeholderChar, placeholderMask]);
+        }, [normalizedValue, mask, placeholderChar, placeholderMask]);
 
         const handlePaste = () => {
             pasted.current = true;
@@ -126,44 +157,20 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
 
         // Постобработчик введенных значений, если маска является номером телефона.
         const phonePipe = (text: string) => {
-            let indexesOfPipedChars: number[] = [];
-
-            if (pasted.current) {
-                // Выражение для поиска чисел из 1 цифры и более, начинающихся с 7 или 8
-                let regEx = /^[78]((\D*\d)*)/;
-
-                text = text.replace(regEx, "+7 ($1");
-
-                // Выражение для поиска чисел вида {любая цифра}7, например 87, 971 и т.д.
-                regEx = /^\d7/;
-
-                // Если вторая цифра номера 7, добавляется +7 перед этим, иначе conformToMask вместо 9701234567 вернет +7901234567.
-                text = text.replace(regEx, (match) => {
-                    indexesOfPipedChars = Array.from("+7 (").map((_, i) => i);
-                    return `+7 (${match}`;
-                });
-            } else if (text === "7" || text === "8") {
-                // Если первая введенная цифра 7 или 8, заменяем её на +7 (
-                text = "+7 (";
-            }
+            // При вставке номер может прийти в любом виде, поэтому нормализуется целиком.
+            // При ручном вводе нормализуется только первая цифра: дальше в text уже есть префикс "+7 (".
+            const normalized = pasted.current
+                ? normalizePhoneText(text)
+                : { indexesOfPipedChars: [], text: text === "7" || text === "8" ? PHONE_PREFIX : text };
 
             return {
-                indexesOfPipedChars,
-                value: conformToMask(text, mask, { guide: false, placeholderChar }).conformedValue,
+                indexesOfPipedChars: normalized.indexesOfPipedChars,
+                value: conformToMask(normalized.text, mask, { guide: false, placeholderChar }).conformedValue,
             };
         };
 
-        // Возвращает value, приведённое к маске. Для некоторых типов масок, value приходится модифицировать из-за багов.
-        const getValue = (): string => {
-            if (mask === presets.masks.phone) {
-                return phonePipe(value).value;
-            }
-
-            return conformToMask(value, mask, { guide: false, placeholderChar }).conformedValue;
-        };
-
         // Значение, приведённое к маске, — уходит в react-text-mask.
-        const maskedValue = getValue();
+        const maskedValue = conformToMask(normalizedValue, mask, { guide: false, placeholderChar }).conformedValue;
         /*
          * Значение, отображаемое в input. Для маски телефона — приведённое к маске (телефон нормализует
          * ввод с 7/8/+7 в начале, без этого react-text-mask форматирует номер неверно), для остальных масок —

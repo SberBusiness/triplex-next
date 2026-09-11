@@ -30,6 +30,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [dropdownOpen, setDropdownOpen, onKeyDown],
     );
 
+    /** Enter и Space на кнопке очистки не должны дополнительно переключать выпадающий список родительского Chip. */
     const handleClearButtonKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
         if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
             event.stopPropagation();
@@ -45,21 +46,19 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [clearSelected],
     );
 
-    const renderTargetPostfix = useCallback(() => {
-        if (value === undefined) {
-            return <ChipDropdownArrow rotated={dropdownOpen} size={size} />;
-        } else {
-            return (
-                <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} size={size} />
-            );
-        }
-    }, [value, size, dropdownOpen, handleClearButtonClick, handleClearButtonKeyDown]);
+    // Пока значение не выбрано — стрелка выпадающего списка, после выбора — кнопка очистки.
+    const targetPostfix =
+        value === undefined ? (
+            <ChipDropdownArrow rotated={dropdownOpen} size={size} />
+        ) : (
+            <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} size={size} />
+        );
 
     return (
         <Chip
             selected={value !== undefined}
             aria-expanded={dropdownOpen}
-            postfix={renderTargetPostfix()}
+            postfix={targetPostfix}
             onKeyDown={handleKeyDown}
             onClick={handleClick}
             size={size}
@@ -69,6 +68,10 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
     );
 };
 
+/**
+ * Target-элемент ChipSuggest: Chip, который открывает и закрывает выпадающий список.
+ * Выбранное значение и видимость списка берёт из SuggestContext, поэтому рендерится только внутри Suggest.
+ */
 export const ChipSuggestTarget = React.forwardRef(ChipSuggestTargetBase) as <T extends ISuggestOption>(
     props: IChipSuggestTargetProps<T> & React.RefAttributes<HTMLSpanElement>,
 ) => JSX.Element;

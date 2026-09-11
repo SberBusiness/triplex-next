@@ -43,7 +43,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
     const inputFocusedRef = useRef(false);
     const dropdownOpenRef = useRef(false);
     const dropdownClosedByCalendarRef = useRef(false); // Dropdown закрылся от выбора даты в календаре
-    const tooltipOpened = useRef(false);
+    const tooltipOpenedRef = useRef(false);
 
     useEffect(() => {
         const newPickerValues = DateFieldUtils.getPickerValues(value, format, limitRange, disabledDays);
@@ -52,10 +52,11 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
             setPickerValues(newPickerValues);
         }
         lastValidPickerValuesRef.current = newPickerValues;
+        // pickerValues намеренно не в зависимостях: эффект синхронизирует поле с внешним value,
+        // а не реагирует на ввод пользователя — иначе он затирал бы промежуточный ввод.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, format, limitRange, disabledDays]);
 
-    /** Функция для хранения ссылки. */
     const setRef = (instance: HTMLDivElement | null) => {
         tooltipTargetRef.current = instance;
         if (typeof ref === "function") {
@@ -63,6 +64,86 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         } else if (ref) {
             ref.current = instance;
         }
+    };
+
+    /** Обработчик изменения значения поля ввода с маской. */
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let date: moment.Moment | null = null;
+
+        if (event.target.value.length === inputDateFormat.length) {
+            date = moment(event.target.value, inputDateFormat, true);
+
+            if (
+                !date.isValid() ||
+                !DateFieldUtils.isAvailableDate(date, date.format(format), limitRange, disabledDays)
+            ) {
+                date = null;
+            }
+
+            tooltipOpenedRef.current = !date;
+        } else {
+            tooltipOpenedRef.current = false;
+        }
+
+        setPickerValues({ calendarDate: date, inputString: event.target.value });
+    };
+
+    /** Триггер изменения значения из поля ввода. */
+    const triggerChangeFromInput = () => {
+        if (pickerValues.inputString.length === 0 && value.length !== 0) {
+            return onChange(pickerValues.inputString);
+        }
+
+        const date = moment(pickerValues.inputString, inputDateFormat, true);
+
+        if (date.isValid()) {
+            const newValue = date.format(format);
+
+            if (newValue === value) {
+                return;
+            }
+
+            if (DateFieldUtils.isAvailableDate(date, newValue, limitRange, disabledDays)) {
+                return onChange(newValue);
+            }
+        }
+
+        // Текущее значение в поле невалидно, возвращаем последнее валидное.
+        if (pickerValues.inputString !== lastValidPickerValuesRef.current.inputString) {
+            tooltipOpenedRef.current = false;
+            setPickerValues(lastValidPickerValuesRef.current);
+        }
+    };
+
+    /** Обработчик открытия Dropdown. */
+    const handleDropdownOpen = () => {
+        dropdownOpenRef.current = true;
+
+        onDropdownOpen?.();
+    };
+
+    /** Обработчик закрытия Dropdown. */
+    const handleDropdownClose = () => {
+        dropdownOpenRef.current = false;
+
+        if (dropdownClosedByCalendarRef.current) {
+            dropdownClosedByCalendarRef.current = false;
+        } else if (
+            !inputFocusedRef.current &&
+            pickerValues.inputString !== lastValidPickerValuesRef.current.inputString
+        ) {
+            triggerChangeFromInput();
+        }
+
+        onDropdownClose?.();
+    };
+
+    /** Обработчик изменения даты. */
+    const handleDateChange = (date: moment.Moment) => {
+        dropdownClosedByCalendarRef.current = true;
+        tooltipOpenedRef.current = false;
+
+        onChange(date.format(format));
     };
 
     /** Рендер-функция управляющего элемента. */
@@ -107,86 +188,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         />
     );
 
-    /** Обработчик изменения значения DatePickerTargetInput. */
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let date: moment.Moment | null = null;
-
-        if (event.target.value.length === inputDateFormat.length) {
-            date = moment(event.target.value, inputDateFormat, true);
-
-            if (
-                !date.isValid() ||
-                !DateFieldUtils.isAvailableDate(date, date.format(format), limitRange, disabledDays)
-            ) {
-                date = null;
-            }
-
-            tooltipOpened.current = !date;
-        } else {
-            tooltipOpened.current = false;
-        }
-
-        setPickerValues({ calendarDate: date, inputString: event.target.value });
-    };
-
-    /** Триггер изменения значения из поля ввода. */
-    const triggerChangeFromInput = () => {
-        if (pickerValues.inputString.length === 0 && value.length !== 0) {
-            return onChange(pickerValues.inputString);
-        }
-
-        const date = moment(pickerValues.inputString, inputDateFormat, true);
-
-        if (date.isValid()) {
-            const newValue = date.format(format);
-
-            if (newValue === value) {
-                return;
-            }
-
-            if (DateFieldUtils.isAvailableDate(date, newValue, limitRange, disabledDays)) {
-                return onChange(newValue);
-            }
-        }
-
-        // Текущее значение в поле невалидно, возвращаем последнее валидное.
-        if (pickerValues.inputString !== lastValidPickerValuesRef.current.inputString) {
-            tooltipOpened.current = false;
-            setPickerValues(lastValidPickerValuesRef.current);
-        }
-    };
-
-    /** Обработчик открытия Dropdown. */
-    const handleDropdownOpen = () => {
-        dropdownOpenRef.current = true;
-
-        onDropdownOpen?.();
-    };
-
-    /** Обработчик закрытия Dropdown. */
-    const handleDropdownClose = () => {
-        dropdownOpenRef.current = false;
-
-        if (dropdownClosedByCalendarRef.current) {
-            dropdownClosedByCalendarRef.current = false;
-        } else if (
-            !inputFocusedRef.current &&
-            pickerValues.inputString !== lastValidPickerValuesRef.current.inputString
-        ) {
-            triggerChangeFromInput();
-        }
-
-        onDropdownClose?.();
-    };
-
-    /** Обработчик изменения даты. */
-    const handleDateChange = (date: moment.Moment) => {
-        dropdownClosedByCalendarRef.current = true;
-        tooltipOpened.current = false;
-
-        onChange(date.format(format));
-    };
-
+    /** Рендер-функция DatePickerExtended — поле ввода с выпадающим календарём. */
     const renderDatePickerExtended = () => (
         <DatePickerExtended
             dropdownTargetRef={dropdownTargetRef}
@@ -207,7 +209,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
     return (
         <MobileView
             fallback={
-                <Tooltip targetRef={tooltipTargetRef} size={ETooltipSize.SM} isOpen={tooltipOpened.current}>
+                <Tooltip targetRef={tooltipTargetRef} size={ETooltipSize.SM} isOpen={tooltipOpenedRef.current}>
                     <Tooltip.Body>{invalidDateHint}</Tooltip.Body>
                     <Tooltip.Target>{renderDatePickerExtended()}</Tooltip.Target>
                 </Tooltip>

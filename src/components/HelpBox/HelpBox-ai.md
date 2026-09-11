@@ -39,7 +39,7 @@ version: "1.0"
 | `focusTrapProps` | `FocusTrapProps` | — | Свойства `focus-trap-react` для ловушки фокуса |
 | `tooltipAriaAttributes` | `TAriaHTMLAttributes` | — | Aria-атрибуты, пробрасываемые в Tooltip-контейнер |
 | `tooltipDataAttributes` | `TDataHTMLAttributes` | — | Data-атрибуты, пробрасываемые в Tooltip-контейнер |
-| `iconProps` | `ISingleColorIconProps` | — | Свойства иконки вопроса (например, `paletteIndex`) |
+| `iconProps` | `ISingleColorIconProps` | — | Свойства иконки вопроса (например, `paletteIndex`; по умолчанию `paletteIndex` равен `5`) |
 | `tooltipXButtonProps` | `ITooltipXButtonProps` | — | Свойства кнопки закрытия Tooltip (включая `aria-label`) |
 | `className` | `string` | — | CSS-класс, пробрасывается на кнопку-триггер |
 | `...rest` | `React.HTMLAttributes<HTMLButtonElement>` | — | Все стандартные атрибуты `<button>`, включая `aria-label`, пробрасываются на кнопку-триггер |
@@ -65,6 +65,9 @@ version: "1.0"
 - **`tooltipSize` prop** — обязательный, не делать optional.
 - **Barrel export в `index.ts`** — не удалять.
 - **`toggleType="hover"`** — Tooltip реагирует на наведение, не менять без согласования.
+- **Ловушка фокуса не активируется при hover-открытии** — фокус пользователя не должен переезжать в подсказку от одного наведения курсора.
+- **`uniqueId()` из `lodash-es`, а не `React.useId`** — код должен собираться в ветке
+  `release-0` под React 17.
 
 ---
 
@@ -75,6 +78,7 @@ version: "1.0"
 - **`aria-label` кнопки закрытия** — передаётся через `tooltipXButtonProps={{ "aria-label": "Закрыть" }}`. Потребитель **обязан** указать значение на своём языке.
 - Tooltip открывается с `role="dialog"`, `tabIndex={-1}`.
 - FocusTrap удерживает фокус внутри открытого тултипа на desktop. При активации: `initialFocus` — элемент Tooltip (по ID), `clickOutsideDeactivates: true` — клик за пределами закрывает, `preventScroll: true`. Потребитель может расширить настройки через `focusTrapProps.focusTrapOptions`.
+- **Ловушка фокуса не ставится, когда подсказку открыли мышью.** Признак вычисляется в момент открытия (`needFocusTrap`): ловушка нужна, если кнопка-триггер держит фокус (клавиатура) либо курсора над ней нет (программное открытие через `isOpen`). Клик мышью ловушку тоже не ставит — `mouseenter` открывает подсказку раньше клика, и второго `onShow` не происходит. Фокус при этом всё равно переходит на кнопку-триггер: это нативное поведение браузера при клике по `<button>`, к ловушке отношения не имеет.
 - `tooltipAriaAttributes` позволяет добавить aria-атрибуты к контейнеру Tooltip.
 
 ---
@@ -113,3 +117,5 @@ version: "1.0"
 | 2026-04-08 | Создан документ. Добавлен `forwardRef`. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», их содержимое перенесено в `Ограничения использования` и `Accessibility`, переставлены секции, добавлена колонка `Example file`. |
 | 2026-07-08 | Актуализирована колонка `Example file`: имена файлов примеров приведены к фактическим (без постфикса `Example`). |
+| 2026-09-08 | AI-рефакторинг: `useId` заменён на `uniqueId` (совместимость с React 17), callback-`ref` стабилизирован через `useCallback`, убраны `!` и `as`-каст в работе с `ref`, `TooltipMobileHeader` берётся из composition-API `Tooltip.MobileHeader`, `paletteIndex` иконки вынесен в константу. Добавлены unit-тесты (25 кейсов, включая мобильную версию). |
+| 2026-09-10 | Ловушка фокуса больше не активируется при открытии подсказки наведением мыши (`needFocusTrap`): фокус остаётся в элементе, с которым работает пользователь. Добавлены unit-тесты на hover- и клавиатурный сценарии. |

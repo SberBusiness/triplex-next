@@ -1,3 +1,4 @@
+import React from "react";
 import { AmountConst } from "@sberbusiness/triplex-next/consts/AmountConst";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { StringUtils } from "@sberbusiness/triplex-next/utils/stringUtils";
@@ -20,6 +21,51 @@ export function createPlaceholder(fractionDigits: number) {
     }
 
     return buffer.join("");
+}
+
+/**
+ * Записать значение в forwarded ref (callback-ref или объектный ref).
+ *
+ * Внутренний хелпер AmountField: из barrel index.ts не экспортируется.
+ *
+ * @param ref Внешняя ссылка, переданная потребителем.
+ * @param instance Экземпляр элемента или null при размонтировании.
+ */
+export function setForwardedRef<T>(ref: React.Ref<T> | undefined, instance: T | null): void {
+    if (typeof ref === "function") {
+        ref(instance);
+    } else if (ref != null) {
+        // React.RefObject помечен readonly, но запись в current — единственный способ заполнить объектный ref.
+        (ref as React.MutableRefObject<T | null>).current = instance;
+    }
+}
+
+/**
+ * Синхронизировать ядро с текущим значением и настройками формата и вернуть отформатированное значение.
+ *
+ * Пересчёт выполняется, только если значение или настройки формата отличаются от тех, что уже в ядре:
+ * иначе повторный рендер затирал бы позицию каретки, вычисленную обработчиком ввода.
+ *
+ * @param core Ядро форматирования, живущее между рендерами.
+ * @param value Значение, пришедшее в inputProps.value.
+ * @param maxIntegerDigits Максимальное количество знаков перед запятой.
+ * @param fractionDigits Количество знаков после запятой.
+ */
+export function syncCoreAndGetFormattedValue(
+    core: AmountBaseInputCore,
+    value: string,
+    maxIntegerDigits: number,
+    fractionDigits: number,
+): string {
+    if (value !== core.value || maxIntegerDigits !== core.maxIntegerDigits || fractionDigits !== core.fractionDigits) {
+        core.maxIntegerDigits = maxIntegerDigits;
+        core.fractionDigits = fractionDigits;
+        core.apply(value, value.length);
+    }
+
+    core.cache.formattedValue = core.formattedValue;
+
+    return core.formattedValue;
 }
 
 /**
@@ -71,7 +117,7 @@ export function setFallbackCaret(input: HTMLInputElement, coreAmount: AmountBase
     }
 
     // Если текст выделялся в обратном порядке, ставим каретку в конец выделения.
-    if (selectionDirection == "backward") return input.setSelectionRange(selectionEnd, selectionEnd);
+    if (selectionDirection === "backward") return input.setSelectionRange(selectionEnd, selectionEnd);
 
     // В остальных случаях ставим каретку в начало выделения.
     return input.setSelectionRange(selectionStart, selectionStart);

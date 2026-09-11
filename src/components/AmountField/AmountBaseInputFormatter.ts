@@ -6,15 +6,12 @@ export class AmountBaseInputFormatter {
     private value: string;
     /** Величина сдвига каретки. */
     private caretOffset: number;
-    /** Максимальное количество знаков (без учёта пробелов). */
-    private readonly maxLength: number;
-    /** Количество чисел после запятой. */
+    /** Количество знаков после запятой. */
     private readonly fractionDigits: number;
 
-    constructor(maxLength: number, fractionDigits: number) {
+    constructor(fractionDigits: number) {
         this.value = "";
         this.caretOffset = 0;
-        this.maxLength = maxLength;
         this.fractionDigits = fractionDigits;
     }
 
@@ -28,11 +25,11 @@ export class AmountBaseInputFormatter {
         return this.caretOffset;
     }
 
-    /** Применение входных данные для форматирования. */
+    /** Применение входных данных для форматирования. */
     public apply(value: string): void {
         const length = value.length;
 
-        if (this.fractionDigits == 0) {
+        if (this.fractionDigits === 0) {
             this.value = this.formatInteger(value, length);
         } else {
             this.value = this.formatDecimal(value, length);
@@ -49,7 +46,7 @@ export class AmountBaseInputFormatter {
             buffer.push(value[i]);
             while (++i < length) {
                 // Нужно ли добавить разделитель между группами цифр.
-                if ((length - i) % 3 == 0) {
+                if ((length - i) % 3 === 0) {
                     buffer.push(" ");
                     this.caretOffset++;
                 }
@@ -64,14 +61,14 @@ export class AmountBaseInputFormatter {
     private formatDecimal(value: string, length: number): string {
         const buffer: string[] = [];
 
-        if (length) {
+        if (length > 0) {
             const integerLength = length - this.fractionDigits - 1;
             let i = 0;
 
             buffer.push(value[i]);
             while (++i < integerLength) {
                 // Нужно ли добавить разделитель между группами цифр.
-                if ((integerLength - i) % 3 == 0) {
+                if ((integerLength - i) % 3 === 0) {
                     buffer.push(" ");
                     this.caretOffset++;
                 }

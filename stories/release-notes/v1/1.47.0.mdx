@@ -5,3 +5,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v1.47.0</Title>
 
 <Heading>Изменения</Heading>
+
+**CardStatic**
+
+- Добавлено: `CardStatic` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.

@@ -94,7 +94,7 @@ describe("CardStatic", () => {
 
     it("renders Media inside the card", () => {
         render(
-            <CardStatic>
+            <CardStatic data-testid="card">
                 <CardStatic.Media data-testid="media" />
                 <CardStatic.Content>
                     <CardStatic.Content.Body>body</CardStatic.Content.Body>
@@ -102,15 +102,15 @@ describe("CardStatic", () => {
             </CardStatic>,
         );
 
-        expect(screen.getByTestId("media")).toBeInTheDocument();
+        expect(screen.getByTestId("card")).toContainElement(screen.getByTestId("media"));
     });
 
     it("exposes displayName and compound components", () => {
         expect(CardStatic.displayName).toBe("CardStatic");
-        expect(CardStatic.Content).toBeDefined();
-        expect(CardStatic.Content.Header).toBeDefined();
-        expect(CardStatic.Content.Body).toBeDefined();
-        expect(CardStatic.Content.Footer).toBeDefined();
-        expect(CardStatic.Media).toBeDefined();
+        expect(CardStatic.Content.displayName).toBe("CardContent");
+        expect(CardStatic.Content.Header.displayName).toBe("CardContentHeader");
+        expect(CardStatic.Content.Body.displayName).toBe("CardContentBody");
+        expect(CardStatic.Content.Footer.displayName).toBe("CardContentFooter");
+        expect(CardStatic.Media.displayName).toBe("CardMedia");
     });
 });

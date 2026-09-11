@@ -1,7 +1,7 @@
 ---
 component: DatePickerExtended
 category: Date components
-related: [Calendar, Dropdown, DateField, MonthYearField, ChipDatePicker]
+related: [Calendar, Dropdown, DateField, MonthYearField, ChipDatePicker, ChipMonthYearPicker]
 tokens: []
 stories: stories/DatePickerExtended/DatePickerExtended.stories.tsx
 version: "1.0"
@@ -97,6 +97,7 @@ version: "1.0"
 - `DateField` — поле ввода даты; передаёт `dropdownTargetRef` и открывает календарь из `DateFieldTarget` через контекст.
 - `MonthYearField` — выбор месяца и года; конфигурирует `pickType={ECalendarPickType.MONTH_YEAR}`.
 - `ChipDatePicker` — чип-фильтр с календарём; открывает дропдаун из `ChipDatePickerTarget` через контекст.
+- `ChipMonthYearPicker` — чип-фильтр с выбором месяца (`pickType` фиксирован в `MONTH_YEAR`); открывает дропдаун из `ChipMonthYearPickerTarget` через контекст.
 - `DatePickerExtendedContext` — контекст открытости дропдауна для целевого элемента. Экспортируется из barrel вместе с типом `IDatePickerExtendedContext`, отдельного AI.md не имеет.
 
 Внутренние части (в barrel не экспортируются, отдельного AI.md не имеют):
@@ -130,5 +131,6 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-09-07 | В потребители базы добавлен `ChipMonthYearPicker` (чип-фильтр с `pickType` `MONTH_YEAR`) |
 | 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`) |
 | 2026-08-20 | Создан документ. AI-рефакторинг, unit-тесты (`__tests__/DatePickerExtended.test.tsx`), stories по modern pattern. Исправлено: `yesterdayButtonProps` / `tomorrowButtonProps` пробрасываются в `Calendar`, `adaptiveMode` больше не попадает в DOM |

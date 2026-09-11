@@ -115,10 +115,25 @@ describe("Slider", () => {
         expect(container.querySelector('[class*="sliderExtendedTooltipOverlay"]')).not.toBeInTheDocument();
     });
 
-    it("applies size class to the root element", () => {
+    it("applies size class to the root element for LG size", () => {
         const { container } = renderSlider({ size: EComponentSize.LG });
 
         expect(container.querySelector("[data-tx]")).toHaveClass("sliderExtended", "lg");
+    });
+
+    it("does not apply LG class for MD size", () => {
+        const { container } = renderSlider({ size: EComponentSize.MD });
+        const sliderRoot = container.querySelector("[data-tx]");
+
+        expect(sliderRoot).toHaveClass("sliderExtended");
+        expect(sliderRoot).not.toHaveClass("lg");
+    });
+
+    it("applies disabled class and drops the dot out of tab order", async () => {
+        const { container } = renderSlider({ disabled: true });
+
+        expect(container.querySelector("[data-tx]")).toHaveClass("disabled");
+        expect(await screen.findByRole("slider")).toHaveAttribute("tabindex", "-1");
     });
 
     it("merges className and rest attributes into the root element", () => {

@@ -93,7 +93,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ButtonIcon | ✅ | ✅ | ✅ |
 | Calendar | ✅ | ✅ | ✅ |
 | CardAction | ✅ | ✅ | ✅ |
-| CardStatic | ⬜ | ⬜ | ⬜ |
+| CardStatic | ✅ | ✅ | ✅ |
 | CarouselExtended | ✅ | ✅ | ✅ |
 | Checkbox | ✅ | ✅ | ✅ |
 | CheckboxTree | ⬜ | ✅ | ⬜ |

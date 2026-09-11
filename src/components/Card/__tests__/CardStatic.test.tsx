@@ -41,6 +41,24 @@ describe("CardStatic", () => {
         expect(screen.getByText("card").className).toContain(mapCardRoundingSizeToCssClass[ECardRoundingSize.MD]);
     });
 
+    it("applies theme GENERAL by default", () => {
+        render(<CardStatic>card</CardStatic>);
+
+        expect(screen.getByText("card").className).toContain(mapCardThemeToCssClass[ECardTheme.GENERAL]);
+    });
+
+    it("forwards ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <CardStatic ref={ref} data-testid="card">
+                card
+            </CardStatic>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toBe(screen.getByTestId("card"));
+    });
+
     it("merges className and forwards attributes", () => {
         render(
             <CardStatic theme={ECardTheme.GENERAL} className="extra" id="card-id" title="title-attr" data-testid="card">
@@ -72,5 +90,27 @@ describe("CardStatic", () => {
         expect(screen.getByTestId("header")).toBeInTheDocument();
         expect(screen.getByTestId("body")).toBeInTheDocument();
         expect(screen.getByTestId("footer")).toBeInTheDocument();
+    });
+
+    it("renders Media inside the card", () => {
+        render(
+            <CardStatic>
+                <CardStatic.Media data-testid="media" />
+                <CardStatic.Content>
+                    <CardStatic.Content.Body>body</CardStatic.Content.Body>
+                </CardStatic.Content>
+            </CardStatic>,
+        );
+
+        expect(screen.getByTestId("media")).toBeInTheDocument();
+    });
+
+    it("exposes displayName and compound components", () => {
+        expect(CardStatic.displayName).toBe("CardStatic");
+        expect(CardStatic.Content).toBeDefined();
+        expect(CardStatic.Content.Header).toBeDefined();
+        expect(CardStatic.Content.Body).toBeDefined();
+        expect(CardStatic.Content.Footer).toBeDefined();
+        expect(CardStatic.Media).toBeDefined();
     });
 });

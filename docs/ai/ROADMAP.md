@@ -103,6 +103,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Chip | ✅ | ✅ | ✅ |
 | ChipDatePicker | ⬜ | ✅ | ⬜ |
 | ChipGroup | ✅ | ✅ | ✅ |
+| ChipMonthYearPicker | ✅ | ✅ | ✅ |
 | ChipMultiselect | ✅ | ✅ | ✅ |
 | ChipOptions | ✅ | ✅ | ✅ |
 | ChipSelect | ⬜ | ✅ | ⬜ |

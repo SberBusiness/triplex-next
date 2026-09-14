@@ -95,6 +95,7 @@ export const Default: Story = {
     },
     args: {
         size: EAvatarSize.XXL,
+        borderRadius: 12,
     },
     render: DefaultExample,
 };
@@ -111,6 +112,7 @@ export const Sizes: Story = {
     },
     args: {
         size: EAvatarSize.XXL,
+        borderRadius: 12,
     },
     render: SizesExample,
 };
@@ -146,6 +148,7 @@ export const Example: Story = {
     },
     args: {
         size: EAvatarSize.XXL,
+        borderRadius: 12,
     },
     render: ExampleUsage,
 };

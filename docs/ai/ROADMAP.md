@@ -84,7 +84,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | AlertProcess | ✅ | ✅ | ✅ |
 | Amount | ✅ | ✅ | ✅ |
 | AmountField | ⬜ | ⬜ | ⬜ |
-| Avatar | ⬜ | ✅ | ⬜ |
+| Avatar | ✅ | ✅ | ✅ |
 | Badge | ✅ | ✅ | ✅ |
 | Body | ✅ | ✅ | ✅ |
 | Button | ✅ | ✅ | ✅ |

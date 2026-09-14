@@ -31,32 +31,27 @@ export interface ISliderProps
  * Слайдер с одним ползунком — готовая сборка SliderExtended: полоса, ползунок, трек и метки.
  * Значение контролируемое: компонент сообщает новое значение через onChange и ждёт его в value.
  */
-export const Slider: React.FC<ISliderProps> = ({
-    marks,
-    onChange,
-    step = 1,
-    value,
-    renderTooltipContent,
-    ...sliderExtendedAttributes
-}) => (
-    <SliderExtended step={step} {...sliderExtendedAttributes}>
-        <SliderExtended.Rail />
-        <SliderExtended.Dot value={value} onChange={onChange}>
-            {renderTooltipContent && (
-                <SliderExtended.Tooltip value={value}>{renderTooltipContent(value)}</SliderExtended.Tooltip>
-            )}
-        </SliderExtended.Dot>
+export const Slider = React.forwardRef<HTMLDivElement, ISliderProps>(
+    ({ marks, onChange, step = 1, value, renderTooltipContent, ...sliderExtendedAttributes }, ref) => (
+        <SliderExtended step={step} {...sliderExtendedAttributes} ref={ref}>
+            <SliderExtended.Rail />
+            <SliderExtended.Dot value={value} onChange={onChange}>
+                {renderTooltipContent && (
+                    <SliderExtended.Tooltip value={value}>{renderTooltipContent(value)}</SliderExtended.Tooltip>
+                )}
+            </SliderExtended.Dot>
 
-        <SliderExtended.Track />
+            <SliderExtended.Track />
 
-        <SliderExtended.Marks>
-            {marks.map((mark) => (
-                <SliderExtended.Mark key={mark.value} value={mark.value}>
-                    {mark.label}
-                </SliderExtended.Mark>
-            ))}
-        </SliderExtended.Marks>
-    </SliderExtended>
+            <SliderExtended.Marks>
+                {marks.map((mark) => (
+                    <SliderExtended.Mark key={mark.value} value={mark.value}>
+                        {mark.label}
+                    </SliderExtended.Mark>
+                ))}
+            </SliderExtended.Marks>
+        </SliderExtended>
+    ),
 );
 
 Slider.displayName = "Slider";

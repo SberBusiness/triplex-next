@@ -19,7 +19,7 @@ const marks = [
     { value: 100, label: "100" },
 ];
 
-const renderSlider = (props?: Partial<ISliderProps>) =>
+const renderSlider = (props?: Partial<ISliderProps> & React.RefAttributes<HTMLDivElement>) =>
     render(
         <Slider min={0} max={100} marks={marks} value={20} onChange={vi.fn()} size={EComponentSize.MD} {...props} />,
     );
@@ -134,6 +134,13 @@ describe("Slider", () => {
 
         expect(container.querySelector("[data-tx]")).toHaveClass("disabled");
         expect(await screen.findByRole("slider")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("forwards ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        const { container } = renderSlider({ ref });
+
+        expect(ref.current).toBe(container.querySelector("[data-tx]"));
     });
 
     it("merges className and rest attributes into the root element", () => {

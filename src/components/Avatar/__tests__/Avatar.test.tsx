@@ -7,7 +7,7 @@ import { EAvatarSize, TAvatarBorderRadius } from "../enums";
 const BORDER_RADIUSES: TAvatarBorderRadius[] = [6, 8, 10, 12, 16];
 
 describe("Avatar component", () => {
-    it("should render with default props", () => {
+    it("should render with required props", () => {
         render(<Avatar size={EAvatarSize.MD} borderRadius={12} data-testid="avatar" />);
 
         const avatar = screen.getByTestId("avatar");

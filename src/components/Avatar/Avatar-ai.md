@@ -102,8 +102,13 @@ Avatar.Background
   опциональным со значением по умолчанию — изменение публичного API.
 - Значения `EAvatarSize` (`xxs`…`xxl`) совпадают с именами CSS-классов размеров,
   на это опираются unit-тесты — переименовывать значения enum нельзя.
-- `TAvatarBorderRadius` — именно union числовых литералов; расширение набора
-  значений требует нового CSS-класса `borderRadius{N}`.
+- `TAvatarBorderRadius` — именно union числовых литералов. Тип стирается при
+  компиляции, рантайм-источника правды у набора нет, поэтому расширение набора
+  синхронизируется вручную в пяти местах: сам union в `enums.ts`, CSS-класс
+  `borderRadius{N}` в `styles/Avatar.module.less`,
+  `BORDER_RADIUS_TO_CLASS_NAME_MAP` в `Avatar.tsx`, `BORDER_RADIUSES` в
+  `__tests__/Avatar.test.tsx` и `argTypes.borderRadius.options` в
+  `stories/Avatar/Avatar.stories.tsx`.
 - Корневой элемент — `<div>` с `overflow: hidden`; содержимое обрезается по
   скруглению, на этом построен вариант с фоновым изображением.
 

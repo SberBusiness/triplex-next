@@ -9,4 +9,5 @@ export enum EAvatarSize {
     XXL = "xxl",
 }
 
+/** Допустимые радиусы скругления компонента Avatar, px. */
 export type TAvatarBorderRadius = 6 | 8 | 10 | 12 | 16;

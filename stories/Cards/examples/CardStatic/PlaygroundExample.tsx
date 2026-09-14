@@ -1,8 +1,7 @@
 import React from "react";
 import {
     CardStatic,
-    ECardTheme,
-    ECardRoundingSize,
+    ICardProps,
     ECardContentPaddingSize,
     Text,
     EFontType,
@@ -12,13 +11,12 @@ import {
     Gap,
 } from "@sberbusiness/triplex-next";
 
-interface IPlaygroundExampleProps {
+export type PlaygroundArgs = Pick<ICardProps, "roundingSize" | "theme"> & {
+    /** Размер внутреннего отступа контента карточки (prop CardStatic.Content). */
     paddingSize: ECardContentPaddingSize;
-    roundingSize: ECardRoundingSize;
-    theme: ECardTheme;
-}
+};
 
-export const PlaygroundExample = ({ paddingSize, roundingSize, theme }: IPlaygroundExampleProps) => (
+export const PlaygroundExample = ({ paddingSize, roundingSize, theme }: PlaygroundArgs) => (
     <div style={{ width: "216px" }}>
         <CardStatic roundingSize={roundingSize} theme={theme}>
             <CardStatic.Content paddingSize={paddingSize}>

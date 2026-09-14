@@ -250,6 +250,36 @@ describe("AmountField", () => {
         expect(handleClear).toHaveBeenCalledTimes(1);
     });
 
+    test("gives the clear button an accessible name from clearProps", () => {
+        render(
+            <AmountField
+                label="Label"
+                inputProps={{ value: "1234.56", onChange: vi.fn() }}
+                onClear={vi.fn()}
+                clearProps={{ "aria-label": "Очистить сумму" }}
+            />,
+        );
+
+        expect(screen.getByRole("button", { name: "Очистить сумму" })).toBeInTheDocument();
+    });
+
+    test("keeps onClear as the clear button click handler regardless of clearProps", () => {
+        const handleClear = vi.fn();
+
+        render(
+            <AmountField
+                label="Label"
+                inputProps={{ value: "1234.56", onChange: vi.fn() }}
+                onClear={handleClear}
+                clearProps={{ "aria-label": "Очистить сумму", disabled: false }}
+            />,
+        );
+
+        fireEvent.click(screen.getByRole("button", { name: "Очистить сумму" }));
+
+        expect(handleClear).toHaveBeenCalledTimes(1);
+    });
+
     test("does not render clear button without onClear", () => {
         render(<AmountField label="Label" inputProps={{ value: "1234.56", onChange: vi.fn() }} />);
 

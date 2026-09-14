@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 import clsx from "clsx";
 import { SliderExtendedContext } from "../SliderExtendedContext";
 import { SliderExtendedUtils } from "../SliderExtendedUtils";
-import { setForwardedRef } from "../utils";
+import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
 import styles from "../styles/SliderExtended.module.less";
 
 /** Свойства компонента SliderExtendedRail. */

@@ -2,10 +2,11 @@ import React, { useRef, useLayoutEffect, useCallback } from "react";
 import clsx from "clsx";
 import { TextFieldBase, ITextFieldBaseProps } from "../TextField/TextFieldBase";
 import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormField";
-import { FormFieldClear } from "../FormField/components/FormFieldClear";
+import { FormFieldClear, IFormFieldClearProps } from "../FormField/components/FormFieldClear";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition, createSizeToClassNameMap } from "../../utils";
-import { createPlaceholder, syncCoreAndGetFormattedValue, setFallbackCaret, setForwardedRef } from "./utils";
+import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
+import { createPlaceholder, syncCoreAndGetFormattedValue, setFallbackCaret } from "./utils";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/AmountField.module.less";
 
@@ -28,6 +29,13 @@ export interface IAmountFieldProps extends Omit<ITextFieldBaseProps, "children">
     fractionDigits?: number;
     /** Обработчик очищения значения. Если передан, в постфиксе поля отображается кнопка очистки. */
     onClear?: () => void;
+    /**
+     * Свойства кнопки очистки. Имеют смысл только вместе с onClear.
+     *
+     * Кнопка содержит лишь иконку, поэтому доступное имя задаётся здесь: передайте aria-label
+     * на языке интерфейса. Обработчик клика задаётся через onClear и здесь не переопределяется.
+     */
+    clearProps?: Omit<IFormFieldClearProps, "onClick">;
 }
 
 /** Соответствие размера имени класса. */
@@ -49,6 +57,7 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
             maxIntegerDigits = 16,
             fractionDigits = 2,
             onClear,
+            clearProps,
             ...restProps
         },
         ref,
@@ -112,7 +121,7 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
             if (onClear !== undefined) {
                 return (
                     <>
-                        <FormFieldClear onClick={onClear} />
+                        <FormFieldClear {...clearProps} onClick={onClear} />
                         {postfix}
                     </>
                 );

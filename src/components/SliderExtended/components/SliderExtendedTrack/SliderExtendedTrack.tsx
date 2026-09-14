@@ -5,7 +5,7 @@ import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import { SliderExtendedContext } from "../../SliderExtendedContext";
 import { SliderExtendedUtils } from "../../SliderExtendedUtils";
-import { setForwardedRef } from "../../utils";
+import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
 import { SliderExtendedMoveHandler, TOnTargetMouseDown, TOnTargetTouchStart } from "../SliderExtendedMoveHandler";
 import { SliderExtendedTrackActions } from "./SliderExtendedTrackActions";
 import styles from "./styles/SliderExtendedTrack.module.less";

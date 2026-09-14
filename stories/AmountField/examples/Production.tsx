@@ -35,6 +35,7 @@ export const Production = () => {
                 }}
                 currency="₽"
                 onClear={handleClear}
+                clearProps={{ "aria-label": "Очистить сумму" }}
             />
         </div>
     );

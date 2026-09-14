@@ -12,8 +12,19 @@ env:
   STORYBOOK_URL_BASE_TRIPLEX_DESIGN: "https://triplex-design.ru/storybook"
 
 jobs:
+  # Деплой только для PR из веток самого репозитория. GitHub и так не отдаёт
+  # секреты прогонам из форков, но здесь в ssh-agent грузятся ключи от двух
+  # боевых серверов — и цена ошибки такова, что условие стоит держать явным:
+  # оно переживёт и включённую кем-то передачу секретов в форки, и подмену
+  # триггера на pull_request_target.
+  #
+  # Боты (Dependabot) секретов тоже не получают: без этого условия каждый
+  # апдейт зависимостей давал бы красную джобу на загрузке ключей.
   preview:
-    if: github.event.action != 'closed'
+    if: >-
+      github.event.action != 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+      && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -120,7 +131,11 @@ jobs:
           fi
 
   cleanup:
-    if: github.event.action == 'closed'
+    # Симметрично preview: чистить нечего, если деплоя не было.
+    if: >-
+      github.event.action == 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+      && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH

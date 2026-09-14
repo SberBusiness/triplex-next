@@ -33,8 +33,11 @@ on:
         type: boolean
         default: false
 
+# Пуши в защищённые ветки идут под PAT бота, а не под GITHUB_TOKEN: он
+# не входит в списки branch protection. Значит workflow'у достаточно чтения,
+# а write выдан точечно джобам публикации.
 permissions:
-  contents: write
+  contents: read
 
 # Два релиза одновременно — гарантированная путаница с dist-tags.
 concurrency:
@@ -57,7 +60,7 @@ jobs:
       next0: ${{ steps.check.outputs.next0 }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -171,13 +174,13 @@ jobs:
       # скрипты полутора тысяч зависимостей), тесты и сборка. Любой из этих
       # скриптов смог бы прочитать токен с правом прямого push в main.
       # Токен подставляется точечно, только в момент push.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: release-0
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
 
@@ -301,13 +304,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
 

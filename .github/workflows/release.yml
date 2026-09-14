@@ -131,13 +131,13 @@ jobs:
       # Определение самого workflow при вызове берётся из ветки вызывающего,
       # то есть из main. Копия этого файла в `release-0` не используется ни на
       # одном пути и подтянется при следующем перелитии.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ inputs.target || github.sha }}
           # workflow не пушит в репозиторий; gh получает токен через env явно
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org/'
@@ -295,7 +295,7 @@ jobs:
       # fail_on_unmatched_files: по умолчанию action молча пропускает ненайденные
       # файлы — релиз опубликовался бы без архива, и это заметили бы уже потребители.
       - name: Upload build artifacts to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           files: dist-${{ env.RELEASE_TAG }}.zip
@@ -306,7 +306,7 @@ jobs:
       # генерация, поэтому отсутствие файла здесь — тоже повод упасть.
       - name: Upload MCP bundle to GitHub Release
         if: steps.mcp.outputs.eligible == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           files: mcp-data-${{ env.RELEASE_TAG }}.json
@@ -317,7 +317,7 @@ jobs:
         run: npm run storybook:build
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
         with:
           ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
 

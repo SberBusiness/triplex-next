@@ -96,12 +96,16 @@ describe("CheckboxTree utils", () => {
         it("Should uncheck the parent when no children are checked", () => {
             const checkbox = createCheckbox("1", {
                 checked: true,
+                bulk: true,
                 children: [createCheckbox("1-1"), createCheckbox("1-2")],
             });
 
             checkParentCheckboxes(checkbox);
 
             expect(checkbox.checked).toBe(false);
+            // Известное ограничение: bulk в этой ветке не сбрасывается. Визуально незаметно —
+            // Checkbox рисует иконку только при checked. Фиксируем текущее поведение, а не желаемое.
+            expect(checkbox.bulk).toBe(true);
         });
 
         it("Should recalculate the whole tree bottom-up when combined with traverseCheckboxes", () => {

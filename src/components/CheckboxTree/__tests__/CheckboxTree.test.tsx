@@ -163,6 +163,20 @@ describe("CheckboxTree", () => {
         ]);
     });
 
+    it("Should link each node with its neighbours from its own level", () => {
+        render(<CheckboxTree checkboxes={getMockCheckboxes()} onChange={vi.fn()} />);
+
+        // Соседи узла передаются как prevNodeId/nextNodeId и задают порядок в абстрактном дереве TreeView.
+        // Наблюдаемое следствие: tabIndex=0 получает только первый узел уровня. Если узлу передать соседей
+        // чужого уровня, регистрация в дереве и распределение tabIndex ломаются.
+        expect(screen.getAllByRole("treeitem").map((node) => node.getAttribute("tabindex"))).toEqual([
+            "0",
+            "-1",
+            "-1",
+            "-1",
+        ]);
+    });
+
     it("Should select the whole subtree when a partially checked parent is clicked", () => {
         const handleChange = vi.fn();
         const checkboxes: ICheckboxTreeCheckboxData[] = [

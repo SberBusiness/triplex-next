@@ -410,6 +410,43 @@ jobs:
           # публиковать всё равно нечего.
           gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" --required --watch --fail-fast
 
+      # Ветку и PR после падения намеренно НЕ удаляем: в них лежит релизный
+      # коммит и результаты проверок — то, по чему разбирают причину. Но
+      # молча оставленный мусор через месяц уже никто не свяжет с релизом,
+      # поэтому пишем в summary, что именно осталось и что с этим делать.
+      - name: Report leftovers on failure
+        if: failure()
+        env:
+          BRANCH: ${{ steps.prepare.outputs.branch }}
+          PR: ${{ steps.checks.outputs.pr }}
+        run: |
+          set -u
+          if [ -z "${BRANCH}" ]; then
+            {
+              echo "### Релиз остановлен до создания релизной ветки"
+              echo ""
+              echo "В репозитории ничего не осталось, публикации не было."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          {
+            echo "### Релиз остановлен на проверках"
+            echo ""
+            echo "Осталось в репозитории:"
+            echo ""
+            echo "- ветка \`${BRANCH}\` с релизным коммитом"
+            if [ -n "${PR}" ]; then
+              echo "- PR #${PR} — в нём видно, какая проверка упала"
+            else
+              echo "- PR создать не успели"
+            fi
+            echo ""
+            echo "Ничего не опубликовано. Почини причину и перезапусти прогон:"
+            echo "он переиспользует ветку и PR, force-push обновит коммит."
+            echo "Если релиз на этой неделе решено не выпускать — удали ветку,"
+            echo "PR закроется сам."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Fast-forward main
         env:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
@@ -423,20 +460,50 @@ jobs:
           # на main смотрят на SHA, и зелёные контексты уже на месте.
           # Требование ревью боту прощает bypass required pull requests
           # (см. docs/human/release.md § «Что настроено один раз»).
-          if ! git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "${SHA}:main"; then
+          REMOTE="https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if ! git push "${REMOTE}" "${SHA}:main"; then
+            # Две принципиально разные причины отказа, и лечатся они по-разному.
+            # Различаем по тому, осталась ли вершина main родителем релизного
+            # коммита: если нет — во время релиза кто-то влил PR, и push
+            # отклонён как non-fast-forward, а не правилами ветки.
+            git fetch "${REMOTE}" main --quiet 2>/dev/null || true
+            TIP=$(git rev-parse FETCH_HEAD 2>/dev/null || echo "")
+            PARENT=$(git rev-parse "${SHA}^" 2>/dev/null || echo "")
             echo "❌ push релизного коммита в main отклонён."
-            echo "   Проверь правило для main: имена обязательных проверок должны"
-            echo "   совпадать с именами джоб ci.yml и visual-test.yml, а dudim-ai —"
-            echo "   оставаться в push restrictions и в bypass required pull requests."
+            if [ -n "${TIP}" ] && [ "${TIP}" != "${PARENT}" ]; then
+              echo "   Причина: main ушёл вперёд во время релиза."
+              echo "   Ожидали вершину ${PARENT:0:8}, а там ${TIP:0:8}."
+              echo "   Кто-то влил PR после старта прогона — main на время релиза"
+              echo "   должен быть заморожен (docs/human/release.md § «Заморозка»)."
+              echo "   Перезапусти прогон: он пересоберёт релизный коммит от новой вершины."
+            else
+              echo "   Причина: правила ветки. Имена обязательных проверок должны"
+              echo "   совпадать с именами джоб ci.yml и visual-test.yml, а dudim-ai —"
+              echo "   оставаться в push restrictions и в bypass required pull requests."
+            fi
             echo "   Коммит сохранён в ветке ${BRANCH}, PR #${PR}."
             exit 1
           fi
 
-          # Пауза — чтобы GitHub успел пометить PR как merged: удаление ветки
-          # раньше этого момента закрыло бы его как отклонённый.
-          sleep 10
-          gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
-            || echo "ℹ️ ветку ${BRANCH} удалить не удалось — удали вручную"
+          # Ветку удаляем только после того, как GitHub пометит PR как merged:
+          # удаление раньше закрыло бы его как отклонённый. Опрашиваем состояние,
+          # а не спим наугад — ставка на длительность чужой асинхронной операции
+          # даёт ровно тот исход, от которого мы защищаемся.
+          MERGED=""
+          for _ in $(seq 1 12); do
+            STATE=$(gh pr view "${PR}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state 2>/dev/null || echo "")
+            if [ "${STATE}" = "MERGED" ]; then MERGED=1; break; fi
+            sleep 5
+          done
+
+          if [ -n "${MERGED}" ]; then
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
+              || echo "ℹ️ ветку ${BRANCH} удалить не удалось — удали вручную"
+          else
+            echo "ℹ️ PR #${PR} за минуту не помечен merged — ветку ${BRANCH} оставляем."
+            echo "   Коммит уже в main, на релиз это не влияет: удали ветку вручную,"
+            echo "   когда GitHub закроет PR."
+          fi
 
   publish-react18:
     needs: [preflight, prepare-react18]

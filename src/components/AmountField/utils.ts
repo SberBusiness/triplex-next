@@ -1,4 +1,3 @@
-import React from "react";
 import { AmountConst } from "@sberbusiness/triplex-next/consts/AmountConst";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { StringUtils } from "@sberbusiness/triplex-next/utils/stringUtils";
@@ -21,23 +20,6 @@ export function createPlaceholder(fractionDigits: number) {
     }
 
     return buffer.join("");
-}
-
-/**
- * Записать значение в forwarded ref (callback-ref или объектный ref).
- *
- * Внутренний хелпер AmountField: из barrel index.ts не экспортируется.
- *
- * @param ref Внешняя ссылка, переданная потребителем.
- * @param instance Экземпляр элемента или null при размонтировании.
- */
-export function setForwardedRef<T>(ref: React.Ref<T> | undefined, instance: T | null): void {
-    if (typeof ref === "function") {
-        ref(instance);
-    } else if (ref != null) {
-        // React.RefObject помечен readonly, но запись в current — единственный способ заполнить объектный ref.
-        (ref as React.MutableRefObject<T | null>).current = instance;
-    }
 }
 
 /**

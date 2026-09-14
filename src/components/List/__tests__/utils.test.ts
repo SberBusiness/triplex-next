@@ -1,40 +1,5 @@
-import React from "react";
-import { describe, it, expect, vi } from "vitest";
-import { setForwardedRef, isDraggableTarget } from "../utils";
-
-describe("setForwardedRef", () => {
-    it("invokes callback ref with instance", () => {
-        const cb = vi.fn();
-        const el = document.createElement("div");
-        setForwardedRef<HTMLDivElement>(cb, el);
-        expect(cb).toHaveBeenCalledWith(el);
-    });
-
-    it("invokes callback ref with null on cleanup", () => {
-        const cb = vi.fn();
-        setForwardedRef<HTMLDivElement>(cb, null);
-        expect(cb).toHaveBeenCalledWith(null);
-    });
-
-    it("assigns instance to object ref", () => {
-        const ref = React.createRef<HTMLDivElement>();
-        const el = document.createElement("div");
-        setForwardedRef(ref, el);
-        expect(ref.current).toBe(el);
-    });
-
-    it("assigns null to object ref on cleanup", () => {
-        const ref: React.MutableRefObject<HTMLDivElement | null> = {
-            current: document.createElement("div"),
-        };
-        setForwardedRef(ref, null);
-        expect(ref.current).toBeNull();
-    });
-
-    it("does nothing when ref is null", () => {
-        expect(() => setForwardedRef<HTMLDivElement>(null, document.createElement("div"))).not.toThrow();
-    });
-});
+import { describe, it, expect } from "vitest";
+import { isDraggableTarget } from "../utils";
 
 describe("isDraggableTarget", () => {
     it("returns true for null target", () => {

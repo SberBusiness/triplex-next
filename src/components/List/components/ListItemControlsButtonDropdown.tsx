@@ -23,7 +23,7 @@ import {
     IListItemControlsButtonProps,
     ListItemControlsButton,
 } from "@sberbusiness/triplex-next/components/List/components/ListItemControlsButton";
-import { setForwardedRef } from "@sberbusiness/triplex-next/components/List/utils";
+import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
 import styles from "../styles/ListItemControlsButton.module.less";
 
 export interface IListItemControlsButtonDropdownProps

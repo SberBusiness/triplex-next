@@ -1,9 +1,7 @@
-import React from "react";
 import {
     createPlaceholder,
     syncCoreAndGetFormattedValue,
     setFallbackCaret,
-    setForwardedRef,
 } from "@sberbusiness/triplex-next/components/AmountField/utils";
 import { AmountBaseInputCore } from "@sberbusiness/triplex-next/components/AmountField/AmountBaseInputCore";
 
@@ -16,37 +14,6 @@ describe("AmountField utils", () => {
         test("returns decimal placeholder when fractionDigits>0", () => {
             expect(createPlaceholder(2)).toBe("0,00");
             expect(createPlaceholder(3)).toBe("0,000");
-        });
-    });
-
-    describe("setForwardedRef", () => {
-        test("calls callback ref with the instance and with null on unmount", () => {
-            const ref = vi.fn();
-            const instance = document.createElement("input");
-
-            setForwardedRef<HTMLInputElement>(ref, instance);
-            expect(ref).toHaveBeenCalledWith(instance);
-
-            setForwardedRef<HTMLInputElement>(ref, null);
-            expect(ref).toHaveBeenLastCalledWith(null);
-        });
-
-        test("writes the instance into an object ref", () => {
-            const ref = React.createRef<HTMLInputElement>();
-            const instance = document.createElement("input");
-
-            setForwardedRef(ref, instance);
-            expect(ref.current).toBe(instance);
-
-            setForwardedRef(ref, null);
-            expect(ref.current).toBeNull();
-        });
-
-        test("does nothing when ref is not passed", () => {
-            const instance = document.createElement("input");
-
-            expect(() => setForwardedRef(undefined, instance)).not.toThrow();
-            expect(() => setForwardedRef(null, instance)).not.toThrow();
         });
     });
 

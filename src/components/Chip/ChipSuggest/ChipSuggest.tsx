@@ -4,7 +4,7 @@ import { ISuggestOption, Suggest } from "../../Suggest";
 import { IChipSuggestProps } from "./types";
 import { ChipSuggestTarget } from "./ChipSuggestTarget";
 import { ChipSuggestDropdown } from "./ChipSuggestDropdown";
-import { setForwardedRef } from "./utils";
+import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
 import styles from "../styles/Chip.module.less";
 
 const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(

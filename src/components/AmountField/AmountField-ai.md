@@ -54,6 +54,7 @@ version: "1.0"
 | `maxIntegerDigits` | `number` | `16` | Максимальное количество знаков перед запятой. Лишние цифры не попадают в значение. |
 | `fractionDigits` | `number` | `2` | Количество знаков после запятой. `0` — поле без дробной части. |
 | `onClear` | `() => void` | — | Обработчик очистки. Если передан, перед пользовательским `postfix` рендерится `FormFieldClear`. Компонент сам значение не сбрасывает — это делает потребитель. |
+| `clearProps` | `Omit<IFormFieldClearProps, "onClick">` | — | Свойства кнопки очистки. Имеют смысл только вместе с `onClear`. Сюда передаётся `aria-label` — доступное имя кнопки. `onClick` задаётся через `onClear` и не переопределяется. |
 
 ### Особенности поведения
 
@@ -104,8 +105,8 @@ FormField.Input_Color_Disabled
 - `forwardRef` на компоненте — не убирать. Внешний `ref` указывает на корневой `<div>`
   `FormField`, ссылка на `<input>` передаётся через `inputProps.ref`.
 - Публичный API (`IAmountFieldProps`: `inputProps`, `currency`, `maxIntegerDigits`,
-  `fractionDigits`, `onClear` + унаследованные от `ITextFieldBaseProps`) — изменение имён,
-  типов и дефолтов является breaking change.
+  `fractionDigits`, `onClear`, `clearProps` + унаследованные от `ITextFieldBaseProps`) —
+  изменение имён, типов и дефолтов является breaking change.
 - `inputProps` не принимает `type`, `maxLength`, `inputMode`, `autoComplete` и собственный
   `onChange` с сигнатурой события: их задаёт сам компонент (`inputMode="decimal"`,
   `autoComplete="off"`, `onChange(value: string)`).
@@ -137,12 +138,12 @@ FormField.Input_Color_Disabled
   из таб-обхода.
 - Семантика ошибки (`aria-invalid`, `aria-describedby`) не хардкодится: при необходимости
   потребитель передаёт атрибуты через `inputProps`.
-- Кнопка очистки (`onClear`) — `FormFieldClear` без текста и **без accessible-имени**:
-  `AmountField` рендерит её только с `onClick`, а прокинуть в неё `aria-label` через
-  публичный API сейчас нельзя. Так же устроены все поля семейства (`SuggestField`,
-  `DateField`, `ChipSuggest`, `MonthYearField`, `SelectExtendedField`), поэтому чинить
-  это нужно разом для всех: дефолтную строку зашить нельзя — библиотека мультиязычная,
-  значит понадобится prop. Не описывай в примерах несуществующий способ её назвать.
+- Кнопка очистки (`onClear`) — `FormFieldClear` с одной иконкой, без текста. Доступное имя
+  задаётся потребителем через `clearProps={{ "aria-label": "…" }}`: дефолтную строку зашить
+  нельзя, библиотека мультиязычная. Без `aria-label` кнопка остаётся безымянной — в примерах
+  и production-коде его передавать обязательно. Остальные поля семейства (`SuggestField`,
+  `DateField`, `ChipSuggest`, `MonthYearField`, `SelectExtendedField`) такого prop пока не
+  имеют и рендерят `FormFieldClear` только с `onClick`.
 - Собственных клавиатурных сокращений нет; `onKeyDown` и `onSelect` из `inputProps`
   вызываются после внутренних обработчиков, которые запоминают нажатую клавишу и выделение
   для расчёта каретки.
@@ -186,3 +187,4 @@ FormField.Input_Color_Disabled
 | Дата | Изменение |
 |---|---|
 | 2026-09-10 | Создан документ (TRI-9). AI-рефакторинг AmountField, unit-тесты на ядро, парсер, форматер и утилиты; добавлен `displayName` |
+| 2026-09-14 | Правки по ревью (TRI-9): добавлен prop `clearProps` — доступное имя кнопки очистки задаётся через `aria-label`. Хелпер `setForwardedRef` переехал в общий внутренний модуль `src/helpers/setForwardedRef.ts` (пять копий по репозиторию свёрнуты в одну); публичный API это не затрагивает. |

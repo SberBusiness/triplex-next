@@ -74,6 +74,7 @@ export const Playground = ({
                     ref: inputRef,
                 }}
                 onClear={withClear ? handleClear : undefined}
+                clearProps={{ "aria-label": "Очистить сумму" }}
             />
         </div>
     );

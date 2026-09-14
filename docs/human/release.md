@@ -51,14 +51,21 @@ Storybook. Обратная сторона: **опубликованную ве�
 
 ### Что настроено один раз
 
-Автоматический путь опирается на две настройки репозитория. Если релиз
+Автоматический путь опирается на три настройки репозитория. Если релиз
 внезапно останавливается после предполёта или перед публикацией — проверь
 в первую очередь их.
 
 | Настройка | Где | Зачем |
 |---|---|---|
-| Секрет `DUDIM_AI_GH_TOKEN` | Settings → Secrets and variables → Actions | PAT `dudim-ai` (`contents: write`, `pull-requests: write`) — под ним workflow пушит бамп версии |
-| `dudim-ai` в push restrictions и в bypass required pull requests | Settings → Branches → правило для `main` | иначе прямой push бампа в защищённый `main` не пройдёт |
+| Секрет `DUDIM_AI_GH_TOKEN` | Settings → Secrets and variables → Actions | PAT `dudim-ai` (`contents: write`, `pull-requests: write`) — под ним workflow пушит бамп версии и открывает релизный PR |
+| `dudim-ai` в push restrictions и в bypass required pull requests | Settings → Branches → правило для `main` | иначе push бампа в защищённый `main` не пройдёт: апрув code owner'а бот сам себе поставить не может |
+| Обязательные проверки на `main` = имена джоб `ci.yml` и `visual-test.yml` | Settings → Branches → правило для `main` | релизный коммит попадает в `main` fast-forward'ом; контексты сверяются по имени, и расхождение остановит релиз |
+
+Релизный коммит `1.Y.0` не пушится в `main` напрямую: обязательные проверки
+запускаются только на `pull_request`, поэтому коммит сначала уходит в ветку
+`prerelease-<VERSION>`, на её PR прогоняются проверки, и уже проверенный SHA
+уезжает в `main` fast-forward'ом. PR при этом GitHub помечает merged сам,
+мержить его руками не нужно.
 
 `github-actions[bot]` в эти списки добавить нельзя — пикер показывает только
 людей, команды и установленные GitHub Apps. Поэтому и нужен PAT машинного

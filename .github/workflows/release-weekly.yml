@@ -305,7 +305,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Bump, commit and push
+      - name: Bump, commit and push release branch
+        id: prepare
         env:
           VERSION: ${{ needs.preflight.outputs.version }}
           NEXT: ${{ needs.preflight.outputs.next }}
@@ -334,10 +335,90 @@ jobs:
             exit 1
           fi
           git commit -m "Подготовка релиза ${VERSION}"
-          # Прямой push, без PR: настройка «bypass required pull requests»
-          # разрешает именно пушить без PR. Вариант с PR упёрся бы в апрув
-          # code owner'а, который бот сам себе поставить не может.
-          git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+          # Прямым push'ом в main релизный коммит больше не едет: на main
+          # включены обязательные проверки, а ci.yml и visual-test.yml
+          # запускаются только на pull_request — на прямом push'е нужные
+          # контексты не появились бы никогда, и он отклонялся бы вечно.
+          # Поэтому коммит сначала уходит в релизную ветку, проверки идут
+          # на её PR и привязываются к тому же SHA, а в main он попадает
+          # fast-forward'ом — уже зелёным (шаг «Fast-forward main»).
+          # Ветка одноразовая: force нужен для перезапуска упавшего прогона.
+          BRANCH="prerelease-${VERSION}"
+          git push --force "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
+          {
+            echo "branch=${BRANCH}"
+            echo "sha=$(git rev-parse HEAD)"
+          } >> "$GITHUB_OUTPUT"
+
+      # Смысл шага — прогнать обязательные проверки на релизном коммите.
+      # PR здесь инструмент, а не ревью: мержить его никто не будет, GitHub
+      # сам пометит его merged, когда коммит окажется в main.
+      - name: Open PR and wait for required checks
+        id: checks
+        timeout-minutes: 60
+        env:
+          GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
+          BRANCH: ${{ steps.prepare.outputs.branch }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+        run: |
+          set -eu
+          find_pr() {
+            gh pr list --repo "${GITHUB_REPOSITORY}" --head "${BRANCH}" --base main \
+              --state open --json number --jq '.[0].number // empty'
+          }
+
+          # Перезапуск прогона после падения не должен плодить PR.
+          PR=$(find_pr)
+          if [ -z "${PR}" ]; then
+            gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "${BRANCH}" \
+              --title "Подготовка релиза ${VERSION}" \
+              --body "Релизный коммит еженедельного прогона. PR открыт, чтобы прогнать обязательные проверки; в main коммит уедет fast-forward'ом тем же прогоном."
+            PR=$(find_pr)
+          fi
+          [ -n "${PR}" ] || { echo "❌ PR для ветки ${BRANCH} не создан"; exit 1; }
+          echo "PR #${PR}"
+          echo "pr=${PR}" >> "$GITHUB_OUTPUT"
+
+          # Прогоны регистрируются не мгновенно: пока их нет, `gh pr checks`
+          # выходит с ошибкой. Ждём появления, и только потом смотрим итог.
+          for _ in $(seq 1 30); do
+            if gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then break; fi
+            sleep 10
+          done
+
+          # --required: сторонние контексты (preview Storybook) на релиз
+          # не влияют. --fail-fast: упавшая проверка останавливает ожидание,
+          # публиковать всё равно нечего.
+          gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" --required --watch --fail-fast
+
+      - name: Fast-forward main
+        env:
+          GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
+          DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
+          BRANCH: ${{ steps.prepare.outputs.branch }}
+          SHA: ${{ steps.prepare.outputs.sha }}
+          PR: ${{ steps.checks.outputs.pr }}
+        run: |
+          set -eu
+          # Тот же самый коммит, что проверялся в PR: обязательные проверки
+          # на main смотрят на SHA, и зелёные контексты уже на месте.
+          # Требование ревью боту прощает bypass required pull requests
+          # (см. docs/human/release.md § «Что настроено один раз»).
+          if ! git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "${SHA}:main"; then
+            echo "❌ push релизного коммита в main отклонён."
+            echo "   Проверь правило для main: имена обязательных проверок должны"
+            echo "   совпадать с именами джоб ci.yml и visual-test.yml, а dudim-ai —"
+            echo "   оставаться в push restrictions и в bypass required pull requests."
+            echo "   Коммит сохранён в ветке ${BRANCH}, PR #${PR}."
+            exit 1
+          fi
+
+          # Пауза — чтобы GitHub успел пометить PR как merged: удаление ветки
+          # раньше этого момента закрыло бы его как отклонённый.
+          sleep 10
+          gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
+            || echo "ℹ️ ветку ${BRANCH} удалить не удалось — удали вручную"
 
   publish-react18:
     needs: [preflight, prepare-react18]

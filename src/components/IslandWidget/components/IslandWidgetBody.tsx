@@ -9,6 +9,7 @@ export interface IIslandWidgetBodyProps extends React.HTMLAttributes<HTMLDivElem
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
+/** Основное содержимое виджета. Горизонтальные отступы берутся из размера виджета. */
 export const IslandWidgetBody: React.FC<IIslandWidgetBodyProps> = ({ children, className, ...htmlDivAttributes }) => {
     const { size } = useContext(IslandWidgetContext);
 

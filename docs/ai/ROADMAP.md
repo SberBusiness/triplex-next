@@ -84,7 +84,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | AlertProcess | ✅ | ✅ | ✅ |
 | Amount | ✅ | ✅ | ✅ |
 | AmountField | ✅ | ✅ | ✅ |
-| Avatar | ⬜ | ✅ | ⬜ |
+| Avatar | ✅ | ✅ | ✅ |
 | Badge | ✅ | ✅ | ✅ |
 | Body | ✅ | ✅ | ✅ |
 | Button | ✅ | ✅ | ✅ |
@@ -93,7 +93,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ButtonIcon | ✅ | ✅ | ✅ |
 | Calendar | ✅ | ✅ | ✅ |
 | CardAction | ✅ | ✅ | ✅ |
-| CardStatic | ⬜ | ⬜ | ⬜ |
+| CardStatic | ✅ | ✅ | ✅ |
 | CarouselExtended | ✅ | ✅ | ✅ |
 | Checkbox | ✅ | ✅ | ✅ |
 | CheckboxTree | ⬜ | ✅ | ⬜ |
@@ -103,6 +103,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Chip | ✅ | ✅ | ✅ |
 | ChipDatePicker | ⬜ | ✅ | ⬜ |
 | ChipGroup | ✅ | ✅ | ✅ |
+| ChipMonthYearPicker | ✅ | ✅ | ✅ |
 | ChipMultiselect | ✅ | ✅ | ✅ |
 | ChipOptions | ✅ | ✅ | ✅ |
 | ChipSelect | ⬜ | ✅ | ⬜ |
@@ -135,7 +136,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ImageGalleryExtended | ✅ | ✅ | ✅ |
 | Island | ✅ | ✅ | ✅ |
 | IslandAccordion | ✅ | ✅ | ✅ |
-| IslandWidget | ⬜ | ✅ | ⬜ |
+| IslandWidget | ✅ | ✅ | ✅ |
 | KeyDownListener | ✅ | ✅ | ✅ |
 | LightBox | ✅ | ✅ | ✅ |
 | Link | ✅ | ✅ | ✅ |

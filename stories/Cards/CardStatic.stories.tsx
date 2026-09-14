@@ -15,11 +15,13 @@ import {
     DefaultExampleSource,
     PaddingSizesExample,
     PaddingSizesExampleSource,
+    type PlaygroundArgs,
     PlaygroundExample,
     RoundingSizesExample,
     RoundingSizesExampleSource,
     ThemesExample,
     ThemesExampleSource,
+    VisualTestsExample,
 } from "./examples/CardStatic";
 
 const meta = {
@@ -54,8 +56,47 @@ const meta = {
 
 export default meta;
 
-export const Playground: StoryObj<typeof CardStatic> = {
+type Story = StoryObj<typeof meta>;
+
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
+    args: {
+        paddingSize: ECardContentPaddingSize.MD,
+        roundingSize: ECardRoundingSize.MD,
+        theme: ECardTheme.GENERAL,
+    },
+    argTypes: {
+        roundingSize: {
+            control: { type: "select" },
+            options: Object.values(ECardRoundingSize),
+            description: "Размер скругления карточки",
+            table: {
+                category: "Props",
+                type: { summary: "ECardRoundingSize" },
+                defaultValue: { summary: ECardRoundingSize.MD },
+            },
+        },
+        theme: {
+            control: { type: "select" },
+            options: Object.values(ECardTheme),
+            description: "Тема карточки",
+            table: {
+                category: "Props",
+                type: { summary: "ECardTheme" },
+                defaultValue: { summary: ECardTheme.GENERAL },
+            },
+        },
+        paddingSize: {
+            control: { type: "select" },
+            options: Object.values(ECardContentPaddingSize),
+            description: "Размер внутреннего отступа контента карточки (prop CardStatic.Content)",
+            table: {
+                category: "Settings",
+                type: { summary: "ECardContentPaddingSize" },
+                defaultValue: { summary: ECardContentPaddingSize.MD },
+            },
+        },
+    },
     parameters: {
         controls: {
             include: ["paddingSize", "roundingSize", "theme"],
@@ -68,35 +109,10 @@ export const Playground: StoryObj<typeof CardStatic> = {
         },
         testRunner: { skip: true },
     },
-    argTypes: {
-        paddingSize: {
-            control: { type: "select" },
-            options: Object.values(ECardContentPaddingSize),
-            desciption: "Возможные размеры внутреннего отступа",
-            table: { defaultValue: { summary: ECardContentPaddingSize.MD } },
-        },
-        roundingSize: {
-            control: { type: "select" },
-            options: Object.values(ECardRoundingSize),
-            description: "Размер скругления карточки",
-            table: { defaultValue: { summary: ECardRoundingSize.MD } },
-        },
-        theme: {
-            control: { type: "select" },
-            options: Object.values(ECardTheme),
-            description: "Тема карточки",
-            table: { defaultValue: { summary: ECardTheme.GENERAL } },
-        },
-    },
-    args: {
-        paddingSize: ECardContentPaddingSize.MD,
-        roundingSize: ECardRoundingSize.MD,
-        theme: ECardTheme.GENERAL,
-    },
     render: PlaygroundExample,
 };
 
-export const Default: StoryObj<typeof CardStatic> = {
+export const Default: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -109,7 +125,7 @@ export const Default: StoryObj<typeof CardStatic> = {
     render: DefaultExample,
 };
 
-export const Themes: StoryObj<typeof CardStatic> = {
+export const Themes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -122,7 +138,7 @@ export const Themes: StoryObj<typeof CardStatic> = {
     render: ThemesExample,
 };
 
-export const PaddingSizes: StoryObj<typeof CardStatic> = {
+export const PaddingSizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -135,7 +151,7 @@ export const PaddingSizes: StoryObj<typeof CardStatic> = {
     render: PaddingSizesExample,
 };
 
-export const RoundingSizes: StoryObj<typeof CardStatic> = {
+export const RoundingSizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
@@ -146,4 +162,18 @@ export const RoundingSizes: StoryObj<typeof CardStatic> = {
         },
     },
     render: RoundingSizesExample,
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: {
+                sourceState: "none",
+            },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsExample,
 };

@@ -22,12 +22,18 @@ jobs:
   # триггера на pull_request_target.
   #
   # Боты (Dependabot) секретов тоже не получают: без этого условия каждый
-  # апдейт зависимостей давал бы красную джобу на загрузке ключей.
+  # апдейт зависимостей давал бы красную джобу на загрузке ключей. Сверяем
+  # автора PR, а не актора события: допиши человек коммит в ветку Dependabot —
+  # на synchronize актором станет он, и превью всё-таки задеплоилось бы.
+  #
+  # Релизные ветки исключены: PR из prerelease-* живёт сорок минут и никем
+  # не читается, а деплой ради него каждую пятницу поднимал бы оба SSH-ключа.
   preview:
     if: >-
       github.event.action != 'closed'
       && github.event.pull_request.head.repo.full_name == github.repository
-      && github.actor != 'dependabot[bot]'
+      && github.event.pull_request.user.login != 'dependabot[bot]'
+      && !startsWith(github.head_ref, 'prerelease-')
     runs-on: ubuntu-latest
     # Джоба публикует комментарий со ссылками на превью. Набор перечислен
     # целиком: права джобы заменяют набор workflow, а не дополняют его.
@@ -147,7 +153,8 @@ jobs:
     if: >-
       github.event.action == 'closed'
       && github.event.pull_request.head.repo.full_name == github.repository
-      && github.actor != 'dependabot[bot]'
+      && github.event.pull_request.user.login != 'dependabot[bot]'
+      && !startsWith(github.head_ref, 'prerelease-')
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH

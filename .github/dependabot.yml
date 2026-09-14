@@ -52,5 +52,10 @@ updates:
     groups:
       actions:
         patterns: ["*"]
+    # Та же выдержка, что и для npm: у actions угон аккаунта мейнтейнера
+    # опаснее — код выполняется на раннере рядом с секретами.
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
     commit-message:
       prefix: deps

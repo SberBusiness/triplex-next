@@ -52,6 +52,13 @@ jobs:
   # ------------------------------------------------------------------
   preflight:
     runs-on: ubuntu-latest
+    # actions: read — для чтения прогонов ci.yml на release-0. Явный блок
+    # обнуляет все неперечисленные scope, а вызов `gh api` ниже заглушён
+    # (`2>/dev/null || echo ""`), поэтому отказ в правах выглядел бы как
+    # «на release-0 нет прогонов ci.yml» и тихо отменял релиз.
+    permissions:
+      contents: read
+      actions: read
     outputs:
       ready: ${{ steps.check.outputs.ready }}
       version: ${{ steps.check.outputs.version }}
@@ -389,10 +396,12 @@ jobs:
           echo "PR #${PR}"
           echo "pr=${PR}" >> "$GITHUB_OUTPUT"
 
-          # Прогоны регистрируются не мгновенно: пока их нет, `gh pr checks`
-          # выходит с ошибкой. Ждём появления, и только потом смотрим итог.
+          # Прогоны регистрируются не мгновенно. Различаем по коду выхода
+          # `gh pr checks`: 0 — все зелёные, 8 — проверки есть и ещё идут,
+          # прочее (включая 1 — «no checks reported») — ждём дальше.
           for _ in $(seq 1 30); do
-            if gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then break; fi
+            gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1 && break
+            [ $? -eq 8 ] && break
             sleep 10
           done
 

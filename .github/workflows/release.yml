@@ -150,9 +150,16 @@ jobs:
       # Node 22 приносит npm 10.x, а обмен OIDC-токена на креденшл публикации
       # появился в 11.5.1. Без обновления publish молча ушёл бы в авторизацию
       # по NPM_AUTH_TOKEN — без provenance и с долгоживущим секретом.
+      #
+      # Версия точная, а не `@latest`: это последняя установка перед шагом,
+      # который публикует пакет с креденшлом реестра, и лотерее там не место.
+      # Плюс эксплуатационное: npm 12 требует Node ^22.22.2, тогда как 11.x
+      # довольствуется >=22.9.0 — с `@latest` релиз зависел бы от того, какой
+      # именно Node 22.x оказался на раннере. Двигать версию — осознанный шаг
+      # вместе с апгрейдом Node.
       - name: Upgrade npm for trusted publishing
         run: |
-          npm install -g npm@latest
+          npm install -g npm@11.19.1
           npm --version
 
       # Публикация. Авторизация — trusted publishing: npm доверяет этому
@@ -208,6 +215,38 @@ jobs:
           # последнюю опубликованную версию. Управляет этим порядок выпуска —
           # сначала 0.Y.0, следом 1.Y.0 (см. .agents/skills/release/SKILL.md).
           npm publish --access public
+
+      # Каким путём прошла авторизация, по логам publish не видно: при неудачном
+      # обмене OIDC npm молча уходит на NODE_AUTH_TOKEN и публикует без
+      # provenance. А от этого зависит решение «секрет NPM_AUTH_TOKEN можно
+      # удалять» (TRI-140) — принимать его по вере нельзя. Здесь факт
+      # проверяется у реестра и попадает в summary прогона.
+      #
+      # Шаг не гейт: provenance не влияет на работоспособность пакета,
+      # и срывать из-за него уже состоявшуюся публикацию нечего.
+      - name: Verify provenance
+        if: always()
+        continue-on-error: true
+        run: |
+          set -u
+          ATT=$(npm view "@sberbusiness/triplex-next@${RELEASE_TAG}" dist.attestations --json 2>/dev/null || echo "null")
+          if [ "${ATT}" = "null" ] || [ -z "${ATT}" ]; then
+            {
+              echo "### ⚠️ Provenance отсутствует"
+              echo ""
+              echo "\`${RELEASE_TAG}\` опубликована **по токену**: обмен OIDC не состоялся."
+              echo "Секрет \`NPM_AUTH_TOKEN\` удалять нельзя. Проверь trusted publisher"
+              echo "в настройках пакета: при вызове через \`workflow_call\` npm видит"
+              echo "\`release-weekly.yml\` в claim \`workflow_ref\` и \`release.yml\` —"
+              echo "в \`job_workflow_ref\`."
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### ✅ Provenance на месте"
+              echo ""
+              echo "\`${RELEASE_TAG}\` опубликована через trusted publishing."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       # Релиз создаётся на путях workflow_dispatch и workflow_call — и только после того,
       # как пакет реально ушёл в npm: упавшая сборка или публикация не оставят

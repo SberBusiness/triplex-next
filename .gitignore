@@ -40,7 +40,6 @@ tsconfig.tsbuildinfo
 # Папка отчета покрытия
 coverage/
 
-.npmrc
 /test-results/
 /helm/
 /jenkins/
@@ -48,9 +47,11 @@ build-storybook.log
 
 # 🔐 Секреты. Push protection ловит такие файлы уже на push (см. SECURITY.md),
 # здесь — слой раньше: не дать им попасть даже в локальный коммит.
+# .npmrc — тот же класс: туда кладёт токен `npm login`, и туда же его писал
+# релизный workflow до перехода на trusted publishing.
+.npmrc
 .env
 .env.*
-!.env.example
 *.pem
 *.key
 id_rsa*

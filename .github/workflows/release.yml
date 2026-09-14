@@ -57,6 +57,7 @@ on:
 
 permissions:
   contents: write   # нужно для создания релиза и загрузки ассетов
+  id-token: write   # OIDC-токен для trusted publishing в npm (см. шаг Publish to npm)
 
 env:
   STORYBOOK_PREVIEW_BASE: "/var/www/storybook/data"
@@ -69,6 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
 
     steps:
       # Запускать workflow может любой с правом на Actions, а дальше идёт checkout
@@ -145,13 +147,29 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # Публикация
+      # Node 22 приносит npm 10.x, а обмен OIDC-токена на креденшл публикации
+      # появился в 11.5.1. Без обновления publish молча ушёл бы в авторизацию
+      # по NPM_AUTH_TOKEN — без provenance и с долгоживущим секретом.
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
+
+      # Публикация. Авторизация — trusted publishing: npm доверяет этому
+      # workflow конкретного репозитория и выдаёт креденшл на минуты в обмен
+      # на OIDC-токен раннера (permissions.id-token выше). Provenance
+      # добавляется при этом автоматически: опубликованная версия привязана
+      # к коммиту и прогону, подмену видно через `npm audit signatures`.
+      #
+      # NPM_AUTH_TOKEN оставлен как запасной путь на время миграции: если
+      # обмен не состоится, npm авторизуется им, и релиз не сорвётся.
+      # После первой публикации с provenance секрет убираем (TRI-140).
+      # .npmrc отдельно не пишем — его создаёт actions/setup-node выше,
+      # подставляя NODE_AUTH_TOKEN.
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          echo "@sberbusiness:registry=https://registry.npmjs.org/" > .npmrc
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
           cd dist
           PKG_VERSION=$(node -p "require('./package.json').version")
           if [ "${PKG_VERSION}" != "${RELEASE_TAG}" ]; then

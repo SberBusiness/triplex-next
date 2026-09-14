@@ -280,6 +280,12 @@ jobs:
   publish-react17:
     needs: [preflight, prepare-react17]
     uses: ./.github/workflows/release.yml
+    # Права переиспользуемому workflow выдаёт вызывающая джоба: объявления
+    # внутри release.yml могут их только сузить. Без id-token здесь обмен
+    # OIDC-токена на креденшл npm не состоится.
+    permissions:
+      contents: write
+      id-token: write
     with:
       tag: ${{ needs.preflight.outputs.v0 }}
       target: release-0
@@ -423,6 +429,9 @@ jobs:
   publish-react18:
     needs: [preflight, prepare-react18]
     uses: ./.github/workflows/release.yml
+    permissions:
+      contents: write
+      id-token: write
     with:
       tag: ${{ needs.preflight.outputs.version }}
       target: main

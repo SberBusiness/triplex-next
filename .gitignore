@@ -45,7 +45,15 @@ coverage/
 /helm/
 /jenkins/
 build-storybook.log
-.env.local
+
+# 🔐 Секреты. Push protection ловит такие файлы уже на push (см. SECURITY.md),
+# здесь — слой раньше: не дать им попасть даже в локальный коммит.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa*
 
 .madge/
 

@@ -100,15 +100,24 @@ Avatar.Background
 - `forwardRef` на компоненте — не убирать; ref всегда указывает на корневой `<div>`.
 - `size` и `borderRadius` — обязательные props. Сделать любой из них
   опциональным со значением по умолчанию — изменение публичного API.
-- Значения `EAvatarSize` (`xxs`…`xxl`) совпадают с именами CSS-классов размеров,
-  на это опираются unit-тесты — переименовывать значения enum нельзя.
+- Значения `EAvatarSize` (`xxs`…`xxl`) — часть публичного API: строковые
+  значения enum видны потребителям, поэтому переименование любого из них —
+  ломающее изменение. Дополнительно на совпадение значений с именами
+  CSS-классов размеров опираются unit-тесты (`toHaveClass(size)`); сам
+  компонент от этого совпадения не зависит — `SIZE_TO_CLASS_NAME_MAP` в
+  `Avatar.tsx` сопоставляет их явно.
 - `TAvatarBorderRadius` — именно union числовых литералов. Тип стирается при
   компиляции, рантайм-источника правды у набора нет, поэтому расширение набора
-  синхронизируется вручную в пяти местах: сам union в `enums.ts`, CSS-класс
+  синхронизируется вручную в шести местах: сам union в `enums.ts`, CSS-класс
   `borderRadius{N}` в `styles/Avatar.module.less`,
   `BORDER_RADIUS_TO_CLASS_NAME_MAP` в `Avatar.tsx`, `BORDER_RADIUSES` в
-  `__tests__/Avatar.test.tsx` и `argTypes.borderRadius.options` в
-  `stories/Avatar/Avatar.stories.tsx`.
+  `__tests__/Avatar.test.tsx`, `argTypes.borderRadius.options` в
+  `stories/Avatar/Avatar.stories.tsx` и `BORDER_RADIUSES` в
+  `stories/Avatar/examples/BorderRadiusExample.tsx`. Последний особенно легко
+  пропустить: story `BorderRadius` рендерит радиусы по своему списку, поэтому
+  новый радиус в ней просто не появится, а visual-тест этого не заметит —
+  скриншот останется прежним. Набор перечислен ещё и прозой в
+  `docs.description` того же stories-файла — эту строку тоже нужно обновить.
 - Корневой элемент — `<div>` с `overflow: hidden`; содержимое обрезается по
   скруглению, на этом построен вариант с фоновым изображением.
 

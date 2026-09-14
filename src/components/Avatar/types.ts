@@ -3,8 +3,8 @@ import { EAvatarSize, TAvatarBorderRadius } from "./enums";
 
 /** Свойства компонента Avatar. */
 export interface IAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Размер. */
+    /** Размер. Задаёт ширину и высоту квадратной области аватара. */
     size: EAvatarSize;
-    /** Радиус скругления. */
+    /** Радиус скругления, px. */
     borderRadius: TAvatarBorderRadius;
 }

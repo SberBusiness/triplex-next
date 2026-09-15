@@ -96,7 +96,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CardStatic | ✅ | ✅ | ✅ |
 | CarouselExtended | ✅ | ✅ | ✅ |
 | Checkbox | ✅ | ✅ | ✅ |
-| CheckboxTree | ⬜ | ✅ | ⬜ |
+| CheckboxTree | ✅ | ✅ | ✅ |
 | CheckboxTreeExtended | ✅ | ✅ | ✅ |
 | CheckboxXGroup | ✅ | ✅ | ✅ |
 | CheckboxYGroup | ✅ | ✅ | ✅ |

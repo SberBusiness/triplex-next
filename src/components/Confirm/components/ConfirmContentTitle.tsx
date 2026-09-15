@@ -11,8 +11,12 @@ export interface IConfirmContentTitleProps extends Partial<TTitleProps<"h1">> {}
 /**
  * Заголовок предупреждения.
  * Обёртка над {@link Title} с дефолтом `size=H3` и отступом до подзаголовка.
+ *
+ * Ref типизирован как `HTMLElement`, а не `HTMLHeadingElement`: тег
+ * переопределяется через `tag` (см. Confirm-ai.md), и тогда в DOM окажется
+ * не заголовок.
  */
-export const ConfirmContentTitle = React.forwardRef<HTMLHeadingElement, IConfirmContentTitleProps>(
+export const ConfirmContentTitle = React.forwardRef<HTMLElement, IConfirmContentTitleProps>(
     ({ children, className, size = ETitleSize.H3, ...rest }, ref) => (
         <Title size={size} className={clsx(styles.confirmContentTitle, className)} {...rest} ref={ref}>
             {children}

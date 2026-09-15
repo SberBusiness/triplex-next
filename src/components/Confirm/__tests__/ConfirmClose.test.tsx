@@ -34,11 +34,12 @@ describe("ConfirmClose", () => {
         expect(screen.getByTestId("icon-close")).toBeInTheDocument();
     });
 
-    it("uses the hardcoded default title", () => {
-        // Дефолт "Закрыть" захардкожен в ConfirmCloseButton — зафиксирован тестом как текущее поведение.
+    it("does not set a title of its own", () => {
+        // Строки на конкретном языке внутри компонентов запрещены (codestyle.md
+        // § «Мультиязычность»), поэтому доступное имя кнопки задаёт потребитель.
         render(<ConfirmClose clickByEsc={false} onClick={vi.fn()} />);
 
-        expect(screen.getByRole("button")).toHaveAttribute("title", "Закрыть");
+        expect(screen.getByRole("button")).not.toHaveAttribute("title");
     });
 
     it("supports custom title", () => {

@@ -16,9 +16,9 @@ const Case = ({ children, title }: ICaseProps) => (
 export const VisualTests = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
         <Case title="Только заголовок">
-            <Confirm>
+            <Confirm aria-labelledby="confirm-vt-title-only">
                 <Confirm.Content>
-                    <Confirm.Content.Title>Удалить документ?</Confirm.Content.Title>
+                    <Confirm.Content.Title id="confirm-vt-title-only">Удалить документ?</Confirm.Content.Title>
                 </Confirm.Content>
 
                 <Confirm.Controls>
@@ -35,9 +35,9 @@ export const VisualTests = () => (
         </Case>
 
         <Case title="Без кнопки закрытия">
-            <Confirm parentComponent={EConfirmParentComponent.SIDE_OVERLAY_SM}>
+            <Confirm parentComponent={EConfirmParentComponent.SIDE_OVERLAY_SM} aria-labelledby="confirm-vt-no-close">
                 <Confirm.Content>
-                    <Confirm.Content.Title>Внимание</Confirm.Content.Title>
+                    <Confirm.Content.Title id="confirm-vt-no-close">Внимание</Confirm.Content.Title>
                     <Confirm.Content.SubTitle>
                         Кнопка закрытия необязательна: закрыть предупреждение можно кнопками действий.
                     </Confirm.Content.SubTitle>
@@ -55,9 +55,11 @@ export const VisualTests = () => (
         </Case>
 
         <Case title="Длинный текст и три кнопки">
-            <Confirm parentComponent={EConfirmParentComponent.SIDE_OVERLAY_MD}>
+            <Confirm parentComponent={EConfirmParentComponent.SIDE_OVERLAY_MD} aria-labelledby="confirm-vt-long">
                 <Confirm.Content>
-                    <Confirm.Content.Title>Сохранить изменения перед выходом?</Confirm.Content.Title>
+                    <Confirm.Content.Title id="confirm-vt-long">
+                        Сохранить изменения перед выходом?
+                    </Confirm.Content.Title>
                     <Confirm.Content.SubTitle>
                         В форме остались несохранённые изменения. Сохраните их, чтобы продолжить работу позже, или
                         выйдите без сохранения — тогда изменения будут потеряны. Текст переносится по ширине контента,

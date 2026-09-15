@@ -9,9 +9,9 @@ export const ParentComponents = () => (
             <div key={parentComponent}>
                 <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{parentComponent}</div>
 
-                <Confirm parentComponent={parentComponent}>
+                <Confirm parentComponent={parentComponent} aria-labelledby={`confirm-${parentComponent}-title`}>
                     <Confirm.Content>
-                        <Confirm.Content.Title>Внимание</Confirm.Content.Title>
+                        <Confirm.Content.Title id={`confirm-${parentComponent}-title`}>Внимание</Confirm.Content.Title>
                         <Confirm.Content.SubTitle>
                             Максимальная ширина предупреждения зависит от компонента, в котором оно открыто.
                         </Confirm.Content.SubTitle>

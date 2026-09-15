@@ -17,7 +17,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **Confirm**
 
-- Добавлено: `Confirm` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`, интерфейс `IConfirmFC` описывает его же со статиками `Close` / `Content` / `Controls`.
+- Добавлено: `Confirm` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Добавлено: `ref` пробрасывают и составные части — `Confirm.Content` (и её `Title` / `SubTitle`), `Confirm.Controls`, `Confirm.Close`. Раньше все они были объявлены как `React.FC`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
 

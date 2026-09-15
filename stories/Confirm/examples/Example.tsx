@@ -9,6 +9,7 @@ import {
     EHeaderPageType,
     ETextSize,
     ETitleSize,
+    FocusTrapUtils,
     LightBox,
     Page,
     Text,
@@ -44,7 +45,13 @@ export const Example = () => {
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
                                 <Page.Header.Title>
                                     <Page.Header.Title.Content>
-                                        <Title tag="h1" size={ETitleSize.H1}>
+                                        <Title
+                                            tag="h1"
+                                            size={ETitleSize.H1}
+                                            tabIndex={-1}
+                                            // Устанавливает фокус на первый элемент при открытии LightBox.
+                                            {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                        >
                                             Форма редактирования
                                         </Title>
                                     </Page.Header.Title.Content>
@@ -59,9 +66,9 @@ export const Example = () => {
                         </Page>
 
                         <TopOverlay opened={topOverlayOpened} onOpen={() => {}} onClose={() => {}}>
-                            <Confirm>
+                            <Confirm aria-labelledby="confirm-example-title">
                                 <Confirm.Content>
-                                    <Confirm.Content.Title>Внимание</Confirm.Content.Title>
+                                    <Confirm.Content.Title id="confirm-example-title">Внимание</Confirm.Content.Title>
                                     <Confirm.Content.SubTitle>
                                         Несохранённые данные будут утеряны. Вы уверены, что хотите покинуть форму
                                         редактирования?

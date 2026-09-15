@@ -56,7 +56,8 @@ const isSameValues = (values: TSliderRangeValues, otherValues: TSliderRangeValue
 
 /**
  * Слайдер с двумя ползунками — готовая сборка SliderExtended для выбора диапазона.
- * Значения контролируемые: компонент рисует ползунки по values и сообщает новую пару через onChange.
+ * Компонент рисует ползунки по внутренним значениям и сообщает новую пару через onChange.
+ * Внутренние значения синхронизируются с values, когда потребитель присылает новую пару.
  */
 class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> {
     public static displayName = "SliderRange";
@@ -81,7 +82,7 @@ class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> 
 
         this.validateValues();
 
-        // Values не изменились — innerValues уже соответствуют им.
+        // Values не изменились — синхронизировать нечего.
         if (isSameValues(values, prevProps.values)) {
             return;
         }
@@ -98,6 +99,8 @@ class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> 
     }
 
     public render(): React.ReactNode {
+        // step = 1 дублирует defaultProps намеренно: при чтении this.props тип остаётся
+        // number | number[] | undefined, а SliderExtended требует определённый step.
         const {
             draggableTrack,
             marks,

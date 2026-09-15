@@ -21,6 +21,13 @@ on:
 permissions:
   contents: read
 
+# Два прогона на одной ветке одновременно — это две попытки закоммитить
+# скриншоты, снятые с разных ревизий. Отменяем начатый: актуален тот, что
+# запущен последним, он и снимет baseline с текущей вершины.
+concurrency:
+  group: visual-update-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   update:
     name: Update baseline screenshots
@@ -83,7 +90,20 @@ jobs:
           git commit -m "chore: update visual snapshots"
 
           REMOTE="https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          # Ветка могла уйти вперёд, пока шёл прогон — подтягиваем перед пушем.
-          git pull --rebase "${REMOTE}" "${GITHUB_REF_NAME}"
+
+          # Скриншоты сняты с той ревизии, что была на момент checkout.
+          # Если ветка с тех пор ушла вперёд, переносить их на новую вершину
+          # нельзя: baseline от старого кода лёг бы поверх нового, и
+          # визуальные тесты либо упали бы с необъяснимой причиной, либо
+          # зафиксировали неверный эталон. Останавливаемся и говорим прямо —
+          # обновление дешевле повторить, чем разбирать испорченный baseline.
+          git fetch --quiet "${REMOTE}" "${GITHUB_REF_NAME}"
+          if [ "$(git rev-parse HEAD^)" != "$(git rev-parse FETCH_HEAD)" ]; then
+            echo "❌ Ветка ${GITHUB_REF_NAME} изменилась, пока шёл прогон."
+            echo "   Скриншоты сняты с устаревшей ревизии и не публикуются."
+            echo "   Запусти обновление заново на актуальной вершине."
+            exit 1
+          fi
+
           git push "${REMOTE}" "HEAD:${GITHUB_REF_NAME}" \
             || { echo "❌ Push отклонён. Проверь, что dudim-ai не потерял права на ветку."; exit 1; }

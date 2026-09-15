@@ -8,15 +8,20 @@ import styles from "../styles/Confirm.module.less";
 /** Свойства компонента ConfirmContentTitle. */
 export interface IConfirmContentTitleProps extends Partial<TTitleProps<"h1">> {}
 
-export const ConfirmContentTitle: React.FC<IConfirmContentTitleProps> = ({
-    children,
-    className,
-    size = ETitleSize.H3,
-    ...rest
-}) => (
-    <Title size={size} className={clsx(className, styles.confirmContentTitle)} {...rest}>
-        {children}
-    </Title>
+/**
+ * Заголовок предупреждения.
+ * Обёртка над {@link Title} с дефолтом `size=H3` и отступом до подзаголовка.
+ *
+ * Ref типизирован как `HTMLElement`, а не `HTMLHeadingElement`: тег
+ * переопределяется через `tag` (см. Confirm-ai.md), и тогда в DOM окажется
+ * не заголовок.
+ */
+export const ConfirmContentTitle = React.forwardRef<HTMLElement, IConfirmContentTitleProps>(
+    ({ children, className, size = ETitleSize.H3, ...rest }, ref) => (
+        <Title size={size} className={clsx(styles.confirmContentTitle, className)} {...rest} ref={ref}>
+            {children}
+        </Title>
+    ),
 );
 
 ConfirmContentTitle.displayName = "ConfirmContentTitle";

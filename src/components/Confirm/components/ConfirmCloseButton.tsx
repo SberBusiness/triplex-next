@@ -6,10 +6,15 @@ import { Button, TButtonProps } from "../../Button/Button";
 import { EButtonTheme } from "../../Button/enums";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 
+/**
+ * Свойства компонента ConfirmCloseButton.
+ * Props кнопки, кроме theme, size и icon: их задаёт сам компонент.
+ */
 export interface IConfirmCloseButtonProps extends Omit<TButtonProps, "theme" | "size" | "icon"> {}
 
 /**
  * Кнопка закрытия.
+ * Иконка-крестик в правом верхнем углу предупреждения.
  */
 export const ConfirmCloseButton = React.forwardRef<HTMLButtonElement, IConfirmCloseButtonProps>(
     ({ className, title = "Закрыть", ...props }, ref) => (
@@ -18,7 +23,7 @@ export const ConfirmCloseButton = React.forwardRef<HTMLButtonElement, IConfirmCl
             theme={EButtonTheme.SECONDARY}
             size={EComponentSize.MD}
             ref={ref}
-            className={clsx(className, styles.confirmCloseButton)}
+            className={clsx(styles.confirmCloseButton, className)}
             title={title}
             {...props}
         />

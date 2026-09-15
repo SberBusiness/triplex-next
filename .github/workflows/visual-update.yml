@@ -1,19 +1,51 @@
 name: Update Visual Snapshots
 
+# Два входа, и оба нужны.
+#
+# `workflow_dispatch` — ручной путь: кнопка в Actions или `gh workflow run`
+# из локальной сессии.
+#
+# `push` с маркером `[update-snapshots]` — путь для агентов. Облачные сессии
+# не могут диспатчить workflow: запись в Actions API отдаёт 403 «Resource not
+# accessible by integration» (наблюдение 2026-09-15, см. docs/ai/commits.md
+# § «Облачные сессии»). Зато `git push` им доступен — на нём и строим триггер.
+# Маркер в сообщении коммита повторяет механику `[no-pr]` из auto-pr.yml.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'TRI-*'
+      - 'TRIPLEX-*'
+
+# Пуш скриншотов идёт под PAT бота, поэтому GITHUB_TOKEN здесь только читает.
+permissions:
+  contents: read
+
+# Два прогона на одной ветке одновременно — это две попытки закоммитить
+# скриншоты, снятые с разных ревизий. Отменяем начатый: актуален тот, что
+# запущен последним, он и снимет baseline с текущей вершины.
+concurrency:
+  group: visual-update-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   update:
     name: Update baseline screenshots
+    # Зацикливания нет: собственный коммит этого workflow маркера не содержит,
+    # поэтому порождённый им push сюда не возвращается.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || contains(github.event.head_commit.message, '[update-snapshots]')
     runs-on: ubuntu-24.04
-    permissions:
-      contents: write
     steps:
+      # persist-credentials: false — ниже выполняется `npm ci`, то есть
+      # lifecycle-скрипты зависимостей. Токен с правом push в ветку не должен
+      # лежать в .git/config, пока они работают; он подставляется точечно,
+      # только в момент push.
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22.17.0
@@ -34,15 +66,44 @@ jobs:
         env:
           # Local pre-commit blocks __screenshots__ commits by design; disable Husky only in CI snapshot update.
           HUSKY: 0
+          DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          set -eu
+          git config user.name "dudim-ai"
+          git config user.email "dudim-ai@users.noreply.github.com"
           git add __screenshots__/
           if git diff --staged --quiet; then
             echo "No snapshot changes"
-          else
-            git commit -m "chore: update visual snapshots [skip ci]"
-            # Ветка могла уйти вперёд, пока шёл прогон — подтягиваем перед пушем.
-            git pull --rebase
-            git push || (echo "❌ Push failed. Check branch protection rules or GITHUB_TOKEN permissions." && exit 1)
+            exit 0
           fi
+
+          # Без `[skip ci]` и под PAT бота — оба условия обязательны, чтобы
+          # на коммите со скриншотами запустились проверки. Пуши, сделанные
+          # GITHUB_TOKEN, workflow не порождают, а `[skip ci]` подавляет их
+          # и для PAT. Без прогонов вершина PR остаётся без обязательных
+          # проверок, и PR невозможно смержить (TRI-140).
+          #
+          # Префикса TRI-XXX намеренно нет: коммит машинный, а auto-pr.yml
+          # создаёт PR только по коммитам в формате `TRI-XXX ...` — иначе
+          # обновление скриншотов могло бы создать PR со случайным
+          # заголовком. См. docs/ai/commits.md § «Формат коммитов».
+          git commit -m "chore: update visual snapshots"
+
+          REMOTE="https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          # Скриншоты сняты с той ревизии, что была на момент checkout.
+          # Если ветка с тех пор ушла вперёд, переносить их на новую вершину
+          # нельзя: baseline от старого кода лёг бы поверх нового, и
+          # визуальные тесты либо упали бы с необъяснимой причиной, либо
+          # зафиксировали неверный эталон. Останавливаемся и говорим прямо —
+          # обновление дешевле повторить, чем разбирать испорченный baseline.
+          git fetch --quiet "${REMOTE}" "${GITHUB_REF_NAME}"
+          if [ "$(git rev-parse HEAD^)" != "$(git rev-parse FETCH_HEAD)" ]; then
+            echo "❌ Ветка ${GITHUB_REF_NAME} изменилась, пока шёл прогон."
+            echo "   Скриншоты сняты с устаревшей ревизии и не публикуются."
+            echo "   Запусти обновление заново на актуальной вершине."
+            exit 1
+          fi
+
+          git push "${REMOTE}" "HEAD:${GITHUB_REF_NAME}" \
+            || { echo "❌ Push отклонён. Проверь, что dudim-ai не потерял права на ветку."; exit 1; }

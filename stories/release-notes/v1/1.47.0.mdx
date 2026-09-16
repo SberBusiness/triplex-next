@@ -27,3 +27,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `Slider` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
+**UploadZone**
+
+- Добавлено: `UploadZone.Input` (`UploadZoneInput`) пробрасывает `ref` на свой `<input type="file">` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Исправлено: `displayName` у `UploadZone.Input` — был `UploadZone`, стал `UploadZoneInput`. Видно в React DevTools и в snapshot-тестах.
+- Исправлено: при закрытии дроп-зоны в консоли больше не появляется предупреждение React «Attempted to synchronously unmount a root while React was already rendering».
+- Проведён AI-рефакторинг: других изменений для потребителя нет.

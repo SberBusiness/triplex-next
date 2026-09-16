@@ -1,25 +1,19 @@
-import React, { useState } from "react";
-import { ArgTypes, Description, Stories, Title, Heading } from "@storybook/addon-docs/blocks";
-import { StoryObj } from "@storybook/react";
-import { Gap } from "../../src/components/Gap";
-import { EFontType, ETextSize, Text } from "../../src/components/Typography";
-import { Link } from "../../src/components/Link";
-import { UploadZone } from "../../src/components/UploadZone";
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { UploadZone } from "@sberbusiness/triplex-next";
 import {
-    DocumentStrokeSrvIcon32,
-    AttachmentStrokeSrvIcon20,
-    DeleteStrokeSrvIcon20,
-    ClouddraguploadStrokeSrvIcon32,
-} from "@sberbusiness/icons-next";
-import { HelpBox } from "../../src/components/HelpBox";
-import { ETooltipSize } from "../../src/components/Tooltip";
-import { EVerticalAlign, TableBasic, ITableBasicColumn, ITableBasicRow, ECellType } from "../../src/components/Table";
-import { EMarkerStatus } from "../../src/components/Marker";
-import { MarkerStatus } from "../../src/components/MarkerStatus";
-import { Button, EButtonTheme } from "../../src/components/Button";
-import { EComponentSize } from "../../src/enums/EComponentSize";
-import { MobileView } from "../../src/components/MobileView/MobileView";
-import "./UploadZone.less";
+    PlaygroundRender,
+    PlaygroundSource,
+    DefaultRender,
+    DefaultSource,
+    WithDropZoneContainerRender,
+    WithDropZoneContainerSource,
+    ProductionRender,
+    ProductionSource,
+    VisualTestsRender,
+    type PlaygroundArgs,
+} from "./examples";
 
 export default {
     title: "Components/UploadZone",
@@ -28,9 +22,8 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: `
-Компонент зоны загрузки файлов.
-                `,
+                component:
+                    "Зона загрузки файлов: кликабельная область с выбором файлов через системный диалог и дроп-зона для перетаскивания.",
             },
             page: () => (
                 <>
@@ -38,273 +31,127 @@ export default {
                     <Description />
                     <Heading>Props</Heading>
                     <ArgTypes of={UploadZone} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
                     <Stories />
                 </>
             ),
         },
     },
+} satisfies Meta<typeof UploadZone>;
+
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    // Settings
+    multiple: true,
+    withDropZoneContainer: true,
+    withContainerContent: true,
+};
+
+export const Playground: StoryObj<PlaygroundArgs> = {
+    tags: ["!autodocs"],
+    args: PLAYGROUND_ARGS,
+    argTypes: {
+        // Settings
+        multiple: {
+            control: "boolean",
+            description: "Выбор нескольких файлов в UploadZone.Input.",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "true" },
+            },
+        },
+        withDropZoneContainer: {
+            control: "boolean",
+            description: "Передавать внешний контейнер в dropZoneContainer.",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "true" },
+            },
+        },
+        withContainerContent: {
+            control: "boolean",
+            description: "Рисовать контент дроп-зоны через renderContainerContent.",
+            table: {
+                category: "Settings",
+                defaultValue: { summary: "true" },
+            },
+        },
+    },
+    parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+            source: {
+                code: PlaygroundSource,
+                language: "tsx",
+            },
+        },
+        testRunner: { skip: true },
+    },
+    render: PlaygroundRender,
 };
 
 export const Default: StoryObj<typeof UploadZone> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
+        },
     },
-    render: () => {
-        const [container, setContainer] = useState<HTMLDivElement | null>(null);
-
-        const renderContainerContent = () => (
-            <div className="uploadZoneContainerContent">
-                <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
-                <Gap size={4} />
-                <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                    Label text
-                </Text>
-            </div>
-        );
-
-        const handleChange = () => {
-            alert("Change handler called.");
-        };
-
-        const renderUploadZoneInput = () => <UploadZone.Input multiple />;
-
-        const renderUploadZoneContentDesktop = (openUploadDialog) => (
-            <div className="uploadZoneContent">
-                {renderUploadZoneInput()}
-                <Gap size={16} />
-                <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
-                <Gap size={4} />
-                <div>
-                    <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                        Label text
-                        {"\u00A0"}
-                        <Link onClick={openUploadDialog}>Link text</Link>
-                        {"\u00A0"}
-                        <HelpBox tooltipSize={ETooltipSize.SM}>Helpbox text</HelpBox>
-                    </Text>
-                </div>
-                <Gap size={16} />
-            </div>
-        );
-
-        const renderUploadZoneContentMobile = (openUploadDialog) => (
-            <div className="uploadZoneMobile">
-                {renderUploadZoneInput()}
-                <div className="uploadZoneMobileHeader">
-                    <Text size={ETextSize.B3}>Файлы для импорта</Text>
-                    <HelpBox tooltipSize={ETooltipSize.SM}>Helpbox text</HelpBox>
-                </div>
-
-                <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={openUploadDialog}>
-                    Загрузить
-                </Button>
-            </div>
-        );
-
-        return (
-            <div ref={(node) => setContainer(node)} style={{ display: "flow-root", position: "relative" }}>
-                <UploadZone
-                    renderContainerContent={renderContainerContent}
-                    dropZoneContainer={container}
-                    onChange={handleChange}
-                >
-                    {({ openUploadDialog }) => (
-                        <MobileView fallback={renderUploadZoneContentDesktop(openUploadDialog)}>
-                            {renderUploadZoneContentMobile(openUploadDialog)}
-                        </MobileView>
-                    )}
-                </UploadZone>
-            </div>
-        );
-    },
+    render: DefaultRender,
 };
 
-export const Examples: StoryObj<typeof UploadZone> = {
+export const WithDropZoneContainer: StoryObj<typeof UploadZone> = {
     parameters: {
         controls: { disable: true },
+        docs: {
+            source: {
+                code: WithDropZoneContainerSource,
+                language: "tsx",
+            },
+        },
+    },
+    render: WithDropZoneContainerRender,
+};
+
+export const Production: StoryObj<typeof UploadZone> = {
+    name: "Example: production",
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: ProductionSource,
+                language: "tsx",
+            },
+        },
         testRunner: { skip: true },
     },
-    render: () => {
-        const [container, setContainer] = useState<HTMLDivElement | null>(null);
+    render: ProductionRender,
+};
 
-        const renderContainerContent = () => (
-            <div className="uploadZoneContainerContent">
-                <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
-                <Gap size={4} />
-                <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                    Положите файлы сюда
-                </Text>
-            </div>
-        );
+export const VisualTests: StoryObj<typeof UploadZone> = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    render: VisualTestsRender,
+    play: async ({ canvas }) => {
+        const dropContainer = await canvas.findByTestId("uploadzone-drop-container");
 
-        const columns: ITableBasicColumn[] = [
-            {
-                fieldKey: "number",
-                width: 38,
-                verticalAlign: EVerticalAlign.TOP,
-            },
-            {
-                fieldKey: "logo",
-                width: 56,
-                verticalAlign: EVerticalAlign.TOP,
-            },
-            {
-                fieldKey: "summary",
-                verticalAlign: EVerticalAlign.TOP,
-            },
-            {
-                fieldKey: "status",
-                width: 122,
-                verticalAlign: EVerticalAlign.TOP,
-            },
-            {
-                fieldKey: "attach",
-                width: 64,
-                cellType: ECellType.COMPONENTS,
-                verticalAlign: EVerticalAlign.TOP,
-            },
-            {
-                fieldKey: "delete",
-                width: 64,
-                cellType: ECellType.COMPONENTS,
-                verticalAlign: EVerticalAlign.TOP,
-            },
-        ];
+        // Компонент слушает dragenter на контейнере дроп-зоны — эмулируем перетаскивание файла над блоком.
+        dropContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
 
-        const getData = (): ITableBasicRow[] => {
-            const data = [
-                {
-                    summary: {
-                        name: "File name",
-                        size: "File size",
-                    },
-                    status: {
-                        status: EMarkerStatus.SUCCESS,
-                        text: "Status text",
-                        desc: "Description",
-                    },
-                },
-                {
-                    summary: {
-                        name: "File name",
-                        size: "File size",
-                    },
-                    status: {
-                        status: EMarkerStatus.WAITING,
-                        text: "Status text",
-                        desc: "Description",
-                    },
-                },
-                {
-                    summary: {
-                        name: "File name",
-                        size: "File size",
-                    },
-                    status: {
-                        status: EMarkerStatus.WAITING,
-                        text: "Status text",
-                        desc: "Description",
-                    },
-                },
-                {
-                    summary: {
-                        name: "File name",
-                        size: "File size",
-                    },
-                    status: {
-                        status: EMarkerStatus.WAITING,
-                        text: "Status text",
-                        desc: "Description",
-                    },
-                },
-                {
-                    summary: {
-                        name: "File name",
-                        size: "File size",
-                    },
-                    status: {
-                        status: EMarkerStatus.SUCCESS,
-                        text: "Status text",
-                        desc: "Description",
-                    },
-                },
-            ];
-
-            return data.map((d, i) => {
-                const rowNumber = i + 1;
-
-                return {
-                    rowKey: String(rowNumber),
-                    rowData: {
-                        number: String(rowNumber + "."),
-                        logo: <DocumentStrokeSrvIcon32 paletteIndex={5} />,
-                        summary: (
-                            <>
-                                <Text size={ETextSize.B3}>{d.summary.name}</Text>
-                                <Gap size={4} />
-                                <Text type={EFontType.SECONDARY} size={ETextSize.B4}>
-                                    {d.summary.size}
-                                </Text>
-                            </>
-                        ),
-                        status: (
-                            <MarkerStatus status={d.status.status} description={d.status.desc} size={EComponentSize.LG}>
-                                {d.status.text}
-                            </MarkerStatus>
-                        ),
-                        attach: (
-                            <Button
-                                size={EComponentSize.MD}
-                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
-                                theme={EButtonTheme.SECONDARY}
-                            />
-                        ),
-                        delete: (
-                            <Button
-                                size={EComponentSize.MD}
-                                icon={<DeleteStrokeSrvIcon20 paletteIndex={0} />}
-                                theme={EButtonTheme.SECONDARY}
-                            />
-                        ),
-                    },
-                };
-            });
-        };
-
-        const handleChange = () => {
-            alert("Change handler called.");
-        };
-
-        const renderUploadZoneContent = (openUploadDialog) => (
-            <div className="uploadZoneContent">
-                <UploadZone.Input multiple />
-                <Gap size={16} />
-                <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
-                <Gap size={4} />
-                <div>
-                    <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                        Label text
-                        {"\u00A0"}
-                        <Link onClick={openUploadDialog}>Link text</Link>
-                        {"\u00A0"}
-                        <HelpBox tooltipSize={ETooltipSize.SM}>Helpbox text</HelpBox>
-                    </Text>
-                </div>
-                <Gap size={16} />
-            </div>
-        );
-        return (
-            <div ref={(node) => setContainer(node)} style={{ display: "flow-root", position: "relative" }}>
-                <UploadZone
-                    renderContainerContent={renderContainerContent}
-                    dropZoneContainer={container}
-                    onChange={handleChange}
-                >
-                    {({ openUploadDialog }) => renderUploadZoneContent(openUploadDialog)}
-                </UploadZone>
-                <Gap size={16} />
-                <TableBasic columns={columns} data={getData()} headless />
-            </div>
-        );
+        // Оверлей монтируется в отдельный React-root, то есть не в том же тике. Без ожидания
+        // скриншот может сняться в состоянии покоя и молча уехать в baseline.
+        await canvas.findByText("Положите файлы сюда");
     },
 };

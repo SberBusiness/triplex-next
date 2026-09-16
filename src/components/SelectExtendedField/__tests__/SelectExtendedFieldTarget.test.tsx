@@ -41,7 +41,8 @@ describe("SelectExtendedFieldTarget", () => {
 
         // Значение поля — div, поэтому лейбл рендерится тегом span, а имя даёт aria-labelledby.
         expect(container.querySelector("label")).toBeNull();
-        expect(screen.getByLabelText("Заголовок поля")).toHaveClass("formFieldTarget");
+        // Доступное имя принадлежит фокусируемому элементу со значением, а не корню поля.
+        expect(screen.getByLabelText("Заголовок поля")).toHaveAttribute("tabindex", "0");
     });
 
     it("Should render with required props", () => {

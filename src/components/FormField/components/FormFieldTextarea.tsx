@@ -32,6 +32,7 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
 
         useLayoutEffect(() => {
             setTargetId(id);
+            return () => setTargetId((currentTargetId) => (currentTargetId === id ? undefined : currentTargetId));
         }, [id, setTargetId]);
 
         useLayoutEffect(() => {

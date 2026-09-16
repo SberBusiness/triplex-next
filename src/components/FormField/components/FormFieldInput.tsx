@@ -58,6 +58,7 @@ export const FormFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInput
 
         useLayoutEffect(() => {
             setTargetId(id);
+            return () => setTargetId((currentTargetId) => (currentTargetId === id ? undefined : currentTargetId));
         }, [id, setTargetId]);
 
         // Начальная синхронизация заполненности: defaultValue учитывается только при монтировании,

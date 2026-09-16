@@ -7,6 +7,7 @@ import {
     FormFieldLabel,
     FormFieldPrefix,
     FormFieldTarget,
+    FormFieldTextarea,
 } from "@sberbusiness/triplex-next/components";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { resetResizeObservers, resizeElement } from "../../../../test-utils/resizeObserver";
@@ -124,6 +125,29 @@ describe("FormFieldLabel", () => {
         // FormFieldTarget — <div>, а не labelable-элемент: связать с ним <label> нечем.
         expect(label.tagName).toBe("SPAN");
         expect(label).not.toHaveAttribute("for");
+    });
+
+    it.each([
+        ["FormFieldInput", <FormFieldInput key="input" />],
+        ["FormFieldTextarea", <FormFieldTextarea key="textarea" />],
+    ])("drops htmlFor when %s is replaced by FormFieldTarget", (_name, field) => {
+        const { rerender } = render(
+            <FormField>
+                <FormFieldLabel data-testid="label">Label</FormFieldLabel>
+                {field}
+            </FormField>,
+        );
+
+        rerender(
+            <FormField>
+                <FormFieldLabel data-testid="label">Label</FormFieldLabel>
+                <FormFieldTarget data-testid="target">Значение</FormFieldTarget>
+            </FormField>,
+        );
+
+        // Иначе htmlFor ссылался бы на id уже удалённого элемента ввода.
+        expect(screen.getByTestId("label")).not.toHaveAttribute("for");
+        expect(screen.getByLabelText("Label")).toBe(screen.getByTestId("target"));
     });
 
     it("stays connected to FormFieldTarget through aria-labelledby", () => {

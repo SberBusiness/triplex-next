@@ -32,7 +32,7 @@ export interface IFooterPageTypeFirstProps extends IFooterProps {
 /** Футер компонента Page. Доступен как `Page.Footer`. Нижний блок страницы с контентом и управляющими элементами. */
 export const FooterPage = Object.assign(
     React.forwardRef<HTMLDivElement, IFooterPageTypeFirstProps | IFooterPageTypeSecondProps>(
-        ({ className, type, size, sticky, ...rest }, ref) => {
+        ({ className, type, size, sticky, ...restProps }, ref) => {
             const footerRef = useRef<HTMLDivElement | null>(null);
             // Плавное обнуление нижних углов и добавление тени при прилипании к низу.
             useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && sticky);
@@ -46,25 +46,17 @@ export const FooterPage = Object.assign(
                 }
             };
 
-            const footerPageTypeFirstClassNames = clsx(
-                styles.footerPageTypeFirst,
-                {
-                    [styles.sticky]: type === EFooterPageType.FIRST && sticky,
-                },
-                className,
-            );
-
             return type === EFooterPageType.FIRST ? (
                 <Island
-                    className={footerPageTypeFirstClassNames}
+                    className={clsx(styles.footerPageTypeFirst, { [styles.sticky]: sticky }, className)}
                     type={EIslandType.TYPE_1}
-                    ref={setFooterRef}
                     size={size}
+                    ref={setFooterRef}
                 >
-                    <Footer {...rest} />
+                    <Footer {...restProps} />
                 </Island>
             ) : (
-                <Footer ref={ref} className={className} {...rest} />
+                <Footer className={clsx(styles.footerPageTypeSecond, className)} {...restProps} ref={ref} />
             );
         },
     ),

@@ -115,5 +115,6 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-09-16 | Добавлен отступ `padding-bottom: 8px` для футера с `type={EFooterPageType.SECOND}`. |
 | 2026-08-06 | Sticky-позиционирование доступно вне `LightBox` при ширине viewport от 992px и отключено при высоте viewport не больше 800px. |
 | 2026-06-19 | Создан документ. AI-рефакторинг (clsx order, JSDoc на props, displayName), unit-тесты, миграция stories на modern pattern. |

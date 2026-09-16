@@ -90,11 +90,14 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
         };
     }, [opened]);
 
-    const handleTargetClick = () => {
+    const handleTargetClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setOpened((prevOpened) => !prevOpened);
+        targetHtmlAttributes?.onClick?.(event);
     };
 
     const handleTargetKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        targetHtmlAttributes?.onKeyDown?.(event);
+
         if (!opened) {
             // Enter и Space раскрывают список нативной активацией кнопки, ArrowUp/ArrowDown обрабатываются здесь.
             if (isKey(event.code, "ARROW_UP") || isKey(event.code, "ARROW_DOWN")) {
@@ -135,7 +138,18 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
     };
 
     const renderTarget = () => {
-        const { onFocus, onBlur, onMouseEnter, onMouseLeave, ...restTargetHtmlAttributes } = targetHtmlAttributes || {};
+        // className и обработчики выделяем, чтобы не потерять переданные потребителем:
+        // ниже идут одноимённые внутренние props, и спред их бы не пережил.
+        const {
+            className: targetClassName,
+            onFocus,
+            onBlur,
+            onMouseEnter,
+            onMouseLeave,
+            onClick,
+            onKeyDown,
+            ...restTargetHtmlAttributes
+        } = targetHtmlAttributes || {};
 
         return (
             <button
@@ -144,9 +158,15 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
                 onBlur={handleTargetBlur}
                 onMouseEnter={handleTargetMouseEnter}
                 onMouseLeave={handleTargetMouseLeave}
-                className={clsx(styles.tab, SIZE_TO_CLASS_NAME_MAP[size], styles.dropdownTarget, {
-                    [styles.active]: active,
-                })}
+                className={clsx(
+                    styles.tab,
+                    SIZE_TO_CLASS_NAME_MAP[size],
+                    styles.dropdownTarget,
+                    {
+                        [styles.active]: active,
+                    },
+                    targetClassName,
+                )}
                 onClick={handleTargetClick}
                 onKeyDown={handleTargetKeyDown}
                 type="button"

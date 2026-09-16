@@ -40,6 +40,12 @@ export const TabsLineDesktop = React.forwardRef<HTMLDivElement, ITabsLineDesktop
 
         const { inlineTabs, dropdownTabs } = useMemo(() => splitTabsByMaxVisible(tabs, maxVisible), [tabs, maxVisible]);
 
+        // Если tabs или maxVisible уменьшились, сохранённый индекс может выйти за границы строки.
+        // Без клэмпа ни один таб не получил бы tabIndex=0, и строка выпала бы из порядка обхода.
+        // Клэмп производный, а не через useEffect: состояние, синхронизируемое эффектом, вернуло бы
+        // react-hooks/set-state-in-effect, который этот рефакторинг как раз снял.
+        const activeTabIndex = focusableTabIndex < inlineTabs.length ? focusableTabIndex : 0;
+
         const renderInlineTab = (
             { selected, onClick, onFocus, onBlur, size: itemSize, ...item }: ITabsLineItemProps,
             index: number,
@@ -84,9 +90,13 @@ export const TabsLineDesktop = React.forwardRef<HTMLDivElement, ITabsLineDesktop
                     selected={selectedId === item.id}
                     onClick={handleClick}
                     onKeyDown={handleKeyDown}
-                    tabIndex={focusableTabIndex === index ? 0 : -1}
+                    tabIndex={activeTabIndex === index ? 0 : -1}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
+                    // Осознанно спредим item последним: onClick/onFocus/onBlur/size выделены выше и смерджены
+                    // с внутренними, а onKeyDown и tabIndex из элемента tabs намеренно перекрывают внутренние —
+                    // это pre-existing контракт (см. «Ограничения» в TabsLine-ai.md), он не чинится в рамках
+                    // рефакторинга, чтобы не менять публичное поведение.
                     {...item}
                     size={itemSize ?? size}
                     ref={setRef}

@@ -34,4 +34,5 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлено: `ref` пробрасывают и остальные компоненты семейства — `TabsLineDesktop`, `TabsLineMobile` и `TabsLineDropdown`. Раньше все они были объявлены как `React.FC`.
 - Добавлено: `TabsLineDesktop` и `TabsLineMobile` прокидывают `className` и остальные html-атрибуты на свой корневой `<div>` — раньше они их молча теряли.
 - Исправлено: таб больше не теряет `className`, `onMouseEnter` и `onMouseLeave`, переданные в элементе массива `tabs`. Раньше `className` перетирался внутренним, а обработчики наведения не вызывались.
+- Исправлено: кнопка дропдауна больше не теряет `className`, `onClick` и `onKeyDown`, переданные в `dropdownTargetHtmlAttributes`. Раньше `className` перетирался внутренним, а обработчики не вызывались.
 - Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.

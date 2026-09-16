@@ -196,6 +196,20 @@ describe("TabsLineDesktop", () => {
         });
     });
 
+    it("Should keep a focusable tab when tabs shrink below the focused index", async () => {
+        const user = userEvent.setup();
+
+        const { rerender } = renderDesktop();
+
+        await user.click(screen.getByRole("tab", { name: "Tab 5" }));
+        expect(screen.getByRole("tab", { name: "Tab 5" })).toHaveAttribute("tabindex", "0");
+
+        rerender(<TabsLineDesktop tabs={tabs.slice(0, 2)} selectedId="tab-1" onChangeTab={vi.fn()} />);
+
+        // Сохранённый индекс (4) вышел за границы строки — иначе вся строка выпала бы из порядка обхода.
+        expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveAttribute("tabindex", "0");
+    });
+
     it("Should have correct displayName", () => {
         expect(TabsLineDesktop.displayName).toBe("TabsLineDesktop");
     });

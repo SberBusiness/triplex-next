@@ -170,6 +170,37 @@ describe("TabsLineDropdown", () => {
         });
     });
 
+    it("Should merge the className from targetHtmlAttributes into the target", () => {
+        renderDropdown({ targetHtmlAttributes: { className: "custom-target" } });
+
+        expect(getTarget()).toHaveClass("custom-target");
+        expect(getTarget()).toHaveClass("dropdownTarget");
+    });
+
+    it("Should call the onClick from targetHtmlAttributes along with opening the list", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+
+        renderDropdown({ targetHtmlAttributes: { onClick } });
+        await user.click(getTarget());
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(queryList()).toBeInTheDocument();
+    });
+
+    it("Should call the onKeyDown from targetHtmlAttributes along with the internal handler", async () => {
+        const user = userEvent.setup();
+        const onKeyDown = vi.fn();
+
+        renderDropdown({ targetHtmlAttributes: { onKeyDown } });
+        await user.tab();
+        expect(getTarget()).toHaveFocus();
+        await user.keyboard("{ArrowDown}");
+
+        expect(onKeyDown).toHaveBeenCalledTimes(1);
+        expect(queryList()).toBeInTheDocument();
+    });
+
     it("Should merge the custom className into the root element and forward ref", () => {
         const ref = React.createRef<HTMLDivElement>();
 

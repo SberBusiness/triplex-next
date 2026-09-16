@@ -191,6 +191,9 @@ export const WithDropdown: StoryObj<typeof TabsLine> = {
     render: WithDropdownRender,
     parameters: {
         controls: { disable: true },
+        // Скриншоты не снимаем: закрытая кнопка дропдауна уже покрыта в Sizes (все три размера),
+        // раскрытый список — в Visual tests. Отдельный baseline ничего не добавляет.
+        testRunner: { skip: true },
         docs: {
             source: {
                 code: WithDropdownSource,

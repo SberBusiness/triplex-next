@@ -168,6 +168,31 @@ describe("TabsLineDropdown", () => {
             expect(onClickTab).toHaveBeenCalledWith(tabs[2]);
             expect(queryList()).not.toBeInTheDocument();
         });
+
+        it("Should keep option ids unique across instances with the same tab ids", async () => {
+            const user = userEvent.setup();
+
+            render(
+                <>
+                    <TabsLineDropdown tabs={tabs} active={false} label="First" onClickTab={vi.fn()} />
+                    <TabsLineDropdown tabs={tabs} active={false} label="Second" onClickTab={vi.fn()} />
+                </>,
+            );
+
+            const [firstTarget, secondTarget] = screen.getAllByRole("tab");
+            const getOptionIds = () => screen.getAllByRole("option").map((option) => option.id);
+
+            // Списки открываются по очереди: клик по второму таргету закрывает первый список.
+            await user.click(firstTarget);
+            const firstIds = getOptionIds();
+
+            await user.click(secondTarget);
+            const secondIds = getOptionIds();
+
+            // DOM id пункта больше не равен id таба — он выводится из идентификатора экземпляра.
+            expect(firstIds).not.toContain("tab-3");
+            expect(new Set([...firstIds, ...secondIds]).size).toBe(firstIds.length + secondIds.length);
+        });
     });
 
     it("Should merge the className from targetHtmlAttributes into the target", () => {

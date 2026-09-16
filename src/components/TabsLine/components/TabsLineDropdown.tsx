@@ -96,8 +96,6 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
     };
 
     const handleTargetKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        targetHtmlAttributes?.onKeyDown?.(event);
-
         if (!opened) {
             // Enter и Space раскрывают список нативной активацией кнопки, ArrowUp/ArrowDown обрабатываются здесь.
             if (isKey(event.code, "ARROW_UP") || isKey(event.code, "ARROW_DOWN")) {
@@ -110,6 +108,8 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
                 setOpened(false);
             }
         }
+
+        targetHtmlAttributes?.onKeyDown?.(event);
     };
 
     const handleClickTab = (tab: ITabsLineItemProps) => {
@@ -140,6 +140,8 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
     const renderTarget = () => {
         // className и обработчики выделяем, чтобы не потерять переданные потребителем:
         // ниже идут одноимённые внутренние props, и спред их бы не пережил.
+        // onClick и onKeyDown деструктурируются только ради исключения из спреда —
+        // вызываются они внутри handleTargetClick / handleTargetKeyDown.
         const {
             className: targetClassName,
             onFocus,
@@ -204,7 +206,7 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
         >
             <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
                 <DropdownList dropdownOpened={opened} id={instanceId.current} size={size}>
-                    {tabs.map((tab) => {
+                    {tabs.map((tab, index) => {
                         const { id, label: tabLabel, showNotificationIcon, ...htmlButtonAttributes } = tab;
 
                         return (
@@ -212,7 +214,10 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
                                 // Свойства таба типизированы под <button>, а пункт списка рендерит <div>.
                                 // Набор атрибутов совпадает, расходятся только дженерики обработчиков событий.
                                 {...(htmlButtonAttributes as React.HTMLAttributes<HTMLDivElement>)}
-                                id={id}
+                                // DOM id выводим из instanceId, а не из tab.id: два TabsLine с одинаковыми
+                                // tab.id иначе дают дублирующиеся id, и aria-activedescendant адресует
+                                // пункт чужого экземпляра. Исходный tab.id уходит в onClickTab.
+                                id={`${instanceId.current}-item-${index}`}
                                 key={id}
                                 onSelect={() => {
                                     handleClickTab(tab);

@@ -5,10 +5,13 @@ import styles from "../styles/Confirm.module.less";
 /** Свойства компонента ConfirmControls. */
 export interface IConfirmControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const ConfirmControls: React.FC<IConfirmControlsProps> = ({ children, className, ...htmlDivAttributes }) => (
-    <div className={clsx(className, styles.confirmControls)} {...htmlDivAttributes}>
-        {children}
-    </div>
+/** Контейнер кнопок действий предупреждения. Запрещает перенос кнопок на новую строку. */
+export const ConfirmControls = React.forwardRef<HTMLDivElement, IConfirmControlsProps>(
+    ({ children, className, ...htmlDivAttributes }, ref) => (
+        <div className={clsx(styles.confirmControls, className)} {...htmlDivAttributes} ref={ref}>
+            {children}
+        </div>
+    ),
 );
 
 ConfirmControls.displayName = "ConfirmControls";

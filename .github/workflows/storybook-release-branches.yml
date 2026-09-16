@@ -9,6 +9,10 @@ on:
       - 'release-*'
   workflow_dispatch:
 
+# Деплой идёт по SSH, к API репозитория workflow не обращается.
+permissions:
+  contents: read
+
 env:
   STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV: "/var/www/storybook/data"
   STORYBOOK_URL_BASE_TRIPLEX_DEV: "https://storybook.triplex-dev.ru"
@@ -20,9 +24,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Иначе токен оседает в .git/config, а ниже выполняется npm ci —
+          # lifecycle-скрипты зависимостей смогли бы его прочитать.
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
 
@@ -31,7 +39,7 @@ jobs:
       - run: npm run storybook:build
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
         with:
           # Оба ключа загружаются в ssh-agent (по одному на сервер)
           ssh-private-key: |

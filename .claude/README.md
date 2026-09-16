@@ -279,9 +279,10 @@ React 17-релиз `0.Y.0` из `release-0` — **первая** половин
 
 Приводит `__screenshots__/` в соответствие со stories текущей ветки:
 
-- Запускает GitHub Actions «Update Visual Snapshots» (`gh workflow run
-  visual-update.yml --ref <ветка>`), находит созданный run по `headSha`
-  текущего HEAD и ждёт его завершения (`gh run watch <run-id>`).
+- Запускает GitHub Actions «Update Visual Snapshots» пушем коммита
+  с маркером `[update-snapshots]` — диспатч из облачной сессии отдаёт 403
+  (см. `docs/ai/commits.md`, «Облачные сессии»). Находит созданный run
+  по `headSha` текущего HEAD и ждёт завершения (`gh run watch <run-id>`).
 - Подтягивает коммит со свежими baseline (`git pull --ff-only`).
 - Находит orphan-скриншоты (story ID отсутствует в
   `storybook-static/index.json`), удаляет их отдельным коммитом и пушит —

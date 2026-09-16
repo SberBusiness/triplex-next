@@ -11,20 +11,24 @@ export type TSliderRangeValues = [number, number];
 export interface ISliderRangeMark {
     /** Значение расположения метки, должно быть в диапазоне от min до max. */
     value: number;
+    /** Содержимое метки. */
     label: React.ReactNode;
 }
 
+/** Свойства компонента SliderRange. */
 export interface ISliderRangeProps extends Omit<ISliderExtendedProps, "onChange" | "step"> {
+    /** Состав слайдера фиксирован, содержимое не передаётся. */
     children?: never;
-    /** Трек можно передвигать. По-умолчанию true. */
+    /** Трек можно передвигать. По умолчанию true. */
     draggableTrack?: boolean;
     /** Массив меток под полосой слайдера. */
     marks: ISliderRangeMark[];
-    /** Обработчик изменения значений. */
+    /** Обработчик изменения значений. Вызывается с отсортированной парой значений. */
     onChange: (values: TSliderRangeValues) => void;
     /**
      * Длина шага, например при длине шага 1, с min-0. max-100, слайдер будет разделен на 100 шагов.
      * Вместо длины шага можно передать массив шагов, например [0, 25, 50, 75, 100]. Начальное значение должно быть равно min, последнее значение должно быть равно max.
+     * По умолчанию 1.
      */
     step?: number | number[];
     /** Значения Range - массив из двух чисел, в соответствии которому строятся ползунки. Оба числа должны быть в диапазоне от min до max. */
@@ -38,7 +42,23 @@ interface ISliderRangeState {
     innerValues: TSliderRangeValues;
 }
 
-/** Слайдер с двумя ползунками. */
+/** Возвращает пару значений, отсортированную по возрастанию. */
+const sortValues = (values: TSliderRangeValues): TSliderRangeValues =>
+    [...values].sort((a, b) => a - b) as TSliderRangeValues;
+
+/**
+ * Сравнивает пары значений.
+ * Сравнение идёт по склейке значений: пары вроде [1, 23] и [12, 3] считаются одинаковыми.
+ * Поведение сохранено намеренно — см. SliderRange-ai.md, раздел «Инварианты».
+ */
+const isSameValues = (values: TSliderRangeValues, otherValues: TSliderRangeValues): boolean =>
+    values.join("") === otherValues.join("");
+
+/**
+ * Слайдер с двумя ползунками — готовая сборка SliderExtended для выбора диапазона.
+ * Компонент рисует ползунки по внутренним значениям и сообщает новую пару через onChange.
+ * Внутренние значения синхронизируются с values, когда потребитель присылает новую пару.
+ */
 class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> {
     public static displayName = "SliderRange";
 
@@ -58,33 +78,29 @@ class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> 
 
     public componentDidUpdate(prevProps: ISliderRangeProps): void {
         const { values } = this.props;
-        const { values: prevValues } = prevProps;
         const { innerValues } = this.state;
 
         this.validateValues();
 
-        // Values изменились.
-        if (values.join("") !== prevValues.join("")) {
-            // Первое значение innerValues меньше второго значения. Присвоение values происходит в обычном порядке.
-            if (innerValues[0] <= innerValues[1]) {
-                const nextInnerValues = [...values];
-                // Новые values отличаются от innerValues.
-                if (nextInnerValues.join("") !== innerValues.join("")) {
-                    this.setState({
-                        innerValues: [...values],
-                    });
-                }
+        // Values не изменились — синхронизировать нечего.
+        if (isSameValues(values, prevProps.values)) {
+            return;
+        }
 
-                // Первое значение innerValues больше второго значения . Присвоение values происходит в обратном порядке. Новые values отличаются от innerValues.
-            } else if ([values[1], values[0]].join("") !== innerValues.join("")) {
-                this.setState({
-                    innerValues: [values[1], values[0]],
-                });
-            }
+        // Первое значение innerValues меньше второго — присвоение values происходит в обычном порядке.
+        // Иначе ползунки перекрещены, и values присваиваются в обратном порядке, чтобы каждый ползунок остался на своей стороне.
+        const nextInnerValues: TSliderRangeValues =
+            innerValues[0] <= innerValues[1] ? [...values] : [values[1], values[0]];
+
+        // Новые values отличаются от innerValues.
+        if (!isSameValues(nextInnerValues, innerValues)) {
+            this.setState({ innerValues: nextInnerValues });
         }
     }
 
     public render(): React.ReactNode {
+        // step = 1 дублирует defaultProps намеренно: при чтении this.props тип остаётся
+        // number | number[] | undefined, а SliderExtended требует определённый step.
         const {
             draggableTrack,
             marks,
@@ -92,13 +108,12 @@ class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> 
             step = 1,
             values,
             renderTooltipContent,
-            size,
             ...sliderExtendedAttributes
         } = this.props;
         const { innerValues } = this.state;
 
         return (
-            <SliderExtended step={step} size={size} {...sliderExtendedAttributes}>
+            <SliderExtended step={step} {...sliderExtendedAttributes}>
                 <SliderExtended.Rail />
 
                 <SliderExtended.Dot key={"1"} value={innerValues[0]} onChange={this.handleChange(0)}>
@@ -131,25 +146,26 @@ class SliderRange extends React.Component<ISliderRangeProps, ISliderRangeState> 
     /** Проверка values, меньшее значение, должно быть перед большим. */
     private validateValues = () => {
         const { onChange, values } = this.props;
+
         if (values[0] > values[1]) {
-            onChange(this.sortValues(values));
+            onChange(sortValues(values));
         }
     };
 
-    private sortValues = (values: TSliderRangeValues): TSliderRangeValues =>
-        [...values].sort((a, b) => a - b) as TSliderRangeValues;
-
+    /** Возвращает обработчик изменения значения ползунка с индексом valueIndex. */
     private handleChange = (valueIndex: number) => {
         return (value: number) => {
             const { onChange } = this.props;
 
+            // Обновление и вызов onChange идут внутри updater'а намеренно: перемещение трека меняет
+            // оба ползунка двумя вызовами подряд, и второй обязан видеть значение, записанное первым.
             this.setState((prevState) => {
                 const { innerValues } = prevState;
                 const nextVal = [...innerValues] as TSliderRangeValues;
                 nextVal[valueIndex] = value;
 
                 // Сортируем значения для передачи в onChange
-                const sortedVal = nextVal[0] > nextVal[1] ? this.sortValues(nextVal) : nextVal;
+                const sortedVal = nextVal[0] > nextVal[1] ? sortValues(nextVal) : nextVal;
                 onChange(sortedVal);
 
                 return { innerValues: nextVal };

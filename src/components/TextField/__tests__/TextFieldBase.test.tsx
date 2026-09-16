@@ -102,13 +102,14 @@ describe("TextFieldBase", () => {
     it("renders label inside FormFieldLabel when passed", () => {
         renderComponent({ label: "Label" });
 
-        expect(screen.getByText("Label").closest("label")).toHaveClass("formFieldLabel");
+        // Тег лейбла зависит от элемента ввода в поле (см. FormFieldLabel), здесь важен сам факт рендера.
+        expect(screen.getByText("Label").closest(".formFieldLabel")).not.toBeNull();
     });
 
     it("does not render FormFieldLabel without label", () => {
         const { container } = renderComponent();
 
-        expect(container.querySelector("label")).toBeNull();
+        expect(container.querySelector(".formFieldLabel")).toBeNull();
     });
 
     it("renders description inside FormFieldDescription without counter", () => {

@@ -6,6 +6,7 @@ import {
     FormFieldInput,
     FormFieldLabel,
     FormFieldPrefix,
+    FormFieldTarget,
 } from "@sberbusiness/triplex-next/components";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { resetResizeObservers, resizeElement } from "../../../../test-utils/resizeObserver";
@@ -110,6 +111,33 @@ describe("FormFieldLabel", () => {
         expect(screen.getByTestId("label")).toHaveAttribute("for", input.id);
     });
 
+    it("renders a span instead of a label when the field value is rendered by FormFieldTarget", () => {
+        render(
+            <FormField>
+                <FormFieldLabel data-testid="label">Label</FormFieldLabel>
+                <FormFieldTarget data-testid="target">Значение</FormFieldTarget>
+            </FormField>,
+        );
+
+        const label = screen.getByTestId("label");
+
+        // FormFieldTarget — <div>, а не labelable-элемент: связать с ним <label> нечем.
+        expect(label.tagName).toBe("SPAN");
+        expect(label).not.toHaveAttribute("for");
+    });
+
+    it("stays connected to FormFieldTarget through aria-labelledby", () => {
+        render(
+            <FormField>
+                <FormFieldLabel data-testid="label">Label</FormFieldLabel>
+                <FormFieldTarget data-testid="target">Значение</FormFieldTarget>
+            </FormField>,
+        );
+
+        expect(screen.getByTestId("target")).toHaveAttribute("aria-labelledby", screen.getByTestId("label").id);
+        expect(screen.getByLabelText("Label")).toBe(screen.getByTestId("target"));
+    });
+
     it("uses the id passed from outside", () => {
         render(
             <FormField>
@@ -206,6 +234,22 @@ describe("FormFieldLabel", () => {
 
         expect(label).toHaveClass("custom-label");
         expect(label).toHaveClass("formFieldLabel");
+    });
+
+    it("forwards ref to the span element rendered for FormFieldTarget", () => {
+        const ref = React.createRef<HTMLSpanElement>();
+
+        render(
+            <FormField>
+                <FormFieldLabel data-testid="label" ref={ref}>
+                    Label
+                </FormFieldLabel>
+                <FormFieldTarget>Значение</FormFieldTarget>
+            </FormField>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLSpanElement);
+        expect(ref.current).toBe(screen.getByTestId("label"));
     });
 
     it("forwards ref to the label element", () => {

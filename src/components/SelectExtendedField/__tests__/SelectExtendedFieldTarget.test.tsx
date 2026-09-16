@@ -36,6 +36,14 @@ describe("SelectExtendedFieldTarget", () => {
         vi.clearAllMocks();
     });
 
+    it("Should keep the accessible name of the field without using a label element", () => {
+        const { container } = renderTarget();
+
+        // Значение поля — div, поэтому лейбл рендерится тегом span, а имя даёт aria-labelledby.
+        expect(container.querySelector("label")).toBeNull();
+        expect(screen.getByLabelText("Заголовок поля")).toHaveClass("formFieldTarget");
+    });
+
     it("Should render with required props", () => {
         const { container } = renderTarget();
 

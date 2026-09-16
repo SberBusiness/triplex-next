@@ -1,6 +1,5 @@
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { ETextSize } from "../Typography/enums";
-import { ITabsLineItemProps } from "./components/TabsLineItem";
 
 /** Соответствие размера таба размеру текста внутри него. */
 export const tabsLineSizeToTextSizeMap = {
@@ -9,12 +8,16 @@ export const tabsLineSizeToTextSizeMap = {
     [EComponentSize.SM]: ETextSize.B4,
 } satisfies Record<EComponentSize, ETextSize>;
 
-/** Результат разделения табов между строкой и выпадающим списком. */
-export interface ITabsLineSplit {
+/**
+ * Результат разделения табов между строкой и выпадающим списком.
+ * Тип таба параметризован: utils не должен зависеть от модуля компонента —
+ * TabsLineItem импортирует отсюда tabsLineSizeToTextSizeMap, и обратный импорт замкнул бы цикл.
+ */
+export interface ITabsLineSplit<T> {
     /** Табы, отображаемые в строке. */
-    inlineTabs: ITabsLineItemProps[];
+    inlineTabs: T[];
     /** Табы, уехавшие в выпадающий список. */
-    dropdownTabs: ITabsLineItemProps[];
+    dropdownTabs: T[];
 }
 
 /**
@@ -23,7 +26,7 @@ export interface ITabsLineSplit {
  * поэтому в строке остаётся maxVisible - 1 табов. Пока табов не больше maxVisible, список не нужен
  * и все табы остаются в строке.
  */
-export const splitTabsByMaxVisible = (tabs: ITabsLineItemProps[], maxVisible?: number): ITabsLineSplit => {
+export const splitTabsByMaxVisible = <T>(tabs: T[], maxVisible?: number): ITabsLineSplit<T> => {
     if (!maxVisible || tabs.length <= maxVisible) {
         return { inlineTabs: tabs, dropdownTabs: [] };
     }

@@ -21,8 +21,11 @@ export const Default = () => {
                         <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                         <Gap size={4} />
                         <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                            Перетащите файлы или{" "}
-                            <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                            {/* Перетаскивание здесь намеренно не обещается: без dropZoneContainer
+                                оно не работает. Пример с drag-and-drop — WithDropZoneContainer. */}
+                            <Link onClick={openUploadDialog}>Выберите файлы</Link>
+                            {" "}
+                            на компьютере
                         </Text>
                     </div>
                 )}

@@ -3,8 +3,6 @@ import { UploadZoneOnChangeType } from "@sberbusiness/triplex-next/components/Up
 
 /** Значение контекста зоны загрузки файлов. */
 export interface IUploadZoneContext {
-    /** Открытие диалогового окна выбора файла(ов). */
-    openUploadDialog: () => void;
     /** Обработчик изменения значения. */
     onChange: UploadZoneOnChangeType;
     /** Установка ссылки на элемент поля. */
@@ -14,6 +12,5 @@ export interface IUploadZoneContext {
 /** Контекст, через который UploadZone связывается со своим полем выбора файлов. */
 export const UploadZoneContext = React.createContext<IUploadZoneContext>({
     onChange: () => void 0,
-    openUploadDialog: () => void 0,
     setInputNode: () => void 0,
 });

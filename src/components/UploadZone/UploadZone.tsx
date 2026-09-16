@@ -177,10 +177,9 @@ export const UploadZone = Object.assign(
             [openUploadDialog],
         );
 
-        const contextValue = useMemo(
-            () => ({ onChange, openUploadDialog, setInputNode }),
-            [onChange, openUploadDialog],
-        );
+        // openUploadDialog в контекст не кладётся: наружу он уходит через children({ openUploadDialog }),
+        // а UploadZoneInput читает из контекста только onChange и setInputNode.
+        const contextValue = useMemo(() => ({ onChange, setInputNode }), [onChange]);
 
         return (
             <UploadZoneContext.Provider value={contextValue}>

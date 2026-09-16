@@ -196,6 +196,10 @@ UploadZone.DragArea_BorderColor
 | `Production` (Example: production) | `Production.tsx` | Композиция с таблицей загруженных файлов и мобильным вариантом через `MobileView` |
 | `VisualTests` | `VisualTests.tsx` | Состояния для скриншот-тестов: покой и раскрытая дроп-зона (через `play`) |
 
+`Playground` исключён из скриншот-тестов: кадр зависит от значений controls.
+`Production` тоже исключён — пример композиционный, его кадр ловит изменения
+`TableBasic` и `MobileView`, а не самой зоны загрузки.
+
 ---
 
 ## История изменений

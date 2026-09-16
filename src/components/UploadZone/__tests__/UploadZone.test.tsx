@@ -161,6 +161,7 @@ describe("UploadZone", () => {
         });
 
         await waitFor(() => expect(queryOverlay(externalContainer)).toBeTruthy());
+        // Non-null: предыдущий waitFor уже дождался, что оверлей смонтирован.
         const overlay = queryOverlay(externalContainer)!;
 
         const droppedFiles = createTestFileList([new File(["content"], "file.png", { type: "image/png" })]);
@@ -222,6 +223,7 @@ describe("UploadZone", () => {
             externalContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
         });
         await waitFor(() => expect(queryOverlay(externalContainer)).toBeTruthy());
+        // Non-null: предыдущий waitFor уже дождался, что оверлей смонтирован.
         const overlay = queryOverlay(externalContainer)!;
 
         // onDragOver из props проксируется оверлеем; проверяем, что он вызывается.

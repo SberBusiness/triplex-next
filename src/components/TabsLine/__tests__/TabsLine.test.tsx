@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { TabsLine, ITabsLineProps } from "../TabsLine";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { ITabsLineItemProps } from "../components/TabsLineItem";
@@ -20,6 +21,11 @@ describe("TabsLine", () => {
 
     const getTabsLine = () => screen.getByRole("tablist");
     const getTab = () => screen.getAllByRole("tab")[0];
+
+    // Снимаем моки здесь, а не в теле теста: иначе упавший ассерт оставил бы подменённый matchMedia следующим тестам.
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
 
     it("Should render with default props", () => {
         render(<TabsLine {...defaultProps} data-testid="tabs-line" />);
@@ -92,5 +98,82 @@ describe("TabsLine", () => {
         const tab1 = getTab();
         const notificationIcon = tab1.querySelector("span[class*='notificationIcon']");
         expect(notificationIcon).toBeInTheDocument();
+    });
+
+    it("Should render the separator when withSeparator is true", () => {
+        render(<TabsLine {...defaultProps} withSeparator />);
+
+        expect(getTabsLine()).toHaveClass("withSeparator");
+    });
+
+    it("Should not render the separator by default", () => {
+        render(<TabsLine {...defaultProps} />);
+
+        expect(getTabsLine()).not.toHaveClass("withSeparator");
+    });
+
+    it("Should merge the custom className into the root element", () => {
+        render(<TabsLine {...defaultProps} className="custom-class" />);
+
+        const tabsLine = getTabsLine();
+
+        expect(tabsLine).toHaveClass("custom-class");
+        expect(tabsLine).toHaveClass("tabsLineWrapper");
+    });
+
+    it("Should spread unknown html attributes onto the root element", () => {
+        render(<TabsLine {...defaultProps} data-test-id="tabs-line" />);
+
+        expect(getTabsLine()).toHaveAttribute("data-test-id", "tabs-line");
+    });
+
+    it("Should forward ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        render(<TabsLine {...defaultProps} ref={ref} />);
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toBe(getTabsLine());
+    });
+
+    it("Should call onChangeTab with the id of the clicked tab", async () => {
+        const onChangeTab = vi.fn();
+        const user = userEvent.setup();
+
+        render(<TabsLine {...defaultProps} onChangeTab={onChangeTab} />);
+        await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+
+        expect(onChangeTab).toHaveBeenCalledTimes(1);
+        expect(onChangeTab).toHaveBeenCalledWith("tab-2");
+    });
+
+    it("Should move the tabs that do not fit into maxVisible to the dropdown", () => {
+        render(<TabsLine {...defaultProps} maxVisible={2} />);
+
+        const tabs = screen.getAllByRole("tab");
+
+        expect(tabs.map((tab) => tab.textContent)).toEqual(["Tab 1", "Tab 2"]);
+        expect(tabs[1]).toHaveAttribute("aria-haspopup", "menu");
+    });
+
+    it("Should render the mobile variant on a mobile screen width", () => {
+        vi.spyOn(window, "matchMedia").mockImplementation(
+            (query) =>
+                ({
+                    matches: true,
+                    media: query,
+                    addEventListener: () => {},
+                    removeEventListener: () => {},
+                }) as unknown as MediaQueryList,
+        );
+
+        render(<TabsLine {...defaultProps} maxVisible={2} />);
+
+        // Мобильный вариант дропдаун не строит: все табы остаются в строке.
+        expect(screen.getAllByRole("tab").map((tab) => tab.textContent)).toEqual(["Tab 1", "Tab 2", "Tab 3"]);
+    });
+
+    it("Should have correct displayName", () => {
+        expect(TabsLine.displayName).toBe("TabsLine");
     });
 });

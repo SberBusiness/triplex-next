@@ -200,7 +200,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TableBasic | ✅ | ✅ | ✅ |
 | Tabs | ⬜ | ⬜ | ⬜ |
 | TabsExtended | ✅ | ✅ | ✅ |
-| TabsLine | ⬜ | ⬜ | ⬜ |
+| TabsLine | ✅ | ✅ | ✅ |
 | Tag | ✅ | ✅ | ✅ |
 | TagColor | ⬜ | ⬜ | ⬜ |
 | TagGroup | ⬜ | ⬜ | ⬜ |

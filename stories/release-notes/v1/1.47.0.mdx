@@ -27,3 +27,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `Slider` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
+**TabsLine**
+
+- Добавлено: `TabsLine` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Добавлено: `ref` пробрасывают и остальные компоненты семейства — `TabsLineDesktop`, `TabsLineMobile` и `TabsLineDropdown`. Раньше все они были объявлены как `React.FC`.
+- Добавлено: `TabsLineDesktop` и `TabsLineMobile` прокидывают `className` и остальные html-атрибуты на свой корневой `<div>` — раньше они их молча теряли.
+- Исправлено: таб больше не теряет `className`, `onMouseEnter` и `onMouseLeave`, переданные в элементе массива `tabs`. Раньше `className` перетирался внутренним, а обработчики наведения не вызывались.
+- Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.

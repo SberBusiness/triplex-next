@@ -1,143 +1,127 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
+import clsx from "clsx";
 import { TestProps } from "../../../types/CoreTypes";
+import { isKey } from "../../../utils/keyboard";
+import { ITabsLineBaseProps } from "../types";
+import { splitTabsByMaxVisible } from "../utils";
 import { TabsLineDropdown } from "./TabsLineDropdown";
 import { ITabsLineItemProps, TabsLineItem } from "./TabsLineItem";
-import { ITabsLineBaseProps } from "../types";
-import { isKey } from "../../../utils/keyboard";
-import { isEqual } from "lodash";
 import styles from "../styles/TabsLine.module.less";
 
 /** Свойства компонента TabsLineDesktop. */
 export interface ITabsLineDesktopProps extends ITabsLineBaseProps {
     /** Атрибуты кнопки дропдауна. */
     dropdownTargetHtmlAttributes?: React.HTMLAttributes<HTMLButtonElement> & TestProps;
-    /** Максимальное число отображаемых табов. */
+    /** Максимальное число элементов строки, включая кнопку дропдауна. Без него все табы остаются в строке. */
     maxVisible?: number;
 }
 
-export const TabsLineDesktop: React.FC<ITabsLineDesktopProps> = ({
-    tabs,
-    dropdownTargetHtmlAttributes,
-    selectedId,
-    onChangeTab,
-    maxVisible,
-    size,
-}) => {
-    const [inlineTabs, setInlineTabs] = useState<ITabsLineItemProps[]>([]);
-    const [dropdownTabs, setDropdownTabs] = useState<ITabsLineItemProps[]>([]);
-
-    const tabsRef = useRef<HTMLDivElement>(null);
-    const focusableTabIndexRef = useRef(0);
-    const inlineTabsRefs = useRef<HTMLButtonElement[]>([]);
-
-    useEffect(() => {
-        const newDropdownTabs: ITabsLineItemProps[] = [];
-        const newInlineTabs: ITabsLineItemProps[] = [];
-
-        tabs.forEach((item: ITabsLineItemProps, i: number) => {
-            const collapsed = maxVisible && i + 1 >= maxVisible && tabs.length > maxVisible;
-            const target = collapsed ? newDropdownTabs : newInlineTabs;
-
-            target.push(item);
-        });
-
-        if (isEqual(newInlineTabs, inlineTabs) === false) {
-            setInlineTabs(newInlineTabs);
-        }
-
-        if (isEqual(newDropdownTabs, dropdownTabs) === false) {
-            setDropdownTabs(newDropdownTabs);
-        }
-    }, [tabs, maxVisible]);
-
-    const renderInlineTab = (
-        { selected, onClick, onFocus, onBlur, size: itemSize, ...item }: ITabsLineItemProps,
-        index: number,
+/**
+ * Десктопный вариант TabsLine: табы в строку, не поместившиеся по maxVisible — в дропдауне.
+ * Клавиатурная навигация по табам строки — стрелками влево/вправо (roving tabIndex).
+ */
+export const TabsLineDesktop = React.forwardRef<HTMLDivElement, ITabsLineDesktopProps>(
+    (
+        {
+            className,
+            dropdownTargetHtmlAttributes,
+            maxVisible,
+            onChangeTab,
+            selectedId,
+            size,
+            tabs,
+            ...htmlDivAttributes
+        },
+        ref,
     ) => {
-        const tabIndex = focusableTabIndexRef.current === index ? 0 : -1;
+        /** Индекс таба строки, доступного по Tab. Остальные табы выключены из порядка обхода. */
+        const [focusableTabIndex, setFocusableTabIndex] = useState(0);
+        const inlineTabsRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-        const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-            onChangeTab(item.id);
-            onClick?.(event);
-        };
+        const { inlineTabs, dropdownTabs } = useMemo(() => splitTabsByMaxVisible(tabs, maxVisible), [tabs, maxVisible]);
 
-        const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-            /** Является ли таб в фокусе последним перед дропдауном */
-            const isLastInlineTab = inlineTabs.length - 1 === focusableTabIndexRef.current;
+        const renderInlineTab = (
+            { selected, onClick, onFocus, onBlur, size: itemSize, ...item }: ITabsLineItemProps,
+            index: number,
+        ) => {
+            const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+                onChangeTab(item.id);
+                onClick?.(event);
+            };
 
-            if (isKey(event.code, "ARROW_LEFT") || (isKey(event.code, "ARROW_RIGHT") && !isLastInlineTab)) {
-                /** Движение влево или вправо */
-                const delta = isKey(event.code, "ARROW_RIGHT") ? 1 : -1;
+            const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+                /** Является ли таб в фокусе последним перед дропдауном. */
+                const isLastInlineTab = index === inlineTabs.length - 1;
 
-                /** Следующий таб, к которому переходим клавишей ArrowLeft/ArrowRight */
-                const nextTabIndex = focusableTabIndexRef.current + delta;
-                const nextTab = inlineTabsRefs.current[nextTabIndex];
+                if (isKey(event.code, "ARROW_LEFT") || (isKey(event.code, "ARROW_RIGHT") && !isLastInlineTab)) {
+                    const delta = isKey(event.code, "ARROW_RIGHT") ? 1 : -1;
+                    const nextTab = inlineTabsRefs.current[index + delta];
 
-                if (nextTab) {
-                    event.preventDefault();
-                    nextTab.focus();
+                    if (nextTab) {
+                        event.preventDefault();
+                        nextTab.focus();
+                    }
                 }
-            }
+            };
+
+            const handleFocus = (event: React.FocusEvent<HTMLButtonElement>) => {
+                setFocusableTabIndex(index);
+                onFocus?.(event);
+            };
+
+            const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
+                setFocusableTabIndex(0);
+                onBlur?.(event);
+            };
+
+            const setRef = (node: HTMLButtonElement | null) => {
+                inlineTabsRefs.current[index] = node;
+            };
+
+            return (
+                <TabsLineItem
+                    key={item.id}
+                    selected={selectedId === item.id}
+                    onClick={handleClick}
+                    onKeyDown={handleKeyDown}
+                    tabIndex={focusableTabIndex === index ? 0 : -1}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    {...item}
+                    size={itemSize ?? size}
+                    ref={setRef}
+                />
+            );
         };
 
-        const handleFocus = (event: React.FocusEvent<HTMLButtonElement>) => {
-            focusableTabIndexRef.current = index;
-            onFocus?.(event);
-        };
-
-        const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
-            focusableTabIndexRef.current = 0;
-            onBlur?.(event);
-        };
-
-        const setRef = (node: HTMLButtonElement) => {
-            inlineTabsRefs.current[index] = node;
-        };
-
-        return (
-            <TabsLineItem
-                key={item.id}
-                selected={selectedId === item.id}
-                onClick={handleClick}
-                onKeyDown={handleKeyDown}
-                tabIndex={tabIndex}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                {...item}
-                size={itemSize ?? size}
-                ref={setRef}
-            />
-        );
-    };
-
-    const renderTabs = () => {
-        const itemsToRender: JSX.Element[] = inlineTabs.map((item, index) => renderInlineTab(item, index));
-
-        if (dropdownTabs.length > 0) {
+        const renderDropdown = () => {
             const selectedTab = dropdownTabs.find((item) => item.id === selectedId);
-            const dropdownLabel = selectedTab ? selectedTab.label : dropdownTabs[0].label;
 
-            itemsToRender.push(
+            return (
                 <TabsLineDropdown
                     key="TabsLineDropdown"
                     tabs={dropdownTabs}
                     active={selectedTab !== undefined}
-                    label={dropdownLabel}
+                    label={selectedTab ? selectedTab.label : dropdownTabs[0].label}
                     onClickTab={(item) => onChangeTab(item.id)}
                     selected={selectedTab}
                     targetHtmlAttributes={dropdownTargetHtmlAttributes}
                     size={size}
-                />,
+                />
             );
+        };
+
+        if (tabs.length === 0) {
+            return null;
         }
 
-        return itemsToRender;
-    };
+        return (
+            <div {...htmlDivAttributes} className={clsx(styles.tabsLine, className)} data-size={size} ref={ref}>
+                {inlineTabs.map((item, index) => renderInlineTab(item, index))}
+                {dropdownTabs.length > 0 && renderDropdown()}
+            </div>
+        );
+    },
+);
 
-    return tabs.length ? (
-        <div className={styles.tabsLine} ref={tabsRef} data-size={size}>
-            {/* eslint-disable-next-line react-hooks/refs */}
-            {renderTabs()}
-        </div>
-    ) : null;
-};
+TabsLineDesktop.displayName = "TabsLineDesktop";

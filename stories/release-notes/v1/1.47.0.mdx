@@ -4,6 +4,16 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.47.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**FormFieldTextarea**
+
+- Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`. Раньше переданное значение всё равно перетиралось статусом. Для `FormFieldInput` / `FormFieldMaskedInput` то же было сделано в 1.45.0.
+
+**TextareaField**
+
+- Свойство `disabled` больше нельзя передать в `textareaProps` — следствие правки `FormFieldTextarea` выше.
+
 <Heading>Изменения</Heading>
 
 **AmountField**
@@ -61,6 +71,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменено: из кнопки дропдауна и пунктов выпадающего списка убраны вложенные `<span>`-обёртки без классов в LESS-модуле. Визуально ничего не изменилось, но собственные стили по вложенности (`button > span`) и e2e-локаторы могут перестать находить элементы.
 - Изменено: DOM `id` пункта выпадающего списка больше не равен `id` таба — он выводится из внутреннего идентификатора экземпляра. Раньше два `TabsLine` с одинаковыми `id` табов давали дублирующиеся DOM `id`, и `aria-activedescendant` мог адресовать пункт чужого экземпляра. В `onChangeTab` по-прежнему приходит исходный `id` таба.
 - Проведён AI-рефакторинг, добавлен `displayName`.
+
+**TextareaField**
+
+- Добавлено: `TextareaField` пробрасывает `ref` на `<div>` поля (`FormField`, внутри обёртки `FormGroup`) — туда же, куда уходит `className`. Раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
 
 **TriggerClickOnKeyDownEvent**
 

@@ -27,7 +27,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `textareaProps` | `IFormFieldTextareaProps & DataAttributes & React.RefAttributes<HTMLTextAreaElement>` | Свойства `<textarea>`: все стандартные атрибуты (`value`, `onChange`, `placeholder`, `maxLength`, `rows`, `name`, `required`…), data-атрибуты и `ref` на сам элемент `<textarea>`. Может быть пустым объектом. |
+| `textareaProps` | `IFormFieldTextareaProps & DataAttributes & React.RefAttributes<HTMLTextAreaElement>` | Свойства `<textarea>`: стандартные атрибуты, **кроме `disabled`** (`value`, `onChange`, `placeholder`, `maxLength`, `rows`, `name`, `required`…), data-атрибуты и `ref` на сам элемент `<textarea>`. Блокировка задаётся через `status={EFormFieldStatus.DISABLED}`, см. «Особенности поведения». Может быть пустым объектом. |
 
 ### Опциональные props
 

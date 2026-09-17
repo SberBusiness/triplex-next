@@ -4,6 +4,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.47.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**TreeView**
+
+- `ref` на `TreeView` теперь отдаёт корневой `<ul role="tree">`, а не инстанс класса. Компонент по-прежнему реализован классом внутри, но наружу экспортируется как `React.ForwardRefExoticComponent`. Это выравнивает `TreeView` с остальной библиотекой, где `ref` всегда указывает на корневой DOM-узел.
+- `TreeView` больше не является типом: `React.createRef<TreeView>()` не компилируется, используйте `React.createRef<HTMLUListElement>()`.
+
 <Heading>Изменения</Heading>
 
 **Avatar**
@@ -72,10 +79,6 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменено: из кнопки дропдауна и пунктов выпадающего списка убраны вложенные `<span>`-обёртки без классов в LESS-модуле. Визуально ничего не изменилось, но собственные стили по вложенности (`button > span`) и e2e-локаторы могут перестать находить элементы.
 - Изменено: DOM `id` пункта выпадающего списка больше не равен `id` таба — он выводится из внутреннего идентификатора экземпляра. Раньше два `TabsLine` с одинаковыми `id` табов давали дублирующиеся DOM `id`, и `aria-activedescendant` мог адресовать пункт чужого экземпляра. В `onChangeTab` по-прежнему приходит исходный `id` таба.
 - Проведён AI-рефакторинг, добавлен `displayName`.
-
-**TreeView**
-
-- **Breaking**: `ref` на `TreeView` теперь отдаёт корневой `<ul role="tree">`, а не инстанс класса. Компонент по-прежнему реализован классом внутри, но наружу экспортируется как `React.ForwardRefExoticComponent`, поэтому `React.createRef<TreeView>()` больше не является корректным типом — используйте `React.createRef<HTMLUListElement>()`. Это выравнивает `TreeView` с остальной библиотекой, где `ref` всегда указывает на корневой DOM-узел.
 
 **TriggerClickOnKeyDownEvent**
 

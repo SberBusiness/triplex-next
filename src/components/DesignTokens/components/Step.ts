@@ -34,7 +34,7 @@ export const Step_Tokens: TDesignTokensComponentsStepValues = {
     Color_Error: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Step-Color_Error)
     Color_Warning: [{ ref: "ColorNeutralAlpha.0" }, { ref: "ColorNeutralAlpha.0" }], // var(--triplex-next-Step-Color_Warning)
 
-    Background_Active: [{ ref: "ColorBrand.100" }, { ref: "ColorBrand.20" }], // var(--triplex-next-Step-Background_Active)
+    Background_Active: [{ ref: "ColorBrand.95" }, { ref: "ColorBrand.20" }], // var(--triplex-next-Step-Background_Active)
     Background_Default: [{ ref: "ColorDarkNeutralAlpha.100" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Step-Background_Default)
     Background_Disabled: [{ ref: "ColorDarkNeutralAlpha.90" }, { ref: "ColorNeutralAlpha.90" }], // var(--triplex-next-Step-Background_Disabled)
     Background_Done: [{ ref: "ColorBrand.40" }, { ref: "ColorBrand.60" }], // var(--triplex-next-Step-Background_Done)

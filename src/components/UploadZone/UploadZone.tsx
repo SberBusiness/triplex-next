@@ -13,7 +13,7 @@ export interface IUploadZoneChildrenProvideProps {
 }
 
 /** Свойства компонента UploadZone. */
-interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children"> {
+export interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children"> {
     /** В качестве чилда передаётся функция. */
     children: (props: IUploadZoneChildrenProvideProps) => React.ReactNode;
     /** Обработчик изменения значения. */

@@ -143,10 +143,8 @@ UploadZone.DragArea_BorderColor
   (нарушение текущего naming convention) — переименование будет ломающим
   изменением, оставлено как есть.
 - Barrel `src/components/UploadZone/index.ts` экспортирует `UploadZone`,
-  `IUploadZoneChildrenProvideProps`, `UploadZoneInput`, `IUploadZoneInputProps`,
-  `UploadZoneOnChangeType`. Интерфейс props самого `UploadZone`
-  (`IUploadZoneProps`) не экспортируется — известный пробел, его добавление
-  расширит публичный API и делается отдельной задачей.
+  `IUploadZoneProps`, `IUploadZoneChildrenProvideProps`, `UploadZoneInput`,
+  `IUploadZoneInputProps`, `UploadZoneOnChangeType`.
 - `UploadZoneContext` — внутренняя деталь, в barrel его нет; связь
   `UploadZone` ↔ `UploadZone.Input` можно менять свободно.
 - Класс `uploadZoneContainerDragArea` используется unit-тестами для поиска

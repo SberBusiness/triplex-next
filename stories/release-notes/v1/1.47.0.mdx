@@ -23,6 +23,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменено: `ref` у `Confirm.Content.Title` и `Confirm.Content.SubTitle` типизирован как `HTMLElement` вместо `HTMLHeadingElement` и `HTMLDivElement`. Оба компонента разрешают переопределить тег через `tag`, и прежние типы обещали не тот DOM-узел.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
 
+**Page.Footer**
+
+- Добавлен нижний отступ для `type={EFooterPageType.SECOND}`.
+
 **Slider**
 
 - Добавлено: `Slider` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.

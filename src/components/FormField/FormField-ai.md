@@ -62,7 +62,7 @@ version: "1.0"
 - Горизонтальные внутренние отступы корневого `div` задаются инлайн-стилем из ширин префикса и постфикса (`paddingLeft: prefixWidth`, `paddingRight: postfixWidth`). Значение по умолчанию — `TARGET_PADDING_X_DEFAULT` (12px); `FormFieldPrefix` / `FormFieldPostfix` измеряют себя через `ResizeObserver` и обновляют его. Пользовательский `style` мерджится последним и может переопределить отступы.
 - Класс `filled` выставляется, когда вложенный элемент ввода сообщил о наличии значения. Для `FormFieldInput` / `FormFieldTextarea` это включает браузерное автозаполнение (ловится через CSS-анимационные хуки `autofill-applied-hook` / `autofill-cancelled-hook`), для `FormFieldTarget` — наличие `children`.
 - Кнопка `FormFieldClear` показывается стилями только при `filled` и hover/активном состоянии непустого и не заблокированного поля, а также при собственном фокусе (`:focus`) — чтобы кнопка оставалась видимой при клавиатурной навигации.
-- Идентификаторы генерируются субкомпонентами (`uniqueId` из `lodash-es`, не `React.useId` — код должен оставаться совместимым с React 17) и попадают в контекст как `targetId` / `labelId`; на них опирается связка `label[htmlFor]` ↔ элемент ввода.
+- Идентификаторы генерируются субкомпонентами (`uniqueId` из `lodash-es`, не `React.useId` — код должен оставаться совместимым с React 17) и попадают в контекст как `targetId` / `labelId`; на них опирается связка лейбла и поля. `targetId` публикуют только labelable-элементы (`FormFieldInput`, `FormFieldTextarea`); `FormFieldTarget` его не публикует — см. Accessibility.
 - Вне `FormField` субкомпоненты используют `initialFormFieldContext`, где `filled: true` — это осознанный временный фикс для `DropdownMobileHeader`, а сеттеры являются no-op.
 
 ---
@@ -114,8 +114,10 @@ FormField.Target_PlaceholderColor_Default
 ## Accessibility
 
 - Корневой элемент — обычный `div` без роли: семантику даёт вложенный нативный `input` / `textarea`.
-- Связка лейбла и поля: `FormFieldLabel` получает `htmlFor={targetId}` из контекста, элемент ввода — сгенерированный `id`. Поэтому `screen.getByLabelText(...)` находит поле, а клик по лейблу фокусирует ввод.
+- Связка лейбла и поля: когда в поле есть labelable-элемент, `FormFieldLabel` рендерит `<label htmlFor={targetId}>`, а элемент ввода — сгенерированный `id`. Поэтому `screen.getByLabelText(...)` находит поле.
 - `FormFieldTarget` (нередактируемое значение, например для select-подобных полей) получает `tabIndex={0}`, `aria-labelledby={labelId}` и `aria-disabled`; при `status = DISABLED` — `tabIndex={-1}`.
+- `FormFieldTarget` намеренно **не** публикует свой `id` как `targetId`: это `<div>`, а не labelable-элемент, и `label[htmlFor]` на него ссылаться не может. В таких полях `FormFieldLabel` рендерит `<span>`, а не `<label>` — несвязанный `<label>` браузер тоже считает ошибкой разметки. Имя полю даёт `aria-labelledby` на `FormFieldTarget`, поэтому `screen.getByLabelText(...)` продолжает находить поле.
+- Следствие выбора тега по контексту: `targetId` публикуется в `useLayoutEffect`, поэтому в полях с labelable-элементом лейбл на первом рендере — `<span>`, а после layout-эффекта DOM-узел заменяется на `<label>`. Замена происходит до отрисовки и визуально незаметна, но ref на `FormFieldLabel` вызывается для обоих узлов.
 - При `status = DISABLED` вложенные `input` / `textarea` получают нативный `disabled`, то есть выпадают из таб-порядка.
 - Плейсхолдер маски в `FormFieldMaskedInput` рендерится с `aria-hidden="true"` — скринридер читает только реальное значение input.
 - Текст описания (`FormFieldDescription`) визуально связан с полем, но не связывается автоматически через `aria-describedby` — при необходимости потребитель передаёт `aria-describedby` элементу ввода сам.
@@ -168,3 +170,5 @@ FormField.Target_PlaceholderColor_Default
 | 2026-08-03 | Ломающее изменение: `statusToClassNameMap` убран из публичного barrel и переименован во внутреннюю константу `STATUS_TO_CLASS_NAME_MAP`. Зафиксировано в release notes 1.41.0. |
 | 2026-09-04 | Исправлено: у `FormFieldTextarea` фиксированная `height` для размеров `sm` / `md` / `lg` заменена на `min-height`. |
 | 2026-09-09 | Исправлено: значение с кодом страны раскладывалось по маске телефона со сдвигом и теряло последнюю цифру. Нормализация номера вынесена в `normalizePhoneText` и применяется и к внешнему `value`, и к слою с маской |
+| 2026-09-16 | Исправлено: `FormFieldTarget` больше не публикует свой `id` как `targetId`, а `FormFieldLabel` рендерит `<span>` вместо `<label>`, когда в поле нет labelable-элемента. Ref `FormFieldLabel` типизирован как `HTMLElement`, props — как `React.HTMLAttributes<HTMLElement>`. Доступное имя по-прежнему даёт `aria-labelledby`.
+Исправлено: `FormFieldInput` и `FormFieldTextarea` очищают `targetId` при размонтировании — иначе после замены элемента ввода на `FormFieldTarget` лейбл сохранял `htmlFor` с `id` удалённого элемента. |

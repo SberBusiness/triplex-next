@@ -187,7 +187,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Skeleton | ⬜ | ✅ | ⬜ |
 | Slider | ✅ | ✅ | ✅ |
 | SliderExtended | ✅ | ✅ | ✅ |
-| SliderRange | ⬜ | ⬜ | ⬜ |
+| SliderRange | ✅ | ✅ | ✅ |
 | SmallInput | ✅ | ✅ | ✅ |
 | Spoiler | ⬜ | ⬜ | ⬜ |
 | StatusTracker | ⬜ | ⬜ | ⬜ |
@@ -200,7 +200,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TableBasic | ✅ | ✅ | ✅ |
 | Tabs | ⬜ | ⬜ | ⬜ |
 | TabsExtended | ✅ | ✅ | ✅ |
-| TabsLine | ⬜ | ⬜ | ⬜ |
+| TabsLine | ✅ | ✅ | ✅ |
 | Tag | ✅ | ✅ | ✅ |
 | TagColor | ⬜ | ⬜ | ⬜ |
 | TagGroup | ⬜ | ⬜ | ⬜ |
@@ -215,7 +215,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Title | ✅ | ✅ | ✅ |
 | Caption | ✅ | ✅ | ✅ |
 | CodeText | ✅ | ✅ | ✅ |
-| TriggerClickOnKeyDownEvent | ⬜ | ⬜ | ⬜ |
+| TriggerClickOnKeyDownEvent | ✅ | ✅ | ✅ |
 | UnorderedList | ✅ | ✅ | ✅ |
 | UnorderedListExtended | ✅ | ✅ | ✅ |
 | UploadZone | ⬜ | ⬜ | ⬜ |

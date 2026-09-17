@@ -17,7 +17,7 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 /** Компонент, отображающий нередактируемое значение. */
 export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTargetProps>(
     ({ children, id: idProp, className, placeholder, onFocus, onBlur, ...restProps }, ref) => {
-        const { size, status, active, labelId, setFilled, setFocused, setTargetId } = useContext(FormFieldContext);
+        const { size, status, active, labelId, setFilled, setFocused } = useContext(FormFieldContext);
         const id = useMemo(() => (idProp === undefined ? uniqueId("target_") : idProp), [idProp]);
         const childrenExist = useMemo(() => React.Children.toArray(children).length !== 0, [children]);
         const classNames = clsx(styles.formFieldTarget, sizeToClassNameMap[size], className, {
@@ -25,10 +25,6 @@ export const FormFieldTarget = React.forwardRef<HTMLDivElement, IFormFieldTarget
             [styles.placeholder]: !!placeholder && !childrenExist && status !== EFormFieldStatus.DISABLED,
             [styles.active]: active,
         });
-
-        useLayoutEffect(() => {
-            setTargetId(id);
-        }, [id, setTargetId]);
 
         useLayoutEffect(() => {
             setFilled(childrenExist);

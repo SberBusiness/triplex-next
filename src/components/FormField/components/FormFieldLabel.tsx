@@ -8,7 +8,7 @@ import { TARGET_PADDING_X_DEFAULT } from "../consts";
 import styles from "../styles/FormFieldLabel.module.less";
 
 /** Свойства компонента FormFieldLabel. */
-export interface IFormFieldLabelProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "htmlFor"> {
+export interface IFormFieldLabelProps extends React.HTMLAttributes<HTMLElement> {
     /** Label отображается в уменьшенном виде над полем ввода/селектом. Если значение не задано, вычисляется как filled || active из FormFieldContext. */
     floating?: boolean;
 }
@@ -20,10 +20,11 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
  * Лейбл поля ввода/селекта.
  *
  * Отображается по середине поля ввода; когда инпут/селект имеет значение или фокус,
- * перемещается в верхний левый угол. Атрибут htmlFor берётся из FormFieldContext (targetId),
- * собственный идентификатор публикуется в контекст как labelId.
+ * перемещается в верхний левый угол. Собственный идентификатор публикуется в контекст как labelId.
+ *
+ * Тег зависит от того, есть ли в поле labelable-элемент (input, textarea, select).
  */
-export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabelProps>(
+export const FormFieldLabel = React.forwardRef<HTMLElement, IFormFieldLabelProps>(
     ({ children, id: idProp, className, style, floating: floatingProp, ...restProps }, ref) => {
         const { targetId, size, status, filled, active, prefixWidth, postfixWidth, setLabelId } =
             useContext(FormFieldContext);
@@ -52,10 +53,22 @@ export const FormFieldLabel = React.forwardRef<HTMLLabelElement, IFormFieldLabel
             setLabelId(id);
         }, [id, setLabelId]);
 
+        // <label> без htmlFor и без вложенного поля браузер считает несвязанным лейблом,
+        // поэтому в полях без labelable-элемента рендерится <span>.
+        const Tag = targetId === undefined ? "span" : "label";
+
         return (
-            <label {...restProps} id={id} className={classNames} htmlFor={targetId} style={labelStyle} ref={ref}>
+            <Tag
+                {...restProps}
+                id={id}
+                className={classNames}
+                htmlFor={targetId}
+                style={labelStyle}
+                // Tag — объединение тегов, поэтому ref приводится к типу более узкого из них.
+                ref={ref as React.Ref<HTMLLabelElement>}
+            >
                 <span className={styles.formFieldLabelText}>{children}</span>
-            </label>
+            </Tag>
         );
     },
 );

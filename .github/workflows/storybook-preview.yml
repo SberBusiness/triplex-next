@@ -142,14 +142,22 @@ jobs:
       - name: Report deploy results
         if: always()
         env:
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+          URL_DEV: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DEV }}
+          URL_DESIGN: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DESIGN }}
           OUTCOME_DEV: ${{ steps.deploy_dev.outcome }}
           OUTCOME_DESIGN: ${{ steps.deploy_design.outcome }}
           OUTCOME_COMMENT: ${{ steps.comment_pr.outcome }}
         run: |
+          # Ссылки печатаются здесь, а не только в комментарии PR: если публикация
+          # комментария упала, это единственное место, где их можно взять.
+          [[ "$OUTCOME_DEV" == "success" ]] && echo "Превью на triplex-dev: $URL_DEV/$PREVIEW_DIR"
+          [[ "$OUTCOME_DESIGN" == "success" ]] && echo "Превью на triplex-design: $URL_DESIGN/$PREVIEW_DIR"
+
           [[ "$OUTCOME_DEV" == "success" ]] || echo "::warning::Деплой превью на triplex-dev не удался (outcome=$OUTCOME_DEV)"
           [[ "$OUTCOME_DESIGN" == "success" ]] || echo "::warning::Деплой превью на triplex-design не удался (outcome=$OUTCOME_DESIGN)"
           # Сбой публикации комментария job не роняет, но и молча теряться не должен.
-          [[ "$OUTCOME_COMMENT" == "success" ]] || echo "::warning::Комментарий со ссылками на превью не опубликован (outcome=$OUTCOME_COMMENT) — ссылки смотри в логе шага деплоя"
+          [[ "$OUTCOME_COMMENT" == "success" ]] || echo "::warning::Комментарий со ссылками на превью не опубликован (outcome=$OUTCOME_COMMENT) — ссылки напечатаны выше в этом же шаге"
 
           if [[ "$OUTCOME_DEV" != "success" && "$OUTCOME_DESIGN" != "success" ]]; then
             echo "::error::Оба сервера недоступны — превью не опубликовано ни на один из них"

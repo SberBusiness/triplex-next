@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Ломающие изменения</Heading>
 
+**Carousel.Indicators**
+
+- Удалено свойство `renderIndicator`.
+
 **FormFieldTextarea**
 
 - Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`. Раньше переданное значение всё равно перетиралось статусом. Для `FormFieldInput` / `FormFieldMaskedInput` то же было сделано в 1.45.0.
@@ -30,6 +34,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `CardStatic` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**Carousel.Indicators**
+
+- Добавлена анимация для индикаторов.
 
 **Confirm**
 

@@ -53,9 +53,10 @@ updates:
       actions:
         patterns: ["*"]
     # Та же выдержка, что и для npm: у actions угон аккаунта мейнтейнера
-    # опаснее — код выполняется на раннере рядом с секретами.
+    # опаснее — код выполняется на раннере рядом с секретами. Градации по
+    # semver здесь нет: Dependabot принимает её только для экосистем
+    # с semver-версиями, а на github-actions отвергает весь конфиг.
     cooldown:
       default-days: 7
-      semver-major-days: 30
     commit-message:
       prefix: deps

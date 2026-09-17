@@ -50,6 +50,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Проведён AI-рефакторинг: изменений для потребителя нет.
 
+**Step**
+
+- Изменен цвет токена `Step.Background_Active` в светлой теме.
+
 **TabsLine**
 
 - Добавлено: `TabsLine` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
@@ -66,3 +70,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `TextareaField` пробрасывает `ref` на `<div>` поля (`FormField`, внутри обёртки `FormGroup`) — туда же, куда уходит `className`. Раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
+**TriggerClickOnKeyDownEvent**
+
+- Добавлено: тип props `ITriggerClickOnKeyDownEventProps` теперь экспортируется — раньше интерфейс был внутренним, и типизировать обёртки над компонентом приходилось вручную.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.

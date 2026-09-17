@@ -1,5 +1,14 @@
 import React from "react";
-import { UploadZone, Gap, Text, Link, EFontType, ETextSize } from "@sberbusiness/triplex-next";
+import {
+    UploadZone,
+    Gap,
+    Text,
+    Button,
+    EButtonTheme,
+    EComponentSize,
+    EFontType,
+    ETextSize,
+} from "@sberbusiness/triplex-next";
 import { ClouddraguploadStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 
 export const Default = () => {
@@ -23,7 +32,9 @@ export const Default = () => {
                         <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
                             {/* Перетаскивание здесь намеренно не обещается: без dropZoneContainer
                                 оно не работает. Пример с drag-and-drop — WithDropZoneContainer. */}
-                            <Link onClick={openUploadDialog}>Выберите файлы</Link>
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={openUploadDialog}>
+                                Выберите файлы
+                            </Button>
                             {" "}
                             на компьютере
                         </Text>

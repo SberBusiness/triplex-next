@@ -4,7 +4,6 @@ import {
     MobileView,
     Gap,
     Text,
-    Link,
     HelpBox,
     Button,
     MarkerStatus,
@@ -116,7 +115,9 @@ export const Production = () => {
             <Gap size={4} />
             <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
                 Перетащите файлы или{" "}
-                <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={openUploadDialog}>
+                    выберите на компьютере
+                </Button>
                 {" "}
                 <HelpBox tooltipSize={ETooltipSize.SM}>Поддерживаются файлы PDF и XLSX до 10 МБ.</HelpBox>
             </Text>

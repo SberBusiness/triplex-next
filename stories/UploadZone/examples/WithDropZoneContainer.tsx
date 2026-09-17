@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { UploadZone, Gap, Text, Link, EFontType, ETextSize } from "@sberbusiness/triplex-next";
+import {
+    UploadZone,
+    Gap,
+    Text,
+    Button,
+    EButtonTheme,
+    EComponentSize,
+    EFontType,
+    ETextSize,
+} from "@sberbusiness/triplex-next";
 import { ClouddraguploadStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 
 export const WithDropZoneContainer = () => {
@@ -47,7 +56,9 @@ export const WithDropZoneContainer = () => {
                         <Gap size={4} />
                         <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
                             Перетащите файлы или{" "}
-                            <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={openUploadDialog}>
+                                выберите на компьютере
+                            </Button>
                         </Text>
                     </div>
                 )}

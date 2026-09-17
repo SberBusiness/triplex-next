@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { UploadZone, Gap, Text, Link, EFontType, ETextSize } from "@sberbusiness/triplex-next";
+import {
+    UploadZone,
+    Gap,
+    Text,
+    Button,
+    EButtonTheme,
+    EComponentSize,
+    EFontType,
+    ETextSize,
+} from "@sberbusiness/triplex-next";
 import { ClouddraguploadStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { action } from "storybook/actions";
 
@@ -56,11 +65,23 @@ export const Playground = ({ multiple, withDropZoneContainer, withContainerConte
                             {withDropZoneContainer ? (
                                 <>
                                     Перетащите файлы или{" "}
-                                    <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                                    <Button
+                                        theme={EButtonTheme.LINK}
+                                        size={EComponentSize.SM}
+                                        onClick={openUploadDialog}
+                                    >
+                                        выберите на компьютере
+                                    </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Link onClick={openUploadDialog}>Выберите файлы</Link>
+                                    <Button
+                                        theme={EButtonTheme.LINK}
+                                        size={EComponentSize.SM}
+                                        onClick={openUploadDialog}
+                                    >
+                                        Выберите файлы
+                                    </Button>
                                     {" "}
                                     на компьютере
                                 </>

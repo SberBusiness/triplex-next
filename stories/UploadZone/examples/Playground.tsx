@@ -53,16 +53,30 @@ export const Playground = ({ multiple, withDropZoneContainer, withContainerConte
                         <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
                         <Gap size={4} />
                         <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                            Перетащите файлы или{" "}
-                            <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                            {withDropZoneContainer ? (
+                                <>
+                                    Перетащите файлы или{" "}
+                                    <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Link onClick={openUploadDialog}>Выберите файлы</Link>
+                                    {" "}
+                                    на компьютере
+                                </>
+                            )}
                         </Text>
                     </div>
                 )}
             </UploadZone>
-            <Gap size={16} />
-            <Text type={EFontType.SECONDARY} size={ETextSize.B4} tag="div">
-                Перетащите файлы на блок, чтобы увидеть дроп-зону.
-            </Text>
+            {withDropZoneContainer && (
+                <>
+                    <Gap size={16} />
+                    <Text type={EFontType.SECONDARY} size={ETextSize.B4} tag="div">
+                        Перетащите файлы на блок, чтобы увидеть дроп-зону.
+                    </Text>
+                </>
+            )}
         </div>
     );
 };

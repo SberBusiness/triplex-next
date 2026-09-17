@@ -3,15 +3,14 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { UploadZone } from "@sberbusiness/triplex-next";
 import {
-    PlaygroundRender,
-    PlaygroundSource,
-    DefaultRender,
+    Playground as PlaygroundRender,
+    Default as DefaultRender,
     DefaultSource,
-    WithDropZoneContainerRender,
+    WithDropZoneContainer as WithDropZoneContainerRender,
     WithDropZoneContainerSource,
-    ProductionRender,
+    Production as ProductionRender,
     ProductionSource,
-    VisualTestsRender,
+    VisualTests as VisualTestsRender,
     type PlaygroundArgs,
 } from "./examples";
 
@@ -83,10 +82,6 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         docs: {
             canvas: { sourceState: "none" },
             codePanel: false,
-            source: {
-                code: PlaygroundSource,
-                language: "tsx",
-            },
         },
         testRunner: { skip: true },
     },

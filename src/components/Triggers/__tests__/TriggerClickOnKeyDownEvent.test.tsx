@@ -151,6 +151,36 @@ describe("TriggerClickOnKeyDownEvent", () => {
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 
+    // Связка, ради которой компонент и существует: LightBoxClose держит два вложенных триггера
+    // на один Esc, десктопная и мобильная копии кнопки переключаются через display: none.
+    it("clicks only the visible target when triggers are nested on the same key", () => {
+        const onClickVisible = vi.fn();
+        const onClickHidden = vi.fn();
+        const visibleRef = React.createRef<HTMLButtonElement>();
+        const hiddenRef = React.createRef<HTMLButtonElement>();
+
+        render(
+            <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={visibleRef}>
+                <TriggerClickOnKeyDownEvent eventKeyCode={EVENT_KEY_CODES.ESCAPE} targetRef={hiddenRef}>
+                    <>
+                        <button type="button" ref={visibleRef} onClick={onClickVisible}>
+                            Visible
+                        </button>
+                        <button type="button" ref={hiddenRef} onClick={onClickHidden}>
+                            Hidden
+                        </button>
+                    </>
+                </TriggerClickOnKeyDownEvent>
+            </TriggerClickOnKeyDownEvent>,
+        );
+        setElementVisible(screen.getByRole("button", { name: "Visible" }), true);
+        setElementVisible(screen.getByRole("button", { name: "Hidden" }), false);
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE });
+
+        expect(onClickVisible).toHaveBeenCalledTimes(1);
+        expect(onClickHidden).not.toHaveBeenCalled();
+    });
+
     // Кнопка живёт вне размонтируемого поддерева: иначе React обнулил бы targetRef.current,
     // и тест остался бы зелёным из-за пустого ref, а не из-за снятого слушателя.
     it("stops clicking the target button after unmount", () => {

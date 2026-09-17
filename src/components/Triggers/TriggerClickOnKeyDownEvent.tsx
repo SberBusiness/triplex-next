@@ -23,8 +23,9 @@ export const TriggerClickOnKeyDownEvent: React.FC<ITriggerClickOnKeyDownEventPro
     /**
      * Кликает по кнопке, если она смонтирована и видима.
      * offsetParent === null — как правило признак того, что элемент или его предок скрыт через
-     * display: none; то же значение дают position: fixed и элементы вне документа. Без этой
-     * проверки триггер срабатывал бы и на скрытых кнопках (например, на мобильной копии кнопки).
+     * display: none; то же значение дают собственный position: fixed у элемента и элементы вне
+     * документа (fixed на предке на проверку не влияет). Без этой проверки триггер срабатывал бы
+     * и на скрытых кнопках (например, на мобильной копии кнопки).
      * https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
      */
     const handleKeyDown = (): void => {

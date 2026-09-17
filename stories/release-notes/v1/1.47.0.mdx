@@ -50,5 +50,5 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **TextareaField**
 
-- Добавлено: `TextareaField` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Добавлено: `TextareaField` пробрасывает `ref` на `<div>` поля (`FormField`, внутри обёртки `FormGroup`) — туда же, куда уходит `className`. Раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.

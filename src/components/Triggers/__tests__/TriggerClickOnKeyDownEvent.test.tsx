@@ -85,7 +85,11 @@ describe("TriggerClickOnKeyDownEvent", () => {
         expect(onClick).not.toHaveBeenCalled();
     });
 
+    // Ошибка из нативного слушателя не пробрасывается наружу dispatchEvent (DOM-спека, шаг
+    // «report an exception»), поэтому not.toThrow() здесь всегда зелёный и защиту не фиксирует.
+    // jsdom поднимает такую ошибку событием error на window — его и слушаем.
     it("does nothing when targetRef is not attached to an element", () => {
+        const onError = vi.fn();
         const targetRef = React.createRef<HTMLButtonElement>();
 
         render(
@@ -94,7 +98,12 @@ describe("TriggerClickOnKeyDownEvent", () => {
             </TriggerClickOnKeyDownEvent>,
         );
 
-        expect(() => fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE })).not.toThrow();
+        window.addEventListener("error", onError);
+        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ESCAPE });
+        window.removeEventListener("error", onError);
+
+        expect(targetRef.current).toBeNull();
+        expect(onError).not.toHaveBeenCalled();
     });
 
     it("clicks the target button on any key code when an array is passed", () => {

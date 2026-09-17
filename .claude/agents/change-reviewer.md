@@ -62,7 +62,7 @@ tools:
 
 - [ ] Если изменилась нетривиальная логика — есть unit-тест.
 - [ ] Тесты в `__tests__/{Component}.test.tsx`.
-- [ ] **Блокер:** `import ... from "vitest"` (а также `@testing-library/*`, `storybook/test`) встречается только в файлах `*.test.ts`/`*.test.tsx`, в `vitest.setup.ts` или в `test-utils/`. Любой другой файл внутри `src/` становится entry-точкой сборки и утягивает vitest в бандл — пакет падает у потребителей с `Vitest failed to access its internal state` (регрессия 1.39.0). Общие тестовые хелперы — в `test-utils/` в корне репозитория, не в `src/**/__tests__/`. Проверка (ловит оба стиля кавычек и side-effect импорты, а не только `vitest`):
+- [ ] **Блокер:** `import ... from "vitest"` (а также `@testing-library/*`, `storybook/test`) встречается только в файлах `*.test.ts`/`*.test.tsx`, в `vitest.setup.ts` или в `test-utils/`. Общие тестовые хелперы — в `test-utils/` в корне репозитория, не в `src/**/__tests__/`. Исходно правило защищало от регрессии 1.39.0 (`Vitest failed to access its internal state` у потребителей), но с TRI-106 `vite.config.ts` исключает `src/**/__tests__/**` из entry-точек, поэтому нарушение правила само по себе **не означает**, что vitest течёт в бандл — это надо проверять по `dist`, а не по расположению файла. Правило остаётся как вторая линия защиты и правило организации кода. Проверка (ловит оба стиля кавычек и side-effect импорты, а не только `vitest`):
   ```bash
   grep -rlnE "(from|import)[[:space:]]*['\"](vitest|@testing-library/|storybook/test)" src \
     | grep -vE "(\.test\.tsx?|vitest\.setup\.ts)$" | grep -v "/test-utils/"

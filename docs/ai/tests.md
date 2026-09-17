@@ -57,15 +57,24 @@ Uncaught Error: Vitest failed to access its internal state.
 Именно это произошло в 1.39.0 из-за файла `src/components/Carousel/__tests__/utils.ts`
 (хелпер без постфикса `.test`). Чанк `vendor` вырос с 640 KB до 1.28 MB.
 
+**Страховка на уровне сборки (TRI-106).** После той регрессии `vite.config.ts`
+исключает из списка entry-точек не только `*.test.{ts,tsx}`, но и целиком
+`src/**/__tests__/**`, `src/**/__test__/**` и `src/**/tests/**`. То есть хелпер
+внутри `__tests__/` сегодня в бандл уже не попадёт, и в `dist` таких импортов
+нет. Правило ниже — вторая линия защиты и правило организации кода, а не
+единственное, что стоит между репозиторием и повторением 1.39.0. Не читай
+нарушение этого правила как «прямо сейчас течёт в бандл»: это надо проверять
+по `dist`, а не по расположению файла.
+
 **Общие тестовые хелперы** (моки `ResizeObserver`, фейковые `Touch`, подмена
 размеров элементов и т.п.) кладём в `test-utils/` в корне репозитория — вне `src/`,
-поэтому сборка их физически не видит:
+поэтому сборка их физически не видит и исключения в её конфиге для них не нужны:
 
 ```typescript
 // ✅ src/components/Carousel/__tests__/CarouselRoot.test.tsx
 import { getResizeCallback, mockElementSize } from "../../../../test-utils/dom";
 
-// ❌ src/components/Carousel/__tests__/utils.ts — станет entry-точкой сборки
+// ❌ src/components/Carousel/__tests__/utils.ts — общему хелперу здесь не место
 import { vi } from "vitest";
 ```
 

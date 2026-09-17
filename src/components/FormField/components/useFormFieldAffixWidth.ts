@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { TARGET_PADDING_X_DEFAULT } from "../consts";
-import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
+import { setForwardedRef } from "../../../helpers/setForwardedRef";
 
 /**
  * Синхронизирует измеренную ширину контейнера-аффикса (FormFieldPrefix / FormFieldPostfix)

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import clsx from "clsx";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import { SliderExtendedContext } from "../../SliderExtendedContext";
-import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
+import { setForwardedRef } from "../../../../helpers/setForwardedRef";
 import styles from "./styles/SliderExtendedTooltip.module.less";
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);

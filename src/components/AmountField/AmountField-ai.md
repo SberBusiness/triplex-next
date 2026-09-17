@@ -188,3 +188,4 @@ FormField.Input_Color_Disabled
 |---|---|
 | 2026-09-10 | Создан документ (TRI-9). AI-рефакторинг AmountField, unit-тесты на ядро, парсер, форматер и утилиты; добавлен `displayName` |
 | 2026-09-14 | Правки по ревью (TRI-9): добавлен prop `clearProps` — доступное имя кнопки очистки задаётся через `aria-label`. Хелпер `setForwardedRef` переехал в общий внутренний модуль `src/helpers/setForwardedRef.ts` (пять копий по репозиторию свёрнуты в одну); публичный API это не затрагивает. |
+| 2026-09-17 | Правки по ревью (TRI-9): `setForwardedRef` импортируется относительным путём вместо алиаса `@sberbusiness/triplex-next/helpers/...` — алиас в `src` зарезервирован за публичными subentry. |

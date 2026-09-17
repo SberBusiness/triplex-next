@@ -106,7 +106,7 @@ FormField.Target_PlaceholderColor_Default
 - Классы `formField`, `filled`, `active`, `error`, `warning`, `disabled`, а также `sm` / `md` / `lg` проверяются unit-тестами и используются в вложенных селекторах стилей семейства.
 - Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
 - `FormFieldDescription` и `FormFieldCounter` объявлены как `React.FC` без `forwardRef` — осознанное историческое отличие от остальных субкомпонентов. Добавление ref расширяет публичный API; решение владельца — оставить как есть.
-- Внутренние утилиты семейства (`components/utils.ts` — `isFilled`, `setForwardedRef`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`.
+- Внутренние утилиты семейства (`components/utils.ts` — `isFilled`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`. Общий `setForwardedRef` вынесен в `src/helpers/setForwardedRef.ts` и импортируется относительным путём.
 - Компонент не рендерит собственных подписей и текстов — библиотека мультиязычная.
 
 ---

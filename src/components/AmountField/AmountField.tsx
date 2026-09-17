@@ -5,7 +5,7 @@ import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormF
 import { FormFieldClear, IFormFieldClearProps } from "../FormField/components/FormFieldClear";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition, createSizeToClassNameMap } from "../../utils";
-import { setForwardedRef } from "@sberbusiness/triplex-next/helpers/setForwardedRef";
+import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { createPlaceholder, syncCoreAndGetFormattedValue, setFallbackCaret } from "./utils";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/AmountField.module.less";

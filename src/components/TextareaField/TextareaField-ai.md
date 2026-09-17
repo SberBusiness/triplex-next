@@ -47,7 +47,7 @@ version: "1.0"
 ### Особенности поведения
 
 - **Поле не растёт по содержимому.** У `<textarea>` выставлен `resize: none`, автоувеличения высоты нет — размер области ввода задаёт только `size` (`min-height` 64px для SM, 60px для MD и LG). Увеличить высоту можно через `textareaProps.rows`; уменьшить — только своим классом на `textareaProps.className`, переопределив `min-height` с достаточной специфичностью (правило задано селектором `.formFieldTextarea.lg`).
-- **`disabled` задаётся только через `status`.** `FormFieldTextarea` выставляет `disabled={status === EFormFieldStatus.DISABLED}` после спреда остальных props, поэтому `textareaProps.disabled` молча перетирается. Для блокировки поля используй `status={EFormFieldStatus.DISABLED}`.
+- **`disabled` задаётся только через `status`.** `FormFieldTextarea` выставляет `disabled={status === EFormFieldStatus.DISABLED}` после спреда остальных props, поэтому передать `disabled` в `textareaProps` нельзя — атрибут исключён из `IFormFieldTextareaProps` через `Omit`, и попытка его передать будет ошибкой компиляции. Для блокировки поля используй `status={EFormFieldStatus.DISABLED}`.
 - **`placeholder` виден только в активном состоянии.** Пока поле не активно (нет фокуса и не передан `active`), плейсхолдер скрыт (`opacity: 0`) — его место занимает опущенный `label`. Когда поле становится активным, лейбл уезжает наверх и плейсхолдер проявляется. Поэтому плейсхолдер не заменяет лейбл: если `label` не задан, у пустого неактивного поля не будет видимой подписи.
 - **Поле работает и контролируемым, и неконтролируемым.** Состояние «заполнено» (от него зависит положение лейбла) синхронизируется на маунте из `value ?? defaultValue`, далее — из `value` для контролируемого поля и из событий `change`/`focus`/`blur` для неконтролируемого.
 - **Автозаполнение браузером отслеживается** через CSS-хуки `animationstart` (`autofill-applied-hook` / `autofill-cancelled-hook`), поэтому лейбл поднимается и при подстановке значения браузером. Свой `textareaProps.onAnimationStart` при этом вызывается.
@@ -114,3 +114,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-17 | Создан документ (TRI-96). AI-рефакторинг `TextareaField`: проброс `ref` на корневой `<div>` через `forwardRef`, `displayName`, unit-тесты вместо mock-заглушек |
+| 2026-09-17 | Ломающее изменение: `disabled` убран из `IFormFieldTextareaProps` (`Omit`), поэтому его больше нельзя передать в `textareaProps` — блокировка только через `status`. Правка по ревью PR #629, зафиксирована в release notes 1.47.0 |

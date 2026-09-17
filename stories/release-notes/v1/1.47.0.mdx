@@ -4,6 +4,16 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.47.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**FormFieldTextarea**
+
+- Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`. Раньше переданное значение всё равно перетиралось статусом. Для `FormFieldInput` / `FormFieldMaskedInput` то же было сделано в 1.45.0.
+
+**TextareaField**
+
+- Свойство `disabled` больше нельзя передать в `textareaProps` — следствие правки `FormFieldTextarea` выше.
+
 <Heading>Изменения</Heading>
 
 **Avatar**

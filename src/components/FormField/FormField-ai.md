@@ -104,6 +104,7 @@ FormField.Target_PlaceholderColor_Default
 - Barrel `src/components/FormField/index.ts` реэкспортирует `enums`, `types`, `components` и сам `FormField` — состав экспортов не сокращать. Маппинг статуса на класс (`STATUS_TO_CLASS_NAME_MAP`) — внутренняя константа модуля и в barrel не входит.
 - `FormFieldContext` и `FormFieldDescriptionContext` в barrel не входят: это внутренний механизм семейства, но на нём завязаны все субкомпоненты — менять форму значения контекста без правки субкомпонентов нельзя.
 - Классы `formField`, `filled`, `active`, `error`, `warning`, `disabled`, а также `sm` / `md` / `lg` проверяются unit-тестами и используются в вложенных селекторах стилей семейства.
+- `disabled` исключён из props элементов ввода (`IFormFieldInputProps`, `IFormFieldTextareaProps`, `IFormFieldMaskedInputProps` — через `Omit`): блокировка задаётся только `status={EFormFieldStatus.DISABLED}`, иначе переданное значение молча перетиралось бы внутренним.
 - Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
 - `FormFieldDescription` и `FormFieldCounter` объявлены как `React.FC` без `forwardRef` — осознанное историческое отличие от остальных субкомпонентов. Добавление ref расширяет публичный API; решение владельца — оставить как есть.
 - Внутренние утилиты семейства (`components/utils.ts` — `isFilled`, `setForwardedRef`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`.
@@ -116,7 +117,7 @@ FormField.Target_PlaceholderColor_Default
 - Корневой элемент — обычный `div` без роли: семантику даёт вложенный нативный `input` / `textarea`.
 - Связка лейбла и поля: `FormFieldLabel` получает `htmlFor={targetId}` из контекста, элемент ввода — сгенерированный `id`. Поэтому `screen.getByLabelText(...)` находит поле, а клик по лейблу фокусирует ввод.
 - `FormFieldTarget` (нередактируемое значение, например для select-подобных полей) получает `tabIndex={0}`, `aria-labelledby={labelId}` и `aria-disabled`; при `status = DISABLED` — `tabIndex={-1}`.
-- При `status = DISABLED` вложенные `input` / `textarea` получают нативный `disabled`, то есть выпадают из таб-порядка.
+- При `status = DISABLED` вложенные `input` / `textarea` получают нативный `disabled`, то есть выпадают из таб-порядка. Передать `disabled` мимо статуса нельзя — атрибут исключён из props элементов ввода.
 - Плейсхолдер маски в `FormFieldMaskedInput` рендерится с `aria-hidden="true"` — скринридер читает только реальное значение input.
 - Текст описания (`FormFieldDescription`) визуально связан с полем, но не связывается автоматически через `aria-describedby` — при необходимости потребитель передаёт `aria-describedby` элементу ввода сам.
 
@@ -168,3 +169,4 @@ FormField.Target_PlaceholderColor_Default
 | 2026-08-03 | Ломающее изменение: `statusToClassNameMap` убран из публичного barrel и переименован во внутреннюю константу `STATUS_TO_CLASS_NAME_MAP`. Зафиксировано в release notes 1.41.0. |
 | 2026-09-04 | Исправлено: у `FormFieldTextarea` фиксированная `height` для размеров `sm` / `md` / `lg` заменена на `min-height`. |
 | 2026-09-09 | Исправлено: значение с кодом страны раскладывалось по маске телефона со сдвигом и теряло последнюю цифру. Нормализация номера вынесена в `normalizePhoneText` и применяется и к внешнему `value`, и к слою с маской |
+| 2026-09-17 | Ломающее изменение: `disabled` убран из `IFormFieldTextareaProps` через `Omit` — так же, как он уже был убран у `FormFieldInput` и `FormFieldMaskedInput`. Поведение не менялось (статус перетирал переданное значение и раньше), но передача `disabled` в props теперь ошибка компиляции. Правка по ревью PR #629, зафиксирована в release notes 1.47.0 |

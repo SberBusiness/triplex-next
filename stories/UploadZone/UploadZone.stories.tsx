@@ -6,8 +6,6 @@ import {
     Playground as PlaygroundRender,
     Default as DefaultRender,
     DefaultSource,
-    WithDropZoneContainer as WithDropZoneContainerRender,
-    WithDropZoneContainerSource,
     Production as ProductionRender,
     ProductionSource,
     VisualTests as VisualTestsRender,
@@ -99,19 +97,6 @@ export const Default: StoryObj<typeof UploadZone> = {
         },
     },
     render: DefaultRender,
-};
-
-export const WithDropZoneContainer: StoryObj<typeof UploadZone> = {
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            source: {
-                code: WithDropZoneContainerSource,
-                language: "tsx",
-            },
-        },
-    },
-    render: WithDropZoneContainerRender,
 };
 
 export const Production: StoryObj<typeof UploadZone> = {

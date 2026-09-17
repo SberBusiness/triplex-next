@@ -106,7 +106,7 @@ render-функцией в `children`, а результат выбора при
 На ширине `≤ @screen-sm-max` (767px) фон корневого элемента и слой с пунктирной
 рамкой скрываются: перетаскивание на мобильных недоступно. Разметку под мобильный
 сценарий (заголовок + кнопка «Загрузить», вызывающая `openUploadDialog`) даёт
-потребитель — типовой приём с `MobileView` показан в stories `WithDropZoneContainer`
+потребитель — типовой приём с `MobileView` показан в stories `Default`
 и `Example: production`. На узком экране перетаскивания нет, поэтому по дизайну
 вместо области сброса показывается обычная кнопка загрузки.
 
@@ -196,8 +196,7 @@ UploadZone.DragArea_BorderColor
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Playground` | `Playground.tsx` | Переключение `dropZoneContainer`, `renderContainerContent` и `multiple` |
-| `Default` | `Default.tsx` | Минимальная зона: скрытый input, иконка, подпись со ссылкой |
-| `WithDropZoneContainer` | `WithDropZoneContainer.tsx` | Дроп-зона на площади внешнего контейнера; на узком экране через `MobileView` вместо неё кнопка |
+| `Default` | `Default.tsx` | Зона с дроп-зоной на площади внешнего контейнера; на узком экране через `MobileView` вместо неё кнопка |
 | `Production` (Example: production) | `Production.tsx` | Композиция с таблицей загруженных файлов и мобильным вариантом через `MobileView` |
 | `VisualTests` | `VisualTests.tsx` | Состояния для скриншот-тестов: покой и раскрытая дроп-зона (через `play`) |
 

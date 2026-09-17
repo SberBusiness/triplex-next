@@ -76,8 +76,9 @@ version: "1.0"
 Семантику задаёт потребитель через проброшенные атрибуты — например `role="group"` вместе с
 `aria-labelledby`, если группа должна объявляться скринридером как единое целое.
 
-Лейбл связывается с полем внутри `FormField`: `FormFieldLabel` берёт `htmlFor` из `targetId`
-в `FormFieldContext`. Описание автоматически не связывается — `aria-describedby` на элементе
+Лейбл связывается с полем внутри `FormField`: в полях с элементом ввода `FormFieldLabel` берёт
+`htmlFor` из `targetId` в `FormFieldContext`, в select-подобных — связь даёт `aria-labelledby`
+на `FormFieldTarget` (см. `FormField-ai.md`). Описание автоматически не связывается — `aria-describedby` на элементе
 ввода (как и `aria-invalid` для ошибки) задаёт потребитель, см. `FormField-ai.md`. `FormGroup`
 не участвует ни в том, ни в другом.
 

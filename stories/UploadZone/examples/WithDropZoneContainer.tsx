@@ -78,10 +78,19 @@ export const WithDropZoneContainer = () => {
                     </MobileView>
                 )}
             </UploadZone>
-            <Gap size={16} />
-            <Text type={EFontType.SECONDARY} size={ETextSize.B4} tag="div">
-                Файлы можно перетащить в любое место этого блока — дроп-зона раскроется на всю его площадь.
-            </Text>
+            {/* Подсказка про перетаскивание — только на широком экране: на узком drag-and-drop недоступен. */}
+            <MobileView
+                fallback={
+                    <>
+                        <Gap size={16} />
+                        <Text type={EFontType.SECONDARY} size={ETextSize.B4} tag="div">
+                            Файлы можно перетащить в любое место этого блока — дроп-зона раскроется на всю его площадь.
+                        </Text>
+                    </>
+                }
+            >
+                {null}
+            </MobileView>
         </div>
     );
 };

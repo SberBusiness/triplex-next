@@ -83,9 +83,9 @@ version: "1.0"
   `KeyDownListener`: компонент не рендерит собственный host-элемент, форвардить
   `ref` некуда. Добавление `forwardRef` изменило бы публичный тип компонента с
   `React.FC` на `React.ForwardRefExoticComponent` — не делать.
-- **`ITriggerClickOnKeyDownEventProps` не экспортируется** (ни из файла, ни из
-  barrel) — это осознанное состояние публичной поверхности. Экспорт интерфейса
-  расширяет публичное API и делается только отдельной задачей.
+- **`ITriggerClickOnKeyDownEventProps` экспортируется** — из файла и через
+  `export *` в barrel, как у остальных компонентов библиотеки. Интерфейс —
+  часть публичного API: имена и типы полей не менять.
 - **Имена props `children`, `eventKeyCode`, `targetRef`** и barrel-экспорт
   `TriggerClickOnKeyDownEvent` из `src/components/Triggers/index.ts` — публичное
   API, не менять.
@@ -157,4 +157,4 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-09-17 | Создан документ. AI-рефакторинг (TRI-101): JSDoc на props и на обработчик клавиши, ветвление в обработчике сведено к одной проверке, импорт React поднят в начало файла; unit-тесты (8 кейсов), stories по modern pattern. Публичный API не менялся: `forwardRef` осознанно отсутствует, `ITriggerClickOnKeyDownEventProps` остаётся неэкспортируемым. |
+| 2026-09-17 | Создан документ. AI-рефакторинг (TRI-101): JSDoc на props и на обработчик клавиши, ветвление в обработчике сведено к одной проверке, импорт React поднят в начало файла; unit-тесты (9 кейсов), stories по modern pattern. `forwardRef` осознанно отсутствует. По итогам ревью PR #628 `ITriggerClickOnKeyDownEventProps` стал экспортируемым — аддитивное расширение публичного API, приведение к общей конвенции репозитория. |

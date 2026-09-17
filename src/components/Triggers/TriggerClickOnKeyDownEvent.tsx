@@ -4,7 +4,7 @@ import { IKeyDownListenerProps, KeyDownListener } from "../KeyDownListener/KeyDo
 /**
  * Свойства компонента TriggerClickOnKeyDownEvent.
  */
-interface ITriggerClickOnKeyDownEventProps extends Pick<IKeyDownListenerProps, "eventKeyCode"> {
+export interface ITriggerClickOnKeyDownEventProps extends Pick<IKeyDownListenerProps, "eventKeyCode"> {
     /** Содержимое. Рендерится как есть, без обёртки и без собственной разметки. */
     children: React.ReactElement;
     /** Ссылка на кнопку, по которой выполняется клик. Скрытая кнопка кликом не вызывается. */

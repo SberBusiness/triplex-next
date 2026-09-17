@@ -79,7 +79,7 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
         // setCaretPosition ничего не делает, если поле не в фокусе.
         useLayoutEffect(() => {
             setCaretPosition(inputRef.current, Math.max(core.caret, 0));
-        }, [inputProps.value, core]);
+        }, [inputProps.value, maxIntegerDigits, fractionDigits, core]);
 
         /** Обработчик изменения значения. */
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

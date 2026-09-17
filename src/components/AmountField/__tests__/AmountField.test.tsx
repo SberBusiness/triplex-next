@@ -159,6 +159,31 @@ describe("AmountField", () => {
         setSelectionRange.mockRestore();
     });
 
+    test("restores caret position when format settings change while the field is focused", () => {
+        const Test = ({ fractionDigits }: { fractionDigits: number }) => (
+            <AmountField
+                label="Label"
+                fractionDigits={fractionDigits}
+                inputProps={{ value: "1234.5", onChange: vi.fn() }}
+            />
+        );
+
+        const { rerender } = render(<Test fractionDigits={2} />);
+        const input = screen.getByRole("textbox") as HTMLInputElement;
+        act(() => {
+            input.focus();
+        });
+
+        const setSelectionRange = vi.spyOn(HTMLInputElement.prototype, "setSelectionRange");
+        rerender(<Test fractionDigits={0} />);
+
+        // Смена fractionDigits пересчитывает core.caret при неизменном inputProps.value,
+        // поэтому эффект обязан перенести каретку: иначе она осталась бы на индексе,
+        // рассчитанном для прежнего формата.
+        expect(setSelectionRange).toHaveBeenCalled();
+        setSelectionRange.mockRestore();
+    });
+
     test("does not reattach a stable callback inputProps.ref on rerender", () => {
         const inputRef = vi.fn();
         const { rerender } = render(

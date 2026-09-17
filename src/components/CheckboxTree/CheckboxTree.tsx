@@ -19,53 +19,61 @@ export interface ICheckboxTreeProps extends Omit<ICheckboxTreeExtendedProps, "ch
  * Дерево чекбоксов.
  * Является оберткой над CheckboxTreeExtended: принимает плоское описание дерева и сам связывает состояние
  * родителей и потомков — выбор родителя выбирает всех потомков, выбор части потомков делает родителя частичным.
+ *
+ * ref указывает на корневой <ul role="tree">.
  */
-export const CheckboxTree: React.FC<ICheckboxTreeProps> = ({ checkboxes, onChange, size = EComponentSize.MD }) => {
-    const handleChange = (checkbox: ICheckboxTreeCheckboxData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { checked } = event.target;
+export const CheckboxTree = React.forwardRef<HTMLUListElement, ICheckboxTreeProps>(
+    ({ checkboxes, onChange, size = EComponentSize.MD, ...rest }, ref) => {
+        const handleChange = (checkbox: ICheckboxTreeCheckboxData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+            const { checked } = event.target;
 
-        // Клик по частично выбранному узлу выбирает его целиком, а не снимает выбор.
-        checkbox.checked = checkbox.bulk ? true : checked;
+            // Клик по частично выбранному узлу выбирает его целиком, а не снимает выбор.
+            checkbox.checked = checkbox.bulk ? true : checked;
 
-        // Обновление флага checked дочерних чекбоксов, при изменении родителя.
-        checkChildrenCheckboxes(checkbox);
+            // Обновление флага checked дочерних чекбоксов, при изменении родителя.
+            checkChildrenCheckboxes(checkbox);
 
-        // Обновление флага checked и bulk всех чекбоксов снизу вверх.
-        traverseCheckboxes(checkboxes, checkParentCheckboxes);
+            // Обновление флага checked и bulk всех чекбоксов снизу вверх.
+            traverseCheckboxes(checkboxes, checkParentCheckboxes);
 
-        onChange([...checkboxes]);
-    };
+            onChange([...checkboxes]);
+        };
 
-    // Соседи по списку передаются узлу как prevNodeId/nextNodeId — по ним TreeView строит клавиатурную навигацию.
-    const renderNodes = (nodes: ICheckboxTreeCheckboxData[]) =>
-        nodes.map((checkbox, index) => renderNode(checkbox, nodes[index - 1], nodes[index + 1]));
+        // Соседи по списку передаются узлу как prevNodeId/nextNodeId — по ним TreeView строит клавиатурную навигацию.
+        const renderNodes = (nodes: ICheckboxTreeCheckboxData[]) =>
+            nodes.map((checkbox, index) => renderNode(checkbox, nodes[index - 1], nodes[index + 1]));
 
-    const renderNode = (
-        checkbox: ICheckboxTreeCheckboxData,
-        prevCheckbox?: ICheckboxTreeCheckboxData,
-        nextCheckbox?: ICheckboxTreeCheckboxData,
-    ) => (
-        <CheckboxTreeExtended.Node
-            id={checkbox.id}
-            key={checkbox.id}
-            checkbox={(props: ICheckboxTreeExtendedCheckboxProvideProps) => (
-                <CheckboxTreeExtended.Checkbox
-                    {...props}
-                    onChange={handleChange(checkbox)}
-                    bulk={checkbox.bulk}
-                    checked={checkbox.checked}
-                >
-                    {checkbox.label}
-                </CheckboxTreeExtended.Checkbox>
-            )}
-            prevNodeId={prevCheckbox?.id}
-            nextNodeId={nextCheckbox?.id}
-        >
-            {checkbox.children && renderNodes(checkbox.children)}
-        </CheckboxTreeExtended.Node>
-    );
+        const renderNode = (
+            checkbox: ICheckboxTreeCheckboxData,
+            prevCheckbox?: ICheckboxTreeCheckboxData,
+            nextCheckbox?: ICheckboxTreeCheckboxData,
+        ) => (
+            <CheckboxTreeExtended.Node
+                id={checkbox.id}
+                key={checkbox.id}
+                checkbox={(props: ICheckboxTreeExtendedCheckboxProvideProps) => (
+                    <CheckboxTreeExtended.Checkbox
+                        {...props}
+                        onChange={handleChange(checkbox)}
+                        bulk={checkbox.bulk}
+                        checked={checkbox.checked}
+                    >
+                        {checkbox.label}
+                    </CheckboxTreeExtended.Checkbox>
+                )}
+                prevNodeId={prevCheckbox?.id}
+                nextNodeId={nextCheckbox?.id}
+            >
+                {checkbox.children && renderNodes(checkbox.children)}
+            </CheckboxTreeExtended.Node>
+        );
 
-    return <CheckboxTreeExtended size={size}>{renderNodes(checkboxes)}</CheckboxTreeExtended>;
-};
+        return (
+            <CheckboxTreeExtended size={size} {...rest} ref={ref}>
+                {renderNodes(checkboxes)}
+            </CheckboxTreeExtended>
+        );
+    },
+);
 
 CheckboxTree.displayName = "CheckboxTree";

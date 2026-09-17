@@ -21,6 +21,15 @@ export interface ITreeViewProps extends React.HTMLAttributes<HTMLUListElement> {
     children: React.ReactNode;
 }
 
+/**
+ * Внутренние свойства TreeViewBase.
+ * Класс не может быть обёрнут forwardRef напрямую, поэтому внешний ref приходит к нему обычным свойством.
+ */
+interface ITreeViewBaseProps extends ITreeViewProps {
+    /** Внешний ref на корневой <ul>, проброшенный обёрткой TreeView. */
+    forwardedRef: React.ForwardedRef<HTMLUListElement>;
+}
+
 /** Состояние TreeView. */
 interface ITreeViewState {
     /**
@@ -34,25 +43,15 @@ interface ITreeViewState {
 const rootNodeId = "rootNode";
 
 /**
- * Базовый компонент визуального дерева.
- * Добавляет нужную семантическую разметку.
- * Создает абстрактное дерево на основе текущего.
- * Устанавливает контекст для дочерних нод.
- * Реализует навигацию по дереву.
- *
- * Accessibility требования:
- * https://www.w3.org/TR/wai-aria-practices-1.1/examples/treeview/treeview-2/treeview-2a.html
+ * Реализация TreeView. Вынесена в отдельный класс, потому что class-компонент нельзя обернуть forwardRef напрямую:
+ * публичный TreeView ниже — обёртка, передающая сюда внешний ref свойством forwardedRef.
  */
-export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
-    public static displayName = "TreeView";
-    public static Node = TreeViewNode;
-    public static Group = TreeViewGroup;
-
+class TreeViewBase extends React.Component<ITreeViewBaseProps, ITreeViewState> {
     private readonly abstractRootNode: TreeViewAbstractNode;
     /** Глобальный слушатель keydown подписан. Он нужен только пока в дереве есть активная нода. */
     private keyDownListenerAttached = false;
 
-    constructor(props: ITreeViewProps) {
+    constructor(props: ITreeViewBaseProps) {
         super(props);
 
         this.abstractRootNode = new TreeViewAbstractNode({ id: rootNodeId });
@@ -67,7 +66,7 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
     }
 
     public render(): JSX.Element {
-        const { children, className, ...props } = this.props;
+        const { children, className, forwardedRef, ...props } = this.props;
         const { updateCount } = this.state;
 
         return (
@@ -84,7 +83,7 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
                 }}
             >
                 {/* role после {...props}: семантика дерева - контракт компонента, потребитель ее не переопределяет. */}
-                <ul className={clsx(styles.treeView, className)} {...props} role="tree">
+                <ul ref={forwardedRef} className={clsx(styles.treeView, className)} {...props} role="tree">
                     {children}
                 </ul>
             </TreeViewContext.Provider>
@@ -200,3 +199,41 @@ export class TreeView extends React.Component<ITreeViewProps, ITreeViewState> {
         this.incrementUpdateCount();
     };
 }
+
+/**
+ * Тип компонента "Базовое дерево" со статическими субкомпонентами.
+ *
+ * Явная аннотация снимает проверку лишних свойств у Object.assign, поэтому при добавлении
+ * или удалении статики этот интерфейс нужно править синхронно: иначе новая статика окажется
+ * в рантайме, но не попадёт в публичный тип, и TypeScript промолчит.
+ */
+export interface ITreeViewFC extends React.ForwardRefExoticComponent<
+    ITreeViewProps & React.RefAttributes<HTMLUListElement>
+> {
+    /** Группа дочерних нод. */
+    Group: typeof TreeViewGroup;
+    /** Нода дерева. */
+    Node: typeof TreeViewNode;
+}
+
+/**
+ * Базовый компонент визуального дерева.
+ * Добавляет нужную семантическую разметку.
+ * Создает абстрактное дерево на основе текущего.
+ * Устанавливает контекст для дочерних нод.
+ * Реализует навигацию по дереву.
+ *
+ * ref указывает на корневой <ul role="tree">.
+ *
+ * Accessibility требования:
+ * https://www.w3.org/TR/wai-aria-practices-1.1/examples/treeview/treeview-2/treeview-2a.html
+ */
+export const TreeView: ITreeViewFC = Object.assign(
+    React.forwardRef<HTMLUListElement, ITreeViewProps>((props, ref) => <TreeViewBase {...props} forwardedRef={ref} />),
+    {
+        Group: TreeViewGroup,
+        Node: TreeViewNode,
+    },
+);
+
+TreeView.displayName = "TreeView";

@@ -1,11 +1,18 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, createEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { CheckboxTree } from "../CheckboxTree";
 import { ICheckboxTreeCheckboxData } from "../types";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 
 const getCheckboxes = () => screen.getAllByRole("checkbox");
+
+/** Слушатель навигации висит на window, поэтому keydown отправляется именно туда. */
+const fireArrowDown = () => fireEvent(window, createEvent.keyDown(window, { keyCode: EVENT_KEY_CODES.ARROW_DOWN }));
+
+/** id узла дерева, внутри которого сейчас находится фокус. */
+const getFocusedNodeId = () => document.activeElement?.closest("li[role=treeitem]")?.id;
 
 describe("CheckboxTree", () => {
     const getMockCheckboxes = (): ICheckboxTreeCheckboxData[] => [
@@ -201,5 +208,58 @@ describe("CheckboxTree", () => {
             expect.objectContaining({ id: "1-1", checked: true }),
             expect.objectContaining({ id: "1-2", checked: true }),
         ]);
+    });
+
+    it("Should forward ref to the root ul", () => {
+        const ref = React.createRef<HTMLUListElement>();
+
+        render(<CheckboxTree checkboxes={getMockCheckboxes()} onChange={vi.fn()} ref={ref} />);
+
+        expect(ref.current).toBe(screen.getByRole("tree"));
+        expect(ref.current?.tagName).toBe("UL");
+    });
+
+    it("Should pass html attributes to the root ul", () => {
+        render(
+            <CheckboxTree
+                checkboxes={getMockCheckboxes()}
+                onChange={vi.fn()}
+                id="my-tree"
+                className="my-class"
+                data-test-id="my-test-id"
+            />,
+        );
+
+        const tree = screen.getByRole("tree");
+        expect(tree).toHaveAttribute("id", "my-tree");
+        expect(tree).toHaveAttribute("data-test-id", "my-test-id");
+        // className складывается с внутренними классами, а не перетирает их.
+        expect(tree).toHaveClass("my-class");
+        expect(tree.className).not.toBe("my-class");
+    });
+
+    it("Should move focus between nodes on ArrowDown", () => {
+        render(<CheckboxTree checkboxes={getMockCheckboxes()} onChange={vi.fn()} />);
+
+        const nodes = screen.getAllByRole("treeitem");
+        expect(nodes.map((node) => node.id)).toEqual(["1", "1-1", "1-2", "2"]);
+
+        // Настоящий focus, а не fireEvent.focus: активная нода переводит фокус на свой чекбокс,
+        // а CheckboxTreeExtendedCheckbox пропускает этот перевод, пока document.activeElement уже содержит его.
+        act(() => nodes[0].focus());
+
+        // Первый проход входит в поддерево от его же родителя, поэтому фокус остаётся на нём — см.
+        // "Известные ограничения" в CheckboxTree-ai.md. Обходим круг, чтобы проверить саму навигацию.
+        [1, 2, 3].forEach(fireArrowDown);
+        expect(getFocusedNodeId()).toBe("2");
+
+        fireArrowDown();
+        expect(getFocusedNodeId()).toBe("1");
+
+        fireArrowDown();
+        expect(getFocusedNodeId()).toBe("1-1");
+
+        fireArrowDown();
+        expect(getFocusedNodeId()).toBe("1-2");
     });
 });

@@ -94,6 +94,15 @@ describe("CheckboxTreeExtended", () => {
         expect(getCheckboxLabel("Группа 1")).toHaveClass("sm");
     });
 
+    it("forwards ref to the root ul", () => {
+        const ref = React.createRef<HTMLUListElement>();
+
+        renderTree({ ref });
+
+        expect(ref.current).toBe(screen.getByRole("tree"));
+        expect(ref.current?.tagName).toBe("UL");
+    });
+
     it("exposes compound parts", () => {
         expect(CheckboxTreeExtended.Node.displayName).toBe("CheckboxTreeExtendedNode");
         expect(CheckboxTreeExtended.Checkbox.displayName).toBe("CheckboxTreeExtendedCheckbox");

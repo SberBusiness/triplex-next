@@ -36,7 +36,8 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 
 ### `CollapsibleTreeExtended`
 
-FC-обёртка над `TreeView` без собственных props.
+`forwardRef`-обёртка над `TreeView` без собственных props. `ref` уходит насквозь
+и указывает на корневой `<ul role="tree">`.
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
@@ -112,17 +113,17 @@ FC-обёртка над `TreeView` без собственных props.
 - **`CollapsibleTreeExtended.Node` — class-компонент.** Намеренное решение —
   не переписывать на FC + hooks без согласования. `forwardRef` к нему не
   применяется (классы используют обычный `ref`).
-- **`CollapsibleTreeExtended` — FC без `forwardRef`.** Это тонкая обёртка
-  `props → <TreeView>`, своего рендера нет; `ref` не имеет смысла, потому
-  что под капотом — class-компонент `TreeView` с собственной обработкой
-  фокуса.
+- **`ref` указывает на корневой `<ul role="tree">`.** Компонент — тонкая обёртка
+  `props → <TreeView>` без своего рендера, поэтому `ref` просто уходит насквозь
+  в `TreeView`, который и отдаёт корневой `<ul>`.
 - **Доступ к ноде только через `CollapsibleTreeExtended.Node`** (compound
   pattern). Прямой импорт `CollapsibleTreeExtendedNode` из barrel разрешён,
   но в потребительском коде предпочтительнее `.Node`.
 - **Публичный API** — имена `ICollapsibleTreeExtendedNodeProps`,
   `ICollapsibleTreeExtendedNodeBodyProvideProps`,
   `ICollapsibleTreeExtendedNodeHeaderProvideProps`, `ICollapsibleTreeExtendedProps`,
-  `ICollapsibleTreeExtendedSFC` и сигнатуры `toggle`, `onToggle`,
+  `ICollapsibleTreeExtendedFC` (и deprecated-алиас `ICollapsibleTreeExtendedSFC`)
+  и сигнатуры `toggle`, `onToggle`,
   `renderHeader`, `renderBody` — нельзя менять без breaking. Зависимости:
   `CollapsibleTree`, `CollapsibleTreeBranchNode`, `CollapsibleTreeLeafNode`.
 - **`children: never` на `Node`** — содержимое задаётся только через
@@ -192,3 +193,4 @@ FC-обёртка над `TreeView` без собственных props.
 | 2026-07-06 | В story-примерах шеврон открытого узла теперь указывает вверх (`rotate(-90deg)`), а не вниз — синхронно с `CollapsibleTree` |
 | 2026-07-14 | В story-примерах на кнопку заголовка добавлены глобальные классы icons-next: `hoverable` всегда и `active` при `opened` — цвет иконки раскрытия, синхронно с `CollapsibleTreeNodeHeader` |
 | 2026-08-26 | В `related` добавлен `TreeViewNode` — у узла появился собственный AI.md, и он точный адресат наследования `ICollapsibleTreeExtendedNodeProps` |
+| 2026-09-17 | TRI-22: `CollapsibleTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICollapsibleTreeExtendedFC`, старое имя оставлено deprecated-алиасом |

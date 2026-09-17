@@ -20,9 +20,11 @@ export const traverseCheckboxes = (
 /**
  * Пересчёт флагов checked и bulk узла по состоянию его прямых потомков.
  * Узел без потомков не трогается: bulk у листа не имеет смысла и остаётся таким, каким его задал потребитель.
+ * Пустой массив children — тоже лист: иначе условие «все потомки выбраны» выполнялось бы вырожденно (0 === 0)
+ * и узел становился выбранным сам по себе.
  */
 export const checkParentCheckboxes = (checkbox: ICheckboxTreeCheckboxData): void => {
-    if (!checkbox.children) {
+    if (!checkbox.children?.length) {
         return;
     }
 

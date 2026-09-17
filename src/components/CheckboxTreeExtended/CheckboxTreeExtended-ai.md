@@ -114,14 +114,13 @@ Checkbox.BorderColor_Focus
   отрисовывается. Файл и обе ветки кода намеренно оставлены — по TODO флаг
   снимут, когда сворачиваемое дерево станет стандартом. Не удаляй ветки
   `!isStaticCheckboxTreeExtended` как «мёртвый код».
-- **`forwardRef` нет ни у одной части** — `CheckboxTreeExtended`,
-  `.Node` и `.Checkbox` объявлены как `React.FC`. Это осознанно и повторяет
-  `CollapsibleTreeExtended`: под капотом class-компоненты `TreeView` /
-  `TreeViewNode` с собственной работой с DOM. Добавление `forwardRef` меняет
-  форму экспортируемого `ICheckboxTreeExtendedSFC` — это отдельное решение
-  мейнтейнера, а не рефакторинг.
+- **`ref` указывает на корневой `<ul role="tree">`.** Компонент обёрнут
+  `forwardRef`, ссылка уходит в `CollapsibleTreeExtended` и дальше в `TreeView`.
+  У `.Node` и `.Checkbox` своего `forwardRef` по-прежнему нет: `.Node` —
+  class-компонент, `.Checkbox` управляет фокусом сам.
 - **Публичный API** — имена `ICheckboxTreeExtendedProps`,
-  `ICheckboxTreeExtendedSFC`, `ICheckboxTreeExtendedCheckboxProvideProps`,
+  `ICheckboxTreeExtendedFC` (и deprecated-алиас `ICheckboxTreeExtendedSFC`),
+  `ICheckboxTreeExtendedCheckboxProvideProps`,
   `ICheckboxTreeExtendedNodeProps`,
   статические `Checkbox` / `Node` и barrel-экспорты `index.ts` менять нельзя:
   на них опирается `CheckboxTree`, а также stories `Chips` и `MultiselectField`.
@@ -224,3 +223,4 @@ Checkbox.BorderColor_Focus
 | 2026-08-17 | `className` у `CheckboxTreeExtended.Node` больше не затирает собственный класс узла — классы мерджатся через `clsx` (правка по ревью PR #535) |
 | 2026-08-17 | Убран мёртвый селектор `.checkboxTreeCheckbox` из мобильной медиа-выборки (рабочие `> span` и `> svg` оставлены), `.caretIconWrapper:focus` заменён на `:focus-visible` (правки по ревью PR #535) |
 | 2026-08-17 | `ICheckboxTreeExtendedNodeProps` экспортируется — тип уходит в barrel и становится частью публичного API (решение владельца по ревью PR #535) |
+| 2026-09-17 | TRI-22: `CheckboxTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICheckboxTreeExtendedFC`, старое имя оставлено deprecated-алиасом |

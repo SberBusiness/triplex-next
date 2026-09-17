@@ -56,6 +56,16 @@ describe("CheckboxTree utils", () => {
             expect(checkbox.bulk).toBe(true);
         });
 
+        it("Should treat an empty children array as a leaf", () => {
+            const checkbox = createCheckbox("1", { checked: false, children: [] });
+
+            checkParentCheckboxes(checkbox);
+
+            // Без guard по length условие "все потомки выбраны" выполнялось бы вырожденно (0 === 0),
+            // и узел становился бы выбранным сам по себе на первом же клике по дереву.
+            expect(checkbox.checked).toBe(false);
+        });
+
         it("Should mark the parent checked and not bulk when all children are checked", () => {
             const checkbox = createCheckbox("1", {
                 bulk: true,

@@ -101,8 +101,13 @@ jobs:
           rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR/"
 
       # Комментарий в PR со ссылками — только на те серверы, куда деплой удался.
+      # continue-on-error: публикация комментария не должна решать судьбу job'а —
+      # это делает шаг «Report deploy results». Без него разовая ошибка GitHub API
+      # роняла job при успешных сборке и деплое и блокировала мерж PR.
       - name: Comment PR with Storybook URLs
+        id: comment_pr
         if: always()
+        continue-on-error: true
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
           PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
@@ -137,11 +142,22 @@ jobs:
       - name: Report deploy results
         if: always()
         env:
+          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
+          URL_DEV: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DEV }}
+          URL_DESIGN: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DESIGN }}
           OUTCOME_DEV: ${{ steps.deploy_dev.outcome }}
           OUTCOME_DESIGN: ${{ steps.deploy_design.outcome }}
+          OUTCOME_COMMENT: ${{ steps.comment_pr.outcome }}
         run: |
+          # Ссылки печатаются здесь, а не только в комментарии PR: если публикация
+          # комментария упала, это единственное место, где их можно взять.
+          [[ "$OUTCOME_DEV" == "success" ]] && echo "Превью на triplex-dev: $URL_DEV/$PREVIEW_DIR"
+          [[ "$OUTCOME_DESIGN" == "success" ]] && echo "Превью на triplex-design: $URL_DESIGN/$PREVIEW_DIR"
+
           [[ "$OUTCOME_DEV" == "success" ]] || echo "::warning::Деплой превью на triplex-dev не удался (outcome=$OUTCOME_DEV)"
           [[ "$OUTCOME_DESIGN" == "success" ]] || echo "::warning::Деплой превью на triplex-design не удался (outcome=$OUTCOME_DESIGN)"
+          # Сбой публикации комментария job не роняет, но и молча теряться не должен.
+          [[ "$OUTCOME_COMMENT" == "success" ]] || echo "::warning::Комментарий со ссылками на превью не опубликован (outcome=$OUTCOME_COMMENT) — ссылки напечатаны выше в этом же шаге"
 
           if [[ "$OUTCOME_DEV" != "success" && "$OUTCOME_DESIGN" != "success" ]]; then
             echo "::error::Оба сервера недоступны — превью не опубликовано ни на один из них"

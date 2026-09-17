@@ -7,7 +7,7 @@ import { useSuggestContext } from "../../Suggest/SuggestContext";
 import { Dropdown, DropdownList, DropdownListItem } from "../../Dropdown";
 import { ChipSuggestDesktopDropdownField } from "./desktop/ChipSuggestDesktopDropdownField";
 import { SuggestMobileDropdownContent } from "../../Suggest/SuggestMobileDropdownContent";
-import { setForwardedRef } from "./utils";
+import { setForwardedRef } from "../../../helpers/setForwardedRef";
 
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 

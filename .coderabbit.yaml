@@ -54,13 +54,15 @@ reviews:
         - clsx для className — никакой конкатенации строк
         - Нет any, нет non-null assertions без комментария
         - Интерфейс props экспортируется
-        - Нет inline styles (допустимо только для лейаута в stories)
+        - Нет inline styles за исключением:
+          - передачи CSS-переменных для динамических стилей;
+          - использования в stories для лейаута примеров.
         - Нет hardcoded строк в aria-label/title/placeholder внутри компонента — библиотека мультиязычная, текст всегда передаётся снаружи через props или ...rest
 
     - path: "src/components/**/styles/*.module.less"
       instructions: |
         Проверь по docs/ai/codestyle.md:
-        - Все цветовые значения через CSS-переменные токенов (--triplex-next-*), кроме `transparent` в элементах-зеркалах и масках.
+        - Все цветовые значения через CSS-переменные токенов (--triplex-next-*), токенизация `transparent` опциональна.
         - Нет !important без комментария с объяснением
         - Классы в camelCase
         - Нет hardcoded hex/rgb значений

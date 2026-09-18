@@ -20,7 +20,12 @@ export const DefaultExample = () => {
             {...props}
         />
     );
-    const renderButton = (props: IDateRangeButtonProvideProps) => <ButtonIcon {...props} />;
+    const renderButtonBack = (props: IDateRangeButtonProvideProps) => (
+        <ButtonIcon aria-label="Предыдущий период" {...props} />
+    );
+    const renderButtonForward = (props: IDateRangeButtonProvideProps) => (
+        <ButtonIcon aria-label="Следующий период" {...props} />
+    );
 
     return (
         <div style={{ maxWidth: "400px" }}>
@@ -31,8 +36,8 @@ export const DefaultExample = () => {
                 shiftUnit={EDateRangeShiftUnit.MONTH}
                 renderPickerFrom={renderPicker}
                 renderPickerTo={renderPicker}
-                renderButtonBack={renderButton}
-                renderButtonForward={renderButton}
+                renderButtonBack={renderButtonBack}
+                renderButtonForward={renderButtonForward}
             />
         </div>
     );

@@ -5,15 +5,15 @@ const TAGS = ["Selected value", "Another value", "One more value"];
 
 export const Default = () => (
     <TagGroup size={EComponentSize.LG} aria-label="Применённые фильтры">
-        {TAGS.map((children, index) => (
+        {TAGS.map((label, index) => (
             <Tag
-                key={children}
+                key={label}
                 id={`default-tag-${index}`}
                 size={EComponentSize.LG}
                 onRemove={() => {}}
                 removeButtonProps={{ "aria-label": "Удалить" }}
             >
-                {children}
+                {label}
             </Tag>
         ))}
     </TagGroup>

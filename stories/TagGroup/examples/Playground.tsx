@@ -14,9 +14,9 @@ const TAGS = ["Selected value", "Another value", "One more value"];
 
 export const Playground = ({ size, withEditButton }: IPlaygroundArgs) => (
     <TagGroup size={size} aria-label="Применённые фильтры">
-        {TAGS.map((children, index) => (
+        {TAGS.map((label, index) => (
             <Tag
-                key={children}
+                key={label}
                 id={`playground-tag-${index}`}
                 size={size}
                 onEdit={withEditButton ? action("onEdit") : undefined}
@@ -24,7 +24,7 @@ export const Playground = ({ size, withEditButton }: IPlaygroundArgs) => (
                 editButtonProps={{ "aria-label": "Редактировать" }}
                 removeButtonProps={{ "aria-label": "Удалить" }}
             >
-                {children}
+                {label}
             </Tag>
         ))}
     </TagGroup>

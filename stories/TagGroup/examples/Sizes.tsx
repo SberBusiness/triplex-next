@@ -10,9 +10,9 @@ export const Sizes = () => (
             <div key={size}>
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
                 <TagGroup size={size} aria-label={`Применённые фильтры, размер ${size}`}>
-                    {TAGS.map((children, index) => (
+                    {TAGS.map((label, index) => (
                         <Tag
-                            key={children}
+                            key={label}
                             id={`${size}-tag-${index}`}
                             size={size}
                             onEdit={() => {}}
@@ -20,7 +20,7 @@ export const Sizes = () => (
                             editButtonProps={{ "aria-label": "Редактировать" }}
                             removeButtonProps={{ "aria-label": "Удалить" }}
                         >
-                            {children}
+                            {label}
                         </Tag>
                     ))}
                 </TagGroup>

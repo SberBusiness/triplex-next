@@ -14,9 +14,9 @@ export const VisualTests = () => (
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
                 {/* Ширина контейнера меньше суммарной ширины тегов — видны отступы между строками. */}
                 <TagGroup size={size} aria-label={`Применённые фильтры, размер ${size}`}>
-                    {TAGS.map((children, index) => (
+                    {TAGS.map((label, index) => (
                         <Tag
-                            key={children}
+                            key={label}
                             id={`visual-${size}-tag-${index}`}
                             size={size}
                             onEdit={index === 0 ? () => {} : undefined}
@@ -24,7 +24,7 @@ export const VisualTests = () => (
                             editButtonProps={EDIT_BUTTON_PROPS}
                             removeButtonProps={REMOVE_BUTTON_PROPS}
                         >
-                            {children}
+                            {label}
                         </Tag>
                     ))}
                 </TagGroup>

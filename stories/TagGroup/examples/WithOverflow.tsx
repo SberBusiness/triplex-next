@@ -6,15 +6,15 @@ const TAGS = Array.from({ length: 10 }, (_, index) => `Selected value ${index + 
 export const WithOverflow = () => (
     <div style={{ width: 400, border: "1px dashed #D0D4D9" }}>
         <TagGroup size={EComponentSize.LG} aria-label="Применённые фильтры">
-            {TAGS.map((children, index) => (
+            {TAGS.map((label, index) => (
                 <Tag
-                    key={children}
+                    key={label}
                     id={`overflow-tag-${index}`}
                     size={EComponentSize.LG}
                     onRemove={() => {}}
                     removeButtonProps={{ "aria-label": "Удалить" }}
                 >
-                    {children}
+                    {label}
                 </Tag>
             ))}
         </TagGroup>

@@ -4,6 +4,7 @@ import {
     MobileView,
     Gap,
     Text,
+    Link,
     Button,
     EButtonTheme,
     EComponentSize,
@@ -36,17 +37,16 @@ export const Default = () => {
         </div>
     );
 
-    /** Широкий экран: перетаскивание плюс ссылка-кнопка выбора файлов. */
+    /** Широкий экран: перетаскивание плюс ссылка выбора файлов. */
     const renderDesktopContent = (openUploadDialog: () => void) => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "16px 0" }}>
             <UploadZone.Input multiple />
             <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
             <Gap size={4} />
             <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                Перетащите файлы или{"\u00a0"}
-                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={openUploadDialog}>
-                    выберите на компьютере
-                </Button>
+                Label text
+                {"\u00A0"}
+                <Link onClick={openUploadDialog}>Link text</Link>
             </Text>
         </div>
     );
@@ -78,19 +78,6 @@ export const Default = () => {
                     </MobileView>
                 )}
             </UploadZone>
-            {/* Подсказка про перетаскивание — только на широком экране: на узком drag-and-drop недоступен. */}
-            <MobileView
-                fallback={
-                    <>
-                        <Gap size={16} />
-                        <Text type={EFontType.SECONDARY} size={ETextSize.B4} tag="div">
-                            Файлы можно перетащить в любое место этого блока — дроп-зона раскроется на всю его площадь.
-                        </Text>
-                    </>
-                }
-            >
-                {null}
-            </MobileView>
         </div>
     );
 };

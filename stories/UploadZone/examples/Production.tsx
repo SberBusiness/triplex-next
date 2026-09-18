@@ -4,8 +4,10 @@ import {
     MobileView,
     Gap,
     Text,
+    Link,
     HelpBox,
     Button,
+    ButtonIcon,
     MarkerStatus,
     TableBasic,
     ITableBasicColumn,
@@ -20,25 +22,77 @@ import {
     ETooltipSize,
 } from "@sberbusiness/triplex-next";
 import {
-    AttachmentStrokeSrvIcon20,
     ClouddraguploadStrokeSrvIcon32,
     DeleteStrokeSrvIcon20,
     DocumentStrokeSrvIcon32,
+    DownloadStrokeSrvIcon20,
+    ImageStrokeSrvIcon32,
+    OtherfilesStrokeSrvIcon32,
 } from "@sberbusiness/icons-next";
+
+const HELPBOX_TEXT = "Допустимые форматы файлов: PDF, PNG, XLSX, ZIP.";
 
 const COLUMNS: ITableBasicColumn[] = [
     { fieldKey: "number", width: 38, verticalAlign: EVerticalAlign.TOP },
     { fieldKey: "logo", width: 56, verticalAlign: EVerticalAlign.TOP },
     { fieldKey: "summary", verticalAlign: EVerticalAlign.TOP },
     { fieldKey: "status", width: 122, verticalAlign: EVerticalAlign.TOP },
-    { fieldKey: "attach", width: 64, cellType: ECellType.COMPONENTS, verticalAlign: EVerticalAlign.TOP },
+    { fieldKey: "download", width: 64, cellType: ECellType.COMPONENTS, verticalAlign: EVerticalAlign.TOP },
     { fieldKey: "delete", width: 64, cellType: ECellType.COMPONENTS, verticalAlign: EVerticalAlign.TOP },
 ];
 
-const FILES = [
-    { name: "Выписка за январь.pdf", size: "1,2 МБ", status: EMarkerStatus.SUCCESS, statusText: "Загружен" },
-    { name: "Выписка за февраль.pdf", size: "980 КБ", status: EMarkerStatus.WAITING, statusText: "Обработка" },
-    { name: "Выписка за март.pdf", size: "1,4 МБ", status: EMarkerStatus.WAITING, statusText: "Обработка" },
+interface IFileRow {
+    /** Иконка файла — зависит от его типа. */
+    icon: React.ReactNode;
+    name: string;
+    size: string;
+    status: EMarkerStatus;
+    statusText: string;
+    /** Скачивание доступно только для уже загруженных файлов. */
+    downloadable: boolean;
+}
+
+const FILES: IFileRow[] = [
+    {
+        icon: <DocumentStrokeSrvIcon32 paletteIndex={5} />,
+        name: "File_Name_Very Lon...12345678.xlsx",
+        size: "Размер файла 10 Кб",
+        status: EMarkerStatus.SUCCESS,
+        statusText: "Загружен",
+        downloadable: true,
+    },
+    {
+        icon: <DocumentStrokeSrvIcon32 paletteIndex={5} />,
+        name: "File_Name_Very Lon...12345678.pdf",
+        size: "Размер файла 13 Кб",
+        status: EMarkerStatus.SUCCESS,
+        statusText: "Загружен",
+        downloadable: true,
+    },
+    {
+        icon: <OtherfilesStrokeSrvIcon32 paletteIndex={5} />,
+        name: "File_Name_Very Lon...12345678.zip",
+        size: "Размер файла 23,76 Кб",
+        status: EMarkerStatus.SUCCESS,
+        statusText: "Загружен",
+        downloadable: true,
+    },
+    {
+        icon: <DocumentStrokeSrvIcon32 paletteIndex={5} />,
+        name: "File_Name_Very Lon...12345678.xlsx",
+        size: "Размер файла 15,4 Кб",
+        status: EMarkerStatus.WAITING,
+        statusText: "Загружается",
+        downloadable: false,
+    },
+    {
+        icon: <ImageStrokeSrvIcon32 paletteIndex={5} />,
+        name: "File_Name_Very Lon...12345678.png",
+        size: "Размер файла 13 Кб",
+        status: EMarkerStatus.WAITING,
+        statusText: "Загружается",
+        downloadable: false,
+    },
 ];
 
 const buildRows = (): ITableBasicRow[] =>
@@ -49,7 +103,7 @@ const buildRows = (): ITableBasicRow[] =>
             rowKey: String(rowNumber),
             rowData: {
                 number: `${rowNumber}.`,
-                logo: <DocumentStrokeSrvIcon32 paletteIndex={5} />,
+                logo: file.icon,
                 summary: (
                     <>
                         <Text size={ETextSize.B3}>{file.name}</Text>
@@ -64,21 +118,18 @@ const buildRows = (): ITableBasicRow[] =>
                         {file.statusText}
                     </MarkerStatus>
                 ),
-                attach: (
-                    <Button
-                        size={EComponentSize.MD}
-                        icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
-                        theme={EButtonTheme.SECONDARY}
-                        aria-label="Прикрепить"
-                    />
+                // Пустая ячейка — именно <div />, а не null: на falsy-содержимом TableBasic рисует прочерк «---».
+                download: file.downloadable ? (
+                    <ButtonIcon aria-label="Скачать">
+                        <DownloadStrokeSrvIcon20 paletteIndex={0} />
+                    </ButtonIcon>
+                ) : (
+                    <div />
                 ),
                 delete: (
-                    <Button
-                        size={EComponentSize.MD}
-                        icon={<DeleteStrokeSrvIcon20 paletteIndex={0} />}
-                        theme={EButtonTheme.SECONDARY}
-                        aria-label="Удалить"
-                    />
+                    <ButtonIcon aria-label="Удалить">
+                        <DeleteStrokeSrvIcon20 paletteIndex={0} />
+                    </ButtonIcon>
                 ),
             },
         };
@@ -114,12 +165,11 @@ export const Production = () => {
             <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
             <Gap size={4} />
             <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                Перетащите файлы или{" "}
-                <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={openUploadDialog}>
-                    выберите на компьютере
-                </Button>
-                {" "}
-                <HelpBox tooltipSize={ETooltipSize.SM}>Поддерживаются файлы PDF и XLSX до 10 МБ.</HelpBox>
+                Перетащите файлы
+                {"\u00A0"}
+                <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                {"\u00A0"}
+                <HelpBox tooltipSize={ETooltipSize.SM}>{HELPBOX_TEXT}</HelpBox>
             </Text>
         </div>
     );
@@ -137,7 +187,7 @@ export const Production = () => {
             <UploadZone.Input multiple />
             <div style={{ display: "flex", gap: "4px" }}>
                 <Text size={ETextSize.B3}>Файлы для импорта</Text>
-                <HelpBox tooltipSize={ETooltipSize.SM}>Поддерживаются файлы PDF и XLSX до 10 МБ.</HelpBox>
+                <HelpBox tooltipSize={ETooltipSize.SM}>{HELPBOX_TEXT}</HelpBox>
             </div>
             <Button theme={EButtonTheme.SECONDARY} size={EComponentSize.SM} onClick={openUploadDialog}>
                 Загрузить

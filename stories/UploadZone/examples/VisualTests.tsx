@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-    UploadZone,
-    Gap,
-    Text,
-    Button,
-    EButtonTheme,
-    EComponentSize,
-    EFontType,
-    ETextSize,
-} from "@sberbusiness/triplex-next";
+import { UploadZone, Gap, Text, Link, EFontType, ETextSize } from "@sberbusiness/triplex-next";
 import { ClouddraguploadStrokeSrvIcon32 } from "@sberbusiness/icons-next";
 import { action } from "storybook/actions";
 
@@ -44,10 +35,9 @@ const renderContent = (openUploadDialog: () => void) => (
         <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
         <Gap size={4} />
         <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-            Перетащите файлы или{" "}
-            <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={openUploadDialog}>
-                выберите на компьютере
-            </Button>
+            Label text
+            {"\u00A0"}
+            <Link onClick={openUploadDialog}>Link text</Link>
         </Text>
     </div>
 );

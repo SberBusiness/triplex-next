@@ -41,13 +41,13 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Иначе токен оседает в .git/config, а ниже выполняется npm ci —
           # lifecycle-скрипты зависимостей смогли бы его прочитать.
           persist-credentials: false
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
 
@@ -58,7 +58,7 @@ jobs:
         run: npm run storybook:build
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           # Оба ключа загружаются в ssh-agent (по одному на сервер)
           ssh-private-key: |
@@ -108,7 +108,7 @@ jobs:
         id: comment_pr
         if: always()
         continue-on-error: true
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
           URL_DEV: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DEV }}
@@ -174,7 +174,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH
-        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: |
             ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DEV }}

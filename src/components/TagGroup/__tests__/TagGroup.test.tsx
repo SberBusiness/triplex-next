@@ -54,6 +54,15 @@ describe("TagGroup", () => {
         expect(group).toHaveClass("lg");
     });
 
+    it("applies only one size class at a time", () => {
+        render(renderWithTags(EComponentSize.MD));
+
+        const group = screen.getByRole("group");
+        expect(group).toHaveClass("md");
+        expect(group).not.toHaveClass("sm");
+        expect(group).not.toHaveClass("lg");
+    });
+
     it("passes additional props to the div element", () => {
         render(<TagGroup id="test-id" aria-label="test-label" size={EComponentSize.MD} />);
 
@@ -70,11 +79,22 @@ describe("TagGroup", () => {
         expect(group).toHaveClass("tagGroup");
     });
 
+    it("allows overriding the default role", () => {
+        render(<TagGroup role="list" size={EComponentSize.MD} />);
+
+        expect(screen.getByRole("list")).toBeInTheDocument();
+        expect(screen.queryByRole("group")).not.toBeInTheDocument();
+    });
+
     it("forwards ref correctly", () => {
         const ref = React.createRef<HTMLDivElement>();
         render(<TagGroup size={EComponentSize.MD} ref={ref} />);
 
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
         expect(ref.current).toBe(screen.getByRole("group"));
+    });
+
+    it("has displayName", () => {
+        expect(TagGroup.displayName).toBe("TagGroup");
     });
 });

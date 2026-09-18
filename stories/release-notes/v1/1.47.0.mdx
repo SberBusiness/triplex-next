@@ -107,6 +107,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Изменено: DOM `id` пункта выпадающего списка больше не равен `id` таба — он выводится из внутреннего идентификатора экземпляра. Раньше два `TabsLine` с одинаковыми `id` табов давали дублирующиеся DOM `id`, и `aria-activedescendant` мог адресовать пункт чужого экземпляра. В `onChangeTab` по-прежнему приходит исходный `id` таба.
 - Проведён AI-рефакторинг, добавлен `displayName`.
 
+**TagGroup**
+
+- Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
 **TextareaField**
 
 - Добавлено: `TextareaField` пробрасывает `ref` на `<div>` поля (`FormField`, внутри обёртки `FormGroup`) — туда же, куда уходит `className`. Раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.

@@ -1,8 +1,8 @@
 import React from "react";
 import { RangeStrokeSrvIcon16, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
+import clsx from "clsx";
 import { EDateRangeShiftUnit } from "./enums";
 import { shiftDateRange } from "./utils";
-import clsx from "clsx";
 import styles from "./styles/DateRange.module.less";
 
 /** Свойства функции рендеринга кнопки сдвига диапазона дат. */
@@ -75,6 +75,8 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
     ) => {
         const [start, end] = value;
         const classNames = clsx(styles.dateRange, className);
+        /** Сдвиг возможен только при обеих заполненных границах диапазона. */
+        const shiftDisabled = !(start && end);
 
         /** Обработчик изменения значения в поле выбора даты "от". Сбрасывает дату "до", если она оказалась меньше. */
         const handleChangePickerFrom = (date: string) => {
@@ -117,8 +119,8 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
                 {!hideNavigation &&
                     renderButtonBack({
                         children: <CaretleftStrokeSrvIcon20 paletteIndex={5} />,
-                        className: clsx(styles.dateRangeButton, { disabled: !(start && end) }),
-                        disabled: !(start && end),
+                        className: clsx(styles.dateRangeButton, { disabled: shiftDisabled }),
+                        disabled: shiftDisabled,
                         onClick: shiftRangeBack,
                     })}
                 {renderPickerFrom({
@@ -133,8 +135,8 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
                 {!hideNavigation &&
                     renderButtonForward({
                         children: <CaretrightStrokeSrvIcon20 paletteIndex={5} />,
-                        className: clsx(styles.dateRangeButton, { disabled: !(start && end) }),
-                        disabled: !(start && end),
+                        className: clsx(styles.dateRangeButton, { disabled: shiftDisabled }),
+                        disabled: shiftDisabled,
                         onClick: shiftRangeForward,
                     })}
             </div>

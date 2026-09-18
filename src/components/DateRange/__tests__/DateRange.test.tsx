@@ -273,11 +273,15 @@ describe("DateRange", () => {
     });
 
     it("ignores children passed to the component", () => {
-        render(
-            <DateRange {...defaultProps} data-testid="date-range-root">
-                <span data-testid="unexpected-child" />
-            </DateRange>,
-        );
+        // Фиксирует контракт, а не реализацию: у корневого div есть собственные JSX-дети,
+        // и они всегда перекрывают children из props, поэтому тест остаётся зелёным и без
+        // деструктуризации children (проверено). Страховкой для неё он не является.
+        const propsWithChildren = {
+            ...defaultProps,
+            children: <span data-testid="unexpected-child" />,
+        };
+
+        render(<DateRange {...propsWithChildren} />);
 
         expect(screen.queryByTestId("unexpected-child")).not.toBeInTheDocument();
     });

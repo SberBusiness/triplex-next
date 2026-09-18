@@ -51,8 +51,8 @@ describe("TreeView", () => {
             expect(tree.tagName).toBe("UL");
         });
 
-        it("Отдает в ref инстанс класса TreeView", () => {
-            const ref = React.createRef<TreeView>();
+        it("Отдает в ref корневой ul", () => {
+            const ref = React.createRef<HTMLUListElement>();
 
             render(
                 <TreeView aria-label="Tree" ref={ref}>
@@ -60,8 +60,9 @@ describe("TreeView", () => {
                 </TreeView>,
             );
 
-            // Инвариант: TreeView остается классовым компонентом, ref отдает инстанс, а не DOM-элемент.
-            expect(ref.current).toBeInstanceOf(TreeView);
+            // Инвариант: ref отдает корневой DOM-узел дерева, а не инстанс внутренней реализации.
+            expect(ref.current).toBe(screen.getByRole("tree"));
+            expect(ref.current?.tagName).toBe("UL");
         });
 
         it("Не дает переопределить role на корневом ul", () => {

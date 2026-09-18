@@ -122,10 +122,13 @@ CollapsibleTree.Header_Shadow_Focus
 
 ## Инварианты
 
-- **`CollapsibleTree` — FC без `forwardRef`.** Под капотом class-компонент
-  `TreeView`, ref не пробрасывается осмысленно. Тот же инвариант, что у
-  `CollapsibleTreeExtended` и `CollapsibleTreeLeafNode` (тоже проксируют в
-  class-компонент).
+- **`CollapsibleTree` — FC без `forwardRef`.** С 1.47.0 это уже не общий
+  инвариант семейства: `CollapsibleTreeExtended` и `TreeView` под ним `ref`
+  пробрасывают на корневой `<ul role="tree">`, а `CollapsibleTree` его
+  по-прежнему теряет. Прежнее обоснование («под капотом class-компонент
+  `TreeView`») больше не действует — это оставшийся долг, а не решение.
+  Починка — наблюдаемое изменение публичного API, отдельная задача с записью
+  в release notes.
 - **`CollapsibleTreeNodeHeader` — `forwardRef<HTMLButtonElement>`** — ref
   идёт на корневой `<button>`, чтобы потребитель мог управлять фокусом
   заголовка (например, программно фокусировать конкретный узел).
@@ -227,3 +230,4 @@ CollapsibleTree.Header_Shadow_Focus
 | 2026-07-06 | Шеврон открытого узла теперь указывает вверх (`rotate(-90deg)`), а не вниз |
 | 2026-07-06 | Добавлено свойство `disabled` у `ICollapsibleTreeNodeBranch` и поддержка пропа `disabled` в `CollapsibleTreeNodeHeader`. Без новых токенов: шеврон приглушается глобальными классами `hoverable disabled` (icons-next), текст — через `type={EFontType.DISABLED}` у лейбла |
 | 2026-07-14 | Глобальный класс `hoverable` (icons-next) на кнопке заголовка теперь стоит всегда, а не только при `disabled` — для корректной окраски шеврона. Добавлен класс `active` на раскрытый узел с детьми (по паттерну `IconWrapper`/`Button`) |
+| 2026-09-17 | TRI-22: инвариант про отсутствие `forwardRef` переформулирован — `CollapsibleTreeExtended` и `TreeView` под ним теперь пробрасывают `ref` на корневой `<ul>`, поэтому прежнее обоснование не действует, а `CollapsibleTree` остаётся долгом |

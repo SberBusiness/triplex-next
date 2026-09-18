@@ -8,7 +8,7 @@ export interface IFormFieldContext {
     size: EComponentSize;
     /** Статус поля. */
     status: EFormFieldStatus;
-    /** Идентификатор элемента ввода. */
+    /** Идентификатор labelable-элемента ввода. */
     targetId: string | undefined;
     /** Идентификатор лейбла. */
     labelId: string | undefined;

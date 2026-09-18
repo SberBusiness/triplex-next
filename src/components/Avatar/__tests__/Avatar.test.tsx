@@ -1,55 +1,29 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest"; // или jest
+import { describe, it, expect } from "vitest";
 import { Avatar } from "../Avatar";
-import { EAvatarSize } from "../enums";
+import { EAvatarSize, TAvatarBorderRadius } from "../enums";
+
+const BORDER_RADIUSES: TAvatarBorderRadius[] = [6, 8, 10, 12, 16];
 
 describe("Avatar component", () => {
-    it("should render with default props", () => {
+    it("should render with required props", () => {
         render(<Avatar size={EAvatarSize.MD} borderRadius={12} data-testid="avatar" />);
 
         const avatar = screen.getByTestId("avatar");
         expect(avatar).toBeInTheDocument();
     });
 
-    it("should apply correct size classes", () => {
-        const sizes = [
-            { size: EAvatarSize.XXS, expectedClass: "xxs" },
-            { size: EAvatarSize.XS, expectedClass: "xs" },
-            { size: EAvatarSize.SM, expectedClass: "sm" },
-            { size: EAvatarSize.MD, expectedClass: "md" },
-            { size: EAvatarSize.LG, expectedClass: "lg" },
-            { size: EAvatarSize.XL, expectedClass: "xl" },
-            { size: EAvatarSize.XXL, expectedClass: "xxl" },
-        ];
+    it.each(Object.values(EAvatarSize))("should apply correct size class for %s", (size) => {
+        render(<Avatar size={size} borderRadius={12} data-testid="avatar" />);
 
-        sizes.forEach(({ size, expectedClass }) => {
-            const { unmount } = render(<Avatar size={size} borderRadius={12} data-testid={`avatar-${size}`} />);
-
-            const avatar = screen.getByTestId(`avatar-${size}`);
-            expect(avatar).toHaveClass(expectedClass);
-            unmount();
-        });
+        expect(screen.getByTestId("avatar")).toHaveClass(size);
     });
 
-    it("should apply correct border radius classes", () => {
-        const borderRadiuses = [
-            { borderRadius: 6, expectedClass: "borderRadius6" },
-            { borderRadius: 8, expectedClass: "borderRadius8" },
-            { borderRadius: 10, expectedClass: "borderRadius10" },
-            { borderRadius: 12, expectedClass: "borderRadius12" },
-            { borderRadius: 16, expectedClass: "borderRadius16" },
-        ] as const;
+    it.each(BORDER_RADIUSES)("should apply correct border radius class for %s", (borderRadius) => {
+        render(<Avatar size={EAvatarSize.MD} borderRadius={borderRadius} data-testid="avatar" />);
 
-        borderRadiuses.forEach(({ borderRadius, expectedClass }) => {
-            const { unmount } = render(
-                <Avatar size={EAvatarSize.MD} borderRadius={borderRadius} data-testid={`avatar-${borderRadius}`} />,
-            );
-
-            const avatar = screen.getByTestId(`avatar-${borderRadius}`);
-            expect(avatar).toHaveClass(expectedClass);
-            unmount();
-        });
+        expect(screen.getByTestId("avatar")).toHaveClass(`borderRadius${borderRadius}`);
     });
 
     it("should merge custom className", () => {
@@ -63,13 +37,23 @@ describe("Avatar component", () => {
         expect(avatar).toHaveClass(customClass);
     });
 
+    it("should render children", () => {
+        render(
+            <Avatar size={EAvatarSize.MD} borderRadius={12} data-testid="avatar">
+                <span data-testid="content">AA</span>
+            </Avatar>,
+        );
+
+        expect(screen.getByTestId("avatar")).toContainElement(screen.getByTestId("content"));
+    });
+
     it("should forward ref to div element", () => {
         const ref = React.createRef<HTMLDivElement>();
 
-        render(<Avatar size={EAvatarSize.MD} borderRadius={12} ref={ref} />);
+        render(<Avatar size={EAvatarSize.MD} borderRadius={12} ref={ref} data-testid="avatar" />);
 
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
-        expect(ref.current).toHaveClass("avatar");
+        expect(ref.current).toBe(screen.getByTestId("avatar"));
     });
 
     it("should pass additional props to div element", () => {

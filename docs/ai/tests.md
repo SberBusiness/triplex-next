@@ -57,15 +57,36 @@ Uncaught Error: Vitest failed to access its internal state.
 Именно это произошло в 1.39.0 из-за файла `src/components/Carousel/__tests__/utils.ts`
 (хелпер без постфикса `.test`). Чанк `vendor` вырос с 640 KB до 1.28 MB.
 
+**Страховка на уровне сборки (TRI-106).** После той регрессии `vite.config.ts`
+исключает из `rollupOptions.input` не только `*.test.{ts,tsx}`, но и целиком
+`src/**/__tests__/**`, `src/**/__test__/**` и `src/**/tests/**`. Важно понимать
+границу: исключение из `input` означает, что такой файл не становится
+**отдельной entry-точкой**. Оно не запрещает Rollup затянуть файл в бандл
+транзитивно, если его импортирует production-код. То же и с `test-utils/`:
+каталог вне `src/` просто не попадает в `input`, но в граф импортов попасть
+может.
+
+Поэтому правило ниже — не формальность, а первая линия защиты: если в
+production-код не ведёт ни одного импорта тестового хелпера, транзитивного
+попадания не будет. А окончательная проверка — только содержимое `dist`:
+
+```bash
+grep -rl 'testing-library\|vitest' dist/ --include='*.js'   # должно быть пусто
+```
+
+Не читай нарушение правила как «прямо сейчас течёт в бандл» и наоборот — не
+считай соблюдение правила доказательством, что не течёт. Смотри `dist`.
+
 **Общие тестовые хелперы** (моки `ResizeObserver`, фейковые `Touch`, подмена
 размеров элементов и т.п.) кладём в `test-utils/` в корне репозитория — вне `src/`,
-поэтому сборка их физически не видит:
+поэтому отдельной entry-точкой они не становятся и исключения в конфиге сборки
+для них не нужны:
 
 ```typescript
 // ✅ src/components/Carousel/__tests__/CarouselRoot.test.tsx
 import { getResizeCallback, mockElementSize } from "../../../../test-utils/dom";
 
-// ❌ src/components/Carousel/__tests__/utils.ts — станет entry-точкой сборки
+// ❌ src/components/Carousel/__tests__/utils.ts — общему хелперу здесь не место
 import { vi } from "vitest";
 ```
 

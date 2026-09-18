@@ -7,17 +7,36 @@ import styles from "../styles/Confirm.module.less";
 /** Свойства компонента ConfirmContent. */
 export interface IConfirmContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export interface IConfirmContentFC extends React.FC<IConfirmContentProps> {
+/**
+ * Тип компонента "Содержимое предупреждения" со статическими субкомпонентами.
+ *
+ * Явная аннотация снимает проверку лишних свойств у Object.assign, поэтому при добавлении
+ * или удалении статики этот интерфейс нужно править синхронно: иначе новая статика окажется
+ * в рантайме, но не попадёт в публичный тип, и TypeScript промолчит.
+ */
+export interface IConfirmContentFC extends React.ForwardRefExoticComponent<
+    IConfirmContentProps & React.RefAttributes<HTMLDivElement>
+> {
+    /** Заголовок предупреждения. */
     Title: typeof ConfirmContentTitle;
+    /** Подзаголовок предупреждения. */
     SubTitle: typeof ConfirmContentSubTitle;
 }
 
-export const ConfirmContent: IConfirmContentFC = ({ children, className, ...htmlDivAttributes }) => (
-    <div className={clsx(className, styles.confirmContent)} {...htmlDivAttributes}>
-        {children}
-    </div>
+/**
+ * Содержимое предупреждения — обёртка заголовка и подзаголовка.
+ * Задаёт отступ до блока кнопок и место под кнопку закрытия справа.
+ */
+export const ConfirmContent: IConfirmContentFC = Object.assign(
+    React.forwardRef<HTMLDivElement, IConfirmContentProps>(({ children, className, ...htmlDivAttributes }, ref) => (
+        <div className={clsx(styles.confirmContent, className)} {...htmlDivAttributes} ref={ref}>
+            {children}
+        </div>
+    )),
+    {
+        Title: ConfirmContentTitle,
+        SubTitle: ConfirmContentSubTitle,
+    },
 );
 
 ConfirmContent.displayName = "ConfirmContent";
-ConfirmContent.Title = ConfirmContentTitle;
-ConfirmContent.SubTitle = ConfirmContentSubTitle;

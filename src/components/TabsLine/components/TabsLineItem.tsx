@@ -1,34 +1,36 @@
 import React, { useState } from "react";
-import { TestProps } from "../../../types/CoreTypes";
 import clsx from "clsx";
-import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
-import { Badge } from "../../Badge/Badge";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { TestProps } from "../../../types/CoreTypes";
+import { Badge } from "../../Badge/Badge";
 import { Text } from "../../Typography/Text";
-import { tabsLineSizeToTextSizeMap } from "../utils";
 import { EFontType } from "../../Typography/enums";
+import { tabsLineSizeToTextSizeMap } from "../utils";
 import styles from "../styles/TabsLine.module.less";
 
-/** Свойства TabsLineItem. */
+/** Свойства компонента TabsLineItem. */
 export interface ITabsLineItemProps extends React.HTMLAttributes<HTMLButtonElement>, TestProps {
-    /** Таб выбран. */
+    /** Таб выбран. По умолчанию false. */
     selected?: boolean;
-    /** Идентификатор таба. */
+    /** Идентификатор таба. Сопоставляется с selectedId и приходит в onChangeTab. В DOM не попадает. */
     id: string;
     /** Отображаемое значение. */
     label: string;
-    /** Флаг отображения значка новых уведомлений. */
+    /** Флаг отображения значка новых уведомлений. По умолчанию false. */
     showNotificationIcon?: boolean;
-    /** Размер таба. */
+    /** Размер таба. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
 }
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Компонент TabsLineItem. */
+/** Кнопка одного таба TabsLine: текст и опциональный значок новых уведомлений. */
 export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemProps>(
     (
         {
+            className,
+            // id — идентификатор таба в модели данных, а не DOM-атрибут: на <button> он намеренно не уходит.
             id,
             label,
             selected,
@@ -45,14 +47,24 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
         const [focused, setFocused] = useState(false);
         const [hovered, setHovered] = useState(false);
 
-        const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
+        const handleFocus = (event: React.FocusEvent<HTMLButtonElement>) => {
             setFocused(true);
-            onFocus?.(e);
+            onFocus?.(event);
         };
 
-        const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
+        const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
             setFocused(false);
-            onBlur?.(e);
+            onBlur?.(event);
+        };
+
+        const handleMouseEnter = (event: React.MouseEvent<HTMLButtonElement>) => {
+            setHovered(true);
+            onMouseEnter?.(event);
+        };
+
+        const handleMouseLeave = (event: React.MouseEvent<HTMLButtonElement>) => {
+            setHovered(false);
+            onMouseLeave?.(event);
         };
 
         return (
@@ -60,11 +72,15 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
                 type="button"
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 {...htmlButtonAttributes}
-                key={id}
-                className={clsx(styles.tab, sizeToClassNameMap[size], { [styles.active]: Boolean(selected) })}
+                className={clsx(
+                    styles.tab,
+                    SIZE_TO_CLASS_NAME_MAP[size],
+                    { [styles.active]: Boolean(selected) },
+                    className,
+                )}
                 role="tab"
                 aria-selected={selected}
                 ref={ref}

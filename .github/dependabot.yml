@@ -1,0 +1,62 @@
+# Обновления зависимостей и actions.
+#
+# Следим только за main: в release-0 обновления приезжают перелитием, отдельный
+# поток PR туда ломал бы React 17-адаптации (см. docs/ai/commits.md).
+#
+# Понедельник, а не пятница: релиз выходит в пятницу, и обновления, приехавшие
+# в день заморозки, некому смотреть.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/Moscow
+    # Очередь ревью не резиновая: пять PR в неделю разбираются, двадцать — нет.
+    open-pull-requests-limit: 5
+    # Группы — чтобы минорные обновления не превращались в десяток PR.
+    # Мажоры в группы не входят намеренно: каждый приезжает отдельно и читается
+    # отдельно, у них ломающие изменения.
+    groups:
+      production:
+        dependency-type: production
+        update-types: ["minor", "patch"]
+      development:
+        dependency-type: development
+        update-types: ["minor", "patch"]
+    # Выдержка перед обновлением: пакет, скомпрометированный через угон
+    # аккаунта мейнтейнера, обычно вычищается из реестра за первые сутки-двое.
+    # Неделя ожидания стоит нам недели отставания, а ловит целый класс атак
+    # на цепочку поставок. Security-обновления идут мимо этой выдержки.
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    # Конвенция TRI-XXX на бота не распространяется, см. docs/ai/commits.md.
+    commit-message:
+      prefix: deps
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/Moscow
+    open-pull-requests-limit: 3
+    # Actions обновляются одной пачкой: их немного, и разводить по PR нет смысла.
+    # Это же единственный способ поддерживать пиннинг по SHA живым — руками
+    # хеши не обновляет никто, и запиненная версия застревает навсегда.
+    groups:
+      actions:
+        patterns: ["*"]
+    # Та же выдержка, что и для npm: у actions угон аккаунта мейнтейнера
+    # опаснее — код выполняется на раннере рядом с секретами. Градации по
+    # semver здесь нет: Dependabot принимает её только для экосистем
+    # с semver-версиями, а на github-actions отвергает весь конфиг.
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: deps

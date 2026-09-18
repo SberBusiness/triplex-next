@@ -7,8 +7,13 @@ import { EFormFieldStatus } from "../enums";
 import { isFilled } from "./utils";
 import styles from "../styles/FormFieldTextarea.module.less";
 
-/** Свойства компонента FormFieldTextarea. */
-export interface IFormFieldTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+/**
+ * Свойства компонента FormFieldTextarea.
+ *
+ * Атрибут disabled исключён намеренно: блокировка задаётся статусом поля (EFormFieldStatus.DISABLED), и переданное
+ * значение всё равно было бы перетёрто. Так же устроен FormFieldInput.
+ */
+export interface IFormFieldTextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "disabled"> {}
 
 // Соответствие размера имени класса.
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -32,6 +37,7 @@ export const FormFieldTextarea = React.forwardRef<HTMLTextAreaElement, IFormFiel
 
         useLayoutEffect(() => {
             setTargetId(id);
+            return () => setTargetId((currentTargetId) => (currentTargetId === id ? undefined : currentTargetId));
         }, [id, setTargetId]);
 
         useLayoutEffect(() => {

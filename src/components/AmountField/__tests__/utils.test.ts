@@ -1,4 +1,8 @@
-import { createPlaceholder, setFallbackCaret } from "@sberbusiness/triplex-next/components/AmountField/utils";
+import {
+    createPlaceholder,
+    syncCoreAndGetFormattedValue,
+    setFallbackCaret,
+} from "@sberbusiness/triplex-next/components/AmountField/utils";
 import { AmountBaseInputCore } from "@sberbusiness/triplex-next/components/AmountField/AmountBaseInputCore";
 
 describe("AmountField utils", () => {
@@ -10,6 +14,48 @@ describe("AmountField utils", () => {
         test("returns decimal placeholder when fractionDigits>0", () => {
             expect(createPlaceholder(2)).toBe("0,00");
             expect(createPlaceholder(3)).toBe("0,000");
+        });
+    });
+
+    describe("syncCoreAndGetFormattedValue", () => {
+        test("formats the value and caches it for the fallback caret", () => {
+            const core = new AmountBaseInputCore(16, 2);
+
+            expect(syncCoreAndGetFormattedValue(core, "1234.56", 16, 2)).toBe("1 234,56");
+            expect(core.cache.formattedValue).toBe("1 234,56");
+        });
+
+        test("does not recalculate when value and format settings are unchanged", () => {
+            const core = new AmountBaseInputCore(16, 2);
+
+            syncCoreAndGetFormattedValue(core, "1234.56", 16, 2);
+            // Каретка, рассчитанная обработчиком ввода, не должна затираться повторным рендером.
+            core.caret = 3;
+
+            expect(syncCoreAndGetFormattedValue(core, "1234.56", 16, 2)).toBe("1 234,56");
+            expect(core.caret).toBe(3);
+        });
+
+        test("recalculates when value changes", () => {
+            const core = new AmountBaseInputCore(16, 2);
+
+            syncCoreAndGetFormattedValue(core, "1234.56", 16, 2);
+
+            expect(syncCoreAndGetFormattedValue(core, "7.00", 16, 2)).toBe("7,00");
+            expect(core.value).toBe("7.00");
+        });
+
+        test("recalculates and stores new format settings when they change", () => {
+            const core = new AmountBaseInputCore(16, 2);
+
+            syncCoreAndGetFormattedValue(core, "1234.56", 16, 2);
+
+            expect(syncCoreAndGetFormattedValue(core, "1234", 16, 0)).toBe("1 234");
+            expect(core.fractionDigits).toBe(0);
+            expect(core.maxIntegerDigits).toBe(16);
+
+            expect(syncCoreAndGetFormattedValue(core, "1234", 3, 0)).toBe("123");
+            expect(core.maxIntegerDigits).toBe(3);
         });
     });
 

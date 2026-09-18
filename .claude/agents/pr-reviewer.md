@@ -83,10 +83,15 @@ repos/{owner}/{repo}/pulls/<N>/reviews` (summary-тексты ревью в
 3. **Тесты**: покрывают ли новое/изменённое поведение; не удалены ли.
    **Блокер:** импорты `vitest` / `@testing-library/*` / `storybook/test` внутри
    `src/` допустимы только в файлах `*.test.ts(x)`; общие тестовые хелперы —
-   в `test-utils/` в корне, не в `src/**/__tests__/`. Иначе файл становится
-   entry-точкой сборки и утягивает vitest в бандл (регрессия 1.39.0,
-   `Vitest failed to access its internal state`). Проверка — та же, что
-   у `change-reviewer` (ловит оба стиля кавычек и side-effect импорты):
+   в `test-utils/` в корне, не в `src/**/__tests__/`. Правило защищает от регрессии
+   1.39.0 (`Vitest failed to access its internal state`). С TRI-106
+   `vite.config.ts` дополнительно исключает `src/**/__tests__/**` из
+   `rollupOptions.input` — такой файл не станет отдельной entry-точкой, но
+   транзитивный импорт из production-кода затянет его в бандл всё равно.
+   Поэтому факт утечки проверяется по `dist`
+   (`grep -rl 'testing-library\|vitest' dist/ --include='*.js'` — пусто),
+   а не по расположению файла. Проверка — та же, что у `change-reviewer`
+   (ловит оба стиля кавычек и side-effect импорты):
    ```bash
    grep -rlnE "(from|import)[[:space:]]*['\"](vitest|@testing-library/|storybook/test)" src \
      | grep -vE "(\.test\.tsx?|vitest\.setup\.ts)$" | grep -v "/test-utils/"

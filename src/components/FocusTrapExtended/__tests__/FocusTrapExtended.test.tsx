@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import { FocusTrapExtended } from "../FocusTrapExtended";
-import { setupDOMElementMocks, restoreDOMElementMocks, setupTestUser } from "./utils";
+import userEvent from "@testing-library/user-event";
+import { setupDOMElementMocks, restoreDOMElementMocks } from "../../../../test-utils/elementVisibility";
 
 describe("FocusTrapExtended", () => {
     beforeAll(() => {
@@ -13,7 +14,7 @@ describe("FocusTrapExtended", () => {
     });
 
     it("should keep focus inside the trap on Tab navigation", async () => {
-        const user = setupTestUser();
+        const user = userEvent.setup();
         render(
             <FocusTrapExtended>
                 <div>
@@ -37,7 +38,7 @@ describe("FocusTrapExtended", () => {
     });
 
     it("should suppress return focus when deactivation happens via outside click", async () => {
-        const user = setupTestUser();
+        const user = userEvent.setup();
 
         const TestComponent = () => {
             const [opened, setOpened] = useState(true);
@@ -76,7 +77,7 @@ describe("FocusTrapExtended", () => {
     });
 
     it("should pause the top trap on outside click and prevent lower traps from stealing focus", async () => {
-        const user = setupTestUser();
+        const user = userEvent.setup();
 
         const NestedTrapComponent = () => {
             return (
@@ -121,7 +122,7 @@ describe("FocusTrapExtended", () => {
     });
 
     it("should clean up paused state and allow clicks on secondary activation without unmount", async () => {
-        const user = setupTestUser();
+        const user = userEvent.setup();
 
         const PersistentComponent = () => {
             const [active, setActive] = useState(true);
@@ -159,7 +160,7 @@ describe("FocusTrapExtended", () => {
     });
 
     it("should return focus normally if outside click was rejected by custom predicate but trap is closed later", async () => {
-        const user = setupTestUser();
+        const user = userEvent.setup();
 
         const RejectedClickComponent = () => {
             const [active, setActive] = useState(false);
@@ -199,7 +200,7 @@ describe("FocusTrapExtended", () => {
     });
 
     it("should respect external paused prop and override internal state changes", async () => {
-        const user = setupTestUser();
+        const user = userEvent.setup();
         let currentPausedState: boolean | undefined = undefined;
 
         const ExternalControlComponent = () => {

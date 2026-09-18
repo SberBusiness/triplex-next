@@ -1,9 +1,17 @@
-import userEvent from "@testing-library/user-event";
+/**
+ * Подмена метрик HTMLElement для JSDOM.
+ *
+ * В JSDOM у элементов нет layout: offsetWidth / offsetHeight всегда 0, а getClientRects возвращает
+ * пустой список. Код, который решает, видим ли элемент (например, поиск фокусируемых элементов
+ * в FocusTrapExtended), считает в такой среде все элементы невидимыми. Эти хелперы делают любой
+ * элемент «видимым» на время теста.
+ */
 
 let originalOffsetHeight: PropertyDescriptor | undefined;
 let originalOffsetWidth: PropertyDescriptor | undefined;
 let originalGetClientRects: PropertyDescriptor | undefined;
 
+/** Делает все элементы видимыми: фиксированные размеры и непустой getClientRects. */
 export const setupDOMElementMocks = (): void => {
     originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetHeight");
     originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetWidth");
@@ -25,6 +33,7 @@ export const setupDOMElementMocks = (): void => {
     });
 };
 
+/** Возвращает HTMLElement.prototype в исходное состояние. Вызывать в afterAll. */
 export const restoreDOMElementMocks = (): void => {
     if (originalOffsetHeight) {
         Object.defineProperty(HTMLElement.prototype, "offsetHeight", originalOffsetHeight);
@@ -43,8 +52,4 @@ export const restoreDOMElementMocks = (): void => {
     } else {
         Reflect.deleteProperty(HTMLElement.prototype, "getClientRects");
     }
-};
-
-export const setupTestUser = () => {
-    return userEvent.setup();
 };

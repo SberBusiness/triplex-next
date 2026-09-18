@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps, TDateRangeValue } from "../DateRange";
+import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps } from "../DateRange";
+import { TDateRangeValue } from "../types";
 import { EDateRangeShiftUnit } from "../enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({

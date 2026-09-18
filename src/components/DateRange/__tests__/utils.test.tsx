@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { shiftDateRange } from "../utils";
 import { EDateRangeShiftUnit } from "../enums";
-import { TDateRangeValue } from "../DateRange";
+import { TDateRangeValue } from "../types";
 
 const january: TDateRangeValue = ["20240101", "20240131"];
 

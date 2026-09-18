@@ -92,7 +92,7 @@ version: "1.0"
 - **К `className` кнопок при неполном диапазоне подмешивается литерал `disabled`**, а не класс LESS-модуля (класса `.disabled` в модуле нет). Строка уходит наружу, в `className` компонента потребителя, и на неё опираются тесты, поэтому «починка» на `styles.disabled` — изменение наблюдаемого поведения. `MonthYearRange` в том же месте ничего не подмешивает.
 - **Формат дат `YYYYMMDD` зашит в контракт**: на нём держится строковое сравнение границ и парсинг в `moment`. Ни `value`, ни аргумент `onChange` пикера в другом формате работать не будут.
 - Значения `EDateRangeShiftUnit` — это строковые единицы `moment` (`day`, `week`, `month`, `quarter`, `year`); переименование значений ломает и публичный API, и сдвиг.
-- Публичный API (`DateRange`, `IDateRangeProps`, `IDateRangeButtonProvideProps`, `IDateRangePickerProvideProps`, `TDateRangeValue`, `EDateRangeShiftUnit`) экспортируется через `src/components/DateRange/index.ts`. `utils.ts` внутренний и в barrel не экспортируется.
+- Публичный API (`DateRange`, `IDateRangeProps`, `IDateRangeButtonProvideProps`, `IDateRangePickerProvideProps`, `TDateRangeValue`, `EDateRangeShiftUnit`) экспортируется через `src/components/DateRange/index.ts`; `TDateRangeValue` живёт в `types.ts`, остальное — в `DateRange.tsx` и `enums.ts`. `utils.ts` внутренний и в barrel не экспортируется.
 - Отступы завязаны на подстроки `sm` / `md` / `lg` в классе вложенного поля — переименование классов размеров в `FormField`-полях тихо сломает выравнивание.
 - Компонент не хардкодит текст: доступные имена полей и кнопок задаёт потребитель — библиотека мультиязычная.
 - React 17-совместимость (ветка `release-0`): не переводить на `useId` и другие React 18-only API.
@@ -139,3 +139,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-18 | Создан документ. Компонент переведён с `React.FC` на `forwardRef`: `ref` уходит на корневой `<div>`, тип стал `React.ForwardRefExoticComponent`. AI-рефакторинг: логика сдвига вынесена в `utils.ts` (`shiftDateRange`), добавлены JSDoc и unit-тесты на хелпер. Остальной публичный API и поведение не изменились |
+| 2026-09-18 | По итогам ревью: обработчики сдвига сведены в один `shiftRange(amount)`; `TDateRangeValue` вынесен в `types.ts` и реэкспортируется из `index.ts` (набор публичных имён не изменился) |

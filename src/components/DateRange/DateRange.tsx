@@ -2,6 +2,7 @@ import React from "react";
 import { RangeStrokeSrvIcon16, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import { EDateRangeShiftUnit } from "./enums";
+import { TDateRangeValue } from "./types";
 import { shiftDateRange } from "./utils";
 import styles from "./styles/DateRange.module.less";
 
@@ -24,9 +25,6 @@ export interface IDateRangePickerProvideProps {
     /** Обработчик изменения даты. Принимает дату в формате YYYYMMDD. */
     onChange: (value: string) => void;
 }
-
-/** Значение компонента DateRange — даты "от" и "до" в формате YYYYMMDD. */
-export type TDateRangeValue = [string, string];
 
 /** Свойства компонента DateRange. */
 export interface IDateRangeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {

@@ -564,14 +564,22 @@ jobs:
               echo ""
               echo "⚠️ \`dist-tags.react17\` = \`${REACT17}\`, ожидалось \`${V0}\`:"
               echo "\`npm i @sberbusiness/triplex-next@react17\` отдаёт не ту сборку."
-              echo "Почини: \`npm dist-tag add @sberbusiness/triplex-next@${V0} react17\`."
+              echo "Почини:"
+              echo ""
+              echo '```bash'
+              echo "npm dist-tag add @sberbusiness/triplex-next@${V0} react17 \\"
+              echo "  --@sberbusiness:registry=https://registry.npmjs.org/ \\"
+              echo "  --registry=https://registry.npmjs.org/"
+              echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [ "${LATEST}" != "${VERSION}" ]; then
             echo "❌ latest = ${LATEST}, ожидалось ${VERSION}."
             echo "   npm install отдаёт потребителям не ту сборку — почини немедленно:"
-            echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest"
+            echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest \\"
+            echo "     --@sberbusiness:registry=https://registry.npmjs.org/ \\"
+            echo "     --registry=https://registry.npmjs.org/"
             exit 1
           fi
           echo "✅ latest на React 18-сборке"

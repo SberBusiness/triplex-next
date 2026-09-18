@@ -10,9 +10,10 @@ description: React 17-релиз triplex-next (0.Y.0) — первая поло�
 
 **Это первая половина релиза.** Вызывается из skill
 [`release`](../release/SKILL.md) до React 18-части. Порядок обратен номерам
-версий намеренно: теги не проносятся во внутренний npm registry, `--tag` там
-игнорируется, и `dist-tags.latest` встаёт на последнюю опубликованную версию.
-Поэтому `0.Y.0` уходит первой, а `1.Y.0` — следом, забирая `latest` себе.
+версий намеренно: во внутренний npm registry пакет попадает зеркалированием,
+а не `npm publish` — dist-tags туда не проносятся, и `latest` определяется
+порядком появления версий. Поэтому `0.Y.0` уходит первой, а `1.Y.0` —
+следом, забирая `latest` себе.
 На npmjs `0.Y.0` публикуется под тегом `react17` (TRI-146), и там `latest`
 не двигается вовсе.
 
@@ -343,18 +344,22 @@ gh run list --workflow=release.yml --limit 1
 gh run watch <RUN_ID> --exit-status
 npm view @sberbusiness/triplex-next@<V0> version
 npm view @sberbusiness/triplex-next dist-tags --json
+npm view @sberbusiness/triplex-next dist-tags --json \
+  --@sberbusiness:registry=https://registry.npmjs.org/ \
+  --registry=https://registry.npmjs.org/
 ```
 
 Ожидается: версия `<V0>` резолвится в реестре.
 
-`dist-tags.latest` на этом шаге **встанет на `<V0>`** — это нормально и
-временно. Теги не проносятся во внутренний registry, `latest` всегда
-указывает на последнюю публикацию; вернёт его на место React 18-половина,
-которая идёт следом. Не пытайся чинить это здесь — ни `npm dist-tag`, ни
+`dist-tags.latest` во внутреннем registry на этом шаге **встанет на `<V0>`**
+— это нормально и временно: dist-tags туда не проносятся, `latest`
+определяется порядком появления версий, и вернёт его на место React
+18-половина, которая идёт следом. Это вывод **голой** команды; на npmjs
+`latest` не двигается вовсе. Не пытайся чинить это здесь — ни `npm dist-tag`, ни
 повторных публикаций.
 
-`dist-tags.react17` на npmjs после публикации должен указывать на `<V0>`:
-с TRI-146 эта половина выходит с явным `--tag react17`.
+`dist-tags.react17` = `<V0>` — это вывод **скоупнутой** команды: теги живут
+только на npmjs, и с TRI-146 эта половина выходит с явным `--tag react17`.
 
 ## Если `latest` завис на 0.x
 

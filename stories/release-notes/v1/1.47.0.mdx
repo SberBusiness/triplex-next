@@ -18,6 +18,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Свойство `disabled` больше нельзя передать в `textareaProps` — следствие правки `FormFieldTextarea` выше.
 
+**TreeView**
+
+- `ref` на `TreeView` теперь отдаёт корневой `<ul role="tree">`, а не инстанс класса. Компонент по-прежнему реализован классом внутри, но наружу экспортируется как `React.ForwardRefExoticComponent`. Это выравнивает `TreeView` с остальной библиотекой, где `ref` всегда указывает на корневой DOM-узел.
+- `TreeView` больше не является типом: `React.createRef<TreeView>()` не компилируется, используйте `React.createRef<HTMLUListElement>()`.
+
 <Heading>Изменения</Heading>
 
 **AmountField**
@@ -38,6 +43,23 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **Carousel.Indicators**
 
 - Добавлена анимация для индикаторов.
+
+**CheckboxTree**
+
+- Добавлено: `CheckboxTree` пробрасывает `ref` на свой корневой `<ul role="tree">` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Добавлено: `CheckboxTree` прокидывает `className`, `id`, `data-*` и остальные html-атрибуты на свой корневой `<ul>` — раньше он деструктурировал только `checkboxes`, `onChange` и `size`, а всё остальное молча терял, хотя тип их разрешал.
+- Исправлено: узел с пустым массивом `children` больше не становится выбранным сам по себе. Раньше условие «все потомки выбраны» выполнялось для него вырожденно (`0 === 0`), и узел уезжал в `onChange` с `checked: true` после первого же клика по любому чекбоксу дерева. Теперь пустой `children` обрабатывается как лист.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**CheckboxTreeExtended**
+
+- Добавлено: `CheckboxTreeExtended` пробрасывает `ref` на свой корневой `<ul role="tree">`. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Изменено: тип `ICheckboxTreeExtendedSFC` переименован в `ICheckboxTreeExtendedFC` — название `SFC` больше не отражает форму компонента. Старое имя сохранено как deprecated-алиас, поэтому импорты не ломаются. Но алиас указывает на новый тип: если вы аннотировали им собственный компонент (`const My: ICheckboxTreeExtendedSFC = (props) => ...`), аннотацию нужно убрать или заменить — это следствие перехода на `forwardRef`.
+
+**CollapsibleTreeExtended**
+
+- Добавлено: `CollapsibleTreeExtended` пробрасывает `ref` на свой корневой `<ul role="tree">`. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Изменено: тип `ICollapsibleTreeExtendedSFC` переименован в `ICollapsibleTreeExtendedFC`. Старое имя сохранено как deprecated-алиас, поэтому импорты не ломаются, но сам тип теперь `ForwardRefExoticComponent` — собственные аннотации им нужно убрать или заменить.
 
 **Confirm**
 

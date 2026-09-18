@@ -96,22 +96,13 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
             }
         };
 
-        /** Функция, смещающая диапазон дат назад. Неполный диапазон не сдвигается. */
-        const shiftRangeBack = () => {
-            if (!start || !end) {
+        /** Смещает обе границы диапазона на amount единиц. Неполный диапазон не сдвигается. */
+        const shiftRange = (amount: number) => {
+            if (shiftDisabled) {
                 return;
             }
 
-            onChange(shiftDateRange(value, -shiftAmount, shiftUnit));
-        };
-
-        /** Функция, смещающая диапазон дат вперёд. Неполный диапазон не сдвигается. */
-        const shiftRangeForward = () => {
-            if (!start || !end) {
-                return;
-            }
-
-            onChange(shiftDateRange(value, shiftAmount, shiftUnit));
+            onChange(shiftDateRange(value, amount, shiftUnit));
         };
 
         return (
@@ -121,7 +112,7 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
                         children: <CaretleftStrokeSrvIcon20 paletteIndex={5} />,
                         className: clsx(styles.dateRangeButton, { disabled: shiftDisabled }),
                         disabled: shiftDisabled,
-                        onClick: shiftRangeBack,
+                        onClick: () => shiftRange(-shiftAmount),
                     })}
                 {renderPickerFrom({
                     onChange: handleChangePickerFrom,
@@ -137,7 +128,7 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
                         children: <CaretrightStrokeSrvIcon20 paletteIndex={5} />,
                         className: clsx(styles.dateRangeButton, { disabled: shiftDisabled }),
                         disabled: shiftDisabled,
-                        onClick: shiftRangeForward,
+                        onClick: () => shiftRange(shiftAmount),
                     })}
             </div>
         );

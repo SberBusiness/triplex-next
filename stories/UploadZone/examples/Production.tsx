@@ -7,7 +7,6 @@ import {
     Link,
     HelpBox,
     Button,
-    ButtonIcon,
     MarkerStatus,
     TableBasic,
     ITableBasicColumn,
@@ -120,16 +119,22 @@ const buildRows = (): ITableBasicRow[] =>
                 ),
                 // Пустая ячейка — именно <div />, а не null: на falsy-содержимом TableBasic рисует прочерк «---».
                 download: file.downloadable ? (
-                    <ButtonIcon aria-label="Скачать">
-                        <DownloadStrokeSrvIcon20 paletteIndex={0} />
-                    </ButtonIcon>
+                    <Button
+                        size={EComponentSize.MD}
+                        icon={<DownloadStrokeSrvIcon20 paletteIndex={0} />}
+                        theme={EButtonTheme.SECONDARY}
+                        aria-label="Скачать"
+                    />
                 ) : (
                     <div />
                 ),
                 delete: (
-                    <ButtonIcon aria-label="Удалить">
-                        <DeleteStrokeSrvIcon20 paletteIndex={0} />
-                    </ButtonIcon>
+                    <Button
+                        size={EComponentSize.MD}
+                        icon={<DeleteStrokeSrvIcon20 paletteIndex={0} />}
+                        theme={EButtonTheme.SECONDARY}
+                        aria-label="Удалить"
+                    />
                 ),
             },
         };
@@ -164,13 +169,15 @@ export const Production = () => {
             <UploadZone.Input multiple />
             <ClouddraguploadStrokeSrvIcon32 paletteIndex={5} />
             <Gap size={4} />
-            <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
-                Перетащите файлы
-                {"\u00A0"}
-                <Link onClick={openUploadDialog}>выберите на компьютере</Link>
-                {"\u00A0"}
+            {/* HelpBox — сосед Text, а не его содержимое: так иконка выравнивается по центру строки. */}
+            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                <Text type={EFontType.PRIMARY} size={ETextSize.B3} tag="div">
+                    Перетащите файлы или
+                    {"\u00A0"}
+                    <Link onClick={openUploadDialog}>выберите на компьютере</Link>
+                </Text>
                 <HelpBox tooltipSize={ETooltipSize.SM}>{HELPBOX_TEXT}</HelpBox>
-            </Text>
+            </div>
         </div>
     );
 

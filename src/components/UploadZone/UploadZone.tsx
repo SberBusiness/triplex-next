@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, forwardRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo, forwardRef } from "react";
 import { createRoot, Root } from "react-dom/client";
 import clsx from "clsx";
 import { UploadZoneInput } from "./components/UploadZoneInput";
@@ -6,13 +6,14 @@ import { UploadZoneContext } from "./UploadZoneContext";
 import { UploadZoneOnChangeType } from "./types";
 import styles from "./styles/UploadZone.module.less";
 
+/** Свойства, которые UploadZone передаёт в children-функцию. */
 export interface IUploadZoneChildrenProvideProps {
     /** Открытие диалогового окна выбора файла(ов). */
     openUploadDialog: () => void;
 }
 
 /** Свойства компонента UploadZone. */
-interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children"> {
+export interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children"> {
     /** В качестве чилда передаётся функция. */
     children: (props: IUploadZoneChildrenProvideProps) => React.ReactNode;
     /** Обработчик изменения значения. */
@@ -23,6 +24,10 @@ interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "o
     renderContainerContent?: () => JSX.Element;
 }
 
+/**
+ * Зона загрузки файлов. Рендерит кликабельную область поверх своего содержимого и,
+ * если передан `dropZoneContainer`, показывает поверх него дроп-зону во время перетаскивания файлов.
+ */
 export const UploadZone = Object.assign(
     forwardRef<HTMLDivElement, IUploadZoneProps>((props, ref) => {
         const {
@@ -37,7 +42,7 @@ export const UploadZone = Object.assign(
         } = props;
 
         const [hoverOnDrag, setHoverOnDrag] = useState(false);
-        const [inputNode, setInputNode] = useState<HTMLInputElement | undefined>(undefined);
+        const [inputNode, setInputNode] = useState<HTMLInputElement | null>(null);
 
         // Описание - https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element.
         // Если counter > 0 - означает, что перетаскиваемый объект в пределах окна браузера.
@@ -62,30 +67,6 @@ export const UploadZone = Object.assign(
                 setHoverOnDrag(false);
             }
         }, []);
-
-        const addListeners = useCallback(
-            (dropZoneContainer: HTMLElement | null | undefined) => {
-                if (!dropZoneContainer) {
-                    return;
-                }
-
-                dropZoneContainer.addEventListener("dragenter", handleDragEnter);
-                dropZoneContainer.addEventListener("dragleave", handleDragLeave);
-            },
-            [handleDragEnter, handleDragLeave],
-        );
-
-        const removeListeners = useCallback(
-            (dropZoneContainer: HTMLElement | null | undefined) => {
-                if (!dropZoneContainer) {
-                    return;
-                }
-
-                dropZoneContainer.removeEventListener("dragenter", handleDragEnter);
-                dropZoneContainer.removeEventListener("dragleave", handleDragLeave);
-            },
-            [handleDragEnter, handleDragLeave],
-        );
 
         const handlePreventDefault = useCallback(
             (e: React.DragEvent<HTMLDivElement>) => {
@@ -117,7 +98,6 @@ export const UploadZone = Object.assign(
                     onDragOver={handlePreventDefault}
                     onDrop={fileDrop}
                     {...restHtmlAttributes}
-                    key="uploadZoneDragArea"
                     role="none"
                 >
                     {renderContainerContent?.()}
@@ -128,25 +108,35 @@ export const UploadZone = Object.assign(
         }, [className, handlePreventDefault, fileDrop, renderContainerContent, restHtmlAttributes]);
 
         const cleanupDropZone = useCallback(() => {
-            if (dropZoneRootRef.current) {
-                dropZoneRootRef.current.unmount();
-                dropZoneRootRef.current = null;
-            }
-
+            const dropZoneRoot = dropZoneRootRef.current;
             const dropZoneWrapperDiv = dropZoneWrapperDivRef.current;
-            if (dropZoneWrapperDiv?.parentNode) {
-                dropZoneWrapperDiv.parentNode.removeChild(dropZoneWrapperDiv);
-            }
 
+            dropZoneRootRef.current = null;
             dropZoneWrapperDivRef.current = null;
+
+            dropZoneWrapperDiv?.parentNode?.removeChild(dropZoneWrapperDiv);
+
+            if (dropZoneRoot) {
+                // Синхронный unmount во время рендера родительского дерева React приводит к предупреждению
+                // "Attempted to synchronously unmount a root while React was already rendering",
+                // поэтому размонтируем отдельный root на следующем микротаске.
+                queueMicrotask(() => dropZoneRoot.unmount());
+            }
         }, []);
 
         useEffect(() => {
-            addListeners(dropZoneContainer);
+            if (!dropZoneContainer) {
+                return;
+            }
+
+            dropZoneContainer.addEventListener("dragenter", handleDragEnter);
+            dropZoneContainer.addEventListener("dragleave", handleDragLeave);
+
             return () => {
-                removeListeners(dropZoneContainer);
+                dropZoneContainer.removeEventListener("dragenter", handleDragEnter);
+                dropZoneContainer.removeEventListener("dragleave", handleDragLeave);
             };
-        }, [dropZoneContainer, addListeners, removeListeners]);
+        }, [dropZoneContainer, handleDragEnter, handleDragLeave]);
 
         useEffect(() => {
             if (!dropZoneContainer) {
@@ -175,30 +165,29 @@ export const UploadZone = Object.assign(
             [cleanupDropZone],
         );
 
-        const openUploadDialog = () => {
+        const openUploadDialog = useCallback(() => {
             inputNode?.click();
-        };
+        }, [inputNode]);
 
-        const handleAreaClick = (e: React.SyntheticEvent) => {
-            e.stopPropagation();
-            openUploadDialog();
-        };
+        const handleAreaClick = useCallback(
+            (e: React.SyntheticEvent) => {
+                e.stopPropagation();
+                openUploadDialog();
+            },
+            [openUploadDialog],
+        );
+
+        // openUploadDialog в контекст не кладётся: наружу он уходит через children({ openUploadDialog }),
+        // а UploadZoneInput читает из контекста только onChange и setInputNode.
+        const contextValue = useMemo(() => ({ onChange, setInputNode }), [onChange]);
 
         return (
-            <UploadZoneContext.Provider
-                value={{
-                    inputNode,
-                    onChange,
-                    openUploadDialog,
-                    setInputNode,
-                }}
-            >
+            <UploadZoneContext.Provider value={contextValue}>
                 <div className={styles.uploadZone} data-tx={process.env.npm_package_version} ref={ref}>
                     <div
                         className={clsx(styles.uploadZoneDragArea, className)}
                         onClick={handleAreaClick}
                         {...restHtmlAttributes}
-                        key="uploadZoneDragArea"
                         role="none"
                     />
                     {children({ openUploadDialog })}

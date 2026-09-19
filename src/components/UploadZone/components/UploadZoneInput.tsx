@@ -1,44 +1,57 @@
-import React from "react";
-import { UploadZoneContext } from "../UploadZoneContext";
+import React, { forwardRef, useCallback, useContext } from "react";
 import clsx from "clsx";
+import { UploadZoneContext } from "../UploadZoneContext";
 import styles from "../styles/UploadZone.module.less";
 
+/** Свойства компонента UploadZoneInput. */
 export interface IUploadZoneInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {}
 
-/** Компонент поля для зоны загрузки файлов. */
-export const UploadZoneInput: React.FC<IUploadZoneInputProps> = ({ className, ...restHtmlAttributes }) => {
-    const context = React.useContext(UploadZoneContext);
+/**
+ * Скрытое поле выбора файлов зоны загрузки.
+ * Обработчик изменения берётся из контекста UploadZone — prop `onChange` у поля не поддерживается.
+ */
+export const UploadZoneInput = forwardRef<HTMLInputElement, IUploadZoneInputProps>(
+    ({ className, ...restHtmlAttributes }, ref) => {
+        const { onChange, setInputNode } = useContext(UploadZoneContext);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        context.onChange(e.target.files, e);
-    };
+        const setRef = useCallback(
+            (instance: HTMLInputElement | null) => {
+                setInputNode(instance);
 
-    /**
-     * Обработчик нажатия пользователем на инпут (кнопку) выбора файла.
-     *
-     * @param {React.SyntheticEvent<HTMLInputElement>} e Событие.
-     */
-    const handleClick = (e: React.SyntheticEvent<HTMLInputElement>): void => {
-        /*
-         *При прикладывании одного и того же файла (должен быть с тем же именем и по тому же пути),
-         *пусть даже отличного по содержимому, не срабатывает событие onChange. Данный обработчик это фиксит.
-         *Решение подсмотрено:
-         *https://stackoverflow.com/questions/39484895/how-to-allow-input-type-file-to-select-the-same-file-in-react-component
+                if (typeof ref === "function") {
+                    ref(instance);
+                } else if (ref) {
+                    ref.current = instance;
+                }
+            },
+            [ref, setInputNode],
+        );
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange(e.target.files, e);
+        };
+
+        /**
+         * При прикладывании одного и того же файла (с тем же именем и по тому же пути),
+         * пусть даже отличного по содержимому, не срабатывает событие onChange. Сброс значения это фиксит.
+         * Решение подсмотрено:
+         * https://stackoverflow.com/questions/39484895/how-to-allow-input-type-file-to-select-the-same-file-in-react-component
          */
-        e.currentTarget.value = "";
-    };
+        const handleClick = (e: React.SyntheticEvent<HTMLInputElement>) => {
+            e.currentTarget.value = "";
+        };
 
-    return (
-        <input
-            {...restHtmlAttributes}
-            type="file"
-            className={clsx(className, styles.uploadZoneInput)}
-            onChange={handleChange}
-            onClick={handleClick}
-            ref={context.setInputNode}
-            key="uploadZoneInput"
-        />
-    );
-};
+        return (
+            <input
+                {...restHtmlAttributes}
+                type="file"
+                className={clsx(className, styles.uploadZoneInput)}
+                onChange={handleChange}
+                onClick={handleClick}
+                ref={setRef}
+            />
+        );
+    },
+);
 
-UploadZoneInput.displayName = "UploadZone";
+UploadZoneInput.displayName = "UploadZoneInput";

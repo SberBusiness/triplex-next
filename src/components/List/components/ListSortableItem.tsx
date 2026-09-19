@@ -5,7 +5,7 @@ import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { ListItem } from "@sberbusiness/triplex-next/components/List/components/ListItem";
 import clsx from "clsx";
 import styles from "../styles/ListSortableItem.module.less";
-import { setForwardedRef } from "../utils";
+import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import { ListSortableItemTarget } from "./ListSortableItemTarget";
 
 export interface IListSortableItemChildrenProvideProps {

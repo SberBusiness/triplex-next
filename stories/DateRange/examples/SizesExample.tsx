@@ -44,7 +44,12 @@ export const SizesExample = () => {
             {...props}
         />
     );
-    const renderButton = (props: IDateRangeButtonProvideProps) => <ButtonIcon {...props} />;
+    const renderButtonBack = (props: IDateRangeButtonProvideProps) => (
+        <ButtonIcon aria-label="Предыдущий период" {...props} />
+    );
+    const renderButtonForward = (props: IDateRangeButtonProvideProps) => (
+        <ButtonIcon aria-label="Следующий период" {...props} />
+    );
 
     return (
         <div style={{ display: "flex", gap: 24, flexDirection: "column" }}>
@@ -57,8 +62,8 @@ export const SizesExample = () => {
                     shiftUnit={EDateRangeShiftUnit.MONTH}
                     renderPickerFrom={renderPickerSM}
                     renderPickerTo={renderPickerSM}
-                    renderButtonBack={renderButton}
-                    renderButtonForward={renderButton}
+                    renderButtonBack={renderButtonBack}
+                    renderButtonForward={renderButtonForward}
                 />
             </div>
 
@@ -71,8 +76,8 @@ export const SizesExample = () => {
                     shiftUnit={EDateRangeShiftUnit.MONTH}
                     renderPickerFrom={renderPickerMD}
                     renderPickerTo={renderPickerMD}
-                    renderButtonBack={renderButton}
-                    renderButtonForward={renderButton}
+                    renderButtonBack={renderButtonBack}
+                    renderButtonForward={renderButtonForward}
                 />
             </div>
 
@@ -85,8 +90,8 @@ export const SizesExample = () => {
                     shiftUnit={EDateRangeShiftUnit.MONTH}
                     renderPickerFrom={renderPickerLG}
                     renderPickerTo={renderPickerLG}
-                    renderButtonBack={renderButton}
-                    renderButtonForward={renderButton}
+                    renderButtonBack={renderButtonBack}
+                    renderButtonForward={renderButtonForward}
                 />
             </div>
         </div>

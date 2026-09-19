@@ -108,6 +108,9 @@ import { Button, EButtonTheme } from "@sberbusiness/triplex-next";
 // ✅ Внутри src/components
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
 
+// ✅ Внутренний модуль вне публичных subentry — только относительный путь
+import { setForwardedRef } from "../../helpers/setForwardedRef";
+
 // ✅ В unit-тестах можно импортировать локально, следуя паттерну файла
 import { Button } from "../Button";
 ```
@@ -116,6 +119,16 @@ import { Button } from "../Button";
 
 - В новых stories/examples, которые показывают копируемый код, импортируй публичный API из `@sberbusiness/triplex-next` или публичных subentry.
 - В unit-тестах и внутреннем коде следуй локальному паттерну файла и предпочитай ближайшие импорты для тестируемого модуля и внутренних зависимостей.
+- Алиас `@sberbusiness/triplex-next/...` внутри `src` допустим только для путей,
+  которые являются публичными subentry: `components`, `enums`, `utils`, `consts`,
+  `types`. Всё остальное — `src/helpers/`, внутренние `components/*/utils.ts`,
+  `components/*/consts.ts` и прочие непубличные модули — импортируй относительным
+  путём.
+
+Почему так: алиас настроен только на время сборки (`vite.config.ts`, `resolve.alias`),
+а `package.json` не объявляет `exports`, поэтому алиасный путь выглядит как публичный
+subentry, хотя модуль из barrel не экспортируется. Ориентир — существующий
+`src/helpers/breakpoints.ts`: он везде импортируется как `../../helpers/breakpoints`.
 
 Порядок импортов (prettier-plugin-organize-imports не используется, но придерживайся):
 
@@ -133,7 +146,9 @@ import { Button } from "../Button";
 
 - Только `.module.less` файлы — никаких глобальных стилей.
 - Имена классов — **camelCase**: `styles.secondaryLight`, `styles.iconOnly`.
-- Никаких **inline styles** в компонентах (в stories допустимо для лейаута примеров).
+- Никаких **inline styles** в компонентах за исключением:
+    - передачи CSS-переменных для динамических стилей;
+    - использования в stories для лейаута примеров.
 - **Цвета** — только через CSS-переменные токенов (`var(--triplex-next-...)`). Никаких hex/rgb.
   В стилях это правильная запись: CSS-переменные — внутренний слой токенов. А в документации
   (`*-ai.md`, тексты Storybook) токен указывается путём `{Группа}.{Токен}` — см.

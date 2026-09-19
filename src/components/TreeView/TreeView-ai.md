@@ -32,12 +32,14 @@ JSX-разметке, управление `tabIndex` и перемещение 
 
 ### `TreeView`
 
-Class-компонент. Собственных props, кроме `children`, нет — остальное это
-стандартные атрибуты `<ul>`.
+`forwardRef`-обёртка над внутренним class-компонентом `TreeViewBase`.
+Собственных props, кроме `children`, нет — остальное это стандартные атрибуты
+`<ul>`.
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `children` | `React.ReactNode` | — | Ноды дерева: `TreeView.Node` напрямую или компоненты-обёртки над ним |
+| `ref` | `React.Ref<HTMLUListElement>` | — | Указывает на корневой `<ul role="tree">` |
 | `...HTMLUListElementAttributes` | — | — | Все стандартные атрибуты `<ul>`; `className` мерджится с собственным классом |
 
 Статические свойства: `TreeView.Node` (= `TreeViewNode`),
@@ -68,13 +70,19 @@ render-prop `children` с пятью provide-props, контракт по `focus
 
 ## Инварианты
 
-- **`TreeView` и `TreeViewNodeWithContext` — class-компоненты.** Это legacy,
-  зафиксированный публичным API: `ref` на `TreeView` отдаёт инстанс класса.
-  Перевод на функциональные компоненты и добавление `forwardRef` — breaking
-  change поведения `ref`. Не мигрировать без отдельного решения мейнтейнера.
+- **`ref` на `TreeView` отдаёт корневой `<ul role="tree">`.** Наружу компонент
+  экспортируется как `React.ForwardRefExoticComponent`: реализация осталась
+  классом `TreeViewBase`, а публичный `TreeView` — обёртка `forwardRef`, которая
+  передаёт внешний `ref` в класс свойством `forwardedRef`. Класс нельзя обернуть
+  `forwardRef` напрямую, отсюда и эта прослойка. До 1.47.0 `ref` отдавал инстанс
+  класса — см. release notes 1.47.0.
+- **`TreeViewBase` и `TreeViewNodeWithContext` — class-компоненты.** Это legacy;
+  перевод на функциональные компоненты не делается без отдельного решения
+  мейнтейнера. `TreeViewBase` наружу не экспортируется.
 - **Barrel `src/components/TreeView/index.ts`** реэкспортирует модули семейства
   целиком (`export * from ...`), поэтому публично всё, что они экспортируют:
-  `TreeView` и `ITreeViewProps`, `TreeViewGroup` и `ITreeViewGroupProps`, а от
+  `TreeView`, `ITreeViewProps` и `ITreeViewFC`, `TreeViewGroup` и
+  `ITreeViewGroupProps`, а от
   ноды — состав, перечисленный в
   [TreeViewNode-ai.md](./TreeViewNode-ai.md) (там же и класс
   `TreeViewNodeWithContext`). Состав и имена менять нельзя — от них зависят
@@ -163,6 +171,7 @@ render-prop `children` с пятью provide-props, контракт по `focus
 
 | Дата | Изменение |
 |---|---|
+| 2026-09-17 | TRI-22: `ref` на `TreeView` переведён с инстанса класса на корневой `<ul>`; реализация вынесена во внутренний `TreeViewBase`, наружу экспортируется обёртка `forwardRef` со статикой `Node` / `Group` |
 | 2026-08-26 | Описание `TreeView.Node` вынесено в отдельный `TreeViewNode-ai.md`, здесь оставлена ссылка |
 | 2026-08-25 | Слушатель `keydown` подписан только пока в дереве есть активная нода: после ухода фокуса из дерева стрелки снова достаются странице. `role` и `aria-expanded` перенесены после `{...props}` — потребитель больше не может их переопределить |
 | 2026-08-24 | `ArrowUp` с первой ноды дерева больше не заходит внутрь свёрнутой последней ветки — активной становится последняя видимая нода (`TreeViewAbstractNodeUtils.getPrevNode`) |

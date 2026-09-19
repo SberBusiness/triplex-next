@@ -58,16 +58,4 @@ export type TCarouselIndicatorPropsFactory = (args: {
 export interface ICarouselIndicatorsProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Свойства для кнопок-индикаторов. */
     indicatorProps?: TCarouselIndicatorProps | TCarouselIndicatorPropsFactory;
-    /**
-     * Кастомный рендер индикатора.
-     * `props` содержат вычисленные role/tabIndex/aria-selected, className и onClick;
-     * `ref` необходимо прокинуть на интерактивный элемент для корректного управления фокусом.
-     */
-    renderIndicator?: (args: {
-        index: number;
-        page: number;
-        selected: boolean;
-        props: TCarouselIndicatorProps;
-        ref: React.RefCallback<HTMLButtonElement>;
-    }) => React.ReactNode;
 }

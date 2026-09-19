@@ -49,7 +49,9 @@ tools:
 - [ ] Imports: для нового кода — публичные `@sberbusiness/triplex-next` в stories/examples; в unit-тестах локальный паттерн файла.
 - [ ] LESS-классы — camelCase. Только `.module.less`, без глобальных стилей.
 - [ ] Нет hardcoded цветов — только CSS-переменные.
-- [ ] Нет inline styles в компонентах.
+- [ ] Нет inline styles в компонентах за исключением:
+  - передачи CSS-переменных для динамических стилей;
+  - использования в stories для лейаута примеров.
 - [ ] `:focus-visible` вместо `:focus` для accessibility-стилей.
 - [ ] Нет хардкода языковых строк в `aria-label`/`title` внутри компонента.
 
@@ -62,7 +64,7 @@ tools:
 
 - [ ] Если изменилась нетривиальная логика — есть unit-тест.
 - [ ] Тесты в `__tests__/{Component}.test.tsx`.
-- [ ] **Блокер:** `import ... from "vitest"` (а также `@testing-library/*`, `storybook/test`) встречается только в файлах `*.test.ts`/`*.test.tsx`, в `vitest.setup.ts` или в `test-utils/`. Любой другой файл внутри `src/` становится entry-точкой сборки и утягивает vitest в бандл — пакет падает у потребителей с `Vitest failed to access its internal state` (регрессия 1.39.0). Общие тестовые хелперы — в `test-utils/` в корне репозитория, не в `src/**/__tests__/`. Проверка (ловит оба стиля кавычек и side-effect импорты, а не только `vitest`):
+- [ ] **Блокер:** `import ... from "vitest"` (а также `@testing-library/*`, `storybook/test`) встречается только в файлах `*.test.ts`/`*.test.tsx`, в `vitest.setup.ts` или в `test-utils/`. Общие тестовые хелперы — в `test-utils/` в корне репозитория, не в `src/**/__tests__/`. Правило защищает от регрессии 1.39.0 (`Vitest failed to access its internal state` у потребителей). С TRI-106 `vite.config.ts` дополнительно исключает `src/**/__tests__/**` из `rollupOptions.input`, то есть такой файл не станет отдельной entry-точкой — но транзитивный импорт из production-кода в бандл его всё равно затянет. Поэтому ни нарушение правила, ни его соблюдение сами по себе ничего не доказывают: факт утечки проверяется по `dist` (`grep -rl 'testing-library\|vitest' dist/ --include='*.js'` — должно быть пусто). Проверка (ловит оба стиля кавычек и side-effect импорты, а не только `vitest`):
   ```bash
   grep -rlnE "(from|import)[[:space:]]*['\"](vitest|@testing-library/|storybook/test)" src \
     | grep -vE "(\.test\.tsx?|vitest\.setup\.ts)$" | grep -v "/test-utils/"

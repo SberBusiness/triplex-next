@@ -23,6 +23,34 @@ export function createPlaceholder(fractionDigits: number) {
 }
 
 /**
+ * Синхронизировать ядро с текущим значением и настройками формата и вернуть отформатированное значение.
+ *
+ * Пересчёт выполняется, только если значение или настройки формата отличаются от тех, что уже в ядре:
+ * иначе повторный рендер затирал бы позицию каретки, вычисленную обработчиком ввода.
+ *
+ * @param core Ядро форматирования, живущее между рендерами.
+ * @param value Значение, пришедшее в inputProps.value.
+ * @param maxIntegerDigits Максимальное количество знаков перед запятой.
+ * @param fractionDigits Количество знаков после запятой.
+ */
+export function syncCoreAndGetFormattedValue(
+    core: AmountBaseInputCore,
+    value: string,
+    maxIntegerDigits: number,
+    fractionDigits: number,
+): string {
+    if (value !== core.value || maxIntegerDigits !== core.maxIntegerDigits || fractionDigits !== core.fractionDigits) {
+        core.maxIntegerDigits = maxIntegerDigits;
+        core.fractionDigits = fractionDigits;
+        core.apply(value, value.length);
+    }
+
+    core.cache.formattedValue = core.formattedValue;
+
+    return core.formattedValue;
+}
+
+/**
  * Установка каретки на случай, если не произойдёт изменения значения.
  *
  * Значение может не измениться по двум причинам:
@@ -71,7 +99,7 @@ export function setFallbackCaret(input: HTMLInputElement, coreAmount: AmountBase
     }
 
     // Если текст выделялся в обратном порядке, ставим каретку в конец выделения.
-    if (selectionDirection == "backward") return input.setSelectionRange(selectionEnd, selectionEnd);
+    if (selectionDirection === "backward") return input.setSelectionRange(selectionEnd, selectionEnd);
 
     // В остальных случаях ставим каретку в начало выделения.
     return input.setSelectionRange(selectionStart, selectionStart);

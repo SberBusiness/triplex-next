@@ -83,7 +83,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | AlertContext | ✅ | ✅ | ✅ |
 | AlertProcess | ✅ | ✅ | ✅ |
 | Amount | ✅ | ✅ | ✅ |
-| AmountField | ⬜ | ⬜ | ⬜ |
+| AmountField | ✅ | ✅ | ✅ |
 | Avatar | ✅ | ✅ | ✅ |
 | Badge | ✅ | ✅ | ✅ |
 | Body | ✅ | ✅ | ✅ |
@@ -96,7 +96,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CardStatic | ✅ | ✅ | ✅ |
 | CarouselExtended | ✅ | ✅ | ✅ |
 | Checkbox | ✅ | ✅ | ✅ |
-| CheckboxTree | ⬜ | ✅ | ⬜ |
+| CheckboxTree | ✅ | ✅ | ✅ |
 | CheckboxTreeExtended | ✅ | ✅ | ✅ |
 | CheckboxXGroup | ✅ | ✅ | ✅ |
 | CheckboxYGroup | ✅ | ✅ | ✅ |
@@ -116,7 +116,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Confirm | ✅ | ✅ | ✅ |
 | DateField | ✅ | ✅ | ✅ |
 | DatePickerExtended | ✅ | ✅ | ✅ |
-| DateRange | ⬜ | ✅ | ⬜ |
+| DateRange | ✅ | ✅ | ✅ |
 | Divider | ⬜ | ✅ | ⬜ |
 | DocumentNumberEdit | ⬜ | ✅ | ⬜ |
 | Dropdown | ✅ | ✅ | ✅ |
@@ -205,7 +205,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TagColor | ⬜ | ⬜ | ⬜ |
 | TagGroup | ⬜ | ⬜ | ⬜ |
 | TextField | ✅ | ✅ | ✅ |
-| TextareaField | ⬜ | ✅ | ⬜ |
+| TextareaField | ✅ | ✅ | ✅ |
 | ThemeProvider | ✅ | ✅ | ✅ |
 | Tooltip | ✅ | ✅ | ✅ |
 | TopOverlay | ✅ | ✅ | ✅ |

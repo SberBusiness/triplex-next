@@ -18,7 +18,7 @@ export const Default = () => (
                     rightSwipeableArea={
                         <ListItemControls>
                             <ListItemControlsButton
-                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}
+                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
                                 onClick={() => {}}
                             >
                                 Скачать

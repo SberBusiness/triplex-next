@@ -1,11 +1,13 @@
 @import '../../../styles/style';
 
-.uploadZoneDragArea() {
+.dragAreaBase() {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+    box-sizing: border-box;
+    border-radius: 8px;
     cursor: pointer;
 }
 
@@ -20,24 +22,17 @@
 }
 
 .uploadZoneDragArea {
-    .uploadZoneDragArea();
+    .dragAreaBase();
 
     border: 1px dashed var(--triplex-next-UploadZone-BorderColor_Default);
-    border-radius: 8px;
-    box-sizing: border-box;
-
-
 }
 
 .uploadZoneContainerDragArea {
-    .uploadZoneDragArea();
+    .dragAreaBase();
 
     height: 100%;
     background: var(--triplex-next-UploadZone-DragArea_Background);
-
     border: 1px dashed var(--triplex-next-UploadZone-DragArea_BorderColor);
-    border-radius: 8px;
-    box-sizing: border-box;
 }
 
 .uploadZoneInput {

@@ -110,6 +110,11 @@ render-функцией в `children`, а результат выбора при
 и `Example: production`. На узком экране перетаскивания нет, поэтому по дизайну
 вместо области сброса показывается обычная кнопка загрузки.
 
+Список уже загруженных файлов потребитель переключает тем же `MobileView`
+отдельно от зоны: на широком экране — таблица, на узком — `List` с
+`ListTableItem` (имя, размер, статус), а действия над файлом уходят в
+`controlButtons` под свайпом. Пример — story `Example: production`.
+
 ---
 
 ## Дизайн-токены
@@ -185,8 +190,9 @@ UploadZone.DragArea_BorderColor
 - `UploadZone.Input` — составная часть, описана выше; собственного AI.md не имеет.
 - Типовые соседи в разметке (связь композиционная, не структурная): `MobileView`
   для мобильного варианта содержимого, `TableBasic` со списком загруженных
-  файлов, `Link` / `Button` как точка вызова `openUploadDialog`, `HelpBox`
-  с подсказкой о допустимых форматах.
+  файлов на широком экране и `List` / `ListTableItem` /
+  `ListItemControlsButton` — на узком, `Link` / `Button` как точка вызова
+  `openUploadDialog`, `HelpBox` с подсказкой о допустимых форматах.
 
 ---
 
@@ -199,12 +205,12 @@ UploadZone.DragArea_BorderColor
 |---|---|---|
 | `Playground` | `Playground.tsx` | Переключение `dropZoneContainer`, `renderContainerContent` и `multiple` |
 | `Default` | `Default.tsx` | Зона с дроп-зоной на площади внешнего контейнера; на узком экране через `MobileView` вместо неё кнопка |
-| `Production` (Example: production) | `Production.tsx` | Композиция с таблицей загруженных файлов и мобильным вариантом через `MobileView` |
+| `Production` (Example: production) | `Production.tsx` | Композиция со списком загруженных файлов: таблица на широком экране, `ListTableItem` на узком; оба варианта через `MobileView` |
 | `VisualTests` | `VisualTests.tsx` | Состояния для скриншот-тестов: покой и раскрытая дроп-зона (через `play`) |
 
 `Playground` исключён из скриншот-тестов: кадр зависит от значений controls.
 `Production` тоже исключён — пример композиционный, его кадр ловит изменения
-`TableBasic` и `MobileView`, а не самой зоны загрузки.
+`TableBasic`, `List` и `MobileView`, а не самой зоны загрузки.
 
 ---
 
@@ -214,3 +220,4 @@ UploadZone.DragArea_BorderColor
 |---|---|
 | 2026-09-16 | Создан документ. AI-рефакторинг: `UploadZone.Input` получил `forwardRef` и корректный `displayName`, stories переписаны на modern pattern |
 | 2026-09-18 | Правки по ревью: в примерах точка входа в диалог вернулась на `Link`, уточнён раздел Accessibility |
+| 2026-09-21 | Правки по ревью: в `Example: production` список загруженных файлов на узком экране переведён на `ListTableItem` |

@@ -7,6 +7,9 @@ import {
     Link,
     HelpBox,
     Button,
+    List,
+    ListTableItem,
+    ListItemControlsButton,
     MarkerStatus,
     TableBasic,
     ITableBasicColumn,
@@ -93,6 +96,37 @@ const FILES: IFileRow[] = [
         downloadable: false,
     },
 ];
+
+/** Узкий экран: таблица не помещается, поэтому файлы показываются списком, действия — под свайпом. */
+const renderFileList = () => (
+    <List>
+        {FILES.map((file, index) => (
+            <ListTableItem
+                key={index}
+                controlButtons={
+                    <>
+                        <ListItemControlsButton icon={<DownloadStrokeSrvIcon20 paletteIndex={5} />}>
+                            Скачать
+                        </ListItemControlsButton>
+                        <ListItemControlsButton icon={<DeleteStrokeSrvIcon20 paletteIndex={5} />}>
+                            Удалить
+                        </ListItemControlsButton>
+                    </>
+                }
+            >
+                <Text size={ETextSize.B3} tag="div">
+                    {file.name}
+                </Text>
+                <Text size={ETextSize.B4} type={EFontType.SECONDARY} tag="div">
+                    {file.size}
+                </Text>
+                <MarkerStatus status={file.status} size={EComponentSize.LG}>
+                    {file.statusText}
+                </MarkerStatus>
+            </ListTableItem>
+        ))}
+    </List>
+);
 
 const buildRows = (): ITableBasicRow[] =>
     FILES.map((file, index) => {
@@ -216,7 +250,11 @@ export const Production = () => {
                 )}
             </UploadZone>
             <Gap size={16} />
-            <TableBasic columns={COLUMNS} data={buildRows()} renderNoData={() => <div />} headless />
+            <MobileView
+                fallback={<TableBasic columns={COLUMNS} data={buildRows()} renderNoData={() => <div />} headless />}
+            >
+                {renderFileList()}
+            </MobileView>
         </div>
     );
 };

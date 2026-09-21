@@ -32,6 +32,8 @@ export const VisualTests = () => (
         ))}
         <div style={{ width: 320 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>SINGLE TAG</div>
+            {/* Единственный ребёнок: отрицательный margin контейнера не должен ломать раскладку.
+                Текст короткий намеренно — обрезка многоточием проверяется в VisualTests самого Tag. */}
             <TagGroup size={EComponentSize.LG} aria-label="Применённые фильтры, один тег">
                 <Tag
                     id="visual-single-tag"
@@ -39,7 +41,7 @@ export const VisualTests = () => (
                     onRemove={() => {}}
                     removeButtonProps={REMOVE_BUTTON_PROPS}
                 >
-                    Very long tag text that should be truncated with ellipsis
+                    Selected value
                 </Tag>
             </TagGroup>
         </div>

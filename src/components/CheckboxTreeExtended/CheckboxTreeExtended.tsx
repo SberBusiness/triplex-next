@@ -17,8 +17,16 @@ export interface ICheckboxTreeExtendedProps extends ICollapsibleTreeExtendedProp
     size?: EComponentSize;
 }
 
-/** CheckboxTreeExtended вместе с составными частями. */
-export interface ICheckboxTreeExtendedSFC extends React.FC<ICheckboxTreeExtendedProps> {
+/**
+ * CheckboxTreeExtended вместе с составными частями.
+ *
+ * Явная аннотация снимает проверку лишних свойств у Object.assign, поэтому при добавлении
+ * или удалении статики этот интерфейс нужно править синхронно: иначе новая статика окажется
+ * в рантайме, но не попадёт в публичный тип, и TypeScript промолчит.
+ */
+export interface ICheckboxTreeExtendedFC extends React.ForwardRefExoticComponent<
+    ICheckboxTreeExtendedProps & React.RefAttributes<HTMLUListElement>
+> {
     /** Чекбокс ноды дерева. */
     Checkbox: typeof CheckboxTreeExtendedCheckbox;
     /** Нода дерева. */
@@ -26,21 +34,38 @@ export interface ICheckboxTreeExtendedSFC extends React.FC<ICheckboxTreeExtended
 }
 
 /**
+ * @deprecated Используйте ICheckboxTreeExtendedFC. Алиас сохранён, чтобы не ломать существующие импорты.
+ */
+export type ICheckboxTreeExtendedSFC = ICheckboxTreeExtendedFC;
+
+/**
  * Декларативное дерево чекбоксов.
  * Является оберткой над CollapsibleTreeExtended.
+ *
+ * ref указывает на корневой <ul role="tree">.
  */
-export const CheckboxTreeExtended: ICheckboxTreeExtendedSFC = ({ className, size = EComponentSize.MD, ...rest }) => {
-    const adaptive = useMobileView();
-    // В мобильном представлении размер зафиксирован, чтобы область нажатия оставалась достаточной.
-    const contextValue = React.useMemo(() => ({ size: adaptive ? EComponentSize.MD : size }), [adaptive, size]);
+export const CheckboxTreeExtended: ICheckboxTreeExtendedFC = Object.assign(
+    React.forwardRef<HTMLUListElement, ICheckboxTreeExtendedProps>(
+        ({ className, size = EComponentSize.MD, ...rest }, ref) => {
+            const adaptive = useMobileView();
+            // В мобильном представлении размер зафиксирован, чтобы область нажатия оставалась достаточной.
+            const contextValue = React.useMemo(() => ({ size: adaptive ? EComponentSize.MD : size }), [adaptive, size]);
 
-    return (
-        <CheckboxTreeExtendedContext.Provider value={contextValue}>
-            <CollapsibleTreeExtended className={clsx(styles.checkboxTreeExtended, className)} {...rest} />
-        </CheckboxTreeExtendedContext.Provider>
-    );
-};
+            return (
+                <CheckboxTreeExtendedContext.Provider value={contextValue}>
+                    <CollapsibleTreeExtended
+                        className={clsx(styles.checkboxTreeExtended, className)}
+                        {...rest}
+                        ref={ref}
+                    />
+                </CheckboxTreeExtendedContext.Provider>
+            );
+        },
+    ),
+    {
+        Checkbox: CheckboxTreeExtendedCheckbox,
+        Node: CheckboxTreeExtendedNode,
+    },
+);
 
 CheckboxTreeExtended.displayName = "CheckboxTreeExtended";
-CheckboxTreeExtended.Checkbox = CheckboxTreeExtendedCheckbox;
-CheckboxTreeExtended.Node = CheckboxTreeExtendedNode;

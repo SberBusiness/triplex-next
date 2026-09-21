@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Ломающие изменения</Heading>
 
+**Carousel.Indicators**
+
+- Удалено свойство `renderIndicator`.
+
 **FormFieldTextarea**
 
 - Удалено свойство `disabled`, используйте `status` со значением `EFormFieldStatus.DISABLED`. Раньше переданное значение всё равно перетиралось статусом. Для `FormFieldInput` / `FormFieldMaskedInput` то же было сделано в 1.45.0.
@@ -13,6 +17,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **TextareaField**
 
 - Свойство `disabled` больше нельзя передать в `textareaProps` — следствие правки `FormFieldTextarea` выше.
+
+**TreeView**
+
+- `ref` на `TreeView` теперь отдаёт корневой `<ul role="tree">`, а не инстанс класса. Компонент по-прежнему реализован классом внутри, но наружу экспортируется как `React.ForwardRefExoticComponent`. Это выравнивает `TreeView` с остальной библиотекой, где `ref` всегда указывает на корневой DOM-узел.
+- `TreeView` больше не является типом: `React.createRef<TreeView>()` не компилируется, используйте `React.createRef<HTMLUListElement>()`.
 
 <Heading>Изменения</Heading>
 
@@ -31,12 +40,38 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Добавлено: `CardStatic` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
 
+**Carousel.Indicators**
+
+- Добавлена анимация для индикаторов.
+
+**CheckboxTree**
+
+- Добавлено: `CheckboxTree` пробрасывает `ref` на свой корневой `<ul role="tree">` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Добавлено: `CheckboxTree` прокидывает `className`, `id`, `data-*` и остальные html-атрибуты на свой корневой `<ul>` — раньше он деструктурировал только `checkboxes`, `onChange` и `size`, а всё остальное молча терял, хотя тип их разрешал.
+- Исправлено: узел с пустым массивом `children` больше не становится выбранным сам по себе. Раньше условие «все потомки выбраны» выполнялось для него вырожденно (`0 === 0`), и узел уезжал в `onChange` с `checked: true` после первого же клика по любому чекбоксу дерева. Теперь пустой `children` обрабатывается как лист.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**CheckboxTreeExtended**
+
+- Добавлено: `CheckboxTreeExtended` пробрасывает `ref` на свой корневой `<ul role="tree">`. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Изменено: тип `ICheckboxTreeExtendedSFC` переименован в `ICheckboxTreeExtendedFC` — название `SFC` больше не отражает форму компонента. Старое имя сохранено как deprecated-алиас, поэтому импорты не ломаются. Но алиас указывает на новый тип: если вы аннотировали им собственный компонент (`const My: ICheckboxTreeExtendedSFC = (props) => ...`), аннотацию нужно убрать или заменить — это следствие перехода на `forwardRef`.
+
+**CollapsibleTreeExtended**
+
+- Добавлено: `CollapsibleTreeExtended` пробрасывает `ref` на свой корневой `<ul role="tree">`. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Изменено: тип `ICollapsibleTreeExtendedSFC` переименован в `ICollapsibleTreeExtendedFC`. Старое имя сохранено как deprecated-алиас, поэтому импорты не ломаются, но сам тип теперь `ForwardRefExoticComponent` — собственные аннотации им нужно убрать или заменить.
+
 **Confirm**
 
 - Добавлено: `Confirm` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Добавлено: `ref` пробрасывают и составные части — `Confirm.Content` (и её `Title` / `SubTitle`), `Confirm.Controls`, `Confirm.Close`. Раньше все они были объявлены как `React.FC`.
 - Изменено: у `Confirm.Close` больше нет дефолтного `title="Закрыть"`. Кнопка иконочная, поэтому без явного `title` (или `aria-label`) у неё не будет доступного имени — передавайте его сами. Строки на конкретном языке внутри компонентов библиотеки не задаются.
 - Изменено: `ref` у `Confirm.Content.Title` и `Confirm.Content.SubTitle` типизирован как `HTMLElement` вместо `HTMLHeadingElement` и `HTMLDivElement`. Оба компонента разрешают переопределить тег через `tag`, и прежние типы обещали не тот DOM-узел.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**DateRange**
+
+- Добавлено: `DateRange` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
 
 **FormField**
@@ -85,3 +120,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: тип props `ITriggerClickOnKeyDownEventProps` теперь экспортируется — раньше интерфейс был внутренним, и типизировать обёртки над компонентом приходилось вручную.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**Установка**
+
+- Тег `react17` в npm снова указывает на актуальную React 17-сборку: `npm i @sberbusiness/triplex-next@react17` ставит версию текущего релиза. Раньше тег не двигался при выпусках и с августа отдавал `0.41.1`. Теги работают в npmjs; из внутреннего registry по-прежнему ставьте по точному номеру версии.

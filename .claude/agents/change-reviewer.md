@@ -49,7 +49,9 @@ tools:
 - [ ] Imports: для нового кода — публичные `@sberbusiness/triplex-next` в stories/examples; в unit-тестах локальный паттерн файла.
 - [ ] LESS-классы — camelCase. Только `.module.less`, без глобальных стилей.
 - [ ] Нет hardcoded цветов — только CSS-переменные.
-- [ ] Нет inline styles в компонентах.
+- [ ] Нет inline styles в компонентах за исключением:
+  - передачи CSS-переменных для динамических стилей;
+  - использования в stories для лейаута примеров.
 - [ ] `:focus-visible` вместо `:focus` для accessibility-стилей.
 - [ ] Нет хардкода языковых строк в `aria-label`/`title` внутри компонента.
 

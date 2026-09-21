@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps, TDateRangeValue } from "../DateRange";
+import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps } from "../DateRange";
+import { TDateRangeValue } from "../types";
 import { EDateRangeShiftUnit } from "../enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({
@@ -132,6 +133,26 @@ describe("DateRange", () => {
         expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240430"]);
     });
 
+    it("shifts range back by custom shiftAmount", () => {
+        render(<DateRange {...defaultProps} shiftAmount={2} />);
+
+        const buttons = screen.getAllByRole("button");
+        const backButton = buttons[0];
+        fireEvent.click(backButton);
+
+        expect(mockOnChange).toHaveBeenCalledWith(["20231101", "20231130"]);
+    });
+
+    it("clamps the day of month when shifting back into a shorter month", () => {
+        render(<DateRange {...defaultProps} value={["20240331", "20240331"]} />);
+
+        const buttons = screen.getAllByRole("button");
+        const backButton = buttons[0];
+        fireEvent.click(backButton);
+
+        expect(mockOnChange).toHaveBeenCalledWith(["20240229", "20240229"]);
+    });
+
     it("shifts range by days when shiftUnit is DAY", () => {
         render(<DateRange {...defaultProps} shiftUnit={EDateRangeShiftUnit.DAY} />);
 
@@ -250,5 +271,28 @@ describe("DateRange", () => {
 
         const root = screen.getByTestId("date-range-root");
         expect(root).toHaveAttribute("aria-label", "Date range");
+    });
+
+    it("ignores children passed to the component", () => {
+        // Фиксирует контракт, а не реализацию: у корневого div есть собственные JSX-дети,
+        // и они всегда перекрывают children из props, поэтому тест остаётся зелёным и без
+        // деструктуризации children (проверено). Страховкой для неё он не является.
+        const propsWithChildren = {
+            ...defaultProps,
+            children: <span data-testid="unexpected-child" />,
+        };
+
+        render(<DateRange {...propsWithChildren} />);
+
+        expect(screen.queryByTestId("unexpected-child")).not.toBeInTheDocument();
+    });
+
+    it("forwards ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        render(<DateRange {...defaultProps} ref={ref} className="custom-class" />);
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toHaveClass("custom-class");
     });
 });

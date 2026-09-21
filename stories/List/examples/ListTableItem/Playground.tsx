@@ -47,11 +47,11 @@ export const Playground = ({ selected }: PlaygroundArgs) => {
                     onClickItem={action("onClickItem")}
                     controlButtons={
                         <>
-                            <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
+                            <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}>
                                 Скачать
                             </ListItemControlsButton>
                             <ListItemControlsButtonDropdown
-                                icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                                icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={0} />}
                                 options={dropdownOptions}
                             >
                                 Действия

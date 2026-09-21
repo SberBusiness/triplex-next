@@ -525,13 +525,13 @@ export const Default = () => {
                                     controlButtons={
                                         <>
                                             <ListItemControlsButton
-                                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}
+                                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
                                             >
                                                 Скачать
                                             </ListItemControlsButton>
 
                                             <ListItemControlsButtonDropdown
-                                                icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                                                icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={0} />}
                                                 options={itemActions}
                                             >
                                                 Действия

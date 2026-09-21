@@ -51,7 +51,7 @@ export const ImperativeApi = () => {
                         leftSwipeableArea={
                             <ListItemControls>
                                 <ListItemControlsButton
-                                    icon={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                                    icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                                     onClick={() => {}}
                                 >
                                     В архив
@@ -61,7 +61,7 @@ export const ImperativeApi = () => {
                         rightSwipeableArea={
                             <ListItemControls>
                                 <ListItemControlsButton
-                                    icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}
+                                    icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
                                     onClick={() => {}}
                                 >
                                     Скачать

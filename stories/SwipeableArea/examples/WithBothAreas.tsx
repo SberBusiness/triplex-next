@@ -19,7 +19,7 @@ export const WithBothAreas = () => (
                     leftSwipeableArea={
                         <ListItemControls>
                             <ListItemControlsButton
-                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}
+                                icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}
                                 onClick={() => {}}
                             >
                                 В архив
@@ -29,7 +29,7 @@ export const WithBothAreas = () => (
                     rightSwipeableArea={
                         <ListItemControls>
                             <ListItemControlsButton
-                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}
+                                icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
                                 onClick={() => {}}
                             >
                                 Скачать

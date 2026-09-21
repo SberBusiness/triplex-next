@@ -46,13 +46,13 @@ export const Example = () => {
                             rightSwipeableArea={
                                 <ListItemControls>
                                     <ListItemControlsButton
-                                        icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}
+                                        icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}
                                         onClick={() => {}}
                                     >
                                         Скачать
                                     </ListItemControlsButton>
                                     <ListItemControlsButtonDropdown
-                                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={5} />}
+                                        icon={<DotshorizontalStrokeSrvIcon20 paletteIndex={0} />}
                                         options={[
                                             { id: `${payment.id}-option-1`, label: "Повторить", onSelect: () => {} },
                                             { id: `${payment.id}-option-2`, label: "Удалить", onSelect: () => {} },

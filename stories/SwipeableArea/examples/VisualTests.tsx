@@ -51,14 +51,14 @@ const VisualItem = ({ title, openedArea }: IVisualItemProps) => {
                         ref={swipeableAreaRef}
                         leftSwipeableArea={
                             <ListItemControls>
-                                <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}>
+                                <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
                                     В архив
                                 </ListItemControlsButton>
                             </ListItemControls>
                         }
                         rightSwipeableArea={
                             <ListItemControls>
-                                <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
+                                <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}>
                                     Скачать
                                 </ListItemControlsButton>
                             </ListItemControls>

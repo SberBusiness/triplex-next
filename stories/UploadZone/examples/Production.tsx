@@ -105,10 +105,13 @@ const renderFileList = () => (
                 key={index}
                 controlButtons={
                     <>
-                        <ListItemControlsButton icon={<DownloadStrokeSrvIcon20 paletteIndex={5} />}>
-                            Скачать
-                        </ListItemControlsButton>
-                        <ListItemControlsButton icon={<DeleteStrokeSrvIcon20 paletteIndex={5} />}>
+                        {/* Скачать можно только уже загруженный файл — как и в таблице на широком экране. */}
+                        {file.downloadable ? (
+                            <ListItemControlsButton icon={<DownloadStrokeSrvIcon20 paletteIndex={0} />}>
+                                Скачать
+                            </ListItemControlsButton>
+                        ) : null}
+                        <ListItemControlsButton icon={<DeleteStrokeSrvIcon20 paletteIndex={0} />}>
                             Удалить
                         </ListItemControlsButton>
                     </>

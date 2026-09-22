@@ -12,7 +12,7 @@ const getTabs = () => screen.getByTestId("tabs");
  * Единственный элемент с ролью button — это триггер dropdown:
  * кнопки табов рендерятся с role="tab".
  */
-const getTab = () => screen.getByRole("button");
+const getDropdownTrigger = () => screen.getByRole("button");
 
 /** Кнопки табов из отображаемого контейнера: скрытый контейнер замеров рендерит их дубликаты. */
 const getInlineTabButtons = () => within(getTabs().querySelector(".tabsReal") as HTMLElement).getAllByRole("tab");
@@ -86,44 +86,44 @@ describe("Tabs", () => {
         render(<Tabs {...defaultProps} data-testid="tabs" />);
 
         const tabs = getTabs();
-        const tab1 = getTab();
+        const dropdownButton = getDropdownTrigger();
 
         expect(tabs).toBeInTheDocument();
         expect(tabs).toHaveClass("type1");
-        expect(tab1).toHaveClass("md");
+        expect(dropdownButton).toHaveClass("md");
     });
 
     it("Should render with size SM", () => {
         render(<Tabs {...defaultProps} size={EComponentSize.SM} data-testid="tabs" />);
 
         const tabs = getTabs();
-        const tab1 = getTab();
+        const dropdownButton = getDropdownTrigger();
 
         expect(tabs).toBeInTheDocument();
         expect(tabs).toHaveClass("type1");
-        expect(tab1).toHaveClass("sm");
+        expect(dropdownButton).toHaveClass("sm");
     });
 
     it("Should render with size LG", () => {
         render(<Tabs {...defaultProps} size={EComponentSize.LG} data-testid="tabs" />);
 
         const tabs = getTabs();
-        const tab1 = getTab();
+        const dropdownButton = getDropdownTrigger();
 
         expect(tabs).toBeInTheDocument();
         expect(tabs).toHaveClass("type1");
-        expect(tab1).toHaveClass("lg");
+        expect(dropdownButton).toHaveClass("lg");
     });
 
     it("Should render with type TYPE_2", () => {
         render(<Tabs {...defaultProps} type={ETabsExtendedType.TYPE_2} data-testid="tabs" />);
 
         const tabs = getTabs();
-        const tab1 = getTab();
+        const dropdownButton = getDropdownTrigger();
 
         expect(tabs).toBeInTheDocument();
         expect(tabs).toHaveClass("type2");
-        expect(tab1).toHaveClass("md");
+        expect(dropdownButton).toHaveClass("md");
     });
 
     it("Should render a tab button per item and apply size to it", () => {

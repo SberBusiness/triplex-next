@@ -149,6 +149,11 @@ TagColor.Text_Color_Default
 | `WithOverflow` | `WithOverflow.tsx` | Обрезка длинного контента многоточием по ширине контейнера |
 | `VisualTests` | `VisualTests.tsx` | Матрица размеров × статусов плюс пустая метка и обрезка — для скриншот-тестов |
 
+Имена `DifferentSizes` и `DifferentStatuses` сохранены от прежнего story-файла намеренно:
+story ID участвуют в именах baseline-скриншотов, и переименование в `Sizes` / `Statuses`
+(как у `Tag`, `Marker`, `NumberField`) потребует перегенерации baseline. Отдельного решения
+на это не было — не переименовывай походя.
+
 ---
 
 ## История изменений
@@ -156,3 +161,4 @@ TagColor.Text_Color_Default
 | Дата | Изменение |
 |---|---|
 | 2026-09-22 | Создан документ. AI-рефакторинг (JSDoc на props, enum и map'ах класса, типизация `STATUS_TO_CLASS_NAME_MAP`, исправлен JSDoc `ITagColorProps`), расширены unit-тесты, stories переведены на modern pattern и дополнены `VisualTests`. |
+| 2026-09-22 | По ревью: `children` объявлен в `ITagColorProps` явно (тип прежний, приходил из `React.HTMLAttributes`) — попадает в таблицу Props в Storybook. JSDoc компонента сокращён, детали разметки остались здесь. |

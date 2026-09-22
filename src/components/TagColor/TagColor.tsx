@@ -21,8 +21,6 @@ const STATUS_TO_CLASS_NAME_MAP: Record<ETagColorStatus, string> = {
  * Компонент, который используется для маркировки и классификации.
  *
  * Неинтерактивный: рендерит `span` без обработчиков и фокуса, цвет фона задаёт `status`.
- * Контент лежит во внутреннем `span`, который обрезает длинный текст многоточием
- * по ширине родителя — сам тег не шире своего контейнера.
  */
 export const TagColor = React.forwardRef<HTMLSpanElement, ITagColorProps>(
     ({ children, className, size, status = ETagColorStatus.DEFAULT, ...restProps }, ref) => (

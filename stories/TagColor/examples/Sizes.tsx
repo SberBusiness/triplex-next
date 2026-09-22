@@ -3,7 +3,7 @@ import { TagColor, EComponentSize, ETagColorStatus } from "@sberbusiness/triplex
 
 const SIZES = Object.values(EComponentSize);
 
-export const DifferentSizes = () => (
+export const Sizes = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <div key={size}>

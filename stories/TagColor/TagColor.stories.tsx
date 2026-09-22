@@ -7,10 +7,10 @@ import {
     Playground as PlaygroundRender,
     Default as DefaultRender,
     DefaultSource,
-    DifferentSizes as DifferentSizesRender,
-    DifferentSizesSource,
-    DifferentStatuses as DifferentStatusesRender,
-    DifferentStatusesSource,
+    Sizes as SizesRender,
+    SizesSource,
+    Statuses as StatusesRender,
+    StatusesSource,
     WithOverflow as WithOverflowRender,
     WithOverflowSource,
     VisualTests as VisualTestsRender,
@@ -103,35 +103,33 @@ export const Default: Story = {
             },
             source: { code: DefaultSource, language: "tsx" },
         },
-        // Состояние MD + DEFAULT уже покрыто DifferentStatuses и VisualTests — отдельный скриншот не нужен.
+        // Состояние MD + DEFAULT уже покрыто Statuses и VisualTests — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };
 
-export const DifferentSizes: Story = {
-    name: "Different sizes",
-    render: DifferentSizesRender,
+export const Sizes: Story = {
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "Размеры SM (16px) / MD (20px) / LG (28px). Размер задаёт высоту, отступы, радиус скругления и размер текста.",
             },
-            source: { code: DifferentSizesSource, language: "tsx" },
+            source: { code: SizesSource, language: "tsx" },
         },
     },
 };
 
-export const DifferentStatuses: Story = {
-    name: "Different statuses",
-    render: DifferentStatusesRender,
+export const Statuses: Story = {
+    render: StatusesRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "Статус задаёт только цвет фона — размер и типографика от него не зависят.",
             },
-            source: { code: DifferentStatusesSource, language: "tsx" },
+            source: { code: StatusesSource, language: "tsx" },
         },
     },
 };

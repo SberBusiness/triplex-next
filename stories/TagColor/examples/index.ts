@@ -1,10 +1,10 @@
 export * from "./Playground";
 export * from "./Default";
 export { default as DefaultSource } from "./Default?raw";
-export * from "./DifferentSizes";
-export { default as DifferentSizesSource } from "./DifferentSizes?raw";
-export * from "./DifferentStatuses";
-export { default as DifferentStatusesSource } from "./DifferentStatuses?raw";
+export * from "./Sizes";
+export { default as SizesSource } from "./Sizes?raw";
+export * from "./Statuses";
+export { default as StatusesSource } from "./Statuses?raw";
 export * from "./WithOverflow";
 export { default as WithOverflowSource } from "./WithOverflow?raw";
 export * from "./VisualTests";

@@ -34,6 +34,18 @@ updates:
     cooldown:
       default-days: 7
       semver-major-days: 30
+    # Обновления, которые в одиночку не ставятся (npm падает с ERESOLVE), —
+    # их делаем руками вместе с зависимостью, которая их держит.
+    ignore:
+      # 0.24+ требует Storybook 10, проект на Storybook 9. Снять при переходе.
+      - dependency-name: "@storybook/test-runner"
+        versions: [">=0.24.0"]
+      # Мажоры vitest и @vitest/* ставятся только вместе: пакеты требуют одну
+      # мажорную версию друг от друга, а Dependabot присылает их по одному.
+      - dependency-name: "vitest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitest/*"
+        update-types: ["version-update:semver-major"]
     # Конвенция TRI-XXX на бота не распространяется, см. docs/ai/commits.md.
     commit-message:
       prefix: deps

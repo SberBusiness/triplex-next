@@ -101,6 +101,13 @@ LightBox.SideOverlay_Background
 css-переменную `--lightBox-scroll-width`, которую вычитают из ширины оверлеев. Ширины размеров
 (`664/864/1064/1264`) заданы LESS-константами `@lightBox-content-max-width-*`.
 
+Боковые отступы контента лайтбокса (`@lightBoxContentPaddingX`, 80px — место под кнопки
+вперёд/назад, на экранах до 1024px включительно 0) публикуются css-переменной
+`--lightBox-content-padding-x` на `.lightBoxContent`. По ней потомки выравниваются с колонкой
+страницы — так это делает обёртка `TopOverlay`. Переменная объявлена именно на `.lightBoxContent`,
+поэтому вне его поддерева (например в `LightBox.SideOverlay` — он сиблинг `LightBox.Content`,
+а не его потомок) она не видна, и читающие её стили получают фолбэк 0.
+
 ---
 
 ## Инварианты
@@ -202,6 +209,7 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 
 | Дата | Изменение |
 |---|---|
+| 2026-09-21 | Боковые отступы `.lightBoxContent` вынесены в css-переменную `--lightBox-content-padding-x` (константа `@lightBoxContentPaddingX`). Нужна, чтобы `TopOverlay` выравнивался по колонке контента |
 | 2026-07-22 | Создан документ (Phase 1 AI-Ready). В том же изменении — AI-рефакторинг: JSDoc на props, общий `LightBoxArrow` для Prev/Next, хук `useLightBoxSidebarVisibility` для сайдбаров, устранение eslint-подавлений; публичный API не менялся |
 | 2026-07-22 | Добавлен `export` к props-интерфейсам `ILightBoxControlsProps`, `ILightBoxCloseProps`, `ILightBoxPrevProps`, `ILightBoxNextProps`, `ILightBoxSideOverlayLoaderProps` (аддитивно, для консистентности с остальными интерфейсами компонента) |
 | 2026-07-22 | Багфиксы по ревью PR #474: клавиатурные триггеры контролов целятся в видимую кнопку (стрелки не работали на desktop, Esc — на mobile); таймер-хак блокировки скролла заменён счётчиком смонтированных лайтбоксов; `LightBoxViewManager` снимает классы mount-ноды при размонтировании последнего менеджера |

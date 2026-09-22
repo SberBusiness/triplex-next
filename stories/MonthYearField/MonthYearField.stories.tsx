@@ -53,7 +53,7 @@ const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
     size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,
-    placeholder: "мм.гггг",
+    placeholder: "Select to proceed",
     label: "Label",
     // Settings
     withPostfix: false,

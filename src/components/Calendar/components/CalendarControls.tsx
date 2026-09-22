@@ -7,6 +7,7 @@ import { Button } from "../../Button/Button";
 import { ButtonIcon } from "../../Button/ButtonIcon";
 import { EButtonTheme, EButtonIconShape } from "../../Button/enums";
 import { ECalendarViewMode } from "../enums";
+import { Text, ETextSize, EFontWeightText } from "../../Typography";
 import { globalLimitRange } from "../../../consts/DateConst";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import styles from "../styles/CalendarControls.module.less";
@@ -145,9 +146,15 @@ export const CalendarControls: React.FC<ICalendarControlsProps> = ({
         <div className={styles.calendarControls}>
             {renderPrevButton()}
             {viewMode === ECalendarViewMode.YEARS ? (
-                <span id={periodId} tabIndex={-1} aria-live="polite">
+                <Text
+                    id={periodId}
+                    tabIndex={-1}
+                    aria-live="polite"
+                    size={ETextSize.B4}
+                    weight={EFontWeightText.SEMIBOLD}
+                >
                     {children}
-                </span>
+                </Text>
             ) : (
                 renderViewButton()
             )}

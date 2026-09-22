@@ -11,7 +11,13 @@ const SizeItem = ({ size }: ISizeItemProps) => {
     return (
         <div style={{ maxWidth: 300 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
-            <MonthYearField size={size} value={value} label="Label" placeholder="мм.гггг" onChange={setValue} />
+            <MonthYearField
+                size={size}
+                value={value}
+                label="Label"
+                placeholder="Select to proceed"
+                onChange={setValue}
+            />
         </div>
     );
 };

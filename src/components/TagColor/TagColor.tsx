@@ -5,9 +5,11 @@ import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/class
 import styles from "./styles/TagColor.module.less";
 import { ETagColorStatus } from "./enums";
 
+/** Соответствие размера тега имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-const STATUS_TO_CLASS_NAME_MAP = {
+/** Соответствие статуса тега имени класса. */
+const STATUS_TO_CLASS_NAME_MAP: Record<ETagColorStatus, string> = {
     [ETagColorStatus.DEFAULT]: styles.default,
     [ETagColorStatus.SUCCESS]: styles.success,
     [ETagColorStatus.INFO]: styles.info,
@@ -15,7 +17,11 @@ const STATUS_TO_CLASS_NAME_MAP = {
     [ETagColorStatus.ERROR]: styles.error,
 };
 
-/** Компонент, который используется для маркировки и классификации. */
+/**
+ * Компонент, который используется для маркировки и классификации.
+ *
+ * Неинтерактивный: рендерит `span` без обработчиков и фокуса, цвет фона задаёт `status`.
+ */
 export const TagColor = React.forwardRef<HTMLSpanElement, ITagColorProps>(
     ({ children, className, size, status = ETagColorStatus.DEFAULT, ...restProps }, ref) => (
         <span

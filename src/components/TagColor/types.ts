@@ -1,10 +1,12 @@
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { ETagColorStatus } from "./enums";
 
-/** Свойства компонента Tag. */
+/** Свойства компонента TagColor. */
 export interface ITagColorProps extends React.HTMLAttributes<HTMLSpanElement> {
-    /** Размер. */
+    /** Содержимое метки. Рендерится во вложенном span, длинный текст обрезается многоточием. */
+    children?: React.ReactNode;
+    /** Размер. Задаёт высоту, отступы, радиус скругления и размер текста. */
     size: EComponentSize;
-    /** Статус. */
+    /** Статус. Определяет цвет фона. По умолчанию ETagColorStatus.DEFAULT. */
     status?: ETagColorStatus;
 }

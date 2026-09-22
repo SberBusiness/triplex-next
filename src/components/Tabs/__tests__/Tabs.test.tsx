@@ -53,10 +53,10 @@ const createRect = (right: number): DOMRect =>
  * Размеры замеряются через getBoundingClientRect, в jsdom они нулевые — без мока в dropdown
  * уезжают все табы, и ни «первый», ни «последний» таб в строке не определяются.
  */
-const mockTabsLayout = () => {
+const mockTabsLayout = (tabsFakeRight = TABS_FAKE_RIGHT) => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
         if (this.classList.contains("tabsFake")) {
-            return createRect(TABS_FAKE_RIGHT);
+            return createRect(tabsFakeRight);
         }
 
         const tabId = this.getAttribute("data-tab-item-id");
@@ -191,6 +191,19 @@ describe("Tabs", () => {
         expect(tabButtons[1].querySelector(".notificationIcon")).not.toBeNull();
     });
 
+    it("Should forward ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        render(<Tabs {...defaultProps} ref={ref} data-testid="tabs" />);
+
+        expect(ref.current).toBe(getTabs());
+        expect(ref.current).toHaveAttribute("role", "tablist");
+    });
+
+    it("Should have displayName", () => {
+        expect(Tabs.displayName).toBe("Tabs");
+    });
+
     it("Should not throw on an empty tabs array", () => {
         expect(() => render(<Tabs {...defaultProps} tabs={[]} selectedId="" data-testid="tabs" />)).not.toThrow();
     });
@@ -227,7 +240,7 @@ describe("Tabs", () => {
     });
 
     describe("Keyboard navigation", () => {
-        beforeEach(mockTabsLayout);
+        beforeEach(() => mockTabsLayout());
 
         afterEach(() => {
             vi.restoreAllMocks();
@@ -298,6 +311,93 @@ describe("Tabs", () => {
             expect(tabButtons[1]).toHaveFocus();
         });
 
+        it("Should move tabIndex 0 to the tab selected from outside", () => {
+            const { rerender } = render(<Tabs {...defaultProps} data-testid="tabs" />);
+
+            rerender(<Tabs {...defaultProps} selectedId="tab-2" data-testid="tabs" />);
+
+            const tabButtons = getInlineTabButtons();
+
+            expect(tabButtons[0]).toHaveAttribute("tabindex", "-1");
+            expect(tabButtons[1]).toHaveAttribute("tabindex", "0");
+        });
+
+        it("Should move tabIndex 0 from the focused tab to the selected one when selection changes", async () => {
+            const user = userEvent.setup();
+            // tab-0 не задан в TAB_RIGHT_BY_ID и остаётся в строке: в ней три таба, tab-3 уезжает в dropdown.
+            const tabs = [{ id: "tab-0", label: "Tab 0" }, ...mockTabs];
+            const { rerender } = render(<Tabs {...defaultProps} tabs={tabs} selectedId="tab-0" data-testid="tabs" />);
+
+            const tabButtons = getInlineTabButtons();
+
+            await user.click(tabButtons[0]);
+            await user.keyboard("{ArrowRight}");
+
+            expect(tabButtons[1]).toHaveAttribute("tabindex", "0");
+
+            rerender(<Tabs {...defaultProps} tabs={tabs} selectedId="tab-2" data-testid="tabs" />);
+
+            expect(tabButtons[1]).toHaveAttribute("tabindex", "-1");
+            expect(tabButtons[2]).toHaveAttribute("tabindex", "0");
+        });
+
+        it("Should move tabIndex 0 to the clicked tab even if selection does not change", async () => {
+            const user = userEvent.setup();
+
+            render(<Tabs {...defaultProps} data-testid="tabs" />);
+
+            const tabButtons = getInlineTabButtons();
+
+            await user.click(tabButtons[1]);
+
+            expect(tabButtons[0]).toHaveAttribute("tabindex", "-1");
+            expect(tabButtons[1]).toHaveAttribute("tabindex", "0");
+        });
+
+        it("Should put tabIndex 0 on the first inline tab when the selected tab is hidden in dropdown", () => {
+            render(<Tabs {...defaultProps} selectedId="tab-3" data-testid="tabs" />);
+
+            const tabButtons = getInlineTabButtons();
+
+            expect(tabButtons[0]).toHaveAttribute("tabindex", "0");
+            expect(tabButtons[1]).toHaveAttribute("tabindex", "-1");
+        });
+
+        it("Should move tabIndex 0 to the selected tab when the focused tab moves to dropdown", async () => {
+            const user = userEvent.setup();
+            // tab-0 не задан в TAB_RIGHT_BY_ID и остаётся в строке: в ней три таба, tab-3 уезжает в dropdown.
+            const tabs = [{ id: "tab-0", label: "Tab 0" }, ...mockTabs];
+            const { rerender } = render(<Tabs {...defaultProps} tabs={tabs} selectedId="tab-1" data-testid="tabs" />);
+
+            await user.click(getInlineTabButtons()[1]);
+            await user.keyboard("{ArrowRight}");
+
+            expect(getInlineTabButtons()[2]).toHaveAttribute("tabindex", "0");
+
+            // Контейнер сужается, и сфокусированный tab-2 тоже уезжает в dropdown. Раскладку пересчитывает смена числа табов.
+            mockTabsLayout(150);
+            rerender(<Tabs {...defaultProps} tabs={tabs.slice(0, 3)} selectedId="tab-1" data-testid="tabs" />);
+
+            const tabButtons = getInlineTabButtons();
+
+            expect(tabButtons[0]).toHaveAttribute("tabindex", "-1");
+            expect(tabButtons[1]).toHaveAttribute("tabindex", "0");
+            expect(tabButtons[2]).toHaveAttribute("tabindex", "-1");
+        });
+
+        it("Should keep tabIndex 0 in the row when tabs are replaced with an array of the same length", () => {
+            const { rerender } = render(<Tabs {...defaultProps} data-testid="tabs" />);
+            const tabs = [
+                { id: "a", label: "A" },
+                { id: "b", label: "B" },
+                { id: "c", label: "C" },
+            ];
+
+            rerender(<Tabs {...defaultProps} tabs={tabs} selectedId="a" data-testid="tabs" />);
+
+            expect(getInlineTabButtons()[0]).toHaveAttribute("tabindex", "0");
+        });
+
         it("Should prevent default on arrow keys to avoid page scroll", () => {
             render(<Tabs {...defaultProps} data-testid="tabs" />);
 
@@ -316,7 +416,7 @@ describe("Tabs", () => {
     });
 
     describe("Dropdown button", () => {
-        beforeEach(mockTabsLayout);
+        beforeEach(() => mockTabsLayout());
 
         afterEach(() => {
             vi.restoreAllMocks();

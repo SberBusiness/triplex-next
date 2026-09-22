@@ -149,7 +149,7 @@ export const WithOverflow: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

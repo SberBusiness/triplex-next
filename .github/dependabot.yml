@@ -55,6 +55,11 @@ updates:
       # Снять вместе с миграцией на Storybook 10 (TRI-145).
       - dependency-name: "@storybook/test-runner"
         versions: [">=0.24.0"]
+      # Типы Node держим на мажоре runtime (node-version: 22 в workflow):
+      # с типами новее TypeScript пропустит API, которых в Node 22 нет, и
+      # ошибка всплывёт только в рантайме. Сдвигать вместе с node-version.
+      - dependency-name: "@types/node"
+        versions: [">=23"]
     # Конвенция TRI-XXX на бота не распространяется, см. docs/ai/commits.md.
     commit-message:
       prefix: deps

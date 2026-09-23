@@ -1,9 +1,9 @@
 import React from "react";
 import { EComponentSize } from "../../enums";
 
-/** Контекст компонента StepperExtended. */
+/** Значение контекста StepperExtended: его читает каждый StepperExtended.Step. */
 export interface IStepperExtendedContext {
-    /** Размер Stepper. */
+    /** Размер шагов. */
     size: EComponentSize;
     /** Уникальный идентификатор выбранного шага. */
     selectedId?: string;
@@ -11,7 +11,7 @@ export interface IStepperExtendedContext {
     onSelectStep: (selectedId: string) => void;
 }
 
-/** Контекст в StepperExtended. */
+/** Контекст StepperExtended. Через barrel не экспортируется — это внутренняя деталь компонента. */
 export const StepperExtendedContext = React.createContext<IStepperExtendedContext>({
     size: EComponentSize.LG,
     selectedId: undefined,

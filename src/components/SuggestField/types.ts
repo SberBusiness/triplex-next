@@ -30,7 +30,7 @@ export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFiel
     onFilter: (value: string) => void;
     /** Обработчик окончания скролла списка (доступные в данный момент элементы закончились). */
     onScrollEnd?: () => void;
-    /** Обработчик отчиски поля. */
+    /** Обработчик очистки поля. Кнопка очистки отображается, только если обработчик передан. */
     onClear?: React.MouseEventHandler<HTMLButtonElement>;
     /** Рендер-функция поля ввода. */
     renderInput?: (props: IFormFieldInputProps) => JSX.Element;

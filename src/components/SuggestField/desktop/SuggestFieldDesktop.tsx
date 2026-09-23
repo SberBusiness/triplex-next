@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, useEffect, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { uniqueId } from "lodash-es";
 import { ISuggestFieldDesktopProps } from "./types";
 import { ISuggestFieldOption } from "../types";
@@ -58,11 +58,6 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     }
 
     const suggestRef = useRef<HTMLDivElement>(null);
-
-    const onScrollEndRef = useRef(onScrollEnd);
-    useLayoutEffect(() => {
-        onScrollEndRef.current = onScrollEnd;
-    }, [onScrollEnd]);
 
     const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
         (event) => {
@@ -173,23 +168,20 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [closeDropdown, onSelect],
     );
 
-    useEffect(() => {
-        if (inputFocused) {
-            if (dropdownOpen) {
-                if (options.length === 0) {
-                    closeDropdown(false);
-                }
-            } else {
-                if (options.length !== 0 && !ignoreAutoOpen) {
-                    setDropdownOpen(true);
-                }
-            }
+    // Пока поле в фокусе, видимость списка следует за наличием опций: появились — открываем
+    // (если открытие не подавлено), закончились — закрываем. Состояние синхронизируется во время
+    // рендера, а не в эффекте: так React пересчитывает его до коммита, без лишнего кадра.
+    if (inputFocused) {
+        if (dropdownOpen && options.length === 0) {
+            closeDropdown(false);
+        } else if (!dropdownOpen && options.length !== 0 && !ignoreAutoOpen) {
+            setDropdownOpen(true);
         }
-    }, [inputFocused, dropdownOpen, options.length, closeDropdown, ignoreAutoOpen]);
+    }
 
     const renderSuggestField = () => {
-        const Input = renderInput === undefined ? FormFieldInput : renderInput;
-        const Dropdown = renderDropdown === undefined ? SuggestFieldDesktopDropdown : renderDropdown;
+        const Input = renderInput ?? FormFieldInput;
+        const Dropdown = renderDropdown ?? SuggestFieldDesktopDropdown;
         // Фактическое состояние открытия выпадающего списка.
         const dropdownActuallyOpen = dropdownOpen && options.length !== 0;
 
@@ -249,7 +241,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     return (
         <Tooltip
             size={ETooltipSize.SM}
-            isOpen={!!(tooltipOpen && inputFocused) && status !== EFormFieldStatus.DISABLED}
+            isOpen={tooltipOpen && inputFocused && status !== EFormFieldStatus.DISABLED}
             toggle={() => {}}
             targetRef={suggestRef}
             disableAdaptiveMode

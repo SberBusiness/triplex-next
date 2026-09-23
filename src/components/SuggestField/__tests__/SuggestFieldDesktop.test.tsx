@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { SuggestFieldDesktop } from "../desktop/SuggestFieldDesktop";
@@ -260,6 +260,29 @@ describe("SuggestFieldDesktop", () => {
         });
     });
 
+    describe("onScrollEnd", () => {
+        it("после перерисовки срабатывает актуальный обработчик", async () => {
+            // Раньше onScrollEnd латчился в ref, который нигде не читался. Ref убран, обработчик
+            // уходит в Dropdown напрямую — тест фиксирует, что список зовёт именно последний
+            // переданный колбэк, а не тот, что был на первом рендере.
+            const user = userEvent.setup();
+            const previousOnScrollEnd = vi.fn();
+            const nextOnScrollEnd = vi.fn();
+            const { rerenderField } = renderField({
+                onScrollEnd: previousOnScrollEnd,
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            await user.click(getInput());
+            rerenderField({ onScrollEnd: nextOnScrollEnd });
+            scrollListToEnd();
+
+            expect(previousOnScrollEnd).not.toHaveBeenCalled();
+            expect(nextOnScrollEnd).toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe("кастомизация", () => {
         it("renderInput заменяет поле ввода", () => {
             renderField({
@@ -291,3 +314,14 @@ describe("SuggestFieldDesktop", () => {
         });
     });
 });
+
+/** Прокручивает выпадающий список до конца: jsdom не считает размеры сам. */
+function scrollListToEnd() {
+    const list = screen.getByRole("listbox");
+
+    Object.defineProperty(list, "scrollHeight", { configurable: true, value: 300 });
+    Object.defineProperty(list, "clientHeight", { configurable: true, value: 100 });
+    list.scrollTop = 200;
+
+    fireEvent.scroll(list);
+}

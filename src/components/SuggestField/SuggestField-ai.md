@@ -1,7 +1,7 @@
 ---
 component: SuggestField
 category: TextFields
-related: [Suggest, TextField, FormField, Dropdown, Tooltip]
+related: [Suggest, SelectField, TextField, FormField, Dropdown]
 tokens: []
 stories: stories/SuggestField/SuggestField.stories.tsx
 version: "1.0"
@@ -187,6 +187,9 @@ version: "1.0"
 - `Suggest` — headless-основа той же задачи: состояние и контекст без разметки. `SuggestField`
   на него **не переведён** и держит собственную реализацию состояния (в `SuggestField.tsx`
   стоит `TODO: Переписать через useSuggest`).
+- `SelectField` — та же задача с другим компромиссом: список фиксированный, ввода и фильтрации
+  нет. Сюда же примыкают `MultiselectField` и `SelectExtendedField` — все трое ссылаются на
+  `SuggestField` со своей стороны.
 - `TextField` — `ISuggestFieldProps` наследует его props (`Omit<ITextFieldProps, "onSelect">`),
   а разметку поля даёт общий `TextFieldBase`.
 - `FormField` — источник `FormFieldInput` (поле ввода и `SuggestField.Input`), `FormFieldClear`
@@ -194,7 +197,10 @@ version: "1.0"
 - `Dropdown` — выпадающий список: `DropdownDesktop` + `DropdownList` + `DropdownListItem` на
   десктопе, `DropdownMobile*` в полноэкранном мобильном варианте. `ISuggestFieldDesktopDropdownProps`
   наследует `IDropdownDesktopProps`.
-- `Tooltip` — подсказка `tooltipHint` у десктопного поля.
+- `Tooltip` — подсказка `tooltipHint` у десктопного поля. В `related` не вынесен: односторонний
+  контракт по рендеру, а ориентир 2–5 имён уже выбран более полезными адресатами.
+- `MobileView` — переключает десктопный и мобильный варианты по ширине экрана. В `related` не
+  вынесен по той же причине.
 - `SuggestFieldDesktop` / `SuggestFieldMobile` — платформенные варианты, экспортируются из barrel
   и принимают те же props. Отдельных AI.md не имеют: их поведение описано выше. Бери их напрямую,
   только если адаптивное переключение `MobileView` не нужно.

@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { SuggestField } from "../SuggestField";
 import { SuggestFieldMobile } from "../mobile/SuggestFieldMobile";
 import { ISuggestFieldMobileProps } from "../mobile/types";
@@ -12,16 +12,34 @@ const OPTIONS: ISuggestFieldOption[] = [
     { id: "b", label: "Вторая опция" },
 ];
 
-/** jsdom не реализует scrollIntoView, а SuggestFieldMobile зовёт его после закрытия дропдауна. */
+/**
+ * jsdom не реализует scrollIntoView, а SuggestFieldMobile зовёт его после закрытия дропдауна.
+ * Возвращает функцию восстановления: `vi.stubGlobal` для метода прототипа не подходит,
+ * а `restoreMocks` в vitest.config.ts не включён.
+ */
 const mockScrollIntoView = () => {
-    Object.defineProperty(Element.prototype, "scrollIntoView", { writable: true, value: vi.fn() });
+    const original = Element.prototype.scrollIntoView;
+
+    Object.defineProperty(Element.prototype, "scrollIntoView", {
+        configurable: true,
+        writable: true,
+        value: vi.fn(),
+    });
+
+    return () => {
+        Object.defineProperty(Element.prototype, "scrollIntoView", {
+            configurable: true,
+            writable: true,
+            value: original,
+        });
+    };
 };
 
 /** Подменяет matchMedia так, чтобы MobileView считал экран мобильным. */
 const mockMobileScreen = () => {
-    Object.defineProperty(window, "matchMedia", {
-        writable: true,
-        value: vi.fn().mockImplementation((query: string) => ({
+    vi.stubGlobal(
+        "matchMedia",
+        vi.fn().mockImplementation((query: string) => ({
             matches: true,
             media: query,
             onchange: null,
@@ -31,8 +49,21 @@ const mockMobileScreen = () => {
             removeListener: vi.fn(),
             dispatchEvent: vi.fn(),
         })),
-    });
+    );
 };
+
+let restoreScrollIntoView: () => void;
+
+// Мобильная среда нужна обоим describe ниже, поэтому настраивается один раз на файл.
+beforeAll(() => {
+    mockMobileScreen();
+    restoreScrollIntoView = mockScrollIntoView();
+});
+
+afterAll(() => {
+    restoreScrollIntoView();
+    vi.unstubAllGlobals();
+});
 
 type TRenderProps = Partial<ISuggestFieldMobileProps> & Pick<ISuggestFieldMobileProps, "onSelect" | "onFilter">;
 
@@ -58,12 +89,13 @@ const getDropdownInput = () => screen.getByRole("textbox");
 /** Открывает мобильный дропдаун так же, как это делает пользователь: фокусом на поле. */
 const openDropdown = () => fireEvent.focus(getTarget());
 
-describe("SuggestFieldMobile", () => {
-    beforeAll(() => {
-        mockMobileScreen();
-        mockScrollIntoView();
-    });
+/**
+ * Кнопка закрытия в шапке мобильного дропдауна. У DropdownMobileClose нет доступного имени,
+ * поэтому отбирается по пустому name — если подпись когда-нибудь появится, чинить здесь.
+ */
+const getDropdownCloseButton = () => screen.getByRole("button", { name: "" });
 
+describe("SuggestFieldMobile", () => {
     describe("поле-триггер", () => {
         it("поле только для чтения: значение выбирается в дропдауне", () => {
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
@@ -103,15 +135,17 @@ describe("SuggestFieldMobile", () => {
             expect(getTarget()).toHaveAttribute("aria-expanded", "true");
         });
 
-        it("кнопка очистки рендерится только вместе с onClear", async () => {
+        it("с onClear кнопка очистки рендерится и вызывает обработчик", async () => {
             const user = userEvent.setup();
             const onClear = vi.fn();
-            const { unmount } = renderField({ value: OPTIONS[0], onClear, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[0], onClear, onSelect: vi.fn(), onFilter: vi.fn() });
 
             await user.click(screen.getByRole("button"));
-            expect(onClear).toHaveBeenCalledTimes(1);
 
-            unmount();
+            expect(onClear).toHaveBeenCalledTimes(1);
+        });
+
+        it("без onClear кнопки очистки нет", () => {
             renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(screen.queryByRole("button")).not.toBeInTheDocument();
@@ -183,7 +217,7 @@ describe("SuggestFieldMobile", () => {
 
             openDropdown();
             fireEvent.focus(getDropdownInput());
-            fireEvent.click(screen.getByRole("button", { name: "" }));
+            fireEvent.click(getDropdownCloseButton());
 
             expect(onSelect).toHaveBeenCalledWith(undefined);
         });
@@ -193,7 +227,7 @@ describe("SuggestFieldMobile", () => {
             renderField({ value: OPTIONS[0], onSelect, onFilter: vi.fn() });
 
             openDropdown();
-            fireEvent.click(screen.getByRole("button", { name: "" }));
+            fireEvent.click(getDropdownCloseButton());
 
             expect(onSelect).not.toHaveBeenCalled();
         });
@@ -247,11 +281,6 @@ describe("SuggestFieldMobile", () => {
 });
 
 describe("SuggestField на мобильной ширине", () => {
-    beforeAll(() => {
-        mockMobileScreen();
-        mockScrollIntoView();
-    });
-
     it("рендерится мобильный вариант: поле только для чтения", () => {
         render(
             <SuggestField
@@ -266,6 +295,44 @@ describe("SuggestField на мобильной ширине", () => {
         );
 
         expect(getTarget()).toHaveAttribute("readonly");
+    });
+
+    it("сам SuggestFieldMobile className и data-test-id применяет", () => {
+        // Положительный контроль к тесту ниже: показывает, что props теряются именно
+        // в SuggestField.tsx, а не в мобильном компоненте.
+        const { container } = renderField({
+            className: "custom-class",
+            "data-test-id": "suggest",
+            onSelect: vi.fn(),
+            onFilter: vi.fn(),
+        });
+
+        expect(container.querySelector(".custom-class")).not.toBeNull();
+        expect(container.querySelector("[data-test-id]")).not.toBeNull();
+    });
+
+    it("className и data-test-id до мобильного варианта не доходят", () => {
+        // Фиксирует инвариант из SuggestField-ai.md: SuggestField.tsx отдаёт в SuggestFieldMobile
+        // явный whitelist props, а в SuggestFieldDesktop — весь {...props}. Поэтому className, id,
+        // data-test-id, active и renderInput на мобильной ширине теряются. Расхождение известное,
+        // выравнивание меняет наблюдаемое поведение и остаётся решением мейнтейнера — тест
+        // покраснеет, если контракт поменяют молча.
+        const { container } = render(
+            <SuggestField
+                value={undefined}
+                options={OPTIONS}
+                tooltipHint="Подсказка"
+                tooltipOpen={false}
+                inputProps={{}}
+                className="custom-class"
+                data-test-id="suggest"
+                onSelect={vi.fn()}
+                onFilter={vi.fn()}
+            />,
+        );
+
+        expect(container.querySelector(".custom-class")).toBeNull();
+        expect(container.querySelector("[data-test-id]")).toBeNull();
     });
 });
 

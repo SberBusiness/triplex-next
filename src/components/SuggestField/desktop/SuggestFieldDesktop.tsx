@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import { uniqueId } from "lodash-es";
+import { isKey } from "@sberbusiness/triplex-next/utils";
 import { ISuggestFieldDesktopProps } from "./types";
 import { ISuggestFieldOption } from "../types";
 import { EComponentSize } from "../../../enums";
@@ -10,7 +11,6 @@ import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import { DropdownListContext } from "../../Dropdown";
 import { DataTestId } from "../../../consts/DataTestId";
 import { SuggestFieldDesktopDropdown } from "./SuggestFieldDesktopDropdown";
-import { isKey } from "@sberbusiness/triplex-next/utils";
 
 /**
  * Выпадающий список с возможностью поиска по введённому значению, позволяет задать кастомные компоненты для отображения всех
@@ -43,7 +43,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     inputProps,
     ...restProps
 }: ISuggestFieldDesktopProps<T>) => {
-    const [inputValue, setInputValue] = useState(value?.label || "");
+    const [inputValue, setInputValue] = useState(value?.label ?? "");
     const [inputFocused, setInputFocused] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     // Флаг для предотвращения автоматического открытия Dropdown сразу после выбора значения.
@@ -54,7 +54,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     const [prevValue, setPrevValue] = useState(value);
     if (value?.id !== prevValue?.id) {
         setPrevValue(value);
-        setInputValue(value?.label || "");
+        setInputValue(value?.label ?? "");
     }
 
     const suggestRef = useRef<HTMLDivElement>(null);
@@ -85,7 +85,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
             closeDropdown(false);
 
             if (inputValue.length !== 0) {
-                setInputValue(value?.label || "");
+                setInputValue(value?.label ?? "");
             } else if (value !== undefined) {
                 onSelect(undefined);
             }
@@ -162,7 +162,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     const handleSelect = useCallback<typeof onSelect>(
         (nextValue) => {
             closeDropdown(true);
-            setInputValue(nextValue?.label || "");
+            setInputValue(nextValue?.label ?? "");
             onSelect(nextValue);
         },
         [closeDropdown, onSelect],

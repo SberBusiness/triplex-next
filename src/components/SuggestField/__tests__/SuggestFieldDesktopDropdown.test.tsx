@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, onTestFinished, vi } from "vitest";
 import { SuggestFieldDesktopDropdown } from "../desktop/SuggestFieldDesktopDropdown";
 import { ISuggestFieldDesktopDropdownProps } from "../desktop/types";
 import { ISuggestFieldOption } from "../types";
@@ -161,7 +161,10 @@ describe("SuggestFieldDesktopDropdown", () => {
             // DropdownList клонирует элементы списка и вешает на них ref. Тип renderListItem —
             // обычная функция, поэтому ref до кастомного элемента не доходит и React пишет
             // предупреждение. Гасим его, чтобы не шуметь в выводе: см. «Инварианты» в SuggestField-ai.md.
+            // Восстановление через onTestFinished, а не последней строкой: иначе упавший expect
+            // оставил бы console.error заглушённым до конца файла (restoreMocks не включён).
             const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+            onTestFinished(() => consoleError.mockRestore());
 
             renderDropdown({
                 renderListItem: ({ children, id }) => <div data-testid={`custom-item-${id}`}>{children}</div>,
@@ -170,8 +173,6 @@ describe("SuggestFieldDesktopDropdown", () => {
 
             expect(screen.getByTestId("custom-item-a")).toHaveTextContent(OPTIONS[0].label);
             expect(screen.getByTestId("custom-item-b")).toHaveTextContent(OPTIONS[1].label);
-
-            consoleError.mockRestore();
         });
     });
 });

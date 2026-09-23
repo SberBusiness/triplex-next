@@ -3,12 +3,12 @@ import { action } from "storybook/actions";
 import { EComponentSize, ETabsExtendedType, Tabs } from "@sberbusiness/triplex-next";
 
 const TABS = [
-    { id: "tab-1", label: "Обзор" },
-    { id: "tab-2", label: "Операции" },
-    { id: "tab-3", label: "Документы" },
-    { id: "tab-4", label: "Реквизиты" },
-    { id: "tab-5", label: "Выписка" },
-    { id: "tab-6", label: "Настройки" },
+    { id: "tab-1", label: "Tab Name 1" },
+    { id: "tab-2", label: "Tab Name 2" },
+    { id: "tab-3", label: "Tab Name 3" },
+    { id: "tab-4", label: "Tab Name 4" },
+    { id: "tab-5", label: "Tab Name 5" },
+    { id: "tab-6", label: "Tab Name 6" },
 ];
 
 /** Свойства примера Playground. */

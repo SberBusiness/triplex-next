@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Tabs } from "@sberbusiness/triplex-next";
 
 const TABS = [
-    { id: "tab-1", label: "Обзор" },
-    { id: "tab-2", label: "Операции", showNotificationIcon: true },
-    { id: "tab-3", label: "Документы" },
+    { id: "tab-1", label: "Tab Name 1" },
+    { id: "tab-2", label: "Tab Name 2", showNotificationIcon: true },
+    { id: "tab-3", label: "Tab Name 3" },
 ];
 
 export const WithNotificationIcon = () => {

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { ETabsExtendedType, Tabs } from "@sberbusiness/triplex-next";
 
 const TABS = [
-    { id: "tab-1", label: "Обзор" },
-    { id: "tab-2", label: "Операции" },
-    { id: "tab-3", label: "Документы" },
+    { id: "tab-1", label: "Tab Name 1" },
+    { id: "tab-2", label: "Tab Name 2" },
+    { id: "tab-3", label: "Tab Name 3" },
 ];
 
 interface ITypeItemProps {

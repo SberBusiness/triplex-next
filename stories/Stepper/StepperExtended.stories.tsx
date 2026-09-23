@@ -175,8 +175,6 @@ export const Example: StoryObj<typeof StepperExtended> = {
                 language: "tsx",
             },
         },
-        // Ширина ленты и положение прокрутки зависят от ResizeObserver — скриншот нестабилен.
-        testRunner: { skip: true },
     },
     render: ExampleRender,
 };

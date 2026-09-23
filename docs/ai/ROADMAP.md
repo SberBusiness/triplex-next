@@ -198,7 +198,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SuggestField | ⬜ | ✅ | ⬜ |
 | SwipeableArea | ✅ | ✅ | ✅ |
 | TableBasic | ✅ | ✅ | ✅ |
-| Tabs | ⬜ | ⬜ | ⬜ |
+| Tabs | ✅ | ✅ | ✅ |
 | TabsExtended | ✅ | ✅ | ✅ |
 | TabsLine | ✅ | ✅ | ✅ |
 | Tag | ✅ | ✅ | ✅ |

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { EComponentSize, TabsLine } from "@sberbusiness/triplex-next";
 
 const TABS = [
-    { id: "tabs-line-all", label: "Все" },
-    { id: "tabs-line-draft", label: "Черновики" },
-    { id: "tabs-line-sign", label: "На подпись" },
-    { id: "tabs-line-executed", label: "Исполненные" },
-    { id: "tabs-line-rejected", label: "Отклоненные" },
+    { id: "tabs-line-all", label: "Tab Name 1" },
+    { id: "tabs-line-draft", label: "Tab Name 2" },
+    { id: "tabs-line-sign", label: "Tab Name 3" },
+    { id: "tabs-line-executed", label: "Tab Name 4" },
+    { id: "tabs-line-rejected", label: "Tab Name 5" },
 ];
 
 /** Пятый таб уходит в дропдаун — так кнопка дропдауна попадает в кадр во всех трёх размерах. */

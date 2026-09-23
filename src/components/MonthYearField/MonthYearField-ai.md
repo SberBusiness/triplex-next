@@ -61,7 +61,6 @@ version: "1.0"
 - `forwardRef` на компоненте — не убирать. Ref пробрасывается в `DatePickerExtended` (корневой DOM-элемент — элемент `DatePickerExtended`).
 - Публичный API (`IMonthYearFieldProps`: `value`, `onChange`, `onClear`, `targetProps`, `placeholder` + унаследованные `size`/`status`/`label` и props `DatePickerExtended`) — изменение имён/типов/значений — breaking change.
 - Поле read-only по контракту — не делать его редактируемым без обсуждения (компонент не имеет логики валидации клавиатурного ввода).
-- Отображаемый формат `"MMM YYYY"` зафиксирован в `inputMonthYearFormat`; менять его — визуальный breaking change для потребителей.
 - Sync-эффект в `MonthYearField.tsx` (`useEffect` по `[value, format, limitRange]` с `eslint-disable react-hooks/exhaustive-deps`) — намеренная синхронизация derived-стейта `pickerValues` с внешним `value`. Не переписывать без анализа поведения: сравнение идёт по `inputString`, чтобы не сбрасывать стейт при эквивалентных значениях.
 - Внутренние символы `MonthYearPickerUtils` (`utils.ts`), `MonthYearFieldContext`, `MonthYearFieldTarget` не экспортируются через barrel — это приватные детали реализации.
 

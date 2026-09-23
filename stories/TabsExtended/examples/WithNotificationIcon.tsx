@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { TabsExtended } from "@sberbusiness/triplex-next";
 
 const TABS = [
-    { id: "tab-1", label: "Обзор", showNotificationIcon: false },
-    { id: "tab-2", label: "Операции", showNotificationIcon: true },
-    { id: "tab-3", label: "Документы", showNotificationIcon: true },
+    { id: "tab-1", label: "Tab Name 1", showNotificationIcon: false },
+    { id: "tab-2", label: "Tab Name 2", showNotificationIcon: true },
+    { id: "tab-3", label: "Tab Name 3", showNotificationIcon: true },
 ];
 
 export const WithNotificationIcon = () => {

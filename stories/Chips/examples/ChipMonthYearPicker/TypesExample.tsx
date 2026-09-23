@@ -15,7 +15,7 @@ const TypeItem = ({ type, label }: TypeItemProps) => {
             <ChipMonthYearPicker
                 value={value}
                 label="MonthYear label"
-                placeholder="мм.гггг"
+                placeholder="Select to proceed"
                 clearButtonProps={{ "aria-label": "Очистить" }}
                 type={type}
                 alignment={EDropdownAlignment.LEFT}

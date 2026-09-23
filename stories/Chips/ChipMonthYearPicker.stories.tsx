@@ -58,7 +58,7 @@ export const Playground: Story = {
         type: EChipType.TYPE_1,
         size: EComponentSize.MD,
         label: "Month label",
-        placeholder: "мм.гггг",
+        placeholder: "Select to proceed",
         displayedValue: undefined,
         disabled: false,
     },

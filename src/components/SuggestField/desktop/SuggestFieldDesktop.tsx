@@ -148,10 +148,13 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [value, onSelect, inputValue.length, onFilter, onClear],
     );
 
-    const handleDropdownOpen = useCallback<typeof setDropdownOpen>(
-        (nextDropdownOpen) => {
+    // Тип ровно как у Dropdown.setOpened — (opened: boolean) => void. Через typeof setDropdownOpen
+    // сюда пролезал бы функциональный updater: он всегда truthy, поэтому закрытие молча уходило бы
+    // в ветку открытия мимо cleanup в closeDropdown.
+    const handleDropdownOpen = useCallback(
+        (nextDropdownOpen: boolean) => {
             if (nextDropdownOpen) {
-                setDropdownOpen(nextDropdownOpen);
+                setDropdownOpen(true);
             } else {
                 closeDropdown(false);
             }

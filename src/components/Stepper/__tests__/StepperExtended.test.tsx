@@ -179,6 +179,22 @@ describe("StepperExtended", () => {
             expect(getStep("Step 2")).not.toHaveAttribute("aria-current");
         });
 
+        it("marks a not yet passed step with inactive class", () => {
+            render(
+                <StepperExtended selectedStepId="step1" onSelectStep={vi.fn()}>
+                    <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
+                        Step 1
+                    </StepperExtended.Step>
+                    <StepperExtended.Step id="step2" type={EStepperStepType.NEUTRAL} isInActiveStep>
+                        Step 2
+                    </StepperExtended.Step>
+                </StepperExtended>,
+            );
+
+            expect(getStep("Step 2")).toHaveClass("inactive");
+            expect(getStep("Step 1")).not.toHaveClass("inactive");
+        });
+
         it("updates selected step when selectedStepId changes", () => {
             const { rerender } = renderStepper({ selectedStepId: "step1" });
 
@@ -232,6 +248,13 @@ describe("StepperExtended", () => {
             await user.keyboard(" ");
 
             expect(onSelectStep).toHaveBeenCalledWith("step2");
+        });
+
+        it("marks a disabled step as unavailable for pointer and keyboard", () => {
+            renderStepper();
+
+            expect(getStep("Step 3")).toHaveAttribute("aria-disabled", "true");
+            expect(getStep("Step 3")).toHaveAttribute("tabindex", "-1");
         });
 
         it("skips disabled steps in keyboard tab order", async () => {

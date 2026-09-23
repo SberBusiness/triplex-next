@@ -52,9 +52,12 @@ version: "1.0"
 | `StepperExtended.Step` (`StepperStep`) | Да | Один шаг: `<li role="button">` с содержимым, иконкой и декоративной стрелкой-границей справа. Обрабатывает клик, `Enter` / `Space` и подсветку фокуса |
 | `StepperExtended.Step.Icon` (`StepperStepIcon`) | Нет | Готовая иконка статуса по `EStepperStepIconType`. Кладётся в prop `icon` шага. Экспортируется из пакета и отдельно — как `StepperStepIcon` |
 
-Собственного AI.md у `StepperStep` и `StepperStepIcon` нет: из barrel
-`src/components/Stepper/index.ts` `StepperStep` не экспортируется (он доступен только как
-`StepperExtended.Step` / `Stepper.Step`), поэтому оба описаны здесь.
+Собственного AI.md у обоих нет, но по разным причинам (`docs/ai/CONTEXT.md` §
+«Когда создавать `{ComponentName}-ai.md`»). `StepperStep` не экспортируется из barrel
+`src/components/Stepper/index.ts` — он доступен только как `StepperExtended.Step` /
+`Stepper.Step`. `StepperStepIcon` из barrel экспортируется, но нетривиального API
+у него нет: единственный prop `type` выбирает иконку из `@sberbusiness/icons-next`,
+ни состояния, ни колбэков, ни клавиатуры. Оба описаны здесь.
 
 ---
 

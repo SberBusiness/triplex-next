@@ -6,7 +6,7 @@ export const DefaultExample = () => {
 
     return (
         <div style={{ maxWidth: 300 }}>
-            <MonthYearField value={value} placeholder="мм.гггг" label="Label" onChange={setValue} />
+            <MonthYearField value={value} placeholder="Select to proceed" label="Label" onChange={setValue} />
         </div>
     );
 };

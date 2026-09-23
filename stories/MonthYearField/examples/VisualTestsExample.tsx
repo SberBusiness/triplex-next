@@ -9,13 +9,25 @@ export const VisualTestsExample = () => (
         {SIZES.map((size) => (
             <div key={size} style={{ width: 220 }}>
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
-                <MonthYearField size={size} value="" label="Empty" placeholder="мм.гггг" onChange={() => {}} />
+                <MonthYearField
+                    size={size}
+                    value=""
+                    label="Empty"
+                    placeholder="Select to proceed"
+                    onChange={() => {}}
+                />
             </div>
         ))}
         {SIZES.map((size) => (
             <div key={`filled-${size}`} style={{ width: 220 }}>
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()} filled</div>
-                <MonthYearField size={size} value="19700101" label="Filled" placeholder="мм.гггг" onChange={() => {}} />
+                <MonthYearField
+                    size={size}
+                    value="19700101"
+                    label="Filled"
+                    placeholder="Select to proceed"
+                    onChange={() => {}}
+                />
             </div>
         ))}
         {STATUSES.map((status) => (
@@ -25,7 +37,7 @@ export const VisualTestsExample = () => (
                     status={status}
                     value="19700101"
                     label="Status"
-                    placeholder="мм.гггг"
+                    placeholder="Select to proceed"
                     onChange={() => {}}
                 />
             </div>
@@ -35,7 +47,7 @@ export const VisualTestsExample = () => (
             <MonthYearField
                 value="19700101"
                 label="Clearable"
-                placeholder="мм.гггг"
+                placeholder="Select to proceed"
                 onChange={() => {}}
                 onClear={() => {}}
             />
@@ -45,7 +57,7 @@ export const VisualTestsExample = () => (
             <MonthYearField
                 value="19700101"
                 label="With postfix"
-                placeholder="мм.гггг"
+                placeholder="Select to proceed"
                 onChange={() => {}}
                 onClear={() => {}}
                 targetProps={{

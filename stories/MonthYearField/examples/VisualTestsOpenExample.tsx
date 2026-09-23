@@ -9,7 +9,7 @@ export const VisualTestsOpenExample = () => (
             size={EComponentSize.MD}
             value="19700101"
             label="Opened"
-            placeholder="мм.гггг"
+            placeholder="Select to proceed"
             onChange={() => {}}
         />
     </div>

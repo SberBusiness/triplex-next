@@ -9,7 +9,7 @@ import {
 export const WithoutNavigationExample = () => {
     const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
-        <MonthYearField label="Label" placeholder="мм.гггг" {...props} />
+        <MonthYearField label="Label" placeholder="Select to proceed" {...props} />
     );
 
     return (

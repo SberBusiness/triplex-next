@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
-import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { ISuggestFieldMobileDropdownProps } from "@sberbusiness/triplex-next/components/SuggestField/mobile/types";
+import { ISuggestFieldOption } from "../types";
+import { ISuggestFieldMobileDropdownProps } from "./types";
 import {
     Dropdown,
     DropdownMobileHeader,
@@ -11,8 +11,8 @@ import {
     DropdownMobileList,
     DropdownMobileListItem,
     IDropdownProps,
-} from "@sberbusiness/triplex-next/components/Dropdown";
-import { SuggestFieldMobileDropdownHint } from "@sberbusiness/triplex-next/components/SuggestField/mobile/SuggestFieldMobileDropdownHint";
+} from "../../Dropdown";
+import { SuggestFieldMobileDropdownHint } from "./SuggestFieldMobileDropdownHint";
 import styles from "../styles/SuggestFieldMobile.module.less";
 
 /** Отображает мобильный dropdown с полем ввода и списком для выбора. */
@@ -45,7 +45,6 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
     // Флаг для предотвращения сброса значения, когда закрытие вызвано выбором конкретной опции из списка.
     const closedBySelectionRef = useRef(false);
 
-    const listRef = useRef<HTMLDivElement>(null);
     // Не используется в мобильном Dropdown, нужен как обязательное свойство Dropdown.
     const targetRef = useRef<HTMLDivElement>(null);
 
@@ -125,7 +124,7 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                             {tooltipOpen ? (
                                 <SuggestFieldMobileDropdownHint>{tooltipHint}</SuggestFieldMobileDropdownHint>
                             ) : (
-                                <DropdownMobileList loading={dropdownListLoading} ref={listRef}>
+                                <DropdownMobileList loading={dropdownListLoading}>
                                     {options.map((option) => (
                                         <DropdownMobileListItem
                                             key={option.id}

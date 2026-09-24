@@ -8,6 +8,12 @@ import { DataTestId } from "../../../consts/DataTestId";
 
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
+/**
+ * Выпадающий список десктопного SuggestField. Рендерится в портале, повторяет ширину поля ввода
+ * и вызывает onScrollEnd при прокрутке списка до конца.
+ *
+ * @template T - тип опции, должен расширять ISuggestFieldOption
+ */
 export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISuggestFieldOption>({
     size,
     value,
@@ -24,8 +30,8 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
     renderListItem,
     ...restProps
 }: ISuggestFieldDesktopDropdownProps<T>) => {
-    const List = renderList === undefined ? DropdownList : renderList;
-    const ListItem = renderListItem === undefined ? DropdownListItem : renderListItem;
+    const List = renderList ?? DropdownList;
+    const ListItem = renderListItem ?? DropdownListItem;
 
     const handleMouseDown = useCallback<React.MouseEventHandler<HTMLDivElement>>(
         (event) => {
@@ -63,7 +69,7 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
                 onMouseDown={handleMouseDown}
             >
                 <List id={listId} size={size} dropdownOpened={opened} loading={listLoading} onScroll={handleListScroll}>
-                    {options?.map((option) => (
+                    {options.map((option) => (
                         <ListItem
                             key={option.id}
                             id={option.id}

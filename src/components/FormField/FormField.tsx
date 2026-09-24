@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 import clsx from "clsx";
 import { FormFieldContext, IFormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
@@ -55,6 +55,12 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
         const [prefixWidth, setPrefixWidth] = useState(TARGET_PADDING_X_DEFAULT);
         const [filled, setFilled] = useState(false);
         const [focused, setFocused] = useState(false);
+
+        useLayoutEffect(() => {
+            if (status === EFormFieldStatus.DISABLED) {
+                setFocused(false);
+            }
+        }, [status]);
 
         // Поле активно, если активность задана снаружи или вложенный элемент ввода в фокусе.
         const isActive = active || focused;

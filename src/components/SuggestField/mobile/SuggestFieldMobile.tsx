@@ -36,7 +36,7 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
     const ref = useRef<HTMLInputElement>(null);
     // Предыдущее состояние dropdownOpened.
     const prevDropdownOpen = useRef(false);
-    const Input = renderInput === undefined ? FormFieldInput : renderInput;
+    const Input = renderInput ?? FormFieldInput;
 
     useEffect(() => {
         // Дропдаун закрылся.
@@ -70,7 +70,7 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
             ref={ref}
         >
             <Input
-                value={value ? value.label : ""}
+                value={value?.label ?? ""}
                 placeholder={placeholder}
                 role="combobox"
                 aria-autocomplete="list"

@@ -201,6 +201,6 @@ export const VisualTests: Story = {
     },
     play: async ({ canvas, userEvent }) => {
         // Раскрытая подсказка — единственное состояние Step, требующее взаимодействия.
-        await userEvent.hover(await canvas.findByLabelText("Шаг с подсказкой"));
+        await userEvent.hover(await canvas.findByTestId("step-with-tooltip"));
     },
 };

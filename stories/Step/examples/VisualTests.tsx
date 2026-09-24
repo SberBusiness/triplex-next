@@ -20,7 +20,7 @@ export const VisualTests = () => (
         </div>
         {/* Раскрытая подсказка — состояние доступно только после наведения, открывается в play. */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, height: 120 }}>
-            <Step step={3} status={EStepStatus.ACTIVE} position={EStepPosition.Default} aria-label="Шаг с подсказкой">
+            <Step step={3} status={EStepStatus.ACTIVE} position={EStepPosition.Default} data-testid="step-with-tooltip">
                 Проверьте сумму и назначение платежа
             </Step>
         </div>

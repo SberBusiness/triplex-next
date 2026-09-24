@@ -191,7 +191,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SmallInput | ✅ | ✅ | ✅ |
 | Spoiler | ⬜ | ⬜ | ⬜ |
 | StatusTracker | ⬜ | ⬜ | ⬜ |
-| Step | ⬜ | ⬜ | ⬜ |
+| Step | ✅ | ✅ | ✅ |
 | Stepper | ⬜ | ⬜ | ⬜ |
 | StepperExtended | ⬜ | ⬜ | ⬜ |
 | Suggest | ✅ | ✅ | ✅ |

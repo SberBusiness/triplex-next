@@ -18,8 +18,9 @@ export const VisualTests = () => (
             <Step step={10} status={EStepStatus.DEFAULT} size={EComponentSize.SM} />
             <Step step={99} status={EStepStatus.DONE} size={EComponentSize.LG} />
         </div>
-        {/* Раскрытая подсказка — состояние доступно только после наведения, открывается в play. */}
-        <div style={{ display: "flex", alignItems: "center", gap: 16, height: 120 }}>
+        {/* Раскрытая подсказка — состояние открывается в play.
+            Запас сверху: подсказка раскрывается вверх и иначе накрывает предыдущую строку. */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 120 }}>
             <Step step={3} status={EStepStatus.ACTIVE} position={EStepPosition.Default} data-testid="step-with-tooltip">
                 Проверьте сумму и назначение платежа
             </Step>

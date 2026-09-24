@@ -201,6 +201,9 @@ export const VisualTests: Story = {
     },
     play: async ({ canvas, userEvent }) => {
         // Раскрытая подсказка — единственное состояние Step, требующее взаимодействия.
-        await userEvent.hover(await canvas.findByTestId("step-with-tooltip"));
+        // Клик, а не hover: на xs (≤ SM_MAX) рендерится TooltipMobile, у которого hover-слушателей нет.
+        // На десктопе клик тоже открывает подсказку — он несёт mouseover, а повторно закрыть её не даёт
+        // проверка targetHoveredRef в TooltipTarget.
+        await userEvent.click(await canvas.findByTestId("step-with-tooltip"));
     },
 };

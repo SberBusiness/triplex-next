@@ -195,7 +195,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Stepper | ⬜ | ⬜ | ⬜ |
 | StepperExtended | ✅ | ✅ | ✅ |
 | Suggest | ✅ | ✅ | ✅ |
-| SuggestField | ⬜ | ✅ | ⬜ |
+| SuggestField | ✅ | ✅ | ✅ |
 | SwipeableArea | ✅ | ✅ | ✅ |
 | TableBasic | ✅ | ✅ | ✅ |
 | Tabs | ✅ | ✅ | ✅ |

@@ -192,7 +192,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Spoiler | ⬜ | ⬜ | ⬜ |
 | StatusTracker | ⬜ | ⬜ | ⬜ |
 | Step | ⬜ | ⬜ | ⬜ |
-| Stepper | ⬜ | ⬜ | ⬜ |
+| Stepper | ✅ | ✅ | ✅ |
 | StepperExtended | ⬜ | ⬜ | ⬜ |
 | Suggest | ✅ | ✅ | ✅ |
 | SuggestField | ⬜ | ✅ | ⬜ |

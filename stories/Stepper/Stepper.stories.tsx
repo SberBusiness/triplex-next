@@ -1,33 +1,73 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
-import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
+import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
 import { action } from "storybook/actions";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import {
-    Stepper,
-    StepperStepIcon,
-    CarouselExtended,
-    StepperExtended,
     ButtonIcon,
-    ICarouselExtendedButtonProvideProps,
+    CarouselExtended,
     EComponentSize,
-    EStepperStepType,
     EStepperStepIconType,
+    EStepperStepType,
+    ICarouselExtendedButtonProvideProps,
+    Stepper,
+    StepperExtended,
+    StepperStepIcon,
 } from "@sberbusiness/triplex-next";
+import {
+    Default as DefaultRender,
+    DefaultSource,
+    IPlaygroundProps,
+    ManySteps as ManyStepsRender,
+    ManyStepsSource,
+    Playground as PlaygroundRender,
+    Sizes as SizesRender,
+    SizesSource,
+    Types as TypesRender,
+    TypesSource,
+    VisualTests as VisualTestsRender,
+    WithIcons as WithIconsRender,
+    WithIconsSource,
+} from "./examples";
 import "./Stepper.less";
 
-export default {
+const meta = {
     title: "Components/Stepper",
     component: Stepper,
     tags: ["autodocs"],
+    argTypes: {
+        // Выбранный шаг и состав шагов живут во внутреннем состоянии примеров, управлять ими из Controls нечем.
+        // В таблице Props (ArgTypes of={Stepper}) они остаются.
+        steps: { table: { disable: true } },
+        selectedStepId: { table: { disable: true } },
+        onSelectStep: { table: { disable: true } },
+    },
     parameters: {
         docs: {
+            description: {
+                component: `
+Лента шагов: принимает массив шагов и сама собирает разметку. Шаги, которые не помещаются в контейнер, прокручиваются — карусель и кнопки прокрутки компонент рендерит сам. Для шагов с нестандартным содержимым есть базовый **StepperExtended**.
+
+## Использование
+
+Состав задаётся массивом **steps** (\`id\` + \`label\` + \`type\`), выбранный шаг — **selectedStepId**, смену запрашивает **onSelectStep**. Компонент управляемый: собственного состояния выбора у него нет.
+
+## Особенности
+
+- Шаги до выбранного считаются пройденными, после — непройденными. Порядок в массиве **steps** и есть порядок прохождения.
+- При смене **selectedStepId** лента сама подводит выбранный шаг в видимую область: на широких экранах прижимает к ближайшему краю, на узких — центрирует.
+- Кнопки прокрутки появляются по наведению на ленту и скрыты на экранах уже 768px: шаги в любом случае доступны прокруткой и с клавиатуры.
+- Иконка статуса шага задаётся полем **icon** — обычно это **StepperStepIcon** с одним из значений \`EStepperStepIconType\`.
+                `,
+            },
             page: () => (
                 <>
                     <Title />
-                    <Subtitle />
                     <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={Stepper} />
+                    <Heading>Playground</Heading>
                     <Primary />
                     <Controls of={Playground} />
                     <Stories />
@@ -35,491 +75,152 @@ export default {
             ),
         },
     },
+} satisfies Meta<typeof Stepper>;
+
+export default meta;
+
+const PLAYGROUND_ARGS: IPlaygroundProps = {
+    size: EComponentSize.LG,
+    type: EStepperStepType.NEUTRAL,
+    stepsCount: 4,
+    withIcons: true,
+    containerWidth: 640,
 };
 
-export const Playground: StoryObj<typeof Stepper> = {
-    args: {
-        steps: [
-            {
-                id: "step1",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-            },
-            {
-                id: "step2",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-            },
-            {
-                id: "step3",
-                label: "Success",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.SUCCESS} />,
-            },
-            {
-                id: "step4",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-            },
-        ],
-        size: EComponentSize.LG,
-        selectedStepId: "step3",
-        onSelectStep: action("On Select Step"),
-    },
+export const Playground: StoryObj<IPlaygroundProps> = {
+    tags: ["!autodocs"],
+    args: PLAYGROUND_ARGS,
+    render: PlaygroundRender,
     argTypes: {
-        steps: {
-            control: { type: "object" },
-            description: "Массив шагов для отображения",
-            table: {
-                type: { summary: "Array<IStepperStep>" },
-            },
-        },
         size: {
-            control: { type: "select" },
+            control: { type: "inline-radio" },
             options: Object.values(EComponentSize),
-            description: "Размер степпера",
+            description: "Размер шагов и кнопок прокрутки.",
             table: {
+                category: "Props",
                 type: { summary: "EComponentSize" },
                 defaultValue: { summary: "EComponentSize.LG" },
             },
         },
-        selectedStepId: {
-            control: { type: "text" },
-            description: "ID выбранного шага",
+        type: {
+            control: { type: "inline-radio" },
+            options: Object.values(EStepperStepType),
+            description: "Тип, которым помечен текущий шаг: NEUTRAL — обычный, ERROR и WARNING подсвечивают шаг.",
             table: {
-                type: { summary: "string" },
+                category: "Props",
+                type: { summary: "EStepperStepType" },
             },
         },
-        onSelectStep: {
-            table: {
-                disable: true,
-            },
+        stepsCount: {
+            control: { type: "range", min: 1, max: 12, step: 1 },
+            description: "Количество шагов.",
+            table: { category: "Settings" },
         },
-    },
-    render: (args) => {
-        const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);
-        useEffect(() => {
-            setSelectedStepId(args.selectedStepId);
-        }, [args.selectedStepId]);
-        const handleSelectStep = (id: string) => setSelectedStepId(id);
-
-        return <Stepper {...args} selectedStepId={selectedStepId} onSelectStep={handleSelectStep} />;
+        withIcons: {
+            control: "boolean",
+            description: "Иконки статуса на пройденных и текущем шагах.",
+            table: { category: "Settings" },
+        },
+        containerWidth: {
+            control: { type: "range", min: 240, max: 900, step: 20 },
+            description: "Ширина контейнера: чем она меньше, тем больше шагов уезжает за край.",
+            table: { category: "Settings" },
+        },
     },
     parameters: {
+        testRunner: { skip: true },
         docs: {
             canvas: { sourceState: "none" },
-            codePanel: false,
         },
-        controls: {
-            include: ["steps", "size", "selectedStepId"],
+    },
+};
+
+export const Default: StoryObj<typeof Stepper> = {
+    render: DefaultRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: DefaultSource,
+                language: "tsx",
+            },
         },
-        testRunner: { skip: true },
     },
 };
 
 export const Sizes: StoryObj<typeof Stepper> = {
-    name: "Sizes",
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-    },
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selectedStepIdSM, setSelectedStepIdSM] = useState("step3");
-        const [selectedStepIdMD, setSelectedStepIdMD] = useState("step3");
-        const [selectedStepIdLG, setSelectedStepIdLG] = useState("step3");
-
-        const commonSteps = [
-            {
-                id: "step1",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
+        docs: {
+            source: {
+                code: SizesSource,
+                language: "tsx",
             },
-            {
-                id: "step2",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-            },
-            {
-                id: "step3",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.SUCCESS} />,
-            },
-            {
-                id: "step4",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step5",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-        ];
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Small (SM)</h3>
-                    <Stepper
-                        steps={commonSteps}
-                        size={EComponentSize.SM}
-                        selectedStepId={selectedStepIdSM}
-                        onSelectStep={setSelectedStepIdSM}
-                    />
-                </div>
-
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Medium (MD)</h3>
-                    <Stepper
-                        steps={commonSteps}
-                        size={EComponentSize.MD}
-                        selectedStepId={selectedStepIdMD}
-                        onSelectStep={setSelectedStepIdMD}
-                    />
-                </div>
-
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Large (LG)</h3>
-                    <Stepper
-                        steps={commonSteps}
-                        size={EComponentSize.LG}
-                        selectedStepId={selectedStepIdLG}
-                        onSelectStep={setSelectedStepIdLG}
-                    />
-                </div>
-            </div>
-        );
+        },
     },
 };
 
 export const Types: StoryObj<typeof Stepper> = {
-    name: "Types",
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
+    render: TypesRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: TypesSource,
+                language: "tsx",
             },
         },
     },
+};
+
+export const WithIcons: StoryObj<typeof Stepper> = {
+    render: WithIconsRender,
     parameters: {
         controls: { disable: true },
-    },
-    render: () => {
-        const [selectedStepIdNeutral, setSelectedStepIdNeutral] = useState("step4");
-        const [selectedStepIdError, setSelectedStepIdError] = useState("step3");
-        const [selectedStepIdWarning, setSelectedStepIdWarning] = useState("step3");
-
-        const neutralSteps = [
-            {
-                id: "step1",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
+        docs: {
+            source: {
+                code: WithIconsSource,
+                language: "tsx",
             },
-            {
-                id: "step2",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-            },
-            {
-                id: "step3",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.SUCCESS} />,
-            },
-            {
-                id: "step4",
-                label: "In Progress",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.WAIT} />,
-            },
-            {
-                id: "step5",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step6",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-        ];
-
-        const errorSteps = [
-            {
-                id: "step1",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.ERROR,
-                icon: <StepperStepIcon type={EStepperStepIconType.ERROR} />,
-            },
-            {
-                id: "step2",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.ERROR,
-                icon: <StepperStepIcon type={EStepperStepIconType.ERROR} />,
-            },
-            {
-                id: "step3",
-                label: "Error",
-                disabled: false,
-                type: EStepperStepType.ERROR,
-                icon: <StepperStepIcon type={EStepperStepIconType.ERROR} />,
-            },
-        ];
-
-        const warningSteps = [
-            {
-                id: "step1",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.WARNING,
-                icon: <StepperStepIcon type={EStepperStepIconType.WARNING} />,
-            },
-            {
-                id: "step2",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.WARNING,
-                icon: <StepperStepIcon type={EStepperStepIconType.WARNING} />,
-            },
-            {
-                id: "step3",
-                label: "Warning",
-                disabled: false,
-                type: EStepperStepType.WARNING,
-                icon: <StepperStepIcon type={EStepperStepIconType.WARNING} />,
-            },
-        ];
-
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Neutral</h3>
-                    <Stepper
-                        steps={neutralSteps}
-                        size={EComponentSize.MD}
-                        selectedStepId={selectedStepIdNeutral}
-                        onSelectStep={setSelectedStepIdNeutral}
-                    />
-                </div>
-
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Error</h3>
-                    <Stepper
-                        steps={errorSteps}
-                        size={EComponentSize.MD}
-                        selectedStepId={selectedStepIdError}
-                        onSelectStep={setSelectedStepIdError}
-                    />
-                </div>
-
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Warning</h3>
-                    <Stepper
-                        steps={warningSteps}
-                        size={EComponentSize.MD}
-                        selectedStepId={selectedStepIdWarning}
-                        onSelectStep={setSelectedStepIdWarning}
-                    />
-                </div>
-            </div>
-        );
+        },
     },
 };
 
 export const ManySteps: StoryObj<typeof Stepper> = {
     name: "With many steps (overflow)",
-    args: {
-        steps: [
-            {
-                id: "step1",
-                label: "In Progress",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-            },
-            {
-                id: "step2",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-            },
-            {
-                id: "step3",
-                label: "Completed",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-                icon: <StepperStepIcon type={EStepperStepIconType.SUCCESS} />,
-            },
-            {
-                id: "step4",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step5",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step6",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step7",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step8",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step9",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step10",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step11",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step12",
-                label: "Available",
-                disabled: false,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step13",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step14",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-            {
-                id: "step15",
-                label: "Disabled",
-                disabled: true,
-                type: EStepperStepType.NEUTRAL,
-            },
-        ],
-        selectedStepId: "step1",
-        onSelectStep: action("On Select Step"),
-    },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        steps: {
-            table: {
-                disable: true,
-            },
-        },
-        selectedStepId: {
-            table: {
-                disable: true,
-            },
-        },
-        onSelectStep: {
-            table: {
-                disable: true,
-            },
-        },
-    },
+    render: ManyStepsRender,
     parameters: {
         controls: { disable: true },
-    },
-    render: (args) => {
-        const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);
-        return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Small (SM)</h3>
-                    <Stepper
-                        {...args}
-                        size={EComponentSize.SM}
-                        selectedStepId={selectedStepId}
-                        onSelectStep={setSelectedStepId}
-                    />
-                </div>
-
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Medium (MD)</h3>
-                    <Stepper
-                        {...args}
-                        size={EComponentSize.MD}
-                        selectedStepId={selectedStepId}
-                        onSelectStep={setSelectedStepId}
-                    />
-                </div>
-
-                <div>
-                    <h3 style={{ marginBottom: "16px", fontSize: "18px", fontWeight: "600" }}>Large (LG)</h3>
-                    <Stepper
-                        {...args}
-                        size={EComponentSize.LG}
-                        selectedStepId={selectedStepId}
-                        onSelectStep={setSelectedStepId}
-                    />
-                </div>
-            </div>
-        );
+        docs: {
+            source: {
+                code: ManyStepsSource,
+                language: "tsx",
+            },
+        },
     },
 };
 
+export const VisualTests: StoryObj<typeof Stepper> = {
+    tags: ["!autodocs"],
+    render: VisualTestsRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
+    play: async ({ userEvent }) => {
+        // Переход по Tab включает :focus-visible на первом шаге.
+        await userEvent.tab();
+    },
+};
+
+/**
+ * Стори базового StepperExtended. Остаётся здесь в прежнем виде до задачи TRI-85,
+ * в которой StepperExtended получает собственный набор stories по modern pattern.
+ */
 export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
     name: "StepperExtended",
     args: {

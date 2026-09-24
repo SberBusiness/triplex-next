@@ -18,6 +18,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда `LightBox.TopOverlay` был шире контента `LightBox`.
 
+**Stepper**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет — публичный API и внешний вид прежние.
+
 **Tabs**
 
 - Добавлено: `Tabs` пробрасывает `ref` на корневой элемент (`<div role="tablist">`) и получил `displayName` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.

@@ -4,7 +4,7 @@ import { EStepperStepType } from "./enums";
 
 /** Свойства компонента StepperExtended. */
 export interface IStepperExtendedProps extends React.HTMLAttributes<HTMLOListElement> {
-    /** Размер. */
+    /** Размер. По умолчанию EComponentSize.LG. */
     size?: EComponentSize;
     /** Уникальный идентификатор выбранного шага. */
     selectedStepId?: string;
@@ -16,19 +16,21 @@ export interface IStepperExtendedProps extends React.HTMLAttributes<HTMLOListEle
 
 /** Свойства шага в Stepper */
 export interface IStepperStep extends IStepperStepProps {
-    /** Название шага. */
+    /** Название шага. Попадает в содержимое шага, остальные поля — в его HTML-атрибуты. */
     label?: React.ReactNode;
 }
 
 /** Свойства компонента Stepper. */
 export interface IStepperProps extends Omit<IStepperExtendedProps, "children"> {
-    /** Шаги. */
+    /** Шаги. Порядок массива задаёт порядок отображения; шаги после выбранного считаются непройденными. */
     steps: Array<IStepperStep>;
 }
 
 /** Свойства компонента StepperStep. */
 export interface IStepperStepProps extends React.LiHTMLAttributes<HTMLLIElement> {
+    /** Уникальный идентификатор шага. Сопоставляется с selectedStepId и приходит в onSelectStep. */
     id: string;
+    /** Шаг недоступен для выбора: не реагирует на клик, клавиатуру и выпадает из таб-порядка. */
     disabled?: boolean;
     /** Иконка, отображающая статус шага. */
     icon?: React.ReactNode;

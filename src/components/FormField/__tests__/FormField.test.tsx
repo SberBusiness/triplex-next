@@ -140,6 +140,29 @@ describe("FormField", () => {
         expect(formField).not.toHaveClass("active");
     });
 
+    it("removes active state when status changes to disabled while focused", () => {
+        const { rerender } = render(
+            <FormField data-testid="form-field">
+                <FormFieldInput />
+            </FormField>,
+        );
+
+        const input = screen.getByRole("textbox");
+        const formField = screen.getByTestId("form-field");
+
+        fireEvent.focus(input);
+        expect(formField).toHaveClass("active");
+
+        rerender(
+            <FormField data-testid="form-field" status={EFormFieldStatus.DISABLED}>
+                <FormFieldInput />
+            </FormField>,
+        );
+
+        expect(formField).not.toHaveClass("active");
+        expect(formField).toHaveClass("disabled");
+    });
+
     it("keeps active state on blur when the active prop is set", () => {
         render(
             <FormField data-testid="form-field" active>

@@ -14,6 +14,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда в адаптивном режиме отображался `placeholder` вместо `label`.
 
+**FormField**
+
+- Исправлен баг, когда поле в фокусе при изменении статуса на `disabled` теряло фокус, но оставалось в состоянии `active`.
+
 **LightBox**
 
 - Исправлен баг, когда `LightBox.TopOverlay` был шире контента `LightBox`.
@@ -22,6 +26,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `Step` пробрасывает `ref` на корневой элемент (кружок шага) — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**SuggestField**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет — публичный API и внешний вид прежние.
 
 **Tabs**
 

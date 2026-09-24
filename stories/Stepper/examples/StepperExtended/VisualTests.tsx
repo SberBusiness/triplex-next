@@ -5,17 +5,9 @@ import {
     CarouselExtended,
     ICarouselExtendedButtonProvideProps,
     StepperExtended,
-    StepperStepIcon,
     EComponentSize,
-    EStepperStepIconType,
     EStepperStepType,
 } from "@sberbusiness/triplex-next";
-
-const TYPE_TO_ICON_TYPE_MAP: Record<EStepperStepType, EStepperStepIconType> = {
-    [EStepperStepType.NEUTRAL]: EStepperStepIconType.FILLED,
-    [EStepperStepType.ERROR]: EStepperStepIconType.ERROR,
-    [EStepperStepType.WARNING]: EStepperStepIconType.WARNING,
-};
 
 /** Величина прокрутки за один клик по кнопке. */
 const SCROLL_STEP = 200;
@@ -40,7 +32,7 @@ interface IStepperSampleProps {
     type: EStepperStepType;
 }
 
-/** Степпер со всеми состояниями шага сразу: пройденный, недоступный, выбранный и непройденный. */
+/** Степпер со всеми состояниями шага сразу: пройденный, выбранный, недоступный и непройденный. */
 const StepperSample = ({ size, type }: IStepperSampleProps) => (
     <div>
         <div style={{ marginBottom: 8, fontSize: 14, fontWeight: 700 }}>
@@ -54,22 +46,14 @@ const StepperSample = ({ size, type }: IStepperSampleProps) => (
             stepNext={SCROLL_STEP}
         >
             <StepperExtended size={size} selectedStepId="selected" onSelectStep={() => {}}>
-                <StepperExtended.Step
-                    id="passed"
-                    type={type}
-                    icon={<StepperStepIcon type={TYPE_TO_ICON_TYPE_MAP[type]} />}
-                >
+                <StepperExtended.Step id="passed" type={type}>
                     Passed
+                </StepperExtended.Step>
+                <StepperExtended.Step id="selected" type={type}>
+                    Selected
                 </StepperExtended.Step>
                 <StepperExtended.Step id="disabled" type={type} disabled>
                     Disabled
-                </StepperExtended.Step>
-                <StepperExtended.Step
-                    id="selected"
-                    type={type}
-                    icon={<StepperStepIcon type={EStepperStepIconType.WAIT} />}
-                >
-                    Selected
                 </StepperExtended.Step>
                 <StepperExtended.Step id="not-passed" type={type} isInActiveStep>
                     Not passed

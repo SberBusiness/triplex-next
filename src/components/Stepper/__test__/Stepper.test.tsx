@@ -524,11 +524,10 @@ describe("Stepper", () => {
         });
 
         it("hides the scroll buttons when the track fits", () => {
-            const { container } = render(
-                <Stepper steps={mockSteps} selectedStepId="step2" onSelectStep={mockOnSelectStep} />,
-            );
+            render(<Stepper steps={mockSteps} selectedStepId="step2" onSelectStep={mockOnSelectStep} />);
 
-            expect(container.querySelector(".stepperButtonWrapper")).not.toBeInTheDocument();
+            // Шаги тоже имеют role="button": лишних кнопок нет — значит кнопок прокрутки в разметке нет.
+            expect(screen.getAllByRole("button")).toHaveLength(mockSteps.length);
         });
 
         it.each([

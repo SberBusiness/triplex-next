@@ -1,3 +1,4 @@
+import React from "react";
 import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
 import { IDropdownMobileProps } from "../../Dropdown";
 
@@ -27,5 +28,6 @@ export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption 
 
 /** Свойства компонента SuggestFieldMobileDropdownHint. */
 export interface ISuggestFieldMobileDropdownHintProps {
+    /** Текст подсказки. */
     children?: React.ReactNode;
 }

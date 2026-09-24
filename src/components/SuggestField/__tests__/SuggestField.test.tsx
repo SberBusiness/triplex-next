@@ -139,6 +139,12 @@ describe("SuggestField", () => {
         expect(screen.getByDisplayValue("Option 2")).toBeInTheDocument();
     });
 
+    it("should expose FormFieldInput as SuggestField.Input", () => {
+        render(<SuggestField.Input value="" onChange={vi.fn()} data-testid="static-input" />);
+
+        expect(screen.getByTestId("static-input")).toBeInTheDocument();
+    });
+
     it("should maintain input focus after clearing with clearInputOnFocus", async () => {
         const selectedValue = options[0];
         render(<SuggestField {...defaultProps} value={selectedValue} clearInputOnFocus={true} />);

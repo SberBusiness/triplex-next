@@ -1,5 +1,6 @@
-import React, { useState, useRef, useLayoutEffect, useEffect, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { uniqueId } from "lodash-es";
+import { isKey } from "@sberbusiness/triplex-next/utils";
 import { ISuggestFieldDesktopProps } from "./types";
 import { ISuggestFieldOption } from "../types";
 import { EComponentSize } from "../../../enums";
@@ -10,7 +11,6 @@ import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import { DropdownListContext } from "../../Dropdown";
 import { DataTestId } from "../../../consts/DataTestId";
 import { SuggestFieldDesktopDropdown } from "./SuggestFieldDesktopDropdown";
-import { isKey } from "@sberbusiness/triplex-next/utils";
 
 /**
  * Выпадающий список с возможностью поиска по введённому значению, позволяет задать кастомные компоненты для отображения всех
@@ -43,7 +43,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     inputProps,
     ...restProps
 }: ISuggestFieldDesktopProps<T>) => {
-    const [inputValue, setInputValue] = useState(value?.label || "");
+    const [inputValue, setInputValue] = useState(value?.label ?? "");
     const [inputFocused, setInputFocused] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     // Флаг для предотвращения автоматического открытия Dropdown сразу после выбора значения.
@@ -54,15 +54,10 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     const [prevValue, setPrevValue] = useState(value);
     if (value?.id !== prevValue?.id) {
         setPrevValue(value);
-        setInputValue(value?.label || "");
+        setInputValue(value?.label ?? "");
     }
 
     const suggestRef = useRef<HTMLDivElement>(null);
-
-    const onScrollEndRef = useRef(onScrollEnd);
-    useLayoutEffect(() => {
-        onScrollEndRef.current = onScrollEnd;
-    }, [onScrollEnd]);
 
     const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
         (event) => {
@@ -90,7 +85,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
             closeDropdown(false);
 
             if (inputValue.length !== 0) {
-                setInputValue(value?.label || "");
+                setInputValue(value?.label ?? "");
             } else if (value !== undefined) {
                 onSelect(undefined);
             }
@@ -153,10 +148,13 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         [value, onSelect, inputValue.length, onFilter, onClear],
     );
 
-    const handleDropdownOpen = useCallback<typeof setDropdownOpen>(
-        (nextDropdownOpen) => {
+    // Тип ровно как у Dropdown.setOpened — (opened: boolean) => void. Через typeof setDropdownOpen
+    // сюда пролезал бы функциональный updater: он всегда truthy, поэтому закрытие молча уходило бы
+    // в ветку открытия мимо cleanup в closeDropdown.
+    const handleDropdownOpen = useCallback(
+        (nextDropdownOpen: boolean) => {
             if (nextDropdownOpen) {
-                setDropdownOpen(nextDropdownOpen);
+                setDropdownOpen(true);
             } else {
                 closeDropdown(false);
             }
@@ -167,29 +165,26 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     const handleSelect = useCallback<typeof onSelect>(
         (nextValue) => {
             closeDropdown(true);
-            setInputValue(nextValue?.label || "");
+            setInputValue(nextValue?.label ?? "");
             onSelect(nextValue);
         },
         [closeDropdown, onSelect],
     );
 
-    useEffect(() => {
-        if (inputFocused) {
-            if (dropdownOpen) {
-                if (options.length === 0) {
-                    closeDropdown(false);
-                }
-            } else {
-                if (options.length !== 0 && !ignoreAutoOpen) {
-                    setDropdownOpen(true);
-                }
-            }
+    // Пока поле в фокусе, видимость списка следует за наличием опций: появились — открываем
+    // (если открытие не подавлено), закончились — закрываем. Состояние синхронизируется во время
+    // рендера, а не в эффекте: так React пересчитывает его до коммита, без лишнего кадра.
+    if (inputFocused) {
+        if (dropdownOpen && options.length === 0) {
+            closeDropdown(false);
+        } else if (!dropdownOpen && options.length !== 0 && !ignoreAutoOpen) {
+            setDropdownOpen(true);
         }
-    }, [inputFocused, dropdownOpen, options.length, closeDropdown, ignoreAutoOpen]);
+    }
 
     const renderSuggestField = () => {
-        const Input = renderInput === undefined ? FormFieldInput : renderInput;
-        const Dropdown = renderDropdown === undefined ? SuggestFieldDesktopDropdown : renderDropdown;
+        const Input = renderInput ?? FormFieldInput;
+        const Dropdown = renderDropdown ?? SuggestFieldDesktopDropdown;
         // Фактическое состояние открытия выпадающего списка.
         const dropdownActuallyOpen = dropdownOpen && options.length !== 0;
 
@@ -249,7 +244,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     return (
         <Tooltip
             size={ETooltipSize.SM}
-            isOpen={!!(tooltipOpen && inputFocused) && status !== EFormFieldStatus.DISABLED}
+            isOpen={tooltipOpen && inputFocused && status !== EFormFieldStatus.DISABLED}
             toggle={() => {}}
             targetRef={suggestRef}
             disableAdaptiveMode

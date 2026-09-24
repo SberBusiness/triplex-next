@@ -14,8 +14,6 @@ import {
     StatesSource,
     WithIconsRender,
     WithIconsSource,
-    ExampleRender,
-    ExampleSource,
     VisualTestsRender,
     type PlaygroundArgs,
 } from "./examples/StepperExtended";
@@ -45,7 +43,7 @@ export default {
 const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
     size: EComponentSize.LG,
-    selectedStepId: "signing",
+    selectedStepId: "step-3",
     // Settings
     withIcons: true,
     withDisabledStep: false,
@@ -67,7 +65,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         },
         selectedStepId: {
             control: "select",
-            options: ["application", "documents", "signing", "result"],
+            options: ["step-1", "step-2", "step-3", "step-4"],
             description: "Идентификатор выбранного шага.",
             table: { category: "Props" },
         },
@@ -163,20 +161,6 @@ export const WithIcons: StoryObj<typeof StepperExtended> = {
         },
     },
     render: WithIconsRender,
-};
-
-export const Example: StoryObj<typeof StepperExtended> = {
-    name: "Example: карусель шагов",
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            source: {
-                code: ExampleSource,
-                language: "tsx",
-            },
-        },
-    },
-    render: ExampleRender,
 };
 
 export const VisualTests: StoryObj<typeof StepperExtended> = {

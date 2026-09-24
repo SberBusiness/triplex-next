@@ -1,48 +1,68 @@
 import React, { useState } from "react";
+import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import {
+    ButtonIcon,
+    CarouselExtended,
+    ICarouselExtendedButtonProvideProps,
     StepperExtended,
-    StepperStepIcon,
     EComponentSize,
-    EStepperStepIconType,
     EStepperStepType,
 } from "@sberbusiness/triplex-next";
 
 const STEPS = [
-    { id: "application", label: "Application" },
-    { id: "documents", label: "Documents" },
-    { id: "signing", label: "Signing" },
+    { id: "step-1", label: "Step 1" },
+    { id: "step-2", label: "Step 2" },
+    { id: "step-3", label: "Step 3" },
 ];
 
-const TYPE_TO_ICON_TYPE_MAP: Record<EStepperStepType, EStepperStepIconType> = {
-    [EStepperStepType.NEUTRAL]: EStepperStepIconType.SUCCESS,
-    [EStepperStepType.ERROR]: EStepperStepIconType.ERROR,
-    [EStepperStepType.WARNING]: EStepperStepIconType.WARNING,
-};
+/** Величина прокрутки за один клик по кнопке. */
+const SCROLL_STEP = 200;
+
+/** Пока прокрутка не нужна, компонент передаёт hidden: кнопка не рендерится. */
+const renderPrevButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonProvideProps) =>
+    hidden ? null : (
+        <ButtonIcon aria-label="Прокрутить назад" {...buttonProps}>
+            <CaretleftStrokeSrvIcon24 paletteIndex={5} />
+        </ButtonIcon>
+    );
+
+const renderNextButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonProvideProps) =>
+    hidden ? null : (
+        <ButtonIcon aria-label="Прокрутить вперёд" {...buttonProps}>
+            <CaretrightStrokeSrvIcon24 paletteIndex={5} />
+        </ButtonIcon>
+    );
 
 interface ITypeItemProps {
     type: EStepperStepType;
 }
 
 const TypeItem = ({ type }: ITypeItemProps) => {
-    const [selectedStepId, setSelectedStepId] = useState("documents");
+    const [selectedStepId, setSelectedStepId] = useState("step-2");
     const selectedIndex = STEPS.findIndex((step) => step.id === selectedStepId);
 
     return (
         <div>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{type.toUpperCase()}</div>
-            <StepperExtended size={EComponentSize.MD} selectedStepId={selectedStepId} onSelectStep={setSelectedStepId}>
-                {STEPS.map(({ id, label }, index) => (
-                    <StepperExtended.Step
-                        key={id}
-                        id={id}
-                        type={type}
-                        isInActiveStep={index > selectedIndex}
-                        icon={<StepperStepIcon type={TYPE_TO_ICON_TYPE_MAP[type]} />}
-                    >
-                        {label}
-                    </StepperExtended.Step>
-                ))}
-            </StepperExtended>
+            <CarouselExtended
+                style={{ display: "flex", alignItems: "center", maxWidth: "640px" }}
+                buttonPrev={renderPrevButton}
+                buttonNext={renderNextButton}
+                stepPrev={SCROLL_STEP}
+                stepNext={SCROLL_STEP}
+            >
+                <StepperExtended
+                    size={EComponentSize.MD}
+                    selectedStepId={selectedStepId}
+                    onSelectStep={setSelectedStepId}
+                >
+                    {STEPS.map(({ id, label }, index) => (
+                        <StepperExtended.Step key={id} id={id} type={type} isInActiveStep={index > selectedIndex}>
+                            {label}
+                        </StepperExtended.Step>
+                    ))}
+                </StepperExtended>
+            </CarouselExtended>
         </div>
     );
 };

@@ -9,6 +9,4 @@ export { States as StatesRender } from "./States";
 export { default as StatesSource } from "./States?raw";
 export { WithIcons as WithIconsRender } from "./WithIcons";
 export { default as WithIconsSource } from "./WithIcons?raw";
-export { Example as ExampleRender } from "./Example";
-export { default as ExampleSource } from "./Example?raw";
 export { VisualTests as VisualTestsRender } from "./VisualTests";

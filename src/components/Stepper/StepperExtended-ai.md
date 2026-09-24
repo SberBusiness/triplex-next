@@ -210,8 +210,8 @@ Stepper.Step_Color_Disabled
 - `Stepper` — готовый степпер поверх `StepperExtended`: принимает массив `steps`, сам
   считает `isInActiveStep`, оборачивает ленту в `CarouselExtended` с кнопками прокрутки
   и доводит выбранный шаг до видимой области. Первый выбор для типовой задачи.
-- `CarouselExtended` — горизонтальная прокручиваемая лента; в `Stepper` и в примере
-  `Example` именно она даёт степперу прокрутку. Зависимости от неё у `StepperExtended` нет.
+- `CarouselExtended` — горизонтальная прокручиваемая лента; в `Stepper` и во всех примерах
+  stories именно она даёт степперу прокрутку. Зависимости от неё у `StepperExtended` нет.
 - `IconWrapper` — им шаг оборачивает `icon`, чтобы приглушить иконку в состоянии
   `disabled`.
 
@@ -225,12 +225,11 @@ Stepper.Step_Color_Disabled
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Playground` | `Playground.tsx` | Интерактивный контроль размера, выбранного шага, иконок и недоступного шага |
-| `Default` | `Default.tsx` | Минимальная лента из четырёх шагов с вычислением `isInActiveStep` |
+| `Default` | `Default.tsx` | Минимальная лента из четырёх шагов в `CarouselExtended` с вычислением `isInActiveStep` |
 | `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG |
 | `Types` | `Types.tsx` | Типы шага `NEUTRAL` / `ERROR` / `WARNING` |
 | `States` | `States.tsx` | Четыре состояния шага рядом: пройден, недоступен, выбран, не пройден |
 | `WithIcons` | `WithIcons.tsx` | Все типы `StepperStepIcon` в шагах |
-| `Example` | `Example.tsx` | Production-like: лента из 12 шагов в `CarouselExtended` с кнопками прокрутки |
 | `VisualTests` | `VisualTests.tsx` | Размеры × типы со всеми состояниями шага и `:focus-visible` на первом шаге (через `play`) |
 
 ---
@@ -241,3 +240,4 @@ Stepper.Step_Color_Disabled
 |---|---|
 | 2026-09-23 | Создан документ AI-ready для `StepperExtended` (TRI-85). |
 | 2026-09-23 | AI-рефакторинг: компонент переведён с `React.FC` на `forwardRef` (prop `forwardedRef` сохранён и заполняется тем же элементом), появился `displayName`, статическое `Step` подключается через `Object.assign`. JSDoc проставлен на всех публичных props. Добавлены unit-тесты и stories по modern pattern. Публичный API (имена props, значения enum, barrel-экспорты) не изменён. |
+| 2026-09-24 | Правки stories по ревью: все примеры обёрнуты в `CarouselExtended` с кнопками прокрутки, story `Example` удалена как дублирующая, нейтральные шаги переименованы в `Step 1/2/3/4`, иконки убраны из `Default`, `Sizes`, `Types`. Код компонента не менялся. |

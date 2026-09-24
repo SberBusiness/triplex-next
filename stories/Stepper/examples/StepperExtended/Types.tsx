@@ -38,7 +38,7 @@ interface ITypeItemProps {
 }
 
 const TypeItem = ({ type }: ITypeItemProps) => {
-    const [selectedStepId, setSelectedStepId] = useState("step-2");
+    const [selectedStepId, setSelectedStepId] = useState("step-1");
     const selectedIndex = STEPS.findIndex((step) => step.id === selectedStepId);
 
     return (

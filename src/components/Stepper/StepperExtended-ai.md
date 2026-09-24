@@ -228,7 +228,7 @@ Stepper.Step_Color_Disabled
 | `Default` | `Default.tsx` | Минимальная лента из четырёх шагов в `CarouselExtended` с вычислением `isInActiveStep` |
 | `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG |
 | `Types` | `Types.tsx` | Типы шага `NEUTRAL` / `ERROR` / `WARNING` |
-| `States` | `States.tsx` | Четыре состояния шага рядом: пройден, недоступен, выбран, не пройден |
+| `States` | `States.tsx` | Четыре состояния шага рядом: пройден, выбран, недоступен, не пройден |
 | `WithIcons` | `WithIcons.tsx` | Все типы `StepperStepIcon` в шагах |
 | `VisualTests` | `VisualTests.tsx` | Размеры × типы со всеми состояниями шага и `:focus-visible` на первом шаге (через `play`) |
 
@@ -241,3 +241,4 @@ Stepper.Step_Color_Disabled
 | 2026-09-23 | Создан документ AI-ready для `StepperExtended` (TRI-85). |
 | 2026-09-23 | AI-рефакторинг: компонент переведён с `React.FC` на `forwardRef` (prop `forwardedRef` сохранён и заполняется тем же элементом), появился `displayName`, статическое `Step` подключается через `Object.assign`. JSDoc проставлен на всех публичных props. Добавлены unit-тесты и stories по modern pattern. Публичный API (имена props, значения enum, barrel-экспорты) не изменён. |
 | 2026-09-24 | Правки stories по ревью: все примеры обёрнуты в `CarouselExtended` с кнопками прокрутки, story `Example` удалена как дублирующая, нейтральные шаги переименованы в `Step 1/2/3/4`, иконки убраны из `Default`, `Sizes`, `Types`. Код компонента не менялся. |
+| 2026-09-24 | Правки stories по второму кругу ревью: во всех примерах по умолчанию выбран первый шаг, в `States` порядок шагов «пройден → выбран → недоступен → не пройден» с выбранным вторым и без иконок. Код компонента не менялся. |

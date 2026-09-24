@@ -43,7 +43,7 @@ export default {
 const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
     size: EComponentSize.LG,
-    selectedStepId: "step-3",
+    selectedStepId: "step-1",
     // Settings
     withIcons: true,
     withDisabledStep: false,

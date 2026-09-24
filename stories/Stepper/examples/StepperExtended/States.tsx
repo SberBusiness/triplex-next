@@ -5,9 +5,7 @@ import {
     CarouselExtended,
     ICarouselExtendedButtonProvideProps,
     StepperExtended,
-    StepperStepIcon,
     EComponentSize,
-    EStepperStepIconType,
     EStepperStepType,
 } from "@sberbusiness/triplex-next";
 
@@ -30,7 +28,7 @@ const renderNextButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonPro
     );
 
 export const States = () => {
-    const [selectedStepId, setSelectedStepId] = useState("signing");
+    const [selectedStepId, setSelectedStepId] = useState("selected");
 
     return (
         <CarouselExtended
@@ -42,27 +40,19 @@ export const States = () => {
         >
             <StepperExtended size={EComponentSize.MD} selectedStepId={selectedStepId} onSelectStep={setSelectedStepId}>
                 {/* Пройденный шаг: выбран не он и isInActiveStep не выставлен. */}
-                <StepperExtended.Step
-                    id="application"
-                    type={EStepperStepType.NEUTRAL}
-                    icon={<StepperStepIcon type={EStepperStepIconType.FILLED} />}
-                >
+                <StepperExtended.Step id="passed" type={EStepperStepType.NEUTRAL}>
                     Passed
                 </StepperExtended.Step>
-                {/* Недоступный шаг: клики и фокус с клавиатуры заблокированы. */}
-                <StepperExtended.Step id="documents" type={EStepperStepType.NEUTRAL} disabled>
-                    Disabled
-                </StepperExtended.Step>
                 {/* Текущий шаг: его id передан в selectedStepId. */}
-                <StepperExtended.Step
-                    id="signing"
-                    type={EStepperStepType.NEUTRAL}
-                    icon={<StepperStepIcon type={EStepperStepIconType.WAIT} />}
-                >
+                <StepperExtended.Step id="selected" type={EStepperStepType.NEUTRAL}>
                     Selected
                 </StepperExtended.Step>
+                {/* Недоступный шаг: клики и фокус с клавиатуры заблокированы. */}
+                <StepperExtended.Step id="disabled" type={EStepperStepType.NEUTRAL} disabled>
+                    Disabled
+                </StepperExtended.Step>
                 {/* Ещё не пройденный шаг. */}
-                <StepperExtended.Step id="result" type={EStepperStepType.NEUTRAL} isInActiveStep>
+                <StepperExtended.Step id="not-passed" type={EStepperStepType.NEUTRAL} isInActiveStep>
                     Not passed
                 </StepperExtended.Step>
             </StepperExtended>

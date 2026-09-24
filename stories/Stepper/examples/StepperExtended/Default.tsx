@@ -34,7 +34,7 @@ const renderNextButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonPro
     );
 
 export const Default = () => {
-    const [selectedStepId, setSelectedStepId] = useState("step-3");
+    const [selectedStepId, setSelectedStepId] = useState("step-1");
     const selectedIndex = STEPS.findIndex((step) => step.id === selectedStepId);
 
     return (

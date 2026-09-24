@@ -38,7 +38,7 @@ const renderNextButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonPro
     );
 
 export const WithIcons = () => {
-    const [selectedStepId, setSelectedStepId] = useState("wait");
+    const [selectedStepId, setSelectedStepId] = useState("filled");
 
     return (
         <CarouselExtended

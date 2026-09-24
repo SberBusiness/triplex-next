@@ -39,7 +39,7 @@ interface ISizeItemProps {
 }
 
 const SizeItem = ({ size }: ISizeItemProps) => {
-    const [selectedStepId, setSelectedStepId] = useState("step-2");
+    const [selectedStepId, setSelectedStepId] = useState("step-1");
     const selectedIndex = STEPS.findIndex((step) => step.id === selectedStepId);
 
     return (

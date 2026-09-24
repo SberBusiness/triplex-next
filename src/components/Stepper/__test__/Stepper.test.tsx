@@ -363,7 +363,11 @@ describe("Stepper", () => {
             );
 
             const list = screen.getByRole("tablist");
-            const carousel = list.parentElement!;
+            const carousel = list.parentElement;
+
+            if (carousel === null) {
+                throw new Error("Stepper list must be rendered inside the carousel track");
+            }
 
             mockScrollLeft(carousel, initialScrollLeft);
             mockRect(carousel, { left: 0, right: CAROUSEL_WIDTH });
@@ -426,6 +430,132 @@ describe("Stepper", () => {
             selectStep("");
 
             expect(carousel.scrollLeft).toBe(500);
+        });
+    });
+
+    describe("scroll buttons", () => {
+        /** Ширина видимой области ленты; содержимое шире неё, иначе кнопки прокрутки скрыты. */
+        const CAROUSEL_CLIENT_WIDTH = 100;
+        const CAROUSEL_SCROLL_WIDTH = 300;
+        /** Стартовая позиция прокрутки: не у края, чтобы обе кнопки были активны. */
+        const INITIAL_SCROLL_LEFT = 50;
+
+        /** Сообщает ResizeObserver компонента ширину ленты — от неё считается шаг прокрутки. */
+        let notifyResize: ((width: number) => void) | null = null;
+
+        beforeEach(() => {
+            vi.stubGlobal(
+                "ResizeObserver",
+                class {
+                    private readonly callback: (entries: Array<{ contentRect: { width: number } }>) => void;
+
+                    constructor(callback: (entries: Array<{ contentRect: { width: number } }>) => void) {
+                        this.callback = callback;
+                    }
+
+                    observe(): void {
+                        notifyResize = (width) => this.callback([{ contentRect: { width } }]);
+                    }
+
+                    unobserve(): void {}
+
+                    disconnect(): void {
+                        notifyResize = null;
+                    }
+                },
+            );
+            // scrollSmoothHorizontally анимирует прокрутку по кадрам: без rAF применяется только первый кадр.
+            vi.stubGlobal("requestAnimationFrame", () => 0);
+        });
+
+        afterEach(() => {
+            notifyResize = null;
+            vi.unstubAllGlobals();
+        });
+
+        /** Кнопка прокрутки по направлению; бросает понятную ошибку, если разметка изменилась. */
+        const getScrollButton = (container: HTMLElement, direction: "prev" | "next"): HTMLElement => {
+            const button = container.querySelector(`.stepperButtonWrapper.${direction} .stepperButton`);
+
+            if (!(button instanceof HTMLElement)) {
+                throw new Error(`Scroll button "${direction}" is not rendered`);
+            }
+
+            return button;
+        };
+
+        /** Рендерит Stepper с переполненной лентой, чтобы CarouselExtended показал кнопки прокрутки. */
+        const renderWithOverflow = (size = EComponentSize.MD) => {
+            const { container } = render(
+                <Stepper steps={mockSteps} size={size} selectedStepId="step2" onSelectStep={mockOnSelectStep} />,
+            );
+
+            const list = screen.getByRole("tablist");
+            const carousel = list.parentElement;
+
+            if (carousel === null) {
+                throw new Error("Stepper list must be rendered inside the carousel track");
+            }
+
+            Object.defineProperty(carousel, "clientWidth", { value: CAROUSEL_CLIENT_WIDTH, configurable: true });
+            Object.defineProperty(carousel, "offsetWidth", { value: CAROUSEL_CLIENT_WIDTH, configurable: true });
+            Object.defineProperty(carousel, "scrollWidth", { value: CAROUSEL_SCROLL_WIDTH, configurable: true });
+            mockScrollLeft(carousel, INITIAL_SCROLL_LEFT);
+
+            act(() => {
+                // CarouselExtended пересчитывает видимость кнопок по resize окна.
+                fireEvent(window, new Event("resize"));
+                notifyResize?.(CAROUSEL_CLIENT_WIDTH);
+            });
+
+            return { container, carousel };
+        };
+
+        it("renders both scroll buttons out of the tab order when the track overflows", () => {
+            const { container } = renderWithOverflow();
+
+            const prevButton = getScrollButton(container, "prev");
+            const nextButton = getScrollButton(container, "next");
+
+            expect(prevButton).toHaveAttribute("tabindex", "-1");
+            expect(nextButton).toHaveAttribute("tabindex", "-1");
+            expect(prevButton.querySelector("svg")).toBeInTheDocument();
+            expect(nextButton.querySelector("svg")).toBeInTheDocument();
+        });
+
+        it("hides the scroll buttons when the track fits", () => {
+            const { container } = render(
+                <Stepper steps={mockSteps} selectedStepId="step2" onSelectStep={mockOnSelectStep} />,
+            );
+
+            expect(container.querySelector(".stepperButtonWrapper")).not.toBeInTheDocument();
+        });
+
+        it.each([
+            [EComponentSize.SM, "sm"],
+            [EComponentSize.MD, "md"],
+            [EComponentSize.LG, "lg"],
+        ])("applies the %s size class to both scroll buttons", (size, expectedClass) => {
+            const { container } = renderWithOverflow(size);
+
+            expect(getScrollButton(container, "prev")).toHaveClass(expectedClass);
+            expect(getScrollButton(container, "next")).toHaveClass(expectedClass);
+        });
+
+        it("scrolls the track forward on the next button click", () => {
+            const { container, carousel } = renderWithOverflow();
+
+            fireEvent.click(getScrollButton(container, "next"));
+
+            expect(carousel.scrollLeft).toBeGreaterThan(INITIAL_SCROLL_LEFT);
+        });
+
+        it("scrolls the track back on the prev button click", () => {
+            const { container, carousel } = renderWithOverflow();
+
+            fireEvent.click(getScrollButton(container, "prev"));
+
+            expect(carousel.scrollLeft).toBeLessThan(INITIAL_SCROLL_LEFT);
         });
     });
 });

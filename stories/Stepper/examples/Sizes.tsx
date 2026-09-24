@@ -24,12 +24,6 @@ const STEPS = [
         label: "Step 3",
         type: EStepperStepType.NEUTRAL,
     },
-    {
-        id: "step4",
-        label: "Step 4",
-        type: EStepperStepType.NEUTRAL,
-        disabled: true,
-    },
 ];
 
 interface ISizeItemProps {

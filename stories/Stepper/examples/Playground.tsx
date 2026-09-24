@@ -44,11 +44,11 @@ const getStepIcon = (index: number, selectedIndex: number, type: EStepperStepTyp
 };
 
 export const Playground = ({ size, type, stepsCount, withIcons, containerWidth }: IPlaygroundProps) => {
-    const [selectedStepId, setSelectedStepId] = useState("step2");
-    const selectedIndex = Math.max(
-        0,
-        Array.from({ length: stepsCount }, (_, index) => `step${index + 1}`).indexOf(selectedStepId),
-    );
+    const [selectedIndexState, setSelectedIndexState] = useState(1);
+    // Контрол stepsCount может опустить число шагов ниже выбранного — выбор съезжает на последний доступный,
+    // иначе выбранного шага не окажется в ленте и Stepper пометит непройденными все шаги сразу.
+    const selectedIndex = Math.min(selectedIndexState, stepsCount - 1);
+    const selectedStepId = `step${selectedIndex + 1}`;
 
     const steps = useMemo<Array<IStepperStep>>(
         () =>
@@ -63,7 +63,7 @@ export const Playground = ({ size, type, stepsCount, withIcons, containerWidth }
 
     const handleSelectStep = (id: string) => {
         action("onSelectStep")(id);
-        setSelectedStepId(id);
+        setSelectedIndexState(Number(id.replace("step", "")) - 1);
     };
 
     return (

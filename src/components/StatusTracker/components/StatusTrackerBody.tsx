@@ -6,7 +6,10 @@ import { StatusTrackerStatusGroup } from "./StatusTrackerStatusGroup";
 import styles from "../styles/StatusTracker.module.less";
 
 /** Свойства компонента StatusTrackerBody. */
-export interface IStatusTrackerBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IStatusTrackerBodyProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое блока: StatusTracker.Body.Status, .StatusGroup, .Alert. */
+    children?: React.ReactNode;
+}
 
 /** Блок с основным контентом статус-трекера. */
 export const StatusTrackerBody = Object.assign(

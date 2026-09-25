@@ -5,3 +5,64 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v0.48.0</Title>
 
 <Heading>Изменения</Heading>
+
+**Calendar**
+
+- Исправлена стилизация диапазона лет.
+
+**ChipMonthYear / MonthYearPicker**
+
+- Исправлен баг, когда в адаптивном режиме отображался `placeholder` вместо `label`.
+
+**FormField**
+
+- Исправлен баг, когда поле в фокусе при изменении статуса на `disabled` теряло фокус, но оставалось в состоянии `active`.
+
+**LightBox**
+
+- Исправлен баг, когда `LightBox.TopOverlay` был шире контента `LightBox`.
+
+**StatusTracker**
+
+- Добавлено: `StatusTracker.Media`, `.Header.Title`, `.Header.Sum`, `.Header.Description` (и `.Footer.Description`), `.Body.Alert`, `.Body.Status` и `.Footer.Button` пробрасывают `ref` на свой корневой элемент — раньше они были объявлены как `React.FC`, поэтому переданный `ref` терялся. Тип этих компонентов изменился на `React.ForwardRefExoticComponent`.
+- Добавлено: `displayName` у тех же субкомпонентов, кроме `.Footer.Button` (у него он уже был) — видно в React DevTools и в snapshot-тестах.
+- Проведён AI-рефакторинг: других изменений для потребителя нет — публичный API и внешний вид прежние.
+
+**Stepper**
+
+- Изменено: размер по умолчанию теперь `EComponentSize.MD` вместо `EComponentSize.LG`. Если `size` не передан, шаги и кнопки прокрутки становятся меньше. Чтобы сохранить прежний вид, передайте `size={EComponentSize.LG}` явно.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**StepperExtended**
+
+- Изменено: размер по умолчанию теперь `EComponentSize.MD` вместо `EComponentSize.LG` — так же, как у `Stepper`. Чтобы сохранить прежний вид, передайте `size={EComponentSize.LG}` явно.
+- Добавлено: компонент пробрасывает `ref` на свой корневой `<ol>` — раньше он был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`. Prop `forwardedRef` продолжает работать и указывает на тот же элемент.
+- Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
+**SuggestField**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет — публичный API и внешний вид прежние.
+
+**Tabs**
+
+- Добавлено: `Tabs` пробрасывает `ref` на корневой элемент (`<div role="tablist">`) и получил `displayName` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Исправлено: строка табов больше не выпадает из обхода по `Tab` после смены `selectedId` извне или когда таб с фокусом уезжает в выпадающий список. Если выбранный таб в выпадающем списке, в таб-порядок попадает первый таб строки.
+- Исправлено: поля таба `label` и `showNotificationIcon` больше не попадают в разметку как атрибуты контейнера таба — React перестал писать в консоль предупреждение о неизвестном атрибуте `showNotificationIcon`.
+- Исправлено: пустой массив `tabs` больше не роняет компонент.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**TagColor**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет — публичный API и внешний вид прежние.
+
+**TagGroup**
+
+- Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
+**UploadZone**
+
+- Добавлено: интерфейс `IUploadZoneProps` экспортируется из пакета — раньше типизировать обёртку над `UploadZone` было нечем.
+- Добавлено: `UploadZone.Input` (`UploadZoneInput`) пробрасывает `ref` на свой `<input type="file">` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Исправлено: `displayName` у `UploadZone.Input` — был `UploadZone`, стал `UploadZoneInput`. Видно в React DevTools и в snapshot-тестах.
+- Исправлено: при закрытии дроп-зоны в консоли больше не появляется предупреждение React «Attempted to synchronously unmount a root while React was already rendering».
+- Проведён AI-рефакторинг: других изменений для потребителя нет.

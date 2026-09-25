@@ -535,8 +535,32 @@ jobs:
           V0: ${{ needs.preflight.outputs.v0 }}
         run: |
           set -eu
-          LATEST=$(npm view @sberbusiness/triplex-next dist-tags.latest)
-          REACT17=$(npm view @sberbusiness/triplex-next dist-tags.react17)
+          REGISTRY="https://registry.npmjs.org"
+          PKG="@sberbusiness%2Ftriplex-next"
+          # npm принимает publish мгновенно, а dist-tags обновляет через
+          # минуты: в TRI-151 `latest` встал на 1.48.0 через 8,5 минуты после
+          # публикации, а джоба стартовала через 70 секунд, увидела 1.47.0 и
+          # уронила прогон, предложив невыполнимый `npm dist-tag add` — версии
+          # в реестре ещё не было (TRI-153). Поэтому ждём `latest` до 15 минут
+          # с запасом над наблюдённым максимумом и только потом судим.
+          #
+          # Реестр опрашиваем curl'ом с no-cache, а не `npm view`: npm кеширует
+          # пакумент локально (max-age=300), и повторный `npm view` мог бы
+          # пять минут отдавать тот же устаревший latest.
+          # react17 не ждём: 0.Y.0 вышла на десятки минут раньше и к этому
+          # моменту проиндексирована, а ждать 15 минут ради предупреждения,
+          # которое прогон не роняет, незачем.
+          DEADLINE=$((SECONDS + 900))
+          while :; do
+            TAGS=$(curl -fsS --max-time 30 -H 'Cache-Control: no-cache' "${REGISTRY}/-/package/${PKG}/dist-tags" 2>/dev/null || echo '{}')
+            LATEST=$(echo "${TAGS}" | jq -r '.latest // ""')
+            REACT17=$(echo "${TAGS}" | jq -r '.react17 // ""')
+            if [ "${LATEST}" = "${VERSION}" ] || [ "${SECONDS}" -ge "${DEADLINE}" ]; then
+              break
+            fi
+            echo "… latest = ${LATEST:-?}, ждём ${VERSION}: реестр ещё индексирует публикацию"
+            sleep 30
+          done
           echo "dist-tags.latest = ${LATEST}"
           echo "dist-tags.react17 = ${REACT17}"
           {
@@ -575,11 +599,25 @@ jobs:
           fi
 
           if [ "${LATEST}" != "${VERSION}" ]; then
-            echo "❌ latest = ${LATEST}, ожидалось ${VERSION}."
-            echo "   npm install отдаёт потребителям не ту сборку — почини немедленно:"
-            echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest \\"
-            echo "     --@sberbusiness:registry=https://registry.npmjs.org/ \\"
-            echo "     --registry=https://registry.npmjs.org/"
+            echo "❌ latest = ${LATEST}, ожидалось ${VERSION} — не встал за 15 минут."
+            # Команда починки имеет смысл, только если версия в реестре есть:
+            # иначе `npm dist-tag add` упадёт на несуществующей версии.
+            # `|| true`: сетевая ошибка curl под `set -e` оборвала бы шаг
+            # без подсказки, а так уйдёт в ветку ниже с HTTP 000.
+            CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${REGISTRY}/${PKG}/${VERSION}" || true)
+            if [ "${CODE}" = "200" ]; then
+              echo "   ${VERSION} в реестре есть, тег на неё не встал."
+              echo "   npm install отдаёт потребителям не ту сборку — почини немедленно:"
+              echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest \\"
+              echo "     --@sberbusiness:registry=https://registry.npmjs.org/ \\"
+              echo "     --registry=https://registry.npmjs.org/"
+            else
+              echo "   ${VERSION} в реестре не видна (HTTP ${CODE}): публикация не дошла"
+              echo "   или реестр задерживает индексацию. Проверь через несколько минут:"
+              echo "   npm view @sberbusiness/triplex-next dist-tags \\"
+              echo "     --@sberbusiness:registry=https://registry.npmjs.org/ \\"
+              echo "     --registry=https://registry.npmjs.org/"
+            fi
             exit 1
           fi
           echo "✅ latest на React 18-сборке"

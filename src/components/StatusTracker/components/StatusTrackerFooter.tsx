@@ -5,7 +5,10 @@ import { StatusTrackerDescription } from "@sberbusiness/triplex-next/components/
 import { StatusTrackerButton } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerButton";
 
 /** Свойства компонента StatusTrackerFooter. */
-export interface IStatusTrackerFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IStatusTrackerFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое блока: StatusTracker.Footer.Button, .Description. */
+    children?: React.ReactNode;
+}
 
 /** Блок с набором кнопок для взаимодействия с документом в статус-трекере. */
 export const StatusTrackerFooter = Object.assign(

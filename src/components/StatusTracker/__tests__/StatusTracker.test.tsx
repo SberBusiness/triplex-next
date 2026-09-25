@@ -9,6 +9,7 @@ import { StatusTrackerFooter } from "@sberbusiness/triplex-next/components/Statu
 import { StatusTrackerButton } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerButton";
 import { StatusTrackerAlert } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerAlert";
 import { StatusTrackerStatus } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerStatus";
+import { StatusTrackerStatusGroup } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerStatusGroup";
 import { StatusTrackerDescription } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerDescription";
 import { StatusTrackerTitle } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerTitle";
 import { StatusTrackerSum } from "@sberbusiness/triplex-next/components/StatusTracker/components/StatusTrackerSum";
@@ -149,6 +150,20 @@ describe("StatusTracker", () => {
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
 
+    it("Should use vertical align TOP by default", () => {
+        render(
+            <StatusTracker type={EStatusTrackerType.WAITING} data-testid="status-tracker">
+                Content
+            </StatusTracker>,
+        );
+        const content = getStatusTracker().querySelector(
+            '[class*="statusTracker"]:not([class*="Wrapper"]):not([class*="Background"]):not([class*="Color"])',
+        );
+        expect(content).toHaveClass("statusTracker");
+        expect(content).not.toHaveClass("verticalAlignMiddle");
+        expect(content).not.toHaveClass("verticalAlignBottom");
+    });
+
     it("Should render composition: Media, Header, Body, Footer", () => {
         render(
             <StatusTracker type={EStatusTrackerType.WAITING} data-testid="status-tracker">
@@ -194,6 +209,17 @@ describe("StatusTrackerMedia", () => {
         const media = screen.getByTestId("media");
         expect(media).toHaveClass("custom-class");
         expect(media).toHaveAttribute("id", "media-id");
+    });
+
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <StatusTrackerMedia ref={ref} data-testid="media">
+                Icon
+            </StatusTrackerMedia>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toBe(screen.getByTestId("media"));
     });
 });
 
@@ -263,6 +289,17 @@ describe("StatusTrackerTitle", () => {
         expect(title).toHaveClass("custom-class");
         expect(title).toHaveAttribute("id", "title-id");
     });
+
+    it("Should forward ref to the h3 element", () => {
+        const ref = React.createRef<HTMLHeadingElement>();
+        render(
+            <StatusTrackerTitle ref={ref} data-testid="title">
+                Title
+            </StatusTrackerTitle>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLHeadingElement);
+        expect(ref.current?.tagName).toBe("H3");
+    });
 });
 
 describe("StatusTrackerSum", () => {
@@ -288,6 +325,13 @@ describe("StatusTrackerSum", () => {
         expect(sum).toHaveClass("custom-class");
         expect(sum).toHaveAttribute("id", "sum-id");
     });
+
+    it("Should forward ref to the h1 element", () => {
+        const ref = React.createRef<HTMLHeadingElement>();
+        render(<StatusTrackerSum ref={ref} amountProps={{ value: "1000", currency: "₽" }} />);
+        expect(ref.current).toBeInstanceOf(HTMLHeadingElement);
+        expect(ref.current?.tagName).toBe("H1");
+    });
 });
 
 describe("StatusTrackerDescription", () => {
@@ -308,6 +352,17 @@ describe("StatusTrackerDescription", () => {
         const description = screen.getByTestId("description");
         expect(description).toHaveClass("custom-class");
         expect(description).toHaveAttribute("id", "desc-id");
+    });
+
+    it("Should forward ref to the span element", () => {
+        const ref = React.createRef<HTMLSpanElement>();
+        render(
+            <StatusTrackerDescription ref={ref} data-testid="description">
+                Description
+            </StatusTrackerDescription>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLSpanElement);
+        expect(ref.current).toBe(screen.getByTestId("description"));
     });
 });
 
@@ -383,6 +438,17 @@ describe("StatusTrackerAlert", () => {
         expect(alert).toHaveClass("custom-class");
         expect(alert).toHaveAttribute("id", "alert-id");
     });
+
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <StatusTrackerAlert ref={ref} type={EAlertType.INFO} data-testid="alert">
+                Alert
+            </StatusTrackerAlert>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toBe(screen.getByTestId("alert"));
+    });
 });
 
 describe("StatusTrackerStatus", () => {
@@ -453,6 +519,17 @@ describe("StatusTrackerStatus", () => {
         );
         const status = screen.getByTestId("status");
         expect(status).toHaveClass("lg");
+    });
+
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <StatusTrackerStatus ref={ref} status={EMarkerStatus.SUCCESS} data-testid="status">
+                Status
+            </StatusTrackerStatus>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toBe(screen.getByTestId("status"));
     });
 });
 
@@ -560,5 +637,90 @@ describe("StatusTrackerButton", () => {
         );
         const button = screen.getByTestId("button");
         expect(button).toBeDisabled();
+    });
+
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLButtonElement>();
+        const buttonProps = {
+            theme: EButtonTheme.GENERAL,
+            size: EComponentSize.MD,
+        } as IButtonGeneralProps;
+        render(
+            <StatusTrackerButton
+                {...(buttonProps as unknown as React.ComponentProps<typeof StatusTrackerButton>)}
+                ref={ref}
+                data-testid="button"
+            >
+                Button
+            </StatusTrackerButton>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+        expect(ref.current).toBe(screen.getByTestId("button"));
+    });
+});
+
+describe("StatusTrackerStatusGroup", () => {
+    it("Should render correctly", () => {
+        render(
+            <StatusTrackerStatusGroup data-testid="status-group">
+                <div>Status</div>
+            </StatusTrackerStatusGroup>,
+        );
+        const statusGroup = screen.getByTestId("status-group");
+        expect(statusGroup).toBeInTheDocument();
+        expect(statusGroup).toHaveClass("statusTrackerStatusGroup");
+    });
+
+    it("Should merge custom className and pass through attributes", () => {
+        render(
+            <StatusTrackerStatusGroup className="custom-class" id="status-group-id" data-testid="status-group">
+                Statuses
+            </StatusTrackerStatusGroup>,
+        );
+        const statusGroup = screen.getByTestId("status-group");
+        expect(statusGroup).toHaveClass("statusTrackerStatusGroup");
+        expect(statusGroup).toHaveClass("custom-class");
+        expect(statusGroup).toHaveAttribute("id", "status-group-id");
+    });
+
+    it("Should forward ref correctly", () => {
+        const ref = React.createRef<HTMLDivElement>();
+        render(
+            <StatusTrackerStatusGroup ref={ref} data-testid="status-group">
+                Statuses
+            </StatusTrackerStatusGroup>,
+        );
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toBe(screen.getByTestId("status-group"));
+    });
+
+    it("Should render nested statuses", () => {
+        render(
+            <StatusTrackerStatusGroup data-testid="status-group">
+                <StatusTrackerStatus status={EMarkerStatus.WARNING}>Первый</StatusTrackerStatus>
+                <StatusTrackerStatus status={EMarkerStatus.WARNING}>Второй</StatusTrackerStatus>
+            </StatusTrackerStatusGroup>,
+        );
+        const statusGroup = screen.getByTestId("status-group");
+        expect(statusGroup.querySelectorAll('[class*="statusTrackerStatus"]')).toHaveLength(2);
+    });
+});
+
+describe("StatusTracker displayName", () => {
+    it.each([
+        [StatusTracker, "StatusTracker"],
+        [StatusTrackerMedia, "StatusTrackerMedia"],
+        [StatusTrackerHeader, "StatusTrackerHeader"],
+        [StatusTrackerTitle, "StatusTrackerTitle"],
+        [StatusTrackerSum, "StatusTrackerSum"],
+        [StatusTrackerDescription, "StatusTrackerDescription"],
+        [StatusTrackerBody, "StatusTrackerBody"],
+        [StatusTrackerAlert, "StatusTrackerAlert"],
+        [StatusTrackerStatus, "StatusTrackerStatus"],
+        [StatusTrackerStatusGroup, "StatusTrackerStatusGroup"],
+        [StatusTrackerFooter, "StatusTrackerFooter"],
+        [StatusTrackerButton, "StatusTrackerButton"],
+    ])("Should be set on %s", (component, expected) => {
+        expect(component.displayName).toBe(expected);
     });
 });

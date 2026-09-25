@@ -88,13 +88,13 @@ describe("Stepper", () => {
         expect(getStep("Step 1")).toHaveClass(className);
     });
 
-    it("uses LG size by default", () => {
+    it("uses MD size by default", () => {
         const { container } = render(
             <Stepper steps={mockSteps} selectedStepId="step1" onSelectStep={mockOnSelectStep} />,
         );
 
-        expect(container.querySelector(".stepperCarousel")).toHaveClass("lg");
-        expect(getStep("Step 1")).toHaveClass("lg");
+        expect(container.querySelector(".stepperCarousel")).toHaveClass("md");
+        expect(getStep("Step 1")).toHaveClass("md");
     });
 
     it("calls onSelectStep when a step is clicked", () => {

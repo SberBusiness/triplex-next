@@ -125,7 +125,7 @@ const alignStep = (carousel: HTMLDivElement, step: HTMLLIElement): void => {
 export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
     className,
     steps,
-    size = EComponentSize.LG,
+    size = EComponentSize.MD,
     selectedStepId,
     ...restProps
 }) => {

@@ -13,7 +13,7 @@ export interface IStepperExtendedContext {
 
 /** Контекст StepperExtended. Через barrel не экспортируется — это внутренняя деталь компонента. */
 export const StepperExtendedContext = React.createContext<IStepperExtendedContext>({
-    size: EComponentSize.LG,
+    size: EComponentSize.MD,
     selectedId: undefined,
     onSelectStep: () => {},
 });

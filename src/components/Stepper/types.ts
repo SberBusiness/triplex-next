@@ -6,7 +6,7 @@ import { EStepperStepType } from "./enums";
 export interface IStepperExtendedProps extends React.HTMLAttributes<HTMLOListElement> {
     /** Шаги. Ожидаются элементы StepperExtended.Step. */
     children?: React.ReactNode;
-    /** Размер шагов. По умолчанию EComponentSize.LG. */
+    /** Размер шагов. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
     /** Уникальный идентификатор выбранного шага. Сопоставляется с id шага. */
     selectedStepId?: string;

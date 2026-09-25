@@ -138,10 +138,10 @@ describe("StepperExtended", () => {
     });
 
     describe("context", () => {
-        it("passes default size LG to steps", () => {
+        it("passes default size MD to steps", () => {
             renderStepper();
 
-            expect(getStep("Step 1")).toHaveClass("lg");
+            expect(getStep("Step 1")).toHaveClass("md");
         });
 
         it.each([

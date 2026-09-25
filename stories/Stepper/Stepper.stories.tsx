@@ -66,7 +66,7 @@ const meta = {
 export default meta;
 
 const PLAYGROUND_ARGS: IPlaygroundProps = {
-    size: EComponentSize.LG,
+    size: EComponentSize.MD,
     type: EStepperStepType.NEUTRAL,
     stepsCount: 4,
     withIcons: true,
@@ -85,7 +85,7 @@ export const Playground: StoryObj<IPlaygroundProps> = {
             table: {
                 category: "Props",
                 type: { summary: "EComponentSize" },
-                defaultValue: { summary: "EComponentSize.LG" },
+                defaultValue: { summary: "EComponentSize.MD" },
             },
         },
         type: {

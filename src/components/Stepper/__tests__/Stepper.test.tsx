@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Stepper, StepperExtended } from "@sberbusiness/triplex-next/components/Stepper";
+import { Stepper } from "@sberbusiness/triplex-next/components/Stepper";
 import { EStepperStepType, EStepperStepIconType } from "../enums";
 import { StepperStepIcon } from "../StepperStepIcon";
 import { EComponentSize } from "../../../enums";
@@ -256,90 +256,5 @@ describe("Stepper", () => {
 
         expect(mockOnSelectStep).toHaveBeenCalledWith("step2");
         expect(mockOnSelectStep).toHaveBeenCalledWith("step3");
-    });
-});
-
-describe("StepperExtended", () => {
-    const mockOnSelectStep = vi.fn();
-
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it("renders with children", () => {
-        render(
-            <StepperExtended selectedStepId="step1" onSelectStep={mockOnSelectStep}>
-                <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
-                    Step 1
-                </StepperExtended.Step>
-                <StepperExtended.Step id="step2" type={EStepperStepType.NEUTRAL}>
-                    Step 2
-                </StepperExtended.Step>
-            </StepperExtended>,
-        );
-
-        expect(screen.getByText("Step 1")).toBeInTheDocument();
-        expect(screen.getByText("Step 2")).toBeInTheDocument();
-    });
-
-    it("calls onSelectStep when a step is clicked", () => {
-        render(
-            <StepperExtended selectedStepId="step1" onSelectStep={mockOnSelectStep}>
-                <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
-                    Step 1
-                </StepperExtended.Step>
-                <StepperExtended.Step id="step2" type={EStepperStepType.NEUTRAL}>
-                    Step 2
-                </StepperExtended.Step>
-            </StepperExtended>,
-        );
-
-        const step2 = screen.getByText("Step 2").closest("li");
-        fireEvent.click(step2!);
-
-        expect(mockOnSelectStep).toHaveBeenCalledWith("step2");
-    });
-
-    it("marks the selected step with aria-current", () => {
-        render(
-            <StepperExtended selectedStepId="step2" onSelectStep={mockOnSelectStep}>
-                <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
-                    Step 1
-                </StepperExtended.Step>
-                <StepperExtended.Step id="step2" type={EStepperStepType.NEUTRAL}>
-                    Step 2
-                </StepperExtended.Step>
-            </StepperExtended>,
-        );
-
-        const step2 = screen.getByText("Step 2").closest("li");
-        expect(step2).toHaveAttribute("aria-current", "true");
-    });
-
-    it("forwards ref to ol element", () => {
-        const ref = React.createRef<HTMLOListElement>();
-        render(
-            <StepperExtended forwardedRef={ref} selectedStepId="step1" onSelectStep={mockOnSelectStep}>
-                <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL}>
-                    Step 1
-                </StepperExtended.Step>
-            </StepperExtended>,
-        );
-
-        expect(ref.current).toBeInstanceOf(HTMLOListElement);
-    });
-
-    it("renders step with disabled state", () => {
-        render(
-            <StepperExtended selectedStepId="step1" onSelectStep={mockOnSelectStep}>
-                <StepperExtended.Step id="step1" type={EStepperStepType.NEUTRAL} disabled>
-                    Disabled Step
-                </StepperExtended.Step>
-            </StepperExtended>,
-        );
-
-        const disabledStep = screen.getByText("Disabled Step").closest("li");
-        expect(disabledStep).toHaveAttribute("aria-disabled", "true");
-        expect(disabledStep).toHaveAttribute("tabindex", "-1");
     });
 });

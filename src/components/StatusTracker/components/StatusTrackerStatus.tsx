@@ -4,12 +4,15 @@ import styles from "@sberbusiness/triplex-next/components/StatusTracker/styles/S
 import { IMarkerStatusProps, MarkerStatus } from "@sberbusiness/triplex-next/components/MarkerStatus";
 
 /** Компонент статуса для блока с основным контентом статус-трекера. */
-export const StatusTrackerStatus: React.FC<IMarkerStatusProps> = (props) => {
-    const { children, className, ...rest } = props;
-
+export const StatusTrackerStatus = React.forwardRef<HTMLDivElement, IMarkerStatusProps>(function StatusTrackerStatus(
+    { children, className, ...rest },
+    ref,
+) {
     return (
-        <MarkerStatus className={clsx(styles.statusTrackerStatus, className)} {...rest}>
+        <MarkerStatus className={clsx(styles.statusTrackerStatus, className)} {...rest} ref={ref}>
             {children}
         </MarkerStatus>
     );
-};
+});
+
+StatusTrackerStatus.displayName = "StatusTrackerStatus";

@@ -22,6 +22,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда `LightBox.TopOverlay` был шире контента `LightBox`.
 
+**StepperExtended**
+
+- Добавлено: компонент пробрасывает `ref` на свой корневой `<ol>` — раньше он был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`. Prop `forwardedRef` продолжает работать и указывает на тот же элемент.
+- Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
+
 **SuggestField**
 
 - Проведён AI-рефакторинг: изменений для потребителя нет — публичный API и внешний вид прежние.

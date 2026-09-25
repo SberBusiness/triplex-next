@@ -1,20 +1,7 @@
-import React, { useState } from "react";
-import clsx from "clsx";
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { ArgTypes, Controls, Description, Heading, Primary, Stories, Title } from "@storybook/addon-docs/blocks";
-import { action } from "storybook/actions";
-import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
-import {
-    ButtonIcon,
-    CarouselExtended,
-    EComponentSize,
-    EStepperStepIconType,
-    EStepperStepType,
-    ICarouselExtendedButtonProvideProps,
-    Stepper,
-    StepperExtended,
-    StepperStepIcon,
-} from "@sberbusiness/triplex-next";
+import { EComponentSize, EStepperStepType, Stepper } from "@sberbusiness/triplex-next";
 import {
     Default as DefaultRender,
     DefaultSource,
@@ -30,7 +17,6 @@ import {
     WithIcons as WithIconsRender,
     WithIconsSource,
 } from "./examples";
-import "./Stepper.less";
 
 const meta = {
     title: "Components/Stepper",
@@ -214,96 +200,5 @@ export const VisualTests: StoryObj<typeof Stepper> = {
     play: async ({ userEvent }) => {
         // Переход по Tab включает :focus-visible на первом шаге.
         await userEvent.tab();
-    },
-};
-
-/**
- * Стори базового StepperExtended. Остаётся здесь в прежнем виде до задачи TRI-85,
- * в которой StepperExtended получает собственный набор stories по modern pattern.
- */
-export const StepperExtendedType: StoryObj<typeof StepperExtended> = {
-    name: "StepperExtended",
-    args: {
-        size: EComponentSize.LG,
-        selectedStepId: "stepper-extended-step-2",
-        onSelectStep: action("On Select Step"),
-    },
-    argTypes: {
-        size: {
-            table: {
-                disable: true,
-            },
-        },
-        selectedStepId: {
-            table: {
-                disable: true,
-            },
-        },
-        onSelectStep: {
-            table: {
-                disable: true,
-            },
-        },
-    },
-    parameters: {
-        controls: { disable: true },
-        testRunner: { skip: true },
-    },
-    render: (args) => {
-        const [selectedStepId, setSelectedStepId] = useState(args.selectedStepId);
-
-        const stepPrev = 200;
-        const stepNext = 200;
-
-        const steps = Array.from({ length: 100 }, (value, index) => ({
-            id: `stepper-extended-step-${index}`,
-            label: "Completed",
-            type: EStepperStepType.NEUTRAL,
-            icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-        }));
-
-        const renderPrevButton = ({ hidden, ...restButtonProps }: ICarouselExtendedButtonProvideProps) =>
-            hidden ? null : (
-                <div className="stepper-button-wrapper prev">
-                    <ButtonIcon
-                        className={clsx("stepper-button", args.size)}
-                        {...restButtonProps}
-                        aria-label="Прокрутить назад"
-                    >
-                        <CaretleftStrokeSrvIcon24 paletteIndex={5} />
-                    </ButtonIcon>
-                </div>
-            );
-
-        const renderNextButton = ({ hidden, ...restButtonProps }: ICarouselExtendedButtonProvideProps) =>
-            hidden ? null : (
-                <div className="stepper-button-wrapper next">
-                    <ButtonIcon
-                        className={clsx("stepper-button", args.size)}
-                        {...restButtonProps}
-                        aria-label="Прокрутить вперёд"
-                    >
-                        <CaretrightStrokeSrvIcon24 paletteIndex={5} />
-                    </ButtonIcon>
-                </div>
-            );
-
-        return (
-            <CarouselExtended
-                className="stepper-carousel"
-                buttonPrev={renderPrevButton}
-                buttonNext={renderNextButton}
-                stepPrev={stepPrev}
-                stepNext={stepNext}
-            >
-                <StepperExtended size={args.size} selectedStepId={selectedStepId} onSelectStep={setSelectedStepId}>
-                    {steps.map(({ id, label, icon, type }) => (
-                        <StepperExtended.Step key={id} id={id} icon={icon} type={type}>
-                            {label}
-                        </StepperExtended.Step>
-                    ))}
-                </StepperExtended>
-            </CarouselExtended>
-        );
     },
 };

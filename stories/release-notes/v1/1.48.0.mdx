@@ -22,8 +22,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда `LightBox.TopOverlay` был шире контента `LightBox`.
 
+**Stepper**
+
+- Изменено: размер по умолчанию теперь `EComponentSize.MD` вместо `EComponentSize.LG`. Если `size` не передан, шаги и кнопки прокрутки становятся меньше. Чтобы сохранить прежний вид, передайте `size={EComponentSize.LG}` явно.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
 **StepperExtended**
 
+- Изменено: размер по умолчанию теперь `EComponentSize.MD` вместо `EComponentSize.LG` — так же, как у `Stepper`. Чтобы сохранить прежний вид, передайте `size={EComponentSize.LG}` явно.
 - Добавлено: компонент пробрасывает `ref` на свой корневой `<ol>` — раньше он был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`. Prop `forwardedRef` продолжает работать и указывает на тот же элемент.
 - Проведён AI-рефакторинг, добавлен `displayName`: других изменений для потребителя нет.
 

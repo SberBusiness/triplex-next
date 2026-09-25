@@ -1,0 +1,29 @@
+import React from "react";
+import { Step, EComponentSize, EStepPosition, EStepStatus } from "@sberbusiness/triplex-next";
+
+const SIZES = Object.values(EComponentSize);
+const STATUSES = Object.values(EStepStatus);
+
+export const VisualTests = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        {SIZES.map((size) => (
+            <div key={size} style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                {STATUSES.map((status, index) => (
+                    <Step key={status} step={index + 1} status={status} size={size} />
+                ))}
+            </div>
+        ))}
+        {/* Двузначный номер — проверка, что кружок не растягивается под содержимое. */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <Step step={10} status={EStepStatus.DEFAULT} size={EComponentSize.SM} />
+            <Step step={99} status={EStepStatus.DONE} size={EComponentSize.LG} />
+        </div>
+        {/* Раскрытая подсказка — состояние открывается в play.
+            Запас сверху: подсказка раскрывается вверх и иначе накрывает предыдущую строку. */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 120 }}>
+            <Step step={3} status={EStepStatus.ACTIVE} position={EStepPosition.Default} data-testid="step-with-tooltip">
+                Проверьте сумму и назначение платежа
+            </Step>
+        </div>
+    </div>
+);

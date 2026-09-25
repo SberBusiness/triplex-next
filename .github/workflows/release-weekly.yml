@@ -293,6 +293,12 @@ jobs:
     # Права переиспользуемому workflow выдаёт вызывающая джоба: объявления
     # внутри release.yml могут их только сузить. Без id-token здесь обмен
     # OIDC-токена на креденшл npm не состоится.
+    #
+    # id-token — необходимое, но не достаточное условие. npm сверяет trusted
+    # publisher по имени вызывающего workflow, то есть по этому файлу,
+    # а не по release.yml, где выполняется publish. Поэтому release-weekly.yml
+    # заведён на npmjs отдельным trusted publisher'ом рядом с release.yml
+    # (docs/human/release.md § «Что настроено один раз», TRI-152).
     permissions:
       contents: write
       id-token: write

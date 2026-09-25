@@ -162,15 +162,24 @@ jobs:
           npm install -g npm@11.19.1
           npm --version
 
-      # Публикация. Авторизация — trusted publishing: npm доверяет этому
-      # workflow конкретного репозитория и выдаёт креденшл на минуты в обмен
+      # Публикация. Авторизация — trusted publishing: npm доверяет workflow
+      # конкретного репозитория и выдаёт креденшл на минуты в обмен
       # на OIDC-токен раннера (permissions.id-token выше). Provenance
       # добавляется при этом автоматически: опубликованная версия привязана
       # к коммиту и прогону, подмену видно через `npm audit signatures`.
       #
+      # Какому workflow доверять, npm решает по имени **вызывающего** файла.
+      # При `release: published` и `workflow_dispatch` это сам release.yml,
+      # а при `workflow_call` из release-weekly.yml — release-weekly.yml, хотя
+      # publish выполняется здесь. Поэтому в настройках пакета на npmjs
+      # заведены оба trusted publisher'а (docs/human/release.md § «Что
+      # настроено один раз»). Без второго еженедельный релиз молча уходил
+      # по токену: так вышли 0.48.0 и 1.48.0 (TRI-152).
+      #
       # NPM_AUTH_TOKEN оставлен как запасной путь на время миграции: если
       # обмен не состоится, npm авторизуется им, и релиз не сорвётся.
-      # После первой публикации с provenance секрет убираем (TRI-140).
+      # Убираем секрет только после публикации с provenance на обоих путях —
+      # ручном и еженедельном через release-weekly.yml (TRI-140, TRI-152).
       # .npmrc отдельно не пишем — его создаёт actions/setup-node выше,
       # подставляя NODE_AUTH_TOKEN.
       - name: Publish to npm
@@ -266,10 +275,10 @@ jobs:
               echo "### ⚠️ Provenance отсутствует"
               echo ""
               echo "\`${RELEASE_TAG}\` опубликована **по токену**: обмен OIDC не состоялся."
-              echo "Секрет \`NPM_AUTH_TOKEN\` удалять нельзя. Проверь trusted publisher"
-              echo "в настройках пакета: при вызове через \`workflow_call\` npm видит"
-              echo "\`release-weekly.yml\` в claim \`workflow_ref\` и \`release.yml\` —"
-              echo "в \`job_workflow_ref\`."
+              echo "Секрет \`NPM_AUTH_TOKEN\` удалять нельзя. Проверь trusted publishers"
+              echo "в настройках пакета на npmjs: npm сверяет имя **вызывающего** workflow,"
+              echo "поэтому нужны оба — \`release.yml\` (ручной релиз) и"
+              echo "\`release-weekly.yml\` (еженедельный, вызов через \`workflow_call\`)."
             } >> "$GITHUB_STEP_SUMMARY"
           else
             {

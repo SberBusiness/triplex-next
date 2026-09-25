@@ -64,7 +64,12 @@ version: "1.0"
 
 Публичный API — составной: субкомпоненты доступны и статическими свойствами, и отдельными
 экспортами — кроме `StatusTrackerAlert`, `StatusTrackerStatus` и `StatusTrackerStatusGroup`:
-они доступны только статическими свойствами, из barrel `index.ts` их нет (см. «Инварианты»).
+они доступны только статическими свойствами, из barrel `index.ts` их нет.
+
+**Известное ограничение, не замысел.** Интерфейс `IStatusTrackerStatusGroup` не экспортируется
+ниоткуда, поэтому типизировать обёртку над `StatusTracker.Body.StatusGroup` потребителю нечем.
+Добавление трёх экспортов аддитивно и не ломающее — уместно отдельной задачей, как это уже
+сделали в 1.48.0 для `IUploadZoneProps`.
 
 | Составной путь | Компонент | Корневой DOM | Своё, сверх `className` + `...rest` |
 |---|---|---|---|
@@ -147,22 +152,27 @@ StatusTracker.Approved_Color
 - `EStatusTrackerVerticalAlign.TOP` намеренно отсутствует в `VERTICAL_ALIGN_TO_CLASS_NAME_MAP`:
   это выравнивание по умолчанию и своего класса не имеет. Мапа объявлена как `Partial<Record<…>>`
   именно поэтому.
-- `StatusTracker.Footer.Button` всегда рендерится с `block` — кнопки футера занимают всю
-  ширину карточки. Тема `LINK` исключена из типа props (`Exclude<TButtonProps, IButtonLinkProps>`),
-  потому что блочный режим для неё недоступен.
+- `StatusTracker.Footer.Button` получает `block` по умолчанию — кнопки футера занимают всю
+  ширину карточки. Это не жёсткий инвариант: `block` проставлен до `...rest`, поэтому
+  `<StatusTracker.Footer.Button block={false}>` отключает блочный режим. Тема `LINK` исключена
+  из типа props (`Exclude<TButtonProps, IButtonLinkProps>`), потому что блочный режим для неё
+  недоступен.
 - `StatusTrackerAlert` оборачивает `children` в `Text` размера B3. Передавать внутрь
   собственный `Text`/`Title` не нужно — получится вложенная типографика.
 - Селектор `.statusTrackerChild:empty { padding: 0 }` схлопывает отступы у пустых блоков —
   пустой `Header` не оставляет дыру в макете.
 - Barrel `src/components/StatusTracker/index.ts` экспортирует `StatusTracker`, оба enum'а и
   субкомпоненты `Header`, `Footer`, `Title`, `Description`, `Media`, `Sum`, `Body`, `Button` —
-  сохранять. `StatusTrackerAlert`, `StatusTrackerStatus` и `StatusTrackerStatusGroup` в barrel
-  **не входят** и доступны только как статические свойства (`StatusTracker.Body.Alert` и т. д.).
+  сохранять.
 - Имена интерфейсов `StatusTrackerMediaProps` (без префикса `I`) и `IStatusTrackerStatusGroup`
   (без суффикса `Props`) расходятся с конвенцией `codestyle.md`. Это публичные имена —
   переименование возможно только как согласованный breaking change.
 - `displayName` проставлены у всех субкомпонентов и совпадают с именами компонентов —
   проверяются unit-тестом.
+- У `Title`, `Sum` и `Description` дженерик ref-а — `HTMLElement`, хотя фактический тег
+  всегда `h3`, `h1` и `span` соответственно. Шире он намеренно: сужение до
+  `HTMLHeadingElement` / `HTMLSpanElement` — изменение публичного типа, требующее
+  согласования. Если сужать, то до выхода 1.48.0.
 
 ---
 
@@ -222,4 +232,4 @@ Story ID участвуют в именах baseline-скриншотов (`stat
 
 | Дата | Изменение |
 |---|---|
-| 2026-09-25 | Создан документ. AI-рефакторинг: JSDoc на всех публичных props, `forwardRef` у субкомпонентов `Media`, `Title`, `Description`, `Sum`, `Alert`, `Status`, `Button` и `displayName` у них же, кроме `Button` (у него он уже был), исправлен JSDoc `StatusTrackerTitle`, импорты приведены к одному виду. Unit-тесты расширены (`StatusTrackerStatusGroup`, проброс ref, `displayName`). Stories переведены на modern pattern с `examples/` и дополнены `Types`, `Example`, `VisualTests`. |
+| 2026-09-25 | Создан документ. AI-рефакторинг: JSDoc на всех публичных props, `forwardRef` у субкомпонентов `Media`, `Title`, `Description`, `Sum`, `Alert`, `Status`, `Button` и `displayName` у них же, кроме `Button` (у него он уже был), исправлен JSDoc `StatusTrackerTitle`. Unit-тесты расширены (`StatusTrackerStatusGroup`, проброс ref, `displayName`). Stories переведены на modern pattern с `examples/` и дополнены `Types`, `Example`, `VisualTests`. |

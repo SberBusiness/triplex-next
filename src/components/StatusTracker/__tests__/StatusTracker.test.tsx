@@ -156,10 +156,8 @@ describe("StatusTracker", () => {
                 Content
             </StatusTracker>,
         );
-        const content = getStatusTracker().querySelector(
-            '[class*="statusTracker"]:not([class*="Wrapper"]):not([class*="Background"]):not([class*="Color"])',
-        );
-        expect(content).toHaveClass("statusTracker");
+        // Контент — последний ребёнок обёртки: перед ним идут два декоративных слоя.
+        const content = getStatusTracker().lastElementChild;
         expect(content).not.toHaveClass("verticalAlignMiddle");
         expect(content).not.toHaveClass("verticalAlignBottom");
     });
@@ -641,21 +639,34 @@ describe("StatusTrackerButton", () => {
 
     it("Should forward ref correctly", () => {
         const ref = React.createRef<HTMLButtonElement>();
-        const buttonProps = {
-            theme: EButtonTheme.GENERAL,
-            size: EComponentSize.MD,
-        } as IButtonGeneralProps;
         render(
-            <StatusTrackerButton
-                {...(buttonProps as unknown as React.ComponentProps<typeof StatusTrackerButton>)}
-                ref={ref}
-                data-testid="button"
-            >
+            <StatusTrackerButton theme={EButtonTheme.GENERAL} size={EComponentSize.MD} ref={ref} data-testid="button">
                 Button
             </StatusTrackerButton>,
         );
         expect(ref.current).toBeInstanceOf(HTMLButtonElement);
         expect(ref.current).toBe(screen.getByTestId("button"));
+    });
+
+    it("Should apply block mode by default and let it be overridden", () => {
+        const { rerender } = render(
+            <StatusTrackerButton theme={EButtonTheme.GENERAL} size={EComponentSize.MD} data-testid="button">
+                Button
+            </StatusTrackerButton>,
+        );
+        const blockClassName = screen.getByTestId("button").className;
+
+        rerender(
+            <StatusTrackerButton
+                theme={EButtonTheme.GENERAL}
+                size={EComponentSize.MD}
+                block={false}
+                data-testid="button"
+            >
+                Button
+            </StatusTrackerButton>,
+        );
+        expect(screen.getByTestId("button").className).not.toBe(blockClassName);
     });
 });
 

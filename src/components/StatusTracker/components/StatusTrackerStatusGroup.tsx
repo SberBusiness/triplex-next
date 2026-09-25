@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import styles from "@sberbusiness/triplex-next/components/StatusTracker/styles/StatusTrackerStatusGroup.module.less";
+import styles from "../styles/StatusTrackerStatusGroup.module.less";
 
 /** Свойства компонента StatusTrackerStatusGroup. */
 export interface IStatusTrackerStatusGroup extends React.HTMLAttributes<HTMLDivElement> {

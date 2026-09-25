@@ -5,14 +5,17 @@ import styles from "@sberbusiness/triplex-next/components/StatusTracker/styles/S
 import { EFontType, ETextSize, Text } from "@sberbusiness/triplex-next/components/Typography";
 
 /** Компонент предупреждения для блока с основным контентом статус-трекера. */
-export const StatusTrackerAlert: React.FC<IAlertProcessProps> = (props) => {
-    const { children, className, ...rest } = props;
-
+export const StatusTrackerAlert = React.forwardRef<HTMLDivElement, IAlertProcessProps>(function StatusTrackerAlert(
+    { children, className, ...rest },
+    ref,
+) {
     return (
-        <AlertProcess className={clsx(styles.statusTrackerAlert, className)} {...rest}>
+        <AlertProcess className={clsx(styles.statusTrackerAlert, className)} {...rest} ref={ref}>
             <Text type={EFontType.PRIMARY} size={ETextSize.B3}>
                 {children}
             </Text>
         </AlertProcess>
     );
-};
+});
+
+StatusTrackerAlert.displayName = "StatusTrackerAlert";

@@ -12,8 +12,12 @@ import { StatusTrackerFooter } from "@sberbusiness/triplex-next/components/Statu
 
 /** Свойства компонента StatusTracker. */
 export interface IStatusTrackerProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Тип статуса документа. Задаёт цвет декоративного градиента на фоне. */
     type: EStatusTrackerType;
+    /** Вертикальное выравнивание контента внутри карточки. По умолчанию EStatusTrackerVerticalAlign.TOP. */
     verticalAlign?: EStatusTrackerVerticalAlign;
+    /** Содержимое карточки: StatusTracker.Media, .Header, .Body, .Footer в любом сочетании. */
+    children?: React.ReactNode;
 }
 
 /** Мапа для получения CSS класса по типу статус-трекера. */
@@ -25,14 +29,18 @@ const TYPE_TO_CLASS_NAME_MAP: Record<EStatusTrackerType, string> = {
     [EStatusTrackerType.APPROVED]: styles.approved,
 };
 
-/** Мапа для получения CSS класса для выравнивания блоков. */
+/**
+ * Мапа для получения CSS класса для выравнивания блоков.
+ * Значение TOP отсутствует намеренно: это выравнивание по умолчанию и отдельного класса не требует.
+ */
 const VERTICAL_ALIGN_TO_CLASS_NAME_MAP: Partial<Record<EStatusTrackerVerticalAlign, string>> = {
     [EStatusTrackerVerticalAlign.MIDDLE]: styles.verticalAlignMiddle,
     [EStatusTrackerVerticalAlign.BOTTOM]: styles.verticalAlignBottom,
 };
 
 /**
- * Компонент предназначен для визуального отображения статуса документа.
+ * Карточка статуса документа: декоративный градиент по типу статуса плюс композиция
+ * из блоков Media, Header, Body и Footer.
  */
 export const StatusTracker = Object.assign(
     React.forwardRef<HTMLDivElement, IStatusTrackerProps>(function StatusTracker(

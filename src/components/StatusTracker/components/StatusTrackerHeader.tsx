@@ -6,7 +6,10 @@ import { StatusTrackerSum } from "@sberbusiness/triplex-next/components/StatusTr
 import styles from "@sberbusiness/triplex-next/components/StatusTracker/styles/StatusTracker.module.less";
 
 /** Свойства компонента StatusTrackerHeader. */
-export interface IStatusTrackerHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface IStatusTrackerHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое блока: StatusTracker.Header.Title, .Sum, .Description. */
+    children?: React.ReactNode;
+}
 
 /** Блок заголовка статус-трекера. */
 export const StatusTrackerHeader = Object.assign(

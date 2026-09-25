@@ -42,37 +42,6 @@ const getTypedSteps = (type: EStepperStepType, iconType: EStepperStepIconType): 
     { id: "step3", label: "Step 3", type: EStepperStepType.NEUTRAL },
 ];
 
-const ICON_STEPS: Array<IStepperStep> = [
-    {
-        id: "step1",
-        label: "FILLED",
-        type: EStepperStepType.NEUTRAL,
-        icon: <StepperStepIcon type={EStepperStepIconType.FILLED} />,
-    },
-    {
-        id: "step2",
-        label: "SUCCESS",
-        type: EStepperStepType.NEUTRAL,
-        icon: <StepperStepIcon type={EStepperStepIconType.SUCCESS} />,
-    },
-    {
-        id: "step3",
-        label: "WAIT",
-        type: EStepperStepType.NEUTRAL,
-        icon: <StepperStepIcon type={EStepperStepIconType.WAIT} />,
-    },
-];
-
-/** Лента, которая заведомо не помещается в контейнер фиксированной ширины. */
-const OVERFLOW_STEPS: Array<IStepperStep> = Array.from({ length: 12 }, (_, index) => ({
-    id: `step${index + 1}`,
-    label: `Step ${index + 1}`,
-    type: EStepperStepType.NEUTRAL,
-}));
-
-/** Ширина контейнера, при которой часть шагов уезжает за край. Фиксирована, чтобы скриншоты не зависели от viewport. */
-const OVERFLOW_CONTAINER_WIDTH = "480px";
-
 interface IVariantProps {
     caption: string;
     steps: Array<IStepperStep>;
@@ -103,19 +72,5 @@ export const VisualTests = () => (
             steps={getTypedSteps(EStepperStepType.WARNING, EStepperStepIconType.WARNING)}
             size={EComponentSize.SM}
         />
-        <Variant caption="Иконки шагов" steps={ICON_STEPS} size={EComponentSize.SM} />
-        <div>
-            <div style={{ marginBottom: "8px", fontSize: "14px", fontWeight: "700" }}>
-                Шаги не помещаются в контейнер
-            </div>
-            <div style={{ width: OVERFLOW_CONTAINER_WIDTH }}>
-                <Stepper
-                    steps={OVERFLOW_STEPS}
-                    size={EComponentSize.SM}
-                    selectedStepId="step2"
-                    onSelectStep={() => {}}
-                />
-            </div>
-        </div>
     </div>
 );

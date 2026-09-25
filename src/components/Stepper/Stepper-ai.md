@@ -157,7 +157,7 @@ Stepper.Step_Color_Disabled
 | `Types` | `Types.tsx` | Типы шага `NEUTRAL`, `ERROR`, `WARNING` |
 | `WithIcons` | `WithIcons.tsx` | Все значения `EStepperStepIconType` на шагах |
 | `ManySteps` | `ManySteps.tsx` | Шаги не помещаются в контейнер и прокручиваются |
-| `VisualTests` | `VisualTests.tsx` | Размеры × состояния, отключённый шаг, типы, иконки, переполнение контейнера, `:focus-visible` на шаге (через `play`) |
+| `VisualTests` | `VisualTests.tsx` | Размеры × состояния, отключённый шаг, типы, `:focus-visible` на шаге (через `play`) |
 | `StepperExtendedType` | — | Стори базового `StepperExtended`; живёт в этом файле до отдельной задачи по `StepperExtended` |
 
 ---

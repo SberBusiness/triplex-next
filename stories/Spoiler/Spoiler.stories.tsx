@@ -52,7 +52,6 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     args: PLAYGROUND_ARGS,
     argTypes: {
         size: {
-            description: "Размер компонента.",
             control: "select",
             options: Object.values(EComponentSize),
             table: {
@@ -62,12 +61,10 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             },
         },
         labelExpand: {
-            description: "Текст раскрытия содержимого.",
             control: "text",
             table: { category: "Props" },
         },
         labelCollapse: {
-            description: "Текст скрытия содержимого.",
             control: "text",
             table: { category: "Props" },
         },

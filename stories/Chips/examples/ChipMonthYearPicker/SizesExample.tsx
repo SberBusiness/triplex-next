@@ -17,7 +17,7 @@ const SizeItem = ({ size, label }: SizeItemProps) => {
                 alignment={EDropdownAlignment.LEFT}
                 value={value}
                 label="MonthYear label"
-                placeholder="мм.гггг"
+                placeholder="Select to proceed"
                 clearButtonProps={{ "aria-label": "Очистить" }}
                 onChange={setValue}
             />

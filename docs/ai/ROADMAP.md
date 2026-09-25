@@ -193,17 +193,17 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | StatusTracker | ⬜ | ⬜ | ⬜ |
 | Step | ⬜ | ⬜ | ⬜ |
 | Stepper | ⬜ | ⬜ | ⬜ |
-| StepperExtended | ⬜ | ⬜ | ⬜ |
+| StepperExtended | ✅ | ✅ | ✅ |
 | Suggest | ✅ | ✅ | ✅ |
-| SuggestField | ⬜ | ✅ | ⬜ |
+| SuggestField | ✅ | ✅ | ✅ |
 | SwipeableArea | ✅ | ✅ | ✅ |
 | TableBasic | ✅ | ✅ | ✅ |
-| Tabs | ⬜ | ⬜ | ⬜ |
+| Tabs | ✅ | ✅ | ✅ |
 | TabsExtended | ✅ | ✅ | ✅ |
 | TabsLine | ✅ | ✅ | ✅ |
 | Tag | ✅ | ✅ | ✅ |
-| TagColor | ⬜ | ⬜ | ⬜ |
-| TagGroup | ⬜ | ⬜ | ⬜ |
+| TagColor | ✅ | ✅ | ✅ |
+| TagGroup | ✅ | ✅ | ✅ |
 | TextField | ✅ | ✅ | ✅ |
 | TextareaField | ✅ | ✅ | ✅ |
 | ThemeProvider | ✅ | ✅ | ✅ |
@@ -218,7 +218,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TriggerClickOnKeyDownEvent | ✅ | ✅ | ✅ |
 | UnorderedList | ✅ | ✅ | ✅ |
 | UnorderedListExtended | ✅ | ✅ | ✅ |
-| UploadZone | ⬜ | ⬜ | ⬜ |
+| UploadZone | ✅ | ✅ | ✅ |
 | WindowResizeListener | ✅ | ✅ | ✅ |
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)

@@ -6,7 +6,7 @@ export const VisualTestsExample = () => (
         <ChipMonthYearPicker
             value="19700101"
             label="MonthYear label"
-            placeholder="мм.гггг"
+            placeholder="Select to proceed"
             clearButtonProps={{ "aria-label": "Очистить" }}
             onChange={() => {}}
             alignment={EDropdownAlignment.LEFT}
@@ -15,7 +15,7 @@ export const VisualTestsExample = () => (
         <ChipMonthYearPicker
             value="19700101"
             label="MonthYear label"
-            placeholder="мм.гггг"
+            placeholder="Select to proceed"
             clearButtonProps={{ "aria-label": "Очистить" }}
             onChange={() => {}}
             alignment={EDropdownAlignment.LEFT}
@@ -24,7 +24,7 @@ export const VisualTestsExample = () => (
         <ChipMonthYearPicker
             value="19700101"
             label="MonthYear label"
-            placeholder="мм.гггг"
+            placeholder="Select to proceed"
             clearButtonProps={{ "aria-label": "Очистить" }}
             onChange={() => {}}
             alignment={EDropdownAlignment.LEFT}

@@ -12,10 +12,25 @@ const getInput = () => screen.getByTestId("uploadzone-input");
  * поэтому эмулируем ровно ту часть структуры, которую использует компонент.
  */
 const createTestFileList = (files: File[]): FileList => {
-    const fileList: Partial<FileList> & { [index: number]: File } = { length: files.length, item: (i: number) => files[i] ?? null };
+    const fileList: Partial<FileList> & { [index: number]: File } = {
+        length: files.length,
+        item: (i: number) => files[i] ?? null,
+    };
     files.forEach((f, i) => (fileList[i] = f));
+
     return fileList as FileList;
 };
+
+/** Создаёт контейнер вне дерева компонента, в который UploadZone монтирует дроп-зону. */
+const createDropZoneContainer = (): HTMLDivElement => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+
+    return container;
+};
+
+const queryOverlay = (container: HTMLElement) =>
+    container.querySelector<HTMLDivElement>("div[class*='uploadZoneContainerDragArea']");
 
 describe("UploadZone", () => {
     /**
@@ -27,7 +42,7 @@ describe("UploadZone", () => {
         render(
             <UploadZone onChange={onChange} data-testid="uploadzone-drag-area">
                 {() => <UploadZone.Input data-testid="uploadzone-input" />}
-            </UploadZone>
+            </UploadZone>,
         );
 
         const area = getDragArea();
@@ -38,14 +53,40 @@ describe("UploadZone", () => {
         expect(input).toHaveAttribute("type", "file");
     });
 
+    it("Should forward ref to the root element", () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        render(
+            <UploadZone onChange={vi.fn()} ref={ref}>
+                {() => <UploadZone.Input />}
+            </UploadZone>,
+        );
+
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
+        expect(ref.current).toHaveClass("uploadZone");
+    });
+
+    it("Should apply custom className to the drag area", () => {
+        render(
+            <UploadZone onChange={vi.fn()} className="custom-class" data-testid="uploadzone-drag-area">
+                {() => <UploadZone.Input />}
+            </UploadZone>,
+        );
+
+        const area = getDragArea();
+
+        expect(area).toHaveClass("uploadZoneDragArea");
+        expect(area).toHaveClass("custom-class");
+    });
+
     it("Should open file dialog when drag area is clicked", () => {
         const onChange = vi.fn();
-        const clickSpy = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => { });
+        const clickSpy = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => {});
 
         render(
             <UploadZone onChange={onChange} data-testid="uploadzone-drag-area">
                 {() => <UploadZone.Input data-testid="uploadzone-input" />}
-            </UploadZone>
+            </UploadZone>,
         );
 
         fireEvent.click(getDragArea());
@@ -55,7 +96,7 @@ describe("UploadZone", () => {
 
     it("Should open file dialog when children call openUploadDialog", () => {
         const onChange = vi.fn();
-        const clickSpy = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => { });
+        const clickSpy = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => {});
 
         render(
             <UploadZone onChange={onChange}>
@@ -66,10 +107,12 @@ describe("UploadZone", () => {
                          * и openUploadDialog() смог вызвать input.click().
                          */}
                         <UploadZone.Input data-testid="uploadzone-input" />
-                        <button type="button" onClick={openUploadDialog} data-testid="opener">Open</button>
+                        <button type="button" onClick={openUploadDialog} data-testid="opener">
+                            Open
+                        </button>
                     </div>
                 )}
-            </UploadZone>
+            </UploadZone>,
         );
 
         fireEvent.click(screen.getByTestId("opener"));
@@ -83,7 +126,7 @@ describe("UploadZone", () => {
         render(
             <UploadZone onChange={onChange}>
                 {() => <UploadZone.Input multiple data-testid="uploadzone-input" />}
-            </UploadZone>
+            </UploadZone>,
         );
 
         const input = getInput();
@@ -103,14 +146,12 @@ describe("UploadZone", () => {
         const onChange = vi.fn();
         const onDrop = vi.fn();
 
-        // Create external container to attach drag listeners and overlay
-        const externalContainer = document.createElement("div");
-        document.body.appendChild(externalContainer);
+        const externalContainer = createDropZoneContainer();
 
         render(
             <UploadZone onChange={onChange} onDrop={onDrop} dropZoneContainer={externalContainer}>
                 {() => <UploadZone.Input data-testid="uploadzone-input" />}
-            </UploadZone>
+            </UploadZone>,
         );
 
         // Инициируем dragenter, чтобы смонтировать overlay.
@@ -119,52 +160,107 @@ describe("UploadZone", () => {
             externalContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
         });
 
-        const getOverlay = () => externalContainer.querySelector("div[class*='uploadZoneContainerDragArea']") as HTMLDivElement | null;
-        await waitFor(() => expect(getOverlay()).toBeTruthy());
-        const overlay = getOverlay()!;
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeTruthy());
+        // Non-null: предыдущий waitFor уже дождался, что оверлей смонтирован.
+        const overlay = queryOverlay(externalContainer)!;
 
-        // Делаем drop на overlay. Здесь проверяем только onDrop и жизненный цикл overlay,
-        // так как поддержка DataTransfer в JSDOM ограничена.
         const droppedFiles = createTestFileList([new File(["content"], "file.png", { type: "image/png" })]);
         act(() => {
             fireEvent.drop(overlay, { dataTransfer: { files: droppedFiles } });
         });
 
         expect(onDrop).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledTimes(1);
+        const [filesArg] = onChange.mock.calls[0];
+        expect((filesArg as FileList)[0].name).toBe("file.png");
 
-        // Overlay должен удалиться после последовательности drag-leave/drop.
-        // Компонент использует счётчик drag-событий; убедимся, что он обнуляется.
+        // Overlay должен удалиться после drop: компонент обнуляет счётчик drag-событий.
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeNull());
+        // Размонтирование отдельного root отложено на микротаск — даём ему отработать внутри act.
+        await act(async () => {});
+    });
+
+    it("Should render renderContainerContent inside the overlay", async () => {
+        const externalContainer = createDropZoneContainer();
+
+        render(
+            <UploadZone
+                onChange={vi.fn()}
+                dropZoneContainer={externalContainer}
+                renderContainerContent={() => <span data-testid="overlay-content">Drop files here</span>}
+            >
+                {() => <UploadZone.Input />}
+            </UploadZone>,
+        );
+
+        act(() => {
+            externalContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
+        });
+
+        await waitFor(() => expect(externalContainer.querySelector("[data-testid='overlay-content']")).toBeTruthy());
+
         act(() => {
             externalContainer.dispatchEvent(new Event("dragleave", { bubbles: true }));
         });
-        await waitFor(() => expect(externalContainer.querySelector("div[class*='uploadZoneContainerDragArea']")).toBeNull());
+
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeNull());
+        await act(async () => {});
     });
 
     it("Should call onDragOver prop when dragging over the overlay", async () => {
         const onDragOver = vi.fn();
 
-        const externalContainer = document.createElement("div");
-        document.body.appendChild(externalContainer);
+        const externalContainer = createDropZoneContainer();
 
         render(
             <UploadZone onChange={vi.fn()} onDragOver={onDragOver} dropZoneContainer={externalContainer}>
                 {() => <UploadZone.Input />}
-            </UploadZone>
+            </UploadZone>,
         );
 
         // Монтируем overlay через dragenter.
         act(() => {
             externalContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
         });
-        const getOverlay2 = () => externalContainer.querySelector("div[class*='uploadZoneContainerDragArea']");
-        await waitFor(() => expect(getOverlay2()).toBeTruthy());
-        const overlay = getOverlay2()!;
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeTruthy());
+        // Non-null: предыдущий waitFor уже дождался, что оверлей смонтирован.
+        const overlay = queryOverlay(externalContainer)!;
 
         // onDragOver из props проксируется оверлеем; проверяем, что он вызывается.
         fireEvent.dragOver(overlay);
         expect(onDragOver).toHaveBeenCalledTimes(1);
+
+        act(() => {
+            externalContainer.dispatchEvent(new Event("dragleave", { bubbles: true }));
+        });
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeNull());
+        await act(async () => {});
+    });
+
+    it("Should keep overlay mounted while drag moves over child elements", async () => {
+        const externalContainer = createDropZoneContainer();
+
+        render(
+            <UploadZone onChange={vi.fn()} dropZoneContainer={externalContainer}>
+                {() => <UploadZone.Input />}
+            </UploadZone>,
+        );
+
+        // dragenter/dragleave всплывают от дочерних элементов — компонент считает их счётчиком,
+        // поэтому оверлей не должен пропадать, пока курсор внутри контейнера.
+        act(() => {
+            externalContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
+            externalContainer.dispatchEvent(new Event("dragenter", { bubbles: true }));
+            externalContainer.dispatchEvent(new Event("dragleave", { bubbles: true }));
+        });
+
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeTruthy());
+
+        act(() => {
+            externalContainer.dispatchEvent(new Event("dragleave", { bubbles: true }));
+        });
+
+        await waitFor(() => expect(queryOverlay(externalContainer)).toBeNull());
+        await act(async () => {});
     });
 });
-
-
-

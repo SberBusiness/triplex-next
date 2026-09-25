@@ -11,8 +11,10 @@
 
 .topOverlayWrapper {
     position: absolute;
-    left: 0;
-    right: 0;
+    // Повторяет боковые отступы контента LightBox.
+    // Фолбэк 0 — для использования вне LightBox.
+    left: var(--lightBox-content-padding-x, 0);
+    right: var(--lightBox-content-padding-x, 0);
     // Коррекция позиции при открытии на прокрученном контенте лайтбокса, значение задаёт TopOverlay.tsx.
     top: var(--triplex-next-runtime-TopOverlay-Top, 0);
 
@@ -25,7 +27,15 @@
         transition: transform 0.6s;
         box-shadow: none;
         background: none;
+        // Повторение паддингов Page и потолка ширины колонки LightBox, иначе содержимое
+        // шире контента на экранах, где максимальная ширина ещё не достигнута.
+        box-sizing: border-box;
+        max-width: var(--lightBox-content-max-width);
         margin-top: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: @page-padding-desktop-x;
+        padding-right: @page-padding-desktop-x;
     }
 }
 
@@ -35,9 +45,11 @@
 }
 
 @media (max-width: @screen-sm-max) {
-    .topOverlayPanel {
+    .topOverlayWrapper .topOverlayPanel {
         margin-left: 16px;
         margin-right: 16px;
         margin-bottom: 16px;
+        padding-left: 0;
+        padding-right: 0;
     }
 }

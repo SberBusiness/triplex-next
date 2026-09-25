@@ -50,6 +50,8 @@
     }
 
     .lightBoxContent {
+        --lightBox-content-padding-x: 0;
+
         display: flex;
         flex-direction: column;
         flex-grow: 1;
@@ -57,7 +59,7 @@
         align-items: center;
         position: relative;
         margin: 16px @lightBoxContentMarginX 0 @lightBoxContentMarginX;
-        padding: 0;
+        padding: 0 var(--lightBox-content-padding-x);
         border-top-left-radius: 32px;
         border-top-right-radius: 32px;
         background-color: var(--triplex-next-LightBox-Content_Background);
@@ -119,7 +121,6 @@
 .global-LB-more-media-point-0 {
     .lightBoxContent {
         // Отступы для кнопок вперед/назад.
-        padding-left: 80px;
-        padding-right: 80px;
+        --lightBox-content-padding-x: @lightBoxContentPaddingX;
     }
 }

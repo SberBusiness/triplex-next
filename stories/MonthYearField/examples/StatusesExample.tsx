@@ -11,7 +11,13 @@ const StatusItem = ({ status }: IStatusItemProps) => {
     return (
         <div style={{ maxWidth: 300 }}>
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{status.toUpperCase()}</div>
-            <MonthYearField status={status} value={value} label="Label" placeholder="мм.гггг" onChange={setValue} />
+            <MonthYearField
+                status={status}
+                value={value}
+                label="Label"
+                placeholder="Select to proceed"
+                onChange={setValue}
+            />
         </div>
     );
 };

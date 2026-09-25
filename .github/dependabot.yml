@@ -19,8 +19,23 @@ updates:
     open-pull-requests-limit: 5
     # Группы — чтобы минорные обновления не превращались в десяток PR.
     # Мажоры в группы не входят намеренно: каждый приезжает отдельно и читается
-    # отдельно, у них ломающие изменения.
+    # отдельно, у них ломающие изменения. Исключение — группа vitest ниже.
+    #
+    # Пакет попадает в первую подходящую группу, поэтому vitest объявлен
+    # раньше development: иначе development забрал бы его минорные обновления.
     groups:
+      # vitest и @vitest/* держат друг друга на точной версии (peer
+      # "vitest": "3.2.7", без ^): поставить можно только всех сразу, по одному
+      # npm падает с ERESOLVE. Поэтому все обновления, включая мажоры, идут
+      # одним PR. Мажор в группе — исключение из правила выше: одиночный PR
+      # на мажор здесь не ставится в принципе.
+      vitest:
+        patterns: ["vitest", "@vitest/*"]
+      # То же для security-обновлений: без группы Dependabot пришлёт
+      # обновление одного пакета, и оно упадёт с ERESOLVE.
+      vitest-security:
+        applies-to: security-updates
+        patterns: ["vitest", "@vitest/*"]
       production:
         dependency-type: production
         update-types: ["minor", "patch"]
@@ -34,6 +49,17 @@ updates:
     cooldown:
       default-days: 7
       semver-major-days: 30
+    ignore:
+      # 0.24+ требует Storybook 10, проект на Storybook 9 — npm падает
+      # с ERESOLVE. Группа не поможет: обновлять надо сам Storybook.
+      # Снять вместе с миграцией на Storybook 10 (TRI-145).
+      - dependency-name: "@storybook/test-runner"
+        versions: [">=0.24.0"]
+      # Типы Node держим на мажоре runtime (node-version: 22 в workflow):
+      # с типами новее TypeScript пропустит API, которых в Node 22 нет, и
+      # ошибка всплывёт только в рантайме. Сдвигать вместе с node-version.
+      - dependency-name: "@types/node"
+        versions: [">=23"]
     # Конвенция TRI-XXX на бота не распространяется, см. docs/ai/commits.md.
     commit-message:
       prefix: deps

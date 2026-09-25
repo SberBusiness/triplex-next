@@ -67,7 +67,7 @@ jobs:
       next0: ${{ steps.check.outputs.next0 }}
 
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -181,13 +181,13 @@ jobs:
       # скрипты полутора тысяч зависимостей), тесты и сборка. Любой из этих
       # скриптов смог бы прочитать токен с правом прямого push в main.
       # Токен подставляется точечно, только в момент push.
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: release-0
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
 
@@ -311,13 +311,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
 
@@ -518,8 +518,11 @@ jobs:
     secrets: inherit
 
   # ------------------------------------------------------------------
-  # Финальная проверка. Между публикациями latest стоит на 0.Y.0 —
-  # это ожидаемое промежуточное состояние. Здесь оно обязано быть снято.
+  # Финальная проверка. Джоба ходит на npmjs: checkout'а здесь нет, .npmrc
+  # взяться неоткуда, @sberbusiness:registry не задан. После TRI-146 latest
+  # там между половинами не двигается вовсе: 0.Y.0 уходит под тегом react17,
+  # поэтому сверяются оба тега. Во внутреннем registry dist-tags нет, latest
+  # определяется порядком появления версий, и его закрывает порядок половин.
   # ------------------------------------------------------------------
   verify:
     needs: [preflight, publish-react18]
@@ -533,7 +536,9 @@ jobs:
         run: |
           set -eu
           LATEST=$(npm view @sberbusiness/triplex-next dist-tags.latest)
+          REACT17=$(npm view @sberbusiness/triplex-next dist-tags.react17)
           echo "dist-tags.latest = ${LATEST}"
+          echo "dist-tags.react17 = ${REACT17}"
           {
             echo "## Релиз выпущен"
             echo ""
@@ -542,12 +547,39 @@ jobs:
             echo "| \`${V0}\` | опубликована |"
             echo "| \`${VERSION}\` | опубликована |"
             echo "| \`dist-tags.latest\` | \`${LATEST}\` |"
+            echo "| \`dist-tags.react17\` | \`${REACT17}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
+
+          # react17 — тег, по которому ставятся React 17-потребители
+          # (stories/Introduction.mdx). Прогон им не роняем: обе версии уже
+          # опубликованы, релиз состоялся, а `npm install` по умолчанию
+          # определяет latest, который проверяется ниже и остаётся гейтом.
+          # Но и молчать нельзя: до TRI-146 тег не двигался с августа,
+          # и `@react17` полтора месяца отдавал давнюю сборку.
+          # Проверка идёт перед гейтом latest — иначе при красном latest
+          # расхождение по react17 не попало бы в отчёт вовсе.
+          if [ "${REACT17}" != "${V0}" ]; then
+            echo "⚠️ dist-tags.react17 = ${REACT17}, ожидалось ${V0}."
+            {
+              echo ""
+              echo "⚠️ \`dist-tags.react17\` = \`${REACT17}\`, ожидалось \`${V0}\`:"
+              echo "\`npm i @sberbusiness/triplex-next@react17\` отдаёт не ту сборку."
+              echo "Почини:"
+              echo ""
+              echo '```bash'
+              echo "npm dist-tag add @sberbusiness/triplex-next@${V0} react17 \\"
+              echo "  --@sberbusiness:registry=https://registry.npmjs.org/ \\"
+              echo "  --registry=https://registry.npmjs.org/"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
           if [ "${LATEST}" != "${VERSION}" ]; then
             echo "❌ latest = ${LATEST}, ожидалось ${VERSION}."
             echo "   npm install отдаёт потребителям не ту сборку — почини немедленно:"
-            echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest"
+            echo "   npm dist-tag add @sberbusiness/triplex-next@${VERSION} latest \\"
+            echo "     --@sberbusiness:registry=https://registry.npmjs.org/ \\"
+            echo "     --registry=https://registry.npmjs.org/"
             exit 1
           fi
           echo "✅ latest на React 18-сборке"

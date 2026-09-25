@@ -19,7 +19,7 @@ export const ProductionExample = () => {
             <MonthYearField
                 value={value}
                 label="Label"
-                placeholder="мм.гггг"
+                placeholder="Select to proceed"
                 onChange={setValue}
                 onClear={handleClear}
                 targetProps={{

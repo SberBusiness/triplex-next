@@ -1,7 +1,7 @@
 ---
 component: ChipGroup
 category: Chips
-related: [Chip]
+related: [Chip, TagGroup]
 tokens: []
 stories: stories/Chips/ChipGroup.stories.tsx
 version: "1.0"

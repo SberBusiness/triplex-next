@@ -59,7 +59,7 @@ export const Playground = ({ withLeftSwipeableArea, withRightSwipeableArea }: IP
                         leftSwipeableArea={
                             withLeftSwipeableArea ? (
                                 <ListItemControls>
-                                    <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={5} />}>
+                                    <ListItemControlsButton icon={<DefaulticonStrokePrdIcon20 paletteIndex={0} />}>
                                         В архив
                                     </ListItemControlsButton>
                                 </ListItemControls>
@@ -68,7 +68,7 @@ export const Playground = ({ withLeftSwipeableArea, withRightSwipeableArea }: IP
                         rightSwipeableArea={
                             withRightSwipeableArea ? (
                                 <ListItemControls>
-                                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={5} />}>
+                                    <ListItemControlsButton icon={<AttachmentStrokeSrvIcon20 paletteIndex={0} />}>
                                         Скачать
                                     </ListItemControlsButton>
                                 </ListItemControls>

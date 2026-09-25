@@ -131,13 +131,13 @@ jobs:
       # Определение самого workflow при вызове берётся из ветки вызывающего,
       # то есть из main. Копия этого файла в `release-0` не используется ни на
       # одном пути и подтянется при следующем перелитии.
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.target || github.sha }}
           # workflow не пушит в репозиторий; gh получает токен через env явно
           persist-credentials: false
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org/'
@@ -196,9 +196,10 @@ jobs:
             echo "⚠️ ${RELEASE_TAG} уже опубликована в npm — публикацию пропускаем."
             exit 0
           fi
-          # Порядок половин — не только договорённость скилов: latest встаёт
-          # на последнюю опубликованную версию, поэтому 1.Y.0, вышедшая раньше
-          # парной 0.Y.0, гарантированно оставит latest на React 17-сборке.
+          # Порядок половин — не только договорённость скилов: во внутреннем
+          # registry latest встаёт на последнюю опубликованную версию, поэтому
+          # 1.Y.0, вышедшая раньше парной 0.Y.0, гарантированно оставит там
+          # latest на React 17-сборке.
           # Гейт стоит после пропуска выше: повторный прогон по уже
           # опубликованной версии до него не доходит и восстановление не ломает.
           case "${RELEASE_TAG}" in
@@ -211,11 +212,25 @@ jobs:
               fi
               ;;
           esac
-          # dist-tag не указываем намеренно: теги не проносятся во внутренний
-          # registry, `--tag` там игнорируется, и `latest` всегда встаёт на
-          # последнюю опубликованную версию. Управляет этим порядок выпуска —
-          # сначала 0.Y.0, следом 1.Y.0 (см. .agents/skills/release/SKILL.md).
-          npm publish --access public
+          # 0.Y.0 публикуется под своим dist-tag, 1.Y.0 — под дефолтным latest.
+          #
+          # Раньше обе половины шли без `--tag`: npm 10 молча уводил `latest`
+          # назад на 0.Y.0, а публикация 1.Y.0 парой минут позже возвращала его
+          # вперёд. npm 11 (пин @11.19.1 выше) так больше не умеет — прогон
+          # 2026-09-18 упал на «Cannot implicitly apply the "latest" tag because
+          # previously published version 1.46.0 is higher than the new version
+          # 0.47.0» (TRI-146). Проверка в npm смотрит на дефолтность тега
+          # (`highestVersionIsGreater && isDefaultTag`), поэтому явный тег её
+          # снимает — и заодно убирает окно между половинами, когда
+          # `npm install` на npmjs отдавал React 17-сборку.
+          #
+          # Порядок выпуска это не отменяет: во внутренний registry теги
+          # не проносятся, `latest` там встаёт на последнюю опубликованную
+          # версию, и 1.Y.0 обязана выйти второй — гейт выше остаётся в силе.
+          case "${RELEASE_TAG}" in
+            0.*) npm publish --access public --tag react17 ;;
+            1.*) npm publish --access public ;;
+          esac
 
       # Каким путём прошла авторизация, по логам publish не видно: при неудачном
       # обмене OIDC npm молча уходит на NODE_AUTH_TOKEN и публикует без
@@ -350,7 +365,7 @@ jobs:
       # fail_on_unmatched_files: по умолчанию action молча пропускает ненайденные
       # файлы — релиз опубликовался бы без архива, и это заметили бы уже потребители.
       - name: Upload build artifacts to GitHub Release
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           files: dist-${{ env.RELEASE_TAG }}.zip
@@ -361,7 +376,7 @@ jobs:
       # генерация, поэтому отсутствие файла здесь — тоже повод упасть.
       - name: Upload MCP bundle to GitHub Release
         if: steps.mcp.outputs.eligible == 'true'
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           files: mcp-data-${{ env.RELEASE_TAG }}.json
@@ -372,7 +387,7 @@ jobs:
         run: npm run storybook:build
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
 

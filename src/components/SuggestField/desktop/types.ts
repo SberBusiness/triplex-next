@@ -1,9 +1,5 @@
-import { ISuggestFieldOption, ISuggestFieldProps } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import {
-    IDropdownDesktopProps,
-    IDropdownListProps,
-    IDropdownListItemProps,
-} from "@sberbusiness/triplex-next/components/Dropdown";
+import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
+import { IDropdownDesktopProps, IDropdownListProps, IDropdownListItemProps } from "../../Dropdown";
 
 /** Свойства компонента SuggestFieldDesktop */
 export interface ISuggestFieldDesktopProps<

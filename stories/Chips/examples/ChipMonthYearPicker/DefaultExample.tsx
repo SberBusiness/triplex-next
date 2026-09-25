@@ -7,7 +7,7 @@ export const DefaultExample = () => {
         <ChipMonthYearPicker
             value={value}
             label="MonthYear label"
-            placeholder="мм.гггг"
+            placeholder="Select to proceed"
             onChange={setValue}
             alignment={EDropdownAlignment.LEFT}
             size={EComponentSize.MD}

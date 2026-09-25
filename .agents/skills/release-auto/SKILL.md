@@ -93,8 +93,8 @@ gh run view <RUN_ID> --json jobs \
 ```
 
 Критерий именно «публикация началась», а не «React 18 опубликована»: если
-`0.Y.0` вышла, а `1.Y.0` упала — это авария, `dist-tags.latest` стоит на
-React 17-сборке и об этом нужно кричать громче всего. Отбор по успеху
+`0.Y.0` вышла, а `1.Y.0` упала — это авария: во внутреннем registry `latest`
+стоит на React 17-сборке, и об этом нужно кричать громче всего. Отбор по успеху
 React 18 такой прогон отбросил бы, и отчёт получился бы «релиза не было»
 в самой опасной из возможных ситуаций.
 
@@ -150,14 +150,22 @@ git fetch origin main release-0
 git show origin/main:package.json | grep -m1 '"version"'
 git show origin/release-0:package.json | grep -m1 '"version"'
 npm view @sberbusiness/triplex-next dist-tags --json
+npm view @sberbusiness/triplex-next dist-tags --json \
+  --@sberbusiness:registry=https://registry.npmjs.org/ \
+  --registry=https://registry.npmjs.org/
 gh release view <VERSION> --json assets --jq '.assets[].name'
 ```
 
 Ожидается: миноры веток совпадают, `dist-tags.latest` = `1.Y.0`, в релизе
 `1.Y.0` лежат `dist-<VERSION>.zip` и `mcp-data-<VERSION>.json`.
 
-`dist-tags.react17` **не проверяй** — тег не поддерживается, теги во внутренний
-registry не проносятся.
+Команд `npm view` две, и путать их вывод нельзя. Голая идёт туда, куда
+смотрит локальный `@sberbusiness:registry`: на машине с внутренним registry
+это он, и `dist-tags.react17` там не будет вовсе — dist-tags туда
+не проносятся, `latest` определяется порядком появления версий. Скоупнутая
+всегда отвечает про npmjs: там ожидается `latest` = `1.Y.0` **и**
+`react17` = `0.Y.0` — с TRI-146 React 17-половина публикуется с явным
+`--tag react17`.
 
 ### 4. Отчёт в Linear
 

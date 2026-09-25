@@ -4,7 +4,7 @@ import { IMonthYearFieldProps } from "./types";
 import { DatePickerExtended } from "../DatePickerExtended/DatePickerExtended";
 import { dateFormatYYYYMMDD, globalLimitRange } from "../../consts/DateConst";
 import { MonthYearPickerUtils } from "./utils";
-import { DropdownMobileInput } from "../Dropdown/mobile/DropdownMobileInput";
+import { Text, ETextSize } from "../Typography";
 import { ECalendarPickType } from "../Calendar/enums";
 import { MonthYearFieldContext } from "./MonthYearFieldContext";
 import { MonthYearFieldTarget } from "./MonthYearFieldTarget";
@@ -59,9 +59,11 @@ export const MonthYearField = React.forwardRef<HTMLDivElement, IMonthYearFieldPr
         );
     };
 
-    const renderDropdownHeaderTarget = () => {
-        return <DropdownMobileInput value={pickerValues.inputString} placeholder={placeholder} readOnly />;
-    };
+    const renderDropdownHeaderTarget = () => (
+        <Text tag="div" size={ETextSize.B3}>
+            {pickerValues.inputString || label}
+        </Text>
+    );
 
     const handleDateChange = (date: moment.Moment) => {
         onChange(date.format(format));

@@ -7,7 +7,7 @@ import { IChipProps } from "../Chip";
 import { ChipMonthYearPickerTarget, IChipMonthYearPickerTargetProps } from "./ChipMonthYearPickerTarget";
 import { dateFormatYYYYMMDD, globalLimitRange } from "../../../consts/DateConst";
 import { DatePickerExtended } from "../../DatePickerExtended/DatePickerExtended";
-import { DropdownMobileInput } from "../../Dropdown/mobile/DropdownMobileInput";
+import { Text, ETextSize } from "../../Typography";
 import { ECalendarPickType } from "../../Calendar/enums";
 import styles from "../styles/Chip.module.less";
 
@@ -65,7 +65,9 @@ export const ChipMonthYearPicker = React.forwardRef<HTMLDivElement, IChipMonthYe
     };
 
     const renderDropdownHeaderTarget = () => (
-        <DropdownMobileInput value={pickerValues.inputString} placeholder={placeholder} readOnly />
+        <Text tag="div" size={ETextSize.B3}>
+            {pickerValues.inputString || label}
+        </Text>
     );
 
     const handleDateChange = (date: moment.Moment) => {

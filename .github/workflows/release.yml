@@ -192,8 +192,11 @@ jobs:
           # спотыкаться о «version already exists»: если ровно эта версия уже
           # в реестре, публикацию пропускаем и идём дальше — досоздавать релиз,
           # ассеты и Storybook.
+          # `published=false` — для Verify provenance: этот прогон ничего
+          # не публиковал, и о способе авторизации ему сказать нечего.
           if npm view "@sberbusiness/triplex-next@${RELEASE_TAG}" version >/dev/null 2>&1; then
             echo "⚠️ ${RELEASE_TAG} уже опубликована в npm — публикацию пропускаем."
+            echo "published=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           # Порядок половин — не только договорённость скилов: во внутреннем
@@ -202,14 +205,33 @@ jobs:
           # latest на React 17-сборке.
           # Гейт стоит после пропуска выше: повторный прогон по уже
           # опубликованной версии до него не доходит и восстановление не ломает.
+          #
+          # Свежая 0.Y.0 появляется в реестре не сразу: npm принимает publish
+          # мгновенно, а отдаёт версию через минуты (TRI-147 — 2–3, TRI-151 —
+          # 8,5). При ручном догоне половины идут подряд, и без ожидания гейт
+          # ложно решил бы, что React 17-половина не вышла (TRI-153). Ждём
+          # до 15 минут; реестр опрашиваем напрямую, в обход кеша npm.
           case "${RELEASE_TAG}" in
             1.*)
               PAIRED_V0="0.${RELEASE_TAG#1.}"
-              if ! npm view "@sberbusiness/triplex-next@${PAIRED_V0}" version >/dev/null 2>&1; then
-                echo "❌ Парная ${PAIRED_V0} не опубликована — React 17-половина обязана выйти первой."
-                echo "   Выпустите ${PAIRED_V0} из release-0 и повторите (см. .agents/skills/release/SKILL.md)."
-                exit 1
-              fi
+              PAIRED_URL="https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/${PAIRED_V0}"
+              DEADLINE=$((SECONDS + 900))
+              until CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${PAIRED_URL}"); [ "${CODE}" = "200" ]; do
+                if [ "${SECONDS}" -ge "${DEADLINE}" ]; then
+                  # 404 — версии действительно нет; 000/5xx — реестр не ответил,
+                  # и советовать выпускать 0.Y.0 было бы неверно.
+                  if [ "${CODE}" = "404" ]; then
+                    echo "❌ Парная ${PAIRED_V0} не появилась в реестре за 15 минут — React 17-половина обязана выйти первой."
+                    echo "   Выпустите ${PAIRED_V0} из release-0 и повторите (см. .agents/skills/release/SKILL.md)."
+                  else
+                    echo "❌ Реестр не ответил на проверку парной ${PAIRED_V0} (последний ответ: HTTP ${CODE})."
+                    echo "   Опубликована ли React 17-половина, неизвестно — проверь и перезапусти упавшие джобы."
+                  fi
+                  exit 1
+                fi
+                echo "… ${PAIRED_V0} пока не видна в реестре, ждём индексации"
+                sleep 30
+              done
               ;;
           esac
           # 0.Y.0 публикуется под своим dist-tag, 1.Y.0 — под дефолтным latest.
@@ -231,53 +253,7 @@ jobs:
             0.*) npm publish --access public --tag react17 ;;
             1.*) npm publish --access public ;;
           esac
-
-      # Каким путём прошла авторизация, по логам publish не видно: при неудачном
-      # обмене OIDC npm молча уходит на NODE_AUTH_TOKEN и публикует без
-      # provenance. А от этого зависит решение «секрет NPM_AUTH_TOKEN можно
-      # удалять» (TRI-140) — принимать его по вере нельзя. Здесь факт
-      # проверяется у реестра и попадает в summary прогона.
-      #
-      # Шаг не гейт: provenance не влияет на работоспособность пакета,
-      # и срывать из-за него уже состоявшуюся публикацию нечего.
-      # Только после успешной публикации: на упавшем прогоне версии в реестре
-      # может не быть вовсе, и отсутствие attestations означало бы «публикации
-      # не было», а не «ушли по токену».
-      - name: Verify provenance
-        if: steps.publish.outcome == 'success'
-        continue-on-error: true
-        run: |
-          set -u
-          # Недоступность реестра — третий исход, и путать его с двумя
-          # остальными нельзя: вывод «опубликовано по токену» стоит решения
-          # не удалять секрет, а обратный — решения его удалить.
-          if ! ATT=$(npm view "@sberbusiness/triplex-next@${RELEASE_TAG}" dist.attestations --json 2>/dev/null); then
-            {
-              echo "### ⚠️ Provenance не проверена"
-              echo ""
-              echo "Реестр не ответил. Публикация \`${RELEASE_TAG}\` состоялась,"
-              echo "но каким путём прошла авторизация — неизвестно. Проверь вручную:"
-              echo "\`npm view @sberbusiness/triplex-next@${RELEASE_TAG} dist.attestations\`"
-            } >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          if [ "${ATT}" = "null" ] || [ -z "${ATT}" ]; then
-            {
-              echo "### ⚠️ Provenance отсутствует"
-              echo ""
-              echo "\`${RELEASE_TAG}\` опубликована **по токену**: обмен OIDC не состоялся."
-              echo "Секрет \`NPM_AUTH_TOKEN\` удалять нельзя. Проверь trusted publisher"
-              echo "в настройках пакета: при вызове через \`workflow_call\` npm видит"
-              echo "\`release-weekly.yml\` в claim \`workflow_ref\` и \`release.yml\` —"
-              echo "в \`job_workflow_ref\`."
-            } >> "$GITHUB_STEP_SUMMARY"
-          else
-            {
-              echo "### ✅ Provenance на месте"
-              echo ""
-              echo "\`${RELEASE_TAG}\` опубликована через trusted publishing."
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+          echo "published=true" >> "$GITHUB_OUTPUT"
 
       # Релиз создаётся на путях workflow_dispatch и workflow_call — и только после того,
       # как пакет реально ушёл в npm: упавшая сборка или публикация не оставят
@@ -400,3 +376,89 @@ jobs:
 
       - name: Output Storybook URL
         run: echo "Storybook deployed ${STORYBOOK_URL_BASE}/releases/${RELEASE_TAG}"
+
+      # Каким путём прошла авторизация, по логам publish не видно: при неудачном
+      # обмене OIDC npm молча уходит на NODE_AUTH_TOKEN и публикует без
+      # provenance. А от этого зависит решение «секрет NPM_AUTH_TOKEN можно
+      # удалять» (TRI-140) — принимать его по вере нельзя. Здесь факт
+      # проверяется у реестра и попадает в summary прогона.
+      #
+      # Шаг не гейт: provenance не влияет на работоспособность пакета,
+      # и срывать из-за него уже состоявшуюся публикацию нечего.
+      # Только после публикации именно в этом прогоне (`published == 'true'`):
+      # на упавшем прогоне версии в реестре может не быть вовсе, а на повторном
+      # publish пропущен, и attestations старого манифеста ничего не говорят
+      # об авторизации текущего запуска — принять их за подтверждение OIDC
+      # значило бы рискнуть преждевременным удалением секрета. Версия
+      # в npm публикуется однажды, поэтому при `published == 'true'`
+      # attestations в манифесте — ровно от этой публикации. Но и при упавшем
+      # деплое после неё — отсюда `!cancelled()`: публикация состоялась,
+      # и ответ нужен.
+      #
+      # Шаг последний намеренно. npm отдаёт свежую версию через минуты после
+      # publish (TRI-147 — 2–3, TRI-151 — 8,5), и сразу после публикации шаг
+      # получал 404 и отчитывался «реестр не ответил» — так в 0.48.0 и 1.48.0
+      # потерялся сигнал об отсутствии provenance (TRI-153). В конце джобы
+      # бо́льшую часть ожидания покрывает сборка Storybook, а остаток шаг
+      # дожидается сам — до 15 минут, опрашивая реестр напрямую, в обход
+      # кеша npm. Стоя сразу после publish, это ожидание задержало бы
+      # создание релиза, ассеты и деплой.
+      - name: Verify provenance
+        if: ${{ !cancelled() && steps.publish.outputs.published == 'true' }}
+        continue-on-error: true
+        run: |
+          set -u
+          VERSION_URL="https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/${RELEASE_TAG}"
+          # Недоступность реестра — третий исход, и путать его с двумя
+          # остальными нельзя: вывод «опубликовано по токену» стоит решения
+          # не удалять секрет, а обратный — решения его удалить. Поэтому
+          # «реестр не ответил» — только по истечении ожидания, а не на
+          # первом 404 во время штатной индексации.
+          DEADLINE=$((SECONDS + 900))
+          until MANIFEST=$(curl -fsS --max-time 30 -H 'Cache-Control: no-cache' "${VERSION_URL}" 2>/dev/null); do
+            if [ "${SECONDS}" -ge "${DEADLINE}" ]; then
+              {
+                echo "### ⚠️ Provenance не проверена"
+                echo ""
+                echo "Реестр не отдал \`${RELEASE_TAG}\` за 15 минут. Публикация состоялась,"
+                echo "но каким путём прошла авторизация — неизвестно. Проверь вручную:"
+                echo "\`npm view @sberbusiness/triplex-next@${RELEASE_TAG} dist.attestations\`"
+              } >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "… ${RELEASE_TAG} пока не видна в реестре, ждём индексации"
+            sleep 30
+          done
+          # Не-JSON в ответе (прокси, сбой реестра) — тоже «не проверена»:
+          # принять его за пустые attestations значило бы ложно заявить
+          # «опубликовано по токену».
+          if ! ATT=$(echo "${MANIFEST}" | jq -c '.dist.attestations // empty' 2>/dev/null); then
+            {
+              echo "### ⚠️ Provenance не проверена"
+              echo ""
+              echo "Реестр вернул для \`${RELEASE_TAG}\` не JSON. Проверь вручную:"
+              echo "\`npm view @sberbusiness/triplex-next@${RELEASE_TAG} dist.attestations\`"
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ -z "${ATT}" ]; then
+            # В reusable workflow GITHUB_WORKFLOW_REF указывает на вызывающий
+            # файл — ровно тот, по которому npm искал trusted publisher.
+            CALLER="${GITHUB_WORKFLOW_REF%%@*}"
+            {
+              echo "### ⚠️ Provenance отсутствует"
+              echo ""
+              echo "\`${RELEASE_TAG}\` опубликована **по токену**: обмен OIDC не состоялся."
+              echo "Секрет \`NPM_AUTH_TOKEN\` удалять нельзя. Проверь trusted publishers"
+              echo "в настройках пакета на npmjs: npm сверяет имя **вызывающего** workflow,"
+              echo "поэтому нужны оба — \`release.yml\` (ручной релиз) и"
+              echo "\`release-weekly.yml\` (еженедельный, вызов через \`workflow_call\`)."
+              echo "В этом прогоне npm сверял \`${CALLER##*/}\` — начни с его записи."
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### ✅ Provenance на месте"
+              echo ""
+              echo "\`${RELEASE_TAG}\` опубликована через trusted publishing."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

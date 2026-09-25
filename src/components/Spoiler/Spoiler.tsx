@@ -1,54 +1,64 @@
 import React, { useCallback, useRef, useState } from "react";
-import { CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
-import { Button, EButtonTheme } from "../Button";
-import { EComponentSize } from "../../enums/EComponentSize";
-import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
+import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { Button, EButtonTheme } from "../Button";
+import { EComponentSize } from "../../enums/EComponentSize";
 import styles from "./styles/Spoiler.module.less";
 
 /** Базовые свойства компонента Spoiler. */
 export interface ISpoilerBaseProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Текст раскрытия содержимого. */
+    /** Текст кнопки в свёрнутом состоянии — приглашение раскрыть содержимое. */
     labelExpand: string;
-    /** Текст скрытия содержимого. */
+    /** Текст кнопки в раскрытом состоянии. Без него в раскрытом состоянии у кнопки остаётся только иконка. */
     labelCollapse?: string;
-    /** Обработчик скрытия/раскрытия. */
+    /** Обработчик скрытия/раскрытия. Вызывается в обоих режимах и получает следующее состояние. */
     onToggle?: (expanded: boolean) => void;
-    /** Элемент правого блока. */
+    /** Содержимое правой части заголовка. Рендерится рядом с кнопкой раскрытия, вне неё. */
     rightBlock?: React.ReactNode;
-    /** Размер компонента. */
+    /** Размер компонента. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
 }
 
 /** Свойства контролируемого Spoiler. */
 export interface ISpoilerControlledProps extends ISpoilerBaseProps {
-    /** Контролируемое состояние скрыт/раскрыт. */
+    /** Контролируемое состояние скрыт/раскрыт. Передача этого свойства переводит компонент в контролируемый режим. */
     expanded: boolean;
-    /** Контролирующая функция скрытия/раскрытия. */
+    /** Контролирующая функция скрытия/раскрытия. Обязательна в контролируемом режиме: сам компонент состояние не меняет. */
     toggle: (nextExpanded: boolean) => void;
 }
 
 /** Свойства неконтролируемого Spoiler. */
 export interface ISpoilerUncontrolledProps extends ISpoilerBaseProps {
-    /** Контролируемое состояние скрыт/раскрыт. */
+    /** В неконтролируемом режиме не передаётся — состояние скрыт/раскрыт хранит сам компонент. */
     expanded?: never;
-    /** Контролирующая функция скрытия/раскрытия. */
+    /** В неконтролируемом режиме не передаётся — состояние меняет сам компонент, сообщая о смене через onToggle. */
     toggle?: never;
 }
 
 /** Комбинированные свойства компонента Spoiler. */
 export type TSpoilerProps = ISpoilerControlledProps | ISpoilerUncontrolledProps;
 
-const sizeToCaretIconMap = {
+/** Соответствие размера компонента иконке раскрытия. */
+const SIZE_TO_CARET_ICON_MAP: Record<EComponentSize, React.ReactElement> = {
     [EComponentSize.SM]: <CaretdownStrokeSrvIcon16 paletteIndex={5} className={styles.caretIcon} />,
     [EComponentSize.MD]: <CaretdownStrokeSrvIcon20 paletteIndex={5} className={styles.caretIcon} />,
     [EComponentSize.LG]: <CaretdownStrokeSrvIcon20 paletteIndex={5} className={styles.caretIcon} />,
 };
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+/** Соответствие размера компонента имени класса. */
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Компонент "Спойлер", используется для раскрытия внутреннего содержимого. */
+/**
+ * Компонент "Спойлер", используется для раскрытия внутреннего содержимого.
+ *
+ * Работает в двух режимах. Без `expanded` — неконтролируемый: состояние хранится внутри, о его
+ * смене компонент сообщает через `onToggle`. С `expanded` — контролируемый: состояние живёт у
+ * потребителя, по клику вызывается `toggle` со следующим значением.
+ *
+ * Корневой элемент — div, на него указывает ref и приходят className и остальные props.
+ */
 export const Spoiler = React.forwardRef<HTMLDivElement, TSpoilerProps>((props, ref) => {
     const {
         children,
@@ -60,7 +70,7 @@ export const Spoiler = React.forwardRef<HTMLDivElement, TSpoilerProps>((props, r
         labelCollapse,
         rightBlock,
         size = EComponentSize.MD,
-        ...divHTMLAttributes
+        ...restProps
     } = props;
 
     const controlled = expanded !== undefined;
@@ -82,7 +92,7 @@ export const Spoiler = React.forwardRef<HTMLDivElement, TSpoilerProps>((props, r
 
     const classNames = clsx(
         styles.spoiler,
-        sizeToClassNameMap[size],
+        SIZE_TO_CLASS_NAME_MAP[size],
         {
             [styles.opened]: open,
         },
@@ -90,7 +100,7 @@ export const Spoiler = React.forwardRef<HTMLDivElement, TSpoilerProps>((props, r
     );
 
     return (
-        <div {...divHTMLAttributes} className={classNames} data-tx={process.env.npm_package_version} ref={ref}>
+        <div {...restProps} className={classNames} data-tx={process.env.npm_package_version} ref={ref}>
             <div className={styles.head}>
                 <Button
                     aria-expanded={open}
@@ -101,7 +111,7 @@ export const Spoiler = React.forwardRef<HTMLDivElement, TSpoilerProps>((props, r
                 >
                     {open ? labelCollapse : labelExpand}
 
-                    {sizeToCaretIconMap[size]}
+                    {SIZE_TO_CARET_ICON_MAP[size]}
                 </Button>
                 {rightBlock}
             </div>

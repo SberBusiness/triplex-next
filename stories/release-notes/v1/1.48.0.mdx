@@ -22,6 +22,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлен баг, когда `LightBox.TopOverlay` был шире контента `LightBox`.
 
+**Spoiler**
+
+- Проведён AI-рефакторинг: изменений для потребителя нет — публичный API и внешний вид прежние.
+
 **StatusTracker**
 
 - Добавлено: `StatusTracker.Media`, `.Header.Title`, `.Header.Sum`, `.Header.Description` (и `.Footer.Description`), `.Body.Alert`, `.Body.Status` и `.Footer.Button` пробрасывают `ref` на свой корневой элемент — раньше они были объявлены как `React.FC`, поэтому переданный `ref` терялся. Тип этих компонентов изменился на `React.ForwardRefExoticComponent`.

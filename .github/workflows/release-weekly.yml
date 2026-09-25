@@ -552,9 +552,11 @@ jobs:
           # которое прогон не роняет, незачем.
           DEADLINE=$((SECONDS + 900))
           while :; do
+            # Не-JSON (прокси, страница ошибки) — как пустой ответ: ждём дальше,
+            # а не обрываем шаг под `set -e` без summary.
             TAGS=$(curl -fsS --max-time 30 -H 'Cache-Control: no-cache' "${REGISTRY}/-/package/${PKG}/dist-tags" 2>/dev/null || echo '{}')
-            LATEST=$(echo "${TAGS}" | jq -r '.latest // ""')
-            REACT17=$(echo "${TAGS}" | jq -r '.react17 // ""')
+            LATEST=$(echo "${TAGS}" | jq -r '.latest // ""' 2>/dev/null || echo "")
+            REACT17=$(echo "${TAGS}" | jq -r '.react17 // ""' 2>/dev/null || echo "")
             if [ "${LATEST}" = "${VERSION}" ] || [ "${SECONDS}" -ge "${DEADLINE}" ]; then
               break
             fi

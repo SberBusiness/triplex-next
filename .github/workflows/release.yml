@@ -192,8 +192,11 @@ jobs:
           # спотыкаться о «version already exists»: если ровно эта версия уже
           # в реестре, публикацию пропускаем и идём дальше — досоздавать релиз,
           # ассеты и Storybook.
+          # `published=false` — для Verify provenance: этот прогон ничего
+          # не публиковал, и о способе авторизации ему сказать нечего.
           if npm view "@sberbusiness/triplex-next@${RELEASE_TAG}" version >/dev/null 2>&1; then
             echo "⚠️ ${RELEASE_TAG} уже опубликована в npm — публикацию пропускаем."
+            echo "published=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           # Порядок половин — не только договорённость скилов: во внутреннем
@@ -213,10 +216,17 @@ jobs:
               PAIRED_V0="0.${RELEASE_TAG#1.}"
               PAIRED_URL="https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/${PAIRED_V0}"
               DEADLINE=$((SECONDS + 900))
-              until [ "$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${PAIRED_URL}")" = "200" ]; do
+              until CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${PAIRED_URL}"); [ "${CODE}" = "200" ]; do
                 if [ "${SECONDS}" -ge "${DEADLINE}" ]; then
-                  echo "❌ Парная ${PAIRED_V0} не появилась в реестре за 15 минут — React 17-половина обязана выйти первой."
-                  echo "   Выпустите ${PAIRED_V0} из release-0 и повторите (см. .agents/skills/release/SKILL.md)."
+                  # 404 — версии действительно нет; 000/5xx — реестр не ответил,
+                  # и советовать выпускать 0.Y.0 было бы неверно.
+                  if [ "${CODE}" = "404" ]; then
+                    echo "❌ Парная ${PAIRED_V0} не появилась в реестре за 15 минут — React 17-половина обязана выйти первой."
+                    echo "   Выпустите ${PAIRED_V0} из release-0 и повторите (см. .agents/skills/release/SKILL.md)."
+                  else
+                    echo "❌ Реестр не ответил на проверку парной ${PAIRED_V0} (последний ответ: HTTP ${CODE})."
+                    echo "   Опубликована ли React 17-половина, неизвестно — проверь и перезапусти упавшие джобы."
+                  fi
                   exit 1
                 fi
                 echo "… ${PAIRED_V0} пока не видна в реестре, ждём индексации"
@@ -243,6 +253,7 @@ jobs:
             0.*) npm publish --access public --tag react17 ;;
             1.*) npm publish --access public ;;
           esac
+          echo "published=true" >> "$GITHUB_OUTPUT"
 
       # Релиз создаётся на путях workflow_dispatch и workflow_call — и только после того,
       # как пакет реально ушёл в npm: упавшая сборка или публикация не оставят
@@ -374,10 +385,15 @@ jobs:
       #
       # Шаг не гейт: provenance не влияет на работоспособность пакета,
       # и срывать из-за него уже состоявшуюся публикацию нечего.
-      # Только после успешной публикации: на упавшем прогоне версии в реестре
-      # может не быть вовсе, и отсутствие attestations означало бы «публикации
-      # не было», а не «ушли по токену». Но и при упавшем деплое после неё —
-      # отсюда `!cancelled()`: публикация состоялась, и ответ нужен.
+      # Только после публикации именно в этом прогоне (`published == 'true'`):
+      # на упавшем прогоне версии в реестре может не быть вовсе, а на повторном
+      # publish пропущен, и attestations старого манифеста ничего не говорят
+      # об авторизации текущего запуска — принять их за подтверждение OIDC
+      # значило бы рискнуть преждевременным удалением секрета. Версия
+      # в npm публикуется однажды, поэтому при `published == 'true'`
+      # attestations в манифесте — ровно от этой публикации. Но и при упавшем
+      # деплое после неё — отсюда `!cancelled()`: публикация состоялась,
+      # и ответ нужен.
       #
       # Шаг последний намеренно. npm отдаёт свежую версию через минуты после
       # publish (TRI-147 — 2–3, TRI-151 — 8,5), и сразу после публикации шаг
@@ -388,7 +404,7 @@ jobs:
       # кеша npm. Стоя сразу после publish, это ожидание задержало бы
       # создание релиза, ассеты и деплой.
       - name: Verify provenance
-        if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.publish.outputs.published == 'true' }}
         continue-on-error: true
         run: |
           set -u

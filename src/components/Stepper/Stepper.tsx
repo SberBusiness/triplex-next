@@ -16,53 +16,135 @@ interface IStepperComposition {
     Step: typeof StepperStep;
 }
 
+/** Направление прокрутки ленты шагов. */
+type TStepperScrollDirection = "prev" | "next";
+
 /** Соответствие размера имени класса. */
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
+/** Доля ширины видимой области ленты, на которую прокручивает один клик по кнопке. */
 const SCROLL_STEP_RATIO = 0.3;
+
+/** Соответствие направления прокрутки имени класса. */
+const DIRECTION_TO_CLASS_NAME_MAP: Record<TStepperScrollDirection, string> = {
+    prev: styles.prev,
+    next: styles.next,
+};
+
+/** Соответствие направления прокрутки иконке кнопки. */
+const DIRECTION_TO_ICON_MAP: Record<TStepperScrollDirection, React.ReactNode> = {
+    prev: <CaretleftStrokeSrvIcon24 paletteIndex={5} />,
+    next: <CaretrightStrokeSrvIcon24 paletteIndex={5} />,
+};
+
+/** Свойства кнопки прокрутки ленты шагов. */
+interface IStepperScrollButtonProps extends ICarouselExtendedButtonProvideProps {
+    /** Направление прокрутки. */
+    direction: TStepperScrollDirection;
+    /** Размер Stepper — от него зависит размер кнопки. */
+    size: EComponentSize;
+}
+
+/**
+ * Кнопка прокрутки ленты шагов. Рендерится по запросу CarouselExtended, который передаёт
+ * `hidden` (прокрутка не нужна), `disabled` (достигнут край) и `onClick`.
+ * Из таб-порядка исключена (`tabIndex = -1`): до любого шага можно дойти клавиатурой и без неё.
+ */
+const StepperScrollButton = ({ direction, size, hidden, ...restButtonProps }: IStepperScrollButtonProps) =>
+    hidden ? null : (
+        <div className={clsx(styles.stepperButtonWrapper, DIRECTION_TO_CLASS_NAME_MAP[direction])}>
+            <ButtonIcon
+                className={clsx(styles.stepperButton, sizeToClassNameMap[size])}
+                tabIndex={-1}
+                {...restButtonProps}
+            >
+                {DIRECTION_TO_ICON_MAP[direction]}
+            </ButtonIcon>
+        </div>
+    );
+
+/**
+ * Прокручивает ленту так, чтобы шаг прижался к правому краю видимой области.
+ * Если справа есть следующий шаг, лента подтягивается ещё и на него — подсказка, что лента не кончилась.
+ */
+const alignStepRight = (carousel: HTMLDivElement, step: HTMLLIElement, delta: number, stepRight: number): void => {
+    if (delta <= 0) {
+        return;
+    }
+
+    const nextStep = step.nextElementSibling;
+    // Текущий шаг – не последний, необходимо показать следующий шаг.
+    const scrollAmount = nextStep ? delta - (stepRight - nextStep.getBoundingClientRect().right) : delta;
+
+    scrollSmoothHorizontally(carousel, Math.ceil(scrollAmount));
+};
+
+/**
+ * Прокручивает ленту так, чтобы шаг прижался к левому краю видимой области.
+ * Если слева есть предыдущий шаг, лента подтягивается ещё и на него — подсказка, что лента не кончилась.
+ */
+const alignStepLeft = (carousel: HTMLDivElement, step: HTMLLIElement, delta: number, stepLeft: number): void => {
+    if (delta >= 0) {
+        return;
+    }
+
+    const prevStep = step.previousElementSibling;
+    // Текущий шаг – не первый, необходимо показать предыдущий шаг.
+    const scrollAmount = prevStep ? delta - (stepLeft - prevStep.getBoundingClientRect().left) : delta;
+
+    scrollSmoothHorizontally(carousel, Math.floor(scrollAmount));
+};
+
+/** Прокручивает ленту так, чтобы шаг встал по центру видимой области. */
+const alignStepCenter = (carousel: HTMLDivElement, delta: number): void => {
+    if (delta) {
+        scrollSmoothHorizontally(carousel, delta);
+    }
+};
+
+/**
+ * Подводит выбранный шаг в видимую область ленты.
+ * На узких экранах шаг центрируется, на широких — прижимается к ближайшему краю.
+ */
+const alignStep = (carousel: HTMLDivElement, step: HTMLLIElement): void => {
+    const { left: carouselLeft, right: carouselRight, width: carouselWidth } = carousel.getBoundingClientRect();
+    const { left: stepLeft, right: stepRight, width: stepWidth } = step.getBoundingClientRect();
+    const carouselCenter = carouselLeft + carouselWidth / 2;
+    const stepCenter = stepLeft + stepWidth / 2;
+
+    if (window.matchMedia(`(max-width: ${EScreenWidth.SM_MAX})`).matches) {
+        alignStepCenter(carousel, stepCenter - carouselCenter);
+    } else if (carouselCenter > stepCenter) {
+        alignStepLeft(carousel, step, stepLeft - carouselLeft, stepLeft);
+    } else if (carouselCenter < stepCenter) {
+        alignStepRight(carousel, step, stepRight - carouselRight, stepRight);
+    }
+};
 
 /** Компонент Stepper, список шагов */
 export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
     className,
     steps,
-    size = EComponentSize.LG,
+    size = EComponentSize.MD,
     selectedStepId,
     ...restProps
 }) => {
-    const [state, setState] = useState({ stepNext: 0, stepPrev: 0 });
+    const [scrollStep, setScrollStep] = useState(0);
     const carouselRef = useRef<HTMLDivElement>(null);
     const stepRefs = useRef<Record<string, HTMLLIElement | null>>({});
     const selectedIndex = steps.findIndex((step) => step.id === selectedStepId);
 
     const renderPrevButton = useCallback(
-        ({ hidden, ...restButtonProps }: ICarouselExtendedButtonProvideProps) =>
-            hidden ? null : (
-                <div className={clsx(styles.stepperButtonWrapper, styles.prev)}>
-                    <ButtonIcon
-                        className={clsx(styles.stepperButton, sizeToClassNameMap[size])}
-                        tabIndex={-1}
-                        {...restButtonProps}
-                    >
-                        <CaretleftStrokeSrvIcon24 paletteIndex={5} />
-                    </ButtonIcon>
-                </div>
-            ),
+        (buttonProps: ICarouselExtendedButtonProvideProps) => (
+            <StepperScrollButton {...buttonProps} direction="prev" size={size} />
+        ),
         [size],
     );
 
     const renderNextButton = useCallback(
-        ({ hidden, ...restButtonProps }: ICarouselExtendedButtonProvideProps) =>
-            hidden ? null : (
-                <div className={clsx(styles.stepperButtonWrapper, styles.next)}>
-                    <ButtonIcon
-                        className={clsx(styles.stepperButton, sizeToClassNameMap[size])}
-                        tabIndex={-1}
-                        {...restButtonProps}
-                    >
-                        <CaretrightStrokeSrvIcon24 paletteIndex={5} />
-                    </ButtonIcon>
-                </div>
-            ),
+        (buttonProps: ICarouselExtendedButtonProvideProps) => (
+            <StepperScrollButton {...buttonProps} direction="next" size={size} />
+        ),
         [size],
     );
 
@@ -74,13 +156,7 @@ export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
         }
 
         const resizeObserver = new ResizeObserver((entries) => {
-            const width = entries[0].contentRect.width;
-            const scrollStep = width * SCROLL_STEP_RATIO;
-
-            setState({
-                stepNext: scrollStep,
-                stepPrev: scrollStep,
-            });
+            setScrollStep(entries[0].contentRect.width * SCROLL_STEP_RATIO);
         });
 
         resizeObserver.observe(carouselNode);
@@ -90,93 +166,48 @@ export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
         };
     }, []);
 
-    /** Выравнивание шага по правой части карусели. */
-    const alignStepRight = useCallback(
-        (carousel: HTMLDivElement, step: HTMLLIElement, delta: number, stepRight: number) => {
-            if (delta > 0) {
-                // Текущий шаг – не последний, необходимо показать следующий шаг.
-                if (step.nextElementSibling) {
-                    delta -= stepRight - step.nextElementSibling.getBoundingClientRect().right;
-                }
-                scrollSmoothHorizontally(carousel, Math.ceil(delta));
-            }
-        },
-        [],
-    );
-
-    /** Выравнивание шага по левой части карусели. */
-    const alignStepLeft = useCallback(
-        (carousel: HTMLDivElement, step: HTMLLIElement, delta: number, stepLeft: number) => {
-            if (delta < 0) {
-                // Текущий шаг – не первый, необходимо показать предыдущий шаг.
-                if (step.previousElementSibling) {
-                    delta -= stepLeft - step.previousElementSibling.getBoundingClientRect().left;
-                }
-                scrollSmoothHorizontally(carousel, Math.floor(delta));
-            }
-        },
-        [],
-    );
-
-    /** Выравнивание шага по центру карусели. */
-    const alignStepCenter = useCallback((carousel: HTMLDivElement, delta: number) => {
-        if (delta) {
-            scrollSmoothHorizontally(carousel, delta);
-        }
-    }, []);
-
-    /** Выравнивание шага в карусели. */
-    const alignStep = useCallback(
-        (carousel: HTMLDivElement, step: HTMLLIElement) => {
-            const { left: carouselLeft, right: carouselRight, width: carouselWidth } = carousel.getBoundingClientRect();
-            const { left: stepLeft, right: stepRight, width: stepWidth } = step.getBoundingClientRect();
-            const carouselCenter = carouselLeft + carouselWidth / 2;
-            const stepCenter = stepLeft + stepWidth / 2;
-
-            if (window.matchMedia(`(max-width: ${EScreenWidth.SM_MAX})`).matches) {
-                alignStepCenter(carousel, stepCenter - carouselCenter);
-            } else if (carouselCenter > stepCenter) {
-                alignStepLeft(carousel, step, stepLeft - carouselLeft, stepLeft);
-            } else if (carouselCenter < stepCenter) {
-                alignStepRight(carousel, step, stepRight - carouselRight, stepRight);
-            }
-        },
-        [alignStepCenter, alignStepLeft, alignStepRight],
-    );
-
     useEffect(() => {
-        if (selectedStepId) {
-            const { current: carousel } = carouselRef;
-            const step = stepRefs.current[selectedStepId];
-
-            if (carousel && step) {
-                alignStep(carousel, step);
-            }
+        if (!selectedStepId) {
+            return;
         }
-    }, [selectedStepId, alignStep]);
+
+        const carousel = carouselRef.current;
+        const step = stepRefs.current[selectedStepId];
+
+        if (carousel && step) {
+            alignStep(carousel, step);
+        }
+    }, [selectedStepId]);
+
+    /** Запоминает узел шага, чтобы подвести его в видимую область при выборе. */
+    const setStepRef = (id: string) => (instance: HTMLLIElement | null) => {
+        if (instance === null) {
+            delete stepRefs.current[id];
+        } else {
+            stepRefs.current[id] = instance;
+        }
+    };
 
     return (
         <CarouselExtended
             className={clsx(styles.stepperCarousel, sizeToClassNameMap[size], className)}
             buttonPrev={renderPrevButton}
             buttonNext={renderNextButton}
-            stepPrev={state.stepPrev}
-            stepNext={state.stepNext}
+            stepPrev={scrollStep}
+            stepNext={scrollStep}
             ref={carouselRef}
         >
             <StepperExtended selectedStepId={selectedStepId} size={size} {...restProps}>
-                {steps.map(({ label, ...step }, index) => {
-                    return (
-                        <StepperExtended.Step
-                            key={step.id}
-                            forwardedRef={(instance) => (stepRefs.current[step.id] = instance)}
-                            {...step}
-                            isInActiveStep={index > selectedIndex}
-                        >
-                            {label}
-                        </StepperExtended.Step>
-                    );
-                })}
+                {steps.map(({ label, ...step }, index) => (
+                    <StepperExtended.Step
+                        key={step.id}
+                        forwardedRef={setStepRef(step.id)}
+                        {...step}
+                        isInActiveStep={index > selectedIndex}
+                    >
+                        {label}
+                    </StepperExtended.Step>
+                ))}
             </StepperExtended>
         </CarouselExtended>
     );

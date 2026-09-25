@@ -654,7 +654,7 @@ describe("StatusTrackerButton", () => {
                 Button
             </StatusTrackerButton>,
         );
-        const blockClassName = screen.getByTestId("button").className;
+        expect(screen.getByTestId("button")).toHaveClass("block");
 
         rerender(
             <StatusTrackerButton
@@ -666,7 +666,7 @@ describe("StatusTrackerButton", () => {
                 Button
             </StatusTrackerButton>,
         );
-        expect(screen.getByTestId("button").className).not.toBe(blockClassName);
+        expect(screen.getByTestId("button")).not.toHaveClass("block");
     });
 });
 

@@ -10,7 +10,6 @@ import styles from "./styles/Button.module.less";
 import { ButtonBase, IButtonBaseProps } from "./ButtonBase";
 import { EButtonTheme } from "./enums";
 import { EComponentSize } from "../../enums/EComponentSize";
-import { IconWrapper } from "../IconWrapper";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 
 /** Свойства кнопки типа General. */
@@ -139,21 +138,26 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
         styles.button,
         THEME_TO_CLASS_NAME_MAP[theme],
         SIZE_TO_CLASS_NAME_MAP[size],
+        // Глобальные классы @sberbusiness/icons-next: должны стоять прямо на <button>, а не на внутренней обёртке
+        // icon+текста — иначе наведение на паддинг кнопки не перекрашивало иконку (см. Button-ai.md → История изменений).
+        "hoverable",
         {
             [styles.block]: block,
             [styles.loading]: loading,
             [styles.icon]: Boolean(icon) && !children,
             [THEME_TO_EXPANDED_CLASS_NAME_MAP[theme]]: expanded,
+            active: expanded,
+            disabled,
         },
         className,
     );
 
     return (
         <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
-            <IconWrapper className={styles.content} disabled={disabled} active={expanded}>
+            <span className={styles.content}>
                 {icon}
                 {children}
-            </IconWrapper>
+            </span>
             <div className={clsx(styles.loader, !loading && styles.hidden)}>{renderLoadingIcon(theme, size)}</div>
         </ButtonBase>
     );

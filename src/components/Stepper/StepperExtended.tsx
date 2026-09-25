@@ -17,7 +17,7 @@ const StepperExtendedRoot = React.forwardRef<HTMLOListElement, IStepperExtendedP
         {
             children,
             className,
-            size = EComponentSize.LG,
+            size = EComponentSize.MD,
             onSelectStep,
             selectedStepId,
             forwardedRef,

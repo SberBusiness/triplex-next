@@ -42,7 +42,7 @@ export default {
 
 const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
-    size: EComponentSize.LG,
+    size: EComponentSize.MD,
     selectedStepId: "step-1",
     // Settings
     withIcons: true,
@@ -60,7 +60,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             description: "Размер шагов.",
             table: {
                 category: "Props",
-                defaultValue: { summary: "EComponentSize.LG" },
+                defaultValue: { summary: "EComponentSize.MD" },
             },
         },
         selectedStepId: {

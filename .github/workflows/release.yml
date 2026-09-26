@@ -148,6 +148,19 @@ jobs:
               ahead|identical) ;;
               *) echo "❌ sha=${SHA} не лежит в ветке ${TARGET} (compare: '${STATUS:-ошибка}')."; exit 1 ;;
             esac
+
+            # Уже существующий тег `gh release create --target` не двигает:
+            # релиз повис бы на чужом коммите, а пакет ушёл бы из SHA.
+            # Совпадающий тег — штатно: повторный прогон после создания релиза.
+            # На 404 gh печатает тело ошибки в stdout — в расчёт идёт только
+            # ответ, похожий на SHA; иначе тега нет.
+            TAG_SHA=$(gh api "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" --jq .sha 2>/dev/null) || TAG_SHA=""
+            printf '%s' "${TAG_SHA}" | grep -qE '^[0-9a-f]{40}$' || TAG_SHA=""
+            if [ -n "${TAG_SHA}" ] && [ "${TAG_SHA}" != "${SHA}" ]; then
+              echo "❌ тег ${RELEASE_TAG} уже есть и указывает на ${TAG_SHA:0:8}, а собираем ${SHA:0:8}."
+              echo "   Релиз повис бы не на опубликованном коммите. Разберись с тегом до публикации."
+              exit 1
+            fi
           fi
 
       # При `release: published` GITHUB_SHA — коммит, на который повешен тег,

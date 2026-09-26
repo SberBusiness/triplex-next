@@ -228,6 +228,37 @@ jobs:
             exit 1
           fi
 
+      # Та же сверка main, что в prepare-react18, но до публикации 0.Y.0.
+      # Мерж, влитый в первые минуты прогона, остановит релиз здесь — пока
+      # ничего не вышло и лечение штатное (перелить заново, новый прогон),
+      # а не на полпути, когда 0.Y.0 уже опубликована и остаётся только
+      # откатывать влитое. Позже этой точки мерж ловит prepare-react18.
+      - name: Check main content is unchanged since preflight
+        env:
+          VERIFIED: ${{ needs.preflight.outputs.main_sha }}
+        run: |
+          set -eu
+          git fetch origin main --quiet
+          if ! git cat-file -e "${VERIFIED}^{commit}" 2>/dev/null; then
+            echo "❌ Проверенный предполётом коммит main '${VERIFIED}' недоступен — сверить не с чем."
+            exit 1
+          fi
+          if ! git diff --quiet "${VERIFIED}" origin/main; then
+            echo "❌ Содержимое main изменилось после предполёта (проверен ${VERIFIED:0:8})."
+            echo "   Влито после предполёта — этого нет в release-0:"
+            git log --oneline "${VERIFIED}..origin/main" --max-count=20 | sed 's/^/     /'
+            echo "   Ничего не опубликовано. Перелей main → release-0 заново, дождись"
+            echo "   зелёного ci.yml и запусти Weekly release заново (или «Re-run all jobs»)."
+            {
+              echo "### ❌ main изменился после предполёта"
+              echo ""
+              echo "Ничего не опубликовано. Перелить \`main\` → \`release-0\` заново, дождаться"
+              echo "зелёного \`ci.yml\` и запустить прогон заново (или «Re-run all jobs»)."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "✅ Содержимое main совпадает с проверенным предполётом (${VERIFIED:0:8})."
+
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
@@ -547,8 +578,9 @@ jobs:
             echo "\`${VERSION}\` не опубликована (\`${V0}\` — уже). Почини причину"
             echo "и перезапусти упавшие джобы: прогон переиспользует ветку и PR,"
             echo "force-push обновит коммит."
-            echo "Если релиз на этой неделе решено не выпускать — удали ветку,"
-            echo "PR закроется сам."
+            echo "Если \`${VERSION}\` на этой неделе решено не выпускать — удали ветку"
+            echo "(PR закроется сам) и верни \`latest\` во внутреннем registry: он остался"
+            echo "на React 17-сборке — docs/human/release.md § «Если релиз выпущен наполовину»."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Fast-forward main
@@ -582,8 +614,8 @@ jobs:
               # Не «перезапусти, пересоберётся от новой вершины»: так влитое
               # уехало бы в 1.Y.0 мимо 0.Y.0 (TRI-155). Перезапуск безопасен
               # только после отката — шаг сверки содержимого его и проверит.
-              echo "   Откати влитое в main (revert) и нажми «Re-run failed jobs»:"
-              echo "   сверка содержимого в начале джобы пропустит сборку, только"
+              echo "   Откати влитое в main (revert) и нажми «Re-run failed jobs»."
+              echo "   Сверка содержимого в начале джобы допустит сборку, только"
               echo "   если main снова совпадает с проверенным предполётом."
             else
               echo "   Причина: правила ветки. Имена обязательных проверок должны"

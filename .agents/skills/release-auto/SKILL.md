@@ -218,6 +218,14 @@ since preflight» или fast-forward отклонён, потому что `mai
 откатить (revert) влитые после предполёта коммиты в `main` — их список в логе
 шага, — затем «Re-run failed jobs». Изменения вернуть после выхода `1.Y.0`.
 
+**`prepare-react17` провалился на сверке состояния.** Шаги «Check release-0
+is unchanged since preflight» и «Check main content is unchanged since
+preflight» в React 17-половине: после предполёта в `release-0` запушили или
+в `main` влили (TRI-155). Ничего не опубликовано, аварии нет — но и
+«Re-run failed jobs» не поможет: он переиспользует старые SHA предполёта
+и откажет снова. Инструкция: для `main` — перелить заново; для `release-0` —
+дождаться зелёного `ci.yml`; затем новый прогон или «Re-run all jobs».
+
 ## Жёсткие ограничения
 
 - Ничего не публиковать и не пушить: релиз делает GitHub Actions.

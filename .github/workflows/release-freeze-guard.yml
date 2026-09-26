@@ -132,7 +132,9 @@ jobs:
           # Прогона нет, а 0.Y.0 вышла — релиз остановился на половине, новый
           # прогон откажет на предполёте («0.Y.0 уже существует»).
           V0="0.$((MINOR + 1)).0"
-          RUN_URL=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/release-weekly.yml/runs?per_page=5" \
+          # branch=main: релиз идёт только с main, а ручной прогон с другой
+          # ветки (проверка правок workflow) — не повод для стоп-сигнала.
+          RUN_URL=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/release-weekly.yml/runs?branch=main&per_page=5" \
             --jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued")][0].html_url // empty' 2>/dev/null) || RUN_URL=""
           # Тело ошибки API — не «прогон идёт»: только настоящая ссылка на прогон.
           printf '%s' "${RUN_URL}" | grep -qE '^https://github\.com/.+/actions/runs/[0-9]+$' || RUN_URL=""

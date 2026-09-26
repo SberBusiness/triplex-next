@@ -117,7 +117,9 @@ jobs:
           # commits/{sha}/pulls отдаёт все PR с этим коммитом, в том числе
           # чужие открытые — нужен именно смерженный в main.
           PR=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${AFTER}/pulls" \
-            --jq '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty' 2>/dev/null || true)
+            --jq '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty' 2>/dev/null) || PR=""
+          # При ошибке gh печатает тело ответа в stdout — берём только число.
+          printf '%s' "${PR}" | grep -qE '^[0-9]+$' || PR=""
 
           # Что делать, зависит от того, где релиз.
           #
@@ -131,7 +133,9 @@ jobs:
           # прогон откажет на предполёте («0.Y.0 уже существует»).
           V0="0.$((MINOR + 1)).0"
           RUN_URL=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/release-weekly.yml/runs?per_page=5" \
-            --jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued")][0].html_url // empty' 2>/dev/null || true)
+            --jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued")][0].html_url // empty' 2>/dev/null) || RUN_URL=""
+          # Тело ошибки API — не «прогон идёт»: только настоящая ссылка на прогон.
+          printf '%s' "${RUN_URL}" | grep -qE '^https://github\.com/.+/actions/runs/[0-9]+$' || RUN_URL=""
           if [ -n "${RUN_URL}" ]; then
             HINT="прямо сейчас идёт прогон Weekly release, версии могут разъехаться"
             ACTION=$(cat <<EOF

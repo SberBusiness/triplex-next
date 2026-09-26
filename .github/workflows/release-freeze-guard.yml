@@ -1,0 +1,200 @@
+name: Release freeze guard
+
+# Сигнал о нарушении заморозки `main` перед релизом — в момент мержа, а не
+# через часы в предполёте `release-weekly.yml`.
+#
+# Предполёт отказывает, если `release-0` не содержит вершину `main`: выпускать
+# 0.Y.0 без коммитов из `main` нельзя. Но узнают об этом поздно. 25.09 перелитие
+# было готово в 13:59, в 17:45 в `main` смержили PR, а плановый прогон пришёл
+# в 18:19 (расписание best-effort, TRI-138) и штатно вышел зелёным со строкой
+# в summary — неделя осталась без релиза, пока его не догнали вручную (TRI-151).
+# Здесь то же нарушение ловится сразу: комментарий в смерженный PR с упоминанием
+# того, кто мержил, и готовой инструкцией (TRI-154).
+#
+# Проверка на самом PR не годится: она прогоняется при открытии и пушах в PR,
+# а не при мерже — позеленевший во вторник PR, смерженный в пятницу, прошёл бы.
+#
+# Отдельным workflow, а не джобой в ci.yml: нужен `pull-requests: write` для
+# комментария, а ci.yml выполняет npm ci и чужой код — давать ему запись незачем.
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+  # Узнать, идёт ли прямо сейчас прогон Weekly release: от этого зависит,
+  # какую инструкцию давать.
+  actions: read
+
+jobs:
+  check:
+    name: Check release freeze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Нужна история обеих веток: проверки — через merge-base.
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Окно заморозки определяется состоянием веток, а не днём недели:
+      # «вершина main уже в release-0» верно ровно между перелитием и
+      # релизом. После релиза в main лежит бамп версии, которого в release-0
+      # нет, — поэтому вне окна сигнал не сработает по построению.
+      #
+      # Значения из события идут через env, а не через ${{ }} прямо в run:
+      # логин задаёт пользователь, и подстановка в shell была бы инъекцией.
+      - name: Detect freeze violation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          SENDER: ${{ github.event.sender.login }}
+        run: |
+          set -euo pipefail
+
+          # Новая ветка или force-push без предыдущей вершины — сравнивать не с чем.
+          if [ "${BEFORE}" = "0000000000000000000000000000000000000000" ] \
+            || ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            echo "Нет предыдущей вершины main — пропуск."
+            exit 0
+          fi
+
+          # 1. Окно было открыто: вершина main до пуша уже перелита в release-0.
+          # Сигнал получает только первый мерж, сорвавший заморозку: после него
+          # вершина main уже не в release-0, и следующие мержи выходят здесь.
+          # Они ничего не меняют — лечение то же, перелить заново.
+          if ! git merge-base --is-ancestor "${BEFORE}" origin/release-0; then
+            echo "Вершина main до пуша не в release-0: окно не открыто или заморозку уже сорвал предыдущий мерж (сигнал был на нём)."
+            exit 0
+          fi
+
+          # 2. Пуш его закрыл: новой вершины в release-0 нет.
+          if git merge-base --is-ancestor "${AFTER}" origin/release-0; then
+            echo "Новая вершина main уже в release-0 — заморозка не нарушена."
+            exit 0
+          fi
+
+          # 3. Это не сам релиз. release-weekly.yml заводит бамп версии в main
+          # fast-forward'ом — штатное завершение окна, а не нарушение.
+          V_BEFORE=$(git show "${BEFORE}:package.json" | jq -r .version)
+          V_AFTER=$(git show "${AFTER}:package.json" | jq -r .version)
+          if [ "${V_BEFORE}" != "${V_AFTER}" ]; then
+            echo "Версия ${V_BEFORE} → ${V_AFTER}: это релизный коммит, пропуск."
+            exit 0
+          fi
+
+          # 4. Релиз на этой неделе запланирован: notes на кандидата заполнены.
+          # Та же проверка, что в предполёте release-weekly.yml, — иначе
+          # перелитие ради синхронизации веток посреди недели давало бы сигнал.
+          MINOR=$(echo "${V_BEFORE}" | cut -d. -f2)
+          VERSION="1.$((MINOR + 1)).0"
+          MDX="stories/release-notes/v1/${VERSION}.mdx"
+          if ! git show "${AFTER}:${MDX}" > /tmp/notes.mdx 2>/dev/null \
+            || [ "$(grep -vcE '^[[:space:]]*$|^import |^<Meta |^<Title>|^<Heading>.*</Heading>$' /tmp/notes.mdx || true)" -eq 0 ]; then
+            echo "Notes на ${VERSION} пустые — релиз не планируется, заморозки нет."
+            exit 0
+          fi
+
+          # 5. Релиз кандидата ещё не вышел.
+          if gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}" >/dev/null 2>&1; then
+            echo "Релиз ${VERSION} уже выпущен — окно закрыто."
+            exit 0
+          fi
+
+          # Нарушение. Коммиты, которых нет в release-0, — то, что придётся
+          # перелить заново.
+          # --max-count, а не `| head`: под pipefail head, закрыв канал раньше
+          # git log, уронил бы шаг по SIGPIPE.
+          MISSING=$(git log "${AFTER}" --not origin/release-0 --oneline --max-count=20)
+          TOTAL=$(git rev-list --count "${AFTER}" --not origin/release-0)
+          if [ "${TOTAL}" -gt 20 ]; then
+            MISSING="${MISSING}
+          … и ещё $((TOTAL - 20))"
+          fi
+          # commits/{sha}/pulls отдаёт все PR с этим коммитом, в том числе
+          # чужие открытые — нужен именно смерженный в main.
+          PR=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${AFTER}/pulls" \
+            --jq '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty' 2>/dev/null) || PR=""
+          # При ошибке gh печатает тело ответа в stdout — берём только число.
+          printf '%s' "${PR}" | grep -qE '^[0-9]+$' || PR=""
+
+          # Что делать, зависит от того, где релиз.
+          #
+          # Прогон Weekly release идёт прямо сейчас. Молча в 1.Y.0 мерж уже
+          # не уедет: prepare-react18 сверяет содержимое main с проверенным
+          # предполётом, а release.yml собирает ровно проверенный коммит
+          # (TRI-155). Но прогон остановится на полпути — 0.Y.0 выйдет,
+          # 1.Y.0 нет, — и довести его можно только откатом влитого.
+          #
+          # Прогона нет, а 0.Y.0 вышла — релиз остановился на половине, новый
+          # прогон откажет на предполёте («0.Y.0 уже существует»).
+          V0="0.$((MINOR + 1)).0"
+          # branch=main: релиз идёт только с main, а ручной прогон с другой
+          # ветки (проверка правок workflow) — не повод для стоп-сигнала.
+          RUN_URL=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/release-weekly.yml/runs?branch=main&per_page=5" \
+            --jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued")][0].html_url // empty' 2>/dev/null) || RUN_URL=""
+          # Тело ошибки API — не «прогон идёт»: только настоящая ссылка на прогон.
+          printf '%s' "${RUN_URL}" | grep -qE '^https://github\.com/.+/actions/runs/[0-9]+$' || RUN_URL=""
+          if [ -n "${RUN_URL}" ]; then
+            HINT="прямо сейчас идёт прогон Weekly release, версии могут разъехаться"
+            ACTION=$(cat <<EOF
+          **Прямо сейчас идёт прогон Weekly release:** ${RUN_URL}
+
+          Мерж пришёлся в середину релиза. В \`${VERSION}\` он не попадёт — прогон сверяет содержимое \`main\` с проверенным предполётом и остановится на \`prepare-react18\` или на fast-forward: \`${V0}\` выйдет, \`${VERSION}\` — нет.
+
+          1. Больше ничего не мержить в \`main\` до конца релиза.
+          2. Сообщить тому, кто ведёт релиз, и открыть прогон по ссылке выше.
+          3. Когда прогон остановится — откатить этот мерж в \`main\` (revert) и нажать **Re-run failed jobs**: \`${VERSION}\` соберётся точной парой \`${V0}\`. Вернуть изменения — после выхода \`${VERSION}\`.
+          EOF
+            )
+          elif gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${V0}" >/dev/null 2>&1; then
+            HINT="релиз остановился на половине, см. «Если релиз выпущен наполовину»"
+            ACTION=$(cat <<EOF
+          Релиз остановился на половине: \`${V0}\` выпущена, \`${VERSION}\` — нет. Перелитие и новый запуск **не помогут**: предполёт откажет, \`${V0}\` уже существует.
+
+          Если прогон остановился на сверке содержимого \`main\` — откатить этот мерж в \`main\` (revert) и нажать **Re-run failed jobs** упавшего прогона: \`${VERSION}\` соберётся точной парой \`${V0}\`. Иначе — \`docs/human/release.md\` § «Если релиз выпущен наполовину».
+          EOF
+            )
+          else
+            HINT="нужно перелить main в release-0 заново"
+            ACTION=$(cat <<EOF
+          Чтобы релиз вышел на этой неделе:
+
+          1. Перелить \`main\` → \`release-0\` заново, разрешить конфликты React 17, запушить.
+          2. Дождаться зелёного \`ci.yml\` на новой вершине \`release-0\`.
+          3. Если плановый прогон уже отказал или не пришёл — **Actions → Weekly release → Run workflow** (\`gh workflow run release-weekly.yml --ref main\`).
+
+          Если перелитие было промежуточным или релиз решили перенести — сигнал ожидаем, но без повторного перелития предполёт откажет.
+          EOF
+            )
+          fi
+
+          BODY=$(cat <<EOF
+          ### ⚠️ Заморозка \`main\` нарушена — релиз \`${VERSION}\` сам не выйдет
+
+          @${SENDER}, этот мерж пришёл в \`main\` после перелития в \`release-0\`, а релиз \`${VERSION}\` ещё не выпущен. \`release-0\` больше не содержит вершину \`main\`.
+
+          Не хватает в \`release-0\`:
+
+          \`\`\`
+          ${MISSING}
+          \`\`\`
+
+          ${ACTION}
+
+          Подробнее — \`docs/human/release.md\` § «Расписание и заморозка \`main\`».
+          EOF
+          )
+
+          echo "::warning title=Заморозка main нарушена::Мерж после перелития в release-0, релиз ${VERSION} ещё не вышел — ${HINT}."
+          echo "${BODY}" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -n "${PR}" ]; then
+            gh pr comment "${PR}" --repo "${GITHUB_REPOSITORY}" --body "${BODY}"
+            echo "Комментарий оставлен в PR #${PR}."
+          else
+            echo "PR для ${AFTER} не найден (прямой push?) — сигнал только в summary."
+          fi

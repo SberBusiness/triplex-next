@@ -49,6 +49,14 @@ on:
         required: false
         default: false
         type: boolean
+      # Точный коммит сборки и тега. `target` — имя ветки, и по нему
+      # собралась бы её вершина на момент старта джобы — вместе со всем,
+      # что влили после того, как вызывающий проверил состояние (TRI-155).
+      sha:
+        description: "Коммит для сборки и тега; обязан лежать в target. Пусто — вершина target"
+        required: false
+        default: ""
+        type: string
       notes:
         description: "Текст release notes; пусто — собрать из MDX в репозитории"
         required: false
@@ -89,6 +97,8 @@ jobs:
           TARGET: ${{ github.event.release.target_commitish || inputs.target }}
           MAKE_LATEST: ${{ inputs.make_latest }}
           EVENT_NAME: ${{ github.event_name }}
+          SHA: ${{ inputs.sha }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if ! printf '%s' "${RELEASE_TAG}" | grep -qE '^[01]\.[0-9]+\.0$'; then
             echo "❌ tag=${RELEASE_TAG}: ожидается ровно 0.Y.0 или 1.Y.0 (минорный релиз, без prerelease)."
@@ -123,6 +133,23 @@ jobs:
             fi
           fi
 
+          # Переданный коммит обязан лежать в ветке target: иначе тег повис бы
+          # на коммите, которого в ветке нет, а проверка ветки выше ничего бы
+          # не значила. Через API — checkout ниже неглубокий, истории нет.
+          if [ -n "${SHA:-}" ]; then
+            # Ровно полный SHA: имя ветки прошло бы compare как identical
+            # и незаметно вернуло бы сборку от вершины.
+            if ! printf '%s' "${SHA}" | grep -qE '^[0-9a-f]{40}$'; then
+              echo "❌ sha='${SHA}': ожидается полный SHA коммита (40 hex-символов)."
+              exit 1
+            fi
+            STATUS=$(gh api "repos/${GITHUB_REPOSITORY}/compare/${SHA}...${TARGET}" --jq .status 2>/dev/null || echo "")
+            case "${STATUS}" in
+              ahead|identical) ;;
+              *) echo "❌ sha=${SHA} не лежит в ветке ${TARGET} (compare: '${STATUS:-ошибка}')."; exit 1 ;;
+            esac
+          fi
+
       # При `release: published` GITHUB_SHA — коммит, на который повешен тег,
       # и checkout по умолчанию взял бы именно его.
       # При `workflow_dispatch` и `workflow_call` ветку для сборки задаёт вход
@@ -131,9 +158,11 @@ jobs:
       # Определение самого workflow при вызове берётся из ветки вызывающего,
       # то есть из main. Копия этого файла в `release-0` не используется ни на
       # одном пути и подтянется при следующем перелитии.
+      #
+      # Если передан `sha`, собирается ровно он, а не вершина `target`.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.target || github.sha }}
+          ref: ${{ inputs.sha || inputs.target || github.sha }}
           # workflow не пушит в репозиторий; gh получает токен через env явно
           persist-credentials: false
 
@@ -292,7 +321,8 @@ jobs:
         if: github.event_name != 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TARGET: ${{ inputs.target }}
+          # Тег — на тот же коммит, из которого собрано и опубликовано.
+          TARGET: ${{ inputs.sha || inputs.target }}
           NOTES: ${{ inputs.notes }}
           MAKE_LATEST: ${{ inputs.make_latest }}
         run: |

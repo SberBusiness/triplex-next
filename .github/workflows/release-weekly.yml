@@ -65,6 +65,8 @@ jobs:
       v0: ${{ steps.check.outputs.v0 }}
       next: ${{ steps.check.outputs.next }}
       next0: ${{ steps.check.outputs.next0 }}
+      main_sha: ${{ steps.check.outputs.main_sha }}
+      release0_sha: ${{ steps.check.outputs.release0_sha }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -163,6 +165,11 @@ jobs:
             echo "v0=${V0}"
             echo "next=${NEXT}"
             echo "next0=${NEXT0}"
+            # Проверенное состояние. Джобы ниже стартуют через десятки минут
+            # и без этих SHA взяли бы текущие вершины — вместе со всем, что
+            # влили после предполёта мимо его проверок (TRI-155).
+            echo "main_sha=$(git rev-parse origin/main)"
+            echo "release0_sha=${TIP}"
           } >> "$GITHUB_OUTPUT"
 
   # ------------------------------------------------------------------
@@ -174,6 +181,8 @@ jobs:
     needs: preflight
     if: needs.preflight.outputs.ready == 'true' && inputs.dry_run != true
     runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.bump.outputs.sha }}
 
     steps:
       # persist-credentials: false — принципиально. Иначе actions/checkout
@@ -181,11 +190,43 @@ jobs:
       # скрипты полутора тысяч зависимостей), тесты и сборка. Любой из этих
       # скриптов смог бы прочитать токен с правом прямого push в main.
       # Токен подставляется точечно, только в момент push.
+      #
+      # Собираем ровно ту вершину release-0, на которой предполёт видел
+      # зелёный CI, а не текущую: push в release-0 после предполёта попал бы
+      # в 0.Y.0 непроверенным (TRI-155).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: release-0
+          ref: ${{ needs.preflight.outputs.release0_sha }}
           fetch-depth: 0
           persist-credentials: false
+
+      # Если release-0 сдвинулся, push релизного коммита ниже всё равно
+      # был бы отклонён как non-fast-forward — но уже после тестов и сборки.
+      # Останавливаемся сразу и объясняем почему: публикации ещё не было,
+      # лечится новым прогоном, предполёт которого проверит CI заново.
+      - name: Check release-0 is unchanged since preflight
+        env:
+          VERIFIED: ${{ needs.preflight.outputs.release0_sha }}
+        run: |
+          set -eu
+          git fetch origin release-0 --quiet
+          TIP=$(git rev-parse origin/release-0)
+          if [ "${TIP}" != "${VERIFIED}" ]; then
+            echo "❌ release-0 сдвинулся после предполёта: проверен ${VERIFIED:0:8}, сейчас ${TIP:0:8}."
+            echo "   Новые коммиты не проходили проверку CI предполёта:"
+            git log --oneline "${VERIFIED}..${TIP}" --max-count=20 | sed 's/^/     /'
+            echo "   Ничего не опубликовано. Дождись зелёного ci.yml на новой вершине"
+            echo "   release-0 и запусти Weekly release заново или «Re-run all jobs» —"
+            echo "   не «Re-run failed jobs»: предполёт должен проверить новое состояние."
+            {
+              echo "### ❌ release-0 изменился после предполёта"
+              echo ""
+              echo "Проверен \`${VERIFIED:0:8}\`, сейчас \`${TIP:0:8}\`. Ничего не опубликовано."
+              echo "Дождаться зелёного \`ci.yml\` на новой вершине и запустить прогон заново"
+              echo "(или «Re-run all jobs», не «Re-run failed jobs»)."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -239,6 +280,7 @@ jobs:
           EOF
 
       - name: Bump, commit and push
+        id: bump
         env:
           V0: ${{ needs.preflight.outputs.v0 }}
           NEXT0: ${{ needs.preflight.outputs.next0 }}
@@ -286,6 +328,9 @@ jobs:
           # GITHUB_TOKEN не годится — он не входит в списки branch protection
           # на main, и его пуши не запускают другие workflow.
           git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:release-0
+          # Публикуем ровно этот коммит, а не вершину release-0 на момент
+          # старта publish-react17 (TRI-155).
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   publish-react17:
     needs: [preflight, prepare-react17]
@@ -299,6 +344,8 @@ jobs:
     with:
       tag: ${{ needs.preflight.outputs.v0 }}
       target: release-0
+      # Ровно релизный коммит, а не вершина ветки на момент старта (TRI-155).
+      sha: ${{ needs.prepare-react17.outputs.sha }}
       make_latest: false
     secrets: inherit
 
@@ -309,13 +356,62 @@ jobs:
   prepare-react18:
     needs: [preflight, publish-react17]
     runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.prepare.outputs.sha }}
 
     steps:
+      # Текущая вершина main, а не проверенный предполётом SHA: релизный
+      # коммит обязан лечь поверх вершины, иначе fast-forward в main
+      # невозможен. Что вершина не принесла ничего нового, проверяет
+      # следующий шаг.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: false
+
+      # 0.Y.0 уже опубликована из release-0, содержащего проверенный
+      # предполётом main. Если с тех пор в main что-то влили, 1.Y.0 собралась
+      # бы вместе с этим — и молча разошлась бы с 0.Y.0, которая обязана быть
+      # её точным аналогом (TRI-155).
+      #
+      # Сверяем содержимое, а не SHA. Равенство SHA сделало бы остановку
+      # тупиковой: сдвинувшийся main не вернуть, а релизный коммит от старой
+      # вершины не заведёшь fast-forward'ом. По содержимому же выход есть —
+      # откатить влитое (revert вернёт дерево к проверенному) и перезапустить
+      # упавшие джобы.
+      - name: Check main content is unchanged since preflight
+        env:
+          VERIFIED: ${{ needs.preflight.outputs.main_sha }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+        run: |
+          set -eu
+          # Недоступный коммит — не «содержимое изменилось»: отказ тот же,
+          # но причина другая, и путать их в сообщении нельзя.
+          if ! git cat-file -e "${VERIFIED}^{commit}" 2>/dev/null; then
+            echo "❌ Проверенный предполётом коммит main '${VERIFIED}' недоступен — сверить не с чем."
+            exit 1
+          fi
+          if ! git diff --quiet "${VERIFIED}" HEAD; then
+            echo "❌ Содержимое main изменилось после предполёта (проверен ${VERIFIED:0:8})."
+            echo "   ${V0} уже опубликована без этих изменений — собрать из них ${VERSION}"
+            echo "   значит развести версии. Влито после предполёта:"
+            git log --oneline "${VERIFIED}..HEAD" --max-count=20 | sed 's/^/     /'
+            echo ""
+            echo "   Выход, при котором ${VERSION} останется точным аналогом ${V0}:"
+            echo "   откатить эти коммиты в main (revert), затем «Re-run failed jobs»"
+            echo "   этого прогона. Вернуть изменения — после выхода ${VERSION}."
+            echo "   Другие варианты — docs/human/release.md § «Если релиз выпущен наполовину»."
+            {
+              echo "### ❌ main изменился после предполёта"
+              echo ""
+              echo "\`${V0}\` опубликована, \`${VERSION}\` — нет. Откатить в \`main\` коммиты,"
+              echo "влитые после \`${VERIFIED:0:8}\`, и перезапустить упавшие джобы."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "✅ Содержимое main совпадает с проверенным предполётом (${VERIFIED:0:8})."
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -414,18 +510,25 @@ jobs:
       # коммит и результаты проверок — то, по чему разбирают причину. Но
       # молча оставленный мусор через месяц уже никто не свяжет с релизом,
       # поэтому пишем в summary, что именно осталось и что с этим делать.
+      # Джоба стартует только после публикации 0.Y.0, поэтому «ничего
+      # не опубликовано» здесь всегда про 1.Y.0 — так и пишем, иначе summary
+      # выглядит как «релиза не было», хотя половина уже вышла.
       - name: Report leftovers on failure
         if: failure()
         env:
           BRANCH: ${{ steps.prepare.outputs.branch }}
           PR: ${{ steps.checks.outputs.pr }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+          VERSION: ${{ needs.preflight.outputs.version }}
         run: |
           set -u
           if [ -z "${BRANCH}" ]; then
             {
-              echo "### Релиз остановлен до создания релизной ветки"
+              echo "### Релиз \`${VERSION}\` остановлен до создания релизной ветки"
               echo ""
-              echo "В репозитории ничего не осталось, публикации не было."
+              echo "Релизной ветки нет, \`${VERSION}\` не опубликована."
+              echo "\`${V0}\` уже опубликована — релиз выпущен наполовину,"
+              echo "см. docs/human/release.md § «Если релиз выпущен наполовину»."
             } >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
@@ -441,8 +544,9 @@ jobs:
               echo "- PR создать не успели"
             fi
             echo ""
-            echo "Ничего не опубликовано. Почини причину и перезапусти прогон:"
-            echo "он переиспользует ветку и PR, force-push обновит коммит."
+            echo "\`${VERSION}\` не опубликована (\`${V0}\` — уже). Почини причину"
+            echo "и перезапусти упавшие джобы: прогон переиспользует ветку и PR,"
+            echo "force-push обновит коммит."
             echo "Если релиз на этой неделе решено не выпускать — удали ветку,"
             echo "PR закроется сам."
           } >> "$GITHUB_STEP_SUMMARY"
@@ -475,7 +579,12 @@ jobs:
               echo "   Ожидали вершину ${PARENT:0:8}, а там ${TIP:0:8}."
               echo "   Кто-то влил PR после старта прогона — main на время релиза"
               echo "   должен быть заморожен (docs/human/release.md § «Заморозка»)."
-              echo "   Перезапусти прогон: он пересоберёт релизный коммит от новой вершины."
+              # Не «перезапусти, пересоберётся от новой вершины»: так влитое
+              # уехало бы в 1.Y.0 мимо 0.Y.0 (TRI-155). Перезапуск безопасен
+              # только после отката — шаг сверки содержимого его и проверит.
+              echo "   Откати влитое в main (revert) и нажми «Re-run failed jobs»:"
+              echo "   сверка содержимого в начале джобы пропустит сборку, только"
+              echo "   если main снова совпадает с проверенным предполётом."
             else
               echo "   Причина: правила ветки. Имена обязательных проверок должны"
               echo "   совпадать с именами джоб ci.yml и visual-test.yml, а dudim-ai —"
@@ -514,6 +623,9 @@ jobs:
     with:
       tag: ${{ needs.preflight.outputs.version }}
       target: main
+      # Тот коммит, что прошёл проверки PR и уехал в main fast-forward'ом.
+      # Мерж в main после fast-forward'а в 1.Y.0 уже не попадёт (TRI-155).
+      sha: ${{ needs.prepare-react18.outputs.sha }}
       make_latest: true
     secrets: inherit
 

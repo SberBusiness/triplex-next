@@ -77,6 +77,17 @@ Storybook. Обратная сторона: **опубликованную ве�
 → Run workflow** с галкой `dry_run`: выполнится только предполёт, ничего не
 опубликуется.
 
+Отдельно — публикация в npm. Она опирается на trusted publishing (OIDC)
+и ломается иначе: релиз не останавливается, а **молча** уходит по запасному
+токену без provenance. Видно это только в summary шага `Verify provenance`
+после реальной публикации — `dry_run` до этого шага не доходит.
+
+| Настройка | Где | Зачем |
+|---|---|---|
+| Trusted publisher `release.yml` | npmjs.com → пакет → Settings → Trusted Publisher (GitHub Actions, `SberBusiness/triplex-next`, environment пустой) | ручной релиз: `release: published` и `workflow_dispatch` у `release.yml`, в том числе через skill `release` |
+| Trusted publisher `release-weekly.yml` | там же, отдельной записью | еженедельный релиз. npm сверяет имя **вызывающего** workflow: при `workflow_call` это `release-weekly.yml`, хотя publish выполняется в `release.yml`. Без этой записи так и вышли по токену `0.48.0` и `1.48.0` (TRI-152) |
+| Секрет `NPM_AUTH_TOKEN` | Settings → Secrets and variables → Actions | запасной путь, если обмен OIDC не состоялся. Не удалять, пока обе записи выше не подтверждены публикацией с provenance: `npm view @sberbusiness/triplex-next@<версия> dist.attestations` не пусто |
+
 ## Кто что делает
 
 Релиз целиком выпускает **GitHub Actions** — workflow

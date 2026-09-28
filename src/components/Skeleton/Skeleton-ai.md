@@ -1,7 +1,7 @@
 ---
 component: Skeleton
 category: Loaders
-related: [LoaderSmall, LoaderMiddle, LoaderScreen]
+related: [LoaderMiddle]
 tokens:
   - Skeleton.BackgroundColor_Type1_Start
   - Skeleton.BackgroundColor_Type1_End
@@ -106,9 +106,9 @@ Skeleton.BackgroundColor_Type3_End
 
 ## Связанные компоненты
 
-- `LoaderSmall` (`src/components/Loader/`) — спиннер для встраивания в кнопку или поле: альтернатива, когда каркас контента неизвестен.
-- `LoaderMiddle` (`src/components/Loader/`) — спиннер для блока/секции: альтернатива на тех же основаниях.
-- `LoaderScreen` (`src/components/LoaderScreen/`) — оверлей с затемнением поверх области: используется, когда контент уже отрисован и обновляется, а не загружается впервые.
+- `LoaderMiddle` (`src/components/Loader/`) — спиннер для блока или секции: альтернатива, решающая ту же задачу (первая загрузка блока) другим компромиссом — берётся, когда будущая раскладка заранее неизвестна.
+
+`LoaderSmall` (внутри кнопки или поля) и `LoaderScreen` (оверлей поверх уже отрисованного контента при обновлении) решают другие задачи, поэтому в `related` не входят — см. «Не используй когда».
 
 ---
 

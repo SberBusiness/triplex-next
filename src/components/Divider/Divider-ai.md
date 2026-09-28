@@ -1,7 +1,7 @@
 ---
 component: Divider
 category: Layout
-related: [Gap]
+related: []
 tokens:
   - Divider.Background
 stories: stories/Divider/Divider.stories.tsx

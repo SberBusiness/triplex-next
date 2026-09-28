@@ -10,3 +10,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `Divider` пробрасывает `ref` на корневой `<hr>`. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг.
+
+**Step**
+
+- Добавлено: `Step` пробрасывает `ref` на корневой элемент (кружок шага) — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.

@@ -18,7 +18,9 @@ const TYPE_TO_CLASS_NAME_MAP: Record<ESkeletonType, string> = {
 
 /**
  * Элемент для визуализации содержимого, которое ещё не загрузилось.
- * Растягивается по родителю (flex-grow) и пульсирует цветом фона в зависимости от типа.
+ * Собственных размеров нет: размер задаёт потребитель через `width`/`height`,
+ * либо скелетон растягивается внутри flex-контейнера (`flex-grow: 1`).
+ * Пульсирует цветом фона в зависимости от типа.
  */
 export const Skeleton = React.forwardRef<HTMLDivElement, ISkeletonProps>(
     ({ className, type = ESkeletonType.TYPE_2, ...htmlDivAttributes }, ref) => (

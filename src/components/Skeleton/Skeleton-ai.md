@@ -86,7 +86,7 @@ Skeleton.BackgroundColor_Type3_End
 - **`barrel src/components/Skeleton/index.ts`** экспортирует `./Skeleton` и `./enums` — оба экспорта сохранять.
 - **Корневой DOM-элемент — `<div>`** без ARIA-роли; собственного содержимого компонент не рендерит.
 - **`data-tx`** проставляется после спреда `...htmlDivAttributes`, то есть потребитель его не перекрывает. Порядок атрибутов в JSX не менять.
-- **CSS-классы `skeleton`, `type1`, `type2`, `type3`** в `Skeleton.module.less` проверяются unit-тестами; `skeleton` и типы фиксируются visual baseline (`loaders-skeleton--visual-tests`).
+- **CSS-классы `skeleton`, `type1`, `type2`, `type3`** в `Skeleton.module.less` проверяются unit-тестами. Visual baseline (`loaders-skeleton--visual-tests`) фиксирует только геометрию из `.skeleton`: в story анимация выключена декоратором, а фон задан inline, поэтому цвета типов визуальным тестом не покрыты — классы `type1/2/3` объявляют лишь `animation`, а цвет приходит из `@keyframes`.
 - **`displayName = "Skeleton"`** — проверяется тестом.
 - **Анимация задаётся только в LESS** (`skeleton-type{N}-pulse`, 2s ease-in-out infinite). Имена keyframes локальны для CSS-модуля; потребитель гасит анимацию своим `className`/`style` (story `Visual tests` для скриншотов делает это глобальным правилом `* { animation: none !important; }` в декораторе).
 

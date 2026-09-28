@@ -68,7 +68,7 @@ Divider.Background
 - **Имена `Divider`, `IDividerProps`, `TDividerMarginSize`** и экспорт из `src/components/Divider/index.ts` — часть публичного API.
 - **`displayName = "Divider"`** — виден в React DevTools и snapshot-тестах.
 - **Токен `Divider.Background`** — единственный цвет компонента; переименование ломает темизацию у потребителей.
-- **CSS-классы `divider`, `marginTopSize-{N}`, `marginBottomSize-{N}`** в `styles/Divider.module.less` генерируются LESS-циклом `each` по списку `@size` и проверяются в unit-тестах — переименование требует синхронного обновления тестов.
+- **CSS-классы `divider`, `marginTopSize-{N}`, `marginBottomSize-{N}`** в `styles/Divider.module.less`: базовый класс `divider` объявлен обычным правилом, а `marginTopSize-{N}` / `marginBottomSize-{N}` генерируются LESS-циклом `each` по списку `@size`. Все они проверяются в unit-тестах — переименование требует синхронного обновления тестов.
 
 ---
 

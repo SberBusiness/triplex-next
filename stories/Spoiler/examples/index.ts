@@ -1,8 +1,8 @@
 export * from "./Playground";
 export * from "./Default";
 export { default as DefaultSource } from "./Default?raw";
-export * from "./DifferentSizes";
-export { default as DifferentSizesSource } from "./DifferentSizes?raw";
+export * from "./Sizes";
+export { default as SizesSource } from "./Sizes?raw";
 export * from "./WithRightBlock";
 export { default as WithRightBlockSource } from "./WithRightBlock?raw";
 export * from "./Controlled";

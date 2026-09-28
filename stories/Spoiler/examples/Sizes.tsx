@@ -9,7 +9,7 @@ const SIZE_TO_TEXT_SIZE_MAP: Record<EComponentSize, ETextSize> = {
     [EComponentSize.LG]: ETextSize.B2,
 };
 
-export const DifferentSizes = () => (
+export const Sizes = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {SIZES.map((size) => (
             <div key={size}>

@@ -7,8 +7,8 @@ import {
     Playground as PlaygroundRender,
     Default as DefaultRender,
     DefaultSource,
-    DifferentSizes as DifferentSizesRender,
-    DifferentSizesSource,
+    Sizes as SizesRender,
+    SizesSource,
     WithRightBlock as WithRightBlockRender,
     WithRightBlockSource,
     Controlled as ControlledRender,
@@ -93,21 +93,20 @@ export const Default: Story = {
             },
             source: { code: DefaultSource, language: "tsx" },
         },
-        // Состояние MD в свёрнутом виде уже покрыто стори Different sizes — отдельный скриншот не нужен.
+        // Состояние MD в свёрнутом виде уже покрыто стори Sizes — отдельный скриншот не нужен.
         testRunner: { skip: true },
     },
 };
 
-export const DifferentSizes: Story = {
-    name: "Different sizes",
-    render: DifferentSizesRender,
+export const Sizes: Story = {
+    render: SizesRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
                 story: "Размер задаёт типографику кнопки и размер иконки раскрытия: 16px для SM, 20px для MD и LG.",
             },
-            source: { code: DifferentSizesSource, language: "tsx" },
+            source: { code: SizesSource, language: "tsx" },
         },
     },
 };

@@ -182,7 +182,7 @@ flex-контейнер, поэтому `rightBlock` встаёт в общий 
 |---|---|---|
 | `Playground` | `Playground.tsx` | Интерактивный контроль `size`, `labelExpand`, `labelCollapse` |
 | `Default` | `Default.tsx` | Минимальный неконтролируемый спойлер |
-| `Different sizes` | `DifferentSizes.tsx` | Размеры SM / MD / LG с подписями |
+| `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG с подписями |
 | `With right block` | `WithRightBlock.tsx` | Содержимое правой части заголовка |
 | `Controlled` | `Controlled.tsx` | Контролируемый режим: `expanded` + `toggle` |
 | `VisualTests` | `VisualTests.tsx` | Свёрнутое и раскрытое состояние всех размеров, `rightBlock`, перенос длинного текста кнопки |

@@ -1,7 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Divider } from "../Divider";
+import { Divider, TDividerMarginSize } from "../Divider";
+
+const marginSizes: TDividerMarginSize[] = [4, 8, 12, 16, 20, 24, 28, 32];
 
 const getDivider = () => screen.getByRole("separator");
 
@@ -21,32 +23,16 @@ describe("Divider", () => {
         expect(divider).toHaveClass("divider");
     });
 
-    it("Should apply marginTopSize class correctly", () => {
-        const { rerender } = render(<Divider marginTopSize={4} />);
-        let divider = getDivider();
-        expect(divider).toHaveClass("marginTopSize-4");
+    it.each(marginSizes)("Should apply marginTopSize class for marginTopSize=%i", (size) => {
+        render(<Divider marginTopSize={size} />);
 
-        rerender(<Divider marginTopSize={16} />);
-        divider = getDivider();
-        expect(divider).toHaveClass("marginTopSize-16");
-
-        rerender(<Divider marginTopSize={32} />);
-        divider = getDivider();
-        expect(divider).toHaveClass("marginTopSize-32");
+        expect(getDivider()).toHaveClass(`marginTopSize-${size}`);
     });
 
-    it("Should apply marginBottomSize class correctly", () => {
-        const { rerender } = render(<Divider marginBottomSize={4} />);
-        let divider = getDivider();
-        expect(divider).toHaveClass("marginBottomSize-4");
+    it.each(marginSizes)("Should apply marginBottomSize class for marginBottomSize=%i", (size) => {
+        render(<Divider marginBottomSize={size} />);
 
-        rerender(<Divider marginBottomSize={16} />);
-        divider = getDivider();
-        expect(divider).toHaveClass("marginBottomSize-16");
-
-        rerender(<Divider marginBottomSize={32} />);
-        divider = getDivider();
-        expect(divider).toHaveClass("marginBottomSize-32");
+        expect(getDivider()).toHaveClass(`marginBottomSize-${size}`);
     });
 
     it("Should apply both marginTopSize and marginBottomSize classes", () => {
@@ -90,6 +76,15 @@ describe("Divider", () => {
         expect(divider).not.toHaveClass("marginBottomSize-4");
         expect(divider).not.toHaveClass("marginBottomSize-8");
         expect(divider).toHaveClass("marginTopSize-16");
+    });
+
+    it("Should forward ref to the root hr element", () => {
+        const ref = React.createRef<HTMLHRElement>();
+        render(<Divider ref={ref} marginTopSize={24} />);
+
+        expect(ref.current).toBeInstanceOf(HTMLHRElement);
+        expect(ref.current).toBe(getDivider());
+        expect(ref.current).toHaveClass("divider", "marginTopSize-24");
     });
 
     it("Should have correct displayName", () => {

@@ -118,7 +118,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DatePickerExtended | ✅ | ✅ | ✅ |
 | DateRange | ✅ | ✅ | ✅ |
 | Divider | ✅ | ✅ | ✅ |
-| DocumentNumberEdit | ⬜ | ✅ | ⬜ |
+| DocumentNumberEdit | ✅ | ✅ | ✅ |
 | Dropdown | ✅ | ✅ | ✅ |
 | Ellipsis | ⬜ | ✅ | ⬜ |
 | EmptyView | ✅ | ✅ | ⬜ |

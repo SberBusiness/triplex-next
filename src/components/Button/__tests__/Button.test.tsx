@@ -220,6 +220,43 @@ describe("Button", () => {
         expect(button).toHaveAttribute("aria-expanded", "false");
     });
 
+    it("applies hoverable/active/disabled classes to the root button so the icon package recolors the icon over the full hover area", () => {
+        const { rerender } = render(
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                Hoverable
+            </Button>,
+        );
+        const button = getButton();
+        expect(button).toHaveClass("hoverable");
+        expect(button).not.toHaveClass("active");
+        expect(button).not.toHaveClass("disabled");
+
+        rerender(
+            <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD} disabled aria-expanded>
+                Hoverable
+            </Button>,
+        );
+        expect(getButton()).toHaveClass("hoverable");
+        expect(getButton()).toHaveClass("active");
+        expect(getButton()).toHaveClass("disabled");
+    });
+
+    it("keeps <button> as the root DOM node and adjacent siblings, so sibling CSS selectors (e.g. margin between buttons) keep working", () => {
+        const { container } = render(
+            <>
+                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                    First
+                </Button>
+                <Button theme={EButtonTheme.GENERAL} size={EComponentSize.MD}>
+                    Second
+                </Button>
+            </>,
+        );
+        const buttons = container.querySelectorAll(":scope > button");
+        expect(buttons).toHaveLength(2);
+        expect(buttons[0].nextElementSibling).toBe(buttons[1]);
+    });
+
     it("forwards ref to root button element", () => {
         const ref = React.createRef<HTMLButtonElement>();
         render(

@@ -112,15 +112,19 @@ CSS-модуль `styles/IconWrapper.module.less` содержит только 
   сделать кликабельную иконку.
 - `Link` (`src/components/Link/Link.tsx`) — оборачивает содержимое ссылки в
   `IconWrapper displayContents`, чтобы иконка внутри ссылки красилась вместе с текстом.
-- `Button` (`src/components/Button/Button.tsx`) — оборачивает содержимое кнопки в
-  `IconWrapper` с кастомным `className` и прокидывает `disabled` / `active`. Единственный
-  в `src/**` случай передачи собственного `className` в IconWrapper.
 - `Chip`, `ChipSort`, `SegmentedControlSegment`, `StepperStep`, `ListItemControlsButton`,
   `SelectExtendedFieldTarget` — используют IconWrapper для синхронизации цвета иконки
   с состоянием элемента.
-- `CollapsibleTreeNodeHeader` (`src/components/CollapsibleTree/components/`) — не использует
-  IconWrapper, но ставит те же глобальные классы напрямую на `<button>`; при изменении логики
-  классов держи оба места синхронными.
+- `Button` (`src/components/Button/Button.tsx`), `CollapsibleTreeNodeHeader`
+  (`src/components/CollapsibleTree/components/`) — **не используют** IconWrapper, ставят те
+  же глобальные классы (`hoverable` / `active` / `disabled`) напрямую на корневой `<button>`;
+  при изменении логики классов держи все места синхронными. `Button` явно переходил на
+  `IconWrapper displayContents` и откатился: обёртка добавляла DOM-узел вокруг `<button>`, из-за
+  чего два соседних `Button` переставали быть смежными DOM-siblings и ломался CSS-отступ между
+  ними (`.button + .button` в `Button.module.less`), плюс это меняло корневой DOM-элемент,
+  который внешние потребители могли таргетить напрямую (`>`- и sibling-селекторы). Для
+  `ButtonIcon`/`SegmentedControlSegment` того же риска нет — у них нет CSS, зависящего от
+  смежности соседних экземпляров.
 
 ---
 

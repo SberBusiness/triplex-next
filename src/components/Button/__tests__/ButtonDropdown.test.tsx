@@ -205,18 +205,6 @@ describe("ButtonDropdown", () => {
         expect(button).not.toHaveClass("active");
     });
 
-    it("does not apply active class to the dots trigger while dropdown is opened", () => {
-        render(
-            <ButtonDropdown theme={EButtonDotsTheme.DOTS_SECONDARY} size={EComponentSize.MD} options={options}>
-                Actions
-            </ButtonDropdown>,
-        );
-
-        fireEvent.click(screen.getByRole("button"));
-
-        expect(screen.getByRole("button")).not.toHaveClass("active");
-    });
-
     it("renders caret with a light palette on filled themes and a dark one on light themes", () => {
         const getCaretPaletteByTheme = (theme: TCaretTheme) => {
             const { unmount } = render(

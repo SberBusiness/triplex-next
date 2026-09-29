@@ -78,7 +78,7 @@ src/components/Button/
 ### Публичный слой — токены в TypeScript
 
 Источник значений: `src/components/DesignTokens/DesignTokensCore.ts` (палитра,
-10 групп) и `src/components/DesignTokens/components/{Group}.ts` (токены
+12 групп) и `src/components/DesignTokens/components/{Group}.ts` (токены
 компонентов, 56 групп). Путь токена — `{Группа}.{Токен}`:
 
 ```text
@@ -109,6 +109,9 @@ const TOKENS = {
   из `DesignTokensCore` (`scripts/generateRefTokensTypes.ts`), ссылка на
   компонентный токен не скомпилируется;
 - у компонентного токена всегда пара значений — `[светлая, тёмная]` тема;
+- палитра теней — core-группы `Shadow` (`Shadow.01` … `Shadow.07`, светлая
+  тема) и `DarkShadow` (`DarkShadow.01` … `DarkShadow.07`, тёмная), значение —
+  готовая строка `box-shadow`;
 - имена core-групп и групп компонентов не должны пересекаться: в одном плоском
   неймспейсе они схлопнутся. Проверяется гардом в `scripts/syncAiMdTokens.ts`.
 

@@ -6,15 +6,18 @@ import styles from "./DesignTokensVisualizer.module.css";
 type DesignTokensGroupName = keyof TDesignTokensCore;
 type TokenGroup = Record<string, { value: string }>;
 
+// Цветовые группы палитры. Тени показывает ShadowTokensVisualizer.
+const colorGroupNames = Object.keys(DesignTokensCore).filter((groupName) =>
+    groupName.startsWith("Color"),
+) as DesignTokensGroupName[];
+
 export const DesignTokensVisualizer: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<DesignTokensGroupName>(
-        Object.keys(DesignTokensCore)[0] as DesignTokensGroupName,
-    );
+    const [activeTab, setActiveTab] = useState<DesignTokensGroupName>(colorGroupNames[0]);
 
     return (
         <div className={styles.container}>
             <div className={styles.tabs}>
-                {Object.keys(DesignTokensCore).map((groupName) => (
+                {colorGroupNames.map((groupName) => (
                     <button
                         type="button"
                         key={groupName}

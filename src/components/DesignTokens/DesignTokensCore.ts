@@ -358,4 +358,50 @@ export const DesignTokensCore: TDesignTokensCore = {
             value: "#FFF4DB", //     var(--triplex-next-ColorWarning-100)
         },
     },
+    Shadow: {
+        "01": {
+            value: "0px 0px 10px rgba(0, 0, 0, 0.1)", //     var(--triplex-next-Shadow-01)
+        },
+        "02": {
+            value: "0px 2px 10px rgba(31, 31, 34, 0.09)", //     var(--triplex-next-Shadow-02)
+        },
+        "03": {
+            value: "0px 2px 12px rgba(31, 31, 34, 0.12)", //     var(--triplex-next-Shadow-03)
+        },
+        "04": {
+            value: "0px 2px 9px rgba(31, 31, 34, 0.15)", //     var(--triplex-next-Shadow-04)
+        },
+        "05": {
+            value: "0px -2px 9px rgba(31, 31, 34, 0.15)", //     var(--triplex-next-Shadow-05)
+        },
+        "06": {
+            value: "0px 4px 12px rgba(31, 31, 34, 0.16)", //     var(--triplex-next-Shadow-06)
+        },
+        "07": {
+            value: "0px 2px 7px rgba(31, 31, 34, 0.25)", //     var(--triplex-next-Shadow-07)
+        },
+    },
+    DarkShadow: {
+        "01": {
+            value: "0px 0px 10px rgba(0, 0, 0, 0.1)", //     var(--triplex-next-DarkShadow-01)
+        },
+        "02": {
+            value: "0px 2px 10px rgba(255, 255, 255, 0.04)", //     var(--triplex-next-DarkShadow-02)
+        },
+        "03": {
+            value: "0px 2px 12px rgba(0, 0, 0, 0.12)", //     var(--triplex-next-DarkShadow-03)
+        },
+        "04": {
+            value: "0px 2px 9px rgba(0, 0, 0, 0.5)", //     var(--triplex-next-DarkShadow-04)
+        },
+        "05": {
+            value: "0px -2px 9px rgba(0, 0, 0, 0.5)", //     var(--triplex-next-DarkShadow-05)
+        },
+        "06": {
+            value: "0px 4px 12px rgba(0, 0, 0, 0.16)", //     var(--triplex-next-DarkShadow-06)
+        },
+        "07": {
+            value: "0px 2px 7px rgba(0, 0, 0, 0.25)", //     var(--triplex-next-DarkShadow-07)
+        },
+    },
 };

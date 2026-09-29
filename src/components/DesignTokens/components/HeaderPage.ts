@@ -13,5 +13,5 @@ export type TDesignTokensComponentsHeaderPage = { HeaderPage: TDesignTokensCompo
 
 // Токены компонента HeaderPage в светлой и темной темах.
 export const HeaderPage_Tokens: TDesignTokensComponentsHeaderPageValues = {
-    StickyShadow: [{ value: "0 2px 7px 0 rgba(31, 31, 34, 0.08)" }, { value: "0 2px 7px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-HeaderPage-StickyShadow)
+    StickyShadow: [{ ref: "Shadow.04" }, { ref: "DarkShadow.04" }], // var(--triplex-next-HeaderPage-StickyShadow)
 };

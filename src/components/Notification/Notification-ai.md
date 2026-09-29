@@ -152,3 +152,4 @@ Notification.TimeColor    (цвет времени)
 | Дата | Изменение |
 |---|---|
 | 2026-06-16 | Создан AI-документ. `Notification`, `NotificationGrouped`, `NotificationBody` переведены на `forwardRef` (паттерн `Object.assign`); удалены типы `INotificationSFC`/`INotificationBodySFC`; тип `Notification.Time.time` расширен с `React.ReactText` до `React.ReactNode`. Stories мигрированы на modern pattern. |
+| 2026-09-28 | Токен `Notification.Shadow` ссылается на `Shadow.07` (светлая) и `DarkShadow.07` (тёмная) вместо литералов; в тёмной теме прозрачность 0.25 вместо 0.35. |

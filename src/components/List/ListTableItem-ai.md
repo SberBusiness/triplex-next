@@ -1,7 +1,7 @@
 ---
 component: ListTableItem
 category: List
-related: [ListItem, ListItemSelectable, ListItemControlsButton, TableBasic, SwipeableArea]
+related: [ListItem, ListItemSelectable, TableBasic, SwipeableArea]
 tokens:
   - ListItem.Background
   - ListItem.Background_Selected
@@ -106,4 +106,4 @@ ListItem.Background_Selected // фон выбранной строки (чере
 |---|---|
 | 2026-04-29 | Создан документ |
 | 2026-07-16 | Компонент переименован `ListItemTable` → `ListTableItem`. Пропсы `IListItemTableProps`/`IListItemTableSelectableProps` → `IListTableItemProps`/`IListTableItemSelectableProps`, CSS-класс `.listItemTable` → `.listTableItem`, файлы `ListTableItem.*`. **Breaking change.** |
-| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemControls`); добавлены обратные ссылки (`TableBasic`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemControls`) и `ListItemControlsButton` — `ListTableItem` принимает `controlButtons` как `React.ReactNode` и рендерит `ListItemControls`, а саму кнопку не импортирует; добавлены обратные ссылки (`TableBasic`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

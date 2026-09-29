@@ -128,8 +128,11 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 - `LoaderScreen` (`src/components/LoaderScreen/LoaderScreen.tsx`) — оверлей с лоадером,
   подписью и кнопками; при `type="small"` рендерит `LoaderSmall` с темой `BRAND`.
 - `Button` (`src/components/Button/Button.tsx`) — рендерит `LoaderSmall` **всегда**, а вне
-  состояния `loading` прячет обёртку классом (`Button.tsx:156`), поэтому `role="status"`
-  доступен и у обычной кнопки — не пиши тест вида `queryByRole("status")` → `null`.
+  состояния `loading` прячет обёртку классом (`Button.tsx:156`). Класс задаёт
+  `visibility: hidden` (`Button.module.less:136-138`), то есть в браузере узел выпадает
+  из дерева доступности, но остаётся в DOM. Unit-тесты идут в jsdom, который LESS не
+  применяет, поэтому там `role="status"` находится и у обычной кнопки — не пиши тест
+  вида `queryByRole("status")` → `null`.
   Тему выбирает по теме кнопки (`SECONDARY` / `SECONDARY_LIGHT` → `BRAND`,
   остальные → `NEUTRAL`), размер — по размеру кнопки.
 - `Dropdown` (`DropdownList`, `DropdownMobileList`, `DropdownMobileLoader`), `SuggestField`,

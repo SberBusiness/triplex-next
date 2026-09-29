@@ -184,7 +184,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SegmentedControl | ⬜ | ⬜ | ⬜ |
 | SelectExtendedField | ✅ | ✅ | ✅ |
 | SelectField | ✅ | ✅ | ✅ |
-| Skeleton | ⬜ | ✅ | ⬜ |
+| Skeleton | ✅ | ✅ | ✅ |
 | Slider | ✅ | ✅ | ✅ |
 | SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ✅ | ✅ | ✅ |

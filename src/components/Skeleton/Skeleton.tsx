@@ -3,10 +3,9 @@ import clsx from "clsx";
 import styles from "./styles/Skeleton.module.less";
 import { ESkeletonType } from "./enums";
 
+/** Свойства компонента Skeleton. */
 export interface ISkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
-    /**
-     * Тип скелетона. По умолчанию ESkeletonType.TYPE_2.
-     */
+    /** Тип скелетона. По умолчанию ESkeletonType.TYPE_2. */
     type?: ESkeletonType;
 }
 
@@ -18,16 +17,20 @@ const TYPE_TO_CLASS_NAME_MAP: Record<ESkeletonType, string> = {
 };
 
 /**
- * Элемент для визуализации содержимого, которое еще не загрузилось.
+ * Элемент для визуализации содержимого, которое ещё не загрузилось.
+ * Собственных размеров нет: размер задаёт потребитель через `width`/`height`,
+ * либо скелетон растягивается внутри flex-контейнера (`flex-grow: 1`).
+ * Пульсирует цветом фона в зависимости от типа.
  */
-export const Skeleton: React.FC<ISkeletonProps> = ({
-    className,
-    type = ESkeletonType.TYPE_2,
-    ...htmlDivAttributes
-}) => (
-    <div
-        className={clsx(styles.skeleton, TYPE_TO_CLASS_NAME_MAP[type], className)}
-        {...htmlDivAttributes}
-        data-tx={process.env.npm_package_version}
-    />
+export const Skeleton = React.forwardRef<HTMLDivElement, ISkeletonProps>(
+    ({ className, type = ESkeletonType.TYPE_2, ...htmlDivAttributes }, ref) => (
+        <div
+            className={clsx(styles.skeleton, TYPE_TO_CLASS_NAME_MAP[type], className)}
+            {...htmlDivAttributes}
+            data-tx={process.env.npm_package_version}
+            ref={ref}
+        />
+    ),
 );
+
+Skeleton.displayName = "Skeleton";

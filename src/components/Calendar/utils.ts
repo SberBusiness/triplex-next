@@ -77,7 +77,7 @@ export function formatDate(viewDate: TPickedDate, viewMode: ECalendarViewMode): 
             const yearFrom = checkedDate.clone().add(-5, "y").format("YYYY");
             const yearTo = checkedDate.clone().add(6, "y").format("YYYY");
 
-            return `${yearFrom} - ${yearTo}`;
+            return `${yearFrom}–${yearTo}`;
         }
     }
 }

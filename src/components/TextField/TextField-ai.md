@@ -62,8 +62,8 @@ version: "1.0"
 
 - `forwardRef` на `TextField` и `TextFieldBase` — не убирать. Внешний `ref` указывает на корневой `<div>` `FormField`; ref на сам input — только через `inputProps.ref`.
 - Публичный API (`ITextFieldProps`: `inputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
-- `TextFieldBase` намеренно НЕ экспортируется — приватная база.
-- Известное ограничение контракта: `inputProps.ref` типизирован как `React.RefObject<HTMLInputElement>` (не `React.Ref`), callback-ref формально не проходит по типам. Исправление — breaking change, требует отдельной задачи.
+- Компонент `TextFieldBase` намеренно НЕ экспортируется — приватная база. Его тип `ITextFieldBaseProps` экспортируется из barrel только как тип (`export type`): `children` в нём обязателен (слот поля ввода), поэтому потребители типизируют props собственных обёрток через `Omit<ITextFieldBaseProps, "children">` — так же, как `TextField`, `MaskedField`, `AmountField` и `TextareaField`. Переименование или изменение полей — breaking change.
+- `inputProps.ref` типизирован как `React.Ref<HTMLInputElement>` (расширен в TRIPLEX-935): принимает и объектный, и callback-ref, `FormFieldInput` отдаёт его прямо на `<input>`.
 - Уникальный `id` для связки label↔input генерируется через `lodash uniqueId` в `FormFieldInput` — не заменять на `useId` (React 17 совместимость через release-0).
 - `description || counter` рендерятся в общем блоке `FormFieldDescription` — не разносить по отдельным блокам (изменит DOM и скриншоты).
 
@@ -80,7 +80,7 @@ version: "1.0"
 
 ## Связанные компоненты
 
-- `TextFieldBase` (внутренний, не в barrel) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. Описан здесь, отдельного AI.md не имеет.
+- `TextFieldBase` (внутренний, не в barrel; публичен только тип `ITextFieldBaseProps`) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. Описан здесь, отдельного AI.md не имеет.
 - `FormField` / `FormFieldInput` и слоты семейства — низкоуровневые строительные блоки; используются напрямую, когда нужна нестандартная композиция.
 - `FormGroup` — контейнер вертикальной раскладки поля и описания.
 - `FormFieldClear` — кнопка очистки, передаётся в `postfix`.
@@ -115,4 +115,5 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-27 | Создан документ (TRI-5). AI-рефакторинг TextField/TextFieldBase, unit-тесты, миграция stories на modern pattern |
+| 2026-09-29 | Тип `ITextFieldBaseProps` экспортирован из barrel (`export type`); компонент `TextFieldBase` остаётся приватным (TRI-158). Удалён устаревший инвариант про `RefObject` у `inputProps.ref` — тип уже `React.Ref` после TRIPLEX-935 |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`SmallInput`). Публичный API и поведение не затронуты. |

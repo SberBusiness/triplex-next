@@ -10,7 +10,11 @@ import {
     IFormFieldProps,
 } from "../FormField";
 
-/** Свойства компонента TextFieldBase. */
+/**
+ * Базовые свойства текстовых полей: label, prefix/postfix, description, counter и слот `children` для поля ввода.
+ * `TextField`, `MaskedField`, `AmountField` и `TextareaField` наследуют их без `children` —
+ * так же типизируются props собственной обёртки: `Omit<ITextFieldBaseProps, "children">`.
+ */
 export interface ITextFieldBaseProps extends Omit<IFormFieldProps, "prefix" | "postfix"> {
     /** Дочерние элементы. */
     children: React.ReactNode;

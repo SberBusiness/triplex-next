@@ -87,6 +87,15 @@ describe("Divider", () => {
         expect(ref.current).toHaveClass("divider", "marginTopSize-24");
     });
 
+    it("Should exclude children from props type", () => {
+        const props: React.ComponentProps<typeof Divider> = {
+            // @ts-expect-error children исключён из props: <hr> — void-элемент и не может содержать потомков.
+            children: "content",
+        };
+
+        expect(props).toBeDefined();
+    });
+
     it("Should have correct displayName", () => {
         expect(Divider.displayName).toBe("Divider");
     });

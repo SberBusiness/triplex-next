@@ -6,7 +6,7 @@ import styles from "./styles/Divider.module.less";
 export type TDividerMarginSize = 4 | 8 | 12 | 16 | 20 | 24 | 28 | 32;
 
 /** Свойства компонента Divider. */
-export interface IDividerProps extends React.HTMLAttributes<HTMLHRElement> {
+export interface IDividerProps extends Omit<React.HTMLAttributes<HTMLHRElement>, "children"> {
     /** Отступ сверху, в пикселях. По умолчанию отступа нет. */
     marginTopSize?: TDividerMarginSize;
     /** Отступ снизу, в пикселях. По умолчанию отступа нет. */

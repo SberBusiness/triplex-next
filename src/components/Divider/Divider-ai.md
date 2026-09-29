@@ -36,14 +36,14 @@ version: "1.0"
 | `marginTopSize` | `TDividerMarginSize` | — | Отступ сверху в пикселях. Без prop'а `margin-top` остаётся `0`. |
 | `marginBottomSize` | `TDividerMarginSize` | — | Отступ снизу в пикселях. Без prop'а `margin-bottom` остаётся `0`. |
 
-Компонент расширяет `React.HTMLAttributes<HTMLHRElement>`, поэтому принимает все стандартные атрибуты `<hr>` (`className`, `style`, `aria-*`, `data-*`); `...rest` и `ref` уходят на корневой `<hr>`.
+Компонент расширяет `Omit<React.HTMLAttributes<HTMLHRElement>, "children">`, поэтому принимает все стандартные атрибуты `<hr>` (`className`, `style`, `aria-*`, `data-*`), кроме `children`; `...rest` и `ref` уходят на корневой `<hr>`.
 
 ### Ограничения
 
 - `TDividerMarginSize` — дискретная шкала `4 | 8 | 12 | 16 | 20 | 24 | 28 | 32`. Произвольное число тип не пропустит: если дизайн требует другой отступ, задай его у родительского блока, а не расширяй шкалу.
 - Отступы задаются только по вертикали. Горизонтальные отступы и ширину линии определяет родитель.
 - Базовый класс сбрасывает браузерный `margin` у `<hr>` в `0`, поэтому вертикальный отступ появляется **только** через `marginTopSize` / `marginBottomSize` (или через собственный `className` потребителя).
-- `<hr>` — void-элемент: несмотря на то что `React.HTMLAttributes` формально допускает `children`, передача потомков приведёт к ошибке React в рантайме. Оборачивать контент в `Divider` нельзя.
+- `<hr>` — void-элемент, поэтому `children` исключён из `IDividerProps` на уровне типа (как у `Gap`): `<Divider>…</Divider>` не соберётся. Оборачивать контент в `Divider` нельзя.
 
 ---
 
@@ -105,3 +105,4 @@ Divider.Background
 | Дата | Изменение |
 |---|---|
 | 2026-09-28 | Создан документ. AI-рефакторинг: компонент переведён с `React.FC` на `React.forwardRef` (`ref` идёт на `<hr>`), уточнены JSDoc на `Divider`, `IDividerProps` и `TDividerMarginSize`, unit-тесты расширены на все значения шкалы отступов и проброс `ref`. |
+| 2026-09-29 | Breaking: `children` исключён из `IDividerProps` (`Omit<React.HTMLAttributes<HTMLHRElement>, "children">`), передача потомков в `<hr>` теперь ловится компилятором. |

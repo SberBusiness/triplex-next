@@ -6,6 +6,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**DocumentNumberEdit**
+
+- Добавлено: `DocumentNumberEdit` пробрасывает `ref` на корневой элемент — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
 **Skeleton**
 
 - Добавлено: `Skeleton` пробрасывает `ref` на свой корневой `<div>` — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.

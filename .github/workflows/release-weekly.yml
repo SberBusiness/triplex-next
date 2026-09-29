@@ -610,9 +610,11 @@ jobs:
             echo "❌ latest = ${LATEST}, ожидалось ${VERSION} — не встал за 15 минут."
             # Команда починки имеет смысл, только если версия в реестре есть:
             # иначе `npm dist-tag add` упадёт на несуществующей версии.
-            # `|| true`: сетевая ошибка curl под `set -e` оборвала бы шаг
-            # без подсказки, а так уйдёт в ветку ниже с HTTP 000.
-            CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${REGISTRY}/${PKG}/${VERSION}" || true)
+            # `|| CODE=000`: сетевая ошибка curl под `set -e` оборвала бы шаг
+            # без подсказки, а так уйдёт в ветку ниже с HTTP 000. Упавший curl —
+            # 000, даже если заголовок 200 успел прийти: `-w` печатает код
+            # и при оборванной передаче.
+            CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${REGISTRY}/${PKG}/${VERSION}") || CODE=000
             if [ "${CODE}" = "200" ]; then
               echo "   ${VERSION} в реестре есть, тег на неё не встал."
               echo "   npm install отдаёт потребителям не ту сборку — почини немедленно:"

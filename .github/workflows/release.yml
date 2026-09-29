@@ -220,12 +220,14 @@ jobs:
           # 8,5). При ручном догоне половины идут подряд, и без ожидания гейт
           # ложно решил бы, что React 17-половина не вышла (TRI-153). Ждём
           # до 15 минут; реестр опрашиваем напрямую, в обход кеша npm.
+          # Упавший curl — это 000, даже если заголовок 200 успел прийти:
+          # `-w` печатает код и при оборванной передаче.
           case "${RELEASE_TAG}" in
             1.*)
               PAIRED_V0="0.${RELEASE_TAG#1.}"
               PAIRED_URL="https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/${PAIRED_V0}"
               DEADLINE=$((SECONDS + 900))
-              until CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${PAIRED_URL}"); [ "${CODE}" = "200" ]; do
+              until CODE=$(curl -s --max-time 30 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "${PAIRED_URL}") || CODE=000; [ "${CODE}" = "200" ]; do
                 if [ "${SECONDS}" -ge "${DEADLINE}" ]; then
                   # 404 — версии действительно нет; 000/5xx — реестр не ответил,
                   # и советовать выпускать 0.Y.0 было бы неверно.

@@ -1,7 +1,7 @@
 ---
 component: SuggestField
 category: TextFields
-related: [Suggest, SelectField, MultiselectField, SelectExtendedField, TextField, FormField, Dropdown]
+related: [Suggest, SelectField, MultiselectField, SelectExtendedField, TextField, FormField, Dropdown, LoaderSmall]
 tokens: []
 stories: stories/SuggestField/SuggestField.stories.tsx
 version: "1.0"
@@ -201,8 +201,10 @@ version: "1.0"
 - `Dropdown` — выпадающий список: `DropdownDesktop` + `DropdownList` + `DropdownListItem` на
   десктопе, `DropdownMobile*` в полноэкранном мобильном варианте. `ISuggestFieldDesktopDropdownProps`
   наследует `IDropdownDesktopProps`.
-- `Tooltip` — подсказка `tooltipHint` у десктопного поля. В `related` не вынесен: односторонний
-  контракт по рендеру, а ориентир 2–5 имён уже выбран более полезными адресатами.
+- `LoaderSmall` — индикатор подгрузки подсказок: `SuggestFieldDesktop` и `SuggestFieldMobile`
+  показывают его с темой `BRAND`, пока `loading`.
+- `Tooltip` — подсказка `tooltipHint` у десктопного поля. В `related` не вынесен: связь узкая,
+  а список адресатов и так шире ориентира 2–5.
 - `MobileView` — переключает десктопный и мобильный варианты по ширине экрана. В `related` не
   вынесен по той же причине.
 - `SuggestFieldDesktop` / `SuggestFieldMobile` — платформенные варианты, экспортируются из barrel
@@ -238,4 +240,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-23 | Создан документ |
-| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`MultiselectField`, `SelectExtendedField`). Публичный API и поведение не затронуты. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`MultiselectField`, `SelectExtendedField`) и контракт по рендеру `LoaderSmall`. Публичный API и поведение не затронуты. |

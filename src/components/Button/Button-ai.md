@@ -1,7 +1,7 @@
 ---
 component: Button
 category: Buttons
-related: [ButtonIcon, ButtonDropdown, ButtonDropdownExtended, IconWrapper]
+related: [ButtonIcon, ButtonDropdown, ButtonDropdownExtended, IconWrapper, LoaderSmall]
 tokens:
   - Button.General_Background_Default
   - Button.General_Color_Default
@@ -160,7 +160,8 @@ version: "1.0"
 - `ButtonDropdownExtended` — контейнер для кастомного dropdown с render-функциями
 - `Loader` (`src/components/Loader`) — используется внутри Button для состояния загрузки
 - `Dropdown` (`src/components/Dropdown`) — используется внутри ButtonDropdown
-- `IconWrapper` (`src/components/IconWrapper`) — обёртка содержимого кнопки: `Button` передаёт в неё собственный `className` и прокидывает `disabled` / `active`
+- `IconWrapper` (`src/components/IconWrapper`) — обёртка содержимого кнопки: получает внутренний класс раскладки `.content`, `disabled` и `active={expanded}` — через неё состояния уходят в иконку. Пользовательский `className` сюда не попадает, он уходит на корневой `ButtonBase`
+- `LoaderSmall` (`src/components/Loader`) — индикатор загрузки; `Button` рендерит его всегда и вне `loading` прячет обёртку классом
 
 ---
 
@@ -193,4 +194,4 @@ version: "1.0"
 | 2026-07-28 | AI-рефакторинг (TRI-13): codestyle-чистка `Button.tsx` (JSDoc компонента, поясняющие комментарии, эквивалентные упрощения в `clsx`), unit-тесты расширены с 10 до 24 кейсов; публичный API и поведение не изменены |
 | 2026-07-28 | Правки по ревью PR #481 (TRI-13): исправлена трактовка строкового `aria-expanded="false"` (больше не считается раскрытым состоянием); `size` стал опциональным с default `EComponentSize.MD` (типы приведены в соответствие с реализацией); `ButtonBase` убран из barrel-экспорта `index.ts` — импорт только по прямому пути `components/Button/ButtonBase` |
 | 2026-08-17 | Добавлен `justify-content: center` корневому классу `.button` — при коротком тексте кнопка растягивается до `min-width`, и содержимое прижималось к левому краю вместо центра |
-| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`IconWrapper`). Публичный API и поведение не затронуты. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены контракты по рендеру в верную сторону (`IconWrapper`, `LoaderSmall`). Публичный API и поведение не затронуты. |

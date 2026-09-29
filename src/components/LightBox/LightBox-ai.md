@@ -181,7 +181,7 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 - `Overlay` (`src/components/Overlay`) — механика оверлея, на которой построен `LightBox.SideOverlay`: `ILightBoxSideOverlayProps` берёт `opened` / `onClose` из `IOverlayBaseProps`, подложку рисует `OverlayMask`
 - `Portal` (`src/components/Portal`) — рендер содержимого в отдельный узел вне текущего DOM-поддерева
 - `LoaderScreen` (`src/components/LoaderScreen`) — экран загрузки боковой панели, настраивается через `loaderScreenProps`
-- `Button` (`src/components/Button`) — на нём построены кнопки закрытия `LightBox.SideOverlay`
+- `Button` (`src/components/Button`) — на нём построены кнопки управления: `LightBox.Controls` (закрытие и стрелки через общий `LightBoxArrow`) и кнопки закрытия `LightBox.SideOverlay`
 
 ---
 

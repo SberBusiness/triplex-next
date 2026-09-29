@@ -1,7 +1,7 @@
 ---
 component: LoaderSmall
 category: Loaders
-related: [LoaderMiddle, LoaderScreen, Button, SelectExtendedField]
+related: [LoaderMiddle, LoaderScreen, Button]
 tokens:
   - Loader.Element_Background_Brand
   - Loader.Element_Background_Neutral
@@ -134,7 +134,9 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
   остальные → `NEUTRAL`), размер — по размеру кнопки.
 - `Dropdown` (`DropdownList`, `DropdownMobileList`, `DropdownMobileLoader`), `SuggestField`,
   `ChipSuggest`, `SelectExtendedField`, `ListItemLoading` — показывают `LoaderSmall` с темой
-  `BRAND` во время подгрузки данных.
+  `BRAND` во время подгрузки данных. В `related` не входят: это контракт по рендеру, ссылка
+  стоит с их стороны. `Button` — исключение «потребитель, опирающийся на хрупкую деталь»
+  (см. выше про `role="status"`), поэтому он в `related` остаётся с обеих сторон.
 
 ---
 
@@ -166,4 +168,4 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 | Дата | Изменение |
 |---|---|
 | 2026-08-06 | Создан документ. AI-рефакторинг: JSDoc на компоненте, props и значениях `ELoaderSmallTheme`, документирован неиспользуемый `ELoaderSmallSize`, порядок импортов приведён к codestyle, константы-маппинги переименованы в `THEME_TO_CLASS_NAME_MAP` / `SIZE_TO_CLASS_NAME_MAP`, в стилях объединено дублирующееся объявление анимации точек — сама анимация задана один раз на `.dot`, а у `.dot1` / `.dot2` / `.dot3` осталась только `animation-delay` (правило `.dot1` с нулевой задержкой обязательно: без него класс исчезнет из CSS-модуля и из разметки), unit-тесты расширены с 3 до 6 кейсов. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API, DOM и визуальное поведение не изменены. |
-| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemLoading`); из `related` убраны несимметричные имена (`Dropdown`, `SuggestField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemLoading`); из `related` убраны потребители `Dropdown`, `SuggestField`, `SelectExtendedField` — ссылка на контракт по рендеру стоит с их стороны; `Button` оставлен как исключение «потребитель, опирающийся на хрупкую деталь». Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

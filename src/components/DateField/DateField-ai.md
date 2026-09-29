@@ -100,7 +100,10 @@ version: "1.0"
 - `Calendar` — календарь внутри дропдауна; его props (`limitRange`, `disabledDays`, `markedDays`, `format`) входят в публичный API через `DatePickerExtended`.
 - `Tooltip` — показывает `invalidDateHint` при вводе недоступной даты (только desktop-ветка).
 - `FormField` — семейство строительных блоков поля, на котором собран `MaskedField`: оттуда
-  в публичный API `DateField` приходят `size`, `status` и слоты `prefix` / `postfix`.
+  в публичный API `DateField` приходят `size` и `status` (через
+  `Pick<IMaskedFieldProps, "size" | "status" | "label">`, вместе с `label`). Слоты
+  `prefix` / `postfix` из `IFormFieldProps` исключены — их заново объявляет `TextFieldBase`,
+  и доступны они только вложенно, через `targetProps`.
 - `DateFieldTarget` (внутренний, не в barrel) — рендерит `MaskedField` с иконкой календаря и кнопкой очистки, обрабатывает клик/клавиатуру/фокус. Описан здесь, отдельного AI.md не имеет. Покрыт `__tests__/DateFieldTarget.test.tsx`.
 - `DateFieldContext` (внутренний, не в barrel) — прокидывает `onChange`, `inputFocusedRef` и `triggerChangeFromInput` в target.
 - `DateFieldUtils` (`utils.ts`, внутренний) — чистые функции парсинга/валидации даты (`getPickerValues`, `getCalendarDate`, `isAvailableDate`). Покрыты `__tests__/utils.test.tsx`.

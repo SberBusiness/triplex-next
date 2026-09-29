@@ -31,4 +31,4 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **TextField**
 
-- Добавлено: из пакета экспортируется тип `ITextFieldBaseProps` — общая база props для `TextField`, `MaskedField`, `AmountField` и `TextareaField`. Компонент `TextFieldBase` по-прежнему внутренний.
+- Добавлено: из пакета экспортируется тип `ITextFieldBaseProps` — базовые props текстовых полей. `TextField`, `MaskedField`, `AmountField` и `TextareaField` наследуют его без `children`; так же типизируются props собственной обёртки: `Omit<ITextFieldBaseProps, "children">`. Компонент `TextFieldBase` по-прежнему внутренний.

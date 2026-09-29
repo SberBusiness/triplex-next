@@ -1,7 +1,7 @@
 ---
 component: ModalWindow
 category: ModalWindow
-related: [ModalWindowContent, ModalWindowHeader, ModalWindowBody, ModalWindowFooter, ModalWindowClose, ModalWindowViewManager, Portal, FocusTrap, Page, HeaderPage, FooterPage, Island, LoaderScreen]
+related: [LightBox, Portal, Page, HeaderPage, FooterPage, Island, LoaderScreen]
 tokens:
   - ModalWindow.Backdrop_Background
   - ModalWindow.Background
@@ -107,6 +107,8 @@ ModalWindow.Background
 - **`ModalWindowBody`** — тело. Тривиальная обёртка над `Island` с фиксированными `type=TYPE_1` и `size=MD`. Тип `IModalWindowBodyProps extends Omit<IIslandProps, "loading" | "loaderScreenProps">`. Состояние загрузки у `Island` намеренно отрезано: тело скроллируется (`overflow: auto`), а `LoaderScreen` позиционируется абсолютно и уехал бы вместе с контентом. Загрузку модального окна задавай на `ModalWindowContent`.
 - **`ModalWindowFooter`** — футер. Тривиальная обёртка над `FooterPage` с фиксированным `type=FIRST`. Экспонирует статическое поле `Description = FooterPage.Description`.
 - **`ModalWindowClose`** — кнопка закрытия. Обёртка над `Button` (`theme=SECONDARY`, `size=MD`, иконка `CrossStrokeSrvIcon20`) внутри `TriggerClickOnKeyDownEvent` с `EVENT_KEY_CODES.ESCAPE`. **Текст `title` не имеет дефолта внутри компонента** — библиотека мультиязычная, локализованную подсказку (например, `title="Закрыть"`) передаёт потребитель через props. Тип `IModalWindowCloseProps` (Omit `size`/`theme`/`icon` от `IButtonSecondaryProps`).
+- **`LightBox`** — альтернатива для полноэкранного просмотра: тот же механизм оверлея, но контент занимает весь экран, а не центрированное окно.
+- **`FocusTrapExtended`** (`src/components/FocusTrapExtended`) — focus trap окна: `ModalWindow` рендерит его и настраивает через `focusTrapProps` (`IFocusTrapExtendedProps`). Своего AI.md и строки в `docs/ai/ROADMAP.md` не имеет.
 - **`ModalWindowViewManager`** — невидимый компонент-сенсор. Создаёт DOM-ноду `<div id="modalWindowViewManagerNodeId">` (если её нет в `body`) и рендерит туда через `Portal` resize-сенсор + `<style>`-инжект CSS-переменных `--modalWindow-screen-*` в `:root`. Подключается автоматически из `ModalWindow`; экспортируется отдельно для случая, когда лайаут хочет позиционировать ноду вручную (например, рисовать модалку только в области рабочей зоны без шапки).
 
 ---
@@ -138,3 +140,4 @@ ModalWindow.Background
 | 2026-06-30 | Fix: модалка не отображалась под React 18 `StrictMode`. На искусственном unmount/mount-цикле cleanup в `useEffect` открепляет портальный `mountNode`, а инициализатор `useState` повторно не вызывается — узел оставался вне DOM. Теперь `useEffect` при (повторном) mount возвращает узел в wrapper, если тот откреплён. Wrapper вынесен в `getOrCreateWrapperNode`. Добавлен регрессионный тест на реальном `Portal` (`ModalWindow.strictMode.test.tsx`). |
 | 2026-08-07 | `IModalWindowBodyProps` сузился до `Omit<IIslandProps, "isLoading" \| "loaderScreenProps">`: в `Island` появилось состояние загрузки, но в скроллируемом теле модалки абсолютный `LoaderScreen` уезжает вместе с контентом. Публичный API не изменён — props исключены до их первого релиза; путь для загрузки модального окна прежний, `ModalWindowContent`. |
 | 2026-08-11 | Prop загрузки в `Island` переименован `isLoading` → `loading`, вслед за ним `Omit` в `IModalWindowBodyProps` — теперь `Omit<IIslandProps, "loading" \| "loaderScreenProps">`. Публичный API `ModalWindow` не изменён: у `ModalWindowContent` prop по-прежнему `isLoading`. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ModalWindowContent`, `ModalWindowHeader`, `ModalWindowBody`, `ModalWindowFooter`, `ModalWindowClose`, `ModalWindowViewManager`, `FocusTrap`); добавлены обратные ссылки (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

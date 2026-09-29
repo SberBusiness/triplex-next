@@ -1,7 +1,7 @@
 ---
 component: LoaderSmall
 category: Loaders
-related: [LoaderMiddle, LoaderScreen, Button, Dropdown, ListItemLoading, SuggestField, SelectExtendedField]
+related: [LoaderMiddle, LoaderScreen, Button, SelectExtendedField]
 tokens:
   - Loader.Element_Background_Brand
   - Loader.Element_Background_Neutral
@@ -166,3 +166,4 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 | Дата | Изменение |
 |---|---|
 | 2026-08-06 | Создан документ. AI-рефакторинг: JSDoc на компоненте, props и значениях `ELoaderSmallTheme`, документирован неиспользуемый `ELoaderSmallSize`, порядок импортов приведён к codestyle, константы-маппинги переименованы в `THEME_TO_CLASS_NAME_MAP` / `SIZE_TO_CLASS_NAME_MAP`, в стилях объединено дублирующееся объявление анимации точек — сама анимация задана один раз на `.dot`, а у `.dot1` / `.dot2` / `.dot3` осталась только `animation-delay` (правило `.dot1` с нулевой задержкой обязательно: без него класс исчезнет из CSS-модуля и из разметки), unit-тесты расширены с 3 до 6 кейсов. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API, DOM и визуальное поведение не изменены. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemLoading`); из `related` убраны несимметричные имена (`Dropdown`, `SuggestField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

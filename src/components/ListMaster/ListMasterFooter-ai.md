@@ -1,7 +1,7 @@
 ---
 component: ListMasterFooter
 category: List
-related: [ListMaster, ListMasterFooterDescription, ListMasterFooterControls]
+related: [ListMaster]
 tokens:
   - ListMaster.Footer_Background
   - ListMaster.Footer_Shadow
@@ -81,3 +81,4 @@ ListMaster.Footer_Shadow      // тень сверху
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ. Уточнён JSDoc по дефолтному значению `sticky`. Добавлены unit-тесты. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListMasterFooterDescription`, `ListMasterFooterControls`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

@@ -1,7 +1,7 @@
 ---
 component: MobileView
 category: MobileView
-related: [MediaWidth, MediaMaxWidth, useMatchMedia, useMobileView]
+related: [MediaWidth]
 tokens: []
 stories: stories/MobileView/MobileView.stories.tsx
 version: "1.0"
@@ -173,3 +173,4 @@ viewport `xs` (575px) рендерится мобильный вариант, н
 | Дата | Изменение |
 |---|---|
 | 2026-08-10 | Создан документ. AI-рефакторинг (TRI-59): `useMobileView.tsx` → `useMobileView.ts` (в файле нет JSX), явный тип возврата у хука, `displayName` у `MobileView`, дополнен JSDoc, добавлены unit-тесты (15 кейсов) и stories по modern pattern. Публичный API не изменён (props, сигнатура хука, barrel-экспорты; `forwardRef` по-прежнему осознанно отсутствует). |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`MediaMaxWidth`, `useMatchMedia`, `useMobileView`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

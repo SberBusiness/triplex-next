@@ -1,7 +1,7 @@
 ---
 component: ListItemSelectable
 category: List
-related: [ListItem, ListItemContent, Checkbox]
+related: [ListItem, Checkbox]
 tokens:
   - ListItem.Background
   - ListItem.Background_Selected
@@ -100,3 +100,4 @@ ListItem.Background_Selected // фон, когда selected=true
 |---|---|
 | 2026-04-29 | Создан документ |
 | 2026-05-21 | Добавлен опциональный prop `disabled` (пробрасывается в `Checkbox`). Компонент пишет в `ListItemContext` флаг `selectable = true` при монтировании. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemContent`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

@@ -1,7 +1,7 @@
 ---
 component: ThemeProvider
 category: ThemeProvider
-related: [useToken]
+related: []
 tokens: []
 stories: stories/ThemeProvider/ThemeProvider.stories.tsx
 version: "1.0"
@@ -194,3 +194,4 @@ const App = () => {
 | 2026-08-05 | Создан документ. AI-рефакторинг: JSDoc на props и экспортах, ключ тега стилей вынесен в хелпер, упрощён эффект `ThemeProviderView`, добавлены unit-тесты `ThemeProviderView` и `useToken`, stories переведены на modern pattern |
 | 2026-08-05 | `related` сокращён до `useToken`. Удалён неактуальный комментарий про относительный импорт в `ThemeProviderView` |
 | 2026-08-31 | Добавлен раздел «Как переопределять токены»: путь `{Группа}.{Токен}`, плоская форма prop `tokens`, `value` / `ref` |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`useToken`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

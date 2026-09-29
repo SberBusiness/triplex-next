@@ -1,7 +1,7 @@
 ---
 component: HeaderPage
 category: Page
-related: [Page, BodyPage, FooterPage, Header, Island, LightBox]
+related: [Page, BodyPage, FooterPage, Header, Island]
 tokens:
   - HeaderPage.StickyShadow
 stories: stories/Page/HeaderPage/HeaderPage.stories.tsx
@@ -120,3 +120,4 @@ version: "1.0"
 |---|---|
 | 2026-08-06 | Sticky-позиционирование доступно вне `LightBox` при ширине viewport от 992px и отключено при высоте viewport не больше 800px. |
 | 2026-06-23 | Создан документ. AI-рефакторинг (clsx order, JSDoc на props, displayName), unit-тесты, миграция stories на modern pattern. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

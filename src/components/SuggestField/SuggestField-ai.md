@@ -1,7 +1,7 @@
 ---
 component: SuggestField
 category: TextFields
-related: [Suggest, SelectField, TextField, FormField, Dropdown]
+related: [Suggest, SelectField, MultiselectField, SelectExtendedField, TextField, FormField, Dropdown]
 tokens: []
 stories: stories/SuggestField/SuggestField.stories.tsx
 version: "1.0"
@@ -238,3 +238,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-23 | Создан документ |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`MultiselectField`, `SelectExtendedField`). Публичный API и поведение не затронуты. |

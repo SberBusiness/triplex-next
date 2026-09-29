@@ -1,7 +1,7 @@
 ---
 component: Badge
 category: Badge
-related: [Marker, Chip, DropdownListItem, DropdownMobileListItem, TabsLineItem, TabsExtendedTabButton, Text, Caption]
+related: [Marker, Chip]
 tokens:
   - Badge.Background
 stories: stories/Badge/Badge.stories.tsx
@@ -214,3 +214,4 @@ Badge.Background
 | Дата | Изменение |
 |---|---|
 | 2026-08-12 | Создан документ. AI-рефакторинг: JSDoc на всех props `IBadgeProps` / `IBadgeDotProps` / `IBadgeContentProps` с указанием размеров в px, в `IBadgeProps` добавлен явный `children` (тип совпадает с унаследованным из `React.HTMLAttributes`), расширены JSDoc компонентов и внутренних обёрток. Unit-тесты расширены с 12 до 45 кейсов: `Badge.test.tsx` вырос с 12 до 23 кейсов, рядом добавлены `BadgeDot.test.tsx` (7), `BadgeContent.test.tsx` (9) и `BadgeAffixes.test.tsx` (6) — покрыты логика снятия отступов контента, нерендеринг частей с falsy-значением, порядок частей разметки, проброс `...rest` и `ref`. Публичный API, DOM-разметка и визуальное поведение не изменены. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`DropdownListItem`, `DropdownMobileListItem`, `TabsLineItem`, `TabsExtendedTabButton`); из `related` убраны несимметричные имена (`Text`, `Caption`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

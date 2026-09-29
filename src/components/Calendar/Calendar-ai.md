@@ -1,7 +1,7 @@
 ---
 component: Calendar
 category: Date components
-related: [DatePickerExtended, DateField, DateRange, MonthYearField, MonthYearRange, ChipDatePicker]
+related: [DatePickerExtended, DateField, MonthYearField, MonthYearRange, ChipDatePicker]
 tokens:
   - Calendar.Background
   - Calendar.View_Header_Color
@@ -202,3 +202,4 @@ Calendar.View_Item_Mark_Critical_Background_Selected_Hover
 |---|---|
 | 2026-07-30 | Создан документ. AI-рефакторинг: общие хелперы клавиатурной навигации и сдвига даты в `utils.ts`, чистка дублирования в `CalendarControls` и сетках, JSDoc на публичных типах, `displayName` у субкомпонентов; добавлены unit-тесты (`Calendar`, `CalendarViewItem`, `utils`) |
 | 2026-07-30 | Исправлены найденные при рефакторинге баги: выбор первой tabbable-ячейки перебирал кандидатов с накоплением шага (в виде годов — месяцами вместо лет; хелпер `getFirstEnabledDate`); заголовок при внешней смене `pickedDate` игнорировал формат вида (`MONTH_YEAR` показывал «March 1970» вместо «1970»); фокус после `PageUp`/`PageDown` не возвращался на tabbable-ячейку, если её позиция сетки не менялась; шаг страницы в `changeTabbableDate`/`changeFocusedDate` переведён на `NAVIGATION_STEPS.page`. Расширения API: `dateFrom`/`dateTo` в `IDateLimitRange` стали опциональными, функциональный `dayHtmlAttributes` допускает `data-*` (`TTdHTMLAttributesWithData`) |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убран `DateRange` — он потребитель `Calendar` (использует его внутри через `DateField`), а потребители по `docs/ai/CONTEXT.md` в `related` не включаются; пояснение сохранено прозой в «Связанные компоненты». Публичный API и поведение не затронуты. |

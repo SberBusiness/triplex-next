@@ -1,7 +1,7 @@
 ---
 component: LightBox
 category: LightBox
-related: [Page, TopOverlay, Portal, FocusTrapExtended, LoaderScreen, Button, ModalWindow]
+related: [Page, TopOverlay, Portal, LoaderScreen, Button, ModalWindow, Overlay]
 tokens:
   - LightBox.Backdrop_Background
   - LightBox.Content_Background
@@ -173,10 +173,15 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 - `LightBoxControls` + `LightBoxClose` / `LightBoxPrev` / `LightBoxNext` (`LightBoxControls/`) — кнопки управления; стрелки построены на общем внутреннем `LightBoxArrow` (не экспортируется)
 - `LightBoxLeftSidebar` / `LightBoxRightSidebar` (`LightBoxSidebars/`) — сайдбары с автоскрытием содержимого по ширине (общий хук `useLightBoxSidebarVisibility`)
 - `LightBoxSideOverlay` (`LightBoxSideOverlay/`) — выезжающая справа панель с собственным focus trap, лоадером и кнопками закрытия CloseDesktop/CloseMobile
+- `FocusTrapExtended` (`src/components/FocusTrapExtended`) — focus trap окна и боковой панели; настраивается через `focusTrapProps` (`IFocusTrapExtendedProps`). Своего AI.md и строки в `docs/ai/ROADMAP.md` не имеет
 - `LightBoxViewManager` (`LightBoxViewManager/`) — внутренний менеджер позиционирования: следит за границами view-manager-ноды, проставляет breakpoint-классы и CSS-переменные
 - `TopOverlay` (`src/components/TopOverlay`) — верхняя панель, реэкспортируется как `LightBox.TopOverlay`
 - `Page` (`src/components/Page`) — рекомендуемая структура содержимого `LightBox.Content`
 - `ModalWindow` — альтернатива для компактных диалогов
+- `Overlay` (`src/components/Overlay`) — механика оверлея, на которой построен `LightBox.SideOverlay`: `ILightBoxSideOverlayProps` берёт `opened` / `onClose` из `IOverlayBaseProps`, подложку рисует `OverlayMask`
+- `Portal` (`src/components/Portal`) — рендер содержимого в отдельный узел вне текущего DOM-поддерева
+- `LoaderScreen` (`src/components/LoaderScreen`) — экран загрузки боковой панели, настраивается через `loaderScreenProps`
+- `Button` (`src/components/Button`) — на нём построены кнопки закрытия `LightBox.SideOverlay`
 
 ---
 
@@ -215,3 +220,4 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 | 2026-07-22 | Багфиксы по ревью PR #474: клавиатурные триггеры контролов целятся в видимую кнопку (стрелки не работали на desktop, Esc — на mobile); таймер-хак блокировки скролла заменён счётчиком смонтированных лайтбоксов; `LightBoxViewManager` снимает классы mount-ноды при размонтировании последнего менеджера |
 | 2026-08-17 | Исправлено: `LightBox.TopOverlay` перекрывался лоадером `LightBox.Content`. У `.loadingContentOverlay` теперь локальный z-index (201) — выше sticky-шапки и футера `Page`, но ниже `TopOverlay` (500); раньше `LoaderScreen` шёл с глобальным `@z-index-loader-screen` (10100) |
 | 2026-08-25 | Исправлено: в состоянии загрузки кнопка закрытия была недоступна для клика — её перекрывал лоадер `LightBox.Content`. Восстановлен модификатор `isLoading` на корневом элементе (терялся при переходе на CSS Modules): контролы поднимаются над лоадером, кнопки вперёд/назад скрываются. Esc в состоянии загрузки сохранён рабочим |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FocusTrapExtended`); добавлены обратные ссылки (`Overlay`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

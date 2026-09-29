@@ -1,7 +1,7 @@
 ---
 component: TextareaField
 category: TextFields
-related: [TextField, MaskedField, FormField, FormGroup, DateField, MonthYearField]
+related: [TextField, FormField, FormGroup]
 tokens: []
 stories: stories/TextareaField/TextareaField.stories.tsx
 version: "1.0"
@@ -115,3 +115,4 @@ version: "1.0"
 |---|---|
 | 2026-09-17 | Создан документ (TRI-96). AI-рефакторинг `TextareaField`: проброс `ref` на корневой `<div>` через `forwardRef`, `displayName`, unit-тесты вместо mock-заглушек |
 | 2026-09-17 | Ломающее изменение: `disabled` убран из `IFormFieldTextareaProps` (`Omit`), поэтому его больше нельзя передать в `textareaProps` — блокировка только через `status`. Правка по ревью PR #629, зафиксирована в release notes 1.47.0 |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`MaskedField`, `DateField`, `MonthYearField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

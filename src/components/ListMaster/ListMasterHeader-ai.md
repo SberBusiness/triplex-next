@@ -1,7 +1,7 @@
 ---
 component: ListMasterHeader
 category: List
-related: [ListMaster, SelectionControls]
+related: [ListMaster]
 tokens:
   - ListMaster.Header_Background
   - ListMaster.Header_Shadow
@@ -87,3 +87,4 @@ ListMaster.Header_Shadow      // тень снизу
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ. Уточнён JSDoc по `useEffect`-логике компенсации скролла. Добавлены unit-тесты. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`SelectionControls`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

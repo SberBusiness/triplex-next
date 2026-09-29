@@ -1,7 +1,7 @@
 ---
 component: Overlay
 category: Overlay
-related: [OverlayBase, OverlayMask, OverlayPanel, LightBox, TopOverlay, ModalWindow, DropdownMobile]
+related: [LightBox, TopOverlay]
 tokens:
   - Overlay.Background
   - Overlay.Panel_Background
@@ -184,7 +184,11 @@ unit-тестами (`toHaveBeenCalledTimes(1)`).
 - `OverlayMask` (`Overlay.Mask`) — кликабельный фон.
 - `OverlayPanel` (`Overlay.Panel`) — выезжающая панель.
 - `LightBox`, `TopOverlay` — построены поверх механики оверлея.
-- `ModalWindow` — альтернатива для центрированных модальных окон.
+- `DropdownMobile` — мобильный оверлей `Dropdown`, построен на `OverlayBase`. Своего AI.md
+  не имеет, описан в `Dropdown-ai.md`.
+- `ModalWindow` — готовое центрированное модальное окно с шапкой, телом и футером, если
+  нужен не низкоуровневый оверлей. На `Overlay` не построен — это отвод в другой класс
+  задач, поэтому в `related` не входит.
 
 ---
 
@@ -212,3 +216,4 @@ Visual baseline для `components-overlay--visual-tests` генерируетс
 |---|---|
 | 2026-08-27 | `OverlayBase` вызывает `onOpen` при монтировании с `opened={true}` — раньше первый рендер гасил все колбэки, и оверлей, смонтированный открытым, не сообщал об этом потребителю (release notes 1.44.0). |
 | 2026-06-17 | Создан документ. `Overlay` переведён на `forwardRef` (ref → корневой `div`, аддитивно, release notes 1.34.0). Дедуплицирован флаг `closing` (единый источник — `OverlayBase`). Codestyle/JSDoc cleanup в 4 файлах. Добавлены 4 unit-тест-файла. Исправлен двойной вызов `onClosing`/`onOpening` за переход — теперь ровно один раз (закреплено `toHaveBeenCalledTimes(1)`). |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`OverlayBase`, `OverlayMask`, `OverlayPanel`, `DropdownMobile`); из `related` убраны несимметричные имена (`ModalWindow`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

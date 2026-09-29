@@ -1,7 +1,7 @@
 ---
 component: List
 category: List
-related: [ListSortable, ListItem, ListEmptyState, ListItemLoading, LoaderScreen]
+related: [ListSortable, ListItem, LoaderScreen]
 tokens: []
 stories: stories/List/List.stories.tsx
 version: "1.0"
@@ -75,3 +75,4 @@ version: "1.0"
 |---|---|
 | 2026-04-29 | Создан документ |
 | 2026-06-17 | `List.module.less`: локальный `z-index: @z-index-step` на `.listLoaderScreen` — исправлено перекрытие `LoaderScreen` поверх `LightBox` / `ModalWindow` |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListEmptyState`, `ListItemLoading`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

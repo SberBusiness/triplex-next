@@ -1,7 +1,7 @@
 ---
 component: ListActionItem
 category: List
-related: [ListItem, ListItemContent, ListSortableItem]
+related: [ListItem]
 tokens:
   - ListItem.Background_Hover
   - ListItem.BorderColor_Focus
@@ -158,3 +158,4 @@ ListItem.BorderColor_Focus   // цвет focus-обводки (:focus-visible)
 |---|---|
 | 2026-07-17 | Добавлена story `WithActionItems` в `List.stories.tsx` — список из нескольких `ListActionItem`. |
 | 2026-07-16 | Создан компонент `ListActionItem` — самодостаточная интерактивная строка (hover, focus по Tab, `onClick` + Enter/Space). Сам рендерит `ListItem` + `ListItemContent`; интерактивность и весь фон живут на одном `ListItemContent`. Пропсы разделены: собственные — на `<li>`, интерактивные — через `listItemContentProps`. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemContent`); из `related` убраны несимметричные имена (`ListSortableItem`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

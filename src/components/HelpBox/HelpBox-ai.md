@@ -1,7 +1,7 @@
 ---
 component: HelpBox
 category: HelpBox
-related: [Tooltip, ButtonIcon, MobileView, FocusTrap]
+related: [Tooltip, ButtonIcon, MobileView]
 tokens: []
 stories: stories/HelpBox/HelpBox.stories.tsx
 version: "1.0"
@@ -119,3 +119,4 @@ version: "1.0"
 | 2026-07-08 | Актуализирована колонка `Example file`: имена файлов примеров приведены к фактическим (без постфикса `Example`). |
 | 2026-09-08 | AI-рефакторинг: `useId` заменён на `uniqueId` (совместимость с React 17), callback-`ref` стабилизирован через `useCallback`, убраны `!` и `as`-каст в работе с `ref`, `TooltipMobileHeader` берётся из composition-API `Tooltip.MobileHeader`, `paletteIndex` иконки вынесен в константу. Добавлены unit-тесты (25 кейсов, включая мобильную версию). |
 | 2026-09-10 | Ловушка фокуса больше не активируется при открытии подсказки наведением мыши (`needFocusTrap`): фокус остаётся в элементе, с которым работает пользователь. Добавлены unit-тесты на hover- и клавиатурный сценарии. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FocusTrap`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

@@ -1,7 +1,7 @@
 ---
 component: ImageGallery
 category: ImageGallery
-related: [ImageGalleryExtended, MobileView, LightBox]
+related: [ImageGalleryExtended, MobileView]
 tokens:
   - ImageGallery.Accent_Color
   - ImageGallery.Arrow_Background_Default
@@ -194,3 +194,4 @@ Runtime CSS-переменная высоты крупной картинки
 |---|---|
 | 2026-05-28 | Создан документ |
 | 2026-08-31 | Удалены неиспользуемые токены `Arrow_Background_Disabled` и `Arrow_BorderColor_Disabled`: неактивная стрелка скрывается (`display: none`), красить нечем |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

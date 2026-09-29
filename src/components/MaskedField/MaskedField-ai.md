@@ -1,7 +1,7 @@
 ---
 component: MaskedField
 category: TextFields
-related: [TextField, FormField, FormFieldMaskedInput, FormGroup, DateField, MonthYearField]
+related: [TextField, FormField, FormGroup, DateField]
 tokens: []
 stories: stories/MaskedField/MaskedField.stories.tsx
 version: "1.0"
@@ -87,6 +87,7 @@ version: "1.0"
 - `TextFieldBase` — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`.
 - `FormFieldMaskedInput` — сам элемент ввода с маской и статическим свойством `presets` (`masks`, `placeholderMasks`). Используется напрямую, когда нужна нестандартная композиция поля.
 - `FormFieldClear` — кнопка очистки, передаётся в `postfix`.
+- `TextField` — то же поле без маски: отличается только элементом ввода (`FormFieldInput` вместо `FormFieldMaskedInput`).
 - `FormGroup` / `FormField` — контейнеры раскладки поля и описания.
 - `DateField`, `MonthYearField`, `AmountField`, `SuggestField`, `TextareaField` — специализированные поля той же группы `TextFields`.
 
@@ -119,3 +120,4 @@ version: "1.0"
 | 2026-08-11 | Тип `maskedInputProps.ref` исправлен на `React.RefObject<HTMLDivElement>` — соответствует фактическому ref-таргету (правки по ревью PR #515) |
 | 2026-08-12 | Исправления в `FormFieldMaskedInput` по ревью PR #515: убрана мутация prop `value` в `getValue()`, `defaultValue` больше не уходит в `<input>` (предупреждение React о controlled/uncontrolled) и исключён из `IFormFieldMaskedInputProps` |
 | 2026-09-09 | Исправлено: значение с кодом страны раскладывалось по маске телефона со сдвигом и теряло последнюю цифру. Нормализация номера вынесена в `normalizePhoneText` и применяется и к внешнему `value`, и к слою с маской |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FormFieldMaskedInput`); из `related` убраны несимметричные имена (`MonthYearField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

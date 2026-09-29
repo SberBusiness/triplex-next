@@ -1,7 +1,7 @@
 ---
 component: TextField
 category: TextFields
-related: [MaskedField, FormField, FormGroup, TextareaField, MonthYearField]
+related: [MaskedField, SmallInput, TextareaField, MonthYearField, FormField, FormGroup]
 tokens: []
 stories: stories/TextField/TextField.stories.tsx
 version: "1.0"
@@ -84,6 +84,8 @@ version: "1.0"
 - `FormField` / `FormFieldInput` и слоты семейства — низкоуровневые строительные блоки; используются напрямую, когда нужна нестандартная композиция.
 - `FormGroup` — контейнер вертикальной раскладки поля и описания.
 - `FormFieldClear` — кнопка очистки, передаётся в `postfix`.
+- `MaskedField` — то же поле, но с маской ввода: отличается только элементом ввода (`FormFieldMaskedInput` вместо `FormFieldInput`).
+- `SmallInput` — альтернатива для инлайн-редактирования короткого значения: без лейбла, статусов, описания и счётчика.
 - `TextareaField`, `AmountField`, `SuggestField`, `DateField`, `MonthYearField` — специализированные поля той же группы `TextFields`.
 
 ---
@@ -113,3 +115,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-27 | Создан документ (TRI-5). AI-рефакторинг TextField/TextFieldBase, unit-тесты, миграция stories на modern pattern |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`SmallInput`). Публичный API и поведение не затронуты. |

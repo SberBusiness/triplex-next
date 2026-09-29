@@ -28,3 +28,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено: `Step` пробрасывает `ref` на корневой элемент (кружок шага) — раньше компонент был объявлен как `React.FC`, поэтому переданный `ref` терялся. Тип компонента изменился на `React.ForwardRefExoticComponent`.
 - Проведён AI-рефакторинг: других изменений для потребителя нет.
+
+**TextField**
+
+- Добавлено: из пакета экспортируется тип `ITextFieldBaseProps` — общая база props для `TextField`, `MaskedField`, `AmountField` и `TextareaField`. Компонент `TextFieldBase` по-прежнему внутренний.

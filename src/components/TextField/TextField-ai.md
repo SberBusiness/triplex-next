@@ -62,7 +62,7 @@ version: "1.0"
 
 - `forwardRef` на `TextField` и `TextFieldBase` — не убирать. Внешний `ref` указывает на корневой `<div>` `FormField`; ref на сам input — только через `inputProps.ref`.
 - Публичный API (`ITextFieldProps`: `inputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
-- `TextFieldBase` намеренно НЕ экспортируется — приватная база.
+- Компонент `TextFieldBase` намеренно НЕ экспортируется — приватная база. Его тип `ITextFieldBaseProps` экспортируется из barrel только как тип (`export type`) — для потребителей, которые строят свои поля на общей базе props; переименование или изменение полей — breaking change.
 - Известное ограничение контракта: `inputProps.ref` типизирован как `React.RefObject<HTMLInputElement>` (не `React.Ref`), callback-ref формально не проходит по типам. Исправление — breaking change, требует отдельной задачи.
 - Уникальный `id` для связки label↔input генерируется через `lodash uniqueId` в `FormFieldInput` — не заменять на `useId` (React 17 совместимость через release-0).
 - `description || counter` рендерятся в общем блоке `FormFieldDescription` — не разносить по отдельным блокам (изменит DOM и скриншоты).
@@ -80,7 +80,7 @@ version: "1.0"
 
 ## Связанные компоненты
 
-- `TextFieldBase` (внутренний, не в barrel) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. Описан здесь, отдельного AI.md не имеет.
+- `TextFieldBase` (внутренний, не в barrel; публичен только тип `ITextFieldBaseProps`) — базовая раскладка `FormGroup`/`FormField` + слоты `prefix`/`children`/`label`/`postfix` и блок `description`/`counter`. Описан здесь, отдельного AI.md не имеет.
 - `FormField` / `FormFieldInput` и слоты семейства — низкоуровневые строительные блоки; используются напрямую, когда нужна нестандартная композиция.
 - `FormGroup` — контейнер вертикальной раскладки поля и описания.
 - `FormFieldClear` — кнопка очистки, передаётся в `postfix`.
@@ -113,3 +113,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-27 | Создан документ (TRI-5). AI-рефакторинг TextField/TextFieldBase, unit-тесты, миграция stories на modern pattern |
+| 2026-09-29 | Тип `ITextFieldBaseProps` экспортирован из barrel (`export type`); компонент `TextFieldBase` остаётся приватным |

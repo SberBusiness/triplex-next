@@ -52,7 +52,13 @@ export const DocumentNumberEdit = React.forwardRef<HTMLDivElement, IDocumentNumb
         const [editingMode, setEditingMode] = useState(false);
 
         /** Текст лейбла: при редактировании — только подпись, иначе подпись с номером либо текст об отсутствии номера. */
-        const labelText = editingMode ? numberLabel : value ? `${numberLabel} ${value}` : emptyNumberLabel;
+        const getLabelText = () => {
+            if (editingMode) {
+                return numberLabel;
+            }
+
+            return value ? `${numberLabel} ${value}` : emptyNumberLabel;
+        };
 
         /** Плейсхолдер поля ввода — маска из нулей по максимальной длине номера. */
         const inputPlaceholder = "0".repeat(maxLength);
@@ -96,7 +102,7 @@ export const DocumentNumberEdit = React.forwardRef<HTMLDivElement, IDocumentNumb
         return (
             <div className={clsx(styles.documentNumberEdit, className)} ref={ref}>
                 <Text className={styles.label} tag="div" size={ETextSize.B3} type={EFontType.SECONDARY}>
-                    {labelText}
+                    {getLabelText()}
                 </Text>
 
                 {editingMode ? (

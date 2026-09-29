@@ -60,14 +60,14 @@ describe("DocumentNumberEdit", () => {
         });
 
         it("показывает подпись с номером и кнопку «Изменить», когда номер задан", () => {
-            renderComponent({ value: "123456", onChange: () => {} });
+            renderComponent({ value: "123456" });
 
             expect(screen.getByText("Документ № 123456")).toBeInTheDocument();
             expect(getEditButton()).toHaveTextContent(labels.buttonLabel);
         });
 
         it("поддерживает числовой номер", () => {
-            renderComponent({ value: 123456, onChange: () => {} });
+            renderComponent({ value: 123456 });
 
             expect(screen.getByText("Документ № 123456")).toBeInTheDocument();
         });
@@ -82,7 +82,7 @@ describe("DocumentNumberEdit", () => {
     describe("переход в режим редактирования", () => {
         it("показывает поле ввода и оставляет в подписи только numberLabel", async () => {
             const user = userEvent.setup();
-            renderComponent({ value: "123456", onChange: () => {} });
+            renderComponent({ value: "123456" });
 
             const input = await startEditing(user);
 
@@ -174,7 +174,7 @@ describe("DocumentNumberEdit", () => {
         it("завершает редактирование по Enter и вызывает onKeyDown", async () => {
             const user = userEvent.setup();
             const onKeyDown = vi.fn();
-            renderComponent({ value: "123456", onChange: () => {}, onKeyDown });
+            renderComponent({ value: "123456", onKeyDown });
 
             await startEditing(user);
             await user.keyboard("{Enter}");
@@ -209,6 +209,28 @@ describe("DocumentNumberEdit", () => {
             expect(getEditButton()).toHaveTextContent(labels.emptyNumberButtonLabel);
             expect(onBlur).toHaveBeenCalledTimes(1);
             expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: input }));
+        });
+    });
+
+    describe("disabled", () => {
+        // Поведение pre-existing: disabled уходит только в поле ввода, ссылку-переключатель не выключает.
+        // Тест фиксирует его «как есть», чтобы будущий рефакторинг не менял его незаметно.
+        it("не запрещает вход в режим редактирования, но делает выход невозможным", async () => {
+            const user = userEvent.setup();
+            renderComponent({ value: "123456", disabled: true });
+
+            const input = await startEditing(user);
+
+            expect(input).toBeDisabled();
+            // Disabled-поле не получает фокус, поэтому autoFocus — no-op, а Enter и blur до обработчиков не доходят.
+            expect(input).not.toHaveFocus();
+
+            await user.keyboard("{Enter}");
+            await user.click(document.body);
+
+            expect(screen.getByRole("textbox")).toBeInTheDocument();
+            expect(screen.queryByRole("link")).not.toBeInTheDocument();
+            expect(screen.queryByText("Документ № 123456")).not.toBeInTheDocument();
         });
     });
 

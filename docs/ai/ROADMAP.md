@@ -118,7 +118,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DatePickerExtended | ✅ | ✅ | ✅ |
 | DateRange | ✅ | ✅ | ✅ |
 | Divider | ⬜ | ✅ | ⬜ |
-| DocumentNumberEdit | ⬜ | ✅ | ⬜ |
+| DocumentNumberEdit | ✅ | ✅ | ✅ |
 | Dropdown | ✅ | ✅ | ✅ |
 | Ellipsis | ⬜ | ✅ | ⬜ |
 | EmptyView | ✅ | ✅ | ⬜ |
@@ -184,14 +184,14 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SegmentedControl | ⬜ | ⬜ | ⬜ |
 | SelectExtendedField | ✅ | ✅ | ✅ |
 | SelectField | ✅ | ✅ | ✅ |
-| Skeleton | ⬜ | ✅ | ⬜ |
+| Skeleton | ✅ | ✅ | ✅ |
 | Slider | ✅ | ✅ | ✅ |
 | SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ✅ | ✅ | ✅ |
 | SmallInput | ✅ | ✅ | ✅ |
-| Spoiler | ⬜ | ⬜ | ⬜ |
+| Spoiler | ✅ | ✅ | ✅ |
 | StatusTracker | ✅ | ✅ | ✅ |
-| Step | ⬜ | ⬜ | ⬜ |
+| Step | ✅ | ✅ | ✅ |
 | Stepper | ✅ | ✅ | ✅ |
 | StepperExtended | ✅ | ✅ | ✅ |
 | Suggest | ✅ | ✅ | ✅ |

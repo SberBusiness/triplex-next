@@ -106,7 +106,7 @@ describe("Calendar", () => {
         fireEvent.click(screen.getByTestId("calendar-view"));
 
         expect(onViewChange.mock.calls[1][1]).toBe(ECalendarViewMode.YEARS);
-        expect(screen.getByText("1965 - 1976")).toBeInTheDocument();
+        expect(screen.getByText("1965–1976")).toBeInTheDocument();
         expect(screen.getByText("1976")).toBeInTheDocument();
     });
 
@@ -114,7 +114,7 @@ describe("Calendar", () => {
         renderCalendar({ reversedPick: true });
 
         expect(screen.queryByTestId("calendar-view")).not.toBeInTheDocument();
-        expect(screen.getByText("1965 - 1976")).toBeInTheDocument();
+        expect(screen.getByText("1965–1976")).toBeInTheDocument();
     });
 
     it("opens months view for MONTH_YEAR pick type", () => {

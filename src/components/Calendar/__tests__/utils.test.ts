@@ -78,7 +78,7 @@ describe("Calendar utils", () => {
         });
 
         it("returns 12 years period for years view", () => {
-            expect(formatDate(date, ECalendarViewMode.YEARS)).toBe("1965 - 1976");
+            expect(formatDate(date, ECalendarViewMode.YEARS)).toBe("1965–1976");
         });
 
         it("falls back to current date for null value", () => {

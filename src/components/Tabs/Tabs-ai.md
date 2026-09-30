@@ -1,7 +1,7 @@
 ---
 component: Tabs
 category: Tabs
-related: [TabsExtended, TabsLine, ButtonDropdown]
+related: [TabsExtended, TabsLine, ButtonDropdown, SegmentedControl]
 tokens:
   - Tabs.Type1_Tab_Background_Selected
   - Tabs.Type2_Tab_Background_Selected
@@ -110,6 +110,7 @@ Tabs.Type2_Tab_Background_Selected
 - `TabsLine` — альтернативный визуальный паттерн табов (подчёркивание вместо залитой кнопки).
 - `ButtonDropdown` — кнопка выпадающего списка, которую `Tabs` рендерит сам для не поместившихся табов; тема подбирается по `type` (`DOTS_SECONDARY` / `DOTS_SECONDARY_LIGHT`).
 - `Badge` — `Badge.Dot` как значок новых уведомлений на кнопке таба (рендерится внутри `TabsExtended.Content.TabButton`).
+- `SegmentedControl` — альтернатива, когда переключатель не управляет панелями контента: компактный набор сегментов без семантики табов, зато с режимом множественного выбора.
 
 ---
 

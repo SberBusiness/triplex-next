@@ -4,6 +4,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.49.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**Divider**
+
+- `IDividerProps` больше не принимает `children`: `<hr>` не может содержать потомков, и раньше такая передача падала в рантайме, теперь её отсекает TypeScript.
+
 <Heading>Изменения</Heading>
 
 **Button**
@@ -14,6 +20,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлена стилизация: скругление ячеек в видах `MONTHS` и `YEARS` в обычном режиме совпадает с адаптивным.
 - Изменён разделитель диапазона лет в заголовке — короткое тире (`–`) без пробелов вместо `" - "`.
+
+**Divider**
+
+- Добавлено: `Divider` пробрасывает `ref` на корневой `<hr>`. Тип компонента изменился на `React.ForwardRefExoticComponent`.
+- Проведён AI-рефакторинг.
 
 **DocumentNumberEdit**
 

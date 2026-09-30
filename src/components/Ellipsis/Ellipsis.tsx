@@ -8,6 +8,8 @@ interface IEllipsisStyle extends React.CSSProperties {
 
 /** Свойства компонента Ellipsis. */
 export interface IEllipsisProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Обрезаемое содержимое. Рассчитано на текст. */
+    children?: React.ReactNode;
     /** Количество строк, после которых происходит сворачивание в многоточие. */
     maxLines: number;
 }

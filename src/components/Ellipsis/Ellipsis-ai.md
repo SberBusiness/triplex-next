@@ -107,8 +107,9 @@ version: "1.0"
   обёртка.
 - **Runtime-переменная `--triplex-next-runtime-Ellipsis-Root_LineClamp`**
   объявляется в `Ellipsis.tsx` и читается в `Ellipsis.module.less`. Имя следует
-  паттерну `docs/ai/codestyle.md`; менять его — значит менять наблюдаемый
-  inline-стиль, это идёт в release notes.
+  паттерну `docs/ai/codestyle.md`. Публичным API она не является и через
+  `ThemeProvider` не переопределяется, но видна в inline-стиле корневого
+  элемента, поэтому её имя меняется в обоих файлах разом.
 - **Потребительский `style` мерджится, а не заменяется.** Порядок
   `{...style, "--...": maxLines}` гарантирует, что `maxLines` не теряется при
   передаче своих стилей.

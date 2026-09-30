@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type ReactNode } from "react";
 import { IButtonBaseProps } from "../Button/ButtonBase";
 import { ESegmentedControlSize, ESegmentedControlTheme, ESegmentedControlType } from "./enums";
 
@@ -10,6 +10,8 @@ export interface ISegmentedControlCommonProps extends Omit<React.HTMLAttributes<
     size: ESegmentedControlSize;
     /** Неактивное состояние. Блокирует все сегменты. По умолчанию false. */
     disabled?: boolean;
+    /** Сегменты контрола — SegmentedControl.Segment. */
+    children?: ReactNode;
 }
 
 /** Свойства компонента SegmentedControl с множественным выбором. */
@@ -39,4 +41,9 @@ export type TSegmentedControlProps = ISegmentedControlSingleProps | ISegmentedCo
 export interface ISegmentedControlSegmentProps extends IButtonBaseProps {
     /** Значение сегмента. Сравнивается со значением SegmentedControl, чтобы определить выбранное состояние. */
     value: string;
+    /**
+     * Содержимое сегмента — подпись, иконка или и то и другое.
+     * Строковое содержимое подставляется в атрибут title, если title не передан явно.
+     */
+    children?: ReactNode;
 }

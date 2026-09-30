@@ -202,7 +202,7 @@ export const Example: Story = {
                 language: "tsx",
             },
         },
-        // Сегменты только с иконкой снимаются в VisualTests вместе с остальными краевыми состояниями.
+        // Сегменты только с иконкой покрыты отдельным блоком в VisualTests (в теме SECONDARY_1).
         testRunner: { skip: true },
     },
     render: ExampleRender,

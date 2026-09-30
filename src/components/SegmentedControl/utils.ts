@@ -1,9 +1,11 @@
-import React from "react";
+import type { ReactNode } from "react";
 import { ESegmentedControlType } from "./enums";
 
 /**
  * Определяет, выбран ли сегмент.
  * При SINGLE значение сегмента сравнивается со значением контрола, при MULTIPLE ищется в массиве значений.
+ * Строковое значение контрола при MULTIPLE (допустимо по типу, но изнутри компонента не достигается)
+ * считается отсутствием выбора — так исключается подстрочное сравнение через String.prototype.includes.
  */
 export const isSegmentSelected = (
     type: ESegmentedControlType,
@@ -14,7 +16,7 @@ export const isSegmentSelected = (
         case ESegmentedControlType.SINGLE:
             return segmentValue === controlValue;
         case ESegmentedControlType.MULTIPLE:
-            return controlValue.includes(segmentValue);
+            return Array.isArray(controlValue) && controlValue.includes(segmentValue);
     }
 };
 
@@ -22,7 +24,7 @@ export const isSegmentSelected = (
  * Возвращает значение атрибута title сегмента.
  * Приоритет у переданного title; если его нет, а содержимое сегмента — строка, она используется как title.
  */
-export const getSegmentTitle = (title: string | undefined, children: React.ReactNode): string | undefined => {
+export const getSegmentTitle = (title: string | undefined, children: ReactNode): string | undefined => {
     if (title) {
         return title;
     }

@@ -1,7 +1,7 @@
 ---
 component: SegmentedControl
 category: SegmentedControl
-related: [Tabs, TabsLine, CheckboxXGroup, IconWrapper]
+related: [Tabs, TabsLine, IconWrapper]
 tokens:
   - SegmentedControl.General_1_Background
   - SegmentedControl.General_2_Background
@@ -258,8 +258,6 @@ SegmentedControlSegment.BorderColor_Focus
   `SegmentedControl` часто используют как визуальный переключатель вида.
 - `TabsLine` — альтернатива для табов-подчёркиваний в шапке раздела. Тот же критерий
   выбора, что и у `Tabs`: нужна ли семантика табов.
-- `CheckboxXGroup` — альтернатива для `type: MULTIPLE`, когда выбор нескольких значений
-  должен читаться как набор чекбоксов в форме, а не как компактный переключатель.
 - `IconWrapper` — рендерится внутри каждого сегмента (`displayContents`) и по классам
   `active` / `disabled` управляет цветом иконки из `@sberbusiness/icons-next`. Поэтому
   сегмент с иконкой перекрашивается вместе с выбранным состоянием; `paletteIndex` в примерах
@@ -286,8 +284,9 @@ SegmentedControlSegment.BorderColor_Focus
 | `VisualTests` | `VisualTests.tsx` | Краевые состояния для скриншотов: `:focus-visible` (открывается `play`), выключенные отдельные сегменты (включая выбранный), обрезка длинной подписи, сегменты-иконки, MULTIPLE без выбора и с полным выбором |
 
 Из скриншот-тестов исключены (`testRunner: { skip: true }`) `Playground`, `Default` и
-`Example`: `Default` визуально дублирует блок SINGLE в `Types`, а сегменты-иконки из
-`Example` снимаются внутри `VisualTests` вместе с остальными краевыми состояниями.
+`Example`: `Default` визуально дублирует блок SINGLE в `Types`, а сегменты только с иконкой
+покрыты отдельным блоком в `VisualTests` (там они сняты в теме `SECONDARY_1`, тогда как
+`Example` использует `GENERAL_1`).
 
 Story ID участвуют в именах baseline-скриншотов (`segmentedcontrol--themes--xs.png` и т.п.),
 поэтому переименование story требует перегенерации baseline и удаления осиротевших файлов.

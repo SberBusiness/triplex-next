@@ -28,6 +28,12 @@ describe("SegmentedControl utils", () => {
         it("returns false for MULTIPLE when control value is empty", () => {
             expect(isSegmentSelected(ESegmentedControlType.MULTIPLE, "option1", [])).toBe(false);
         });
+
+        it("returns false for MULTIPLE when control value is a string containing the segment value", () => {
+            // Строковое значение допустимо по типу, но изнутри компонента не достигается: проверяем,
+            // что вместо подстрочного сравнения через String.prototype.includes выбор не определяется.
+            expect(isSegmentSelected(ESegmentedControlType.MULTIPLE, "option", "option_1")).toBe(false);
+        });
     });
 
     describe("getSegmentTitle", () => {

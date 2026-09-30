@@ -2,6 +2,7 @@ import React from "react";
 import type { StoryObj } from "@storybook/react";
 import { Controls, Description, Primary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { DesignTokensVisualizer } from "./utils/DesignTokensVisualizer";
+import { ShadowTokensVisualizer } from "./utils/ShadowTokensVisualizer";
 
 export default {
     title: "Design Tokens/Core",
@@ -26,6 +27,14 @@ export default {
 export const Color: StoryObj<typeof DesignTokensVisualizer> = {
     name: "Color",
     render: () => <DesignTokensVisualizer />,
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
+export const Shadow: StoryObj<typeof ShadowTokensVisualizer> = {
+    name: "Shadow",
+    render: () => <ShadowTokensVisualizer />,
     parameters: {
         controls: { disable: true },
     },

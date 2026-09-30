@@ -13,5 +13,5 @@ export type TDesignTokensComponentsFooterPage = { FooterPage: TDesignTokensCompo
 
 // Токены компонента FooterPage в светлой и темной темах.
 export const FooterPage_Tokens: TDesignTokensComponentsFooterPageValues = {
-    StickyShadow: [{ value: "0 -2px 7px 0 rgba(31, 31, 34, 0.08)" }, { value: "0 -2px 7px 0 rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-FooterPage-StickyShadow)
+    StickyShadow: [{ ref: "Shadow.05" }, { ref: "DarkShadow.05" }], // var(--triplex-next-FooterPage-StickyShadow)
 };

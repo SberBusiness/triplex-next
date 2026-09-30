@@ -17,42 +17,43 @@
     color: inherit;
 }
 
-.tokenList {
+.shadowContainer {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 24px;
 }
 
-.token {
+.shadowToken {
     display: flex;
-    padding-bottom: 10px;
+    align-items: center;
     font-size: 14px;
 }
 
-.tokenName {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 10%;
-}
-
-.tokenColor {
-    width: 100px;
-    height: 80px;
-    border-radius: 10px;
-    border: 1px solid #e0e0e0;
-}
-
-.tokenValue {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 25%;
+.shadowValue {
+    flex-shrink: 0;
+    width: 280px;
     margin-left: 20px;
 }
 
-.variable {
+.shadowVariable {
+    flex-shrink: 0;
+    width: 140px;
+    margin-left: 20px;
+}
+
+.shadowPanel {
+    box-sizing: border-box;
     display: flex;
+    flex-shrink: 0;
+    width: 180px;
     align-items: center;
     justify-content: center;
+    height: 100px;
+    border-radius: 10px;
+}
+
+.shadowCard {
+    width: 120px;
+    height: 72px;
+    border-radius: 10px;
 }

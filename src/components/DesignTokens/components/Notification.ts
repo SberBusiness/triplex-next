@@ -22,5 +22,5 @@ export const Notification_Tokens: TDesignTokensComponentsNotificationValues = {
     Background: [{ ref: "ColorNeutral.100" }, { ref: "ColorDarkNeutral.30" }], // var(--triplex-next-Notification-Background)
     Color: [{ ref: "ColorDarkNeutral.30" }, { ref: "ColorNeutral.100" }], // var(--triplex-next-Notification-Color)
     TimeColor: [{ value: "rgba(31, 31, 34, 0.65)" }, { value: "rgba(255, 255, 255, 0.55)" }], // var(--triplex-next-Notification-TimeColor)
-    Shadow: [{ value: "0px 2px 7px rgba(31, 31, 34, 0.25)" }, { value: "0px 2px 7px rgba(0, 0, 0, 0.35)" }], // var(--triplex-next-Notification-Shadow)
+    Shadow: [{ ref: "Shadow.07" }, { ref: "DarkShadow.07" }], // var(--triplex-next-Notification-Shadow)
 };

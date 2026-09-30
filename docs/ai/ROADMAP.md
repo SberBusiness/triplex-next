@@ -120,7 +120,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Divider | ⬜ | ✅ | ⬜ |
 | DocumentNumberEdit | ✅ | ✅ | ✅ |
 | Dropdown | ✅ | ✅ | ✅ |
-| Ellipsis | ⬜ | ✅ | ⬜ |
+| Ellipsis | ✅ | ✅ | ✅ |
 | EmptyView | ✅ | ✅ | ⬜ |
 | ExpandAnimation | ✅ | ✅ | ✅ |
 | Footer | ✅ | ✅ | ✅ |

@@ -1,7 +1,7 @@
 ---
 component: Chip
 category: Chips
-related: [ChipGroup, ChipIcon, ChipOptions, ChipSelect, ChipMultiselect, ChipSort, ChipSuggest, ChipDatePicker, ChipMonthYearPicker, ChipClearButton, ChipDropdownArrow, Badge, IconWrapper]
+related: [ChipGroup, ChipOptions, ChipSelect, ChipMultiselect, ChipSort, ChipSuggest, ChipDatePicker, ChipMonthYearPicker, Badge, IconWrapper]
 tokens:
   - Chip.Background_Type1_Default
   - Chip.Background_Type1_Hover
@@ -240,3 +240,4 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 | 2026-07-29 | AI-рефакторинг (TRI-26): codestyle-чистка `Chip.tsx` (константы-маппинги в UPPER_SNAKE_CASE, эквивалентные упрощения в `clsx`, JSDoc на `children` и `handleKeyDown`), unit-тесты расширены с 5 до 22 кейсов; публичный API, DOM и визуал не изменены |
 | 2026-07-29 | Правки по ревью PR #487: уточнена атрибуция класса `.chipGroupItem` (его проставляет семейство Chip*, а не раскладка `ChipGroup`) и описание API `ChipClearButton` / `ChipDropdownArrow` |
 | 2026-09-07 | В семейство добавлен `ChipMonthYearPicker` — упомянут в списках потребителей `Chip` и `.chipGroupItem` |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ChipIcon`, `ChipClearButton`, `ChipDropdownArrow`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

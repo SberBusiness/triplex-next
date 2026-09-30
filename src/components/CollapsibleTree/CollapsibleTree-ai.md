@@ -1,7 +1,7 @@
 ---
 component: CollapsibleTree
 category: CollapsibleTree
-related: [CollapsibleTreeExtended, CollapsibleTreeNodeHeader, CollapsibleTreeNodeLabel, TreeView, AccordionBase]
+related: [CollapsibleTreeExtended, TreeView, AccordionBase]
 tokens:
   - CollapsibleTree.Header_Background_Hover
   - CollapsibleTree.Header_Shadow_Focus
@@ -231,3 +231,4 @@ CollapsibleTree.Header_Shadow_Focus
 | 2026-07-06 | Добавлено свойство `disabled` у `ICollapsibleTreeNodeBranch` и поддержка пропа `disabled` в `CollapsibleTreeNodeHeader`. Без новых токенов: шеврон приглушается глобальными классами `hoverable disabled` (icons-next), текст — через `type={EFontType.DISABLED}` у лейбла |
 | 2026-07-14 | Глобальный класс `hoverable` (icons-next) на кнопке заголовка теперь стоит всегда, а не только при `disabled` — для корректной окраски шеврона. Добавлен класс `active` на раскрытый узел с детьми (по паттерну `IconWrapper`/`Button`) |
 | 2026-09-17 | TRI-22: инвариант про отсутствие `forwardRef` переформулирован — `CollapsibleTreeExtended` и `TreeView` под ним теперь пробрасывают `ref` на корневой `<ul>`, поэтому прежнее обоснование не действует, а `CollapsibleTree` остаётся долгом |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`CollapsibleTreeNodeHeader`, `CollapsibleTreeNodeLabel`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

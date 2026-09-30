@@ -1,7 +1,7 @@
 ---
 component: ChipOptions
 category: Chips
-related: [Chip, ChipGroup, ChipSort, ChipMultiselect]
+related: [Chip, ChipSort, ChipMultiselect]
 tokens: []
 stories: stories/Chips/ChipOptions.stories.tsx
 version: "1.0"
@@ -176,3 +176,4 @@ version: "1.0"
 | 2026-09-04 | Создан документ (TRI-133, AI-Ready Phase 1) |
 | 2026-09-04 | AI-рефакторинг (TRI-133): JSDoc на интерфейсе, `size` разобран из props явно, иконка опций собрана в один элемент со сменой `paletteIndex`, `typeof children !== "undefined"` → `children !== undefined`, комментарий про `<span />`-заглушку в `postfix`; unit-тесты расширены с 3 до 19 кейсов. Публичный API, DOM и визуал не изменены |
 | 2026-09-08 | Добавлен prop `clearButtonProps` (TRI-133): кнопке сброса можно задать `aria-label`, `disabled` и прочие props `ChipClearButton`; переданные `onClick` / `onKeyDown` вызываются после собственных обработчиков компонента. `Enter` / `Space` на кнопке сброса больше не всплывают до `Chip` — `Space` активирует кнопку, внешний `onKeyDown` чипса не срабатывает заодно со сбросом |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`ChipGroup`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

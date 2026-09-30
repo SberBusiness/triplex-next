@@ -1,7 +1,7 @@
 ---
 component: CheckboxXGroup
 category: Inputs
-related: [Checkbox]
+related: [Checkbox, CheckboxYGroup]
 tokens: []
 stories: stories/CheckboxXGroup/CheckboxXGroup.stories.tsx
 version: "1.0"
@@ -88,3 +88,4 @@ version: "1.0"
 | 2026-04-16 | Приведение `CheckboxXGroup` к AI-ready: добавлен `forwardRef`, типизирован `children`, созданы AI-документ и инварианты. |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убрана секция «Ключевые особенности реализации» (содержимое перенесено в `Ограничения использования`), переставлены секции, добавлена колонка `Example file` и пустой раздел `Дизайн-токены`. |
 | 2026-08-18 | AI-рефакторинг: JSDoc на props и компоненте, комментарий про кросс-модульный класс `.label` в LESS, добавлены unit-тесты `__tests__/CheckboxXGroup.test.tsx`. Публичный API не изменён. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`CheckboxYGroup`). Публичный API и поведение не затронуты. |

@@ -1,7 +1,7 @@
 ---
 component: MonthYearField
 category: Date components
-related: [DatePickerExtended, MonthYearRange, ChipMonthYearPicker, TextField, Calendar]
+related: [MonthYearRange, ChipMonthYearPicker, DateField, DatePickerExtended, TextField, Calendar]
 tokens: []
 stories: stories/MonthYearField/MonthYearField.stories.tsx
 version: "1.0"
@@ -81,6 +81,8 @@ version: "1.0"
 - `MonthYearRange` — выбор диапазона месяцев; использует `MonthYearField` как поля «от» и «до».
 - `ChipMonthYearPicker` — тот же выбор месяца в виде чипса-фильтра: наследует `IMonthYearFieldProps` и утилиты `MonthYearPickerUtils`, но вместо поля формы рендерит `Chip`.
 - `TextField` — внутреннее поле-триггер.
+- `Calendar` — календарь внутри дропдауна в режиме `MONTH_YEAR`; его props приходят в публичный API через `DatePickerExtended`.
+- `DateField` — альтернатива для выбора полной даты; устроен по той же схеме, но поле редактируемое и с маской.
 - `MonthYearFieldTarget` (внутренний, не в barrel) — рендерит `TextField` с иконкой календаря и кнопкой очистки, обрабатывает клик/клавиатуру для открытия дропдауна. Описан здесь, отдельного AI.md не имеет.
 - `MonthYearFieldContext` (внутренний, не в barrel) — прокидывает `onChange` в target; тривиальный контекст без своей логики.
 - `MonthYearPickerUtils` (`utils.ts`, внутренний) — чистые функции парсинга/валидации даты (`getPickerValues`, `getCalendarDate`, `isAvailableDate`). Покрыты `__tests__/utils.test.tsx`.
@@ -111,3 +113,4 @@ version: "1.0"
 | 2026-06-16 | Создан документ. AI-рефакторинг (JSDoc-фиксы), unit-тесты для `utils.ts`, story `VisualTests` и включение скриншот-тестов |
 | 2026-06-16 | Добавлена story `VisualTestsOpen` — скриншот раскрытого dropdown с календарём (через `play`) |
 | 2026-09-07 | В «Связанные компоненты» добавлен `ChipMonthYearPicker` — чипс-вариант того же выбора месяца |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`DateField`). Публичный API и поведение не затронуты. |

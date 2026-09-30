@@ -1,7 +1,7 @@
 ---
 component: SelectExtendedField
 category: SelectExtendedField
-related: [SelectField, MultiselectField, SuggestField, Chip, Dropdown, FormField, KeyDownListener, IconWrapper, LoaderSmall]
+related: [SelectField, MultiselectField, SuggestField, Dropdown, FormField, KeyDownListener, IconWrapper, LoaderSmall]
 tokens: []
 stories: stories/SelectExtendedField/SelectExtendedField.stories.tsx
 version: "1.0"
@@ -203,3 +203,4 @@ version: "1.0"
 |---|---|
 | 2026-08-07 | Создан документ AI-ready для `SelectExtendedField` (TRI-74). |
 | 2026-08-07 | AI-рефакторинг (TRI-74): `onOpen` / `onClose` сравнивают предыдущее значение `opened` вместо флага «смонтирован» — колбэки больше не срабатывают ложно при двойном маунте в React 18 StrictMode. Удалены ссылки на несуществующие CSS-классы в `SelectExtendedFieldTarget` (в `class` попадал литерал `undefined`). Клик по кнопке очистки больше не раскрывает выпадающий блок — всплытие останавливается, как в `Chip.Select`. Слушатель `mousedown` навешивается только пока блок открыт, callback-ref стабилизирован через `useCallback`, убран мёртвый внутренний `targetRef` в `SelectExtendedFieldTarget`, дедуплицирован список опций десктопной и мобильной версий в `SelectExtendedFieldDropdownDefault`. JSDoc на всех props, unit-тесты разбиты по субкомпонентам и расширены с 42 до 69 кейсов. Stories переведены на modern pattern. Публичный API не изменён. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

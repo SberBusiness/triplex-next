@@ -1,7 +1,7 @@
 ---
 component: LoaderScreen
 category: Loaders
-related: [LoaderSmall, LoaderMiddle, Gap, Text, ModalWindowContent, LightBoxContent, LightBoxSideOverlay, List, TableBasic, MultiselectField]
+related: [LoaderSmall, LoaderMiddle, Gap, Text, List, TableBasic]
 tokens:
   - LoaderScreen.Small_Backdrop_Default
   - LoaderScreen.Middle_Backdrop_Default
@@ -161,6 +161,11 @@ breaking change для темизации), но опираться на нег�
 - `TableBasic` — лоадер поверх тела таблицы.
 - `MultiselectField` — `LoaderScreen type="small"` внутри выпадающего списка.
 
+`MultiselectField` в `related` не входит: обычный контракт по рендеру, ссылка стоит с его
+стороны. `List` и `TableBasic` остаются — они подпадают под исключение «потребитель,
+опирающийся на хрупкую деталь»: оба понижают `z-index` лоадера через вложенный селектор,
+и держится это на специфичности правил `.loaderScreen` (см. «Ограничения раскладки»).
+
 ---
 
 ## Stories
@@ -186,3 +191,4 @@ breaking change для темизации), но опираться на нег�
 | Дата | Изменение |
 |---|---|
 | 2026-08-06 | Создан документ. AI-рефакторинг: порядок импортов по `codestyle.md`, JSDoc на компоненте, props и `ILoaderScreenMiddleProps` (включая значение по умолчанию для `size`), подложка вынесена в `TYPE_TO_BACKDROP_CLASS_NAME_MAP`, `className` в `clsx` перенесён в конец. Unit-тесты расширены: все значения `EComponentSize`, игнорирование `size` при `type="middle"`, класс подложки по типу, отсутствие `description` / `controls`, мердж `className`, spread rest-props, `forwardRef`. Публичный API, DOM и стили не изменены. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ModalWindowContent`, `LightBoxContent`, `LightBoxSideOverlay`) и потребитель `MultiselectField` — контракт по рендеру, ссылка стоит с его стороны. `List` и `TableBasic` оставлены: они понижают `z-index` лоадера вложенным селектором и опираются на специфичность правил `.loaderScreen` — исключение «потребитель, опирающийся на хрупкую деталь». Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

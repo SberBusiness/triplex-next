@@ -28,16 +28,19 @@
         }
 
         .headerTitleControls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px @button-siblings-margin-left;
+            margin-top: 16px;
             padding-left: 0;
             white-space: normal;
             flex-shrink: initial;
-            // Отступы, компенсирующие отступы у Button.
-            margin-left: -16px;
 
+            // Отступы между кнопками задаёт gap, поэтому собственные margin обнуляются
             > button,
             > [class*="buttonDropdown"] {
-                margin-left: 16px;
-                margin-top: 16px;
+                margin: 0 !important;
             }
         }
     }

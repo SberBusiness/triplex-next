@@ -1,7 +1,7 @@
 ---
 component: TabsLine
 category: Tabs
-related: [Tabs, TabsExtended, Dropdown, Badge, Text]
+related: [Tabs, TabsExtended, Dropdown, Badge, Text, SegmentedControl]
 tokens:
   - TabsLine.BorderColor_Active
   - TabsLine.BorderColor_Hover
@@ -144,6 +144,7 @@ TabsLine.Shadow_Focus
 - `Badge` — значок новых уведомлений на табе (`Badge.Dot`).
 - `Text` — текст таба; размер выбирается по `size` через `tabsLineSizeToTextSizeMap`.
 - `MobileView` — переключает десктопный и мобильный варианты по ширине окна (<768px). Собственной разметки не добавляет.
+- `SegmentedControl` — альтернатива, когда переключатель не управляет панелями контента: компактный набор сегментов без семантики табов, зато с режимом множественного выбора.
 
 ---
 

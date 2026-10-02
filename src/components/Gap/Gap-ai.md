@@ -1,7 +1,7 @@
 ---
 component: Gap
 category: Layout
-related: [Divider, Col, Row]
+related: [Col, Row]
 tokens: []
 stories: stories/Gap/Gap.stories.tsx
 version: "1.0"

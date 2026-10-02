@@ -20,7 +20,7 @@ const generateLessFromDesignTokens = () => {
     const lessVariables = lightThemeCssVariables
         .split("\n")
         .map((line) => line.trim())
-        .filter((line) => line.startsWith("--triplex-next-Color"))
+        .filter((line) => line.startsWith("--triplex-next-Color") || line.startsWith("--triplex-next-Shadow"))
         .map((line) => line.replace(/^--/, "@"))
         .map((line) => line.replace(/-\d+(?:-\d+){2}(?=:)/, ""))
         .join("\n");

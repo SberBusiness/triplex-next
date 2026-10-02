@@ -54,9 +54,9 @@ export const Card_Tokens: TDesignTokensComponentsCardValues = {
     Action_Secondary_Background_Selected_Hover: [{ ref: "ColorNeutral.30" }, { ref: "ColorDarkNeutral.100" }], // var(--triplex-next-Card-Action_Secondary_Background_Selected_Hover)
 
     // Shadow
-    Shadow_Default: [{ value: "0 2px 12px 0 rgba(31, 31, 34, 0.12)" }, { value: "none" }], // var(--triplex-next-Card-Shadow_Default)
+    Shadow_Default: [{ ref: "Shadow.03" }, { ref: "DarkShadow.03" }], // var(--triplex-next-Card-Shadow_Default)
     Shadow_Focus: [{ value: "inset 0 0 0 1px #FFD169" }, { value: "inset 0 0 0 1px #FFD169" }], // var(--triplex-next-Card-Shadow_Focus)
-    Shadow_Hover: [{ value: "0 4px 12px 0 rgba(31, 31, 34, 0.16)" }, { value: "none" }], // var(--triplex-next-Card-Shadow_Hover)
+    Shadow_Hover: [{ ref: "Shadow.06" }, { ref: "DarkShadow.06" }], // var(--triplex-next-Card-Shadow_Hover)
     Shadow_Selected: [{ value: "inset 0 0 0 1px #21A19A" }, { value: "inset 0 0 0 1px #21A19A" }], // var(--triplex-next-Card-Shadow_Selected)
     Shadow_Selected_Hover: [{ value: "inset 0 0 0 1px #19BDB0" }, { value: "inset 0 0 0 1px #19BDB0" }], // var(--triplex-next-Card-Shadow_Selected_Hover)
 };

@@ -9,7 +9,8 @@
     cursor: default;
     border-radius: 50%;
 
-    &.sm, &.md {
+    &.sm,
+    &.md {
         width: 28px;
         height: 28px;
     }
@@ -18,55 +19,55 @@
         width: 32px;
         height: 32px;
     }
+
     &.default {
         background-color: var(--triplex-next-Step-Background_Default);
 
         & > span {
-            color: var(--triplex-next-Step-Color_Default) ;
+            color: var(--triplex-next-Step-Color_Default);
         }
     }
 
     &.done {
+        background-color: var(--triplex-next-Step-Background_Done);
+
         & > span {
             color: var(--triplex-next-Step-Color_Done);
         }
-
-        background-color: var(--triplex-next-Step-Background_Done);
     }
 
     &.warning {
+        background-color: var(--triplex-next-Step-Background_Warning);
+
         & > span {
             color: var(--triplex-next-Step-Color_Warning);
         }
-        
-        background-color: var(--triplex-next-Step-Background_Warning);
     }
 
     &.active {
+        background-color: var(--triplex-next-Step-Background_Active);
+
         & > span {
             color: var(--triplex-next-Step-Color_Active);
         }
-        
-        background-color: var(--triplex-next-Step-Background_Active);
     }
 
     &.error {
+        background-color: var(--triplex-next-Step-Background_Error);
+
         & > span {
             color: var(--triplex-next-Step-Color_Error);
         }
-        
-        background-color: var(--triplex-next-Step-Background_Error);
     }
 
     &.disabled {
+        background-color: var(--triplex-next-Step-Background_Disabled);
+
         & > span {
             color: var(--triplex-next-Step-Color_Disabled);
         }
-        
-        background-color: var(--triplex-next-Step-Background_Disabled);
     }
 }
-
 
 @media (max-width: @screen-sm-max) {
     .step {

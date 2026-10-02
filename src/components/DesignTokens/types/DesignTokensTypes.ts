@@ -186,6 +186,10 @@ export const designTokensCoreGroupColorSystemKeys = [
     "10",
     "0",
 ] as const;
+// Название токенов группы Shadow.
+export const designTokensCoreGroupShadowKeys = ["01", "02", "03", "04", "05", "06", "07"] as const;
+// Название токенов группы DarkShadow.
+export const designTokensCoreGroupDarkShadowKeys = ["01", "02", "03", "04", "05", "06", "07"] as const;
 // Название токенов группы ColorWarning.
 export const designTokensCoreGroupColorWarningKeys = [
     "100",
@@ -220,6 +224,10 @@ export type TDesignTokensCoreGroupColorNeutralKeys = (typeof designTokensCoreGro
 export type TDesignTokensCoreGroupColorSuccessKeys = (typeof designTokensCoreGroupColorSuccessKeys)[number];
 // Тип, содержащий названия токенов группы ColorSystem.
 export type TDesignTokensCoreGroupColorSystemKeys = (typeof designTokensCoreGroupColorSystemKeys)[number];
+// Тип, содержащий названия токенов группы Shadow.
+export type TDesignTokensCoreGroupShadowKeys = (typeof designTokensCoreGroupShadowKeys)[number];
+// Тип, содержащий названия токенов группы DarkShadow.
+export type TDesignTokensCoreGroupDarkShadowKeys = (typeof designTokensCoreGroupDarkShadowKeys)[number];
 // Тип, содержащий названия токенов группы ColorWarning.
 export type TDesignTokensCoreGroupColorWarningKeys = (typeof designTokensCoreGroupColorWarningKeys)[number];
 
@@ -250,6 +258,10 @@ export type TDesignTokensCoreGroupColorNeutralValue = Record<TDesignTokensCoreGr
 export type TDesignTokensCoreGroupColorSuccessValue = Record<TDesignTokensCoreGroupColorSuccessKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов группы ColorSystem и их значения.
 export type TDesignTokensCoreGroupColorSystemValue = Record<TDesignTokensCoreGroupColorSystemKeys, TDesignTokenValue>;
+// Тип, содержащий названия токенов группы Shadow и их значения.
+export type TDesignTokensCoreGroupShadowValue = Record<TDesignTokensCoreGroupShadowKeys, TDesignTokenValue>;
+// Тип, содержащий названия токенов группы DarkShadow и их значения.
+export type TDesignTokensCoreGroupDarkShadowValue = Record<TDesignTokensCoreGroupDarkShadowKeys, TDesignTokenValue>;
 // Тип, содержащий названия токенов группы Warning и их значения.
 export type TDesignTokensCoreGroupColorWarningValue = Record<TDesignTokensCoreGroupColorWarningKeys, TDesignTokenValue>;
 
@@ -275,6 +287,10 @@ export type TDesignTokensCoreGroupColorNeutral = { ColorNeutral: TDesignTokensCo
 export type TDesignTokensCoreGroupColorSuccess = { ColorSuccess: TDesignTokensCoreGroupColorSuccessValue };
 // Тип токенов группы ColorSystem.
 export type TDesignTokensCoreGroupColorSystem = { ColorSystem: TDesignTokensCoreGroupColorSystemValue };
+// Тип токенов группы Shadow.
+export type TDesignTokensCoreGroupShadow = { Shadow: TDesignTokensCoreGroupShadowValue };
+// Тип токенов группы DarkShadow.
+export type TDesignTokensCoreGroupDarkShadow = { DarkShadow: TDesignTokensCoreGroupDarkShadowValue };
 // Тип токенов группы Warning.
 export type TDesignTokensCoreGroupColorWarning = { ColorWarning: TDesignTokensCoreGroupColorWarningValue };
 
@@ -288,7 +304,9 @@ export type TDesignTokensCore = TDesignTokensCoreGroupColorBrand &
     TDesignTokensCoreGroupColorNeutral &
     TDesignTokensCoreGroupColorSuccess &
     TDesignTokensCoreGroupColorSystem &
-    TDesignTokensCoreGroupColorWarning;
+    TDesignTokensCoreGroupColorWarning &
+    TDesignTokensCoreGroupShadow &
+    TDesignTokensCoreGroupDarkShadow;
 
 // Тип локальных токенов(токенов компонентов).
 export type TDesignTokensComponents =

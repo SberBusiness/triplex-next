@@ -84,15 +84,14 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
             setInputFocused(false);
             closeDropdown(false);
 
-            if (inputValue.length !== 0) {
-                setInputValue(value?.label ?? "");
-            } else if (value !== undefined) {
-                onSelect(undefined);
+            const nextInputValue = value !== undefined ? value.label : "";
+            if (inputValue !== nextInputValue) {
+                setInputValue(nextInputValue);
             }
 
             inputProps.onBlur?.(event);
         },
-        [closeDropdown, inputValue, value, onSelect, inputProps],
+        [closeDropdown, inputValue, value, inputProps],
     );
 
     const handleInputKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>(

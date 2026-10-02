@@ -55,13 +55,29 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
         [inputProps],
     );
 
+    const handleClear = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+        (event) => {
+            if (value !== undefined) {
+                onSelect(undefined);
+
+                // Поле-триггер показывает label значения, поэтому «поле не пустое» здесь равно «label не пустой».
+                if (value.label.length !== 0) {
+                    onFilter("");
+                }
+            }
+
+            onClear?.(event);
+        },
+        [value, onSelect, onFilter, onClear],
+    );
+
     return (
         <TextFieldBase
             data-test-id={dataTestId}
             size={size}
             postfix={
                 <React.Fragment>
-                    {onClear !== undefined && <FormFieldClear onClick={onClear} />}
+                    {onClear !== undefined && <FormFieldClear onClick={handleClear} />}
                     {loading && <LoaderSmall theme={ELoaderSmallTheme.BRAND} size={size} />}
                     {postfix}
                 </React.Fragment>

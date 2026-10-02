@@ -10,7 +10,6 @@ import {
     DropdownMobileBody,
     DropdownMobileList,
     DropdownMobileListItem,
-    IDropdownProps,
 } from "../../Dropdown";
 import { SuggestFieldMobileDropdownHint } from "./SuggestFieldMobileDropdownHint";
 import styles from "../styles/SuggestFieldMobile.module.less";
@@ -42,9 +41,6 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
         setInputValue(value?.label || "");
     }
 
-    // Флаг для предотвращения сброса значения, когда закрытие вызвано выбором конкретной опции из списка.
-    const closedBySelectionRef = useRef(false);
-
     // Не используется в мобильном Dropdown, нужен как обязательное свойство Dropdown.
     const targetRef = useRef<HTMLDivElement>(null);
 
@@ -68,16 +64,12 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
         setOpened(false);
     }, [setOpened]);
 
-    const handleDropdownClose = useCallback<NonNullable<IDropdownProps["onClose"]>>(() => {
-        if (closedBySelectionRef.current) {
-            closedBySelectionRef.current = false;
-            return;
-        }
-
-        if (inputValue.length === 0 && value !== undefined) {
-            onSelect(undefined);
-        }
-    }, [inputValue.length, onSelect, value]);
+    // Закрытие без выбора значение не сбрасывает, поэтому и поле ввода возвращается к его label.
+    // Иначе при повторном открытии во время анимации закрытия (содержимое ещё смонтировано,
+    // автофокус не срабатывает) в поле остался бы прежний ввод.
+    const handleDropdownClose = useCallback(() => {
+        setInputValue(value?.label || "");
+    }, [value?.label]);
 
     const handleListScroll = useCallback<React.UIEventHandler<HTMLDivElement>>(
         (event) => {
@@ -132,7 +124,6 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                                             selected={option.id === value?.id}
                                             showNotificationIcon={option.showNotificationIcon}
                                             onSelect={() => {
-                                                closedBySelectionRef.current = true;
                                                 onSelect(option);
                                                 setOpened(false);
                                             }}

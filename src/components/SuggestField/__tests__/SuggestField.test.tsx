@@ -1,158 +1,96 @@
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { SuggestField } from "@sberbusiness/triplex-next/components/SuggestField/SuggestField";
-import { ISuggestFieldOption } from "@sberbusiness/triplex-next/components/SuggestField/types";
-import { IFormFieldInputProps, EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { render, screen } from "@testing-library/react";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { SuggestField } from "../SuggestField";
+import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
+import { FormFieldInput } from "../../FormField";
 
+const OPTIONS: ISuggestFieldOption[] = [
+    { id: "a", label: "First option" },
+    { id: "b", label: "Second option" },
+];
+
+const renderField = (props: Partial<ISuggestFieldProps> = {}) =>
+    render(
+        <SuggestField
+            value={undefined}
+            options={OPTIONS}
+            tooltipHint="Hint"
+            tooltipOpen={false}
+            inputProps={{}}
+            onSelect={vi.fn()}
+            onFilter={vi.fn()}
+            {...props}
+        />,
+    );
+
+/** Подменяет matchMedia так, чтобы MobileView считал экран мобильным. */
+const mockMobileScreen = () => {
+    vi.stubGlobal(
+        "matchMedia",
+        vi.fn().mockImplementation((query: string) => ({
+            matches: true,
+            media: query,
+            onchange: null,
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+            addListener: vi.fn(),
+            removeListener: vi.fn(),
+            dispatchEvent: vi.fn(),
+        })),
+    );
+};
+
+// Поведение платформенных вариантов проверяется в SuggestFieldDesktop.test.tsx и
+// SuggestFieldMobile.test.tsx. Здесь — только то, что делает сам SuggestField: выбор варианта
+// по ширине экрана и проброс props.
 describe("SuggestField", () => {
-    const user = userEvent.setup();
+    describe("on desktop width", () => {
+        it("renders the desktop variant with an editable input", () => {
+            renderField();
 
-    const options: ISuggestFieldOption[] = [
-        { id: "1", label: "Option 1" },
-        { id: "2", label: "Option 2" },
-        { id: "3", label: "Option 3" },
-    ];
+            expect(screen.getByRole("combobox")).not.toHaveAttribute("readonly");
+        });
 
-    const defaultProps = {
-        value: undefined,
-        options: options,
-        size: EComponentSize.MD,
-        status: EFormFieldStatus.DEFAULT,
-        label: "Test Label",
-        placeholder: "Test placeholder",
-        tooltipHint: "Test tooltip",
-        tooltipOpen: false,
-        inputProps: {},
-        onSelect: vi.fn(),
-        onFilter: vi.fn(),
-        "data-testid": "suggest-field",
-    };
+        it("passes className and data-test-id to the desktop variant", () => {
+            const { container } = renderField({ className: "custom-class", "data-test-id": "suggest" });
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it("should render with basic props", () => {
-        render(<SuggestField {...defaultProps} />);
-
-        expect(screen.getByTestId("suggest-field")).toBeInTheDocument();
-        expect(screen.getByLabelText("Test Label")).toBeInTheDocument();
-        expect(screen.getByPlaceholderText("Test placeholder")).toBeInTheDocument();
-    });
-
-    it("should display selected value", () => {
-        const selectedValue = options[0];
-        render(<SuggestField {...defaultProps} value={selectedValue} />);
-
-        expect(screen.getByDisplayValue("Option 1")).toBeInTheDocument();
-    });
-
-    it("should call onFilter when user types", async () => {
-        render(<SuggestField {...defaultProps} />);
-
-        const input = screen.getByRole("combobox");
-        await user.type(input, "test");
-
-        expect(defaultProps.onFilter).toHaveBeenCalledWith("test");
-    });
-
-    it("should handle disabled state", () => {
-        render(<SuggestField {...defaultProps} status={EFormFieldStatus.DISABLED} />);
-
-        const input = screen.getByRole("combobox");
-        expect(input).toBeDisabled();
-    });
-
-    it("should call onInputFocus and onInputBlur", async () => {
-        const onInputFocus = vi.fn();
-        const onInputBlur = vi.fn();
-
-        render(
-            <SuggestField
-                {...defaultProps}
-                inputProps={{
-                    onFocus: onInputFocus,
-                    onBlur: onInputBlur,
-                }}
-            />,
-        );
-
-        const input = screen.getByRole("combobox");
-
-        await user.click(input);
-        expect(onInputFocus).toHaveBeenCalled();
-
-        await user.tab();
-        expect(onInputBlur).toHaveBeenCalled();
-    });
-
-    it("should handle clearInputOnFocus prop", async () => {
-        const selectedValue = options[0];
-        render(<SuggestField {...defaultProps} value={selectedValue} clearInputOnFocus={true} />);
-
-        const input = screen.getByRole("combobox");
-        await user.click(input);
-
-        expect(input).toHaveValue("");
-    });
-
-    it("should display tooltip when tooltipOpen is true", async () => {
-        render(<SuggestField {...defaultProps} tooltipOpen={true} />);
-
-        const input = screen.getByRole("combobox");
-        await user.click(input);
-
-        await waitFor(() => {
-            expect(screen.getByText("Test tooltip")).toBeInTheDocument();
+            expect(container.querySelector(".custom-class")).not.toBeNull();
+            expect(container.querySelector('[data-test-id="suggest"]')).not.toBeNull();
         });
     });
 
-    it("should support custom renderInput", () => {
-        const CustomInput = (props: IFormFieldInputProps) => (
-            <input
-                data-testid="custom-input"
-                value={props.value}
-                onChange={props.onChange}
-                placeholder={props.placeholder}
-            />
-        );
+    describe("on mobile width", () => {
+        // useMatchMedia читает matchMedia на рендере, поэтому мока на этот describe достаточно.
+        beforeAll(() => {
+            mockMobileScreen();
+        });
 
-        render(<SuggestField {...defaultProps} renderInput={CustomInput} />);
+        afterAll(() => {
+            vi.unstubAllGlobals();
+        });
 
-        expect(screen.getByTestId("custom-input")).toBeInTheDocument();
+        it("renders the mobile variant with a read-only input", () => {
+            renderField();
+
+            expect(screen.getByRole("combobox")).toHaveAttribute("readonly");
+        });
+
+        it("passes className, id, data-test-id and renderInput to the mobile variant", () => {
+            const { container } = renderField({
+                className: "custom-class",
+                id: "suggest-id",
+                "data-test-id": "suggest",
+                renderInput: (props) => <input {...props} data-testid="custom-input" />,
+            });
+
+            expect(container.querySelector(".custom-class")).not.toBeNull();
+            expect(container.querySelector("#suggest-id")).not.toBeNull();
+            expect(container.querySelector('[data-test-id="suggest"]')).not.toBeNull();
+            expect(screen.getByTestId("custom-input")).toHaveAttribute("readonly");
+        });
     });
 
-    it("should show loading indicator when loading is true", () => {
-        render(<SuggestField {...defaultProps} loading={true} />);
-
-        expect(screen.getByLabelText("loading")).toBeInTheDocument();
-    });
-
-    it("should update input value when selected value changes", () => {
-        const { rerender } = render(<SuggestField {...defaultProps} />);
-
-        const newValue = options[1];
-        rerender(<SuggestField {...defaultProps} value={newValue} />);
-
-        expect(screen.getByDisplayValue("Option 2")).toBeInTheDocument();
-    });
-
-    it("should expose FormFieldInput as SuggestField.Input", () => {
-        render(<SuggestField.Input value="" onChange={vi.fn()} data-testid="static-input" />);
-
-        expect(screen.getByTestId("static-input")).toBeInTheDocument();
-    });
-
-    it("should maintain input focus after clearing with clearInputOnFocus", async () => {
-        const selectedValue = options[0];
-        render(<SuggestField {...defaultProps} value={selectedValue} clearInputOnFocus={true} />);
-
-        const input = screen.getByRole("combobox");
-        await user.click(input);
-
-        expect(input).toHaveFocus();
-        expect(input).toHaveValue("");
+    it("exposes FormFieldInput as SuggestField.Input", () => {
+        expect(SuggestField.Input).toBe(FormFieldInput);
     });
 });

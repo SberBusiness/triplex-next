@@ -106,7 +106,6 @@ export const PlaygroundExample = ({
         setInputPristine(false);
 
         if (inputValue.length === 0) {
-            setValue(undefined);
             setOptions(FOOD_OPTIONS);
             setTooltipOpen(false);
         } else {
@@ -147,8 +146,11 @@ export const PlaygroundExample = ({
     );
 
     const handleClear = useCallback(() => {
-        inputRef.current?.focus();
-    }, []);
+        // На мобильном фокус открыл бы полноэкранный дропдаун сразу после очистки.
+        if (!adaptive) {
+            inputRef.current?.focus();
+        }
+    }, [adaptive]);
 
     const handleLinkClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((event) => {
         event.preventDefault();

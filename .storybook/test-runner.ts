@@ -92,9 +92,22 @@ const config: TestRunnerConfig = {
                 content: "* { caret-color: transparent !important; }",
             });
 
+            // userEvent.hover отправляет события, поэтому для CSS :hover нужен настоящий указатель.
+            const hoverTarget: unknown = storyContext.parameters?.visualTests?.hoverTarget;
+
+            if (typeof hoverTarget === "string") {
+                const target = page.getByTestId(hoverTarget);
+                await target.hover();
+                expect(await target.evaluate((element) => element.matches(":hover"))).toBe(true);
+            }
+
             // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
             // снимаются целиком, а не обрезаются по высоте viewport.
             const screenshot = await page.screenshot({ fullPage: true });
+
+            if (typeof hoverTarget === "string") {
+                await page.mouse.move(0, 0);
+            }
 
             // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
             const snapshotId = context.id.replace(/^components-/, "");

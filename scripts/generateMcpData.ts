@@ -112,6 +112,10 @@ const EXCLUDED_STORIES = new Set([
     "VisualTestsNotFound",
     "VisualTestsAlignmentRight",
     "VisualTestsDropdownListLoading",
+    "VisualTestsFocused",
+    "VisualTestsErrorFocused",
+    "VisualTestsSubmitHovered",
+    "VisualTestsRefreshHovered",
 ]);
 
 /**

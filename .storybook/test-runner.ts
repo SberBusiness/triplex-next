@@ -4,6 +4,14 @@ import type { Page } from "playwright";
 import { getStoryContext } from "@storybook/test-runner";
 import { VISUAL_TEST_VIEWPORTS } from "./visualTestViewports";
 
+/** parameters.testRunner.hover: реальное наведение перед каждым скриншотом для проверки CSS :hover. */
+interface ITestRunnerHover {
+    /** Семантическая роль целевого элемента. */
+    role: Parameters<Page["getByRole"]>[0];
+    /** Точное доступное имя целевого элемента. */
+    name: string;
+}
+
 /**
  * Перемонтирует стори через внутренний канал Storybook и ждёт стабилизации DOM.
  *
@@ -82,30 +90,43 @@ const config: TestRunnerConfig = {
             return;
         }
 
+        const hover: ITestRunnerHover | undefined = storyContext.parameters?.testRunner?.hover;
+
         for (const viewport of VISUAL_TEST_VIEWPORTS) {
             await page.setViewportSize({ width: viewport.width, height: 768 });
             await remountAndSettle(page, context.id);
 
-            // Скрываем каретку в input'ах — мигающий курсор делает скриншоты нестабильными.
-            // addStyleTag вызывается в каждой итерации, т.к. forceRemount сбрасывает injected-стили.
-            await page.addStyleTag({
-                content: "* { caret-color: transparent !important; }",
-            });
+            try {
+                if (hover) {
+                    await page.getByRole(hover.role, { name: hover.name, exact: true }).hover();
+                }
 
-            // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
-            // снимаются целиком, а не обрезаются по высоте viewport.
-            const screenshot = await page.screenshot({ fullPage: true });
+                // Скрываем каретку в input'ах — мигающий курсор делает скриншоты нестабильными.
+                // addStyleTag вызывается в каждой итерации, т.к. forceRemount сбрасывает injected-стили.
+                await page.addStyleTag({
+                    content: "* { caret-color: transparent !important; }",
+                });
 
-            // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
-            const snapshotId = context.id.replace(/^components-/, "");
+                // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
+                // снимаются целиком, а не обрезаются по высоте viewport.
+                const screenshot = await page.screenshot({ fullPage: true });
 
-            expect(screenshot).toMatchImageSnapshot({
-                customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
-                customSnapshotsDir: "__screenshots__",
-                customDiffDir: "__screenshots__/__diff__",
-                failureThreshold: 10,
-                failureThresholdType: "pixel",
-            });
+                // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
+                const snapshotId = context.id.replace(/^components-/, "");
+
+                expect(screenshot).toMatchImageSnapshot({
+                    customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
+                    customSnapshotsDir: "__screenshots__",
+                    customDiffDir: "__screenshots__/__diff__",
+                    failureThreshold: 10,
+                    failureThresholdType: "pixel",
+                });
+            } finally {
+                if (hover) {
+                    // Уводим указатель за viewport, чтобы hover не перешёл в следующий скриншот.
+                    await page.mouse.move(-1, -1);
+                }
+            }
         }
     },
 };

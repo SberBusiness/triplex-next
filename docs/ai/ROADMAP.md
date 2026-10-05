@@ -117,10 +117,10 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DateField | ✅ | ✅ | ✅ |
 | DatePickerExtended | ✅ | ✅ | ✅ |
 | DateRange | ✅ | ✅ | ✅ |
-| Divider | ⬜ | ✅ | ⬜ |
+| Divider | ✅ | ✅ | ✅ |
 | DocumentNumberEdit | ✅ | ✅ | ✅ |
 | Dropdown | ✅ | ✅ | ✅ |
-| Ellipsis | ⬜ | ✅ | ⬜ |
+| Ellipsis | ✅ | ✅ | ✅ |
 | EmptyView | ✅ | ✅ | ⬜ |
 | ExpandAnimation | ✅ | ✅ | ✅ |
 | Footer | ✅ | ✅ | ✅ |
@@ -181,7 +181,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | RadioYGroup | ⬜ | ⬜ | ⬜ |
 | Row | ✅ | ✅ | ✅ |
 | SMSField | ⬜ | ⬜ | ⬜ |
-| SegmentedControl | ⬜ | ⬜ | ⬜ |
+| SegmentedControl | ✅ | ✅ | ✅ |
 | SelectExtendedField | ✅ | ✅ | ✅ |
 | SelectField | ✅ | ✅ | ✅ |
 | Skeleton | ✅ | ✅ | ✅ |

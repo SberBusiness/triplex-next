@@ -1,0 +1,108 @@
+---
+component: Divider
+category: Layout
+related: []
+tokens:
+  - Divider.Background
+stories: stories/Divider/Divider.stories.tsx
+version: "1.0"
+---
+
+# Divider
+
+## Назначение
+
+Визуальный разделитель контента: горизонтальная линия толщиной 1px на всю ширину родителя. Рендерит `<hr>` с собственным цветом из дизайн-токена и опциональными вертикальными отступами из шкалы дизайн-системы.
+
+Используй когда: нужно отделить друг от друга смысловые блоки контента видимой линией — пункты списка, секции формы, строки в футере таблицы.
+
+Не используй когда:
+- Нужен только отступ без линии — используй `Gap`.
+- Нужна вертикальная линия-разделитель: компонент рендерит только горизонтальную линию, вертикальной темы у него нет.
+- Нужна линия как часть границы блока — задай `border` у самого блока, не вставляй `Divider` рядом.
+
+---
+
+## Варианты и props
+
+### Обязательные props
+
+Обязательных props нет — `<Divider />` без props рендерит линию без отступов.
+
+### Опциональные props
+
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `marginTopSize` | `TDividerMarginSize` | — | Отступ сверху в пикселях. Без prop'а `margin-top` остаётся `0`. |
+| `marginBottomSize` | `TDividerMarginSize` | — | Отступ снизу в пикселях. Без prop'а `margin-bottom` остаётся `0`. |
+
+Компонент расширяет `Omit<React.HTMLAttributes<HTMLHRElement>, "children">`, поэтому принимает все стандартные атрибуты `<hr>` (`className`, `style`, `aria-*`, `data-*`), кроме `children`; `...rest` и `ref` уходят на корневой `<hr>`.
+
+### Ограничения
+
+- `TDividerMarginSize` — дискретная шкала `4 | 8 | 12 | 16 | 20 | 24 | 28 | 32`. Произвольное число тип не пропустит: если дизайн требует другой отступ, задай его у родительского блока, а не расширяй шкалу.
+- Отступы задаются только по вертикали. Горизонтальные отступы и ширину линии определяет родитель.
+- Базовый класс сбрасывает браузерный `margin` у `<hr>` в `0`, поэтому вертикальный отступ появляется **только** через `marginTopSize` / `marginBottomSize` (или через собственный `className` потребителя).
+- `<hr>` — void-элемент, поэтому `children` исключён из `IDividerProps` на уровне типа (как у `Gap`): `<Divider>…</Divider>` не соберётся. Оборачивать контент в `Divider` нельзя.
+
+---
+
+## Дизайн-токены
+
+Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
+«Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/Divider.ts`.
+
+```text
+Divider.Background
+```
+
+Токен задаёт цвет линии (`background` у элемента высотой 1px, `border` снят). Значения по умолчанию: `ColorNeutral.20` в светлой теме, `ColorDarkNeutral.80` в тёмной.
+
+---
+
+## Инварианты
+
+- **`forwardRef`** — обязателен, не убирать. `ref` пробрасывается на корневой `<hr>`.
+- **Корневой элемент — `<hr>`.** Замена на `<div>` сломала бы неявную роль `separator` и запросы `getByRole("separator")` в тестах потребителей.
+- **`TDividerMarginSize`** — публичный union type, экспортируется из barrel. Изменение перечня значений — breaking change.
+- **Имена `Divider`, `IDividerProps`, `TDividerMarginSize`** и экспорт из `src/components/Divider/index.ts` — часть публичного API.
+- **`displayName = "Divider"`** — виден в React DevTools и snapshot-тестах.
+- **Токен `Divider.Background`** — единственный цвет компонента; переименование ломает темизацию у потребителей.
+- **CSS-классы `divider`, `marginTopSize-{N}`, `marginBottomSize-{N}`** в `styles/Divider.module.less`: базовый класс `divider` объявлен обычным правилом, а `marginTopSize-{N}` / `marginBottomSize-{N}` генерируются LESS-циклом `each` по списку `@size`. Все они проверяются в unit-тестах — переименование требует синхронного обновления тестов.
+
+---
+
+## Accessibility
+
+- `<hr>` имеет неявную роль `separator` с `aria-orientation="horizontal"` — screen reader объявляет разделитель секций. Дополнительных ARIA-атрибутов компонент не выставляет.
+- Компонент не интерактивный и не попадает в таб-порядок: focus management и keyboard navigation не применимы.
+- Если линия чисто декоративная и дублирует уже озвученную структуру, потребитель может передать `aria-hidden="true"` через spread.
+- Библиотека мультиязычная, поэтому текстовых подписей (`aria-label`) компонент не хардкодит — при необходимости их передаёт потребитель.
+
+---
+
+## Связанные компоненты
+
+- `Gap` (`src/components/Gap/`) — вертикальный отступ без видимой линии, та же идея дискретной шкалы размеров. Частая путаница: нужен пробел — `Gap`, нужна линия — `Divider`.
+
+---
+
+## Stories
+
+Основные истории: `stories/Divider/Divider.stories.tsx`
+Файлы примеров: `stories/Divider/examples/`
+
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `marginTopSize` и `marginBottomSize` через select |
+| `Default` | `DefaultExample.tsx` | Разделение абзацев текста линией с отступами 24/16 |
+| `VisualTests` | `VisualTestsExample.tsx` | Все 8 значений шкалы отступов для скриншот-регрессии |
+
+---
+
+## История изменений
+
+| Дата | Изменение |
+|---|---|
+| 2026-09-28 | Создан документ. AI-рефакторинг: компонент переведён с `React.FC` на `React.forwardRef` (`ref` идёт на `<hr>`), уточнены JSDoc на `Divider`, `IDividerProps` и `TDividerMarginSize`, unit-тесты расширены на все значения шкалы отступов и проброс `ref`. |
+| 2026-09-29 | Breaking: `children` исключён из `IDividerProps` (`Omit<React.HTMLAttributes<HTMLHRElement>, "children">`), передача потомков в `<hr>` теперь ловится компилятором. |

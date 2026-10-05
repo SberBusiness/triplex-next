@@ -1,9 +1,6 @@
-import {
-    ESegmentedControlType,
-    ESegmentedControlTheme,
-    ESegmentedControlSize,
-} from "@sberbusiness/triplex-next/components/SegmentedControl/enums";
-import { IButtonBaseProps } from "@sberbusiness/triplex-next/components/Button/ButtonBase";
+import React, { type ReactNode } from "react";
+import { IButtonBaseProps } from "../Button/ButtonBase";
+import { ESegmentedControlSize, ESegmentedControlTheme, ESegmentedControlType } from "./enums";
 
 /** Общие свойства компонента SegmentedControl. */
 export interface ISegmentedControlCommonProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
@@ -11,27 +8,29 @@ export interface ISegmentedControlCommonProps extends Omit<React.HTMLAttributes<
     theme: ESegmentedControlTheme;
     /** Размер сегментов. */
     size: ESegmentedControlSize;
-    /** Неактивное состояние. */
+    /** Неактивное состояние. Блокирует все сегменты. По умолчанию false. */
     disabled?: boolean;
+    /** Сегменты контрола — SegmentedControl.Segment. */
+    children?: ReactNode;
 }
 
 /** Свойства компонента SegmentedControl с множественным выбором. */
 export interface ISegmentedControlMultipleProps extends ISegmentedControlCommonProps {
-    /** Значение. */
+    /** Значения выбранных сегментов. */
     value: string[];
     /** Тип выбора элементов. */
     type: ESegmentedControlType.MULTIPLE;
-    /** Колбэк-функция выбора элемента. */
+    /** Колбэк-функция выбора элемента. Получает новый набор выбранных значений. */
     onSelect: (value: string[]) => void;
 }
 
 /** Свойства компонента SegmentedControl с одиночным выбором. */
 export interface ISegmentedControlSingleProps extends ISegmentedControlCommonProps {
-    /** Значение. */
+    /** Значение выбранного сегмента. */
     value: string;
     /** Тип выбора элементов. */
     type: ESegmentedControlType.SINGLE;
-    /** Колбэк-функция выбора элемента. */
+    /** Колбэк-функция выбора элемента. Получает значение нажатого сегмента. */
     onSelect: (value: string) => void;
 }
 
@@ -40,5 +39,11 @@ export type TSegmentedControlProps = ISegmentedControlSingleProps | ISegmentedCo
 
 /** Свойства компонента SegmentedControlSegment. */
 export interface ISegmentedControlSegmentProps extends IButtonBaseProps {
+    /** Значение сегмента. Сравнивается со значением SegmentedControl, чтобы определить выбранное состояние. */
     value: string;
+    /**
+     * Содержимое сегмента — подпись, иконка или и то и другое.
+     * Строковое содержимое подставляется в атрибут title, если title не передан явно.
+     */
+    children?: ReactNode;
 }

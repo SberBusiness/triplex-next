@@ -211,6 +211,37 @@ describe("SegmentedControl", () => {
 
         const control = screen.getByTestId("segmented-control");
         expect(control).toBeInTheDocument();
+        expect(control).toHaveClass("segmentedControl");
+        expect(control).toHaveClass("custom-class");
+    });
+
+    it.each([
+        [ESegmentedControlTheme.GENERAL_1, "general1"],
+        [ESegmentedControlTheme.GENERAL_2, "general2"],
+        [ESegmentedControlTheme.SECONDARY_1, "secondary1"],
+        [ESegmentedControlTheme.SECONDARY_2, "secondary2"],
+    ])("applies class %s for theme prop", (theme, className) => {
+        render(
+            <SegmentedControl {...defaultSingleProps} theme={theme} data-testid="segmented-control">
+                <SegmentedControl.Segment value="option1">Option 1</SegmentedControl.Segment>
+            </SegmentedControl>,
+        );
+
+        expect(screen.getByTestId("segmented-control")).toHaveClass(className);
+    });
+
+    it.each([
+        [ESegmentedControlSize.SM, "sm"],
+        [ESegmentedControlSize.MD, "md"],
+        [ESegmentedControlSize.LG, "lg"],
+    ])("applies class %s for size prop", (size, className) => {
+        render(
+            <SegmentedControl {...defaultSingleProps} size={size} data-testid="segmented-control">
+                <SegmentedControl.Segment value="option1">Option 1</SegmentedControl.Segment>
+            </SegmentedControl>,
+        );
+
+        expect(screen.getByTestId("segmented-control")).toHaveClass(className);
     });
 
     it("handles additional HTML attributes on segment", () => {

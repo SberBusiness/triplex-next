@@ -79,7 +79,7 @@ export const Disabled: Story = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "disabled задаётся на каждом Radio отдельно. Показаны выбранные и невыбранные элементы всех размеров.",
+                story: "disabled задаётся на каждом Radio отдельно. Показаны выбранный и невыбранный элементы размера MD.",
             },
             source: { code: DisabledSource, language: "tsx" },
         },
@@ -87,7 +87,7 @@ export const Disabled: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
@@ -112,7 +112,7 @@ export const VisualTests: Story = {
 };
 
 export const VisualTestsCheckedHover: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

@@ -123,12 +123,13 @@ version: "1.0"
 | `Default` | `Default.tsx` | Минимальная группа с доступным именем и общим `name` дочерних Radio |
 | `Sizes` | `Sizes.tsx` | Размеры SM / MD / LG на дочерних Radio, выбранные и невыбранные варианты |
 | `Selected` | `Selected.tsx` | Controlled-выбор тарифа через `checked` и `onChange` |
-| `Disabled` | `Disabled.tsx` | Выбранные и невыбранные disabled-варианты всех размеров |
+| `Disabled` | `Disabled.tsx` | Выбранный и невыбранный disabled-варианты размера MD |
 | `VisualTests` | `VisualTests.tsx` | Фокус с клавиатуры и hover невыбранного варианта |
 | `VisualTestsCheckedHover` | — | Фокус выбранного варианта и hover выбранного варианта, тот же renderer |
 
 Playground не создаётся: у группы нет собственных настраиваемых props.
-Обе VisualTests-истории используют `play`; настоящий CSS hover перед снимком
+Обе VisualTests-истории скрыты из меню и autodocs тегами `!dev` и `!autodocs`.
+Они используют `play`; настоящий CSS hover перед снимком
 устанавливает test-runner через opt-in параметр `visualTests.hoverTarget`.
 Baseline-файлы создаются только CI/Docker на viewport xs и xl.
 
@@ -140,3 +141,4 @@ Baseline-файлы создаются только CI/Docker на viewport xs �
 |---|---|
 | 2026-10-05 | Создан документ (TRI-70): добавлен forwardRef на корневой div, описаны accessibility и HTML-контракты, unit-тесты и modern stories |
 | 2026-10-05 | Уточнены отступы между смежными Radio одного размера и связь CSS-классов внутри семейства через общий генератор имён |
+| 2026-10-05 | VisualTests-истории скрыты из меню Storybook, пример Disabled упрощён до размера MD |

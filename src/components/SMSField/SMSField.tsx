@@ -1,67 +1,67 @@
-import clsx from "clsx";
 import React, { useState } from "react";
+import clsx from "clsx";
 import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
-import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
-import { ISMSFieldProps } from "@sberbusiness/triplex-next/components/SMSField/types";
-import { SMSFieldInput } from "@sberbusiness/triplex-next/components/SMSField/components/SMSFieldInput";
-import { SMSFieldRefresh } from "@sberbusiness/triplex-next/components/SMSField/components/SMSFieldRefresh";
-import { SMSFieldSubmit } from "@sberbusiness/triplex-next/components/SMSField/components/SMSFieldSubmit";
-import { SMSFieldTooltip } from "@sberbusiness/triplex-next/components/SMSField/components/SMSFieldTooltip";
-import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { SMSFieldContext } from "./SMSFieldContext";
+import { ISMSFieldProps } from "./types";
+import { SMSFieldInput } from "./components/SMSFieldInput";
+import { SMSFieldRefresh } from "./components/SMSFieldRefresh";
+import { SMSFieldSubmit } from "./components/SMSFieldSubmit";
+import { SMSFieldTooltip } from "./components/SMSFieldTooltip";
+import styles from "./styles/SMSField.module.less";
 
-// Соответствие размера имени класса.
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
-/** Внутренние составляющие SMSField. */
-interface ISMSFieldComposition {
-    Tooltip: typeof SMSFieldTooltip;
-    Refresh: typeof SMSFieldRefresh;
-    Input: typeof SMSFieldInput;
-    Submit: typeof SMSFieldSubmit;
-}
+/** Компонент для ввода СМС. Ref указывает на корневой div. */
+export const SMSField = Object.assign(
+    React.forwardRef<HTMLDivElement, ISMSFieldProps>((props, ref) => {
+        const {
+            children,
+            className,
+            code,
+            onChangeCode,
+            onSubmitCode,
+            size,
+            status = EFormFieldStatus.DEFAULT,
+            ...htmlDivAttributes
+        } = props;
 
-/** Компонент для ввода СМС. */
-export const SMSField: React.FC<ISMSFieldProps> & ISMSFieldComposition = (props) => {
-    const {
-        children,
-        className,
-        code,
-        onChangeCode,
-        onSubmitCode,
-        size,
-        status = EFormFieldStatus.DEFAULT,
-        ...htmlDivAttributes
-    } = props;
+        const [disabledSubmit, setDisabledSubmit] = useState(true);
+        const [tooltipId, setTooltipId] = useState<string>();
+        const classSMSField = clsx(styles.smsField, className);
 
-    const [disabledSubmit, setDisabledSubmit] = useState(true);
-    const [tooltipId, setTooltipId] = useState<string>();
-    const classSMSField = clsx(styles.smsField, className);
-
-    return (
-        <SMSFieldContext.Provider
-            value={{
-                code,
-                disabledSubmit,
-                onChangeCode,
-                onSubmitCode,
-                setDisabledSubmit,
-                setTooltipId,
-                size,
-                sizeClassName: sizeToClassNameMap[size],
-                status,
-                tooltipId,
-            }}
-        >
-            <div className={classSMSField} {...htmlDivAttributes} data-tx={process.env.npm_package_version}>
-                {children}
-            </div>
-        </SMSFieldContext.Provider>
-    );
-};
+        return (
+            <SMSFieldContext.Provider
+                value={{
+                    code,
+                    disabledSubmit,
+                    onChangeCode,
+                    onSubmitCode,
+                    setDisabledSubmit,
+                    setTooltipId,
+                    size,
+                    sizeClassName: SIZE_TO_CLASS_NAME_MAP[size],
+                    status,
+                    tooltipId,
+                }}
+            >
+                <div
+                    className={classSMSField}
+                    {...htmlDivAttributes}
+                    data-tx={process.env.npm_package_version}
+                    ref={ref}
+                >
+                    {children}
+                </div>
+            </SMSFieldContext.Provider>
+        );
+    }),
+    {
+        Tooltip: SMSFieldTooltip,
+        Refresh: SMSFieldRefresh,
+        Input: SMSFieldInput,
+        Submit: SMSFieldSubmit,
+    },
+);
 
 SMSField.displayName = "SMSField";
-SMSField.Tooltip = SMSFieldTooltip;
-SMSField.Refresh = SMSFieldRefresh;
-SMSField.Input = SMSFieldInput;
-SMSField.Submit = SMSFieldSubmit;

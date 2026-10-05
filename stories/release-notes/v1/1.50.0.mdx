@@ -18,6 +18,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлены горизонтальные отступы `12px` между соседними `ButtonDropdownExtended`, а также между `ButtonDropdownExtended` и `Button` в обоих порядках.
 
+**SMSField**
+
+- Добавлена поддержка `ref` на корневой `div`: контейнер поля теперь доступен для измерения и работы с DOM. Для ссылки на само поле ввода по-прежнему передавайте `ref` в `SMSField.Input`.
+
 **SuggestField**
 
 - Исправлен баг: на мобильной ширине терялись `className`, `id`, `data-test-id`, `active` и `renderInput` — `SuggestField` передавал мобильному варианту только часть props. Теперь оба варианта получают одинаковый набор props, в том числе `data-test-id` для e2e.

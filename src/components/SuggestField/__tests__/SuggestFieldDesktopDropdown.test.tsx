@@ -7,8 +7,8 @@ import { ISuggestFieldOption } from "../types";
 import { EComponentSize } from "../../../enums";
 
 const OPTIONS: ISuggestFieldOption[] = [
-    { id: "a", label: "Первая опция" },
-    { id: "b", label: "Вторая опция" },
+    { id: "a", label: "First option" },
+    { id: "b", label: "Second option" },
 ];
 
 type TRenderProps = Partial<ISuggestFieldDesktopDropdownProps> & Pick<ISuggestFieldDesktopDropdownProps, "onSelect">;
@@ -53,8 +53,8 @@ const scrollList = (scrollTop: number, { scrollHeight = 300, clientHeight = 100 
 };
 
 describe("SuggestFieldDesktopDropdown", () => {
-    describe("рендер опций", () => {
-        it("рендерит каждую опцию отдельным элементом списка", () => {
+    describe("options rendering", () => {
+        it("renders each option as a separate list item", () => {
             renderDropdown({ onSelect: vi.fn() });
 
             const items = screen.getAllByRole("option");
@@ -63,7 +63,7 @@ describe("SuggestFieldDesktopDropdown", () => {
             expect(items[1]).toHaveTextContent(OPTIONS[1].label);
         });
 
-        it("отмечает выбранную опцию", () => {
+        it("marks the selected option", () => {
             renderDropdown({ value: OPTIONS[1], onSelect: vi.fn() });
 
             const items = screen.getAllByRole("option");
@@ -71,23 +71,25 @@ describe("SuggestFieldDesktopDropdown", () => {
             expect(items[1]).toHaveAttribute("aria-selected", "true");
         });
 
-        it("рендерит content опции вместо label", () => {
+        it("renders option content instead of label", () => {
             renderDropdown({
-                options: [{ id: "a", label: "Первая опция", content: <b>Кастомное содержимое</b> }],
+                options: [{ id: "a", label: "First option", content: <b>Custom content</b> }],
                 onSelect: vi.fn(),
             });
 
-            expect(screen.getByText("Кастомное содержимое")).toBeInTheDocument();
-            expect(screen.queryByText("Первая опция")).not.toBeInTheDocument();
+            expect(screen.getByText("Custom content")).toBeInTheDocument();
+            expect(screen.queryByText("First option")).not.toBeInTheDocument();
         });
 
-        it("списку проставляется переданный listId", () => {
+        it("applies listId to the list", () => {
             renderDropdown({ onSelect: vi.fn() });
 
             expect(getList()).toHaveAttribute("id", "suggest-list");
         });
+    });
 
-        it("onSelect вызывается с выбранной опцией", () => {
+    describe("selection", () => {
+        it("calls onSelect with the selected option", () => {
             const onSelect = vi.fn();
             renderDropdown({ onSelect });
 
@@ -98,7 +100,7 @@ describe("SuggestFieldDesktopDropdown", () => {
     });
 
     describe("onScrollEnd", () => {
-        it("вызывается, когда список прокручен до конца", () => {
+        it("is called when the list is scrolled to the end", () => {
             const onScrollEnd = vi.fn();
             renderDropdown({ onScrollEnd, onSelect: vi.fn() });
 
@@ -107,7 +109,7 @@ describe("SuggestFieldDesktopDropdown", () => {
             expect(onScrollEnd).toHaveBeenCalledTimes(1);
         });
 
-        it("не вызывается, пока до конца списка есть расстояние", () => {
+        it("is not called before the end of the list", () => {
             const onScrollEnd = vi.fn();
             renderDropdown({ onScrollEnd, onSelect: vi.fn() });
 
@@ -116,7 +118,7 @@ describe("SuggestFieldDesktopDropdown", () => {
             expect(onScrollEnd).not.toHaveBeenCalled();
         });
 
-        it("не вызывается, пока идёт догрузка списка", () => {
+        it("is not called while the list is loading", () => {
             const onScrollEnd = vi.fn();
             renderDropdown({ onScrollEnd, listLoading: true, onSelect: vi.fn() });
 
@@ -126,28 +128,21 @@ describe("SuggestFieldDesktopDropdown", () => {
         });
     });
 
-    describe("фокус", () => {
-        it("mousedown по выпадающему списку не уводит фокус с поля ввода", () => {
-            renderDropdown({ onSelect: vi.fn() });
+    describe("focus", () => {
+        it("mousedown keeps focus on the input and calls the passed onMouseDown", () => {
+            const onMouseDown = vi.fn();
+            renderDropdown({ onMouseDown, onSelect: vi.fn() });
 
             const event = createMouseDownEvent();
             getList().dispatchEvent(event);
 
             expect(event.defaultPrevented).toBe(true);
-        });
-
-        it("переданный onMouseDown вызывается после внутреннего обработчика", () => {
-            const onMouseDown = vi.fn();
-            renderDropdown({ onMouseDown, onSelect: vi.fn() });
-
-            getList().dispatchEvent(createMouseDownEvent());
-
             expect(onMouseDown).toHaveBeenCalledTimes(1);
         });
     });
 
-    describe("кастомизация", () => {
-        it("renderList заменяет список", () => {
+    describe("customization", () => {
+        it("renderList replaces the list", () => {
             renderDropdown({
                 renderList: ({ children }) => <div data-testid="custom-list">{children}</div>,
                 onSelect: vi.fn(),
@@ -157,7 +152,7 @@ describe("SuggestFieldDesktopDropdown", () => {
             expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
         });
 
-        it("renderListItem заменяет элементы списка", () => {
+        it("renderListItem replaces the list items", () => {
             // DropdownList клонирует элементы списка и вешает на них ref. Тип renderListItem —
             // обычная функция, поэтому ref до кастомного элемента не доходит и React пишет
             // предупреждение. Гасим его, чтобы не шуметь в выводе: см. «Инварианты» в SuggestField-ai.md.

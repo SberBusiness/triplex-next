@@ -60,7 +60,6 @@ export const ProductionExample = () => {
         setInputPristine(false);
 
         if (inputValue.length === 0) {
-            setValue(undefined);
             setOptions(FOOD_OPTIONS);
             setTooltipOpen(false);
         } else {
@@ -95,7 +94,10 @@ export const ProductionExample = () => {
     };
 
     const handleClear: React.MouseEventHandler<HTMLButtonElement> = () => {
-        inputRef.current?.focus();
+        // На мобильном фокус открыл бы полноэкранный дропдаун сразу после очистки.
+        if (!adaptive) {
+            inputRef.current?.focus();
+        }
     };
 
     const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {

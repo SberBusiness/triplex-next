@@ -1,7 +1,7 @@
 ---
 component: ButtonIcon
 category: Buttons
-related: [Button]
+related: [Button, IconWrapper]
 tokens:
   - Button.Icon_Shadow_Focus
 stories: stories/Buttons/ButtonIcon.stories.tsx
@@ -76,6 +76,7 @@ Button.Icon_Shadow_Focus
 
 - `Button` (`src/components/Button/Button.tsx`) — текстовая/универсальная кнопка, используемая вместо `ButtonIcon` когда нужен label.
 - `ButtonDropdown` (`src/components/Button/ButtonDropdown.tsx`) — использует иконочный паттерн для dots-варианта trigger.
+- `IconWrapper` (`src/components/IconWrapper`) — оборачивает `<button>` в режиме `displayContents`; через неё в иконку уходят состояния `active` / `disabled`.
 
 ---
 
@@ -104,3 +105,4 @@ Button.Icon_Shadow_Focus
 | 2026-07-08 | Актуализирована таблица Stories: story `Disabled` заменена на `States` (`StatesExample.tsx`). |
 | 2026-07-15 | `vertical-align: top` заменён на `middle` (синхронно с `Button`) — общая опорная точка для кнопок разной высоты и центрирование относительно строки инлайн-текста. |
 | 2026-07-30 | AI-рефакторинг: внутренние импорты переведены на относительные, `children` объявлен и задокументирован явно, JSDoc уточнён дефолтами; добавлены unit-тесты `__tests__/ButtonIcon.test.tsx`; в таблицу Stories добавлены отсутствовавшие `VisualTestsSquircle` и `VisualTestsCircle`. Публичный API не изменён. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`IconWrapper`). Публичный API и поведение не затронуты. |

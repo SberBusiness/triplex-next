@@ -117,8 +117,8 @@ version: "1.0"
 - `TriggerClickOnKeyDownEvent` (`src/components/Triggers/`) — по нажатию клавиши
   вызывает `click` на элементе из `targetRef`.
 - `SelectExtendedField` — закрывает выпадающий список по `Esc`.
-- `SliderExtendedDot`, `SliderExtendedTrack` — стрелки для перемещения ползунка,
-  слушатели монтируются только когда элемент в фокусе.
+- `SliderExtended` (`SliderExtendedDot`, `SliderExtendedTrack`) — стрелки для перемещения
+  ползунка, слушатели монтируются только когда элемент в фокусе.
 
 ---
 
@@ -149,3 +149,4 @@ version: "1.0"
 | 2026-08-11 | TRI-112: у `ComposedKeyDownListener` появились собственный `ComposedKeyDownListener-ai.md` и набор stories `stories/ComposedKeyDownListener/`; раздел «Связанные компоненты» сокращён до ссылки, story `Example` (демонстрация композитора) перенесена в новый набор. Ограничение на стабильную длину `keyDownListeners` снято — композитор рендерит слушателей соседями к `children`. Набор stories `KeyDownListener` исключён из скриншот-тестов, story `VisualTests` и baseline удалены — визуального интерфейса у компонента нет. Реализация самого `KeyDownListener` не менялась. |
 | 2026-08-04 | По ревью PR #502: интерфейс props `IComposedKeyDownListenerProps` стал экспортируемым — публичная поверхность пакета расширена аддитивно. `ComposedKeyDownListener` добавлен отдельной строкой в `docs/ai/ROADMAP.md`, собственный AI.md вынесен в отдельную задачу. |
 | 2026-08-04 | Создан документ. AI-рефакторинг (TRI-48): JSDoc на props `IKeyDownListenerProps` и `ComposedKeyDownListener`, ветвление в `handleKeyDown` сведено к одной проверке (снят `eslint-disable`), в `ComposedKeyDownListener` убран `as JSX.Element` и добавлен `displayName`, unit-тесты (16 кейсов на оба компонента), stories по modern pattern. Публичный API не менялся; компонент остаётся class-компонентом, `forwardRef` осознанно отсутствует. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): в «Связанных компонентах» потребители `SliderExtendedDot` / `SliderExtendedTrack` названы через адресата `related` — `SliderExtended`. Публичный API и поведение не затронуты. |

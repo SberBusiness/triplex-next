@@ -1,7 +1,7 @@
 ---
 component: ButtonDropdownExtended
 category: Buttons
-related: [ButtonDropdown, Button, Dropdown, DropdownList]
+related: [ButtonDropdown, Button, Dropdown]
 tokens: []
 stories: stories/Buttons/ButtonDropdownExtended.stories.tsx
 version: "1.0"
@@ -117,3 +117,4 @@ version: "1.0"
 |---|---|
 | 2026-08-31 | Компонент переведён с `React.FC` на `Object.assign(forwardRef(...), {...})` — теперь пробрасывает `ref` на корневой `<div>`, форвард мерджится с внутренним `containerRef`. Базовый тип `IButtonDropdownExtendedComponent` изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props, статики и DOM не изменились. Понадобилось для `TableBasicSettings`, который рендерит `ButtonDropdownExtended` корнем. |
 | 2026-07-29 | Создан документ AI-ready для `ButtonDropdownExtended`. AI-рефакторинг без изменения публичного API: режим управления переведён с ref на `useState` (устранены ошибки `react-hooks/refs`), убраны вырожденный тернарник в `useState` и мёртвые проверки `opened` внутри обработчиков, `setOpened && setOpened(...)` заменён на опциональный вызов, добавлены JSDoc. Добавлены unit-тесты и stories по modern pattern. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`DropdownList`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

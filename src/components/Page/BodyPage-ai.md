@@ -1,7 +1,7 @@
 ---
 component: BodyPage
 category: Page
-related: [Page, HeaderPage, FooterPage, Body, Island, LightBox]
+related: [Page, HeaderPage, FooterPage, Body, Island]
 tokens: []
 stories: stories/Page/BodyPage/BodyPage.stories.tsx
 version: "1.0"
@@ -134,3 +134,4 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 |---|---|
 | 2026-06-18 | Создан документ. AI-рефакторинг (clsx order, JSDoc), unit-тесты, миграция stories на modern pattern. |
 | 2026-08-26 | TRI-121: добавлено `EBodyPageVerticalMargin.NONE`; `verticalMargin` принимает объект `{top, bottom}` (обе стороны обязательны) для независимых отступов сверху и снизу. LESS переразбит на односторонние классы. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

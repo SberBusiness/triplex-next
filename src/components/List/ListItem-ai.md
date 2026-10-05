@@ -1,7 +1,7 @@
 ---
 component: ListItem
 category: List
-related: [List, ListItemContent, ListActionItem, ListItemSelectable, ListTableItem, ListSortableItem]
+related: [List, ListActionItem, ListItemSelectable, ListTableItem, ListSortableItem]
 tokens:
   - ListItem.Background
   - ListItem.Background_Selected
@@ -73,6 +73,7 @@ ListItem.BorderColor_Focus   // цвет focus-обводки на desktop (List
 - `ListItemLoading` — элемент-спиннер для пагинации (используется как последний элемент).
 - `ListItemControls`, `ListItemControlsButton`, `ListItemControlsButtonDropdown` — кнопки действий, обычно внутри `SwipeableArea.rightSwipeableArea`.
 - `ListItemTailLeft` / `ListItemTailRight` — декоративные хвосты для `SwipeableArea`.
+- `ListSortableItem` — самодостаточный элемент перетаскиваемого списка: тоже рендерит `ListItem` внутри себя, но добавляет target и контролы перетаскивания.
 - `ListTableItem` — комбинированная высокоуровневая обёртка.
 
 ---
@@ -99,3 +100,4 @@ ListItem.BorderColor_Focus   // цвет focus-обводки на desktop (List
 | 2026-04-29 | Создан документ |
 | 2026-05-21 | `ListItemContext` расширен полями `selectable` / `setSelectable`. Исправлен цвет токена `Background_Selected` в тёмной теме (`ColorDarkNeutral.10` → `ColorDarkNeutral.60`). |
 | 2026-07-16 | Добавлен самодостаточный компонент `ListActionItem` (сам рендерит `ListItem` + `ListItemContent`; hover, focus по Tab, `onClick` + Enter/Space). Координация фона через контекст не понадобилась — `ListItemContext` без изменений. Другие компоненты семейства его не используют. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemContent`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

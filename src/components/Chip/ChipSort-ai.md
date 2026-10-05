@@ -1,7 +1,7 @@
 ---
 component: ChipSort
 category: Chips
-related: [Chip, ChipSelect, ChipGroup, SelectExtendedField, IconWrapper]
+related: [Chip, ChipSelect, ChipOptions, SelectExtendedField, IconWrapper]
 tokens: []
 stories: stories/Chips/ChipSort.stories.tsx
 version: "1.0"
@@ -178,6 +178,8 @@ JSX, `isEqual` сравнивает деревья элементов. Держ�
 - `ChipGroup` — рекомендуемый контейнер: отступы, перенос строк, режим `oneLine`
 - `SelectExtendedField` — база: владеет состоянием открытости, правилами закрытия
   и корневым `<div>`; список рендерится через `SelectExtendedFieldDropdownDefault`
+- `ChipOptions` — тот же приём (иконка в `prefix` + смена палитры по `selected`), но для
+  набора опций и с кнопкой сброса
 - `IconWrapper` — обёртка иконки сортировки, добавляет состояния `active` / `disabled`
 
 ---
@@ -203,3 +205,4 @@ JSX, `isEqual` сравнивает деревья элементов. Держ�
 |---|---|
 | 2026-09-04 | Создан документ (TRI-132, AI-Ready Phase 1) |
 | 2026-09-04 | AI-рефакторинг (TRI-132): codestyle-чистка `ChipSort.tsx` (объединены дублирующиеся импорты, пути приведены к `../`, magic-числа палитры иконки вынесены в именованные константы, добавлены JSDoc и комментарии к нетривиальной логике), unit-тесты расширены с 1 до 19 кейсов; публичный API, DOM и визуал не изменены |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`ChipGroup`); добавлены обратные ссылки (`ChipOptions`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

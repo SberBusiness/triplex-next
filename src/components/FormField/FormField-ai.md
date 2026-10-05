@@ -1,7 +1,7 @@
 ---
 component: FormField
 category: FormField
-related: [FormFieldLabel, FormFieldInput, FormFieldTextarea, FormFieldTarget, FormFieldMaskedInput, FormFieldPrefix, FormFieldPostfix, FormFieldClear, FormFieldDescription, FormFieldCounter, FormGroup, TextField, TextareaField, MaskedField, SelectField, SuggestField, DateField]
+related: [FormGroup, TextField, TextareaField, MaskedField, SelectField, SuggestField, DateField]
 tokens:
   - FormField.Background_Default
   - FormField.Background_Hover
@@ -175,3 +175,4 @@ FormField.Target_PlaceholderColor_Default
 | 2026-09-16 | Исправлено: `FormFieldInput` и `FormFieldTextarea` очищают `targetId` при размонтировании — иначе после замены элемента ввода на `FormFieldTarget` лейбл сохранял `htmlFor` с `id` удалённого элемента. |
 | 2026-09-17 | Ломающее изменение: `disabled` убран из `IFormFieldTextareaProps` через `Omit` — так же, как он уже был убран у `FormFieldInput` и `FormFieldMaskedInput`. Поведение не менялось (статус перетирал переданное значение и раньше), но передача `disabled` в props теперь ошибка компиляции. Правка по ревью PR #629, зафиксирована в release notes 1.47.0 |
 | 2026-09-23 | Исправлено: при смене `status` на `EFormFieldStatus.DISABLED`, пока вложенный элемент ввода в фокусе, `FormField` теперь явно сбрасывает состояние `focused` в `useLayoutEffect`. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FormFieldLabel`, `FormFieldInput`, `FormFieldTextarea`, `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

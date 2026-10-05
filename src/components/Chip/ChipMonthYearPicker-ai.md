@@ -1,7 +1,7 @@
 ---
 component: ChipMonthYearPicker
 category: Chips
-related: [Chip, ChipDatePicker, ChipGroup, MonthYearField, DatePickerExtended]
+related: [Chip, ChipDatePicker, MonthYearField, DatePickerExtended]
 tokens: []
 stories: stories/Chips/ChipMonthYearPicker.stories.tsx
 version: "1.0"
@@ -197,3 +197,4 @@ selected = getPickerValues(value, format, limitRange).calendarDate !== null
 | Дата | Изменение |
 |---|---|
 | 2026-09-07 | Создан компонент и документ (AI-Ready Phase 1) |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`ChipGroup`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

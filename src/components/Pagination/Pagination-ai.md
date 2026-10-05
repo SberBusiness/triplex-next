@@ -3,16 +3,9 @@ component: Pagination
 category: Navigation
 related:
   - PaginationExtended
-  - PaginationNavigation
-  - PaginationNavigationButton
   - PaginationNavigationExtended
-  - PaginationNavigationExtendedItem
-  - PaginationPageButton
-  - PaginationPageEllipsis
-  - PaginationSelect
   - SelectField
   - ButtonIcon
-  - ButtonBase
   - MasterTable
 tokens:
   - Pagination.PageButton_Background_Hover
@@ -165,3 +158,4 @@ Pagination.PageButton_BorderColor_Focus
 | 2026-08-26 | `PaginationSelect` прокидывает в `SelectField` все свойства, которые не разбирает сам: `data`-атрибуты, `id`, `aria`-атрибуты, `targetProps`, `dropdownProps`, `mobileTitle` и т.д. Публичный API не изменился. |
 | 2026-08-12 | В состоянии загрузки `MasterTable` элементы пагинации становятся `disabled` — читается из `MasterTableContext.loading`. Публичный API не изменился. Заодно `PaginationSelect` перестал молча терять переданный `status`. |
 | 2026-08-27 | Навигация больше не скрывается при `totalPages <= 1`: отрисовывается одна страница с заблокированными стрелками, высота панели пагинации не схлопывается. Публичный API не изменился. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`PaginationNavigation`, `PaginationNavigationButton`, `PaginationNavigationExtendedItem`, `PaginationPageButton`, `PaginationPageEllipsis`, `PaginationSelect`, `ButtonBase`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

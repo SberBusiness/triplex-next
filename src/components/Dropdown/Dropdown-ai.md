@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, OverlayBase, SelectField, SelectExtendedField, SuggestField, MultiselectField, TabsLine]
+related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -181,6 +181,14 @@ DropdownMobileList.Selected_Background
 - `Portal`, `MobileView`, `OverlayBase` — инфраструктура рендера.
 - `ButtonDropdown`, `ButtonDropdownExtended` — готовые кнопки с выпадающим блоком поверх `Dropdown`.
 
+**Потребители внутри библиотеки** (в `related` не входят — по `docs/ai/CONTEXT.md` ссылка
+стоит с их стороны, и она там уже есть):
+
+- `SelectExtendedField` — база полей выбора: владеет состоянием открытости и рендерит `Dropdown`.
+- `SelectField`, `MultiselectField` — поля выбора одного и нескольких значений, построены на `SelectExtendedField`.
+- `SuggestField` — поле с поиском по вводу; собрано на `Dropdown` напрямую, а не на `SelectExtendedField`.
+- `TabsLine` — прячет не поместившиеся вкладки в `Dropdown`.
+
 ---
 
 ## Stories
@@ -211,3 +219,4 @@ DropdownMobileList.Selected_Background
 | 2026-07-31 | AI-рефакторинг: `DropdownList` больше не создаёт ref через `React.createRef()` в рендере (из-за этого автопрокрутка к активному элементу не работала), сброс активного элемента при открытии переведён на корректировку state в рендере вместо `setState` в эффекте, прокрутка вынесена в `desktop/utils.ts`, в `DropdownListItem` починен устаревший обработчик клавиатуры, в `Dropdown` актуальные `onOpen` / `onClose` хранятся в ref. Публичный API не изменён. Добавлены unit-тесты (109 кейсов) и stories. |
 | 2026-07-31 | Правки по ревью PR #491: эффект `onOpen` / `onClose` в `Dropdown` сравнивает предыдущее значение `opened` вместо флага «смонтирован» — колбэки больше не срабатывают ложно при двойном маунте в React 18 StrictMode (регрессионный тест `__tests__/Dropdown.strictMode.test.tsx`). Документационные stories стартуют закрытыми и раскрываются через `play`. Сброс активного элемента `DropdownList` сделан симметричным: при закрытии подсветка снимается вместе с `activeDescendant`. |
 | 2026-09-28 | Токен `Dropdown.Shadow` ссылается на `Shadow.07` (светлая) и `DarkShadow.07` (тёмная) вместо литералов; в тёмной теме прозрачность 0.25 вместо 0.35. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`OverlayBase`) и потребители `SelectField` / `SelectExtendedField` / `SuggestField` / `MultiselectField` / `TabsLine` — по `docs/ai/CONTEXT.md` ссылка стоит с их стороны; добавлен `LoaderSmall` — контракт по рендеру в верную сторону. Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

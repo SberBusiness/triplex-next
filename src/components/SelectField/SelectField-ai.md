@@ -1,7 +1,7 @@
 ---
 component: SelectField
 category: SelectField
-related: [SelectExtendedField, MultiselectField, SuggestField, Chip, Dropdown, Pagination]
+related: [SelectExtendedField, MultiselectField, SuggestField, Dropdown, Pagination, FormField]
 tokens: []
 stories: stories/SelectField/SelectField.stories.tsx
 version: "1.0"
@@ -171,6 +171,8 @@ version: "1.0"
   `IChipSelectProps` собирается из `ISelectFieldProps`.
 - `Dropdown` — выпадающий блок, `DropdownList` / `DropdownListItem` и `DropdownListContext`,
   через который поднимается активная опция для `aria-activedescendant`.
+- `FormField` — семейство строительных блоков поля: `SelectExtendedField.Target` собран на `FormFieldTarget`,
+  поэтому лейбл, статусы и слоты приходят в публичный API `SelectField` оттуда.
 - `Pagination` — потребитель внутри библиотеки: `PaginationSelect` оборачивает `SelectField`
   для выбора количества элементов на странице и опирается на проброс `aria-labelledby`
   и на пустой `targetProps.fieldLabel`.
@@ -203,3 +205,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-03 | Создан документ (TRI-75). AI-рефакторинг: удалён мёртвый внутренний `targetRef`, внешний `ref` пробрасывается напрямую и больше не пересоздаётся на каждый рендер; идентификатор списка переведён с `useRef(uniqueId())` на `useState(() => uniqueId())`, чтобы счётчик не крутился на каждом рендере; параметры рендер-функций перестали затенять `props` компонента; импорты приведены к алиасу пакета; JSDoc на всех props и на компоненте. Unit-тесты расширены с 15 до 24 кейсов (`onChange` с аргументом, опции и выбранное значение, `aria-activedescendant` через `DropdownListContext`, стабильность `listId`, ref-target). Stories переведены на modern pattern, `States` разделена на `Statuses` и `Loading`. Публичный API не изменён |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`); добавлены обратные ссылки (`FormField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

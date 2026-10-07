@@ -2,7 +2,14 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Stories } from "@storybook/addon-docs/blocks";
 import { OrderedList } from "@sberbusiness/triplex-next";
-import { DefaultExample, DefaultExampleSource, WithLongContentExample, WithLongContentExampleSource } from "./examples";
+import {
+    DefaultExample,
+    DefaultExampleSource,
+    WithLongContentExample,
+    WithLongContentExampleSource,
+    Start as StartRender,
+    StartSource,
+} from "./examples";
 
 const meta = {
     title: "Components/OrderedList",
@@ -10,7 +17,7 @@ const meta = {
     parameters: {
         docs: {
             description: {
-                component: "Нумерованный список.",
+                component: "Нумерованный список. Свойство `start` задаёт начальный номер; по умолчанию — 1.",
             },
             page: () => (
                 <>
@@ -50,6 +57,19 @@ export const WithLongContent: Story = {
             controls: { disable: true },
             source: {
                 code: WithLongContentExampleSource,
+                language: "tsx",
+            },
+        },
+    },
+};
+
+export const Start: Story = {
+    render: StartRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            source: {
+                code: StartSource,
                 language: "tsx",
             },
         },

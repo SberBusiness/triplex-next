@@ -82,6 +82,8 @@ const config: TestRunnerConfig = {
             return;
         }
 
+        const hoverSelector: unknown = storyContext.parameters?.testRunner?.hoverSelector;
+
         for (const viewport of VISUAL_TEST_VIEWPORTS) {
             await page.setViewportSize({ width: viewport.width, height: 768 });
             await remountAndSettle(page, context.id);
@@ -92,33 +94,31 @@ const config: TestRunnerConfig = {
                 content: "* { caret-color: transparent !important; }",
             });
 
-            // userEvent.hover отправляет события, поэтому для CSS :hover нужен настоящий указатель.
-            const hoverTarget: unknown = storyContext.parameters?.visualTests?.hoverTarget;
+            try {
+                // Реальная мышь нужна для CSS :hover; синтетические события из play его не включают.
+                if (typeof hoverSelector === "string") {
+                    await page.locator(hoverSelector).hover();
+                }
 
-            if (typeof hoverTarget === "string") {
-                const target = page.getByTestId(hoverTarget);
-                await target.hover();
-                expect(await target.evaluate((element) => element.matches(":hover"))).toBe(true);
+                // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
+                // снимаются целиком, а не обрезаются по высоте viewport.
+                const screenshot = await page.screenshot({ fullPage: true });
+
+                // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
+                const snapshotId = context.id.replace(/^components-/, "");
+
+                expect(screenshot).toMatchImageSnapshot({
+                    customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
+                    customSnapshotsDir: "__screenshots__",
+                    customDiffDir: "__screenshots__/__diff__",
+                    failureThreshold: 10,
+                    failureThresholdType: "pixel",
+                });
+            } finally {
+                if (typeof hoverSelector === "string") {
+                    await page.mouse.move(0, 0);
+                }
             }
-
-            // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
-            // снимаются целиком, а не обрезаются по высоте viewport.
-            const screenshot = await page.screenshot({ fullPage: true });
-
-            if (typeof hoverTarget === "string") {
-                await page.mouse.move(0, 0);
-            }
-
-            // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
-            const snapshotId = context.id.replace(/^components-/, "");
-
-            expect(screenshot).toMatchImageSnapshot({
-                customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
-                customSnapshotsDir: "__screenshots__",
-                customDiffDir: "__screenshots__/__diff__",
-                failureThreshold: 10,
-                failureThresholdType: "pixel",
-            });
         }
     },
 };

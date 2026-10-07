@@ -89,7 +89,7 @@ version: "1.0"
 | `RadioSizes` | `RadioSizes.tsx` | Дочерние Radio размеров SM, MD и LG. |
 | `States` | `States.tsx` | Выбранные и невыбранные, доступные и отключённые Radio. |
 | `Wrapping` | `Wrapping.tsx` | Перенос вариантов и длинных подписей в контейнере шириной 320 px. |
-| `VisualTests` | `VisualTests.tsx` | Клавиатурный focus и hover через `play`, пустая группа; скрыта из autodocs. |
+| `VisualTests` | `VisualTests.tsx` | Клавиатурный focus через `play`, CSS hover через реальную мышь test-runner (`parameters.testRunner.hoverSelector`), пустая группа; скрыта из autodocs. |
 
 Legacy stories `stories/Radio.stories.tsx` и их ID сохраняются; новый набор имеет собственный title `Components/RadioXGroup`.
 
@@ -100,3 +100,4 @@ Legacy stories `stories/Radio.stories.tsx` и их ID сохраняются; н
 | Дата | Изменение |
 |---|---|
 | 2026-10-07 | Создан документ для TRI-69: добавлен forwardRef на корневой div, уточнён JSDoc; контракты indent, HTML-атрибутов и ref покрыты unit-тестами, добавлены современные stories. |
+| 2026-10-07 | Исправлено визуальное покрытие CSS hover: test-runner перемещает реальную мышь по opt-in селектору и возвращает её после снимка. |

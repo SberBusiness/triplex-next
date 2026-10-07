@@ -145,11 +145,11 @@ export const VisualTests: Story = {
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
+        testRunner: { hoverSelector: 'input[value="hovered"]' },
     },
     render: VisualTestsRender,
     play: async ({ canvas, userEvent }) => {
         canvas.getByRole("radiogroup", { name: "Клавиатурный фокус" }).focus();
         await userEvent.tab();
-        await userEvent.hover(canvas.getByRole("radio", { name: "Наведение" }));
     },
 };

@@ -1,8 +1,11 @@
 import React from "react";
-import styles from "../styles/PaginationNavigationExtended.module.less";
 import clsx from "clsx";
+import styles from "../styles/PaginationNavigationExtended.module.less";
 
-/** Свойства компонента PaginationNavigationExtended. */
+/**
+ * Свойства компонента PaginationNavigationExtended: стандартные HTML-атрибуты списка.
+ * children задаёт элементы списка, className добавляется к классу корневого ul.
+ */
 export interface IPaginationNavigationExtendedProps extends React.HTMLAttributes<HTMLUListElement> {}
 
 /** Контейнер-список для компоновки кастомной навигации пагинации. */

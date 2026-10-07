@@ -194,4 +194,5 @@ Playground не создаётся — у компонента нет настр
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-01 | `Header.Title.Controls` в адаптиве (`max-width: @screen-sm-max`): вместо отрицательного `margin-left` контейнера и `margin-left/top: 16px` у кнопок используется `display: flex; flex-wrap: wrap; gap: 16px 12px` и `margin-top: 16px` у контейнера. Прямым потомкам `button` и `[class*="buttonDropdown"]` собственные `margin` сбрасываются через `!important` (иначе их перебивают правила отступа между соседними кнопками, специфичность 0,3,0), поэтому пользовательские `margin` на них в адаптиве не действуют. Остальные прямые потомки участвуют во flex-раскладке (`align-items: center`). Десктопные стили не менялись. |
 | 2026-08-28 | Создан документ. AI-рефакторинг (JSDoc на `children` и `withoutPaddings`, выровнен порядок аргументов `clsx`, удалён мёртвый CSS-селектор `.headerLink` и пустое правило `.headerTitleContent`), unit-тесты на все одиннадцать компонентов, stories по modern pattern. |

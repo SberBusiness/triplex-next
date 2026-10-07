@@ -74,6 +74,65 @@ describe("OrderedList", () => {
         expect(ref).toHaveBeenCalledWith(expect.any(HTMLOListElement));
     });
 
+    it("uses default numbering without an inline counter when start is omitted", () => {
+        render(<OrderedList />);
+
+        const list = screen.getByRole("list");
+        expect(list).not.toHaveAttribute("start");
+        expect(list.style.getPropertyValue("--start-index-tx")).toBe("");
+    });
+
+    it.each([
+        { start: 5, counter: "4" },
+        { start: 0, counter: "-1" },
+        { start: -2, counter: "-3" },
+    ])("applies start=$start to the HTML attribute and CSS counter", ({ start, counter }) => {
+        render(<OrderedList start={start} />);
+
+        const list = screen.getByRole("list");
+        expect(list).toHaveAttribute("start", String(start));
+        expect(list.style.getPropertyValue("--start-index-tx")).toBe(counter);
+    });
+
+    it("preserves custom styles when start is set", () => {
+        render(<OrderedList start={5} style={{ marginTop: 12 }} />);
+
+        const list = screen.getByRole("list");
+        expect(list).toHaveStyle({ marginTop: "12px" });
+        expect(list.style.getPropertyValue("--start-index-tx")).toBe("4");
+    });
+
+    it("preserves a custom counter style when start is omitted", () => {
+        const style: React.CSSProperties & { "--start-index-tx": number } = {
+            "--start-index-tx": 9,
+        };
+        render(<OrderedList style={style} />);
+
+        const list = screen.getByRole("list");
+        expect(list.style.getPropertyValue("--start-index-tx")).toBe("9");
+    });
+
+    it("gives start precedence over a custom counter style", () => {
+        const style: React.CSSProperties & { "--start-index-tx": number } = {
+            "--start-index-tx": 9,
+        };
+        render(<OrderedList start={5} style={style} />);
+
+        const list = screen.getByRole("list");
+        expect(list.style.getPropertyValue("--start-index-tx")).toBe("4");
+    });
+
+    it("removes the inline counter when start is cleared", () => {
+        const { rerender } = render(<OrderedList start={5} style={{ marginTop: 12 }} />);
+
+        rerender(<OrderedList style={{ marginTop: 12 }} />);
+
+        const list = screen.getByRole("list");
+        expect(list).not.toHaveAttribute("start");
+        expect(list.style.getPropertyValue("--start-index-tx")).toBe("");
+        expect(list).toHaveStyle({ marginTop: "12px" });
+    });
+
     describe("OrderedList.Item", () => {
         it("renders list item with correct typography", () => {
             render(<OrderedList.Item>List item content</OrderedList.Item>);

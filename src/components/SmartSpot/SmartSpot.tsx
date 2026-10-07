@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { DEFAULT_BLUR, STATUS_CONFIG } from "./consts";
 import { ESmartSpotAnimation, ESmartSpotStatus } from "./enums";
-import { getSmartSpotFrame } from "./utils";
+import { getSmartSpotDuration, getSmartSpotFrame } from "./utils";
 import styles from "./styles/SmartSpot.module.less";
 
 /** Свойства компонента SmartSpot. */
@@ -14,6 +14,12 @@ export interface ISmartSpotProps extends React.HTMLAttributes<HTMLDivElement> {
     animation?: ESmartSpotAnimation;
     /** Размытие, px. */
     blur?: number;
+    /** Дистанция движения слоя пятен (радиус по горизонтали), px. По умолчанию — значение пресета. Не влияет на Breathing. */
+    distance?: number;
+    /** Длительность одного цикла анимации, мс. По умолчанию — значение пресета. */
+    duration?: number;
+    /** Скрывает сплошной фон статуса, остаются только пятна. */
+    hideBackground?: boolean;
 }
 
 interface IStyle extends React.CSSProperties {
@@ -37,6 +43,9 @@ export const SmartSpot = React.forwardRef<HTMLDivElement, ISmartSpotProps>(
             status,
             animation = ESmartSpotAnimation.DRIFT,
             blur = DEFAULT_BLUR,
+            distance,
+            duration,
+            hideBackground = false,
             className,
             style,
             children,
@@ -45,6 +54,9 @@ export const SmartSpot = React.forwardRef<HTMLDivElement, ISmartSpotProps>(
         ref,
     ) => {
         const moveRef = React.useRef<HTMLDivElement>(null);
+        // Параметры движения читаются в каждом кадре, чтобы их смена не перезапускала анимацию.
+        const motionRef = React.useRef({ distance, duration });
+        motionRef.current = { distance, duration };
         const { spots } = STATUS_CONFIG[status];
 
         React.useEffect(() => {
@@ -55,7 +67,7 @@ export const SmartSpot = React.forwardRef<HTMLDivElement, ISmartSpotProps>(
             }
 
             const apply = (t: number) => {
-                const frame = getSmartSpotFrame(animation, t);
+                const frame = getSmartSpotFrame(animation, t, motionRef.current);
                 move.style.setProperty("--triplex-next-runtime-SmartSpot-Move_X", `${frame.x}px`);
                 move.style.setProperty("--triplex-next-runtime-SmartSpot-Move_Y", `${frame.y}px`);
                 move.style.setProperty("--triplex-next-runtime-SmartSpot-Spot_Scale", String(frame.scale));
@@ -67,9 +79,18 @@ export const SmartSpot = React.forwardRef<HTMLDivElement, ISmartSpotProps>(
                 return undefined;
             }
 
-            const start = performance.now();
+            // Прогресс цикла (0..1) накапливается по кадрам, поэтому при смене duration движение продолжается
+            // с текущей точки, а не перескакивает.
+            let progress = 0;
+            let last = performance.now();
             let rafId = requestAnimationFrame(function tick(now) {
-                apply(now - start);
+                const period = getSmartSpotDuration(animation, motionRef.current.duration);
+
+                if (period > 0) {
+                    progress = (progress + (now - last) / period) % 1;
+                }
+                last = now;
+                apply(progress * period);
                 rafId = requestAnimationFrame(tick);
             });
 
@@ -84,7 +105,12 @@ export const SmartSpot = React.forwardRef<HTMLDivElement, ISmartSpotProps>(
         return (
             <div
                 {...restProps}
-                className={clsx(styles.smartSpot, styles[status], className)}
+                className={clsx(
+                    styles.smartSpot,
+                    styles[status],
+                    { [styles.hideBackground]: hideBackground },
+                    className,
+                )}
                 style={rootStyle}
                 ref={(node) => setForwardedRef(ref, node)}
             >

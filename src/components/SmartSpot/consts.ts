@@ -1,4 +1,4 @@
-import { ESmartSpotStatus } from "./enums";
+import { ESmartSpotAnimation, ESmartSpotStatus } from "./enums";
 
 /** Размытие по умолчанию, px. */
 export const DEFAULT_BLUR = 200;
@@ -53,3 +53,28 @@ export const STATUS_CONFIG: Record<ESmartSpotStatus, ISmartSpotStatusConfig> = {
         ],
     },
 };
+
+/** Параметры эллиптического движения слоя пятен. */
+export interface ISmartSpotEllipsePreset {
+    /** Радиус по горизонтали, px. */
+    distance: number;
+    /** Отношение радиуса по вертикали к радиусу по горизонтали. */
+    ratioY: number;
+    /** Длительность цикла, мс. */
+    duration: number;
+    /** Начальный угол, рад. */
+    startAngle: number;
+    /** Направление: 1 — по часовой стрелке на экране, -1 — против. */
+    direction: 1 | -1;
+}
+
+/** Значения пресетов анимации по умолчанию. */
+export const ANIMATION_PRESETS = {
+    [ESmartSpotAnimation.DRIFT]: { distance: 50, ratioY: 0.5, duration: 8000, startAngle: Math.PI / 2, direction: -1 },
+    [ESmartSpotAnimation.WAVE]: { distance: 30, ratioY: 0.3, duration: 3000, startAngle: Math.PI / 2, direction: -1 },
+    [ESmartSpotAnimation.ORBIT]: { distance: 250, ratioY: 1, duration: 10000, startAngle: 0, direction: 1 },
+    [ESmartSpotAnimation.BREATHING]: { duration: 8000 },
+} satisfies Record<
+    Exclude<ESmartSpotAnimation, ESmartSpotAnimation.NONE>,
+    ISmartSpotEllipsePreset | Pick<ISmartSpotEllipsePreset, "duration">
+>;

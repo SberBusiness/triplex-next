@@ -6,7 +6,7 @@ export const Selected = () => (
         <RadioYGroup aria-label="Начальный выбор, вертикальная группа">
             {[1, 2, 3, 4].map((value) => (
                 <Radio key={value} name="radio-group" value={value} defaultChecked={value === 2}>
-                    Radio text
+                    Radio text {value}
                 </Radio>
             ))}
         </RadioYGroup>
@@ -14,7 +14,7 @@ export const Selected = () => (
         <RadioXGroup aria-label="Начальный выбор, горизонтальная группа" indent={16}>
             {[1, 2, 3].map((value) => (
                 <Radio key={value} name="radio-x-group" value={value} defaultChecked={value === 2}>
-                    Radio text
+                    Radio text {value}
                 </Radio>
             ))}
         </RadioXGroup>

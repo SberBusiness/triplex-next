@@ -29,10 +29,6 @@ export const VisualTests = () => {
                     </Radio>
                 </RadioXGroup>
             </div>
-            <div>
-                <div style={{ marginBottom: 8, fontWeight: 700 }}>Пустая группа</div>
-                <RadioXGroup aria-label="Нет доступных вариантов" />
-            </div>
         </div>
     );
 };

@@ -7,6 +7,4 @@ export * from "./RadioSizes";
 export { default as RadioSizesSource } from "./RadioSizes?raw";
 export * from "./States";
 export { default as StatesSource } from "./States?raw";
-export * from "./Wrapping";
-export { default as WrappingSource } from "./Wrapping?raw";
 export * from "./VisualTests";

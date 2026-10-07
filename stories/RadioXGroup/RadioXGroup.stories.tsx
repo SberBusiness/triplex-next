@@ -13,8 +13,6 @@ import {
     RadioSizesSource,
     States as StatesRender,
     StatesSource,
-    Wrapping as WrappingRender,
-    WrappingSource,
     VisualTests as VisualTestsRender,
 } from "./examples";
 
@@ -127,17 +125,6 @@ export const States: Story = {
         },
     },
     render: StatesRender,
-};
-
-export const Wrapping: Story = {
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: { story: "Перенос Radio и длинных подписей в контейнере шириной 320 px." },
-            source: { code: WrappingSource, language: "tsx" },
-        },
-    },
-    render: WrappingRender,
 };
 
 export const VisualTests: Story = {

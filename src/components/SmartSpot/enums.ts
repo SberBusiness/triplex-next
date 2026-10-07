@@ -14,12 +14,20 @@ export enum ESmartSpotStatus {
 export enum ESmartSpotAnimation {
     /** Медленный дрейф слоя пятен по эллипсу. */
     DRIFT = "drift",
-    /** Быстрое покачивание слоя пятен по узкому эллипсу. */
-    WAVE = "wave",
-    /** Движение слоя пятен по окружности. */
-    ORBIT = "orbit",
     /** Пульсация размера каждого пятна. */
     BREATHING = "breathing",
     /** Без анимации. */
     NONE = "none",
+}
+
+/** Форма пятен SmartSpot. */
+export enum ESmartSpotShape {
+    /** Круг. */
+    CIRCLE = "circle",
+    /** Овал, вытянутый по горизонтали. */
+    OVAL = "oval",
+    /** Квадрат. */
+    SQUARE = "square",
+    /** Треугольник. */
+    TRIANGLE = "triangle",
 }

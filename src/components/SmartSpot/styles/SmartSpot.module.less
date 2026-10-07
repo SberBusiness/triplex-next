@@ -24,7 +24,7 @@
 
 .spot {
     position: absolute;
-    left: var(--triplex-next-runtime-SmartSpot-Spot_X);
+    left: calc(50% + var(--triplex-next-runtime-SmartSpot-Spot_X));
     top: var(--triplex-next-runtime-SmartSpot-Spot_Y);
     width: var(--triplex-next-runtime-SmartSpot-Spot_Size);
     height: var(--triplex-next-runtime-SmartSpot-Spot_Size);
@@ -118,4 +118,22 @@
     .spot:nth-child(4) {
         --triplex-next-runtime-SmartSpot-Spot_Color: var(--triplex-next-ColorSystem-90);
     }
+}
+
+.smartSpot.hideBackground {
+    background: transparent;
+}
+
+.oval .spot {
+    height: calc(var(--triplex-next-runtime-SmartSpot-Spot_Size) * 0.6);
+    margin-top: calc(var(--triplex-next-runtime-SmartSpot-Spot_Size) * 0.2);
+}
+
+.square .spot {
+    border-radius: 0;
+}
+
+.triangle .spot {
+    border-radius: 0;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }

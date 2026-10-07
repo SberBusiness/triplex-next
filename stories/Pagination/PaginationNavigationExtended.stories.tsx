@@ -2,13 +2,7 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { PaginationNavigationExtended } from "@sberbusiness/triplex-next";
-import {
-    Default as DefaultRender,
-    DefaultSource,
-    Example as ExampleRender,
-    ExampleSource,
-    VisualTests as VisualTestsRender,
-} from "./examples/PaginationNavigationExtended";
+import { Example as ExampleRender, ExampleSource } from "./examples/PaginationNavigationExtended";
 
 const meta = {
     title: "Components/Pagination/PaginationNavigationExtended",
@@ -36,19 +30,6 @@ export default meta;
 
 type TStory = StoryObj<typeof meta>;
 
-export const Default: TStory = {
-    render: DefaultRender,
-    parameters: {
-        docs: {
-            description: { story: "Минимальное наполнение списка через PaginationNavigationExtendedItem." },
-            source: {
-                code: DefaultSource,
-                language: "tsx",
-            },
-        },
-    },
-};
-
 export const Example: TStory = {
     render: ExampleRender,
     parameters: {
@@ -60,17 +41,6 @@ export const Example: TStory = {
                 code: ExampleSource,
                 language: "tsx",
             },
-        },
-    },
-};
-
-export const VisualTests: TStory = {
-    tags: ["!autodocs", "!dev"],
-    render: VisualTestsRender,
-    parameters: {
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
         },
     },
 };

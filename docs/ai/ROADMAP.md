@@ -177,8 +177,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | PaginationNavigationExtended | ⬜ | ⬜ | ⬜ |
 | Portal | ✅ | ✅ | ✅ |
 | Radio | ⬜ | ⬜ | ⬜ |
-| RadioXGroup | ⬜ | ⬜ | ⬜ |
 | RadioYGroup | ✅ | ✅ | ✅ |
+| RadioXGroup | ✅ | ✅ | ✅ |
 | Row | ✅ | ✅ | ✅ |
 | SMSField | ⬜ | ⬜ | ⬜ |
 | SegmentedControl | ✅ | ✅ | ✅ |

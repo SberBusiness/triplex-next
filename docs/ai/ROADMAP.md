@@ -121,7 +121,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DocumentNumberEdit | ✅ | ✅ | ✅ |
 | Dropdown | ✅ | ✅ | ✅ |
 | Ellipsis | ✅ | ✅ | ✅ |
-| EmptyView | ✅ | ✅ | ⬜ |
+| EmptyView | ✅ | ✅ | ✅ |
 | ExpandAnimation | ✅ | ✅ | ✅ |
 | Footer | ✅ | ✅ | ✅ |
 | FooterPage | ✅ | ✅ | ✅ |

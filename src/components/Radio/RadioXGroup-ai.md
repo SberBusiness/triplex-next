@@ -86,8 +86,8 @@ version: "1.0"
 | `Playground` | `Playground.tsx` | Controls для `indent` и настройки размера/disabled дочерних Radio; исключена из скриншот-тестов. |
 | `Default` | `Default.tsx` | Группа с дефолтным отступом, общим `name` и доступным именем. |
 | `Indents` | `Indents.tsx` | Все шесть значений горизонтального отступа. |
-| `RadioSizes` | `RadioSizes.tsx` | Дочерние Radio размеров SM, MD и LG. |
-| `States` | `States.tsx` | Выбранные и невыбранные, доступные и отключённые Radio. |
+| `Sizes` | `Sizes.tsx` | Дочерние Radio размеров SM, MD и LG. |
+| `States` | `States.tsx` | Controlled-выбор через `checked` и `onChange`; выбранный и невыбранный отключённые Radio. |
 | `VisualTests` | `VisualTests.tsx` | Клавиатурный focus через `play`, CSS hover через реальную мышь test-runner (`parameters.testRunner.hoverSelector`); скрыта из autodocs. |
 
 Legacy stories `stories/Radio.stories.tsx` и их ID сохраняются; новый набор имеет собственный title `Components/RadioXGroup`.
@@ -101,3 +101,4 @@ Legacy stories `stories/Radio.stories.tsx` и их ID сохраняются; н
 | 2026-10-07 | Создан документ для TRI-69: добавлен forwardRef на корневой div, уточнён JSDoc; контракты indent, HTML-атрибутов и ref покрыты unit-тестами, добавлены современные stories. |
 | 2026-10-07 | Исправлено визуальное покрытие CSS hover: test-runner перемещает реальную мышь по opt-in селектору и возвращает её после снимка. |
 | 2026-10-07 | По замечаниям ревью удалены история Wrapping и пример пустой группы из VisualTests. |
+| 2026-10-08 | Story `RadioSizes` переименована в `Sizes`; подписи вариантов приведены к общему формату, States разбита на подписанные секции Selected и Disabled, VisualTests скрыта из сайдбара (`!dev`). |

@@ -1,17 +1,18 @@
-import React from "react";
-import { Radio, RadioXGroup } from "@sberbusiness/triplex-next";
+import React, { useState } from "react";
+import { uniqueId } from "lodash-es";
+import { Radio, RadioYGroup } from "@sberbusiness/triplex-next";
 
 export const States = () => {
-    const name = React.useId();
-    const [value, setValue] = React.useState("second");
+    const [name] = useState(() => uniqueId("radio-y-group-states-"));
+    const [value, setValue] = useState("second");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 24, width: 480, maxWidth: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div>
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>Selected</div>
-                <RadioXGroup aria-label="Выбранный вариант">
+                <RadioYGroup aria-label="Выбранный вариант">
                     <Radio name={`${name}-selected`} value="first" checked={value === "first"} onChange={handleChange}>
                         Radio text
                     </Radio>
@@ -26,18 +27,18 @@ export const States = () => {
                     <Radio name={`${name}-selected`} value="third" checked={value === "third"} onChange={handleChange}>
                         Radio text
                     </Radio>
-                </RadioXGroup>
+                </RadioYGroup>
             </div>
             <div>
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>Disabled</div>
-                <RadioXGroup aria-label="Отключённые варианты">
-                    <Radio name={`${name}-disabled`} value="checked" disabled defaultChecked>
+                <RadioYGroup aria-label="Отключённые варианты">
+                    <Radio name={`${name}-disabled`} value="first" disabled>
                         Radio text
                     </Radio>
-                    <Radio name={`${name}-disabled`} value="unchecked" disabled>
+                    <Radio name={`${name}-disabled`} value="second" disabled defaultChecked>
                         Radio text
                     </Radio>
-                </RadioXGroup>
+                </RadioYGroup>
             </div>
         </div>
     );

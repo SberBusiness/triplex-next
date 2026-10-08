@@ -9,8 +9,8 @@ import {
     DefaultSource,
     Indents as IndentsRender,
     IndentsSource,
-    RadioSizes as RadioSizesRender,
-    RadioSizesSource,
+    Sizes as SizesRender,
+    SizesSource,
     States as StatesRender,
     StatesSource,
     VisualTests as VisualTestsRender,
@@ -104,23 +104,24 @@ export const Indents: Story = {
     render: IndentsRender,
 };
 
-export const RadioSizes: Story = {
-    name: "Radio sizes",
+export const Sizes: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
             description: { story: "Размер задаётся каждому дочернему Radio; у RadioXGroup собственного size нет." },
-            source: { code: RadioSizesSource, language: "tsx" },
+            source: { code: SizesSource, language: "tsx" },
         },
     },
-    render: RadioSizesRender,
+    render: SizesRender,
 };
 
 export const States: Story = {
     parameters: {
         controls: { disable: true },
         docs: {
-            description: { story: "Выбранное и отключённое состояния принадлежат дочерним Radio." },
+            description: {
+                story: "Выбранное и отключённое состояния задаются на каждом Radio: выбор — через checked и onChange, отключение — через disabled.",
+            },
             source: { code: StatesSource, language: "tsx" },
         },
     },
@@ -128,7 +129,7 @@ export const States: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },

@@ -13,13 +13,13 @@ export const Indents = () => {
                     <div style={{ marginBottom: 8, fontWeight: 700 }}>indent = {indent}</div>
                     <RadioXGroup indent={indent} aria-label={`Способ доставки, отступ ${indent}`}>
                         <Radio name={`${name}-${indent}`} value="courier" defaultChecked>
-                            Курьер
+                            Radio text
                         </Radio>
                         <Radio name={`${name}-${indent}`} value="pickup">
-                            Самовывоз
+                            Radio text
                         </Radio>
                         <Radio name={`${name}-${indent}`} value="post">
-                            Почта
+                            Radio text
                         </Radio>
                     </RadioXGroup>
                 </div>

@@ -11,10 +11,10 @@ export const VisualTests = () => {
                 <div style={{ marginBottom: 8, fontWeight: 700 }}>Клавиатурный фокус</div>
                 <RadioXGroup aria-label="Клавиатурный фокус" tabIndex={-1}>
                     <Radio name={`${name}-focus`} value="focused" onChange={action("onChange")}>
-                        В фокусе
+                        Radio text
                     </Radio>
                     <Radio name={`${name}-focus`} value="other" onChange={action("onChange")}>
-                        Другой вариант
+                        Radio text
                     </Radio>
                 </RadioXGroup>
             </div>
@@ -22,10 +22,10 @@ export const VisualTests = () => {
                 <div style={{ marginBottom: 8, fontWeight: 700 }}>Наведение на выбранный Radio</div>
                 <RadioXGroup aria-label="Наведение">
                     <Radio name={`${name}-hover`} value="hovered" defaultChecked onChange={action("onChange")}>
-                        Наведение
+                        Radio text
                     </Radio>
                     <Radio name={`${name}-hover`} value="other" onChange={action("onChange")}>
-                        Другой вариант
+                        Radio text
                     </Radio>
                 </RadioXGroup>
             </div>

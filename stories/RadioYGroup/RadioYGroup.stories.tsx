@@ -8,10 +8,8 @@ import {
     DefaultSource,
     Sizes as SizesRender,
     SizesSource,
-    Selected as SelectedRender,
-    SelectedSource,
-    Disabled as DisabledRender,
-    DisabledSource,
+    States as StatesRender,
+    StatesSource,
     VisualTests as VisualTestsRender,
 } from "./examples";
 
@@ -60,28 +58,15 @@ export const Sizes: Story = {
     },
 };
 
-export const Selected: Story = {
-    render: SelectedRender,
+export const States: Story = {
+    render: StatesRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Управляемый выбор хранится в состоянии приложения и передаётся в checked каждого Radio.",
+                story: "Выбранное и отключённое состояния задаются на каждом Radio: выбор — через checked и onChange, отключение — через disabled.",
             },
-            source: { code: SelectedSource, language: "tsx" },
-        },
-    },
-};
-
-export const Disabled: Story = {
-    render: DisabledRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "disabled задаётся на каждом Radio отдельно. Показаны выбранный и невыбранный элементы размера MD.",
-            },
-            source: { code: DisabledSource, language: "tsx" },
+            source: { code: StatesSource, language: "tsx" },
         },
     },
 };

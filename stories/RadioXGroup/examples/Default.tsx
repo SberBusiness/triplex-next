@@ -7,13 +7,13 @@ export const Default = () => {
     return (
         <RadioXGroup aria-label="Способ доставки">
             <Radio name={name} value="courier" defaultChecked>
-                Курьер
+                Radio text
             </Radio>
             <Radio name={name} value="pickup">
-                Самовывоз
+                Radio text
             </Radio>
             <Radio name={name} value="post">
-                Почта
+                Radio text
             </Radio>
         </RadioXGroup>
     );

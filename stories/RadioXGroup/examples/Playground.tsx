@@ -20,13 +20,13 @@ export const Playground = ({ indent, radioSize, disabled }: IPlaygroundArgs) => 
                 defaultChecked
                 onChange={action("onChange")}
             >
-                Курьер
+                Radio text
             </Radio>
             <Radio name={name} value="pickup" size={radioSize} disabled={disabled} onChange={action("onChange")}>
-                Самовывоз
+                Radio text
             </Radio>
             <Radio name={name} value="post" size={radioSize} disabled={disabled} onChange={action("onChange")}>
-                Почта
+                Radio text
             </Radio>
         </RadioXGroup>
     );

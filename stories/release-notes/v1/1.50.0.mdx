@@ -18,6 +18,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлены горизонтальные отступы `12px` между соседними `ButtonDropdownExtended`, а также между `ButtonDropdownExtended` и `Button` в обоих порядках.
 
+**NumberField**
+
+- Добавлено: `NumberField` передаёт `ref` на корневой контейнер `FormField` (`HTMLDivElement`) и имеет `displayName="NumberField"`. Тип компонента изменился с `React.FC` на `React.ForwardRefExoticComponent`.
+
 **RadioXGroup**
 
 - Добавлена поддержка `ref` на корневой контейнер (`HTMLDivElement`).

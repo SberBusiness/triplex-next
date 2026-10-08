@@ -167,7 +167,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | MultiselectField | ✅ | ✅ | ✅ |
 | Notification | ✅ | ✅ | ✅ |
 | NotificationGrouped | ⬜ | ⬜ | ⬜ |
-| NumberField | ⬜ | ✅ | ⬜ |
+| NumberField | ✅ | ✅ | ✅ |
 | OrderedList | ⬜ | ✅ | ⬜ |
 | Overlay | ✅ | ✅ | ✅ |
 | BodyPage | ✅ | ✅ | ✅ |

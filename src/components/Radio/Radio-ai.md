@@ -138,10 +138,10 @@ Radio.Background_Checked_Hover
 
 ## Связанные компоненты
 
-- `RadioXGroup` — публичная горизонтальная компоновка Radio, с настраиваемым
-  отступом и ролью `radiogroup`; отдельная задача AI-Ready.
-- `RadioYGroup` — публичная вертикальная компоновка Radio с ролью
-  `radiogroup`; отдельная задача AI-Ready.
+- `RadioXGroup` — горизонтальная компоновка Radio с настраиваемым отступом
+  и ролью `radiogroup`; см. `RadioXGroup-ai.md`.
+- `RadioYGroup` — вертикальная компоновка Radio с ролью `radiogroup`;
+  см. `RadioYGroup-ai.md`.
 - `Text` — рендерится внутри Radio для подписи. Его размер зависит от `size`
   Radio: `SM` → `B4`, `MD` → `B3`, `LG` → `B2`.
 
@@ -156,32 +156,24 @@ Radio.Background_Checked_Hover
 |---|---|---|
 | `Playground` | `Playground.tsx` | Controls для подписи, размера, выбранности и disabled; выбор синхронизируется с Controls |
 | `Default` | `Default.tsx` | Минимальная радио-кнопка с размером MD |
-| `DifferentSizes` | `DifferentSizes.tsx` | Подписанные размеры SM / MD / LG; в документации называется Sizes |
-| `XGroup` | `XGroup.tsx` | Использование Radio в горизонтальных группах разных размеров |
-| `YGroup` | `YGroup.tsx` | Использование Radio в вертикальных группах разных размеров |
-| `Selected` | `Selected.tsx` | Начальный выбор через defaultChecked в горизонтальной и вертикальной группах |
-| `Disabled` | `Disabled.tsx` | Выбранные и невыбранные disabled Radio всех размеров |
+| `Sizes` | `Sizes.tsx` | Подписанные размеры SM / MD / LG |
+| `States` | `States.tsx` | Controlled-выбор через `checked` и `onChange` с общим `name`; выбранный и невыбранный disabled-варианты |
 | `WithoutLabel` | `WithoutLabel.tsx` | Все размеры и комбинации checked / disabled без видимой подписи, с aria-label |
-| `Controlled` | `Controlled.tsx` | Выбор одного способа уведомления, управляемый через checked / onChange |
-| `VisualTests` | `VisualTests.tsx` | Клавиатурный фокус через play, выбранные / disabled состояния всех размеров и длинная подпись |
-| `VisualTestsHover` | — | Реальный CSS hover невыбранного Radio, включаемый Playwright в test-runner |
-| `VisualTestsCheckedHover` | — | Реальный CSS hover выбранного Radio, включаемый Playwright в test-runner |
+| `VisualTests` | `VisualTests.tsx` | Клавиатурный фокус через play, hover невыбранного варианта, checked / disabled всех размеров и длинная подпись |
+| `VisualTestsCheckedHover` | — | Тот же renderer, hover выбранного варианта |
 
-Для двух hover-историй существуют служебные render-файлы
-`VisualTestsHover.tsx` и `VisualTestsCheckedHover.tsx`. В колонке `Example file`
-намеренно стоит «—», чтобы MCP не выдавал их как копируемые примеры:
-их поведение зависит от параметров test-runner.
+Примеры компоновки Radio в группах — в stories `RadioXGroup` и `RadioYGroup`.
 
-Скриншоты снимаются для `DifferentSizes`, `WithoutLabel`, `VisualTests`,
-`VisualTestsHover` и `VisualTestsCheckedHover` на viewport xs / xl.
-Остальные истории исключены через `testRunner.skip`: Playground интерактивный,
-Default / Selected / Disabled / Controlled покрыты визуальной матрицей,
-а RadioXGroup / RadioYGroup остаются отдельными задачами.
+Visual-истории скрыты из autodocs и sidebar тегами `!autodocs` / `!dev`, но снимаются
+test-runner'ом на viewport xs / xl. Из скриншот-тестов исключены Playground
+(интерактивный) и Default (MD покрыт `Sizes`).
 
-Для hover-историй задан opt-in параметр `testRunner.hoverSelector`: synthetic
+Для hover задан opt-in параметр `testRunner.hoverSelector`: synthetic
 `userEvent.hover` из play не включает CSS `:hover`, поэтому test-runner
-перемещает реальный указатель после каждого remount. Baseline-файлы
-генерируются только CI / Docker; локальные macOS-скриншоты не публикуются.
+перемещает реальный указатель после каждого remount. Указатель в одном снимке
+может стоять только над одним элементом, поэтому hover выбранного варианта
+вынесен в `VisualTestsCheckedHover`. Baseline-файлы генерируются только
+CI / Docker; локальные macOS-скриншоты не публикуются.
 
 ---
 
@@ -189,4 +181,4 @@ Default / Selected / Disabled / Controlled покрыты визуальной �
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-07 | Создан документ. Проведён AI-рефакторинг Radio, уточнён JSDoc, расширены тесты публичных контрактов; stories переведены на modern pattern с визуальным покрытием размеров, checked / disabled, пустой и длинной подписи, клавиатурного фокуса и настоящего hover. |
+| 2026-10-07 | Создан документ. Проведён AI-рефакторинг Radio, уточнён JSDoc, расширены тесты публичных контрактов; stories переведены на modern pattern (Default, Sizes, States, WithoutLabel) с визуальным покрытием размеров, checked / disabled, пустой и длинной подписи, клавиатурного фокуса и настоящего hover. |

@@ -7,23 +7,13 @@ import {
     Playground as PlaygroundRender,
     Default as DefaultRender,
     DefaultSource,
-    DifferentSizes as DifferentSizesRender,
-    DifferentSizesSource,
-    XGroup as XGroupRender,
-    XGroupSource,
-    YGroup as YGroupRender,
-    YGroupSource,
-    Selected as SelectedRender,
-    SelectedSource,
-    Disabled as DisabledRender,
-    DisabledSource,
+    Sizes as SizesRender,
+    SizesSource,
+    States as StatesRender,
+    StatesSource,
     WithoutLabel as WithoutLabelRender,
     WithoutLabelSource,
-    Controlled as ControlledRender,
-    ControlledSource,
     VisualTests as VisualTestsRender,
-    VisualTestsHover as VisualTestsHoverRender,
-    VisualTestsCheckedHover as VisualTestsCheckedHoverRender,
 } from "./examples";
 
 const meta = {
@@ -38,6 +28,8 @@ const meta = {
 
 Общий name объединяет варианты в нативную группу. defaultChecked задаёт начальный выбор, а checked вместе с onChange — контролируемый.
 Без видимого описания передавайте aria-label. labelAttributes применяются к label, остальные атрибуты и ref — к input.
+
+Компоновка вариантов в группы — см. RadioXGroup и RadioYGroup.
                 `,
             },
             page: () => (
@@ -108,68 +100,31 @@ export const Default: TStory = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: DefaultSource, language: "tsx" } },
-        // Размер MD покрыт DifferentSizes.
+        // Размер MD покрыт Sizes.
         testRunner: { skip: true },
     },
     render: DefaultRender,
 };
 
-export const DifferentSizes: TStory = {
-    name: "Sizes",
+export const Sizes: TStory = {
     parameters: {
         controls: { disable: true },
-        docs: { source: { code: DifferentSizesSource, language: "tsx" } },
+        docs: { source: { code: SizesSource, language: "tsx" } },
     },
-    render: DifferentSizesRender,
+    render: SizesRender,
 };
 
-export const XGroup: TStory = {
-    name: "X Group",
+export const States: TStory = {
     parameters: {
         controls: { disable: true },
         docs: {
-            description: { story: "Группа радио-кнопок с направлением по оси X." },
-            source: { code: XGroupSource, language: "tsx" },
+            description: {
+                story: "Выбор задаётся через checked и onChange (или defaultChecked), недоступность — через disabled. Radio одной группы связываются общим name.",
+            },
+            source: { code: StatesSource, language: "tsx" },
         },
-        testRunner: { skip: true },
     },
-    render: XGroupRender,
-};
-
-export const YGroup: TStory = {
-    name: "Y Group",
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: { story: "Группа радио-кнопок с направлением по оси Y." },
-            source: { code: YGroupSource, language: "tsx" },
-        },
-        testRunner: { skip: true },
-    },
-    render: YGroupRender,
-};
-
-export const Selected: TStory = {
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: { story: "Начальный выбор задаётся через defaultChecked." },
-            source: { code: SelectedSource, language: "tsx" },
-        },
-        // Выбранные Radio всех размеров покрыты VisualTests; композиции групп сохраняются как пример.
-        testRunner: { skip: true },
-    },
-    render: SelectedRender,
-};
-
-export const Disabled: TStory = {
-    parameters: {
-        controls: { disable: true },
-        docs: { source: { code: DisabledSource, language: "tsx" } },
-        // Недоступные выбранные и невыбранные Radio всех размеров покрыты VisualTests.
-        testRunner: { skip: true },
-    },
-    render: DisabledRender,
+    render: StatesRender,
 };
 
 export const WithoutLabel: TStory = {
@@ -184,53 +139,30 @@ export const WithoutLabel: TStory = {
     render: WithoutLabelRender,
 };
 
-export const Controlled: TStory = {
-    parameters: {
-        controls: { disable: true },
-        docs: { source: { code: ControlledSource, language: "tsx" } },
-        testRunner: { skip: true },
-    },
-    render: ControlledRender,
-};
-
 export const VisualTests: TStory = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
+        // Play отправляет synthetic events; реальный :hover для снимка включает test-runner через Playwright.
+        testRunner: { hoverSelector: '[data-testid="radio-hover-unchecked"]' },
     },
     render: VisualTestsRender,
     play: async ({ canvas, userEvent }) => {
+        const radio = canvas.getByTestId("radio-focus");
+
         await userEvent.tab();
-        const radio = canvas.getByRole("radio", { name: "Фокус с клавиатуры" });
         await expect(radio).toHaveFocus();
         await expect(radio.matches(":focus-visible")).toBe(true);
     },
 };
 
-export const VisualTestsHover: TStory = {
-    tags: ["!autodocs"],
-    parameters: {
-        controls: { disable: true },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
-        // Play отправляет события; реальный :hover для снимка включает test-runner через Playwright.
-        testRunner: { hoverSelector: '[data-testid="radio-hover"]' },
-    },
-    render: VisualTestsHoverRender,
-    play: async ({ canvas, userEvent }) => {
-        await userEvent.hover(canvas.getByTestId("radio-hover"));
-    },
-};
-
 export const VisualTestsCheckedHover: TStory = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
-        testRunner: { hoverSelector: '[data-testid="radio-checked-hover"]' },
+        testRunner: { hoverSelector: '[data-testid="radio-hover-checked"]' },
     },
-    render: VisualTestsCheckedHoverRender,
-    play: async ({ canvas, userEvent }) => {
-        await userEvent.hover(canvas.getByTestId("radio-checked-hover"));
-    },
+    render: VisualTestsRender,
 };

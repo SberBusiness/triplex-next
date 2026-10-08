@@ -88,13 +88,11 @@ const config: TestRunnerConfig = {
             await page.setViewportSize({ width: viewport.width, height: 768 });
             await remountAndSettle(page, context.id);
 
-            // userEvent.hover() из play отправляет synthetic events и не включает CSS :hover.
-            // Для явно отмеченных stories перед снимком перемещаем реальный указатель.
-            const hoverSelector: unknown = storyContext.parameters?.testRunner?.hoverSelector;
-            try {
-                if (typeof hoverSelector === "string") {
-                    await page.locator(hoverSelector).hover();
-                }
+            // Скрываем каретку в input'ах — мигающий курсор делает скриншоты нестабильными.
+            // addStyleTag вызывается в каждой итерации, т.к. forceRemount сбрасывает injected-стили.
+            await page.addStyleTag({
+                content: "* { caret-color: transparent !important; }",
+            });
 
             try {
                 // Реальная мышь нужна для CSS :hover; синтетические события из play его не включают.
@@ -118,7 +116,8 @@ const config: TestRunnerConfig = {
                 });
             } finally {
                 if (typeof hoverSelector === "string") {
-                    await page.mouse.move(0, 0);
+                    // Убираем указатель за viewport, чтобы hover не влиял на следующую стори.
+                    await page.mouse.move(-1, -1);
                 }
             }
         }

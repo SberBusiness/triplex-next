@@ -7,7 +7,7 @@ export const WithoutLabel = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {SIZES.map((size) => (
             <div key={size}>
-                <div style={{ marginBottom: 8, fontWeight: 700 }}>{size.toUpperCase()}</div>
+                <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
                 <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
                     <Radio size={size} aria-label={`Не выбран, ${size}`} />
                     <Radio size={size} defaultChecked aria-label={`Выбран, ${size}`} />

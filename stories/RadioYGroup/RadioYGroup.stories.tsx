@@ -99,7 +99,7 @@ export const VisualTests: Story = {
     },
     play: async ({ canvas, userEvent }) => {
         const focusGroup = within(canvas.getByRole("radiogroup", { name: "Фокус с клавиатуры" }));
-        const focusRadio = focusGroup.getByRole("radio", { name: "Первый вариант" });
+        const focusRadio = focusGroup.getAllByRole("radio", { name: "Radio text" })[0];
         const hoverRadio = canvas.getByTestId("radio-y-group-hover-unchecked");
 
         await userEvent.tab();
@@ -124,7 +124,7 @@ export const VisualTestsCheckedHover: Story = {
     },
     play: async ({ canvas, userEvent }) => {
         const focusGroup = within(canvas.getByRole("radiogroup", { name: "Фокус с клавиатуры" }));
-        const focusRadio = focusGroup.getByRole("radio", { name: "Первый вариант" });
+        const focusRadio = focusGroup.getAllByRole("radio", { name: "Radio text" })[0];
         const hoverRadio = canvas.getByTestId("radio-y-group-hover-checked");
 
         await userEvent.tab();

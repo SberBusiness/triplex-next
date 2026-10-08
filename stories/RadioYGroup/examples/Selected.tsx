@@ -11,13 +11,13 @@ export const Selected = () => {
     return (
         <RadioYGroup aria-label="Выберите тариф">
             <Radio name={name} value="basic" checked={value === "basic"} onChange={handleChange}>
-                Базовый
+                Radio text
             </Radio>
             <Radio name={name} value="standard" checked={value === "standard"} onChange={handleChange}>
-                Стандартный
+                Radio text
             </Radio>
             <Radio name={name} value="extended" checked={value === "extended"} onChange={handleChange}>
-                Расширенный
+                Radio text
             </Radio>
         </RadioYGroup>
     );

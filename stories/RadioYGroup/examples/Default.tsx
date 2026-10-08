@@ -8,13 +8,13 @@ export const Default = () => {
     return (
         <RadioYGroup aria-label="Выберите вариант">
             <Radio name={name} value="first">
-                Первый вариант
+                Radio text
             </Radio>
             <Radio name={name} value="second">
-                Второй вариант
+                Radio text
             </Radio>
             <Radio name={name} value="third">
-                Третий вариант
+                Radio text
             </Radio>
         </RadioYGroup>
     );

@@ -14,13 +14,13 @@ export const Sizes = () => {
                     <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
                     <RadioYGroup aria-label={`Варианты размера ${size.toUpperCase()}`}>
                         <Radio name={`${name}-${size}`} value="first" size={size}>
-                            Первый вариант
+                            Radio text
                         </Radio>
                         <Radio name={`${name}-${size}`} value="second" size={size} defaultChecked>
-                            Второй вариант
+                            Radio text
                         </Radio>
                         <Radio name={`${name}-${size}`} value="third" size={size}>
-                            Третий вариант
+                            Radio text
                         </Radio>
                     </RadioYGroup>
                 </div>

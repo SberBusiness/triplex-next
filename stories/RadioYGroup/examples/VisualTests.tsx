@@ -13,10 +13,10 @@ export const VisualTests = () => (
                     onChange={action("onChange")}
                     onFocus={action("onFocus")}
                 >
-                    Первый вариант
+                    Radio text
                 </Radio>
                 <Radio name="radio-y-group-focus" value="second" onChange={action("onChange")}>
-                    Второй вариант
+                    Radio text
                 </Radio>
             </RadioYGroup>
         </div>
@@ -29,7 +29,7 @@ export const VisualTests = () => (
                     data-testid="radio-y-group-hover-unchecked"
                     onChange={action("onChange")}
                 >
-                    Не выбран
+                    Radio text
                 </Radio>
                 <Radio
                     name="radio-y-group-hover"
@@ -38,7 +38,7 @@ export const VisualTests = () => (
                     defaultChecked
                     onChange={action("onChange")}
                 >
-                    Выбран
+                    Radio text
                 </Radio>
             </RadioYGroup>
         </div>

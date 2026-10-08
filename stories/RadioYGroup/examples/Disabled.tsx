@@ -8,10 +8,10 @@ export const Disabled = () => {
     return (
         <RadioYGroup aria-label="Отключённые варианты">
             <Radio name={name} value="first" size={EComponentSize.MD} disabled>
-                Не выбран
+                Radio text
             </Radio>
             <Radio name={name} value="second" size={EComponentSize.MD} disabled defaultChecked>
-                Выбран
+                Radio text
             </Radio>
         </RadioYGroup>
     );

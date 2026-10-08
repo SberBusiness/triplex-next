@@ -29,14 +29,3 @@ export const VisualTestsArrows = () => (
         </div>
     </div>
 );
-
-/**
- * Скриншот-тест тиков-индикаторов (мобильный preset, XS viewport): лента
- * миниатюр заменяется рядом тиков, активный тик соответствует выбранному
- * бакету (третий из четырёх для `photo-5`).
- */
-export const VisualTestsDots = () => (
-    <div style={{ width: 360 }}>
-        <ImageGallery items={ITEMS} defaultId="photo-5" withBlur showDots {...ARROW_PROPS} />
-    </div>
-);

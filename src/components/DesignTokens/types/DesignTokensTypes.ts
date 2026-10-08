@@ -36,6 +36,7 @@ import {
     TDesignTokensComponentsMultiselectField,
     TDesignTokensComponentsNotification,
     TDesignTokensComponentsOverlay,
+    TDesignTokensComponentsPageIndicators,
     TDesignTokensComponentsPagination,
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
@@ -346,6 +347,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsMultiselectField
     | TDesignTokensComponentsNotification
     | TDesignTokensComponentsOverlay
+    | TDesignTokensComponentsPageIndicators
     | TDesignTokensComponentsPagination
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl

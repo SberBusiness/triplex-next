@@ -2,7 +2,7 @@ import React from "react";
 import {
     ImageGallery,
     TImageGalleryArrowProps,
-    TImageGalleryDotsProps,
+    TImageGalleryPageIndicatorsProps,
     TImageGalleryThumbnailsProps,
 } from "@sberbusiness/triplex-next";
 
@@ -17,24 +17,24 @@ export interface IPlaygroundArgs {
     height: "auto" | number;
     withBlur: boolean;
     showThumbnails: boolean;
-    showDots: boolean;
+    showPageIndicators: boolean;
     defaultId: string;
     prevArrowProps: TImageGalleryArrowProps;
     nextArrowProps: TImageGalleryArrowProps;
     thumbnailsProps: TImageGalleryThumbnailsProps;
-    dotsProps: TImageGalleryDotsProps;
+    pageIndicatorsProps: TImageGalleryPageIndicatorsProps;
 }
 
 export const Playground = ({
     height,
     withBlur,
     showThumbnails,
-    showDots,
+    showPageIndicators,
     defaultId,
     prevArrowProps,
     nextArrowProps,
     thumbnailsProps,
-    dotsProps,
+    pageIndicatorsProps,
 }: IPlaygroundArgs) => (
     <ImageGallery
         items={ITEMS}
@@ -42,10 +42,10 @@ export const Playground = ({
         height={height}
         withBlur={withBlur}
         showThumbnails={showThumbnails}
-        showDots={showDots}
+        showPageIndicators={showPageIndicators}
         prevArrowProps={prevArrowProps}
         nextArrowProps={nextArrowProps}
         thumbnailsProps={thumbnailsProps}
-        dotsProps={dotsProps}
+        pageIndicatorsProps={pageIndicatorsProps}
     />
 );

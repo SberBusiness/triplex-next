@@ -1,5 +1,5 @@
-import React from "react";
-import { ImageGalleryExtended, EImageGalleryArrowDirection } from "@sberbusiness/triplex-next";
+import React, { useState } from "react";
+import { ImageGalleryExtended, EImageGalleryArrowDirection, MobileView } from "@sberbusiness/triplex-next";
 
 const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     id: `photo-${i + 1}`,
@@ -8,11 +8,12 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
 }));
 
 /**
- * Полный десктопный состав: крупная картинка со стрелками + лента миниатюр.
+ * Полный состав: крупная картинка со стрелками + лента миниатюр на десктопе,
+ * на мобильном (<768px) лента заменяется индикаторами страниц через `MobileView`.
  * Активный id хранится в состоянии (компонент controlled-only).
  */
 export const Default = () => {
-    const [selectedId, setSelectedId] = React.useState("photo-1");
+    const [selectedId, setSelectedId] = useState("photo-1");
 
     return (
         <ImageGalleryExtended items={ITEMS} selectedId={selectedId} onChange={setSelectedId}>
@@ -38,7 +39,9 @@ export const Default = () => {
                     )}
                 </ImageGalleryExtended.Nav>
             </ImageGalleryExtended.Main>
-            <ImageGalleryExtended.Thumbnails />
+            <MobileView fallback={<ImageGalleryExtended.Thumbnails />}>
+                <ImageGalleryExtended.PageIndicators />
+            </MobileView>
         </ImageGalleryExtended>
     );
 };

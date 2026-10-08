@@ -9,12 +9,12 @@ import {
     CaretrightStrokeSrvIcon20,
     CaretdownStrokeSrvIcon20,
 } from "@sberbusiness/icons-next";
-import { ECarouselOrientation } from "./enums";
+import { EOrientation } from "../../enums";
 import styles from "./styles/Carousel.module.less";
 
-const ORIENTATION_TO_PREV_ICON_MAP: Record<ECarouselOrientation, React.ReactElement> = {
-    [ECarouselOrientation.HORIZONTAL]: <CaretleftStrokeSrvIcon20 paletteIndex={7} />,
-    [ECarouselOrientation.VERTICAL]: <CaretupStrokeSrvIcon20 paletteIndex={7} />,
+const ORIENTATION_TO_PREV_ICON_MAP: Record<EOrientation, React.ReactElement> = {
+    [EOrientation.HORIZONTAL]: <CaretleftStrokeSrvIcon20 paletteIndex={7} />,
+    [EOrientation.VERTICAL]: <CaretupStrokeSrvIcon20 paletteIndex={7} />,
 };
 
 export const CarouselPrevButton = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
@@ -50,9 +50,9 @@ export const CarouselPrevButton = React.forwardRef<HTMLButtonElement, IButtonIco
 
 CarouselPrevButton.displayName = "Carousel.PrevButton";
 
-const ORIENTATION_TO_NEXT_ICON_MAP: Record<ECarouselOrientation, React.ReactElement> = {
-    [ECarouselOrientation.HORIZONTAL]: <CaretrightStrokeSrvIcon20 paletteIndex={7} />,
-    [ECarouselOrientation.VERTICAL]: <CaretdownStrokeSrvIcon20 paletteIndex={7} />,
+const ORIENTATION_TO_NEXT_ICON_MAP: Record<EOrientation, React.ReactElement> = {
+    [EOrientation.HORIZONTAL]: <CaretrightStrokeSrvIcon20 paletteIndex={7} />,
+    [EOrientation.VERTICAL]: <CaretdownStrokeSrvIcon20 paletteIndex={7} />,
 };
 
 export const CarouselNextButton = React.forwardRef<HTMLButtonElement, IButtonIconProps>(

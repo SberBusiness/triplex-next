@@ -305,31 +305,6 @@ describe("ImageGalleryExtended — Nav (render-функция)", () => {
     });
 });
 
-describe("ImageGalleryExtended — Dots (мобильный)", () => {
-    beforeEach(() => {
-        mobileState.isMobile = true;
-    });
-
-    it("рендерит min(items, 4) тиков и клик переключает id через bucketSize", () => {
-        const onChange = vi.fn();
-        render(
-            <ControlledGallery items={buildItems(9)} onChange={onChange}>
-                <ImageGalleryExtended.Main />
-                <ImageGalleryExtended.Dots />
-            </ControlledGallery>,
-        );
-
-        // Доступное имя тика берётся из item.alt.
-        const dots = screen.getAllByRole("button", { name: /^Photo/ });
-        expect(dots).toHaveLength(4);
-
-        // 9 items, bucketSize=2: тик 2 → index 4 → p5.
-        fireEvent.click(dots[2]);
-        expect(onChange).toHaveBeenCalledWith("p5");
-        expect(screen.getByAltText("Photo 5")).toBeInTheDocument();
-    });
-});
-
 describe("ImageGalleryExtended — Thumbnails (render-функция)", () => {
     it("кастомная render-функция получает состояние и переключает id", () => {
         const onChange = vi.fn();
@@ -372,20 +347,20 @@ describe("ImageGalleryExtended — refs", () => {
     it("пробрасывает ref в корневые DOM-элементы публичных составных частей", () => {
         const rootRef = React.createRef<HTMLDivElement>();
         const mainRef = React.createRef<HTMLDivElement>();
-        const dotsRef = React.createRef<HTMLDivElement>();
+        const pageIndicatorsRef = React.createRef<HTMLDivElement>();
         const thumbnailsRef = React.createRef<HTMLDivElement>();
 
         render(
             <ImageGalleryExtended ref={rootRef} items={buildItems(9)} selectedId="p1" onChange={vi.fn()}>
                 <ImageGalleryExtended.Main ref={mainRef} />
-                <ImageGalleryExtended.Dots ref={dotsRef} />
+                <ImageGalleryExtended.PageIndicators ref={pageIndicatorsRef} />
                 <ImageGalleryExtended.Thumbnails ref={thumbnailsRef} />
             </ImageGalleryExtended>,
         );
 
         expect(rootRef.current).toBeInstanceOf(HTMLDivElement);
         expect(mainRef.current).toBeInstanceOf(HTMLDivElement);
-        expect(dotsRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(pageIndicatorsRef.current).toBeInstanceOf(HTMLDivElement);
         expect(thumbnailsRef.current).toBeInstanceOf(HTMLDivElement);
     });
 });

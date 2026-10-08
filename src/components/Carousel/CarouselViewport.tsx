@@ -2,19 +2,19 @@ import React, { useContext, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { ICarouselViewportProps } from "./types";
 import { CarouselContext } from "./CarouselContext";
-import { mergeRefs } from "./utils";
+import { mergeRefs } from "../../utils/refs";
 import { ORIENTATION_TRANSFORM } from "./constants";
-import { ECarouselOrientation } from "./enums";
+import { EOrientation } from "../../enums";
 import styles from "./styles/Carousel.module.less";
 
 const ORIENTATION_TO_TOUCH_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: "clientX",
-    [ECarouselOrientation.VERTICAL]: "clientY",
+    [EOrientation.HORIZONTAL]: "clientX",
+    [EOrientation.VERTICAL]: "clientY",
 } as const;
 
 const ORIENTATION_TO_CROSS_TOUCH_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: "clientY",
-    [ECarouselOrientation.VERTICAL]: "clientX",
+    [EOrientation.HORIZONTAL]: "clientY",
+    [EOrientation.VERTICAL]: "clientX",
 } as const;
 
 export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewportProps>(

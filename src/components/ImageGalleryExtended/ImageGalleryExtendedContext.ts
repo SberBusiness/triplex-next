@@ -1,7 +1,7 @@
 import React from "react";
 import { IImageGalleryItemProps } from "./types";
 
-/** Контекст ImageGalleryExtended. Связывает контейнер с составными частями (`Main`/`Thumbnails`/`Dots`). */
+/** Контекст ImageGalleryExtended. Связывает контейнер с составными частями (`Main`/`Thumbnails`/`PageIndicators`). */
 export interface IImageGalleryExtendedContext {
     /** Список изображений галереи (из пропа `items` контейнера). */
     items: ReadonlyArray<IImageGalleryItemProps>;

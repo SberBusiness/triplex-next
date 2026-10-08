@@ -18,6 +18,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлены горизонтальные отступы `12px` между соседними `ButtonDropdownExtended`, а также между `ButtonDropdownExtended` и `Button` в обоих порядках.
 
+**RadioYGroup**
+
+- Добавлено: `RadioYGroup` передаёт `ref` на корневой `<div>`. Тип компонента изменился с `React.FC` на `React.ForwardRefExoticComponent`.
+
 **SuggestField**
 
 - Исправлен баг: на мобильной ширине терялись `className`, `id`, `data-test-id`, `active` и `renderInput` — `SuggestField` передавал мобильному варианту только часть props. Теперь оба варианта получают одинаковый набор props, в том числе `data-test-id` для e2e.

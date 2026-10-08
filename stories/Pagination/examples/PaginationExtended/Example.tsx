@@ -1,57 +1,51 @@
 import React, { useState } from "react";
 import {
-    EComponentSize,
-    ETextSize,
-    ISelectFieldOption,
     PaginationExtended,
     PaginationNavigation,
-    SelectField,
-    Text,
+    PaginationSelect,
+    ISelectExtendedFieldDefaultOption,
 } from "@sberbusiness/triplex-next";
 
-const PAGE_SIZE_OPTIONS: ISelectFieldOption[] = [
-    { id: "25", value: "25", label: "25" },
-    { id: "50", value: "50", label: "50" },
-    { id: "100", value: "100", label: "100" },
-];
-
-const TOTAL_ITEMS = 125;
-
 export const Example = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSizeOption, setPageSizeOption] = useState(PAGE_SIZE_OPTIONS[0]);
-    const pageSize = Number(pageSizeOption.value);
-    const totalPages = Math.ceil(TOTAL_ITEMS / pageSize);
-    const firstItem = (currentPage - 1) * pageSize + 1;
-    const lastItem = Math.min(currentPage * pageSize, TOTAL_ITEMS);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const totalItems = 300;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
-    const handlePageSizeChange = (option: ISelectFieldOption) => {
-        setPageSizeOption(option);
-        setCurrentPage(1);
+    const handlePageSizeChange = (option: ISelectExtendedFieldDefaultOption) => {
+        setPageSize(Number(option.value));
+        // Смена размера страницы меняет totalPages — возвращаемся на первую, чтобы не оказаться вне диапазона.
+        setPage(1);
     };
 
+    const options: ISelectExtendedFieldDefaultOption[] = [
+        { id: "0", value: "10", label: "10" },
+        { id: "1", value: "20", label: "20" },
+        { id: "2", value: "50", label: "50" },
+        { id: "3", value: "100", label: "100" },
+        { id: "4", value: "300", label: "300" },
+    ];
+
+    const selectedOption = options.find((option) => option.value === String(pageSize));
+
     return (
-        <PaginationExtended aria-label="Пагинация списка документов" style={{ flexWrap: "wrap", gap: 24 }}>
-            <Text size={ETextSize.B3}>
-                {firstItem}–{lastItem} из {TOTAL_ITEMS}
-            </Text>
+        <PaginationExtended>
             <PaginationNavigation
-                currentPage={currentPage}
+                currentPage={page}
                 totalPages={totalPages}
-                onCurrentPageChange={setCurrentPage}
-                buttonPrevProps={{ "aria-label": "Предыдущая страница" }}
-                buttonNextProps={{ "aria-label": "Следующая страница" }}
+                boundaryCount={1}
+                siblingCount={1}
+                onCurrentPageChange={setPage}
             />
-            <div style={{ width: 180 }}>
-                <SelectField
-                    size={EComponentSize.SM}
-                    value={pageSizeOption}
-                    options={PAGE_SIZE_OPTIONS}
-                    onChange={handlePageSizeChange}
-                    targetProps={{ fieldLabel: "Записей на странице" }}
-                    mobileTitle="Записей на странице"
-                />
-            </div>
+            <PaginationSelect
+                paginationLabel="Показать на странице:"
+                value={selectedOption || options[0]}
+                options={options}
+                onChange={handlePageSizeChange}
+                targetProps={{
+                    fieldLabel: "",
+                }}
+            />
         </PaginationExtended>
     );
 };

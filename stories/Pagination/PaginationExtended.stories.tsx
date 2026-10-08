@@ -2,12 +2,7 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { PaginationExtended } from "@sberbusiness/triplex-next";
-import {
-    Default as DefaultRender,
-    DefaultSource,
-    Example as ExampleRender,
-    ExampleSource,
-} from "./examples/PaginationExtended";
+import { Example as ExampleRender, ExampleSource } from "./examples/PaginationExtended";
 
 const meta = {
     title: "Components/Pagination/PaginationExtended",
@@ -33,19 +28,6 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
-    render: DefaultRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            source: {
-                code: DefaultSource,
-                language: "tsx",
-            },
-        },
-    },
-};
 
 export const Example: Story = {
     render: ExampleRender,

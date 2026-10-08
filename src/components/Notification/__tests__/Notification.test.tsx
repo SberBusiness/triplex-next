@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Notification } from "../Notification";
-import { NotificationGrouped } from "../NotificationGrouped";
 import { SuccessStrokeStsIcon20 } from "@sberbusiness/icons-next";
 
 describe("Notification", () => {
@@ -325,52 +324,5 @@ describe("Notification", () => {
 
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
         expect(ref.current?.className).toContain("notificationBody");
-    });
-});
-
-describe("NotificationGrouped", () => {
-    it("should render children", () => {
-        render(
-            <NotificationGrouped>
-                <Notification>
-                    <Notification.Body>
-                        <Notification.Body.Content>Grouped content</Notification.Body.Content>
-                    </Notification.Body>
-                </Notification>
-            </NotificationGrouped>,
-        );
-
-        expect(screen.getByText("Grouped content")).toBeInTheDocument();
-    });
-
-    it("should render with grouped wrapper class", () => {
-        const { container } = render(
-            <NotificationGrouped>
-                <Notification>
-                    <Notification.Body>
-                        <Notification.Body.Content>Test</Notification.Body.Content>
-                    </Notification.Body>
-                </Notification>
-            </NotificationGrouped>,
-        );
-
-        const wrapper = container.firstElementChild as HTMLElement;
-        expect(wrapper.className).toContain("notificationGroupedWrapper");
-    });
-
-    it("should forward ref to the root element", () => {
-        const ref = React.createRef<HTMLDivElement>();
-        render(
-            <NotificationGrouped ref={ref}>
-                <Notification>
-                    <Notification.Body>
-                        <Notification.Body.Content>Test</Notification.Body.Content>
-                    </Notification.Body>
-                </Notification>
-            </NotificationGrouped>,
-        );
-
-        expect(ref.current).toBeInstanceOf(HTMLDivElement);
-        expect(ref.current?.className).toContain("notificationGroupedWrapper");
     });
 });

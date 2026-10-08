@@ -1,16 +1,14 @@
-import { NotificationGroupedFooter } from "./components/NotificationGroupedFooter";
 import React from "react";
+import { NotificationGroupedFooter } from "./components/NotificationGroupedFooter";
 import styles from "./styles/Notification.module.less";
 
 /** Свойства NotificationGrouped. */
 export interface INotificationGroupedProps {
-    /** Нотификация. */
+    /** Содержимое группы; обычно один Notification, под которым отображаются декоративные слои. */
     children: React.ReactNode;
 }
 
-/**
- * Компонент NotificationGrouped.
- */
+/** Обёртка, обозначающая группу уведомлений двумя декоративными слоями под содержимым. */
 export const NotificationGrouped = React.forwardRef<HTMLDivElement, INotificationGroupedProps>(
     function NotificationGrouped({ children }, ref) {
         return (

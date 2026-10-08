@@ -8,40 +8,46 @@ import styles from "./styles/MonthYearRange.module.less";
 
 /** Свойства функции рендеринга кнопки сдвига диапазона месяцев. */
 export interface IMonthYearRangeButtonProvideProps {
+    /** Содержимое кнопки — иконка направления сдвига. */
     children: React.ReactNode;
+    /** CSS-класс, который следует передать кнопке. */
     className: string;
+    /** Обработчик сдвига; не вызывает onChange при пустой или невалидной границе. */
     onClick: () => void;
+    /** Кнопка отключена, если хотя бы одна граница диапазона пуста. */
     disabled: boolean;
 }
 
 /** Свойства функции рендеринга поля выбора месяца. */
 export interface IMonthYearRangePickerProvideProps {
+    /** Дата в формате YYYYMMDD или пустая строка, если граница не выбрана. */
     value: string;
+    /** Обработчик изменения границы; при пересечении очищает противоположную границу. */
     onChange: (value: string) => void;
 }
 
-/** Значение компонента MonthYearRange. */
+/** Границы диапазона [от, до] в формате YYYYMMDD; пустая строка означает отсутствие границы. */
 export type TMonthYearRangeValue = [string, string];
 
 /** Свойства компонента MonthYearRange. */
 export interface IMonthYearRangeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-    /** Диапазон месяцев. */
+    /** Границы диапазона [от, до] в формате YYYYMMDD; пустая строка означает отсутствие границы. */
     value: TMonthYearRangeValue;
-    /** Функция, вызывающаяся при изменении диапазона месяцев. */
+    /** Обработчик изменения диапазона; передаёт новые границы для обновления value. */
     onChange: (value: TMonthYearRangeValue) => void;
-    /** Численная величина сдвига диапазона месяцев. */
+    /** Величина сдвига, применяемая Moment.js. По умолчанию 1. */
     shiftAmount?: number;
-    /** Единица измерения сдвига диапазона месяцев. */
+    /** Единица измерения сдвига. По умолчанию EMonthYearRangeShiftUnit.MONTH. */
     shiftUnit?: EMonthYearRangeShiftUnit;
-    /** Управление отображением/скрытием кнопок сдвига диапазона месяцев. */
+    /** Скрывает кнопки сдвига диапазона. По умолчанию кнопки отображаются. */
     hideNavigation?: boolean;
-    /** Функция рендеринга поля выбора месяца "от". */
+    /** Рендерит поле выбора месяца "от", используя переданные value и onChange. */
     renderPickerFrom: (props: IMonthYearRangePickerProvideProps) => React.ReactNode;
-    /** Функция рендеринга поля выбора месяца "до". */
+    /** Рендерит поле выбора месяца "до", используя переданные value и onChange. */
     renderPickerTo: (props: IMonthYearRangePickerProvideProps) => React.ReactNode;
-    /** Функция рендеринга кнопки сдвига диапазона месяцев "назад". */
+    /** Рендерит кнопку сдвига назад, используя переданные children, className, onClick и disabled. */
     renderButtonBack: (props: IMonthYearRangeButtonProvideProps) => React.ReactNode;
-    /** Функция рендеринга кнопки сдвига диапазона месяцев "вперёд". */
+    /** Рендерит кнопку сдвига вперёд, используя переданные children, className, onClick и disabled. */
     renderButtonForward: (props: IMonthYearRangeButtonProvideProps) => React.ReactNode;
 }
 
@@ -84,8 +90,7 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
             }
         };
 
-        /** Функция, смещающая диапазон месяцев назад. */
-        const shiftRangeBack = () => {
+        const shiftRange = (method: "subtract" | "add") => {
             if (!start || !end) {
                 return;
             }
@@ -98,29 +103,13 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
             }
 
             onChange([
-                momentStart.subtract(shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
-                momentEnd.subtract(shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
+                momentStart[method](shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
+                momentEnd[method](shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
             ]);
         };
 
-        /** Функция, смещающая диапазон месяцев вперёд. */
-        const shiftRangeForward = () => {
-            if (!start || !end) {
-                return;
-            }
-
-            const momentStart = moment(start, dateFormatYYYYMMDD, true);
-            const momentEnd = moment(end, dateFormatYYYYMMDD, true);
-
-            if (!momentStart.isValid() || !momentEnd.isValid()) {
-                return;
-            }
-
-            onChange([
-                momentStart.add(shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
-                momentEnd.add(shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
-            ]);
-        };
+        const shiftRangeBack = () => shiftRange("subtract");
+        const shiftRangeForward = () => shiftRange("add");
 
         return (
             <div className={classNames} {...rest} ref={ref}>

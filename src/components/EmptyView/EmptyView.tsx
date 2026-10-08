@@ -26,11 +26,16 @@ const BUTTONS_GAP_MAP: Record<EEmptyViewSize, TGapSize> = {
 /** Заглушка для пустых состояний. */
 export const EmptyView = React.forwardRef<HTMLDivElement, IEmptyViewProps>(
     ({ className, size, icon, title, description, caption, buttons, ...rest }, ref) => {
-        const hasDescription = !!(description || caption);
+        const hasDescriptionOrCaption = Boolean(description || caption);
 
         return (
             <div
-                className={clsx(styles.emptyView, SIZE_CLASS_MAP[size], { [styles.hasTitle]: !!title }, className)}
+                className={clsx(
+                    styles.emptyView,
+                    SIZE_CLASS_MAP[size],
+                    { [styles.hasTitle]: Boolean(title) },
+                    className,
+                )}
                 ref={ref}
                 {...rest}
             >
@@ -38,16 +43,16 @@ export const EmptyView = React.forwardRef<HTMLDivElement, IEmptyViewProps>(
                     {icon && <div className={styles.icon}>{icon}</div>}
                     {icon && size === EEmptyViewSize.SM && <Gap size={8} />}
 
-                    {(title || hasDescription) && (
+                    {(title || hasDescriptionOrCaption) && (
                         <div className={styles.textBlock}>
                             {title && (
                                 <Title size={ETitleSize.H3} weight={EFontWeightTitle.MEDIUM}>
                                     {title}
                                 </Title>
                             )}
-                            {title && hasDescription && <Gap size={12} />}
+                            {title && hasDescriptionOrCaption && <Gap size={12} />}
 
-                            {hasDescription && (
+                            {hasDescriptionOrCaption && (
                                 <div className={styles.descriptionBlock}>
                                     {description && (
                                         <Text

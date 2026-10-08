@@ -173,7 +173,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | BodyPage | ✅ | ✅ | ✅ |
 | Page | ✅ | ✅ | ✅ |
 | Pagination | ✅ | ✅ | ✅ |
-| PaginationExtended | ⬜ | ⬜ | ⬜ |
+| PaginationExtended | ✅ | ✅ | ✅ |
 | PaginationNavigationExtended | ⬜ | ⬜ | ⬜ |
 | Portal | ✅ | ✅ | ✅ |
 | Radio | ⬜ | ⬜ | ⬜ |

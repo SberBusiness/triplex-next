@@ -7,7 +7,7 @@ import { ImageGalleryExtendedNav } from "./components/ImageGalleryExtendedNav";
 import { ImageGalleryExtendedArrow } from "./components/ImageGalleryExtendedArrow";
 import { ImageGalleryExtendedThumbnails } from "./components/ImageGalleryExtendedThumbnails";
 import { ImageGalleryExtendedThumb } from "./components/ImageGalleryExtendedThumb";
-import { ImageGalleryExtendedDots } from "./components/ImageGalleryExtendedDots";
+import { ImageGalleryExtendedPageIndicators } from "./components/ImageGalleryExtendedPageIndicators";
 import { IImageGalleryExtendedProps } from "./types";
 import styles from "./styles/ImageGalleryExtended.module.less";
 
@@ -18,7 +18,7 @@ interface IImageGalleryExtendedComposition {
     Arrow: typeof ImageGalleryExtendedArrow;
     Thumbnails: typeof ImageGalleryExtendedThumbnails;
     Thumb: typeof ImageGalleryExtendedThumb;
-    Dots: typeof ImageGalleryExtendedDots;
+    PageIndicators: typeof ImageGalleryExtendedPageIndicators;
 }
 
 /**
@@ -113,6 +113,6 @@ export const ImageGalleryExtended: typeof ImageGalleryExtendedRoot & IImageGalle
         Arrow: ImageGalleryExtendedArrow,
         Thumbnails: ImageGalleryExtendedThumbnails,
         Thumb: ImageGalleryExtendedThumb,
-        Dots: ImageGalleryExtendedDots,
+        PageIndicators: ImageGalleryExtendedPageIndicators,
     },
 );

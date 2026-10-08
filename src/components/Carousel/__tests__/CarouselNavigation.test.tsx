@@ -3,7 +3,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { CarouselPrevButton, CarouselNextButton } from "../CarouselButton";
 import { CarouselContext, ICarouselContext } from "../CarouselContext";
-import { ECarouselOrientation, ECarouselScrollMode } from "../enums";
+import { ECarouselScrollMode } from "../enums";
+import { EOrientation } from "../../../enums";
 
 interface IWrapperProps {
     contextOverrides?: Partial<ICarouselContext>;
@@ -13,7 +14,7 @@ interface IWrapperProps {
 const ButtonContextMockWrapper: React.FC<IWrapperProps> = ({ contextOverrides, children }) => {
     const defaultMockContext: ICarouselContext = {
         gap: 16,
-        orientation: ECarouselOrientation.HORIZONTAL,
+        orientation: EOrientation.HORIZONTAL,
         scrollMode: ECarouselScrollMode.ITEM,
         offset: 0,
         activeIndices: new Array<number>(),
@@ -24,10 +25,9 @@ const ButtonContextMockWrapper: React.FC<IWrapperProps> = ({ contextOverrides, c
         nextSlide: vi.fn(),
         prevSlide: vi.fn(),
         goToSlide: vi.fn(),
-        orientationRef: { current: ECarouselOrientation.HORIZONTAL },
+        orientationRef: { current: EOrientation.HORIZONTAL },
         offsetRef: { current: 0 },
         maxOffsetRef: { current: 0 },
-        currentIndexRef: { current: 0 },
         viewportRef: { current: null },
         trackRef: { current: null },
         slideRefs: { current: new Map<number, HTMLDivElement>() },

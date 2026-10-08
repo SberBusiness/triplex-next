@@ -58,19 +58,19 @@ test.describe("ImageGallery", () => {
             await expect(arrows.nth(1)).toBeHidden();
         });
 
-        test("dots row is visible and click on a tick switches the main image", async ({ page }) => {
-            // Тики-индикаторы — кнопки с aria-label вида "Photo N" (на мобильном вместо миниатюр).
-            const dots = page.getByRole("button", { name: /^Photo \d+$/ });
+        test("page indicators are visible and click on an indicator switches the main image", async ({ page }) => {
+            // Индикаторы страниц — вкладки с aria-label вида "Photo N" (на мобильном вместо миниатюр).
+            // Видимо окно из 5 индикаторов, остальные скрыты от доступности (aria-hidden).
+            const indicators = page.getByRole("tab", { name: /^Photo \d+$/ });
 
-            await expect(dots).toHaveCount(4);
+            await expect(indicators).toHaveCount(5);
             // На мобильном Main — карусельная лента: в DOM окно соседних слайдов (prev/current/next),
             // поэтому активную картинку определяем по её попаданию во вьюпорт (соседи клипаются .main).
             await expect(page.getByRole("img", { name: "Photo 1" })).toBeInViewport();
 
-            // 9 items, bucketSize=2: тик 2 → index 4 → Photo 5
-            await dots.nth(2).click();
-            await expect(page.getByRole("img", { name: "Photo 5" })).toBeInViewport();
-            await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+            await page.getByRole("tab", { name: "Photo 3" }).click();
+            await expect(page.getByRole("img", { name: "Photo 3" })).toBeInViewport();
+            await expect(page.getByRole("tab", { name: "Photo 3" })).toHaveAttribute("aria-selected", "true");
         });
     });
 });

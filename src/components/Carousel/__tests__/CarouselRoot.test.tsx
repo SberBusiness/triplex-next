@@ -2,11 +2,12 @@ import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Carousel } from "../Carousel";
-import { ECarouselOrientation, ECarouselScrollMode } from "../enums";
+import { ECarouselScrollMode } from "../enums";
+import { EOrientation } from "../../../enums";
 import { getResizeCallback, resetResizeCallback, mockElementSize } from "../../../../test-utils/dom";
 
 interface ITestCarouselProps {
-    orientation?: ECarouselOrientation;
+    orientation?: EOrientation;
     scrollMode?: ECarouselScrollMode;
     gap?: number;
     slideSizes?: number[];
@@ -14,13 +15,13 @@ interface ITestCarouselProps {
 }
 
 const TestCarousel: React.FC<ITestCarouselProps> = ({
-    orientation = ECarouselOrientation.HORIZONTAL,
+    orientation = EOrientation.HORIZONTAL,
     scrollMode = ECarouselScrollMode.ITEM,
     gap = 16,
     slideSizes = [100, 100, 100],
     viewportSize = 500,
 }) => {
-    const horizontal = orientation === ECarouselOrientation.HORIZONTAL;
+    const horizontal = orientation === EOrientation.HORIZONTAL;
     return (
         <Carousel orientation={orientation} scrollMode={scrollMode} gap={gap}>
             <Carousel.Viewport
@@ -83,7 +84,7 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 name: "disable buttons when content fits inside viewport",
                 sizes: [100, 100, 100],
                 mode: ECarouselScrollMode.ITEM,
-                orient: ECarouselOrientation.HORIZONTAL,
+                orient: EOrientation.HORIZONTAL,
                 viewSize: 500,
                 expectNextDisabled: true,
             },
@@ -91,7 +92,7 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 name: "enable next button when content overflows",
                 sizes: [300, 300, 300],
                 mode: ECarouselScrollMode.ITEM,
-                orient: ECarouselOrientation.HORIZONTAL,
+                orient: EOrientation.HORIZONTAL,
                 viewSize: 500,
                 expectNextDisabled: false,
             },
@@ -99,7 +100,7 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 name: "scroll within a huge slide on next click",
                 sizes: [800],
                 mode: ECarouselScrollMode.ITEM,
-                orient: ECarouselOrientation.HORIZONTAL,
+                orient: EOrientation.HORIZONTAL,
                 viewSize: 500,
                 expectNextDisabled: false,
             },
@@ -107,7 +108,7 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 name: "group elements into centered pages in PAGE mode",
                 sizes: [200, 200, 200, 200],
                 mode: ECarouselScrollMode.PAGE,
-                orient: ECarouselOrientation.HORIZONTAL,
+                orient: EOrientation.HORIZONTAL,
                 viewSize: 450,
                 expectNextDisabled: false,
             },
@@ -115,7 +116,7 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 name: "handle height dimensions in VERTICAL orientation",
                 sizes: [300, 300, 300],
                 mode: ECarouselScrollMode.ITEM,
-                orient: ECarouselOrientation.VERTICAL,
+                orient: EOrientation.VERTICAL,
                 viewSize: 400,
                 expectNextDisabled: false,
             },

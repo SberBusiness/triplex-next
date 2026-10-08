@@ -2,8 +2,10 @@ import React, { useState, useMemo, useRef, useLayoutEffect, useCallback, useEffe
 import clsx from "clsx";
 import { CarouselContext } from "./CarouselContext";
 import { ICarouselProps } from "./types";
-import { ECarouselOrientation, ECarouselScrollMode } from "./enums";
-import { resolveViewportPadding, useLatestRef } from "./utils";
+import { ECarouselScrollMode } from "./enums";
+import { EOrientation } from "../../enums";
+import { resolveViewportPadding } from "./utils";
+import { useLatestRef } from "../../utils/refs";
 import styles from "./styles/Carousel.module.less";
 import { CarouselViewport } from "./CarouselViewport";
 import { CarouselTrack } from "./CarouselTrack";
@@ -12,25 +14,25 @@ import { CarouselPrevButton, CarouselNextButton } from "./CarouselButton";
 import { CarouselIndicators } from "./CarouselIndicators";
 
 const ORIENTATION_TO_PADDING_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: { start: "left", end: "right" },
-    [ECarouselOrientation.VERTICAL]: { start: "top", end: "bottom" },
+    [EOrientation.HORIZONTAL]: { start: "left", end: "right" },
+    [EOrientation.VERTICAL]: { start: "top", end: "bottom" },
 } as const;
 
 const ORIENTATION_TO_RECT_SIZE_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: "width",
-    [ECarouselOrientation.VERTICAL]: "height",
+    [EOrientation.HORIZONTAL]: "width",
+    [EOrientation.VERTICAL]: "height",
 } as const;
 
 const ORIENTATION_TO_CLIENT_SIZE_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: "clientWidth",
-    [ECarouselOrientation.VERTICAL]: "clientHeight",
+    [EOrientation.HORIZONTAL]: "clientWidth",
+    [EOrientation.VERTICAL]: "clientHeight",
 } as const;
 
 const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
     (
         {
             children,
-            orientation = ECarouselOrientation.HORIZONTAL,
+            orientation = EOrientation.HORIZONTAL,
             scrollMode = ECarouselScrollMode.ITEM,
             gap = 16,
             viewportPadding = 0,
@@ -433,7 +435,6 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 orientationRef,
                 offsetRef,
                 maxOffsetRef,
-                currentIndexRef,
                 viewportRef,
                 trackRef,
                 slideRefs,

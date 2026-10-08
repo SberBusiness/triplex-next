@@ -4,10 +4,10 @@ import { ImageGalleryExtended, EImageGalleryArrowDirection } from "../ImageGalle
 import { IImageGalleryProps } from "./types";
 
 /**
- * Галерея изображений с лентой миниатюр (десктоп) и тиками-индикаторами (мобильный).
+ * Галерея изображений с лентой миниатюр (десктоп) и индикаторами страниц (мобильный).
  *
  * Тонкая обёртка над `ImageGalleryExtended`: задаёт пресет раскладки
- * (`Main` + миниатюры/тики через `MobileView`) и добавляет uncontrolled-режим
+ * (`Main` + миниатюры/индикаторы страниц через `MobileView`) и добавляет uncontrolled-режим
  * (`defaultId`). Изображения задаются массивом `items`.
  * Поддерживает controlled (`selectedId` + `onChange`) и uncontrolled режимы.
  */
@@ -22,11 +22,11 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
             height = "auto",
             withBlur = true,
             showThumbnails = true,
-            showDots = true,
+            showPageIndicators = true,
             prevArrowProps,
             nextArrowProps,
             thumbnailsProps,
-            dotsProps,
+            pageIndicatorsProps,
             ...rest
         },
         ref,
@@ -76,7 +76,7 @@ export const ImageGallery = React.forwardRef<HTMLDivElement, IImageGalleryProps>
                 </ImageGalleryExtended.Main>
 
                 <MobileView fallback={showThumbnails ? <ImageGalleryExtended.Thumbnails {...thumbnailsProps} /> : null}>
-                    {showDots ? <ImageGalleryExtended.Dots {...dotsProps} /> : null}
+                    {showPageIndicators ? <ImageGalleryExtended.PageIndicators {...pageIndicatorsProps} /> : null}
                 </MobileView>
             </ImageGalleryExtended>
         );

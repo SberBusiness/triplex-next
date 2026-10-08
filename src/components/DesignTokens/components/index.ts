@@ -34,6 +34,7 @@ export * from "./ModalWindow";
 export * from "./MultiselectField";
 export * from "./Notification";
 export * from "./Overlay";
+export * from "./PageIndicators";
 export * from "./Pagination";
 export * from "./Radio";
 export * from "./SegmentedControl";

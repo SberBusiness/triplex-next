@@ -163,7 +163,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | MobileView | ✅ | ✅ | ✅ |
 | ModalWindow | ✅ | ✅ | ✅ |
 | MonthYearField | ✅ | ✅ | ✅ |
-| MonthYearRange | ⬜ | ✅ | ⬜ |
+| MonthYearRange | ✅ | ✅ | ✅ |
 | MultiselectField | ✅ | ✅ | ✅ |
 | Notification | ✅ | ✅ | ✅ |
 | NotificationGrouped | ⬜ | ⬜ | ⬜ |

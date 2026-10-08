@@ -32,7 +32,7 @@ export const Example = () => {
 
     return (
         <PaginationExtended aria-label="Пагинация списка документов" style={{ flexWrap: "wrap", gap: 24 }}>
-            <Text size={ETextSize.B3}>
+            <Text size={ETextSize.B3} aria-live="polite">
                 {firstItem}–{lastItem} из {TOTAL_ITEMS}
             </Text>
             <PaginationNavigation

@@ -2,14 +2,13 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { SuggestField } from "../SuggestField";
 import { SuggestFieldMobile } from "../mobile/SuggestFieldMobile";
 import { ISuggestFieldMobileProps } from "../mobile/types";
 import { ISuggestFieldOption } from "../types";
 
 const OPTIONS: ISuggestFieldOption[] = [
-    { id: "a", label: "Первая опция" },
-    { id: "b", label: "Вторая опция" },
+    { id: "a", label: "First option" },
+    { id: "b", label: "Second option" },
 ];
 
 /**
@@ -54,7 +53,7 @@ const mockMobileScreen = () => {
 
 let restoreScrollIntoView: () => void;
 
-// Мобильная среда нужна обоим describe ниже, поэтому настраивается один раз на файл.
+// Мобильная среда нужна всем тестам файла, поэтому настраивается один раз.
 beforeAll(() => {
     mockMobileScreen();
     restoreScrollIntoView = mockScrollIntoView();
@@ -72,8 +71,8 @@ const renderField = (props: TRenderProps) =>
         <SuggestFieldMobile
             value={undefined}
             options={OPTIONS}
-            label="Лейбл"
-            tooltipHint="Подсказка"
+            label="Label"
+            tooltipHint="Hint"
             tooltipOpen={false}
             inputProps={{}}
             {...props}
@@ -96,26 +95,33 @@ const openDropdown = () => fireEvent.focus(getTarget());
 const getDropdownCloseButton = () => screen.getByRole("button", { name: "" });
 
 describe("SuggestFieldMobile", () => {
-    describe("поле-триггер", () => {
-        it("поле только для чтения: значение выбирается в дропдауне", () => {
+    describe("trigger input", () => {
+        it("is read-only: the value is picked in the dropdown", () => {
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(getTarget()).toHaveAttribute("readonly");
         });
 
-        it("поле показывает label выбранной опции", () => {
+        it("passes label and placeholder to the input", () => {
+            renderField({ placeholder: "Placeholder", onSelect: vi.fn(), onFilter: vi.fn() });
+
+            expect(screen.getByLabelText("Label")).toBe(getTarget());
+            expect(getTarget()).toHaveAttribute("placeholder", "Placeholder");
+        });
+
+        it("shows the label of the selected option", () => {
             renderField({ value: OPTIONS[1], onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(getTarget()).toHaveValue(OPTIONS[1].label);
         });
 
-        it("без выбранного значения поле пустое", () => {
+        it("is empty without a selected value", () => {
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(getTarget()).toHaveValue("");
         });
 
-        it("aria-expanded отражает состояние дропдауна", () => {
+        it("aria-expanded reflects the dropdown state", () => {
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
@@ -123,9 +129,31 @@ describe("SuggestFieldMobile", () => {
             openDropdown();
 
             expect(getTarget()).toHaveAttribute("aria-expanded", "true");
+
+            fireEvent.click(getDropdownCloseButton());
+
+            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });
 
-        it("onFocus из inputProps вызывается вместе с открытием дропдауна", () => {
+        it("shows a loader in the field when loading", () => {
+            renderField({ loading: true, onSelect: vi.fn(), onFilter: vi.fn() });
+
+            expect(screen.getByLabelText("loading")).toBeInTheDocument();
+        });
+
+        it("scrolls the input to the center of the screen after the dropdown closes", () => {
+            // В iOS открытие полноэкранного дропдауна уводит страницу вверх.
+            const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+
+            openDropdown();
+            scrollIntoView.mockClear();
+            fireEvent.click(getDropdownCloseButton());
+
+            expect(scrollIntoView).toHaveBeenCalledWith({ block: "center" });
+        });
+
+        it("calls inputProps.onFocus along with opening the dropdown", () => {
             const onFocus = vi.fn();
             renderField({ inputProps: { onFocus }, onSelect: vi.fn(), onFilter: vi.fn() });
 
@@ -135,31 +163,77 @@ describe("SuggestFieldMobile", () => {
             expect(getTarget()).toHaveAttribute("aria-expanded", "true");
         });
 
-        it("с onClear кнопка очистки рендерится и вызывает обработчик", async () => {
+        it("clear button resets the value and the filter and calls onClear", async () => {
             const user = userEvent.setup();
+            const onSelect = vi.fn();
+            const onFilter = vi.fn();
             const onClear = vi.fn();
-            renderField({ value: OPTIONS[0], onClear, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[0], onClear, onSelect, onFilter });
 
             await user.click(screen.getByRole("button"));
 
+            expect(onSelect).toHaveBeenCalledWith(undefined);
+            expect(onFilter).toHaveBeenCalledWith("");
             expect(onClear).toHaveBeenCalledTimes(1);
         });
 
-        it("без onClear кнопки очистки нет", () => {
+        it("clear button with an empty label resets the value but not the filter", async () => {
+            const user = userEvent.setup();
+            const onSelect = vi.fn();
+            const onFilter = vi.fn();
+            const onClear = vi.fn();
+            renderField({ value: { id: "empty", label: "" }, onClear, onSelect, onFilter });
+
+            await user.click(screen.getByRole("button"));
+
+            expect(onSelect).toHaveBeenCalledWith(undefined);
+            expect(onFilter).not.toHaveBeenCalled();
+            expect(onClear).toHaveBeenCalledTimes(1);
+        });
+
+        it("clear button without a value calls only onClear", async () => {
+            const user = userEvent.setup();
+            const onSelect = vi.fn();
+            const onFilter = vi.fn();
+            const onClear = vi.fn();
+            renderField({ onClear, onSelect, onFilter });
+
+            await user.click(screen.getByRole("button"));
+
+            expect(onSelect).not.toHaveBeenCalled();
+            expect(onFilter).not.toHaveBeenCalled();
+            expect(onClear).toHaveBeenCalledTimes(1);
+        });
+
+        it("does not render the clear button without onClear", () => {
             renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(screen.queryByRole("button")).not.toBeInTheDocument();
         });
+
+        it("applies className, data-test-id and the input data-test-id suffix", () => {
+            // Суффикс захардкожен, а не взят из DataTestId: на него опираются e2e.
+            const { container } = renderField({
+                className: "custom-class",
+                "data-test-id": "suggest",
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            expect(container.querySelector(".custom-class")).not.toBeNull();
+            expect(container.querySelector('[data-test-id="suggest"]')).not.toBeNull();
+            expect(getTarget()).toHaveAttribute("data-test-id", "suggest__input");
+        });
     });
 
-    describe("дропдаун", () => {
-        it("до фокуса содержимое дропдауна не отрендерено", () => {
+    describe("dropdown", () => {
+        it("does not render the dropdown content before focus", () => {
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
             expect(screen.queryByRole("option")).not.toBeInTheDocument();
         });
 
-        it("после фокуса рендерятся все опции", () => {
+        it("renders all options after focus", () => {
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
             openDropdown();
@@ -169,7 +243,7 @@ describe("SuggestFieldMobile", () => {
             expect(items[0]).toHaveTextContent(OPTIONS[0].label);
         });
 
-        it("выбранная опция отмечена", () => {
+        it("marks the selected option", () => {
             renderField({ value: OPTIONS[1], onSelect: vi.fn(), onFilter: vi.fn() });
 
             openDropdown();
@@ -179,28 +253,17 @@ describe("SuggestFieldMobile", () => {
             expect(items[1]).toHaveAttribute("aria-selected", "true");
         });
 
-        it("ввод в дропдауне вызывает onFilter", () => {
+        it("typing in the dropdown calls onFilter", () => {
             const onFilter = vi.fn();
             renderField({ onSelect: vi.fn(), onFilter });
 
             openDropdown();
-            fireEvent.change(getDropdownInput(), { target: { value: "перв" } });
+            fireEvent.change(getDropdownInput(), { target: { value: "fir" } });
 
-            expect(onFilter).toHaveBeenCalledWith("перв");
+            expect(onFilter).toHaveBeenCalledWith("fir");
         });
 
-        it("выбор опции вызывает onSelect и закрывает дропдаун", () => {
-            const onSelect = vi.fn();
-            renderField({ onSelect, onFilter: vi.fn() });
-
-            openDropdown();
-            fireEvent.click(screen.getByText(OPTIONS[1].label));
-
-            expect(onSelect).toHaveBeenCalledWith(OPTIONS[1]);
-            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
-        });
-
-        it("выбор опции не сбрасывает значение при закрытии", () => {
+        it("selecting an option calls onSelect and closes the dropdown", () => {
             const onSelect = vi.fn();
             renderField({ onSelect, onFilter: vi.fn() });
 
@@ -208,31 +271,85 @@ describe("SuggestFieldMobile", () => {
             fireEvent.click(screen.getByText(OPTIONS[1].label));
 
             expect(onSelect).toHaveBeenCalledTimes(1);
-            expect(onSelect).not.toHaveBeenCalledWith(undefined);
+            expect(onSelect).toHaveBeenCalledWith(OPTIONS[1]);
+            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });
 
-        it("закрытие с пустым вводом сбрасывает выбранное значение", () => {
+        // Значение сбрасывает только кнопка очистки: закрытие без выбора его не трогает, как бы ни изменился ввод.
+        it.each([
+            {
+                scenario: "focus with clearInputOnFocus",
+                props: { clearInputOnFocus: true },
+                editInput: () => fireEvent.focus(getDropdownInput()),
+            },
+            {
+                scenario: "manual erasing",
+                props: {},
+                editInput: () => fireEvent.change(getDropdownInput(), { target: { value: "" } }),
+            },
+        ])("closing after $scenario keeps the value", ({ props, editInput }) => {
             const onSelect = vi.fn();
-            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect, onFilter: vi.fn() });
+            renderField({ value: OPTIONS[0], onSelect, onFilter: vi.fn(), ...props });
 
             openDropdown();
-            fireEvent.focus(getDropdownInput());
-            fireEvent.click(getDropdownCloseButton());
-
-            expect(onSelect).toHaveBeenCalledWith(undefined);
-        });
-
-        it("закрытие с непустым вводом не трогает выбранное значение", () => {
-            const onSelect = vi.fn();
-            renderField({ value: OPTIONS[0], onSelect, onFilter: vi.fn() });
-
-            openDropdown();
+            editInput();
             fireEvent.click(getDropdownCloseButton());
 
             expect(onSelect).not.toHaveBeenCalled();
+            expect(getTarget()).toHaveValue(OPTIONS[0].label);
         });
 
-        it("clearInputOnFocus очищает поле дропдауна, которое получает автофокус при открытии", () => {
+        it("reopening during the close animation does not bring back the erased input", () => {
+            // Содержимое ещё смонтировано, автофокус не срабатывает — поле сбрасывается на закрытии.
+            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
+
+            openDropdown();
+            fireEvent.change(getDropdownInput(), { target: { value: "" } });
+            fireEvent.click(getDropdownCloseButton());
+            openDropdown();
+
+            expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
+        });
+
+        it("shows the label of the newly selected option in the dropdown input, not the previous one", () => {
+            // Сброс поля на закрытии не должен перетереть label только что выбранной опции.
+            const ControlledField = () => {
+                const [value, setValue] = React.useState<ISuggestFieldOption | undefined>(OPTIONS[0]);
+
+                return (
+                    <SuggestFieldMobile
+                        value={value}
+                        options={OPTIONS}
+                        tooltipHint="Hint"
+                        tooltipOpen={false}
+                        inputProps={{}}
+                        onSelect={setValue}
+                        onFilter={vi.fn()}
+                    />
+                );
+            };
+            render(<ControlledField />);
+
+            openDropdown();
+            fireEvent.click(screen.getByText(OPTIONS[1].label));
+            openDropdown();
+
+            expect(getDropdownInput()).toHaveValue(OPTIONS[1].label);
+        });
+
+        it("reopening after the close animation does not bring back the erased input", () => {
+            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
+
+            openDropdown();
+            fireEvent.change(getDropdownInput(), { target: { value: "" } });
+            fireEvent.click(getDropdownCloseButton());
+            finishCloseAnimation();
+            openDropdown();
+
+            expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
+        });
+
+        it("clearInputOnFocus clears the dropdown input that is autofocused on open", () => {
             renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect: vi.fn(), onFilter: vi.fn() });
 
             openDropdown();
@@ -240,7 +357,7 @@ describe("SuggestFieldMobile", () => {
             expect(getDropdownInput()).toHaveValue("");
         });
 
-        it("без clearInputOnFocus поле дропдауна сохраняет label выбранной опции", () => {
+        it("keeps the selected label in the dropdown input without clearInputOnFocus", () => {
             renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
 
             openDropdown();
@@ -249,16 +366,16 @@ describe("SuggestFieldMobile", () => {
             expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
         });
 
-        it("tooltipOpen показывает подсказку вместо списка", () => {
+        it("tooltipOpen shows the hint instead of the list", () => {
             renderField({ tooltipOpen: true, onSelect: vi.fn(), onFilter: vi.fn() });
 
             openDropdown();
 
-            expect(screen.getByText("Подсказка")).toBeInTheDocument();
+            expect(screen.getByText("Hint")).toBeInTheDocument();
             expect(screen.queryByRole("option")).not.toBeInTheDocument();
         });
 
-        it("onScrollEnd вызывается при прокрутке списка до конца", () => {
+        it("calls onScrollEnd when the list is scrolled to the end", () => {
             const onScrollEnd = vi.fn();
             renderField({ onScrollEnd, onSelect: vi.fn(), onFilter: vi.fn() });
 
@@ -268,7 +385,7 @@ describe("SuggestFieldMobile", () => {
             expect(onScrollEnd).toHaveBeenCalledTimes(1);
         });
 
-        it("onScrollEnd не вызывается во время догрузки списка", () => {
+        it("does not call onScrollEnd while the list is loading", () => {
             const onScrollEnd = vi.fn();
             renderField({ onScrollEnd, dropdownListLoading: true, onSelect: vi.fn(), onFilter: vi.fn() });
 
@@ -280,68 +397,27 @@ describe("SuggestFieldMobile", () => {
     });
 });
 
-describe("SuggestField на мобильной ширине", () => {
-    it("рендерится мобильный вариант: поле только для чтения", () => {
-        render(
-            <SuggestField
-                value={undefined}
-                options={OPTIONS}
-                tooltipHint="Подсказка"
-                tooltipOpen={false}
-                inputProps={{}}
-                onSelect={vi.fn()}
-                onFilter={vi.fn()}
-            />,
-        );
+/**
+ * Завершает анимацию закрытия: DropdownMobileInner снимает содержимое только по transitionend на
+ * подложке, а jsdom переходов не проигрывает. Без этого при повторном открытии осталось бы прежнее
+ * поле ввода, и автофокус, который переинициализирует его значение, не сработал бы.
+ */
+function finishCloseAnimation() {
+    const backdrop = document.querySelector(".dropdownMobileBackdrop");
 
-        expect(getTarget()).toHaveAttribute("readonly");
-    });
+    if (backdrop === null) {
+        throw new Error("Mobile dropdown backdrop not found");
+    }
 
-    it("сам SuggestFieldMobile className и data-test-id применяет", () => {
-        // Положительный контроль к тесту ниже: показывает, что props теряются именно
-        // в SuggestField.tsx, а не в мобильном компоненте.
-        const { container } = renderField({
-            className: "custom-class",
-            "data-test-id": "suggest",
-            onSelect: vi.fn(),
-            onFilter: vi.fn(),
-        });
-
-        expect(container.querySelector(".custom-class")).not.toBeNull();
-        expect(container.querySelector("[data-test-id]")).not.toBeNull();
-    });
-
-    it("className и data-test-id до мобильного варианта не доходят", () => {
-        // Фиксирует инвариант из SuggestField-ai.md: SuggestField.tsx отдаёт в SuggestFieldMobile
-        // явный whitelist props, а в SuggestFieldDesktop — весь {...props}. Поэтому className, id,
-        // data-test-id, active и renderInput на мобильной ширине теряются. Расхождение известное,
-        // выравнивание меняет наблюдаемое поведение и остаётся решением мейнтейнера — тест
-        // покраснеет, если контракт поменяют молча.
-        const { container } = render(
-            <SuggestField
-                value={undefined}
-                options={OPTIONS}
-                tooltipHint="Подсказка"
-                tooltipOpen={false}
-                inputProps={{}}
-                className="custom-class"
-                data-test-id="suggest"
-                onSelect={vi.fn()}
-                onFilter={vi.fn()}
-            />,
-        );
-
-        expect(container.querySelector(".custom-class")).toBeNull();
-        expect(container.querySelector("[data-test-id]")).toBeNull();
-    });
-});
+    fireEvent.transitionEnd(backdrop);
+}
 
 /** Прокручивает DropdownMobileBody (родителя listbox) до конца: jsdom не считает размеры сам. */
 function scrollBodyToEnd() {
     const body = screen.getByRole("listbox").parentElement;
 
     if (body === null) {
-        throw new Error("DropdownMobileBody не найден: у listbox нет родительского элемента");
+        throw new Error("DropdownMobileBody not found: listbox has no parent element");
     }
 
     Object.defineProperty(body, "scrollHeight", { configurable: true, value: 300 });

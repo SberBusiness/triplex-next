@@ -1,7 +1,7 @@
 ---
 component: MediaWidth
 category: MediaWidth
-related: [MediaMinWidth, MediaMaxWidth, MediaBetweenWidth, useMatchMedia, MobileView, WindowResizeListener]
+related: [MobileView, WindowResizeListener]
 tokens: []
 stories: stories/MediaWidth/MediaWidth.stories.tsx
 version: "1.0"
@@ -227,3 +227,4 @@ version: "1.0"
 |---|---|
 | 2026-08-18 | TRI-104: в `related` и «Связанные компоненты» добавлен `WindowResizeListener` — обратная сторона симметричной связи-альтернативы. Код и публичный API не затронуты. |
 | 2026-08-11 | Создан документ. AI-рефакторинг (TRI-58): `displayName` у `MediaWidth`, исправлены опечатки и дополнен JSDoc props и компонента, unit-тесты расширены с 7 до 19 кейсов (проверяются строки медиа-запросов, выбор реализации, `null`-ветки, переподписка и отписка). Публичный API не изменён (props, `IMediaProps`, barrel-экспорты; `forwardRef` по-прежнему осознанно отсутствует). |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`MediaMinWidth`, `MediaMaxWidth`, `MediaBetweenWidth`, `useMatchMedia`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

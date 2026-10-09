@@ -1,7 +1,7 @@
 ---
 component: LoaderMiddle
 category: Loaders
-related: [LoaderSmall, LoaderScreen, TableBasic]
+related: [Skeleton, LoaderSmall, LoaderScreen, TableBasic]
 tokens:
   - Loader.Middle_Background_Default
   - Loader.Element_Background_Brand
@@ -106,6 +106,9 @@ Loader.Element_Background_Brand
   того же barrel `src/components/Loader/index.ts`.
 - `LoaderScreen` (`src/components/LoaderScreen/LoaderScreen.tsx`) — оверлей-подложка с лоадером по
   центру, подписью и кнопками; при `type="middle"` рендерит `LoaderMiddle` без обёрток.
+- `Skeleton` (`src/components/Skeleton/`) — альтернатива для той же задачи (первая загрузка
+  блока) с другим компромиссом: показывает каркас будущей раскладки, поэтому берётся, когда
+  раскладка известна заранее. `LoaderMiddle` — когда неизвестна.
 - `TableBasic` (`src/components/Table/TableBasic/TableBasic.tsx`) — показывает `LoaderMiddle` в
   футере таблицы при догрузке данных на пустом состоянии.
 
@@ -134,3 +137,4 @@ Loader.Element_Background_Brand
 | Дата | Изменение |
 |---|---|
 | 2026-08-05 | Создан документ. AI-рефакторинг: JSDoc на компоненте, порядок импортов приведён к codestyle, в LESS объединены дублирующиеся базовые стили `.dot` и `.line`, unit-тесты расширены с 1 до 2 кейсов (роль корневого элемента, количество точек и линии). В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` (внутри `docs` не применялся). Публичный API, DOM и визуальное поведение не изменены. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлена обратная ссылка `Skeleton` — `Skeleton-ai.md` называет `LoaderMiddle` альтернативой (категория 2), а такие пары по `docs/ai/CONTEXT.md` симметричны; в TRI-76 связь была проставлена только с одной стороны. Публичный API и поведение не затронуты. |

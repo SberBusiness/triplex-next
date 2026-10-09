@@ -1,7 +1,7 @@
 ---
 component: ListItemControlsButton
 category: List
-related: [ListItemControls, ListItemControlsButtonDropdown, IconWrapper]
+related: [ListItemControlsButtonDropdown, IconWrapper]
 tokens:
   - ListItemControlsButton.Background_Default
   - ListItemControlsButton.Background_Hover
@@ -104,3 +104,4 @@ ListItemControlsButton.Color_Active
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemControls`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

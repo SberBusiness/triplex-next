@@ -1,7 +1,7 @@
 ---
 component: Button
 category: Buttons
-related: [ButtonIcon, ButtonDropdown, ButtonDropdownExtended]
+related: [ButtonIcon, ButtonDropdown, ButtonDropdownExtended, LoaderSmall]
 tokens:
   - Button.General_Background_Default
   - Button.General_Color_Default
@@ -160,6 +160,7 @@ version: "1.0"
 - `ButtonDropdownExtended` — контейнер для кастомного dropdown с render-функциями
 - `Loader` (`src/components/Loader`) — используется внутри Button для состояния загрузки
 - `Dropdown` (`src/components/Dropdown`) — используется внутри ButtonDropdown
+- `LoaderSmall` (`src/components/Loader`) — индикатор загрузки; `Button` рендерит его всегда и вне `loading` прячет обёртку классом
 
 ---
 
@@ -186,6 +187,7 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-01 | В правило отступа между соседями (`& + .button, & + .buttonDropdown`) добавлен `& + .buttonDropdownExtended`: `ButtonDropdownExtended` после `Button` получает `@button-siblings-margin-left`. Обратный порядок описан в `ButtonDropdownExtended.module.less`. |
 | 2026-03-31 | Создан документ (пилот AI-Ready) |
 | 2026-04-27 | Приведён в соответствие с `docs/ai/template-ai.md`: убраны секции «Файловая структура» и «Ключевые особенности реализации», переструктурированы props, добавлена колонка `Example file` в таблице Stories |
 | 2026-07-15 | Добавлен `vertical-align: middle` корневому классу `.button` — icon-only кнопка (`icon` без `children`) смещалась по вертикали относительно соседней текстовой кнопки из-за baseline-выравнивания inline-элементов; `middle` также центрирует кнопку относительно строки инлайн-текста |
@@ -193,3 +195,4 @@ version: "1.0"
 | 2026-07-28 | Правки по ревью PR #481 (TRI-13): исправлена трактовка строкового `aria-expanded="false"` (больше не считается раскрытым состоянием); `size` стал опциональным с default `EComponentSize.MD` (типы приведены в соответствие с реализацией); `ButtonBase` убран из barrel-экспорта `index.ts` — импорт только по прямому пути `components/Button/ButtonBase` |
 | 2026-08-17 | Добавлен `justify-content: center` корневому классу `.button` — при коротком тексте кнопка растягивается до `min-width`, и содержимое прижималось к левому краю вместо центра |
 | 2026-09-24 | Исправлен баг: иконка не перекрашивалась при наведении на паддинг кнопки (вне тесной обёртки icon+текст), т.к. классы `hoverable`/`active`/`disabled` пакета `@sberbusiness/icons-next` стояли на внутренней `.content`-обёртке вместо корневого `<button>`. Классы возвращены на `<button>` напрямую (без `IconWrapper` — по аналогии с `CollapsibleTreeNodeHeader`, см. `IconWrapper-ai.md` → «Связанные компоненты»): промежуточный вариант через `IconWrapper displayContents` ломал sibling-селектор `.button + .button` (отступ между соседними кнопками, `Button.module.less`) и DOM-контракт у потребителей, полагающихся на `Button` как на буквальный корневой `<button>`. Публичный API не изменён |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлен контракт по рендеру `LoaderSmall` — `Button` рендерит его всегда. `IconWrapper` в `related` не добавлен: `Button` его не использует, классы состояний стоят на корневом `<button>` напрямую (см. запись от 2026-09-24 и `IconWrapper-ai.md`). Публичный API и поведение не затронуты. |

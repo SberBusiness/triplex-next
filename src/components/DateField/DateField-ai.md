@@ -1,7 +1,7 @@
 ---
 component: DateField
 category: Date components
-related: [DatePickerExtended, MonthYearField, ChipDatePicker, MaskedField, Calendar, Tooltip]
+related: [DatePickerExtended, MonthYearField, ChipDatePicker, MaskedField, Calendar, Tooltip, FormField]
 tokens: []
 stories: stories/DateField/DateField.stories.tsx
 version: "1.0"
@@ -99,6 +99,11 @@ version: "1.0"
 - `MaskedField` — внутреннее поле-триггер; его props частично входят в публичный API (`size`, `status`, `label`, `targetProps`).
 - `Calendar` — календарь внутри дропдауна; его props (`limitRange`, `disabledDays`, `markedDays`, `format`) входят в публичный API через `DatePickerExtended`.
 - `Tooltip` — показывает `invalidDateHint` при вводе недоступной даты (только desktop-ветка).
+- `FormField` — семейство строительных блоков поля, на котором собран `MaskedField`: оттуда
+  в публичный API `DateField` приходят `size` и `status` (через
+  `Pick<IMaskedFieldProps, "size" | "status" | "label">`, вместе с `label`). Слоты
+  `prefix` / `postfix` из `IFormFieldProps` исключены — их заново объявляет `TextFieldBase`,
+  и доступны они только вложенно, через `targetProps`.
 - `DateFieldTarget` (внутренний, не в barrel) — рендерит `MaskedField` с иконкой календаря и кнопкой очистки, обрабатывает клик/клавиатуру/фокус. Описан здесь, отдельного AI.md не имеет. Покрыт `__tests__/DateFieldTarget.test.tsx`.
 - `DateFieldContext` (внутренний, не в barrel) — прокидывает `onChange`, `inputFocusedRef` и `triggerChangeFromInput` в target.
 - `DateFieldUtils` (`utils.ts`, внутренний) — чистые функции парсинга/валидации даты (`getPickerValues`, `getCalendarDate`, `isAvailableDate`). Покрыты `__tests__/utils.test.tsx`.
@@ -126,3 +131,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-08 | Создан документ. AI-рефакторинг (JSDoc-фиксы, `displayName` у `DateFieldTarget`), unit-тесты для `utils.ts`, поведения поля (ввод, blur, клавиатура, колбэки дропдауна) и `DateFieldTarget` (фокус, mousedown, клавиатура, проброс обработчиков) |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`FormField`). Публичный API и поведение не затронуты. |

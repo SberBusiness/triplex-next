@@ -1,7 +1,7 @@
 ---
 component: ComposedKeyDownListener
 category: KeyDownListener
-related: [KeyDownListener, TriggerClickOnKeyDownEvent, SelectExtendedField, SliderExtended]
+related: [KeyDownListener, TriggerClickOnKeyDownEvent]
 tokens: []
 stories: stories/ComposedKeyDownListener/ComposedKeyDownListener.stories.tsx
 version: "1.0"
@@ -125,8 +125,8 @@ version: "1.0"
   сравнение по устаревшему `event.keyCode` и константы `EVENT_KEY_CODES`.
 - `TriggerClickOnKeyDownEvent` (`src/components/Triggers/`) — по нажатию клавиши
   вызывает `click` на элементе из `targetRef`.
-- `SelectExtendedField`, `SliderExtendedDot`, `SliderExtendedTrack` — потребители
-  `KeyDownListener` внутри библиотеки.
+- `SelectExtendedField`, `SliderExtended` (`SliderExtendedDot`, `SliderExtendedTrack`) —
+  потребители базового `KeyDownListener` внутри библиотеки, а не композитора.
 
 ---
 
@@ -153,3 +153,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-08-11 | Создан документ (TRI-112). Слушатели рендерятся соседями к `children` вместо вложения — смена длины `keyDownListeners` больше не перемонтирует содержимое (покрыто unit-тестом). Добавлен собственный набор stories по modern pattern; демонстрационная story `Example` перенесена из набора `KeyDownListener`. Публичный API не изменён. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`SelectExtendedField`, `SliderExtended`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

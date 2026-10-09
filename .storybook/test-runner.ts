@@ -82,6 +82,8 @@ const config: TestRunnerConfig = {
             return;
         }
 
+        const hoverSelector: unknown = storyContext.parameters?.testRunner?.hoverSelector;
+
         for (const viewport of VISUAL_TEST_VIEWPORTS) {
             await page.setViewportSize({ width: viewport.width, height: 768 });
             await remountAndSettle(page, context.id);
@@ -92,20 +94,32 @@ const config: TestRunnerConfig = {
                 content: "* { caret-color: transparent !important; }",
             });
 
-            // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
-            // снимаются целиком, а не обрезаются по высоте viewport.
-            const screenshot = await page.screenshot({ fullPage: true });
+            try {
+                // Реальная мышь нужна для CSS :hover; синтетические события из play его не включают.
+                if (typeof hoverSelector === "string") {
+                    await page.locator(hoverSelector).hover();
+                }
 
-            // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
-            const snapshotId = context.id.replace(/^components-/, "");
+                // fullPage: стори выше 768px (например, Visual Tests в одну колонку на xs)
+                // снимаются целиком, а не обрезаются по высоте viewport.
+                const screenshot = await page.screenshot({ fullPage: true });
 
-            expect(screenshot).toMatchImageSnapshot({
-                customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
-                customSnapshotsDir: "__screenshots__",
-                customDiffDir: "__screenshots__/__diff__",
-                failureThreshold: 10,
-                failureThresholdType: "pixel",
-            });
+                // Storybook prefixes story IDs with "components-" (e.g. "components-daterange--playground"), strip it for cleaner filenames
+                const snapshotId = context.id.replace(/^components-/, "");
+
+                expect(screenshot).toMatchImageSnapshot({
+                    customSnapshotIdentifier: `${snapshotId}--${viewport.name}`,
+                    customSnapshotsDir: "__screenshots__",
+                    customDiffDir: "__screenshots__/__diff__",
+                    failureThreshold: 10,
+                    failureThresholdType: "pixel",
+                });
+            } finally {
+                if (typeof hoverSelector === "string") {
+                    // Убираем указатель за viewport, чтобы hover не влиял на следующую стори.
+                    await page.mouse.move(-1, -1);
+                }
+            }
         }
     },
 };

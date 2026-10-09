@@ -1,7 +1,7 @@
 ---
 component: ListSortable
 category: List
-related: [List, ListSortableItem, ListSortableItemTarget, ListSortableItemControls]
+related: [List, ListSortableItem]
 tokens: []
 stories: stories/List/List.stories.tsx
 version: "1.0"
@@ -86,3 +86,4 @@ callback `onItemsChange`, в который пробрасывает резул�
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListSortableItemTarget`, `ListSortableItemControls`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

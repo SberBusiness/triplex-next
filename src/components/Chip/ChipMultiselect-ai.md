@@ -1,7 +1,7 @@
 ---
 component: ChipMultiselect
 category: Chips
-related: [Chip, ChipGroup, ChipSelect, MultiselectField, SelectExtendedField]
+related: [Chip, ChipSelect, ChipOptions, MultiselectField, SelectExtendedField]
 tokens: []
 stories: stories/Chips/ChipMultiselect.stories.tsx
 version: "1.0"
@@ -169,6 +169,8 @@ Postfix переключается тем же флагом `selected`: `ChipDro
 - `ChipGroup` — контейнер для ряда чипсов; корневой класс `chipGroupItem`
   проставляется именно ради него.
 - `ChipSelect` — тот же чипс-фильтр, но для выбора одного значения.
+- `ChipOptions` — альтернатива, когда содержимое дропдауна произвольное, а не готовый
+  список значений: тот же `clearSelected` и счётчик, но без собственного target-элемента.
 - `MultiselectField` — родитель по типам и по рендеру: даёт состояние открытости,
   выпадающий блок (`MultiselectField.Dropdown`), focus trap и раздачу размера.
 - `SelectExtendedField` — уровнем ниже `MultiselectField`; из него приходит тип
@@ -202,3 +204,4 @@ Postfix переключается тем же флагом `selected`: `ChipDro
 | Дата | Изменение |
 |---|---|
 | 2026-09-07 | Создан документ (TRI-135). AI-рефакторинг: JSDoc на props и компоненте, мемоизация обработчиков кнопки сброса, порядок импортов; поведение и публичный API не менялись |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`ChipGroup`); добавлены обратные ссылки (`ChipOptions`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

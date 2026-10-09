@@ -1,7 +1,7 @@
 ---
 component: FooterPage
 category: Page
-related: [Page, HeaderPage, BodyPage, Footer, Island, LightBox]
+related: [Page, HeaderPage, BodyPage, Footer, Island]
 tokens:
   - FooterPage.StickyShadow
 stories: stories/Page/FooterPage/FooterPage.stories.tsx
@@ -119,3 +119,4 @@ version: "1.0"
 | 2026-09-16 | Добавлен отступ `padding-bottom: 8px` для футера с `type={EFooterPageType.SECOND}`. |
 | 2026-08-06 | Sticky-позиционирование доступно вне `LightBox` при ширине viewport от 992px и отключено при высоте viewport не больше 800px. |
 | 2026-06-19 | Создан документ. AI-рефакторинг (clsx order, JSDoc на props, displayName), unit-тесты, миграция stories на modern pattern. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

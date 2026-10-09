@@ -1,7 +1,7 @@
 ---
 component: Amount
 category: Amount
-related: [AmountField, Text, StatusTrackerSum, TableFooterSummaryAmount]
+related: [AmountField]
 tokens: []
 stories: stories/Amount/Amount.stories.tsx
 version: "1.0"
@@ -184,3 +184,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-08-12 | Создан документ. AI-рефакторинг: `Amount` переведён с `React.FC` на `forwardRef` — ref указывает на корневой `<span>`, то есть на тот же элемент, что получает `className` и `...rest` (аддитивное изменение, `IAmountProps` не менялся). Порядок импортов приведён к codestyle, константа `adaptiveAmountLength` переименована в `ADAPTIVE_AMOUNT_LENGTH`, магические символы вынесены в именованные константы `HYPHEN_MINUS` / `MINUS_SIGN` / `NON_BREAKING_SPACE`, нестрогое сравнение `==` заменено на `startsWith`, `let` заменён на `const`, inline-функция `renderCurrencyName` (возвращала массив React-узлов) заменена на фрагмент прямо в JSX, JSDoc props дополнен значениями по умолчанию, `!important` в `.adaptive` получил комментарий-обоснование. Unit-тесты расширены с 4 до 23 кейсов. Публичный API, DOM-разметка и визуальное отображение не изменены. |
+| 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`StatusTrackerSum`, `TableFooterSummaryAmount`); из `related` убраны несимметричные имена (`Text`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

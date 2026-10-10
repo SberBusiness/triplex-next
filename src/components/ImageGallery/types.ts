@@ -1,7 +1,7 @@
 import React from "react";
 import {
     IImageGalleryExtendedArrowProps,
-    IImageGalleryExtendedDotsProps,
+    IImageGalleryExtendedPageIndicatorsProps,
     IImageGalleryExtendedThumbnailsProps,
     IImageGalleryItemProps,
 } from "../ImageGalleryExtended";
@@ -17,8 +17,9 @@ export type TImageGalleryArrowProps = Omit<
 /** Свойства ленты миниатюр, которые ImageGallery пробрасывает в ImageGalleryExtended.Thumbnails. Допускают `data-*`. */
 export type TImageGalleryThumbnailsProps = Omit<IImageGalleryExtendedThumbnailsProps, "children"> & DataAttributes;
 
-/** Свойства тиков, которые ImageGallery пробрасывает в ImageGalleryExtended.Dots. Допускают `data-*`. */
-export type TImageGalleryDotsProps = Omit<IImageGalleryExtendedDotsProps, "children"> & DataAttributes;
+/** Свойства индикаторов страниц, которые ImageGallery пробрасывает в ImageGalleryExtended.PageIndicators. Допускают `data-*`. */
+export type TImageGalleryPageIndicatorsProps = Omit<IImageGalleryExtendedPageIndicatorsProps, "children"> &
+    DataAttributes;
 
 /** Свойства компонента ImageGallery. */
 export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
@@ -38,14 +39,14 @@ export interface IImageGalleryProps extends Omit<React.HTMLAttributes<HTMLDivEle
     withBlur?: boolean;
     /** Показывать ли ленту миниатюр (десктоп). */
     showThumbnails?: boolean;
-    /** Показывать ли ряд тиков-индикаторов (мобильный). */
-    showDots?: boolean;
+    /** Показывать ли индикаторы страниц (мобильный). */
+    showPageIndicators?: boolean;
     /** Свойства кнопки перехода к предыдущему изображению. */
     prevArrowProps: TImageGalleryArrowProps;
     /** Свойства кнопки перехода к следующему изображению. */
     nextArrowProps: TImageGalleryArrowProps;
     /** Свойства ленты миниатюр (десктоп). */
     thumbnailsProps?: TImageGalleryThumbnailsProps;
-    /** Свойства ряда тиков-индикаторов (мобильный). */
-    dotsProps?: TImageGalleryDotsProps;
+    /** Свойства индикаторов страниц (мобильный). */
+    pageIndicatorsProps?: TImageGalleryPageIndicatorsProps;
 }

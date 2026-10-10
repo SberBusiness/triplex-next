@@ -3,24 +3,21 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { ImageGallery } from "@sberbusiness/triplex-next";
 import {
-    IPlaygroundArgs,
-    Playground as PlaygroundRender,
-    Default as DefaultRender,
+    PlaygroundRender,
+    DefaultRender,
     DefaultSource,
-    FixedHeight as FixedHeightRender,
+    FixedHeightRender,
     FixedHeightSource,
-    WithoutThumbnails as WithoutThumbnailsRender,
+    WithoutThumbnailsRender,
     WithoutThumbnailsSource,
-    WithDots as WithDotsRender,
-    WithDotsSource,
-    PropsForwarding as PropsForwardingRender,
+    PropsForwardingRender,
     PropsForwardingSource,
-    WithoutBlur as WithoutBlurRender,
+    WithoutBlurRender,
     WithoutBlurSource,
-    InsideLightBox as InsideLightBoxRender,
+    InsideLightBoxRender,
     InsideLightBoxSource,
-    VisualTestsArrows as VisualTestsArrowsRender,
-    VisualTestsDots as VisualTestsDotsRender,
+    VisualTestsArrowsRender,
+    type IPlaygroundArgs,
 } from "./examples";
 
 export default {
@@ -49,12 +46,12 @@ const PLAYGROUND_ARGS: IPlaygroundArgs = {
     height: "auto",
     withBlur: true,
     showThumbnails: true,
-    showDots: true,
+    showPageIndicators: true,
     defaultId: "photo-1",
     prevArrowProps: { "aria-label": "Предыдущее изображение" },
     nextArrowProps: { "aria-label": "Следующее изображение" },
     thumbnailsProps: {},
-    dotsProps: {},
+    pageIndicatorsProps: {},
 };
 
 /** Интерактивный playground: все props галереи настраиваются через панель Controls. */
@@ -78,9 +75,9 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             description: "Показывать ли ленту миниатюр (десктоп).",
             table: { category: "Props" },
         },
-        showDots: {
+        showPageIndicators: {
             control: "boolean",
-            description: "Показывать ли ряд тиков-индикаторов (мобильный).",
+            description: "Показывать ли индикаторы страниц (мобильный).",
             table: { category: "Props" },
         },
         defaultId: {
@@ -114,9 +111,9 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
             description: "Свойства ленты миниатюр (десктоп).",
             table: { category: "Props" },
         },
-        dotsProps: {
+        pageIndicatorsProps: {
             control: "object",
-            description: "Свойства ряда тиков-индикаторов (мобильный).",
+            description: "Свойства индикаторов страниц (мобильный).",
             table: { category: "Props" },
         },
     },
@@ -164,19 +161,7 @@ export const WithoutThumbnails: StoryObj<typeof ImageGallery> = {
     render: WithoutThumbnailsRender,
 };
 
-/** Мобильный preset (XS viewport): лента миниатюр заменена рядом тиков-индикаторов (максимум 4). */
-export const WithDots: StoryObj<typeof ImageGallery> = {
-    parameters: {
-        controls: { disable: true },
-        viewport: { defaultViewport: "XS" },
-        docs: {
-            source: { code: WithDotsSource, language: "tsx" },
-        },
-    },
-    render: WithDotsRender,
-};
-
-/** Проброс `id`/`data-test-id` в стрелки, ленту миниатюр и ряд тиков через `*ArrowProps` / `thumbnailsProps` / `dotsProps`. */
+/** Проброс `id`/`data-test-id` в стрелки, ленту миниатюр и индикаторы страниц через `*ArrowProps` / `thumbnailsProps` / `pageIndicatorsProps`. */
 export const PropsForwarding: StoryObj<typeof ImageGallery> = {
     parameters: {
         controls: { disable: true },
@@ -225,18 +210,4 @@ export const VisualTestsArrows: StoryObj<typeof ImageGallery> = {
         },
     },
     render: VisualTestsArrowsRender,
-};
-
-/** Скриншот-тест тиков-индикаторов (мобильный preset, XS viewport): активный тик и обычные. */
-export const VisualTestsDots: StoryObj<typeof ImageGallery> = {
-    tags: ["!autodocs", "!dev"],
-    parameters: {
-        viewport: { defaultViewport: "XS" },
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    render: VisualTestsDotsRender,
 };

@@ -1,5 +1,4 @@
-import React from "react";
-import { action } from "storybook/actions";
+import React, { useState } from "react";
 import { ImageGalleryExtended, EImageGalleryArrowDirection } from "@sberbusiness/triplex-next";
 
 const ITEMS = Array.from({ length: 9 }, (_, i) => ({
@@ -10,7 +9,7 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
 
 /** Галерея с полным десктопным составом и стрелками поверх крупной картинки. */
 const Gallery: React.FC<{ initialId: string; withBlur?: boolean }> = ({ initialId, withBlur }) => {
-    const [selectedId, setSelectedId] = React.useState(initialId);
+    const [selectedId, setSelectedId] = useState(initialId);
 
     return (
         <div style={{ width: 480 }}>
@@ -56,24 +55,3 @@ export const VisualTestsArrows = () => (
         <Gallery initialId="photo-9" withBlur />
     </div>
 );
-
-/** Только тики-индикаторы (мобильный preset): активный тик (бакет третьего) и обычные. */
-export const VisualTestsDots = () => {
-    const [selectedId, setSelectedId] = React.useState("photo-5");
-
-    return (
-        <div style={{ width: 360 }}>
-            <ImageGalleryExtended
-                items={ITEMS}
-                selectedId={selectedId}
-                onChange={(id) => {
-                    setSelectedId(id);
-                    action("onChange")(id);
-                }}
-            >
-                <ImageGalleryExtended.Main withBlur />
-                <ImageGalleryExtended.Dots />
-            </ImageGalleryExtended>
-        </div>
-    );
-};

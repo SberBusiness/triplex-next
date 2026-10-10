@@ -1,4 +1,3 @@
-import React, { useRef, useLayoutEffect } from "react";
 import { TCarouselViewportPadding, ICarouselPaddingResult } from "./types";
 
 /** Очищает значение: отсекает NaN, Infinity и отрицательные числа, возвращая 0. */
@@ -52,26 +51,3 @@ export const resolveViewportPadding = (padding: TCarouselViewportPadding | undef
         style: "0px",
     };
 };
-
-/** Объединяет несколько рефов в один чистый колбэк-реф. */
-export function mergeRefs<T>(...refs: React.ForwardedRef<T>[]) {
-    return (node: T | null) => {
-        refs.forEach((ref) => {
-            if (ref === null) return;
-            if (typeof ref === "function") {
-                ref(node);
-            } else {
-                ref.current = node;
-            }
-        });
-    };
-}
-
-/** Возвращает стабильный реф, который всегда хранит самое актуальное значение. */
-export function useLatestRef<T>(value: T) {
-    const ref = useRef(value);
-    useLayoutEffect(() => {
-        ref.current = value;
-    }, [value]);
-    return ref;
-}

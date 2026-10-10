@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ImageGalleryExtended, EImageGalleryArrowDirection } from "@sberbusiness/triplex-next";
 
 const ITEMS = Array.from({ length: 9 }, (_, i) => ({
@@ -8,11 +8,11 @@ const ITEMS = Array.from({ length: 9 }, (_, i) => ({
 }));
 
 /**
- * Только крупная картинка со стрелками — без миниатюр и тиков.
+ * Только крупная картинка со стрелками — без миниатюр и индикаторов страниц.
  * Навигация доступна стрелками и клавишами `←` / `→`.
  */
 export const MainOnly = () => {
-    const [selectedId, setSelectedId] = React.useState("photo-1");
+    const [selectedId, setSelectedId] = useState("photo-1");
 
     return (
         <ImageGalleryExtended items={ITEMS} selectedId={selectedId} onChange={setSelectedId}>

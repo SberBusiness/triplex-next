@@ -1,8 +1,8 @@
 import React from "react";
-import { Carousel, ECarouselOrientation } from "@sberbusiness/triplex-next";
+import { Carousel, EOrientation } from "@sberbusiness/triplex-next";
 
 interface OrientationItemProps {
-    orientation: ECarouselOrientation;
+    orientation: EOrientation;
 }
 
 const BASE_ITEM_STYLE: React.CSSProperties = {
@@ -17,20 +17,20 @@ const BASE_ITEM_STYLE: React.CSSProperties = {
     userSelect: "none",
 };
 
-const ORIENTATION_TO_ITEM_DIMENSIONS_MAP: Record<ECarouselOrientation, (size: number) => React.CSSProperties> = {
-    [ECarouselOrientation.HORIZONTAL]: (size) => ({
+const ORIENTATION_TO_ITEM_DIMENSIONS_MAP: Record<EOrientation, (size: number) => React.CSSProperties> = {
+    [EOrientation.HORIZONTAL]: (size) => ({
         width: size,
         height: "100%",
     }),
-    [ECarouselOrientation.VERTICAL]: (size) => ({
+    [EOrientation.VERTICAL]: (size) => ({
         width: "100%",
         height: size / 2,
     }),
 };
 
-const ORIENTATION_TO_GAP_MAP: Record<ECarouselOrientation, number> = {
-    [ECarouselOrientation.HORIZONTAL]: 16,
-    [ECarouselOrientation.VERTICAL]: 8,
+const ORIENTATION_TO_GAP_MAP: Record<EOrientation, number> = {
+    [EOrientation.HORIZONTAL]: 16,
+    [EOrientation.VERTICAL]: 8,
 };
 
 const OrientationItem = ({ orientation }: OrientationItemProps) => {
@@ -83,7 +83,7 @@ const OrientationItem = ({ orientation }: OrientationItemProps) => {
     );
 };
 
-const ORIENTATIONS = Object.values(ECarouselOrientation);
+const ORIENTATIONS = Object.values(EOrientation);
 
 export const Orientations = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

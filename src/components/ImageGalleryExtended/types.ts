@@ -16,7 +16,7 @@ export interface IImageGalleryItemProps {
 export interface IImageGalleryExtendedProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
     /** Изображения галереи. Раздаются составным частям через контекст. */
     items: ReadonlyArray<IImageGalleryItemProps>;
-    /** Составные части: `ImageGalleryExtended.Main/.Thumbnails/.Dots`. */
+    /** Составные части: `ImageGalleryExtended.Main/.Thumbnails/.PageIndicators`. */
     children: React.ReactNode;
     /** Идентификатор активного изображения (controlled). */
     selectedId: string;

@@ -41,7 +41,7 @@ stories/{Group}/{Component}/
 - **Sizes / Themes / Statuses** — на enum-props, варианты подписаны рядом с компонентом.
 - **`Disabled` / `Loading` / `WithIcon`** — на boolean-state и нестандартные наполнения.
 - **Examples** — production-like композиция (опционально).
-- **VisualTests** — если основных стори недостаточно для покрытия визуальных состояний; через `play` если нужно взаимодействие; данные захардкожены.
+- **VisualTests** — если основных стори недостаточно для покрытия визуальных состояний; `tags: ["!autodocs", "!dev"]`; через `play` если нужно взаимодействие; данные захардкожены.
 
 ## Жёсткие правила
 
@@ -50,7 +50,7 @@ stories/{Group}/{Component}/
 - **Колбэки:**
   - в `Playground` / `VisualTests`-рендерах — `action("eventName")` из `storybook/actions`;
   - в копируемых примерах (`Default`, `Sizes`, и т.д.) — пустые `() => {}`. Никаких `alert`/`console.log`/`action`.
-- **Alias обязателен** при импорте example в stories.tsx: `Default as DefaultRender, DefaultSource` (из-за коллизии с именем story-экспорта).
+- **`examples/index.ts` — явные экспорты** `{Story}Render` / `{Story}Source` (см. stories-guide.md), в stories.tsx импорт без alias. Старые `index.ts` с `export *` при небольших правках не мигрируй.
 - **Без `Example`-постфикса** в именах файлов: `Default.tsx`, не `DefaultExample.tsx`.
 - **НЕ переименовывай существующие story ids/export names** — на них могут опираться e2e/visual-тесты.
 - **НЕ хардкодь язык** в `aria-label`/`title` внутри компонента. В stories для демонстрации — можно (`<ModalCloseButton aria-label="Закрыть" />`).

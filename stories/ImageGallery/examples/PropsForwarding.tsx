@@ -16,9 +16,9 @@ export const PropsForwarding = () => (
             id: "image-gallery-thumbnails",
             "data-test-id": "image-gallery-thumbnails",
         }}
-        dotsProps={{
-            id: "image-gallery-dots",
-            "data-test-id": "image-gallery-dots",
+        pageIndicatorsProps={{
+            id: "image-gallery-page-indicators",
+            "data-test-id": "image-gallery-page-indicators",
         }}
     />
 );

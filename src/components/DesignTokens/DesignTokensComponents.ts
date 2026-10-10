@@ -39,6 +39,7 @@ import {
     MultiselectField_Tokens,
     Notification_Tokens,
     Overlay_Tokens,
+    PageIndicators_Tokens,
     Pagination_Tokens,
     Radio_Tokens,
     SegmentedControlSegment_Tokens,
@@ -95,6 +96,7 @@ import {
     TDesignTokensComponentsMultiselectFieldValue,
     TDesignTokensComponentsNotificationValue,
     TDesignTokensComponentsOverlayValue,
+    TDesignTokensComponentsPageIndicatorsValue,
     TDesignTokensComponentsPaginationValue,
     TDesignTokensComponentsRadioValue,
     TDesignTokensComponentsSegmentedControlSegmentValue,
@@ -208,6 +210,10 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         Notification_Tokens,
     ),
     Overlay: GetTokensValueByTheme<TDesignTokensComponentsOverlayValue>(ETriplexNextTheme.LIGHT, Overlay_Tokens),
+    PageIndicators: GetTokensValueByTheme<TDesignTokensComponentsPageIndicatorsValue>(
+        ETriplexNextTheme.LIGHT,
+        PageIndicators_Tokens,
+    ),
     Pagination: GetTokensValueByTheme<TDesignTokensComponentsPaginationValue>(
         ETriplexNextTheme.LIGHT,
         Pagination_Tokens,

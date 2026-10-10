@@ -4,4 +4,30 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.51.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**Carousel**
+
+- Удалён enum `ECarouselOrientation`: используйте общий `EOrientation`, значения те же.
+- Удалены токены `Carousel.Indicator_*`: индикаторы теперь красятся токенами `PageIndicators.Indicator_*` с теми же именами и значениями. Если вы переопределяли их через `ThemeProvider`, перенесите ключи в группу `PageIndicators`.
+
+**ImageGallery**
+
+- Свойство `showDots` переименовано в `showPageIndicators`, `dotsProps` — в `pageIndicatorsProps`, тип `TImageGalleryDotsProps` — в `TImageGalleryPageIndicatorsProps`.
+
+**ImageGalleryExtended**
+
+- Часть `ImageGalleryExtended.Dots` заменена на `ImageGalleryExtended.PageIndicators`, тип `IImageGalleryExtendedDotsProps` — на `IImageGalleryExtendedPageIndicatorsProps`. Замените `<ImageGalleryExtended.Dots />` на `<ImageGalleryExtended.PageIndicators />`.
+- Изменено: вместо не более 4 тиков — индикатор на каждое изображение, видимо окно из 5. Ряд стал WAI-ARIA `tablist`: активный индикатор помечается `aria-selected="true"` вместо `aria-current`, стрелки, `Home` и `End` переключают изображение. Подписи индикаторов можно задать через `indicatorProps`.
+- Изменено: отступ 16px между частями галереи теперь задаёт только лента миниатюр, индикаторы страниц прилегают к картинке вплотную. Своей разметке между частями задайте отступ самостоятельно.
+- Удалены токены `ImageGallery.Dot_Background_*`: индикаторы красятся токенами `PageIndicators.Indicator_*`.
+
 <Heading>Изменения</Heading>
+
+**EOrientation**
+
+- Добавлен общий enum ориентации `EOrientation` (`HORIZONTAL` / `VERTICAL`), его используют `Carousel` и `PageIndicators`.
+
+**PageIndicators**
+
+- Добавлен компонент `PageIndicators` — ряд индикаторов страниц с окном из 5 видимых индикаторов и навигацией с клавиатуры. Его используют `Carousel.Indicators` (без изменений для потребителя) и `ImageGalleryExtended.PageIndicators`.

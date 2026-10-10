@@ -10,9 +10,6 @@ tokens:
   - ImageGallery.Arrow_BorderColor_Default
   - ImageGallery.Arrow_BorderColor_Hover
   - ImageGallery.Arrow_BorderColor_Active
-  - ImageGallery.Dot_Background_Default
-  - ImageGallery.Dot_Background_Hover
-  - ImageGallery.Dot_Background_Active
   - ImageGallery.Thumb_Mask_Background
 stories: stories/ImageGallery/ImageGallery.stories.tsx
 version: "1.0"
@@ -24,12 +21,12 @@ version: "1.0"
 
 Готовый пресет галереи изображений поверх `ImageGalleryExtended`. Тонкая
 обёртка: фиксирует стандартную раскладку (крупная картинка `.Main` со стрелками
-навигации + лента миниатюр на десктопе / ряд тиков-индикаторов на мобильном
+навигации + лента миниатюр на десктопе / индикаторы страниц на мобильном
 через `MobileView`) и добавляет uncontrolled-режим (`defaultId`), которого нет у
 controlled-only контейнера `ImageGalleryExtended`. Изображения задаются массивом
 `items`.
 
-Используй когда: нужна типовая галерея «крупная картинка + миниатюры/тики» без
+Используй когда: нужна типовая галерея «крупная картинка + миниатюры/индикаторы страниц» без
 кастомизации раскладки — достаточно передать `items` и подписать стрелки.
 Поддерживает и controlled (`selectedId` + `onChange`), и uncontrolled
 (`defaultId`) режимы.
@@ -68,9 +65,9 @@ controlled-only контейнера `ImageGalleryExtended`. Изображен�
 | `height` | `'auto' \| number \| string` | `'auto'` | Высота крупной картинки. `'auto'` — фиксированные значения по breakpoint (504px / 264px); число → `px` |
 | `withBlur` | `boolean` | `true` | Блюр-слой копии изображения по краям (для картинок уже вьюпорта) |
 | `showThumbnails` | `boolean` | `true` | Показывать ленту миниатюр (десктоп) |
-| `showDots` | `boolean` | `true` | Показывать ряд тиков-индикаторов (мобильный) |
+| `showPageIndicators` | `boolean` | `true` | Показывать индикаторы страниц (мобильный) |
 | `thumbnailsProps` | `TImageGalleryThumbnailsProps` | — | Свойства ленты миниатюр (пробрасываются в `.Thumbnails`). Допускают `data-*` |
-| `dotsProps` | `TImageGalleryDotsProps` | — | Свойства ряда тиков (пробрасываются в `.Dots`). Допускают `data-*` |
+| `pageIndicatorsProps` | `TImageGalleryPageIndicatorsProps` | — | Свойства индикаторов страниц (пробрасываются в `.PageIndicators`). Допускают `data-*` |
 | `...HTMLDivAttributes` | — | — | Пробрасываются на корневой контейнер. Кроме `onChange` (переопределён под смену изображения) |
 
 ### Controlled vs uncontrolled
@@ -91,7 +88,8 @@ controlled-only контейнера `ImageGalleryExtended`. Изображен�
 Собственных стилей и `.less`-файлов у `ImageGallery` нет — вся отрисовка
 делегируется частям `ImageGalleryExtended`. Перечисленные токены принадлежат
 семейству и используются через эти части — группа `ImageGallery` намеренно
-делится обоими семействами.
+делится обоими семействами. Индикаторы страниц на мобильном красятся токенами
+группы `PageIndicators` (см. `PageIndicators-ai.md`).
 
 ```text
 ImageGallery.Accent_Color
@@ -102,10 +100,6 @@ ImageGallery.Arrow_Background_Active
 ImageGallery.Arrow_BorderColor_Default
 ImageGallery.Arrow_BorderColor_Hover
 ImageGallery.Arrow_BorderColor_Active
-
-ImageGallery.Dot_Background_Default
-ImageGallery.Dot_Background_Hover
-ImageGallery.Dot_Background_Active
 
 ImageGallery.Thumb_Mask_Background
 ```
@@ -129,10 +123,10 @@ Runtime CSS-переменная высоты крупной картинки
   `ImageGalleryExtended` (клик по уже активному изображению не триггерит).
   Потребители на это полагаются.
 - **Публичный API** (имена и сигнатуры props, типы `TImageGalleryArrowProps` /
-  `TImageGalleryThumbnailsProps` / `TImageGalleryDotsProps`, barrel-экспорты) —
+  `TImageGalleryThumbnailsProps` / `TImageGalleryPageIndicatorsProps`, barrel-экспорты) —
   breaking change при изменении.
-- **Раскладка-пресет фиксирована.** Состав (`.Main` + стрелки + миниатюры/тики
-  через `MobileView`) — суть компонента. Нужна другая раскладка — это
+- **Раскладка-пресет фиксирована.** Состав (`.Main` + стрелки + миниатюры/индикаторы
+  страниц через `MobileView`) — суть компонента. Нужна другая раскладка — это
   `ImageGalleryExtended`, а не новый prop здесь.
 
 ---
@@ -147,8 +141,9 @@ Runtime CSS-переменная высоты крупной картинки
   с клавиатуры); `disabled`-стрелка на границе диапазона не показывается вовсе.
 - **Клавиатура:** `←` / `→` на корневом контейнере переключают активное
   изображение (поведение унаследовано от `ImageGalleryExtended`).
-- **`aria-current="true"`** — на активной миниатюре и активном тике.
-- **Миниатюры и тики** берут доступное имя из `item.alt`.
+- **`aria-current="true"`** — на активной миниатюре.
+- **Индикаторы страниц** (мобильный) — WAI-ARIA `tablist`, см. `PageIndicators-ai.md`.
+- **Миниатюры и индикаторы страниц** берут доступное имя из `item.alt`.
 - **Декоративный блюр-слой** (`withBlur`) помечен `aria-hidden="true"` с пустым
   `alt`.
 - **Мобильный свайп** крупного изображения перехватывает горизонтальный жест,
@@ -163,7 +158,7 @@ Runtime CSS-переменная высоты крупной картинки
   и добавляет uncontrolled-режим. Используй Extended напрямую, если нужна
   кастомная раскладка или поведение.
 - `MobileView` — переключает ветку рендера: на десктопе показывает ленту
-  миниатюр (`.Thumbnails`), на мобильном — ряд тиков (`.Dots`).
+  миниатюр (`.Thumbnails`), на мобильном — индикаторы страниц (`.PageIndicators`).
 - `LightBox` — типовой сценарий: `onImageClick` открывает изображение в
   лайтбоксе (см. story `InsideLightBox`).
 
@@ -180,11 +175,10 @@ Runtime CSS-переменная высоты крупной картинки
 | `Default` | `Default.tsx` | Стандартный пресет: крупная картинка со стрелками + лента миниатюр |
 | `FixedHeight` | `FixedHeight.tsx` | Фиксированная высота крупной картинки (`height={number}`) |
 | `WithoutThumbnails` | `WithoutThumbnails.tsx` | Скрытая лента миниатюр (`showThumbnails={false}`) |
-| `WithDots` | `WithDots.tsx` | Мобильный preset (XS viewport): крупная картинка + тики-индикаторы |
-| `PropsForwarding` | `PropsForwarding.tsx` | Проброс свойств (включая `data-*`) в стрелки, миниатюры и тики |
+| `PropsForwarding` | `PropsForwarding.tsx` | Проброс свойств (включая `data-*`) в стрелки, миниатюры и индикаторы страниц |
 | `WithoutBlur` | `WithoutBlur.tsx` | Отключённый блюр-слой по краям (`withBlur={false}`) |
 | `InsideLightBox` | `InsideLightBox.tsx` | Открытие активного изображения в `LightBox` по клику (`onImageClick`) |
-| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: встроенные стрелки на границах (disabled) + блюр; тики-индикаторы |
+| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: встроенные стрелки на границах (disabled) + блюр |
 
 ---
 
@@ -195,3 +189,4 @@ Runtime CSS-переменная высоты крупной картинки
 | 2026-05-28 | Создан документ |
 | 2026-08-31 | Удалены неиспользуемые токены `Arrow_Background_Disabled` и `Arrow_BorderColor_Disabled`: неактивная стрелка скрывается (`display: none`), красить нечем |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-07 | **Breaking:** `showDots`/`dotsProps` → `showPageIndicators`/`pageIndicatorsProps`, мобильные тики заменены индикаторами страниц, удалены токены `Dot_Background_*` |

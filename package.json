@@ -98,7 +98,7 @@
         "react-dom": "18.3.1",
         "react-window": "1.8.11",
         "rollup-plugin-postcss": "4.0.2",
-        "start-server-and-test": "2.1.5",
+        "start-server-and-test": "3.0.12",
         "storybook": "9.1.20",
         "tsx": "4.23.15",
         "typescript": "5.9.3",

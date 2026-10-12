@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import clsx from "clsx";
 import { ICarouselTrackProps } from "./types";
 import { CarouselContext } from "./CarouselContext";
-import { mergeRefs } from "./utils";
+import { mergeRefs } from "../../utils/refs";
 import { ORIENTATION_TRANSFORM } from "./constants";
 import styles from "./styles/Carousel.module.less";
 

@@ -202,103 +202,38 @@ describe("ImageGallery — mobile", () => {
         mobileState.isMobile = true;
     });
 
-    it("renders 4 dots for 9 items (bucketSize=2)", () => {
-        renderGallery({}, 9);
-        const dots = screen.getAllByRole("button", { name: /Photo/ });
-        expect(dots).toHaveLength(4);
-    });
-
-    it("renders 0 dots for a single item", () => {
-        renderGallery({}, 1);
-        expect(screen.queryAllByRole("button", { name: /Photo/ })).toHaveLength(0);
-    });
-
-    it("renders Math.min(items.length, 4) dots", () => {
-        const { rerender } = renderGallery({}, 3);
-        expect(screen.getAllByRole("button", { name: /Photo/ })).toHaveLength(3);
-
-        rerender(
-            <ImageGallery
-                items={buildItems(2)}
-                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
-                nextArrowProps={{ "aria-label": "Следующее изображение" }}
-            />,
-        );
-        expect(screen.getAllByRole("button", { name: /Photo/ })).toHaveLength(2);
-
-        rerender(
-            <ImageGallery
-                items={buildItems(10)}
-                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
-                nextArrowProps={{ "aria-label": "Следующее изображение" }}
-            />,
-        );
-        expect(screen.getAllByRole("button", { name: /Photo/ })).toHaveLength(4);
-    });
-
-    it("click on tick t calls onChange with the id at t * bucketSize (9 items → bucketSize=2)", () => {
+    // Логика индикаторов покрыта в PageIndicators.test.tsx и ImageGalleryExtendedPageIndicators.test.tsx.
+    it("uncontrolled: click on a page indicator switches the main image", () => {
         const onChange = vi.fn();
         renderGallery({ onChange }, 9);
 
-        const dots = screen.getAllByRole("button", { name: /Photo/ });
-        fireEvent.click(dots[2]);
-        expect(onChange).toHaveBeenCalledWith("p5");
+        fireEvent.click(screen.getByRole("tab", { name: "Photo 3" }));
 
-        fireEvent.click(dots[3]);
-        expect(onChange).toHaveBeenCalledWith("p7");
+        expect(onChange).toHaveBeenCalledWith("p3");
+        expect(screen.getByAltText("Photo 3")).toBeInTheDocument();
+        expect(screen.getByRole("tab", { name: "Photo 3" })).toHaveAttribute("aria-selected", "true");
     });
 
-    it("active dot reflects current selectedId via Math.floor(i / bucketSize)", () => {
-        const { rerender } = renderGallery({ selectedId: "p1" }, 9);
-        let dots = screen.getAllByRole("button", { name: /Photo/ });
-        expect(dots[0]).toHaveAttribute("aria-current", "true");
-
-        rerender(
-            <ImageGallery
-                items={buildItems(9)}
-                selectedId="p4"
-                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
-                nextArrowProps={{ "aria-label": "Следующее изображение" }}
-            />,
-        );
-        dots = screen.getAllByRole("button", { name: /Photo/ });
-        // index 3 → tick = floor(3/2) = 1
-        expect(dots[1]).toHaveAttribute("aria-current", "true");
-
-        rerender(
-            <ImageGallery
-                items={buildItems(9)}
-                selectedId="p9"
-                prevArrowProps={{ "aria-label": "Предыдущее изображение" }}
-                nextArrowProps={{ "aria-label": "Следующее изображение" }}
-            />,
-        );
-        dots = screen.getAllByRole("button", { name: /Photo/ });
-        // index 8 → floor(8/2) = 4, capped at ticksCount-1 = 3
-        expect(dots[3]).toHaveAttribute("aria-current", "true");
+    it("showPageIndicators={false} hides the page indicators", () => {
+        renderGallery({ showPageIndicators: false }, 9);
+        expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
     });
 
-    it("showDots={false} hides the dots row", () => {
-        renderGallery({ showDots: false }, 9);
-        expect(screen.queryAllByRole("button", { name: /Photo/ })).toHaveLength(0);
-    });
-
-    it("passes dotsProps (including data-*) to mobile dots", () => {
+    it("passes pageIndicatorsProps (including data-*) to mobile page indicators", () => {
         renderGallery(
             {
-                dotsProps: {
-                    id: "dots",
-                    "data-test-id": "dots-test-id",
+                pageIndicatorsProps: {
+                    id: "page-indicators",
+                    "data-test-id": "page-indicators-test-id",
                 },
             },
             9,
         );
 
-        const dots = document.getElementById("dots");
-        expect(dots).toBeInTheDocument();
-        expect(dots).toHaveAttribute("data-test-id", "dots-test-id");
-        // Доступное имя тика берётся из item.alt (тик 3 → index 4 → Photo 5).
-        expect(screen.getByRole("button", { name: "Photo 5" })).toBeInTheDocument();
+        const pageIndicators = document.getElementById("page-indicators");
+        expect(pageIndicators).toBeInTheDocument();
+        expect(pageIndicators).toHaveAttribute("data-test-id", "page-indicators-test-id");
+        expect(pageIndicators).toHaveAttribute("role", "tablist");
     });
 
     /** jsdom не реализует TouchEvent/TransitionEvent — диспатчим обычный Event с нужными полями. */

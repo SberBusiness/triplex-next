@@ -1,5 +1,5 @@
-import React from "react";
-import { ImageGalleryExtended, EImageGalleryArrowDirection } from "@sberbusiness/triplex-next";
+import React, { useState } from "react";
+import { ImageGalleryExtended, EImageGalleryArrowDirection, MobileView } from "@sberbusiness/triplex-next";
 
 /** Доступных файлов-картинок всего 9, поэтому в большом наборе они повторяются по кругу. */
 const IMAGE_COUNT = 9;
@@ -17,9 +17,10 @@ const ITEMS = Array.from({ length: 20 }, (_, i) => {
 /**
  * Большой набор (20 изображений) — проверяет горизонтальный скролл ленты миниатюр
  * и автоцентровку активной миниатюры, когда они не помещаются в видимую область.
+ * На мобильном (<768px) лента заменяется индикаторами страниц через `MobileView`.
  */
 export const ManyThumbnails = () => {
-    const [selectedId, setSelectedId] = React.useState("photo-1");
+    const [selectedId, setSelectedId] = useState("photo-1");
 
     return (
         <ImageGalleryExtended items={ITEMS} selectedId={selectedId} onChange={setSelectedId}>
@@ -45,7 +46,9 @@ export const ManyThumbnails = () => {
                     )}
                 </ImageGalleryExtended.Nav>
             </ImageGalleryExtended.Main>
-            <ImageGalleryExtended.Thumbnails />
+            <MobileView fallback={<ImageGalleryExtended.Thumbnails />}>
+                <ImageGalleryExtended.PageIndicators />
+            </MobileView>
         </ImageGalleryExtended>
     );
 };

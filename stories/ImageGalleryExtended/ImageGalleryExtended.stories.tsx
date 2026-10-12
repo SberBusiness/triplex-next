@@ -3,22 +3,19 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { ImageGalleryExtended } from "@sberbusiness/triplex-next";
 import {
-    IPlaygroundArgs,
-    Playground as PlaygroundRender,
-    Default as DefaultRender,
+    PlaygroundRender,
+    DefaultRender,
     DefaultSource,
-    MainOnly as MainOnlyRender,
+    MainOnlyRender,
     MainOnlySource,
-    WithDots as WithDotsRender,
-    WithDotsSource,
-    CustomLayout as CustomLayoutRender,
+    CustomLayoutRender,
     CustomLayoutSource,
-    ManyThumbnails as ManyThumbnailsRender,
+    ManyThumbnailsRender,
     ManyThumbnailsSource,
-    OpenFromAvatar as OpenFromAvatarRender,
+    OpenFromAvatarRender,
     OpenFromAvatarSource,
-    VisualTestsArrows as VisualTestsArrowsRender,
-    VisualTestsDots as VisualTestsDotsRender,
+    VisualTestsArrowsRender,
+    type IPlaygroundArgs,
 } from "./examples";
 
 export default {
@@ -76,7 +73,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
     render: PlaygroundRender,
 };
 
-/** Полный десктопный состав, собранный вручную: крупная картинка со стрелками (`Main` + `Nav`/`Arrow`) и лента миниатюр (`Thumbnails`). */
+/** Полный состав, собранный вручную: крупная картинка со стрелками (`Main` + `Nav`/`Arrow`) и лента миниатюр (`Thumbnails`), на мобильном — индикаторы страниц через `MobileView`. */
 export const Default: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -87,7 +84,7 @@ export const Default: StoryObj<typeof ImageGalleryExtended> = {
     render: DefaultRender,
 };
 
-/** Только крупная картинка со стрелками — без миниатюр и тиков. */
+/** Только крупная картинка со стрелками — без миниатюр и индикаторов страниц. */
 export const MainOnly: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -98,19 +95,7 @@ export const MainOnly: StoryObj<typeof ImageGalleryExtended> = {
     render: MainOnlyRender,
 };
 
-/** Мобильный preset: крупная картинка и ряд тиков-индикаторов (`Dots`) вместо ленты миниатюр. */
-export const WithDots: StoryObj<typeof ImageGalleryExtended> = {
-    parameters: {
-        controls: { disable: true },
-        viewport: { defaultViewport: "XS" },
-        docs: {
-            source: { code: WithDotsSource, language: "tsx" },
-        },
-    },
-    render: WithDotsRender,
-};
-
-/** Произвольная раскладка: миниатюры над картинкой, а вместо стандартных стрелок — кастомная панель «N / Total» через render-функцию `Nav`. */
+/** Кастомизация через render-функции: панель навигации «Назад · N / Total · Вперёд» через `Nav` вместо стрелок и миниатюры с собственным доступным именем через `Thumbnails`. */
 export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -121,7 +106,7 @@ export const CustomLayout: StoryObj<typeof ImageGalleryExtended> = {
     render: CustomLayoutRender,
 };
 
-/** Большой набор (20 изображений): горизонтальный скролл ленты миниатюр с автоцентровкой активной. */
+/** Большой набор (20 изображений): горизонтальный скролл ленты миниатюр с автоцентровкой активной, на мобильном — индикаторы страниц. */
 export const ManyThumbnails: StoryObj<typeof ImageGalleryExtended> = {
     parameters: {
         controls: { disable: true },
@@ -158,17 +143,4 @@ export const VisualTestsArrows: StoryObj<typeof ImageGalleryExtended> = {
         },
     },
     render: VisualTestsArrowsRender,
-};
-
-/** Скриншот-тест тиков-индикаторов (мобильный preset): активный тик и обычные. */
-export const VisualTestsDots: StoryObj<typeof ImageGalleryExtended> = {
-    tags: ["!autodocs", "!dev"],
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
-        },
-    },
-    render: VisualTestsDotsRender,
 };

@@ -10,7 +10,7 @@ const ErrorItem = ({ size }: IErrorItemProps) => {
 
     return (
         <div>
-            <div style={{ marginBottom: 8, fontWeight: 700 }}>{size.toUpperCase()} — ERROR</div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
             <SMSField
                 code={code}
                 onChangeCode={setCode}

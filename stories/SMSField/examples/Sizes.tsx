@@ -10,7 +10,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 
     return (
         <div>
-            <div style={{ marginBottom: 8, fontWeight: 700 }}>{size.toUpperCase()}</div>
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
             <SMSField code={code} onChangeCode={setCode} onSubmitCode={() => {}} size={size}>
                 <SMSField.Refresh
                     aria-label="Запросить новый код"

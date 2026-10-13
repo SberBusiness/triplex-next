@@ -9,8 +9,8 @@ export const Disabled = () => (
         {SIZES.flatMap((size) =>
             CODES.map((code) => (
                 <div key={`${size}-${code}`}>
-                    <div style={{ marginBottom: 8, fontWeight: 700 }}>
-                        {size.toUpperCase()} — DISABLED, {code ? "с кодом" : "пустое поле"}
+                    <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>
+                        {size.toUpperCase()}, {code ? "с кодом" : "пустое поле"}
                     </div>
                     <SMSField
                         code={code}

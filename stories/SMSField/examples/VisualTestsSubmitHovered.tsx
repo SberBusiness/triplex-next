@@ -16,7 +16,7 @@ export const VisualTestsSubmitHovered = () => (
                 countdownTimeLeft={0}
                 onRefresh={action("onRefresh")}
             />
-            <SMSField.Input aria-label="СМС-код" placeholder="Введите код" />
+            <SMSField.Input aria-label="СМС-код" />
             <SMSField.Submit aria-label="Отправить код" />
         </SMSField>
     </div>

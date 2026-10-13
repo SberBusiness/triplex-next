@@ -141,7 +141,7 @@ Typography.Error_Color
 | `VisualTestsSubmitHovered` | `VisualTestsSubmitHovered.tsx` | Hover доступной активной кнопки отправки при заполненном коде. |
 | `VisualTestsRefreshHovered` | `VisualTestsRefreshHovered.tsx` | Hover кнопки повторного запроса с открытой подсказкой в портале и стабильным ID. |
 
-Код документационных примеров показывается через `?raw`. Из скриншот-тестов исключены Playground, Default (дублирует LG в Sizes) и Example (живой таймер). Статус меняет только цвета, поэтому stories с одним размером используют LG — основной размер на формах; геометрию размеров проверяет Sizes. В hover-stories курсор наводит test-runner по `parameters.testRunner.hoverSelector` (CSS `:hover`), а `play` открывает подсказку.
+Код документационных примеров показывается через `?raw`. Из скриншот-тестов исключены Playground, Default (дублирует LG в Sizes) и Example (живой таймер). Stories с одним размером используют LG — основной размер на формах: статус меняет только цвета, а геометрию размеров проверяет Sizes. В hover-stories курсор наводит test-runner по `parameters.testRunner.hoverSelector` (CSS `:hover`), а `play` открывает подсказку.
 
 ---
 

@@ -34,8 +34,6 @@ const VisualItem = ({
                 aria-label="СМС-код"
                 counter={withDescription ? "8/8" : undefined}
                 description={withDescription ? "Введите код из СМС" : undefined}
-                errorText="Неверный код"
-                placeholder="Введите код"
             />
             <SMSField.Submit aria-label="Отправить код" />
         </SMSField>

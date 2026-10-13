@@ -28,7 +28,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
 const SIZES = Object.values(EComponentSize);
 
 export const Sizes = () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20, width: 300 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}>
         {SIZES.map((size) => (
             <SizeItem key={size} size={size} />
         ))}

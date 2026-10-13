@@ -8,7 +8,7 @@ export const VisualTestsFocused = () => (
             code=""
             onChangeCode={action("onChangeCode")}
             onSubmitCode={action("onSubmitCode")}
-            size={EComponentSize.MD}
+            size={EComponentSize.LG}
         >
             <SMSField.Refresh
                 aria-label="Запросить новый код"

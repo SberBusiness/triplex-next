@@ -6,12 +6,10 @@ import {
     PlaygroundRender,
     DefaultRender,
     DefaultSource,
-    ErrorRender,
-    ErrorSource,
-    DisabledRender,
-    DisabledSource,
     SizesRender,
     SizesSource,
+    StatusesRender,
+    StatusesSource,
     ExampleRender,
     ExampleSource,
     VisualTestsRender,
@@ -49,7 +47,7 @@ export default {
 } satisfies Meta<typeof SMSField>;
 
 const PLAYGROUND_ARGS: IPlaygroundArgs = {
-    size: EComponentSize.MD,
+    size: EComponentSize.LG,
     status: EFormFieldStatus.DEFAULT,
     description: "",
     errorText: "Неверный код",
@@ -124,28 +122,20 @@ export const Default: TStory = {
     render: DefaultRender,
 };
 
-export const Error: TStory = {
-    parameters: {
-        controls: { disable: true },
-        docs: { source: { code: ErrorSource, language: "tsx" } },
-    },
-    render: ErrorRender,
-};
-
-export const Disabled: TStory = {
-    parameters: {
-        controls: { disable: true },
-        docs: { source: { code: DisabledSource, language: "tsx" } },
-    },
-    render: DisabledRender,
-};
-
 export const Sizes: TStory = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: SizesSource, language: "tsx" } },
     },
     render: SizesRender,
+};
+
+export const Statuses: TStory = {
+    parameters: {
+        controls: { disable: true },
+        docs: { source: { code: StatusesSource, language: "tsx" } },
+    },
+    render: StatusesRender,
 };
 
 export const Example: TStory = {

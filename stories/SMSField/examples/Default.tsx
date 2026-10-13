@@ -6,7 +6,7 @@ export const Default = () => {
 
     return (
         <div style={{ width: 300 }}>
-            <SMSField code={code} onChangeCode={setCode} onSubmitCode={() => {}} size={EComponentSize.MD}>
+            <SMSField code={code} onChangeCode={setCode} onSubmitCode={() => {}} size={EComponentSize.LG}>
                 <SMSField.Refresh
                     aria-label="Запросить новый код"
                     countdownTime={10}

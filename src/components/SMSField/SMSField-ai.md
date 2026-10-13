@@ -132,17 +132,16 @@ Typography.Error_Color
 |---|---|---|
 | `Playground` | `Playground.tsx` | Управляемый код, size/status, настройки Input, счётчик и внешний обратный отсчёт; Actions для callbacks. |
 | `Default` | `Default.tsx` | Минимальная контролируемая композиция с доступными именами поля и кнопок. |
-| `Error` | `Error.tsx` | Пустое поле в ERROR, errorText вне фокуса, все размеры. |
-| `Disabled` | `Disabled.tsx` | DISABLED с пустым и заполненным кодом во всех размерах. |
 | `Sizes` | `Sizes.tsx` | Пустое поле DEFAULT в размерах SM / MD / LG с подписями. |
+| `Statuses` | `Statuses.tsx` | Пустое поле в DEFAULT, ERROR (errorText вместо placeholder) и DISABLED; WARNING не поддерживается. |
 | `Example` | `Example.tsx` | Внешний таймер повторного запроса, Tooltip, описание, maxLength и счётчик. |
-| `VisualTests` | `VisualTests.tsx` | Заполненные DEFAULT/ERROR во всех размерах, начало и середина обратного отсчёта, описание и счётчик. |
+| `VisualTests` | `VisualTests.tsx` | Заполненный код в DEFAULT / ERROR / DISABLED, начало и середина обратного отсчёта, описание и счётчик. |
 | `VisualTestsFocused` | `VisualTestsFocused.tsx` | Фокус пустого поля DEFAULT через play. |
 | `VisualTestsErrorFocused` | `VisualTestsErrorFocused.tsx` | Фокус пустого ERROR: обычный placeholder вместо errorText. |
 | `VisualTestsSubmitHovered` | `VisualTestsSubmitHovered.tsx` | Hover доступной активной кнопки отправки при заполненном коде. |
 | `VisualTestsRefreshHovered` | `VisualTestsRefreshHovered.tsx` | Hover кнопки повторного запроса с открытой подсказкой в портале и стабильным ID. |
 
-Код документационных примеров показывается через `?raw`. Из скриншот-тестов исключены Playground, Default (дублирует MD в Sizes) и Example (живой таймер). В hover-stories курсор наводит test-runner по `parameters.testRunner.hoverSelector` (CSS `:hover`), а `play` открывает подсказку.
+Код документационных примеров показывается через `?raw`. Из скриншот-тестов исключены Playground, Default (дублирует LG в Sizes) и Example (живой таймер). Статус меняет только цвета, поэтому stories с одним размером используют LG — основной размер на формах; геометрию размеров проверяет Sizes. В hover-stories курсор наводит test-runner по `parameters.testRunner.hoverSelector` (CSS `:hover`), а `play` открывает подсказку.
 
 ---
 

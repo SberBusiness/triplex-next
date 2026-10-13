@@ -11,7 +11,7 @@ export const VisualTestsRefreshHovered = () => {
                 code=""
                 onChangeCode={action("onChangeCode")}
                 onSubmitCode={action("onSubmitCode")}
-                size={EComponentSize.MD}
+                size={EComponentSize.LG}
             >
                 <SMSField.Tooltip
                     id="smsfield-refresh-tooltip"

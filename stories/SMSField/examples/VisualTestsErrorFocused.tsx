@@ -8,7 +8,7 @@ export const VisualTestsErrorFocused = () => (
             code=""
             onChangeCode={action("onChangeCode")}
             onSubmitCode={action("onSubmitCode")}
-            size={EComponentSize.MD}
+            size={EComponentSize.LG}
             status={EFormFieldStatus.ERROR}
         >
             <SMSField.Refresh

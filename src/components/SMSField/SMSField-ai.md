@@ -106,7 +106,7 @@ Typography.Error_Color
 - Доступное имя Input и обеих кнопок-иконок задаёт потребитель: например, `aria-label` или связь через `aria-labelledby`. Placeholder и `description` сами по себе не заменяют доступное имя. Компонент не хардкодит язык подписей.
 - Input в `ERROR` выставляет `aria-invalid="true"`, в других статусах атрибут отсутствует. Текст `errorText` отображается как placeholder; автоматического `aria-live` или связи input с текстом ошибки нет. При необходимости связь через `aria-describedby` задаёт потребитель на Input.
 - Корневой `DISABLED` выставляет нативный `disabled` на Input, Submit и Refresh: они исключаются из обычного таб-обхода. Локальный `disabled` кнопки действует дополнительно.
-- Enter в Input отправляет текущий код только при `disabledSubmit === false`; пользовательский `onKeyDown` Input получает событие после этой обработки. SMSField не вызывает `preventDefault` для Enter. Tab, фокус/blur и активация кнопок сохраняют нативное поведение.
+- Enter в Input отправляет текущий код только при `disabledSubmit === false`; пользовательский `onKeyDown` Input вызывается на самом `input` после этой обработки. SMSField не вызывает `preventDefault` для Enter. Tab, фокус/blur и активация кнопок сохраняют нативное поведение.
 - Refresh получает `aria-describedby={tooltipId}` из контекста. Tooltip связывает подсказку с target через `targetRef` и ID; сам базовый Tooltip не добавляет `role="tooltip"`.
 
 ---

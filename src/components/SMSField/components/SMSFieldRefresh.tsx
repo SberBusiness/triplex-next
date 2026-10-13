@@ -33,7 +33,7 @@ export const SMSFieldRefresh = forwardRef<HTMLButtonElement, ISMSFieldRefreshPro
                 ? 0
                 : (countdownTime - countdownTimeLeft) / countdownTime;
 
-        const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
             onRefresh();
             onClick?.(event);
         };

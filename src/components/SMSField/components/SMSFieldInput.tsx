@@ -14,9 +14,9 @@ import styles from "../styles/SMSField.module.less";
 
 /** Свойства SMSField.Input. */
 export interface ISMSFieldInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "disabled"> {
-    /** Счётчик символов */
+    /** Счётчик символов. */
     counter?: React.ReactNode;
-    /** Описание поля ввода */
+    /** Описание поля ввода. */
     description?: React.ReactNode;
     /** Текст ошибки. Отображается вместо placeholder в статусе EFormFieldStatus.ERROR, пока поле не в фокусе. */
     errorText?: string;
@@ -58,36 +58,36 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
             className,
         );
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.value;
+        const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+            const value = event.target.value;
             if (!DIGITS_REGEXP.test(value)) {
                 return;
             }
             onChangeCode(value);
-            onChange?.(e);
+            onChange?.(event);
         };
 
-        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        const handleFocus: React.FocusEventHandler<HTMLInputElement> = (event) => {
             setFocused(true);
-            onFocus?.(e);
+            onFocus?.(event);
         };
 
-        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        const handleBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
             setFocused(false);
-            onBlur?.(e);
+            onBlur?.(event);
         };
 
         // Enter отправляет код, только если доступна SMSField.Submit.
-        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.keyCode === EVENT_KEY_CODES.ENTER && !disabledSubmit) {
+        const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+            if (event.keyCode === EVENT_KEY_CODES.ENTER && !disabledSubmit) {
                 onSubmitCode(code);
             }
-            onKeyDown?.(e);
+            onKeyDown?.(event);
         };
 
         return (
             <FormGroup>
-                <FormField className={sizeClassName} onKeyDown={handleKeyDown} size={size} status={status}>
+                <FormField className={sizeClassName} size={size} status={status}>
                     <FormFieldInput
                         autoComplete="off"
                         className={inputClassName}
@@ -95,6 +95,7 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
                         onBlur={handleBlur}
                         onChange={handleChange}
                         onFocus={handleFocus}
+                        onKeyDown={handleKeyDown}
                         placeholder={showErrorText ? errorText : placeholder}
                         ref={ref}
                         value={code}

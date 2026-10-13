@@ -167,4 +167,20 @@ describe("SMSField.Input", () => {
         expect(onBlur).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ target: input }));
     });
+
+    it("calls own onKeyDown with the input as currentTarget", () => {
+        const onKeyDown = vi.fn((event: React.KeyboardEvent<HTMLInputElement>) => event.currentTarget);
+
+        render(
+            <SMSField {...createProps()}>
+                <SMSField.Input aria-label="SMS code" onKeyDown={onKeyDown} />
+            </SMSField>,
+        );
+
+        const input = screen.getByRole("textbox", { name: "SMS code" });
+        fireEvent.keyDown(input, { key: "1" });
+
+        expect(onKeyDown).toHaveBeenCalledTimes(1);
+        expect(onKeyDown.mock.results[0].value).toBe(input);
+    });
 });

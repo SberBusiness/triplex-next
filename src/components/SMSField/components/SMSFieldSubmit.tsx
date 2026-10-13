@@ -23,7 +23,7 @@ export const SMSFieldSubmit = React.forwardRef<HTMLButtonElement, ISMSFieldSubmi
             setDisabledSubmit(submitDisabled);
         }, [submitDisabled, setDisabledSubmit]);
 
-        const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
             onSubmitCode(code);
             onClick?.(event);
         };

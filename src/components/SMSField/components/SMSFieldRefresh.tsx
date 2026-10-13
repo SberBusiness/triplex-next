@@ -1,11 +1,11 @@
+import React, { forwardRef, useContext } from "react";
 import clsx from "clsx";
-import React, { forwardRef, useContext, useMemo } from "react";
 import { EButtonIconShape } from "@sberbusiness/triplex-next/components/Button";
 import { ButtonIcon } from "@sberbusiness/triplex-next/components/Button/ButtonIcon";
 import { EFormFieldStatus } from "@sberbusiness/triplex-next/components/FormField";
-import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
-import { RefreshIcon } from "@sberbusiness/triplex-next/components/SMSField/components/RefreshIcon";
-import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
+import { SMSFieldContext } from "../SMSFieldContext";
+import { RefreshIcon } from "./RefreshIcon";
+import styles from "../styles/SMSField.module.less";
 
 /** Свойства SMSField.Refresh. */
 export interface ISMSFieldRefreshProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,28 +17,23 @@ export interface ISMSFieldRefreshProps extends React.ButtonHTMLAttributes<HTMLBu
     onRefresh: () => void;
 }
 
+/** Кнопка повторного запроса кода с индикатором обратного отсчёта. Ref указывает на button. */
 export const SMSFieldRefresh = forwardRef<HTMLButtonElement, ISMSFieldRefreshProps>(
     ({ className, countdownTime, countdownTimeLeft, disabled, onClick, onRefresh, ...restProps }, ref) => {
         const { size, sizeClassName, status, tooltipId } = useContext(SMSFieldContext);
 
-        const fieldDisabled = status === EFormFieldStatus.DISABLED;
-        const isSmsCountdownTicking = countdownTimeLeft > 0;
-        const refreshDisabled = fieldDisabled || disabled || isSmsCountdownTicking;
+        const iconDisabled = status === EFormFieldStatus.DISABLED || Boolean(disabled);
+        const refreshDisabled = iconDisabled || countdownTimeLeft > 0;
         const refreshClassName = clsx(styles.btnRefresh, sizeClassName, className, {
             [styles.disabled]: refreshDisabled,
         });
+        // Доля прошедшего времени обратного отсчёта, от 0 до 1.
+        const percent =
+            iconDisabled || countdownTimeLeft >= countdownTime
+                ? 0
+                : (countdownTime - countdownTimeLeft) / countdownTime;
 
-        // Проценты выражаются в долях единицы.
-        const percent = useMemo(() => {
-            if (countdownTimeLeft >= countdownTime || fieldDisabled || disabled) {
-                return 0;
-            } else {
-                return (countdownTime - countdownTimeLeft) / countdownTime;
-            }
-        }, [countdownTime, countdownTimeLeft, disabled, fieldDisabled]);
-
-        /** Обработчик запроса sms-кода. */
-        const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
             onRefresh();
             onClick?.(event);
         };
@@ -53,7 +48,7 @@ export const SMSFieldRefresh = forwardRef<HTMLButtonElement, ISMSFieldRefreshPro
                 shape={EButtonIconShape.SQUIRCLE}
                 {...restProps}
             >
-                <RefreshIcon percent={percent || 0} size={size} disabled={Boolean(fieldDisabled || disabled)} />
+                <RefreshIcon percent={percent} size={size} disabled={iconDisabled} />
             </ButtonIcon>
         );
     },

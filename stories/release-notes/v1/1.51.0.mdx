@@ -39,3 +39,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **PaginationExtended**
 
 - Проведён AI-рефакторинг.
+
+**SMSField**
+
+- Проведён AI-рефакторинг. `SMSField` и `SMSField.Submit` принимают `ref`: на корневой `div` и на `button` соответственно. Для ссылки на поле ввода по-прежнему передавайте `ref` в `SMSField.Input`.
+- Исправлено: `onKeyDown` у `SMSField.Input` получал событие с `currentTarget` на обёртке поля, теперь — на `input`.

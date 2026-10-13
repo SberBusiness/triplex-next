@@ -1,7 +1,7 @@
 ---
 component: SMSField
 category: TextFields
-related: []
+related: [FormField, FormGroup, ButtonIcon, Tooltip]
 tokens:
   - FormField.Input_Color_Disabled
   - SMSField.Refresh_Disabled
@@ -52,16 +52,16 @@ version: "1.0"
 
 - `SMSField.Input` (`SMSFieldInput`) — ввод на базе `FormFieldInput`. Значение задавай через корневой `code`. По умолчанию `maxLength={8}`, `autoComplete="off"`; при попытке ввода нецифровой строки не вызывает ни `onChangeCode`, ни собственный `onChange`. `description` и `counter` выводятся в общем блоке под полем, счётчик вычисляет потребитель.
 - `errorText` у Input заменяет placeholder в статусе `ERROR`, пока поле не в фокусе. В фокусе возвращается обычный placeholder. Текущее значение кода сохраняется; текст ошибки виден как placeholder только у пустого поля. Без `errorText` остаются рамка ошибки и `aria-invalid`.
-- `SMSField.Submit` (`SMSFieldSubmit`) — кнопка отправки. Недоступна при пустом `code`, корневом `DISABLED` или собственном `disabled`; при доступном клике вызывает `onSubmitCode(code)`, затем свой `onClick`. Наличие кода включает активный вид кнопки. Полноту и правильность кода компонент не проверяет: непустое значение можно отправить до достижения `maxLength`.
+- `SMSField.Submit` (`SMSFieldSubmit`) — кнопка отправки. Недоступна при пустом `code`, корневом `DISABLED` или собственном `disabled`; при доступном клике вызывает `onSubmitCode(code)`, затем свой `onClick`. Наличие кода включает активный вид кнопки. Ref указывает на `button`. Полноту и правильность кода компонент не проверяет: непустое значение можно отправить до достижения `maxLength`.
 - `SMSField.Refresh` (`SMSFieldRefresh`) — кнопка повторного запроса. Требует `countdownTime`, `countdownTimeLeft` и `onRefresh`; недоступна при корневом `DISABLED`, собственном `disabled` или `countdownTimeLeft > 0`. При доступном клике вызывает `onRefresh()`, затем свой `onClick`. Таймер, очистку кода и сетевой запрос реализует потребитель. Радиальное заполнение иконки отображает долю прошедшего времени.
 - `SMSField.Tooltip` (`SMSFieldTooltip`) — обёртка над одним React-элементом с обязательными `message` и `targetRef`. Для обычной композиции используй тот же ref на `SMSField.Refresh` и в `targetRef`. Размер SM, выравнивание START, hover-переключение и отключение адаптивного режима заданы как настройки по умолчанию и могут переопределяться props Tooltip.
 
 ### Синхронизация и ограничения
 
-- Корень передаёт `code`, callbacks, `size` и `status` составным частям через `SMSFieldContext`. Собственного состояния кода и таймера у него нет; проверка цифр относится к событиям Input и не нормализует переданный снаружи `code`.
+- Корень передаёт `code`, callbacks, `size` и `status` составным частям через `SMSFieldContext`. Фильтр цифр работает только при вводе в Input: переданный снаружи `code` не нормализуется.
 - `disabledSubmit` хранится в корне и изначально равен `true`. `SMSField.Submit` синхронизирует его эффектом со своей доступностью; Input использует это значение для отправки по Enter. Для согласованного поведения Enter размещай Submit внутри того же SMSField.
-- `tooltipId` хранится в корневом контексте. Tooltip записывает в него переданный `id`, а при его отсутствии генерирует значение через `lodash-es/uniqueId`; Refresh получает этот идентификатор для `aria-describedby`. Для воспроизводимых визуальных примеров задавай стабильный `id`.
-- Статус `WARNING` исключён из публичного типа SMSField. Размер и статус составных частей задаются через корень.
+- `tooltipId` хранится в корневом контексте: Tooltip записывает туда свой `id` (без него — значение `uniqueId`, сгенерированное при монтировании), Refresh берёт его для `aria-describedby`. Для воспроизводимых визуальных примеров задавай стабильный `id`.
+- У составных частей нет собственных `size` и `status` — они задаются только через корень.
 
 ---
 
@@ -84,13 +84,13 @@ Typography.Error_Color
 
 Значения по умолчанию находятся в `src/components/DesignTokens/components/SMSField.ts`, `FormField.ts` и `Typography.ts`. Переопределяй их через `ThemeProvider` (prop `tokens`) — см. [ThemeProvider-ai.md](../ThemeProvider/ThemeProvider-ai.md), раздел «Как переопределять токены».
 
-Внешний вид базовых поля, кнопок и подсказки также наследует токены семейств FormField, Button/IconWrapper и Tooltip. Здесь перечислены только прямые ссылки общего LESS SMSField.
+Внешний вид базовых поля, кнопок и подсказки также наследует токены семейств FormField, Button/IconWrapper и Tooltip.
 
 ---
 
 ## Инварианты
 
-- `forwardRef<HTMLDivElement>` на SMSField сохраняется; внешний ref указывает на прежний корневой `div`, а не на input. Ref на поле ввода передаётся в `SMSField.Input`, ref на кнопку повторного запроса — в `SMSField.Refresh`.
+- `forwardRef<HTMLDivElement>` на SMSField сохраняется; внешний ref указывает на прежний корневой `div`, а не на input. Ref на поле ввода передаётся в `SMSField.Input`, ref на кнопки — в `SMSField.Refresh` и `SMSField.Submit`.
 - Статические части `SMSField.Input`, `.Refresh`, `.Submit`, `.Tooltip` и отдельные экспорты `SMSFieldInput`, `SMSFieldRefresh`, `SMSFieldSubmit`, `SMSFieldTooltip` из barrel сохраняются. Имена и типы props, значения `EComponentSize` и допустимые значения `EFormFieldStatus` — публичный API.
 - Корневой `div` остаётся контейнером с `position: relative` и полной шириной; кнопки позиционируются внутри него. `className`, HTML-атрибуты и `data-tx` относятся к корню.
 - Связь через единый `SMSFieldContext`, синхронизация `disabledSubmit` кнопкой Submit и передача `tooltipId` от Tooltip к Refresh определяют поведение композиции; не меняй их независимо друг от друга.
@@ -102,7 +102,7 @@ Typography.Error_Color
 
 ## Accessibility
 
-- Корневой `div` не имеет собственной роли поля, label или автоматического перевода фокуса. Его ref пригоден для работы с контейнером; для фокуса Input используй ref `SMSField.Input`.
+- Корневой `div` не имеет роли и label и не управляет фокусом; для фокуса используй ref `SMSField.Input`.
 - Доступное имя Input и обеих кнопок-иконок задаёт потребитель: например, `aria-label` или связь через `aria-labelledby`. Placeholder и `description` сами по себе не заменяют доступное имя. Компонент не хардкодит язык подписей.
 - Input в `ERROR` выставляет `aria-invalid="true"`, в других статусах атрибут отсутствует. Текст `errorText` отображается как placeholder; автоматического `aria-live` или связи input с текстом ошибки нет. При необходимости связь через `aria-describedby` задаёт потребитель на Input.
 - Корневой `DISABLED` выставляет нативный `disabled` на Input, Submit и Refresh: они исключаются из обычного таб-обхода. Локальный `disabled` кнопки действует дополнительно.
@@ -113,12 +113,12 @@ Typography.Error_Color
 
 ## Связанные компоненты
 
-- `SMSFieldInput`, `SMSFieldRefresh`, `SMSFieldSubmit`, `SMSFieldTooltip` — отдельно экспортируемые составные части, доступные также через statics. Корень сам рендерит Provider и `div`; перечисленные ниже зависимости рендерятся составными частями.
+- `SMSFieldInput`, `SMSFieldRefresh`, `SMSFieldSubmit`, `SMSFieldTooltip` — составные части, доступны также как `SMSField.*`. Зависимости ниже рендерят они, а не корень.
 - `FormField` — через Input передаёт статус и размер базовому полю; `FormFieldInput`, `FormFieldDescription` и `FormFieldCounter` формируют ввод и нижний блок.
 - `FormGroup` — через Input объединяет поле с описанием и счётчиком.
 - `ButtonIcon` — база Submit и Refresh; даёт нативный `button`, недоступное состояние и обработчики.
 - `Tooltip` — база SMSField.Tooltip; её `targetRef` и дополнительные props определяют размещение и открытие подсказки.
-- `RefreshIcon` и `SubmitIcon` — внутренние SVG-компоненты общего семейства; не экспортируются из публичного barrel.
+- `RefreshIcon` и `SubmitIcon` — внутренние SVG-иконки Refresh и Submit, из barrel не экспортируются.
 - `TextField`, `MaskedField`, `SuggestField` — поля для других задач ввода, описанных в «Не используй когда».
 
 ---
@@ -142,7 +142,7 @@ Typography.Error_Color
 | `VisualTestsSubmitHovered` | `VisualTestsSubmitHovered.tsx` | Hover доступной активной кнопки отправки при заполненном коде. |
 | `VisualTestsRefreshHovered` | `VisualTestsRefreshHovered.tsx` | Hover кнопки повторного запроса с открытой подсказкой в портале и стабильным ID. |
 
-Документационные примеры показываются через `?raw`; Playground и VisualTests не показывают исходный код. Playground, Default и Example исключены из скриншот-тестов: Default дублирует MD в Sizes, а Example с внешним таймером служит интерактивным примером. Остальные восемь stories снимаются на xs/xl; hover stories используют `play` и реальное наведение через `parameters.testRunner.hoverSelector` после перемонтирования на каждом viewport. Baseline-файлы создаются в CI, не локально.
+Код документационных примеров показывается через `?raw`. Из скриншот-тестов исключены Playground, Default (дублирует MD в Sizes) и Example (живой таймер). В hover-stories курсор наводит test-runner по `parameters.testRunner.hoverSelector` (CSS `:hover`), а `play` открывает подсказку.
 
 ---
 
@@ -150,4 +150,4 @@ Typography.Error_Color
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-05 | Создан документ (TRI-72). Описаны контролируемый код, составные части, контекст и accessibility; добавлен ref на корневой div, stories переведены на modern pattern. |
+| 2026-10-05 | Создан документ (TRI-72). Описаны контролируемый код, составные части, контекст и accessibility; добавлен ref на корневой div и на SMSField.Submit, stories переведены на modern pattern. |

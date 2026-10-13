@@ -3,22 +3,22 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { SMSField, EComponentSize, EFormFieldStatus } from "@sberbusiness/triplex-next";
 import {
-    Playground as PlaygroundRender,
-    Default as DefaultRender,
+    PlaygroundRender,
+    DefaultRender,
     DefaultSource,
-    Error as ErrorRender,
+    ErrorRender,
     ErrorSource,
-    Disabled as DisabledRender,
+    DisabledRender,
     DisabledSource,
-    Sizes as SizesRender,
+    SizesRender,
     SizesSource,
-    Example as ExampleRender,
+    ExampleRender,
     ExampleSource,
-    VisualTests as VisualTestsRender,
-    VisualTestsFocused as VisualTestsFocusedRender,
-    VisualTestsErrorFocused as VisualTestsErrorFocusedRender,
-    VisualTestsSubmitHovered as VisualTestsSubmitHoveredRender,
-    VisualTestsRefreshHovered as VisualTestsRefreshHoveredRender,
+    VisualTestsRender,
+    VisualTestsFocusedRender,
+    VisualTestsErrorFocusedRender,
+    VisualTestsSubmitHoveredRender,
+    VisualTestsRefreshHoveredRender,
     type IPlaygroundArgs,
 } from "./examples";
 
@@ -98,6 +98,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         },
         placeholder: {
             control: "text",
+            description: "Подсказка в пустом поле ввода.",
             table: { category: "Input" },
         },
         withCounter: {

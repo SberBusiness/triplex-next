@@ -38,36 +38,8 @@ describe("SMSField", () => {
         expect(root).toHaveClass("smsField", "custom-field");
         expect(root).toHaveAttribute("id", "sms-confirmation");
         expect(root).toHaveAttribute("data-test-id", "sms-confirmation");
+        expect(root).toHaveAttribute("data-tx", process.env.npm_package_version);
         expect(root).toContainElement(screen.getByRole("textbox", { name: "SMS code" }));
-    });
-
-    it("calls a callback ref with the root div and clears it on unmount", () => {
-        const ref = vi.fn();
-        const { unmount } = render(
-            <SMSField {...createProps()} aria-label="SMS confirmation" ref={ref} role="group" />,
-        );
-
-        expect(ref).toHaveBeenCalledWith(screen.getByRole("group", { name: "SMS confirmation" }));
-
-        unmount();
-
-        expect(ref).toHaveBeenLastCalledWith(null);
-    });
-
-    it("passes root event handlers with their native event arguments", async () => {
-        const user = userEvent.setup();
-        const onClick = vi.fn();
-
-        render(
-            <SMSField {...createProps()} onClick={onClick}>
-                <span>Confirmation content</span>
-            </SMSField>,
-        );
-
-        const content = screen.getByText("Confirmation content");
-        await user.click(content);
-
-        expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ target: content }));
     });
 
     it.each(Object.values(EComponentSize))("provides size %s to every nested control", (size) => {

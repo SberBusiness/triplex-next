@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import React, { useContext, useState } from "react";
+import clsx from "clsx";
 import {
     EFormFieldStatus,
     FormField,
@@ -8,9 +8,9 @@ import {
     FormFieldInput,
 } from "@sberbusiness/triplex-next/components/FormField";
 import { FormGroup } from "@sberbusiness/triplex-next/components/FormGroup";
-import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
-import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
+import { SMSFieldContext } from "../SMSFieldContext";
+import styles from "../styles/SMSField.module.less";
 
 /** Свойства SMSField.Input. */
 export interface ISMSFieldInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "disabled"> {
@@ -22,8 +22,9 @@ export interface ISMSFieldInputProps extends Omit<React.InputHTMLAttributes<HTML
     errorText?: string;
 }
 
-const regExp = new RegExp(/^[0-9]*$/);
+const DIGITS_REGEXP = /^[0-9]*$/;
 
+/** Поле ввода кода: принимает только цифры, значение берёт из code корневого SMSField. Ref указывает на input. */
 export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputProps>(
     (
         {
@@ -57,29 +58,26 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
             className,
         );
 
-        /** Обработчик ввода sms-кода. */
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             const value = e.target.value;
-            if (!regExp.test(value)) {
+            if (!DIGITS_REGEXP.test(value)) {
                 return;
             }
             onChangeCode(value);
             onChange?.(e);
         };
 
-        /** Обработчик получения фокуса. */
         const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
             setFocused(true);
             onFocus?.(e);
         };
 
-        /** Обработчик потери фокуса. */
         const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
             setFocused(false);
             onBlur?.(e);
         };
 
-        /** Обработчик нажатия клавиши Enter (для отправки sms-кода). */
+        // Enter отправляет код, только если доступна SMSField.Submit.
         const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.keyCode === EVENT_KEY_CODES.ENTER && !disabledSubmit) {
                 onSubmitCode(code);

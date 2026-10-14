@@ -1,15 +1,12 @@
 import React from "react";
 
-/** Свойства компонента OrderedList. */
+/**
+ * Свойства компонента OrderedList.
+ * Кроме start принимает стандартные атрибуты <ol>.
+ */
 export interface IOrderedListProps extends React.OlHTMLAttributes<HTMLOListElement> {
-    /** Элементы списка. Обычно OrderedList.Item. */
-    children?: React.ReactNode;
-    /** Дополнительный CSS-класс корневого элемента. */
-    className?: React.OlHTMLAttributes<HTMLOListElement>["className"];
     /** Начальный номер списка. По умолчанию 1. */
-    start?: React.OlHTMLAttributes<HTMLOListElement>["start"];
-    /** Пользовательские стили списка. При заданном start начальный номер имеет приоритет. */
-    style?: React.OlHTMLAttributes<HTMLOListElement>["style"];
+    start?: number;
 }
 
 /** Свойства компонента OrderedListItem. */

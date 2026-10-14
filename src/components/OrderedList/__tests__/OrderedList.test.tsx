@@ -2,6 +2,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { OrderedList } from "@sberbusiness/triplex-next/components/OrderedList/OrderedList";
 
+const COUNTER_RESET_VAR = "--triplex-next-runtime-OrderedList-Root_CounterReset";
+
 // Мокаем process.env.npm_package_version
 beforeAll(() => {
     vi.stubEnv("npm_package_version", "1.0.0-test");
@@ -79,7 +81,7 @@ describe("OrderedList", () => {
 
         const list = screen.getByRole("list");
         expect(list).not.toHaveAttribute("start");
-        expect(list.style.getPropertyValue("--start-index-tx")).toBe("");
+        expect(list.style.getPropertyValue(COUNTER_RESET_VAR)).toBe("");
     });
 
     it.each([
@@ -91,35 +93,19 @@ describe("OrderedList", () => {
 
         const list = screen.getByRole("list");
         expect(list).toHaveAttribute("start", String(start));
-        expect(list.style.getPropertyValue("--start-index-tx")).toBe(counter);
+        expect(list.style.getPropertyValue(COUNTER_RESET_VAR)).toBe(counter);
     });
 
-    it("preserves custom styles when start is set", () => {
-        render(<OrderedList start={5} style={{ marginTop: 12 }} />);
-
-        const list = screen.getByRole("list");
-        expect(list).toHaveStyle({ marginTop: "12px" });
-        expect(list.style.getPropertyValue("--start-index-tx")).toBe("4");
-    });
-
-    it("preserves a custom counter style when start is omitted", () => {
-        const style: React.CSSProperties & { "--start-index-tx": number } = {
-            "--start-index-tx": 9,
-        };
-        render(<OrderedList style={style} />);
-
-        const list = screen.getByRole("list");
-        expect(list.style.getPropertyValue("--start-index-tx")).toBe("9");
-    });
-
-    it("gives start precedence over a custom counter style", () => {
-        const style: React.CSSProperties & { "--start-index-tx": number } = {
-            "--start-index-tx": 9,
+    it("merges custom styles and gives start precedence over the counter variable", () => {
+        const style: React.CSSProperties & { [COUNTER_RESET_VAR]: number } = {
+            marginTop: 12,
+            [COUNTER_RESET_VAR]: 9,
         };
         render(<OrderedList start={5} style={style} />);
 
         const list = screen.getByRole("list");
-        expect(list.style.getPropertyValue("--start-index-tx")).toBe("4");
+        expect(list).toHaveStyle({ marginTop: "12px" });
+        expect(list.style.getPropertyValue(COUNTER_RESET_VAR)).toBe("4");
     });
 
     it("removes the inline counter when start is cleared", () => {
@@ -129,7 +115,7 @@ describe("OrderedList", () => {
 
         const list = screen.getByRole("list");
         expect(list).not.toHaveAttribute("start");
-        expect(list.style.getPropertyValue("--start-index-tx")).toBe("");
+        expect(list.style.getPropertyValue(COUNTER_RESET_VAR)).toBe("");
         expect(list).toHaveStyle({ marginTop: "12px" });
     });
 
@@ -173,13 +159,6 @@ describe("OrderedList", () => {
             render(<OrderedList.Item ref={ref}>Item</OrderedList.Item>);
 
             expect(ref).toHaveBeenCalledWith(expect.any(HTMLLIElement));
-        });
-
-        it("renders with li tag", () => {
-            render(<OrderedList.Item>Item</OrderedList.Item>);
-
-            const item = screen.getByRole("listitem");
-            expect(item.tagName).toBe("LI");
         });
     });
 

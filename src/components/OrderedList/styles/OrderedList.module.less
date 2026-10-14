@@ -1,9 +1,10 @@
 .orderedList {
-    --start-index-tx: 0;
+    // Объявление на самом списке сбрасывает значение, унаследованное вложенным списком от родителя.
+    --triplex-next-runtime-OrderedList-Root_CounterReset: 0;
 
     position: relative;
     margin: 0;
     padding-left: 25px;
     list-style: none;
-    counter-reset: list-item-tx var(--start-index-tx);
+    counter-reset: list-item-tx var(--triplex-next-runtime-OrderedList-Root_CounterReset);
 }

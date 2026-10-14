@@ -32,6 +32,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлен общий enum ориентации `EOrientation` (`HORIZONTAL` / `VERTICAL`), его используют `Carousel` и `PageIndicators`.
 
+**OrderedList**
+
+- Изменено: внутренняя CSS-переменная начального номера переименована с `--start-index-tx` в `--triplex-next-runtime-OrderedList-Root_CounterReset` — она видна в inline-стиле корневого элемента.
+- Проведён AI-рефакторинг: других изменений для потребителя нет.
+
 **PageIndicators**
 
 - Добавлен компонент `PageIndicators` — ряд индикаторов страниц с окном из 5 видимых индикаторов и навигацией с клавиатуры. Его используют `Carousel.Indicators` (без изменений для потребителя) и `ImageGalleryExtended.PageIndicators`.

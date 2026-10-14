@@ -1,7 +1,7 @@
 import React from "react";
 import { OrderedList } from "@sberbusiness/triplex-next";
 
-export const WithLongContentExample = () => (
+export const WithLongContent = () => (
     <div style={{ maxWidth: 200 }}>
         <OrderedList>
             <OrderedList.Item>List item text;</OrderedList.Item>

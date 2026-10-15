@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     ButtonIcon,
     MonthYearField,
     MonthYearRange,
-    IMonthYearRangeButtonProvideProps,
-    IMonthYearRangePickerProvideProps,
-    TMonthYearRangeValue,
+    EMonthYearRangeShiftUnit,
+    type IMonthYearRangeButtonProvideProps,
+    type IMonthYearRangePickerProvideProps,
 } from "@sberbusiness/triplex-next";
 
-export const PlaygroundExample = (args: React.ComponentProps<typeof MonthYearRange>) => {
-    const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
+export const VisualTests = () => {
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
         <MonthYearField label="Label" placeholder="Select to proceed" {...props} />
     );
@@ -18,9 +17,10 @@ export const PlaygroundExample = (args: React.ComponentProps<typeof MonthYearRan
     return (
         <div style={{ maxWidth: "400px" }}>
             <MonthYearRange
-                {...args}
-                value={value}
-                onChange={setValue}
+                value={["19700101", "19700101"]}
+                onChange={() => {}}
+                shiftAmount={1}
+                shiftUnit={EMonthYearRangeShiftUnit.MONTH}
                 renderPickerFrom={renderPicker}
                 renderPickerTo={renderPicker}
                 renderButtonBack={renderButton}

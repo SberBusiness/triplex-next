@@ -3,16 +3,17 @@ import { Meta, StoryObj } from "@storybook/react";
 import { MonthYearRange, EMonthYearRangeShiftUnit } from "@sberbusiness/triplex-next";
 import { Title, Description, Primary, Controls, Stories, Heading, ArgTypes } from "@storybook/addon-docs/blocks";
 import {
-    PlaygroundExample,
-    DefaultExample,
-    DefaultExampleSource,
-    WithoutNavigationExample,
-    WithoutNavigationExampleSource,
-    VisualTestsExample,
-    SizesExample,
-    SizesExampleSource,
-    ProductionExample,
-    ProductionExampleSource,
+    PlaygroundRender,
+    DefaultRender,
+    DefaultSource,
+    SizesRender,
+    SizesSource,
+    WithoutNavigationRender,
+    WithoutNavigationSource,
+    ProductionRender,
+    ProductionSource,
+    VisualTestsRender,
+    type PlaygroundArgs,
 } from "./examples";
 
 const meta = {
@@ -21,11 +22,6 @@ const meta = {
     tags: ["autodocs"],
     parameters: {
         docs: {
-            description: {
-                component: `
-Компонент выбора диапазона месяцев с возможностью навигации.
-                `,
-            },
             page: () => (
                 <>
                     <Title />
@@ -43,81 +39,83 @@ const meta = {
 } satisfies Meta<typeof MonthYearRange>;
 
 export default meta;
-type Story = StoryObj<typeof MonthYearRange>;
-type MonthYearRangePlaygroundStory = StoryObj<React.ComponentProps<typeof MonthYearRange>>;
 
-export const Playground: MonthYearRangePlaygroundStory = {
+const PLAYGROUND_ARGS: PlaygroundArgs = {
+    shiftAmount: 1,
+    shiftUnit: EMonthYearRangeShiftUnit.MONTH,
+    hideNavigation: false,
+};
+
+export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
-    args: {
-        shiftAmount: 1,
-        shiftUnit: EMonthYearRangeShiftUnit.MONTH,
-        hideNavigation: false,
-    },
+    args: PLAYGROUND_ARGS,
     argTypes: {
         shiftAmount: {
             control: { type: "number", min: 1, max: 12 },
-            description: "Численная величина сдвига диапазона месяцев",
         },
-        shiftUnit: {
-            control: { type: "select" },
-            options: Object.values(EMonthYearRangeShiftUnit),
-            description: "Единица измерения сдвига диапазона месяцев",
-        },
-        hideNavigation: { control: { type: "boolean" }, description: "Скрыть кнопки навигации" },
+        shiftUnit: { control: "select", options: Object.values(EMonthYearRangeShiftUnit) },
+        hideNavigation: { control: "boolean" },
     },
     parameters: {
-        controls: { include: ["shiftAmount", "shiftUnit", "hideNavigation"] },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
         testRunner: { skip: true },
     },
-    render: PlaygroundExample,
+    render: PlaygroundRender,
 };
 
-export const Default: Story = {
-    render: DefaultExample,
+export const Default: StoryObj<typeof MonthYearRange> = {
     parameters: {
         controls: { disable: true },
         docs: {
-            source: { code: DefaultExampleSource, language: "tsx" },
+            source: { code: DefaultSource, language: "tsx" },
         },
     },
+    render: DefaultRender,
 };
 
-export const Sizes: Story = {
-    render: SizesExample,
+export const Sizes: StoryObj<typeof MonthYearRange> = {
     parameters: {
         controls: { disable: true },
         docs: {
-            source: { code: SizesExampleSource, language: "tsx" },
+            source: { code: SizesSource, language: "tsx" },
         },
     },
+    render: SizesRender,
 };
 
-export const WithoutNavigation: Story = {
-    render: WithoutNavigationExample,
+export const WithoutNavigation: StoryObj<typeof MonthYearRange> = {
     parameters: {
         controls: { disable: true },
         docs: {
-            description: { story: "MonthYearRange без кнопок навигации - только поля выбора месяца." },
-            source: { code: WithoutNavigationExampleSource, language: "tsx" },
+            source: { code: WithoutNavigationSource, language: "tsx" },
         },
     },
+    render: WithoutNavigationRender,
 };
 
-export const Production: Story = {
+export const Production: StoryObj<typeof MonthYearRange> = {
     name: "Example: production",
-    render: ProductionExample,
     parameters: {
         controls: { disable: true },
-        docs: { source: { code: ProductionExampleSource, language: "tsx" } },
+        docs: {
+            source: { code: ProductionSource, language: "tsx" },
+        },
     },
+    render: ProductionRender,
 };
 
-export const VisualTests: Story = {
+export const VisualTests: StoryObj<typeof MonthYearRange> = {
     tags: ["!autodocs", "!dev"],
-    render: VisualTestsExample,
     parameters: {
         controls: { disable: true },
-        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
     },
+    render: VisualTestsRender,
 };

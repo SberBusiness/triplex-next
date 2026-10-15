@@ -105,13 +105,12 @@ version: "1.0"
 |---|---|---|
 | `Default` | `Default.tsx` | Минимальная группа с одним уведомлением |
 | `WithFooter` | `WithFooter.tsx` | Карточка с действием, кнопкой закрытия и временем |
-| `DarkTheme` | `DarkTheme.tsx` | Тёмная тема через scoped ThemeProvider |
 | `VisualTests` | `VisualTests.tsx` | Клавиатурный фокус на действии и закрытие при наведении на карточку |
 
 Playground отсутствует: у обёртки только `children`, настраиваемых вариантов нет.
 Stories снимаются на xs/xl; реальное наведение для `VisualTests` выполняется test-runner
 через `hoverSelector`, а фокус устанавливается клавиатурой в `play`.
-Существующий пример `BusinessStack` в `stories/Notification/` сохраняется.
+Несколько групп подряд — story `Business Stack` в `stories/Notification/`.
 
 ---
 

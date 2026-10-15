@@ -3,15 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { expect } from "storybook/test";
 import { NotificationGrouped } from "@sberbusiness/triplex-next";
-import {
-    DefaultRender,
-    DefaultSource,
-    WithFooterRender,
-    WithFooterSource,
-    DarkThemeRender,
-    DarkThemeSource,
-    VisualTestsRender,
-} from "./examples";
+import { DefaultRender, DefaultSource, WithFooterRender, WithFooterSource, VisualTestsRender } from "./examples";
 
 const meta = {
     title: "Components/NotificationGrouped",
@@ -56,20 +48,6 @@ export const WithFooter: Story = {
                 story: "Действие, кнопка закрытия и время добавлены в дочерний Notification.",
             },
             source: { code: WithFooterSource, language: "tsx" },
-        },
-    },
-};
-
-export const DarkTheme: Story = {
-    globals: { theme: "dark" },
-    render: DarkThemeRender,
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            description: {
-                story: "ThemeProvider применяет тёмную тему к группе уведомлений внутри заданной области.",
-            },
-            source: { code: DarkThemeSource, language: "tsx" },
         },
     },
 };

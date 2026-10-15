@@ -1,102 +1,218 @@
-import React from "react";
-import { render } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { ITextFieldBaseProps } from "../../TextField/TextFieldBase";
-import type { IFormFieldInputProps } from "../../FormField";
-import type { INumberFieldProps } from "../types";
-
-const { textFieldBaseRender, numberFieldInputRender } = vi.hoisted(() => ({
-    textFieldBaseRender: vi.fn<React.ForwardRefRenderFunction<HTMLDivElement, ITextFieldBaseProps>>(),
-    numberFieldInputRender: vi.fn<React.ForwardRefRenderFunction<HTMLInputElement, IFormFieldInputProps>>(),
-}));
-
-vi.mock("@sberbusiness/triplex-next/components/TextField/TextFieldBase", () => {
-    textFieldBaseRender.mockImplementation(
-        ({ children, description, counter, prefix, postfix, label, ...props }, ref) => (
-            <div data-testid="text-field-base" {...props} ref={ref}>
-                {children}
-            </div>
-        ),
-    );
-    const TextFieldBase = React.forwardRef(textFieldBaseRender);
-    TextFieldBase.displayName = "TextFieldBaseMock";
-    return { TextFieldBase };
-});
-
-vi.mock("@sberbusiness/triplex-next/components/NumberField/NumberFieldInput", () => {
-    numberFieldInputRender.mockImplementation((props, ref) => (
-        <input data-testid="number-field-input" {...props} readOnly ref={ref} />
-    ));
-    const NumberFieldInput = React.forwardRef(numberFieldInputRender);
-    NumberFieldInput.displayName = "NumberFieldInputMock";
-    return { NumberFieldInput };
-});
-
-import { NumberField } from "@sberbusiness/triplex-next/components/NumberField";
-import { NumberFieldInput } from "@sberbusiness/triplex-next/components/NumberField/NumberFieldInput";
+import React, { useState } from "react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+import { EComponentSize } from "../../../enums/EComponentSize";
+import { EFormFieldStatus } from "../../FormField";
+import { NumberField, INumberFieldProps } from "../index";
 
 describe("NumberField", () => {
-    const defaultProps = {
-        inputProps: {
-            value: "123",
-            placeholder: "0",
+    const renderComponent = (props: Partial<INumberFieldProps> = {}) =>
+        render(<NumberField inputProps={{}} {...props} />);
+
+    it("forwards independent root and input refs with their respective attributes", () => {
+        const rootRef = React.createRef<HTMLDivElement>();
+        const inputRef = React.createRef<HTMLInputElement>();
+        render(
+            <NumberField
+                ref={rootRef}
+                className="custom-root"
+                id="number-field"
+                label="Number"
+                inputProps={{ ref: inputRef, id: "number-input", className: "custom-input", name: "quantity" }}
+            />,
+        );
+
+        expect(rootRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(rootRef.current).toHaveClass("formField", "custom-root");
+        expect(rootRef.current).toHaveAttribute("id", "number-field");
+        expect(rootRef.current).toContainElement(inputRef.current);
+        expect(inputRef.current).toBeInstanceOf(HTMLInputElement);
+        expect(inputRef.current).toBe(screen.getByLabelText("Number"));
+        expect(inputRef.current).toHaveClass("formFieldInput", "custom-input");
+        expect(inputRef.current).toHaveAttribute("id", "number-input");
+        expect(inputRef.current).toHaveAttribute("name", "quantity");
+    });
+
+    it("supports callback refs and clears both refs on unmount", () => {
+        const rootRef = vi.fn<React.RefCallback<HTMLDivElement>>();
+        const inputRef = vi.fn<React.RefCallback<HTMLInputElement>>();
+        const { unmount } = render(<NumberField ref={rootRef} inputProps={{ ref: inputRef }} />);
+
+        expect(rootRef).toHaveBeenCalledWith(expect.any(HTMLDivElement));
+        expect(inputRef).toHaveBeenCalledWith(screen.getByRole("textbox"));
+
+        unmount();
+
+        expect(rootRef).toHaveBeenLastCalledWith(null);
+        expect(inputRef).toHaveBeenLastCalledWith(null);
+    });
+
+    it("renders prefix and postfix inside the field and description with counter below it", () => {
+        const rootRef = React.createRef<HTMLDivElement>();
+        render(
+            <NumberField
+                ref={rootRef}
+                prefix="Prefix"
+                postfix="Postfix"
+                description="Description"
+                counter="Counter"
+                inputProps={{}}
+            />,
+        );
+
+        expect(rootRef.current).toContainElement(screen.getByText("Prefix"));
+        expect(rootRef.current).toContainElement(screen.getByText("Postfix"));
+        expect(rootRef.current).not.toContainElement(screen.getByText("Description"));
+        expect(rootRef.current).not.toContainElement(screen.getByText("Counter"));
+    });
+
+    it.each(Object.values(EComponentSize))("applies size %s to the field and input", (size) => {
+        const rootRef = React.createRef<HTMLDivElement>();
+        render(<NumberField ref={rootRef} size={size} inputProps={{}} />);
+
+        expect(rootRef.current).toHaveClass(size);
+        expect(screen.getByRole("textbox")).toHaveClass(size);
+    });
+
+    it.each(Object.values(EFormFieldStatus))("applies status %s to the field and input", (status) => {
+        const rootRef = React.createRef<HTMLDivElement>();
+        render(<NumberField ref={rootRef} status={status} inputProps={{}} />);
+
+        expect(rootRef.current).toHaveClass(status);
+        expect(screen.getByRole<HTMLInputElement>("textbox").disabled).toBe(status === EFormFieldStatus.DISABLED);
+    });
+
+    it.each([
+        ["123", "123"],
+        ["a1b2c3", "123"],
+        ["12.34", "12,34"],
+        ["12,34", "12,34"],
+        ["-12.34", "-12,34"],
+        ["1-2+3", "123"],
+        ["--12", "-12"],
+        ["0012", "0012"],
+        ["-", "-"],
+        [",", ","],
+        ["-,", "-,"],
+        ["abc", ""],
+        ["1,2.3", "1,23"],
+    ])("filters changed value %s to %s before calling onChange", (value, filteredValue) => {
+        const onFilteredChange = vi.fn<(value: string) => void>();
+        const onChange = vi.fn<React.ChangeEventHandler<HTMLInputElement>>((event) => {
+            onFilteredChange(event.target.value);
+        });
+        renderComponent({ inputProps: { onChange } });
+        const input = screen.getByRole("textbox");
+
+        fireEvent.change(input, { target: { value, selectionStart: value.length, selectionEnd: value.length } });
+
+        expect(input).toHaveValue(filteredValue);
+        expect(onFilteredChange).toHaveBeenCalledWith(filteredValue);
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ target: input }));
+    });
+
+    it("filters input without an onChange callback", () => {
+        renderComponent();
+
+        fireEvent.change(screen.getByRole("textbox"), { target: { value: "a12.3b" } });
+
+        expect(screen.getByRole("textbox")).toHaveValue("12,3");
+    });
+
+    it.each([
+        { value: "12x34", caret: 3, filteredValue: "1234", filteredCaret: 2 },
+        { value: "1.2,3", caret: 2, filteredValue: "12,3", filteredCaret: 1 },
+        { value: "1,2.3", caret: 4, filteredValue: "1,23", filteredCaret: 3 },
+        { value: "5-12", caret: 1, filteredValue: "512", filteredCaret: 1 },
+        { value: "312a", caret: 1, filteredValue: "312", filteredCaret: 1 },
+        { value: "1,2,3", caret: 0, filteredValue: "12,3", filteredCaret: 0 },
+    ])(
+        "preserves filtering and caret adjustment for $value at caret $caret",
+        async ({ value, caret, filteredValue, filteredCaret }) => {
+            const user = userEvent.setup();
+            const onFilteredChange = vi.fn<(value: string, caret: number | null) => void>();
+            const onChange = vi.fn<React.ChangeEventHandler<HTMLInputElement>>((event) => {
+                onFilteredChange(event.target.value, event.target.selectionStart);
+            });
+            renderComponent({ inputProps: { onChange } });
+            const input = screen.getByRole<HTMLInputElement>("textbox");
+            await user.click(input);
+
+            fireEvent.change(input, { target: { value, selectionStart: caret, selectionEnd: caret } });
+
+            expect(input).toHaveValue(filteredValue);
+            expect(input.selectionStart).toBe(filteredCaret);
+            expect(input.selectionEnd).toBe(filteredCaret);
+            expect(onFilteredChange).toHaveBeenCalledWith(filteredValue, filteredCaret);
+            expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ target: input }));
         },
-        label: "Label",
-        prefix: "Prefix",
-        postfix: "Postfix",
-        description: "Description",
-        counter: "Counter",
-    };
+    );
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it("should render TextFieldBase with correct props", () => {
-        render(<NumberField {...defaultProps} className="test-class" />);
-
-        expect(textFieldBaseRender).toHaveBeenCalledWith(
-            {
-                className: "test-class",
-                label: "Label",
-                prefix: "Prefix",
-                postfix: "Postfix",
-                description: "Description",
-                counter: "Counter",
-                children: expect.any(Object),
-            },
-            null,
-        );
-    });
-
-    it("should render NumberFieldInput with correct inputProps", () => {
-        const propsWithInputAttributes = {
-            ...defaultProps,
-            inputProps: {
-                ...defaultProps.inputProps,
-                required: true,
-                name: "test-field",
-            },
+    it("filters typed characters in a controlled field", async () => {
+        const user = userEvent.setup();
+        const ControlledNumberField = () => {
+            const [value, setValue] = useState("");
+            return <NumberField inputProps={{ value, onChange: (event) => setValue(event.target.value) }} />;
         };
+        render(<ControlledNumberField />);
 
-        render(<NumberField {...propsWithInputAttributes} />);
+        await user.type(screen.getByRole("textbox"), "a-12.3x");
 
-        expect(numberFieldInputRender).toHaveBeenCalledWith(
-            { value: "123", placeholder: "0", required: true, name: "test-field" },
-            null,
-        );
+        expect(screen.getByRole("textbox")).toHaveValue("-12,3");
     });
 
-    it("should render NumberFieldInput as child of TextFieldBase", () => {
-        render(<NumberField {...defaultProps} />);
+    it("does not filter the supplied value during render or rerender", () => {
+        const { rerender } = render(<NumberField inputProps={{ value: "a-1.2", readOnly: true }} />);
 
-        const textFieldBaseCall = vi.mocked(textFieldBaseRender).mock.calls[0];
-        const children = textFieldBaseCall[0].children;
+        expect(screen.getByRole("textbox")).toHaveValue("a-1.2");
 
-        expect(React.isValidElement(children)).toBe(true);
-        if (React.isValidElement<INumberFieldProps["inputProps"]>(children)) {
-            expect(children.type).toBe(NumberFieldInput);
-            expect(children.props).toEqual({ value: "123", placeholder: "0" });
-        }
+        rerender(<NumberField inputProps={{ value: "3.4", readOnly: true }} />);
+
+        expect(screen.getByRole("textbox")).toHaveValue("3.4");
+    });
+
+    it("calls input focus and blur callbacks and updates the active state", async () => {
+        const user = userEvent.setup();
+        const rootRef = React.createRef<HTMLDivElement>();
+        const onFocus = vi.fn<React.FocusEventHandler<HTMLInputElement>>();
+        const onBlur = vi.fn<React.FocusEventHandler<HTMLInputElement>>();
+        render(
+            <>
+                <NumberField ref={rootRef} inputProps={{ onFocus, onBlur }} />
+                <button>Next</button>
+            </>,
+        );
+        const input = screen.getByRole("textbox");
+
+        await user.click(input);
+
+        expect(input).toHaveFocus();
+        expect(rootRef.current).toHaveClass("active");
+        expect(onFocus).toHaveBeenCalledWith(expect.objectContaining({ target: input, type: "focus" }));
+
+        await user.tab();
+
+        expect(screen.getByRole("button", { name: "Next" })).toHaveFocus();
+        expect(rootRef.current).not.toHaveClass("active");
+        expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ target: input, type: "blur" }));
+    });
+
+    it("blocks typing and focus callbacks while disabled", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn<React.ChangeEventHandler<HTMLInputElement>>();
+        const onFocus = vi.fn<React.FocusEventHandler<HTMLInputElement>>();
+        renderComponent({ status: EFormFieldStatus.DISABLED, inputProps: { onChange, onFocus } });
+
+        await user.type(screen.getByRole("textbox"), "123");
+
+        expect(screen.getByRole("textbox")).toHaveValue("");
+        expect(onChange).not.toHaveBeenCalled();
+        expect(onFocus).not.toHaveBeenCalled();
+    });
+
+    it("has displayName NumberField", () => {
+        expect(NumberField.displayName).toBe("NumberField");
     });
 });

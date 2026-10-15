@@ -6,7 +6,7 @@ export const DarkTheme = () => {
 
     return (
         <ThemeProvider theme={ETriplexNextTheme.DARK} scopeRef={scopeRef}>
-            <div ref={scopeRef} style={{ maxWidth: "600px" }}>
+            <div ref={scopeRef}>
                 <NotificationGrouped>
                     <Notification>
                         <Notification.Body>

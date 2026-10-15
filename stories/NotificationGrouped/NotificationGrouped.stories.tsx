@@ -4,19 +4,18 @@ import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
 import { expect } from "storybook/test";
 import { NotificationGrouped } from "@sberbusiness/triplex-next";
 import {
-    Default as DefaultRender,
+    DefaultRender,
     DefaultSource,
-    WithFooter as WithFooterRender,
+    WithFooterRender,
     WithFooterSource,
-    DarkTheme as DarkThemeRender,
+    DarkThemeRender,
     DarkThemeSource,
-    VisualTests as VisualTestsRender,
+    VisualTestsRender,
 } from "./examples";
 
 const meta = {
     title: "Components/NotificationGrouped",
     component: NotificationGrouped,
-    args: { children: null },
     tags: ["autodocs"],
     parameters: {
         docs: {
@@ -38,7 +37,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof NotificationGrouped>;
 
 export const Default: Story = {
     render: DefaultRender,
@@ -76,7 +75,7 @@ export const DarkTheme: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

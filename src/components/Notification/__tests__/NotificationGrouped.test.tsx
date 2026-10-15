@@ -25,6 +25,27 @@ describe("NotificationGrouped", () => {
         expect(screen.getByText(String(children))).toBeInTheDocument();
     });
 
+    it("renders two decorative layers after children", () => {
+        const { container } = render(
+            <NotificationGrouped>
+                <span>Grouped content</span>
+            </NotificationGrouped>,
+        );
+
+        const [content, footer] = Array.from((container.firstElementChild as HTMLElement).children);
+        const [first, second] = Array.from(footer.children);
+
+        expect(content).toHaveTextContent("Grouped content");
+        expect(first).toHaveClass("notificationGroupedFooterItem", "first");
+        expect(second).toHaveClass("notificationGroupedFooterItem", "second");
+    });
+
+    it("renders decorative layers without children", () => {
+        const { container } = render(<NotificationGrouped>{null}</NotificationGrouped>);
+
+        expect(container.querySelectorAll(".notificationGroupedFooterItem")).toHaveLength(2);
+    });
+
     it("forwards ref to the root div", () => {
         const ref = React.createRef<HTMLDivElement>();
         const { container } = render(

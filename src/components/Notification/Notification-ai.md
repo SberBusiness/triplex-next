@@ -123,7 +123,7 @@ Notification.TimeColor    (цвет времени)
 
 ## Связанные компоненты
 
-- `NotificationGrouped` — обёртка для отображения уведомления стопкой.
+- `NotificationGrouped` — обёртка для отображения уведомления стопкой; см. [`NotificationGrouped-ai.md`](./NotificationGrouped-ai.md).
 - `Button` — типичное содержимое `Notification.Body.Footer`.
 - `AlertContext` — может вкладываться в `Notification.Body.Footer`.
 - `UnorderedList` — основа `Notification.Body.List`.
@@ -153,3 +153,4 @@ Notification.TimeColor    (цвет времени)
 |---|---|
 | 2026-06-16 | Создан AI-документ. `Notification`, `NotificationGrouped`, `NotificationBody` переведены на `forwardRef` (паттерн `Object.assign`); удалены типы `INotificationSFC`/`INotificationBodySFC`; тип `Notification.Time.time` расширен с `React.ReactText` до `React.ReactNode`. Stories мигрированы на modern pattern. |
 | 2026-09-28 | Токен `Notification.Shadow` ссылается на `Shadow.07` (светлая) и `DarkShadow.07` (тёмная) вместо литералов; в тёмной теме прозрачность 0.25 вместо 0.35. |
+| 2026-10-15 | Добавлена ссылка на отдельный `NotificationGrouped-ai.md`. |

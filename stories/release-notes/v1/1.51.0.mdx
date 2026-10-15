@@ -32,6 +32,11 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлен общий enum ориентации `EOrientation` (`HORIZONTAL` / `VERTICAL`), его используют `Carousel` и `PageIndicators`.
 
+**NumberField**
+
+- Добавлено: `NumberField` передаёт `ref` на корневой контейнер `FormField` (`HTMLDivElement`) и имеет `displayName="NumberField"`. Тип компонента изменился с `React.FC` на `React.ForwardRefExoticComponent`.
+- Исправлено: каретка не смещается влево, когда при вводе удаляется символ правее неё. Например, при вводе цифры перед ведущим минусом каретка остаётся после введённой цифры.
+
 **OrderedList**
 
 - Изменено: внутренняя CSS-переменная начального номера переименована с `--start-index-tx` в `--triplex-next-runtime-OrderedList-Root_CounterReset` — она видна в inline-стиле корневого элемента.

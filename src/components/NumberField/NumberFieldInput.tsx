@@ -4,51 +4,56 @@ import { getCaretPosition, setCaretPosition } from "@sberbusiness/triplex-next/u
 import { StringUtils } from "@sberbusiness/triplex-next/utils/stringUtils";
 import { AmountConst } from "@sberbusiness/triplex-next/consts/AmountConst";
 
+/**
+ * Оставляет в строке цифры, ведущий минус и одну десятичную запятую (точка заменяется запятой).
+ * При повторном разделителе сохраняется тот, что стоит правее каретки.
+ * Каретка сдвигается только на символы, удалённые левее неё.
+ */
+const filterValue = (value: string, caret: number): { value: string; caret: number } => {
+    /** Символы результата по позициям исходной строки; пустая строка — символ удалён. */
+    const buffer: string[] = [];
+    let separatorIndex = -1;
+
+    for (let i = 0; i < value.length; i++) {
+        const char = value[i];
+
+        if (StringUtils.isDigit(char)) {
+            buffer.push(char);
+        } else if (StringUtils.isDecimalSeparator(char) && (separatorIndex === -1 || i > caret)) {
+            if (separatorIndex !== -1) {
+                buffer[separatorIndex] = "";
+            }
+            buffer.push(AmountConst.DecimalComma);
+            separatorIndex = i;
+        } else if (i === 0 && StringUtils.isUnaryMinus(char)) {
+            buffer.push("-");
+        } else {
+            buffer.push("");
+        }
+    }
+
+    return { value: buffer.join(""), caret: buffer.slice(0, caret).join("").length };
+};
+
 /** Поле ввода компонента NumberField. */
 export const NumberFieldInput = React.forwardRef<HTMLInputElement, IFormFieldInputProps>(
     ({ onChange, ...restProps }, ref) => {
-        /** Функция, возвращающая отфильтрованное значение. */
-        const getFilteredValue = useCallback((value: string, caret: number): string => {
-            const buffer: string[] = [];
-            const length = value.length;
-            let separatorIndex = -1;
-
-            for (let i = 0; i < length; i++) {
-                if (StringUtils.isDigit(value[i])) {
-                    buffer.push(value[i]);
-                } else if (StringUtils.isDecimalSeparator(value[i])) {
-                    if (separatorIndex == -1) {
-                        buffer.push(AmountConst.DecimalComma);
-                        separatorIndex = buffer.length - 1;
-                    } else if (i > caret) {
-                        buffer.push(AmountConst.DecimalComma);
-                        buffer[separatorIndex] = "";
-                        separatorIndex = buffer.length - 1;
-                    }
-                } else if (i === 0 && StringUtils.isUnaryMinus(value[i])) {
-                    buffer.push("-");
-                }
-            }
-
-            return buffer.join("");
-        }, []);
-
         /** Обработчик изменения значения. */
         const handleChange = useCallback(
             (event: React.ChangeEvent<HTMLInputElement>) => {
-                const caret = getCaretPosition(event.target);
-                const value = getFilteredValue(event.target.value, caret);
-                const caretShift = value.length - event.target.value.length;
+                const { value, caret } = filterValue(event.target.value, getCaretPosition(event.target));
 
                 event.target.value = value;
 
-                setCaretPosition(event.target, caret + caretShift);
+                setCaretPosition(event.target, caret);
 
                 onChange?.(event);
             },
-            [getFilteredValue, onChange],
+            [onChange],
         );
 
         return <FormFieldInput onChange={handleChange} {...restProps} ref={ref} />;
     },
 );
+
+NumberFieldInput.displayName = "NumberFieldInput";

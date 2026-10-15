@@ -3,7 +3,6 @@ component: Pagination
 category: Navigation
 related:
   - PaginationExtended
-  - PaginationNavigationExtended
   - SelectField
   - ButtonIcon
   - MasterTable
@@ -133,6 +132,16 @@ Pagination.PageButton_BorderColor_Focus
 - `PaginationNavigationButton` — кнопка «Назад»/«Вперёд» (поверх `ButtonIcon`), направление задаётся `EPaginationNavigationIconDirection`.
 - `MasterTable` — таблица, в паре с которой пагинация обычно и используется (`MasterTable.PaginationPanel`). Её `loading` через `MasterTableContext` блокирует элементы пагинации.
 
+### PaginationNavigationExtended
+
+Контейнер `<ul>` для полностью кастомной компоновки навигации. Он задаёт раскладку списка, а состав страниц определяет потребитель. Для автоматического вычисления видимых страниц и многоточий используй `PaginationNavigation`. Как тривиальная обёртка `PaginationNavigationExtended` описывается здесь, отдельного AI.md у него нет.
+
+`IPaginationNavigationExtendedProps` наследует стандартные HTML-атрибуты `<ul>`. `children` передаёт содержимое списка: для сохранения семантики `<ul>/<li>` используй `PaginationNavigationExtendedItem` или обычные `<li>`. `className` объединяется с базовым классом через `clsx`, остальные HTML-свойства, включая `id`, `aria-*`, `data-*` и обработчики событий, передаются через `...rest` на корневой `<ul>`. `forwardRef` направлен на этот же элемент (`HTMLUListElement`), `displayName` равен `PaginationNavigationExtended`; корневой элемент, ref-target и публичный экспорт сохраняй.
+
+Раскладка — горизонтальный flex-список с `align-items: center` и `gap: 4px`, без маркеров (`list-style-type: none`), с нулевыми `margin` и `padding`. Собственных тем и дизайн-токенов у контейнера нет; оформление вложенных кнопок и многоточий определяется соответствующими компонентами.
+
+Контейнер не хранит состояние и не имеет собственных callback-props, не генерирует номера страниц, не обрабатывает `disabled` или `loading` и не читает `MasterTableContext`. Текущую страницу, блокировку кнопок, многоточия и переходы задают дочерние элементы и потребитель; вложенные кнопки могут сами учитывать загрузку таблицы. Для доступности потребитель задаёт имя навигации, подписи кнопок и при необходимости `aria-current="page"` на текущей странице. Управление фокусом и клавиатурное поведение остаются у вложенных элементов: контейнер не добавляет обработчиков клавиатуры или roving tabindex.
+
 ---
 
 ## Stories
@@ -148,6 +157,19 @@ Pagination.PageButton_BorderColor_Focus
 | `Extended` | `Extended.tsx` | Кастомная компоновка через `PaginationExtended` + `PaginationNavigation` + `PaginationSelect` |
 | `VisualTests` | — | Скриншот-регрессия: короткая навигация, многоточия слева/справа/с обеих сторон, disabled-крайние кнопки, вариант с селектом |
 
+### PaginationNavigationExtended
+
+Основные истории: `stories/Pagination/PaginationNavigationExtended.stories.tsx`
+Файлы примеров: `stories/Pagination/examples/PaginationNavigationExtended/`
+
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Default` | `Default.tsx` | Минимальный список с тремя `PaginationNavigationExtendedItem` |
+| `Example` | `Example.tsx` | Ручная компоновка кнопок страниц, текущей страницы, многоточия и заблокированной кнопки «Назад» внутри `PaginationExtended` |
+| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: одна страница с двумя заблокированными стрелками, пустой и длинный списки |
+
+`Playground` отсутствует: у контейнера только стандартные HTML-свойства. Код `VisualTests` исключается из MCP bundle; `Default` и `Example` доступны как примеры семейства `Pagination`.
+
 ---
 
 ## История изменений
@@ -159,3 +181,4 @@ Pagination.PageButton_BorderColor_Focus
 | 2026-08-12 | В состоянии загрузки `MasterTable` элементы пагинации становятся `disabled` — читается из `MasterTableContext.loading`. Публичный API не изменился. Заодно `PaginationSelect` перестал молча терять переданный `status`. |
 | 2026-08-27 | Навигация больше не скрывается при `totalPages <= 1`: отрисовывается одна страница с заблокированными стрелками, высота панели пагинации не схлопывается. Публичный API не изменился. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`PaginationNavigation`, `PaginationNavigationButton`, `PaginationNavigationExtendedItem`, `PaginationPageButton`, `PaginationPageEllipsis`, `PaginationSelect`, `ButtonBase`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-07 | TRI-66: описан контракт обёртки `PaginationNavigationExtended` в родительской документации, добавлены её stories и файлы примеров; ссылка из `related` удалена, поскольку отдельный AI.md для обёртки не создаётся. |

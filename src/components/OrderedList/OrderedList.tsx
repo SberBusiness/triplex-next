@@ -4,25 +4,33 @@ import { IOrderedListProps } from "@sberbusiness/triplex-next/components/Ordered
 import { OrderedListItem } from "@sberbusiness/triplex-next/components/OrderedList/OrderedListItem";
 import styles from "./styles/OrderedList.module.less";
 
+interface IOrderedListStyle extends React.CSSProperties {
+    "--triplex-next-runtime-OrderedList-Root_CounterReset": number;
+}
+
 /** Нумерованный список. */
 export const OrderedList = Object.assign(
-    React.forwardRef<HTMLOListElement, IOrderedListProps>(({ className, start, style, ...restProps }, ref) => (
-        <ol
-            className={clsx(styles.orderedList, className)}
-            start={start}
-            style={
-                start !== undefined
-                    ? {
-                          ...style,
-                          ["--start-index-tx" as keyof React.CSSProperties]: start - 1,
-                      }
-                    : style
-            }
-            {...restProps}
-            data-tx={process.env.npm_package_version}
-            ref={ref}
-        />
-    )),
+    React.forwardRef<HTMLOListElement, IOrderedListProps>(({ className, start, style, ...restProps }, ref) => {
+        // Каждый пункт увеличивает счётчик до вывода номера, поэтому сброс — на единицу меньше start.
+        const orderedListStyle =
+            start !== undefined
+                ? ({
+                      ...style,
+                      "--triplex-next-runtime-OrderedList-Root_CounterReset": start - 1,
+                  } satisfies IOrderedListStyle)
+                : style;
+
+        return (
+            <ol
+                className={clsx(styles.orderedList, className)}
+                start={start}
+                style={orderedListStyle}
+                {...restProps}
+                data-tx={process.env.npm_package_version}
+                ref={ref}
+            />
+        );
+    }),
     {
         Item: OrderedListItem,
     },

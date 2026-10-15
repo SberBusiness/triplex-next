@@ -116,7 +116,8 @@ const config: TestRunnerConfig = {
                 });
             } finally {
                 if (typeof hoverSelector === "string") {
-                    await page.mouse.move(0, 0);
+                    // Убираем указатель за viewport, чтобы hover не влиял на следующую стори.
+                    await page.mouse.move(-1, -1);
                 }
             }
         }

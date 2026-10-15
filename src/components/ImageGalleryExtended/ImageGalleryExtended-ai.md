@@ -1,7 +1,7 @@
 ---
 component: ImageGalleryExtended
 category: ImageGalleryExtended
-related: [ImageGallery, MobileView]
+related: [ImageGallery, MobileView, PageIndicators]
 tokens:
   - ImageGallery.Accent_Color
   - ImageGallery.Arrow_Background_Default
@@ -10,9 +10,6 @@ tokens:
   - ImageGallery.Arrow_BorderColor_Default
   - ImageGallery.Arrow_BorderColor_Hover
   - ImageGallery.Arrow_BorderColor_Active
-  - ImageGallery.Dot_Background_Default
-  - ImageGallery.Dot_Background_Hover
-  - ImageGallery.Dot_Background_Active
   - ImageGallery.Thumb_Mask_Background
 stories: stories/ImageGalleryExtended/ImageGalleryExtended.stories.tsx
 version: "1.0"
@@ -26,14 +23,14 @@ version: "1.0"
 массивом `items`, контейнер хранит активный индекс, обрабатывает стрелочную
 навигацию с клавиатуры и раздаёт данные составным частям через React-контекст.
 Раскладка задаётся декларативно — потребитель сам собирает нужные части
-(`.Main`, `.Thumbnails`, `.Dots`, `.Nav`, `.Arrow`, `.Thumb`) в любом порядке.
+(`.Main`, `.Thumbnails`, `.PageIndicators`, `.Nav`, `.Arrow`, `.Thumb`) в любом порядке.
 
 Используй `ImageGalleryExtended` когда: нужен полный контроль над раскладкой и
 поведением галереи (нестандартный порядок частей, кастомные стрелки или
 миниатюры через render-функции, собственное управление активным изображением).
 
 Не используй когда: достаточно стандартного пресета «крупная картинка + лента
-миниатюр (десктоп) / тики (мобильный)» с uncontrolled-режимом — для этого есть
+миниатюр (десктоп) / индикаторы страниц (мобильный)» с uncontrolled-режимом — для этого есть
 готовая обёртка `ImageGallery`.
 
 ---
@@ -55,6 +52,10 @@ version: "1.0"
 
 Контейнер controlled-only: своего состояния активного изображения не держит.
 Uncontrolled-режим (`defaultId`) добавляет обёртка `ImageGallery`.
+
+Части идут колонкой без `gap`: `.Thumbnails` отделяется `margin-top: 16px`,
+`.PageIndicators` прилегает вплотную (отступ до полоски даёт кнопка-индикатор).
+Отступ своей разметке задаёт потребитель.
 
 ### `ImageGalleryExtended.Main`
 
@@ -96,6 +97,10 @@ child `.Main`, чтобы стрелки позиционировались по
 Горизонтальная лента миниатюр с нативным скроллом и автоцентровкой активной.
 `children` — опциональная **render-функция** миниатюры; по умолчанию рисует
 `.Thumb`. Состояние render-функции: `{ item, index, isActive, ariaLabel, onSelect, ref }`.
+
+По дизайну на узком экране (< MD) лента миниатюр заменяется индикаторами
+страниц. Сама часть не переключается — оберни её в `MobileView` с
+`.PageIndicators` в мобильной ветке, как в пресете `ImageGallery` и stories.
 Чтобы автоцентровка работала, проброс `ref` на корневой `<button>` обязателен.
 
 ### `ImageGalleryExtended.Thumb`
@@ -110,11 +115,17 @@ child `.Main`, чтобы стрелки позиционировались по
 | `item` | `IImageGalleryItemProps` | да | Изображение миниатюры (использует `thumbSrc ?? src`) |
 | `isActive` | `boolean` | да | Активна ли миниатюра (рамка + `aria-current`) |
 
-### `ImageGalleryExtended.Dots`
+### `ImageGalleryExtended.PageIndicators`
 
-Ряд кликабельных тиков-индикаторов (мобильный preset). Изображения распределяются
-по тикам бакетами равного размера (макс. 4 тика); при `items.length <= 1` ничего
-не рендерит. Собственных публичных props нет (`className + ...HTMLDivAttributes`).
+Индикаторы страниц (мобильный preset) — обёртка над `PageIndicators`: индикатор
+на каждое изображение, видимо окно из 5. `count`/`activeIndex`/`onChange` берутся
+из контекста, ориентация всегда горизонтальная. При `items.length <= 1` ничего не
+рендерит.
+
+| Prop | Тип | Обязательный | Описание |
+|---|---|---|---|
+| `indicatorProps` | `TPageIndicatorProps \| TPageIndicatorPropsFactory` | нет | Свойства кнопок-индикаторов. По умолчанию `aria-label` = `item.alt`; значения из `indicatorProps` имеют приоритет |
+| `...HTMLDivAttributes` | — | — | Пробрасываются на корневой `<div role="tablist">` |
 
 ---
 
@@ -124,7 +135,8 @@ child `.Main`, чтобы стрелки позиционировались по
 «Как переопределять токены». Значения по умолчанию — `src/components/DesignTokens/components/ImageGallery.ts`.
 
 Токены живут в общей с `ImageGallery` группе `ImageGallery`
-(семейства делят визуальный язык).
+(семейства делят визуальный язык). `.PageIndicators` красится токенами группы
+`PageIndicators` (см. `PageIndicators-ai.md`).
 
 ```text
 ImageGallery.Accent_Color
@@ -135,10 +147,6 @@ ImageGallery.Arrow_Background_Active
 ImageGallery.Arrow_BorderColor_Default
 ImageGallery.Arrow_BorderColor_Hover
 ImageGallery.Arrow_BorderColor_Active
-
-ImageGallery.Dot_Background_Default
-ImageGallery.Dot_Background_Hover
-ImageGallery.Dot_Background_Active
 
 ImageGallery.Thumb_Mask_Background
 ```
@@ -157,8 +165,8 @@ Runtime CSS-переменные (задаются компонентом чер
 ## Инварианты
 
 - **`forwardRef`** обязателен на всех публичных частях (`Root`, `.Main`, `.Arrow`,
-  `.Thumbnails`, `.Thumb`, `.Dots`). Target — корневой DOM-элемент части
-  (`<div>` для контейнера/Main/Thumbnails/Dots, `<button>` для Arrow/Thumb).
+  `.Thumbnails`, `.Thumb`, `.PageIndicators`). Target — корневой DOM-элемент части
+  (`<div>` для контейнера/Main/Thumbnails/PageIndicators, `<button>` для Arrow/Thumb).
   `.Thumbnails` пробрасывает ref через `useImperativeHandle` на внутренний
   `carouselRef` — это нужно для автоцентровки; не заменять на прямой ref.
 - **Контейнер controlled-only.** Не добавлять внутреннее состояние активного
@@ -185,10 +193,11 @@ Runtime CSS-переменные (задаются компонентом чер
   При навигации стрелками фокус переносится с прежней миниатюры на активную —
   иначе кольцо `:focus-visible` осталось бы на старой одновременно с рамкой
   `.active` новой.
-- **`aria-current`:** активная миниатюра (`.Thumb`), активный тик (`.Dots`) и
-  активная кнопка получают `aria-current="true"`.
+- **`aria-current`:** активная миниатюра (`.Thumb`) получает `aria-current="true"`.
+- **Индикаторы страниц (`.PageIndicators`):** WAI-ARIA `tablist`, см.
+  `PageIndicators-ai.md`. Корневой обработчик стрелок их клавиатуру не дублирует.
 - **`aria-label` — обязанность потребителя.** `.Arrow` требует `aria-label`
-  явным props; компонент не хардкодит язык. `.Thumb`/`.Dots` берут доступное имя
+  явным props; компонент не хардкодит язык. `.Thumb`/`.PageIndicators` берут доступное имя
   из `item.alt`.
 - **Декоративные изображения** (блюр-слой) помечены `aria-hidden="true"` с пустым
   `alt`.
@@ -202,11 +211,14 @@ Runtime CSS-переменные (задаются компонентом чер
 ## Связанные компоненты
 
 - `ImageGallery` — тонкая обёртка-пресет над `ImageGalleryExtended`: задаёт
-  стандартную раскладку (`.Main` + стрелки + миниатюры/тики через `MobileView`) и
+  стандартную раскладку (`.Main` + стрелки + миниатюры/индикаторы страниц через `MobileView`) и
   добавляет uncontrolled-режим (`defaultId`). Используй её, если кастомная
   раскладка не нужна.
+- `PageIndicators` — рендерится внутри `.PageIndicators`; его props
+  (`IPageIndicatorsProps` без `count`/`activeIndex`/`onChange`/`orientation`)
+  составляют API части.
 - `MobileView` — переключает десктопную/мобильную ветку рендера внутри `.Main`
-  (лента свайпа) и в пресете `ImageGallery` (миниатюры ↔ тики).
+  (лента свайпа) и в пресете `ImageGallery` (миниатюры ↔ индикаторы страниц).
 - `LightBox` — типовой сценарий: `onImageClick` открывает изображение в лайтбоксе
   (см. story `OpenFromAvatar`).
 
@@ -231,13 +243,12 @@ API (экспортируются из barrel ради композиции, н�
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Playground` | `Playground.tsx` | Интерактивный контроль `withBlur` / `height` |
-| `Default` | `Default.tsx` | Полный десктопный состав: крупная картинка со стрелками + лента миниатюр |
-| `MainOnly` | `MainOnly.tsx` | Только крупная картинка со стрелками (без миниатюр/тиков), с блюром |
-| `WithDots` | `WithDots.tsx` | Мобильный preset: крупная картинка + тики-индикаторы |
-| `CustomLayout` | `CustomLayout.tsx` | Произвольный порядок частей + кастомные стрелки и миниатюры через render-функции |
+| `Default` | `Default.tsx` | Полный состав: крупная картинка со стрелками + лента миниатюр (на мобильном — индикаторы через `MobileView`) |
+| `MainOnly` | `MainOnly.tsx` | Только крупная картинка со стрелками (без миниатюр/индикаторов), с блюром |
+| `CustomLayout` | `CustomLayout.tsx` | Render-функции: панель навигации через `.Nav` вместо стрелок, миниатюры с собственным `aria-label` через `.Thumbnails` |
 | `ManyThumbnails` | `ManyThumbnails.tsx` | Большой набор (20 изображений): горизонтальный скролл и автоцентровка ленты миниатюр |
 | `OpenFromAvatar` | `OpenFromAvatar.tsx` | Открытие изображения в `LightBox` по клику (интеграция `onImageClick`) |
-| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: стрелки на границах диапазона (disabled) и тики-индикаторы |
+| `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: стрелки на границах диапазона (disabled) |
 
 ---
 
@@ -248,3 +259,4 @@ API (экспортируются из barrel ради композиции, н�
 | 2026-05-28 | Создан документ |
 | 2026-08-31 | Удалены неиспользуемые токены `Arrow_Background_Disabled` и `Arrow_BorderColor_Disabled`: неактивная стрелка скрывается (`display: none`), красить нечем |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-07 | **Breaking:** `.Dots` → `.PageIndicators`, удалены токены `Dot_Background_*`, `gap` корня заменён отступом у `.Thumbnails` |

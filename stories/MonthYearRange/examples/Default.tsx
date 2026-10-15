@@ -7,25 +7,17 @@ import {
     IMonthYearRangeButtonProvideProps,
     IMonthYearRangePickerProvideProps,
     TMonthYearRangeValue,
-    HelpBox,
-    ETooltipSize,
 } from "@sberbusiness/triplex-next";
 
-export const ProductionExample = () => {
+export const Default = () => {
     const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
-
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
-        <MonthYearField
-            label="Label"
-            placeholder="Select to proceed"
-            targetProps={{ postfix: <HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>, inputProps: {} }}
-            {...props}
-        />
+        <MonthYearField label="Label" placeholder="Select to proceed" {...props} />
     );
     const renderButton = (props: IMonthYearRangeButtonProvideProps) => <ButtonIcon {...props} />;
 
     return (
-        <div style={{ maxWidth: 660 }}>
+        <div style={{ maxWidth: "400px" }}>
             <MonthYearRange
                 value={value}
                 onChange={setValue}

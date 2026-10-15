@@ -70,10 +70,9 @@ version: "1.0"
 
 ### Сдвиг диапазона
 
-- Общий внутренний обработчик `shiftRange` строго парсит обе границы через `moment(value, dateFormatYYYYMMDD, true)`. Если хотя бы одна невалидна, `onChange` не вызывается.
-- `disabled` зависит только от пустых строк. При двух непустых невалидных строках кнопки получают `disabled: false`, но обработчик сдвига ничего не меняет.
-- Кнопка назад использует `Moment.subtract`, вперёд — `Moment.add`. Обе границы сдвигаются независимо на одну величину; день сохраняется или сокращается до последнего дня целевого месяца. Например, `20240331` минус месяц → `20240229`, `20240229` плюс год → `20250228`.
-- `shiftAmount` передаётся в Moment без дополнительного округления или ограничения: отрицательное значение меняет направление, дробное обрабатывается по календарной арифметике Moment, ноль вызывает `onChange` с теми же датами.
+- Сдвиг строго парсит обе границы через `moment(value, dateFormatYYYYMMDD, true)`. Если хотя бы одна невалидна, `onChange` не вызывается.
+- Кнопка назад сдвигает границы на `-shiftAmount`, вперёд — на `shiftAmount` через `Moment.add`. Обе границы сдвигаются независимо на одну величину; день сохраняется или сокращается до последнего дня целевого месяца. Например, `20240331` минус месяц → `20240229`, `20240229` плюс год → `20250228`.
+- `shiftAmount` передаётся в Moment без проверки: рассчитан на целые положительные значения, отрицательное меняет направление кнопок.
 - Сдвиг не исправляет порядок входного кортежа и не проверяет ограничения календаря `limitRange`. Потребитель согласует их с полями самостоятельно.
 - Результат сериализуется обратно в `YYYYMMDD`. Сдвиг на месяц, квартал или год может изменить длину диапазона в днях.
 
@@ -95,9 +94,8 @@ version: "1.0"
 
 - `forwardRef` обязателен; корневой DOM-элемент и ref-target — `HTMLDivElement`.
 - Публичные имена `MonthYearRange`, `IMonthYearRangeProps`, `IMonthYearRangeButtonProvideProps`, `IMonthYearRangePickerProvideProps`, `TMonthYearRangeValue` и `EMonthYearRangeShiftUnit` экспортируются через `src/components/MonthYearRange/index.ts`. Имена, типы и enum-значения нельзя менять без согласования.
-- Формат `YYYYMMDD`, пустая строка как невыбранная граница и строковое сравнение в пикерах — часть контракта.
-- Строгая валидация дат относится только к сдвигу; не переносить её в обработчики полей и не включать в вычисление `disabled` без обсуждения.
-- Сохранять отдельные операции `subtract` / `add` и передачу исходного `shiftAmount` в Moment, включая ноль, дробные и отрицательные величины.
+- Формат `YYYYMMDD` и пустая строка как невыбранная граница — часть контракта.
+- `disabled` кнопок зависит только от пустых границ; невалидные даты блокирует сам обработчик сдвига.
 - Порядок содержимого: кнопка назад → поле «от» → иконка-разделитель → поле «до» → кнопка вперёд. `hideNavigation` исключает вызовы обоих render-props кнопок.
 - `displayName` — `"MonthYearRange"`; React 17-совместимость сохраняется, React 18-only API не добавлять.
 - Story IDs `components-date-components-monthyearrange--*` связаны с baseline `__screenshots__/date-components-monthyearrange--{story}--{xs|xl}.png`: test-runner удаляет префикс `components-` из имени файла. Не переименовывать stories без обновления скриншот-тестов.
@@ -130,12 +128,12 @@ version: "1.0"
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | `PlaygroundExample.tsx` | Интерактивное управление `shiftAmount`, `shiftUnit` и `hideNavigation`. |
-| `Default` | `DefaultExample.tsx` | Два пустых `MonthYearField`, неактивные кнопки и сдвиг на месяц. |
-| `Sizes` | `SizesExample.tsx` | Поля SM / MD / LG; размер задаётся полям в render-props. |
-| `WithoutNavigation` | `WithoutNavigationExample.tsx` | Только поля и разделитель; кнопки скрыты. |
-| `Production` | `ProductionExample.tsx` | Пример `Example: production`: поля с `HelpBox` в постфиксе. |
-| `VisualTests` | `VisualTestsExample.tsx` | Заполненный диапазон `["19700101", "19700101"]` с активными кнопками. |
+| `Playground` | `Playground.tsx` | Интерактивное управление `shiftAmount`, `shiftUnit` и `hideNavigation`. |
+| `Default` | `Default.tsx` | Два пустых `MonthYearField`, неактивные кнопки и сдвиг на месяц. |
+| `Sizes` | `Sizes.tsx` | Поля SM / MD / LG; размер задаётся полям в render-props. |
+| `WithoutNavigation` | `WithoutNavigation.tsx` | Только поля и разделитель; кнопки скрыты. |
+| `Production` | `Production.tsx` | Пример `Example: production`: поля с `HelpBox` в постфиксе. |
+| `VisualTests` | `VisualTests.tsx` | Заполненный диапазон `["19700101", "19700101"]` с активными кнопками. |
 
 `Playground` исключён из скриншот-тестов. Остальные пять stories покрыты десятью baseline для viewport xs / xl в `__screenshots__/`. `Playground` и `VisualTests` не включаются в MCP bundle.
 

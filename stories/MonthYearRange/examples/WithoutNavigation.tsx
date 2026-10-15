@@ -6,7 +6,7 @@ import {
     TMonthYearRangeValue,
 } from "@sberbusiness/triplex-next";
 
-export const WithoutNavigationExample = () => {
+export const WithoutNavigation = () => {
     const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
         <MonthYearField label="Label" placeholder="Select to proceed" {...props} />

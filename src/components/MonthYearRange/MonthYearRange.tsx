@@ -35,7 +35,7 @@ export interface IMonthYearRangeProps extends Omit<React.HTMLAttributes<HTMLDivE
     value: TMonthYearRangeValue;
     /** Обработчик изменения диапазона; передаёт новые границы для обновления value. */
     onChange: (value: TMonthYearRangeValue) => void;
-    /** Величина сдвига, применяемая Moment.js. По умолчанию 1. */
+    /** Величина сдвига диапазона в единицах shiftUnit. По умолчанию 1. */
     shiftAmount?: number;
     /** Единица измерения сдвига. По умолчанию EMonthYearRangeShiftUnit.MONTH. */
     shiftUnit?: EMonthYearRangeShiftUnit;
@@ -51,7 +51,10 @@ export interface IMonthYearRangeProps extends Omit<React.HTMLAttributes<HTMLDivE
     renderButtonForward: (props: IMonthYearRangeButtonProvideProps) => React.ReactNode;
 }
 
-/** Выбор диапазона месяцев. */
+/**
+ * Выбор диапазона месяцев: поля «от» и «до» и кнопки сдвига диапазона назад и вперёд.
+ * Поля и кнопки рендерит потребитель через render-props.
+ */
 export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangeProps>(
     (
         {
@@ -71,8 +74,10 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
     ) => {
         const [start, end] = value;
         const classNames = clsx(styles.monthYearRange, className);
+        /** Сдвиг возможен только при обеих заполненных границах диапазона. */
+        const shiftDisabled = !(start && end);
 
-        /** Обработчик изменения значения в поле выбора месяца "от". */
+        /** Обработчик изменения значения в поле выбора месяца "от". Сбрасывает месяц "до", если он оказался меньше. */
         const handleChangePickerFrom = (date: string) => {
             if (!date || !end || date <= end) {
                 onChange([date, end]);
@@ -81,7 +86,7 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
             }
         };
 
-        /** Обработчик изменения значения в поле выбора месяца "до". */
+        /** Обработчик изменения значения в поле выбора месяца "до". Сбрасывает месяц "от", если он оказался больше. */
         const handleChangePickerTo = (date: string) => {
             if (!date || !start || date >= start) {
                 onChange([start, date]);
@@ -90,8 +95,9 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
             }
         };
 
-        const shiftRange = (method: "subtract" | "add") => {
-            if (!start || !end) {
+        /** Смещает обе границы диапазона на amount единиц. Неполный или невалидный диапазон не сдвигается. */
+        const shiftRange = (amount: number) => {
+            if (shiftDisabled) {
                 return;
             }
 
@@ -103,22 +109,19 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
             }
 
             onChange([
-                momentStart[method](shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
-                momentEnd[method](shiftAmount, shiftUnit).format(dateFormatYYYYMMDD),
+                momentStart.add(amount, shiftUnit).format(dateFormatYYYYMMDD),
+                momentEnd.add(amount, shiftUnit).format(dateFormatYYYYMMDD),
             ]);
         };
-
-        const shiftRangeBack = () => shiftRange("subtract");
-        const shiftRangeForward = () => shiftRange("add");
 
         return (
             <div className={classNames} {...rest} ref={ref}>
                 {!hideNavigation &&
                     renderButtonBack({
                         children: <CaretleftStrokeSrvIcon20 paletteIndex={5} />,
-                        className: clsx(styles.monthYearRangeButton),
-                        disabled: !(start && end),
-                        onClick: shiftRangeBack,
+                        className: styles.monthYearRangeButton,
+                        disabled: shiftDisabled,
+                        onClick: () => shiftRange(-shiftAmount),
                     })}
                 {renderPickerFrom({
                     onChange: handleChangePickerFrom,
@@ -132,9 +135,9 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
                 {!hideNavigation &&
                     renderButtonForward({
                         children: <CaretrightStrokeSrvIcon20 paletteIndex={5} />,
-                        className: clsx(styles.monthYearRangeButton),
-                        disabled: !(start && end),
-                        onClick: shiftRangeForward,
+                        className: styles.monthYearRangeButton,
+                        disabled: shiftDisabled,
+                        onClick: () => shiftRange(shiftAmount),
                     })}
             </div>
         );

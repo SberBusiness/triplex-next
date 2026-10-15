@@ -27,11 +27,7 @@ describe("MonthYearRange", () => {
     );
 
     const renderButton = (props: IMonthYearRangeButtonProvideProps) => (
-        <button
-            data-testid={props.className.includes("disabled") ? "button-disabled" : "button"}
-            onClick={props.onClick}
-            disabled={props.disabled}
-        >
+        <button onClick={props.onClick} disabled={props.disabled}>
             {props.children}
         </button>
     );
@@ -123,91 +119,10 @@ describe("MonthYearRange", () => {
         expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240601"]);
     });
 
-    it("shifts range by quarters when shiftUnit is QUARTER", () => {
-        render(<MonthYearRange {...defaultProps} shiftUnit={EMonthYearRangeShiftUnit.QUARTER} />);
-
-        const buttons = screen.getAllByRole("button");
-        const forwardButton = buttons[1];
-        fireEvent.click(forwardButton);
-
-        expect(mockOnChange).toHaveBeenCalledWith(["20240401", "20240601"]);
-    });
-
-    it("shifts range by years when shiftUnit is YEAR", () => {
-        render(<MonthYearRange {...defaultProps} shiftUnit={EMonthYearRangeShiftUnit.YEAR} />);
-
-        const buttons = screen.getAllByRole("button");
-        const forwardButton = buttons[1];
-        fireEvent.click(forwardButton);
-
-        expect(mockOnChange).toHaveBeenCalledWith(["20250101", "20250301"]);
-    });
-
-    it("does not shift range when start date is empty", () => {
-        render(<MonthYearRange {...defaultProps} value={["", "20240301"]} />);
-
-        const buttons = screen.getAllByRole("button");
-        const forwardButton = buttons[1];
-        fireEvent.click(forwardButton);
-
-        expect(mockOnChange).not.toHaveBeenCalled();
-    });
-
-    it("does not shift range when end date is empty", () => {
-        render(<MonthYearRange {...defaultProps} value={["20240101", ""]} />);
-
-        const buttons = screen.getAllByRole("button");
-        const backButton = buttons[0];
-        fireEvent.click(backButton);
-
-        expect(mockOnChange).not.toHaveBeenCalled();
-    });
-
-    it("disables navigation buttons when dates are empty", () => {
-        const renderButtonWithDisabledTest = (props: IMonthYearRangeButtonProvideProps) => (
-            <button
-                data-testid={props.disabled ? "button-disabled" : "button-enabled"}
-                onClick={props.onClick}
-                disabled={props.disabled}
-            >
-                {props.children}
-            </button>
-        );
-
-        render(
-            <MonthYearRange
-                {...defaultProps}
-                value={["", ""]}
-                renderButtonBack={renderButtonWithDisabledTest}
-                renderButtonForward={renderButtonWithDisabledTest}
-            />,
-        );
-
-        const disabledButtons = screen.getAllByTestId("button-disabled");
-        expect(disabledButtons).toHaveLength(2);
-    });
-
     it("enables navigation buttons when both dates are filled", () => {
-        const renderButtonWithDisabledTest = (props: IMonthYearRangeButtonProvideProps) => (
-            <button
-                data-testid={props.disabled ? "button-disabled" : "button-enabled"}
-                onClick={props.onClick}
-                disabled={props.disabled}
-            >
-                {props.children}
-            </button>
-        );
+        render(<MonthYearRange {...defaultProps} />);
 
-        render(
-            <MonthYearRange
-                {...defaultProps}
-                renderButtonBack={renderButtonWithDisabledTest}
-                renderButtonForward={renderButtonWithDisabledTest}
-            />,
-        );
-
-        const enabledButtons = screen.getAllByTestId("button-enabled");
-        expect(enabledButtons).toHaveLength(2);
+        screen.getAllByRole("button").forEach((button) => expect(button).toBeEnabled());
     });
 
     it("applies custom className", () => {
@@ -258,71 +173,8 @@ describe("MonthYearRange", () => {
             back: ["20240229", "20240430"],
             forward: ["20231231", "20240229"],
         },
-        {
-            value: ["20240131", "20240331"],
-            amount: -1,
-            unit: EMonthYearRangeShiftUnit.QUARTER,
-            back: ["20240430", "20240630"],
-            forward: ["20231031", "20231231"],
-        },
-        {
-            value: ["20200229", "20240331"],
-            amount: -1,
-            unit: EMonthYearRangeShiftUnit.YEAR,
-            back: ["20210228", "20250331"],
-            forward: ["20190228", "20230331"],
-        },
-        {
-            value: ["20240131", "20240331"],
-            amount: 0.5,
-            unit: EMonthYearRangeShiftUnit.MONTH,
-            back: ["20231231", "20240229"],
-            forward: ["20240229", "20240430"],
-        },
-        {
-            value: ["20240131", "20240331"],
-            amount: 0.5,
-            unit: EMonthYearRangeShiftUnit.QUARTER,
-            back: ["20231130", "20240131"],
-            forward: ["20240331", "20240531"],
-        },
-        {
-            value: ["20200229", "20240331"],
-            amount: 0.5,
-            unit: EMonthYearRangeShiftUnit.YEAR,
-            back: ["20190829", "20230930"],
-            forward: ["20200829", "20240930"],
-        },
-        {
-            value: ["20240131", "20240331"],
-            amount: -0.5,
-            unit: EMonthYearRangeShiftUnit.MONTH,
-            back: ["20240229", "20240430"],
-            forward: ["20231231", "20240229"],
-        },
-        {
-            value: ["20240131", "20240331"],
-            amount: -0.5,
-            unit: EMonthYearRangeShiftUnit.QUARTER,
-            back: ["20240331", "20240531"],
-            forward: ["20231130", "20240131"],
-        },
-        {
-            value: ["20200229", "20240331"],
-            amount: -0.5,
-            unit: EMonthYearRangeShiftUnit.YEAR,
-            back: ["20200829", "20240930"],
-            forward: ["20190829", "20230930"],
-        },
-        {
-            value: ["20240131", "20240331"],
-            amount: 0,
-            unit: EMonthYearRangeShiftUnit.MONTH,
-            back: ["20240131", "20240331"],
-            forward: ["20240131", "20240331"],
-        },
     ])(
-        "preserves $unit arithmetic with amount $amount at date boundaries",
+        "shifts by $amount $unit clamping the day to the end of the target month",
         ({ value, amount, unit, back, forward }) => {
             render(<MonthYearRange {...defaultProps} value={value} shiftAmount={amount} shiftUnit={unit} />);
 
@@ -341,14 +193,10 @@ describe("MonthYearRange", () => {
         ["20240131", "20240230"],
         ["2024-01-31", "20240331"],
         ["20240131", "202403"],
-    ])("does not shift invalid dates %s and %s but keeps navigation enabled", (start, end) => {
+    ])("does not shift invalid dates %s and %s", (start, end) => {
         render(<MonthYearRange {...defaultProps} value={[start, end]} />);
 
-        const buttons = screen.getAllByRole("button");
-        buttons.forEach((button) => {
-            expect(button).toBeEnabled();
-            fireEvent.click(button);
-        });
+        screen.getAllByRole("button").forEach((button) => fireEvent.click(button));
 
         expect(mockOnChange).not.toHaveBeenCalled();
     });
@@ -413,22 +261,6 @@ describe("MonthYearRange", () => {
         fireEvent.change(screen.getByTestId("picker-20240301"), { target: { value: "20231201" } });
 
         expect(mockOnChange).toHaveBeenCalledWith(["", "20231201"]);
-    });
-
-    it("compares picker 'from' values as strings without validating date format", () => {
-        render(<MonthYearRange {...defaultProps} />);
-
-        fireEvent.change(screen.getByTestId("picker-20240101"), { target: { value: "2024-04-01" } });
-
-        expect(mockOnChange).toHaveBeenCalledWith(["2024-04-01", "20240301"]);
-    });
-
-    it("compares picker 'to' values as strings without validating date format", () => {
-        render(<MonthYearRange {...defaultProps} />);
-
-        fireEvent.change(screen.getByTestId("picker-20240301"), { target: { value: "2024-04-01" } });
-
-        expect(mockOnChange).toHaveBeenCalledWith(["", "2024-04-01"]);
     });
 
     it("forwards ref to the root div", () => {

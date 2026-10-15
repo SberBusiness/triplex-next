@@ -1,24 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     ButtonIcon,
     MonthYearField,
     MonthYearRange,
     EMonthYearRangeShiftUnit,
-    type IMonthYearRangeButtonProvideProps,
-    type IMonthYearRangePickerProvideProps,
+    IMonthYearRangeButtonProvideProps,
+    IMonthYearRangePickerProvideProps,
+    TMonthYearRangeValue,
+    HelpBox,
+    ETooltipSize,
 } from "@sberbusiness/triplex-next";
 
-export const VisualTestsExample = () => {
+export const Production = () => {
+    const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
+
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
-        <MonthYearField label="Label" placeholder="Select to proceed" {...props} />
+        <MonthYearField
+            label="Label"
+            placeholder="Select to proceed"
+            targetProps={{ postfix: <HelpBox tooltipSize={ETooltipSize.SM}>HelpBox text</HelpBox>, inputProps: {} }}
+            {...props}
+        />
     );
     const renderButton = (props: IMonthYearRangeButtonProvideProps) => <ButtonIcon {...props} />;
 
     return (
-        <div style={{ maxWidth: "400px" }}>
+        <div style={{ maxWidth: 660 }}>
             <MonthYearRange
-                value={["19700101", "19700101"]}
-                onChange={() => {}}
+                value={value}
+                onChange={setValue}
                 shiftAmount={1}
                 shiftUnit={EMonthYearRangeShiftUnit.MONTH}
                 renderPickerFrom={renderPicker}

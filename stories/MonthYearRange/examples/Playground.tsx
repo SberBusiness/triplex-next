@@ -3,33 +3,29 @@ import {
     ButtonIcon,
     MonthYearField,
     MonthYearRange,
-    EMonthYearRangeShiftUnit,
     IMonthYearRangeButtonProvideProps,
     IMonthYearRangePickerProvideProps,
     TMonthYearRangeValue,
-    EComponentSize,
 } from "@sberbusiness/triplex-next";
 
-interface ISizeItemProps {
-    size: EComponentSize;
-}
+export type PlaygroundArgs = Pick<
+    React.ComponentProps<typeof MonthYearRange>,
+    "shiftAmount" | "shiftUnit" | "hideNavigation"
+>;
 
-const SizeItem = ({ size }: ISizeItemProps) => {
+export const Playground = (args: PlaygroundArgs) => {
     const [value, setValue] = useState<TMonthYearRangeValue>(["", ""]);
-
     const renderPicker = (props: IMonthYearRangePickerProvideProps) => (
-        <MonthYearField label="Label" placeholder="Select to proceed" size={size} {...props} />
+        <MonthYearField label="Label" placeholder="Select to proceed" {...props} />
     );
     const renderButton = (props: IMonthYearRangeButtonProvideProps) => <ButtonIcon {...props} />;
 
     return (
-        <div style={{ maxWidth: 500 }}>
-            <div style={{ marginBottom: "8px", fontSize: "16px", fontWeight: "700" }}>{size.toUpperCase()}</div>
+        <div style={{ maxWidth: "400px" }}>
             <MonthYearRange
+                {...args}
                 value={value}
                 onChange={setValue}
-                shiftAmount={1}
-                shiftUnit={EMonthYearRangeShiftUnit.MONTH}
                 renderPickerFrom={renderPicker}
                 renderPickerTo={renderPicker}
                 renderButtonBack={renderButton}
@@ -38,13 +34,3 @@ const SizeItem = ({ size }: ISizeItemProps) => {
         </div>
     );
 };
-
-const SIZES = Object.values(EComponentSize);
-
-export const SizesExample = () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {SIZES.map((size) => (
-            <SizeItem key={size} size={size} />
-        ))}
-    </div>
-);

@@ -2,7 +2,7 @@ import React, { useContext, useRef, useCallback } from "react";
 import clsx from "clsx";
 import { ICarouselItemProps } from "./types";
 import { CarouselContext } from "./CarouselContext";
-import { mergeRefs } from "./utils";
+import { mergeRefs } from "../../utils/refs";
 import styles from "./styles/Carousel.module.less";
 
 export const CarouselItem = React.forwardRef<HTMLDivElement, ICarouselItemProps>(

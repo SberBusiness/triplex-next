@@ -1,5 +1,5 @@
 import React from "react";
-import { Carousel, ICarouselProps, ECarouselOrientation } from "@sberbusiness/triplex-next";
+import { Carousel, ICarouselProps, EOrientation } from "@sberbusiness/triplex-next";
 
 export interface PlaygroundArgs extends Pick<ICarouselProps, "orientation" | "scrollMode" | "gap"> {}
 
@@ -16,17 +16,17 @@ const BASE_ITEM_STYLE: React.CSSProperties = {
 };
 
 const ORIENTATION_TO_ITEM_DIMENSIONS_MAP = {
-    [ECarouselOrientation.HORIZONTAL]: (size: number): React.CSSProperties => ({
+    [EOrientation.HORIZONTAL]: (size: number): React.CSSProperties => ({
         width: size,
         height: "100%",
     }),
-    [ECarouselOrientation.VERTICAL]: (size: number): React.CSSProperties => ({
+    [EOrientation.VERTICAL]: (size: number): React.CSSProperties => ({
         width: "100%",
         height: size,
     }),
 };
 
-export const Playground = ({ orientation = ECarouselOrientation.HORIZONTAL, ...restArgs }: PlaygroundArgs) => {
+export const Playground = ({ orientation = EOrientation.HORIZONTAL, ...restArgs }: PlaygroundArgs) => {
     const itemSizes = [92, 168, 220, 244, 252, 256, 252, 244, 220, 168, 92];
     const items = itemSizes.map((size, index) => {
         const totalItems = itemSizes.length;

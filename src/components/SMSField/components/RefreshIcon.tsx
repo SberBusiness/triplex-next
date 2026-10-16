@@ -1,7 +1,7 @@
-import clsx from "clsx";
 import React from "react";
-import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
+import clsx from "clsx";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import styles from "../styles/SMSField.module.less";
 
 const iconPath =
     "M2 10c0-4.42 3.58-8 8-8 2.52 0 4.77 1.16 6.24 3H13.5c-.56 0-1 .44-1 1 0 .55.44 1 1 1h5c.55 0 1-.45 1-1V1c0-.56-.45-1-1-1-.56 0-1 .44-1 1v2.38A10.02 10.02 0 0 0 10 0C4.47 0 0 4.47 0 10c0 5.52 4.47 10 10 10 5.52 0 10-4.48 10-10 0-.56-.45-1-1-1-.56 0-1 .44-1 1 0 4.41-3.59 8-8 8-4.42 0-8-3.59-8-8";

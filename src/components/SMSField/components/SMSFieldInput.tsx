@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import React, { useContext, useState } from "react";
+import clsx from "clsx";
 import {
     EFormFieldStatus,
     FormField,
@@ -8,22 +8,23 @@ import {
     FormFieldInput,
 } from "@sberbusiness/triplex-next/components/FormField";
 import { FormGroup } from "@sberbusiness/triplex-next/components/FormGroup";
-import { SMSFieldContext } from "@sberbusiness/triplex-next/components/SMSField/SMSFieldContext";
-import styles from "@sberbusiness/triplex-next/components/SMSField/styles/SMSField.module.less";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
+import { SMSFieldContext } from "../SMSFieldContext";
+import styles from "../styles/SMSField.module.less";
 
 /** Свойства SMSField.Input. */
 export interface ISMSFieldInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "disabled"> {
-    /** Счётчик символов */
+    /** Счётчик символов. */
     counter?: React.ReactNode;
-    /** Описание поля ввода */
+    /** Описание поля ввода. */
     description?: React.ReactNode;
     /** Текст ошибки. Отображается вместо placeholder в статусе EFormFieldStatus.ERROR, пока поле не в фокусе. */
     errorText?: string;
 }
 
-const regExp = new RegExp(/^[0-9]*$/);
+const DIGITS_REGEXP = /^[0-9]*$/;
 
+/** Поле ввода кода: принимает только цифры, значение берёт из code корневого SMSField. Ref указывает на input. */
 export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputProps>(
     (
         {
@@ -57,39 +58,36 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
             className,
         );
 
-        /** Обработчик ввода sms-кода. */
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.value;
-            if (!regExp.test(value)) {
+        const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+            const value = event.target.value;
+            if (!DIGITS_REGEXP.test(value)) {
                 return;
             }
             onChangeCode(value);
-            onChange?.(e);
+            onChange?.(event);
         };
 
-        /** Обработчик получения фокуса. */
-        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        const handleFocus: React.FocusEventHandler<HTMLInputElement> = (event) => {
             setFocused(true);
-            onFocus?.(e);
+            onFocus?.(event);
         };
 
-        /** Обработчик потери фокуса. */
-        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        const handleBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
             setFocused(false);
-            onBlur?.(e);
+            onBlur?.(event);
         };
 
-        /** Обработчик нажатия клавиши Enter (для отправки sms-кода). */
-        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.keyCode === EVENT_KEY_CODES.ENTER && !disabledSubmit) {
+        // Enter отправляет код, только если доступна SMSField.Submit.
+        const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+            if (event.keyCode === EVENT_KEY_CODES.ENTER && !disabledSubmit) {
                 onSubmitCode(code);
             }
-            onKeyDown?.(e);
+            onKeyDown?.(event);
         };
 
         return (
             <FormGroup>
-                <FormField className={sizeClassName} onKeyDown={handleKeyDown} size={size} status={status}>
+                <FormField className={sizeClassName} size={size} status={status}>
                     <FormFieldInput
                         autoComplete="off"
                         className={inputClassName}
@@ -97,6 +95,7 @@ export const SMSFieldInput = React.forwardRef<HTMLInputElement, ISMSFieldInputPr
                         onBlur={handleBlur}
                         onChange={handleChange}
                         onFocus={handleFocus}
+                        onKeyDown={handleKeyDown}
                         placeholder={showErrorText ? errorText : placeholder}
                         ref={ref}
                         value={code}

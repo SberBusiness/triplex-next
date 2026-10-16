@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { Carousel, ECarouselOrientation, ECarouselScrollMode } from "@sberbusiness/triplex-next";
+import { Carousel, EOrientation, ECarouselScrollMode } from "@sberbusiness/triplex-next";
 import {
     type PlaygroundArgs,
     PlaygroundRender,
@@ -42,7 +42,7 @@ export default {
 
 const PLAYGROUND_ARGS: PlaygroundArgs = {
     // Props
-    orientation: ECarouselOrientation.HORIZONTAL,
+    orientation: EOrientation.HORIZONTAL,
     scrollMode: ECarouselScrollMode.ITEM,
     gap: 16,
 };
@@ -53,7 +53,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     argTypes: {
         // Props
         orientation: {
-            options: Object.values(ECarouselOrientation),
+            options: Object.values(EOrientation),
             control: { type: "select" },
             table: { category: "Props" },
         },

@@ -27,19 +27,21 @@ const SCROLL_TO_END = Number.MAX_SAFE_INTEGER;
 /** Позиция прокрутки ленты на момент снятия скриншота. */
 type TScrollPosition = "middle" | "end";
 
-const renderPrevButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonProvideProps) =>
-    hidden ? null : (
-        <ButtonIcon aria-label="Прокрутить назад" {...buttonProps}>
-            <CaretleftStrokeSrvIcon24 paletteIndex={5} />
-        </ButtonIcon>
-    );
+/*
+ * Кнопки рендерятся всегда (контент заведомо шире ленты): с `hidden ? null : ...` они появлялись бы после
+ * первого измерения и сужали ленту уже после прокрутки — итоговое состояние кнопок становилось бы случайным.
+ */
+const renderPrevButton = ({ hidden: _hidden, ...buttonProps }: ICarouselExtendedButtonProvideProps) => (
+    <ButtonIcon aria-label="Прокрутить назад" {...buttonProps}>
+        <CaretleftStrokeSrvIcon24 paletteIndex={5} />
+    </ButtonIcon>
+);
 
-const renderNextButton = ({ hidden, ...buttonProps }: ICarouselExtendedButtonProvideProps) =>
-    hidden ? null : (
-        <ButtonIcon aria-label="Прокрутить вперёд" {...buttonProps}>
-            <CaretrightStrokeSrvIcon24 paletteIndex={5} />
-        </ButtonIcon>
-    );
+const renderNextButton = ({ hidden: _hidden, ...buttonProps }: ICarouselExtendedButtonProvideProps) => (
+    <ButtonIcon aria-label="Прокрутить вперёд" {...buttonProps}>
+        <CaretrightStrokeSrvIcon24 paletteIndex={5} />
+    </ButtonIcon>
+);
 
 interface IScrolledCarouselProps {
     /** Позиция, в которую лента прокручивается сразу после монтирования. */
@@ -57,24 +59,32 @@ interface IScrolledCarouselProps {
  * `play` в `stories-guide.md` описан для пользовательских взаимодействий (клик, ввод), здесь же
  * это начальное состояние. Осознанный выбор, а не упущенный `play`.
  *
- * Обе позиции заданы константами и не вычисляются из измеренных ширин: измерение зависело бы от
- * метрик шрифта на момент эффекта, и при поздней загрузке шрифтов скриншот «поплыл» бы. Значение
- * для конца ленты браузер сам обрезает до максимума, поэтому оно точное при любой ширине контента.
+ * Обе позиции заданы константами и не вычисляются из измеренных ширин. Значение для конца ленты
+ * браузер обрезает до максимума, поэтому прокрутка выставляется после загрузки шрифтов: иначе
+ * поздний шрифт изменил бы ширину контента уже после неё, и «конец» перестал бы быть концом.
  */
 const ScrolledCarousel = ({ position, label }: IScrolledCarouselProps) => {
     const carouselRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const carousel = carouselRef.current;
+        let cancelled = false;
 
-        if (carousel === null) {
-            return;
-        }
+        document.fonts.ready.then(() => {
+            const carousel = carouselRef.current;
 
-        carousel.scrollLeft = position === "end" ? SCROLL_TO_END : SCROLL_TO_MIDDLE;
-        // Браузер рассылает scroll-событие асинхронно — дублируем его синхронно,
-        // чтобы состояние кнопок пересчиталось сразу после прокрутки.
-        carousel.dispatchEvent(new Event("scroll"));
+            if (cancelled || carousel === null) {
+                return;
+            }
+
+            carousel.scrollLeft = position === "end" ? SCROLL_TO_END : SCROLL_TO_MIDDLE;
+            // Браузер рассылает scroll-событие асинхронно — дублируем его синхронно,
+            // чтобы состояние кнопок пересчиталось сразу после прокрутки.
+            carousel.dispatchEvent(new Event("scroll"));
+        });
+
+        return () => {
+            cancelled = true;
+        };
     }, [position]);
 
     return (

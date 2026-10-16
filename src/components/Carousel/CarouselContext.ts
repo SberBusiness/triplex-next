@@ -1,5 +1,6 @@
 import React from "react";
-import { ECarouselOrientation, ECarouselScrollMode } from "./enums";
+import { ECarouselScrollMode } from "./enums";
+import { EOrientation } from "../../enums";
 import { ICarouselProps } from "./types";
 
 export interface ICarouselContext extends Required<Pick<ICarouselProps, "gap" | "orientation" | "scrollMode">> {
@@ -12,8 +13,7 @@ export interface ICarouselContext extends Required<Pick<ICarouselProps, "gap" | 
     nextSlide: () => void;
     prevSlide: () => void;
     goToSlide: (index: number) => void;
-    orientationRef: React.MutableRefObject<ECarouselOrientation>;
-    currentIndexRef: React.MutableRefObject<number>;
+    orientationRef: React.MutableRefObject<EOrientation>;
     offsetRef: React.MutableRefObject<number>;
     maxOffsetRef: React.MutableRefObject<number>;
     viewportRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -23,7 +23,7 @@ export interface ICarouselContext extends Required<Pick<ICarouselProps, "gap" | 
 
 export const CarouselContext = React.createContext<ICarouselContext>({
     gap: 0,
-    orientation: ECarouselOrientation.HORIZONTAL,
+    orientation: EOrientation.HORIZONTAL,
     scrollMode: ECarouselScrollMode.ITEM,
     offset: 0,
     activeIndices: [],
@@ -34,8 +34,7 @@ export const CarouselContext = React.createContext<ICarouselContext>({
     nextSlide: () => {},
     prevSlide: () => {},
     goToSlide: () => {},
-    orientationRef: { current: ECarouselOrientation.HORIZONTAL },
-    currentIndexRef: { current: 0 },
+    orientationRef: { current: EOrientation.HORIZONTAL },
     viewportRef: { current: null },
     trackRef: { current: null },
     slideRefs: { current: new Map() },

@@ -1,55 +1,11 @@
 import React from "react";
-import moment from "moment";
 import { RangeStrokeSrvIcon16, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
 import { dateFormatYYYYMMDD } from "../../consts/DateConst";
 import { EMonthYearRangeShiftUnit } from "./enums";
+import { IMonthYearRangeProps } from "./types";
+import { isDateAfter, shiftMonthYearRange } from "./utils";
 import styles from "./styles/MonthYearRange.module.less";
-
-/** Свойства функции рендеринга кнопки сдвига диапазона месяцев. */
-export interface IMonthYearRangeButtonProvideProps {
-    /** Содержимое кнопки — иконка направления сдвига. */
-    children: React.ReactNode;
-    /** CSS-класс, который следует передать кнопке. */
-    className: string;
-    /** Обработчик сдвига; не вызывает onChange при пустой или невалидной границе. */
-    onClick: () => void;
-    /** Кнопка отключена, если хотя бы одна граница диапазона пуста. */
-    disabled: boolean;
-}
-
-/** Свойства функции рендеринга поля выбора месяца. */
-export interface IMonthYearRangePickerProvideProps {
-    /** Дата в формате YYYYMMDD или пустая строка, если граница не выбрана. */
-    value: string;
-    /** Обработчик изменения границы; при пересечении очищает противоположную границу. */
-    onChange: (value: string) => void;
-}
-
-/** Границы диапазона [от, до] в формате YYYYMMDD; пустая строка означает отсутствие границы. */
-export type TMonthYearRangeValue = [string, string];
-
-/** Свойства компонента MonthYearRange. */
-export interface IMonthYearRangeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-    /** Границы диапазона [от, до] в формате YYYYMMDD; пустая строка означает отсутствие границы. */
-    value: TMonthYearRangeValue;
-    /** Обработчик изменения диапазона; передаёт новые границы для обновления value. */
-    onChange: (value: TMonthYearRangeValue) => void;
-    /** Величина сдвига диапазона в единицах shiftUnit. По умолчанию 1. */
-    shiftAmount?: number;
-    /** Единица измерения сдвига. По умолчанию EMonthYearRangeShiftUnit.MONTH. */
-    shiftUnit?: EMonthYearRangeShiftUnit;
-    /** Скрывает кнопки сдвига диапазона. По умолчанию кнопки отображаются. */
-    hideNavigation?: boolean;
-    /** Рендерит поле выбора месяца "от", используя переданные value и onChange. */
-    renderPickerFrom: (props: IMonthYearRangePickerProvideProps) => React.ReactNode;
-    /** Рендерит поле выбора месяца "до", используя переданные value и onChange. */
-    renderPickerTo: (props: IMonthYearRangePickerProvideProps) => React.ReactNode;
-    /** Рендерит кнопку сдвига назад, используя переданные children, className, onClick и disabled. */
-    renderButtonBack: (props: IMonthYearRangeButtonProvideProps) => React.ReactNode;
-    /** Рендерит кнопку сдвига вперёд, используя переданные children, className, onClick и disabled. */
-    renderButtonForward: (props: IMonthYearRangeButtonProvideProps) => React.ReactNode;
-}
 
 /**
  * Выбор диапазона месяцев: поля «от» и «до» и кнопки сдвига диапазона назад и вперёд.
@@ -60,15 +16,16 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
         {
             className,
             value,
-            onChange,
+            format = dateFormatYYYYMMDD,
             shiftAmount = 1,
             shiftUnit = EMonthYearRangeShiftUnit.MONTH,
             hideNavigation,
+            onChange,
             renderPickerFrom,
             renderPickerTo,
             renderButtonForward,
             renderButtonBack,
-            ...rest
+            ...restProps
         },
         ref,
     ) => {
@@ -79,7 +36,7 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
 
         /** Обработчик изменения значения в поле выбора месяца "от". Сбрасывает месяц "до", если он оказался меньше. */
         const handleChangePickerFrom = (date: string) => {
-            if (!date || !end || date <= end) {
+            if (!date || !end || !isDateAfter(date, end, format)) {
                 onChange([date, end]);
             } else {
                 onChange([date, ""]);
@@ -88,7 +45,7 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
 
         /** Обработчик изменения значения в поле выбора месяца "до". Сбрасывает месяц "от", если он оказался больше. */
         const handleChangePickerTo = (date: string) => {
-            if (!date || !start || date >= start) {
+            if (!date || !start || !isDateAfter(start, date, format)) {
                 onChange([start, date]);
             } else {
                 onChange(["", date]);
@@ -101,21 +58,15 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
                 return;
             }
 
-            const momentStart = moment(start, dateFormatYYYYMMDD, true);
-            const momentEnd = moment(end, dateFormatYYYYMMDD, true);
+            const shiftedValue = shiftMonthYearRange(value, amount, shiftUnit, format);
 
-            if (!momentStart.isValid() || !momentEnd.isValid()) {
-                return;
+            if (shiftedValue) {
+                onChange(shiftedValue);
             }
-
-            onChange([
-                momentStart.add(amount, shiftUnit).format(dateFormatYYYYMMDD),
-                momentEnd.add(amount, shiftUnit).format(dateFormatYYYYMMDD),
-            ]);
         };
 
         return (
-            <div className={classNames} {...rest} ref={ref}>
+            <div className={classNames} {...restProps} ref={ref}>
                 {!hideNavigation &&
                     renderButtonBack({
                         children: <CaretleftStrokeSrvIcon20 paletteIndex={5} />,
@@ -124,13 +75,15 @@ export const MonthYearRange = React.forwardRef<HTMLDivElement, IMonthYearRangePr
                         onClick: () => shiftRange(-shiftAmount),
                     })}
                 {renderPickerFrom({
-                    onChange: handleChangePickerFrom,
                     value: start,
+                    format,
+                    onChange: handleChangePickerFrom,
                 })}
                 <RangeStrokeSrvIcon16 className={styles.separator} paletteIndex={5} />
                 {renderPickerTo({
-                    onChange: handleChangePickerTo,
                     value: end,
+                    format,
+                    onChange: handleChangePickerTo,
                 })}
                 {!hideNavigation &&
                     renderButtonForward({

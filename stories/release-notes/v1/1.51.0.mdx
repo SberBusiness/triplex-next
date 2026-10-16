@@ -11,6 +11,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Удалён enum `ECarouselOrientation`: используйте общий `EOrientation`, значения те же.
 - Удалены токены `Carousel.Indicator_*`: индикаторы теперь красятся токенами `PageIndicators.Indicator_*` с теми же именами и значениями. Если вы переопределяли их через `ThemeProvider`, перенесите ключи в группу `PageIndicators`.
 
+**DateRange, MonthYearRange**
+
+- Поля в `renderPickerFrom` / `renderPickerTo` получают `format` диапазона. Если вы задавали `format` полю до spread (`<DateField format="..." {...props} />`), он перезапишется на `YYYYMMDD`: перенесите `format` на `DateRange` / `MonthYearRange`.
+
 **ImageGallery**
 
 - Свойство `showDots` переименовано в `showPageIndicators`, `dotsProps` — в `pageIndicatorsProps`, тип `TImageGalleryDotsProps` — в `TImageGalleryPageIndicatorsProps`.
@@ -24,6 +28,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**DateRange**
+
+- Добавлено свойство `format` — формат дат в `value` и `onChange`, по умолчанию `YYYYMMDD`; передаётся полям в render-props.
+- Исправлено: даты «от» и «до» сравнивались как строки. С форматом вроде `DD.MM.YYYY` ввод 31.01.2024 при дате «до» 01.02.2024 ошибочно сбрасывал дату «до». Теперь даты сравниваются хронологически.
+- Исправлено: сдвиг диапазона с датой не в формате `format` передавал в `onChange` неверную дату (например, `"31.01.2024"` превращалась в `"20310220"`). Теперь, как и в `MonthYearRange`, диапазон с невалидной границей не сдвигается и `onChange` не вызывается.
+
 **EmptyView**
 
 - Проведён AI-рефакторинг.
@@ -35,6 +45,8 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **MonthYearRange**
 
 - Проведён AI-рефакторинг.
+- Добавлено свойство `format` — формат дат в `value` и `onChange`, по умолчанию `YYYYMMDD`; передаётся полям в render-props.
+- Исправлено: месяцы «от» и «до» сравнивались как строки, из-за чего с форматом вроде `DD.MM.YYYY` противоположная граница сбрасывалась ошибочно. Теперь даты сравниваются хронологически.
 
 **NotificationGrouped**
 

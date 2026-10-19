@@ -10,6 +10,8 @@ import { Dropdown, DropdownList, DropdownListContext, EDropdownWidth } from "../
 import { Text, EFontType } from "../../Typography";
 import { tabsLineSizeToTextSizeMap } from "../utils";
 import { ITabsLineItemProps } from "./TabsLineItem";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/TabsLine.module.less";
 
 /** Свойства компонента TabsLineDropdown. */
@@ -46,6 +48,7 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
         ...htmlDivAttributes
     } = props;
 
+    const wordArt = React.useContext(SkinContext) === "wordart";
     const [activeDescendant, setActiveDescendant] = useState<string | undefined>(undefined);
     const [opened, setOpened] = useState(false);
     const [focused, setFocused] = useState(false);
@@ -164,6 +167,8 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
                     styles.tab,
                     SIZE_TO_CLASS_NAME_MAP[size],
                     styles.dropdownTarget,
+                    wordArt && skinStyles.wordArtLineTab,
+                    wordArt && active && skinStyles.wordArtLineTabSelected,
                     {
                         [styles.active]: active,
                     },

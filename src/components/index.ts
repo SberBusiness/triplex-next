@@ -69,6 +69,7 @@ export * from "./Row";
 export * from "./SegmentedControl";
 export * from "./SelectExtendedField";
 export * from "./SelectField";
+export * from "./SkinProvider";
 export * from "./Skeleton";
 export * from "./Slider";
 export * from "./SliderExtended";

@@ -298,3 +298,4 @@ Story ID участвуют в именах baseline-скриншотов (`segm
 | Дата | Изменение |
 |---|---|
 | 2026-09-30 | Создан документ. AI-рефакторинг: `SegmentedControlSegment` переведён с `React.FC` на `forwardRef<HTMLButtonElement>`, чистые хелперы вынесены в `utils.ts` (`isSegmentSelected`, `getSegmentTitle`), JSDoc на props и полях контекста, внутренние импорты приведены к относительным. Добавлены unit-тесты (`__tests__/SegmentedControlSegment.test.tsx`, `__tests__/utils.test.tsx`, классы тем и размеров в `__tests__/SegmentedControl.test.tsx`). Stories перенесены в `stories/SegmentedControl/` по modern pattern, добавлена story `VisualTests`. |
+| 2026-10-17 | Добавлено оформление WordArt для группы и сегментов через SkinProvider. Сохраняются aria-pressed, нативный disabled и обработчики выбора; выбранный сегмент и фокус имеют отдельные акценты. |

@@ -6,6 +6,8 @@ import { TabsExtendedTabButton } from "./TabsExtendedTabButton";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { TabsExtendedDropdownWrapper } from "./TabsExtendedDropdownWrapper";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/TabsExtended.module.less";
 
 /** Свойства компонента TabsExtendedContent. */
@@ -31,15 +33,23 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 /** Контейнер табов и Dropdown. Задаёт фон и размер компонента. */
 export const TabsExtendedContent = Object.assign(
     React.forwardRef<HTMLDivElement, ITabsExtendedContentProps>(
-        ({ children, className, size = EComponentSize.MD, ...htmlDivAttributes }, ref) => (
-            <div
-                className={clsx(styles.tabsExtendedContent, sizeToClassNameMap[size], className)}
-                {...htmlDivAttributes}
-                ref={ref}
-            >
-                {children}
-            </div>
-        ),
+        ({ children, className, size = EComponentSize.MD, ...htmlDivAttributes }, ref) => {
+            const wordArt = React.useContext(SkinContext) === "wordart";
+            return (
+                <div
+                    className={clsx(
+                        styles.tabsExtendedContent,
+                        sizeToClassNameMap[size],
+                        wordArt && skinStyles.wordArtTabs,
+                        className,
+                    )}
+                    {...htmlDivAttributes}
+                    ref={ref}
+                >
+                    {children}
+                </div>
+            );
+        },
     ),
     {
         TabsWrapper: TabsExtendedTabsWrapper,

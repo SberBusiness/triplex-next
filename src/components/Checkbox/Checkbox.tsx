@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { CheckboxbulkStrokeSrvIcon24, CheckboxtickStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { ETextSize, Text } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
@@ -43,8 +45,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
         size = EComponentSize.MD,
         ...inputAttributes
     } = props;
+    const wordArt = React.useContext(SkinContext) === "wordart";
     const labelClassName = clsx(
         styles.label,
+        wordArt && !disabled && skinStyles.wordArtChoice,
         SIZE_TO_CLASS_NAME_MAP[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
         className,
@@ -55,7 +59,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, ICheckboxProps>((prop
     return (
         <label {...labelAttributes} className={labelClassName} data-tx={process.env.npm_package_version}>
             <input type="checkbox" className={styles.checkbox} disabled={disabled} {...inputAttributes} ref={ref} />
-            <span className={styles.checkboxIcon} />
+            <span className={clsx(styles.checkboxIcon, wordArt && skinStyles.wordArtCheck)} />
             <CheckmarkIcon className={styles.checkmarkIcon} paletteIndex={7} />
             {children && (
                 <Text size={SIZE_TO_TEXT_SIZE_MAP[size]} tag="div">

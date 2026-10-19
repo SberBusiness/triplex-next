@@ -3,6 +3,8 @@ import React from "react";
 import { LoaderScreen, ILoaderScreenMiddleProps } from "../../LoaderScreen/LoaderScreen";
 import styles from "../styles/ModalWindow.module.less";
 import { Page } from "../../Page/Page";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 
 /** Свойства компонента ModalWindowContent. */
 export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,23 +21,28 @@ export interface IModalWindowContentProps extends React.HTMLAttributes<HTMLDivEl
  * `isLoading` показывает `LoaderScreen` поверх контента.
  */
 export const ModalWindowContent = React.forwardRef<HTMLDivElement, IModalWindowContentProps>(
-    ({ isLoading, className, loaderScreenProps, children, ...rest }, ref) => (
-        <div
-            ref={ref}
-            className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: isLoading })}
-            {...rest}
-        >
-            <Page className={styles.modalWindowContentPage}>{children}</Page>
+    ({ isLoading, className, loaderScreenProps, children, ...rest }, ref) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
+        return (
+            <div
+                ref={ref}
+                className={clsx(styles.modalWindowContent, className, { [styles.isLoading]: isLoading })}
+                {...rest}
+            >
+                <Page className={clsx(styles.modalWindowContentPage, wordArt && skinStyles.wordArtModalSurface)}>
+                    {children}
+                </Page>
 
-            {isLoading && (
-                <LoaderScreen
-                    {...loaderScreenProps}
-                    className={clsx(styles.modalWindowLoaderScreen, loaderScreenProps?.className)}
-                    type="middle"
-                />
-            )}
-        </div>
-    ),
+                {isLoading && (
+                    <LoaderScreen
+                        {...loaderScreenProps}
+                        className={clsx(styles.modalWindowLoaderScreen, loaderScreenProps?.className)}
+                        type="middle"
+                    />
+                )}
+            </div>
+        );
+    },
 );
 
 ModalWindowContent.displayName = "ModalWindowContent";

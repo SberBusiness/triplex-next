@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import { ESegmentedControlTheme, ESegmentedControlType } from "./enums";
 import { ISegmentedControlContextType, SegmentedControlContext } from "./SegmentedControlContext";
@@ -22,10 +24,12 @@ const sizeToClassNameMap = createSizeToClassNameMap(styles);
 export const SegmentedControl = Object.assign(
     React.forwardRef<HTMLDivElement, TSegmentedControlProps>(
         ({ children, className, value, theme, type, size, disabled, onSelect, ...rest }, ref) => {
+            const wordArt = React.useContext(SkinContext) === "wordart";
             const classNames = clsx(
                 styles.segmentedControl,
                 themeToClassNameMap[theme],
                 sizeToClassNameMap[size],
+                wordArt && skinStyles.wordArtSegments,
                 className,
             );
 

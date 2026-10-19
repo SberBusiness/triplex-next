@@ -5,6 +5,8 @@ import { NotificationIcon } from "./components/NotificationIcon";
 import { NotificationTime } from "./components/NotificationTime";
 import React from "react";
 import styles from "./styles/Notification.module.less";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 
 /** Свойства Notification. */
 export interface INotificationProps extends React.ButtonHTMLAttributes<HTMLElement> {
@@ -26,7 +28,8 @@ export const Notification = Object.assign(
         { children, className, withExtraBottomPadding = false, isShowCloseOnHover = false, onClick, ...HTMLAttributes },
         ref,
     ) {
-        const cn = clsx(className, styles.notification, {
+        const wordArt = React.useContext(SkinContext) === "wordart";
+        const cn = clsx(className, styles.notification, wordArt && skinStyles.wordArtNotification, {
             [styles.showCloseOnHover]: isShowCloseOnHover,
             [styles.extraBottomPadding]: withExtraBottomPadding,
         });

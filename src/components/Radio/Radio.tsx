@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { Text, ETextSize } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../utils/classNameMaps";
@@ -30,9 +32,11 @@ const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
  */
 export const Radio = React.forwardRef<HTMLInputElement, IRadioProps>((props, ref) => {
     const { children, className, disabled, labelAttributes, size = EComponentSize.MD, ...inputAttributes } = props;
+    const wordArt = React.useContext(SkinContext) === "wordart";
     const inputClassName = clsx(styles.radio, className, SIZE_TO_CLASS_NAME_MAP[size]);
     const labelClassName = clsx(
         styles.label,
+        wordArt && !disabled && skinStyles.wordArtChoice,
         styles[size],
         { [styles.disabled]: !!disabled, [styles.nonempty]: !!children },
         labelAttributes?.className,
@@ -41,7 +45,7 @@ export const Radio = React.forwardRef<HTMLInputElement, IRadioProps>((props, ref
     return (
         <label {...labelAttributes} className={labelClassName} data-tx={process.env.npm_package_version}>
             <input type="radio" className={inputClassName} disabled={disabled} {...inputAttributes} ref={ref} />
-            <span className={styles.radioIcon} />
+            <span className={clsx(styles.radioIcon, wordArt && skinStyles.wordArtRadio)} />
             {children && (
                 <Text size={SIZE_TO_TEXT_SIZE_MAP[size]} tag="div">
                     {children}

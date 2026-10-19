@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { CardContent } from "@sberbusiness/triplex-next/components/Card/components/CardContent/CardContent";
 import { CardMedia } from "@sberbusiness/triplex-next/components/Card/components/CardMedia";
 import { ECardRoundingSize, ECardTheme } from "@sberbusiness/triplex-next/components/Card/enums";
@@ -19,21 +21,25 @@ interface ICardStaticComposition {
 }
 
 const CardStaticRoot = React.forwardRef<HTMLDivElement, ICardProps>(
-    ({ children, className, roundingSize = ECardRoundingSize.MD, theme = ECardTheme.GENERAL, ...rest }, ref) => (
-        <div
-            className={clsx(
-                cardStyles.card,
-                mapCardThemeToCssClass[theme],
-                mapCardRoundingSizeToCssClass[roundingSize],
-                className,
-            )}
-            {...rest}
-            ref={ref}
-            data-tx={process.env.npm_package_version}
-        >
-            {children}
-        </div>
-    ),
+    ({ children, className, roundingSize = ECardRoundingSize.MD, theme = ECardTheme.GENERAL, ...rest }, ref) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
+        return (
+            <div
+                className={clsx(
+                    cardStyles.card,
+                    mapCardThemeToCssClass[theme],
+                    mapCardRoundingSizeToCssClass[roundingSize],
+                    wordArt && skinStyles.wordArtCard,
+                    className,
+                )}
+                {...rest}
+                ref={ref}
+                data-tx={process.env.npm_package_version}
+            >
+                {children}
+            </div>
+        );
+    },
 );
 
 CardStaticRoot.displayName = "CardStatic";

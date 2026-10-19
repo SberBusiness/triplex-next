@@ -31,6 +31,7 @@ import {
     pickZone,
 } from "@sberbusiness/triplex-next/components/Tooltip/utils/Positioning";
 import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipDesktop.module.less";
+import skinStyles from "../../../../SkinProvider/WordArt.module.less";
 
 // Маппер flow в translate для Tip (стрелочка)
 const flowToTipTranslations: Record<ETooltipFlowTypes, string> = {
@@ -187,7 +188,7 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
             return;
         }
 
-        if (state.isOpen && !isEqual(prevProps.children, props.children)) {
+        if (state.isOpen && (!isEqual(prevProps.children, props.children) || prevProps.className !== props.className)) {
             this.setTooltipBodySize();
             this.setAndCheckResizeTargetBounds();
             this.resolveTooltipLayout();
@@ -551,7 +552,10 @@ export class TooltipDesktopBase extends React.Component<ITooltipDesktopBaseProps
         return (
             <div className={styles.tooltipOverlay}>
                 <div className={classNames} {...rest} ref={this.setTooltipNode}>
-                    <div className={styles.tooltipDesktopContent} ref={this.bodyRef}>
+                    <div
+                        className={clsx(styles.tooltipDesktopContent, skinStyles.wordArtTooltipSurface)}
+                        ref={this.bodyRef}
+                    >
                         {elements.body}
                         {elements.link}
                         {elements.closeButton}

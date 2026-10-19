@@ -44,6 +44,7 @@ import {
     Radio_Tokens,
     SegmentedControlSegment_Tokens,
     SegmentedControl_Tokens,
+    SkinProvider_Tokens,
     Skeleton_Tokens,
     SmallInput_Tokens,
     SMSField_Tokens,
@@ -101,6 +102,7 @@ import {
     TDesignTokensComponentsRadioValue,
     TDesignTokensComponentsSegmentedControlSegmentValue,
     TDesignTokensComponentsSegmentedControlValue,
+    TDesignTokensComponentsSkinProviderValue,
     TDesignTokensComponentsSkeletonValue,
     TDesignTokensComponentsSMSFieldValue,
     TDesignTokensComponentsSliderValue,
@@ -226,6 +228,10 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     SegmentedControlSegment: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlSegmentValue>(
         ETriplexNextTheme.DARK,
         SegmentedControlSegment_Tokens,
+    ),
+    SkinProvider: GetTokensValueByTheme<TDesignTokensComponentsSkinProviderValue>(
+        ETriplexNextTheme.DARK,
+        SkinProvider_Tokens,
     ),
     Skeleton: GetTokensValueByTheme<TDesignTokensComponentsSkeletonValue>(ETriplexNextTheme.DARK, Skeleton_Tokens),
     SmallInput: GetTokensValueByTheme<TDesignTokensComponentsSmallInputValue>(

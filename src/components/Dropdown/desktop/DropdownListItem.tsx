@@ -4,6 +4,8 @@ import { TestProps } from "../../../types/CoreTypes";
 import { EComponentSize } from "../../../enums";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { Badge } from "../../Badge/Badge";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownListItem. */
@@ -47,6 +49,7 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
         },
         ref,
     ) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             onSelect?.();
             onClick?.(event);
@@ -77,6 +80,8 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
             <div
                 className={clsx(
                     styles.dropdownDesktopListItem,
+                    wordArt && skinStyles.wordArtOption,
+                    wordArt && active && skinStyles.wordArtOptionActive,
                     { [styles.active]: !!active, [styles.selected]: !!selected },
                     className,
                 )}

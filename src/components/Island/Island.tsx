@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
 import { EIslandType } from "./enums";
 import { IslandBody } from "./components/IslandBody";
 import { IslandHeader } from "./components/IslandHeader";
@@ -12,6 +13,7 @@ import {
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import styles from "./styles/Island.module.less";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 
 /** Свойства компонента Island. */
 export interface IIslandProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -45,6 +47,7 @@ export const Island = Object.assign(
             },
             ref,
         ) => {
+            const wordArt = React.useContext(SkinContext) === "wordart" && type === EIslandType.TYPE_1;
             return (
                 <div
                     className={clsx(
@@ -52,6 +55,7 @@ export const Island = Object.assign(
                         { [styles.withoutPaddings]: Boolean(withoutPaddings) },
                         mapTypeToClassName(type),
                         SIZE_TO_CLASS_NAME_MAP[size],
+                        wordArt && skinStyles.wordArtIsland,
                         className,
                     )}
                     ref={ref}

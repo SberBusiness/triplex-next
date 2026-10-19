@@ -1,0 +1,668 @@
+// Match the native button's size + theme specificity, independently of CSS import order.
+.wordArtButton.wordArtButton.wordArtButton.wordArtButton {
+    --triplex-next-Loader-Element_Background_Neutral: var(--triplex-next-SkinProvider-WordArt_LabelInk);
+    border: 2px solid var(--triplex-next-SkinProvider-WordArt_LabelInk);
+    color: var(--triplex-next-SkinProvider-WordArt_LabelInk);
+    background: linear-gradient(
+        110deg,
+        var(--triplex-next-SkinProvider-WordArt_Blue),
+        var(--triplex-next-SkinProvider-WordArt_Violet) 22%,
+        var(--triplex-next-SkinProvider-WordArt_Pink) 42%,
+        var(--triplex-next-SkinProvider-WordArt_Gold) 64%,
+        var(--triplex-next-SkinProvider-WordArt_Green) 82%,
+        var(--triplex-next-SkinProvider-WordArt_Cyan)
+    );
+    box-shadow:
+        inset 2px 2px var(--triplex-next-SkinProvider-WordArt_LabelSurface),
+        inset -2px -2px var(--triplex-next-SkinProvider-WordArt_Purple),
+        1px 1px var(--triplex-next-SkinProvider-WordArt_Violet),
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        3px 3px var(--triplex-next-SkinProvider-WordArt_Purple),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        5px 5px var(--triplex-next-SkinProvider-WordArt_Purple),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_LabelInk),
+        7px 7px var(--triplex-next-SkinProvider-WordArt_LabelInk),
+        9px 11px var(--triplex-next-SkinProvider-WordArt_Shadow);
+    text-shadow: none;
+    transition:
+        transform 120ms ease,
+        box-shadow 120ms ease;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 3px 4px auto;
+        height: 42%;
+        border-radius: 4px 4px 35% 35%;
+        background: linear-gradient(var(--triplex-next-SkinProvider-WordArt_Gloss), transparent);
+        pointer-events: none;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        right: 5px;
+        width: 10px;
+        height: 10px;
+        clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+        background: var(--triplex-next-SkinProvider-WordArt_LabelSurface);
+        pointer-events: none;
+    }
+
+    &:not(:disabled):hover {
+        transform: translate(-1px, -2px);
+    }
+
+    &:not(:disabled):active,
+    &:not(:disabled)[aria-expanded="true"] {
+        transform: translate(5px, 5px);
+        box-shadow:
+            inset 2px 2px var(--triplex-next-SkinProvider-WordArt_Purple),
+            1px 1px var(--triplex-next-SkinProvider-WordArt_LabelInk),
+            2px 2px var(--triplex-next-SkinProvider-WordArt_LabelInk),
+            4px 5px var(--triplex-next-SkinProvider-WordArt_Shadow);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 5px;
+    }
+
+    &:disabled {
+        filter: grayscale(0.8);
+        opacity: 0.55;
+    }
+}
+
+// Use the existing content slot: consumers do not need an extra span around the label.
+.wordArtButton .wordArtLabel.wordArtLabel {
+    z-index: 1;
+    display: inline-flex;
+    padding-inline: 4px;
+    border-radius: 3px;
+    background: var(--triplex-next-SkinProvider-WordArt_LabelSurface);
+    color: var(--triplex-next-SkinProvider-WordArt_LabelInk);
+    box-shadow: 0 1px var(--triplex-next-SkinProvider-WordArt_Violet);
+}
+
+.wordArtButton .wordArtLabelLarge.wordArtLabelLarge {
+    padding: 5px 12px;
+}
+
+// GENERAL icons normally use the light palette. Keep their reading surface dark.
+.wordArtButton .wordArtIconLabel.wordArtIconLabel {
+    gap: 6px;
+    background: var(--triplex-next-SkinProvider-WordArt_LabelInk);
+    color: var(--triplex-next-SkinProvider-WordArt_LabelSurface);
+    padding-inline: 0;
+}
+
+.wordArtField.wordArtField.wordArtField {
+    border-radius: 0;
+}
+
+// Only default fields receive the decorative surface. Error, warning and disabled retain native tokens.
+.wordArtFieldSurface.wordArtFieldSurface.wordArtFieldSurface {
+    --triplex-next-FormField-Background_Default: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-FormField-Background_Hover: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-FormField-Background_Active: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-FormField-Input_Color_Default: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-FormField-Label_Color_Default: var(--triplex-next-SkinProvider-WordArt_Muted);
+    --triplex-next-FormField-Target_Color_Default: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-FormField-Placeholder_Color: var(--triplex-next-SkinProvider-WordArt_Muted);
+    --triplex-next-FormField-Target_PlaceholderColor_Default: var(--triplex-next-SkinProvider-WordArt_Muted);
+    box-shadow:
+        inset 0 0 0 2px var(--triplex-next-SkinProvider-WordArt_Purple),
+        3px 3px var(--triplex-next-SkinProvider-WordArt_Shadow);
+
+    &:focus-within,
+    &.wordArtFieldActive {
+        box-shadow:
+            inset 0 0 0 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+            5px 5px var(--triplex-next-SkinProvider-WordArt_Violet);
+    }
+}
+
+.wordArtIsland.wordArtIsland.wordArtIsland {
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 5px solid transparent;
+    background:
+        linear-gradient(
+                var(--triplex-next-SkinProvider-WordArt_Surface),
+                var(--triplex-next-SkinProvider-WordArt_Surface)
+            )
+            padding-box,
+        linear-gradient(
+                130deg,
+                var(--triplex-next-SkinProvider-WordArt_Blue),
+                var(--triplex-next-SkinProvider-WordArt_Violet) 22%,
+                var(--triplex-next-SkinProvider-WordArt_Pink) 44%,
+                var(--triplex-next-SkinProvider-WordArt_Gold) 65%,
+                var(--triplex-next-SkinProvider-WordArt_Green) 82%,
+                var(--triplex-next-SkinProvider-WordArt_Cyan)
+            )
+            border-box;
+    outline: 1px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+    box-shadow:
+        inset 0 0 0 1px var(--triplex-next-SkinProvider-WordArt_Shadow),
+        1px 1px var(--triplex-next-SkinProvider-WordArt_Violet),
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        3px 3px var(--triplex-next-SkinProvider-WordArt_Purple),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        5px 5px var(--triplex-next-SkinProvider-WordArt_Pink),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_Pink),
+        7px 7px var(--triplex-next-SkinProvider-WordArt_Amber),
+        8px 8px var(--triplex-next-SkinProvider-WordArt_Amber),
+        9px 9px var(--triplex-next-SkinProvider-WordArt_LabelInk),
+        12px 14px 12px var(--triplex-next-SkinProvider-WordArt_Shadow);
+}
+
+// Raised secondary/danger buttons retain the native size, label and semantic danger colors.
+.wordArtSecondaryButton.wordArtSecondaryButton.wordArtSecondaryButton.wordArtSecondaryButton,
+.wordArtDangerButton.wordArtDangerButton.wordArtDangerButton.wordArtDangerButton {
+    &:not(:disabled) {
+        border: 1px solid var(--triplex-next-SkinProvider-WordArt_Purple);
+        box-shadow:
+            inset 1px 2px var(--triplex-next-SkinProvider-WordArt_Gloss),
+            inset -1px -2px var(--triplex-next-SkinProvider-WordArt_Violet),
+            3px 3px var(--triplex-next-SkinProvider-WordArt_Purple),
+            5px 6px var(--triplex-next-SkinProvider-WordArt_Shadow);
+    }
+
+    &:not(:disabled):active,
+    &:not(:disabled)[aria-expanded="true"] {
+        transform: translate(2px, 2px);
+        box-shadow:
+            inset 1px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+            1px 1px var(--triplex-next-SkinProvider-WordArt_Purple);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 4px;
+    }
+}
+
+.wordArtSecondaryButton.wordArtSecondaryButton.wordArtSecondaryButton.wordArtSecondaryButton:not(:disabled) {
+    --triplex-next-Loader-Element_Background_Brand: var(--triplex-next-SkinProvider-WordArt_Ink);
+    background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    color: var(--triplex-next-SkinProvider-WordArt_Ink);
+
+    &:hover {
+        border-color: var(--triplex-next-SkinProvider-WordArt_Pink);
+    }
+}
+
+.wordArtLinkButton.wordArtLinkButton.wordArtLinkButton:not(:disabled) {
+    color: var(--triplex-next-SkinProvider-WordArt_Ink);
+    text-decoration: underline;
+    text-decoration-color: var(--triplex-next-SkinProvider-WordArt_Pink);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+
+    &:hover {
+        text-decoration-color: var(--triplex-next-SkinProvider-WordArt_Blue);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 3px;
+    }
+}
+
+// Paint only the control. Labels, native inputs and their sibling order remain intact.
+.wordArtChoice.wordArtChoice {
+    --triplex-next-Checkbox-Checkmark_Fill_Default: var(--triplex-next-SkinProvider-WordArt_LabelSurface);
+    --triplex-next-Radio-Dot_Default: var(--triplex-next-SkinProvider-WordArt_LabelSurface);
+
+    > input:enabled + .wordArtCheck.wordArtCheck,
+    > input:enabled + .wordArtRadio.wordArtRadio {
+        background: var(--triplex-next-SkinProvider-WordArt_Surface);
+        box-shadow:
+            inset 0 0 0 1px var(--triplex-next-SkinProvider-WordArt_Purple),
+            inset 2px 2px var(--triplex-next-SkinProvider-WordArt_Gloss),
+            2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+            3px 3px var(--triplex-next-SkinProvider-WordArt_Purple);
+    }
+
+    > input:enabled:checked + .wordArtCheck,
+    > input:enabled:checked + .wordArtRadio {
+        background: linear-gradient(
+            135deg,
+            var(--triplex-next-SkinProvider-WordArt_Violet),
+            var(--triplex-next-SkinProvider-WordArt_Purple) 55%,
+            var(--triplex-next-SkinProvider-WordArt_Pink)
+        );
+    }
+
+    > input:enabled:focus-visible + .wordArtCheck,
+    > input:enabled:focus-visible + .wordArtRadio {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 4px;
+    }
+
+    @media (hover: hover) {
+        > input:enabled:hover + .wordArtCheck,
+        > input:enabled:hover + .wordArtRadio {
+            outline: 1px solid var(--triplex-next-SkinProvider-WordArt_Pink);
+            outline-offset: 1px;
+        }
+
+        > input:enabled:hover:focus-visible + .wordArtCheck,
+        > input:enabled:hover:focus-visible + .wordArtRadio {
+            outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+            outline-offset: 4px;
+        }
+    }
+}
+
+// Shared material, with a plain surface behind all content and a rainbow confined to the rim.
+.rainbowFrame() {
+    background:
+        linear-gradient(
+                var(--triplex-next-SkinProvider-WordArt_Surface),
+                var(--triplex-next-SkinProvider-WordArt_Surface)
+            )
+            padding-box,
+        linear-gradient(
+                120deg,
+                var(--triplex-next-SkinProvider-WordArt_Blue),
+                var(--triplex-next-SkinProvider-WordArt_Violet),
+                var(--triplex-next-SkinProvider-WordArt_Pink),
+                var(--triplex-next-SkinProvider-WordArt_Gold),
+                var(--triplex-next-SkinProvider-WordArt_Cyan)
+            )
+            border-box;
+}
+
+.wordArtChip.wordArtChip.wordArtChip.wordArtChip {
+    .rainbowFrame();
+    border: 2px solid transparent;
+    color: var(--triplex-next-SkinProvider-WordArt_Ink);
+    box-shadow: 2px 3px var(--triplex-next-SkinProvider-WordArt_Purple);
+
+    &:hover {
+        box-shadow: 3px 4px var(--triplex-next-SkinProvider-WordArt_Pink);
+    }
+
+    &.wordArtChipSelected,
+    &[aria-expanded="true"] {
+        border-color: var(--triplex-next-SkinProvider-WordArt_Violet);
+        box-shadow:
+            inset 0 -3px var(--triplex-next-SkinProvider-WordArt_Pink),
+            2px 3px var(--triplex-next-SkinProvider-WordArt_Purple);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 4px;
+    }
+}
+
+.wordArtTag.wordArtTag.wordArtTag {
+    .rainbowFrame();
+    border: 1px solid transparent;
+    box-shadow: 2px 2px var(--triplex-next-SkinProvider-WordArt_Violet);
+}
+
+.wordArtSegments.wordArtSegments.wordArtSegments {
+    background: var(--triplex-next-SkinProvider-WordArt_Shadow);
+    box-shadow:
+        inset 0 0 0 1px var(--triplex-next-SkinProvider-WordArt_Violet),
+        3px 3px var(--triplex-next-SkinProvider-WordArt_Purple);
+}
+
+// Native segment rules include the group theme, selection and hover; keep skin specificity above them.
+.wordArtSegment.wordArtSegment.wordArtSegment.wordArtSegment:not(:disabled) {
+    background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    color: var(--triplex-next-SkinProvider-WordArt_Ink);
+    border: 2px solid transparent;
+
+    &[aria-pressed="true"] {
+        .rainbowFrame();
+        box-shadow:
+            inset 0 -2px var(--triplex-next-SkinProvider-WordArt_Pink),
+            1px 2px var(--triplex-next-SkinProvider-WordArt_Purple);
+        font-weight: 600;
+    }
+
+    &:hover {
+        border-color: var(--triplex-next-SkinProvider-WordArt_Violet);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 1px;
+    }
+}
+
+// CardAction already draws selected/focus rings above media. Retain that mechanism and native radius.
+.wordArtCard.wordArtCard.wordArtCard.wordArtCard.wordArtCard {
+    --triplex-next-Card-Shadow_Selected: inset 0 0 0 3px var(--triplex-next-SkinProvider-WordArt_Pink);
+    --triplex-next-Card-Shadow_Selected_Hover: inset 0 0 0 3px var(--triplex-next-SkinProvider-WordArt_Violet);
+    --triplex-next-Card-Shadow_Focus: inset 0 0 0 3px var(--triplex-next-SkinProvider-WordArt_Ink);
+    .rainbowFrame();
+    border: 4px solid transparent;
+    box-shadow:
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_Pink),
+        8px 8px var(--triplex-next-SkinProvider-WordArt_Amber),
+        10px 12px var(--triplex-next-SkinProvider-WordArt_Shadow);
+}
+
+// Surface classes live on the portal content, so the backdrop and positioning stay native.
+.wordArtDropdown.wordArtDropdown.wordArtDropdown {
+    .rainbowFrame();
+    border: 3px solid transparent;
+    box-shadow:
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_Pink),
+        8px 10px 12px var(--triplex-next-SkinProvider-WordArt_Shadow);
+}
+
+.wordArtOption.wordArtOption.wordArtOption {
+    background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    color: var(--triplex-next-SkinProvider-WordArt_Ink);
+
+    &[aria-selected="true"] {
+        background: linear-gradient(
+            90deg,
+            var(--triplex-next-SkinProvider-WordArt_Violet) 4px,
+            var(--triplex-next-SkinProvider-WordArt_Surface) 4px
+        );
+        box-shadow: inset 0 0 0 1px var(--triplex-next-SkinProvider-WordArt_Violet);
+    }
+
+    // Active navigation and selection remain distinct, including when both apply to one option.
+    &.wordArtOptionActive,
+    &:active,
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: -2px;
+        box-shadow: inset 0 -3px var(--triplex-next-SkinProvider-WordArt_Pink);
+    }
+}
+
+.wordArtMobileDropdown.wordArtMobileDropdown.wordArtMobileDropdown {
+    --triplex-next-DropdownMobile-Header_Background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-DropdownMobile-Content_Background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-DropdownMobile-Footer_Background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-DropdownMobile-Border_Color: var(--triplex-next-SkinProvider-WordArt_Violet);
+    .rainbowFrame();
+    box-sizing: border-box;
+    border: 3px solid transparent;
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px var(--triplex-next-SkinProvider-WordArt_Purple);
+}
+
+.wordArtTabs.wordArtTabs.wordArtTabs {
+    background: var(--triplex-next-SkinProvider-WordArt_Shadow);
+    box-shadow:
+        inset 0 0 0 1px var(--triplex-next-SkinProvider-WordArt_Violet),
+        3px 3px var(--triplex-next-SkinProvider-WordArt_Purple);
+}
+
+// Keep border widths and type metrics unchanged: TabsExtended measures copies of these buttons.
+.wordArtTab.wordArtTab.wordArtTab.wordArtTab {
+    background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    border-color: transparent;
+
+    &[aria-selected="true"] {
+        .rainbowFrame();
+        box-shadow:
+            inset 0 -2px var(--triplex-next-SkinProvider-WordArt_Pink),
+            1px 2px var(--triplex-next-SkinProvider-WordArt_Purple);
+    }
+
+    &:not(:disabled):hover {
+        border-color: var(--triplex-next-SkinProvider-WordArt_Violet);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: -2px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+}
+
+.wordArtLineTab.wordArtLineTab.wordArtLineTab {
+    &::after {
+        height: 4px;
+        border: none;
+        background: transparent;
+        transition: none;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+        background: var(--triplex-next-SkinProvider-WordArt_Violet);
+    }
+
+    &.wordArtLineTabSelected::after,
+    &[aria-expanded="true"]::after {
+        height: 6px;
+        background: linear-gradient(
+            100deg,
+            var(--triplex-next-SkinProvider-WordArt_Blue),
+            var(--triplex-next-SkinProvider-WordArt_Violet),
+            var(--triplex-next-SkinProvider-WordArt_Pink),
+            var(--triplex-next-SkinProvider-WordArt_Gold)
+        );
+        box-shadow: inset 0 -2px var(--triplex-next-SkinProvider-WordArt_Purple);
+    }
+
+    &:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--triplex-next-SkinProvider-WordArt_Ink);
+    }
+}
+
+.wordArtModalSurface.wordArtModalSurface.wordArtModalSurface {
+    .rainbowFrame();
+    border: 5px solid transparent;
+    box-shadow:
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_Pink),
+        8px 8px var(--triplex-next-SkinProvider-WordArt_Amber),
+        10px 12px 20px var(--triplex-next-SkinProvider-WordArt_Shadow);
+
+    // Header, body and footer are Islands. Flatten only these immediate sections, not nested cards.
+    > .wordArtIsland.wordArtIsland {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    }
+}
+
+.wordArtTable.wordArtTable.wordArtTable {
+    --triplex-next-TableBasic-Header_Background: var(--triplex-next-SkinProvider-WordArt_Surface);
+    --triplex-next-TableBasic-Color: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-TableBasic-Background_Hover: var(--triplex-next-SkinProvider-WordArt_Shadow);
+    --triplex-next-TableBasic-Background_Selected: var(--triplex-next-SkinProvider-WordArt_Shadow);
+    .rainbowFrame();
+    border: 3px solid transparent;
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow:
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_Pink);
+
+    > table > thead > tr > th {
+        box-shadow:
+            inset 0 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+            inset 0 -3px var(--triplex-next-SkinProvider-WordArt_Pink);
+    }
+
+    > table > tbody > .wordArtTableSelected > td {
+        box-shadow: inset 0 -2px var(--triplex-next-SkinProvider-WordArt_Violet);
+
+        &:first-child {
+            box-shadow:
+                inset 4px 0 var(--triplex-next-SkinProvider-WordArt_Pink),
+                inset 0 -2px var(--triplex-next-SkinProvider-WordArt_Violet);
+        }
+    }
+}
+
+// Scope the measured surface and native arrow together. No filter or transform on the overlay.
+.wordArtTooltip.wordArtTooltip {
+    --triplex-next-Tooltip-Background: var(--triplex-next-SkinProvider-WordArt_Purple);
+    --triplex-next-Tooltip-Color: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-Tooltip-Link_Desktop_Color_Default: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-Tooltip-Link_Desktop_Color_Hover: var(--triplex-next-SkinProvider-WordArt_Muted);
+    --triplex-next-Tooltip-Link_Desktop_Color_Active: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-Tooltip-Link_Desktop_Shadow_Focus: 0 0 0 2px var(--triplex-next-SkinProvider-WordArt_Ink);
+
+    > .wordArtTooltipSurface {
+        .rainbowFrame();
+        border: 2px solid transparent;
+        box-shadow:
+            2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+            4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+            6px 6px var(--triplex-next-SkinProvider-WordArt_Pink);
+    }
+}
+
+.wordArtNotification.wordArtNotification.wordArtNotification {
+    --triplex-next-Notification-Color: var(--triplex-next-SkinProvider-WordArt_Ink);
+    --triplex-next-Notification-TimeColor: var(--triplex-next-SkinProvider-WordArt_Muted);
+    .rainbowFrame();
+    border: 3px solid transparent;
+    box-shadow:
+        inset 1px 1px var(--triplex-next-SkinProvider-WordArt_Gloss),
+        2px 2px var(--triplex-next-SkinProvider-WordArt_Violet),
+        4px 4px var(--triplex-next-SkinProvider-WordArt_Purple),
+        6px 6px var(--triplex-next-SkinProvider-WordArt_Pink),
+        8px 10px 12px var(--triplex-next-SkinProvider-WordArt_Shadow);
+}
+
+.wordArtNotificationLayer.wordArtNotificationLayer.wordArtNotificationLayer {
+    .rainbowFrame();
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    box-shadow: 3px 3px var(--triplex-next-SkinProvider-WordArt_Purple);
+}
+
+// Reserve room for the extrusion and keyboard outline inside CarouselExtended's clipping area.
+.wordArtStepper.wordArtStepper {
+    padding: 3px 7px 8px 3px;
+}
+
+// Keep the native dimensions and arrow paths; drop-shadow follows the complete silhouette.
+.wordArtStep.wordArtStep.wordArtStep.wordArtStep {
+    --triplex-next-runtime-wordart-step-edge: var(--triplex-next-SkinProvider-WordArt_Purple);
+    scroll-margin: 3px 7px 8px 3px;
+    filter: drop-shadow(1px 1px 0 var(--triplex-next-SkinProvider-WordArt_Shadow));
+
+    > .wordArtStepSurface {
+        border-color: var(--triplex-next-runtime-wordart-step-edge);
+        box-shadow:
+            inset 0 2px var(--triplex-next-SkinProvider-WordArt_Gloss),
+            inset 0 -2px var(--triplex-next-runtime-wordart-step-edge);
+    }
+
+    > svg path:last-child {
+        fill: var(--triplex-next-runtime-wordart-step-edge);
+    }
+
+    &.wordArtStepNeutral {
+        > .wordArtStepSurface {
+            background: var(--triplex-next-SkinProvider-WordArt_Surface);
+            color: var(--triplex-next-SkinProvider-WordArt_Ink);
+        }
+
+        > svg path:first-child {
+            fill: var(--triplex-next-SkinProvider-WordArt_Surface);
+        }
+    }
+
+    &.wordArtStepCompleted {
+        filter: drop-shadow(1px 2px 0 var(--triplex-next-runtime-wordart-step-edge));
+    }
+
+    &[aria-current="true"] {
+        filter: drop-shadow(1px 2px 0 var(--triplex-next-runtime-wordart-step-edge))
+            drop-shadow(1px 2px 0 var(--triplex-next-runtime-wordart-step-edge));
+    }
+
+    &.wordArtStepNeutral[aria-current="true"] {
+        > .wordArtStepSurface {
+            // The content-box is an opaque reading surface, including any consumer-supplied icon.
+            background:
+                linear-gradient(
+                        var(--triplex-next-SkinProvider-WordArt_LabelSurface),
+                        var(--triplex-next-SkinProvider-WordArt_LabelSurface)
+                    )
+                    content-box,
+                linear-gradient(
+                    90deg,
+                    var(--triplex-next-SkinProvider-WordArt_Blue),
+                    var(--triplex-next-SkinProvider-WordArt_Violet) 22%,
+                    var(--triplex-next-SkinProvider-WordArt_Pink) 44%,
+                    var(--triplex-next-SkinProvider-WordArt_Gold) 66%,
+                    var(--triplex-next-SkinProvider-WordArt_Cyan)
+                );
+            color: var(--triplex-next-SkinProvider-WordArt_LabelInk);
+        }
+
+        > svg path:first-child {
+            fill: var(--triplex-next-SkinProvider-WordArt_Cyan);
+        }
+    }
+
+    // Semantic fills and text remain native; only the bevel/extrusion uses their status border.
+    &.wordArtStepError {
+        --triplex-next-runtime-wordart-step-edge: var(--triplex-next-Stepper-Step_BorderColor_Error);
+    }
+
+    &.wordArtStepWarning {
+        --triplex-next-runtime-wordart-step-edge: var(--triplex-next-Stepper-Step_BorderColor_Warning);
+    }
+
+    &:not([aria-disabled="true"]):not([aria-current="true"]):hover {
+        > .wordArtStepSurface {
+            box-shadow:
+                inset 0 2px var(--triplex-next-SkinProvider-WordArt_Gloss),
+                inset 0 -3px var(--triplex-next-runtime-wordart-step-edge);
+        }
+    }
+
+    // A read-only current step (for example, a finished wizard) still identifies the current stage.
+    &[aria-disabled="true"]:not([aria-current="true"]) {
+        filter: none;
+
+        > .wordArtStepSurface {
+            background: var(--triplex-next-Stepper-Step_Background_Disabled);
+            border-color: var(--triplex-next-Stepper-Step_Background_Disabled);
+            color: var(--triplex-next-Stepper-Step_Color_Disabled);
+            box-shadow: none;
+        }
+
+        > svg path {
+            fill: var(--triplex-next-Stepper-Step_Background_Disabled);
+        }
+    }
+
+    &.wordArtStepFocusVisible:not([aria-disabled="true"]) {
+        outline: 2px solid var(--triplex-next-SkinProvider-WordArt_Ink);
+        outline-offset: 1px;
+        border-radius: 6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wordArtButton.wordArtButton.wordArtButton.wordArtButton {
+        transition: none;
+    }
+}

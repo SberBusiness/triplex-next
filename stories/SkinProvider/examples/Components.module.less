@@ -1,0 +1,48 @@
+// Story styles are not hashed. Scope every layout rule to this example.
+.skinComponentsExample {
+    display: grid;
+    gap: 32px;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 24px 24px 40px;
+
+    .heading {
+        display: grid;
+        gap: 8px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 28px;
+        align-items: start;
+    }
+
+    .stack {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+        min-width: 0;
+    }
+
+    .choices {
+        display: grid;
+        gap: 16px;
+    }
+
+    .row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+
+    .cardRow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}

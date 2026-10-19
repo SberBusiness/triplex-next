@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import {
     CrossStrokeSrvIcon16,
     CrossStrokeSrvIcon20,
@@ -55,6 +57,7 @@ export const Tag = React.forwardRef<HTMLSpanElement, ITagProps>(
         { children, id, className, size, disabled, onRemove, onEdit, removeButtonProps, editButtonProps, ...restProps },
         ref,
     ) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         // onClick кнопок вынимается из props, чтобы колбэк тега вызвался до пользовательского обработчика.
         const { onClick: onEditButtonClick, ...restEditButtonProps } = editButtonProps ?? {};
         const { onClick: onRemoveButtonClick, ...restRemoveButtonProps } = removeButtonProps ?? {};
@@ -72,7 +75,12 @@ export const Tag = React.forwardRef<HTMLSpanElement, ITagProps>(
         return (
             <span
                 id={id}
-                className={clsx(styles.tag, SIZE_TO_CLASS_NAME_MAP[size], className)}
+                className={clsx(
+                    styles.tag,
+                    SIZE_TO_CLASS_NAME_MAP[size],
+                    wordArt && !disabled && skinStyles.wordArtTag,
+                    className,
+                )}
                 {...restProps}
                 ref={ref}
             >

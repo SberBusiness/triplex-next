@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { FormFieldContext, IFormFieldContext } from "./FormFieldContext";
 import { TARGET_PADDING_X_DEFAULT } from "./consts";
 import { EFormFieldStatus } from "./enums";
@@ -49,6 +51,7 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
         },
         ref,
     ) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         const [targetId, setTargetId] = useState<string>();
         const [labelId, setLabelId] = useState<string>();
         const [postfixWidth, setPostfixWidth] = useState(TARGET_PADDING_X_DEFAULT);
@@ -93,6 +96,9 @@ export const FormField = React.forwardRef<HTMLDivElement, IFormFieldProps>(
                         styles.formField,
                         SIZE_TO_CLASS_NAME_MAP[size],
                         STATUS_TO_CLASS_NAME_MAP[status],
+                        wordArt && skinStyles.wordArtField,
+                        wordArt && status === EFormFieldStatus.DEFAULT && skinStyles.wordArtFieldSurface,
+                        wordArt && isActive && skinStyles.wordArtFieldActive,
                         {
                             [styles.filled]: filled,
                             [styles.active]: isActive,

@@ -406,6 +406,28 @@ describe("Stepper", () => {
             expect(carousel.scrollLeft).toBe(500);
         });
 
+        it("leaves room for the last step's shadow when its box is already at the right edge", () => {
+            const { carousel, selectStep } = renderWithLayout(500);
+            const lastStep = getStep("Step 3");
+            mockRect(lastStep, { left: 40, right: 100 });
+            lastStep.style.scrollMarginRight = "7px";
+
+            selectStep("step3");
+
+            expect(carousel.scrollLeft).toBeGreaterThan(500);
+        });
+
+        it("leaves room for the first step's keyboard outline at the left edge", () => {
+            const { carousel, selectStep } = renderWithLayout(500, "step3");
+            const firstStep = getStep("Step 1");
+            mockRect(firstStep, { left: 0, right: 60 });
+            firstStep.style.scrollMarginLeft = "3px";
+
+            selectStep("step1");
+
+            expect(carousel.scrollLeft).toBeLessThan(500);
+        });
+
         it("centers the step on narrow screens", () => {
             const matchMediaSpy = vi
                 .spyOn(window, "matchMedia")

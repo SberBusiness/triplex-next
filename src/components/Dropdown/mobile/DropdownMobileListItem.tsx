@@ -4,6 +4,8 @@ import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import { Badge } from "../../Badge/Badge";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileListItem. */
@@ -21,6 +23,7 @@ export interface IDropdownMobileListItemProps extends React.HTMLAttributes<HTMLD
 /** Элемент списка мобильной версии Dropdown. */
 export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdownMobileListItemProps>(
     ({ children, className, id, onClick, onSelect, selected, showNotificationIcon, ...htmlAttributes }, ref) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             onSelect?.();
             onClick?.(event);
@@ -30,7 +33,12 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
             <Text
                 tag="div"
                 size={ETextSize.B3}
-                className={clsx(styles.dropdownMobileListItem, { [styles.selected]: Boolean(selected) }, className)}
+                className={clsx(
+                    styles.dropdownMobileListItem,
+                    wordArt && skinStyles.wordArtOption,
+                    { [styles.selected]: Boolean(selected) },
+                    className,
+                )}
                 aria-selected={Boolean(selected)}
                 role="option"
                 ref={ref}

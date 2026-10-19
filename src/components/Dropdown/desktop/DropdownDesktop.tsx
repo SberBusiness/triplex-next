@@ -5,6 +5,8 @@ import { EComponentSize } from "../../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { useToken } from "../../ThemeProvider/useToken";
 import { isKey } from "../../../utils/keyboard";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/DropdownDesktop.module.less";
 
 /** Свойства компонента DropdownDesktop. */
@@ -52,11 +54,18 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         setOpened,
         ...rest
     } = props;
+    const wordArt = React.useContext(SkinContext) === "wordart";
     const [styleState, setStyleState] = useState<React.CSSProperties>({ opacity: 0 });
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     const { scopeClassName } = useToken();
-    const classNames = clsx(styles.dropdownDesktop, sizeToClassNameMap[size], scopeClassName, className);
+    const classNames = clsx(
+        styles.dropdownDesktop,
+        sizeToClassNameMap[size],
+        scopeClassName,
+        wordArt && skinStyles.wordArtDropdown,
+        className,
+    );
 
     /** Блокировка скролла вне дропдауна. */
     const wheelHandler = useCallback((event: WheelEvent) => {

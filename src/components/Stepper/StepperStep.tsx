@@ -2,12 +2,15 @@ import React, { useState, useContext, useRef } from "react";
 import clsx from "clsx";
 import { StepperStepIcon } from "./StepperStepIcon";
 import { createSizeToClassNameMap, isKey } from "../../utils";
+import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { StepperExtendedContext } from "./StepperExtendedContext";
 import { EFocusSource } from "../../enums/EFocusSource";
 import { EStepperStepType } from "./enums";
 import { StepperStepArrowBorder } from "./StepperStepArrowBorder";
 import { IconWrapper } from "../IconWrapper";
 import { IStepperStepProps } from "./types";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import styles from "./styles/StepperStep.module.less";
 
 /** Внутренние составляющие StepperStep. */
@@ -35,6 +38,7 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
     ...rest
 }) => {
     const { selectedId, size, onSelectStep } = useContext(StepperExtendedContext);
+    const wordArt = useContext(SkinContext) === "wordart";
     const [focusSource, setFocusSource] = useState(EFocusSource.NONE);
     const ref = useRef<HTMLLIElement | null>(null);
     const progress = id === selectedId;
@@ -51,6 +55,12 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
             [styles.error]: !disabled && type === EStepperStepType.ERROR,
             [styles.warning]: !disabled && type === EStepperStepType.WARNING,
             [styles.focusVisible]: focusSource === EFocusSource.KEYBOARD,
+            [skinStyles.wordArtStep]: wordArt,
+            [skinStyles.wordArtStepNeutral]: wordArt && (disabled || type === EStepperStepType.NEUTRAL),
+            [skinStyles.wordArtStepCompleted]: wordArt && !progress && !isInActiveStep,
+            [skinStyles.wordArtStepError]: wordArt && !disabled && type === EStepperStepType.ERROR,
+            [skinStyles.wordArtStepWarning]: wordArt && !disabled && type === EStepperStepType.WARNING,
+            [skinStyles.wordArtStepFocusVisible]: wordArt && focusSource === EFocusSource.KEYBOARD,
         },
         className,
     );
@@ -107,12 +117,7 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
     const setRef = (instance: HTMLLIElement | null) => {
         ref.current = instance;
 
-        if (typeof forwardedRef === "function") {
-            forwardedRef(instance);
-        } else if (forwardedRef) {
-            // eslint-disable-next-line react-hooks/immutability
-            (forwardedRef as React.MutableRefObject<HTMLLIElement | null>).current = instance;
-        }
+        setForwardedRef(forwardedRef, instance);
     };
 
     const renderIcon = () => (
@@ -122,7 +127,10 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
     );
 
     const renderContent = () => (
-        <div className={styles.content} data-tx={process.env.npm_package_version}>
+        <div
+            className={clsx(styles.content, wordArt && skinStyles.wordArtStepSurface)}
+            data-tx={process.env.npm_package_version}
+        >
             {icon && renderIcon()}
             {children}
         </div>

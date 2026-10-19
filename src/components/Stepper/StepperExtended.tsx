@@ -1,10 +1,12 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import clsx from "clsx";
 import { StepperStep } from "./StepperStep";
 import { StepperExtendedContext } from "./StepperExtendedContext";
 import { IStepperExtendedProps } from "./types";
 import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { EComponentSize } from "../../enums";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import styles from "./styles/StepperExtended.module.less";
 
 /** Внутренние составляющие StepperExtended. */
@@ -25,6 +27,7 @@ const StepperExtendedRoot = React.forwardRef<HTMLOListElement, IStepperExtendedP
         },
         ref,
     ) => {
+        const wordArt = useContext(SkinContext) === "wordart";
         const contextValue = useMemo(
             () => ({ selectedId: selectedStepId, size, onSelectStep }),
             [selectedStepId, size, onSelectStep],
@@ -42,7 +45,7 @@ const StepperExtendedRoot = React.forwardRef<HTMLOListElement, IStepperExtendedP
         return (
             <StepperExtendedContext.Provider value={contextValue}>
                 <ol
-                    className={clsx(styles.stepperExtended, className)}
+                    className={clsx(styles.stepperExtended, wordArt && skinStyles.wordArtStepper, className)}
                     role="tablist"
                     {...htmlOlAttributes}
                     ref={setRef}

@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { ButtonBase } from "../Button/ButtonBase";
 import { IconWrapper } from "../IconWrapper";
 import { ESegmentedControlType } from "./enums";
@@ -11,6 +13,7 @@ import styles from "./styles/SegmentedControlSegment.module.less";
 /** Элемент SegmentedControl, представляет собой опцию для выбора. */
 export const SegmentedControlSegment = React.forwardRef<HTMLButtonElement, ISegmentedControlSegmentProps>(
     ({ children, className, value, title, disabled, onClick, ...rest }, ref) => {
+        const wordArt = useContext(SkinContext) === "wordart";
         const {
             type,
             value: valueFromContext,
@@ -20,7 +23,12 @@ export const SegmentedControlSegment = React.forwardRef<HTMLButtonElement, ISegm
 
         const selected = isSegmentSelected(type, value, valueFromContext);
         const isDisabled = disabled || disabledFromContext;
-        const classNames = clsx(styles.segmentedControlSegment, { [styles.selected]: selected }, className);
+        const classNames = clsx(
+            styles.segmentedControlSegment,
+            { [styles.selected]: selected },
+            wordArt && skinStyles.wordArtSegment,
+            className,
+        );
 
         const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
             switch (type) {

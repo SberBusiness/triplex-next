@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { IOverlayChildrenProvideProps } from "@sberbusiness/triplex-next/components/Overlay/OverlayBase";
 import { useToken } from "../../ThemeProvider/useToken";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/DropdownMobile.module.less";
 
 /** Свойства компонента DropdownMobileInner. */
@@ -23,6 +25,7 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
         },
         ref,
     ) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         // OpeningState после рендера становится равен openingProps. Чтобы появилась анимация открытия, сначала нужно отрендерить элемент в закрытом виде.
         const [openingState, setOpeningState] = useState(false);
         const [openedState, setOpenedState] = useState(false);
@@ -48,7 +51,7 @@ export const DropdownMobileInner = React.forwardRef<HTMLDivElement, IDropdownMob
             [styles.opening]: openingState,
         });
 
-        const classNamesContent = clsx(styles.dropdownMobile, {
+        const classNamesContent = clsx(styles.dropdownMobile, wordArt && skinStyles.wordArtMobileDropdown, {
             [styles.closing]: closing,
             [styles.opened]: openedState,
             [styles.opening]: openingState,

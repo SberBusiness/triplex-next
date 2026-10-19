@@ -1,4 +1,6 @@
 import React from "react";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { ICardActionProps } from "@sberbusiness/triplex-next/components/Card/types";
 import { CardContent } from "@sberbusiness/triplex-next/components/Card/components/CardContent/CardContent";
 import { CardMedia } from "@sberbusiness/triplex-next/components/Card/components/CardMedia";
@@ -31,6 +33,8 @@ interface ICardActionState {
  */
 export class CardAction extends React.Component<ICardActionProps, ICardActionState> {
     public static displayName = "CardAction";
+    public static contextType = SkinContext;
+    declare context: React.ContextType<typeof SkinContext>;
 
     /** Контент карточки. */
     public static Content = CardContent;
@@ -78,6 +82,7 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
             actionStyles.action,
             mapCardThemeToCssClass[theme],
             mapCardRoundingSizeToCssClass[roundingSize],
+            this.context === "wordart" && skinStyles.wordArtCard,
             {
                 [actionStyles.focusVisible]: focusSource === EFocusSource.KEYBOARD,
                 [actionStyles.selected]: isControlled ? !!selected : isSelected,

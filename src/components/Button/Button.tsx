@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
 import { LoaderSmall, ELoaderSmallTheme } from "../Loader";
 import generalStyles from "./styles/ButtonGeneral.module.less";
 import secondaryStyles from "./styles/ButtonSecondary.module.less";
@@ -11,6 +12,7 @@ import { ButtonBase, IButtonBaseProps } from "./ButtonBase";
 import { EButtonTheme } from "./enums";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 
 /** Свойства кнопки типа General. */
 export interface IButtonGeneralProps extends IButtonBaseProps {
@@ -114,6 +116,14 @@ const THEME_TO_EXPANDED_CLASS_NAME_MAP: Record<EButtonTheme, string> = {
 
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
 
+const THEME_TO_WORD_ART_CLASS_NAME_MAP: Record<EButtonTheme, string> = {
+    [EButtonTheme.GENERAL]: skinStyles.wordArtButton,
+    [EButtonTheme.SECONDARY]: skinStyles.wordArtSecondaryButton,
+    [EButtonTheme.SECONDARY_LIGHT]: skinStyles.wordArtSecondaryButton,
+    [EButtonTheme.DANGER]: skinStyles.wordArtDangerButton,
+    [EButtonTheme.LINK]: skinStyles.wordArtLinkButton,
+};
+
 /** Отрисовка анимации загрузки. */
 const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
     const loaderTheme = [EButtonTheme.SECONDARY, EButtonTheme.SECONDARY_LIGHT].includes(theme)
@@ -129,6 +139,8 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
  */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EComponentSize.MD, block, loading, icon, ...rest } = props;
+    const wordArt = React.useContext(SkinContext) === "wordart";
+    const wordArtLabel = wordArt && theme === EButtonTheme.GENERAL;
 
     // aria-expanded остаётся в rest и попадает на DOM-элемент, здесь читается для визуального состояния «раскрыто».
     // Тип атрибута — Booleanish: строковое "false" — валидное «закрытое» состояние, поэтому truthy-проверки недостаточно.
@@ -138,6 +150,7 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
         styles.button,
         THEME_TO_CLASS_NAME_MAP[theme],
         SIZE_TO_CLASS_NAME_MAP[size],
+        wordArt && THEME_TO_WORD_ART_CLASS_NAME_MAP[theme],
         // Глобальные классы @sberbusiness/icons-next: должны стоять прямо на <button>, а не на внутренней обёртке
         // icon+текста — иначе наведение на паддинг кнопки не перекрашивало иконку (см. Button-ai.md → История изменений).
         "hoverable",
@@ -154,7 +167,14 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
 
     return (
         <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
-            <span className={styles.content}>
+            <span
+                className={clsx(
+                    styles.content,
+                    wordArtLabel && skinStyles.wordArtLabel,
+                    wordArtLabel && icon && skinStyles.wordArtIconLabel,
+                    wordArtLabel && size === EComponentSize.LG && children && skinStyles.wordArtLabelLarge,
+                )}
+            >
                 {icon}
                 {children}
             </span>

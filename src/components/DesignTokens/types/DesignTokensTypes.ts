@@ -41,6 +41,7 @@ import {
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
     TDesignTokensComponentsSegmentedControlSegment,
+    TDesignTokensComponentsSkinProvider,
     TDesignTokensComponentsSkeleton,
     TDesignTokensComponentsSmallInput,
     TDesignTokensComponentsSMSField,
@@ -352,6 +353,7 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment
+    | TDesignTokensComponentsSkinProvider
     | TDesignTokensComponentsSkeleton
     | TDesignTokensComponentsSmallInput
     | TDesignTokensComponentsSMSField

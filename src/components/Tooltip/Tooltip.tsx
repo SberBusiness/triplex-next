@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import clsx from "clsx";
 import { TooltipContext } from "./TootlipContext";
 import { MobileView } from "../MobileView/MobileView";
 import { TooltipDesktop } from "./components/desktop/TooltipDesktop";
@@ -19,6 +20,8 @@ import {
 } from "./types";
 import { useTooltipTheme } from "./utils/useTooltipTheme";
 import { useMobileView } from "../MobileView";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 
 /** Внутренние составляющие компонента Tooltip. */
 interface ITooltipComposition {
@@ -72,8 +75,10 @@ export const Tooltip: React.FC<ITooltipProps> & ITooltipComposition = ({
     disableAdaptiveMode,
     isOpen: openProp,
     toggle,
+    className,
     ...rest
 }) => {
+    const wordArt = React.useContext(SkinContext) === "wordart";
     const isMobileScreenWidth = useMobileView();
     const [openState, setOpenState] = useState(false);
     const targetHoveredRef = useRef(false);
@@ -120,11 +125,17 @@ export const Tooltip: React.FC<ITooltipProps> & ITooltipComposition = ({
 
     /** Рендер десктоп версии компонента. */
     const renderDesktopTooltip = () => (
-        <TooltipDesktop isOpen={open} toggleType={toggleType} preferPlace={preferPlace} {...rest} />
+        <TooltipDesktop
+            isOpen={open}
+            toggleType={toggleType}
+            preferPlace={preferPlace}
+            {...rest}
+            className={clsx(className, wordArt && skinStyles.wordArtTooltip)}
+        />
     );
 
     /** Рендер мобильной версии компонента. */
-    const renderMobileTooltip = () => <TooltipMobile isOpen={open} {...rest} />;
+    const renderMobileTooltip = () => <TooltipMobile isOpen={open} className={className} {...rest} />;
 
     return (
         <TooltipContext.Provider value={contextValue}>

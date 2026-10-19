@@ -17,6 +17,8 @@ import {
 import { ECellType, EVerticalAlign } from "@sberbusiness/triplex-next/components/Table/TableBasic/enums";
 import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
 import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
+import { SkinContext } from "../../../SkinProvider/SkinContext";
+import skinStyles from "../../../SkinProvider/WordArt.module.less";
 
 /** Свойства компонента TableBasicRow. */
 interface ITableBasicRowProps {
@@ -52,8 +54,13 @@ const renderCellContent = (cellNode: React.ReactNode, cellType: ECellType) => {
 /** Компонент строки в теле таблицы. */
 export const TableBasicRow = ({ columns, data, onClickRow }: ITableBasicRowProps) => {
     const { rowKey, rowData, rowLayout, ariaAttributes, dataAttributes, selected = false } = data;
+    const wordArt = React.useContext(SkinContext) === "wordart";
 
-    const classNameTr = clsx({ [styles.selected]: selected, selected });
+    const classNameTr = clsx({
+        [styles.selected]: selected,
+        selected,
+        [skinStyles.wordArtTableSelected]: wordArt && selected,
+    });
     const dataTestId = dataAttributes?.["test-id"];
 
     const renderTd = (column: ITableBasicColumn, value: React.ReactNode, spanProps?: ITableRowCellSpanProps) => {

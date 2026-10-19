@@ -5,6 +5,8 @@ import { TabsExtendedContext } from "../TabsExtendedContext";
 import { Text, EFontType } from "../../Typography";
 import { Badge } from "../../Badge";
 import { EComponentSize } from "../../../enums";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/TabsExtendedTabButton.module.less";
 
 /** Свойства компонента TabsExtendedTabButton. */
@@ -24,11 +26,13 @@ export interface ITabsExtendedButtonProps extends React.ButtonHTMLAttributes<HTM
 export const TabsExtendedTabButton = React.forwardRef<HTMLButtonElement, ITabsExtendedButtonProps>(
     ({ children, className, selected, size = EComponentSize.MD, showNotificationIcon, ...rest }, ref) => {
         const { type } = useContext(TabsExtendedContext);
+        const wordArt = useContext(SkinContext) === "wordart";
 
         const classNames = clsx(
             styles.tabsExtendedTabButton,
             styles[size],
             TABS_EXTENDED_TYPE_TO_CLASS_NAME_MAP[type],
+            wordArt && skinStyles.wordArtTab,
             { [styles.selected]: selected },
             className,
         );

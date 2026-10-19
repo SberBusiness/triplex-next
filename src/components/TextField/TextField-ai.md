@@ -114,6 +114,8 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-16 | Добавлена поддержка WordArt через SkinProvider; ошибка, предупреждение и блокировка сохраняют стандартные цвета. |
 | 2026-07-27 | Создан документ (TRI-5). AI-рефакторинг TextField/TextFieldBase, unit-тесты, миграция stories на modern pattern |
 | 2026-09-29 | Тип `ITextFieldBaseProps` экспортирован из barrel (`export type`); компонент `TextFieldBase` остаётся приватным (TRI-158). Удалён устаревший инвариант про `RefObject` у `inputProps.ref` — тип уже `React.Ref` после TRIPLEX-935 |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`SmallInput`). Публичный API и поведение не затронуты. |
+| 2026-10-17 | Интеграция WordArt перенесена в FormField. TextField остаётся тонкой обёрткой; контракт ref и inputProps не изменён. |

@@ -241,3 +241,4 @@ Default и Hover. Цвет текста (`Color_*`) от типа не зави�
 | 2026-07-29 | Правки по ревью PR #487: уточнена атрибуция класса `.chipGroupItem` (его проставляет семейство Chip*, а не раскладка `ChipGroup`) и описание API `ChipClearButton` / `ChipDropdownArrow` |
 | 2026-09-07 | В семейство добавлен `ChipMonthYearPicker` — упомянут в списках потребителей `Chip` и `.chipGroupItem` |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ChipIcon`, `ChipClearButton`, `ChipDropdownArrow`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-17 | Добавлен WordArt через SkinProvider: радужная рамка и объём, отдельные акценты selected и aria-expanded. Disabled сохраняет нативное оформление; DOM и обработчики не менялись. |

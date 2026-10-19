@@ -1,0 +1,43 @@
+.skinNavigationExample {
+    display: grid;
+    gap: 32px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 24px 24px 48px;
+
+    .heading {
+        display: grid;
+        gap: 8px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 32px;
+        align-items: start;
+    }
+
+    .stack {
+        display: grid;
+        gap: 28px;
+        min-width: 0;
+    }
+
+    .tabsWidth {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 24px;
+    }
+}
+
+// Portal content sits outside the example root; this class is unique to this story.
+.skinNavigationModalForm {
+    display: grid;
+    gap: 24px;
+}

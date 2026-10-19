@@ -1,5 +1,7 @@
 import React, { useCallback } from "react";
 import clsx from "clsx";
+import { SkinContext } from "../SkinProvider/SkinContext";
+import skinStyles from "../SkinProvider/WordArt.module.less";
 import { EComponentSize } from "../../enums";
 import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 import { DataAttributes } from "../../types/CoreTypes";
@@ -59,6 +61,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
         },
         ref,
     ) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         /** Отменяет прокрутку страницы при нажатии пробела, так как Chip является фокусируемым элементом. */
         const handleKeyDown = useCallback<React.KeyboardEventHandler<HTMLSpanElement>>(
             (event) => {
@@ -77,6 +80,8 @@ export const Chip = React.forwardRef<HTMLSpanElement, IChipProps>(
                     styles.chipGroupItem,
                     TYPE_TO_CLASS_NAME_MAP[type],
                     SIZE_TO_CLASS_NAME_MAP[size],
+                    wordArt && !disabled && skinStyles.wordArtChip,
+                    wordArt && !disabled && selected && skinStyles.wordArtChipSelected,
                     {
                         [styles.disabled]: disabled,
                         [styles.selected]: selected,

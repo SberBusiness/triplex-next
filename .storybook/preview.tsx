@@ -4,6 +4,7 @@ import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import { useRef } from "react";
 import { ThemeProvider, ETriplexNextTheme } from "../src/components/ThemeProvider";
+import { SkinProvider } from "../src/components/SkinProvider";
 import { ThemeProvider as ThemeProviderIcons, EIconsTheme } from "@sberbusiness/icons-next";
 import DocsContainer from "./DocsContainer";
 import "@sberbusiness/icons-next/styles/icons.css";
@@ -90,7 +91,9 @@ const preview: Preview = {
                         scopeRef={scopeRef}
                     >
                         <ThemeProviderIcons theme={isDark ? EIconsTheme.DARK : EIconsTheme.LIGHT}>
-                            <Story />
+                            <SkinProvider skin="wordart">
+                                <Story />
+                            </SkinProvider>
                         </ThemeProviderIcons>
                     </ThemeProvider>
                 </div>

@@ -39,6 +39,7 @@ export * from "./Pagination";
 export * from "./Radio";
 export * from "./SegmentedControl";
 export * from "./SegmentedControlSegment";
+export * from "./SkinProvider";
 export * from "./Skeleton";
 export * from "./Slider";
 export * from "./SmallInput";

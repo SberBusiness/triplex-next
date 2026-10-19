@@ -127,5 +127,6 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-17 | MasterTable.TableBasic автоматически наследует WordArt от SkinProvider. API контейнера, панели и контекст загрузки не менялись. |
 | 2026-08-31 | Обёртки семейства (`FilterPanel`, `ChipPanel` + `.Links`, `NoColumns`, `PaginationPanel`, `TableFooter`, `TableBasicSettings`) переведены с `React.FC` на `forwardRef`, у составных статики — через `Object.assign`. Добавлены smoke-тесты на каждую. Ради `TableBasicSettings` `forwardRef` добавлен и в `ButtonDropdownExtended`. Набор props и DOM не изменились. |
 | 2026-08-27 | Создан документ. Компонент переведён с `React.FC` на `Object.assign(forwardRef(...), {...})` — теперь пробрасывает `ref` на корневой `<div>`; значение контекста мемоизировано. Публичный API не изменился. |

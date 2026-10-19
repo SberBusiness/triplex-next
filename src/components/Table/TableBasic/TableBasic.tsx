@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import clsx from "clsx";
 import isEqual from "lodash-es/isEqual";
 import { MasterTableContext } from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
 import styles from "./styles/TableBasic.module.less";
@@ -7,6 +8,8 @@ import { TableBasicBody } from "@sberbusiness/triplex-next/components/Table/Tabl
 import { ITableBasicProps } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
 import { LoaderMiddle } from "@sberbusiness/triplex-next/components/Loader/LoaderMiddle/LoaderMiddle";
 import { LoaderScreen } from "@sberbusiness/triplex-next/components/LoaderScreen/LoaderScreen";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 
 /**
  * Компонент обычной таблицы.
@@ -31,6 +34,7 @@ export const TableBasic = React.forwardRef<HTMLTableElement, ITableBasicProps>(
         ref,
     ) => {
         const { columns: contextColumns, loading, setColumns } = useContext(MasterTableContext);
+        const wordArt = useContext(SkinContext) === "wordart";
         const isEmptyData = data.length === 0;
 
         useEffect(() => {
@@ -85,7 +89,7 @@ export const TableBasic = React.forwardRef<HTMLTableElement, ITableBasicProps>(
         };
 
         return (
-            <div className={styles.tableBasic}>
+            <div className={clsx(styles.tableBasic, wordArt && skinStyles.wordArtTable)}>
                 {renderTable()}
                 {renderFooter()}
             </div>

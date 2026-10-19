@@ -258,6 +258,7 @@ Island — неинтерактивный контейнер: не выстав�
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-16 | Добавлена поддержка WordArt через SkinProvider для TYPE_1; типы TYPE_2 и TYPE_3 сохраняют стандартное оформление. |
 | 2026-08-24 | Добавлено свойство `withoutPaddings` — отключает внутренние отступы карточки. Добавлена story `WithoutPaddings`. |
 | 2026-08-11 | Prop состояния загрузки переименован `isLoading` → `loading` — по преобладающей в библиотеке конвенции boolean-props без префикса `is` (`loading` у `Button`, `List`, `Dropdown`, `Suggest`, `Table`). Prop ещё не выпускался, поэтому breaking change нет; `Omit` в `IModalWindowBodyProps` обновлён на `"loading"`. Поведение не изменилось. |
 | 2026-08-06 | `related` приведён к правилу `docs/ai/CONTEXT.md` → «Как заполнять `related` в AI.md»: убраны потребители (`BodyPage`, `HeaderPage`, `FooterPage`, `Confirm`), `ModalWindowBody` заменён родителем `ModalWindow`, добавлен `LoaderScreen`. Раздел «Связанные компоненты» разбит по типам связи. Добавлено состояние загрузки: props `isLoading` и `loaderScreenProps` — при `isLoading` поверх контента карточки рендерится `LoaderScreen` типа `middle`. Подложка наследует скругление карточки, `z-index` понижен до локального. `ModalWindowBody` эти props не наследует (`Omit`) — его тело скроллируется, лоадер там задаётся на `ModalWindowContent`. Добавлены story `Loading` и unit-тесты. Остальной публичный API не изменён. |

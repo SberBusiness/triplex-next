@@ -7,6 +7,8 @@ import { Badge } from "../../Badge/Badge";
 import { Text } from "../../Typography/Text";
 import { EFontType } from "../../Typography/enums";
 import { tabsLineSizeToTextSizeMap } from "../utils";
+import { SkinContext } from "../../SkinProvider/SkinContext";
+import skinStyles from "../../SkinProvider/WordArt.module.less";
 import styles from "../styles/TabsLine.module.less";
 
 /** Свойства компонента TabsLineItem. */
@@ -44,6 +46,7 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
         },
         ref,
     ) => {
+        const wordArt = React.useContext(SkinContext) === "wordart";
         const [focused, setFocused] = useState(false);
         const [hovered, setHovered] = useState(false);
 
@@ -77,6 +80,8 @@ export const TabsLineItem = React.forwardRef<HTMLButtonElement, ITabsLineItemPro
                 {...htmlButtonAttributes}
                 className={clsx(
                     styles.tab,
+                    wordArt && skinStyles.wordArtLineTab,
+                    wordArt && selected && skinStyles.wordArtLineTabSelected,
                     SIZE_TO_CLASS_NAME_MAP[size],
                     { [styles.active]: Boolean(selected) },
                     className,

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect, useContext } from "react";
 import clsx from "clsx";
 import { CaretleftStrokeSrvIcon24, CaretrightStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { CarouselExtended, ICarouselExtendedButtonProvideProps } from "../CarouselExtended/CarouselExtended";
@@ -9,6 +9,7 @@ import { createSizeToClassNameMap, scrollSmoothHorizontally } from "../../utils"
 import { IStepperProps } from "./types";
 import { EComponentSize } from "../../enums";
 import { EScreenWidth } from "../../helpers/breakpoints";
+import { SkinContext } from "../SkinProvider/SkinContext";
 import styles from "./styles/Stepper.module.less";
 
 /** Внутренние составляющие Stepper. */
@@ -109,15 +110,19 @@ const alignStepCenter = (carousel: HTMLDivElement, delta: number): void => {
 const alignStep = (carousel: HTMLDivElement, step: HTMLLIElement): void => {
     const { left: carouselLeft, right: carouselRight, width: carouselWidth } = carousel.getBoundingClientRect();
     const { left: stepLeft, right: stepRight, width: stepWidth } = step.getBoundingClientRect();
+    // Shadows and focus outlines can extend beyond the measured step, particularly with skins.
+    const stepStyle = getComputedStyle(step);
+    const marginLeft = parseFloat(stepStyle.scrollMarginLeft) || 0;
+    const marginRight = parseFloat(stepStyle.scrollMarginRight) || 0;
     const carouselCenter = carouselLeft + carouselWidth / 2;
     const stepCenter = stepLeft + stepWidth / 2;
 
     if (window.matchMedia(`(max-width: ${EScreenWidth.SM_MAX})`).matches) {
         alignStepCenter(carousel, stepCenter - carouselCenter);
     } else if (carouselCenter > stepCenter) {
-        alignStepLeft(carousel, step, stepLeft - carouselLeft, stepLeft);
+        alignStepLeft(carousel, step, stepLeft - carouselLeft - marginLeft, stepLeft);
     } else if (carouselCenter < stepCenter) {
-        alignStepRight(carousel, step, stepRight - carouselRight, stepRight);
+        alignStepRight(carousel, step, stepRight - carouselRight + marginRight, stepRight);
     }
 };
 
@@ -129,6 +134,7 @@ export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
     selectedStepId,
     ...restProps
 }) => {
+    const skin = useContext(SkinContext);
     const [scrollStep, setScrollStep] = useState(0);
     const carouselRef = useRef<HTMLDivElement>(null);
     const stepRefs = useRef<Record<string, HTMLLIElement | null>>({});
@@ -177,7 +183,7 @@ export const Stepper: React.FC<IStepperProps> & IStepperComposition = ({
         if (carousel && step) {
             alignStep(carousel, step);
         }
-    }, [selectedStepId]);
+    }, [selectedStepId, skin]);
 
     /** Запоминает узел шага, чтобы подвести его в видимую область при выборе. */
     const setStepRef = (id: string) => (instance: HTMLLIElement | null) => {

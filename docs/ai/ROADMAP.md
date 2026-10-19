@@ -72,7 +72,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 **Что значат колонки (definition of done):**
 
 - **AI.md** — у компонента есть `{ComponentName}-ai.md`, заполненный по `docs/ai/template-ai.md`: frontmatter (component, category, related, tokens, stories, version), Назначение, Варианты и props, Инварианты, Связанные компоненты, Stories с колонкой `Example file`, История изменений. Accessibility — обязательно для интерактивных компонентов.
-- **Storybook examples** (для основной таблицы) — есть `.stories.tsx` в modern pattern (`docs/ai/stories-guide.md`): примеры вынесены в подпапку `examples/` рядом со stories-файлом, по отдельному файлу на каждую story (кроме `Playground` / `VisualTests`), и реэкспортированы через `examples/index.ts`. Папка со stories-файлом лежит либо в корне (`stories/{Component}/examples/`), либо внутри категории (`stories/{Category}/{Component}/examples/`). Если в одной папке лежит несколько `.stories.tsx`, примеры дополнительно разложены по подпапкам компонентов: `stories/{Category}/examples/{Component}/`.
+- **Storybook examples** (для основной таблицы) — основные документационные `.stories.tsx` используют modern pattern (`docs/ai/stories-guide.md`): примеры вынесены в подпапку `examples/` рядом со stories-файлом, по отдельному файлу на каждую story (кроме `Playground` / `VisualTests`), реэкспортированы через `examples/index.ts` и подключены к `docs.source.code` через `?raw`. Примеры используют публичные импорты пакета. Папка со stories-файлом лежит либо в корне (`stories/{Component}/examples/`), либо внутри категории (`stories/{Category}/{Component}/examples/`). Если в одной папке лежит несколько основных документационных `.stories.tsx` разных компонентов, примеры дополнительно разложены по подпапкам компонентов: `stories/{Category}/examples/{Component}/`. Старые имена файлов `*Example.tsx` допустимы по `stories-guide.md`. Дополнительный legacy-файл для визуальной регрессии допустим при наличии основных примеров в modern pattern; конкретные исключения перечислены в отчёте сверки ниже. Разрешение сохранять legacy pattern при мелкой правке само по себе не подтверждает эту колонку.
 - **AI refactoring** — компонент проведён через `docs/ai/ai-refactoring.md`: codestyle-чистка, structural-упрощение, AI-friendliness (JSDoc на всех props), unit-тесты на ключевую логику.
 
 Какие компоненты заслуживают отдельного `*-ai.md` (а какие описываются в родителе)
@@ -82,8 +82,11 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Основная таблица
 
-Из 140 компонентов 138 отмечены завершёнными. У `ChipSelect` и `ChipDatePicker`
+Из 140 компонентов 136 отмечены завершёнными. У `ChipSelect` и `ChipDatePicker`
 есть Storybook-примеры, но отсутствуют AI.md и не завершён AI-рефакторинг.
+У `Chip` не завершён критерий Storybook examples: исходный код примера
+`WithNotificationIcon` не подключён к документации story. У `Stepper` примеры
+ещё не выделены в собственную подпапку при общей папке stories со `StepperExtended`.
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
 |---|---|---|---|
@@ -109,7 +112,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CheckboxTreeExtended | ✅ | ✅ | ✅ |
 | CheckboxXGroup | ✅ | ✅ | ✅ |
 | CheckboxYGroup | ✅ | ✅ | ✅ |
-| Chip | ✅ | ✅ | ✅ |
+| Chip | ✅ | ⬜ | ✅ |
 | ChipDatePicker | ⬜ | ✅ | ⬜ |
 | ChipGroup | ✅ | ✅ | ✅ |
 | ChipMonthYearPicker | ✅ | ✅ | ✅ |
@@ -201,7 +204,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Spoiler | ✅ | ✅ | ✅ |
 | StatusTracker | ✅ | ✅ | ✅ |
 | Step | ✅ | ✅ | ✅ |
-| Stepper | ✅ | ✅ | ✅ |
+| Stepper | ✅ | ⬜ | ✅ |
 | StepperExtended | ✅ | ✅ | ✅ |
 | Suggest | ✅ | ✅ | ✅ |
 | SuggestField | ✅ | ✅ | ✅ |
@@ -343,6 +346,27 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 - У 94 атомов рефакторинг отмечен ◐: наличие реализации и тестов семейства не доказывает весь DoD именно этой части. Для каждого атома требуется проверить критерии и доработать недостающее. У `ChipSelect` и `ChipDatePicker` сохранён незавершённый статус ⬜.
 - Для существующих 138 документов проверены frontmatter, обязательные разделы, колонка `Example file` и существование stories. Ранее принятый статус рефакторинга этих строк сохранён; полный повторный аудит их поведения и тестов в эту сверку не входит.
 
+**Проверка Storybook examples — 2026-10-19:**
+
+Для 138 строк с AI.md проверены 130 основных story-файлов, указанных в поле
+`stories` их frontmatter. В них 553 документационные stories: у всех примеры
+вынесены в `examples/` и реэкспортированы через `index.ts`; у 552 исходный код
+примера подключён через `?raw` к `docs.source.code`. Файлы копируемых примеров
+используют публичные импорты. Результат для каждой строки определяется её
+основным story-файлом; исключения указаны в таблице.
+
+| Строки / файлы | Проверенный паттерн | Storybook examples |
+|---|---|---|
+| 136 строк с AI.md — все, кроме `Chip` и `Stepper` | Основные story-файлы из frontmatter используют modern pattern: отдельные примеры, реэкспорт, `?raw` и публичные импорты | ✅ |
+| `Chip` — `stories/Chips/Chip.stories.tsx` | У `WithNotificationIcon` есть отдельный пример и его raw-экспорт, но `docs.source.code` не подключён | ⬜ |
+| `Stepper` — `stories/Stepper/Stepper.stories.tsx` | Примеры лежат прямо в `stories/Stepper/examples/`, хотя рядом есть основной файл `StepperExtended.stories.tsx`. Для завершения раскладки нужна подпапка `examples/Stepper/`; у `StepperExtended` своя подпапка уже есть | ⬜ |
+| `LightBox` — дополнительный `stories/LightBox/LightBoxInitialOpened.stories.tsx` | Допустимое legacy-исключение только для визуальной регрессии. Основной `stories/LightBox/LightBox.stories.tsx` использует modern pattern и копируемые примеры | ✅ по основному файлу |
+| `ChipSelect`, `ChipDatePicker` — `stories/Chips/{ChipSelect,ChipDatePicker}.stories.tsx` | Проверены отдельно: примеры в `examples/{Component}/`, реэкспорт через `index.ts`, `?raw` и публичные импорты | ✅; AI.md ещё отсутствуют |
+
+Существующие имена `*Example.tsx` сохраняются согласно разделу «Именование
+файлов примеров» в `stories-guide.md`; структура таких основных stories
+соответствует modern pattern.
+
 **Устранённые расхождения прежнего учёта:**
 
 | Строка | Что показали исходники | Решение |
@@ -354,7 +378,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 #### Части, учитываемые в документации родителя
 
-При сверке из самостоятельного учёта исключены ещё 28 презентационных частей. Размер, отступ, выбор иконки, типографика и передача props сами по себе не считаются самостоятельной логикой.
+Таблица ниже содержит 119 презентационных частей из 32 семейств, учитываемых в документации родителя. Размер, отступ, выбор иконки, типографика и передача props сами по себе не считаются самостоятельной логикой.
 
 Отдельный AI.md не планируется для перечисленных ниже обёрток: они делегируют
 описанный API/стили родителю, не вводя самостоятельный контракт. Для семейства

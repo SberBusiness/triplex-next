@@ -72,7 +72,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 **Что значат колонки (definition of done):**
 
 - **AI.md** — у компонента есть `{ComponentName}-ai.md`, заполненный по `docs/ai/template-ai.md`: frontmatter (component, category, related, tokens, stories, version), Назначение, Варианты и props, Инварианты, Связанные компоненты, Stories с колонкой `Example file`, История изменений. Accessibility — обязательно для интерактивных компонентов.
-- **Storybook examples** (для основной таблицы) — основные документационные `.stories.tsx` используют modern pattern (`docs/ai/stories-guide.md`): примеры вынесены в подпапку `examples/` рядом со stories-файлом, по отдельному файлу на каждую story (кроме `Playground` / `VisualTests`), реэкспортированы через `examples/index.ts` и подключены к `docs.source.code` через `?raw`. Примеры используют публичные импорты пакета. Папка со stories-файлом лежит либо в корне (`stories/{Component}/examples/`), либо внутри категории (`stories/{Category}/{Component}/examples/`). Если в одной папке лежит несколько основных документационных `.stories.tsx` разных компонентов, примеры дополнительно разложены по подпапкам компонентов: `stories/{Category}/examples/{Component}/`. Старые имена файлов `*Example.tsx` допустимы по `stories-guide.md`. Дополнительный legacy-файл для визуальной регрессии допустим при наличии основных примеров в modern pattern; конкретные исключения перечислены в отчёте сверки ниже. Разрешение сохранять legacy pattern при мелкой правке само по себе не подтверждает эту колонку.
+- **Storybook examples** (для основной таблицы) — основные документационные `.stories.tsx` используют modern pattern (`docs/ai/stories-guide.md`): примеры вынесены в подпапку `examples/` рядом со stories-файлом, по отдельному файлу на каждую story (кроме `Playground` / `VisualTests`), реэкспортированы через `examples/index.ts` и подключены к `docs.source.code` через `?raw`. Примеры используют публичные импорты пакета. Папка со stories-файлом лежит либо в корне (`stories/{Component}/examples/`), либо внутри категории (`stories/{Category}/{Component}/examples/`). Если в одной папке лежит несколько основных документационных `.stories.tsx` разных компонентов, примеры дополнительно разложены по подпапкам компонентов: `stories/{Category}/examples/{Component}/`. Старые имена файлов `*Example.tsx` допустимы по `stories-guide.md`. Дополнительный legacy-файл для визуальной регрессии допустим при наличии основных примеров в modern pattern; конкретные исключения описаны в [правилах учёта покрытия](component-coverage.md). Разрешение сохранять legacy pattern при мелкой правке само по себе не подтверждает эту колонку.
 - **AI refactoring** — компонент проведён через `docs/ai/ai-refactoring.md`: codestyle-чистка, structural-упрощение, AI-friendliness (JSDoc на всех props), unit-тесты на ключевую логику.
 
 Какие компоненты заслуживают отдельного `*-ai.md` (а какие описываются в родителе)
@@ -331,98 +331,6 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TooltipTarget | ⬜ | ◐ |
 | TooltipXButton | ⬜ | ◐ |
 | UploadZoneInput | ⬜ | ◐ |
-
-#### Сверка с исходниками — 2026-10-16
-
-Проверены все **106 каталогов** `src/components/`, публичные именованные экспорты
-`src/components/index.ts` и статические части составных компонентов, доступные
-через них (включая вложенные пути вроде `MasterTable.TableFooter.Summary.Amount`).
-Основа сверки — `main` на коммите `ac177e3a`.
-
-- На дату сверки в двух таблицах **234 компонента**: **140 в основной таблице** и **94 атома**. Есть **138 AI.md**, **96 файлов ещё нужны**.
-- У 94 атомов рефакторинг отмечен ◐: наличие реализации и тестов семейства не доказывает весь DoD именно этой части. Для каждого атома требуется проверить критерии и доработать недостающее. У `ChipSelect` и `ChipDatePicker` сохранён незавершённый статус ⬜.
-- Для существующих 138 документов проверены frontmatter, обязательные разделы, колонка `Example file` и существование stories. Ранее принятый статус рефакторинга этих строк сохранён; полный повторный аудит их поведения и тестов в эту сверку не входит.
-
-**Проверка Storybook examples — 2026-10-19:**
-
-Для 138 строк с AI.md проверены 130 основных story-файлов, указанных в поле
-`stories` их frontmatter. В них 553 документационные stories: у всех примеры
-вынесены в `examples/` и реэкспортированы через `index.ts`; у всех 553 исходный код
-примера подключён через `?raw` к `docs.source.code`. Файлы копируемых примеров
-используют публичные импорты. Результат для каждой строки определяется её
-основным story-файлом; исключения указаны в таблице.
-
-| Строки / файлы | Проверенный паттерн | Storybook examples |
-|---|---|---|
-| 136 строк с AI.md — все, кроме `Chip` и `Stepper` | Основные story-файлы из frontmatter используют modern pattern: отдельные примеры, реэкспорт, `?raw` и публичные импорты | ✅ |
-| `Chip` — `stories/Chips/Chip.stories.tsx` | Все документационные stories, включая `WithNotificationIcon`, подключают отдельные примеры и raw-исходники через `docs.source.code` | ✅ |
-| `Stepper` — `stories/Stepper/Stepper.stories.tsx` | Примеры и `index.ts` находятся в `stories/Stepper/examples/Stepper/`, отдельно от `examples/StepperExtended/`; импорты и путь в AI.md обновлены | ✅ |
-| `LightBox` — дополнительный `stories/LightBox/LightBoxInitialOpened.stories.tsx` | Допустимое legacy-исключение только для визуальной регрессии. Основной `stories/LightBox/LightBox.stories.tsx` использует modern pattern и копируемые примеры | ✅ по основному файлу |
-| `ChipSelect`, `ChipDatePicker` — `stories/Chips/{ChipSelect,ChipDatePicker}.stories.tsx` | Проверены отдельно: примеры в `examples/{Component}/`, реэкспорт через `index.ts`, `?raw` и публичные импорты | ✅; AI.md ещё отсутствуют |
-
-Существующие имена `*Example.tsx` сохраняются согласно разделу «Именование
-файлов примеров» в `stories-guide.md`; структура таких основных stories
-соответствует modern pattern.
-
-**Устранённые расхождения прежнего учёта:**
-
-| Строка | Что показали исходники | Решение |
-|---|---|---|
-| ChipSelect / ChipDatePicker | AI.md отсутствуют; Storybook-примеры есть | Оставить AI.md и AI refactoring незавершёнными |
-| AbstractTree / AccordionBase | Внутренние реализации, отсутствуют в публичных barrel-экспортах | Убрать отдельные строки; описывать внутренние зависимости у публичных потребителей |
-| PaginationNavigationExtended | Тривиальный `ul` без собственного API и логики; уже описан в [Pagination-ai.md](../../src/components/Pagination/Pagination-ai.md) | Учитывать в документации Pagination без отдельной строки |
-| TreeViewNodeWithContext | Экспортируемая реализация того же `TreeView.Node`, который описан в `TreeViewNode-ai.md` | Сохранить одну строку TreeViewNode, без дубликата |
-
-#### Части, учитываемые в документации родителя
-
-Таблица ниже содержит 119 презентационных частей из 32 семейств, учитываемых в документации родителя. Размер, отступ, выбор иконки, типографика и передача props сами по себе не считаются самостоятельной логикой.
-
-Отдельный AI.md не планируется для перечисленных ниже обёрток: они делегируют
-описанный API/стили родителю, не вводя самостоятельный контракт. Для семейства
-List сохранено явное исключение из `CONTEXT.md`, включая `ListItemContent` и
-`ListSortableItemTarget`. Уже существующие AI.md не удаляются из-за гранулярности
-старого учёта.
-
-| Семейство | Части без отдельного AI.md | Где описываются |
-|---|---|---|
-| Badge | `BadgeDot` | [Документация родителя](../../src/components/Badge/Badge-ai.md) |
-| Card | `CardContentBody`, `CardContentHeader`, `CardContentFooter`, `CardMedia`, `CardContent` | [Документация родителя](../../src/components/Card/CardStatic-ai.md) |
-| Carousel | `CarouselTrack` | Документация семейства |
-| Confirm | `ConfirmContent`, `ConfirmContentTitle`, `ConfirmContentSubTitle`, `ConfirmControls` | [Документация родителя](../../src/components/Confirm/Confirm-ai.md) |
-| Chip | `ChipIcon`, `ChipClearButton`, `ChipDropdownArrow` | [Документация родителя](../../src/components/Chip/Chip-ai.md) |
-| Dropdown | `DropdownMobileBody`, `DropdownMobileClose`, `DropdownMobileFooter`, `DropdownMobileInput`, `DropdownMobileLoader`, `DropdownMobileHeader` | [Документация родителя](../../src/components/Dropdown/Dropdown-ai.md) |
-| Footer | `FooterDescription`, `FooterDescriptionControls`, `FooterDescriptionContent` | [Документация родителя](../../src/components/Footer/Footer-ai.md) |
-| Header | `HeaderLayoutSidebar`, `HeaderLayoutSidebarContent`, `HeaderLayoutSidebarSidebar`, `HeaderTabs`, `HeaderTabsContent`, `HeaderTabsControls`, `HeaderTitle`, `HeaderTitleContent`, `HeaderTitleControls`, `HeaderSubheader` | [Документация родителя](../../src/components/Header/Header-ai.md) |
-| Island | `IslandBody`, `IslandHeader`, `IslandFooter` | [Документация родителя](../../src/components/Island/Island-ai.md) |
-| IslandAccordion | `IslandAccordionContent`, `IslandAccordionFooter` | [Документация родителя](../../src/components/IslandAccordion/IslandAccordion-ai.md) |
-| IslandWidget | `IslandWidgetHeaderContent`, `IslandWidgetHeaderTitle`, `IslandWidgetHeaderControls`, `IslandWidgetFooterContent`, `IslandWidgetFooterControls`, `IslandWidgetHeader`, `IslandWidgetHeaderDescription`, `IslandWidgetBody`, `IslandWidgetFooter` | [Документация родителя](../../src/components/IslandWidget/IslandWidget-ai.md) |
-| LightBox | `LightBoxControls`, `LightBoxSideOverlayCloseMobile` | [Документация родителя](../../src/components/LightBox/LightBox-ai.md) |
-| List | `ListItemControls`, `ListItemContent`, `ListEmptyState`, `ListItemLoading`, `ListItemTailLeft`, `ListItemTailRight`, `ListSortableItemTarget`, `ListSortableItemControls` | [Документация родителя](../../src/components/List/List-ai.md) |
-| ListMaster | `ListMasterBody`, `ListMasterChipGroup`, `ListMasterFooterControls`, `ListMasterFooterDescription`, `SelectionControls` | [Документация родителя](../../src/components/ListMaster/ListMaster-ai.md) |
-| ModalWindow | `ModalWindowBody`, `ModalWindowFooter`, `ModalWindowHeader`, `ModalWindowContent` | [Документация родителя](../../src/components/ModalWindow/ModalWindow-ai.md) |
-| MultiselectField | `MultiselectFieldDropdownHeader`, `MultiselectFieldDropdownFooter` | [Документация родителя](../../src/components/MultiselectField/MultiselectField-ai.md) |
-| Notification | `NotificationIcon`, `NotificationBody`, `NotificationHeader`, `NotificationBodyContent`, `NotificationFooter`, `NotificationBodyList`, `NotificationClose`, `NotificationTime` | [Документация родителя](../../src/components/Notification/Notification-ai.md) |
-| OrderedList | `OrderedListItem` | [Документация родителя](../../src/components/OrderedList/OrderedList-ai.md) |
-| Pagination | `PaginationNavigationExtended`, `PaginationNavigationExtendedItem`, `PaginationPageEllipsis` | [Документация родителя](../../src/components/Pagination/Pagination-ai.md) |
-| SliderExtended | `SliderExtendedMarks` | [Документация родителя](../../src/components/SliderExtended/SliderExtended-ai.md) |
-| StatusTracker | `StatusTrackerHeader`, `StatusTrackerFooter`, `StatusTrackerTitle`, `StatusTrackerDescription`, `StatusTrackerMedia`, `StatusTrackerBody`, `StatusTrackerButton`, `StatusTrackerAlert`, `StatusTrackerStatusGroup`, `StatusTrackerSum`, `StatusTrackerStatus` | [Документация родителя](../../src/components/StatusTracker/StatusTracker-ai.md) |
-| SuggestField | `SuggestFieldMobileDropdownHint` | [Документация родителя](../../src/components/SuggestField/SuggestField-ai.md) |
-| Table | `TableFooter`, `NoColumns`, `FilterPanel`, `ChipPanel`, `PaginationPanel`, `TableFooterSummarySelectedCount`, `ChipPanelLinks`, `TableBasicSettingsBody`, `ColumnSettingsStaticListItem`, `TableBasicSettingsFooter`, `TableBasicSettingsHeader`, `TableFooterSummary`, `TableFooterSummaryAmount`, `ColumnSettingsStaticList` | [Документация родителя](../../src/components/Table/MasterTable-ai.md) |
-| TreeView | `TreeViewGroup` | [Документация родителя](../../src/components/TreeView/TreeView-ai.md) |
-| UnorderedListExtended | `UnorderedListExtendedItem`, `UnorderedListExtendedItemMarker` | [Документация родителя](../../src/components/UnorderedListExtended/UnorderedListExtended-ai.md) |
-| CollapsibleTree | `CollapsibleTreeNodeLabel` | [Документация родителя](../../src/components/CollapsibleTree/CollapsibleTree-ai.md) |
-| ImageGalleryExtended | `ImageGalleryExtendedArrow`, `ImageGalleryExtendedThumb` | [Документация родителя](../../src/components/ImageGalleryExtended/ImageGalleryExtended-ai.md) |
-| Overlay | `OverlayMask` | [Документация родителя](../../src/components/Overlay/Overlay-ai.md) |
-| SelectExtendedField | `SelectExtendedFieldDropdown` | [Документация родителя](../../src/components/SelectExtendedField/SelectExtendedField-ai.md) |
-| Stepper | `StepperStepIcon` | [Документация родителя](../../src/components/Stepper/Stepper-ai.md) |
-| TabsExtended | `TabsExtendedContent` | [Документация родителя](../../src/components/TabsExtended/TabsExtended-ai.md) |
-| Tooltip | `TooltipBody`, `TooltipMobileHeader` | [Документация родителя](../../src/components/Tooltip/Tooltip-ai.md) |
-
-`AdvancedMouseSensor` и `AdvancedTouchSensor` — служебные DnD-классы, а не React-компоненты;
-их контракт относится к `ListSortable`. `DesignTokens` — инфраструктура токенов.
-`FocusTrapExtended`, `AbstractTree`, `AccordionBase` и прочие части, не доступные
-через публичный barrel/составной API, остаются внутренними зависимостями.
-Переэкспорты уже учтённых частей (например, `Page.Header.Subhead`) не создают новые строки.
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

@@ -344,6 +344,9 @@ AI-агента.
 |---|---|
 | `List`, `ListItem`, `ListActionItem`, `ListTableItem`, `ListItemSelectable`, `ListItemControlsButton`, `ListItemControlsButtonDropdown`, `ListSortable`, `ListSortableItem` | `ListItemControls`, `ListItemContent`, `ListEmptyState`, `ListItemLoading`, `ListItemTailLeft`, `ListItemTailRight`, `ListSortableItemTarget`, `ListSortableItemControls` |
 
+Перечень частей, описываемых в родителе, и пояснения к учёту покрытия —
+в [component-coverage.md](component-coverage.md).
+
 В ROADMAP-таблице каждый AI.md-достойный компонент идёт отдельной строкой —
 так считается прогресс покрытия и видны субкомпоненты с собственным API.
 

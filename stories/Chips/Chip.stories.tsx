@@ -15,6 +15,7 @@ import {
     WithPrefixAndPostfixExample,
     WithPrefixAndPostfixExampleSource,
     WithNotificationIconExample,
+    WithNotificationIconExampleSource,
 } from "./examples/Chip";
 
 const meta = {
@@ -124,6 +125,7 @@ export const WithPrefixAndPostfix: Story = {
 export const WithNotificationIcon: StoryObj<typeof Chip> = {
     parameters: {
         controls: { disable: true },
+        docs: { source: { code: WithNotificationIconExampleSource, language: "tsx" } },
     },
     render: WithNotificationIconExample,
 };

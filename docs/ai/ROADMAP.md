@@ -82,11 +82,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Основная таблица
 
-Из 140 компонентов 136 отмечены завершёнными. У `ChipSelect` и `ChipDatePicker`
+Из 140 компонентов 138 отмечены завершёнными. У `ChipSelect` и `ChipDatePicker`
 есть Storybook-примеры, но отсутствуют AI.md и не завершён AI-рефакторинг.
-У `Chip` не завершён критерий Storybook examples: исходный код примера
-`WithNotificationIcon` не подключён к документации story. У `Stepper` примеры
-ещё не выделены в собственную подпапку при общей папке stories со `StepperExtended`.
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
 |---|---|---|---|
@@ -112,7 +109,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CheckboxTreeExtended | ✅ | ✅ | ✅ |
 | CheckboxXGroup | ✅ | ✅ | ✅ |
 | CheckboxYGroup | ✅ | ✅ | ✅ |
-| Chip | ✅ | ⬜ | ✅ |
+| Chip | ✅ | ✅ | ✅ |
 | ChipDatePicker | ⬜ | ✅ | ⬜ |
 | ChipGroup | ✅ | ✅ | ✅ |
 | ChipMonthYearPicker | ✅ | ✅ | ✅ |
@@ -204,7 +201,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Spoiler | ✅ | ✅ | ✅ |
 | StatusTracker | ✅ | ✅ | ✅ |
 | Step | ✅ | ✅ | ✅ |
-| Stepper | ✅ | ⬜ | ✅ |
+| Stepper | ✅ | ✅ | ✅ |
 | StepperExtended | ✅ | ✅ | ✅ |
 | Suggest | ✅ | ✅ | ✅ |
 | SuggestField | ✅ | ✅ | ✅ |
@@ -350,7 +347,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 Для 138 строк с AI.md проверены 130 основных story-файлов, указанных в поле
 `stories` их frontmatter. В них 553 документационные stories: у всех примеры
-вынесены в `examples/` и реэкспортированы через `index.ts`; у 552 исходный код
+вынесены в `examples/` и реэкспортированы через `index.ts`; у всех 553 исходный код
 примера подключён через `?raw` к `docs.source.code`. Файлы копируемых примеров
 используют публичные импорты. Результат для каждой строки определяется её
 основным story-файлом; исключения указаны в таблице.
@@ -358,8 +355,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Строки / файлы | Проверенный паттерн | Storybook examples |
 |---|---|---|
 | 136 строк с AI.md — все, кроме `Chip` и `Stepper` | Основные story-файлы из frontmatter используют modern pattern: отдельные примеры, реэкспорт, `?raw` и публичные импорты | ✅ |
-| `Chip` — `stories/Chips/Chip.stories.tsx` | У `WithNotificationIcon` есть отдельный пример и его raw-экспорт, но `docs.source.code` не подключён | ⬜ |
-| `Stepper` — `stories/Stepper/Stepper.stories.tsx` | Примеры лежат прямо в `stories/Stepper/examples/`, хотя рядом есть основной файл `StepperExtended.stories.tsx`. Для завершения раскладки нужна подпапка `examples/Stepper/`; у `StepperExtended` своя подпапка уже есть | ⬜ |
+| `Chip` — `stories/Chips/Chip.stories.tsx` | Все документационные stories, включая `WithNotificationIcon`, подключают отдельные примеры и raw-исходники через `docs.source.code` | ✅ |
+| `Stepper` — `stories/Stepper/Stepper.stories.tsx` | Примеры и `index.ts` находятся в `stories/Stepper/examples/Stepper/`, отдельно от `examples/StepperExtended/`; импорты и путь в AI.md обновлены | ✅ |
 | `LightBox` — дополнительный `stories/LightBox/LightBoxInitialOpened.stories.tsx` | Допустимое legacy-исключение только для визуальной регрессии. Основной `stories/LightBox/LightBox.stories.tsx` использует modern pattern и копируемые примеры | ✅ по основному файлу |
 | `ChipSelect`, `ChipDatePicker` — `stories/Chips/{ChipSelect,ChipDatePicker}.stories.tsx` | Проверены отдельно: примеры в `examples/{Component}/`, реэкспорт через `index.ts`, `?raw` и публичные импорты | ✅; AI.md ещё отсутствуют |
 

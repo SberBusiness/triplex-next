@@ -1,7 +1,7 @@
 ---
 component: CollapsibleTreeExtended
 category: CollapsibleTree
-related: [CollapsibleTree, TreeView, TreeViewNode, AccordionBase]
+related: [CollapsibleTree, TreeView, TreeViewNode]
 tokens: []
 stories: stories/CollapsibleTreeExtended/CollapsibleTreeExtended.stories.tsx
 version: "1.0"
@@ -194,3 +194,4 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 | 2026-07-14 | В story-примерах на кнопку заголовка добавлены глобальные классы icons-next: `hoverable` всегда и `active` при `opened` — цвет иконки раскрытия, синхронно с `CollapsibleTreeNodeHeader` |
 | 2026-08-26 | В `related` добавлен `TreeViewNode` — у узла появился собственный AI.md, и он точный адресат наследования `ICollapsibleTreeExtendedNodeProps` |
 | 2026-09-17 | TRI-22: `CollapsibleTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICollapsibleTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
+| 2026-10-16 | При сверке ROADMAP с публичными экспортами внутренний `AccordionBase` исключён из `related`; описание зависимости сохранено в «Связанные компоненты». |

@@ -11,6 +11,7 @@ import { ISelectFieldProps } from "../../SelectField";
 import { ChipSelectTarget } from "./ChipSelectTarget";
 import styles from "../styles/Chip.module.less";
 
+/** Свойства компонента ChipSelect. */
 export interface IChipSelectProps
     extends
         Pick<IChipProps, "className" | "disabled" | "type">,
@@ -24,11 +25,11 @@ export interface IChipSelectProps
             | "status"
             | "placeholder"
         > {
-    /* Функция отмены выбора. */
+    /** Обработчик сброса выбора. Потребитель самостоятельно очищает value. */
     clearSelected: () => void;
-    /* Название поля. */
+    /** Название чипса без выбранного значения и заголовок мобильного списка. */
     label?: React.ReactNode;
-    /* Лейбл, отображаемый вместо выбранного значения. */
+    /** Контент вместо label выбранной опции. Без value не отображается. */
     displayedValue?: React.ReactNode;
 }
 

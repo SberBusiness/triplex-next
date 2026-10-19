@@ -82,8 +82,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Основная таблица
 
-Из 140 компонентов 138 отмечены завершёнными. У `ChipSelect` и `ChipDatePicker`
-есть Storybook-примеры, но отсутствуют AI.md и не завершён AI-рефакторинг.
+Основная таблица содержит 140 компонентов. Статус каждой колонки подтверждается
+по её definition of done; незавершённые пункты отмечены ⬜.
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
 |---|---|---|---|
@@ -115,7 +115,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ChipMonthYearPicker | ✅ | ✅ | ✅ |
 | ChipMultiselect | ✅ | ✅ | ✅ |
 | ChipOptions | ✅ | ✅ | ✅ |
-| ChipSelect | ⬜ | ✅ | ⬜ |
+| ChipSelect | ✅ | ✅ | ✅ |
 | ChipSort | ✅ | ✅ | ✅ |
 | ChipSuggest | ✅ | ✅ | ✅ |
 | CodeText | ✅ | ✅ | ✅ |
@@ -227,6 +227,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | UnorderedListExtended | ✅ | ✅ | ✅ |
 | UploadZone | ✅ | ✅ | ✅ |
 | WindowResizeListener | ✅ | ✅ | ✅ |
+
+Задачи для завершения основной таблицы: [ChipDatePicker — TRI-136](https://linear.app/triplex-next/issue/TRI-136/chipdatepicker-ai-ready-phase-1), [ChipSelect — TRI-131](https://linear.app/triplex-next/issue/TRI-131/chipselect-ai-ready-phase-1).
 
 ##### Атомы составных компонентов
 

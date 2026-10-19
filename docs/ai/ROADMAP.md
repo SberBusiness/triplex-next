@@ -239,7 +239,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
-| AlertProcessSpoiler | ⬜ | ◐ |
+| [AlertProcessSpoiler](../../src/components/Alert/AlertProcessSpoiler-ai.md) ([TRI-160](https://linear.app/triplex-next/issue/TRI-160/alertprocessspoiler-ai-ready-phase-1)) | ✅ | ✅ |
 | Carousel | ⬜ | ◐ |
 | CarouselIndicators | ⬜ | ◐ |
 | CarouselItem | ⬜ | ◐ |

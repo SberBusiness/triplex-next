@@ -10,3 +10,4 @@ export { Production as ProductionRender } from "./Production";
 export { default as ProductionSource } from "./Production?raw";
 export { DynamicIndicators as DynamicIndicatorsRender } from "./DynamicIndicators";
 export { default as DynamicIndicatorsSource } from "./DynamicIndicators?raw";
+export { VisualTests as VisualTestsRender } from "./VisualTests";

@@ -176,6 +176,82 @@ describe("Carousel Navigation (Buttons & Context)", () => {
             expect(screen.getByTestId("prev-btn")).toHaveTextContent("Back");
         });
 
+        it("forwards next button ref, attributes and replacement children", () => {
+            const ref = React.createRef<HTMLButtonElement>();
+            render(
+                <ButtonContextMockWrapper>
+                    <CarouselNextButton
+                        ref={ref}
+                        className="custom-next"
+                        aria-label="Next offer"
+                        data-tracking="next"
+                        type="submit"
+                    >
+                        Next
+                    </CarouselNextButton>
+                </ButtonContextMockWrapper>,
+            );
+
+            const button = screen.getByRole("button", { name: "Next offer" });
+            expect(ref.current).toBe(button);
+            expect(button).toHaveClass("custom-next");
+            expect(button).toHaveAttribute("data-tracking", "next");
+            expect(button).toHaveAttribute("type", "submit");
+            expect(button).toHaveTextContent("Next");
+        });
+
+        it("blocks both next button callbacks when native disabled is set", () => {
+            const nextSlide = vi.fn();
+            const onClick = vi.fn();
+            render(
+                <ButtonContextMockWrapper contextOverrides={{ atEnd: false, nextSlide }}>
+                    <CarouselNextButton aria-label="Next offer" disabled onClick={onClick} />
+                </ButtonContextMockWrapper>,
+            );
+
+            const button = screen.getByRole("button", { name: "Next offer" });
+            expect(button).toBeDisabled();
+            expect(button).toHaveAttribute("aria-disabled", "false");
+            fireEvent.click(button);
+            expect(nextSlide).not.toHaveBeenCalled();
+            expect(onClick).not.toHaveBeenCalled();
+        });
+
+        it("uses current next button callbacks and boundary after rerender", () => {
+            const initialNextSlide = vi.fn();
+            const initialOnClick = vi.fn();
+            const nextSlide = vi.fn();
+            const onClick = vi.fn();
+            const { rerender } = render(
+                <ButtonContextMockWrapper contextOverrides={{ atEnd: false, nextSlide: initialNextSlide }}>
+                    <CarouselNextButton aria-label="Next offer" onClick={initialOnClick} />
+                </ButtonContextMockWrapper>,
+            );
+
+            rerender(
+                <ButtonContextMockWrapper contextOverrides={{ atEnd: false, nextSlide }}>
+                    <CarouselNextButton aria-label="Next offer" onClick={onClick} />
+                </ButtonContextMockWrapper>,
+            );
+            const button = screen.getByRole("button", { name: "Next offer" });
+            fireEvent.click(button);
+            expect(initialNextSlide).not.toHaveBeenCalled();
+            expect(initialOnClick).not.toHaveBeenCalled();
+            expect(nextSlide).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click", target: button }));
+            expect(nextSlide.mock.invocationCallOrder[0]).toBeLessThan(onClick.mock.invocationCallOrder[0]);
+
+            rerender(
+                <ButtonContextMockWrapper contextOverrides={{ atEnd: true, nextSlide }}>
+                    <CarouselNextButton aria-label="Next offer" onClick={onClick} />
+                </ButtonContextMockWrapper>,
+            );
+            fireEvent.click(button);
+            expect(button).toHaveAttribute("aria-disabled", "true");
+            expect(nextSlide).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledTimes(2);
+        });
+
         it("should consume default context functions safely without throwing exceptions", () => {
             const FallbackConsumer = () => {
                 const ctx = useContext(CarouselContext);

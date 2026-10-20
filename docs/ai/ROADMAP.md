@@ -237,11 +237,13 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 родителя. Отдельные stories для каждой части не являются условием завершения.
 В разделе Stories AI.md атома можно ссылаться на соответствующие примеры родителя.
 
+Аудит CarouselIndicators завершён в TRI-164.
+
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
 | Carousel | ✅ | ✅ |
-| CarouselIndicators | ⬜ | ◐ |
+| CarouselIndicators | ✅ | ✅ |
 | CarouselItem | ⬜ | ◐ |
 | CarouselNextButton | ⬜ | ◐ |
 | CarouselPrevButton | ⬜ | ◐ |

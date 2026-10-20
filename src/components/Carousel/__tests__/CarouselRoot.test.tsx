@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Carousel } from "../Carousel";
 import { ECarouselScrollMode } from "../enums";
+import { ICarouselProps } from "../types";
 import { EOrientation } from "../../../enums";
 import { getResizeCallback, resetResizeCallback, mockElementSize } from "../../../../test-utils/dom";
 
@@ -10,6 +11,7 @@ interface ITestCarouselProps {
     orientation?: EOrientation;
     scrollMode?: ECarouselScrollMode;
     gap?: number;
+    viewportPadding?: ICarouselProps["viewportPadding"];
     slideSizes?: number[];
     viewportSize?: number;
 }
@@ -18,12 +20,13 @@ const TestCarousel: React.FC<ITestCarouselProps> = ({
     orientation = EOrientation.HORIZONTAL,
     scrollMode = ECarouselScrollMode.ITEM,
     gap = 16,
+    viewportPadding,
     slideSizes = [100, 100, 100],
     viewportSize = 500,
 }) => {
     const horizontal = orientation === EOrientation.HORIZONTAL;
     return (
-        <Carousel orientation={orientation} scrollMode={scrollMode} gap={gap}>
+        <Carousel orientation={orientation} scrollMode={scrollMode} gap={gap} viewportPadding={viewportPadding}>
             <Carousel.Viewport
                 data-testid="viewport"
                 ref={(n) =>
@@ -132,6 +135,79 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 fireEvent.click(nextBtn);
                 expect(screen.getByTestId("prev-btn")).toHaveAttribute("aria-disabled", "false");
             }
+        });
+    });
+
+    describe("Root contract", () => {
+        it("forwards ref, className and HTML attributes to the root div", () => {
+            const ref = React.createRef<HTMLDivElement>();
+            render(
+                <Carousel ref={ref} className="custom-carousel" role="region" aria-label="Featured cards">
+                    Content
+                </Carousel>,
+            );
+
+            const root = screen.getByRole("region", { name: "Featured cards" });
+            expect(root).toBeInstanceOf(HTMLDivElement);
+            expect(ref.current).toBe(root);
+            expect(root).toHaveClass("carousel", "horizontal", "custom-carousel");
+            expect(root).toHaveTextContent("Content");
+        });
+
+        it.each([
+            { name: "gap", props: { gap: 24 }, transform: "translateX(0px)" },
+            {
+                name: "scroll mode",
+                props: { scrollMode: ECarouselScrollMode.PAGE },
+                transform: "translateX(0px)",
+            },
+            {
+                name: "orientation",
+                props: { orientation: EOrientation.VERTICAL },
+                transform: "translateY(0px)",
+            },
+        ])("resets navigation when $name changes", ({ props, transform }) => {
+            const { rerender } = render(<TestCarousel slideSizes={[300, 300, 300]} viewportSize={500} />);
+            act(() => getResizeCallback()?.());
+            fireEvent.click(screen.getByTestId("next-btn"));
+            expect(screen.getByTestId("prev-btn")).toHaveAttribute("aria-disabled", "false");
+
+            rerender(<TestCarousel slideSizes={[300, 300, 300]} viewportSize={500} {...props} />);
+            act(() => getResizeCallback()?.());
+
+            expect(screen.getByTestId("prev-btn")).toHaveAttribute("aria-disabled", "true");
+            expect(screen.getByTestId("track")).toHaveStyle({
+                "--triplex-next-runtime-carousel-transform": transform,
+            });
+        });
+
+        it("includes viewport padding in the scroll boundary and updates its runtime style", () => {
+            const { rerender } = render(
+                <TestCarousel slideSizes={[300, 300, 300]} viewportSize={500} viewportPadding={[8, 16, 8, 32]} />,
+            );
+            act(() => getResizeCallback()?.());
+
+            expect(screen.getByTestId("viewport")).toHaveStyle({
+                "--triplex-next-runtime-carousel-viewport-padding": "8px 16px 8px 32px",
+            });
+
+            fireEvent.click(screen.getByTestId("next-btn"));
+            fireEvent.click(screen.getByTestId("next-btn"));
+
+            expect(screen.getByTestId("track")).toHaveStyle({
+                "--triplex-next-runtime-carousel-transform": "translateX(-480px)",
+            });
+            expect(screen.getByTestId("next-btn")).toHaveAttribute("aria-disabled", "true");
+
+            rerender(<TestCarousel slideSizes={[300, 300, 300]} viewportSize={500} viewportPadding={0} />);
+            act(() => getResizeCallback()?.());
+
+            expect(screen.getByTestId("viewport")).toHaveStyle({
+                "--triplex-next-runtime-carousel-viewport-padding": "0px",
+            });
+            expect(screen.getByTestId("track")).toHaveStyle({
+                "--triplex-next-runtime-carousel-transform": "translateX(-432px)",
+            });
         });
     });
 

@@ -28,6 +28,7 @@ const ORIENTATION_TO_CLIENT_SIZE_KEY = {
     [EOrientation.VERTICAL]: "clientHeight",
 } as const;
 
+/** Контейнер составной карусели: управляет геометрией, текущим слайдом и состоянием навигации. */
 const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
     (
         {
@@ -272,6 +273,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 pageMode,
                 getSlideSize,
                 getSlideStart,
+                offsetRef,
             ],
         );
 
@@ -387,7 +389,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
             observer.observe(trackRef.current);
 
             return () => observer.disconnect();
-        }, [updateOffsetAndPages]);
+        }, [updateOffsetAndPages, currentIndexRef]);
 
         // Сброс индекса при изменении ключевых настроек карусели
         useEffect(() => {
@@ -452,6 +454,8 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 nextSlide,
                 prevSlide,
                 goToSlide,
+                orientationRef,
+                offsetRef,
             ],
         );
 
@@ -467,7 +471,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
 
 CarouselRoot.displayName = "Carousel";
 
-/** Карусель. */
+/** Составная карусель с прокруткой по элементам или страницам в горизонтальной или вертикальной ориентации. */
 export const Carousel = Object.assign(CarouselRoot, {
     Viewport: CarouselViewport,
     Track: CarouselTrack,

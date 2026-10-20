@@ -240,7 +240,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
-| Carousel | ⬜ | ◐ |
+| Carousel | ✅ | ✅ |
 | CarouselIndicators | ⬜ | ◐ |
 | CarouselItem | ⬜ | ◐ |
 | CarouselNextButton | ⬜ | ◐ |
@@ -333,6 +333,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TooltipTarget | ⬜ | ◐ |
 | TooltipXButton | ⬜ | ◐ |
 | UploadZoneInput | ⬜ | ◐ |
+
+Аудит атома `Carousel` завершён в TRI-163.
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

@@ -228,7 +228,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | UploadZone | ✅ | ✅ | ✅ |
 | WindowResizeListener | ✅ | ✅ | ✅ |
 
-Задачи для завершения основной таблицы: [ChipDatePicker — TRI-136](https://linear.app/triplex-next/issue/TRI-136/chipdatepicker-ai-ready-phase-1), [ChipSelect — TRI-131](https://linear.app/triplex-next/issue/TRI-131/chipselect-ai-ready-phase-1).
+Задачи для завершения основной таблицы: ChipDatePicker — TRI-136, ChipSelect — TRI-131.
 
 ##### Атомы составных компонентов
 
@@ -239,7 +239,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
-| AlertProcessSpoiler | ⬜ | ◐ |
+| AlertProcessSpoiler | ✅ | ✅ |
 | Carousel | ⬜ | ◐ |
 | CarouselIndicators | ⬜ | ◐ |
 | CarouselItem | ⬜ | ◐ |

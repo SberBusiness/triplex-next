@@ -47,7 +47,7 @@ export const WithPrefixAndPostfix = () => {
                 <ChipDatePickerTarget
                     selected={pickedDate !== null}
                     onClear={handleClear}
-                    prefix={<CalendarStrokeSrvIcon20 paletteIndex={5} />}
+                    prefix={<CalendarStrokeSrvIcon20 paletteIndex={pickedDate !== null ? 6 : 5} />}
                     aria-haspopup="dialog"
                     {...postfixProps}
                 >

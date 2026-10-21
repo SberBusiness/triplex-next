@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { DateRange, IDateRangeButtonProvideProps, IDateRangePickerProvideProps } from "../DateRange";
-import { TDateRangeValue } from "../types";
+import { DateRange } from "../DateRange";
+import { IDateRangeButtonProvideProps, IDateRangePickerProvideProps, TDateRangeValue } from "../types";
 import { EDateRangeShiftUnit } from "../enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({
@@ -101,6 +101,61 @@ describe("DateRange", () => {
         fireEvent.change(pickerTo, { target: { value: "20231215" } });
 
         expect(mockOnChange).toHaveBeenCalledWith(["", "20231215"]);
+    });
+
+    it("allows 'from' date to equal 'to' date", () => {
+        render(<DateRange {...defaultProps} />);
+
+        const pickerFrom = screen.getByTestId("picker-20240101");
+        fireEvent.change(pickerFrom, { target: { value: "20240131" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["20240131", "20240131"]);
+    });
+
+    it("allows 'to' date to equal 'from' date", () => {
+        render(<DateRange {...defaultProps} />);
+
+        const pickerTo = screen.getByTestId("picker-20240131");
+        fireEvent.change(pickerTo, { target: { value: "20240101" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["20240101", "20240101"]);
+    });
+
+    it("keeps 'to' date when 'from' date is earlier but lexicographically greater in custom format", () => {
+        render(<DateRange {...defaultProps} value={["", "01.02.2024"]} format="DD.MM.YYYY" />);
+
+        const pickerFrom = screen.getByTestId("picker-empty");
+        fireEvent.change(pickerFrom, { target: { value: "31.01.2024" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["31.01.2024", "01.02.2024"]);
+    });
+
+    it("clears 'to' date when 'from' date is greater in custom format", () => {
+        render(<DateRange {...defaultProps} value={["", "31.01.2024"]} format="DD.MM.YYYY" />);
+
+        const pickerFrom = screen.getByTestId("picker-empty");
+        fireEvent.change(pickerFrom, { target: { value: "01.02.2024" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["01.02.2024", ""]);
+    });
+
+    it("clears 'from' date when 'to' date is less in custom format", () => {
+        render(<DateRange {...defaultProps} value={["01.02.2024", ""]} format="DD.MM.YYYY" />);
+
+        const pickerTo = screen.getByTestId("picker-empty");
+        fireEvent.change(pickerTo, { target: { value: "31.01.2024" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["", "31.01.2024"]);
+    });
+
+    it("shifts range in custom format", () => {
+        render(<DateRange {...defaultProps} value={["01.01.2024", "31.01.2024"]} format="DD.MM.YYYY" />);
+
+        const buttons = screen.getAllByRole("button");
+        const forwardButton = buttons[1];
+        fireEvent.click(forwardButton);
+
+        expect(mockOnChange).toHaveBeenCalledWith(["01.02.2024", "29.02.2024"]);
     });
 
     it("shifts range back by one month by default", () => {
@@ -213,6 +268,26 @@ describe("DateRange", () => {
         expect(mockOnChange).not.toHaveBeenCalled();
     });
 
+    it("does not shift range when a date is invalid", () => {
+        render(<DateRange {...defaultProps} value={["20241301", "20240131"]} />);
+
+        const buttons = screen.getAllByRole("button");
+        const forwardButton = buttons[1];
+        fireEvent.click(forwardButton);
+
+        expect(mockOnChange).not.toHaveBeenCalled();
+    });
+
+    it("does not shift range when dates do not match the format", () => {
+        render(<DateRange {...defaultProps} value={["31.01.2024", "29.02.2024"]} />);
+
+        const buttons = screen.getAllByRole("button");
+        const forwardButton = buttons[1];
+        fireEvent.click(forwardButton);
+
+        expect(mockOnChange).not.toHaveBeenCalled();
+    });
+
     it("disables navigation buttons when dates are empty", () => {
         const renderButtonWithDisabledTest = (props: IDateRangeButtonProvideProps) => (
             <button
@@ -271,6 +346,33 @@ describe("DateRange", () => {
 
         const root = screen.getByTestId("date-range-root");
         expect(root).toHaveAttribute("aria-label", "Date range");
+    });
+
+    it("passes the default format to both pickers", () => {
+        const renderPickerFrom = vi.fn(renderPicker);
+        const renderPickerTo = vi.fn(renderPicker);
+
+        render(<DateRange {...defaultProps} renderPickerFrom={renderPickerFrom} renderPickerTo={renderPickerTo} />);
+
+        expect(renderPickerFrom).toHaveBeenCalledWith(expect.objectContaining({ format: "YYYYMMDD" }));
+        expect(renderPickerTo).toHaveBeenCalledWith(expect.objectContaining({ format: "YYYYMMDD" }));
+    });
+
+    it("passes custom format to both pickers", () => {
+        const renderPickerFrom = vi.fn(renderPicker);
+        const renderPickerTo = vi.fn(renderPicker);
+
+        render(
+            <DateRange
+                {...defaultProps}
+                format="DD.MM.YYYY"
+                renderPickerFrom={renderPickerFrom}
+                renderPickerTo={renderPickerTo}
+            />,
+        );
+
+        expect(renderPickerFrom).toHaveBeenCalledWith(expect.objectContaining({ format: "DD.MM.YYYY" }));
+        expect(renderPickerTo).toHaveBeenCalledWith(expect.objectContaining({ format: "DD.MM.YYYY" }));
     });
 
     it("ignores children passed to the component", () => {

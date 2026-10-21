@@ -249,7 +249,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CheckboxTreeExtendedCheckbox | ⬜ | ◐ |
 | CheckboxTreeExtendedNode | ⬜ | ◐ |
 | ChipDatePickerTarget | ✅ | ✅ |
-| ChipMonthYearPickerTarget | ⬜ | ◐ |
+| ChipMonthYearPickerTarget | ✅ | ✅ |
 | ChipSelectTarget | ⬜ | ◐ |
 | ChipSuggestTarget | ⬜ | ◐ |
 | CollapsibleTreeExtendedNode | ⬜ | ◐ |

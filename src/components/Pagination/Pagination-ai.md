@@ -3,7 +3,6 @@ component: Pagination
 category: Navigation
 related:
   - PaginationExtended
-  - PaginationNavigationExtended
   - SelectField
   - ButtonIcon
   - MasterTable
@@ -51,7 +50,7 @@ version: "1.0"
 | `siblingCount` | `number` | `0` | Сколько соседних страниц показывать вокруг текущей. |
 | `buttonPrevProps` / `buttonNextProps` | `Omit<IPaginationNavigationButtonProps, "direction" \| "children">` | — | Доп. настройки кнопок навигации. |
 
-Логика расстановки видимых страниц и многоточий — в `utils/paginationUtils.tsx` (`PaginationUtils.createPagesArray`). При больших `totalPages` и нулевых `boundaryCount`/`siblingCount` отображается минимальный набор; увеличение этих значений раскрывает больше номеров и добавляет многоточия по краям. Места многоточий помечаются sentinel-значением `PAGINATION_ELLIPSIS_VALUE` (`-1`) в массиве страниц.
+Логика расстановки видимых страниц и многоточий — в `utils.tsx` (`PaginationUtils.createPagesArray`). При больших `totalPages` и нулевых `boundaryCount`/`siblingCount` отображается минимальный набор; увеличение этих значений раскрывает больше номеров и добавляет многоточия по краям. Места многоточий помечаются sentinel-значением `PAGINATION_ELLIPSIS_VALUE` (`-1`) в массиве страниц.
 
 ### `PaginationSelect` props (через `paginationSelectProps`)
 
@@ -104,7 +103,7 @@ Pagination.PageButton_BorderColor_Focus
 - Публичный API не менять: имена и обязательность props (`paginationNavigationProps` — обязателен, `paginationSelectProps` — опционален), enum `EPaginationNavigationIconDirection` (`BACK`/`NEXT`), barrel-экспорты из `index.ts`.
 - Корневой DOM-элемент `Pagination`/`PaginationExtended` — `<nav>`; навигация по страницам — семантический список `<ul>/<li>`. Не менять без обсуждения: семантика участвует в accessibility-контракте.
 - Навигация рендерится всегда, включая случай единственной страницы: `PaginationNavigation` приводит `totalPages` к минимуму 1, рисует одну страницу и блокирует обе стрелки. Это держит высоту панели пагинации постоянной независимо от размера страницы — не возвращать условный рендер по `totalPages > 1`.
-- Логику `PaginationUtils.createPagesArray` / `generatePageRanges` / `generateRange` не менять без перегенерации `__tests__/paginationUtils.test.tsx` — там зафиксированы граничные случаи раскладки.
+- Логику `PaginationUtils.createPagesArray` / `generatePageRanges` / `generateRange` не менять без проверки `__tests__/utils.test.ts` — там зафиксированы граничные случаи раскладки.
 - `PAGINATION_ELLIPSIS_VALUE = -1` — sentinel в массиве страниц, на него завязан рендер многоточия.
 - Блокировка по `MasterTableContext.loading` перекрывает `disabled`, пришедший из props: в состоянии загрузки кнопка заблокирована независимо от того, что передал потребитель. Обратное неверно — вне загрузки решает prop.
 - `PaginationSelect` не должен терять свойства: его публичный тип — свойства `SelectField`, поэтому всё, что не разобрано явно, обязано уходить в `SelectField`. Точечные перечисления props вместо `...rest` здесь уже приводили к молчаливой потере `status`, `targetProps` и `data`-атрибутов.
@@ -133,6 +132,16 @@ Pagination.PageButton_BorderColor_Focus
 - `PaginationNavigationButton` — кнопка «Назад»/«Вперёд» (поверх `ButtonIcon`), направление задаётся `EPaginationNavigationIconDirection`.
 - `MasterTable` — таблица, в паре с которой пагинация обычно и используется (`MasterTable.PaginationPanel`). Её `loading` через `MasterTableContext` блокирует элементы пагинации.
 
+### PaginationNavigationExtended
+
+Контейнер `<ul>` для полностью кастомной компоновки навигации. Он задаёт раскладку списка, а состав страниц определяет потребитель. Для автоматического вычисления видимых страниц и многоточий используй `PaginationNavigation`. Как тривиальная обёртка `PaginationNavigationExtended` описывается здесь, отдельного AI.md у него нет.
+
+`IPaginationNavigationExtendedProps` наследует стандартные HTML-атрибуты `<ul>`. `children` передаёт содержимое списка: для сохранения семантики `<ul>/<li>` используй `PaginationNavigationExtendedItem` или обычные `<li>`. `className` объединяется с базовым классом через `clsx`, остальные HTML-свойства, включая `id`, `aria-*`, `data-*` и обработчики событий, передаются через `...rest` на корневой `<ul>`. `forwardRef` направлен на этот же элемент (`HTMLUListElement`), `displayName` равен `PaginationNavigationExtended`; корневой элемент, ref-target и публичный экспорт сохраняй.
+
+Раскладка — горизонтальный flex-список с `align-items: center` и `gap: 4px`, без маркеров (`list-style-type: none`), с нулевыми `margin` и `padding`. Собственных тем и дизайн-токенов у контейнера нет; оформление вложенных кнопок и многоточий определяется соответствующими компонентами.
+
+Контейнер не хранит состояние и не имеет собственных callback-props, не генерирует номера страниц, не обрабатывает `disabled` или `loading` и не читает `MasterTableContext`. Текущую страницу, блокировку кнопок, многоточия и переходы задают дочерние элементы и потребитель; вложенные кнопки могут сами учитывать загрузку таблицы. Для доступности потребитель задаёт имя навигации, подписи кнопок и при необходимости `aria-current="page"` на текущей странице. Управление фокусом и клавиатурное поведение остаются у вложенных элементов: контейнер не добавляет обработчиков клавиатуры или roving tabindex.
+
 ---
 
 ## Stories
@@ -148,6 +157,17 @@ Pagination.PageButton_BorderColor_Focus
 | `Extended` | `Extended.tsx` | Кастомная компоновка через `PaginationExtended` + `PaginationNavigation` + `PaginationSelect` |
 | `VisualTests` | — | Скриншот-регрессия: короткая навигация, многоточия слева/справа/с обеих сторон, disabled-крайние кнопки, вариант с селектом |
 
+### PaginationNavigationExtended
+
+Основные истории: `stories/Pagination/PaginationNavigationExtended.stories.tsx`
+Файлы примеров: `stories/Pagination/examples/PaginationNavigationExtended/`
+
+| Story | Example file | Что демонстрирует |
+|---|---|---|
+| `Example` | `Example.tsx` | Ручная компоновка кнопок страниц, текущей страницы, многоточия и заблокированной кнопки «Назад» внутри `PaginationExtended` |
+
+`Playground` отсутствует: у контейнера только стандартные HTML-свойства. Единственная история `Example` доступна как пример семейства `Pagination` и участвует в скриншот-тестах.
+
 ---
 
 ## История изменений
@@ -159,3 +179,5 @@ Pagination.PageButton_BorderColor_Focus
 | 2026-08-12 | В состоянии загрузки `MasterTable` элементы пагинации становятся `disabled` — читается из `MasterTableContext.loading`. Публичный API не изменился. Заодно `PaginationSelect` перестал молча терять переданный `status`. |
 | 2026-08-27 | Навигация больше не скрывается при `totalPages <= 1`: отрисовывается одна страница с заблокированными стрелками, высота панели пагинации не схлопывается. Публичный API не изменился. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`PaginationNavigation`, `PaginationNavigationButton`, `PaginationNavigationExtendedItem`, `PaginationPageButton`, `PaginationPageEllipsis`, `PaginationSelect`, `ButtonBase`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-07 | TRI-66: описан контракт обёртки `PaginationNavigationExtended` в родительской документации, добавлены её stories и файлы примеров; ссылка из `related` удалена, поскольку отдельный AI.md для обёртки не создаётся. |
+| 2026-10-16 | При сверке AI-Ready удалены ссылки на отсутствующие stories и примеры `Default` / `VisualTests` у `PaginationNavigationExtended`; таблица соответствует текущему `Example`, пути к утилитам и их тестам актуализированы. |

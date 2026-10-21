@@ -1,4 +1,6 @@
-import { ECarouselOrientation, ECarouselScrollMode } from "./enums";
+import { ECarouselScrollMode } from "./enums";
+import { EOrientation } from "../../enums";
+import { IPageIndicatorsProps, TPageIndicatorProps, TPageIndicatorPropsFactory } from "../PageIndicators/types";
 
 /** Внутренний отступ компонента CarouselViewport. */
 export type TCarouselViewportPadding =
@@ -9,12 +11,14 @@ export type TCarouselViewportPadding =
 
 /** Свойства компонента Carousel. */
 export interface ICarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое карусели: область просмотра с лентой слайдов и необязательная навигация. */
+    children?: React.ReactNode;
     /** Расстояние (зазор) между слайдами в пикселях. По умолчанию 16. */
     gap?: number;
     /** Режим прокрутки карусели: поочередно по одному элементу или постранично. По умолчанию ECarouselScrollMode.ITEM. */
     scrollMode?: ECarouselScrollMode;
-    /** Направление движения карусели (горизонтальное или вертикальное). По умолчанию ECarouselOrientation.HORIZONTAL. */
-    orientation?: ECarouselOrientation;
+    /** Направление движения карусели (горизонтальное или вертикальное). По умолчанию EOrientation.HORIZONTAL. */
+    orientation?: EOrientation;
     /** Внутренние отступы области видимости слайдов (Viewport), задающие зазоры по краям рабочей области скролла. По умолчанию 0. */
     viewportPadding?: TCarouselViewportPadding;
 }
@@ -45,17 +49,13 @@ export interface ICarouselItemProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 /** Свойства кнопки-индикатора. */
-export type TCarouselIndicatorProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+export type TCarouselIndicatorProps = TPageIndicatorProps;
 
 /** Функция для динамического формирования пропсов индикатора. */
-export type TCarouselIndicatorPropsFactory = (args: {
-    index: number;
-    page: number;
-    selected: boolean;
-}) => TCarouselIndicatorProps;
+export type TCarouselIndicatorPropsFactory = TPageIndicatorPropsFactory;
 
-/** Свойства компонента CarouselIndicators. */
-export interface ICarouselIndicatorsProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Свойства для кнопок-индикаторов. */
-    indicatorProps?: TCarouselIndicatorProps | TCarouselIndicatorPropsFactory;
-}
+/** Свойства компонента CarouselIndicators. Количество страниц, активная страница и ориентация берутся из Carousel. */
+export interface ICarouselIndicatorsProps extends Omit<
+    IPageIndicatorsProps,
+    "count" | "activeIndex" | "onChange" | "orientation"
+> {}

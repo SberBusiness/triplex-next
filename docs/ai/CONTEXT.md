@@ -79,7 +79,7 @@ src/components/Button/
 
 Источник значений: `src/components/DesignTokens/DesignTokensCore.ts` (палитра,
 12 групп) и `src/components/DesignTokens/components/{Group}.ts` (токены
-компонентов, 56 групп). Путь токена — `{Группа}.{Токен}`:
+компонентов, 57 групп). Путь токена — `{Группа}.{Токен}`:
 
 ```text
 ColorBrand.50

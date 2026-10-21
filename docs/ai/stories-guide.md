@@ -26,6 +26,15 @@ Stories выполняют несколько функций (в порядке 
 - Если задача маленькая и story-файл уже legacy, **не рефактори весь файл только ради миграции**. Сохраняй локальный паттерн и обновляй только нужный участок.
 - Не переименовывай существующие story ids/export names без явной необходимости: на них могут опираться e2e и visual tests.
 
+Готовность **Storybook examples** в ROADMAP оценивается по основным
+документационным stories с копируемыми примерами. Дополнительный legacy-файл
+для визуальной регрессии допустим, если основные примеры компонента
+соответствуют modern pattern. Например, у `LightBox` основные примеры находятся
+в `stories/LightBox/LightBox.stories.tsx` и `stories/LightBox/examples/`,
+а `stories/LightBox/LightBoxInitialOpened.stories.tsx` сохраняет legacy pattern
+для скриншот-тестов. Разрешение сохранять legacy pattern при мелкой правке
+само по себе не подтверждает готовность основных примеров.
+
 ---
 
 ## Что обновлять при добавлении нового prop
@@ -96,7 +105,7 @@ stories/
 - **Без постфикса `Example`** — не пиши `DefaultExample.tsx`, `SizesExample.tsx`. Если встретишь старые файлы с этим постфиксом, сохраняй локальный паттерн до миграции, но новые файлы создавай без него.
 - Имя экспорта-функции внутри файла совпадает с именем файла: `export const Default = () => ...`.
 - Source-константа: `{StoryName}Source` — `DefaultSource`, `SizesSource`, `PlaygroundSource`.
-- В story-файле импорт компонента-примера делается через alias, чтобы избежать коллизии со story-экспортом: `Default as DefaultRender`, `Playground as PlaygroundRender`. Source без alias.
+- `examples/index.ts` реэкспортирует пример с суффиксом `Render` (`Default as DefaultRender`), поэтому в story-файле импорт идёт без alias — см. «Файл `examples/index.ts`».
 
 ---
 
@@ -344,11 +353,11 @@ import { action } from "storybook/actions";
 
 ### Параметры Visual tests
 
-Visual tests скрыта из документации и не показывает исходный код — она предназначена только для тестов:
+Visual tests скрыта из документации (`"!autodocs"`) и сайдбара (`"!dev"`) и не показывает код: она нужна только для скриншот-тестов, test-runner её снимает:
 
 ```tsx
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -368,7 +377,7 @@ export const VisualTests: Story = {
 
 ```tsx
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -444,16 +453,20 @@ render: () => (
 
 ## Файл `examples/index.ts`
 
-В modern pattern для каждого примера экспортируются два значения — сам компонент и его исходный код:
+В modern pattern для каждого примера экспортируются два значения — сам компонент под именем `{StoryName}Render` и его исходный код под именем `{StoryName}Source`. Экспорты только явные, без `export *`:
 
 ```ts
-export * from "./Default";
+export { Playground as PlaygroundRender, type IPlaygroundArgs } from "./Playground";
+export { Default as DefaultRender } from "./Default";
 export { default as DefaultSource } from "./Default?raw";
-export * from "./Sizes";
+export { Sizes as SizesRender } from "./Sizes";
 export { default as SizesSource } from "./Sizes?raw";
+export { VisualTests as VisualTestsRender } from "./VisualTests";
 ```
 
-> **Имена.** Файл и экспорт-функция называются как story (`Default.tsx` экспортирует `Default`). Source-константа добавляет суффикс `Source` (`DefaultSource`). Из-за коллизии с именем story-экспорта в `*.stories.tsx` импорт компонента-примера делается через alias — см. ниже.
+> **Имена.** Файл и экспорт-функция называются как story (`Default.tsx` экспортирует `Default`). Суффикс `Render` нужен, потому что имя `Default` в `*.stories.tsx` занято story-экспортом. Типы экспортируются через `type`.
+
+В существующих `index.ts` с `export *` при небольших правках сохраняй локальный паттерн; на явные экспорты переводи при переписывании stories.
 
 ---
 
@@ -462,7 +475,7 @@ export { default as SizesSource } from "./Sizes?raw";
 В modern pattern каждая документационная стори подключает пример и его исходный код через `?raw`:
 
 ```tsx
-import { Default as DefaultRender, DefaultSource } from "./examples";
+import { DefaultRender, DefaultSource } from "./examples";
 
 export const Default: StoryObj<typeof Component> = {
     render: DefaultRender,
@@ -478,7 +491,7 @@ export const Default: StoryObj<typeof Component> = {
 };
 ```
 
-> **Alias обязателен.** Имя экспорта-функции (`Default`) совпадает с именем story-экспорта (`Default: StoryObj`), поэтому в импорте используется `Default as DefaultRender`. Source-константа конфликта не вызывает (`DefaultSource`), её импортируем без alias. То же относится к Playground (`Playground as PlaygroundRender`).
+> Суффикс `Render` добавлен в `examples/index.ts`, поэтому alias при импорте не нужен.
 
 ---
 
@@ -491,13 +504,7 @@ import React, { useState, useCallback } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Title, Description, Primary, Controls, Stories, ArgTypes, Heading } from "@storybook/addon-docs/blocks";
 import { ComponentName, EComponentSize } from "@sberbusiness/triplex-next";
-import {
-    Default as DefaultRender,
-    DefaultSource,
-    Playground as PlaygroundRender,
-    Sizes as SizesRender,
-    SizesSource,
-} from "./examples";
+import { DefaultRender, DefaultSource, PlaygroundRender, SizesRender, SizesSource } from "./examples";
 
 const meta = {
     title: "Components/Group/ComponentName",
@@ -633,9 +640,10 @@ export const Sizes = () => (
 ### `examples/index.ts`
 
 ```ts
-export * from "./Default";
+export { Playground as PlaygroundRender } from "./Playground";
+export { Default as DefaultRender } from "./Default";
 export { default as DefaultSource } from "./Default?raw";
-export * from "./Sizes";
+export { Sizes as SizesRender } from "./Sizes";
 export { default as SizesSource } from "./Sizes?raw";
 ```
 
@@ -653,7 +661,7 @@ export { default as SizesSource } from "./Sizes?raw";
 - [ ] Playground скрыт из autodocs (`tags: ["!autodocs"]`) — если есть
 - [ ] Все документационные стори, кроме Playground, **не** имеют Controls (`controls: { disable: true }`)
 - [ ] Все документационные стори, кроме Playground, показывают пример кода через `source.code`
-- [ ] Все примеры вынесены в `examples/` и реэкспортированы через `index.ts`
+- [ ] Все примеры вынесены в `examples/` и реэкспортированы через `index.ts` явными экспортами
 - [ ] Default — минимальный пример с параметрами по умолчанию
 - [ ] Стори с вариантами (Sizes, Statuses) — каждый вариант подписан рядом с компонентом
 - [ ] Примеры самодостаточны (можно скопировать целиком)
@@ -670,7 +678,7 @@ export { default as SizesSource } from "./Sizes?raw";
 - [ ] Нет дублирующих скриншотов — визуально идентичные стори исключены через `testRunner: { skip: true }`
 - [ ] Все ключевые визуальные состояния покрыты (размеры, статусы, заполненные поля, фокус)
 - [ ] Если основных сторей недостаточно — создана Visual tests с недостающими состояниями
-- [ ] Visual tests скрыта из autodocs (`tags: ["!autodocs"]`) и не показывает код
+- [ ] Visual tests скрыта из autodocs и сайдбара (`tags: ["!autodocs", "!dev"]`) и не показывает код
 - [ ] Если компонент требует взаимодействия (dropdown, tooltip, modal, popover) — реализован `play` в Visual tests
 - [ ] Данные в Visual tests захардкожены (нет `new Date()`, `Math.random()`)
 - [ ] Контейнеры имеют фиксированные размеры для стабильного layout'а

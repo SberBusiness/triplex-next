@@ -147,7 +147,7 @@ Stepper.Step_Color_Disabled
 ## Stories
 
 Основные истории: `stories/Stepper/Stepper.stories.tsx`
-Файлы примеров: `stories/Stepper/examples/`
+Файлы примеров: `stories/Stepper/examples/Stepper/`
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
@@ -158,7 +158,6 @@ Stepper.Step_Color_Disabled
 | `WithIcons` | `WithIcons.tsx` | Все значения `EStepperStepIconType` на шагах |
 | `ManySteps` | `ManySteps.tsx` | Шаги не помещаются в контейнер и прокручиваются |
 | `VisualTests` | `VisualTests.tsx` | Размеры × состояния, отключённый шаг, типы, `:focus-visible` на шаге (через `play`) |
-| `StepperExtendedType` | — | Стори базового `StepperExtended`; живёт в этом файле до отдельной задачи по `StepperExtended` |
 
 ---
 
@@ -169,3 +168,4 @@ Stepper.Step_Color_Disabled
 | 2026-09-24 | Создан документ AI-ready для `Stepper` (TRI-84). |
 | 2026-09-24 | AI-рефакторинг: подводка шага и кнопки прокрутки вынесены в чистые функции и отдельный компонент модульного уровня, величина прокрутки хранится одним числом вместо объекта, ссылки на узлы удалённых шагов больше не удерживаются, JSDoc проставлен на публичных полях `steps` и `size`. Публичный API (имена props, значения enum, barrel-экспорты) и разметка не изменились. Добавлены unit-тесты на состояния шагов, типы, клавиатуру, `forwardedRef`, `...rest` и подводку шага в видимую область; stories переписаны по modern pattern. |
 | 2026-09-25 | Размер по умолчанию изменён с `LG` на `MD` по решению ревью — вместе со `StepperExtended`, чтобы компоненты не разъехались. Изменение наблюдаемое: без явного `size` шаги и кнопки прокрутки становятся меньше, описано в release notes 1.48.0. |
+| 2026-10-19 | Примеры перенесены в `stories/Stepper/examples/Stepper/`, отдельно от `StepperExtended`; путь обновлён, удалена устаревшая запись о несуществующей story `StepperExtendedType`. |

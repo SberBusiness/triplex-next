@@ -1,5 +1,5 @@
-import React from "react";
-import { ImageGalleryExtended, EImageGalleryArrowDirection } from "@sberbusiness/triplex-next";
+import React, { useState } from "react";
+import { ImageGalleryExtended, EImageGalleryArrowDirection, MobileView } from "@sberbusiness/triplex-next";
 
 const ITEMS = Array.from({ length: 9 }, (_, i) => ({
     id: `photo-${i + 1}`,
@@ -14,7 +14,7 @@ export interface IPlaygroundArgs {
 }
 
 export const Playground = ({ withBlur, height }: IPlaygroundArgs) => {
-    const [selectedId, setSelectedId] = React.useState("photo-1");
+    const [selectedId, setSelectedId] = useState("photo-1");
 
     return (
         <ImageGalleryExtended items={ITEMS} selectedId={selectedId} onChange={setSelectedId}>
@@ -40,7 +40,9 @@ export const Playground = ({ withBlur, height }: IPlaygroundArgs) => {
                     )}
                 </ImageGalleryExtended.Nav>
             </ImageGalleryExtended.Main>
-            <ImageGalleryExtended.Thumbnails />
+            <MobileView fallback={<ImageGalleryExtended.Thumbnails />}>
+                <ImageGalleryExtended.PageIndicators />
+            </MobileView>
         </ImageGalleryExtended>
     );
 };

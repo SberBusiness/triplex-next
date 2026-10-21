@@ -61,6 +61,7 @@ export * from "./NumberField";
 export * from "./OrderedList";
 export * from "./Overlay";
 export * from "./Page";
+export * from "./PageIndicators";
 export * from "./Pagination";
 export * from "./Portal";
 export * from "./Radio";

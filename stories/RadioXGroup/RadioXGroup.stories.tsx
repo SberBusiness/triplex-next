@@ -1,0 +1,143 @@
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
+import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { RadioXGroup, EComponentSize } from "@sberbusiness/triplex-next";
+import {
+    Playground as PlaygroundRender,
+    IPlaygroundArgs,
+    Default as DefaultRender,
+    DefaultSource,
+    Indents as IndentsRender,
+    IndentsSource,
+    Sizes as SizesRender,
+    SizesSource,
+    States as StatesRender,
+    StatesSource,
+    VisualTests as VisualTestsRender,
+} from "./examples";
+
+const meta = {
+    title: "Components/RadioXGroup",
+    component: RadioXGroup,
+    tags: ["autodocs"],
+    parameters: {
+        docs: {
+            description: {
+                component:
+                    "Группа Radio с горизонтальным расположением и переносом на следующую строку. " +
+                    "Отступ задаётся через indent. Размер, выбранное и отключённое состояния задаются каждому Radio. " +
+                    "У Radio одной группы должен быть общий name, а у группы — доступное имя через aria-label или aria-labelledby.",
+            },
+            page: () => (
+                <>
+                    <Title />
+                    <Description />
+                    <Heading>Props</Heading>
+                    <ArgTypes of={RadioXGroup} />
+                    <Heading>Playground</Heading>
+                    <Primary />
+                    <Controls of={Playground} />
+                    <Stories />
+                </>
+            ),
+        },
+    },
+} satisfies Meta<typeof RadioXGroup>;
+
+export default meta;
+
+const PLAYGROUND_ARGS: IPlaygroundArgs = {
+    indent: 12,
+    radioSize: EComponentSize.MD,
+    disabled: false,
+};
+
+type Story = StoryObj<typeof meta>;
+
+export const Playground: StoryObj<IPlaygroundArgs> = {
+    tags: ["!autodocs"],
+    args: PLAYGROUND_ARGS,
+    argTypes: {
+        indent: {
+            control: "select",
+            options: [12, 16, 20, 24, 28, 32],
+            description: "Горизонтальный отступ между Radio в пикселях.",
+            table: {
+                category: "Props",
+                type: { summary: "12 | 16 | 20 | 24 | 28 | 32" },
+                defaultValue: { summary: "12" },
+            },
+        },
+        radioSize: {
+            control: "select",
+            options: Object.values(EComponentSize),
+            description: "Размер дочерних Radio.",
+            table: { category: "Settings", defaultValue: { summary: "EComponentSize.MD" } },
+        },
+        disabled: {
+            control: "boolean",
+            description: "Отключает дочерние Radio.",
+            table: { category: "Settings", defaultValue: { summary: "false" } },
+        },
+    },
+    parameters: {
+        controls: { include: Object.keys(PLAYGROUND_ARGS) },
+        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        testRunner: { skip: true },
+    },
+    render: PlaygroundRender,
+};
+
+export const Default: Story = {
+    parameters: {
+        controls: { disable: true },
+        docs: { source: { code: DefaultSource, language: "tsx" } },
+    },
+    render: DefaultRender,
+};
+
+export const Indents: Story = {
+    parameters: {
+        controls: { disable: true },
+        docs: { source: { code: IndentsSource, language: "tsx" } },
+    },
+    render: IndentsRender,
+};
+
+export const Sizes: Story = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: { story: "Размер задаётся каждому дочернему Radio; у RadioXGroup собственного size нет." },
+            source: { code: SizesSource, language: "tsx" },
+        },
+    },
+    render: SizesRender,
+};
+
+export const States: Story = {
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            description: {
+                story: "Выбранное и отключённое состояния задаются на каждом Radio: выбор — через checked и onChange, отключение — через disabled.",
+            },
+            source: { code: StatesSource, language: "tsx" },
+        },
+    },
+    render: StatesRender,
+};
+
+export const VisualTests: Story = {
+    tags: ["!autodocs", "!dev"],
+    parameters: {
+        controls: { disable: true },
+        docs: { canvas: { sourceState: "none" }, codePanel: false },
+        testRunner: { hoverSelector: 'input[value="hovered"]' },
+    },
+    render: VisualTestsRender,
+    play: async ({ canvas, userEvent }) => {
+        canvas.getByRole("radiogroup", { name: "Клавиатурный фокус" }).focus();
+        await userEvent.tab();
+    },
+};

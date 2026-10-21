@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Description, Stories, Title } from "@storybook/addon-docs/blocks";
-import { Default as DefaultRender, DefaultSource } from "./examples";
+import { DefaultRender, DefaultSource } from "./examples";
 
 const meta = {
     title: "Components/Typography/Font Comparison",

@@ -2,8 +2,10 @@ import React, { useState, useMemo, useRef, useLayoutEffect, useCallback, useEffe
 import clsx from "clsx";
 import { CarouselContext } from "./CarouselContext";
 import { ICarouselProps } from "./types";
-import { ECarouselOrientation, ECarouselScrollMode } from "./enums";
-import { resolveViewportPadding, useLatestRef } from "./utils";
+import { ECarouselScrollMode } from "./enums";
+import { EOrientation } from "../../enums";
+import { resolveViewportPadding } from "./utils";
+import { useLatestRef } from "../../utils/refs";
 import styles from "./styles/Carousel.module.less";
 import { CarouselViewport } from "./CarouselViewport";
 import { CarouselTrack } from "./CarouselTrack";
@@ -12,25 +14,26 @@ import { CarouselPrevButton, CarouselNextButton } from "./CarouselButton";
 import { CarouselIndicators } from "./CarouselIndicators";
 
 const ORIENTATION_TO_PADDING_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: { start: "left", end: "right" },
-    [ECarouselOrientation.VERTICAL]: { start: "top", end: "bottom" },
+    [EOrientation.HORIZONTAL]: { start: "left", end: "right" },
+    [EOrientation.VERTICAL]: { start: "top", end: "bottom" },
 } as const;
 
 const ORIENTATION_TO_RECT_SIZE_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: "width",
-    [ECarouselOrientation.VERTICAL]: "height",
+    [EOrientation.HORIZONTAL]: "width",
+    [EOrientation.VERTICAL]: "height",
 } as const;
 
 const ORIENTATION_TO_CLIENT_SIZE_KEY = {
-    [ECarouselOrientation.HORIZONTAL]: "clientWidth",
-    [ECarouselOrientation.VERTICAL]: "clientHeight",
+    [EOrientation.HORIZONTAL]: "clientWidth",
+    [EOrientation.VERTICAL]: "clientHeight",
 } as const;
 
+/** Контейнер составной карусели: управляет геометрией, текущим слайдом и состоянием навигации. */
 const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
     (
         {
             children,
-            orientation = ECarouselOrientation.HORIZONTAL,
+            orientation = EOrientation.HORIZONTAL,
             scrollMode = ECarouselScrollMode.ITEM,
             gap = 16,
             viewportPadding = 0,
@@ -158,6 +161,8 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 const { start: startKey, end: endKey } = ORIENTATION_TO_PADDING_KEY[orientation];
                 const startP = normalizedPadding[startKey];
                 const endP = normalizedPadding[endKey];
+                // Видимая область для группировки и центрирования страниц — без отступов Viewport
+                const pageSize = Math.max(0, containerSize - startP - endP);
 
                 const calculatedMaxOffset = Math.max(0, totalContentSize + startP + endP - containerSize);
                 maxOffsetRef.current = calculatedMaxOffset;
@@ -173,7 +178,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                         const slideSize = getSlideSize(i);
                         const addedSize = currentPage.length > 0 ? slideSize + gap : slideSize;
 
-                        if (currentGroupSize + addedSize <= containerSize + 1) {
+                        if (currentGroupSize + addedSize <= pageSize + 1) {
                             currentPage.push(i);
                             currentGroupSize += addedSize;
                         } else {
@@ -215,7 +220,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                         const groupEnd = getSlideStart(lastSlideIndex) + lastSlideSize;
                         const groupSize = groupEnd - groupStart;
 
-                        targetOffset = groupStart - (containerSize - groupSize) / 2;
+                        targetOffset = groupStart - (pageSize - groupSize) / 2;
                     }
                 } else {
                     setActiveIndices((prev) => (prev.length === 0 ? prev : []));
@@ -270,6 +275,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 pageMode,
                 getSlideSize,
                 getSlideStart,
+                offsetRef,
             ],
         );
 
@@ -385,7 +391,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
             observer.observe(trackRef.current);
 
             return () => observer.disconnect();
-        }, [updateOffsetAndPages]);
+        }, [updateOffsetAndPages, currentIndexRef]);
 
         // Сброс индекса при изменении ключевых настроек карусели
         useEffect(() => {
@@ -433,7 +439,6 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 orientationRef,
                 offsetRef,
                 maxOffsetRef,
-                currentIndexRef,
                 viewportRef,
                 trackRef,
                 slideRefs,
@@ -451,6 +456,8 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
                 nextSlide,
                 prevSlide,
                 goToSlide,
+                orientationRef,
+                offsetRef,
             ],
         );
 
@@ -466,7 +473,7 @@ const CarouselRoot = React.forwardRef<HTMLDivElement, ICarouselProps>(
 
 CarouselRoot.displayName = "Carousel";
 
-/** Карусель. */
+/** Составная карусель с прокруткой по элементам или страницам в горизонтальной или вертикальной ориентации. */
 export const Carousel = Object.assign(CarouselRoot, {
     Viewport: CarouselViewport,
     Track: CarouselTrack,

@@ -5,10 +5,13 @@ import { ChipClearButton } from "../ChipClearButton";
 import { DatePickerExtendedContext } from "../../DatePickerExtended/DatePickerExtendedContext";
 import { isKey } from "../../../utils/keyboard";
 
+/** Свойства компонента ChipDatePickerTarget. */
 export interface IChipDatePickerTargetProps extends IChipProps {
+    /** Вызывается без аргументов при нажатии кнопки очистки; выбранное значение сбрасывает потребитель. */
     onClear: () => void;
 }
 
+/** Чипс-таргет DatePickerExtended: переключает календарь через контекст и отображает очистку при selected. */
 export const ChipDatePickerTarget = React.forwardRef<HTMLSpanElement, IChipDatePickerTargetProps>((props, ref) => {
     const { children, size, selected, onKeyDown, onClick, onClear, ...restProps } = props;
     const { dropdownOpen, setDropdownOpen } = useContext(DatePickerExtendedContext);

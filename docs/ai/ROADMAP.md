@@ -241,7 +241,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
 | Carousel | ✅ | ✅ |
-| CarouselIndicators | ⬜ | ◐ |
+| CarouselIndicators | ✅ | ✅ |
 | CarouselItem | ⬜ | ◐ |
 | CarouselNextButton | ⬜ | ◐ |
 | CarouselPrevButton | ⬜ | ◐ |

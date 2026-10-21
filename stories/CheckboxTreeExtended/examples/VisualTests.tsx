@@ -3,8 +3,9 @@ import { CheckboxTreeExtended, EComponentSize } from "@sberbusiness/triplex-next
 import { action } from "storybook/actions";
 
 const SIZES = [EComponentSize.SM, EComponentSize.MD, EComponentSize.LG];
+// Настоящий фокус в документе один: play переводит его на SM, поэтому строка фокуса есть только в этой колонке.
+const FOCUS_STATE = { id: "focus", label: "Фокус с клавиатуры", checked: false };
 const STATES = [
-    { id: "focus", label: "Фокус с клавиатуры", checked: false },
     { id: "checked", label: "Выбран", checked: true },
     { id: "bulk", label: "Частичный выбор", checked: true, bulk: true },
     { id: "disabled", label: "Недоступен", checked: false, disabled: true },
@@ -18,7 +19,7 @@ export const VisualTests = () => (
             <div key={size} style={{ width: 300 }}>
                 <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>{size.toUpperCase()}</div>
                 <CheckboxTreeExtended size={size} aria-label={`Состояния ${size.toUpperCase()}`}>
-                    {STATES.map(({ id, label, ...state }) => (
+                    {(size === EComponentSize.SM ? [FOCUS_STATE, ...STATES] : STATES).map(({ id, label, ...state }) => (
                         <CheckboxTreeExtended.Node
                             key={id}
                             id={`${size}-${id}`}

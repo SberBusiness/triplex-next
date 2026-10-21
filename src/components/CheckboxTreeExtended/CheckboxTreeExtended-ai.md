@@ -217,6 +217,7 @@ Checkbox.BorderColor_Focus
 | `Playground` | `PlaygroundExample.tsx` | Интерактивный контроль `size` |
 | `Default` | `DefaultExample.tsx` | Дерево из двух веток с вложенным узлом, состояние чекбоксов в `useState` потребителя |
 | `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG рядом |
+| `VisualTests` | `VisualTests.tsx` | Состояния `.Checkbox` в дереве: checked, bulk, disabled и hover на SM / MD / LG, клавиатурный фокус на SM; скрыта из docs и сайдбара |
 
 ---
 
@@ -229,4 +230,4 @@ Checkbox.BorderColor_Focus
 | 2026-08-17 | Убран мёртвый селектор `.checkboxTreeCheckbox` из мобильной медиа-выборки (рабочие `> span` и `> svg` оставлены), `.caretIconWrapper:focus` заменён на `:focus-visible` (правки по ревью PR #535) |
 | 2026-08-17 | `ICheckboxTreeExtendedNodeProps` экспортируется — тип уходит в barrel и становится частью публичного API (решение владельца по ревью PR #535) |
 | 2026-09-17 | TRI-22: `CheckboxTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICheckboxTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
-| 2026-10-21 | Добавлена ссылка на отдельную документацию `CheckboxTreeExtended.Checkbox` с контрактом фокуса и наследуемых props. |
+| 2026-10-21 | Добавлена ссылка на отдельную документацию `CheckboxTreeExtended.Checkbox` с контрактом фокуса и наследуемых props; добавлена скрытая `VisualTests` с состояниями `.Checkbox` в дереве. |

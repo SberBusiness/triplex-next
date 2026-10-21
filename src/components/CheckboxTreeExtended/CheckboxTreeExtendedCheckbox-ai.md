@@ -147,7 +147,7 @@ Checkbox.Background_Checked_Hover
   должен сохранять возможность его перекрыть.
 - Ветку `!isStaticCheckboxTreeExtended` в focus-обработчике label не удалять:
   она оставлена для будущего сворачиваемого режима семейства.
-- В заголовке узла вертикальный margin label обнуляется, а на мобильной ширине
+- В заголовке узла нижний margin label обнуляется, а на мобильной ширине
   добавляется padding сверху/снизу по 16 px. Вне `CheckboxTreeExtended.Node`
   эта раскладка не применяется.
 
@@ -197,6 +197,7 @@ Checkbox.Background_Checked_Hover
 | `Playground` | `PlaygroundExample.tsx` | Размер родительского дерева |
 | `Default` | `DefaultExample.tsx` | Публичное обращение `.Checkbox`, передача provide-props и controlled-состояние потребителя |
 | `Sizes` | `SizesExample.tsx` | Размеры SM / MD / LG с подписями и единым размером дерева |
+| `VisualTests` | `VisualTests.tsx` | SM / MD / LG в checked, checked bulk и disabled, реальный клавиатурный фокус в дереве (только SM — фокус в документе один) и hover выбранного input; мобильная раскладка |
 
 Композиционный пример: `stories/Chips/ChipMultiselect.stories.tsx`
 Файлы примеров: `stories/Chips/examples/ChipMultiselect/`
@@ -204,13 +205,6 @@ Checkbox.Background_Checked_Hover
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `WithCheckboxTree` | `WithCheckboxTreeExample.tsx` | Дерево внутри ChipMultiselect, пересчёт checked/bulk и фильтрация на стороне потребителя; исключён из скриншотов |
-
-Визуальная регрессия: `stories/CheckboxTreeExtendedCheckbox/CheckboxTreeExtendedCheckbox.stories.tsx`
-Файлы примеров: `stories/CheckboxTreeExtendedCheckbox/examples/`
-
-| Story | Example file | Что демонстрирует |
-|---|---|---|
-| `VisualTests` | `VisualTests.tsx` | SM / MD / LG в checked, checked bulk и disabled, реальный клавиатурный фокус в дереве и hover выбранного input; мобильная раскладка |
 
 `Playground` и `VisualTests` исключаются из MCP bundle. Focus/hover-состояния
 проверяются после play и перемонтирования истории на двух viewport: xs / xl.

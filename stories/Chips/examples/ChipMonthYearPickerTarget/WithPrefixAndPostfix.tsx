@@ -22,8 +22,8 @@ export const WithPrefixAndPostfix = () => {
                     <ChipMonthYearPickerTarget
                         selected={pickedDate !== null}
                         onClear={() => setPickedDate(null)}
-                        prefix={<SortStrokeSrvIcon20 paletteIndex={5} />}
-                        postfix={<SortStrokeSrvIcon20 paletteIndex={5} />}
+                        prefix={<SortStrokeSrvIcon20 paletteIndex={pickedDate !== null ? 6 : 5} />}
+                        postfix={<SortStrokeSrvIcon20 paletteIndex={pickedDate !== null ? 6 : 5} />}
                         showNotificationIcon
                     >
                         {label}

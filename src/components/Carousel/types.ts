@@ -38,7 +38,10 @@ export interface ICarouselPaddingResult {
 }
 
 /** Свойства компонента CarouselViewport. */
-export interface ICarouselViewportProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ICarouselViewportProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Лента слайдов Carousel.Track и необязательные кнопки навигации. */
+    children?: React.ReactNode;
+}
 
 /** Свойства компонента CarouselTrack. */
 export interface ICarouselTrackProps extends React.HTMLAttributes<HTMLDivElement> {}

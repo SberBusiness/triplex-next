@@ -17,6 +17,7 @@ const ORIENTATION_TO_CROSS_TOUCH_KEY = {
     [EOrientation.VERTICAL]: "clientX",
 } as const;
 
+/** Область просмотра карусели: ограничивает ленту и обрабатывает touch-жесты. */
 export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewportProps>(
     ({ children, className, style, onTouchStart, ...restProps }, ref) => {
         const {
@@ -53,50 +54,53 @@ export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewpo
             }
         }, []);
 
-        const handleTouchMove = useCallback((event: TouchEvent) => {
-            if (!draggingRef.current || !trackRef.current) return;
+        const handleTouchMove = useCallback(
+            (event: TouchEvent) => {
+                if (!draggingRef.current || !trackRef.current) return;
 
-            const touch = event.targetTouches[0];
-            if (!touch) return;
+                const touch = event.targetTouches[0];
+                if (!touch) return;
 
-            const orientation = orientationRef.current;
-            const touchKey = ORIENTATION_TO_TOUCH_KEY[orientation];
-            const crossKey = ORIENTATION_TO_CROSS_TOUCH_KEY[orientation];
+                const orientation = orientationRef.current;
+                const touchKey = ORIENTATION_TO_TOUCH_KEY[orientation];
+                const crossKey = ORIENTATION_TO_CROSS_TOUCH_KEY[orientation];
 
-            const dragDistance = touch[touchKey] - startCoordsRef.current[touchKey];
-            const crossDistance = touch[crossKey] - startCoordsRef.current[crossKey];
+                const dragDistance = touch[touchKey] - startCoordsRef.current[touchKey];
+                const crossDistance = touch[crossKey] - startCoordsRef.current[crossKey];
 
-            if (scrollingRef.current === null) {
-                const absMain = Math.abs(dragDistance);
-                const absCross = Math.abs(crossDistance);
+                if (scrollingRef.current === null) {
+                    const absMain = Math.abs(dragDistance);
+                    const absCross = Math.abs(crossDistance);
 
-                if (absMain > 5 || absCross > 5) {
-                    scrollingRef.current = absCross > absMain;
+                    if (absMain > 5 || absCross > 5) {
+                        scrollingRef.current = absCross > absMain;
+                    }
                 }
-            }
 
-            if (scrollingRef.current) {
-                return;
-            }
+                if (scrollingRef.current) {
+                    return;
+                }
 
-            if (event.cancelable) {
-                event.preventDefault();
-            }
+                if (event.cancelable) {
+                    event.preventDefault();
+                }
 
-            dragDistanceRef.current = dragDistance;
-            const maxOffset = maxOffsetRef.current;
-            const targetOffset = startOffsetRef.current - dragDistance;
-            let currentTranslate = -targetOffset;
+                dragDistanceRef.current = dragDistance;
+                const maxOffset = maxOffsetRef.current;
+                const targetOffset = startOffsetRef.current - dragDistance;
+                let currentTranslate = -targetOffset;
 
-            if (targetOffset < 0) {
-                currentTranslate = -targetOffset / 3;
-            } else if (targetOffset > maxOffset) {
-                currentTranslate = -(maxOffset + (targetOffset - maxOffset) / 3);
-            }
+                if (targetOffset < 0) {
+                    currentTranslate = -targetOffset / 3;
+                } else if (targetOffset > maxOffset) {
+                    currentTranslate = -(maxOffset + (targetOffset - maxOffset) / 3);
+                }
 
-            trackRef.current.style.transform = ORIENTATION_TRANSFORM[orientation](currentTranslate);
-            trackRef.current.style.transition = "none";
-        }, []);
+                trackRef.current.style.transform = ORIENTATION_TRANSFORM[orientation](currentTranslate);
+                trackRef.current.style.transition = "none";
+            },
+            [maxOffsetRef, orientationRef, trackRef],
+        );
 
         const handleTouchEnd = useCallback(
             (event: TouchEvent) => {
@@ -129,7 +133,7 @@ export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewpo
 
                 trackRef.current.style.transform = "";
             },
-            [nextSlide, prevSlide, clearTouchListeners],
+            [nextSlide, prevSlide, clearTouchListeners, trackRef],
         );
 
         const handleTouchStart = useCallback<React.TouchEventHandler<HTMLDivElement>>(
@@ -163,7 +167,7 @@ export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewpo
 
                 onTouchStart?.(event);
             },
-            [handleTouchMove, handleTouchEnd, clearTouchListeners, onTouchStart],
+            [handleTouchMove, handleTouchEnd, clearTouchListeners, onTouchStart, offsetRef, trackRef],
         );
 
         useEffect(() => {

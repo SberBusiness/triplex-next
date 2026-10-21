@@ -17,6 +17,7 @@ const ORIENTATION_TO_PREV_ICON_MAP: Record<EOrientation, React.ReactElement> = {
     [EOrientation.VERTICAL]: <CaretupStrokeSrvIcon20 paletteIndex={7} />,
 };
 
+/** Кнопка перехода назад: граница из контекста блокирует прокрутку, но сохраняет пользовательский onClick. */
 export const CarouselPrevButton = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ children, className, onClick, ...restProps }, ref) => {
         const { orientation, atStart, prevSlide } = useContext(CarouselContext);
@@ -24,7 +25,9 @@ export const CarouselPrevButton = React.forwardRef<HTMLButtonElement, IButtonIco
 
         const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
             (event) => {
-                if (!atStart) prevSlide();
+                if (!atStart) {
+                    prevSlide();
+                }
                 onClick?.(event);
             },
             [atStart, prevSlide, onClick],

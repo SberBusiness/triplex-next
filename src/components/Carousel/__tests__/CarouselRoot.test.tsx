@@ -209,6 +209,26 @@ describe("CarouselRoot (Core & Math Logic)", () => {
                 "--triplex-next-runtime-carousel-transform": "translateX(-432px)",
             });
         });
+
+        it("excludes viewport padding from page grouping and centering in PAGE mode", () => {
+            render(
+                <TestCarousel
+                    scrollMode={ECarouselScrollMode.PAGE}
+                    slideSizes={[225, 225, 225]}
+                    viewportSize={500}
+                    viewportPadding={[0, 50]}
+                />,
+            );
+            act(() => getResizeCallback()?.());
+
+            expect(screen.getAllByRole("tab")).toHaveLength(3);
+
+            fireEvent.click(screen.getByTestId("next-btn"));
+
+            expect(screen.getByTestId("track")).toHaveStyle({
+                "--triplex-next-runtime-carousel-transform": "translateX(-153.5px)",
+            });
+        });
     });
 
     describe("Responsiveness and Cleanup", () => {

@@ -174,8 +174,9 @@ version: "1.0"
   его в первую очередь.
 - `Carousel` (`src/components/Carousel/`) — современная слайдовая карусель со
   своим составным API (`Carousel.Viewport`, `Carousel.Track`, `Carousel.Item`,
-  `Carousel.Indicators`, `Carousel.PrevButton` / `NextButton`), клавиатурой и
-  touch-жестами. Решает соседнюю задачу: там прокрутка постраничная или по
+  `Carousel.Indicators`, `Carousel.PrevButton` / `NextButton`) и
+  touch-жестами; с клавиатуры — кнопки навигации и индикаторы `PageIndicators`
+  в режиме `PAGE`. Решает соседнюю задачу: там прокрутка постраничная или по
   элементам, здесь — свободная лента произвольного контента. Контракт описан
   в [Carousel-ai.md](../Carousel/Carousel-ai.md).
 - `ButtonIcon` (`src/components/Button/ButtonIcon.tsx`) — то, что обычно

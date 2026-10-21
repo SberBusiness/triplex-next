@@ -1,7 +1,7 @@
 ---
 component: SuggestField
 category: TextFields
-related: [Suggest, SelectField, MultiselectField, SelectExtendedField, TextField, FormField, Dropdown, LoaderSmall]
+related: [Suggest, SelectField, MultiselectField, SelectExtendedField, TextField, FormField, Dropdown, Puller, LoaderSmall]
 tokens: []
 stories: stories/SuggestField/SuggestField.stories.tsx
 version: "1.0"
@@ -17,7 +17,7 @@ version: "1.0"
 возвращает новый `options`.
 
 Адаптивный: на ширине экрана < 768px вместо десктопного поля с выпадающим списком рендерится
-мобильный вариант — поле только для чтения, по фокусу открывающее полноэкранный дропдаун с
+мобильный вариант — поле только для чтения, по фокусу открывающее нижнюю шторку `Puller` с
 собственным полем ввода. Переключение делает `MobileView`, потребителю ничего делать не нужно.
 
 Используй когда: нужно поле с подсказками-опциями — поиск контрагента, счёта, адреса, в том
@@ -101,7 +101,7 @@ version: "1.0"
 
 ### Поведение мобильного варианта
 
-Поле-триггер — `readOnly`, по фокусу открывается полноэкранный `Dropdown` с собственным полем
+Поле-триггер — `readOnly`, по фокусу открывается `Dropdown` в виде шторки `Puller` с собственным полем
 ввода (автофокус). При `tooltipOpen` вместо списка показывается `SuggestFieldMobileDropdownHint`
 с текстом `tooltipHint`. Закрытие дропдауна без выбора опции значение не сбрасывает, даже при
 пустом поле ввода: на закрытии поле ввода дропдауна возвращается к `label` текущего `value`
@@ -205,8 +205,9 @@ version: "1.0"
 - `FormField` — источник `FormFieldInput` (поле ввода и `SuggestField.Input`), `FormFieldClear`
   (кнопка очистки) и статусов `EFormFieldStatus`.
 - `Dropdown` — выпадающий список: `DropdownDesktop` + `DropdownList` + `DropdownListItem` на
-  десктопе, `DropdownMobile*` в полноэкранном мобильном варианте. `ISuggestFieldDesktopDropdownProps`
-  наследует `IDropdownDesktopProps`.
+  десктопе. `ISuggestFieldDesktopDropdownProps` наследует `IDropdownDesktopProps`.
+- `Puller` — нижняя шторка мобильного варианта (`PullerHeader`, `PullerInput`, `PullerList`, …).
+  `ISuggestFieldMobileDropdownProps` наследует `Omit<IPullerProps, "onSelect">`.
 - `LoaderSmall` — индикатор подгрузки подсказок: `SuggestFieldDesktop` и `SuggestFieldMobile`
   показывают его с темой `BRAND`, пока `loading`.
 - `Tooltip` — подсказка `tooltipHint` у десктопного поля. В `related` не вынесен: связь узкая,
@@ -248,3 +249,4 @@ version: "1.0"
 | 2026-09-23 | Создан документ |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`MultiselectField`, `SelectExtendedField`) и контракт по рендеру `LoaderSmall`. Публичный API и поведение не затронуты. |
 | 2026-10-02 | Сброс значения только кнопкой очистки на обеих платформах: при `clearInputOnFocus` значение терялось от фокуса без выбора. Blur на десктопе и закрытие дропдауна на мобильном больше не вызывают `onSelect(undefined)`; мобильная кнопка очистки сама зовёт `onSelect(undefined)` и `onFilter("")` (последний — при непустом `label`), как десктопная; на закрытии мобильного дропдауна его поле ввода возвращается к `label`. `SuggestField` отдаёт мобильному варианту все props, как десктопному: на мобильной ширине больше не теряются `className`, `id`, `data-test-id`, `active` и `renderInput`. Обновлены `onSelect`, поведение обеих платформ и «Инварианты» |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный вариант собран из частей нижней шторки `Puller` (бывший `DropdownMobile*`), `ISuggestFieldMobileDropdownProps` наследует `Omit<IPullerProps, "onSelect">`. |

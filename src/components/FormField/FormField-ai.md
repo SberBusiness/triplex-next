@@ -63,7 +63,7 @@ version: "1.0"
 - Класс `filled` выставляется, когда вложенный элемент ввода сообщил о наличии значения. Для `FormFieldInput` / `FormFieldTextarea` это включает браузерное автозаполнение (ловится через CSS-анимационные хуки `autofill-applied-hook` / `autofill-cancelled-hook`), для `FormFieldTarget` — наличие `children`.
 - Кнопка `FormFieldClear` показывается стилями только при `filled` и hover/активном состоянии непустого и не заблокированного поля, а также при собственном фокусе (`:focus`) — чтобы кнопка оставалась видимой при клавиатурной навигации.
 - Идентификаторы генерируются субкомпонентами (`uniqueId` из `lodash-es`, не `React.useId` — код должен оставаться совместимым с React 17) и попадают в контекст как `targetId` / `labelId`; на них опирается связка лейбла и поля. `targetId` публикуют только labelable-элементы (`FormFieldInput`, `FormFieldTextarea`, а также `FormFieldMaskedInput` — он рендерит `FormFieldInput` внутри себя через `render`); `FormFieldTarget` его не публикует — см. Accessibility.
-- Вне `FormField` субкомпоненты используют `initialFormFieldContext`, где `filled: true` — это осознанный временный фикс для `DropdownMobileHeader`, а сеттеры являются no-op.
+- Вне `FormField` субкомпоненты используют `initialFormFieldContext`, где `filled: true` — это осознанный временный фикс для `PullerHeader`, а сеттеры являются no-op.
 
 ---
 
@@ -176,3 +176,4 @@ FormField.Target_PlaceholderColor_Default
 | 2026-09-17 | Ломающее изменение: `disabled` убран из `IFormFieldTextareaProps` через `Omit` — так же, как он уже был убран у `FormFieldInput` и `FormFieldMaskedInput`. Поведение не менялось (статус перетирал переданное значение и раньше), но передача `disabled` в props теперь ошибка компиляции. Правка по ревью PR #629, зафиксирована в release notes 1.47.0 |
 | 2026-09-23 | Исправлено: при смене `status` на `EFormFieldStatus.DISABLED`, пока вложенный элемент ввода в фокусе, `FormField` теперь явно сбрасывает состояние `focused` в `useLayoutEffect`. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FormFieldLabel`, `FormFieldInput`, `FormFieldTextarea`, `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): временный фикс `filled: true` в `initialFormFieldContext` относится к `PullerHeader` (бывший `DropdownMobileHeader`). |

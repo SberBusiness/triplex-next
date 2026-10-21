@@ -82,7 +82,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Основная таблица
 
-Основная таблица содержит 140 компонентов. Статус каждой колонки подтверждается
+Основная таблица содержит 141 компонент. Статус каждой колонки подтверждается
 по её definition of done; незавершённые пункты отмечены ⬜.
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
@@ -185,6 +185,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Pagination | ✅ | ✅ | ✅ |
 | PaginationExtended | ✅ | ✅ | ✅ |
 | Portal | ✅ | ✅ | ✅ |
+| Puller | ✅ | ✅ | ✅ |
 | Radio | ✅ | ✅ | ✅ |
 | RadioXGroup | ✅ | ✅ | ✅ |
 | RadioYGroup | ✅ | ✅ | ✅ |
@@ -261,10 +262,6 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DropdownDesktop | ⬜ | ◐ |
 | DropdownList | ⬜ | ◐ |
 | DropdownListItem | ⬜ | ◐ |
-| DropdownMobile | ⬜ | ◐ |
-| DropdownMobileInner | ⬜ | ◐ |
-| DropdownMobileList | ⬜ | ◐ |
-| DropdownMobileListItem | ⬜ | ◐ |
 | FormFieldClear | ⬜ | ◐ |
 | FormFieldCounter | ⬜ | ◐ |
 | FormFieldDescription | ⬜ | ◐ |
@@ -303,6 +300,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | PaginationNavigationButton | ⬜ | ◐ |
 | PaginationPageButton | ⬜ | ◐ |
 | PaginationSelect | ⬜ | ◐ |
+| PullerInner | ⬜ | ◐ |
+| PullerList | ⬜ | ◐ |
+| PullerListItem | ⬜ | ◐ |
 | SegmentedControlSegment | ⬜ | ◐ |
 | SelectExtendedFieldTarget | ⬜ | ◐ |
 | SliderExtendedDot | ⬜ | ◐ |

@@ -59,8 +59,8 @@ version: "1.0"
 | `loading` | `boolean` | `false` | Вместо каретки — лоадер; список не раскрывается ни мышью, ни с клавиатуры |
 | `targetProps` | `Omit<ISelectExtendedFieldTargetProps, "opened" \| "setOpened" \| "size">` | — | Уходит целиком в `SelectExtendedField.Target`. Здесь задаётся **обязательный** заголовок поля `fieldLabel`, а также `prefix`, `postfix`, `onClear` |
 | `dropdownProps` | `ISelectExtendedFieldDropdownDefaultProps["dropdownProps"]` | — | Настройки `Dropdown` (`direction`, `alignment`, `className`, ...). `width`, `size`, `opened` и `targetRef` компонент задаёт сам |
-| `dropdownListItemClassName` | `string` | — | Класс каждого элемента списка — и десктопного `DropdownListItem`, и мобильного `DropdownMobileListItem` |
-| `mobileTitle` | `React.ReactNode` | — | Заголовок выпадающего блока в мобильном режиме. Отдельный prop: на мобильном список раскрывается на весь экран и `fieldLabel` в нём не виден |
+| `dropdownListItemClassName` | `string` | — | Класс каждого элемента списка — и десктопного `DropdownListItem`, и мобильного `PullerListItem` |
+| `mobileTitle` | `React.ReactNode` | — | Заголовок выпадающего блока в мобильном режиме. Отдельный prop: на мобильном список открывается в нижней шторке `Puller`, и `fieldLabel` в ней не виден |
 | `closeOnTab` | `boolean` | `true` | Компонент передаёт `closeOnTab={true}`, но `{...rest}` идёт после, поэтому переданное потребителем значение выигрывает |
 | `children` | `never` | — | Не принимаются: выпадающий блок компонент рендерит сам |
 
@@ -206,3 +206,4 @@ version: "1.0"
 |---|---|
 | 2026-09-03 | Создан документ (TRI-75). AI-рефакторинг: удалён мёртвый внутренний `targetRef`, внешний `ref` пробрасывается напрямую и больше не пересоздаётся на каждый рендер; идентификатор списка переведён с `useRef(uniqueId())` на `useState(() => uniqueId())`, чтобы счётчик не крутился на каждом рендере; параметры рендер-функций перестали затенять `props` компонента; импорты приведены к алиасу пакета; JSDoc на всех props и на компоненте. Unit-тесты расширены с 15 до 24 кейсов (`onChange` с аргументом, опции и выбранное значение, `aria-activedescendant` через `DropdownListContext`, стабильность `listId`, ref-target). Stories переведены на modern pattern, `States` разделена на `Statuses` и `Loading`. Публичный API не изменён |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`); добавлены обратные ссылки (`FormField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный элемент списка — `PullerListItem` (бывший `DropdownMobileListItem`), мобильная версия описана как нижняя шторка `Puller` вместо «полноэкранного» дропдауна. |

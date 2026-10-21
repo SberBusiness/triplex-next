@@ -1,0 +1,10 @@
+.pullerMaskedInput {
+    flex-grow: 1;
+
+    div,
+    input {
+        // !important перебивает вертикальные отступы размеров FormField (.sm / .md / .lg) у поля и слоя маски:
+        // в шапке Puller поле стоит без собственных отступов.
+        padding: 0 !important;
+    }
+}

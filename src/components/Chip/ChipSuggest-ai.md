@@ -58,7 +58,7 @@ version: "1.0"
 | `type` | `EChipType` | `EChipType.TYPE_1` (дефолт `Chip`) | Тип чипса. Задавать только здесь: `targetProps.type` не работает — см. «Инварианты» |
 | `displayedValue` | `React.ReactNode` | — | Что показать на чипсе вместо `value.label`. Учитывается только при выбранном `value` |
 | `targetProps` | `IChipSuggestTargetProps<T>` | — | Props target-элемента. Через него передаётся `clearSelected`, а также props `Chip` (`disabled`, `className`, `data-*`, `onClick`, `size`). Два исключения — см. «Инварианты»: `targetProps.type` не применяется никогда, `targetProps.onKeyDown` вызывается только на `Enter`/`Space` |
-| `dropdownProps` | `Omit<IChipSuggestDropdownProps<T>, "targetRef">` | — | Props выпадающего списка: props `Dropdown` (`onOpen`, `onClose`, `mobileViewProps`, …) плюс `focusTrapProps`. `targetRef` проставляет сам `ChipSuggest` |
+| `dropdownProps` | `Omit<IChipSuggestDropdownProps<T>, "targetRef">` | — | Props выпадающего списка: props `Dropdown` (`onOpen`, `onClose`, `pullerProps`, …) плюс `focusTrapProps`. `targetRef` проставляет сам `ChipSuggest` |
 
 `className` попадает на корневой `<div>` (рядом с внутренним классом `chipGroupItem`),
 остальные `React.HTMLAttributes<HTMLDivElement>` уходят в `Suggest`.
@@ -242,3 +242,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-07 | Создан документ (AI-рефакторинг ChipSuggest, TRI-134) |
+| 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps` в `dropdownProps` переименован в `pullerProps`. |

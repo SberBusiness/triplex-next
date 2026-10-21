@@ -1,11 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { Portal } from "@sberbusiness/triplex-next/components/Portal/Portal";
-import {
-    DropdownDesktop,
-    IDropdownDesktopProps,
-} from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownDesktop";
-import { DropdownMobile, IDropdownMobileProps } from "./mobile/DropdownMobile";
-import { MobileView } from "@sberbusiness/triplex-next/components/MobileView/MobileView";
+import { Portal } from "../Portal/Portal";
+import { DropdownDesktop, IDropdownDesktopProps } from "./desktop/DropdownDesktop";
+import { MobileView } from "../MobileView/MobileView";
+import { Puller, IPullerProps } from "../Puller/Puller";
 
 /** Свойства компонента Dropdown. */
 export interface IDropdownProps extends IDropdownDesktopProps {
@@ -13,18 +10,21 @@ export interface IDropdownProps extends IDropdownDesktopProps {
     onOpen?: () => void;
     /** Функция, вызывающаяся при закрытии. */
     onClose?: () => void;
-    /** Свойства отображения в адаптивном режиме. В этом режиме на мобильном устройстве Dropdown рендерится на весь экран. */
-    mobileViewProps?: Omit<IDropdownMobileProps, "opened" | "setOpened">;
+    /**
+     * Свойства шторки Puller для адаптивного режима. Если передан, на мобильной ширине экрана (<768px)
+     * вместо десктопного меню рендерится Puller; pullerProps.children заменяет children.
+     */
+    pullerProps?: Omit<IPullerProps, "opened" | "setOpened">;
 }
 
 /**
  * Выпадающее меню.
  * Рендерится через Portal в document.body и позиционируется относительно targetRef.
- * Если передан mobileViewProps, на мобильной ширине экрана вместо десктопного меню рендерится
- * полноэкранная мобильная версия (DropdownMobile).
+ * Если передан pullerProps, на мобильной ширине экрана вместо десктопного меню рендерится
+ * нижняя шторка (Puller).
  */
 export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
-    ({ children, opened, setOpened, onOpen, onClose, mobileViewProps, ...desktopProps }, ref) => {
+    ({ children, opened, setOpened, onOpen, onClose, pullerProps, ...desktopProps }, ref) => {
         // Предыдущее состояние открытости. Сравнение со значением вместо флага "смонтирован"
         // делает эффект идемпотентным: повторный маунт в StrictMode не вызывает колбэки.
         const prevOpenedRef = useRef(opened);
@@ -53,7 +53,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
 
         return (
             <Portal container={document.body}>
-                {mobileViewProps ? (
+                {pullerProps ? (
                     <MobileView
                         fallback={
                             <DropdownDesktop opened={opened} setOpened={setOpened} {...desktopProps} ref={ref}>
@@ -61,9 +61,9 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
                             </DropdownDesktop>
                         }
                     >
-                        <DropdownMobile opened={opened} setOpened={setOpened} {...mobileViewProps} ref={ref}>
-                            {mobileViewProps.children || children}
-                        </DropdownMobile>
+                        <Puller opened={opened} setOpened={setOpened} {...pullerProps} ref={ref}>
+                            {pullerProps.children || children}
+                        </Puller>
                     </MobileView>
                 ) : (
                     <DropdownDesktop opened={opened} setOpened={setOpened} {...desktopProps} ref={ref}>

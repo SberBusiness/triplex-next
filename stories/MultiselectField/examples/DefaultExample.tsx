@@ -15,11 +15,11 @@ import {
     TagGroup,
     Text,
     ETextSize,
-    DropdownMobileFooter,
-    DropdownMobileBody,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileClose,
+    PullerFooter,
+    PullerBody,
+    PullerHeader,
+    PullerInput,
+    PullerClose,
 } from "@sberbusiness/triplex-next";
 import "../MultiselectField.less";
 
@@ -168,28 +168,26 @@ export const DefaultExample = () => {
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
-                                        <DropdownMobileInput
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                                        <PullerInput
                                             autoFocus={true}
                                             placeholder="Type to proceed"
                                             value={filter}
                                             onChange={(event) => setFilter(event.target.value)}
                                         />
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>
+                                    </PullerHeader>
+                                    <PullerBody>
                                         {renderCheckboxList()}
                                         {!!filter.trim().length && !visibleOptions.length && (
                                             <Text size={ETextSize.B3} className="not-found">
                                                 Nothing was found.
                                             </Text>
                                         )}
-                                    </DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    </PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.SECONDARY}
                                             size={EComponentSize.MD}
@@ -204,7 +202,7 @@ export const DefaultExample = () => {
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

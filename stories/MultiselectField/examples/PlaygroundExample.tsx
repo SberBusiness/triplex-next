@@ -3,11 +3,6 @@ import {
     Button,
     Checkbox,
     CheckboxYGroup,
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileFooter,
-    DropdownMobileHeader,
-    DropdownMobileInput,
     EButtonTheme,
     EComponentSize,
     EFormFieldStatus,
@@ -19,6 +14,11 @@ import {
     FormFieldPostfix,
     ISelectExtendedFieldTargetProvideProps,
     MultiselectField,
+    PullerBody,
+    PullerClose,
+    PullerFooter,
+    PullerHeader,
+    PullerInput,
     Tag,
     TagGroup,
     Text,
@@ -199,30 +199,28 @@ export const PlaygroundExample = ({
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
                                         {withInput && (
-                                            <DropdownMobileInput
+                                            <PullerInput
                                                 autoFocus={true}
                                                 placeholder="Type to proceed"
                                                 value={filter}
                                                 onChange={(event) => setFilter(event.target.value)}
                                             />
                                         )}
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>
+                                    </PullerHeader>
+                                    <PullerBody>
                                         {renderCheckboxList()}
                                         {!!filter.length && !visibleOptions.length && (
                                             <div className="not-found">
                                                 <Text size={ETextSize.B3}>Nothing was found.</Text>
                                             </div>
                                         )}
-                                    </DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    </PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.SECONDARY}
                                             size={EComponentSize.MD}
@@ -237,7 +235,7 @@ export const PlaygroundExample = ({
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

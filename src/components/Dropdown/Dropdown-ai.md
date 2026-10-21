@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, LoaderSmall]
+related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -9,15 +9,6 @@ tokens:
   - DropdownList.Background_Default
   - DropdownList.Background_Active
   - DropdownList.Background_Selected
-  - DropdownMobile.Backdrop
-  - DropdownMobile.Header_Background
-  - DropdownMobile.Content_Background
-  - DropdownMobile.Footer_Background
-  - DropdownMobile.Border_Color
-  - DropdownMobileList.Active_Background
-  - DropdownMobileList.Selected_Background
-  - FormField.Input_Color_Default
-  - FormField.Placeholder_Color
 stories: stories/Dropdown/Dropdown.stories.tsx
 version: "1.0"
 ---
@@ -26,7 +17,7 @@ version: "1.0"
 
 ## Назначение
 
-Выпадающее меню: рендерится через `Portal` в `document.body` и фиксированно позиционируется относительно управляющего элемента (`targetRef`). Содержимое произвольное — список опций, форма фильтра, любой блок. Если задан `mobileViewProps`, на мобильной ширине экрана (<768px) вместо десктопного меню открывается полноэкранная мобильная версия.
+Выпадающее меню: рендерится через `Portal` в `document.body` и фиксированно позиционируется относительно управляющего элемента (`targetRef`). Содержимое произвольное — список опций, форма фильтра, любой блок. Если задан `pullerProps`, на мобильной ширине экрана (<768px) вместо десктопного меню открывается нижняя шторка `Puller`.
 
 Используй когда: нужно показать всплывающий блок, привязанный к элементу-триггеру, и при этом выйти за пределы контейнеров с `overflow: hidden`.
 Не используй когда:
@@ -59,8 +50,8 @@ version: "1.0"
 | `width` | `EDropdownWidth` | `CONTENT` | Расчёт ширины: по содержимому, равна ширине управляющего элемента (`TARGET`) или не уже неё (`MIN_TARGET`) |
 | `onOpen` | `() => void` | — | Вызывается при переходе `opened` в `true`. На первом рендере не вызывается |
 | `onClose` | `() => void` | — | Вызывается при переходе `opened` в `false`. На первом рендере не вызывается |
-| `mobileViewProps` | `Omit<IDropdownMobileProps, "opened" \| "setOpened">` | — | Включает адаптивный режим. `mobileViewProps.children` заменяет `children` в мобильной версии; если не задан, используется `children` |
-| `className` | `string` | — | Дополнительный класс. В десктопной версии — на корневом `<div>` меню, в мобильной — на wrapper'е оверлея |
+| `pullerProps` | `Omit<IPullerProps, "opened" \| "setOpened">` | — | Включает адаптивный режим и целиком спредится в `Puller`. `pullerProps.children` заменяет `children` в мобильной версии; если не задан, используется `children` |
+| `className` | `string` | — | Дополнительный класс корневого `<div>` десктопного меню. В мобильную версию не попадает: там класс задаётся через `pullerProps.className` |
 | `style` | `React.CSSProperties` | — | Мержится **поверх** вычисленного положения, поэтому им можно перебить `top` / `left` / `width` |
 
 ### Список опций — `DropdownList` и `DropdownList.Item`
@@ -88,14 +79,14 @@ version: "1.0"
 - `DropdownList` в качестве `children` принимает только `DropdownList.Item` — остальные узлы рендерятся как есть, но не участвуют в навигации и нумерации.
 - `DropdownList` — не `forwardRef`-компонент: ссылка на контейнер списка передаётся через prop `listRef`.
 - Закрытие по `Escape`, `Tab` и клику вне меню `Dropdown` **не реализует**. Это ответственность потребителя либо `ButtonDropdownExtended`.
-- Мобильная версия строится на `OverlayBase` и имеет собственный набор субкомпонентов (`DropdownMobileHeader`, `DropdownMobileBody`, `DropdownMobileList` и т.д.), которые передаются через `mobileViewProps.children`.
+- Мобильная версия — отдельный компонент `Puller` (см. `Puller-ai.md`). Его части (`PullerHeader`, `PullerBody`, `PullerList` и т.д.) передаются через `pullerProps.children`.
 
 ---
 
 ## Дизайн-токены
 
 Переопределяются через `ThemeProvider` (prop `tokens`) — см. `ThemeProvider-ai.md` →
-«Как переопределять токены». Значения по умолчанию — файлы групп `Dropdown`, `DropdownList`, `DropdownMobile`, `DropdownMobileList` в `src/components/DesignTokens/components/`.
+«Как переопределять токены». Значения по умолчанию — файлы групп `Dropdown`, `DropdownList` в `src/components/DesignTokens/components/`. Токены мобильной версии (группы `Puller`, `PullerList`) описаны в `Puller-ai.md`.
 
 ```text
 Dropdown.Background
@@ -104,44 +95,34 @@ DropdownList.Color
 DropdownList.Background_Default
 DropdownList.Background_Active
 DropdownList.Background_Selected
-DropdownMobile.Backdrop
-DropdownMobile.Header_Background
-DropdownMobile.Content_Background
-DropdownMobile.Footer_Background
-DropdownMobile.Border_Color
-DropdownMobileList.Active_Background
-DropdownMobileList.Selected_Background
 ```
-
-`DropdownMobileInput` дополнительно использует токены поля ввода: `FormField.Input_Color_Default`, `FormField.Placeholder_Color`.
 
 ---
 
 ## Инварианты
 
-- `forwardRef` на `Dropdown`, `DropdownDesktop`, `DropdownListItem` и всех мобильных субкомпонентах — не убирать. Ref `Dropdown` указывает на корневой `<div>` десктопного меню, а в мобильном режиме — на контентный `<div>` (`.dropdownMobile`).
+- `forwardRef` на `Dropdown`, `DropdownDesktop`, `DropdownListItem` — не убирать. Ref `Dropdown` указывает на корневой `<div>` десктопного меню, а в мобильном режиме — на контентный `<div>` `Puller` (`.puller`).
 - Меню в закрытом состоянии не рендерит ничего (`DropdownDesktop` возвращает `null`) — на это опираются потребители, монтирующие `Dropdown` безусловно.
 - Компонент управляемый: не добавлять внутренний state открытости, иначе сломается контракт `opened` / `setOpened`.
 - `Dropdown` рендерится в `document.body` через `Portal`. Смена контейнера портала — breaking change для потребителей, которые ищут меню в DOM.
-- Публичные barrel-экспорты `src/components/Dropdown/index.ts`, `desktop/index.ts`, `mobile/index.ts` должны сохраняться: компонент используется внутри `ButtonDropdown`, `SelectField`, `SelectExtendedField`, `SuggestField`, `MultiselectField`, `TabsLine`, `DatePickerExtended`, `Chip`, `List`.
+- Публичные barrel-экспорты `src/components/Dropdown/index.ts`, `desktop/index.ts` должны сохраняться: компонент используется внутри `ButtonDropdown`, `SelectField`, `SelectExtendedField`, `SuggestField`, `MultiselectField`, `TabsLine`, `DatePickerExtended`, `Chip`, `List`.
 - `DropdownList` проставляет дочерним элементам `active`, `size`, `ref`, `onMouseOver` и `onMouseOut` через `cloneElement` — эти props у `DropdownList.Item` нельзя считать «пользовательскими».
 - Пока десктопное меню открыто, на `document.body` висит класс блокировки скролла, а на документе — обработчики `wheel` и `keydown`. Снятие обработчиков в cleanup эффекта обязательно.
 - Числовой формат `keyCodesForSelection` (`number[]`, а не `KeyboardEvent.code`) — часть публичного API.
 - Хелперы из `desktop/utils.ts` внутренние: не экспортировать их через barrel.
-- У мобильного списка (`DropdownMobileList`) нет собственного класса-зацепки — в отличие от десктопного `.dropdownDesktopList`. Это осознанно: в `styles/DropdownMobile.module.less` такого класса никогда не было, стилизуются только элементы списка и лоадер. Корневой `<div>` получает только `className` снаружи; не добавлять пустое правило в LESS ради зацепки без задачи.
 - `listRef` у `DropdownList` и `setActiveDescendant` из `DropdownListContext` должны быть стабильными между рендерами (ref из `useRef`, сеттер из `useState`). Нестабильные значения переподписывают клавиатурный обработчик и сбрасывают `aria-activedescendant` на каждый рендер.
 
 ---
 
 ## Accessibility
 
-- `DropdownList` рендерит контейнер с `role="listbox"`, `DropdownList.Item` — `role="option"` и `aria-selected`. Мобильные `DropdownMobileList` / `DropdownMobileListItem` — те же роли.
+- `DropdownList` рендерит контейнер с `role="listbox"`, `DropdownList.Item` — `role="option"` и `aria-selected`. В мобильной версии `PullerList` / `PullerListItem` — те же роли.
 - Клавиатурная навигация по списку: `ArrowDown` / `ArrowUp` перемещают активный элемент по кругу и прокручивают контейнер к нему, `Enter` / `Space` (или клавиши из `keyCodesForSelection`) вызывают `onSelect` активного элемента. Обработчики висят на `document`, пока `dropdownOpened === true`.
 - При открытии активным становится элемент с `selected`, иначе первый; список прокручивается к нему.
 - Пока меню открыто, `DropdownDesktop` гасит клавиши прокрутки страницы (`Space`, `PageUp`, `PageDown`, `Home`, `End`, стрелки), но только если фокус на `document.body`.
 - `aria-activedescendant` компонент сам на триггер **не выставляет**: `DropdownList` публикует id активного элемента через `DropdownListContext.setActiveDescendant`, а связать его с триггером должен потребитель (см. `SelectField`, `ButtonDropdown`). Контекст сбрасывается при закрытии и размонтировании списка.
 - Потребитель отвечает за атрибуты триггера: `aria-haspopup`, `aria-expanded`, `aria-controls`, `aria-activedescendant`.
-- Компонент не хардкодит текстовые строки: `aria-label` для `DropdownMobileClose` и заголовки мобильной версии передаёт потребитель (библиотека мультиязычная).
+- Компонент не хардкодит текстовые строки: `aria-label` для `PullerClose` и заголовки мобильной версии передаёт потребитель (библиотека мультиязычная).
 - **Известное ограничение:** при уходе курсора с элемента списка (`onMouseOut`) подсветка снимается, но `activeDescendant` в контексте не сбрасывается — `aria-activedescendant` на триггере продолжает указывать на последний наведённый пункт до следующей смены активного элемента или закрытия меню. Поведение унаследованное; его исправление меняет наблюдаемый контракт для `SelectField` / `ButtonDropdown` / `SuggestField` и требует отдельного решения.
 - Фокус компонент не перехватывает и не возвращает. Если нужен focus trap, его добавляет потребитель (так делает `MultiselectField.Dropdown`).
 
@@ -153,7 +134,7 @@ DropdownMobileList.Selected_Background
 Это область задачи TRI-35 («Scope: только Dropdown; соседние экспортируемые компоненты
 из `src/components/Dropdown/` — отдельные задачи»), а не вывод по критериям
 `docs/ai/CONTEXT.md` → «Когда создавать `{ComponentName}-ai.md`». По этим критериям
-`DropdownList`, `DropdownListItem`, `DropdownMobile` и `DropdownMobileListItem`
+`DropdownList` и `DropdownListItem`
 заслуживают собственных AI.md и отдельных строк в `docs/ai/ROADMAP.md` — как это
 сделано для семейства `List`. Решение о том, заводить ли их, за владельцем репозитория.
 
@@ -163,17 +144,9 @@ DropdownMobileList.Selected_Background
 - `DropdownList` — контейнер списка с клавиатурной навигацией, `role="listbox"`. Статическое свойство `DropdownList.Item`.
 - `DropdownListItem` — элемент списка, `role="option"`, выбор мышью и клавиатурой.
 
-**Мобильная версия (`src/components/Dropdown/mobile/`):**
+**Мобильная версия:**
 
-- `DropdownMobile` — полноэкранный оверлей снизу на базе `OverlayBase`, блокирует скролл body.
-- `DropdownMobileInner` — внутренняя разметка оверлея: подложка и контент с анимацией открытия/закрытия.
-- `DropdownMobileHeader` — шапка со слотом `controlButtons` (тип `IDropdownMobileHeaderProps` объявлен в `src/components/Tooltip/types.ts`).
-- `DropdownMobileBody` — скроллируемое тело.
-- `DropdownMobileFooter` — футер для кнопок.
-- `DropdownMobileList` / `DropdownMobileListItem` — список и элемент списка мобильной версии.
-- `DropdownMobileClose` — кнопка закрытия (обёртка над `ButtonIcon`).
-- `DropdownMobileLoader` — лоадер для шапки (обёртка над `LoaderSmall`).
-- `DropdownMobileInput` / `DropdownMobileMaskedInput` — поля ввода для шапки (второе — обёртка над `FormFieldMaskedInput` с `presets`).
+- `Puller` (`src/components/Puller/`) — нижняя шторка на базе `OverlayBase`, которую `Dropdown` рендерит в адаптивном режиме вместо десктопного меню. Ей уходят `opened`, `setOpened`, `ref` и всё содержимое `pullerProps`. Части шторки (`PullerHeader`, `PullerBody`, `PullerFooter`, `PullerList`, `PullerListItem`, `PullerClose`, `PullerLoader`, `PullerInput`) описаны в `Puller-ai.md`.
 
 **Общее:**
 
@@ -206,7 +179,7 @@ DropdownMobileList.Selected_Background
 | `Widths` | `Widths.tsx` | `CONTENT` / `TARGET` / `MIN_TARGET` |
 | `Loading` | `Loading.tsx` | Подгрузка опций: элемент с лоадером в конце списка |
 | `WithSelectedOption` | `WithSelectedOption.tsx` | Выбранная опция подсвечена и активна при открытии |
-| `MobileView` | `MobileView.tsx` | Адаптивный режим: `mobileViewProps` и мобильные субкомпоненты |
+| `MobileView` | `MobileView.tsx` | Адаптивный режим: `pullerProps` и части `Puller` |
 | `VisualTests` | `VisualTests.tsx` | Длинный список со скроллом, значок уведомления, произвольный контент вместо списка |
 
 ---
@@ -220,3 +193,4 @@ DropdownMobileList.Selected_Background
 | 2026-07-31 | Правки по ревью PR #491: эффект `onOpen` / `onClose` в `Dropdown` сравнивает предыдущее значение `opened` вместо флага «смонтирован» — колбэки больше не срабатывают ложно при двойном маунте в React 18 StrictMode (регрессионный тест `__tests__/Dropdown.strictMode.test.tsx`). Документационные stories стартуют закрытыми и раскрываются через `play`. Сброс активного элемента `DropdownList` сделан симметричным: при закрытии подсветка снимается вместе с `activeDescendant`. |
 | 2026-09-28 | Токен `Dropdown.Shadow` ссылается на `Shadow.07` (светлая) и `DarkShadow.07` (тёмная) вместо литералов; в тёмной теме прозрачность 0.25 вместо 0.35. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`OverlayBase`) и потребители `SelectField` / `SelectExtendedField` / `SuggestField` / `MultiselectField` / `TabsLine` — по `docs/ai/CONTEXT.md` ссылка стоит с их стороны; добавлен `LoaderSmall` — контракт по рендеру в верную сторону. Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | **Breaking** (TRIPLEX-961): мобильная версия выделена в компонент `Puller`, `DropdownMobile*` удалены без алиасов. Prop `mobileViewProps` переименован в `pullerProps`, группы токенов `DropdownMobile` / `DropdownMobileList` — в `Puller` / `PullerList` (ключ `Content_Background` → `Body_Background`). Исправлено описание `className`: в мобильную версию он не попадает, класс шторки задаётся через `pullerProps.className`. |

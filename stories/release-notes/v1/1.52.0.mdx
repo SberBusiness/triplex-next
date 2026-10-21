@@ -4,11 +4,31 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v1.52.0</Title>
 
+<Heading>Новые компоненты</Heading>
+
+**Puller**
+
+- Нижняя всплывающая шторка, бывший `DropdownMobile`. Вместе с ним из пакета экспортируется `PullerMaskedInput`.
+
 <Heading>Ломающие изменения</Heading>
 
 **DateRange, MonthYearRange**
 
 - Поля в `renderPickerFrom` / `renderPickerTo` получают `format` диапазона. Если вы задавали `format` полю до spread (`<DateField format="..." {...props} />`), он перезапишется на `YYYYMMDD`: перенесите `format` на `DateRange` / `MonthYearRange`.
+
+**Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown / ChipSuggest / Suggest**
+
+- Prop `mobileViewProps` переименован в `pullerProps` (тип `Omit<IPullerProps, "opened" | "setOpened">`), поведение прежнее. Переименование распространяется на props, унаследованные от `IDropdownProps`: `IMultiselectFieldDropdownProps`, `ISelectExtendedFieldDropdownProps`, `ISuggestDropdownProps`, `dropdownProps` у `ChipSuggest`.
+
+**Puller**
+
+- Компоненты и типы `DropdownMobile*` удалены без алиасов. Замена:
+    - `DropdownMobile` → `Puller`, `DropdownMobileInner` → `PullerInner`, `DropdownMobileHeader` → `PullerHeader`, `DropdownMobileBody` → `PullerBody`, `DropdownMobileFooter` → `PullerFooter`, `DropdownMobileClose` → `PullerClose`, `DropdownMobileLoader` → `PullerLoader`, `DropdownMobileInput` → `PullerInput`, `DropdownMobileMaskedInput` → `PullerMaskedInput`, `DropdownMobileList` → `PullerList`, `DropdownMobileListItem` → `PullerListItem`;
+    - типы `IDropdownMobile*Props` → `IPuller*Props`, `IDropownMobileLoaderProps` → `IPullerLoaderProps`;
+    - `IDropdownMobileHeaderProps` перенесён из `components/Tooltip/types` в `components/Puller/PullerHeader` под именем `IPullerHeaderProps`;
+    - deep-импорты `components/Dropdown/mobile/DropdownMobile*` нужно заменить на `components/Puller/Puller*`.
+- Группы дизайн-токенов `DropdownMobile` и `DropdownMobileList` переименованы в `Puller` и `PullerList`, ключ `DropdownMobile.Content_Background` — в `Puller.Body_Background`.
+- CSS-классы `.dropdownMobile*` переименованы в `.puller*`, кроме `.dropdownMobileContent` → `.pullerBody`, `.dropdownMobileBodyOverflow` → `.pullerScrollLock` и `.controlButtons` → `.pullerHeaderControls`. Модификатор `.closing` удалён.
 
 <Heading>Изменения</Heading>
 
@@ -35,3 +55,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено свойство `format` — формат дат в `value` и `onChange`, по умолчанию `YYYYMMDD`.
 - Исправлено: с форматом вроде `DD.MM.YYYY` противоположная граница ошибочно сбрасывалась. Теперь даты сравниваются хронологически в формате `format`.
+
+**Puller**
+
+- Исправлено: монтирование закрытой шторки снимало блокировку скролла страницы, поставленную другой, открытой шторкой.

@@ -20,15 +20,11 @@ import { isKey } from "../../utils/keyboard";
 import {
     DropdownList,
     DropdownListContext,
-    DropdownMobileHeader,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileList,
-    DropdownMobileListItem,
     IDropdownListItemProps,
     EDropdownWidth,
     EDropdownAlignment,
 } from "../Dropdown";
+import { PullerHeader, PullerClose, PullerBody, PullerList, PullerListItem } from "../Puller";
 import { Text, ETextSize } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { DataAttributes } from "../../types/CoreTypes";
@@ -236,20 +232,18 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                         setOpened={setOpened}
                         targetRef={buttonRef}
                         ref={dropdownRef}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
                                         <Text tag="div" size={ETextSize.B3}>
                                             {children}
                                         </Text>
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>
-                                        <DropdownMobileList>
+                                    </PullerHeader>
+                                    <PullerBody>
+                                        <PullerList>
                                             {options.map(({ label, ...restOption }) => (
-                                                <DropdownMobileListItem
+                                                <PullerListItem
                                                     {...restOption}
                                                     key={restOption.id}
                                                     selected={restOption.id === selected?.id}
@@ -259,10 +253,10 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                                                     }}
                                                 >
                                                     {label}
-                                                </DropdownMobileListItem>
+                                                </PullerListItem>
                                             ))}
-                                        </DropdownMobileList>
-                                    </DropdownMobileBody>
+                                        </PullerList>
+                                    </PullerBody>
                                 </>
                             ),
                         }}

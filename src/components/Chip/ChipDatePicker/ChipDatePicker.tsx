@@ -7,7 +7,7 @@ import { DateFieldUtils } from "../../DateField/utils";
 import { DatePickerExtended } from "../../DatePickerExtended/DatePickerExtended";
 import { ChipDatePickerTarget } from "./ChipDatePickerTarget";
 import { inputDateFormat } from "../../DateField/constants";
-import { DropdownMobileMaskedInput } from "../../Dropdown/mobile/DropdownMobileMaskedInput";
+import { PullerMaskedInput } from "../../Puller/PullerMaskedInput";
 import styles from "../styles/Chip.module.less";
 
 /** Свойства компонента ChipDatePicker. */
@@ -91,9 +91,9 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
     };
 
     const renderDropdownHeaderTarget = () => (
-        <DropdownMobileMaskedInput
+        <PullerMaskedInput
             value={pickerValues.inputString}
-            mask={DropdownMobileMaskedInput.presets.masks.date}
+            mask={PullerMaskedInput.presets.masks.date}
             placeholderMask={placeholderMask}
             onChange={handleInputChange}
             autoFocus={true}

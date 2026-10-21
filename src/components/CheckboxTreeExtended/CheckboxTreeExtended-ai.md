@@ -1,7 +1,7 @@
 ---
 component: CheckboxTreeExtended
 category: Inputs
-related: [CheckboxTree, CollapsibleTreeExtended, Checkbox]
+related: [CheckboxTreeExtendedCheckbox, CheckboxTree, CollapsibleTreeExtended, Checkbox]
 tokens:
   - Checkbox.BorderColor_Focus
 stories: stories/CheckboxTreeExtended/CheckboxTreeExtended.stories.tsx
@@ -83,6 +83,8 @@ render-функции узла.
 
 `size`, переданный явно, перекрывает размер из контекста — так сделано намеренно
 (spread props идёт после), но в дереве это не нужно и ломает единый ритм.
+Подробный контракт фокуса, `labelAttributes` и наследуемых props описан в
+[CheckboxTreeExtendedCheckbox-ai.md](./CheckboxTreeExtendedCheckbox-ai.md).
 
 ---
 
@@ -189,6 +191,9 @@ Checkbox.BorderColor_Focus
 
 ## Связанные компоненты
 
+- `CheckboxTreeExtendedCheckbox` — публичная часть `CheckboxTreeExtended.Checkbox`:
+  связывает базовый чекбокс с размером дерева и фокусом активного узла.
+  Подробности — в `CheckboxTreeExtendedCheckbox-ai.md`.
 - `CheckboxTree` (`src/components/CheckboxTree`) — обёртка верхнего уровня:
   принимает массив `ICheckboxTreeCheckboxData` и сама пересчитывает `checked` /
   `bulk` вверх и вниз по дереву. Если своя структура данных не нужна — бери её.
@@ -224,3 +229,4 @@ Checkbox.BorderColor_Focus
 | 2026-08-17 | Убран мёртвый селектор `.checkboxTreeCheckbox` из мобильной медиа-выборки (рабочие `> span` и `> svg` оставлены), `.caretIconWrapper:focus` заменён на `:focus-visible` (правки по ревью PR #535) |
 | 2026-08-17 | `ICheckboxTreeExtendedNodeProps` экспортируется — тип уходит в barrel и становится частью публичного API (решение владельца по ревью PR #535) |
 | 2026-09-17 | TRI-22: `CheckboxTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICheckboxTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
+| 2026-10-21 | Добавлена ссылка на отдельную документацию `CheckboxTreeExtended.Checkbox` с контрактом фокуса и наследуемых props. |

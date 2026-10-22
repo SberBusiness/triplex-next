@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { expect, within } from "storybook/test";
+import { expect } from "storybook/test";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Carousel, EOrientation, ECarouselScrollMode } from "@sberbusiness/triplex-next";
 import {
@@ -166,8 +166,7 @@ export const VisualTests: StoryObj<typeof Carousel> = {
         },
         testRunner: { hoverSelector: '[data-testid="carousel-next-hover"]' },
     },
-    play: async ({ canvasElement, userEvent }) => {
-        const canvas = within(canvasElement);
+    play: async ({ canvas, canvasElement, userEvent }) => {
         const endButton = canvas.getByTestId("carousel-next-end");
         await userEvent.click(endButton);
         await userEvent.click(endButton);

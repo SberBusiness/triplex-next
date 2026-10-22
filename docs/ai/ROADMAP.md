@@ -240,8 +240,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
-| Carousel | ⬜ | ◐ |
-| CarouselIndicators | ⬜ | ◐ |
+| Carousel | ✅ | ✅ |
+| CarouselIndicators | ✅ | ✅ |
 | CarouselItem | ✅ | ✅ |
 | CarouselNextButton | ⬜ | ◐ |
 | CarouselPrevButton | ⬜ | ◐ |

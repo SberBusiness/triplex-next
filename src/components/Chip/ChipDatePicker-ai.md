@@ -118,7 +118,7 @@ disabled), `Calendar` (календарь) и `Dropdown` (выпадающий �
   `DateField`; изменения их логики или сигнатур требуют проверки обоих компонентов.
 - `IChipDatePickerProps`, `ChipDatePicker`, `ChipDatePickerTarget` и его props
   экспортируются через `src/components/Chip/index.ts` и вложенный barrel; сохранять
-  имена, типы и экспорты. Таргет имеет отдельную задачу AI-готовности.
+  имена, типы и экспорты. Контракт таргета описан в [ChipDatePickerTarget-ai.md](./ChipDatePickerTarget-ai.md).
 - Story ids `chips-chipdatepicker--*` используются существующими baseline-файлами
   xs / xl, поэтому их нельзя переименовывать без обновления visual-проверок.
 
@@ -152,7 +152,7 @@ disabled), `Calendar` (календарь) и `Dropdown` (выпадающий �
 ## Связанные компоненты
 
 - `Chip` — база таргета и источник визуальных состояний; родитель семейства.
-- `ChipDatePickerTarget` — публичный таргет со своим контекстным и клавиатурным
+- [ChipDatePickerTarget](./ChipDatePickerTarget-ai.md) — публичный таргет со своим контекстным и клавиатурным
   контрактом: читает `DatePickerExtendedContext`, переключает дропдаун, выбирает
   между `ChipClearButton` и `ChipDropdownArrow`.
 - `ChipMonthYearPicker` — альтернатива для выбора месяца без дня и ручного ввода.
@@ -190,3 +190,4 @@ disabled), `Calendar` (календарь) и `Dropdown` (выпадающий �
 | Дата | Изменение |
 |---|---|
 | 2026-10-19 | Создан документ; подтверждены контракт управляемой даты, мобильного ввода и существующие ограничения. Лениво инициализировано состояние и дополнены unit-тесты (TRI-136) |
+| 2026-10-21 | Добавлена ссылка на отдельную AI-документацию ChipDatePickerTarget |

@@ -3,7 +3,7 @@ component: ChipMonthYearPickerTarget
 category: Chips
 related: [ChipMonthYearPicker, Chip, DatePickerExtended]
 tokens: []
-stories: stories/Chips/ChipMonthYearPickerTarget.stories.tsx
+stories: stories/Chips/ChipMonthYearPicker.stories.tsx
 version: "1.0"
 ---
 
@@ -23,6 +23,29 @@ version: "1.0"
 
 Публичные named imports: `ChipMonthYearPickerTarget` и
 `IChipMonthYearPickerTargetProps` из `@sberbusiness/triplex-next`.
+
+Минимальная управляемая композиция:
+
+```tsx
+const [pickedDate, setPickedDate] = useState<moment.Moment | null>(null);
+const label = pickedDate ? pickedDate.format("MMM YYYY") : "Выберите месяц";
+
+<DatePickerExtended
+    pickType={ECalendarPickType.MONTH_YEAR}
+    pickedDate={pickedDate}
+    onDateChange={setPickedDate}
+    renderTarget={() => (
+        <ChipMonthYearPickerTarget
+            selected={pickedDate !== null}
+            onClear={() => setPickedDate(null)}
+            clearButtonProps={{ "aria-label": "Очистить месяц" }}
+        >
+            {label}
+        </ChipMonthYearPickerTarget>
+    )}
+    renderDropdownHeaderTarget={() => label}
+/>;
+```
 
 ---
 
@@ -63,8 +86,8 @@ version: "1.0"
 
 Вне provider используется значение контекста по умолчанию: `dropdownOpen=false`,
 setter ничего не делает. Самостоятельный target поэтому не открывает календарь.
-В копируемых примерах используется публичная композиция через `renderTarget`,
-а не внутренний `Context.Provider`.
+Возвращай таргет из `renderTarget`, как в примере выше; создавать свой
+`Context.Provider` для обычной композиции не требуется.
 
 `aria-expanded` по умолчанию отражает контекст. Внешние `aria-expanded` и `postfix`
 идут в `restProps` после внутренних значений и имеют приоритет. При их подмене
@@ -143,20 +166,27 @@ setter ничего не делает. Самостоятельный target п�
 
 ## Stories
 
-Основные истории: `stories/Chips/ChipMonthYearPickerTarget.stories.tsx`
-Файлы примеров: `stories/Chips/examples/ChipMonthYearPickerTarget/`
+Основные истории: `stories/Chips/ChipMonthYearPicker.stories.tsx`
+Файлы примеров: `stories/Chips/examples/ChipMonthYearPicker/`
+
+Используются существующие истории родителя: `ChipMonthYearPicker` рендерит этот таргет.
+Отдельный stories-файл атому не требуется. Пример ручной композиции через
+`renderTarget` приведён выше в этом документе.
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | `Playground.tsx` | Прямые props таргета внутри публичного `DatePickerExtended` |
-| `Default` | `Default.tsx` | Управляемая дата, содержимое, `selected`, очистка и публичный `renderTarget` |
-| `WithPrefixAndPostfix` | `WithPrefixAndPostfix.tsx` | Левый слот, уведомление и замена внутреннего postfix |
-| `VisualTests` | `VisualTests.tsx` | Фокус, реальный hover, disabled с выбранным/пустым значением и настройки clearButtonProps |
+| `Playground` | `PlaygroundExample.tsx` | Таргет с контролами `type`, `size`, `disabled`; выбор месяца включает `selected` и кнопку очистки |
+| `Default` | `DefaultExample.tsx` | Управляемое значение и `aria-label` кнопки очистки через `clearButtonProps` |
+| `Types` | `TypesExample.tsx` | TYPE_1 / TYPE_2 таргет без выбора, со стрелкой |
+| `Sizes` | `SizesExample.tsx` | SM / MD / LG таргет без выбора, со стрелкой |
+| `VisualTests` | `VisualTestsExample.tsx` | Выбранный таргет трёх размеров с кнопкой очистки; play раскрывает календарь последнего |
 
-Размеры, типы и открытый календарь дополнительно покрыты существующими stories
-`ChipMonthYearPicker`; новая VisualTests проверяет недостающие состояния таргета.
-`Default`, `WithPrefixAndPostfix` и `VisualTests` участвуют в visual regression
-на xs (575px) и xl (1200px); только `Playground` исключён из скриншот-тестов.
+Состояния `disabled`, hover, focus и prefix/postfix-слоты отрисовывает `Chip`;
+они покрыты stories `stories/Chips/Chip.stories.tsx`.
+
+Контракт таргета покрывает `src/components/Chip/__tests__/ChipMonthYearPickerTarget.test.tsx`;
+календарный выбор и связь с датой — существующие тесты `ChipMonthYearPicker` и
+`DatePickerExtended`.
 
 ---
 
@@ -164,5 +194,4 @@ setter ничего не делает. Самостоятельный target п�
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-21 | Создан документ; подтверждены прямой публичный API, контекст, приоритет props и клавиатурный контракт. Добавлены отдельные примеры и тесты таргета без изменения production-кода. |
-| 2026-10-22 | `Default` включён в visual regression на xs/xl по замечанию ревью. |
+| 2026-10-21 | Создан документ; подтверждены публичный API, контекст, приоритет props и клавиатурный контракт. Добавлены тесты таргета без изменения production-кода. |

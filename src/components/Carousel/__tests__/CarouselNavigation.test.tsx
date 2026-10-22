@@ -140,7 +140,8 @@ describe("Carousel Navigation (Buttons & Context)", () => {
             fireEvent.click(btn);
 
             expect(nextSlideSpy).toHaveBeenCalledTimes(1);
-            expect(clickSpy).toHaveBeenCalledTimes(1);
+            expect(clickSpy).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ type: "click", target: btn }));
+            expect(nextSlideSpy.mock.invocationCallOrder[0]).toBeLessThan(clickSpy.mock.invocationCallOrder[0]);
         });
 
         it("should block nextSlide but fire onClick when atEnd is true", () => {
@@ -238,8 +239,7 @@ describe("Carousel Navigation (Buttons & Context)", () => {
             expect(initialNextSlide).not.toHaveBeenCalled();
             expect(initialOnClick).not.toHaveBeenCalled();
             expect(nextSlide).toHaveBeenCalledTimes(1);
-            expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click", target: button }));
-            expect(nextSlide.mock.invocationCallOrder[0]).toBeLessThan(onClick.mock.invocationCallOrder[0]);
+            expect(onClick).toHaveBeenCalledTimes(1);
 
             rerender(
                 <ButtonContextMockWrapper contextOverrides={{ atEnd: true, nextSlide }}>

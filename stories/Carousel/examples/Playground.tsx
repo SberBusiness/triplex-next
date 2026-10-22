@@ -67,7 +67,7 @@ export const Playground = ({ orientation = EOrientation.HORIZONTAL, ...restArgs 
                         ))}
                     </Carousel.Track>
                     <Carousel.PrevButton />
-                    <Carousel.NextButton />
+                    <Carousel.NextButton aria-label="Next slide" />
                 </Carousel.Viewport>
                 <Carousel.Indicators />
             </Carousel>

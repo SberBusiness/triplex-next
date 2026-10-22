@@ -4,7 +4,7 @@ import { Carousel, EButtonIconShape, EOrientation } from "@sberbusiness/triplex-
 const ITEMS = [0, 1, 2];
 
 interface IVisualCarouselProps {
-    id: string;
+    testId: string;
     label: string;
     orientation?: EOrientation;
     disabled?: boolean;
@@ -13,7 +13,7 @@ interface IVisualCarouselProps {
 }
 
 const VisualCarousel = ({
-    id,
+    testId,
     label,
     orientation = EOrientation.HORIZONTAL,
     disabled,
@@ -36,12 +36,12 @@ const VisualCarousel = ({
                     ))}
                 </Carousel.Track>
                 <Carousel.NextButton
-                    data-testid={id}
-                    aria-label={label}
+                    data-testid={testId}
+                    aria-label="Next slide"
                     disabled={disabled}
                     shape={shape}
-                    // Fade отключён для стабильного кадра; focus/hover сохраняют обычное управление opacity.
-                    style={{ transition: "none", ...(alwaysVisible ? { opacity: 1 } : {}) }}
+                    // Без fade, иначе скриншот ловит промежуточную opacity.
+                    style={{ transition: "none", opacity: alwaysVisible ? 1 : undefined }}
                 />
             </Carousel.Viewport>
         </Carousel>
@@ -50,11 +50,11 @@ const VisualCarousel = ({
 
 export const VisualTests = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        <VisualCarousel id="carousel-next-focus" label="NextButton: фокус с клавиатуры" />
-        <VisualCarousel id="carousel-next-hover" label="NextButton: наведение" />
-        <VisualCarousel id="carousel-next-end" label="NextButton: конец ленты" alwaysVisible />
+        <VisualCarousel testId="carousel-next-focus" label="NextButton: фокус с клавиатуры" />
+        <VisualCarousel testId="carousel-next-hover" label="NextButton: наведение" />
+        <VisualCarousel testId="carousel-next-end" label="NextButton: конец ленты" alwaysVisible />
         <VisualCarousel
-            id="carousel-next-disabled"
+            testId="carousel-next-disabled"
             label="NextButton: disabled, circle, вертикальная карусель"
             orientation={EOrientation.VERTICAL}
             shape={EButtonIconShape.CIRCLE}

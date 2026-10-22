@@ -244,7 +244,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CarouselIndicators | ✅ | ✅ |
 | CarouselItem | ⬜ | ◐ |
 | CarouselNextButton | ⬜ | ◐ |
-| CarouselPrevButton | ⬜ | ◐ |
+| CarouselPrevButton | ✅ | ✅ |
 | CarouselViewport | ⬜ | ◐ |
 | CheckboxTreeExtendedCheckbox | ⬜ | ◐ |
 | CheckboxTreeExtendedNode | ⬜ | ◐ |

@@ -250,7 +250,7 @@ describe("Carousel Elements (Viewport, Track, Item)", () => {
             expect(refObj.current).toBeInstanceOf(HTMLDivElement);
         });
 
-        it("updates pages and navigation when a slide is removed and remaining slides are reindexed", () => {
+        it("should update pages and navigation when a slide is removed and remaining slides are reindexed", () => {
             const renderItems = (items: string[]) => (
                 <Carousel scrollMode={ECarouselScrollMode.PAGE} gap={0}>
                     <Carousel.Viewport ref={(node) => node && mockElementSize(node, { clientWidth: 300 })}>

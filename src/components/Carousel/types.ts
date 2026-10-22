@@ -45,8 +45,6 @@ export interface ICarouselTrackProps extends React.HTMLAttributes<HTMLDivElement
 
 /** Свойства компонента CarouselItem. */
 export interface ICarouselItemProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Содержимое слайда. */
-    children?: React.ReactNode;
     /** Позиция слайда с нуля; индексы должны идти подряд в порядке элементов ленты. */
     index: number;
 }

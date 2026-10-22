@@ -250,6 +250,49 @@ describe("Carousel Elements (Viewport, Track, Item)", () => {
             expect(refObj.current).toBeInstanceOf(HTMLDivElement);
         });
 
+        it("should update pages and navigation when a slide is removed and remaining slides are reindexed", () => {
+            const renderItems = (items: string[]) => (
+                <Carousel scrollMode={ECarouselScrollMode.PAGE} gap={0}>
+                    <Carousel.Viewport ref={(node) => node && mockElementSize(node, { clientWidth: 300 })}>
+                        <Carousel.Track data-testid="track">
+                            {items.map((item, index) => (
+                                <Carousel.Item
+                                    key={item}
+                                    index={index}
+                                    aria-label={item}
+                                    ref={(node) => node && mockElementSize(node, { width: 300 })}
+                                >
+                                    {item}
+                                </Carousel.Item>
+                            ))}
+                        </Carousel.Track>
+                        <Carousel.NextButton aria-label="Next slide" />
+                    </Carousel.Viewport>
+                    <Carousel.Indicators />
+                </Carousel>
+            );
+            const items = ["First", "Second", "Third"];
+            const { rerender } = render(renderItems(items));
+            act(() => getResizeCallback()?.());
+            const secondSlide = screen.getByRole("group", { name: "Second" });
+            expect(screen.getAllByRole("tab")).toHaveLength(3);
+
+            rerender(renderItems(items.slice(1)));
+            act(() => getResizeCallback()?.());
+
+            expect(screen.queryByRole("group", { name: "First" })).not.toBeInTheDocument();
+            expect(screen.getByRole("group", { name: "Second" })).toBe(secondSlide);
+            expect(screen.getAllByRole("tab")).toHaveLength(2);
+
+            fireEvent.click(screen.getByRole("button", { name: "Next slide" }));
+
+            expect(screen.getAllByRole("tab")[1]).toHaveAttribute("aria-selected", "true");
+            expect(screen.getByTestId("track")).toHaveStyle({
+                "--triplex-next-runtime-carousel-transform": "translateX(-300px)",
+            });
+            expect(screen.getByRole("button", { name: "Next slide" })).toHaveAttribute("aria-disabled", "true");
+        });
+
         it("should clean up old map registry when index prop changes dynamically", () => {
             const DynamicItemComponent = () => {
                 const [idx, setIdx] = React.useState(0);

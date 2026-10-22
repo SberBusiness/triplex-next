@@ -74,6 +74,7 @@ export * from "./Slider";
 export * from "./SliderExtended";
 export * from "./SliderRange";
 export * from "./SmallInput";
+export * from "./SmartSpot";
 export * from "./SMSField";
 export * from "./Spoiler";
 export * from "./StatusTracker";

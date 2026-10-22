@@ -130,3 +130,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-20 | Создан документ. AI-рефакторинг: decoration-логика вынесена во внутренний хелпер `getTextDecorationClassName` (`utils.ts`), комментарии переведены в JSDoc, unit-тесты расширены (все значения `ETitleSize`/`EFontWeightTitle`, дефолтные heading-теги). Stories переведены на modern pattern (`examples/Title/`). |
+| 2026-10-07 | TRI-159: обновлены WOFF2 шрифта SB Sans Display (Regular, Medium, Semibold, Bold). |

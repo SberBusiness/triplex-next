@@ -1,0 +1,161 @@
+@font-face {
+    font-family: TriplexPreviousSBSansText;
+    src: url("./assets/SBSansText-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: TriplexPreviousSBSansText;
+    src: url("./assets/SBSansText-Semibold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+}
+
+.fontComparison {
+    max-width: 1100px;
+    margin: 0 auto;
+    color: var(--triplex-next-Typography-Primary_Color);
+
+    h2 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    h3 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 600;
+    }
+
+    .editor {
+        max-width: 640px;
+        margin-bottom: 24px;
+    }
+
+    .pair {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .headings {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 12px 0;
+        background: var(--triplex-next-Island-Type1_Background);
+        border-bottom: 1px solid var(--triplex-next-Divider-Background);
+    }
+
+    .columnHeading {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 0 12px;
+        font-size: 16px;
+        line-height: 20px;
+
+        span {
+            color: var(--triplex-next-Typography-Secondary_Color);
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+
+    .section {
+        margin-top: 32px;
+    }
+
+    .hint {
+        margin: 8px 0 16px;
+        color: var(--triplex-next-Typography-Secondary_Color);
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .example {
+        margin-top: 16px;
+    }
+
+    .panel {
+        min-width: 0;
+        padding: 12px;
+        border: 1px solid var(--triplex-next-Divider-Background);
+        border-radius: 8px;
+        font-family: var(--triplex-next-runtime-FontComparison-Regular_FontFamily), Arial, sans-serif;
+
+        &.previous {
+            --triplex-next-runtime-FontComparison-Regular_FontFamily: TriplexPreviousSBSansText;
+            --triplex-next-runtime-FontComparison-Semibold_FontFamily: TriplexPreviousSBSansText;
+        }
+
+        &.current {
+            --triplex-next-runtime-FontComparison-Regular_FontFamily: SBSansText;
+            --triplex-next-runtime-FontComparison-Semibold_FontFamily: SBSansTextSemibold;
+        }
+
+        .button {
+            font-family: var(--triplex-next-runtime-FontComparison-Semibold_FontFamily), Arial, sans-serif;
+        }
+
+        .field {
+            font-family: var(--triplex-next-runtime-FontComparison-Regular_FontFamily), Arial, sans-serif;
+        }
+    }
+
+    .regular {
+        font-family: var(--triplex-next-runtime-FontComparison-Regular_FontFamily), Arial, sans-serif;
+        font-weight: 400;
+    }
+
+    .semibold {
+        font-family: var(--triplex-next-runtime-FontComparison-Semibold_FontFamily), Arial, sans-serif;
+        font-weight: 600;
+    }
+
+    .textSamples {
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+
+        p {
+            margin: 0;
+        }
+
+        p + p {
+            margin-top: 6px;
+        }
+    }
+
+    .normalSample {
+        font-size: 14px;
+        line-height: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+    }
+}
+
+@media (max-width: 575px) {
+    .fontComparison {
+        .pair {
+            gap: 8px;
+        }
+
+        .panel {
+            padding: 8px;
+        }
+
+        .columnHeading {
+            padding: 0 8px;
+            font-size: 14px;
+        }
+    }
+}

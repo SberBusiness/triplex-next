@@ -81,7 +81,6 @@ export const Default: Story = {
     parameters: {
         controls: { disable: true },
         docs: { source: { code: DefaultSource, language: "tsx" } },
-        testRunner: { skip: true },
     },
 };
 

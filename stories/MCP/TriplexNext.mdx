@@ -1,0 +1,131 @@
+import { Meta, Title, Subtitle } from "@storybook/addon-docs/blocks";
+
+<Meta title="MCP/Triplex Next" />
+
+<Title>Triplex Next MCP</Title>
+<Subtitle>Дизайн-система в контексте AI-агента</Subtitle>
+
+[`@sberbusiness/triplex-next-mcp-server`](https://www.npmjs.com/package/@sberbusiness/triplex-next-mcp-server)
+даёт AI-агенту документацию компонентов Triplex Next, дизайн-токены, имена иконок и правила
+генерации кода через Model Context Protocol (MCP).
+
+Используйте сервер, чтобы подобрать компонент, уточнить его props или получить пример перед
+написанием кода. Для генерации интерфейса по макету подключите также
+<a href="./?path=/docs/mcp-pixso-to-triplex-next--docs" target="_top">Pixso to Triplex Next MCP</a>.
+
+## Быстрый старт
+
+Понадобятся Node.js 18 или новее, npm с командой `npx` и AI-клиент с поддержкой MCP.
+При первом запуске `npx` скачает пакет из npm.
+
+1. Откройте конфигурацию MCP вашего клиента:
+   - **Claude Code** — файл `.mcp.json` в корне проекта;
+   - **Cursor** — файл `.cursor/mcp.json` в корне проекта.
+2. Добавьте сервер `triplex`. Если в конфигурации уже есть `mcpServers`, добавьте запись в этот объект.
+3. Перезапустите MCP-серверы или клиент и убедитесь, что `triplex` подключён.
+
+```json
+{
+  "mcpServers": {
+    "triplex": {
+      "command": "npx",
+      "args": ["-y", "@sberbusiness/triplex-next-mcp-server"]
+    }
+  }
+}
+```
+
+## Как проверить подключение
+
+Отправьте агенту запрос:
+
+```text
+Используй MCP-сервер triplex: вызови list_components и покажи,
+какие компоненты доступны и у каких есть AI-документация.
+```
+
+В истории действий агента должен появиться вызов `list_components`. Наличие сервера в
+конфигурации само по себе не означает, что агент использовал его для ответа.
+
+## Доступные инструменты
+
+<div style={{ overflowX: "auto" }}>
+<table>
+    <thead>
+        <tr><th>Инструмент</th><th>Когда использовать</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><code>list_components</code></td><td>Найти компонент и проверить флаг <code>ai_ready</code>.</td></tr>
+        <tr><td><code>get_component</code></td><td>Получить props, инварианты, пример и оглавление документации компонента.</td></tr>
+        <tr><td><code>get_tokens</code></td><td>Найти группы токенов, токены компонента или значения конкретной группы.</td></tr>
+        <tr><td><code>list_icons</code></td><td>Найти существующее имя иконки из <code>@sberbusiness/icons-next</code> по подстроке и размеру.</td></tr>
+        <tr><td><code>get_guidelines</code></td><td>Прочитать правила генерации кода на Triplex Next.</td></tr>
+    </tbody>
+</table>
+</div>
+
+### Документация компонента
+
+По умолчанию `get_component` возвращает компактное описание. Например, аргументы запроса для Button:
+
+```json
+{
+  "name": "Button"
+}
+```
+
+Чтобы уточнить детали, агент может передать `section` для отдельного раздела, `example` для
+примера, `full` для полного документа или `offset` для продолжения длинного ответа.
+Нужный раздел и пример выбираются по оглавлению ответа.
+
+### Токены и иконки
+
+`get_tokens` без аргументов возвращает индекс групп. Параметр `component` выбирает токены
+компонента, а `group` — группу целиком. Публичное имя токена имеет вид `Группа.Токен`,
+например `Button.General_Background_Default`.
+
+`list_icons` принимает `query`, `size` и `limit`. Попросите агента проверить имя иконки этим
+инструментом перед импортом, чтобы в код не попало несуществующее имя.
+
+## Пример задачи для агента
+
+```text
+Собери форму на @sberbusiness/triplex-next: поле ввода имени и кнопку отправки.
+
+Перед написанием кода:
+1. Прочитай get_guidelines MCP-сервера triplex.
+2. Через list_components подбери компоненты.
+3. Через get_component проверь их props и примеры.
+4. Если нужны иконки, найди их через list_icons.
+
+Соблюдай соглашения проекта. Не выдумывай props, enum-значения и имена иконок.
+После реализации проверь TypeScript и перечисли использованные компоненты.
+```
+
+Для точечных вопросов можно начать с «Какие props есть у Button?», «Какие токены использует
+Calendar?» или «Найди иконки со стрелкой размером 16 px» и явно попросить использовать `triplex`.
+
+## Если что-то не работает
+
+<div style={{ overflowX: "auto" }}>
+<table>
+    <thead>
+        <tr><th>Ситуация</th><th>Что проверить</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Сервер не запускается</td><td>Node.js 18+, доступность <code>npx</code> для AI-клиента и доступ к npm при первом запуске.</td></tr>
+        <tr><td>Инструменты не появились</td><td>Корректность JSON, расположение конфигурации и статус сервера после перезапуска клиента.</td></tr>
+        <tr><td>Агент отвечает без документации</td><td>Явно укажите сервер и нужный инструмент в запросе. Проверьте историю вызовов.</td></tr>
+    </tbody>
+</table>
+</div>
+
+Документация поставляется внутри npm-пакета сервера. Номер версии
+[`@sberbusiness/triplex-next-mcp-server`](https://www.npmjs.com/package/@sberbusiness/triplex-next-mcp-server)
+соответствует номеру версии `@sberbusiness/triplex-next`. Чем больше различаются версии сервера
+и библиотеки в вашем проекте, тем выше вероятность неточностей в ответах MCP.
+
+## Ссылки
+
+- [Пакет и README в npm](https://www.npmjs.com/package/@sberbusiness/triplex-next-mcp-server).
+- <a href="./?path=/docs/mcp-pixso-to-triplex-next--docs" target="_top">Генерация интерфейса по макету Pixso</a>.

@@ -35,3 +35,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Добавлено свойство `format` — формат дат в `value` и `onChange`, по умолчанию `YYYYMMDD`.
 - Исправлено: с форматом вроде `DD.MM.YYYY` противоположная граница ошибочно сбрасывалась. Теперь даты сравниваются хронологически в формате `format`.
+
+**LightBox**
+
+- Исправлен баг появления второго скролла во время открытия/закрытия SideOverlay и сдвига Lightbox/SideOverlay при открытии SideOverlay и TopOverlay на Windows.

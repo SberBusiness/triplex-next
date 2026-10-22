@@ -246,7 +246,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CarouselNextButton | ⬜ | ◐ |
 | CarouselPrevButton | ⬜ | ◐ |
 | CarouselViewport | ⬜ | ◐ |
-| CheckboxTreeExtendedCheckbox | ⬜ | ◐ |
+| CheckboxTreeExtendedCheckbox | ✅ | ✅ |
 | CheckboxTreeExtendedNode | ⬜ | ◐ |
 | ChipDatePickerTarget | ✅ | ✅ |
 | ChipMonthYearPickerTarget | ✅ | ✅ |

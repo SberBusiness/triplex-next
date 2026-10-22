@@ -4,3 +4,4 @@ export * from "./SizesExample";
 export { default as SizesExampleSource } from "./SizesExample?raw";
 export * from "./PlaygroundExample";
 export { default as PlaygroundExampleSource } from "./PlaygroundExample?raw";
+export { VisualTests as VisualTestsRender } from "./VisualTests";

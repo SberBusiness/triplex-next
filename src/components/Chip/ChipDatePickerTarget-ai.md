@@ -3,7 +3,7 @@ component: ChipDatePickerTarget
 category: Chips
 related: [ChipDatePicker, Chip, DatePickerExtended]
 tokens: []
-stories: stories/Chips/ChipDatePickerTarget.stories.tsx
+stories: stories/Chips/ChipDatePicker.stories.tsx
 version: "1.0"
 ---
 
@@ -30,6 +30,23 @@ import { ChipDatePickerTarget, type IChipDatePickerTargetProps } from "@sberbusi
 контекст. Вне provider используется значение контекста по умолчанию
 (`dropdownOpen: false`, пустой setter), поэтому самостоятельный target не открывает
 календарь. Создавать свой `Context.Provider` для обычной композиции не требуется.
+
+Минимальная управляемая композиция:
+
+```tsx
+const [pickedDate, setPickedDate] = useState<string | null>(null);
+
+<DatePickerExtended
+    pickedDate={pickedDate}
+    onDateChange={(date) => setPickedDate(date.format("YYYYMMDD"))}
+    renderTarget={() => (
+        <ChipDatePickerTarget selected={pickedDate !== null} onClear={() => setPickedDate(null)}>
+            {pickedDate ? moment(pickedDate, "YYYYMMDD").format("DD.MM.YYYY") : "Выберите дату"}
+        </ChipDatePickerTarget>
+    )}
+    renderDropdownHeaderTarget={() => <span>Выберите дату</span>}
+/>;
+```
 
 ---
 
@@ -119,13 +136,42 @@ import { ChipDatePickerTarget, type IChipDatePickerTargetProps } from "@sberbusi
   а не нативное отключение `<span>`; программно отправленные события
   обработчики не блокируют. Встроенная кнопка очистки не получает `disabled`.
 - Встроенная очистка останавливает только всплытие клика. Её Enter / Space
-  всплывают в target, а доступное имя из props target не передаётся кнопке.
-  `clearButtonProps` у этого компонента нет. Это существующие ограничения,
-  не гарантии корректного отключения или клавиатурной очистки.
-- Для собственной именованной кнопки очистки используй существующий `postfix`,
-  явно задавая `aria-label`, обработчик очистки, остановку всплытия клика и
-  Enter / Space. Пример `WithPrefixAndPostfix` показывает такую композицию;
-  локализованный текст остаётся у потребителя.
+  всплывают в target: обработчик target вызывает `preventDefault()`, отменяя
+  нативную активацию кнопки, и переключает календарь. Поэтому встроенную
+  кнопку нельзя нажать с клавиатуры — `onClear` не вызывается. Доступное имя
+  из props target кнопке не передаётся, `clearButtonProps` у компонента нет.
+  Это существующие ограничения, а не желаемое поведение.
+- Для клавиатурно доступной именованной очистки передай свою кнопку в `postfix`:
+  `aria-label`, остановка всплытия клика и Enter / Space; локализованный текст
+  остаётся у потребителя.
+
+```tsx
+const handleClearClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setPickedDate(null);
+};
+
+// Не даём Enter / Space дойти до target: нативная активация кнопки вызовет click.
+const handleClearKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.code === "Enter" || event.code === "Space") {
+        event.stopPropagation();
+    }
+};
+
+// postfix передаётся только при выборе: явный postfix={undefined} убрал бы автоматическую стрелку.
+const postfixProps =
+    pickedDate !== null
+        ? {
+              postfix: (
+                  <ChipClearButton aria-label="Очистить дату" onClick={handleClearClick} onKeyDown={handleClearKeyDown} />
+              ),
+          }
+        : {};
+
+<ChipDatePickerTarget selected={pickedDate !== null} onClear={() => setPickedDate(null)} {...postfixProps}>
+    {label}
+</ChipDatePickerTarget>;
+```
 
 ---
 
@@ -146,21 +192,22 @@ import { ChipDatePickerTarget, type IChipDatePickerTargetProps } from "@sberbusi
 
 ## Stories
 
-Основные истории: `stories/Chips/ChipDatePickerTarget.stories.tsx`
-Файлы примеров: `stories/Chips/examples/ChipDatePickerTarget/`
+Основные истории: `stories/Chips/ChipDatePicker.stories.tsx`
+Файлы примеров: `stories/Chips/examples/ChipDatePicker/`
+
+Используются существующие истории родителя: `ChipDatePicker` рендерит этот target.
+Отдельный stories-файл атому не требуется. Примеры ручной композиции через
+`renderTarget` приведены выше в этом документе.
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
-| `Playground` | `Playground.tsx` | Controls унаследованных props, события target и рабочий контекст через `DatePickerExtended` |
-| `Default` | `Default.tsx` | Минимальная управляемая композиция с фиксированной страницей календаря и очисткой |
-| `WithPrefixAndPostfix` | `WithPrefixAndPostfix.tsx` | Иконка в prefix и пользовательская именованная кнопка очистки в postfix |
-| `VisualTests` | `VisualTests.tsx` | Изолированные закрытые состояния: keyboard focus, настоящий hover, disabled и selected + disabled |
+| `Playground` | `PlaygroundExample.tsx` | Target с контролами type, size, disabled; выбор даты включает `selected` и кнопку очистки |
+| `Types` | `TypesExample.tsx` | TYPE_1 / TYPE_2 target без выбора, со стрелкой |
+| `Sizes` | `SizesExample.tsx` | SM / MD / LG target без выбора, со стрелкой |
+| `VisualTests` | `VisualTestsExample.tsx` | Selected target трёх размеров с кнопкой очистки; play раскрывает календарь последнего |
 
-Типы, размеры и раскрытый календарь покрыты stories родителя `ChipDatePicker`;
-визуально совпадающий `Default` target исключён из повторных скриншотов.
-`VisualTests` намеренно показывает только закрытые target без календарной
-композиции; `play` фокусирует первый target, `hoverSelector` наводит реальную мышь
-на выбранный target. Данные примеров фиксированы, футер текущей даты не включён.
+Состояния `disabled`, hover, focus и prefix/postfix-слоты отрисовывает `Chip`;
+они покрыты stories `stories/Chips/Chip.stories.tsx`.
 
 Контракт target покрывает `src/components/Chip/__tests__/ChipDatePickerTarget.test.tsx`;
 календарный выбор и связь с датой — существующие тесты `ChipDatePicker` и
@@ -173,4 +220,4 @@ import { ChipDatePickerTarget, type IChipDatePickerTargetProps } from "@sberbusi
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-21 | Создан документ; добавлены JSDoc, прямые публичные examples и focused тесты target без изменения API и поведения |
+| 2026-10-21 | Создан документ; добавлены JSDoc и focused тесты target без изменения API и поведения |

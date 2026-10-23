@@ -56,7 +56,7 @@ const ScrollModeItem = ({ scrollMode }: ScrollModeItemProps) => {
                         ))}
                     </Carousel.Track>
                     <Carousel.PrevButton />
-                    <Carousel.NextButton />
+                    <Carousel.NextButton aria-label="Next slide" />
                 </Carousel.Viewport>
                 <Carousel.Indicators />
             </Carousel>

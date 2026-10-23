@@ -4,4 +4,52 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v0.52.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**DateRange, MonthYearRange**
+
+- Поля в `renderPickerFrom` / `renderPickerTo` получают `format` диапазона. Если вы задавали `format` полю до spread (`<DateField format="..." {...props} />`), он перезапишется на `YYYYMMDD`: перенесите `format` на `DateRange` / `MonthYearRange`.
+
 <Heading>Изменения</Heading>
+
+**Carousel**
+
+- Исправлено: в режиме `ECarouselScrollMode.PAGE` страницы формировались и центрировались без учёта `viewportPadding`, из-за чего крайний слайд страницы мог обрезаться.
+- Проведён AI-рефакторинг.
+
+**CarouselItem**
+
+- Проведён AI-рефакторинг.
+
+**ChipDatePicker**
+
+- Добавлен файл `ChipDatePicker-ai.md` с AI-документацией компонента.
+
+**ChipDatePickerTarget**
+
+- Добавлен файл `ChipDatePickerTarget-ai.md` с AI-документацией компонента.
+- Проведён AI-рефакторинг.
+
+**ChipMonthYearPickerTarget**
+
+- Добавлен файл `ChipMonthYearPickerTarget-ai.md` с AI-документацией компонента.
+- Проведён AI-рефакторинг.
+
+**ChipSelect**
+
+- Добавлен файл `ChipSelect-ai.md` с AI-документацией компонента.
+
+**DateRange**
+
+- Добавлено свойство `format` — формат дат в `value` и `onChange`, по умолчанию `YYYYMMDD`.
+- Исправлено: с форматом вроде `DD.MM.YYYY` дата «до» ошибочно сбрасывалась — например, при вводе 31.01.2024 в «от» при «до» 01.02.2024. Теперь даты сравниваются хронологически в формате `format`.
+- Исправлено: сдвиг диапазона с невалидной границей передавал в `onChange` неверную дату (например, `"31.01.2024"` превращалась в `"20310220"`). Теперь такой диапазон не сдвигается.
+
+**MonthYearRange**
+
+- Добавлено свойство `format` — формат дат в `value` и `onChange`, по умолчанию `YYYYMMDD`.
+- Исправлено: с форматом вроде `DD.MM.YYYY` противоположная граница ошибочно сбрасывалась. Теперь даты сравниваются хронологически в формате `format`.
+
+**LightBox**
+
+- Исправлен баг появления второго скролла во время открытия/закрытия SideOverlay и сдвига Lightbox/SideOverlay при открытии SideOverlay и TopOverlay на Windows.

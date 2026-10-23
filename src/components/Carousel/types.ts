@@ -11,6 +11,8 @@ export type TCarouselViewportPadding =
 
 /** Свойства компонента Carousel. */
 export interface ICarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Содержимое карусели: область просмотра с лентой слайдов и необязательная навигация. */
+    children?: React.ReactNode;
     /** Расстояние (зазор) между слайдами в пикселях. По умолчанию 16. */
     gap?: number;
     /** Режим прокрутки карусели: поочередно по одному элементу или постранично. По умолчанию ECarouselScrollMode.ITEM. */
@@ -43,6 +45,7 @@ export interface ICarouselTrackProps extends React.HTMLAttributes<HTMLDivElement
 
 /** Свойства компонента CarouselItem. */
 export interface ICarouselItemProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Позиция слайда с нуля; индексы должны идти подряд в порядке элементов ленты. */
     index: number;
 }
 

@@ -5,6 +5,7 @@ import { CarouselContext } from "./CarouselContext";
 import { mergeRefs } from "../../utils/refs";
 import styles from "./styles/Carousel.module.less";
 
+/** Слайд карусели: регистрирует свой DOM-узел по индексу для измерения и навигации. */
 export const CarouselItem = React.forwardRef<HTMLDivElement, ICarouselItemProps>(
     ({ children, className, index, ...restProps }, ref) => {
         const { slideRefs } = useContext(CarouselContext);
@@ -24,7 +25,7 @@ export const CarouselItem = React.forwardRef<HTMLDivElement, ICarouselItemProps>
                     lastRegisteredIndexRef.current = null;
                 }
             },
-            [index],
+            [index, slideRefs],
         );
 
         const combinedRef = mergeRefs(ref, registerItemRef);

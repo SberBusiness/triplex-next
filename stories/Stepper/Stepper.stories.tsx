@@ -16,7 +16,7 @@ import {
     VisualTests as VisualTestsRender,
     WithIcons as WithIconsRender,
     WithIconsSource,
-} from "./examples";
+} from "./examples/Stepper";
 
 const meta = {
     title: "Components/Stepper",

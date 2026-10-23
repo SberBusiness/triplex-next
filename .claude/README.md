@@ -316,9 +316,8 @@ React 17-релиз `0.Y.0` из `release-0` — **первая** половин
 
 ## Linear (таск-трекер)
 
-Задачи ведутся в Linear: workspace `triplex-next`, команда **TRI**
-(https://linear.app/triplex-next). Номер задачи `TRI-XXX` — префикс веток и
-коммитов (см. `docs/ai/commits.md`; `TRIPLEX-XXX` — legacy). GitHub-интеграция
+Задачи ведутся в Linear: workspace `triplex-next`, команда **TRI**.
+Номер задачи `TRI-XXX` — префикс веток и коммитов (см. `docs/ai/commits.md`; `TRIPLEX-XXX` — legacy). GitHub-интеграция
 Linear линкует PR по номеру в имени ветки и двигает статусы автоматически:
 ветка → In Progress, PR → In Review, merge → Done.
 

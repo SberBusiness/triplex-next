@@ -15,7 +15,7 @@ export interface IChipDatePickerProps
     extends Omit<IDateFieldProps, "status" | "invalidDateHint">, Pick<IChipProps, "type" | "disabled"> {
     /** Название поля, когда не выбрано значение. */
     label: React.ReactNode;
-    /** Лейбл, отображаемый вместо выбранного значения. */
+    /** Контент вместо выбранной даты; при пустом или недоступном value отображается label. */
     displayedValue?: React.ReactNode;
 }
 
@@ -37,7 +37,7 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         onDropdownClose,
         ...rest
     } = props;
-    const [pickerValues, setPickerValues] = useState(
+    const [pickerValues, setPickerValues] = useState(() =>
         DateFieldUtils.getPickerValues(value, format, limitRange, disabledDays),
     );
     const lastValidPickerValuesRef = useRef(pickerValues);
@@ -52,6 +52,8 @@ export const ChipDatePicker = React.forwardRef<HTMLDivElement, IChipDatePickerPr
         if (newPickerValues.inputString !== pickerValues.inputString) {
             setPickerValues(newPickerValues);
         }
+        // pickerValues намеренно не в зависимостях: эффект синхронизирует внешнее value,
+        // а не промежуточный ввод мобильного поля — иначе он затирал бы ввод пользователя.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, format, limitRange, disabledDays]);
 

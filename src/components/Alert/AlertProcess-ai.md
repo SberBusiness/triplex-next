@@ -1,7 +1,7 @@
 ---
 component: AlertProcess
 category: Alert
-related: [AlertContext]
+related: [AlertProcessSpoiler, AlertContext]
 tokens:
   - AlertProcess.Info_Background
   - AlertProcess.Warning_Background
@@ -56,7 +56,8 @@ ARIA-роли не выставляет.
 ### AlertProcess.Spoiler
 
 Раскрывающийся блок внутри `AlertProcess`. **Полностью управляемый** — своего
-состояния не хранит.
+состояния не хранит. Полный контракт, ограничения и примеры —
+[AlertProcessSpoiler-ai.md](./AlertProcessSpoiler-ai.md).
 
 | Prop                          | Тип                       | По умолчанию | Описание                                                             |
 | ----------------------------- | ------------------------- | ------------ | -------------------------------------------------------------------- |
@@ -195,7 +196,8 @@ AlertProcess.Feature_Background  // фон для type=FEATURE
   `role="alert"`, иконка + короткий текст, без фона и кнопок. Не поддерживает
   `EAlertType.FEATURE`.
 - `AlertProcessSpoiler` — субкомпонент, доступный только как
-  `AlertProcess.Spoiler`. Собственного AI.md не имеет, описан здесь.
+  `AlertProcess.Spoiler`. Подробности — в
+  [AlertProcessSpoiler-ai.md](./AlertProcessSpoiler-ai.md).
 - `EAlertType` — общий enum типов семейства. `AlertProcess` использует его целиком.
 - `EAlertProcessBorderRadius` — enum скруглений, экспортируется из barrel.
 - `ALERT_TYPE_TO_CLASS_NAME_MAP` (`AlertTypeUtils.tsx`) — общий с `AlertContext`
@@ -249,3 +251,4 @@ AlertProcess.Feature_Background  // фон для type=FEATURE
 | 2026-08-10 | Создан документ. AI-рефакторинг: `AlertProcessSpoiler` переведён на `forwardRef` и перестал затирать `className` собственными классами; из него убрана ссылка на несуществующий CSS-класс `styles.spoiler`; в `AlertProcess` убрано дублирующее присваивание `AlertProcess.Spoiler`, `renderIcon` приведён к `\|\|` как в `AlertContext`, добавлены JSDoc на props с дефолтами и явный `children`; из LESS удалено мёртвое правило `.alertTypeFeature .themeIcon { padding-top: 0 }`. Unit-тесты разбиты на `AlertProcess.test.tsx`и`AlertProcessSpoiler.test.tsx`и расширены с 11 до 34 кейсов. Stories переведены на modern pattern — файлы примеров без суффикса`Example`. Публичный API не изменён. |
 | 2026-08-11 | По ревью PR #520: из `AlertProcessSpoiler` убрана пустая обёртка-`<div>` — контент и кнопка раскрытия стали соседними элементами, корневым элементом компонента стал элемент контента (он и раньше получал `className` / `ref` / `...rest`). На кнопке раскрытия выставлен `aria-expanded`. Тесты дополнены до 37 кейсов. Публичный API не изменён.                                                                                                                                                                                                                                                                                                                                                     |
 | 2026-08-28 | Скругление варианта `MD` увеличено с 12px до 16px в `styles/AlertProcess.module.less`. |
+| 2026-10-19 | По TRI-160 добавлена связь с отдельной документацией `AlertProcessSpoiler`, проверены существующие примеры и контракт атома |

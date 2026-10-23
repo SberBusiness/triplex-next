@@ -1,52 +1,11 @@
 import React from "react";
 import { RangeStrokeSrvIcon16, CaretleftStrokeSrvIcon20, CaretrightStrokeSrvIcon20 } from "@sberbusiness/icons-next";
 import clsx from "clsx";
+import { dateFormatYYYYMMDD } from "../../consts/DateConst";
 import { EDateRangeShiftUnit } from "./enums";
-import { TDateRangeValue } from "./types";
-import { shiftDateRange } from "./utils";
+import { IDateRangeProps } from "./types";
+import { isDateAfter, shiftDateRange } from "./utils";
 import styles from "./styles/DateRange.module.less";
-
-/** Свойства функции рендеринга кнопки сдвига диапазона дат. */
-export interface IDateRangeButtonProvideProps {
-    /** Иконка направления сдвига. */
-    children: React.ReactNode;
-    /** Класс кнопки сдвига. */
-    className: string;
-    /** Обработчик клика, сдвигающий диапазон дат. */
-    onClick: () => void;
-    /** Кнопка недоступна — диапазон дат заполнен не полностью. */
-    disabled: boolean;
-}
-
-/** Свойства функции рендеринга поля выбора даты. */
-export interface IDateRangePickerProvideProps {
-    /** Дата в формате YYYYMMDD, пустая строка — дата не выбрана. */
-    value: string;
-    /** Обработчик изменения даты. Принимает дату в формате YYYYMMDD. */
-    onChange: (value: string) => void;
-}
-
-/** Свойства компонента DateRange. */
-export interface IDateRangeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-    /** Диапазон дат. */
-    value: TDateRangeValue;
-    /** Функция, вызывающаяся при изменении диапазона дат. */
-    onChange: (value: TDateRangeValue) => void;
-    /** Численная величина сдвига диапазона дат. По умолчанию 1. */
-    shiftAmount?: number;
-    /** Единица измерения сдвига диапазона дат. По умолчанию EDateRangeShiftUnit.MONTH. */
-    shiftUnit?: EDateRangeShiftUnit;
-    /** Управление отображением/скрытием кнопок сдвига диапазона дат. По умолчанию false. */
-    hideNavigation?: boolean;
-    /** Функция рендеринга поля выбора даты "от". */
-    renderPickerFrom: (props: IDateRangePickerProvideProps) => React.ReactNode;
-    /** Функция рендеринга поля выбора даты "до". */
-    renderPickerTo: (props: IDateRangePickerProvideProps) => React.ReactNode;
-    /** Функция рендеринга кнопки сдвига диапазона дат "назад". */
-    renderButtonBack: (props: IDateRangeButtonProvideProps) => React.ReactNode;
-    /** Функция рендеринга кнопки сдвига диапазона дат "вперёд". */
-    renderButtonForward: (props: IDateRangeButtonProvideProps) => React.ReactNode;
-}
 
 /**
  * Выбор диапазона дат. Рендерит два поля выбора даты и кнопки сдвига диапазона,
@@ -59,15 +18,16 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
             children,
             className,
             value,
-            onChange,
+            format = dateFormatYYYYMMDD,
             shiftAmount = 1,
             shiftUnit = EDateRangeShiftUnit.MONTH,
             hideNavigation,
+            onChange,
             renderPickerFrom,
             renderPickerTo,
             renderButtonForward,
             renderButtonBack,
-            ...rest
+            ...restProps
         },
         ref,
     ) => {
@@ -78,7 +38,7 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
 
         /** Обработчик изменения значения в поле выбора даты "от". Сбрасывает дату "до", если она оказалась меньше. */
         const handleChangePickerFrom = (date: string) => {
-            if (!date || !end || date <= end) {
+            if (!date || !end || !isDateAfter(date, end, format)) {
                 onChange([date, end]);
             } else {
                 onChange([date, ""]);
@@ -87,24 +47,24 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
 
         /** Обработчик изменения значения в поле выбора даты "до". Сбрасывает дату "от", если она оказалась больше. */
         const handleChangePickerTo = (date: string) => {
-            if (!date || !start || date >= start) {
+            if (!date || !start || !isDateAfter(start, date, format)) {
                 onChange([start, date]);
             } else {
                 onChange(["", date]);
             }
         };
 
-        /** Смещает обе границы диапазона на amount единиц. Неполный диапазон не сдвигается. */
+        /** Смещает обе границы диапазона на amount единиц. Неполный или невалидный диапазон не сдвигается. */
         const shiftRange = (amount: number) => {
-            if (shiftDisabled) {
-                return;
-            }
+            const shiftedValue = shiftDateRange(value, amount, shiftUnit, format);
 
-            onChange(shiftDateRange(value, amount, shiftUnit));
+            if (shiftedValue) {
+                onChange(shiftedValue);
+            }
         };
 
         return (
-            <div className={classNames} {...rest} ref={ref}>
+            <div className={classNames} {...restProps} ref={ref}>
                 {!hideNavigation &&
                     renderButtonBack({
                         children: <CaretleftStrokeSrvIcon20 paletteIndex={5} />,
@@ -113,13 +73,15 @@ export const DateRange = React.forwardRef<HTMLDivElement, IDateRangeProps>(
                         onClick: () => shiftRange(-shiftAmount),
                     })}
                 {renderPickerFrom({
-                    onChange: handleChangePickerFrom,
                     value: start,
+                    format,
+                    onChange: handleChangePickerFrom,
                 })}
                 <RangeStrokeSrvIcon16 className={styles.separator} paletteIndex={5} />
                 {renderPickerTo({
-                    onChange: handleChangePickerTo,
                     value: end,
+                    format,
+                    onChange: handleChangePickerTo,
                 })}
                 {!hideNavigation &&
                     renderButtonForward({

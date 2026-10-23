@@ -1,12 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import {
-    MonthYearRange,
-    IMonthYearRangeButtonProvideProps,
-    IMonthYearRangePickerProvideProps,
-    TMonthYearRangeValue,
-} from "../MonthYearRange";
+import { MonthYearRange } from "../MonthYearRange";
+import { IMonthYearRangeButtonProvideProps, IMonthYearRangePickerProvideProps, TMonthYearRangeValue } from "../types";
 import { EMonthYearRangeShiftUnit } from "../enums";
 
 vi.mock("@sberbusiness/icons-next", () => ({
@@ -87,6 +83,43 @@ describe("MonthYearRange", () => {
         fireEvent.change(pickerTo, { target: { value: "20240401" } });
 
         expect(mockOnChange).toHaveBeenCalledWith(["20240101", "20240401"]);
+    });
+
+    it("keeps 'to' date when 'from' date is earlier but lexicographically greater in custom format", () => {
+        render(<MonthYearRange {...defaultProps} value={["", "01.02.2024"]} format="DD.MM.YYYY" />);
+
+        const pickerFrom = screen.getByTestId("picker-empty");
+        fireEvent.change(pickerFrom, { target: { value: "01.12.2023" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["01.12.2023", "01.02.2024"]);
+    });
+
+    it("clears 'to' date when 'from' date is greater in custom format", () => {
+        render(<MonthYearRange {...defaultProps} value={["", "01.12.2023"]} format="DD.MM.YYYY" />);
+
+        const pickerFrom = screen.getByTestId("picker-empty");
+        fireEvent.change(pickerFrom, { target: { value: "01.02.2024" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["01.02.2024", ""]);
+    });
+
+    it("clears 'from' date when 'to' date is less in custom format", () => {
+        render(<MonthYearRange {...defaultProps} value={["01.02.2024", ""]} format="DD.MM.YYYY" />);
+
+        const pickerTo = screen.getByTestId("picker-empty");
+        fireEvent.change(pickerTo, { target: { value: "01.12.2023" } });
+
+        expect(mockOnChange).toHaveBeenCalledWith(["", "01.12.2023"]);
+    });
+
+    it("shifts range in custom format", () => {
+        render(<MonthYearRange {...defaultProps} value={["01.01.2024", "01.03.2024"]} format="DD.MM.YYYY" />);
+
+        const buttons = screen.getAllByRole("button");
+        const forwardButton = buttons[1];
+        fireEvent.click(forwardButton);
+
+        expect(mockOnChange).toHaveBeenCalledWith(["01.02.2024", "01.04.2024"]);
     });
 
     it("shifts range back by one month by default", () => {
@@ -261,6 +294,35 @@ describe("MonthYearRange", () => {
         fireEvent.change(screen.getByTestId("picker-20240301"), { target: { value: "20231201" } });
 
         expect(mockOnChange).toHaveBeenCalledWith(["", "20231201"]);
+    });
+
+    it("passes the default format to both pickers", () => {
+        const renderPickerFrom = vi.fn(renderPicker);
+        const renderPickerTo = vi.fn(renderPicker);
+
+        render(
+            <MonthYearRange {...defaultProps} renderPickerFrom={renderPickerFrom} renderPickerTo={renderPickerTo} />,
+        );
+
+        expect(renderPickerFrom).toHaveBeenCalledWith(expect.objectContaining({ format: "YYYYMMDD" }));
+        expect(renderPickerTo).toHaveBeenCalledWith(expect.objectContaining({ format: "YYYYMMDD" }));
+    });
+
+    it("passes custom format to both pickers", () => {
+        const renderPickerFrom = vi.fn(renderPicker);
+        const renderPickerTo = vi.fn(renderPicker);
+
+        render(
+            <MonthYearRange
+                {...defaultProps}
+                format="DD.MM.YYYY"
+                renderPickerFrom={renderPickerFrom}
+                renderPickerTo={renderPickerTo}
+            />,
+        );
+
+        expect(renderPickerFrom).toHaveBeenCalledWith(expect.objectContaining({ format: "DD.MM.YYYY" }));
+        expect(renderPickerTo).toHaveBeenCalledWith(expect.objectContaining({ format: "DD.MM.YYYY" }));
     });
 
     it("forwards ref to the root div", () => {

@@ -5,6 +5,7 @@ import { EComponentSize } from "../../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { useToken } from "../../ThemeProvider/useToken";
 import { isKey } from "../../../utils/keyboard";
+import { lockBodyScroll } from "../../../utils/scroll/bodyScrollLock";
 import styles from "../styles/DropdownDesktop.module.less";
 
 /** Свойства компонента DropdownDesktop. */
@@ -26,8 +27,6 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
 }
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
-
-const overflowHiddenClassName = styles.dropdownDesktopOverflowHidden;
 
 /** Отступ между управляющим элементом и выпадающим меню, px. */
 const TARGET_OFFSET = 4;
@@ -193,14 +192,14 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             document.addEventListener("scroll", updatePosition, true);
             window.addEventListener("resize", updatePosition);
             toggleScrollEventListener(true);
-            document.body.classList.add(overflowHiddenClassName);
+            const unlockBodyScroll = lockBodyScroll(styles.dropdownDesktopScrollLock);
             updatePosition();
 
             return () => {
                 document.removeEventListener("scroll", updatePosition, true);
                 window.removeEventListener("resize", updatePosition);
                 toggleScrollEventListener(false);
-                document.body.classList.remove(overflowHiddenClassName);
+                unlockBodyScroll();
             };
         }
     }, [opened, updatePosition, toggleScrollEventListener]);

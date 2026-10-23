@@ -185,6 +185,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Pagination | ✅ | ✅ | ✅ |
 | PaginationExtended | ✅ | ✅ | ✅ |
 | Portal | ✅ | ✅ | ✅ |
+| Puller | ✅ | ✅ | ✅ |
 | Radio | ✅ | ✅ | ✅ |
 | RadioXGroup | ✅ | ✅ | ✅ |
 | RadioYGroup | ✅ | ✅ | ✅ |
@@ -262,10 +263,6 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DropdownDesktop | ⬜ | ◐ |
 | DropdownList | ⬜ | ◐ |
 | DropdownListItem | ⬜ | ◐ |
-| DropdownMobile | ⬜ | ◐ |
-| DropdownMobileInner | ⬜ | ◐ |
-| DropdownMobileList | ⬜ | ◐ |
-| DropdownMobileListItem | ⬜ | ◐ |
 | FormFieldClear | ⬜ | ◐ |
 | FormFieldCounter | ⬜ | ◐ |
 | FormFieldDescription | ⬜ | ◐ |
@@ -304,6 +301,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | PaginationNavigationButton | ⬜ | ◐ |
 | PaginationPageButton | ⬜ | ◐ |
 | PaginationSelect | ⬜ | ◐ |
+| PullerInner | ⬜ | ◐ |
+| PullerList | ⬜ | ◐ |
+| PullerListItem | ⬜ | ◐ |
 | SegmentedControlSegment | ⬜ | ◐ |
 | SelectExtendedFieldTarget | ⬜ | ◐ |
 | SliderExtendedDot | ⬜ | ◐ |

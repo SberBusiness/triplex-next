@@ -1,28 +1,19 @@
 import React, { useRef, useState } from "react";
 import clsx from "clsx";
-import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
 import { uniqueId } from "lodash-es";
+import { ETextSize } from "../../Typography/enums";
+import { Text } from "../../Typography/Text";
 import {
     ButtonDropdownExtended,
     IButtonDropdownExtendedButtonProvideProps,
     IButtonDropdownExtendedDropdownProvideProps,
-} from "@sberbusiness/triplex-next/components/Button/ButtonDropdownExtended";
-import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
-import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
-import {
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileHeader,
-    DropdownMobileList,
-    DropdownMobileListItem,
-} from "@sberbusiness/triplex-next/components/Dropdown/mobile";
-import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
-import { IButtonDropdownProps } from "@sberbusiness/triplex-next/components/Button/ButtonDropdown";
-import {
-    IListItemControlsButtonProps,
-    ListItemControlsButton,
-} from "@sberbusiness/triplex-next/components/List/components/ListItemControlsButton";
+} from "../../Button/ButtonDropdownExtended";
+import { isKey } from "../../../utils/keyboard";
+import { DropdownListContext } from "../../Dropdown/DropdownListContext";
+import { DropdownList } from "../../Dropdown/desktop/DropdownList";
+import { IButtonDropdownProps } from "../../Button/ButtonDropdown";
+import { IListItemControlsButtonProps, ListItemControlsButton } from "./ListItemControlsButton";
+import { PullerBody, PullerClose, PullerHeader, PullerList, PullerListItem } from "../../Puller";
 import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import styles from "../styles/ListItemControlsButton.module.less";
 
@@ -84,20 +75,18 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
                         setOpened={setOpened}
                         targetRef={buttonRef}
                         ref={dropdownRef}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
                                         <Text tag="div" size={ETextSize.B1}>
                                             {children}
                                         </Text>
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>
-                                        <DropdownMobileList>
+                                    </PullerHeader>
+                                    <PullerBody>
+                                        <PullerList>
                                             {options.map((option) => (
-                                                <DropdownMobileListItem
+                                                <PullerListItem
                                                     {...option}
                                                     key={option.id}
                                                     selected={option.id === selected?.id}
@@ -107,10 +96,10 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
                                                     }}
                                                 >
                                                     {option.label}
-                                                </DropdownMobileListItem>
+                                                </PullerListItem>
                                             ))}
-                                        </DropdownMobileList>
-                                    </DropdownMobileBody>
+                                        </PullerList>
+                                    </PullerBody>
                                 </>
                             ),
                         }}

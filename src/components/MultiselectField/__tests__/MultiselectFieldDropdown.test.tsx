@@ -181,30 +181,30 @@ describe("MultiselectFieldDropdown", () => {
             window.matchMedia = originalMatchMedia;
         });
 
-        // Мобильную версию приходится искать по классу чужого компонента: у DropdownMobile
+        // Мобильную версию приходится искать по классу чужого компонента: у Puller
         // нет ни role, ни aria-атрибутов, ни data-testid. Переименование класса
-        // dropdownMobile в Dropdown/styles/DropdownMobile.module.less уронит эти тесты.
+        // puller в Puller/styles/Puller.module.less уронит эти тесты.
         it("Should render the desktop version on desktop width", () => {
             renderDropdown();
 
-            expect(document.querySelector(".dropdownMobile")).toBeNull();
+            expect(document.querySelector(".puller")).toBeNull();
             expect(screen.getByTestId("dropdown-content")).toBeInTheDocument();
         });
 
-        it("Should render the mobile version on mobile width even without mobileViewProps", () => {
+        it("Should render the mobile version on mobile width even without pullerProps", () => {
             mockMobileWidth();
 
             renderDropdown();
 
-            expect(document.querySelector(".dropdownMobile")).not.toBeNull();
+            expect(document.querySelector(".puller")).not.toBeNull();
             expect(screen.getByTestId("dropdown-content")).toBeInTheDocument();
         });
 
-        it("Should render mobileViewProps children instead of dropdown children on mobile width", () => {
+        it("Should render pullerProps children instead of dropdown children on mobile width", () => {
             mockMobileWidth();
 
             renderDropdown({
-                mobileViewProps: { children: <div data-testid="mobile-content">Mobile content</div> },
+                pullerProps: { children: <div data-testid="mobile-content">Mobile content</div> },
             });
 
             expect(screen.getByTestId("mobile-content")).toBeInTheDocument();

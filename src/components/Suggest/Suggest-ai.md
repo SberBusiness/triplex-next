@@ -1,7 +1,7 @@
 ---
 component: Suggest
 category: Suggest
-related: [SuggestField, Chip, Dropdown]
+related: [SuggestField, Chip, Puller, Dropdown]
 tokens: []
 stories: stories/Suggest/Suggest.stories.tsx
 version: "1.0"
@@ -145,11 +145,11 @@ Headless-основа выпадающего списка с фильтраци�
 - `Chip` — родитель `ChipSuggest`, единственного компонента библиотеки, собранного на
   `Suggest`. `ChipSuggest` опирается не только на barrel, но и на внутренний
   `SuggestMobileDropdownContent`.
-- `Dropdown` — мобильное наполнение Suggest рендерится из его частей
-  (`DropdownMobileHeader`, `DropdownMobileInput`, `DropdownMobileList`, …); в десктопной
-  композиции `Dropdown` обычно и служит выпадающим списком.
-- `SuggestMobileDropdownContent` — внутреннее наполнение полноэкранного мобильного
-  дропдауна: поле ввода, список опций, лоадер и текст при пустом списке. Данные берёт из
+- `Puller` — мобильное наполнение Suggest рендерится из его частей
+  (`PullerHeader`, `PullerInput`, `PullerList`, …).
+- `Dropdown` — в десктопной композиции обычно служит выпадающим списком.
+- `SuggestMobileDropdownContent` — внутреннее наполнение мобильного дропдауна (шторки
+  `Puller`): поле ввода, список опций, лоадер и текст при пустом списке. Данные берёт из
   `SuggestContext`, поэтому рендерится только внутри `Suggest`. Отдельного AI.md не имеет,
   из barrel не экспортируется.
 
@@ -184,3 +184,4 @@ Suggest headless: собственной разметки он не рендер
 | Дата | Изменение |
 |---|---|
 | 2026-09-02 | Создан документ |
+| 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps`, унаследованный `ISuggestDropdownProps` от `Dropdown`, переименован в `pullerProps`. Мобильное наполнение собрано из частей нижней шторки `Puller` (бывший `DropdownMobile*`). |

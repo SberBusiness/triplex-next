@@ -96,9 +96,9 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 - **`displayName = "LoaderSmall"`** — используется в React DevTools.
 - **Значения `ELoaderSmallTheme`** (`brand` / `neutral`) и наличие `ELoaderSmallSize` в barrel —
   часть публичного API, удаление или переименование — breaking change.
-- **`ILoaderSmallProps` — не только props этого компонента.** `DropdownMobileLoader` строит из
-  него свой публичный интерфейс: `IDropownMobileLoaderProps extends Omit<ILoaderSmallProps,
-  "theme" | "size">` (`src/components/Dropdown/mobile/DropdownMobileLoader.tsx:8`). Любое
+- **`ILoaderSmallProps` — не только props этого компонента.** `PullerLoader` строит из
+  него свой публичный интерфейс: `IPullerLoaderProps extends Omit<ILoaderSmallProps,
+  "theme" | "size">` (`src/components/Puller/PullerLoader.tsx:8`). Любое
   изменение формы `ILoaderSmallProps` автоматически меняет публичный API и этого компонента.
 - **Токены `Loader-*` общие для семейства** — переименование ломает темизацию у потребителей
   и затрагивает `LoaderMiddle`.
@@ -135,7 +135,7 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
   вида `queryByRole("status")` → `null`.
   Тему выбирает по теме кнопки (`SECONDARY` / `SECONDARY_LIGHT` → `BRAND`,
   остальные → `NEUTRAL`), размер — по размеру кнопки.
-- `Dropdown` (`DropdownList`, `DropdownMobileList`, `DropdownMobileLoader`), `SuggestField`,
+- `Dropdown` (`DropdownList`), `Puller` (`PullerList`, `PullerLoader`), `SuggestField`,
   `ChipSuggest`, `SelectExtendedField`, `ListItemLoading` — показывают `LoaderSmall` с темой
   `BRAND` во время подгрузки данных. В `related` не входят: это контракт по рендеру, ссылка
   стоит с их стороны. `Button` — исключение «потребитель, опирающийся на хрупкую деталь»
@@ -172,3 +172,4 @@ Loader: `Element_Background_Brand` использует также `LoaderMiddle
 |---|---|
 | 2026-08-06 | Создан документ. AI-рефакторинг: JSDoc на компоненте, props и значениях `ELoaderSmallTheme`, документирован неиспользуемый `ELoaderSmallSize`, порядок импортов приведён к codestyle, константы-маппинги переименованы в `THEME_TO_CLASS_NAME_MAP` / `SIZE_TO_CLASS_NAME_MAP`, в стилях объединено дублирующееся объявление анимации точек — сама анимация задана один раз на `.dot`, а у `.dot1` / `.dot2` / `.dot3` осталась только `animation-delay` (правило `.dot1` с нулевой задержкой обязательно: без него класс исчезнет из CSS-модуля и из разметки), unit-тесты расширены с 3 до 6 кейсов. В stories `controls: { disable: true }` перенесён на верхний уровень `parameters` — внутри `docs` он не применялся. Публичный API, DOM и визуальное поведение не изменены. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`ListItemLoading`); из `related` убраны потребители `Dropdown`, `SuggestField`, `SelectExtendedField` — ссылка на контракт по рендеру стоит с их стороны; `Button` оставлен как исключение «потребитель, опирающийся на хрупкую деталь». Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): `IDropownMobileLoaderProps` переименован в `IPullerLoaderProps` и перенесён в `src/components/Puller/PullerLoader.tsx`. |

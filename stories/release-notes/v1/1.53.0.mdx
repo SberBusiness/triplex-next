@@ -6,9 +6,36 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Новые компоненты</Heading>
 
+**Puller**
+
+- Нижняя шторка для экранов любой ширины, бывший `DropdownMobile`. Из пакета также экспортируется `PullerMaskedInput`.
+- В `Portal` себя не выносит: при прямом использовании оберните в `<Portal container={document.body}>`. В `pullerProps` у `Dropdown` это не нужно.
+- Отличия от `DropdownMobile`:
+    - блокировка скролла страницы не снимается, пока открыта другая шторка;
+    - `PullerListItem` передаёт `id` в DOM-элемент;
+    - лоадер `PullerList` больше не считается вариантом списка: он скрыт от скринридеров, загрузку передаёт `aria-busy`.
+
 **SmartSpot**
 
 - Компонент-анимированная подложка статуса. Состоит из размытых пятна на прозрачном фоне в цветах статуса с пресетами анимации Drift, Breathing и None.
+
+<Heading>Ломающие изменения</Heading>
+
+**Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown / ChipSuggest / Suggest**
+
+- Prop `mobileViewProps` переименован в `pullerProps` (тип `Omit<IPullerProps, "opened" | "setOpened">`), поведение прежнее. Переименование распространяется на props, унаследованные от `IDropdownProps`: `IMultiselectFieldDropdownProps`, `ISelectExtendedFieldDropdownProps`, `ISuggestDropdownProps`, `dropdownProps` у `ChipSuggest`.
+- CSS-класс блокировки скролла на `body` у десктопного меню переименован: `.dropdownDesktopOverflowHidden` → `.dropdownDesktopScrollLock`.
+
+**Puller**
+
+- Компоненты и типы `DropdownMobile*` удалены без алиасов. Замена:
+    - `DropdownMobile` → `Puller`, `DropdownMobileHeader` → `PullerHeader`, `DropdownMobileBody` → `PullerBody`, `DropdownMobileFooter` → `PullerFooter`, `DropdownMobileClose` → `PullerClose`, `DropdownMobileLoader` → `PullerLoader`, `DropdownMobileInput` → `PullerInput`, `DropdownMobileMaskedInput` → `PullerMaskedInput`, `DropdownMobileList` → `PullerList`, `DropdownMobileListItem` → `PullerListItem`;
+    - типы `IDropdownMobile*Props` → `IPuller*Props`, `IDropownMobileLoaderProps` → `IPullerLoaderProps`;
+    - `DropdownMobileInner` — без замены, используйте `Puller`;
+    - `IDropdownMobileHeaderProps` перенесён из `components/Tooltip/types` в `components/Puller/PullerHeader` под именем `IPullerHeaderProps`;
+    - deep-импорты `components/Dropdown/mobile/DropdownMobile*` нужно заменить на `components/Puller/Puller*`.
+- Группы дизайн-токенов `DropdownMobile` и `DropdownMobileList` переименованы в `Puller` и `PullerList`, ключ `DropdownMobile.Content_Background` — в `Puller.Body_Background`.
+- CSS-классы `.dropdownMobile*` переименованы в `.puller*`, кроме `.dropdownMobileContent` → `.pullerBody`, `.dropdownMobileBodyOverflow` → `.pullerScrollLock` и `.controlButtons` → `.pullerHeaderControls`. Модификатор `.closing` удалён.
 
 <Heading>Изменения</Heading>
 
@@ -19,3 +46,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **CarouselPrevButton**
 
 - Проведён AI-рефакторинг.
+
+**Dropdown**
+
+- Исправлено: закрытие одного из открытых десктопных меню снимало блокировку скролла страницы, хотя другое меню оставалось открытым.

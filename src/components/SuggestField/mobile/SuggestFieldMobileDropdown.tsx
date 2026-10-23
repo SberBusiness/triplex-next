@@ -1,16 +1,16 @@
 import React, { useState, useRef, useCallback } from "react";
 import { ISuggestFieldOption } from "../types";
 import { ISuggestFieldMobileDropdownProps } from "./types";
+import { Dropdown } from "../../Dropdown";
 import {
-    Dropdown,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileLoader,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileList,
-    DropdownMobileListItem,
-} from "../../Dropdown";
+    PullerHeader,
+    PullerInput,
+    PullerLoader,
+    PullerClose,
+    PullerBody,
+    PullerList,
+    PullerListItem,
+} from "../../Puller";
 import { SuggestFieldMobileDropdownHint } from "./SuggestFieldMobileDropdownHint";
 import styles from "../styles/SuggestFieldMobile.module.less";
 
@@ -92,33 +92,33 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
             setOpened={setOpened}
             targetRef={targetRef}
             onClose={handleDropdownClose}
-            mobileViewProps={{
+            pullerProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader
+                        <PullerHeader
                             controlButtons={
                                 <>
-                                    {loading && <DropdownMobileLoader />}
-                                    <DropdownMobileClose onClick={handleCloseClick} />
+                                    {loading && <PullerLoader />}
+                                    <PullerClose onClick={handleCloseClick} />
                                 </>
                             }
                         >
-                            <DropdownMobileInput
+                            <PullerInput
                                 value={inputValue}
                                 placeholder={placeholder}
                                 autoFocus={true}
                                 onFocus={handleInputFocus}
                                 onChange={handleInputChange}
                             />
-                        </DropdownMobileHeader>
+                        </PullerHeader>
 
-                        <DropdownMobileBody className={styles.suggestFieldMobileBody} onScroll={handleListScroll}>
+                        <PullerBody className={styles.suggestFieldMobileBody} onScroll={handleListScroll}>
                             {tooltipOpen ? (
                                 <SuggestFieldMobileDropdownHint>{tooltipHint}</SuggestFieldMobileDropdownHint>
                             ) : (
-                                <DropdownMobileList loading={dropdownListLoading}>
+                                <PullerList loading={dropdownListLoading}>
                                     {options.map((option) => (
-                                        <DropdownMobileListItem
+                                        <PullerListItem
                                             key={option.id}
                                             id={option.id}
                                             selected={option.id === value?.id}
@@ -129,11 +129,11 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
                                             }}
                                         >
                                             {option.content || option.label}
-                                        </DropdownMobileListItem>
+                                        </PullerListItem>
                                     ))}
-                                </DropdownMobileList>
+                                </PullerList>
                             )}
-                        </DropdownMobileBody>
+                        </PullerBody>
                     </>
                 ),
             }}

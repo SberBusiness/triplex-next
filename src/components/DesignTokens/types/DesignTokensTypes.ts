@@ -14,8 +14,6 @@ import {
     TDesignTokensComponentsDivider,
     TDesignTokensComponentsDropdown,
     TDesignTokensComponentsDropdownList,
-    TDesignTokensComponentsDropdownMobile,
-    TDesignTokensComponentsDropdownMobileList,
     TDesignTokensComponentsFooterPage,
     TDesignTokensComponentsFormField,
     TDesignTokensComponentsHeaderPage,
@@ -38,6 +36,8 @@ import {
     TDesignTokensComponentsOverlay,
     TDesignTokensComponentsPageIndicators,
     TDesignTokensComponentsPagination,
+    TDesignTokensComponentsPuller,
+    TDesignTokensComponentsPullerList,
     TDesignTokensComponentsRadio,
     TDesignTokensComponentsSegmentedControl,
     TDesignTokensComponentsSegmentedControlSegment,
@@ -326,8 +326,6 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsDivider
     | TDesignTokensComponentsDropdown
     | TDesignTokensComponentsDropdownList
-    | TDesignTokensComponentsDropdownMobile
-    | TDesignTokensComponentsDropdownMobileList
     | TDesignTokensComponentsFooterPage
     | TDesignTokensComponentsFormField
     | TDesignTokensComponentsHeaderPage
@@ -350,6 +348,8 @@ export type TDesignTokensComponents =
     | TDesignTokensComponentsOverlay
     | TDesignTokensComponentsPageIndicators
     | TDesignTokensComponentsPagination
+    | TDesignTokensComponentsPuller
+    | TDesignTokensComponentsPullerList
     | TDesignTokensComponentsRadio
     | TDesignTokensComponentsSegmentedControl
     | TDesignTokensComponentsSegmentedControlSegment

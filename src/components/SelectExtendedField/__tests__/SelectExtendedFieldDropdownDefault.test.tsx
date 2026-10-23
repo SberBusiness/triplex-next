@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EComponentSize } from "../../../enums/EComponentSize";
 import { SelectExtendedFieldDropdownDefault } from "../components/SelectExtendedFieldDropdownDefault";
 import { EDropdownWidth } from "../../Dropdown/desktop/enums";
 import { EScreenWidth } from "../../../helpers/breakpoints";
@@ -99,7 +99,7 @@ describe("SelectExtendedFieldDropdownDefault", () => {
         expect(dropdown).toHaveClass("custom-dropdown-class");
     });
 
-    // В мобильном режиме Dropdown рендерит mobileViewProps.children. Мобильность определяется
+    // В мобильном режиме Dropdown рендерит pullerProps.children. Мобильность определяется
     // через window.matchMedia (MobileView → MediaMaxWidth → useMatchMedia), а не через
     // window.innerWidth, поэтому мокаем matchMedia: мобильный запрос (max-width: SM_MAX) совпадает.
     describe("mobile view", () => {

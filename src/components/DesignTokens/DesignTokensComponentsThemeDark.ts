@@ -16,8 +16,6 @@ import {
     Chip_Tokens,
     CollapsibleTree_Tokens,
     DropdownList_Tokens,
-    DropdownMobileList_Tokens,
-    DropdownMobile_Tokens,
     Dropdown_Tokens,
     FooterPage_Tokens,
     FormField_Tokens,
@@ -41,6 +39,8 @@ import {
     Overlay_Tokens,
     PageIndicators_Tokens,
     Pagination_Tokens,
+    PullerList_Tokens,
+    Puller_Tokens,
     Radio_Tokens,
     SegmentedControlSegment_Tokens,
     SegmentedControl_Tokens,
@@ -73,8 +73,6 @@ import {
     TDesignTokensComponentsCollapsibleTreeValue,
     TDesignTokensComponentsDividerValue,
     TDesignTokensComponentsDropdownListValue,
-    TDesignTokensComponentsDropdownMobileListValue,
-    TDesignTokensComponentsDropdownMobileValue,
     TDesignTokensComponentsDropdownValue,
     TDesignTokensComponentsFooterPageValue,
     TDesignTokensComponentsFormFieldValue,
@@ -98,6 +96,8 @@ import {
     TDesignTokensComponentsOverlayValue,
     TDesignTokensComponentsPageIndicatorsValue,
     TDesignTokensComponentsPaginationValue,
+    TDesignTokensComponentsPullerListValue,
+    TDesignTokensComponentsPullerValue,
     TDesignTokensComponentsRadioValue,
     TDesignTokensComponentsSegmentedControlSegmentValue,
     TDesignTokensComponentsSegmentedControlValue,
@@ -145,14 +145,6 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     DropdownList: GetTokensValueByTheme<TDesignTokensComponentsDropdownListValue>(
         ETriplexNextTheme.DARK,
         DropdownList_Tokens,
-    ),
-    DropdownMobile: GetTokensValueByTheme<TDesignTokensComponentsDropdownMobileValue>(
-        ETriplexNextTheme.DARK,
-        DropdownMobile_Tokens,
-    ),
-    DropdownMobileList: GetTokensValueByTheme<TDesignTokensComponentsDropdownMobileListValue>(
-        ETriplexNextTheme.DARK,
-        DropdownMobileList_Tokens,
     ),
     FooterPage: GetTokensValueByTheme<TDesignTokensComponentsFooterPageValue>(
         ETriplexNextTheme.DARK,
@@ -217,6 +209,11 @@ export const DesignTokensComponentsThemeDark: TDesignTokensComponents = {
     Pagination: GetTokensValueByTheme<TDesignTokensComponentsPaginationValue>(
         ETriplexNextTheme.DARK,
         Pagination_Tokens,
+    ),
+    Puller: GetTokensValueByTheme<TDesignTokensComponentsPullerValue>(ETriplexNextTheme.DARK, Puller_Tokens),
+    PullerList: GetTokensValueByTheme<TDesignTokensComponentsPullerListValue>(
+        ETriplexNextTheme.DARK,
+        PullerList_Tokens,
     ),
     Radio: GetTokensValueByTheme<TDesignTokensComponentsRadioValue>(ETriplexNextTheme.DARK, Radio_Tokens),
     SegmentedControl: GetTokensValueByTheme<TDesignTokensComponentsSegmentedControlValue>(

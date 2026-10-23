@@ -9,11 +9,11 @@ import {
     ChipGroup,
     ChipMultiselect,
     Col,
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileFooter,
-    DropdownMobileHeader,
-    DropdownMobileInput,
+    PullerBody,
+    PullerClose,
+    PullerFooter,
+    PullerHeader,
+    PullerInput,
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
@@ -336,21 +336,19 @@ export const ExampleProduction = () => {
                     ref={dropdownRef}
                     alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                    mobileViewProps={{
+                    pullerProps={{
                         children: (
                             <>
-                                <DropdownMobileHeader
-                                    controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                >
-                                    <DropdownMobileInput
+                                <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                                    <PullerInput
                                         autoFocus
                                         placeholder="Поиск по статусу"
                                         value={statusFilter}
                                         onChange={handleStatusFilterChange}
                                     />
-                                </DropdownMobileHeader>
-                                <DropdownMobileBody>{renderStatusDropdownContent()}</DropdownMobileBody>
-                                <DropdownMobileFooter>
+                                </PullerHeader>
+                                <PullerBody>{renderStatusDropdownContent()}</PullerBody>
+                                <PullerFooter>
                                     <Button
                                         theme={EButtonTheme.GENERAL}
                                         size={EComponentSize.SM}
@@ -365,7 +363,7 @@ export const ExampleProduction = () => {
                                     >
                                         Сбросить
                                     </Button>
-                                </DropdownMobileFooter>
+                                </PullerFooter>
                             </>
                         ),
                     }}

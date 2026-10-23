@@ -4,10 +4,10 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
+    PullerInput,
 } from "@sberbusiness/triplex-next";
 
 const DATE_FORMAT = "YYYYMMDD";
@@ -54,7 +54,7 @@ const AlignmentItem = ({ alignment }: IAlignmentItemProps) => {
                 format={DATE_FORMAT}
                 onDateChange={(date) => setValue(date.format(DATE_FORMAT))}
                 renderTarget={() => <Target>{displayedValue}</Target>}
-                renderDropdownHeaderTarget={() => <DropdownMobileInput value={displayedValue} readOnly />}
+                renderDropdownHeaderTarget={() => <PullerInput value={displayedValue} readOnly />}
             />
         </div>
     );

@@ -3,10 +3,10 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
+    PullerInput,
 } from "@sberbusiness/triplex-next";
 
 // Данные захардкожены: календарь всегда открывается на январе 1970 года,
@@ -39,7 +39,7 @@ export const VisualTestsAlignmentRight = () => (
             format={DATE_FORMAT}
             onDateChange={() => {}}
             renderTarget={() => <Target />}
-            renderDropdownHeaderTarget={() => <DropdownMobileInput value="15.01.1970" readOnly />}
+            renderDropdownHeaderTarget={() => <PullerInput value="15.01.1970" readOnly />}
         />
     </div>
 );

@@ -1,7 +1,7 @@
 ---
 component: DateField
 category: Date components
-related: [DatePickerExtended, MonthYearField, ChipDatePicker, MaskedField, Calendar, Tooltip, FormField]
+related: [DatePickerExtended, MonthYearField, ChipDatePicker, MaskedField, Calendar, Puller, Tooltip, FormField]
 tokens: []
 stories: stories/DateField/DateField.stories.tsx
 version: "1.0"
@@ -85,7 +85,7 @@ version: "1.0"
 - Триггер — поле ввода с маской. Открытие/закрытие календаря по клику (`mousedown`), по клавише `Enter` и по `Space` (с `preventDefault` для `Space`, чтобы не вводить пробел и не скроллить страницу). Обработчики в `DateFieldTarget`.
 - `aria-label` и `aria-labelledby` пробрасываются потребителем на элемент input через одноимённые props `DateField`. Компонент не хардкодит текст — библиотека мультиязычная.
 - Состояние `disabled` (`status === EFormFieldStatus.DISABLED`) блокирует и поле, и кнопку календаря.
-- Тултип с `invalidDateHint` показывается только в desktop-ветке (`MobileView.fallback`); в мобильном представлении ввод идёт через `DropdownMobileMaskedInput` в заголовке дропдауна.
+- Тултип с `invalidDateHint` показывается только в desktop-ветке (`MobileView.fallback`); в мобильном представлении ввод идёт через `PullerMaskedInput` в заголовке дропдауна.
 - ARIA-роль выпадающего календаря (`dialog`) и навигация по нему — на стороне `DatePickerExtended` / `Calendar`.
 - **Известный пробел:** кнопка-иконка календаря (`ButtonIcon` в `DateFieldTarget`) фокусируема и не имеет `aria-label` — скринридер объявит её без имени. В `MonthYearFieldTarget` аналогичная кнопка выведена из таб-обхода (`role="presentation"`, `tabIndex={-1}`). Приведение к общему поведению требует изменения публичного API (новый prop для локализованного лейбла) и вынесено за рамки AI-рефакторинга.
 
@@ -98,6 +98,7 @@ version: "1.0"
 - `ChipDatePicker` — выбор даты в виде чипа-фильтра, а не поля формы; альтернатива, когда дата задаётся в панели фильтров. Одновременно единственный потребитель, опирающийся на приватные детали `DateField` — импортирует `DateFieldUtils` и `inputDateFormat` (см. «Инварианты»), поэтому правки этих символов проверяй и на нём.
 - `MaskedField` — внутреннее поле-триггер; его props частично входят в публичный API (`size`, `status`, `label`, `targetProps`).
 - `Calendar` — календарь внутри дропдауна; его props (`limitRange`, `disabledDays`, `markedDays`, `format`) входят в публичный API через `DatePickerExtended`.
+- `Puller` — мобильная шторка календаря; дата вводится через `PullerMaskedInput` в её шапке.
 - `Tooltip` — показывает `invalidDateHint` при вводе недоступной даты (только desktop-ветка).
 - `FormField` — семейство строительных блоков поля, на котором собран `MaskedField`: оттуда
   в публичный API `DateField` приходят `size` и `status` (через
@@ -132,3 +133,4 @@ version: "1.0"
 |---|---|
 | 2026-09-08 | Создан документ. AI-рефакторинг (JSDoc-фиксы, `displayName` у `DateFieldTarget`), unit-тесты для `utils.ts`, поведения поля (ввод, blur, клавиатура, колбэки дропдауна) и `DateFieldTarget` (фокус, mousedown, клавиатура, проброс обработчиков) |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): добавлены обратные ссылки (`FormField`). Публичный API и поведение не затронуты. |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный ввод даты — `PullerMaskedInput` (бывший `DropdownMobileMaskedInput`). |

@@ -1,7 +1,7 @@
 ---
 component: DatePickerExtended
 category: Date components
-related: [Calendar, Dropdown, DateField, MonthYearField, ChipDatePicker, ChipMonthYearPicker]
+related: [Calendar, Dropdown, Puller, DateField, MonthYearField, ChipDatePicker, ChipMonthYearPicker]
 tokens: []
 stories: stories/DatePickerExtended/DatePickerExtended.stories.tsx
 version: "1.0"
@@ -11,7 +11,7 @@ version: "1.0"
 
 ## Назначение
 
-Связка «произвольный целевой элемент + выпадающий календарь». Компонент рендерит целевой элемент (render-prop `renderTarget`) и `Calendar` внутри `Dropdown`, хранит состояние открытости календаря и отдаёт его целевому элементу через `DatePickerExtendedContext`. На мобильной ширине экрана вместо десктопного дропдауна открывается полноэкранный `DropdownMobile` с заголовком из `renderDropdownHeaderTarget`.
+Связка «произвольный целевой элемент + выпадающий календарь». Компонент рендерит целевой элемент (render-prop `renderTarget`) и `Calendar` внутри `Dropdown`, хранит состояние открытости календаря и отдаёт его целевому элементу через `DatePickerExtendedContext`. На мобильной ширине экрана вместо десктопного дропдауна открывается нижняя шторка `Puller` с заголовком из `renderDropdownHeaderTarget`.
 
 Используй когда: строишь собственный компонент выбора даты с нестандартным триггером (поле, чип, кнопка) и хочешь переиспользовать готовую механику дропдауна с календарём. Именно так устроены `DateField`, `MonthYearField` и `ChipDatePicker`.
 
@@ -28,7 +28,7 @@ version: "1.0"
 | Prop | Тип | Описание |
 |---|---|---|
 | `renderTarget` | `() => ReactNode` | Рендер целевого элемента. Вызывается внутри `DatePickerExtendedContext.Provider`, поэтому возвращённое дерево может читать и менять открытость календаря через контекст. |
-| `renderDropdownHeaderTarget` | `() => ReactNode` | Рендер целевого элемента в заголовке мобильного дропдауна (`DropdownMobileHeader`). Обычно — `DropdownMobileInput` с текущим значением. |
+| `renderDropdownHeaderTarget` | `() => ReactNode` | Рендер целевого элемента в заголовке мобильного дропдауна (`PullerHeader`). Обычно — `PullerInput` с текущим значением. |
 | `pickedDate` | `string \| Moment \| null` | Выбранная дата (prop `Calendar`). Компонент неуправляемый только в части открытости — выбранную дату хранит потребитель. |
 | `onDateChange` | `(date: Moment) => void` | Вызывается при выборе даты в календаре. Компонент дополнительно закрывает дропдаун. |
 
@@ -94,6 +94,7 @@ version: "1.0"
 
 - `Calendar` — календарная сетка, рендерится внутри дропдауна; её props входят в `IDatePickerExtendedProps`, кроме `adaptiveMode`.
 - `Dropdown` — выпадающее меню; из его props наружу выведен только `alignment`, мобильная версия конфигурируется внутри.
+- `Puller` — мобильная вёрстка дропдауна (`PullerHeader`, `PullerClose`, `PullerBody`); заголовок обычно содержит `PullerInput`.
 - `DateField` — поле ввода даты; передаёт `dropdownTargetRef` и открывает календарь из `DateFieldTarget` через контекст.
 - `MonthYearField` — выбор месяца и года; конфигурирует `pickType={ECalendarPickType.MONTH_YEAR}`.
 - `ChipDatePicker` — чип-фильтр с календарём; открывает дропдаун из `ChipDatePickerTarget` через контекст.
@@ -102,7 +103,7 @@ version: "1.0"
 
 Внутренние части (в barrel не экспортируются, отдельного AI.md не имеют):
 
-- `DatePickerExtendedDropdown` — дропдаун с `FocusTrap` вокруг календаря и мобильной версткой (`DropdownMobileHeader` + `DropdownMobileBody`).
+- `DatePickerExtendedDropdown` — дропдаун с `FocusTrap` вокруг календаря и мобильной версткой (`PullerHeader` + `PullerBody`).
 
 ---
 
@@ -131,6 +132,7 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильная версия собрана из частей `Puller` (бывший `DropdownMobile*`). |
 | 2026-09-07 | В потребители базы добавлен `ChipMonthYearPicker` (чип-фильтр с `pickType` `MONTH_YEAR`) |
 | 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`) |
 | 2026-08-20 | Создан документ. AI-рефакторинг, unit-тесты (`__tests__/DatePickerExtended.test.tsx`), stories по modern pattern. Исправлено: `yesterdayButtonProps` / `tomorrowButtonProps` пробрасываются в `Calendar`, `adaptiveMode` больше не попадает в DOM |

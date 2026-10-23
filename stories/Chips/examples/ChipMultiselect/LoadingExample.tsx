@@ -12,15 +12,15 @@ import {
     ChipMultiselect,
     ETextSize,
     Text,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileFooter,
+    PullerHeader,
+    PullerInput,
+    PullerClose,
+    PullerBody,
+    PullerFooter,
     EDropdownAlignment,
     Button,
     EButtonTheme,
-    DropdownMobileLoader,
+    PullerLoader,
 } from "@sberbusiness/triplex-next";
 import { CHIP_MULTISELECT_OPTIONS } from "./storyConstants";
 
@@ -112,26 +112,26 @@ export const LoadingExample = () => {
                     ref={dropdownRef}
                     alignment={EDropdownAlignment.LEFT}
                     focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                    mobileViewProps={{
+                    pullerProps={{
                         children: (
                             <>
-                                <DropdownMobileHeader
+                                <PullerHeader
                                     controlButtons={
                                         <>
-                                            <DropdownMobileLoader />
-                                            <DropdownMobileClose onClick={() => setOpened(false)} />
+                                            <PullerLoader />
+                                            <PullerClose onClick={() => setOpened(false)} />
                                         </>
                                     }
                                 >
-                                    <DropdownMobileInput
+                                    <PullerInput
                                         autoFocus={true}
                                         placeholder="Type to proceed"
                                         value={filter}
                                         onChange={handleFilterChange}
                                     />
-                                </DropdownMobileHeader>
-                                <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                                <DropdownMobileFooter>
+                                </PullerHeader>
+                                <PullerBody>{renderDropdownContent()}</PullerBody>
+                                <PullerFooter>
                                     <Button
                                         theme={EButtonTheme.GENERAL}
                                         size={EComponentSize.SM}
@@ -146,7 +146,7 @@ export const LoadingExample = () => {
                                     >
                                         Button link text
                                     </Button>
-                                </DropdownMobileFooter>
+                                </PullerFooter>
                             </>
                         ),
                     }}

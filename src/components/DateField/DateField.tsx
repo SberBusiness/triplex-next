@@ -9,7 +9,7 @@ import { inputDateFormat } from "./constants";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { ETooltipSize } from "../Tooltip/enums";
 import { MobileView } from "../MobileView/MobileView";
-import { DropdownMobileMaskedInput } from "../Dropdown/mobile/DropdownMobileMaskedInput";
+import { PullerMaskedInput } from "../Puller/PullerMaskedInput";
 import { DateFieldContext } from "./DateFieldContext";
 import { FormFieldMaskedInput } from "../FormField/components/FormFieldMaskedInput";
 
@@ -177,11 +177,11 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         );
     };
 
-    /** Рендер-функция управляющего элемента в заголовке DropdownMobile. */
+    /** Рендер-функция управляющего элемента в заголовке Puller. */
     const renderDropdownHeaderTarget = () => (
-        <DropdownMobileMaskedInput
+        <PullerMaskedInput
             value={pickerValues.inputString}
-            mask={DropdownMobileMaskedInput.presets.masks.date}
+            mask={PullerMaskedInput.presets.masks.date}
             placeholderMask={placeholderMask}
             onChange={handleInputChange}
             autoFocus={true}

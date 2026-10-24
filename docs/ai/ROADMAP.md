@@ -82,7 +82,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Основная таблица
 
-Основная таблица содержит 140 компонентов. Статус каждой колонки подтверждается
+Основная таблица содержит 141 компонент. Статус каждой колонки подтверждается
 по её definition of done; незавершённые пункты отмечены ⬜.
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
@@ -197,6 +197,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ✅ | ✅ | ✅ |
 | SmallInput | ✅ | ✅ | ✅ |
+| SmartSpot | ✅ | ✅ | ✅ |
 | SMSField | ✅ | ✅ | ✅ |
 | Spoiler | ✅ | ✅ | ✅ |
 | StatusTracker | ✅ | ✅ | ✅ |

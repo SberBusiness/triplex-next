@@ -171,6 +171,11 @@ export const VisualTests: StoryObj<typeof Carousel> = {
         await userEvent.click(endButton);
         await userEvent.click(endButton);
         await expect(endButton).toHaveAttribute("aria-disabled", "true");
+        await expect(canvas.getByTestId("carousel-prev-start")).toHaveAttribute("aria-disabled", "true");
+        await userEvent.click(canvas.getByTestId("carousel-prev-disabled-prepare"));
+        const disabledPrevButton = canvas.getByTestId("carousel-prev-disabled");
+        await expect(disabledPrevButton).toHaveAttribute("aria-disabled", "false");
+        await expect(disabledPrevButton).toBeDisabled();
         await userEvent.click(canvasElement);
         await userEvent.tab();
         await expect(canvas.getByTestId("carousel-next-focus")).toHaveFocus();

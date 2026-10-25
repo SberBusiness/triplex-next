@@ -55,6 +55,7 @@ const ORIENTATION_TO_NEXT_ICON_MAP: Record<EOrientation, React.ReactElement> = {
     [EOrientation.VERTICAL]: <CaretdownStrokeSrvIcon20 paletteIndex={7} />,
 };
 
+/** Кнопка перехода к следующему слайду Carousel. При (pointer: coarse) не рендерится. */
 export const CarouselNextButton = React.forwardRef<HTMLButtonElement, IButtonIconProps>(
     ({ children, className, onClick, ...restProps }, ref) => {
         const { orientation, atEnd, nextSlide } = useContext(CarouselContext);

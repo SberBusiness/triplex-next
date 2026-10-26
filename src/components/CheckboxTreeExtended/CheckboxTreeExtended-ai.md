@@ -1,7 +1,7 @@
 ---
 component: CheckboxTreeExtended
 category: Inputs
-related: [CheckboxTreeExtendedCheckbox, CheckboxTree, CollapsibleTreeExtended, Checkbox]
+related: [CheckboxTreeExtendedCheckbox, CheckboxTreeExtendedNode, CheckboxTree, CollapsibleTreeExtended, Checkbox]
 tokens:
   - Checkbox.BorderColor_Focus
 stories: stories/CheckboxTreeExtended/CheckboxTreeExtended.stories.tsx
@@ -49,9 +49,11 @@ version: "1.0"
 ### `CheckboxTreeExtended.Node`
 
 Наследует `ICollapsibleTreeExtendedNodeProps` без `children`, `renderBody`,
-`renderHeader` — заголовок и тело узла формирует сам компонент. Тип props
-экспортируется как `ICheckboxTreeExtendedNodeProps` — им типизируют
-собственную обёртку узла.
+`renderHeader` — заголовок и тело узла формирует сам компонент. Компонент
+`CheckboxTreeExtendedNode` и типы
+`ICheckboxTreeExtendedNodeProps`, `ICheckboxTreeExtendedCheckboxProvideProps`
+экспортируются через публичный barrel. Типом props типизируют собственную
+обёртку узла. Полный контракт — в `CheckboxTreeExtendedNode-ai.md`.
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
@@ -119,7 +121,7 @@ Checkbox.BorderColor_Focus
 - **`ref` указывает на корневой `<ul role="tree">`.** Компонент обёрнут
   `forwardRef`, ссылка уходит в `CollapsibleTreeExtended` и дальше в `TreeView`.
   У `.Node` и `.Checkbox` своего `forwardRef` по-прежнему нет: `.Node` —
-  class-компонент, `.Checkbox` управляет фокусом сам.
+  функциональный компонент без внешнего ref, `.Checkbox` управляет фокусом сам.
 - **Публичный API** — имена `ICheckboxTreeExtendedProps`,
   `ICheckboxTreeExtendedFC` (и deprecated-алиас `ICheckboxTreeExtendedSFC`),
   `ICheckboxTreeExtendedCheckboxProvideProps`,
@@ -158,8 +160,9 @@ Checkbox.BorderColor_Focus
 
 ## Accessibility
 
-- Семантику и клавиатурную навигацию (стрелки, Home/End, перемещение по узлам)
-  обеспечивает `TreeView`. Компонент добавляет к ней только передачу фокуса.
+- Семантику и перемещение по узлам клавишами `ArrowDown` / `ArrowUp`
+  обеспечивает `TreeView`. `Home` / `End` не реализованы. Компонент добавляет
+  к навигации только передачу фокуса.
 - **Фокус при навигации с клавиатуры.** Узел сообщает в render-функцию
   `active`; `CheckboxTreeExtended.Checkbox` по этому флагу вызывает
   `focus()` на `<input>`. Правило ровно одно: фокус берётся, когда `active`
@@ -194,6 +197,9 @@ Checkbox.BorderColor_Focus
 - `CheckboxTreeExtendedCheckbox` — публичная часть `CheckboxTreeExtended.Checkbox`:
   связывает базовый чекбокс с размером дерева и фокусом активного узла.
   Подробности — в `CheckboxTreeExtendedCheckbox-ai.md`.
+- `CheckboxTreeExtendedNode` (`CheckboxTreeExtended.Node`) — узел дерева с
+  render-функцией чекбокса, вложенностью и передачей активности из `TreeView`.
+  Подробный контракт — в `CheckboxTreeExtendedNode-ai.md`.
 - `CheckboxTree` (`src/components/CheckboxTree`) — обёртка верхнего уровня:
   принимает массив `ICheckboxTreeCheckboxData` и сама пересчитывает `checked` /
   `bulk` вверх и вниз по дереву. Если своя структура данных не нужна — бери её.
@@ -231,3 +237,4 @@ Checkbox.BorderColor_Focus
 | 2026-08-17 | `ICheckboxTreeExtendedNodeProps` экспортируется — тип уходит в barrel и становится частью публичного API (решение владельца по ревью PR #535) |
 | 2026-09-17 | TRI-22: `CheckboxTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICheckboxTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
 | 2026-10-21 | Добавлена ссылка на отдельную документацию `CheckboxTreeExtended.Checkbox` с контрактом фокуса и наследуемых props; добавлена скрытая `VisualTests` с состояниями `.Checkbox` в дереве. |
+| 2026-10-21 | Добавлена ссылка на документацию CheckboxTreeExtendedNode, уточнены его экспорты, отсутствие внешнего ref и поддерживаемые клавиши навигации |

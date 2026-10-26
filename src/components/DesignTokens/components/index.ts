@@ -42,6 +42,7 @@ export * from "./SegmentedControlSegment";
 export * from "./Skeleton";
 export * from "./Slider";
 export * from "./SmallInput";
+export * from "./SmartSpot";
 export * from "./SMSField";
 export * from "./StatusTracker";
 export * from "./Step";

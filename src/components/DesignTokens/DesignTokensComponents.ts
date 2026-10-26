@@ -46,6 +46,7 @@ import {
     SegmentedControl_Tokens,
     Skeleton_Tokens,
     SmallInput_Tokens,
+    SmartSpot_Tokens,
     SMSField_Tokens,
     Slider_Tokens,
     StatusTracker_Tokens,
@@ -103,6 +104,7 @@ import {
     TDesignTokensComponentsSegmentedControlValue,
     TDesignTokensComponentsSkeletonValue,
     TDesignTokensComponentsSmallInputValue,
+    TDesignTokensComponentsSmartSpotValue,
     TDesignTokensComponentsSMSFieldValue,
     TDesignTokensComponentsSliderValue,
     TDesignTokensComponentsStatusTrackerValue,
@@ -232,6 +234,7 @@ export const DesignTokensComponents: TDesignTokensComponents = {
         ETriplexNextTheme.LIGHT,
         SmallInput_Tokens,
     ),
+    SmartSpot: GetTokensValueByTheme<TDesignTokensComponentsSmartSpotValue>(ETriplexNextTheme.LIGHT, SmartSpot_Tokens),
     SMSField: GetTokensValueByTheme<TDesignTokensComponentsSMSFieldValue>(ETriplexNextTheme.LIGHT, SMSField_Tokens),
     Slider: GetTokensValueByTheme<TDesignTokensComponentsSliderValue>(ETriplexNextTheme.LIGHT, Slider_Tokens),
     StatusTracker: GetTokensValueByTheme<TDesignTokensComponentsStatusTrackerValue>(

@@ -195,7 +195,7 @@ export const Animations: StoryObj<typeof SmartSpot> = {
 };
 
 export const VisualTests: StoryObj<typeof SmartSpot> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

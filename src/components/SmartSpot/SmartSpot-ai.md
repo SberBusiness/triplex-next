@@ -3,22 +3,22 @@ component: SmartSpot
 category: SmartSpot
 related: []
 tokens:
-    - SmartSpot.Success_Spot1_Color
-    - SmartSpot.Success_Spot2_Color
-    - SmartSpot.Success_Spot3_Color
-    - SmartSpot.Success_Spot4_Color
-    - SmartSpot.Warning_Spot1_Color
-    - SmartSpot.Warning_Spot2_Color
-    - SmartSpot.Warning_Spot3_Color
-    - SmartSpot.Warning_Spot4_Color
-    - SmartSpot.Error_Spot1_Color
-    - SmartSpot.Error_Spot2_Color
-    - SmartSpot.Error_Spot3_Color
-    - SmartSpot.Error_Spot4_Color
-    - SmartSpot.Waiting_Spot1_Color
-    - SmartSpot.Waiting_Spot2_Color
-    - SmartSpot.Waiting_Spot3_Color
-    - SmartSpot.Waiting_Spot4_Color
+  - SmartSpot.Success_Spot1_Color
+  - SmartSpot.Success_Spot2_Color
+  - SmartSpot.Success_Spot3_Color
+  - SmartSpot.Success_Spot4_Color
+  - SmartSpot.Warning_Spot1_Color
+  - SmartSpot.Warning_Spot2_Color
+  - SmartSpot.Warning_Spot3_Color
+  - SmartSpot.Warning_Spot4_Color
+  - SmartSpot.Error_Spot1_Color
+  - SmartSpot.Error_Spot2_Color
+  - SmartSpot.Error_Spot3_Color
+  - SmartSpot.Error_Spot4_Color
+  - SmartSpot.Waiting_Spot1_Color
+  - SmartSpot.Waiting_Spot2_Color
+  - SmartSpot.Waiting_Spot3_Color
+  - SmartSpot.Waiting_Spot4_Color
 stories: stories/SmartSpot/SmartSpot.stories.tsx
 version: "1.0"
 ---

@@ -7,3 +7,4 @@ export { Shapes as ShapesRender } from "./Shapes";
 export { default as ShapesSource } from "./Shapes?raw";
 export { Animations as AnimationsRender } from "./Animations";
 export { default as AnimationsSource } from "./Animations?raw";
+export { VisualTests as VisualTestsRender } from "./VisualTests";

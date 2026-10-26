@@ -12,6 +12,7 @@ import {
     ShapesSource,
     AnimationsRender,
     AnimationsSource,
+    VisualTestsRender,
     type PlaygroundArgs,
 } from "./examples";
 
@@ -59,7 +60,7 @@ const PLAYGROUND_ARGS: PlaygroundArgs = {
 
 // Документационные стори используют анимацию по умолчанию (Drift): кадры пишутся в style
 // на каждом requestAnimationFrame, DOM не стабилизируется и скриншоты нестабильны — поэтому
-// они исключены из test-runner'а.
+// они исключены из test-runner'а. Скриншот-покрытие — в VisualTests с Animation None.
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
@@ -191,4 +192,16 @@ export const Animations: StoryObj<typeof SmartSpot> = {
         testRunner: { skip: true },
     },
     render: AnimationsRender,
+};
+
+export const VisualTests: StoryObj<typeof SmartSpot> = {
+    tags: ["!autodocs"],
+    render: VisualTestsRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+    },
 };

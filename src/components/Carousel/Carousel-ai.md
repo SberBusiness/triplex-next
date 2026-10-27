@@ -200,8 +200,10 @@ DOM-порядку, а `key` — стабильный идентификатор
 | `DynamicIndicators` | `DynamicIndicators.tsx` | Автоматический расчёт страниц и окно индикаторов для длинной ленты |
 
 У `ScrollModes` и `Orientations` есть Linux/CI baseline-скриншоты на `xs` / `xl`
-в `__screenshots__/`. Остальные текущие stories исключены из скриншот-прогона
-через `testRunner.skip`; `Playground` также не попадает в MCP-примеры.
+в `__screenshots__/`. Скрытая story `VisualTests` также снимается и проверяет
+состояния кнопок навигации. Остальные текущие stories исключены из
+скриншот-прогона через `testRunner.skip`; `Playground` также не попадает
+в MCP-примеры.
 
 ---
 

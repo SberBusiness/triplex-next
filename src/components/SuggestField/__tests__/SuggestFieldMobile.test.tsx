@@ -89,7 +89,7 @@ const getDropdownInput = () => screen.getByRole("textbox");
 const openDropdown = () => fireEvent.focus(getTarget());
 
 /**
- * Кнопка закрытия в шапке мобильного дропдауна. У DropdownMobileClose нет доступного имени,
+ * Кнопка закрытия в шапке мобильного дропдауна. У PullerClose нет доступного имени,
  * поэтому отбирается по пустому name — если подпись когда-нибудь появится, чинить здесь.
  */
 const getDropdownCloseButton = () => screen.getByRole("button", { name: "" });
@@ -142,7 +142,7 @@ describe("SuggestFieldMobile", () => {
         });
 
         it("scrolls the input to the center of the screen after the dropdown closes", () => {
-            // В iOS открытие полноэкранного дропдауна уводит страницу вверх.
+            // В iOS открытие мобильного дропдауна уводит страницу вверх.
             const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
@@ -398,12 +398,12 @@ describe("SuggestFieldMobile", () => {
 });
 
 /**
- * Завершает анимацию закрытия: DropdownMobileInner снимает содержимое только по transitionend на
+ * Завершает анимацию закрытия: PullerInner снимает содержимое только по transitionend на
  * подложке, а jsdom переходов не проигрывает. Без этого при повторном открытии осталось бы прежнее
  * поле ввода, и автофокус, который переинициализирует его значение, не сработал бы.
  */
 function finishCloseAnimation() {
-    const backdrop = document.querySelector(".dropdownMobileBackdrop");
+    const backdrop = document.querySelector(".pullerBackdrop");
 
     if (backdrop === null) {
         throw new Error("Mobile dropdown backdrop not found");
@@ -412,12 +412,12 @@ function finishCloseAnimation() {
     fireEvent.transitionEnd(backdrop);
 }
 
-/** Прокручивает DropdownMobileBody (родителя listbox) до конца: jsdom не считает размеры сам. */
+/** Прокручивает PullerBody (родителя listbox) до конца: jsdom не считает размеры сам. */
 function scrollBodyToEnd() {
     const body = screen.getByRole("listbox").parentElement;
 
     if (body === null) {
-        throw new Error("DropdownMobileBody not found: listbox has no parent element");
+        throw new Error("PullerBody not found: listbox has no parent element");
     }
 
     Object.defineProperty(body, "scrollHeight", { configurable: true, value: 300 });

@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { DropdownMobileHeader } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileHeader";
-import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
-import { TooltipMobileCloseButton } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileCloseButton";
-import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
-import { EFontType, ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-import { ITooltipMobileHeaderProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
+import { TooltipContext } from "../../../TootlipContext";
+import { TooltipMobileCloseButton } from "./TooltipMobileCloseButton";
+import { Text } from "../../../../Typography/Text";
+import { EFontType, ETextSize } from "../../../../Typography/enums";
+import { ITooltipMobileHeaderProps } from "../../../types";
+import { PullerHeader } from "../../../../Puller/PullerHeader";
 
 /**
  * Заголовок компонента TooltipMobile.
@@ -17,10 +17,10 @@ export const TooltipMobileHeader: React.FC<ITooltipMobileHeaderProps> = ({ child
     const closeButton = <TooltipMobileCloseButton {...elements.closeButton?.props} />;
 
     return (
-        <DropdownMobileHeader controlButtons={closeButton} {...rest}>
+        <PullerHeader controlButtons={closeButton} {...rest}>
             <Text size={ETextSize.B3} type={EFontType.PRIMARY} tag="div">
                 {children}
             </Text>
-        </DropdownMobileHeader>
+        </PullerHeader>
     );
 };

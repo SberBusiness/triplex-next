@@ -2,19 +2,19 @@ import React, { useCallback } from "react";
 import { ISuggestOption } from "./types";
 import { useSuggestContext } from "./SuggestContext";
 import {
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileLoader,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileList,
-    DropdownMobileListItem,
-} from "../Dropdown";
-import { Text, EFontType, ETextSize } from "@sberbusiness/triplex-next/components/Typography";
+    PullerHeader,
+    PullerInput,
+    PullerLoader,
+    PullerClose,
+    PullerBody,
+    PullerList,
+    PullerListItem,
+} from "../Puller";
+import { Text, EFontType, ETextSize } from "../Typography";
 import styles from "./styles/SuggestDropdown.module.less";
 
 /**
- * Наполнение полноэкранного мобильного Dropdown внутри Suggest.
+ * Наполнение мобильного Dropdown (шторки Puller) внутри Suggest.
  * Данные и обработчики берёт из SuggestContext, поэтому рендерится только внутри Suggest.
  */
 export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
@@ -65,24 +65,24 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
 
     return (
         <>
-            <DropdownMobileHeader
+            <PullerHeader
                 controlButtons={
                     <>
-                        {loading && <DropdownMobileLoader />}
-                        <DropdownMobileClose onClick={handleMobileDropdownClose} />
+                        {loading && <PullerLoader />}
+                        <PullerClose onClick={handleMobileDropdownClose} />
                     </>
                 }
             >
-                <DropdownMobileInput
+                <PullerInput
                     value={inputValue}
                     placeholder={placeholder}
                     autoFocus={true}
                     onFocus={handleInputFocus}
                     onChange={handleInputChange}
                 />
-            </DropdownMobileHeader>
+            </PullerHeader>
 
-            <DropdownMobileBody className={styles.suggestDropdownMobileBody} onScroll={handleDropdownScroll}>
+            <PullerBody className={styles.suggestDropdownMobileBody} onScroll={handleDropdownScroll}>
                 {options.length === 0 ? (
                     <Text
                         className={styles.suggestDropdownMobileNoOptionsText}
@@ -93,9 +93,9 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
                         {noOptionsText}
                     </Text>
                 ) : (
-                    <DropdownMobileList loading={dropdownListLoading}>
+                    <PullerList loading={dropdownListLoading}>
                         {options.map((option) => (
-                            <DropdownMobileListItem
+                            <PullerListItem
                                 key={option.id}
                                 id={option.id}
                                 selected={option.id === value?.id}
@@ -105,11 +105,11 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
                                 }}
                             >
                                 {option.content || option.label}
-                            </DropdownMobileListItem>
+                            </PullerListItem>
                         ))}
-                    </DropdownMobileList>
+                    </PullerList>
                 )}
-            </DropdownMobileBody>
+            </PullerBody>
         </>
     );
 };

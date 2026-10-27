@@ -1,13 +1,13 @@
 import React from "react";
 import clsx from "clsx";
-import { Text } from "@sberbusiness/triplex-next/components/Typography/Text";
-import { ETextSize } from "@sberbusiness/triplex-next/components/Typography/enums";
-import { Badge } from "../../Badge/Badge";
-import { EComponentSize } from "@sberbusiness/triplex-next/enums";
-import styles from "../styles/DropdownMobile.module.less";
+import { Text } from "../Typography/Text";
+import { ETextSize } from "../Typography/enums";
+import { EComponentSize } from "../../enums";
+import { Badge } from "../Badge/Badge";
+import styles from "./styles/Puller.module.less";
 
-/** Свойства компонента DropdownMobileListItem. */
-export interface IDropdownMobileListItemProps extends React.HTMLAttributes<HTMLDivElement> {
+/** Свойства компонента PullerListItem. */
+export interface IPullerListItemProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Идентификатор элемента. */
     id: string;
     /** Обработчик выбора текущего элемента. Вызывается по клику, до onClick. */
@@ -18,9 +18,9 @@ export interface IDropdownMobileListItemProps extends React.HTMLAttributes<HTMLD
     showNotificationIcon?: boolean;
 }
 
-/** Элемент списка мобильной версии Dropdown. */
-export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdownMobileListItemProps>(
-    ({ children, className, id, onClick, onSelect, selected, showNotificationIcon, ...htmlAttributes }, ref) => {
+/** Элемент списка Puller. */
+export const PullerListItem = React.forwardRef<HTMLDivElement, IPullerListItemProps>(
+    ({ children, className, id, onClick, onSelect, selected, showNotificationIcon, ...restProps }, ref) => {
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             onSelect?.();
             onClick?.(event);
@@ -30,13 +30,14 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
             <Text
                 tag="div"
                 size={ETextSize.B3}
-                className={clsx(styles.dropdownMobileListItem, { [styles.selected]: Boolean(selected) }, className)}
+                className={clsx(styles.pullerListItem, { [styles.selected]: selected }, className)}
+                id={id}
                 aria-selected={Boolean(selected)}
                 role="option"
-                ref={ref}
                 onClick={handleClick}
                 title={typeof children === "string" ? children : undefined}
-                {...htmlAttributes}
+                {...restProps}
+                ref={ref}
             >
                 {children}
                 {showNotificationIcon && <Badge.Dot size={EComponentSize.MD} className={styles.notificationIcon} />}
@@ -45,4 +46,4 @@ export const DropdownMobileListItem = React.forwardRef<HTMLDivElement, IDropdown
     },
 );
 
-DropdownMobileListItem.displayName = "DropdownMobileListItem";
+PullerListItem.displayName = "PullerListItem";

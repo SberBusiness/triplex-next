@@ -1,12 +1,9 @@
 import React, { useContext } from "react";
-import {
-    DropdownMobileClose,
-    IDropdownMobileCloseProps,
-} from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileClose";
-import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
+import { TooltipContext } from "../../../TootlipContext";
+import { PullerClose, IPullerCloseProps } from "../../../../Puller/PullerClose";
 
 /** Свойства компонента TooltipMobileCloseButton. */
-export interface ITooltipMobileCloseButton extends IDropdownMobileCloseProps {}
+export interface ITooltipMobileCloseButton extends IPullerCloseProps {}
 
 /** Кнопка закрытия TooltipMobile. */
 export const TooltipMobileCloseButton: React.FC<ITooltipMobileCloseButton> = ({ onClick, ...rest }) => {
@@ -18,5 +15,5 @@ export const TooltipMobileCloseButton: React.FC<ITooltipMobileCloseButton> = ({ 
         onClick?.(event);
     };
 
-    return <DropdownMobileClose onClick={handleClick} {...rest} />;
+    return <PullerClose onClick={handleClick} {...rest} />;
 };

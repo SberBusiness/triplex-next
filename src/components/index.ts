@@ -64,6 +64,7 @@ export * from "./Page";
 export * from "./PageIndicators";
 export * from "./Pagination";
 export * from "./Portal";
+export * from "./Puller";
 export * from "./Radio";
 export * from "./Row";
 export * from "./SegmentedControl";

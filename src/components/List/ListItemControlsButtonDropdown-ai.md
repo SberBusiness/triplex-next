@@ -1,7 +1,7 @@
 ---
 component: ListItemControlsButtonDropdown
 category: List
-related: [ListItemControlsButton, ButtonDropdownExtended, Dropdown]
+related: [ListItemControlsButton, ButtonDropdownExtended, Dropdown, Puller]
 tokens:
   - ListItemControlsButton.Background_Default
   - ListItemControlsButton.Background_Hover
@@ -87,7 +87,7 @@ dropdown.
 - `ListItemControlsButton` — используется как сама кнопка-триггер.
 - `ButtonDropdownExtended` — обвязка для кастомных кнопок + dropdown.
 - `Dropdown`, `DropdownList` (desktop) — выпадающий список на десктопе.
-- `DropdownMobileBody`, `DropdownMobileList`, `DropdownMobileListItem`, `DropdownMobileHeader`, `DropdownMobileClose` — bottom-sheet на мобильном.
+- `Puller` (`PullerBody`, `PullerList`, `PullerListItem`, `PullerHeader`, `PullerClose`) — bottom-sheet на мобильном.
 - `DropdownListContext` — управление `activeDescendant`.
 
 ---
@@ -108,3 +108,4 @@ dropdown.
 | Дата | Изменение |
 |---|---|
 | 2026-04-29 | Создан документ |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильная версия собрана из частей `Puller` (бывший `DropdownMobile*`). |

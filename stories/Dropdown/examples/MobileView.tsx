@@ -3,16 +3,16 @@ import {
     Button,
     Dropdown,
     DropdownList,
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileFooter,
-    DropdownMobileHeader,
-    DropdownMobileList,
-    DropdownMobileListItem,
     EButtonTheme,
     EComponentSize,
     EDropdownWidth,
     ETextSize,
+    PullerBody,
+    PullerClose,
+    PullerFooter,
+    PullerHeader,
+    PullerList,
+    PullerListItem,
     Text,
 } from "@sberbusiness/triplex-next";
 
@@ -50,31 +50,29 @@ export const MobileView = () => {
                 targetRef={targetRef}
                 size={EComponentSize.MD}
                 width={EDropdownWidth.MIN_TARGET}
-                mobileViewProps={{
+                pullerProps={{
                     children: (
                         <>
-                            <DropdownMobileHeader
-                                controlButtons={
-                                    <DropdownMobileClose aria-label="Закрыть" onClick={() => setOpened(false)} />
-                                }
+                            <PullerHeader
+                                controlButtons={<PullerClose aria-label="Закрыть" onClick={() => setOpened(false)} />}
                             >
                                 <Text size={ETextSize.B1}>Заголовок</Text>
-                            </DropdownMobileHeader>
-                            <DropdownMobileBody>
-                                <DropdownMobileList>
+                            </PullerHeader>
+                            <PullerBody>
+                                <PullerList>
                                     {OPTIONS.map((option) => (
-                                        <DropdownMobileListItem
+                                        <PullerListItem
                                             key={option.id}
                                             id={`mobile-${option.id}`}
                                             selected={option.id === selectedId}
                                             onSelect={() => handleSelect(option.id)}
                                         >
                                             {option.label}
-                                        </DropdownMobileListItem>
+                                        </PullerListItem>
                                     ))}
-                                </DropdownMobileList>
-                            </DropdownMobileBody>
-                            <DropdownMobileFooter>
+                                </PullerList>
+                            </PullerBody>
+                            <PullerFooter>
                                 <Button
                                     theme={EButtonTheme.SECONDARY}
                                     size={EComponentSize.MD}
@@ -82,7 +80,7 @@ export const MobileView = () => {
                                 >
                                     Button text
                                 </Button>
-                            </DropdownMobileFooter>
+                            </PullerFooter>
                         </>
                     ),
                 }}

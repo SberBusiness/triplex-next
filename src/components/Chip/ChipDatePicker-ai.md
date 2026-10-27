@@ -1,7 +1,7 @@
 ---
 component: ChipDatePicker
 category: Chips
-related: [Chip, ChipDatePickerTarget, ChipMonthYearPicker, DateField, DatePickerExtended, FormField]
+related: [Chip, ChipDatePickerTarget, ChipMonthYearPicker, DateField, DatePickerExtended, Puller]
 tokens: []
 stories: stories/Chips/ChipDatePicker.stories.tsx
 version: "1.0"
@@ -160,8 +160,8 @@ disabled), `Calendar` (календарь) и `Dropdown` (выпадающий �
   `DateFieldUtils` и `inputDateFormat`.
 - `DatePickerExtended` — рендерится внутри, владеет календарём, дропдауном,
   открытостью и корневым DOM-элементом.
-- `FormField` — семейство маскированного ввода, используемого через
-  `DropdownMobileMaskedInput`; общие props поля и маски описаны в нём.
+- `Puller` — мобильная шторка календаря; в её шапке рендерится `PullerMaskedInput` —
+  обёртка над `FormFieldMaskedInput`, общие props поля и маски описаны в `FormField`.
 - `ChipGroup` — рекомендуемый контейнер для ряда фильтров.
 
 ---
@@ -191,3 +191,4 @@ disabled), `Calendar` (календарь) и `Dropdown` (выпадающий �
 |---|---|
 | 2026-10-19 | Создан документ; подтверждены контракт управляемой даты, мобильного ввода и существующие ограничения. Лениво инициализировано состояние и дополнены unit-тесты (TRI-136) |
 | 2026-10-21 | Добавлена ссылка на отдельную AI-документацию ChipDatePickerTarget |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный ввод даты — `PullerMaskedInput` (бывший `DropdownMobileMaskedInput`). |

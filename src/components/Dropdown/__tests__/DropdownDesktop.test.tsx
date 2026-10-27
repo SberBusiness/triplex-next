@@ -105,19 +105,24 @@ describe("DropdownDesktop", () => {
     it("toggles the body overflow class while opened", () => {
         const { rerender } = render(<DropdownWithTarget />);
 
-        expect(document.body).toHaveClass("dropdownDesktopOverflowHidden");
+        expect(document.body).toHaveClass("dropdownDesktopScrollLock");
 
         rerender(<DropdownWithTarget opened={false} />);
 
-        expect(document.body).not.toHaveClass("dropdownDesktopOverflowHidden");
+        expect(document.body).not.toHaveClass("dropdownDesktopScrollLock");
     });
 
-    it("removes the body overflow class on unmount", () => {
-        const { unmount } = render(<DropdownWithTarget />);
+    it("keeps the body overflow class until the last opened dropdown closes", () => {
+        const first = render(<DropdownWithTarget />);
+        const second = render(<DropdownWithTarget />);
 
-        unmount();
+        first.rerender(<DropdownWithTarget opened={false} />);
 
-        expect(document.body).not.toHaveClass("dropdownDesktopOverflowHidden");
+        expect(document.body).toHaveClass("dropdownDesktopScrollLock");
+
+        second.unmount();
+
+        expect(document.body).not.toHaveClass("dropdownDesktopScrollLock");
     });
 
     describe("vertical position", () => {

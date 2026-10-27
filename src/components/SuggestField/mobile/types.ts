@@ -1,6 +1,6 @@
 import React from "react";
 import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
-import { IDropdownMobileProps } from "../../Dropdown";
+import { IPullerProps } from "../../Puller";
 
 /** Свойства компонента SuggestFieldMobile. */
 export interface ISuggestFieldMobileProps<
@@ -10,7 +10,7 @@ export interface ISuggestFieldMobileProps<
 /** Свойства компонента SuggestFieldMobileDropdown. */
 export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
     extends
-        Omit<IDropdownMobileProps, "onSelect">,
+        Omit<IPullerProps, "onSelect">,
         Pick<
             ISuggestFieldMobileProps<T>,
             | "value"

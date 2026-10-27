@@ -2,20 +2,22 @@ import React, { useContext, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { ICarouselViewportProps } from "./types";
 import { CarouselContext } from "./CarouselContext";
-import { mergeRefs } from "../../utils/refs";
+import { mergeRefs, useLatestRef } from "../../utils/refs";
 import { ORIENTATION_TRANSFORM } from "./constants";
 import { EOrientation } from "../../enums";
 import styles from "./styles/Carousel.module.less";
 
-const ORIENTATION_TO_TOUCH_KEY = {
-    [EOrientation.HORIZONTAL]: "clientX",
-    [EOrientation.VERTICAL]: "clientY",
+const ORIENTATION_TOUCH_KEYS = {
+    [EOrientation.HORIZONTAL]: { main: "clientX", cross: "clientY" },
+    [EOrientation.VERTICAL]: { main: "clientY", cross: "clientX" },
 } as const;
 
-const ORIENTATION_TO_CROSS_TOUCH_KEY = {
-    [EOrientation.HORIZONTAL]: "clientY",
-    [EOrientation.VERTICAL]: "clientX",
-} as const;
+/** Смещение в px, после которого жест закрепляется за осью карусели или за прокруткой страницы. */
+const AXIS_LOCK_THRESHOLD = 5;
+/** Строгий порог в px вдоль оси для перехода к соседнему слайду. */
+const SWIPE_THRESHOLD = 50;
+/** Во сколько раз уменьшается смещение за границей ленты. */
+const RUBBER_BAND_RESISTANCE = 3;
 
 /** Область просмотра карусели: ограничивает ленту и обрабатывает touch-жесты. */
 export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewportProps>(
@@ -31,150 +33,112 @@ export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewpo
             trackRef,
         } = useContext(CarouselContext);
         const combinedRef = mergeRefs(ref, viewportRef);
+        // Обработчики на window живут весь жест, поэтому навигация берётся актуальной на момент touchend.
+        const nextSlideRef = useLatestRef(nextSlide);
+        const prevSlideRef = useLatestRef(prevSlide);
 
-        const draggingRef = useRef(false);
-        const scrollingRef = useRef<boolean | null>(null);
-
-        const startCoordsRef = useRef({ clientX: 0, clientY: 0 });
-        const startOffsetRef = useRef(0);
-        const dragDistanceRef = useRef(0);
-
-        const touchMoveHandlerRef = useRef<typeof handleTouchMove | null>(null);
-        const touchEndHandlerRef = useRef<typeof handleTouchEnd | null>(null);
+        const removeTouchListenersRef = useRef<(() => void) | null>(null);
 
         const clearTouchListeners = useCallback(() => {
-            if (touchMoveHandlerRef.current) {
-                window.removeEventListener("touchmove", touchMoveHandlerRef.current);
-                touchMoveHandlerRef.current = null;
-            }
-            if (touchEndHandlerRef.current) {
-                window.removeEventListener("touchend", touchEndHandlerRef.current);
-                window.removeEventListener("touchcancel", touchEndHandlerRef.current);
-                touchEndHandlerRef.current = null;
-            }
+            removeTouchListenersRef.current?.();
+            removeTouchListenersRef.current = null;
         }, []);
 
-        const handleTouchMove = useCallback(
-            (event: TouchEvent) => {
-                if (!draggingRef.current || !trackRef.current) return;
+        const startGesture = (touch: React.Touch) => {
+            const orientation = orientationRef.current;
+            const { main: mainKey, cross: crossKey } = ORIENTATION_TOUCH_KEYS[orientation];
+            const startMain = touch[mainKey];
+            const startCross = touch[crossKey];
+            const startOffset = offsetRef.current;
+            let scrolling: boolean | null = null;
+            let dragDistance = 0;
 
-                const touch = event.targetTouches[0];
-                if (!touch) return;
+            const handleTouchMove = (moveEvent: TouchEvent) => {
+                if (!trackRef.current) return;
 
-                const orientation = orientationRef.current;
-                const touchKey = ORIENTATION_TO_TOUCH_KEY[orientation];
-                const crossKey = ORIENTATION_TO_CROSS_TOUCH_KEY[orientation];
+                const moveTouch = moveEvent.targetTouches[0];
+                if (!moveTouch) return;
 
-                const dragDistance = touch[touchKey] - startCoordsRef.current[touchKey];
-                const crossDistance = touch[crossKey] - startCoordsRef.current[crossKey];
+                const mainDistance = moveTouch[mainKey] - startMain;
+                const crossDistance = moveTouch[crossKey] - startCross;
 
-                if (scrollingRef.current === null) {
-                    const absMain = Math.abs(dragDistance);
+                if (scrolling === null) {
+                    const absMain = Math.abs(mainDistance);
                     const absCross = Math.abs(crossDistance);
 
-                    if (absMain > 5 || absCross > 5) {
-                        scrollingRef.current = absCross > absMain;
+                    // До выбора оси touchmove не отменяется: иначе браузер может не начать прокрутку страницы.
+                    if (absMain <= AXIS_LOCK_THRESHOLD && absCross <= AXIS_LOCK_THRESHOLD) return;
+
+                    scrolling = absCross > absMain;
+
+                    if (scrolling) {
+                        // Иначе браузер ждёт non-passive listener на каждом touchmove прокрутки.
+                        window.removeEventListener("touchmove", handleTouchMove);
+                        return;
                     }
+
+                    // Отключение transition обрывает анимацию перехода, поэтому только для жеста по оси карусели.
+                    trackRef.current.style.transition = "none";
                 }
 
-                if (scrollingRef.current) {
-                    return;
+                if (moveEvent.cancelable) {
+                    moveEvent.preventDefault();
                 }
 
-                if (event.cancelable) {
-                    event.preventDefault();
-                }
-
-                dragDistanceRef.current = dragDistance;
+                dragDistance = mainDistance;
                 const maxOffset = maxOffsetRef.current;
-                const targetOffset = startOffsetRef.current - dragDistance;
+                const targetOffset = startOffset - mainDistance;
                 let currentTranslate = -targetOffset;
 
                 if (targetOffset < 0) {
-                    currentTranslate = -targetOffset / 3;
+                    currentTranslate = -targetOffset / RUBBER_BAND_RESISTANCE;
                 } else if (targetOffset > maxOffset) {
-                    currentTranslate = -(maxOffset + (targetOffset - maxOffset) / 3);
+                    currentTranslate = -(maxOffset + (targetOffset - maxOffset) / RUBBER_BAND_RESISTANCE);
                 }
 
                 trackRef.current.style.transform = ORIENTATION_TRANSFORM[orientation](currentTranslate);
-                trackRef.current.style.transition = "none";
-            },
-            [maxOffsetRef, orientationRef, trackRef],
-        );
+            };
 
-        const handleTouchEnd = useCallback(
-            (event: TouchEvent) => {
-                if (!draggingRef.current) return;
-
-                draggingRef.current = false;
-
-                const scrolling = scrollingRef.current;
-                scrollingRef.current = null;
-
+            const handleTouchEnd = (endEvent: TouchEvent) => {
                 clearTouchListeners();
 
                 if (!trackRef.current) return;
 
                 trackRef.current.style.transition = "";
-
-                if (event.type === "touchcancel" || scrolling) {
-                    trackRef.current.style.transform = "";
-                    return;
-                }
-
-                const finalDrag = dragDistanceRef.current;
-                const threshold = 50;
-
-                if (finalDrag > threshold) {
-                    prevSlide();
-                } else if (finalDrag < -threshold) {
-                    nextSlide();
-                }
-
                 trackRef.current.style.transform = "";
-            },
-            [nextSlide, prevSlide, clearTouchListeners, trackRef],
-        );
 
-        const handleTouchStart = useCallback<React.TouchEventHandler<HTMLDivElement>>(
-            (event) => {
-                const touch = event.targetTouches[0];
-                if (!touch) return;
+                if (endEvent.type === "touchcancel" || scrolling) return;
 
-                draggingRef.current = true;
-                scrollingRef.current = null;
-
-                startCoordsRef.current = {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY,
-                };
-
-                startOffsetRef.current = offsetRef.current;
-                dragDistanceRef.current = 0;
-
-                if (trackRef.current) {
-                    trackRef.current.style.transition = "none";
+                if (dragDistance > SWIPE_THRESHOLD) {
+                    prevSlideRef.current();
+                } else if (dragDistance < -SWIPE_THRESHOLD) {
+                    nextSlideRef.current();
                 }
-
-                clearTouchListeners();
-
-                touchMoveHandlerRef.current = handleTouchMove;
-                touchEndHandlerRef.current = handleTouchEnd;
-
-                window.addEventListener("touchmove", handleTouchMove, { passive: false });
-                window.addEventListener("touchend", handleTouchEnd);
-                window.addEventListener("touchcancel", handleTouchEnd);
-
-                onTouchStart?.(event);
-            },
-            [handleTouchMove, handleTouchEnd, clearTouchListeners, onTouchStart, offsetRef, trackRef],
-        );
-
-        useEffect(() => {
-            return () => {
-                clearTouchListeners();
             };
-        }, [clearTouchListeners]);
+
+            clearTouchListeners();
+
+            window.addEventListener("touchmove", handleTouchMove, { passive: false });
+            window.addEventListener("touchend", handleTouchEnd);
+            window.addEventListener("touchcancel", handleTouchEnd);
+
+            removeTouchListenersRef.current = () => {
+                window.removeEventListener("touchmove", handleTouchMove);
+                window.removeEventListener("touchend", handleTouchEnd);
+                window.removeEventListener("touchcancel", handleTouchEnd);
+            };
+        };
+
+        const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+            const touch = event.targetTouches[0];
+            if (touch) {
+                startGesture(touch);
+            }
+
+            onTouchStart?.(event);
+        };
+
+        useEffect(() => clearTouchListeners, [clearTouchListeners]);
 
         const runtimeStyle = {
             "--triplex-next-runtime-carousel-viewport-padding": viewportPaddingStyle,

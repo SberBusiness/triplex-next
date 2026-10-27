@@ -163,6 +163,7 @@ export const CardsCarousel = () => (
 | `Orientations` | `Orientations.tsx` | Горизонтальная и вертикальная области с ограниченной высотой |
 | `Production` | `Production.tsx` | Отступы области через `viewportPadding={8}` родителя |
 | `DynamicIndicators` | `DynamicIndicators.tsx` | Постраничная лента с большим количеством элементов |
+| `VisualTests` | `VisualTests.tsx` | Горизонтальная и вертикальная области с кнопками; снимаются только состояния кнопок |
 
 Скриншот-покрытие stories описано в [Carousel](Carousel-ai.md#stories).
 

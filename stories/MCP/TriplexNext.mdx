@@ -56,7 +56,7 @@ import { Meta, Title, Subtitle } from "@storybook/addon-docs/blocks";
     </thead>
     <tbody>
         <tr><td><code>list_components</code></td><td>Найти компонент и проверить флаг <code>ai_ready</code>.</td></tr>
-        <tr><td><code>get_component</code></td><td>Получить props, инварианты, пример и оглавление документации компонента.</td></tr>
+        <tr><td><code>get_component</code></td><td>Получить доступную документацию компонента; состав ответа зависит от наличия подробного описания.</td></tr>
         <tr><td><code>get_tokens</code></td><td>Найти группы токенов, токены компонента или значения конкретной группы.</td></tr>
         <tr><td><code>list_icons</code></td><td>Найти существующее имя иконки из <code>@sberbusiness/icons-next</code> по подстроке и размеру.</td></tr>
         <tr><td><code>get_guidelines</code></td><td>Прочитать правила генерации кода на Triplex Next.</td></tr>
@@ -66,7 +66,8 @@ import { Meta, Title, Subtitle } from "@storybook/addon-docs/blocks";
 
 ### Документация компонента
 
-По умолчанию `get_component` возвращает компактное описание. Например, аргументы запроса для Button:
+Для компонентов с подробной документацией `get_component` по умолчанию возвращает компактное
+описание. Например, аргументы запроса для Button:
 
 ```json
 {

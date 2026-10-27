@@ -32,12 +32,20 @@ React-код по этому дереву пишет AI-агент.
 Понадобятся Node.js 20 или новее, npm с командой `npx`, AI-клиент с поддержкой MCP
 и доступ к макету в Pixso.
 
-1. Получите токен в профиле Pixso и сохраните его в переменной окружения `PIXSO_MCP_TOKEN`,
-   например в `~/.zshrc`.
+1. Получите токен в профиле Pixso и задайте переменную окружения `PIXSO_MCP_TOKEN`
+   до запуска AI-клиента.
 2. Откройте макет в Pixso, выделите нужный фрейм и скопируйте ссылку на него.
 3. Добавьте оба сервера в конфигурацию клиента: `.mcp.json` для Claude Code
    или `.cursor/mcp.json` для Cursor. Если `mcpServers` уже существует, дополните его.
 4. Перезапустите MCP-серверы или клиент и проверьте, что оба сервера подключены.
+
+Клиент должен получить `PIXSO_MCP_TOKEN` в своём окружении. Записи в `~/.zshrc` недостаточно
+для Cursor, запущенного из графической среды. Полностью закройте Cursor и запустите его
+командой `cursor .` из терминала с экспортированной переменной либо задайте её в окружении
+графического сеанса. Claude Code запускайте командой `claude` из терминала с этой переменной.
+
+Уточните HTTPS-адрес Remote MCP у администратора своей инсталляции Pixso. Если сервис доступен
+только по HTTP, используйте согласованный защищённый туннель, а не прямое подключение.
 
 ```json
 {
@@ -50,7 +58,7 @@ React-код по этому дереву пишет AI-агент.
       "command": "npx",
       "args": ["-y", "@sberbusiness/pixso-to-triplex-next-mcp-server"],
       "env": {
-        "PIXSO_MCP_URL": "http://pixso.design.sber.ru/api/mcp/mcp",
+        "PIXSO_MCP_URL": "https://<хост инсталляции>/api/mcp/mcp",
         "PIXSO_MCP_TOKEN": "${PIXSO_MCP_TOKEN}",
         "PIXSO_AUTH_STYLE": "dual"
       }
@@ -60,7 +68,8 @@ React-код по этому дереву пишет AI-агент.
 ```
 
 `npx` скачает пакеты при первом запуске. Токен не записывается в конфигурацию: клиент
-подставит его из переменной окружения. В Cursor вместо `${PIXSO_MCP_TOKEN}` укажите
+подставит его из переменной окружения. В [Cursor](https://cursor.com/docs/mcp#config-interpolation)
+вместо `${PIXSO_MCP_TOKEN}` укажите
 `${env:PIXSO_MCP_TOKEN}`.
 
 ### Ссылка на фрейм
@@ -273,5 +282,4 @@ description: >-
 ## Ссылки
 
 - [Пакет и README в npm](https://www.npmjs.com/package/@sberbusiness/pixso-to-triplex-next-mcp-server).
-- [Исходный код конвертера](https://github.com/SberBusiness/pixso-to-triplex-next-mcp-server).
 - <a href="./?path=/docs/mcp-triplex-next--docs" target="_top">Подключение Triplex Next MCP</a>.

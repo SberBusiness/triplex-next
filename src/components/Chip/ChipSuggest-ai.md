@@ -1,7 +1,7 @@
 ---
 component: ChipSuggest
 category: Chips
-related: [Chip, ChipSelect, Suggest, Dropdown, FormField]
+related: [ChipSuggestTarget, Chip, ChipSelect, Suggest, Dropdown, FormField]
 tokens: []
 stories: stories/Chips/ChipSuggest.stories.tsx
 version: "1.0"
@@ -203,9 +203,9 @@ version: "1.0"
   `DropdownList` и `DropdownListItem`.
 - `FormField` — из его частей (`FormFieldLabel`, `FormFieldInput`, `FormFieldPostfix`,
   `FormFieldClear`) собрано поле фильтрации внутри десктопного списка.
-- `ChipSuggestTarget` — сам чипс-триггер. Экспортируется из barrel, но самостоятельного
+- [ChipSuggestTarget](ChipSuggestTarget-ai.md) — сам чипс-триггер. Экспортируется из barrel, но самостоятельного
   применения не имеет: `value` и `dropdownOpen` берёт из `SuggestContext`, поэтому работает
-  только внутри `Suggest`. Отдельного AI.md не имеет.
+  только внутри `Suggest`. Собственный контракт описан в отдельном AI.md.
 - `ChipSuggestDropdown` — выпадающий список компонента: `FocusTrap` + поле фильтрации +
   `DropdownList` на десктопе, `SuggestMobileDropdownContent` на мобильной ширине. Из barrel
   не экспортируется (наружу уходит только тип props), отдельного AI.md не имеет.
@@ -243,3 +243,4 @@ version: "1.0"
 |---|---|
 | 2026-09-07 | Создан документ (AI-рефакторинг ChipSuggest, TRI-134) |
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps` в `dropdownProps` переименован в `pullerProps`. |
+| 2026-10-29 | Добавлены related и ссылка на самостоятельный контракт ChipSuggestTarget; target получил displayName и дополнительные тесты. |

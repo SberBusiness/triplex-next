@@ -172,7 +172,7 @@ DOM-порядку, а `key` — стабильный идентификатор
   DOM-узел для измерений и убирает его при размонтировании.
 - `CarouselIndicators` (`Carousel.Indicators`) — связывает `PageIndicators` с
   текущей страницей и количеством страниц контекста, работает только в `PAGE`.
-- `CarouselPrevButton` / `CarouselNextButton` (`Carousel.PrevButton` /
+- [CarouselPrevButton](CarouselPrevButton-ai.md) / [CarouselNextButton](CarouselNextButton-ai.md) (`Carousel.PrevButton` /
   `Carousel.NextButton`) — стрелки навигации с граничным `aria-disabled` и
   адаптацией к `(pointer: coarse)`.
 - `Carousel.Track` — часть без отдельного AI.md: `<div role="presentation">`,
@@ -211,5 +211,6 @@ DOM-порядку, а `key` — стабильный идентификатор
 
 | Дата | Изменение |
 |---|---|
+| 2026-10-29 | Добавлены ссылки на отдельную AI-документацию кнопок навигации. |
 | 2026-10-21 | В режиме `PAGE` группировка и центрирование страниц учитывают `viewportPadding`: группа больше не выходит за видимую область. |
 | 2026-10-20 | Создан документ. Завершён аудит Carousel в TRI-163: уточнены JSDoc и стабильные зависимости hooks, проверены существующие stories и дополнены тесты корневого контракта. |

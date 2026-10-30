@@ -137,9 +137,9 @@ describe("Dropdown", () => {
         });
     });
 
-    describe("mobileViewProps", () => {
+    describe("pullerProps", () => {
         it("renders the desktop version on a wide screen", () => {
-            render(<DropdownWithTarget mobileViewProps={{ children: <span>Mobile content</span> }} />);
+            render(<DropdownWithTarget pullerProps={{ children: <span>Mobile content</span> }} />);
 
             expect(screen.getByText("Dropdown content")).toBeInTheDocument();
             expect(screen.queryByText("Mobile content")).toBeNull();
@@ -148,22 +148,22 @@ describe("Dropdown", () => {
         it("renders the mobile version on a narrow screen", () => {
             setMobileView(true);
 
-            render(<DropdownWithTarget mobileViewProps={{ children: <span>Mobile content</span> }} />);
+            render(<DropdownWithTarget pullerProps={{ children: <span>Mobile content</span> }} />);
 
             expect(screen.getByText("Mobile content")).toBeInTheDocument();
             expect(screen.queryByText("Dropdown content")).toBeNull();
             expect(document.querySelector(".dropdownDesktop")).toBeNull();
         });
 
-        it("falls back to children when mobileViewProps has no children", () => {
+        it("falls back to children when pullerProps has no children", () => {
             setMobileView(true);
 
-            render(<DropdownWithTarget mobileViewProps={{}} />);
+            render(<DropdownWithTarget pullerProps={{}} />);
 
             expect(screen.getByText("Dropdown content")).toBeInTheDocument();
         });
 
-        it("renders the desktop version on a narrow screen without mobileViewProps", () => {
+        it("renders the desktop version on a narrow screen without pullerProps", () => {
             setMobileView(true);
 
             render(<DropdownWithTarget />);

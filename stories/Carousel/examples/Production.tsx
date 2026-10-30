@@ -104,8 +104,8 @@ export const Production = () => {
                             );
                         })}
                     </Carousel.Track>
-                    <Carousel.PrevButton />
-                    <Carousel.NextButton />
+                    <Carousel.PrevButton aria-label="Previous slide" />
+                    <Carousel.NextButton aria-label="Next slide" />
                 </Carousel.Viewport>
             </Carousel>
         </div>

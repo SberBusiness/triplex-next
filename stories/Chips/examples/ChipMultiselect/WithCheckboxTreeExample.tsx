@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
     MultiselectField,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileFooter,
+    PullerHeader,
+    PullerInput,
+    PullerClose,
+    PullerBody,
+    PullerFooter,
     Button,
     EButtonTheme,
     EComponentSize,
@@ -196,18 +196,14 @@ export const WithCheckboxTreeExample = () => {
             focusTrapProps={{
                 focusTrapOptions: { initialFocus: false },
             }}
-            mobileViewProps={{
+            pullerProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
-                            <DropdownMobileInput
-                                placeholder="Type to proceed"
-                                value={filter}
-                                onChange={handleFilterChange}
-                            />
-                        </DropdownMobileHeader>
-                        <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                        <DropdownMobileFooter>
+                        <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                            <PullerInput placeholder="Type to proceed" value={filter} onChange={handleFilterChange} />
+                        </PullerHeader>
+                        <PullerBody>{renderDropdownContent()}</PullerBody>
+                        <PullerFooter>
                             <Button
                                 theme={EButtonTheme.GENERAL}
                                 size={EComponentSize.SM}
@@ -218,7 +214,7 @@ export const WithCheckboxTreeExample = () => {
                             <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
                                 Button link text
                             </Button>
-                        </DropdownMobileFooter>
+                        </PullerFooter>
                     </>
                 ),
             }}

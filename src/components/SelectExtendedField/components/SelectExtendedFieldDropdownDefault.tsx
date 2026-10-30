@@ -4,14 +4,8 @@ import {
     ISelectExtendedFieldDropdownProvideProps,
     SelectExtendedField,
 } from "../SelectExtendedField";
-import {
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileHeader,
-    DropdownMobileList,
-    DropdownMobileListItem,
-    IDropdownProps,
-} from "../../Dropdown";
+import { IDropdownProps } from "../../Dropdown";
+import { PullerBody, PullerClose, PullerHeader, PullerList, PullerListItem } from "../../Puller";
 import { Text, ETextSize } from "../../Typography";
 
 /** Свойства компонента SelectExtendedFieldDropdownDefault. */
@@ -20,10 +14,7 @@ export interface ISelectExtendedFieldDropdownDefaultProps
     /** ClassName для модификации SelectExtendedField.Dropdown.List.Item. */
     dropdownListItemClassName?: string;
     /** Свойства, передающиеся в Dropdown. */
-    dropdownProps?: Omit<
-        IDropdownProps,
-        "children" | "opened" | "setOpened" | "targetRef" | "size" | "mobileViewProps"
-    >;
+    dropdownProps?: Omit<IDropdownProps, "children" | "opened" | "setOpened" | "targetRef" | "size" | "pullerProps">;
     /** Состояние загрузки. В этот момент Dropdown закрыт, Target отображает лоадер. По умолчанию false. */
     loading?: boolean;
     /** Id SelectExtendedField.Dropdown.List. Нужен для связи с Target. */
@@ -87,21 +78,21 @@ export const SelectExtendedFieldDropdownDefault: React.FC<ISelectExtendedFieldDr
             targetRef={targetRef}
             size={size}
             {...dropdownProps}
-            mobileViewProps={{
+            pullerProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
+                        <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
                             <Text tag="div" size={ETextSize.B3}>
                                 {mobileTitle}
                             </Text>
-                        </DropdownMobileHeader>
-                        <DropdownMobileBody>
-                            <DropdownMobileList>
+                        </PullerHeader>
+                        <PullerBody>
+                            <PullerList>
                                 {options.map((option) => (
-                                    <DropdownMobileListItem key={option.id} {...getOptionProps(option)} />
+                                    <PullerListItem key={option.id} {...getOptionProps(option)} />
                                 ))}
-                            </DropdownMobileList>
-                        </DropdownMobileBody>
+                            </PullerList>
+                        </PullerBody>
                     </>
                 ),
             }}

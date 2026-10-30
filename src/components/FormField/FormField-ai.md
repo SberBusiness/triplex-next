@@ -63,7 +63,7 @@ version: "1.0"
 - Класс `filled` выставляется, когда вложенный элемент ввода сообщил о наличии значения. Для `FormFieldInput` / `FormFieldTextarea` это включает браузерное автозаполнение (ловится через CSS-анимационные хуки `autofill-applied-hook` / `autofill-cancelled-hook`), для `FormFieldTarget` — наличие `children`.
 - Кнопка `FormFieldClear` показывается стилями только при `filled` и hover/активном состоянии непустого и не заблокированного поля, а также при собственном фокусе (`:focus`) — чтобы кнопка оставалась видимой при клавиатурной навигации.
 - Идентификаторы генерируются субкомпонентами (`uniqueId` из `lodash-es`, не `React.useId` — код должен оставаться совместимым с React 17) и попадают в контекст как `targetId` / `labelId`; на них опирается связка лейбла и поля. `targetId` публикуют только labelable-элементы (`FormFieldInput`, `FormFieldTextarea`, а также `FormFieldMaskedInput` — он рендерит `FormFieldInput` внутри себя через `render`); `FormFieldTarget` его не публикует — см. Accessibility.
-- Вне `FormField` субкомпоненты используют `initialFormFieldContext`, где `filled: true` — это осознанный временный фикс для `DropdownMobileHeader`, а сеттеры являются no-op.
+- Вне `FormField` субкомпоненты используют `initialFormFieldContext`, где `filled: true` — это осознанный временный фикс для `PullerHeader`, а сеттеры являются no-op.
 
 ---
 

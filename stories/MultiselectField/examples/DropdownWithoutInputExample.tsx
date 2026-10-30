@@ -3,11 +3,11 @@ import {
     Button,
     Checkbox,
     CheckboxYGroup,
-    DropdownMobileBody,
-    DropdownMobileFooter,
     EButtonTheme,
     EComponentSize,
     MultiselectField,
+    PullerBody,
+    PullerFooter,
     Tag,
     TagGroup,
 } from "@sberbusiness/triplex-next";
@@ -122,11 +122,11 @@ export const DropdownWithoutInputExample = () => {
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileBody>{renderCheckboxList()}</DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    <PullerBody>{renderCheckboxList()}</PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.SECONDARY}
                                             size={EComponentSize.MD}
@@ -141,7 +141,7 @@ export const DropdownWithoutInputExample = () => {
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

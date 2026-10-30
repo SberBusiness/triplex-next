@@ -4,7 +4,7 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
+    PullerInput,
     ECalendarDateMarkType,
     EButtonTheme,
     EComponentSize,
@@ -55,7 +55,7 @@ export const VisualTests = () => (
             todayButtonProps={{ children: "Сегодня" }}
             onDateChange={() => {}}
             renderTarget={() => <Target />}
-            renderDropdownHeaderTarget={() => <DropdownMobileInput value="15.01.1970" readOnly />}
+            renderDropdownHeaderTarget={() => <PullerInput value="15.01.1970" readOnly />}
         />
     </div>
 );

@@ -21,7 +21,7 @@ export interface IDatePickerExtendedProps
     dropdownTargetRef?: React.RefObject<HTMLElement>;
     /** Рендер-функция целевого элемента. */
     renderTarget: () => React.ReactNode;
-    /** Рендер-функция целевого элемента в заголовке DropdownMobile. */
+    /** Рендер-функция целевого элемента в заголовке Puller. */
     renderDropdownHeaderTarget: () => React.ReactNode;
     /** Callback на открытие Dropdown. */
     onDropdownOpen?: () => void;

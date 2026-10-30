@@ -1,7 +1,7 @@
 ---
 component: ButtonDropdown
 category: Buttons
-related: [Button, ButtonDropdownExtended, Dropdown]
+related: [Button, ButtonDropdownExtended, Dropdown, Puller]
 tokens: []
 stories: stories/Buttons/ButtonDropdown.stories.tsx
 version: "1.0"
@@ -56,7 +56,7 @@ version: "1.0"
 
 - Для `EButtonDotsTheme` prop `block` запрещён типизацией (`never`).
 - Dots-режим использует иконку `Dotshorizontal*` вместо текстового контента кнопки.
-- Desktop рендерит `DropdownList` с `DropdownList.Item`; mobile через `mobileViewProps` рендерит `DropdownMobileHeader` + `DropdownMobileList`.
+- Desktop рендерит `DropdownList` с `DropdownList.Item`; mobile через `pullerProps` рендерит `PullerHeader` + `PullerList`.
 
 ---
 
@@ -90,7 +90,8 @@ version: "1.0"
 
 - `Button` (`src/components/Button/Button.tsx`) — базовый триггер, на котором построен `ButtonDropdown`.
 - `ButtonDropdownExtended` (`src/components/Button/ButtonDropdownExtended.tsx`) — управляет открытием/закрытием dropdown через render-функции `renderButton` и `renderDropdown`.
-- `Dropdown` (`src/components/Dropdown`) — контейнер и пункты списка для desktop/mobile представления.
+- `Dropdown` (`src/components/Dropdown`) — контейнер и пункты списка для desktop-представления.
+- `Puller` (`src/components/Puller`) — мобильное представление: `PullerHeader`, `PullerClose`, `PullerBody`, `PullerList`, `PullerListItem`.
 
 ---
 
@@ -123,3 +124,4 @@ version: "1.0"
 | 2026-07-28 | AI-рефакторинг: dots- и обычный триггер объединены в один `renderButton` (общая a11y-обвязка), тема кнопки и палитра каретки выведены через мапы вместо `as`-каста и `switch`, удалено обращение к несуществующему CSS-классу `buttonDropdownMenu` (в LESS его не было, в сборке значение было `undefined`). Публичный API и разметка не изменились. Unit-тесты расширены до 32 кейсов. |
 | 2026-07-29 | Правки по ревью PR #482: типы триггера и props-интерфейсы вариантов теперь экспортируются (`TButtonDropdownButtonTheme`, `TButtonDropdownTheme`, `IButtonDropdownBaseProps`, `IButtonDotsProps`) — по конвенции все типы barrel-компонентов публичны; поведение не изменилось. |
 | 2026-07-29 | Отработка находок AI-рефакторинга: починен перехват пробела на триггере (сравнение по `event.code`; `Space` явно переключает dropdown), `label` опции больше не утекает в DOM-атрибут элемента списка, легализован controlled-режим — публичные props `opened` / `setOpened` (ранее `opened` работал только через нетипизированный spread). |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильная версия собрана из частей `Puller` (бывший `DropdownMobile*`). |

@@ -225,12 +225,12 @@ export interface IButtonGeneralProps extends IButtonBaseProps {
 
 ```typescript
 // Деструктурируй из пропсов:
-const { theme, size, newProp, className, ...rest } = props;
+const { theme, size, newProp, className, ...restProps } = props;
 
 // Применяй через clsx:
 <button
     className={clsx(styles.button, styles[size], { [styles.newVariant]: newProp === 'variant' }, className)}
-    {...rest}
+    {...restProps}
 >
 ```
 
@@ -332,7 +332,7 @@ AI-агента.
 1. Компонент экспортируется из barrel `src/components/{Family}/index.ts`
    (внутренние/приватные — нет).
 2. У компонента есть нетривиальный API или поведение: собственные props
-   сверх `className + ref + ...rest`, либо state, контекст, клавиатура,
+   сверх `className + ref + ...restProps`, либо state, контекст, клавиатура,
    callback'и, accessibility-контракт, render-prop, discriminated union.
 
 Тривиальные wrapper'ы (`className + spread + forwardRef` без своей логики)
@@ -354,7 +354,7 @@ AI-агента.
 Индекс переходов для агента, а не «похожие компоненты»: только имена, пояснения —
 в разделе «Связанные компоненты». Имя обязано быть адресатом: компонентом из
 таблицы `docs/ai/ROADMAP.md`, у которого AI.md есть или запланирован. Связь с
-обёрткой вне таблицы записывается на её родителя (`IDropdownMobileMaskedInputProps
+обёрткой вне таблицы записывается на её родителя (`IPullerMaskedInputProps
 extends IFormFieldMaskedInputProps` → `FormField`).
 
 Адресат попадает в `related`, только если подходит под одну из четырёх категорий:

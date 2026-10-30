@@ -47,7 +47,7 @@ export const initialFormFieldContext: IFormFieldContext = {
     labelId: undefined,
     postfixWidth: 0,
     prefixWidth: 0,
-    // Временный фикс для DropdownMobileHeader
+    // Временный фикс для PullerHeader
     filled: true,
     focused: false,
     active: false,

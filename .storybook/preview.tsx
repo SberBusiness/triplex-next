@@ -67,7 +67,14 @@ const preview: Preview = {
         options: {
             storySort: {
                 method: "alphabetical",
-                order: ["Introduction", "release-notes", "Components", "*"],
+                order: [
+                    "Introduction",
+                    "MCP",
+                    ["Triplex Next", "Pixso to Triplex Next"],
+                    "release-notes",
+                    "Components",
+                    "*",
+                ],
             },
             showPanel: true,
         },

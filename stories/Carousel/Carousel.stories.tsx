@@ -1,5 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import { expect } from "storybook/test";
 import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Carousel, EOrientation, ECarouselScrollMode } from "@sberbusiness/triplex-next";
 import {
@@ -16,6 +17,7 @@ import {
     ProductionSource,
     DynamicIndicatorsRender,
     DynamicIndicatorsSource,
+    VisualTestsRender,
 } from "./examples";
 
 export default {
@@ -151,4 +153,31 @@ export const DynamicIndicators: StoryObj<typeof Carousel> = {
         testRunner: { skip: true },
     },
     render: DynamicIndicatorsRender,
+};
+
+export const VisualTests: StoryObj<typeof Carousel> = {
+    tags: ["!autodocs", "!dev"],
+    render: VisualTestsRender,
+    parameters: {
+        controls: { disable: true },
+        docs: {
+            canvas: { sourceState: "none" },
+            codePanel: false,
+        },
+        testRunner: { hoverSelector: '[data-testid="carousel-next-hover"]' },
+    },
+    play: async ({ canvas, canvasElement, userEvent }) => {
+        const endButton = canvas.getByTestId("carousel-next-end");
+        await userEvent.click(endButton);
+        await userEvent.click(endButton);
+        await expect(endButton).toHaveAttribute("aria-disabled", "true");
+        await expect(canvas.getByTestId("carousel-prev-start")).toHaveAttribute("aria-disabled", "true");
+        await userEvent.click(canvas.getByTestId("carousel-prev-disabled-prepare"));
+        const disabledPrevButton = canvas.getByTestId("carousel-prev-disabled");
+        await expect(disabledPrevButton).toHaveAttribute("aria-disabled", "false");
+        await expect(disabledPrevButton).toBeDisabled();
+        await userEvent.click(canvasElement);
+        await userEvent.tab();
+        await expect(canvas.getByTestId("carousel-next-focus")).toHaveFocus();
+    },
 };

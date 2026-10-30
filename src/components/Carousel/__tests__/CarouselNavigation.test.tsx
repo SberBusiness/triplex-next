@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { CarouselPrevButton, CarouselNextButton } from "../CarouselButton";
 import { CarouselContext, ICarouselContext } from "../CarouselContext";
 import { ECarouselScrollMode } from "../enums";
 import { EOrientation } from "../../../enums";
+import styles from "../styles/Carousel.module.less";
 
 interface IWrapperProps {
     contextOverrides?: Partial<ICarouselContext>;
@@ -17,7 +18,7 @@ const ButtonContextMockWrapper: React.FC<IWrapperProps> = ({ contextOverrides, c
         orientation: EOrientation.HORIZONTAL,
         scrollMode: ECarouselScrollMode.ITEM,
         offset: 0,
-        activeIndices: new Array<number>(),
+        activeIndices: [],
         currentIndex: 0,
         viewportPaddingStyle: "0px",
         atStart: false,
@@ -37,11 +38,11 @@ const ButtonContextMockWrapper: React.FC<IWrapperProps> = ({ contextOverrides, c
     return <CarouselContext.Provider value={defaultMockContext}>{children}</CarouselContext.Provider>;
 };
 
-const mockGlobalMatchMedia = (matchesValue: boolean) => {
+const mockTouchDevice = () => {
     vi.spyOn(window, "matchMedia").mockImplementation(
         (query: string) =>
             ({
-                matches: matchesValue,
+                matches: true,
                 media: query,
                 onchange: null,
                 addEventListener: vi.fn(),
@@ -53,146 +54,208 @@ const mockGlobalMatchMedia = (matchesValue: boolean) => {
     );
 };
 
+interface INavigationButtonCase {
+    name: string;
+    Button: typeof CarouselPrevButton;
+    label: string;
+    className: string;
+    icons: Record<EOrientation, string>;
+    boundaryContext: (atBoundary: boolean, slide: () => void) => Partial<ICarouselContext>;
+}
+
+const NAVIGATION_BUTTONS: INavigationButtonCase[] = [
+    {
+        name: "Prev",
+        Button: CarouselPrevButton,
+        label: "Previous offer",
+        className: styles.prev,
+        icons: {
+            [EOrientation.HORIZONTAL]: "CaretleftStrokeSrvIcon20",
+            [EOrientation.VERTICAL]: "CaretupStrokeSrvIcon20",
+        },
+        boundaryContext: (atStart, prevSlide) => ({ atStart, prevSlide }),
+    },
+    {
+        name: "Next",
+        Button: CarouselNextButton,
+        label: "Next offer",
+        className: styles.next,
+        icons: {
+            [EOrientation.HORIZONTAL]: "CaretrightStrokeSrvIcon20",
+            [EOrientation.VERTICAL]: "CaretdownStrokeSrvIcon20",
+        },
+        boundaryContext: (atEnd, nextSlide) => ({ atEnd, nextSlide }),
+    },
+];
+
 describe("Carousel Navigation (Buttons & Context)", () => {
     afterEach(() => {
         vi.restoreAllMocks();
     });
 
-    describe("Responsive Visibility via useMatchMedia", () => {
-        it("should render navigation buttons on desktop devices", () => {
-            mockGlobalMatchMedia(false);
-            render(
+    describe.each(NAVIGATION_BUTTONS)("$name button", ({ Button, label, className, icons, boundaryContext }) => {
+        it("should render nothing and keep ref null on touch devices", () => {
+            mockTouchDevice();
+            const ref = React.createRef<HTMLButtonElement>();
+            const { container } = render(
                 <ButtonContextMockWrapper>
-                    <CarouselPrevButton data-testid="prev-btn" />
-                    <CarouselNextButton data-testid="next-btn" />
+                    <Button ref={ref} aria-label={label} />
                 </ButtonContextMockWrapper>,
             );
-            expect(screen.getByTestId("prev-btn")).toBeInTheDocument();
-            expect(screen.getByTestId("next-btn")).toBeInTheDocument();
+            expect(container).toBeEmptyDOMElement();
+            expect(ref.current).toBeNull();
         });
 
-        it("should hide navigation buttons on touch devices", () => {
-            mockGlobalMatchMedia(true);
+        it("should trigger slide and custom onClick away from the boundary", () => {
+            const slide = vi.fn();
+            const onClick = vi.fn();
             render(
-                <ButtonContextMockWrapper>
-                    <CarouselPrevButton data-testid="prev-btn" />
-                    <CarouselNextButton data-testid="next-btn" />
+                <ButtonContextMockWrapper contextOverrides={boundaryContext(false, slide)}>
+                    <Button aria-label={label} onClick={onClick} />
                 </ButtonContextMockWrapper>,
             );
-            expect(screen.queryByTestId("prev-btn")).not.toBeInTheDocument();
-            expect(screen.queryByTestId("next-btn")).not.toBeInTheDocument();
+
+            const button = screen.getByRole("button", { name: label });
+            expect(button).toHaveAttribute("aria-disabled", "false");
+            fireEvent.click(button);
+
+            expect(slide).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ type: "click", target: button }));
+            expect(slide.mock.invocationCallOrder[0]).toBeLessThan(onClick.mock.invocationCallOrder[0]);
         });
-    });
 
-    describe("Carousel Buttons Behaviour", () => {
-        beforeEach(() => {
-            mockGlobalMatchMedia(false);
-        });
-
-        it("should trigger prevSlide and custom onClick when not at start", () => {
-            const prevSlideSpy = vi.fn();
-            const clickSpy = vi.fn();
-
+        it("should block slide, fire onClick and override user aria-disabled at the boundary", () => {
+            const slide = vi.fn();
+            const onClick = vi.fn();
             render(
-                <ButtonContextMockWrapper contextOverrides={{ atStart: false, prevSlide: prevSlideSpy }}>
-                    <CarouselPrevButton data-testid="prev-btn" onClick={clickSpy} />
+                <ButtonContextMockWrapper contextOverrides={boundaryContext(true, slide)}>
+                    <Button aria-label={label} aria-disabled={false} onClick={onClick} />
                 </ButtonContextMockWrapper>,
             );
 
-            const btn = screen.getByTestId("prev-btn");
-            expect(btn).toHaveAttribute("aria-disabled", "false");
-            fireEvent.click(btn);
+            const button = screen.getByRole("button", { name: label });
+            expect(button).toBeEnabled();
+            expect(button).toHaveAttribute("aria-disabled", "true");
+            fireEvent.click(button);
 
-            expect(prevSlideSpy).toHaveBeenCalledTimes(1);
-            expect(clickSpy).toHaveBeenCalledTimes(1);
+            expect(slide).not.toHaveBeenCalled();
+            expect(onClick).toHaveBeenCalledTimes(1);
         });
 
-        it("should block prevSlide but fire onClick when atStart is true due to aria-disabled pattern", () => {
-            const prevSlideSpy = vi.fn();
-            const clickSpy = vi.fn();
-
+        it("should block both callbacks when native disabled is set", () => {
+            const slide = vi.fn();
+            const onClick = vi.fn();
             render(
-                <ButtonContextMockWrapper contextOverrides={{ atStart: true, prevSlide: prevSlideSpy }}>
-                    <CarouselPrevButton data-testid="prev-btn" onClick={clickSpy} />
+                <ButtonContextMockWrapper contextOverrides={boundaryContext(false, slide)}>
+                    <Button aria-label={label} disabled onClick={onClick} />
                 </ButtonContextMockWrapper>,
             );
 
-            const btn = screen.getByTestId("prev-btn");
-            expect(btn).toHaveAttribute("aria-disabled", "true");
-            fireEvent.click(btn);
-
-            expect(prevSlideSpy).not.toHaveBeenCalled();
-            expect(clickSpy).toHaveBeenCalledTimes(1);
+            const button = screen.getByRole("button", { name: label });
+            expect(button).toBeDisabled();
+            expect(button).toHaveAttribute("aria-disabled", "false");
+            fireEvent.click(button);
+            expect(slide).not.toHaveBeenCalled();
+            expect(onClick).not.toHaveBeenCalled();
         });
 
-        it("should trigger nextSlide and custom onClick when not at end", () => {
-            const nextSlideSpy = vi.fn();
-            const clickSpy = vi.fn();
-
-            render(
-                <ButtonContextMockWrapper contextOverrides={{ atEnd: false, nextSlide: nextSlideSpy }}>
-                    <CarouselNextButton data-testid="next-btn" onClick={clickSpy} />
+        it("should use current callbacks and boundary after rerender", () => {
+            const initialSlide = vi.fn();
+            const initialOnClick = vi.fn();
+            const slide = vi.fn();
+            const onClick = vi.fn();
+            const { rerender } = render(
+                <ButtonContextMockWrapper contextOverrides={boundaryContext(true, initialSlide)}>
+                    <Button aria-label={label} onClick={initialOnClick} />
                 </ButtonContextMockWrapper>,
             );
 
-            const btn = screen.getByTestId("next-btn");
-            expect(btn).toHaveAttribute("aria-disabled", "false");
-            fireEvent.click(btn);
-
-            expect(nextSlideSpy).toHaveBeenCalledTimes(1);
-            expect(clickSpy).toHaveBeenCalledTimes(1);
-        });
-
-        it("should block nextSlide but fire onClick when atEnd is true", () => {
-            const nextSlideSpy = vi.fn();
-            const clickSpy = vi.fn();
-
-            render(
-                <ButtonContextMockWrapper contextOverrides={{ atEnd: true, nextSlide: nextSlideSpy }}>
-                    <CarouselNextButton data-testid="next-btn" onClick={clickSpy} />
+            rerender(
+                <ButtonContextMockWrapper contextOverrides={boundaryContext(false, slide)}>
+                    <Button aria-label={label} onClick={onClick} />
                 </ButtonContextMockWrapper>,
             );
+            const button = screen.getByRole("button", { name: label });
+            expect(button).toHaveAttribute("aria-disabled", "false");
+            fireEvent.click(button);
+            expect(initialSlide).not.toHaveBeenCalled();
+            expect(initialOnClick).not.toHaveBeenCalled();
+            expect(slide).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledTimes(1);
 
-            const btn = screen.getByTestId("next-btn");
-            expect(btn).toHaveAttribute("aria-disabled", "true");
-            fireEvent.click(btn);
-
-            expect(nextSlideSpy).not.toHaveBeenCalled();
-            expect(clickSpy).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe("Customisation and Context Fallbacks", () => {
-        beforeEach(() => {
-            mockGlobalMatchMedia(false);
-        });
-
-        it("should replace default icon with custom children text when provided", () => {
-            render(
-                <ButtonContextMockWrapper>
-                    <CarouselPrevButton data-testid="prev-btn">Back</CarouselPrevButton>
+            rerender(
+                <ButtonContextMockWrapper contextOverrides={boundaryContext(true, slide)}>
+                    <Button aria-label={label} onClick={onClick} />
                 </ButtonContextMockWrapper>,
             );
-            expect(screen.getByTestId("prev-btn")).toHaveTextContent("Back");
+            fireEvent.click(button);
+            expect(button).toHaveAttribute("aria-disabled", "true");
+            expect(slide).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledTimes(2);
         });
 
-        it("should consume default context functions safely without throwing exceptions", () => {
-            const FallbackConsumer = () => {
-                const ctx = useContext(CarouselContext);
-                const triggerFallback = () => {
-                    ctx.nextSlide();
-                    ctx.prevSlide();
-                    ctx.goToSlide(0);
-                };
-                return (
-                    <button data-testid="fallback-btn" onClick={triggerFallback}>
-                        Run
-                    </button>
+        it.each([EOrientation.HORIZONTAL, EOrientation.VERTICAL])(
+            "should select default icon from %s orientation",
+            (orientation) => {
+                render(
+                    <ButtonContextMockWrapper contextOverrides={{ orientation }}>
+                        <Button aria-label={label} />
+                    </ButtonContextMockWrapper>,
                 );
+                expect(screen.getByRole("button", { name: label }).querySelector("svg")).toHaveAttribute(
+                    "name",
+                    icons[orientation],
+                );
+            },
+        );
+
+        it.each([null, false, 0, ""])("should keep default icon for falsy children %o", (children) => {
+            render(
+                <ButtonContextMockWrapper>
+                    <Button aria-label={label}>{children}</Button>
+                </ButtonContextMockWrapper>,
+            );
+            expect(screen.getByRole("button", { name: label }).querySelector("svg")).toHaveAttribute(
+                "name",
+                icons[EOrientation.HORIZONTAL],
+            );
+        });
+
+        it("should forward ref, attributes and replacement children", () => {
+            const ref = React.createRef<HTMLButtonElement>();
+            render(
+                <ButtonContextMockWrapper>
+                    <Button ref={ref} className="custom-nav" aria-label={label} data-tracking="nav" type="submit">
+                        Custom
+                    </Button>
+                </ButtonContextMockWrapper>,
+            );
+
+            const button = screen.getByRole("button", { name: label });
+            expect(ref.current).toBe(button);
+            expect(button).toHaveClass(styles.navButton, className, "custom-nav");
+            expect(button).toHaveAttribute("data-tracking", "nav");
+            expect(button).toHaveAttribute("type", "submit");
+            expect(button).toHaveTextContent("Custom");
+            expect(button.querySelector("svg")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("Context Fallbacks", () => {
+        it("should consume default context functions safely without throwing exceptions", () => {
+            const contexts: ICarouselContext[] = [];
+            const ContextReader: React.FC = () => {
+                contexts.push(useContext(CarouselContext));
+                return null;
             };
 
-            render(<FallbackConsumer />);
-            expect(() => screen.getByTestId("fallback-btn").click()).not.toThrow();
+            render(<ContextReader />);
+            const context = contexts[0];
+            expect(() => {
+                context.nextSlide();
+                context.prevSlide();
+                context.goToSlide(0);
+            }).not.toThrow();
         });
     });
 });

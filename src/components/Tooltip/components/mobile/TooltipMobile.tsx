@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useRef } from "react";
-import { TooltipContext } from "@sberbusiness/triplex-next/components/Tooltip/TootlipContext";
-import { Portal } from "@sberbusiness/triplex-next/components/Portal/Portal";
-import { DropdownMobile } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobile";
-import { DropdownMobileBody } from "@sberbusiness/triplex-next/components/Dropdown/mobile/DropdownMobileBody";
-import { TooltipMobileCloseButton } from "@sberbusiness/triplex-next/components/Tooltip/components/mobile/components/TooltipMobileCloseButton";
 import clsx from "clsx";
-import styles from "@sberbusiness/triplex-next/components/Tooltip/styles/TooltipMobile.module.less";
-import { ITooltipProps } from "@sberbusiness/triplex-next/components/Tooltip/types";
+import { TooltipContext } from "../../TootlipContext";
+import { Portal } from "../../../Portal/Portal";
+import { TooltipMobileCloseButton } from "./components/TooltipMobileCloseButton";
+import { ITooltipProps } from "../../types";
+import { Puller } from "../../../Puller/Puller";
+import { PullerBody } from "../../../Puller/PullerBody";
+import styles from "../../styles/TooltipMobile.module.less";
 
 /** Свойства компонента TooltipMobile. */
 export interface ITooltipMobileProps extends Omit<ITooltipProps, "preferPlace" | "toggle"> {
@@ -18,11 +18,11 @@ export interface ITooltipMobileProps extends Omit<ITooltipProps, "preferPlace" |
 
 /**
  * Мобильная версия Tooltip.
- * Рендерится в document.body поверх страницы как нижний оверлей (DropdownMobile).
+ * Рендерится в document.body поверх страницы как нижний оверлей (Puller).
  */
 export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
     // children, renderContainer, targetRef, disableAdaptiveMode, size и alignTip не нужны мобильной
-    // версии и не должны попадать в DOM — исключаются из rest, который спредится на DropdownMobile.
+    // версии и не должны попадать в DOM — исключаются из rest, который спредится на Puller.
     children,
     renderContainer,
     targetRef,
@@ -60,7 +60,7 @@ export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
         <>
             {elements.target}
             <Portal container={document.body}>
-                <DropdownMobile
+                <Puller
                     className={classNames}
                     tabIndex={-1}
                     opened={isOpen}
@@ -69,12 +69,12 @@ export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
                     ref={tooltipRef}
                 >
                     {elements.mobileHeader}
-                    <DropdownMobileBody className={styles.tooltipMobileContent}>
+                    <PullerBody className={styles.tooltipMobileContent}>
                         {elements.body}
                         {elements.link}
                         {elements.mobileHeader === null && renderCloseButton()}
-                    </DropdownMobileBody>
-                </DropdownMobile>
+                    </PullerBody>
+                </Puller>
             </Portal>
         </>
     );

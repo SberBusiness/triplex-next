@@ -21,7 +21,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Ломающие изменения</Heading>
 
-**Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown / ChipSuggest / Suggest**
+**ChipSuggest / Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown / Suggest**
 
 - Prop `mobileViewProps` переименован в `pullerProps` (тип `Omit<IPullerProps, "opened" | "setOpened">`), поведение прежнее. Переименование распространяется на props, унаследованные от `IDropdownProps`: `IMultiselectFieldDropdownProps`, `ISelectExtendedFieldDropdownProps`, `ISuggestDropdownProps`, `dropdownProps` у `ChipSuggest`.
 - CSS-класс блокировки скролла на `body` у десктопного меню переименован: `.dropdownDesktopOverflowHidden` → `.dropdownDesktopScrollLock`.
